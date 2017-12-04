@@ -3,6 +3,16 @@
 The Koinos Reader is a joint project of the [Digital Bible Society](https://dbs.org) 
 and [Faith Comes by Hearing](https://faithcomesbyhearing.com).
 
+## QuickStart
+
+    npm install; npm start
+
+## Description
+
+A minimalist bible study application with a focus on flexibility, accessibility, and
+portability. It is in many ways the spiritual successor to the bible browser and the
+[inScript projects](https://github.com/digitalbiblesociety/).
+
 ## Goals
 
 - ** Accessibility **
