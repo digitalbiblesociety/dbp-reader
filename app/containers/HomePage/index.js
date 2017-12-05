@@ -27,20 +27,25 @@ import saga from './saga';
 
 class HomePage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   render() {
+    const {
+      activeTextName,
+    } = this.props.homepage;
+
     return (
       <React.Fragment>
         <Helmet>
           <title>Home Page</title>
           <meta name="description" content="Home page for bible.is" />
         </Helmet>
-        <NavigationBar />
+        <NavigationBar activeTextName={activeTextName} />
       </React.Fragment>
     );
   }
 }
 
 HomePage.propTypes = {
-  dispatch: PropTypes.func.isRequired,
+  // dispatch: PropTypes.func.isRequired,
+  homepage: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
