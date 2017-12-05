@@ -10,16 +10,56 @@
  */
 
 import React from 'react';
-import NavigationBar from 'components/NavigationBar';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { Helmet } from 'react-helmet';
 // import { FormattedMessage } from 'react-intl';
+import { createStructuredSelector } from 'reselect';
+import { compose } from 'redux';
+import NavigationBar from 'components/NavigationBar';
+
+import injectSaga from 'utils/injectSaga';
+import injectReducer from 'utils/injectReducer';
+import makeSelectHomePage from './selectors';
+import reducer from './reducer';
+import saga from './saga';
 // import messages from './messages';
 
-export default class HomePage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+class HomePage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   render() {
     return (
-      <h1>
+      <React.Fragment>
+        <Helmet>
+          <title>Home Page</title>
+          <meta name="description" content="Home page for bible.is" />
+        </Helmet>
         <NavigationBar />
-      </h1>
+      </React.Fragment>
     );
   }
 }
+
+HomePage.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = createStructuredSelector({
+  homepage: makeSelectHomePage(),
+});
+
+function mapDispatchToProps(dispatch) {
+  return {
+    dispatch,
+  };
+}
+
+const withConnect = connect(mapStateToProps, mapDispatchToProps);
+
+const withReducer = injectReducer({ key: 'homepage', reducer });
+const withSaga = injectSaga({ key: 'homepage', saga });
+
+export default compose(
+  withReducer,
+  withSaga,
+  withConnect,
+)(HomePage);
