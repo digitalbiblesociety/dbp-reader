@@ -6,7 +6,7 @@
 
 import { fromJS } from 'immutable';
 import {
-  DEFAULT_ACTION,
+  LOAD_TEXTS,
 } from './constants';
 
 const initialState = fromJS({
@@ -25,8 +25,8 @@ const initialState = fromJS({
 
 function homePageReducer(state = initialState, action) {
   switch (action.type) {
-    case DEFAULT_ACTION:
-      return state;
+    case LOAD_TEXTS:
+      return state.set('texts', action.texts);
     default:
       return state;
   }

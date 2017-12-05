@@ -20,12 +20,17 @@ import NavigationBar from 'components/NavigationBar';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
+import { getTexts } from './actions';
 import makeSelectHomePage from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 // import messages from './messages';
 
 class HomePage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+  componentDidMount() {
+    this.props.dispatch(getTexts());
+  }
+
   render() {
     const {
       activeTextName,
@@ -44,8 +49,8 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 }
 
 HomePage.propTypes = {
-  // dispatch: PropTypes.func.isRequired,
-  homepage: PropTypes.string.isRequired,
+  dispatch: PropTypes.func.isRequired,
+  homepage: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({

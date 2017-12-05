@@ -5,11 +5,19 @@
  */
 
 import {
-  DEFAULT_ACTION,
+  LOAD_TEXTS,
+  GET_DPB_TEXTS,
 } from './constants';
 
-export function defaultAction() {
+export function loadTexts({ texts }) {
   return {
-    type: DEFAULT_ACTION,
+    type: LOAD_TEXTS,
+    texts,
+  };
+}
+
+export function getTexts() {
+  return {
+    type: GET_DPB_TEXTS,
   };
 }
