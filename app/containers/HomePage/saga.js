@@ -6,10 +6,17 @@ import { loadTexts } from './actions';
 
 export function* getTexts() {
   // need to configure the correct request url as this one is not getting a response
-  const requestUrl = `https://api.dbp.dev/library/volume?key=${process.env.DBP_API_KEY}`;
+  const requestUrl = `https://api.bible.build/library/volume?key=${process.env.DBP_API_KEY}&v=2`;
   try {
     const texts = yield call(request, requestUrl);
-    yield put(loadTexts({ texts }));
+    const formattedTexts = texts.map((text) => ({
+      volume_name: text.volume_name,
+      dam_id: text.dam_id,
+      language_name: text.language_name,
+      language_iso: text.language_iso,
+      language_iso_name: text.language_iso_name,
+    }));
+    yield put(loadTexts({ texts: formattedTexts }));
   } catch (err) {
     if (process.ENV === 'development') {
       console.error(err); // eslint-disable-line no-console

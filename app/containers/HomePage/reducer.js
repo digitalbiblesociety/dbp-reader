@@ -26,7 +26,7 @@ const initialState = fromJS({
 function homePageReducer(state = initialState, action) {
   switch (action.type) {
     case LOAD_TEXTS:
-      return state.set('texts', action.texts);
+      return state.set('texts', fromJS(action.texts));
     default:
       return state;
   }
