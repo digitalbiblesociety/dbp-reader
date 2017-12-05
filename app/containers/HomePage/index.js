@@ -16,12 +16,14 @@ import { Helmet } from 'react-helmet';
 // import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import NavigationBar from 'components/NavigationBar';
-
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
+
+import NavigationBar from 'components/NavigationBar';
+import TableOfContents from 'components/TableOfContents';
+
 import { getTexts } from './actions';
-import makeSelectHomePage from './selectors';
+import makeSelectHomePage, { selectTextTitles } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 // import messages from './messages';
@@ -35,6 +37,9 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
     const {
       activeTextName,
     } = this.props.homepage;
+    const {
+      textTitles,
+    } = this.props;
 
     return (
       <React.Fragment>
@@ -43,6 +48,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
           <meta name="description" content="Home page for bible.is" />
         </Helmet>
         <NavigationBar activeTextName={activeTextName} />
+        <TableOfContents textTitles={textTitles} />
       </React.Fragment>
     );
   }
@@ -51,10 +57,12 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 HomePage.propTypes = {
   dispatch: PropTypes.func.isRequired,
   homepage: PropTypes.object.isRequired,
+  textTitles: PropTypes.array,
 };
 
 const mapStateToProps = createStructuredSelector({
   homepage: makeSelectHomePage(),
+  textTitles: selectTextTitles(),
 });
 
 function mapDispatchToProps(dispatch) {

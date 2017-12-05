@@ -33,7 +33,7 @@ module.exports = (options) => ({
         // This is the place to add your own loaders (e.g. sass/less etc.)
         // for a list of loaders, see https://webpack.js.org/loaders/#styling
         test: /\.css$|\.scss$/,
-        include: /node_modules|app/,
+        include: /app/,
         loaders: ['style-loader', 'css-loader', 'sass-loader'],
       },
       {
