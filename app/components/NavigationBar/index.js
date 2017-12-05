@@ -30,7 +30,7 @@ class NavigationBar extends React.PureComponent { // eslint-disable-line react/p
         </div>
         <div className="small-6 columns">
           <button className="version-button" onClick={toggleBibleNames} >{activeTextName}</button>
-          <ChapterButton onClick={toggleBookNames} />
+          <ChapterButton toggleBookNames={toggleBookNames} />
           <form id="search-form" method="post" action="/search" _lpchecked="1">
             <input type="hidden" name="_token" value="c7sP4piHloj4OtAJaujus64WWylkp5OxR1leypxZ" />
             <input className="search" type="text" name="search" placeholder="Romanos 10:17 or Jesus" />

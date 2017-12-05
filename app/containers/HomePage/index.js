@@ -21,6 +21,7 @@ import injectReducer from 'utils/injectReducer';
 
 import NavigationBar from 'components/NavigationBar';
 import BiblesTable from 'components/BiblesTable';
+import BooksTable from 'components/BooksTable';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
 
 import { getTexts, toggleBibleNames, toggleBookNames } from './actions';
@@ -44,6 +45,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
       isBibleTableActive,
       isBookTableActive,
       texts,
+      books,
     } = this.props.homepage;
 
     return (
@@ -63,7 +65,9 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
           ) : null
         }
         {
-          isBookTableActive ? <div>book table placeholder</div> : null
+          isBookTableActive ? (
+            <BooksTable books={books} />
+          ) : null
         }
       </GenericErrorBoundary>
     );
