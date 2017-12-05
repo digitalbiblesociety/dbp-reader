@@ -19,6 +19,8 @@ class NavigationBar extends React.PureComponent { // eslint-disable-line react/p
     const {
       // toggleVersionSelect,
       activeTextName,
+      toggleBibleNames,
+      toggleBookNames,
     } = this.props;
 
     return (
@@ -27,8 +29,8 @@ class NavigationBar extends React.PureComponent { // eslint-disable-line react/p
           <Logo />
         </div>
         <div className="small-6 columns">
-          <button className="version-button">{activeTextName}</button>
-          <ChapterButton />
+          <button className="version-button" onClick={toggleBibleNames} >{activeTextName}</button>
+          <ChapterButton onClick={toggleBookNames} />
           <form id="search-form" method="post" action="/search" _lpchecked="1">
             <input type="hidden" name="_token" value="c7sP4piHloj4OtAJaujus64WWylkp5OxR1leypxZ" />
             <input className="search" type="text" name="search" placeholder="Romanos 10:17 or Jesus" />
@@ -46,6 +48,8 @@ class NavigationBar extends React.PureComponent { // eslint-disable-line react/p
 
 NavigationBar.propTypes = {
   activeTextName: PropTypes.string,
+  toggleBibleNames: PropTypes.func,
+  toggleBookNames: PropTypes.func,
 };
 
 export default NavigationBar;

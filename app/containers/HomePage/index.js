@@ -20,10 +20,11 @@ import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 
 import NavigationBar from 'components/NavigationBar';
-import TableOfContents from 'components/TableOfContents';
+import BiblesTable from 'components/BiblesTable';
+import GenericErrorBoundary from 'components/GenericErrorBoundary';
 
-import { getTexts } from './actions';
-import makeSelectHomePage, { selectTextTitles } from './selectors';
+import { getTexts, toggleBibleNames, toggleBookNames } from './actions';
+import makeSelectHomePage from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 // import messages from './messages';
@@ -33,23 +34,38 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
     this.props.dispatch(getTexts());
   }
 
+  toggleBibleNames = () => this.props.dispatch(toggleBibleNames());
+
+  toggleBookNames = () => this.props.dispatch(toggleBookNames());
+
   render() {
     const {
       activeTextName,
+      isBibleTableActive,
+      isBookTableActive,
+      texts,
     } = this.props.homepage;
-    const {
-      textTitles,
-    } = this.props;
 
     return (
-      <React.Fragment>
+      <GenericErrorBoundary>
         <Helmet>
           <title>Home Page</title>
           <meta name="description" content="Home page for bible.is" />
         </Helmet>
-        <NavigationBar activeTextName={activeTextName} />
-        <TableOfContents textTitles={textTitles} />
-      </React.Fragment>
+        <NavigationBar
+          activeTextName={activeTextName}
+          toggleBibleNames={this.toggleBibleNames}
+          toggleBookNames={this.toggleBookNames}
+        />
+        {
+          isBibleTableActive ? (
+            <BiblesTable bibles={texts} />
+          ) : null
+        }
+        {
+          isBookTableActive ? <div>book table placeholder</div> : null
+        }
+      </GenericErrorBoundary>
     );
   }
 }
@@ -57,12 +73,10 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 HomePage.propTypes = {
   dispatch: PropTypes.func.isRequired,
   homepage: PropTypes.object.isRequired,
-  textTitles: PropTypes.array,
 };
 
 const mapStateToProps = createStructuredSelector({
   homepage: makeSelectHomePage(),
-  textTitles: selectTextTitles(),
 });
 
 function mapDispatchToProps(dispatch) {
