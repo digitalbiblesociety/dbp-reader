@@ -12,7 +12,7 @@ export function* getTexts() {
 
     yield put(loadTexts({ texts: response.data }));
   } catch (err) {
-    if (process.ENV === 'development') {
+    if (process.env.NODE_ENV === 'development') {
       console.error(err); // eslint-disable-line no-console
     }
   }
