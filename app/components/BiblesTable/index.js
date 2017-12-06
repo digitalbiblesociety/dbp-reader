@@ -15,24 +15,24 @@ import CustomCell from 'components/CustomCell';
 
 class BiblesTable extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	render() {
-		const { bibles, getBooksForText } = this.props;
+		const { bibles, getBooksForText, setActiveText } = this.props;
 		return (
 			<Table rowHeight={50} rowsCount={bibles.length || 1} width={1200} height={750} headerHeight={50}>
 				<Column
 					header={<Cell>Name</Cell>}
-					cell={({ rowIndex, ...props }) => (<CustomCell rowIndex={rowIndex} abbr={bibles[rowIndex].abbr} content={bibles[rowIndex].name} getBooksForText={getBooksForText} {...props} />)}
+					cell={({ rowIndex, ...props }) => (<CustomCell rowIndex={rowIndex} abbr={bibles[rowIndex].abbr} content={bibles[rowIndex].name} getBooksForText={getBooksForText} setActiveText={setActiveText} {...props} />)}
 					allowCellsRecycling
 					width={500}
 				/>
 				<Column
 					header={<Cell>Abbreviation</Cell>}
-					cell={({ rowIndex, ...props }) => (<CustomCell rowIndex={rowIndex} abbr={bibles[rowIndex].abbr} content={bibles[rowIndex].abbr} getBooksForText={getBooksForText} {...props} />)}
+					cell={({ rowIndex, ...props }) => (<CustomCell rowIndex={rowIndex} abbr={bibles[rowIndex].abbr} content={bibles[rowIndex].abbr} getBooksForText={getBooksForText} setActiveText={setActiveText} {...props} />)}
 					allowCellsRecycling
 					width={200}
 				/>
 				<Column
 					header={<Cell>Language</Cell>}
-					cell={({ rowIndex, ...props }) => (<CustomCell rowIndex={rowIndex} abbr={bibles[rowIndex].abbr} content={bibles[rowIndex].language} getBooksForText={getBooksForText} {...props} />)}
+					cell={({ rowIndex, ...props }) => (<CustomCell rowIndex={rowIndex} abbr={bibles[rowIndex].abbr} content={bibles[rowIndex].language} getBooksForText={getBooksForText} setActiveText={setActiveText} {...props} />)}
 					allowCellsRecycling
 					width={500}
 				/>
@@ -44,6 +44,7 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 BiblesTable.propTypes = {
 	bibles: PropTypes.array,
 	getBooksForText: PropTypes.func,
+	setActiveText: PropTypes.func,
 };
 
 export default BiblesTable;

@@ -22,9 +22,10 @@ import injectReducer from 'utils/injectReducer';
 import NavigationBar from 'components/NavigationBar';
 import BiblesTable from 'components/BiblesTable';
 import BooksTable from 'components/BooksTable';
+import Text from 'components/Text';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
 
-import { getTexts, toggleBibleNames, toggleBookNames, setActiveBookName, getBooks } from './actions';
+import { getTexts, toggleBibleNames, toggleBookNames, setActiveBookName, getBooks, getChapterText, setActiveText } from './actions';
 import makeSelectHomePage from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -37,7 +38,11 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 
 	getBooksForText = ({ textId }) => this.props.dispatch(getBooks({ textId }));
 
+	getChapterText = ({ book, chapter }) => this.props.dispatch(getChapterText({ bible: this.props.homepage.activeTextId, book, chapter }));
+
 	setActiveBookName = (bookName) => this.props.dispatch(setActiveBookName(bookName));
+
+	setActiveText = ({ textName, textId }) => this.props.dispatch(setActiveText({ textName, textId }));
 
 	toggleBibleNames = () => this.props.dispatch(toggleBibleNames());
 
@@ -51,6 +56,8 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			texts,
 			books,
 			activeBookName,
+			chapterText,
+			isChapterActive,
 		} = this.props.homepage;
 
 		return (
@@ -66,12 +73,17 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 				/>
 				{
 					isBibleTableActive ? (
-						<BiblesTable getBooksForText={this.getBooksForText} bibles={texts} />
+						<BiblesTable setActiveText={this.setActiveText} getBooksForText={this.getBooksForText} bibles={texts} />
 					) : null
 				}
 				{
 					isBookTableActive ? (
-						<BooksTable setActiveBookName={this.setActiveBookName} activeBookName={activeBookName} books={books} />
+						<BooksTable getChapterText={this.getChapterText} setActiveBookName={this.setActiveBookName} activeBookName={activeBookName} books={books} />
+					) : null
+				}
+				{
+					isChapterActive ? (
+						<Text text={chapterText} />
 					) : null
 				}
 			</GenericErrorBoundary>

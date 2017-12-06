@@ -1,8 +1,8 @@
 import { take, takeLatest, cancel, call, put } from 'redux-saga/effects';
 import request from 'utils/request';
 import { LOCATION_CHANGE } from 'react-router-redux';
-import { GET_DPB_TEXTS, GET_BOOKS } from './constants';
-import { loadTexts, loadBooks } from './actions';
+import { GET_DPB_TEXTS, GET_BOOKS, GET_CHAPTER_TEXT } from './constants';
+import { loadTexts, loadBooks, loadChapter } from './actions';
 
 export function* getTexts() {
 	// need to configure the correct request url as this one is not getting a response
@@ -36,12 +36,28 @@ export function* getBooks({ textId }) {
 	}
 }
 
+export function* getChapter({ bible, book, chapter }) {
+	const requestUrl = `https://api.bible.build/bible/${bible}/${book}/${chapter}?key=${process.env.DBP_API_KEY}&v=4&pretty`;
+
+	try {
+		const response = yield call(request, requestUrl);
+
+		yield put(loadChapter({ text: response.data }));
+	} catch (err) {
+		if (process.env.NODE_ENV === 'development') {
+			console.error(err); // eslint-disable-line no-console
+		}
+	}
+}
+
 // Individual exports for testing
 export default function* defaultSaga() {
 	const watchTextsRequest = yield takeLatest(GET_DPB_TEXTS, getTexts);
 	const watchBooksRequest = yield takeLatest(GET_BOOKS, getBooks);
+	const watchChapterRequest = yield takeLatest(GET_CHAPTER_TEXT, getChapter);
 
 	yield take(LOCATION_CHANGE);
 	yield cancel(watchBooksRequest);
 	yield cancel(watchTextsRequest);
+	yield cancel(watchChapterRequest);
 }
