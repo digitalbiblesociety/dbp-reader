@@ -17,24 +17,24 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 	render() {
 		const { bibles, getBooksForText, setActiveText } = this.props;
 		return (
-			<Table rowHeight={50} rowsCount={bibles.length || 1} width={1200} height={750} headerHeight={50}>
+			<Table rowHeight={50} rowsCount={bibles.length || 1} width={820} height={750} headerHeight={50}>
 				<Column
 					header={<Cell>Name</Cell>}
 					cell={({ rowIndex, ...props }) => (<CustomCell rowIndex={rowIndex} abbr={bibles[rowIndex].abbr} content={bibles[rowIndex].name} getBooksForText={getBooksForText} setActiveText={setActiveText} {...props} />)}
 					allowCellsRecycling
-					width={500}
+					width={400}
 				/>
 				<Column
 					header={<Cell>Abbreviation</Cell>}
 					cell={({ rowIndex, ...props }) => (<CustomCell rowIndex={rowIndex} abbr={bibles[rowIndex].abbr} content={bibles[rowIndex].abbr} getBooksForText={getBooksForText} setActiveText={setActiveText} {...props} />)}
 					allowCellsRecycling
-					width={200}
+					width={120}
 				/>
 				<Column
 					header={<Cell>Language</Cell>}
 					cell={({ rowIndex, ...props }) => (<CustomCell rowIndex={rowIndex} abbr={bibles[rowIndex].abbr} content={bibles[rowIndex].language} getBooksForText={getBooksForText} setActiveText={setActiveText} {...props} />)}
 					allowCellsRecycling
-					width={500}
+					width={300}
 				/>
 			</Table>
 		);

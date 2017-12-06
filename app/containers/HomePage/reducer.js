@@ -63,7 +63,10 @@ function homePageReducer(state = initialState, action) {
 	case SET_ACTIVE_TEXT:
 		return state
 			.set('activeTextName', action.textName)
-			.set('activeTextId', action.textId);
+			.set('activeTextId', action.textId)
+			.set('isBookTableActive', true)
+			.set('isBibleTableActive', false)
+			.set('activeBookName', '');
 	case SET_ACTIVE_BOOK_NAME:
 		return state.set('activeBookName', action.book);
 	case LOAD_BOOKS:

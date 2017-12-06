@@ -18,7 +18,7 @@ const CustomCell = ({ rowIndex, abbr, content, getBooksForText, setActiveText, .
 				getBooksForText({ textId: abbr });
 			}}
 		>
-			<h1>{content}</h1>
+			<h4>{content}</h4>
 		</div>
 	</Cell>
 );
