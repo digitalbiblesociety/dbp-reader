@@ -22,7 +22,7 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
       <Table
         rowHeight={50}
         rowsCount={books.length || 1}
-        width={1200}
+        width={650}
         height={750}
         headerHeight={50}
       >
@@ -34,27 +34,17 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
             </Cell>
           )}
           allowCellsRecycling
-          width={500}
+          width={250}
         />
         <Column
-          header={<Cell>Abbreviation</Cell>}
+          header={<Cell>Chapters</Cell>}
           cell={({ rowIndex, ...props }) => (
             <Cell {...props}>
-              {books[rowIndex].abbr}
+              {books[rowIndex].chapters}
             </Cell>
           )}
           allowCellsRecycling
-          width={200}
-        />
-        <Column
-          header={<Cell>Language</Cell>}
-          cell={({ rowIndex, ...props }) => (
-            <Cell {...props}>
-              {books[rowIndex].language}
-            </Cell>
-          )}
-          allowCellsRecycling
-          width={500}
+          width={400}
         />
       </Table>
     );
