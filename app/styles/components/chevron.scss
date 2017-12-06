@@ -1,0 +1,30 @@
+.chevron::before {
+  border-style: solid;
+  border-width: .25em .25em 0 0;
+  content: '';
+  display: inline-block;
+  height: 0.9em;
+  left: 0.3em;
+  position: relative;
+  top: 0.3em;
+  transform: rotate(-45deg);
+  vertical-align: top;
+  width: 0.9em;
+  color:#ccc;
+
+  &.right {
+    left: 0;
+    transform: rotate(45deg);
+  }
+
+  &.bottom {
+    top: 0;
+    transform: rotate(135deg);
+  }
+
+  &.left {
+    left: 0.25em;
+    transform: rotate(-135deg);
+  }
+
+}
