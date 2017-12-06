@@ -24,7 +24,7 @@ import BiblesTable from 'components/BiblesTable';
 import BooksTable from 'components/BooksTable';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
 
-import { getTexts, toggleBibleNames, toggleBookNames } from './actions';
+import { getTexts, toggleBibleNames, toggleBookNames, setActiveBookName, getBooks } from './actions';
 import makeSelectHomePage from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -35,18 +35,23 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		this.props.dispatch(getTexts());
 	}
 
+	getBooksForText = ({ textId }) => this.props.dispatch(getBooks({ textId }));
+
+	setActiveBookName = (bookName) => this.props.dispatch(setActiveBookName(bookName));
+
 	toggleBibleNames = () => this.props.dispatch(toggleBibleNames());
 
 	toggleBookNames = () => this.props.dispatch(toggleBookNames());
 
 	render() {
 		const {
-      activeTextName,
-      isBibleTableActive,
-      isBookTableActive,
-      texts,
-      books,
-    } = this.props.homepage;
+			activeTextName,
+			isBibleTableActive,
+			isBookTableActive,
+			texts,
+			books,
+			activeBookName,
+		} = this.props.homepage;
 
 		return (
 			<GenericErrorBoundary>
@@ -60,15 +65,15 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					toggleBookNames={this.toggleBookNames}
 				/>
 				{
-          isBibleTableActive ? (
-	<BiblesTable bibles={texts} />
-          ) : null
-        }
+					isBibleTableActive ? (
+						<BiblesTable getBooksForText={this.getBooksForText} bibles={texts} />
+					) : null
+				}
 				{
-          isBookTableActive ? (
-	<BooksTable books={books} />
-          ) : null
-        }
+					isBookTableActive ? (
+						<BooksTable setActiveBookName={this.setActiveBookName} activeBookName={activeBookName} books={books} />
+					) : null
+				}
 			</GenericErrorBoundary>
 		);
 	}
@@ -95,7 +100,7 @@ const withReducer = injectReducer({ key: 'homepage', reducer });
 const withSaga = injectSaga({ key: 'homepage', saga });
 
 export default compose(
-  withReducer,
-  withSaga,
-  withConnect,
+	withReducer,
+	withSaga,
+	withConnect,
 )(HomePage);

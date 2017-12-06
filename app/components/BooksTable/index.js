@@ -6,7 +6,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Table, Column, Cell } from 'fixed-data-table-2';
+// import ChaptersCell from './ChaptersCell';
 // import styled from 'styled-components';
 
 // import { FormattedMessage } from 'react-intl';
@@ -14,28 +14,38 @@ import { Table, Column, Cell } from 'fixed-data-table-2';
 
 class BooksTable extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	render() {
-		const { books } = this.props;
+		const { books, activeBookName, setActiveBookName } = this.props;
+
 		return (
-			<Table rowHeight={50} rowsCount={books.length || 1} width={1200} height={750} headerHeight={50}>
-				<Column
-					header={<Cell>Name</Cell>}
-					cell={({ rowIndex, ...props }) => (<Cell {...props}>{books[rowIndex].name}</Cell>)}
-					allowCellsRecycling
-					width={500}
-				/>
-				<Column
-					header={<Cell>Chapters</Cell>}
-					cell={({ rowIndex, ...props }) => (<Cell {...props}>{books[rowIndex].chapters}</Cell>)}
-					allowCellsRecycling
-					width={200}
-				/>
-			</Table>
+			<div className="row centered">
+				<div className="centered small-6 shadow">
+					<div className="book-chapter-header">
+						<div role="button" tabIndex="0" onClick={() => setActiveBookName('')}><h1>Book</h1></div><div><h1>{activeBookName || 'Chapter'}</h1></div>
+					</div>
+				</div>
+				{
+					activeBookName ? books.filter((book) => book.name === activeBookName).map((book) => (
+						<div key={book.name} className="centered small-6 chapter-container">
+							{
+								book.chapters.map((chapter) => (
+									<div key={chapter} className="chapter-box">
+										{chapter}
+									</div>
+								))
+							}
+						</div>
+					)) :
+					books.map((book) => (<div tabIndex="0" role="button" key={book.name} onClick={() => setActiveBookName(book.name)} className="centered small-6 shadow">{book.name}</div>))
+				}
+			</div>
 		);
 	}
 }
 
 BooksTable.propTypes = {
 	books: PropTypes.array,
+	setActiveBookName: PropTypes.func.isRequired,
+	activeBookName: PropTypes.string,
 };
 
 export default BooksTable;

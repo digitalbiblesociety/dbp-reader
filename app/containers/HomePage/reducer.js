@@ -6,9 +6,11 @@
 
 import { fromJS } from 'immutable';
 import {
-  LOAD_TEXTS,
-  TOGGLE_BIBLE_NAMES,
-  TOGGLE_BOOK_NAMES,
+	LOAD_TEXTS,
+	TOGGLE_BIBLE_NAMES,
+	TOGGLE_BOOK_NAMES,
+	SET_ACTIVE_BOOK_NAME,
+	LOAD_BOOKS,
 } from './constants';
 
 const initialState = fromJS({
@@ -36,6 +38,7 @@ const initialState = fromJS({
 	isBibleTableActive: false,
 	activeTextName: 'ESV',
 	isBookTableActive: false,
+	activeBookName: '',
 });
 
 function homePageReducer(state = initialState, action) {
@@ -44,12 +47,16 @@ function homePageReducer(state = initialState, action) {
 		return state.set('texts', fromJS(action.texts));
 	case TOGGLE_BOOK_NAMES:
 		return state
-        .set('isBibleTableActive', false)
-        .set('isBookTableActive', !state.get('isBookTableActive'));
+				.set('isBibleTableActive', false)
+				.set('isBookTableActive', !state.get('isBookTableActive'));
 	case TOGGLE_BIBLE_NAMES:
 		return state
-        .set('isBibleTableActive', !state.get('isBibleTableActive'))
-        .set('isBookTableActive', false);
+				.set('isBibleTableActive', !state.get('isBibleTableActive'))
+				.set('isBookTableActive', false);
+	case SET_ACTIVE_BOOK_NAME:
+		return state.set('activeBookName', action.book);
+	case LOAD_BOOKS:
+		return state.set('books', fromJS(action.books));
 	default:
 		return state;
 	}

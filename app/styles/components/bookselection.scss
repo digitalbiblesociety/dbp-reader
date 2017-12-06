@@ -1,0 +1,18 @@
+.chapter-box {
+  padding: 2px;
+  border: 1px solid black;
+  width: 25px;
+  height: 25px;
+  margin: 1px;
+}
+
+.chapter-container {
+  display: grid;
+  grid-template-columns: repeat(5, 30px);
+  grid-template-rows: auto;
+}
+
+.book-chapter-header {
+  display: flex;
+  justify-content: space-between;
+}

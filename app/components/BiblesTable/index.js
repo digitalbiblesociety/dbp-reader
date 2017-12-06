@@ -7,6 +7,7 @@
 import React from 'react';
 import { Table, Column, Cell } from 'fixed-data-table-2';
 import PropTypes from 'prop-types';
+import CustomCell from 'components/CustomCell';
 // import styled from 'styled-components';
 
 // import { FormattedMessage } from 'react-intl';
@@ -14,24 +15,24 @@ import PropTypes from 'prop-types';
 
 class BiblesTable extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	render() {
-		const { bibles } = this.props;
+		const { bibles, getBooksForText } = this.props;
 		return (
 			<Table rowHeight={50} rowsCount={bibles.length || 1} width={1200} height={750} headerHeight={50}>
 				<Column
 					header={<Cell>Name</Cell>}
-					cell={({ rowIndex, ...props }) => (<Cell {...props}>{bibles[rowIndex].name}</Cell>)}
+					cell={({ rowIndex, ...props }) => (<CustomCell rowIndex={rowIndex} abbr={bibles[rowIndex].abbr} content={bibles[rowIndex].name} getBooksForText={getBooksForText} {...props} />)}
 					allowCellsRecycling
 					width={500}
 				/>
 				<Column
 					header={<Cell>Abbreviation</Cell>}
-					cell={({ rowIndex, ...props }) => (<Cell {...props}>{bibles[rowIndex].abbr}</Cell>)}
+					cell={({ rowIndex, ...props }) => (<CustomCell rowIndex={rowIndex} abbr={bibles[rowIndex].abbr} content={bibles[rowIndex].abbr} getBooksForText={getBooksForText} {...props} />)}
 					allowCellsRecycling
 					width={200}
 				/>
 				<Column
 					header={<Cell>Language</Cell>}
-					cell={({ rowIndex, ...props }) => (<Cell {...props}>{bibles[rowIndex].language}</Cell>)}
+					cell={({ rowIndex, ...props }) => (<CustomCell rowIndex={rowIndex} abbr={bibles[rowIndex].abbr} content={bibles[rowIndex].language} getBooksForText={getBooksForText} {...props} />)}
 					allowCellsRecycling
 					width={500}
 				/>
@@ -42,6 +43,7 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 
 BiblesTable.propTypes = {
 	bibles: PropTypes.array,
+	getBooksForText: PropTypes.func,
 };
 
 export default BiblesTable;
