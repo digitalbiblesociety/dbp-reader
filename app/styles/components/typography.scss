@@ -1,13 +1,14 @@
 /* 1rem(16px) @ 30rem(480px) increasing to 2rem(32px) @ 120rem(1920px) */
 @media (min-width: 30rem) {
-  * {
+  main * {
     font-size: calc(1rem + ((1vw - 0.3rem) * 1.1111));
     /* Where: * 1.1111 = 100 * font_Size_Difference / viewport_Width_Difference */
   }
 }
 /* Prevent font scaling beyond this breakpoint */
 @media (min-width: 120rem) {
-  * {
+  main * {
     font-size: 2rem;
   }
 }
+

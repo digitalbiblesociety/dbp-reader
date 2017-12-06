@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 import Logo from 'components/Logo';
 import ChapterButton from 'components/ChapterButton';
 import SearchButton from 'components/SearchButton';
+import LocaleToggle from 'containers/LocaleToggle';
 // import styled from 'styled-components';
 
 // import { FormattedMessage } from 'react-intl';
@@ -25,7 +26,7 @@ class NavigationBar extends React.PureComponent { // eslint-disable-line react/p
 
     return (
       <nav>
-        <div className="small-3 columns">
+        <div className="small-2 columns">
           <Logo />
         </div>
         <div className="small-6 columns">
@@ -38,8 +39,11 @@ class NavigationBar extends React.PureComponent { // eslint-disable-line react/p
             <SearchButton />
           </form>
         </div>
-        <div className="small-3 columns">
+        <div className="small-2 columns">
           <button className="font-button">Aa</button>
+        </div>
+        <div className="small-2 columns">
+          <LocaleToggle />
         </div>
       </nav>
     );

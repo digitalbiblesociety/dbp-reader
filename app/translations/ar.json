@@ -1,0 +1,9 @@
+{
+  "app.components.ChapterButton.header": "",
+  "app.components.HomePage.header": "",
+  "app.components.Logo.header": "",
+  "app.components.NavigationBar.header": "",
+  "app.components.NotFoundPage.header": "",
+  "app.components.SearchButton.header": "",
+  "app.containers.AboutPage.header": ""
+}

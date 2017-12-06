@@ -1,20 +1,20 @@
 *, *::after, *::before {box-sizing:border-box;margin:0;padding:0}
 body, html 	           {height:100%}
-body 				   {margin:0 auto;color:#222;overflow-x: hidden;overflow-y: scroll;font-size: .98em;font-family: 'Open Sans', sans-serif;}
-a                      {text-decoration: none;}
+body 				   {margin:0 auto;color:#222;overflow-x:hidden;overflow-y:scroll;font-size:.98em;font-family:'Open Sans', sans-serif}
+a                      {text-decoration:none}
 
 // images
 img                    {max-width:100%;height:auto}
-img[data-src]          {filter: blur(15px);}
-img.loaded             {transition: all .5s linear;filter:blur(0)}
+img[data-src]          {filter:blur(15px)}
+img.loaded             {transition:all .5s linear;filter:blur(0)}
 
 // Icons Style Applied to All SVG Sprites
-.icon                  {width: 1em; height: 1em;vertical-align: -0.15em;fill: currentColor;overflow: hidden}
-li                     {list-style: none}
-.shadow                {box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24)!important}
+.icon                  {width:1em;height:1em;vertical-align:-0.15em;fill:currentColor;overflow:hidden}
+li                     {list-style:none}
+.shadow                {box-shadow:0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24)!important}
 
 // GRID
-section {position: relative}
+section                 {position:relative}
 .row 					{margin:0 auto;max-width:1200px;width:100%}
 main:after,
 .row:before, .row:after {content:" ";display:table;clear:both}
@@ -27,14 +27,14 @@ main:after,
 .columns 				{padding-left:1.1rem;padding-right:1.1rem;width:100%;float:left}
 .centered 				{margin-left:auto;margin-right:auto;float:none}
 .centered:last-child 	{float:none}
-.clearfix:after {content: ""; display: table; clear: both; }
-.hidden {border: 0;height: 1px;margin: -1px; overflow: hidden;padding: 0; position: absolute; width: 1px;}
+.clearfix:after {content:"";display:table;clear:both}
+.hidden {border:0;height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px}
 .disabled {opacity:.5}
 
-.visuallyhidden, .hide {display: none}
+.visuallyhidden, .hide {display:none}
 
 @media only screen and (max-width:400px) {
-  .x-small-hide {display: none}
+  .x-small-hide {display:none}
 }
 
 @media only screen {
