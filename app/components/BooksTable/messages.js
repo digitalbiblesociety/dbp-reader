@@ -6,8 +6,8 @@
 import { defineMessages } from 'react-intl';
 
 export default defineMessages({
-  header: {
-    id: 'app.components.BooksTable.header',
-    defaultMessage: 'This is the BooksTable component !',
-  },
+	header: {
+		id: 'app.components.BooksTable.header',
+		defaultMessage: 'This is the BooksTable component !',
+	},
 });

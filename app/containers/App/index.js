@@ -19,13 +19,13 @@ import AboutPage from 'containers/AboutPage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 
 export default function App() {
-  return (
-    <div>
-      <Switch>
-        <Route exact path="/" component={HomePage} />
-        <Route exact path="/about" component={AboutPage} />
-        <Route component={NotFoundPage} />
-      </Switch>
-    </div>
-  );
+	return (
+		<div>
+			<Switch>
+				<Route exact path="/" component={HomePage} />
+				<Route exact path="/about" component={AboutPage} />
+				<Route component={NotFoundPage} />
+			</Switch>
+		</div>
+	);
 }

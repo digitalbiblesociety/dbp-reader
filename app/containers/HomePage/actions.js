@@ -12,18 +12,18 @@ import {
 } from './constants';
 
 export const loadTexts = ({ texts }) => ({
-  type: LOAD_TEXTS,
-  texts,
+	type: LOAD_TEXTS,
+	texts,
 });
 
 export const getTexts = () => ({
-  type: GET_DPB_TEXTS,
+	type: GET_DPB_TEXTS,
 });
 
 export const toggleBookNames = () => ({
-  type: TOGGLE_BOOK_NAMES,
+	type: TOGGLE_BOOK_NAMES,
 });
 
 export const toggleBibleNames = () => ({
-  type: TOGGLE_BIBLE_NAMES,
+	type: TOGGLE_BIBLE_NAMES,
 });

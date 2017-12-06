@@ -19,11 +19,11 @@ import ruTranslationMessages from './translations/ru.json';
 import esTranslationMessages from './translations/es.json';
 
 export const appLocales = [
-  'en',
-  'ar',
-  'th',
-  'ru',
-  'es',
+	'en',
+	'ar',
+	'th',
+	'ru',
+	'es',
 ];
 
 addLocaleData(enLocaleData);
@@ -33,22 +33,22 @@ addLocaleData(ruLocaleData);
 addLocaleData(esLocaleData);
 
 export const formatTranslationMessages = (locale, messages) => {
-  const defaultFormattedMessages = locale !== DEFAULT_LOCALE
+	const defaultFormattedMessages = locale !== DEFAULT_LOCALE
     ? formatTranslationMessages(DEFAULT_LOCALE, enTranslationMessages)
     : {};
-  return Object.keys(messages).reduce((formattedMessages, key) => {
-    let message = messages[key];
-    if (!message && locale !== DEFAULT_LOCALE) {
-      message = defaultFormattedMessages[key];
-    }
-    return Object.assign(formattedMessages, { [key]: message });
-  }, {});
+	return Object.keys(messages).reduce((formattedMessages, key) => {
+		let message = messages[key];
+		if (!message && locale !== DEFAULT_LOCALE) {
+			message = defaultFormattedMessages[key];
+		}
+		return Object.assign(formattedMessages, { [key]: message });
+	}, {});
 };
 
 export const translationMessages = {
-  en: formatTranslationMessages('en', enTranslationMessages),
-  ar: formatTranslationMessages('ar', arTranslationMessages),
-  th: formatTranslationMessages('th', thTranslationMessages),
-  ru: formatTranslationMessages('ru', ruTranslationMessages),
-  es: formatTranslationMessages('es', esTranslationMessages),
+	en: formatTranslationMessages('en', enTranslationMessages),
+	ar: formatTranslationMessages('ar', arTranslationMessages),
+	th: formatTranslationMessages('th', thTranslationMessages),
+	ru: formatTranslationMessages('ru', ruTranslationMessages),
+	es: formatTranslationMessages('es', esTranslationMessages),
 };

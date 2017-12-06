@@ -4,7 +4,7 @@
 // import Logo from '../index';
 
 describe('<Logo />', () => {
-  it('Expect to have unit tests specified', () => {
-    expect(true).toEqual(false);
-  });
+	it('Expect to have unit tests specified', () => {
+		expect(true).toEqual(false);
+	});
 });
