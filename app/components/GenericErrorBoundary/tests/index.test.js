@@ -4,7 +4,7 @@
 // import GenericErrorBoundary from '../index';
 
 describe('<GenericErrorBoundary />', () => {
-  it('Expect to have unit tests specified', () => {
-    expect(true).toEqual(false);
-  });
+	it('Expect to have unit tests specified', () => {
+		expect(true).toEqual(false);
+	});
 });

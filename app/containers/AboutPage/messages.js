@@ -6,8 +6,8 @@
 import { defineMessages } from 'react-intl';
 
 export default defineMessages({
-  header: {
-    id: 'app.containers.AboutPage.header',
-    defaultMessage: 'About Us',
-  },
+	header: {
+		id: 'app.containers.AboutPage.header',
+		defaultMessage: 'About Us',
+	},
 });

@@ -1,11 +1,19 @@
 nav {
   background:#A14;
   height:60px;
-}
 
-nav input,
-nav a {
-  float:left;
+  input,
+  a {
+    float:left;
+  }
+
+  #search-form input {
+    width:calc(100% - 120px);
+    height:40px;
+    margin:10px 0;
+    border:none;
+  }
+
 }
 
 .version-button,
@@ -31,13 +39,6 @@ nav a {
 .font-button:hover {
   color:#FFF;
   font-weight:bold;
-}
-
-nav #search-form input {
-  width:calc(100% - 120px);
-  height:40px;
-  margin:10px 0;
-  border:none;
 }
 
 article {
@@ -174,39 +175,8 @@ a {
   right:10px;
 }
 
-.chevron::before {
-  border-style: solid;
-  border-width: .25em .25em 0 0;
-  content: '';
-  display: inline-block;
-  height: 0.9em;
-  left: 0.3em;
-  position: relative;
-  top: 0.3em;
-  transform: rotate(-45deg);
-  vertical-align: top;
-  width: 0.9em;
-  color:#ccc;
-}
-
-.chevron.right:before {
-  left: 0;
-  transform: rotate(45deg);
-}
-
-.chevron.bottom:before {
-  top: 0;
-  transform: rotate(135deg);
-}
-
-.chevron.left:before {
-  left: 0.25em;
-  transform: rotate(-135deg);
-}
-
 .logo {
-  width:100px;
-  margin-top:15px;
+  width:120px;
 }
 
 .chapters {

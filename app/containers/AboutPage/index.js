@@ -14,26 +14,26 @@ import { compose } from 'redux';
 import messages from './messages';
 
 function AboutPage() {
-  return (
-    <div>
-      <Helmet>
-        <title>About Page</title>
-        <meta name="description" content="About the Koinos App" />
-      </Helmet>
-      <FormattedMessage {...messages.header} />
-    </div>
-  );
+	return (
+		<div>
+			<Helmet>
+				<title>About Page</title>
+				<meta name="description" content="About the Koinos App" />
+			</Helmet>
+			<FormattedMessage {...messages.header} />
+		</div>
+	);
 }
 
 AboutPage.propTypes = {
-  dispatch: PropTypes.func.isRequired,
+	dispatch: PropTypes.func.isRequired,
 };
 
 
 function mapDispatchToProps(dispatch) {
-  return {
-    dispatch,
-  };
+	return {
+		dispatch,
+	};
 }
 
 const withConnect = connect(null, mapDispatchToProps);

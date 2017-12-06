@@ -4,7 +4,7 @@
 // import ChapterButton from '../index';
 
 describe('<ChapterButton />', () => {
-  it('Expect to have unit tests specified', () => {
-    expect(true).toEqual(false);
-  });
+	it('Expect to have unit tests specified', () => {
+		expect(true).toEqual(false);
+	});
 });
