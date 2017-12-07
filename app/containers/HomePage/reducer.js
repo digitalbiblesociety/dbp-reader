@@ -31,8 +31,9 @@ const initialState = fromJS({
 	isChapterActive: false,
 	activeTextName: 'ENGESV',
 	isBookTableActive: false,
-	activeBookName: 'GEN',
+	activeBookName: 'Genesis',
 	activeTextId: 'ENGESV',
+	initialBookId: 'GEN',
 });
 
 function homePageReducer(state = initialState, action) {
@@ -54,11 +55,13 @@ function homePageReducer(state = initialState, action) {
 			.set('activeTextName', action.textName)
 			.set('activeTextId', action.textId)
 			.set('isBookTableActive', true)
-			.set('isBibleTableActive', false);
+			.set('isBibleTableActive', false)
+			.set('activeBookName', '');
 	case SET_ACTIVE_BOOK_NAME:
 		return state.set('activeBookName', action.book);
 	case LOAD_BOOKS:
-		return state.set('books', fromJS(action.books));
+		return state
+			.set('books', fromJS(action.books));
 	case LOAD_CHAPTER_TEXT:
 		return state
 			.set('isBookTableActive', false)

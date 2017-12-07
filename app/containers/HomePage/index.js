@@ -35,10 +35,10 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 	componentDidMount() {
 		const {
 			activeTextId,
-			activeBookName,
+			initialBookId,
 		} = this.props.homepage;
 
-		this.props.dispatch(getChapterText({ bible: activeTextId, book: activeBookName, chapter: 1 }));
+		this.props.dispatch(getChapterText({ bible: activeTextId, book: initialBookId, chapter: 1 }));
 		this.props.dispatch(getBooks({ textId: activeTextId }));
 		this.props.dispatch(getTexts());
 	}
