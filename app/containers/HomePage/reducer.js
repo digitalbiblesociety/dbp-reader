@@ -18,32 +18,21 @@ import {
 const initialState = fromJS({
 	texts: [
 		{
-			volume_name: 'English Standard Version',
-			dam_id: 'ENGESVO2ET',
-			language_name: 'ESV',
-			language_iso: 'eng',
-			language_iso_name: 'English',
+			abbr: 'ENGESV',
+			name: 'English Standard Version',
+			vname: 'English Standard Version',
+			language: 'English',
+			date: 2001,
 		},
 	],
-	books: [
-		{
-			book_id: 'GEN',
-			name: 'Genesis',
-			chapters: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50],
-		},
-		{
-			book_id: 'EXO',
-			name: 'Exodus',
-			chapters: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40],
-		},
-	],
+	books: [],
 	chapterText: [],
 	isBibleTableActive: false,
 	isChapterActive: false,
-	activeTextName: 'ESV',
+	activeTextName: 'ENGESV',
 	isBookTableActive: false,
-	activeBookName: '',
-	activeTextId: '',
+	activeBookName: 'GEN',
+	activeTextId: 'ENGESV',
 });
 
 function homePageReducer(state = initialState, action) {
@@ -65,8 +54,7 @@ function homePageReducer(state = initialState, action) {
 			.set('activeTextName', action.textName)
 			.set('activeTextId', action.textId)
 			.set('isBookTableActive', true)
-			.set('isBibleTableActive', false)
-			.set('activeBookName', '');
+			.set('isBibleTableActive', false);
 	case SET_ACTIVE_BOOK_NAME:
 		return state.set('activeBookName', action.book);
 	case LOAD_BOOKS:

@@ -33,6 +33,13 @@ import saga from './saga';
 
 class HomePage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	componentDidMount() {
+		const {
+			activeTextId,
+			activeBookName,
+		} = this.props.homepage;
+
+		this.props.dispatch(getChapterText({ bible: activeTextId, book: activeBookName, chapter: 1 }));
+		this.props.dispatch(getBooks({ textId: activeTextId }));
 		this.props.dispatch(getTexts());
 	}
 
