@@ -15,7 +15,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		} = this.props;
 
 		return (
-			<div className="row small-10 centered">
+			<div className="row small-10 centered main">
 				{
 					text.map((verse) => (
 						<div className="text-container">

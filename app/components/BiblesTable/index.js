@@ -70,7 +70,7 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 		}
 		return (
 			<div className="centered">
-				<input onChange={this.handleChange} placeholder="Filter by language" />
+				<input type="text" className="search" name="filter" onChange={this.handleChange} placeholder="Filter by language" />
 				<Table rowHeight={50} rowsCount={bibles.size || 1} width={820} height={750} headerHeight={50}>
 					<Column
 						header={<Cell>Name</Cell>}
@@ -97,7 +97,7 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 }
 
 BiblesTable.propTypes = {
-	bibles: PropTypes.array,
+	bibles: PropTypes.object,
 	getBooksForText: PropTypes.func,
 	setActiveText: PropTypes.func,
 };
