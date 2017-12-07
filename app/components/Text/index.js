@@ -6,7 +6,6 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-// import styled from 'styled-components';
 
 class Text extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	render() {
@@ -15,16 +14,13 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		} = this.props;
 
 		return (
-			<div className="row small-10 centered main">
+			<main className="chapter">
 				{
 					text.map((verse) => (
-						<div key={verse.verse_start} className="text-container">
-							<h5 className="verse-number">{verse.verse_start}</h5>
-							<h3 className="verse-text">{verse.verse_text}</h3>
-						</div>
+						<span key={verse.verse_start}>&nbsp;<sup>{verse.verse_start}</sup>&nbsp;{verse.verse_text}</span>
 					))
 				}
-			</div>
+			</main>
 		);
 	}
 }
