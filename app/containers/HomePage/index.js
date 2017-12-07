@@ -26,7 +26,7 @@ import Text from 'components/Text';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
 
 import { getTexts, toggleBibleNames, toggleBookNames, setActiveBookName, getBooks, getChapterText, setActiveText } from './actions';
-import makeSelectHomePage from './selectors';
+import makeSelectHomePage, { selectTexts } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 // import messages from './messages';
@@ -53,12 +53,12 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			activeTextName,
 			isBibleTableActive,
 			isBookTableActive,
-			texts,
 			books,
 			activeBookName,
 			chapterText,
 			isChapterActive,
 		} = this.props.homepage;
+		const { texts } = this.props;
 
 		return (
 			<GenericErrorBoundary>
@@ -94,10 +94,12 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 HomePage.propTypes = {
 	dispatch: PropTypes.func.isRequired,
 	homepage: PropTypes.object.isRequired,
+	texts: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
 	homepage: makeSelectHomePage(),
+	texts: selectTexts(),
 });
 
 function mapDispatchToProps(dispatch) {
