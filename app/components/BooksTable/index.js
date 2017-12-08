@@ -11,6 +11,7 @@ import PropTypes from 'prop-types';
 
 // import { FormattedMessage } from 'react-intl';
 // import messages from './messages';
+// TODO: change logic for rendering chapter to use isBookActive instead of activeBookName
 
 class BooksTable extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	render() {
@@ -18,14 +19,12 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 
 		return (
 			<div className="row centered books-dropdown">
-				<div className="centered small-6 shadow">
-					<div className="book-chapter-header">
-						<div role="button" tabIndex="0" onClick={() => setActiveBookName('')}><h1>Book</h1></div><div><h1>{activeBookName || 'Chapter'}</h1></div>
-					</div>
+				<div className="book-chapter-header">
+					<div className={activeBookName ? 'book-text' : 'book-text-active'} role="button" tabIndex="0" onClick={() => setActiveBookName('')}><h1>Book</h1></div><div className={activeBookName ? 'chapter-text-active' : 'chapter-text'}><h1>{activeBookName || 'Chapter'}</h1></div>
 				</div>
 				{
 					activeBookName ? books.filter((book) => book.name === activeBookName).map((book) => (
-						<div key={book.name} className="centered small-6 chapter-container">
+						<div key={book.name} className="chapter-container">
 							{
 								book.chapters.map((chapter) => (
 									<div role="button" tabIndex="0" key={chapter} className="chapter-box" onClick={() => getChapterText({ book: book.book_id, chapter })}>
@@ -34,8 +33,13 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 								))
 							}
 						</div>
-					)) :
-					books.map((book) => (<div tabIndex="0" role="button" key={book.name} onClick={() => setActiveBookName(book.name)} className="centered small-6 shadow">{book.name}</div>))
+					)) : (
+						<div className="book-container">
+							{
+								books.map((book) => (<div tabIndex="0" role="button" key={book.name} onClick={() => setActiveBookName(book.name)}>{book.name}</div>))
+							}
+						</div>
+					)
 				}
 			</div>
 		);

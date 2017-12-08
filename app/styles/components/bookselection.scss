@@ -1,30 +1,69 @@
 .chapter-box {
-  padding: 2px;
   border: 1px solid black;
-  width: 25px;
-  height: 25px;
-  margin: 1px;
+  width: 40px;
+  height: 30px;
+  margin-bottom: 5px;
+  text-align: center;
 }
 
 .chapter-container {
   display: grid;
-  grid-template-columns: repeat(5, 30px);
+  width: 50%;
+  margin: auto;
+  padding: 5px 0 5px 8px;
+  background-color: beige;
+  color: #222;
+  grid-template-columns: repeat(5, 1fr);
   grid-template-rows: auto;
 }
 
 .book-chapter-header {
   display: flex;
   justify-content: space-between;
+  width: 50%;
+  margin: auto;
 }
 
 .books-dropdown {
   display: block;
   position: fixed;
   z-index: 1;
+  padding: 5px;
   background-color: rgba(36,41,47,.96);
   color: whitesmoke;
   border: 1px solid grey;
-  overflow-y: scroll;
   max-height: 500px;
   max-width: 500px;
+}
+
+.book-text {
+  width: 50%;
+  background-color: rgba(36,41,47,.96);
+}
+
+.book-text-active {
+  width: 50%;
+  background-color: beige;
+  color: #222;
+}
+
+.chapter-text {
+  width: 50%;
+  background-color: rgba(36,41,47,.96);
+}
+
+.chapter-text-active {
+  width: 50%;
+  background-color: beige;
+  color: #222;
+}
+
+.book-container {
+  width: 50%;
+  margin: auto;
+  padding: 5px 0 5px 8px;
+  background-color: beige;
+  color: #222;
+  max-height: 454px;
+  overflow-y: scroll;
 }
