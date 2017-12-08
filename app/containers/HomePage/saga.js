@@ -1,6 +1,5 @@
-import { take, takeLatest, cancel, call, put } from 'redux-saga/effects';
+import { takeLatest, call, put } from 'redux-saga/effects';
 import request from 'utils/request';
-import { LOCATION_CHANGE } from 'react-router-redux';
 import { GET_DPB_TEXTS, GET_BOOKS, GET_CHAPTER_TEXT } from './constants';
 import { loadTexts, loadBooks, loadChapter } from './actions';
 
@@ -52,12 +51,7 @@ export function* getChapter({ bible, book, chapter }) {
 
 // Individual exports for testing
 export default function* defaultSaga() {
-	const watchTextsRequest = yield takeLatest(GET_DPB_TEXTS, getTexts);
-	const watchBooksRequest = yield takeLatest(GET_BOOKS, getBooks);
-	const watchChapterRequest = yield takeLatest(GET_CHAPTER_TEXT, getChapter);
-
-	yield take(LOCATION_CHANGE);
-	yield cancel(watchBooksRequest);
-	yield cancel(watchTextsRequest);
-	yield cancel(watchChapterRequest);
+	yield takeLatest(GET_DPB_TEXTS, getTexts);
+	yield takeLatest(GET_BOOKS, getBooks);
+	yield takeLatest(GET_CHAPTER_TEXT, getChapter);
 }
