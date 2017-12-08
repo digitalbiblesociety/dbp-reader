@@ -17,7 +17,7 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 		const { books, activeBookName, setActiveBookName, getChapterText } = this.props;
 
 		return (
-			<div className="row centered">
+			<div className="row centered books-dropdown">
 				<div className="centered small-6 shadow">
 					<div className="book-chapter-header">
 						<div role="button" tabIndex="0" onClick={() => setActiveBookName('')}><h1>Book</h1></div><div><h1>{activeBookName || 'Chapter'}</h1></div>

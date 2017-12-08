@@ -43,12 +43,10 @@ function homePageReducer(state = initialState, action) {
 	case TOGGLE_BOOK_NAMES:
 		return state
 			.set('isBibleTableActive', false)
-			.set('isChapterActive', false)
 			.set('isBookTableActive', !state.get('isBookTableActive'));
 	case TOGGLE_BIBLE_NAMES:
 		return state
 			.set('isBibleTableActive', !state.get('isBibleTableActive'))
-			.set('isChapterActive', false)
 			.set('isBookTableActive', false);
 	case SET_ACTIVE_TEXT:
 		return state

@@ -16,3 +16,15 @@
   display: flex;
   justify-content: space-between;
 }
+
+.books-dropdown {
+  display: block;
+  position: fixed;
+  z-index: 1;
+  background-color: rgba(36,41,47,.96);
+  color: whitesmoke;
+  border: 1px solid grey;
+  overflow-y: scroll;
+  max-height: 500px;
+  max-width: 500px;
+}
