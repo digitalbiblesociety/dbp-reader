@@ -1,0 +1,23 @@
+.bibles_header {
+  display: flex;
+  justify-content: space-between;
+  max-width: 560px;
+  width: 100%;
+}
+
+.bibles_row {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  cursor: pointer;
+  &:hover {
+    color: #0284ff;
+  }
+}
+
+.bibles_table {
+  border: 1px solid grey;
+  overflow-y: scroll;
+  max-height: 350px;
+  max-width: 560px;
+}

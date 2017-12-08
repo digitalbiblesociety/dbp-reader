@@ -5,9 +5,7 @@
 */
 
 import React from 'react';
-import { Table, Column, Cell } from 'fixed-data-table-2';
 import PropTypes from 'prop-types';
-import CustomCell from 'components/CustomCell';
 // import styled from 'styled-components';
 
 // import { FormattedMessage } from 'react-intl';
@@ -39,58 +37,36 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 	render() {
 		const { bibles, getBooksForText, setActiveText } = this.props;
 		const { filterText } = this.state;
+		const filteredBibles = filterText ? bibles.filter((bible) => this.filterFunction(bible, filterText)) : bibles;
 
-		if (filterText) {
-			const filteredBibles = bibles.filter((bible) => this.filterFunction(bible, filterText));
-			return (
-				<div className="centered">
-					<input onChange={this.handleChange} placeholder="Filter by language" />
-					<Table rowHeight={50} rowsCount={filteredBibles.size || 1} width={820} height={750} headerHeight={50}>
-						<Column
-							header={<Cell>Name</Cell>}
-							cell={({ rowIndex, ...props }) => (<CustomCell rowIndex={rowIndex} abbr={filteredBibles.getIn([rowIndex, 'abbr'])} content={filteredBibles.getIn([rowIndex, 'name'])} getBooksForText={getBooksForText} setActiveText={setActiveText} {...props} />)}
-							allowCellsRecycling
-							width={400}
-						/>
-						<Column
-							header={<Cell>Abbreviation</Cell>}
-							cell={({ rowIndex, ...props }) => (<CustomCell rowIndex={rowIndex} abbr={filteredBibles.getIn([rowIndex, 'abbr'])} content={filteredBibles.getIn([rowIndex, 'abbr'])} getBooksForText={getBooksForText} setActiveText={setActiveText} {...props} />)}
-							allowCellsRecycling
-							width={120}
-						/>
-						<Column
-							header={<Cell>Language</Cell>}
-							cell={({ rowIndex, ...props }) => (<CustomCell rowIndex={rowIndex} abbr={filteredBibles.getIn([rowIndex, 'abbr'])} content={filteredBibles.getIn([rowIndex, 'language'])} getBooksForText={getBooksForText} setActiveText={setActiveText} {...props} />)}
-							allowCellsRecycling
-							width={300}
-						/>
-					</Table>
-				</div>
-			);
-		}
 		return (
 			<div className="centered">
-				<input type="text" className="search" name="filter" onChange={this.handleChange} placeholder="Filter by language" />
-				<Table rowHeight={50} rowsCount={bibles.size || 1} width={820} height={750} headerHeight={50}>
-					<Column
-						header={<Cell>Name</Cell>}
-						cell={({ rowIndex, ...props }) => (<CustomCell rowIndex={rowIndex} abbr={bibles.getIn([rowIndex, 'abbr'])} content={bibles.getIn([rowIndex, 'name'])} getBooksForText={getBooksForText} setActiveText={setActiveText} {...props} />)}
-						allowCellsRecycling
-						width={400}
-					/>
-					<Column
-						header={<Cell>Abbreviation</Cell>}
-						cell={({ rowIndex, ...props }) => (<CustomCell rowIndex={rowIndex} abbr={bibles.getIn([rowIndex, 'abbr'])} content={bibles.getIn([rowIndex, 'abbr'])} getBooksForText={getBooksForText} setActiveText={setActiveText} {...props} />)}
-						allowCellsRecycling
-						width={120}
-					/>
-					<Column
-						header={<Cell>Language</Cell>}
-						cell={({ rowIndex, ...props }) => (<CustomCell rowIndex={rowIndex} abbr={bibles.getIn([rowIndex, 'abbr'])} content={bibles.getIn([rowIndex, 'language'])} getBooksForText={getBooksForText} setActiveText={setActiveText} {...props} />)}
-						allowCellsRecycling
-						width={300}
-					/>
-				</Table>
+				<div className="row centered small-6">
+					<div className="bibles_header">
+						<h1>Name</h1>
+						<input onChange={this.handleChange} placeholder="Filter by language" />
+						<h1>Language</h1>
+					</div>
+					<div className="bibles_table">
+						{
+							filteredBibles.map((bible) => (
+								<div
+									tabIndex="0"
+									role="button"
+									className="bibles_row"
+									onClick={() => {
+										const abbr = bible.get('abbr');
+										setActiveText({ textId: abbr, textName: abbr });
+										getBooksForText({ textId: abbr });
+									}}
+								>
+									<h3>{bible.get('name')}</h3>
+									<span>{bible.get('language')}</span>
+								</div>
+							))
+						}
+					</div>
+				</div>
 			</div>
 		);
 	}
