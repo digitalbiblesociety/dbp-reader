@@ -77,6 +77,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 				{
 					isBibleTableActive || isBookTableActive ? (
 						(<TextSelection
+							{...this.props.homepage}
 							bibles={texts}
 							setActiveBookName={this.setActiveBookName}
 							getChapterText={this.getChapterText}
