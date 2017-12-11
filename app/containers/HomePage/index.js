@@ -13,17 +13,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
-// import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
-
 import NavigationBar from 'components/NavigationBar';
-import BiblesTable from 'components/BiblesTable';
-import BooksTable from 'components/BooksTable';
+import TextSelection from 'components/TextSelection';
 import Text from 'components/Text';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
+// import BooksTable from 'components/BooksTable';
 
 import { getTexts, toggleBibleNames, toggleBookNames, setActiveBookName, getBooks, getChapterText, setActiveText } from './actions';
 import makeSelectHomePage, { selectTexts } from './selectors';
@@ -60,8 +58,6 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			activeTextName,
 			isBibleTableActive,
 			isBookTableActive,
-			books,
-			activeBookName,
 			chapterText,
 			isChapterActive,
 		} = this.props.homepage;
@@ -79,13 +75,14 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					toggleBookNames={this.toggleBookNames}
 				/>
 				{
-					isBibleTableActive ? (
-						<BiblesTable setActiveText={this.setActiveText} getBooksForText={this.getBooksForText} bibles={texts} />
-					) : null
-				}
-				{
-					isBookTableActive ? (
-						<BooksTable getChapterText={this.getChapterText} setActiveBookName={this.setActiveBookName} activeBookName={activeBookName} books={books} />
+					isBibleTableActive || isBookTableActive ? (
+						(<TextSelection
+							bibles={texts}
+							setActiveBookName={this.setActiveBookName}
+							getChapterText={this.getChapterText}
+							getBooksForText={this.getBooksForText}
+							setActiveText={this.setActiveText}
+						/>)
 					) : null
 				}
 				{
