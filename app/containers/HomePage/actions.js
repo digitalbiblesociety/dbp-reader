@@ -15,6 +15,7 @@ import {
 	LOAD_CHAPTER_TEXT,
 	GET_CHAPTER_TEXT,
 	SET_ACTIVE_TEXT,
+	TOGGLE_SETTINGS_MODAL,
 } from './constants';
 
 export const loadBooks = ({ books }) => ({
@@ -54,6 +55,10 @@ export const toggleBookNames = () => ({
 
 export const toggleBibleNames = () => ({
 	type: TOGGLE_BIBLE_NAMES,
+});
+
+export const toggleSettingsModal = () => ({
+	type: TOGGLE_SETTINGS_MODAL,
 });
 
 export const setActiveBookName = (book) => ({

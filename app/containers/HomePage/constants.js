@@ -14,4 +14,4 @@ export const SET_ACTIVE_BOOK_NAME = 'app/HomePage/SET_ACTIVE_BOOK_NAME';
 export const SET_ACTIVE_TEXT = 'app/HomePage/SET_ACTIVE_TEXT';
 export const TOGGLE_BIBLE_NAMES = 'app/HomePage/TOGGLE_BIBLE_NAMES';
 export const TOGGLE_BOOK_NAMES = 'app/HomePage/TOGGLE_BOOK_NAMES';
-
+export const TOGGLE_SETTINGS_MODAL = 'app/HomePage/TOGGLE_SETTINGS_MODAL';

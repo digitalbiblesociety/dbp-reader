@@ -20,10 +20,11 @@ import injectReducer from 'utils/injectReducer';
 import NavigationBar from 'components/NavigationBar';
 import TextSelection from 'components/TextSelection';
 import Text from 'components/Text';
+import Settings from 'containers/Settings';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
 // import BooksTable from 'components/BooksTable';
 
-import { getTexts, toggleBibleNames, toggleBookNames, setActiveBookName, getBooks, getChapterText, setActiveText } from './actions';
+import { getTexts, toggleBibleNames, toggleBookNames, setActiveBookName, toggleSettingsModal, getBooks, getChapterText, setActiveText } from './actions';
 import makeSelectHomePage, { selectTexts } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -53,6 +54,8 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 
 	toggleBookNames = () => this.props.dispatch(toggleBookNames());
 
+	toggleSettingsModal = () => this.props.dispatch(toggleSettingsModal());
+
 	render() {
 		const {
 			activeTextName,
@@ -60,6 +63,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			isBookTableActive,
 			chapterText,
 			isChapterActive,
+			isSettingsModalActive,
 		} = this.props.homepage;
 		const { texts } = this.props;
 
@@ -73,6 +77,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					activeTextName={activeTextName}
 					toggleBibleNames={this.toggleBibleNames}
 					toggleBookNames={this.toggleBookNames}
+					toggleSettingsModal={this.toggleSettingsModal}
 				/>
 				{
 					isBibleTableActive || isBookTableActive ? (
@@ -89,6 +94,11 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 				{
 					isChapterActive ? (
 						<Text text={chapterText} />
+					) : null
+				}
+				{
+					isSettingsModalActive ? (
+						<Settings />
 					) : null
 				}
 			</GenericErrorBoundary>

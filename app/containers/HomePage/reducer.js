@@ -13,6 +13,7 @@ import {
 	LOAD_BOOKS,
 	LOAD_CHAPTER_TEXT,
 	SET_ACTIVE_TEXT,
+	TOGGLE_SETTINGS_MODAL,
 } from './constants';
 
 const initialState = fromJS({
@@ -34,6 +35,7 @@ const initialState = fromJS({
 	activeBookName: 'Genesis',
 	activeTextId: 'ENGESV',
 	initialBookId: 'GEN',
+	isSettingsModalActive: false,
 });
 
 function homePageReducer(state = initialState, action) {
@@ -48,6 +50,11 @@ function homePageReducer(state = initialState, action) {
 		return state
 			.set('isBibleTableActive', !state.get('isBibleTableActive'))
 			.set('isBookTableActive', false);
+	case TOGGLE_SETTINGS_MODAL:
+		return state
+			.set('isSettingsModalActive', !state.get('isSettingsModalActive'))
+			.set('isBookTableActive', false)
+			.set('isBibleTableActive', false);
 	case SET_ACTIVE_TEXT:
 		return state
 			.set('activeTextName', action.textName)
