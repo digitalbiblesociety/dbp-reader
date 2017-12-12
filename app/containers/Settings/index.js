@@ -52,24 +52,46 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 			settingsToggleOptions,
 		} = this.props.settings;
 		return (
-			<div>
+
+			<aside className="settings">
 				<div>
 					<h2>Settings</h2>
 					<h2 className="settings-close-icon">X</h2>
 				</div>
-				<div>
-          theme changes
-        </div>
-				<div>
-          font selector
-        </div>
-				<div>
-          font size
-        </div>
+				<div className="color-schemes">
+					<span className="option paper">
+						<span className="title">Light</span>
+					</span>
+					<span className="option red">
+						<span className="title">Default</span>
+					</span>
+					<span className="option dark">
+						<span className="title">Night</span>
+					</span>
+				</div>
+				<div className="font-settings">
+					<span className="option sans">
+						<span className="title">Sans Serif</span>
+					</span>
+					<span className="option serif">
+						<span className="title">Serif</span>
+					</span>
+					<span className="option slab">
+						<span className="title">Slab Serif</span>
+					</span>
+				</div>
+				<div className="font-sizes">
+					<span className="option smallest">Aa</span>
+					<span className="option small">Aa</span>
+					<span className="option medium">Aa</span>
+					<span className="option large">Aa</span>
+					<span className="option largest">Aa</span>
+				</div>
+				<div>option toggles</div>
 				{
-					settingsToggleOptions.map((option) => <SettingsToggle name={option} action={this.toggle[option]} />)
-				}
-			</div>
+                    settingsToggleOptions.map((option) => <SettingsToggle name={option} action={this.toggle[option]} />)
+                }
+			</aside>
 		);
 	}
 }
