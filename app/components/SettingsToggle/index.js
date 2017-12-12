@@ -10,12 +10,15 @@ import PropTypes from 'prop-types';
 
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
-
+/* eslint-disable jsx-a11y/label-has-for */
 function SettingsToggle({ action, name }) {
 	return (
-		<div>
+		<div className="checkbox-settings">
 			<FormattedMessage {...messages[name]} />
-			<input type="checkbox" onChange={action} />
+			<label className="switch">
+				<input type="checkbox" onChange={action} />
+				<span className="slider round"></span>
+			</label>
 		</div>
 	);
 }

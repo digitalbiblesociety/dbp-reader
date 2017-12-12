@@ -51,12 +51,15 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 		const {
 			settingsToggleOptions,
 		} = this.props.settings;
-		return (
+		const {
+			toggleSettingsModal,
+		} = this.props;
 
+		return (
 			<aside className="settings">
 				<div>
 					<h2>Settings</h2>
-					<h2 className="settings-close-icon">X</h2>
+					<span role="button" tabIndex={0} className="close-icon" onClick={toggleSettingsModal}>X</span>
 				</div>
 				<div className="color-schemes">
 					<span className="option paper">
@@ -89,8 +92,8 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 				</div>
 				<div>option toggles</div>
 				{
-                    settingsToggleOptions.map((option) => <SettingsToggle name={option} action={this.toggle[option]} />)
-                }
+					settingsToggleOptions.map((option) => <SettingsToggle key={option} name={option} action={this.toggle[option]} />)
+				}
 			</aside>
 		);
 	}
@@ -99,6 +102,7 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 Settings.propTypes = {
 	dispatch: PropTypes.func.isRequired,
 	settings: PropTypes.object,
+	toggleSettingsModal: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({

@@ -98,7 +98,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 				}
 				{
 					isSettingsModalActive ? (
-						<Settings />
+						<Settings toggleSettingsModal={this.toggleSettingsModal} />
 					) : null
 				}
 			</GenericErrorBoundary>
