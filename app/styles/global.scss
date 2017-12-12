@@ -1,6 +1,6 @@
 *, *::after, *::before {box-sizing:border-box;margin:0;padding:0}
 body, html 	           {height:100%}
-body 				   {margin:0 auto;color:#222;overflow-x:hidden;overflow-y:scroll;font-size:.98em;font-family:'Open Sans', sans-serif}
+body 				   {margin:0 auto;color:#222;overflow-x:hidden;overflow-y:scroll;font-size:.98em;font-family:$font-primary}
 a                      {text-decoration:none}
 
 // images

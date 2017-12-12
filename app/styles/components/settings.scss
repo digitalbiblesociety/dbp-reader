@@ -1,0 +1,119 @@
+.settings {
+  position: absolute;
+  top:0;
+  right:0;
+  height:100%;
+  width:400px;
+  background-color:#1b1f24;
+
+  .inactive {color:#6E747F}
+  .active   {color:#F4F6F9}
+
+  .color-schemes {
+
+    .option {
+      position: relative;
+      color: #F4F6F9;
+      width: 33%;
+      display: inline-block;
+      text-align: center;
+      line-height: 100px;
+
+      &:before {
+        content:"";
+        border-radius: 100%;
+        width: 38px;
+        height: 38px;
+        background-color: transparent;
+        border: thin solid #D4D8DD;
+        position: absolute;
+        left:50%;
+        margin-left:-19px;
+      }
+
+      &.red {
+        &:before {
+          background-color: $color-primary;
+          border-color: $color-secondary;
+        }
+      }
+
+      &.paper {
+        &:before {
+          background-color:$paper-sidebar;
+          border-color:$paper-secondary;
+        }
+      }
+
+      .title {
+        text-transform: uppercase;
+        font-size:14px;
+        font-weight:bold;
+        text-align: center;
+      }
+
+    }
+
+  }
+
+  .font-settings {
+
+    .option {
+      display: inline-block;
+      text-align: center;
+      font-size: 36px;
+      color: #F4F6F9;
+      opacity: .75;
+      display: flex;
+      flex-direction: row;
+
+
+      .title {
+        align-content: space-around;
+        text-transform: uppercase;
+        font-size:14px;
+        font-weight:bold;
+      }
+
+      &.active {
+        opacity: 1;
+      }
+
+    }
+  }
+
+  .font-sizes {
+    border-bottom: thin solid white;
+    height:60px;
+    line-height:1;
+
+    .option {
+      display: flex;
+      text-align: center;
+      font-size: 36px;
+      color: #F4F6F9;
+      opacity: .75;
+      width:20%;
+      float: left;
+      height: 60px;
+      margin-bottom: auto;
+
+      .title {
+        flex-grow: 1;
+        margin-top: auto;
+        align-self: flex-end;
+      }
+
+      &.smallest {font-size:1rem}
+      &.small    {font-size:1.5rem}
+      &.medium   {font-size:2rem}
+      &.large    {font-size:2.5rem}
+      &.largest  {font-size:3rem}
+
+      &.active   {opacity: 1}
+
+    }
+  }
+
+
+}

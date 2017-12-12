@@ -125,7 +125,10 @@
       "import/no-webpack-loader-syntax": 0,
       "import/prefer-default-export": 0,
       "no-tabs": 0,
-      "indent": ["error", "tab"],
+      "indent": [
+        "error",
+        "tab"
+      ],
       "jsx-a11y/aria-props": 2,
       "jsx-a11y/heading-has-content": 0,
       "jsx-a11y/href-no-hash": 2,
@@ -144,8 +147,14 @@
         2,
         "multiline"
       ],
-      "react/jsx-indent": [2,"tab"],
-      "react/jsx-indent-props": [2,"tab"],
+      "react/jsx-indent": [
+        2,
+        "tab"
+      ],
+      "react/jsx-indent-props": [
+        2,
+        "tab"
+      ],
       "react/jsx-filename-extension": 0,
       "react/jsx-no-target-blank": 0,
       "react/require-default-props": 0,
