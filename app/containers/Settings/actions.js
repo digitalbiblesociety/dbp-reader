@@ -9,8 +9,12 @@ import {
 	UPDATE_THEME,
 	UPDATE_FONT_TYPE,
 	UPDATE_FONT_SIZE,
-	SAVE_SETTINGS,
-	UNDO_SETTINGS,
+	TOGGLE_READERS_MODE,
+	TOGGLE_CROSS_REFERENCES,
+	TOGGLE_RED_LETTER,
+	TOGGLE_JUSTIFIED_TEXT,
+	TOGGLE_ONE_VERSE_PER_LINE,
+	TOGGLE_VERTICAL_SCROLLING,
 } from './constants';
 
 export function defaultAction() {
@@ -34,10 +38,26 @@ export const updateFontSize = ({ size }) => ({
 	size,
 });
 
-export const saveSettings = () => ({
-	type: SAVE_SETTINGS,
+export const toggleReadersMode = () => ({
+	type: TOGGLE_READERS_MODE,
 });
 
-export const undoSettings = () => ({
-	type: UNDO_SETTINGS,
+export const toggleCrossReferences = () => ({
+	type: TOGGLE_CROSS_REFERENCES,
+});
+
+export const toggleRedLetter = () => ({
+	type: TOGGLE_RED_LETTER,
+});
+
+export const toggleJustifiedText = () => ({
+	type: TOGGLE_JUSTIFIED_TEXT,
+});
+
+export const toggleOneVersePerLine = () => ({
+	type: TOGGLE_ONE_VERSE_PER_LINE,
+});
+
+export const toggleVerticalScrolling = () => ({
+	type: TOGGLE_VERTICAL_SCROLLING,
 });

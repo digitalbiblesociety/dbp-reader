@@ -16,8 +16,12 @@ import {
 	updateTheme,
 	updateFontType,
 	updateFontSize,
-	saveSettings,
-	undoSettings,
+	toggleReadersMode,
+	toggleCrossReferences,
+	toggleRedLetter,
+	toggleJustifiedText,
+	toggleOneVersePerLine,
+	toggleVerticalScrolling,
 } from './actions';
 // import messages from './messages';
 // import { FormattedMessage } from 'react-intl';
@@ -27,8 +31,12 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 	updateTheme = ({ theme }) => this.props.dispatch(updateTheme({ theme }));
 	updateFontType = ({ font }) => this.props.dispatch(updateFontType({ font }));
 	updateFontSize = ({ size }) => this.props.dispatch(updateFontSize({ size }));
-	saveSettings = () => this.props.dispatch(saveSettings());
-	undoSettings = () => this.props.dispatch(undoSettings());
+	toggleReadersMode = () => this.props.dispatch(toggleReadersMode());
+	toggleCrossReferences = () => this.props.dispatch(toggleCrossReferences());
+	toggleRedLetter = () => this.props.dispatch(toggleRedLetter());
+	toggleJustifiedText = () => this.props.dispatch(toggleJustifiedText());
+	toggleOneVersePerLine = () => this.props.dispatch(toggleOneVersePerLine());
+	toggleVerticalScrolling = () => this.props.dispatch(toggleVerticalScrolling());
 
 	render() {
 		return (
