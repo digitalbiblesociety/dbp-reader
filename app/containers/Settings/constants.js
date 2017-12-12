@@ -4,7 +4,6 @@
  *
  */
 
-export const DEFAULT_ACTION = 'app/Settings/DEFAULT_ACTION';
 export const UPDATE_THEME = 'app/Settings/UPDATE_THEME';
 export const UPDATE_FONT_TYPE = 'app/Settings/UPDATE_FONT_TYPE';
 export const UPDATE_FONT_SIZE = 'app/Settings/UPDATE_FONT_SIZE';

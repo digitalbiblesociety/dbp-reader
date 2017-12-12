@@ -5,7 +5,6 @@
  */
 
 import {
-  DEFAULT_ACTION,
 	UPDATE_THEME,
 	UPDATE_FONT_TYPE,
 	UPDATE_FONT_SIZE,
@@ -16,12 +15,6 @@ import {
 	TOGGLE_ONE_VERSE_PER_LINE,
 	TOGGLE_VERTICAL_SCROLLING,
 } from './constants';
-
-export function defaultAction() {
-	return {
-		type: DEFAULT_ACTION,
-	};
-}
 
 export const updateTheme = ({ theme }) => ({
 	type: UPDATE_THEME,
