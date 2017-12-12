@@ -13,6 +13,7 @@ import injectReducer from 'utils/injectReducer';
 import SettingsToggle from 'components/SettingsToggle/index';
 import makeSelectSettings from './selectors';
 import reducer from './reducer';
+import menu from '../../images/menu.svg';
 import {
 	updateTheme,
 	updateFontType,
@@ -57,11 +58,13 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 
 		return (
 			<aside className="settings">
-				<div>
-					<h2>Settings</h2>
-					<span role="button" tabIndex={0} className="close-icon" onClick={toggleSettingsModal}>X</span>
-				</div>
-				<div className="color-schemes">
+				<header>
+					<h2 className="section-title">Settings</h2>
+					<span role="button" tabIndex={0} className="close-icon" onClick={toggleSettingsModal}>
+						<svg className="icon"><use xmlnsXlink="http://www.w3.org/1999/xlink" xlinkHref={`${menu}#close`}></use></svg>
+					</span>
+				</header>
+				<section className="color-schemes">
 					<span className="option paper">
 						<span className="title">Light</span>
 					</span>
@@ -71,29 +74,30 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 					<span className="option dark">
 						<span className="title">Night</span>
 					</span>
-				</div>
-				<div className="font-settings">
+				</section>
+				<section className="font-settings">
 					<span className="option sans">
-						<span className="title">Sans Serif</span>
+						<span className="title">Aa <small>Sans Serif</small></span>
 					</span>
 					<span className="option serif">
-						<span className="title">Serif</span>
+						<span className="title">Aa <small>Serif</small></span>
 					</span>
 					<span className="option slab">
-						<span className="title">Slab Serif</span>
+						<span className="title">Aa <small>Slab Serif</small></span>
 					</span>
-				</div>
-				<div className="font-sizes">
+				</section>
+				<section className="font-sizes">
 					<span className="option smallest">Aa</span>
 					<span className="option small">Aa</span>
 					<span className="option medium">Aa</span>
 					<span className="option large">Aa</span>
 					<span className="option largest">Aa</span>
-				</div>
-				<div>option toggles</div>
-				{
-					settingsToggleOptions.map((option) => <SettingsToggle key={option} name={option} action={this.toggle[option]} />)
-				}
+				</section>
+				<section className="option-toggles">
+					{
+						settingsToggleOptions.map((option) => <SettingsToggle key={option} name={option} action={this.toggle[option]} />)
+					}
+				</section>
 			</aside>
 		);
 	}
