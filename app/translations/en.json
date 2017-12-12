@@ -11,5 +11,11 @@
   "app.containers.AboutPage.faq_title": "Frequently Asked Questions",
   "app.containers.AboutPage.header": "About Us",
   "app.containers.LocaleToggle.ar": "عربى",
-  "app.containers.LocaleToggle.en": "English"
+  "app.containers.LocaleToggle.en": "English",
+  "app.components.NavigationBar.readersMode": "READER'S MODE",
+  "app.components.NavigationBar.crossReference": "CROSS REFERENCE",
+  "app.components.NavigationBar.redLetter": "RED LETTER",
+  "app.components.NavigationBar.justifiedText": "JUSTIFIED TEXT",
+  "app.components.NavigationBar.oneVersePerLine": "ONE VERSE PER LINE",
+  "app.components.NavigationBar.verticalScrolling": "VERTICAL SCROLLING"
 }

@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import injectReducer from 'utils/injectReducer';
+import SettingsToggle from 'components/SettingsToggle/index';
 import makeSelectSettings from './selectors';
 import reducer from './reducer';
 import {
@@ -37,8 +38,19 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 	toggleJustifiedText = () => this.props.dispatch(toggleJustifiedText());
 	toggleOneVersePerLine = () => this.props.dispatch(toggleOneVersePerLine());
 	toggleVerticalScrolling = () => this.props.dispatch(toggleVerticalScrolling());
+	toggle = {
+		'READER\'S MODE': this.toggleReadersMode,
+		'CROSS REFERENCE': this.toggleCrossReferences,
+		'RED LETTER': this.toggleRedLetter,
+		'JUSTIFIED TEXT': this.toggleJustifiedText,
+		'ONE VERSE PER LINE': this.toggleOneVersePerLine,
+		'VERTICAL SCROLLING': this.toggleVerticalScrolling,
+	}
 
 	render() {
+		const {
+			settingsToggleOptions,
+		} = this.props.settings;
 		return (
 			<div>
 				<div>
@@ -54,9 +66,9 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 				<div>
           font size
         </div>
-				<div>
-          option toggles
-        </div>
+				{
+					settingsToggleOptions.map((option) => <SettingsToggle name={option} action={this.toggle[option]} />)
+				}
 			</div>
 		);
 	}
@@ -64,6 +76,7 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 
 Settings.propTypes = {
 	dispatch: PropTypes.func.isRequired,
+	settings: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({

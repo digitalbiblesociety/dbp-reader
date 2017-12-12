@@ -21,12 +21,20 @@ const initialState = fromJS({
 	activeTheme: 'default',
 	activeFont: 'sans-serif',
 	activeFontSize: '14px',
-	readersMode: false,
+	readerMode: false,
 	crossReferences: false,
 	redLetter: false,
 	justifiedText: false,
 	oneVersePerLine: false,
 	verticalScrolling: true,
+	settingsToggleOptions: [
+		'READER\'S MODE',
+		'CROSS REFERENCE',
+		'RED LETTER',
+		'JUSTIFIED TEXT',
+		'ONE VERSE PER LINE',
+		'VERTICAL SCROLLING',
+	],
 });
 
 function settingsReducer(state = initialState, action) {
@@ -38,7 +46,7 @@ function settingsReducer(state = initialState, action) {
 	case UPDATE_FONT_SIZE:
 		return state.set('activeFontSize', action.size);
 	case TOGGLE_READERS_MODE:
-		return state.set('readersMode', !state.get('readersMode'));
+		return state.set('readerMode', !state.get('readerMode'));
 	case TOGGLE_CROSS_REFERENCES:
 		return state.set('crossReferences', !state.get('crossReferences'));
 	case TOGGLE_RED_LETTER:
