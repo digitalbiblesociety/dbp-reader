@@ -1,29 +1,25 @@
 /**
 *
-* {{ properCase name }}
+* FontSizeSelector
 *
 */
 
 import React from 'react';
 // import styled from 'styled-components';
 
-{{#if wantMessages}}
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
-{{/if}}
 
-function {{ properCase name }}() {
+function FontSizeSelector() {
 	return (
 		<div>
-		{{#if wantMessages}}
 			<FormattedMessage {...messages.header} />
-		{{/if}}
 		</div>
 	);
 }
 
-{{ properCase name }}.propTypes = {
+FontSizeSelector.propTypes = {
 
 };
 
-export default {{ properCase name }};
+export default FontSizeSelector;

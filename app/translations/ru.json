@@ -11,5 +11,11 @@
   "app.containers.AboutPage.faq_title": "",
   "app.containers.AboutPage.header": "",
   "app.containers.LocaleToggle.ar": "",
-  "app.containers.LocaleToggle.en": ""
+  "app.containers.LocaleToggle.en": "",
+  "app.components.NavigationBar.readersMode": "",
+  "app.components.NavigationBar.crossReference": "",
+  "app.components.NavigationBar.redLetter": "",
+  "app.components.NavigationBar.justifiedText": "",
+  "app.components.NavigationBar.oneVersePerLine": "",
+  "app.components.NavigationBar.verticalScrolling": ""
 }

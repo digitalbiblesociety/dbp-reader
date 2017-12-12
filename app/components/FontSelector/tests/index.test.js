@@ -1,9 +1,9 @@
 // import React from 'react';
 // import { shallow } from 'enzyme';
 
-// import { {{ properCase name }} } from '../index';
+// import FontSelector from '../index';
 
-describe('<{{ properCase name }} />', () => {
+describe('<FontSelector />', () => {
 	it('Expect to have unit tests specified', () => {
 		expect(true).toEqual(false);
 	});

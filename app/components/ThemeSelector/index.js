@@ -1,29 +1,25 @@
 /**
 *
-* {{ properCase name }}
+* ThemeSelector
 *
 */
 
 import React from 'react';
 // import styled from 'styled-components';
 
-{{#if wantMessages}}
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
-{{/if}}
 
-function {{ properCase name }}() {
+function ThemeSelector() {
 	return (
 		<div>
-		{{#if wantMessages}}
 			<FormattedMessage {...messages.header} />
-		{{/if}}
 		</div>
 	);
 }
 
-{{ properCase name }}.propTypes = {
+ThemeSelector.propTypes = {
 
 };
 
-export default {{ properCase name }};
+export default ThemeSelector;

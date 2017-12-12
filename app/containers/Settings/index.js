@@ -9,16 +9,48 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-
 import injectReducer from 'utils/injectReducer';
+import SettingsToggle from 'components/SettingsToggle/index';
 import makeSelectSettings from './selectors';
 import reducer from './reducer';
+import {
+	updateTheme,
+	updateFontType,
+	updateFontSize,
+	toggleReadersMode,
+	toggleCrossReferences,
+	toggleRedLetter,
+	toggleJustifiedText,
+	toggleOneVersePerLine,
+	toggleVerticalScrolling,
+} from './actions';
 // import messages from './messages';
 // import { FormattedMessage } from 'react-intl';
 
 // add icon for settings close button
 export class Settings extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+	updateTheme = ({ theme }) => this.props.dispatch(updateTheme({ theme }));
+	updateFontType = ({ font }) => this.props.dispatch(updateFontType({ font }));
+	updateFontSize = ({ size }) => this.props.dispatch(updateFontSize({ size }));
+	toggleReadersMode = () => this.props.dispatch(toggleReadersMode());
+	toggleCrossReferences = () => this.props.dispatch(toggleCrossReferences());
+	toggleRedLetter = () => this.props.dispatch(toggleRedLetter());
+	toggleJustifiedText = () => this.props.dispatch(toggleJustifiedText());
+	toggleOneVersePerLine = () => this.props.dispatch(toggleOneVersePerLine());
+	toggleVerticalScrolling = () => this.props.dispatch(toggleVerticalScrolling());
+	toggle = {
+		'READER\'S MODE': this.toggleReadersMode,
+		'CROSS REFERENCE': this.toggleCrossReferences,
+		'RED LETTER': this.toggleRedLetter,
+		'JUSTIFIED TEXT': this.toggleJustifiedText,
+		'ONE VERSE PER LINE': this.toggleOneVersePerLine,
+		'VERTICAL SCROLLING': this.toggleVerticalScrolling,
+	}
+
 	render() {
+		const {
+			settingsToggleOptions,
+		} = this.props.settings;
 		return (
 			<div>
 				<div>
@@ -34,9 +66,9 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 				<div>
           font size
         </div>
-				<div>
-          option toggles
-        </div>
+				{
+					settingsToggleOptions.map((option) => <SettingsToggle name={option} action={this.toggle[option]} />)
+				}
 			</div>
 		);
 	}
@@ -44,6 +76,7 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 
 Settings.propTypes = {
 	dispatch: PropTypes.func.isRequired,
+	settings: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
