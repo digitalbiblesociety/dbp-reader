@@ -15,3 +15,6 @@ export const SET_ACTIVE_TEXT = 'app/HomePage/SET_ACTIVE_TEXT';
 export const TOGGLE_BIBLE_NAMES = 'app/HomePage/TOGGLE_BIBLE_NAMES';
 export const TOGGLE_BOOK_NAMES = 'app/HomePage/TOGGLE_BOOK_NAMES';
 export const TOGGLE_SETTINGS_MODAL = 'app/HomePage/TOGGLE_SETTINGS_MODAL';
+export const GET_LANGUAGES = 'app/HomePage/GET_LANGUAGES';
+export const SET_LANGUAGES = 'app/HomePage/SET_LANGUAGES';
+

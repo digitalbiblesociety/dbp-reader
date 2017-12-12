@@ -12,9 +12,11 @@ import {
 	SET_ACTIVE_BOOK_NAME,
 	LOAD_BOOKS,
 	GET_BOOKS,
+	GET_LANGUAGES,
 	LOAD_CHAPTER_TEXT,
 	GET_CHAPTER_TEXT,
 	SET_ACTIVE_TEXT,
+	SET_LANGUAGES,
 	TOGGLE_SETTINGS_MODAL,
 } from './constants';
 
@@ -44,6 +46,10 @@ export const getTexts = () => ({
 	type: GET_DPB_TEXTS,
 });
 
+export const getLanguages = () => ({
+	type: GET_LANGUAGES,
+});
+
 export const getBooks = ({ textId }) => ({
 	type: GET_BOOKS,
 	textId,
@@ -70,4 +76,9 @@ export const setActiveText = ({ textName, textId }) => ({
 	type: SET_ACTIVE_TEXT,
 	textName,
 	textId,
+});
+
+export const setLanguages = ({ languages }) => ({
+	type: SET_LANGUAGES,
+	languages,
 });

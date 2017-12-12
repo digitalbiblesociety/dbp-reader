@@ -5,7 +5,8 @@
 */
 
 import React from 'react';
-import BiblesTable from 'components/BiblesTable';
+import LanguageList from 'components/LanguageList';
+import VersionList from 'components/VersionList';
 import BooksTable from 'components/BooksTable';
 import PropTypes from 'prop-types';
 // import styled from 'styled-components';
@@ -15,32 +16,32 @@ import PropTypes from 'prop-types';
 class TextSelection extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	render() {
 		const {
-			isBibleTableActive,
 			bibles,
 			books,
+			languages,
 			activeBookName,
+			activeIsoCode,
+			setActiveIsoCode,
 			setActiveBookName,
 			getChapterText,
 			getBooksForText,
 			setActiveText,
 		} = this.props;
 		return (
-			<React.Fragment>
-				{
-					isBibleTableActive ? (
-						<BiblesTable setActiveText={setActiveText} getBooksForText={getBooksForText} bibles={bibles} />
-					) : (
-						<BooksTable getChapterText={getChapterText} setActiveBookName={setActiveBookName} activeBookName={activeBookName} books={books} />
-					)
-				}
-			</React.Fragment>
+			<div>
+				<LanguageList languages={languages} setActiveIsoCode={setActiveIsoCode} />
+				<VersionList activeIsoCode={activeIsoCode} setActiveText={setActiveText} getBooksForText={getBooksForText} bibles={bibles} />
+				<BooksTable getChapterText={getChapterText} setActiveBookName={setActiveBookName} activeBookName={activeBookName} books={books} />
+			</div>
 		);
 	}
 }
 
 TextSelection.propTypes = {
-	isBibleTableActive: PropTypes.bool,
+	activeIsoCode: PropTypes.string,
+	setActiveIsoCode: PropTypes.func,
 	bibles: PropTypes.object,
+	languages: PropTypes.object,
 	books: PropTypes.array,
 	activeBookName: PropTypes.string,
 	setActiveBookName: PropTypes.func,

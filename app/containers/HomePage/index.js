@@ -24,8 +24,8 @@ import Settings from 'containers/Settings';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
 // import BooksTable from 'components/BooksTable';
 
-import { getTexts, toggleBibleNames, toggleBookNames, setActiveBookName, toggleSettingsModal, getBooks, getChapterText, setActiveText } from './actions';
-import makeSelectHomePage, { selectTexts } from './selectors';
+import { getTexts, getLanguages, toggleBibleNames, toggleBookNames, setActiveBookName, toggleSettingsModal, getBooks, getChapterText, setActiveText } from './actions';
+import makeSelectHomePage, { selectTexts, selectLanguages } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 // import messages from './messages';
@@ -39,6 +39,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 
 		this.props.dispatch(getChapterText({ bible: activeTextId, book: initialBookId, chapter: 1 }));
 		this.props.dispatch(getBooks({ textId: activeTextId }));
+		this.props.dispatch(getLanguages());
 		this.props.dispatch(getTexts());
 	}
 
@@ -65,7 +66,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			isChapterActive,
 			isSettingsModalActive,
 		} = this.props.homepage;
-		const { texts } = this.props;
+		const { texts, languages } = this.props;
 
 		return (
 			<GenericErrorBoundary>
@@ -84,6 +85,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 						(<TextSelection
 							{...this.props.homepage}
 							bibles={texts}
+							languages={languages}
 							setActiveBookName={this.setActiveBookName}
 							getChapterText={this.getChapterText}
 							getBooksForText={this.getBooksForText}
@@ -110,11 +112,13 @@ HomePage.propTypes = {
 	dispatch: PropTypes.func.isRequired,
 	homepage: PropTypes.object.isRequired,
 	texts: PropTypes.object,
+	languages: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
 	homepage: makeSelectHomePage(),
 	texts: selectTexts(),
+	languages: selectLanguages(),
 });
 
 function mapDispatchToProps(dispatch) {

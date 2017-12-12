@@ -14,6 +14,7 @@ import {
 	LOAD_CHAPTER_TEXT,
 	SET_ACTIVE_TEXT,
 	TOGGLE_SETTINGS_MODAL,
+	SET_LANGUAGES,
 } from './constants';
 
 const initialState = fromJS({
@@ -73,6 +74,8 @@ function homePageReducer(state = initialState, action) {
 			.set('isBibleTableActive', false)
 			.set('chapterText', fromJS(action.text))
 			.set('isChapterActive', true);
+	case SET_LANGUAGES:
+		return state.set('languages', fromJS(action.languages));
 	default:
 		return state;
 	}
