@@ -14,6 +14,10 @@ import {
 	LOAD_CHAPTER_TEXT,
 	SET_ACTIVE_TEXT,
 	TOGGLE_SETTINGS_MODAL,
+	SET_LANGUAGES, SET_ISO_CODE,
+	TOGGLE_TEXT_SELECTION,
+	TOGGLE_VERSION_LIST,
+	TOGGLE_LANGUAGE_LIST,
 } from './constants';
 
 const initialState = fromJS({
@@ -23,23 +27,33 @@ const initialState = fromJS({
 			name: 'English Standard Version',
 			vname: 'English Standard Version',
 			language: 'English',
+			iso: 'eng',
 			date: 2001,
 		},
 	],
 	books: [],
 	chapterText: [],
-	isBibleTableActive: false,
+	textSelectionActive: false,
+	versionListActive: false,
 	isChapterActive: false,
 	activeTextName: 'ENGESV',
-	isBookTableActive: false,
+	bookTableActive: false,
+	languageListActive: false,
 	activeBookName: 'Genesis',
 	activeTextId: 'ENGESV',
 	initialBookId: 'GEN',
+	activeIsoCode: 'eng',
 	isSettingsModalActive: false,
 });
 
 function homePageReducer(state = initialState, action) {
 	switch (action.type) {
+	case TOGGLE_TEXT_SELECTION:
+		return state.set('textSelectionActive', !state.get('textSelectionActive'));
+	case TOGGLE_LANGUAGE_LIST:
+		return state.set('languageListActive', !state.get('languageListActive'));
+	case TOGGLE_VERSION_LIST:
+		return state.set('versionListActive', !state.get('versionListActive'));
 	case LOAD_TEXTS:
 		return state.set('texts', fromJS(action.texts));
 	case TOGGLE_BOOK_NAMES:
@@ -73,6 +87,10 @@ function homePageReducer(state = initialState, action) {
 			.set('isBibleTableActive', false)
 			.set('chapterText', fromJS(action.text))
 			.set('isChapterActive', true);
+	case SET_LANGUAGES:
+		return state.set('languages', fromJS(action.languages));
+	case SET_ISO_CODE:
+		return state.set('activeIsoCode', action.isoCode);
 	default:
 		return state;
 	}

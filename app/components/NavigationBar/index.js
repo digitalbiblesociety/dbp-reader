@@ -7,8 +7,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Logo from 'components/Logo';
-import ChapterButton from 'components/ChapterButton';
-import SearchButton from 'components/SearchButton';
 import LocaleToggle from 'containers/LocaleToggle';
 // import styled from 'styled-components';
 
@@ -19,9 +17,8 @@ class NavigationBar extends React.PureComponent { // eslint-disable-line react/p
 	render() {
 		const {
       // toggleVersionSelect,
-      activeTextName,
-      toggleBibleNames,
-      toggleBookNames,
+			activeBookName,
+      toggleTextSelection,
 			toggleSettingsModal,
     } = this.props;
 
@@ -31,14 +28,7 @@ class NavigationBar extends React.PureComponent { // eslint-disable-line react/p
 					<Logo />
 				</div>
 				<div className="small-4 columns">
-					<button className="version-button" onClick={toggleBibleNames} >{activeTextName}</button>
-					<ChapterButton toggleBookNames={toggleBookNames} />
-					<form id="search-form" method="post" action="/search" _lpchecked="1">
-						<input type="hidden" name="_token" value="c7sP4piHloj4OtAJaujus64WWylkp5OxR1leypxZ" />
-						<input className="search" type="text" name="search" placeholder="Romanos 10:17 or Jesus" />
-						<input type="hidden" name="bible_id" id="volume" value="ENGNIV" />
-						<SearchButton />
-					</form>
+					<div role="button" tabIndex={0} onClick={toggleTextSelection}>{activeBookName || 'Genesis'}</div>
 				</div>
 				<div role="button" tabIndex="0" className="small-2 columns" onClick={toggleSettingsModal}>
 					Settings Icon
@@ -55,9 +45,8 @@ class NavigationBar extends React.PureComponent { // eslint-disable-line react/p
 }
 
 NavigationBar.propTypes = {
-	activeTextName: PropTypes.string,
-	toggleBibleNames: PropTypes.func,
-	toggleBookNames: PropTypes.func,
+	activeBookName: PropTypes.string,
+	toggleTextSelection: PropTypes.func,
 	toggleSettingsModal: PropTypes.func,
 };
 
