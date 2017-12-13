@@ -26,12 +26,18 @@ class TextSelection extends React.PureComponent { // eslint-disable-line react/p
 			getChapterText,
 			getBooksForText,
 			setActiveText,
+			toggleTextSelection,
+			toggleVersionList,
+			toggleLanguageList,
+			languageListActive,
+			versionListActive,
 		} = this.props;
+		const bookTableActive = true;
 		return (
 			<div>
-				<LanguageList languages={languages} setActiveIsoCode={setActiveIsoCode} />
-				<VersionList activeIsoCode={activeIsoCode} setActiveText={setActiveText} getBooksForText={getBooksForText} bibles={bibles} />
-				<BooksTable getChapterText={getChapterText} setActiveBookName={setActiveBookName} activeBookName={activeBookName} books={books} />
+				<LanguageList active={languageListActive} toggleLanguageList={toggleLanguageList} languages={languages} setActiveIsoCode={setActiveIsoCode} />
+				<VersionList active={versionListActive} toggleVersionList={toggleVersionList} activeIsoCode={activeIsoCode} setActiveText={setActiveText} getBooksForText={getBooksForText} bibles={bibles} />
+				<BooksTable toggleTextSelection={toggleTextSelection} active={bookTableActive} getChapterText={getChapterText} setActiveBookName={setActiveBookName} activeBookName={activeBookName} books={books} />
 			</div>
 		);
 	}
@@ -48,6 +54,11 @@ TextSelection.propTypes = {
 	getChapterText: PropTypes.func,
 	getBooksForText: PropTypes.func,
 	setActiveText: PropTypes.func,
+	toggleTextSelection: PropTypes.func,
+	toggleLanguageList: PropTypes.func,
+	toggleVersionList: PropTypes.func,
+	languageListActive: PropTypes.bool,
+	versionListActive: PropTypes.bool,
 };
 
 export default TextSelection;

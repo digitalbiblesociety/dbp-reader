@@ -24,7 +24,21 @@ import Settings from 'containers/Settings';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
 // import BooksTable from 'components/BooksTable';
 
-import { getTexts, getLanguages, toggleBibleNames, toggleBookNames, setActiveBookName, toggleSettingsModal, getBooks, getChapterText, setActiveText } from './actions';
+import {
+	getTexts,
+	getLanguages,
+	toggleVersionList,
+	toggleLanguageList,
+	toggleTextSelection,
+	toggleBibleNames,
+	toggleBookNames,
+	setActiveBookName,
+	setActiveIsoCode,
+	toggleSettingsModal,
+	getBooks,
+	getChapterText,
+	setActiveText,
+} from './actions';
 import makeSelectHomePage, { selectTexts, selectLanguages } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -49,22 +63,30 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 
 	setActiveBookName = (bookName) => this.props.dispatch(setActiveBookName(bookName));
 
+	setActiveIsoCode = (isoCode) => this.props.dispatch(setActiveIsoCode(isoCode));
+
 	setActiveText = ({ textName, textId }) => this.props.dispatch(setActiveText({ textName, textId }));
 
 	toggleBibleNames = () => this.props.dispatch(toggleBibleNames());
 
 	toggleBookNames = () => this.props.dispatch(toggleBookNames());
 
+	toggleLanguageList = () => this.props.dispatch(toggleLanguageList());
+
 	toggleSettingsModal = () => this.props.dispatch(toggleSettingsModal());
+
+	toggleTextSelection = () => this.props.dispatch(toggleTextSelection());
+
+	toggleVersionList = () => this.props.dispatch(toggleVersionList());
 
 	render() {
 		const {
 			activeTextName,
-			isBibleTableActive,
-			isBookTableActive,
 			chapterText,
 			isChapterActive,
 			isSettingsModalActive,
+			textSelectionActive,
+			activeBookName,
 		} = this.props.homepage;
 		const { texts, languages } = this.props;
 
@@ -76,12 +98,12 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 				</Helmet>
 				<NavigationBar
 					activeTextName={activeTextName}
-					toggleBibleNames={this.toggleBibleNames}
-					toggleBookNames={this.toggleBookNames}
+					activeBookName={activeBookName}
+					toggleTextSelection={this.toggleTextSelection}
 					toggleSettingsModal={this.toggleSettingsModal}
 				/>
 				{
-					isBibleTableActive || isBookTableActive ? (
+					textSelectionActive ? (
 						(<TextSelection
 							{...this.props.homepage}
 							bibles={texts}
@@ -90,6 +112,10 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 							getChapterText={this.getChapterText}
 							getBooksForText={this.getBooksForText}
 							setActiveText={this.setActiveText}
+							setActiveIsoCode={this.setActiveIsoCode}
+							toggleTextSelection={this.toggleTextSelection}
+							toggleLanguageList={this.toggleLanguageList}
+							toggleVersionList={this.toggleVersionList}
 						/>)
 					) : null
 				}
