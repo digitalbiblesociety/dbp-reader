@@ -28,7 +28,7 @@ class NavigationBar extends React.PureComponent { // eslint-disable-line react/p
 					<Logo />
 				</div>
 				<div className="small-4 columns">
-					<div role="button" tabIndex={0} onClick={toggleTextSelection}>{activeBookName}</div>
+					<div role="button" tabIndex={0} onClick={toggleTextSelection}>{activeBookName || 'Genesis'}</div>
 				</div>
 				<div role="button" tabIndex="0" className="small-2 columns" onClick={toggleSettingsModal}>
 					Settings Icon
