@@ -88,9 +88,10 @@ export const setActiveBookName = (book) => ({
 	book,
 });
 
-export const setActiveIsoCode = (isoCode) => ({
+export const setActiveIsoCode = ({ iso, name }) => ({
 	type: SET_ISO_CODE,
-	isoCode,
+	iso,
+	name,
 });
 
 export const setActiveText = ({ textName, textId }) => ({

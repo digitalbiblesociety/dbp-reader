@@ -18,20 +18,30 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 			setActiveIsoCode,
 			active,
 			toggleLanguageList,
+			activeLanguageName,
 		} = this.props;
 		if (active) {
 			return (
-				<div>
-					{
-						languages.map((language) => (
-							<div role="button" tabIndex={0} onClick={() => { setActiveIsoCode(language.get('iso')); toggleLanguageList(); }}>{language.get('name')}</div>
-						))
-					}
+				<div className="language-section">
+					<i>i</i>
+					<h3>LANGUAGE:</h3>
+					<h3 className="active-language-name">{activeLanguageName.toUpperCase()}</h3>
+					<div className="language-name-list">
+						{
+							languages.map((language) => (
+								<div className="language-name" role="button" tabIndex={0} onClick={() => { setActiveIsoCode({ iso: language.get('iso'), name: language.get('name') }); toggleLanguageList(); }}>{language.get('name')}</div>
+							))
+						}
+					</div>
 				</div>
 			);
 		}
 		return (
-			<div role="button" tabIndex={0} onClick={toggleLanguageList}>ACTIVE LANGUAGE NAME</div>
+			<div className="language-section" role="button" tabIndex={0} onClick={toggleLanguageList}>
+				<i>i</i>
+				<h3>LANGUAGE:</h3>
+				<h3 className="active-language-name">{activeLanguageName.toUpperCase()}</h3>
+			</div>
 		);
 	}
 }
@@ -41,6 +51,7 @@ LanguageList.propTypes = {
 	setActiveIsoCode: PropTypes.func,
 	toggleLanguageList: PropTypes.func,
 	active: PropTypes.bool,
+	activeLanguageName: PropTypes.string,
 };
 
 export default LanguageList;

@@ -63,7 +63,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 
 	setActiveBookName = (bookName) => this.props.dispatch(setActiveBookName(bookName));
 
-	setActiveIsoCode = (isoCode) => this.props.dispatch(setActiveIsoCode(isoCode));
+	setActiveIsoCode = ({ iso, name }) => this.props.dispatch(setActiveIsoCode({ iso, name }));
 
 	setActiveText = ({ textName, textId }) => this.props.dispatch(setActiveText({ textName, textId }));
 

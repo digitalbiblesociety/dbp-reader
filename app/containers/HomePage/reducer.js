@@ -43,6 +43,7 @@ const initialState = fromJS({
 	activeTextId: 'ENGESV',
 	initialBookId: 'GEN',
 	activeIsoCode: 'eng',
+	activeLanguageName: 'English',
 	isSettingsModalActive: false,
 });
 
@@ -90,7 +91,9 @@ function homePageReducer(state = initialState, action) {
 	case SET_LANGUAGES:
 		return state.set('languages', fromJS(action.languages));
 	case SET_ISO_CODE:
-		return state.set('activeIsoCode', action.isoCode);
+		return state
+			.set('activeLanguageName', action.name)
+			.set('activeIsoCode', action.iso);
 	default:
 		return state;
 	}

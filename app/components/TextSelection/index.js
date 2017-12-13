@@ -31,14 +31,15 @@ class TextSelection extends React.PureComponent { // eslint-disable-line react/p
 			toggleLanguageList,
 			languageListActive,
 			versionListActive,
+			activeLanguageName,
 		} = this.props;
 		const bookTableActive = true;
 		return (
-			<div>
-				<LanguageList active={languageListActive} toggleLanguageList={toggleLanguageList} languages={languages} setActiveIsoCode={setActiveIsoCode} />
+			<aside>
+				<LanguageList active={languageListActive} activeLanguageName={activeLanguageName} toggleLanguageList={toggleLanguageList} languages={languages} setActiveIsoCode={setActiveIsoCode} />
 				<VersionList active={versionListActive} toggleVersionList={toggleVersionList} activeIsoCode={activeIsoCode} setActiveText={setActiveText} getBooksForText={getBooksForText} bibles={bibles} />
 				<BooksTable toggleTextSelection={toggleTextSelection} active={bookTableActive} getChapterText={getChapterText} setActiveBookName={setActiveBookName} activeBookName={activeBookName} books={books} />
-			</div>
+			</aside>
 		);
 	}
 }
@@ -59,6 +60,7 @@ TextSelection.propTypes = {
 	toggleVersionList: PropTypes.func,
 	languageListActive: PropTypes.bool,
 	versionListActive: PropTypes.bool,
+	activeLanguageName: PropTypes.string,
 };
 
 export default TextSelection;
