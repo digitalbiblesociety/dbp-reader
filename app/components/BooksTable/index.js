@@ -20,7 +20,7 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 		return (
 			<div className="row centered books-dropdown">
 				<div className="book-chapter-header">
-					<div className={activeBookName ? 'book-text' : 'book-text-active'} role="button" tabIndex="0" onClick={() => setActiveBookName('')}><h1>Book</h1></div><div className={activeBookName ? 'chapter-text-active' : 'chapter-text'}><h1>{activeBookName || 'Chapter'}</h1></div>
+					<div className={activeBookName ? 'book-text' : 'book-text-active'} role="button" tabIndex="0" onClick={() => setActiveBookName('')}><h1>Book & Chapter</h1></div>
 				</div>
 				{
 					activeBookName ? books.filter((book) => book.name === activeBookName).map((book) => (

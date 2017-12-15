@@ -86,8 +86,6 @@ function textSelectionReducer(state = initialState, action) {
 		return state
 			.set('activeTextName', action.textName)
 			.set('activeTextId', action.textId)
-			.set('isBookTableActive', true)
-			.set('isBibleTableActive', false)
 			.set('activeBookName', '');
 	case LOAD_BOOKS:
 		return state

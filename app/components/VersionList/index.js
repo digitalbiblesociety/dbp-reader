@@ -39,25 +39,27 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 	handleChange = (e) => this.setState({ filterText: e.target.value });
 
 	render() {
-		const { bibles, getBooksForText, setActiveText, activeIsoCode, active, toggleVersionList } = this.props;
+		const { bibles, getBooksForText, setActiveText, activeTextName, activeIsoCode, active, toggleVersionList } = this.props;
 		const { filterText } = this.state;
 		const filteredBibles = filterText ? bibles.filter((bible) => this.filterFunction(bible, filterText, activeIsoCode)) : bibles.filter((bible) => bible.get('iso') === activeIsoCode);
 		if (active) {
 			return (
-				<div className="centered bibles-table">
-					<div className="bibles-header">
-						<h1>Name</h1>
-						<input onChange={this.handleChange} placeholder="Filter by language" />
-						<h1>Language</h1>
+				<div className="centered">
+					<section className="version-section">
+						<span>icon</span>
+						<span>VERSION:</span>
+						<span className="active-iso-code">{activeTextName}</span>
+					</section>
+					<div>
+						<input onChange={this.handleChange} placeholder="SEARCH VERSIONS" />
 					</div>
-					<div className="bibles-list">
+					<div>
 						{
 							filteredBibles.map((bible) => (
 								<div
 									tabIndex="0"
 									role="button"
 									key={`${bible.get('abbr')}${bible.get('date')}`}
-									className="bibles-row"
 									onClick={() => {
 										const abbr = bible.get('abbr');
 										setActiveText({ textId: abbr, textName: abbr });
@@ -66,7 +68,6 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 									}}
 								>
 									<h4>{bible.get('name')}</h4>
-									<span className="language-text">{bible.get('language')}</span>
 								</div>
 							))
 						}
@@ -75,7 +76,13 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 			);
 		}
 		return (
-			<div tabIndex="0" role="button" onClick={toggleVersionList}>SELECTED TEXT</div>
+			<div tabIndex="0" role="button" onClick={toggleVersionList}>
+				<section className="version-section">
+					<span>icon</span>
+					<span>VERSION:</span>
+					<span className="active-iso-code">{activeTextName}</span>
+				</section>
+			</div>
 		);
 	}
 }
@@ -85,6 +92,7 @@ BiblesTable.propTypes = {
 	getBooksForText: PropTypes.func,
 	setActiveText: PropTypes.func,
 	activeIsoCode: PropTypes.string,
+	activeTextName: PropTypes.string,
 	active: PropTypes.bool,
 	toggleVersionList: PropTypes.func,
 };
