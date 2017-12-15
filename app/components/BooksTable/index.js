@@ -15,7 +15,7 @@ import PropTypes from 'prop-types';
 
 class BooksTable extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	render() {
-		const { books, activeBookName, setActiveBookName, getChapterText, toggleTextSelection } = this.props;
+		const { activeTextId, books, activeBookName, setActiveBookName, getChapterText, toggleTextSelection } = this.props;
 
 		return (
 			<div className="row centered books-dropdown">
@@ -27,7 +27,7 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 						<div key={book.name} className="chapter-container">
 							{
 								book.chapters.map((chapter) => (
-									<div role="button" tabIndex="0" key={chapter} className="chapter-box" onClick={() => { getChapterText({ book: book.book_id, chapter }); toggleTextSelection(); }}>
+									<div role="button" tabIndex="0" key={chapter} className="chapter-box" onClick={() => { getChapterText({ bible: activeTextId, book: book.book_id, chapter }); toggleTextSelection(); }}>
 										{chapter}
 									</div>
 								))
@@ -52,6 +52,7 @@ BooksTable.propTypes = {
 	activeBookName: PropTypes.string,
 	getChapterText: PropTypes.func,
 	toggleTextSelection: PropTypes.func,
+	activeTextId: PropTypes.string,
 };
 
 export default BooksTable;
