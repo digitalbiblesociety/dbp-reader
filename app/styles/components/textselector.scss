@@ -1,51 +1,20 @@
-.language-section {
-  color: #FFF;
-  max-height: 80%;
-}
+.text-selection-section                             {color:#FFF;max-height:80%;}
+.text-selection-section ::-webkit-input-placeholder {color:#FFF;}
+.text-selection-section ::-moz-placeholder          {color:#FFF;}
+.text-selection-section :-ms-input-placeholder      {color:#FFF;}
 
-.version-section {
-  color: #FFF;
-  max-height: 100%;
-}
+// Language Selection Styles
+.active-language-name      {color:rgba(255,255,255,.4);text-transform:uppercase;margin-left:5px;}
+.language-name             {text-transform:uppercase;}
+.language-section-expanded {color:#FFF;}
+.language-name-list        {max-height:500px;overflow-y:scroll;overflow-x:hidden;}
 
-.active-language-name {
-  color: rgba(255, 255, 255, .4);
-  text-transform: uppercase;
-  margin-left: 5px;
-}
+// Book Selection Styles
+.chapter-box       {width:60px;height:30px;color:white;margin-bottom:5px;text-align:center;}
+.chapter-container {display:grid;margin:auto;padding-top:10px;grid-template-columns:repeat(5,60px);grid-template-rows:auto;}
+.active-iso-code   {color:rgba(255,255,255,.4);text-transform:uppercase;margin-left:5px;}
 
-.language-name {
-  text-transform: uppercase;
-}
+// Version Selection Styles
 
-.language-section-expanded {
-  color: #FFF;
-}
-
-.language-name-list {
-  max-height: 500px;
-  overflow-y: scroll;
-  overflow-x: hidden;
-}
-
-.chapter-box {
-  width: 60px;
-  height: 30px;
-  color: white;
-  margin-bottom: 5px;
-  text-align: center;
-}
-
-.chapter-container {
-  display: grid;
-  margin: auto;
-  padding-top: 10px;
-  grid-template-columns: repeat(5, 60px);
-  grid-template-rows: auto;
-}
-
-.active-iso-code {
-  color: rgba(255, 255, 255, .4);
-  text-transform: uppercase;
-  margin-left: 5px;
-}
+// Input Box Styles
+.text-selection-input {width:100%;height:50px;background-color:rgb(110,116,127);color:#FFF;font-size:1.3em;}

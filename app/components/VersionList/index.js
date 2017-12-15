@@ -44,15 +44,13 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 		const filteredBibles = filterText ? bibles.filter((bible) => this.filterFunction(bible, filterText, activeIsoCode)) : bibles.filter((bible) => bible.get('iso') === activeIsoCode);
 		if (active) {
 			return (
-				<div className="centered">
-					<section className="version-section">
+				<section className="text-selection-section">
+					<section>
 						<span>icon</span>
 						<span>VERSION:</span>
 						<span className="active-iso-code">{activeTextName}</span>
 					</section>
-					<div>
-						<input onChange={this.handleChange} placeholder="SEARCH VERSIONS" />
-					</div>
+					<input className="text-selection-input" onChange={this.handleChange} placeholder="SEARCH VERSIONS" />
 					<div>
 						{
 							filteredBibles.map((bible) => (
@@ -73,17 +71,17 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 							))
 						}
 					</div>
-				</div>
+				</section>
 			);
 		}
 		return (
-			<div tabIndex="0" role="button" onClick={() => { toggleVersionList(); setBookListState({ state: false }); }}>
-				<section className="version-section">
+			<section className="text-selection-section" tabIndex="0" role="button" onClick={() => { toggleVersionList(); setBookListState({ state: false }); }}>
+				<section>
 					<span>icon</span>
 					<span>VERSION:</span>
 					<span className="active-iso-code">{activeTextName}</span>
 				</section>
-			</div>
+			</section>
 		);
 	}
 }

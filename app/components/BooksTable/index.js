@@ -18,10 +18,10 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 		const { active, activeTextId, books, activeBookName, setActiveBookName, getChapterText, toggleTextSelection } = this.props;
 		if (active) {
 			return (
-				<div>
-					<div className="book-chapter-header">
+				<section className="text-selection-section">
+					<header className="book-chapter-header">
 						<div className={activeBookName ? 'book-text' : 'book-text-active'} role="button" tabIndex="0" onClick={() => setActiveBookName('')}><h1>Book & Chapter</h1></div>
-					</div>
+					</header>
 					{
 						<div className="book-container">
 							{
@@ -42,7 +42,7 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 							}
 						</div>
 					}
-				</div>
+				</section>
 			);
 		}
 		return (

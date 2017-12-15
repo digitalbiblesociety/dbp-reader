@@ -79,7 +79,7 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 		return (
 			<aside className="settings">
 				<header>
-					<h2 className="section-title text-selection">{`${sectionTitle} SELECTION`}</h2>
+					<h2 className="text-selection">{`${sectionTitle} SELECTION`}</h2>
 					<span role="button" tabIndex={0} className="close-icon" onClick={toggleTextSelection}>
 						<svg className="icon"><use xmlnsXlink="http://www.w3.org/1999/xlink" xlinkHref={`${menu}#close`}></use></svg>
 					</span>
