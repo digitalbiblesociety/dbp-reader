@@ -17,7 +17,7 @@ function SettingsToggle({ action, name }) {
 				<FormattedMessage {...messages[name]} />
 				<div className="switch">
 					<input type="checkbox" onChange={action} />
-					<span className="slider round"></span>
+					<span className="slider"></span>
 				</div>
 			</label>
 		</div>
