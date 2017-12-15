@@ -21,6 +21,26 @@ import {
 } from './constants';
 
 const initialState = fromJS({
+	languages: [
+		{
+			glotto_code: 6414,
+			iso_code: 'eng',
+			name: 'English',
+			count_bible: null,
+		},
+		{
+			glotto_code: 6415,
+			iso_code: 'deu',
+			name: 'German',
+			count_bible: null,
+		},
+		{
+			glotto_code: 7892,
+			iso_code: 'arb',
+			name: 'Standard Arabic',
+			count_bible: null,
+		},
+	],
 	texts: [
 		{
 			abbr: 'ENGESV',
@@ -29,6 +49,22 @@ const initialState = fromJS({
 			language: 'English',
 			iso: 'eng',
 			date: 2001,
+		},
+		{
+			abbr: 'ENGASV',
+			name: 'American Standard Version',
+			vname: 'American Standard Version',
+			language: 'English',
+			iso: 'eng',
+			date: 1901,
+		},
+		{
+			abbr: 'DEUD05',
+			name: 'German 1905 Darby Unrevidierte Elberfel',
+			vname: 'German 1905 Darby Unrevidierte Elberfel',
+			language: 'German',
+			iso: 'deu',
+			date: 1905,
 		},
 	],
 	books: [],
