@@ -22,7 +22,7 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 	filterFunction = (bible, filterText, iso) => {
 		const lowerCaseText = filterText.toLowerCase();
 
-		if (!bible.get('iso') === iso) {
+		if (!(bible.get('iso') === iso)) {
 			return false;
 		}
 

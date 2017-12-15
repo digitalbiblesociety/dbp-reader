@@ -43,6 +43,8 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		this.props.dispatch(getChapterText({ bible: activeTextId, book: initialBookId, chapter: 1 }));
 	}
 
+	getChapters = ({ bible, book, chapter }) => this.props.dispatch(getChapterText({ bible, book, chapter }));
+
 	setActiveBookName = (bookName) => this.props.dispatch(setActiveBookName(bookName));
 
 	toggleSettingsModal = () => this.props.dispatch(toggleSettingsModal());
@@ -75,6 +77,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					textSelectionActive ? (
 						(<TextSelection
 							activeBookName={activeBookName}
+							getChapters={this.getChapters}
 							setActiveBookName={this.setActiveBookName}
 							toggleTextSelection={this.toggleTextSelection}
 						/>)

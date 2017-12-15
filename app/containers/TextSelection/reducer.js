@@ -8,7 +8,6 @@ import { fromJS } from 'immutable';
 import {
 	LOAD_TEXTS,
 	LOAD_BOOKS,
-	LOAD_CHAPTER_TEXT,
 	SET_ACTIVE_TEXT,
 	SET_LANGUAGES,
 	SET_ISO_CODE,
@@ -93,12 +92,6 @@ function textSelectionReducer(state = initialState, action) {
 	case LOAD_BOOKS:
 		return state
 			.set('books', fromJS(action.books));
-	case LOAD_CHAPTER_TEXT:
-		return state
-			.set('isBookTableActive', false)
-			.set('isBibleTableActive', false)
-			.set('chapterText', fromJS(action.text))
-			.set('isChapterActive', true);
 	case SET_LANGUAGES:
 		return state.set('languages', fromJS(action.languages));
 	case SET_ISO_CODE:

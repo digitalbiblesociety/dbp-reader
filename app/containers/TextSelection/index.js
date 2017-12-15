@@ -22,7 +22,6 @@ import {
 	getBooks,
 	getLanguages,
 	getTexts,
-	getChapterText,
 	setActiveText,
 } from './actions';
 import makeSelectTextSelection, { selectLanguages, selectTexts } from './selectors';
@@ -40,8 +39,6 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 
 	getBooksForText = ({ textId }) => this.props.dispatch(getBooks({ textId }));
 
-	getChapterText = ({ bible, book, chapter }) => this.props.dispatch(getChapterText({ bible, book, chapter }));
-
 	setActiveIsoCode = ({ iso, name }) => this.props.dispatch(setActiveIsoCode({ iso, name }));
 
 	setActiveText = ({ textName, textId }) => this.props.dispatch(setActiveText({ textName, textId }));
@@ -53,7 +50,6 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 	render() {
 		const {
 			activeIsoCode,
-			toggleTextSelection,
 			languageListActive,
 			versionListActive,
 			activeLanguageName,
@@ -61,12 +57,19 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 			activeTextId,
 			books,
 		} = this.props.textselection;
-		const { bibles, languages, setActiveBookName, activeBookName } = this.props;
+		const {
+			bibles,
+			languages,
+			setActiveBookName,
+			activeBookName,
+			toggleTextSelection,
+			getChapters,
+		} = this.props;
 		return (
 			<aside>
 				<LanguageList active={languageListActive} activeLanguageName={activeLanguageName} toggleLanguageList={this.toggleLanguageList} languages={languages} setActiveIsoCode={this.setActiveIsoCode} />
 				<VersionList active={versionListActive} toggleVersionList={this.toggleVersionList} activeIsoCode={activeIsoCode} setActiveText={this.setActiveText} getBooksForText={this.getBooksForText} bibles={bibles} />
-				<BooksTable activeTextId={activeTextId} toggleTextSelection={toggleTextSelection} active={bookTableActive} getChapterText={this.getChapterText} setActiveBookName={setActiveBookName} activeBookName={activeBookName} books={books} />
+				<BooksTable activeTextId={activeTextId} toggleTextSelection={toggleTextSelection} active={bookTableActive} getChapterText={getChapters} setActiveBookName={setActiveBookName} activeBookName={activeBookName} books={books} />
 			</aside>
 		);
 	}
@@ -78,6 +81,7 @@ TextSelection.propTypes = {
 	languages: PropTypes.object,
 	toggleTextSelection: PropTypes.func,
 	setActiveBookName: PropTypes.func,
+	getChapters: PropTypes.func,
 	activeBookName: PropTypes.string,
 	textselection: PropTypes.object,
 };
