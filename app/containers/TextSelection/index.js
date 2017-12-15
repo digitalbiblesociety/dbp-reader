@@ -56,6 +56,7 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 			bookTableActive,
 			activeTextId,
 			books,
+			activeTextName,
 		} = this.props.textselection;
 		const {
 			bibles,
@@ -67,8 +68,8 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 		} = this.props;
 		return (
 			<aside>
-				<LanguageList active={languageListActive} activeLanguageName={activeLanguageName} toggleLanguageList={this.toggleLanguageList} languages={languages} setActiveIsoCode={this.setActiveIsoCode} />
-				<VersionList active={versionListActive} toggleVersionList={this.toggleVersionList} activeIsoCode={activeIsoCode} setActiveText={this.setActiveText} getBooksForText={this.getBooksForText} bibles={bibles} />
+				<LanguageList active={languageListActive} toggleVersionList={this.toggleVersionList} activeLanguageName={activeLanguageName} toggleLanguageList={this.toggleLanguageList} languages={languages} setActiveIsoCode={this.setActiveIsoCode} />
+				<VersionList active={versionListActive} activeTextName={activeTextName} toggleVersionList={this.toggleVersionList} activeIsoCode={activeIsoCode} setActiveText={this.setActiveText} getBooksForText={this.getBooksForText} bibles={bibles} />
 				<BooksTable activeTextId={activeTextId} toggleTextSelection={toggleTextSelection} active={bookTableActive} getChapterText={getChapters} setActiveBookName={setActiveBookName} activeBookName={activeBookName} books={books} />
 			</aside>
 		);
@@ -83,6 +84,7 @@ TextSelection.propTypes = {
 	setActiveBookName: PropTypes.func,
 	getChapters: PropTypes.func,
 	activeBookName: PropTypes.string,
+	activeTextName: PropTypes.string,
 	textselection: PropTypes.object,
 };
 

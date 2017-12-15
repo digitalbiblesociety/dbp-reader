@@ -12,6 +12,26 @@ import PropTypes from 'prop-types';
 // import messages from './messages';
 
 class LanguageList extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+	constructor(props) {
+		super(props);
+		this.state = {
+			filterText: '',
+		};
+	}
+
+	filterFunction = (language, filterText) => {
+		const lowerCaseText = filterText.toLowerCase();
+
+		if (language.get('iso_code').toLowerCase().includes(lowerCaseText)) {
+			return true;
+		} else if (language.get('name').toLowerCase().includes(lowerCaseText)) {
+			return true;
+		}
+		return false;
+	}
+
+	handleChange = (e) => this.setState({ filterText: e.target.value });
+
 	render() {
 		const {
 			languages,
@@ -19,29 +39,35 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 			active,
 			toggleLanguageList,
 			activeLanguageName,
+			toggleVersionList,
 		} = this.props;
+		const { filterText } = this.state;
+		const filteredLanguages = filterText ? languages.filter((language) => this.filterFunction(language, filterText)) : languages;
 		if (active) {
 			return (
-				<div className="language-section">
-					<i>i</i>
-					<h3>LANGUAGE:</h3>
-					<h3 className="active-language-name">{activeLanguageName.toUpperCase()}</h3>
-					<div className="language-name-list">
+				<section className="language-section">
+					<section className="language-title">
+						<i>icon</i>
+						<span>LANGUAGE:</span>
+						<span className="active-language-name">{activeLanguageName}</span>
+					</section>
+					<input onChange={this.handleChange} placeholder="SEARCH LANGUAGES" />
+					<section className="language-name-list">
 						{
-							languages.map((language) => (
-								<div className="language-name" role="button" tabIndex={0} onClick={() => { setActiveIsoCode({ iso: language.get('iso'), name: language.get('name') }); toggleLanguageList(); }}>{language.get('name')}</div>
+							filteredLanguages.map((language) => (
+								<div className="language-name" key={language.get('iso_code')} role="button" tabIndex={0} onClick={() => { setActiveIsoCode({ iso: language.get('iso_code'), name: language.get('name') }); toggleLanguageList(); toggleVersionList(); }}>{language.get('name')}</div>
 							))
 						}
-					</div>
-				</div>
+					</section>
+				</section>
 			);
 		}
 		return (
-			<div className="language-section" role="button" tabIndex={0} onClick={toggleLanguageList}>
-				<i>i</i>
-				<h3>LANGUAGE:</h3>
-				<h3 className="active-language-name">{activeLanguageName.toUpperCase()}</h3>
-			</div>
+			<section className="language-section" role="button" tabIndex={0} onClick={toggleLanguageList}>
+				<i>icon</i>
+				<span>LANGUAGE:</span>
+				<span className="active-language-name">{activeLanguageName}</span>
+			</section>
 		);
 	}
 }
@@ -50,6 +76,7 @@ LanguageList.propTypes = {
 	languages: PropTypes.object,
 	setActiveIsoCode: PropTypes.func,
 	toggleLanguageList: PropTypes.func,
+	toggleVersionList: PropTypes.func,
 	active: PropTypes.bool,
 	activeLanguageName: PropTypes.string,
 };
