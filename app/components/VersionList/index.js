@@ -44,12 +44,10 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 		const filteredBibles = filterText ? bibles.filter((bible) => this.filterFunction(bible, filterText, activeIsoCode)) : bibles.filter((bible) => bible.get('iso') === activeIsoCode);
 		if (active) {
 			return (
-				<section className="text-selection-section">
-					<section>
-						<span>icon</span>
-						<span>VERSION:</span>
-						<span className="active-iso-code">{activeTextName}</span>
-					</section>
+				<div className="text-selection-section">
+					<span>icon</span>
+					<span>VERSION:</span>
+					<span className="active-iso-code">{activeTextName}</span>
 					<input className="text-selection-input" onChange={this.handleChange} placeholder="SEARCH VERSIONS" />
 					<div>
 						{
@@ -71,17 +69,15 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 							))
 						}
 					</div>
-				</section>
+				</div>
 			);
 		}
 		return (
-			<section className="text-selection-section" tabIndex="0" role="button" onClick={() => { toggleVersionList(); setBookListState({ state: false }); }}>
-				<section>
-					<span>icon</span>
-					<span>VERSION:</span>
-					<span className="active-iso-code">{activeTextName}</span>
-				</section>
-			</section>
+			<div className="text-selection-section" tabIndex="0" role="button" onClick={() => { toggleVersionList(); setBookListState({ state: false }); }}>
+				<span>icon</span>
+				<span>VERSION:</span>
+				<span className="active-iso-code">{activeTextName}</span>
+			</div>
 		);
 	}
 }

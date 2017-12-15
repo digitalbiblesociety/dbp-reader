@@ -45,12 +45,10 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 		const filteredLanguages = filterText ? languages.filter((language) => this.filterFunction(language, filterText)) : languages;
 		if (active) {
 			return (
-				<section className="text-selection-section">
-					<header className="language-title">
-						<i>icon</i>
-						<span>LANGUAGE:</span>
-						<span className="active-language-name">{activeLanguageName}</span>
-					</header>
+				<div className="text-selection-section">
+					<i>icon</i>
+					<span>LANGUAGE:</span>
+					<span className="active-language-name">{activeLanguageName}</span>
 					<input className="text-selection-input" onChange={this.handleChange} placeholder="SEARCH LANGUAGES" />
 					<section className="language-name-list">
 						{
@@ -59,15 +57,15 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 							))
 						}
 					</section>
-				</section>
+				</div>
 			);
 		}
 		return (
-			<section className="text-selection-section" role="button" tabIndex={0} onClick={() => { toggleLanguageList(); setBookListState({ state: false }); }}>
+			<div className="text-selection-section" role="button" tabIndex={0} onClick={() => { toggleLanguageList(); setBookListState({ state: false }); }}>
 				<i>icon</i>
 				<span>LANGUAGE:</span>
 				<span className="active-language-name">{activeLanguageName}</span>
-			</section>
+			</div>
 		);
 	}
 }

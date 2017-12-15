@@ -1,4 +1,4 @@
-.text-selection-section                             {color:#FFF;max-height:80%;}
+.text-selection-section                             {color:#FFF;max-height:80%;padding:5px;}
 .text-selection-section ::-webkit-input-placeholder {color:#FFF;}
 .text-selection-section ::-moz-placeholder          {color:#FFF;}
 .text-selection-section :-ms-input-placeholder      {color:#FFF;}
@@ -17,4 +17,4 @@
 // Version Selection Styles
 
 // Input Box Styles
-.text-selection-input {width:100%;height:50px;background-color:rgb(110,116,127);color:#FFF;font-size:1.3em;}
+.text-selection-input {border:none;width:100%;height:50px;background-color:rgb(110,116,127);color:#FFF;font-size:.9em;font-weight:200;}
