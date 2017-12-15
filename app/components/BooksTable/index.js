@@ -30,11 +30,11 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 									<h4>{book.name}</h4>
 									<div className="chapter-container">
 										{
-											book.chapters.map((chapter) => (
+											book.name === activeBookName ? book.chapters.map((chapter) => (
 												<div role="button" tabIndex="0" key={chapter} className="chapter-box" onClick={() => { getChapterText({ bible: activeTextId, book: book.book_id, chapter }); toggleTextSelection(); }}>
 													{chapter}
 												</div>
-											))
+											)) : null
 										}
 									</div>
 								</div>
