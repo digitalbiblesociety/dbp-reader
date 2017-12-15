@@ -7,7 +7,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-// import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import injectSaga from 'utils/injectSaga';
@@ -27,6 +26,7 @@ import {
 import makeSelectTextSelection, { selectLanguages, selectTexts } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
+// import { FormattedMessage } from 'react-intl';
 // import messages from './messages';
 
 export class TextSelection extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
