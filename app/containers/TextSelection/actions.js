@@ -15,6 +15,7 @@ import {
 	SET_ISO_CODE,
 	TOGGLE_LANGUAGE_LIST,
 	TOGGLE_VERSION_LIST,
+	SET_BOOK_LIST_STATE,
 } from './constants';
 
 export const loadBooks = ({ books }) => ({
@@ -38,6 +39,11 @@ export const getLanguages = () => ({
 export const getBooks = ({ textId }) => ({
 	type: GET_BOOKS,
 	textId,
+});
+
+export const setBookListState = ({ state }) => ({
+	type: SET_BOOK_LIST_STATE,
+	state,
 });
 
 export const toggleLanguageList = () => ({

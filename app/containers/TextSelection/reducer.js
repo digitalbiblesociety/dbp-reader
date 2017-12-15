@@ -13,6 +13,7 @@ import {
 	SET_ISO_CODE,
 	TOGGLE_VERSION_LIST,
 	TOGGLE_LANGUAGE_LIST,
+	SET_BOOK_LIST_STATE,
 } from './constants';
 
 const initialState = fromJS({
@@ -66,7 +67,6 @@ const initialState = fromJS({
 	languageListActive: false,
 	versionListActive: false,
 	bookTableActive: true,
-	isChapterActive: false,
 	activeLanguageName: 'English',
 	activeTextName: 'ENGESV',
 	activeTextId: 'ENGESV',
@@ -80,6 +80,8 @@ function textSelectionReducer(state = initialState, action) {
 		return state.set('languageListActive', !state.get('languageListActive'));
 	case TOGGLE_VERSION_LIST:
 		return state.set('versionListActive', !state.get('versionListActive'));
+	case SET_BOOK_LIST_STATE:
+		return state.set('bookTableActive', action.state);
 	case LOAD_TEXTS:
 		return state.set('texts', fromJS(action.texts));
 	case SET_ACTIVE_TEXT:

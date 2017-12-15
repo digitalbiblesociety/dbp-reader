@@ -14,10 +14,12 @@ import injectReducer from 'utils/injectReducer';
 import LanguageList from 'components/LanguageList';
 import VersionList from 'components/VersionList';
 import BooksTable from 'components/BooksTable';
+import menu from 'images/menu.svg';
 import {
 	toggleVersionList,
 	toggleLanguageList,
 	setActiveIsoCode,
+	setBookListState,
 	getBooks,
 	getLanguages,
 	getTexts,
@@ -38,6 +40,8 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 	}
 
 	getBooksForText = ({ textId }) => this.props.dispatch(getBooks({ textId }));
+
+	setBookListState = ({ state }) => this.props.dispatch(setBookListState({ state }));
 
 	setActiveIsoCode = ({ iso, name }) => this.props.dispatch(setActiveIsoCode({ iso, name }));
 
@@ -66,10 +70,22 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 			toggleTextSelection,
 			getChapters,
 		} = this.props;
+		let sectionTitle = 'LANGUAGE';
+		if (versionListActive) {
+			sectionTitle = 'VERSION';
+		} else if (bookTableActive) {
+			sectionTitle = 'BOOK';
+		}
 		return (
-			<aside>
-				<LanguageList active={languageListActive} toggleVersionList={this.toggleVersionList} activeLanguageName={activeLanguageName} toggleLanguageList={this.toggleLanguageList} languages={languages} setActiveIsoCode={this.setActiveIsoCode} />
-				<VersionList active={versionListActive} activeTextName={activeTextName} toggleVersionList={this.toggleVersionList} activeIsoCode={activeIsoCode} setActiveText={this.setActiveText} getBooksForText={this.getBooksForText} bibles={bibles} />
+			<aside className="settings">
+				<header>
+					<h2 className="section-title text-selection">{`${sectionTitle} SELECTION`}</h2>
+					<span role="button" tabIndex={0} className="close-icon" onClick={toggleTextSelection}>
+						<svg className="icon"><use xmlnsXlink="http://www.w3.org/1999/xlink" xlinkHref={`${menu}#close`}></use></svg>
+					</span>
+				</header>
+				<LanguageList active={languageListActive} setBookListState={this.setBookListState} toggleVersionList={this.toggleVersionList} activeLanguageName={activeLanguageName} toggleLanguageList={this.toggleLanguageList} languages={languages} setActiveIsoCode={this.setActiveIsoCode} />
+				<VersionList active={versionListActive} setBookListState={this.setBookListState} activeTextName={activeTextName} toggleVersionList={this.toggleVersionList} activeIsoCode={activeIsoCode} setActiveText={this.setActiveText} getBooksForText={this.getBooksForText} bibles={bibles} />
 				<BooksTable activeTextId={activeTextId} toggleTextSelection={toggleTextSelection} active={bookTableActive} getChapterText={getChapters} setActiveBookName={setActiveBookName} activeBookName={activeBookName} books={books} />
 			</aside>
 		);

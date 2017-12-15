@@ -39,7 +39,7 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 			active,
 			toggleLanguageList,
 			activeLanguageName,
-			toggleVersionList,
+			setBookListState,
 		} = this.props;
 		const { filterText } = this.state;
 		const filteredLanguages = filterText ? languages.filter((language) => this.filterFunction(language, filterText)) : languages;
@@ -55,7 +55,7 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 					<section className="language-name-list">
 						{
 							filteredLanguages.map((language) => (
-								<div className="language-name" key={language.get('iso_code')} role="button" tabIndex={0} onClick={() => { setActiveIsoCode({ iso: language.get('iso_code'), name: language.get('name') }); toggleLanguageList(); toggleVersionList(); }}>{language.get('name')}</div>
+								<div className="language-name" key={language.get('iso_code')} role="button" tabIndex={0} onClick={() => { setActiveIsoCode({ iso: language.get('iso_code'), name: language.get('name') }); toggleLanguageList(); setBookListState({ state: false }); }}>{language.get('name')}</div>
 							))
 						}
 					</section>
@@ -63,7 +63,7 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 			);
 		}
 		return (
-			<section className="language-section" role="button" tabIndex={0} onClick={toggleLanguageList}>
+			<section className="language-section" role="button" tabIndex={0} onClick={() => { toggleLanguageList(); setBookListState({ state: false }); }}>
 				<i>icon</i>
 				<span>LANGUAGE:</span>
 				<span className="active-language-name">{activeLanguageName}</span>
@@ -76,7 +76,7 @@ LanguageList.propTypes = {
 	languages: PropTypes.object,
 	setActiveIsoCode: PropTypes.func,
 	toggleLanguageList: PropTypes.func,
-	toggleVersionList: PropTypes.func,
+	setBookListState: PropTypes.func,
 	active: PropTypes.bool,
 	activeLanguageName: PropTypes.string,
 };

@@ -39,7 +39,7 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 	handleChange = (e) => this.setState({ filterText: e.target.value });
 
 	render() {
-		const { bibles, getBooksForText, setActiveText, activeTextName, activeIsoCode, active, toggleVersionList } = this.props;
+		const { bibles, setBookListState, getBooksForText, setActiveText, activeTextName, activeIsoCode, active, toggleVersionList } = this.props;
 		const { filterText } = this.state;
 		const filteredBibles = filterText ? bibles.filter((bible) => this.filterFunction(bible, filterText, activeIsoCode)) : bibles.filter((bible) => bible.get('iso') === activeIsoCode);
 		if (active) {
@@ -65,6 +65,7 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 										setActiveText({ textId: abbr, textName: abbr });
 										getBooksForText({ textId: abbr });
 										toggleVersionList();
+										setBookListState({ state: true });
 									}}
 								>
 									<h4>{bible.get('name')}</h4>
@@ -76,7 +77,7 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 			);
 		}
 		return (
-			<div tabIndex="0" role="button" onClick={toggleVersionList}>
+			<div tabIndex="0" role="button" onClick={() => { toggleVersionList(); setBookListState({ state: false }); }}>
 				<section className="version-section">
 					<span>icon</span>
 					<span>VERSION:</span>
@@ -91,6 +92,7 @@ BiblesTable.propTypes = {
 	bibles: PropTypes.object,
 	getBooksForText: PropTypes.func,
 	setActiveText: PropTypes.func,
+	setBookListState: PropTypes.func,
 	activeIsoCode: PropTypes.string,
 	activeTextName: PropTypes.string,
 	active: PropTypes.bool,

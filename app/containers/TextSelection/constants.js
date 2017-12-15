@@ -14,3 +14,4 @@ export const SET_LANGUAGES = 'app/TextSelection/SET_LANGUAGES';
 export const SET_ISO_CODE = 'app/TextSelection/SET_ISO_CODE';
 export const TOGGLE_VERSION_LIST = 'app/TextSelection/TOGGLE_VERSION_LIST';
 export const TOGGLE_LANGUAGE_LIST = 'app/TextSelection/TOGGLE_LANGUAGE_LIST';
+export const SET_BOOK_LIST_STATE = 'app/TextSelection/SET_BOOK_LIST_STATE';
