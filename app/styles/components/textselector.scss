@@ -1,15 +1,20 @@
 .language-section {
-  display: flex;
+  color: #FFF;
+  max-height: 100%;
+}
+.version-section {
   color: #FFF;
   max-height: 100%;
 }
 
 .active-language-name {
   color: rgba(255, 255, 255, .4);
+  text-transform: uppercase;
+  margin-left: 5px;
 }
 
 .language-name {
-
+  text-transform: uppercase;
 }
 
 .language-section-expanded {
@@ -20,4 +25,26 @@
   max-height: 80%;
   overflow-y: scroll;
   overflow-x: hidden;
+}
+
+.chapter-box {
+  width: 60px;
+  height: 30px;
+  color: white;
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+.chapter-container {
+  display: grid;
+  margin: auto;
+  padding-top: 10px;
+  grid-template-columns: repeat(5, 60px);
+  grid-template-rows: auto;
+}
+
+.active-iso-code {
+  color: rgba(255, 255, 255, .4);
+  text-transform: uppercase;
+  margin-left: 5px;
 }

@@ -2,15 +2,7 @@
 body, html 	           {height:100%}
 body 				   {margin:0 auto;color:#222;overflow-x:hidden;overflow-y:scroll;font-size:.98em;font-family:$font-primary}
 a                      {text-decoration:none}
-aside {
-  position: absolute;
-  top:0;
-  right:0;
-  height:100%;
-  width:320px;
-  background-color:#2C3036;
-  color:rgba(244,245,246,.5);
-}
+aside {position:absolute;top:0;right:0;height:100%;width:320px;background-color:#2C3036;color:rgba(244,245,246,.5);}
 
 // images
 img                    {max-width:100%;height:auto}
