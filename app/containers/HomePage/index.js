@@ -18,12 +18,10 @@ import { compose } from 'redux';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import NavigationBar from 'components/NavigationBar';
-import TextSelection from 'components/TextSelection';
+import TextSelection from 'containers/TextSelection';
 import Text from 'components/Text';
 import Settings from 'containers/Settings';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
-// import BooksTable from 'components/BooksTable';
-
 import {
 	getTexts,
 	getLanguages,
