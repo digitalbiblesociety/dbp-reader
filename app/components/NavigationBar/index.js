@@ -8,6 +8,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Logo from 'components/Logo';
 import LocaleToggle from 'containers/LocaleToggle';
+import SvgWrapper from 'components/SvgWrapper';
 // import styled from 'styled-components';
 
 // import { FormattedMessage } from 'react-intl';
@@ -27,7 +28,7 @@ class NavigationBar extends React.PureComponent { // eslint-disable-line react/p
 		return (
 			<nav>
 				<div className="small-1 columns">
-					<span role="button" tabIndex={0} onClick={toggleMenuBar}>MENU</span>
+					<span role="button" tabIndex={0} onClick={toggleMenuBar}><SvgWrapper className="navbar-button" height="100%" width="100%" fill="#fff" svgid="menu" /></span>
 				</div>
 				<div className="small-2 columns">
 					<Logo />
