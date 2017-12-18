@@ -10,12 +10,14 @@ import {
 	LOAD_CHAPTER_TEXT,
 	TOGGLE_SETTINGS_MODAL,
 	TOGGLE_TEXT_SELECTION,
+	TOGGLE_MENU_BAR,
 } from './constants';
 
 const initialState = fromJS({
 	chapterText: [],
 	textSelectionActive: false,
 	isChapterActive: false,
+	isMenuBarActive: false,
 	activeBookName: 'Genesis',
 	activeTextId: 'ENGESV',
 	initialBookId: 'GEN',
@@ -24,6 +26,8 @@ const initialState = fromJS({
 
 function homePageReducer(state = initialState, action) {
 	switch (action.type) {
+	case TOGGLE_MENU_BAR:
+		return state.set('isMenuBarActive', !state.get('isMenuBarActive'));
 	case TOGGLE_TEXT_SELECTION:
 		return state
 			.set('textSelectionActive', !state.get('textSelectionActive'))

@@ -1,0 +1,5 @@
+.menu-sidebar {left:0;}
+
+.menu-link-list {display:flex;flex-direction:column;padding-left:10px;padding-top:5px;color:#fff;}
+.menu-link-list .item {margin-top:10px;color:#fff;}
+.menu-link-list .item:hover {color:$menu-active-color;}

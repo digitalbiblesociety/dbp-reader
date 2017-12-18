@@ -20,9 +20,11 @@ import injectReducer from 'utils/injectReducer';
 import NavigationBar from 'components/NavigationBar';
 import TextSelection from 'containers/TextSelection';
 import Text from 'components/Text';
+import MenuBar from 'components/MenuBar';
 import Settings from 'containers/Settings';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
 import {
+	toggleMenuBar,
 	toggleTextSelection,
 	toggleSettingsModal,
 	setActiveBookName,
@@ -47,6 +49,8 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 
 	setActiveBookName = (bookName) => this.props.dispatch(setActiveBookName(bookName));
 
+	toggleMenuBar = () => this.props.dispatch(toggleMenuBar());
+
 	toggleSettingsModal = () => this.props.dispatch(toggleSettingsModal());
 
 	toggleTextSelection = () => this.props.dispatch(toggleTextSelection());
@@ -59,6 +63,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			isSettingsModalActive,
 			textSelectionActive,
 			activeBookName,
+			isMenuBarActive,
 		} = this.props.homepage;
 
 		return (
@@ -70,6 +75,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 				<NavigationBar
 					activeTextName={activeTextName}
 					activeBookName={activeBookName}
+					toggleMenuBar={this.toggleMenuBar}
 					toggleTextSelection={this.toggleTextSelection}
 					toggleSettingsModal={this.toggleSettingsModal}
 				/>
@@ -91,6 +97,11 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 				{
 					isSettingsModalActive ? (
 						<Settings toggleSettingsModal={this.toggleSettingsModal} />
+					) : null
+				}
+				{
+					isMenuBarActive ? (
+						<MenuBar toggleMenuBar={this.toggleMenuBar} />
 					) : null
 				}
 			</GenericErrorBoundary>

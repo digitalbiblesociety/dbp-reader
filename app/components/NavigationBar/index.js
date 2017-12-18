@@ -20,10 +20,14 @@ class NavigationBar extends React.PureComponent { // eslint-disable-line react/p
 			activeBookName,
       toggleTextSelection,
 			toggleSettingsModal,
+			toggleMenuBar,
     } = this.props;
 
 		return (
 			<nav>
+				<div className="small-1 columns">
+					<span role="button" tabIndex={0} onClick={toggleMenuBar}>MENU</span>
+				</div>
 				<div className="small-2 columns">
 					<Logo />
 				</div>
@@ -32,10 +36,10 @@ class NavigationBar extends React.PureComponent { // eslint-disable-line react/p
 						<span role="button" tabIndex={0} onClick={toggleTextSelection} className="text">{activeBookName || 'Genesis'}</span>
 					</div>
 				</div>
-				<div role="button" tabIndex="0" className="small-2 columns" onClick={toggleSettingsModal}>
+				<div role="button" tabIndex="0" className="small-1 columns" onClick={toggleSettingsModal}>
 					Settings Icon
 				</div>
-				<div className="small-2 columns">
+				<div className="small-1 columns">
 					<LocaleToggle />
 				</div>
 			</nav>
@@ -47,6 +51,7 @@ NavigationBar.propTypes = {
 	activeBookName: PropTypes.string,
 	toggleTextSelection: PropTypes.func,
 	toggleSettingsModal: PropTypes.func,
+	toggleMenuBar: PropTypes.func,
 };
 
 export default NavigationBar;
