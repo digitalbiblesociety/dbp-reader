@@ -67,9 +67,11 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 			bibles,
 			languages,
 			setActiveBookName,
+			setActiveChapter,
 			activeBookName,
 			toggleTextSelection,
 			getChapters,
+			activeChapter,
 		} = this.props;
 		let sectionTitle = 'LANGUAGE';
 		if (versionListActive) {
@@ -87,7 +89,7 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 				</header>
 				<LanguageList active={languageListActive} setBookListState={this.setBookListState} toggleVersionList={this.toggleVersionList} activeLanguageName={activeLanguageName} toggleLanguageList={this.toggleLanguageList} languages={languages} setActiveIsoCode={this.setActiveIsoCode} />
 				<VersionList active={versionListActive} setBookListState={this.setBookListState} activeTextName={activeTextName} toggleVersionList={this.toggleVersionList} activeIsoCode={activeIsoCode} setActiveText={this.setActiveText} getBooksForText={this.getBooksForText} bibles={bibles} toggleLanguageList={this.toggleLanguageList} />
-				<BooksTable toggleVersionList={this.toggleVersionList} toggleLanguageList={this.toggleLanguageList} activeTextId={activeTextId} setBookListState={this.setBookListState} toggleTextSelection={toggleTextSelection} active={bookTableActive} getChapterText={getChapters} setActiveBookName={setActiveBookName} activeBookName={activeBookName} books={books} />
+				<BooksTable toggleVersionList={this.toggleVersionList} activeChapter={activeChapter} setActiveChapter={setActiveChapter} toggleLanguageList={this.toggleLanguageList} activeTextId={activeTextId} setBookListState={this.setBookListState} toggleTextSelection={toggleTextSelection} active={bookTableActive} getChapterText={getChapters} setActiveBookName={setActiveBookName} activeBookName={activeBookName} books={books} />
 			</aside>
 		);
 	}
@@ -97,12 +99,14 @@ TextSelection.propTypes = {
 	dispatch: PropTypes.func.isRequired,
 	bibles: PropTypes.object,
 	languages: PropTypes.object,
+	textselection: PropTypes.object,
 	toggleTextSelection: PropTypes.func,
 	setActiveBookName: PropTypes.func,
+	setActiveChapter: PropTypes.func,
 	getChapters: PropTypes.func,
 	activeBookName: PropTypes.string,
 	activeTextName: PropTypes.string,
-	textselection: PropTypes.object,
+	activeChapter: PropTypes.number,
 };
 
 const mapStateToProps = createStructuredSelector({

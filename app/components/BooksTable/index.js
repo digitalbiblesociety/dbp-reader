@@ -15,7 +15,20 @@ import PropTypes from 'prop-types';
 
 class BooksTable extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	render() {
-		const { active, activeTextId, toggleVersionList, books, activeBookName, setActiveBookName, setBookListState, getChapterText, toggleTextSelection, toggleLanguageList } = this.props;
+		const {
+			active,
+			activeTextId,
+			toggleVersionList,
+			books,
+			activeBookName,
+			activeChapter,
+			setActiveBookName,
+			setActiveChapter,
+			setBookListState,
+			getChapterText,
+			toggleTextSelection,
+			toggleLanguageList,
+		} = this.props;
 		if (active) {
 			return (
 				<div className="text-selection-section">
@@ -32,7 +45,7 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 										<div className="chapter-container">
 											{
 												book.name === activeBookName ? book.chapters.map((chapter) => (
-													<div role="button" tabIndex="0" key={chapter} className="chapter-box" onClick={() => { getChapterText({ bible: activeTextId, book: book.book_id, chapter }); toggleTextSelection(); }}>
+													<div role="button" tabIndex="0" key={chapter} className="chapter-box" onClick={() => { getChapterText({ bible: activeTextId, book: book.book_id, chapter }); toggleTextSelection(); setActiveChapter(chapter); }}>
 														{chapter}
 													</div>
 												)) : null
@@ -49,7 +62,7 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 		return (
 			<div className="text-selection-section closed" role="button" tabIndex="0" onClick={() => { setBookListState({ state: true }); toggleVersionList({ state: false }); toggleLanguageList({ state: false }); }}>
 				<i>icon</i>
-				<span className="book-header">{`${activeBookName} 1`}</span>
+				<span className="book-header">{`${activeBookName} ${activeChapter}`}</span>
 			</div>
 		);
 	}
@@ -59,6 +72,7 @@ BooksTable.propTypes = {
 	books: PropTypes.array,
 	active: PropTypes.bool,
 	setActiveBookName: PropTypes.func.isRequired,
+	setActiveChapter: PropTypes.func,
 	activeBookName: PropTypes.string,
 	getChapterText: PropTypes.func,
 	toggleTextSelection: PropTypes.func,
@@ -66,6 +80,7 @@ BooksTable.propTypes = {
 	toggleVersionList: PropTypes.func,
 	toggleLanguageList: PropTypes.func,
 	activeTextId: PropTypes.string,
+	activeChapter: PropTypes.number,
 };
 
 export default BooksTable;

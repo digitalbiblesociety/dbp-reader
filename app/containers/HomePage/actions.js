@@ -10,7 +10,7 @@ import {
 	GET_CHAPTER_TEXT,
 	TOGGLE_SETTINGS_MODAL,
 	TOGGLE_TEXT_SELECTION,
-	TOGGLE_MENU_BAR,
+	TOGGLE_MENU_BAR, SET_ACTIVE_CHAPTER,
 } from './constants';
 
 export const loadChapter = ({ text }) => ({
@@ -40,4 +40,9 @@ export const toggleTextSelection = () => ({
 export const setActiveBookName = (book) => ({
 	type: SET_ACTIVE_BOOK_NAME,
 	book,
+});
+
+export const setActiveChapter = (chapter) => ({
+	type: SET_ACTIVE_CHAPTER,
+	chapter,
 });

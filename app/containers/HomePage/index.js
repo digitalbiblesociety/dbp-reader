@@ -28,6 +28,7 @@ import {
 	toggleTextSelection,
 	toggleSettingsModal,
 	setActiveBookName,
+	setActiveChapter,
 	getChapterText,
 } from './actions';
 import makeSelectHomePage from './selectors';
@@ -49,6 +50,8 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 
 	setActiveBookName = (bookName) => this.props.dispatch(setActiveBookName(bookName));
 
+	setActiveChapter = (chapter) => this.props.dispatch(setActiveChapter(chapter));
+
 	toggleMenuBar = () => this.props.dispatch(toggleMenuBar());
 
 	toggleSettingsModal = () => this.props.dispatch(toggleSettingsModal());
@@ -64,6 +67,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			textSelectionActive,
 			activeBookName,
 			isMenuBarActive,
+			activeChapter,
 		} = this.props.homepage;
 
 		return (
@@ -75,6 +79,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 				<NavigationBar
 					activeTextName={activeTextName}
 					activeBookName={activeBookName}
+					activeChapter={activeChapter}
 					toggleMenuBar={this.toggleMenuBar}
 					toggleTextSelection={this.toggleTextSelection}
 					toggleSettingsModal={this.toggleSettingsModal}
@@ -83,8 +88,10 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					textSelectionActive ? (
 						(<TextSelection
 							activeBookName={activeBookName}
+							activeChapter={activeChapter}
 							getChapters={this.getChapters}
 							setActiveBookName={this.setActiveBookName}
+							setActiveChapter={this.setActiveChapter}
 							toggleTextSelection={this.toggleTextSelection}
 						/>)
 					) : null
