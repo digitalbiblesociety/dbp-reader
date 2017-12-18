@@ -27,14 +27,13 @@ class NavigationBar extends React.PureComponent { // eslint-disable-line react/p
 				<div className="small-2 columns">
 					<Logo />
 				</div>
-				<div className="small-4 columns">
-					<div role="button" tabIndex={0} onClick={toggleTextSelection}>{activeBookName || 'Genesis'}</div>
+				<div className="small-6 columns">
+					<div className="navbar-active-chapter">
+						<span role="button" tabIndex={0} onClick={toggleTextSelection} className="text">{activeBookName || 'Genesis'}</span>
+					</div>
 				</div>
 				<div role="button" tabIndex="0" className="small-2 columns" onClick={toggleSettingsModal}>
 					Settings Icon
-				</div>
-				<div className="small-2 columns">
-					<button className="font-button">Aa</button>
 				</div>
 				<div className="small-2 columns">
 					<LocaleToggle />

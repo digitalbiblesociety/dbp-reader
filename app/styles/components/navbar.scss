@@ -1,190 +1,39 @@
-nav {
-  background:#A14;
-  height:60px;
-
-  input,
-  a {
-    float:left;
-  }
-
-  #search-form input {
-    width:calc(100% - 120px);
-    height:40px;
-    margin:10px 0;
-    border:none;
-  }
-
-}
-
+nav                               {background:rgb(148,27,47);height:54px;}
+nav div                           {height:54px;}
+nav input,a                       {float:left;}
+nav #search-form input            {width:calc(100% - 120px);height:40px;margin:10px 0;border:none;}
 .version-button,
 .font-button,
 .search-button,
-.chapter-button {
-  float:left;
-  height:40px;
-  width:40px;
-  display:block;
-  background-color:#770011;
-  color:#FFF;
-  padding:10px;
-  margin:10px 0;
-  font-size:12px;
-}
-
-.font-button {
-  float:right;
-  margin-right:15px;
-}
-
-.font-button:hover {
-  color:#FFF;
-  font-weight:bold;
-}
-
-article {
-  text-align:justify;
-  line-height:1.5;
-  font-size:1.5rem;
-  padding-top:70px;
-}
-
-a {
-  text-decoration:none!important;
-  -webkit-transition:all 225ms ease;
-  -moz-transition:all 225ms ease;
-  transition:all 225ms ease;
-}
-
-.panel {
-  background:#444;
-  overflow:scroll
-}
-
-.panel ul {
-  list-style:none;
-  padding:0;
-  margin:0;
-  text-align:center;
-
-}
-
-.panel > ul {
-  height:800px;
-  overflow: scroll;
-}
-
-.panel > ul li a {
-  display:block;
-  width:100%;
-  height:50px;
-  line-height:50px;
-  background:transparent;
-  color:#fff;
-}
-
-.panel > ul li a:hover {
-  background:#555;
-}
-
-.panel input          {
-  width:100%;
-  height: 60px;
-  padding: 10px;
-  background: #f1f1f1;
-  text-indent: 30px;
-}
-
+.chapter-button                   {float:left;height:40px;width:40px;display:block;background-color:#770011;color:#FFF;padding:10px;margin:10px 0;font-size:12px;}
+.font-button                      {float:right;margin-right:15px;}
+.font-button:hover                {color:#FFF;font-weight:bold;}
+article                           {text-align:justify;line-height:1.5;font-size:1.5rem;padding-top:70px;}
+a                                 {text-decoration:none!important;-webkit-transition:all 225ms ease;-moz-transition:all 225ms ease;transition:all 225ms ease;}
+.panel                            {background:#444;overflow:scroll}
+.panel ul                         {list-style:none;padding:0;margin:0;text-align:center; }
+.panel > ul                       {height:800px;overflow: scroll;}
+.panel > ul li a                  {display:block;width:100%;height:50px;line-height:50px;background:transparent;color:#fff;}
+.panel > ul li a:hover            {background:#555;}
+.panel input                      {width:100%;height: 60px;padding: 10px;background: #f1f1f1;text-indent: 30px;}
 #settings-panel li,
-#settings-panel a {
-  font-size:16px;
-}
-
-#settings-panel .list ul {
-  border-top:thin solid #333;
-}
-
-#settings-panel .list > li {
-  color:#FFF;
-  padding:10px;
-}
-
-#navigation-panel .list .book {
-  width: 100%;
-  display: block;
-  color: #FFF;
-}
-
-#navigation-panel .list .chapter {
-  float: left;
-  width: 20%;
-  height: 50px;
-  display: block;
-  line-height: 50px;
-  /* padding: 10px; */
-  background: #FFF;
-  color: #222;
-  border: thin solid #222;
-}
-
-#navigation-panel .list .chapters {
-  padding:10px;
-}
-
-.result {
-  font-size: .75rem;
-  background: #f1f1f1;
-  padding:10px;
-  margin:5px;
-}
-
-.result a {
-  color:#222;
-}
-
-.result a b {
-  color:#701;
-}
-
-.result a:hover {
-  color:#000;
-  background:#f2f2f2;
-}
-
-.sideNav {
-  position: fixed;
-  top:50%;
-  padding:100px 10px;
-  margin-top:-100px;
-  border-radius: 5px;
-}
-
-.sideNav:hover {
-  background: #ccc;
-  color:#FFF;
-}
-
-.sideNav:hover .chevron:before {
-  color:#FFF;
-}
-
-.sideNav.left {
-  left:10px;
-}
-
-.sideNav.right {
-  right:10px;
-}
-
-.logo {
-  width:120px;
-}
-
-.chapters {
-  visibility: hidden;
-  display: none;
-}
-
-.chapters.active {
-  visibility: visible;
-  display: block;
-}
+#settings-panel a                 {font-size:16px;}
+#settings-panel .list ul          {border-top:thin solid #333;}
+#settings-panel .list > li        {color:#FFF;padding:10px;}
+#navigation-panel .list .book     {width: 100%;display: block;color: #FFF;}
+#navigation-panel .list .chapter  {float: left;width: 20%;height: 50px;display: block;line-height:50px;background: #FFF;color: #222;border: thin solid #222;}
+#navigation-panel .list .chapters {padding:10px;}
+.result                           {font-size: .75rem;background: #f1f1f1;padding:10px;margin:5px;}
+.result a                         {color:#222;}
+.result a b                       {color:#701;}
+.result a:hover                   {color:#000;background:#f2f2f2;}
+.sideNav                          {position:fixed;top:50%;padding:100px 10px;margin-top:-100px;border-radius:5px;}
+.sideNav:hover                    {background:#ccc;color:#FFF;}
+.sideNav:hover .chevron:before    {color:#FFF;}
+.sideNav.left                     {left:10px;}
+.sideNav.right                    {right:10px;}
+.logo                             {width:120px;}
+.chapters                         {visibility:hidden;display:none;}
+.chapters.active                  {visibility:visible;display:block;}
+.navbar-active-chapter            {margin-top:15px;font-size:1.3em;color:#fff;text-align:center;}
+.navbar-active-chapter .text      {cursor:pointer;}

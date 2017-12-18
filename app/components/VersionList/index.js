@@ -74,7 +74,12 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 			);
 		}
 		return (
-			<div className="text-selection-section closed" tabIndex="0" role="button" onClick={() => { toggleVersionList({ state: true }); setBookListState({ state: false }); toggleLanguageList({ state: false }); }}>
+			<div
+				className="text-selection-section closed"
+				tabIndex="0"
+				role="button"
+				onClick={() => { toggleVersionList({ state: true }); setBookListState({ state: false }); toggleLanguageList({ state: false }); }}
+			>
 				<span>icon</span>
 				<span>VERSION:</span>
 				<span className="active-iso-code">{activeTextName}</span>
