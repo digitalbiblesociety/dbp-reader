@@ -4,6 +4,9 @@
  *
  * this component connects the redux state language locale to the
  * IntlProvider component and i18n messages (loaded from `app/translations`)
+ *
+ * if there are issues with passing styles to messages use textComponent={Fragment}
+ * const Fragment = (props) => props.children;
  */
 
 import React from 'react';
