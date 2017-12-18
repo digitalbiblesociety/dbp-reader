@@ -15,19 +15,20 @@ import PropTypes from 'prop-types';
 
 class BooksTable extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	render() {
-		const { active, activeTextId, books, activeBookName, setActiveBookName, getChapterText, toggleTextSelection } = this.props;
+		const { active, activeTextId, toggleVersionList, books, activeBookName, setActiveBookName, setBookListState, getChapterText, toggleTextSelection, toggleLanguageList } = this.props;
 		if (active) {
 			return (
-				<section className="text-selection-section">
-					<header className="book-chapter-header">
-						<div className={activeBookName ? 'book-text' : 'book-text-active'} role="button" tabIndex="0" onClick={() => setActiveBookName('')}><h1>Book & Chapter</h1></div>
-					</header>
+				<div className="text-selection-section">
+					<div>
+						<i>icon</i>
+						<span className="book-header">Book & Chapter:</span>
+					</div>
 					{
 						<div className="book-container">
 							{
 								books.map((book) => (
-									<div tabIndex="0" role="button" key={book.name} onClick={() => setActiveBookName(book.name)}>
-										<h4>{book.name}</h4>
+									<div className="book-button" tabIndex="0" role="button" key={book.name} onClick={() => setActiveBookName(book.name)}>
+										<h4 className={book.name === activeBookName ? 'selected-book' : ''}>{book.name}</h4>
 										<div className="chapter-container">
 											{
 												book.name === activeBookName ? book.chapters.map((chapter) => (
@@ -42,13 +43,14 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 							}
 						</div>
 					}
-				</section>
+				</div>
 			);
 		}
 		return (
-			<section className="book-chapter-header">
-				<div role="button" tabIndex="0" onClick={() => setActiveBookName('')}><h1>Book & Chapter</h1></div>
-			</section>
+			<div className="text-selection-section closed" role="button" tabIndex="0" onClick={() => { setBookListState({ state: true }); toggleVersionList({ state: false }); toggleLanguageList({ state: false }); }}>
+				<i>icon</i>
+				<span className="book-header">{`${activeBookName} 1`}</span>
+			</div>
 		);
 	}
 }
@@ -60,6 +62,9 @@ BooksTable.propTypes = {
 	activeBookName: PropTypes.string,
 	getChapterText: PropTypes.func,
 	toggleTextSelection: PropTypes.func,
+	setBookListState: PropTypes.func,
+	toggleVersionList: PropTypes.func,
+	toggleLanguageList: PropTypes.func,
 	activeTextId: PropTypes.string,
 };
 

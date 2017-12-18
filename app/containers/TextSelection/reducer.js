@@ -11,8 +11,8 @@ import {
 	SET_ACTIVE_TEXT,
 	SET_LANGUAGES,
 	SET_ISO_CODE,
-	TOGGLE_VERSION_LIST,
-	TOGGLE_LANGUAGE_LIST,
+	SET_VERSION_LIST_STATE,
+	SET_LANGUAGE_LIST_STATE,
 	SET_BOOK_LIST_STATE,
 } from './constants';
 
@@ -76,10 +76,10 @@ const initialState = fromJS({
 
 function textSelectionReducer(state = initialState, action) {
 	switch (action.type) {
-	case TOGGLE_LANGUAGE_LIST:
-		return state.set('languageListActive', !state.get('languageListActive'));
-	case TOGGLE_VERSION_LIST:
-		return state.set('versionListActive', !state.get('versionListActive'));
+	case SET_LANGUAGE_LIST_STATE:
+		return state.set('languageListActive', action.state);
+	case SET_VERSION_LIST_STATE:
+		return state.set('versionListActive', action.state);
 	case SET_BOOK_LIST_STATE:
 		return state.set('bookTableActive', action.state);
 	case LOAD_TEXTS:

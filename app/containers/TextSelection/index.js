@@ -16,8 +16,8 @@ import VersionList from 'components/VersionList';
 import BooksTable from 'components/BooksTable';
 import menu from 'images/menu.svg';
 import {
-	toggleVersionList,
-	toggleLanguageList,
+	setVersionListState,
+	setLanguageListState,
 	setActiveIsoCode,
 	setBookListState,
 	getBooks,
@@ -34,6 +34,7 @@ import saga from './saga';
 export class TextSelection extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	componentDidMount() {
 		const { activeTextId } = this.props.textselection;
+		// TODO: use a conditional to ensure the actions below only happen on the first mount
 		this.props.dispatch(getBooks({ textId: activeTextId }));
 		this.props.dispatch(getLanguages());
 		this.props.dispatch(getTexts());
@@ -47,9 +48,9 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 
 	setActiveText = ({ textName, textId }) => this.props.dispatch(setActiveText({ textName, textId }));
 
-	toggleLanguageList = () => this.props.dispatch(toggleLanguageList());
+	toggleLanguageList = ({ state }) => this.props.dispatch(setLanguageListState({ state }));
 
-	toggleVersionList = () => this.props.dispatch(toggleVersionList());
+	toggleVersionList = ({ state }) => this.props.dispatch(setVersionListState({ state }));
 
 	render() {
 		const {
@@ -85,8 +86,8 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 					</span>
 				</header>
 				<LanguageList active={languageListActive} setBookListState={this.setBookListState} toggleVersionList={this.toggleVersionList} activeLanguageName={activeLanguageName} toggleLanguageList={this.toggleLanguageList} languages={languages} setActiveIsoCode={this.setActiveIsoCode} />
-				<VersionList active={versionListActive} setBookListState={this.setBookListState} activeTextName={activeTextName} toggleVersionList={this.toggleVersionList} activeIsoCode={activeIsoCode} setActiveText={this.setActiveText} getBooksForText={this.getBooksForText} bibles={bibles} />
-				<BooksTable activeTextId={activeTextId} toggleTextSelection={toggleTextSelection} active={bookTableActive} getChapterText={getChapters} setActiveBookName={setActiveBookName} activeBookName={activeBookName} books={books} />
+				<VersionList active={versionListActive} setBookListState={this.setBookListState} activeTextName={activeTextName} toggleVersionList={this.toggleVersionList} activeIsoCode={activeIsoCode} setActiveText={this.setActiveText} getBooksForText={this.getBooksForText} bibles={bibles} toggleLanguageList={this.toggleLanguageList} />
+				<BooksTable toggleVersionList={this.toggleVersionList} toggleLanguageList={this.toggleLanguageList} activeTextId={activeTextId} setBookListState={this.setBookListState} toggleTextSelection={toggleTextSelection} active={bookTableActive} getChapterText={getChapters} setActiveBookName={setActiveBookName} activeBookName={activeBookName} books={books} />
 			</aside>
 		);
 	}

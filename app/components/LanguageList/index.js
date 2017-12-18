@@ -40,20 +40,23 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 			toggleLanguageList,
 			activeLanguageName,
 			setBookListState,
+			toggleVersionList,
 		} = this.props;
 		const { filterText } = this.state;
 		const filteredLanguages = filterText ? languages.filter((language) => this.filterFunction(language, filterText)) : languages;
 		if (active) {
 			return (
 				<div className="text-selection-section">
-					<i>icon</i>
-					<span>LANGUAGE:</span>
-					<span className="active-language-name">{activeLanguageName}</span>
-					<input className="text-selection-input" onChange={this.handleChange} placeholder="SEARCH LANGUAGES" />
+					<div>
+						<i>icon</i>
+						<span>LANGUAGE:</span>
+						<span className="active-language-name">{activeLanguageName}</span>
+						<input className="text-selection-input" onChange={this.handleChange} placeholder="SEARCH LANGUAGES" />
+					</div>
 					<section className="language-name-list">
 						{
 							filteredLanguages.map((language) => (
-								<div className="language-name" key={language.get('iso_code')} role="button" tabIndex={0} onClick={() => { setActiveIsoCode({ iso: language.get('iso_code'), name: language.get('name') }); toggleLanguageList(); setBookListState({ state: false }); }}>{language.get('name')}</div>
+								<div className="language-name" key={language.get('iso_code')} role="button" tabIndex={0} onClick={() => { setActiveIsoCode({ iso: language.get('iso_code'), name: language.get('name') }); toggleLanguageList({ state: false }); toggleVersionList({ state: true }); setBookListState({ state: false }); }}>{language.get('name')}</div>
 							))
 						}
 					</section>
@@ -61,7 +64,7 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 			);
 		}
 		return (
-			<div className="text-selection-section" role="button" tabIndex={0} onClick={() => { toggleLanguageList(); setBookListState({ state: false }); }}>
+			<div className="text-selection-section closed" role="button" tabIndex={0} onClick={() => { toggleLanguageList({ state: true }); toggleVersionList({ state: false }); setBookListState({ state: false }); }}>
 				<i>icon</i>
 				<span>LANGUAGE:</span>
 				<span className="active-language-name">{activeLanguageName}</span>
@@ -75,6 +78,7 @@ LanguageList.propTypes = {
 	setActiveIsoCode: PropTypes.func,
 	toggleLanguageList: PropTypes.func,
 	setBookListState: PropTypes.func,
+	toggleVersionList: PropTypes.func,
 	active: PropTypes.bool,
 	activeLanguageName: PropTypes.string,
 };

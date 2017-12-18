@@ -13,8 +13,8 @@ import {
 	SET_ACTIVE_TEXT,
 	SET_LANGUAGES,
 	SET_ISO_CODE,
-	TOGGLE_LANGUAGE_LIST,
-	TOGGLE_VERSION_LIST,
+	SET_LANGUAGE_LIST_STATE,
+	SET_VERSION_LIST_STATE,
 	SET_BOOK_LIST_STATE,
 } from './constants';
 
@@ -46,12 +46,14 @@ export const setBookListState = ({ state }) => ({
 	state,
 });
 
-export const toggleLanguageList = () => ({
-	type: TOGGLE_LANGUAGE_LIST,
+export const setLanguageListState = ({ state }) => ({
+	type: SET_LANGUAGE_LIST_STATE,
+	state,
 });
 
-export const toggleVersionList = () => ({
-	type: TOGGLE_VERSION_LIST,
+export const setVersionListState = ({ state }) => ({
+	type: SET_VERSION_LIST_STATE,
+	state,
 });
 
 export const setActiveIsoCode = ({ iso, name }) => ({

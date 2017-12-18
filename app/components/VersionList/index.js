@@ -39,7 +39,7 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 	handleChange = (e) => this.setState({ filterText: e.target.value });
 
 	render() {
-		const { bibles, setBookListState, getBooksForText, setActiveText, activeTextName, activeIsoCode, active, toggleVersionList } = this.props;
+		const { bibles, setBookListState, toggleLanguageList, getBooksForText, setActiveText, activeTextName, activeIsoCode, active, toggleVersionList } = this.props;
 		const { filterText } = this.state;
 		const filteredBibles = filterText ? bibles.filter((bible) => this.filterFunction(bible, filterText, activeIsoCode)) : bibles.filter((bible) => bible.get('iso') === activeIsoCode);
 		if (active) {
@@ -60,7 +60,7 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 										const abbr = bible.get('abbr');
 										setActiveText({ textId: abbr, textName: abbr });
 										getBooksForText({ textId: abbr });
-										toggleVersionList();
+										toggleVersionList({ state: false });
 										setBookListState({ state: true });
 									}}
 								>
@@ -73,7 +73,7 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 			);
 		}
 		return (
-			<div className="text-selection-section" tabIndex="0" role="button" onClick={() => { toggleVersionList(); setBookListState({ state: false }); }}>
+			<div className="text-selection-section closed" tabIndex="0" role="button" onClick={() => { toggleVersionList({ state: true }); setBookListState({ state: false }); toggleLanguageList({ state: false }); }}>
 				<span>icon</span>
 				<span>VERSION:</span>
 				<span className="active-iso-code">{activeTextName}</span>
@@ -91,6 +91,7 @@ BiblesTable.propTypes = {
 	activeTextName: PropTypes.string,
 	active: PropTypes.bool,
 	toggleVersionList: PropTypes.func,
+	toggleLanguageList: PropTypes.func,
 };
 
 export default BiblesTable;
