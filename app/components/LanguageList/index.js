@@ -53,13 +53,15 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 						<span className="active-language-name">{activeLanguageName}</span>
 						<input className="text-selection-input" onChange={this.handleChange} placeholder="SEARCH LANGUAGES" />
 					</div>
-					<section className="language-name-list">
+					<div className="language-name-list">
 						{
 							filteredLanguages.map((language) => (
-								<div className="language-name" key={language.get('iso_code')} role="button" tabIndex={0} onClick={() => { setActiveIsoCode({ iso: language.get('iso_code'), name: language.get('name') }); toggleLanguageList({ state: false }); toggleVersionList({ state: true }); setBookListState({ state: false }); }}>{language.get('name')}</div>
+								<div className="language-name" key={language.get('iso_code')} role="button" tabIndex={0} onClick={() => { setActiveIsoCode({ iso: language.get('iso_code'), name: language.get('name') }); toggleLanguageList({ state: false }); toggleVersionList({ state: true }); setBookListState({ state: false }); }}>
+									<h4 className={language.get('name') === activeLanguageName ? 'active-language-name' : ''}>{language.get('name')}</h4>
+								</div>
 							))
 						}
-					</section>
+					</div>
 				</div>
 			);
 		}

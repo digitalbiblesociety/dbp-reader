@@ -53,6 +53,7 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 						{
 							filteredBibles.map((bible) => (
 								<div
+									className="version-item-button"
 									tabIndex="0"
 									role="button"
 									key={`${bible.get('abbr')}${bible.get('date')}`}
@@ -64,7 +65,7 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 										setBookListState({ state: true });
 									}}
 								>
-									<h4>{bible.get('name')}</h4>
+									<h4 className={bible.get('abbr') === activeTextName ? 'active-version' : ''}>{bible.get('name')}</h4>
 								</div>
 							))
 						}
