@@ -8,6 +8,9 @@ aside {position:absolute;top:0;right:0;height:100%;width:320px;background-color:
 img                    {max-width:100%;height:auto}
 img[data-src]          {filter:blur(15px)}
 img.loaded             {transition:all .5s linear;filter:blur(0)}
+/* for making svg fill dynamic to support light/dark modes
+svg {fill: currentColor;}
+*/
 
 // Icons Style Applied to All SVG Sprites
 .icon                  {width:1em;height:1em;vertical-align:-0.15em;fill:currentColor;overflow:hidden;cursor:pointer;}
