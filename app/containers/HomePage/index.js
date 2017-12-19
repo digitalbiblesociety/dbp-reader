@@ -17,12 +17,13 @@ import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
-import NavigationBar from 'components/NavigationBar';
-import TextSelection from 'containers/TextSelection';
+import Settings from 'containers/Settings';
 import AudioPlayer from 'containers/AudioPlayer';
+import TextSelection from 'containers/TextSelection';
+import NavigationBar from 'components/NavigationBar';
 import Text from 'components/Text';
 import MenuBar from 'components/MenuBar';
-import Settings from 'containers/Settings';
+import Footer from 'components/Footer';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
 import {
 	toggleMenuBar,
@@ -83,7 +84,6 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					activeChapter={activeChapter}
 					toggleMenuBar={this.toggleMenuBar}
 					toggleTextSelection={this.toggleTextSelection}
-					toggleSettingsModal={this.toggleSettingsModal}
 				/>
 				<AudioPlayer />
 				{
@@ -113,6 +113,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 						<MenuBar toggleMenuBar={this.toggleMenuBar} />
 					) : null
 				}
+				<Footer toggleSettingsModal={this.toggleSettingsModal} />
 			</GenericErrorBoundary>
 		);
 	}

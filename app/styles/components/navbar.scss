@@ -1,13 +1,12 @@
+.nav-container                   {display:flex;justify-content:space-around;align-items:center;background:$header-footer;height:54px;width:100%;position:fixed;}
 .nav-container .logo             {width:120px;}
-.chapter-selector .text          {cursor:pointer;}
-.chapter-selector .text:hover    {opacity:.65;}
-.navbar-button                   {cursor:pointer;}
-.navbar-button:hover             {opacity:.65;}
-.nav-container                   {display:flex;justify-content:space-around;align-items:center;background:rgb(158,30,53);height:54px;width:100%;}
 .nav-container .menu             {flex-grow:1;}
 .nav-container .chapter-selector {flex-grow:10;text-align:center;font-size:1.3em;color:#fff;}
 .nav-container .logo             {flex-grow:2;}
 .nav-container .logo:hover       {opacity:.65;}
-.nav-container .buttons          {flex-grow:2;justify-content:space-between;}
-.nav-container .locale           {flex-grow:1;align-content:flex-end;}
+.nav-container .buttons          {flex-grow:2;justify-content:space-around;}
 .nav-container div               {height:54px;display:flex;align-items:center;justify-content:center;}
+.chapter-selector .text          {cursor:pointer;}
+.chapter-selector .text:hover    {opacity:.65;}
+.navbar-button                   {cursor:pointer;}
+.navbar-button:hover             {opacity:.65;}
