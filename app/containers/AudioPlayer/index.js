@@ -13,7 +13,7 @@ import injectReducer from 'utils/injectReducer';
 import SvgWrapper from 'components/SvgWrapper';
 import makeSelectAudioPlayer from './selectors';
 import reducer from './reducer';
-/* eslint-disable no-unused-expressions, jsx-a11y/media-has-caption */
+/* eslint-disable jsx-a11y/media-has-caption */
 /* disabled the above eslint config options because you can't add tracks to audio elements */
 export class AudioPlayer extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	constructor(props) {
@@ -69,7 +69,7 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 		return (
 			<div className="audio-player-container">
 				<SvgWrapper onClick={this.skipBackward} className="item" width="25px" height="25px" fill="#fff" svgid="backward" />
-				<SvgWrapper onClick={() => { this.state.playing ? this.pauseVideo() : this.playVideo(); }} className="item" width="25px" height="25px" fill="#fff" svgid={this.state.playing ? 'pause' : 'play_audio'} />
+				<SvgWrapper onClick={this.state.playing ? this.pauseVideo : this.playVideo} className="item" width="25px" height="25px" fill="#fff" svgid={this.state.playing ? 'pause' : 'play_audio'} />
 				<SvgWrapper onClick={this.skipForward} className="item" width="25px" height="25px" fill="#fff" svgid="forward" />
 				<SvgWrapper onClick={this.decreaseVolume} className="item" width="25px" height="25px" fill="#fff" svgid="volume_down" />
 				<SvgWrapper onClick={this.increaseVolume} className="item" width="25px" height="25px" fill="#fff" svgid="volume_up" />
