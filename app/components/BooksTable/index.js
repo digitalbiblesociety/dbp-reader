@@ -36,26 +36,24 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 						<i>icon</i>
 						<span className="book-header">Book & Chapter:</span>
 					</div>
-					{
-						<div className="book-container">
-							{
-								books.map((book) => (
-									<div className="book-button" tabIndex="0" role="button" key={book.name} onClick={() => setActiveBookName(book.name)}>
-										<h4 className={book.name === activeBookName ? 'selected-book' : ''}>{book.name}</h4>
-										<div className="chapter-container">
-											{
-												book.name === activeBookName ? book.chapters.map((chapter) => (
-													<div role="button" tabIndex="0" key={chapter} className="chapter-box" onClick={() => { getChapterText({ bible: activeTextId, book: book.book_id, chapter }); toggleTextSelection(); setActiveChapter(chapter); }}>
-														{chapter}
-													</div>
-												)) : null
-											}
-										</div>
+					<div className="book-container">
+						{
+							books.map((book) => (
+								<div className="book-button" tabIndex="0" role="button" key={book.name} onClick={() => setActiveBookName(book.name)}>
+									<h4 className={book.name === activeBookName ? 'selected-book' : ''}>{book.name}</h4>
+									<div className="chapter-container">
+										{
+											book.name === activeBookName ? book.chapters.map((chapter) => (
+												<div role="button" tabIndex="0" key={chapter} className="chapter-box" onClick={() => { getChapterText({ bible: activeTextId, book: book.book_id, chapter }); toggleTextSelection(); setActiveChapter(chapter); }}>
+													{chapter}
+												</div>
+											)) : null
+										}
 									</div>
-								))
-							}
-						</div>
-					}
+								</div>
+							))
+						}
+					</div>
 				</div>
 			);
 		}

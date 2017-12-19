@@ -7,8 +7,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import menu from 'images/menu.svg';
-// import styled from 'styled-components';
-
+import SvgWrapper from 'components/SvgWrapper';
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
 
@@ -22,12 +21,42 @@ function MenuBar({ toggleMenuBar }) {
 				</span>
 			</header>
 			<div className="menu-link-list">
-				<a className="item" href="/"><FormattedMessage {...messages.bible} /></a>
-				<a className="item" href="http://www.bible.is/radio"><FormattedMessage {...messages.radio} /></a>
-				<a className="item" href="http://www.bible.is/download/audio"><FormattedMessage {...messages.download} /></a>
-				<a className="item" href="http://www.bible.is/apps"><FormattedMessage {...messages.apps} /></a>
-				<a className="item" href="http://www.bible.is/share"><FormattedMessage {...messages.share} /></a>
-				<a className="item" href="http://www.bible.is/donate"><FormattedMessage {...messages.donate} /></a>
+				<a className="item" href="/">
+					<div className="item-container">
+						<SvgWrapper className="svg" height="30px" width="30px" fill="#fff" svgid="bible" />
+						<FormattedMessage {...messages.bible} />
+					</div>
+				</a>
+				<a className="item" href="http://www.bible.is/radio">
+					<div className="item-container">
+						<SvgWrapper className="svg" height="30px" width="30px" fill="#fff" svgid="radio" />
+						<FormattedMessage {...messages.radio} />
+					</div>
+				</a>
+				<a className="item" href="http://www.bible.is/download/audio">
+					<div className="item-container">
+						<SvgWrapper className="svg" height="30px" width="30px" fill="#fff" svgid="download" />
+						<FormattedMessage {...messages.download} />
+					</div>
+				</a>
+				<a className="item" href="http://www.bible.is/apps">
+					<div className="item-container">
+						<SvgWrapper className="svg" height="30px" width="30px" fill="#fff" svgid="apps" />
+						<FormattedMessage {...messages.apps} />
+					</div>
+				</a>
+				<a className="item" href="http://www.bible.is/share">
+					<div className="item-container">
+						<SvgWrapper className="svg" height="30px" width="30px" fill="#fff" svgid="share" />
+						<FormattedMessage {...messages.share} />
+					</div>
+				</a>
+				<a className="item" href="http://www.bible.is/donate">
+					<div className="item-container">
+						<SvgWrapper className="svg" height="30px" width="30px" fill="#fff" svgid="donate" />
+						<FormattedMessage {...messages.donate} />
+					</div>
+				</a>
 			</div>
 		</aside>
 	);
