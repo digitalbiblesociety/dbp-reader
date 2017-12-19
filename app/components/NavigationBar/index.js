@@ -28,7 +28,7 @@ class NavigationBar extends React.PureComponent { // eslint-disable-line react/p
 		return (
 			<nav>
 				<div className="small-1 columns">
-					<span role="button" tabIndex={0} onClick={toggleMenuBar}><SvgWrapper className="navbar-button" height="100%" width="100%" fill="#fff" svgid="menu" /></span>
+					<span role="button" tabIndex={0} onClick={toggleMenuBar}><SvgWrapper className="navbar-button" height="30px" width="30px" fill="#fff" svgid="menu" /></span>
 				</div>
 				<div className="small-2 columns">
 					<Logo />
@@ -38,10 +38,11 @@ class NavigationBar extends React.PureComponent { // eslint-disable-line react/p
 						<span role="button" tabIndex={0} onClick={toggleTextSelection} className="text">{`${activeBookName} ${activeChapter}`}</span>
 					</div>
 				</div>
-				<div role="button" tabIndex="0" className="small-1 columns" onClick={toggleSettingsModal}>
-					Settings Icon
-				</div>
-				<div className="small-1 columns">
+				<div className="small-3 columns">
+					<span><SvgWrapper className="navbar-button" height="30px" width="30px" fill="#fff" svgid="search" /></span>
+					<span><SvgWrapper className="navbar-button" height="30px" width="30px" fill="#fff" svgid="info" /></span>
+					<span role="button" tabIndex={0} onClick={toggleSettingsModal}><SvgWrapper className="navbar-button" height="30px" width="30px" fill="#fff" svgid="settings" /></span>
+					<span><SvgWrapper className="navbar-button" height="30px" width="30px" fill="#fff" svgid="profile" /></span>
 					<LocaleToggle />
 				</div>
 			</nav>
