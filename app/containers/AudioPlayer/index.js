@@ -11,6 +11,7 @@ import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import injectReducer from 'utils/injectReducer';
 import SvgWrapper from 'components/SvgWrapper';
+import SpeedControl from 'components/SpeedControl';
 import makeSelectAudioPlayer from './selectors';
 import reducer from './reducer';
 /* eslint-disable jsx-a11y/media-has-caption */
@@ -23,8 +24,13 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 		this.state = {
 			playing: false,
 			src: 'http://cloud.faithcomesbyhearing.com/mp3audiobibles2/ENGESVO2DA/A01___02_Genesis_____ENGESVO2DA.mp3',
+			speedControlState: false,
 		};
 	}
+
+	closeSpeedControl = () => this.setState({
+		speedControlState: false,
+	})
 
 	decreaseVolume = () => {
 		const volume = this.audioRef.volume;
@@ -44,6 +50,10 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 		}
 	}
 
+	openSpeedControl = () => this.setState({
+		speedControlState: true,
+	});
+
 	pauseVideo = () => {
 		this.audioRef.pause();
 		this.setState({
@@ -54,6 +64,10 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 	playVideo = () => this.audioRef.play().then(() => this.setState({
 		playing: true,
 	}))
+
+	updatePlayerSpeed = (rate) => {
+		this.audioRef.playbackRate = rate;
+	}
 
 	skipBackward = () => this.setState({
 		src: 'http://cloud.faithcomesbyhearing.com/mp3audiobibles2/ENGESVO2DA/A01___01_Genesis_____ENGESVO2DA.mp3',
@@ -73,8 +87,11 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 				<SvgWrapper onClick={this.skipForward} className="item" width="25px" height="25px" fill="#fff" svgid="forward" />
 				<SvgWrapper onClick={this.decreaseVolume} className="item" width="25px" height="25px" fill="#fff" svgid="volume_down" />
 				<SvgWrapper onClick={this.increaseVolume} className="item" width="25px" height="25px" fill="#fff" svgid="volume_up" />
-				<SvgWrapper className="item" width="25px" height="25px" fill="#fff" svgid="play_speed" />
+				<SvgWrapper onClick={this.state.speedControlState ? this.closeSpeedControl : this.openSpeedControl} className="item" width="25px" height="25px" fill="#fff" svgid="play_speed" />
 				<SvgWrapper className="item" width="25px" height="25px" fill="#fff" svgid="more_menu" />
+				{
+					this.state.speedControlState ? (<SpeedControl options={[0.5, 1, 1.25, 1.5, 2]} setSpeed={this.updatePlayerSpeed} closeControl={this.closeSpeedControl} />) : null
+				}
 				<audio ref={this.handleRef} className="audio-player" src={this.state.src}></audio>
 			</div>
 		);
