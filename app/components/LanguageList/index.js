@@ -6,6 +6,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import SvgWrapper from 'components/SvgWrapper';
 // import styled from 'styled-components';
 
 // import { FormattedMessage } from 'react-intl';
@@ -47,12 +48,12 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 		if (active) {
 			return (
 				<div className="text-selection-section">
-					<div>
-						<i>icon</i>
-						<span>LANGUAGE:</span>
+					<div className="text-selection-title">
+						<SvgWrapper height="25px" width="25px" fill="#fff" svgid="world" />
+						<span className="text">LANGUAGE:</span>
 						<span className="active-language-name">{activeLanguageName}</span>
-						<input className="text-selection-input" onChange={this.handleChange} placeholder="SEARCH LANGUAGES" />
 					</div>
+					<input className="text-selection-input" onChange={this.handleChange} placeholder="SEARCH LANGUAGES" />
 					<div className="language-name-list">
 						{
 							filteredLanguages.map((language) => (
@@ -67,9 +68,11 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 		}
 		return (
 			<div className="text-selection-section closed" role="button" tabIndex={0} onClick={() => { toggleLanguageList({ state: true }); toggleVersionList({ state: false }); setBookListState({ state: false }); }}>
-				<i>icon</i>
-				<span>LANGUAGE:</span>
-				<span className="active-language-name">{activeLanguageName}</span>
+				<div className="text-selection-title">
+					<SvgWrapper height="25px" width="25px" fill="#fff" svgid="world" />
+					<span className="text">LANGUAGE:</span>
+					<span className="active-language-name">{activeLanguageName}</span>
+				</div>
 			</div>
 		);
 	}

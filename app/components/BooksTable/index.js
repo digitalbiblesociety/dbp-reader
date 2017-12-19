@@ -6,6 +6,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import SvgWrapper from 'components/SvgWrapper';
 // import ChaptersCell from './ChaptersCell';
 // import styled from 'styled-components';
 
@@ -32,9 +33,9 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 		if (active) {
 			return (
 				<div className="text-selection-section">
-					<div>
-						<i>icon</i>
-						<span className="book-header">Book & Chapter:</span>
+					<div className="text-selection-title">
+						<SvgWrapper height="30px" width="25px" fill="#fff" svgid="books-chapters" />
+						<span className="text">Book & Chapter:</span>
 					</div>
 					<div className="book-container">
 						{
@@ -59,8 +60,10 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 		}
 		return (
 			<div className="text-selection-section closed" role="button" tabIndex="0" onClick={() => { setBookListState({ state: true }); toggleVersionList({ state: false }); toggleLanguageList({ state: false }); }}>
-				<i>icon</i>
-				<span className="book-header">{`${activeBookName} ${activeChapter}`}</span>
+				<div className="text-selection-title">
+					<SvgWrapper height="30px" width="25px" fill="#fff" svgid="books-chapters" />
+					<span className="text">{`${activeBookName} ${activeChapter}`}</span>
+				</div>
 			</div>
 		);
 	}

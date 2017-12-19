@@ -6,6 +6,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import SvgWrapper from 'components/SvgWrapper';
 // import styled from 'styled-components';
 
 // import { FormattedMessage } from 'react-intl';
@@ -45,9 +46,11 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 		if (active) {
 			return (
 				<div className="text-selection-section">
-					<span>icon</span>
-					<span>VERSION:</span>
-					<span className="active-iso-code">{activeTextName}</span>
+					<div className="text-selection-title">
+						<SvgWrapper height="25px" width="25px" fill="#fff" svgid="resources" />
+						<span className="text">VERSION:</span>
+						<span className="active-iso-code">{activeTextName}</span>
+					</div>
 					<input className="text-selection-input" onChange={this.handleChange} placeholder="SEARCH VERSIONS" />
 					<div>
 						{
@@ -80,9 +83,11 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 				role="button"
 				onClick={() => { toggleVersionList({ state: true }); setBookListState({ state: false }); toggleLanguageList({ state: false }); }}
 			>
-				<span>icon</span>
-				<span>VERSION:</span>
-				<span className="active-iso-code">{activeTextName}</span>
+				<div className="text-selection-title">
+					<SvgWrapper height="25px" width="25px" fill="#fff" svgid="resources" />
+					<span className="text">VERSION:</span>
+					<span className="active-iso-code">{activeTextName}</span>
+				</div>
 			</div>
 		);
 	}

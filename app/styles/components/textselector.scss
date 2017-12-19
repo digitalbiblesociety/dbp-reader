@@ -3,6 +3,8 @@
 .text-selection-section ::-moz-placeholder          {color:#FFF;}
 .text-selection-section :-ms-input-placeholder      {color:#FFF;}
 .text-selection-section.closed                      {cursor:pointer;}
+.text-selection-title                               {display:flex;align-items:center;justify-content:flex-start;margin:10px 0 5px 10px;}
+.text-selection-title .text                         {margin-left:10px;}
 
 // Language Selection Styles
 .active-language-name      {color:$menu-active-color;margin-left:5px;}
@@ -15,7 +17,6 @@
 // Book Selection Styles
 .chapter-box       {width:60px;height:30px;color:white;margin-bottom:5px;text-align:center;}
 .chapter-container {display:grid;margin:auto;padding-top:10px;grid-template-columns:repeat(5,60px);grid-template-rows:auto;}
-.book-header       {}
 .selected-book     {color:$menu-active-color;}
 .book-container    {max-height:500px;overflow-y:scroll;overflow-x:hidden;}
 .book-button       {cursor:pointer;}
