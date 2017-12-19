@@ -19,6 +19,7 @@ import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import NavigationBar from 'components/NavigationBar';
 import TextSelection from 'containers/TextSelection';
+import AudioPlayer from 'containers/AudioPlayer';
 import Text from 'components/Text';
 import MenuBar from 'components/MenuBar';
 import Settings from 'containers/Settings';
@@ -84,6 +85,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					toggleTextSelection={this.toggleTextSelection}
 					toggleSettingsModal={this.toggleSettingsModal}
 				/>
+				<AudioPlayer />
 				{
 					textSelectionActive ? (
 						(<TextSelection

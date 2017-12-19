@@ -9,15 +9,23 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-
+import ReactAudioPlayer from 'react-audio-player';
 import injectReducer from 'utils/injectReducer';
+import SvgWrapper from 'components/SvgWrapper';
 import makeSelectAudioPlayer from './selectors';
 import reducer from './reducer';
 
 export class AudioPlayer extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	render() {
 		return (
-			<div>
+			<div className="audio-player-container">
+				<SvgWrapper width="25px" height="25px" fill="#fff" svgid="backward" />
+				<SvgWrapper width="25px" height="25px" fill="#fff" svgid="play_audio" />
+				<SvgWrapper width="25px" height="25px" fill="#fff" svgid="forward" />
+				<SvgWrapper width="25px" height="25px" fill="#fff" svgid="volume" />
+				<SvgWrapper width="25px" height="25px" fill="#fff" svgid="play_speed" />
+				<SvgWrapper width="25px" height="25px" fill="#fff" svgid="more_menu" />
+				<ReactAudioPlayer className="audio-player" controls src="http://cloud.faithcomesbyhearing.com/mp3audiobibles2/ENGESVO2DA/A01___01_Genesis_____ENGESVO2DA.mp3" />
 			</div>
 		);
 	}
