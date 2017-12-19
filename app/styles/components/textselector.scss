@@ -1,7 +1,7 @@
 .text-selection-section                             {color:#FFF;max-height:80%;text-transform:uppercase;}
-.text-selection-section ::-webkit-input-placeholder {color:#FFF;}
-.text-selection-section ::-moz-placeholder          {color:#FFF;}
-.text-selection-section :-ms-input-placeholder      {color:#FFF;}
+.text-selection-section ::-webkit-input-placeholder {color:#FFF;padding-left:45px;}
+.text-selection-section ::-moz-placeholder          {color:#FFF;padding-left:45px;}
+.text-selection-section :-ms-input-placeholder      {color:#FFF;padding-left:45px;}
 .text-selection-section.closed                      {cursor:pointer;}
 .text-selection-title                               {display:flex;align-items:center;justify-content:flex-start;margin:10px 0 5px 10px;}
 .text-selection-title .text                         {margin-left:10px;}
@@ -27,4 +27,8 @@
 .active-version      {color:$menu-active-color;}
 
 // Input Box Styles
-.text-selection-input {border:none;width:100%;height:50px;background-color:rgb(110,116,127);color:#FFF;font-size:.9em;font-weight:200;}
+.text-selection-input       {background:url("../images/input_search_icon.svg") no-repeat 5px 10px;border:none;width:100%;height:50px;background-color:rgb(110,116,127);color:#FFF;font-size:.9em;font-weight:200;caret-color:#000;padding-left:10px;}
+.text-selection-input:focus {background-image:none;}
+.text-selection-input:focus::-webkit-input-placeholder {color:transparent;}
+.text-selection-input:focus::-moz-placeholder          {color:transparent;}
+.text-selection-input:focus:-ms-input-placeholder      {color:transparent;}
