@@ -19,12 +19,12 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 	render() {
 		return (
 			<div className="audio-player-container">
-				<SvgWrapper width="25px" height="25px" fill="#fff" svgid="backward" />
-				<SvgWrapper width="25px" height="25px" fill="#fff" svgid="play_audio" />
-				<SvgWrapper width="25px" height="25px" fill="#fff" svgid="forward" />
-				<SvgWrapper width="25px" height="25px" fill="#fff" svgid="volume" />
-				<SvgWrapper width="25px" height="25px" fill="#fff" svgid="play_speed" />
-				<SvgWrapper width="25px" height="25px" fill="#fff" svgid="more_menu" />
+				<SvgWrapper className="item" width="25px" height="25px" fill="#fff" svgid="backward" />
+				<SvgWrapper className="item" width="25px" height="25px" fill="#fff" svgid="play_audio" />
+				<SvgWrapper className="item" width="25px" height="25px" fill="#fff" svgid="forward" />
+				<SvgWrapper className="item" width="25px" height="25px" fill="#fff" svgid="volume" />
+				<SvgWrapper className="item" width="25px" height="25px" fill="#fff" svgid="play_speed" />
+				<SvgWrapper className="item" width="25px" height="25px" fill="#fff" svgid="more_menu" />
 				<ReactAudioPlayer className="audio-player" controls src="http://cloud.faithcomesbyhearing.com/mp3audiobibles2/ENGESVO2DA/A01___01_Genesis_____ENGESVO2DA.mp3" />
 			</div>
 		);

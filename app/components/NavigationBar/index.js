@@ -26,26 +26,26 @@ class NavigationBar extends React.PureComponent { // eslint-disable-line react/p
     } = this.props;
 
 		return (
-			<nav>
-				<div className="small-1 columns">
+			<div className="nav-container">
+				<div className="menu">
 					<span role="button" tabIndex={0} onClick={toggleMenuBar}><SvgWrapper className="navbar-button" height="30px" width="30px" fill="#fff" svgid="menu" /></span>
 				</div>
-				<div className="small-2 columns">
+				<div className="logo">
 					<Logo />
 				</div>
-				<div className="small-6 columns">
-					<div className="navbar-active-chapter">
-						<span role="button" tabIndex={0} onClick={toggleTextSelection} className="text">{`${activeBookName} ${activeChapter}`}</span>
-					</div>
+				<div className="chapter-selector">
+					<span role="button" tabIndex={0} onClick={toggleTextSelection} className="text">{`${activeBookName} ${activeChapter}`}</span>
 				</div>
-				<div className="small-3 columns">
+				<div className="buttons">
 					<span><SvgWrapper className="navbar-button" height="30px" width="30px" fill="#fff" svgid="search" /></span>
 					<span><SvgWrapper className="navbar-button" height="30px" width="30px" fill="#fff" svgid="info" /></span>
 					<span role="button" tabIndex={0} onClick={toggleSettingsModal}><SvgWrapper className="navbar-button" height="30px" width="30px" fill="#fff" svgid="settings" /></span>
 					<span><SvgWrapper className="navbar-button" height="30px" width="30px" fill="#fff" svgid="profile" /></span>
+				</div>
+				<div className="locale">
 					<LocaleToggle />
 				</div>
-			</nav>
+			</div>
 		);
 	}
 }

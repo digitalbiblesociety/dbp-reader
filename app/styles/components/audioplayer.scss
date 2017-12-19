@@ -1,2 +1,4 @@
-.audio-player-container {display:flex;justify-content:space-around;align-items:center;width:100%;height:50px;background-color:rgba(78,69,76,.9);}
-.audio-player {width:100%;display:none;}
+.audio-player-container             {display:flex;justify-content:space-around;align-items:center;width:100%;height:50px;background-color:rgba(78,69,76,.9);}
+.audio-player-container .item       {cursor:pointer;}
+.audio-player-container .item:hover {opacity:.65;}
+.audio-player                       {width:100%;display:none;}
