@@ -11,3 +11,4 @@ export const SET_ACTIVE_CHAPTER = 'app/HomePage/SET_ACTIVE_CHAPTER';
 export const TOGGLE_TEXT_SELECTION = 'app/HomePage/TOGGLE_TEXT_SELECTION';
 export const TOGGLE_SETTINGS_MODAL = 'app/HomePage/TOGGLE_SETTINGS_MODAL';
 export const TOGGLE_MENU_BAR = 'app/HomePage/TOGGLE_MENU_BAR';
+export const TOGGLE_PROFILE = 'app/HomePage/TOGGLE_PROFILE';

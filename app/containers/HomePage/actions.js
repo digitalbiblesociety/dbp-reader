@@ -10,6 +10,7 @@ import {
 	GET_CHAPTER_TEXT,
 	TOGGLE_SETTINGS_MODAL,
 	TOGGLE_TEXT_SELECTION,
+	TOGGLE_PROFILE,
 	TOGGLE_MENU_BAR, SET_ACTIVE_CHAPTER,
 } from './constants';
 
@@ -27,6 +28,10 @@ export const getChapterText = ({ bible, book, chapter }) => ({
 
 export const toggleMenuBar = () => ({
 	type: TOGGLE_MENU_BAR,
+});
+
+export const toggleProfile = () => ({
+	type: TOGGLE_PROFILE,
 });
 
 export const toggleSettingsModal = () => ({

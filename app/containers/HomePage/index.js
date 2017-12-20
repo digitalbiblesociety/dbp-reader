@@ -20,6 +20,7 @@ import injectReducer from 'utils/injectReducer';
 import Settings from 'containers/Settings';
 import AudioPlayer from 'containers/AudioPlayer';
 import TextSelection from 'containers/TextSelection';
+import Profile from 'containers/Profile';
 import NavigationBar from 'components/NavigationBar';
 import Text from 'components/Text';
 import MenuBar from 'components/MenuBar';
@@ -27,6 +28,7 @@ import Footer from 'components/Footer';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
 import {
 	toggleMenuBar,
+	toggleProfile,
 	toggleTextSelection,
 	toggleSettingsModal,
 	setActiveBookName,
@@ -56,6 +58,8 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 
 	toggleMenuBar = () => this.props.dispatch(toggleMenuBar());
 
+	toggleProfile = () => this.props.dispatch(toggleProfile());
+
 	toggleSettingsModal = () => this.props.dispatch(toggleSettingsModal());
 
 	toggleTextSelection = () => this.props.dispatch(toggleTextSelection());
@@ -70,6 +74,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			activeBookName,
 			isMenuBarActive,
 			activeChapter,
+			isProfileActive,
 		} = this.props.homepage;
 
 		return (
@@ -83,6 +88,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					activeBookName={activeBookName}
 					activeChapter={activeChapter}
 					toggleMenuBar={this.toggleMenuBar}
+					toggleProfile={this.toggleProfile}
 					toggleTextSelection={this.toggleTextSelection}
 				/>
 				<AudioPlayer />
@@ -111,6 +117,11 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 				{
 					isMenuBarActive ? (
 						<MenuBar toggleMenuBar={this.toggleMenuBar} />
+					) : null
+				}
+				{
+					isProfileActive ? (
+						<Profile toggleProfile={this.toggleProfile} />
 					) : null
 				}
 				<Footer toggleSettingsModal={this.toggleSettingsModal} />

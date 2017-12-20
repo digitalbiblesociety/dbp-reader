@@ -1,0 +1,10 @@
+// GLOBAL SETTINGS
+.profile                              {position:fixed;top:0;height:100%;width:320px;background-color:#2C3036;color:rgba(244,245,246,.5)}
+.profile header                       {position:relative;background:#7E0E2A;color:#FFF;text-align:center;height:54px;line-height:54px}
+.profile header .close-icon           {position:absolute;top:0px;right:10px}
+.profile section                      {padding:15px}
+.profile .option:hover                {color:rgba(244,245,246,1);cursor:pointer}
+.profile .active                      {color:rgba(244,245,246,1)}
+
+// Input boxes
+input {width:100%;background-color:rgb(110,116,127);}
