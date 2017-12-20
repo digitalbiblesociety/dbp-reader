@@ -6,15 +6,17 @@
 
 import { fromJS } from 'immutable';
 import {
-	DEFAULT_ACTION,
+	SELECT_ACCOUNT_OPTION,
 } from './constants';
 
-const initialState = fromJS({});
+const initialState = fromJS({
+	activeOption: 'login',
+});
 
 function profileReducer(state = initialState, action) {
 	switch (action.type) {
-	case DEFAULT_ACTION:
-		return state;
+	case SELECT_ACCOUNT_OPTION:
+		return state.set('activeOption', action.option);
 	default:
 		return state;
 	}

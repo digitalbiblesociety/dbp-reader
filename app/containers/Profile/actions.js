@@ -5,11 +5,12 @@
  */
 
 import {
-	DEFAULT_ACTION,
+	SELECT_ACCOUNT_OPTION,
 } from './constants';
 
-export function defaultAction() {
+export function selectAccountOption(option) {
 	return {
-		type: DEFAULT_ACTION,
+		type: SELECT_ACCOUNT_OPTION,
+		option,
 	};
 }

@@ -4,4 +4,4 @@
  *
  */
 
-export const DEFAULT_ACTION = 'app/AudioPlayer/DEFAULT_ACTION';
+export const DEFAULT_ACTION = 'app/AudioPlayer/SELECT_ACCOUNT_OPTION';

@@ -3,14 +3,14 @@ import {
 	defaultAction,
 } from '../actions';
 import {
-	DEFAULT_ACTION,
+	SELECT_ACCOUNT_OPTION,
 } from '../constants';
 
 describe('Profile actions', () => {
 	describe('Default Action', () => {
-		it('has a type of DEFAULT_ACTION', () => {
+		it('has a type of SELECT_ACCOUNT_OPTION', () => {
 			const expected = {
-				type: DEFAULT_ACTION,
+				type: SELECT_ACCOUNT_OPTION,
 			};
 			expect(defaultAction()).toEqual(expected);
 		});

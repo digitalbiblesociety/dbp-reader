@@ -16,13 +16,17 @@ import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import menu from 'images/menu.svg';
 import SvgWrapper from 'components/SvgWrapper';
+import { selectAccountOption } from './actions';
 import makeSelectProfile from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 // import messages from './messages';
 
 export class Profile extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+	selectAccountOption = (option) => this.props.dispatch(selectAccountOption(option))
+
 	render() {
+		const { activeOption } = this.props.profile;
 		const { toggleProfile } = this.props;
 		return (
 			<aside className="profile">
@@ -33,8 +37,8 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 					</span>
 				</header>
 				<div className="form-options">
-					<h1 className="login">LOGIN</h1>
-					<h1 className="signup">SIGN UP</h1>
+					<span role="button" tabIndex={0} onClick={() => this.selectAccountOption('login')} className={activeOption === 'login' ? 'login active' : 'login'}>LOGIN</span>
+					<span role="button" tabIndex={0} onClick={() => this.selectAccountOption('signup')} className={activeOption === 'signup' ? 'signup active' : 'signup'}>SIGN UP</span>
 				</div>
 				<section className="message">
 					<p>Signing up lets you create Bookmarks, Highlights and Notes, and access them wherever you use Bible.is!</p>
@@ -62,7 +66,9 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 }
 
 Profile.propTypes = {
+	dispatch: PropTypes.func.isRequired,
 	toggleProfile: PropTypes.func,
+	profile: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({

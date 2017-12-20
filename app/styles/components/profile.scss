@@ -32,8 +32,8 @@
 .profile .form-options                 {display:flex;align-items:center;justify-content:space-between;}
 .profile .form-options .login          {margin:10px 0 10px 10px;color:$paper-primary;cursor:pointer;}
 .profile .form-options .signup         {margin:10px 10px 10px 0;color:$paper-primary;cursor:pointer;}
-.profile .form-options .login .active  {color:$menu-active-color}
-.profile .form-options .signup .active {color:$menu-active-color}
+.profile .form-options .active  {color:$menu-active-color}
+.profile .form-options .active {color:$menu-active-color}
 
 // Message
 .profile .message {color:$paper-primary;}
