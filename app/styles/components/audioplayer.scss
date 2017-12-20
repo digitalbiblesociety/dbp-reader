@@ -2,8 +2,12 @@
 .audio-player-container             {margin-top:54px;display:flex;justify-content:space-around;align-items:center;width:100%;height:50px;background-color:rgba(78,69,76,.9);}
 .audio-player-container .item       {cursor:pointer;}
 .audio-player-container .item:hover {opacity:.65;}
-.audio-player                       {width:100%;display:none;}
+.audio-player                       {width:300px;display:none;}
 
 // Speed Control Styles
 .speed-control-container {display:flex;align-items:center;justify-content:space-around;background-color:#222;position:relative;top:0;left:0;height:30px;width:150px;}
 .speed-control-container .item {color:#fff;cursor:pointer;}
+
+// Progress Bar Styles
+.progress-bar {width:50%;background-color:rgb(32,34,39);height:2px;cursor:pointer;}
+.progress-bar:focus {outline: none;}

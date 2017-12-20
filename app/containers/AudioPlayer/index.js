@@ -12,6 +12,7 @@ import { compose } from 'redux';
 import injectReducer from 'utils/injectReducer';
 import SvgWrapper from 'components/SvgWrapper';
 import SpeedControl from 'components/SpeedControl';
+import AudioProgressBar from 'components/AudioProgressBar';
 import makeSelectAudioPlayer from './selectors';
 import reducer from './reducer';
 /* eslint-disable jsx-a11y/media-has-caption */
@@ -25,7 +26,40 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 			playing: false,
 			src: 'http://cloud.faithcomesbyhearing.com/mp3audiobibles2/ENGESVO2DA/A01___02_Genesis_____ENGESVO2DA.mp3',
 			speedControlState: false,
+			duration: 100,
+			currentTime: 0,
 		};
+	}
+
+	componentDidMount() {
+		// canplaythrough might be a safe event to listen for
+		this.audioRef.addEventListener('durationchange', (e) => {
+			this.setState({
+				duration: e.target.duration,
+			});
+		});
+		this.audioRef.addEventListener('timeupdate', (e) => {
+			this.setState({
+				currentTime: e.target.currentTime,
+			});
+		});
+		this.audioRef.addEventListener('seeking', (e) => {
+			this.setState({
+				currentTime: e.target.currentTime,
+			});
+		});
+		this.audioRef.addEventListener('seeked', (e) => {
+			this.setState({
+				currentTime: e.target.currentTime,
+			});
+		});
+	}
+
+	setCurrentTime = (time) => {
+		this.audioRef.currentTime = time;
+		this.setState({
+			currentTime: time,
+		});
 	}
 
 	closeSpeedControl = () => this.setState({
@@ -85,6 +119,7 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 				<SvgWrapper onClick={this.skipBackward} className="item" width="25px" height="25px" fill="#fff" svgid="backward" />
 				<SvgWrapper onClick={this.state.playing ? this.pauseVideo : this.playVideo} className="item" width="25px" height="25px" fill="#fff" svgid={this.state.playing ? 'pause' : 'play_audio'} />
 				<SvgWrapper onClick={this.skipForward} className="item" width="25px" height="25px" fill="#fff" svgid="forward" />
+				<AudioProgressBar setCurrentTime={this.setCurrentTime} duration={this.state.duration} currentTime={this.state.currentTime} />
 				<SvgWrapper onClick={this.decreaseVolume} className="item" width="25px" height="25px" fill="#fff" svgid="volume_down" />
 				<SvgWrapper onClick={this.increaseVolume} className="item" width="25px" height="25px" fill="#fff" svgid="volume_up" />
 				<SvgWrapper onClick={this.state.speedControlState ? this.closeSpeedControl : this.openSpeedControl} className="item" width="25px" height="25px" fill="#fff" svgid="play_speed" />
