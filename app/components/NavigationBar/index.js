@@ -19,6 +19,7 @@ class NavigationBar extends React.PureComponent { // eslint-disable-line react/p
 		const {
       // toggleVersionSelect,
 			activeBookName,
+			activeTextId,
       toggleTextSelection,
 			toggleMenuBar,
 			toggleProfile,
@@ -34,7 +35,10 @@ class NavigationBar extends React.PureComponent { // eslint-disable-line react/p
 					<Logo />
 				</div>
 				<div className="chapter-selector">
-					<span role="button" tabIndex={0} onClick={toggleTextSelection} className="text">{`${activeBookName} ${activeChapter}`}</span>
+					<span role="button" tabIndex={0} onClick={toggleTextSelection} className="text">{`${activeBookName} ${activeChapter}`}▼</span>
+				</div>
+				<div className="version-selector">
+					<span role="button" tabIndex={0} onClick={toggleTextSelection} className="text">{activeTextId}▼</span>
 				</div>
 				<div className="buttons">
 					<span><SvgWrapper className="navbar-button" height="30px" width="30px" fill="#fff" svgid="search" /></span>
@@ -48,6 +52,7 @@ class NavigationBar extends React.PureComponent { // eslint-disable-line react/p
 
 NavigationBar.propTypes = {
 	activeBookName: PropTypes.string,
+	activeTextId: PropTypes.string,
 	toggleTextSelection: PropTypes.func,
 	toggleMenuBar: PropTypes.func,
 	toggleProfile: PropTypes.func,

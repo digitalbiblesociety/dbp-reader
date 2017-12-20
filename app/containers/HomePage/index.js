@@ -67,6 +67,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 	render() {
 		const {
 			activeTextName,
+			activeTextId,
 			chapterText,
 			isChapterActive,
 			isSettingsModalActive,
@@ -85,6 +86,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 				</Helmet>
 				<NavigationBar
 					activeTextName={activeTextName}
+					activeTextId={activeTextId}
 					activeBookName={activeBookName}
 					activeChapter={activeChapter}
 					toggleMenuBar={this.toggleMenuBar}
