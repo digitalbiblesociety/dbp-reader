@@ -17,8 +17,8 @@ function Login({ toggleSignInForm, signInActive, selectAccountOption }) {
 			{
 				signInActive ? (
 					<React.Fragment>
-						<input className="email" placeholder="Enter your email" />
-						<input className="first-password" placeholder="Enter a password" />
+						<input className="email" placeholder="Enter E-mail" />
+						<input className="first-password" placeholder="Enter Password" />
 						<div className="sign-in-button">
 							<input className="login-checkbox" type="checkbox" />
 							<span className="text">KEEP ME LOGGED IN</span>

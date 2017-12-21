@@ -14,12 +14,10 @@ function PasswordReset() {
 	return (
 		<React.Fragment>
 			<section className="message">
-				<p>Signing up lets you create Bookmarks, Highlights and Notes, and access them wherever you use Bible.is!</p>
+				<p>In order to reset your password, please enter the email address you used to register for Bible.is.</p>
 			</section>
-			<input className="email" placeholder="Enter your email" />
-			<input className="first-password" placeholder="Enter a password" />
-			<input className="second-password" placeholder="Re-enter your password" />
-			<div className="sign-up-button"><span className="text">SIGN UP</span></div>
+			<input className="email" placeholder="Enter E-mail" />
+			<div className="sign-up-button"><span className="text">RESET PASSWORD</span></div>
 			<section className="disclaimer">
 				If you are unable to reset your password, please
 				<Link className="link" to="/contact-form"> contact us </Link>

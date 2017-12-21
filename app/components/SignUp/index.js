@@ -17,9 +17,9 @@ function SignUp() {
 			<section className="message">
 				<p>Signing up lets you create Bookmarks, Highlights and Notes, and access them wherever you use Bible.is!</p>
 			</section>
-			<input className="email" placeholder="Enter your email" />
-			<input className="first-password" placeholder="Enter a password" />
-			<input className="second-password" placeholder="Re-enter your password" />
+			<input className="email" placeholder="Enter E-mail" />
+			<input className="first-password" placeholder="Enter Password" />
+			<input className="second-password" placeholder="Confirm Password" />
 			<div className="sign-up-button"><span className="text">SIGN UP</span></div>
 			<div className="google">
 				<SvgWrapper className="svg" height="30px" width="30px" fill="#fff" svgid="google_plus" />
