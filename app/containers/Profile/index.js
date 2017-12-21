@@ -48,6 +48,7 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 						<Login
 							signInActive={signInActive}
 							toggleSignInForm={this.toggleSignInForm}
+							selectAccountOption={this.selectAccountOption}
 						/>
 					) : null
 				}

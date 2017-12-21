@@ -42,7 +42,7 @@ function Login({ toggleSignInForm, signInActive, selectAccountOption }) {
 			</div>
 			<section className="sign-up-free">
 				Don&#39;t have an account yet?
-				<span role="button" tabIndex={0} className="link" onClick={() => toggleSignInForm(true)}> Sign up for free!</span>
+				<span role="button" tabIndex={0} className="link" onClick={() => { selectAccountOption('signup'); toggleSignInForm(false); }}> Sign up for free!</span>
 			</section>
 			<section className="forgot-password">
 				<span role="button" tabIndex={0} className="link" onClick={() => { selectAccountOption('password_reset'); toggleSignInForm(false); }}>Forgot your password?</span>
