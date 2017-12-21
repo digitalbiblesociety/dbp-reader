@@ -35,10 +35,8 @@ class NavigationBar extends React.PureComponent { // eslint-disable-line react/p
 					<Logo />
 				</div>
 				<div className="chapter-selector">
-					<span role="button" tabIndex={0} onClick={toggleTextSelection} className="text">{`${activeBookName} ${activeChapter}`}▼</span>
-				</div>
-				<div className="version-selector">
-					<span role="button" tabIndex={0} onClick={toggleTextSelection} className="text">{activeTextId}▼</span>
+					<span role="button" tabIndex={0} onClick={toggleTextSelection} className="text">{`${activeBookName} ${activeChapter}`}<SvgWrapper className="svg" height="15px" width="15px" fill="#fff" svgid="circle_down" /></span>
+					<span role="button" tabIndex={0} onClick={toggleTextSelection} className="text version">{activeTextId}<SvgWrapper className="svg" height="15px" width="15px" fill="#fff" svgid="circle_down" /></span>
 				</div>
 				<div className="buttons">
 					<span><SvgWrapper className="navbar-button" height="30px" width="30px" fill="#fff" svgid="search" /></span>

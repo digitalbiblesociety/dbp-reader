@@ -8,5 +8,7 @@
 .nav-container div               {height:54px;display:flex;align-items:center;justify-content:center;}
 .chapter-selector .text          {cursor:pointer;}
 .chapter-selector .text:hover    {opacity:.65;}
+.chapter-selector .version       {margin-left:10px;font-size:1em;}
+.chapter-selector .text .svg     {margin-left:10px;}
 .navbar-button                   {cursor:pointer;}
 .navbar-button:hover             {opacity:.65;}
