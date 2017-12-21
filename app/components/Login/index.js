@@ -6,13 +6,12 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import SvgWrapper from 'components/SvgWrapper';
 // import styled from 'styled-components';
 // import { FormattedMessage } from 'react-intl';
 // import messages from './messages';
 
-function Login({ toggleSignInForm, signInActive }) {
+function Login({ toggleSignInForm, signInActive, selectAccountOption }) {
 	return (
 		<React.Fragment>
 			{
@@ -46,7 +45,7 @@ function Login({ toggleSignInForm, signInActive }) {
 				<span role="button" tabIndex={0} className="link" onClick={() => toggleSignInForm(true)}> Sign up for free!</span>
 			</section>
 			<section className="forgot-password">
-				<Link className="link" to="/terms-of-use">Forgot your password?</Link>
+				<span role="button" tabIndex={0} className="link" onClick={() => { selectAccountOption('password_reset'); toggleSignInForm(false); }}>Forgot your password?</span>
 			</section>
 		</React.Fragment>
 	);
@@ -54,6 +53,7 @@ function Login({ toggleSignInForm, signInActive }) {
 
 Login.propTypes = {
 	toggleSignInForm: PropTypes.func,
+	selectAccountOption: PropTypes.func,
 	signInActive: PropTypes.bool,
 };
 

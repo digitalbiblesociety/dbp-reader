@@ -8,6 +8,8 @@
 
 // Input boxes
 .profile input                                  {border:none;width:100%;height:50px;background-color:rgb(110,116,127);color:$paper-primary;font-size:.9em;font-weight:200;caret-color:#000;padding-left:10px;}
+.profile input.email                            {background:url("../images/email.svg") no-repeat 5px 10px;background-color:rgb(110,116,127);padding-left:10px;}
+.profile input.email:focus                      {background-image:none;}
 .profile input:focus::-webkit-input-placeholder {color:transparent;}
 .profile input:focus::-moz-placeholder          {color:transparent;}
 .profile input:focus:-ms-input-placeholder      {color:transparent;}

@@ -28,7 +28,3 @@
 
 // Input Box Styles
 .text-selection-input       {background:url("../images/input_search_icon.svg") no-repeat 5px 10px;border:none;width:100%;height:50px;background-color:rgb(110,116,127);color:#FFF;font-size:.9em;font-weight:200;caret-color:#000;padding-left:10px;}
-.text-selection-input:focus {background-image:none;}
-.text-selection-input:focus::-webkit-input-placeholder {color:transparent;}
-.text-selection-input:focus::-moz-placeholder          {color:transparent;}
-.text-selection-input:focus:-ms-input-placeholder      {color:transparent;}

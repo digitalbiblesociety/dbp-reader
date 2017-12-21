@@ -16,6 +16,7 @@ import injectReducer from 'utils/injectReducer';
 import menu from 'images/menu.svg';
 import SignUp from 'components/SignUp';
 import Login from 'components/Login';
+import PasswordReset from 'components/PasswordReset';
 // import SvgWrapper from 'components/SvgWrapper';
 import { selectAccountOption, toggleSignInForm } from './actions';
 import makeSelectProfile from './selectors';
@@ -44,10 +45,21 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 				</div>
 				{
 					activeOption === 'login' ? (
-						<Login signInActive={signInActive} toggleSignInForm={this.toggleSignInForm} />
-					) : (
+						<Login
+							signInActive={signInActive}
+							toggleSignInForm={this.toggleSignInForm}
+						/>
+					) : null
+				}
+				{
+					activeOption === 'signup' ? (
 						<SignUp />
-					)
+					) : null
+				}
+				{
+					activeOption === 'password_reset' ? (
+						<PasswordReset />
+					) : null
 				}
 			</aside>
 		);

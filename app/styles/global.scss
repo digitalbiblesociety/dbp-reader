@@ -17,6 +17,12 @@ svg {fill: currentColor;}
 li                     {list-style:none}
 .shadow                {box-shadow:0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24)!important}
 
+// Input Box Styles
+input:focus                            {background-image:none;}
+input:focus::-webkit-input-placeholder {color:transparent;}
+input:focus::-moz-placeholder          {color:transparent;}
+input:focus:-ms-input-placeholder      {color:transparent;}
+
 // font sizes
 h2 {font-size: 1.3em;}
 // GRID
