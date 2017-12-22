@@ -9,9 +9,11 @@ import {
 	LOAD_CHAPTER_TEXT,
 	GET_CHAPTER_TEXT,
 	TOGGLE_SETTINGS_MODAL,
-	TOGGLE_TEXT_SELECTION,
+	TOGGLE_CHAPTER_SELECTION,
 	TOGGLE_PROFILE,
-	TOGGLE_MENU_BAR, SET_ACTIVE_CHAPTER,
+	TOGGLE_MENU_BAR,
+	SET_ACTIVE_CHAPTER,
+	TOGGLE_VERSION_SELECTION,
 } from './constants';
 
 export const loadChapter = ({ text }) => ({
@@ -38,8 +40,12 @@ export const toggleSettingsModal = () => ({
 	type: TOGGLE_SETTINGS_MODAL,
 });
 
-export const toggleTextSelection = () => ({
-	type: TOGGLE_TEXT_SELECTION,
+export const toggleChapterSelection = () => ({
+	type: TOGGLE_CHAPTER_SELECTION,
+});
+
+export const toggleVersionSelection = () => ({
+	type: TOGGLE_VERSION_SELECTION,
 });
 
 export const setActiveBookName = (book) => ({

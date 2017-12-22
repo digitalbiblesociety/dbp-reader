@@ -69,7 +69,7 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 			setActiveBookName,
 			setActiveChapter,
 			activeBookName,
-			toggleTextSelection,
+			toggleVersionSelection,
 			getChapters,
 			activeChapter,
 		} = this.props;
@@ -83,13 +83,13 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 			<aside className="settings">
 				<header>
 					<h2 className="text-selection">{`${sectionTitle} SELECTION`}</h2>
-					<span role="button" tabIndex={0} className="close-icon" onClick={toggleTextSelection}>
+					<span role="button" tabIndex={0} className="close-icon" onClick={toggleVersionSelection}>
 						<svg className="icon"><use xmlnsXlink="http://www.w3.org/1999/xlink" xlinkHref={`${menu}#close`}></use></svg>
 					</span>
 				</header>
 				<LanguageList active={languageListActive} setBookListState={this.setBookListState} toggleVersionList={this.toggleVersionList} activeLanguageName={activeLanguageName} toggleLanguageList={this.toggleLanguageList} languages={languages} setActiveIsoCode={this.setActiveIsoCode} />
 				<VersionList active={versionListActive} setBookListState={this.setBookListState} activeTextName={activeTextName} toggleVersionList={this.toggleVersionList} activeIsoCode={activeIsoCode} setActiveText={this.setActiveText} getBooksForText={this.getBooksForText} bibles={bibles} toggleLanguageList={this.toggleLanguageList} />
-				<BooksTable toggleVersionList={this.toggleVersionList} activeChapter={activeChapter} setActiveChapter={setActiveChapter} toggleLanguageList={this.toggleLanguageList} activeTextId={activeTextId} setBookListState={this.setBookListState} toggleTextSelection={toggleTextSelection} active={bookTableActive} getChapterText={getChapters} setActiveBookName={setActiveBookName} activeBookName={activeBookName} books={books} />
+				<BooksTable toggleVersionList={this.toggleVersionList} activeChapter={activeChapter} setActiveChapter={setActiveChapter} toggleLanguageList={this.toggleLanguageList} activeTextId={activeTextId} setBookListState={this.setBookListState} toggleVersionSelection={toggleVersionSelection} active={bookTableActive} getChapterText={getChapters} setActiveBookName={setActiveBookName} activeBookName={activeBookName} books={books} />
 			</aside>
 		);
 	}
@@ -100,7 +100,7 @@ TextSelection.propTypes = {
 	bibles: PropTypes.object,
 	languages: PropTypes.object,
 	textselection: PropTypes.object,
-	toggleTextSelection: PropTypes.func,
+	toggleVersionSelection: PropTypes.func,
 	setActiveBookName: PropTypes.func,
 	setActiveChapter: PropTypes.func,
 	getChapters: PropTypes.func,

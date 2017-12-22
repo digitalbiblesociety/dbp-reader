@@ -20,6 +20,7 @@ import injectReducer from 'utils/injectReducer';
 import Settings from 'containers/Settings';
 import AudioPlayer from 'containers/AudioPlayer';
 import TextSelection from 'containers/TextSelection';
+import ChapterSelection from 'containers/ChapterSelection';
 import Profile from 'containers/Profile';
 import NavigationBar from 'components/NavigationBar';
 import Text from 'components/Text';
@@ -29,8 +30,9 @@ import GenericErrorBoundary from 'components/GenericErrorBoundary';
 import {
 	toggleMenuBar,
 	toggleProfile,
-	toggleTextSelection,
+	toggleChapterSelection,
 	toggleSettingsModal,
+	toggleVersionSelection,
 	setActiveBookName,
 	setActiveChapter,
 	getChapterText,
@@ -62,7 +64,9 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 
 	toggleSettingsModal = () => this.props.dispatch(toggleSettingsModal());
 
-	toggleTextSelection = () => this.props.dispatch(toggleTextSelection());
+	toggleChapterSelection = () => this.props.dispatch(toggleChapterSelection());
+
+	toggleVersionSelection = () => this.props.dispatch(toggleVersionSelection());
 
 	render() {
 		const {
@@ -71,7 +75,8 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			chapterText,
 			isChapterActive,
 			isSettingsModalActive,
-			textSelectionActive,
+			isVersionSelectionActive,
+			isChapterSelectionActive,
 			activeBookName,
 			isMenuBarActive,
 			activeChapter,
@@ -91,19 +96,33 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					activeChapter={activeChapter}
 					toggleMenuBar={this.toggleMenuBar}
 					toggleProfile={this.toggleProfile}
-					toggleTextSelection={this.toggleTextSelection}
+					toggleChapterSelection={this.toggleChapterSelection}
+					toggleVersionSelection={this.toggleVersionSelection}
 				/>
 				<AudioPlayer />
 				{
-					textSelectionActive ? (
-						(<TextSelection
+					isChapterSelectionActive ? (
+						<ChapterSelection
+							activeBookName={activeBookName}
+							activeChapter={activeChapter}
+							activeTextId={activeTextId}
+							getChapters={this.getChapters}
+							setActiveBookName={this.setActiveBookName}
+							setActiveChapter={this.setActiveChapter}
+							toggleChapterSelection={this.toggleChapterSelection}
+						/>
+					) : null
+				}
+				{
+					isVersionSelectionActive ? (
+						<TextSelection
 							activeBookName={activeBookName}
 							activeChapter={activeChapter}
 							getChapters={this.getChapters}
 							setActiveBookName={this.setActiveBookName}
 							setActiveChapter={this.setActiveChapter}
-							toggleTextSelection={this.toggleTextSelection}
-						/>)
+							toggleVersionSelection={this.toggleVersionSelection}
+						/>
 					) : null
 				}
 				{

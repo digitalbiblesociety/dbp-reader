@@ -10,7 +10,6 @@ import Logo from 'components/Logo';
 import LocaleToggle from 'containers/LocaleToggle';
 import SvgWrapper from 'components/SvgWrapper';
 // import styled from 'styled-components';
-
 // import { FormattedMessage } from 'react-intl';
 // import messages from './messages';
 
@@ -20,7 +19,8 @@ class NavigationBar extends React.PureComponent { // eslint-disable-line react/p
       // toggleVersionSelect,
 			activeBookName,
 			activeTextId,
-      toggleTextSelection,
+      toggleChapterSelection,
+			toggleVersionSelection,
 			toggleMenuBar,
 			toggleProfile,
 			activeChapter,
@@ -35,8 +35,8 @@ class NavigationBar extends React.PureComponent { // eslint-disable-line react/p
 					<Logo />
 				</div>
 				<div className="chapter-selector">
-					<span role="button" tabIndex={0} onClick={toggleTextSelection} className="text">{`${activeBookName} ${activeChapter}`}<SvgWrapper className="svg" height="15px" width="15px" fill="#fff" svgid="circle_down" /></span>
-					<span role="button" tabIndex={0} onClick={toggleTextSelection} className="text version">{activeTextId}<SvgWrapper className="svg" height="15px" width="15px" fill="#fff" svgid="circle_down" /></span>
+					<span role="button" tabIndex={0} onClick={toggleChapterSelection} className="text">{`${activeBookName} ${activeChapter}`}<SvgWrapper className="svg" height="15px" width="15px" fill="#fff" svgid="circle_down" /></span>
+					<span role="button" tabIndex={0} onClick={toggleVersionSelection} className="text version">{activeTextId}<SvgWrapper className="svg" height="15px" width="15px" fill="#fff" svgid="circle_down" /></span>
 				</div>
 				<div className="buttons">
 					<span><SvgWrapper className="navbar-button" height="30px" width="30px" fill="#fff" svgid="search" /></span>
@@ -51,7 +51,8 @@ class NavigationBar extends React.PureComponent { // eslint-disable-line react/p
 NavigationBar.propTypes = {
 	activeBookName: PropTypes.string,
 	activeTextId: PropTypes.string,
-	toggleTextSelection: PropTypes.func,
+	toggleChapterSelection: PropTypes.func,
+	toggleVersionSelection: PropTypes.func,
 	toggleMenuBar: PropTypes.func,
 	toggleProfile: PropTypes.func,
 	activeChapter: PropTypes.number,
