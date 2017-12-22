@@ -1,4 +1,4 @@
-.text-selection-section                             {color:#FFF;max-height:80%;text-transform:uppercase;}
+.text-selection-section                             {color:#FFF;max-height:calc(100% - 108px);height:calc(100% - 108px);text-transform:uppercase;}
 .text-selection-section ::-webkit-input-placeholder {color:#FFF;padding-left:45px;}
 .text-selection-section ::-moz-placeholder          {color:#FFF;padding-left:45px;}
 .text-selection-section :-ms-input-placeholder      {color:#FFF;padding-left:45px;}
@@ -18,7 +18,7 @@
 .chapter-box       {width:60px;height:30px;color:white;margin-bottom:5px;text-align:center;}
 .chapter-container {display:grid;margin:auto;padding-top:10px;grid-template-columns:repeat(5,60px);grid-template-rows:auto;}
 .active-book       {color:$menu-active-color;}
-.book-container    {max-height:500px;overflow-y:scroll;overflow-x:hidden;}
+.book-container    {max-height:100%;overflow-y:scroll;overflow-x:hidden;padding:15px;}
 .book-button       {cursor:pointer;}
 .active-chapter    {color:$menu-active-color;}
 

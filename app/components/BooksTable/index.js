@@ -14,12 +14,20 @@ import PropTypes from 'prop-types';
 // TODO: change logic for rendering chapter to use isBookActive instead of activeBookName
 
 class BooksTable extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+	componentDidMount() {
+		this.container.scrollTop = this.button.offsetTop - this.container.offsetTop;
+	}
+
 	handleBookClick = (e, name) => {
 		const book = e.target;
 		const bookButton = book.parentElement;
 		const bookContainer = bookButton.parentElement;
 		bookContainer.scrollTop = bookButton.offsetTop - bookContainer.offsetTop;
 		this.props.setSelectedBookName(name);
+	}
+
+	handleRef = (el, name) => {
+		this[name] = el;
 	}
 
 	render() {
@@ -34,10 +42,10 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 		} = this.props;
 		return (
 			<div className="text-selection-section">
-				<div className="book-container">
+				<div ref={(el) => this.handleRef(el, 'container')} className="book-container">
 					{
 						books.map((book) => (
-							<div className={book.name === selectedBookName ? 'book-button' : 'book-button'} tabIndex="0" role="button" key={book.name} onClick={(e) => this.handleBookClick(e, book.name)}>
+							<div className={'book-button'} ref={book.name === selectedBookName ? (el) => this.handleRef(el, 'button') : null} tabIndex="0" role="button" key={book.name} onClick={(e) => this.handleBookClick(e, book.name)}>
 								<h4 className={book.name === selectedBookName ? 'active-book' : ''}>{book.name}</h4>
 								<div className="chapter-container">
 									{
