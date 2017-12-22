@@ -9,3 +9,5 @@ stats.json
 .DS_Store
 npm-debug.log
 .idea
+# Don't check the temp json file into source
+app/utils/parsedCountries.json

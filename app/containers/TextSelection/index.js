@@ -13,7 +13,6 @@ import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import LanguageList from 'components/LanguageList';
 import VersionList from 'components/VersionList';
-import BooksTable from 'components/BooksTable';
 import menu from 'images/menu.svg';
 import {
 	setVersionListState,
@@ -59,19 +58,12 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 			versionListActive,
 			activeLanguageName,
 			bookTableActive,
-			activeTextId,
-			books,
 			activeTextName,
 		} = this.props.textselection;
 		const {
 			bibles,
 			languages,
-			setActiveBookName,
-			setActiveChapter,
-			activeBookName,
 			toggleVersionSelection,
-			getChapters,
-			activeChapter,
 		} = this.props;
 		let sectionTitle = 'LANGUAGE';
 		if (versionListActive) {
@@ -89,7 +81,6 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 				</header>
 				<LanguageList active={languageListActive} setBookListState={this.setBookListState} toggleVersionList={this.toggleVersionList} activeLanguageName={activeLanguageName} toggleLanguageList={this.toggleLanguageList} languages={languages} setActiveIsoCode={this.setActiveIsoCode} />
 				<VersionList active={versionListActive} setBookListState={this.setBookListState} activeTextName={activeTextName} toggleVersionList={this.toggleVersionList} activeIsoCode={activeIsoCode} setActiveText={this.setActiveText} getBooksForText={this.getBooksForText} bibles={bibles} toggleLanguageList={this.toggleLanguageList} />
-				<BooksTable toggleVersionList={this.toggleVersionList} activeChapter={activeChapter} setActiveChapter={setActiveChapter} toggleLanguageList={this.toggleLanguageList} activeTextId={activeTextId} setBookListState={this.setBookListState} toggleVersionSelection={toggleVersionSelection} active={bookTableActive} getChapterText={getChapters} setActiveBookName={setActiveBookName} activeBookName={activeBookName} books={books} />
 			</aside>
 		);
 	}
@@ -101,12 +92,6 @@ TextSelection.propTypes = {
 	languages: PropTypes.object,
 	textselection: PropTypes.object,
 	toggleVersionSelection: PropTypes.func,
-	setActiveBookName: PropTypes.func,
-	setActiveChapter: PropTypes.func,
-	getChapters: PropTypes.func,
-	activeBookName: PropTypes.string,
-	activeTextName: PropTypes.string,
-	activeChapter: PropTypes.number,
 };
 
 const mapStateToProps = createStructuredSelector({

@@ -15,7 +15,9 @@ import PropTypes from 'prop-types';
 
 class BooksTable extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	componentDidMount() {
-		this.container.scrollTop = this.button.offsetTop - this.container.offsetTop;
+		if (this.button && this.container) {
+			this.container.scrollTop = this.button.offsetTop - this.container.offsetTop;
+		}
 	}
 
 	handleBookClick = (e, name) => {
