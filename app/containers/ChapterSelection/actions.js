@@ -6,7 +6,7 @@
 
 import {
 	LOAD_BOOKS,
-	SET_BOOK_LIST_STATE,
+	SET_SELECTED_BOOK_NAME,
 	GET_BOOKS,
 } from './constants';
 
@@ -20,7 +20,7 @@ export const getBooks = ({ textId }) => ({
 	textId,
 });
 
-export const setBookListState = ({ state }) => ({
-	type: SET_BOOK_LIST_STATE,
-	state,
+export const setSelectedBookName = (book) => ({
+	type: SET_SELECTED_BOOK_NAME,
+	book,
 });

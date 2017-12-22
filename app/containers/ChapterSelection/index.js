@@ -13,7 +13,7 @@ import BooksTable from 'components/BooksTable';
 import menu from 'images/menu.svg';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
-import { getBooks, setBookListState } from './actions';
+import { getBooks, setSelectedBookName } from './actions';
 import makeSelectChapterSelection from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -27,10 +27,10 @@ export class ChapterSelection extends React.PureComponent { // eslint-disable-li
 		this.props.dispatch(getBooks({ textId: activeTextId }));
 	}
 
-	setBookListState = ({ state }) => this.props.dispatch(setBookListState({ state }))
+	setSelectedBookName = (book) => this.props.dispatch(setSelectedBookName(book))
 
 	render() {
-		const { books } = this.props.chapterselection;
+		const { books, selectedBookName } = this.props.chapterselection;
 		const {
 			setActiveChapter,
 			setActiveBookName,
@@ -52,7 +52,8 @@ export class ChapterSelection extends React.PureComponent { // eslint-disable-li
 					activeChapter={activeChapter}
 					setActiveChapter={setActiveChapter}
 					activeTextId={activeTextId}
-					setBookListState={this.setBookListState}
+					selectedBookName={selectedBookName}
+					setSelectedBookName={this.setSelectedBookName}
 					toggleChapterSelection={toggleChapterSelection}
 					getChapterText={getChapters}
 					setActiveBookName={setActiveBookName}

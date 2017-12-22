@@ -6,19 +6,19 @@
 
 import { fromJS } from 'immutable';
 import {
-	SET_BOOK_LIST_STATE,
+	SET_SELECTED_BOOK_NAME,
 	LOAD_BOOKS,
 } from './constants';
 
 const initialState = fromJS({
 	books: [],
-	bookTableActive: false,
+	selectedBookName: 'Genesis',
 });
 
 function chapterSelectionReducer(state = initialState, action) {
 	switch (action.type) {
-	case SET_BOOK_LIST_STATE:
-		return state.set('bookTableActive', action.state);
+	case SET_SELECTED_BOOK_NAME:
+		return state.set('selectedBookName', action.book);
 	case LOAD_BOOKS:
 		return state
 			.set('books', fromJS(action.books));
