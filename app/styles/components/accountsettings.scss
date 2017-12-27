@@ -1,0 +1,25 @@
+// Account Settings
+.account-settings {}
+.account-settings .button {color:#fff;font-weight:400;cursor:pointer;&:hover{color:$menu-active-color;}}
+.delete-account {color:inherit;}
+
+// Personal Information Styles
+.personal-info {}
+.profile-picture {}
+
+// Email Section Styles
+.email-section {}
+.email-section .email {background-color:$input-background-color;color:#fff;width:100%;height:50px;display:flex;align-items:center;justify-content:space-between;}
+
+// Password Section Styles
+.password-section {}
+.password-section .password {background-color:$input-background-color;color:#fff;width:100%;height:50px;display:flex;align-items:center;justify-content:space-between;}
+
+// Address Section Styles
+.address-section {}
+.address-section .country {}
+.address-section .address-1 {}
+.address-section .address-2 {}
+.address-section .city {}
+.address-section .state {}
+.address-section .postal-code {}

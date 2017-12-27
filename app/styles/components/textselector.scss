@@ -30,4 +30,4 @@
 .active-version            {color:$menu-active-color;}
 
 // Input Box Styles
-.text-selection-input       {background:url("../images/input_search_icon.svg") no-repeat 5px 10px;border:none;width:100%;height:50px;background-color:rgb(110,116,127);color:#FFF;font-size:.9em;font-weight:200;caret-color:#000;padding-left:10px;}
+.text-selection-input       {background:url("../images/input_search_icon.svg") no-repeat 5px 10px;border:none;width:100%;height:50px;background-color:$input-background-color;color:#FFF;font-size:.9em;font-weight:200;caret-color:#000;padding-left:10px;}
