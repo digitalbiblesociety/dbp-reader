@@ -27,11 +27,11 @@ import PropTypes from 'prop-types';
   });
 */
 
-function ImageComponent({ dataSrc, src, classes, alt }) {
+function ImageComponent({ dataSrc, src, classes, alt, ...props }) {
 	if (dataSrc) {
-		return (<img src={dataSrc} className={`${classes} loaded`} alt={alt} />);
+		return (<img src={dataSrc} className={`${classes} loaded`} alt={alt} {...props} />);
 	}
-	return (<img src={src} alt={alt} className={classes} />);
+	return (<img src={src} alt={alt} className={classes} {...props} />);
 }
 
 ImageComponent.propTypes = {
