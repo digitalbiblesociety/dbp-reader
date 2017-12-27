@@ -6,6 +6,11 @@
 .text-selection-title                               {display:flex;align-items:center;justify-content:flex-start;margin:10px 0 5px 10px;}
 .text-selection-title .text                         {margin-left:10px;}
 
+// Country Selection Styles
+.country-name       {display:flex;align-items:center;cursor:pointer;}
+.country-name .svg  {margin-right:20px;margin-left:5px;}
+.country-name:hover {color:$menu-active-color;}
+
 // Language Selection Styles
 .active-language-name      {color:$menu-active-color;margin-left:5px;}
 .language-name             {cursor:pointer;margin-top:5px;}
@@ -30,4 +35,4 @@
 .active-version            {color:$menu-active-color;}
 
 // Input Box Styles
-.text-selection-input       {background:url("../images/input_search_icon.svg") no-repeat 5px 10px;border:none;width:100%;height:50px;background-color:$input-background-color;color:#FFF;font-size:.9em;font-weight:200;caret-color:#000;padding-left:10px;}
+.text-selection-input      {background:url("../images/input_search_icon.svg") no-repeat 5px 10px;border:none;width:100%;height:50px;background-color:$input-background-color;color:#FFF;font-size:.9em;font-weight:200;caret-color:#000;padding-left:10px;}

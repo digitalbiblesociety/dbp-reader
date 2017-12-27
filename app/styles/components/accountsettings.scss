@@ -23,6 +23,7 @@
 // Address Section Styles
 .address-section {margin-top:15px;display:flex;flex-direction:column;}
 .address-section .input-svg {display:block;position:absolute;margin-top:10px;margin-left:20px;fill:$paper-primary;}
+.address-section input {height:40px;font-size:.8em;font-style:italic;}
 .address-section .country {}
 .address-section .address-1 {}
 .address-section .address-2 {}

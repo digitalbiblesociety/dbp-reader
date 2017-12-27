@@ -7,6 +7,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import SvgWrapper from 'components/SvgWrapper';
+import flags from 'images/flags.svg';
 // import styled from 'styled-components';
 
 // import { FormattedMessage } from 'react-intl';
@@ -58,7 +59,7 @@ class CountryList extends React.PureComponent { // eslint-disable-line react/pre
 						{
 							filteredCountries.valueSeq().map((country) => (
 								<div
-									className="language-name"
+									className="country-name"
 									key={country.get('iso')}
 									role="button"
 									tabIndex={0}
@@ -69,6 +70,9 @@ class CountryList extends React.PureComponent { // eslint-disable-line react/pre
 										toggleLanguageList({ state: true });
 									}}
 								>
+									<svg className="svg" height="25px" width="25px">
+										<use xmlnsXlink="http://www.w3.org/1999/xlink" xlinkHref={`${flags}#${country.get('iso')}`}></use>
+									</svg>
 									<h4 className={activeCountryName === country.get('name') ? 'active-language-name' : 'inactive-country'}>{country.get('name')}</h4>
 								</div>
 							))
