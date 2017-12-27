@@ -15,7 +15,8 @@ import {
 	SET_ISO_CODE,
 	SET_LANGUAGE_LIST_STATE,
 	SET_VERSION_LIST_STATE,
-	SET_BOOK_LIST_STATE,
+	SET_COUNTRY_LIST_STATE,
+	SET_COUNTRY_NAME,
 } from './constants';
 
 export const loadBooks = ({ books }) => ({
@@ -41,9 +42,14 @@ export const getBooks = ({ textId }) => ({
 	textId,
 });
 
-export const setBookListState = ({ state }) => ({
-	type: SET_BOOK_LIST_STATE,
+export const setCountryListState = ({ state }) => ({
+	type: SET_COUNTRY_LIST_STATE,
 	state,
+});
+
+export const setCountryName = (name) => ({
+	type: SET_COUNTRY_NAME,
+	name,
 });
 
 export const setLanguageListState = ({ state }) => ({

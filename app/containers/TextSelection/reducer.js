@@ -9,11 +9,12 @@ import {
 	LOAD_TEXTS,
 	LOAD_BOOKS,
 	SET_ACTIVE_TEXT,
+	SET_COUNTRY_NAME,
 	SET_LANGUAGES,
 	SET_ISO_CODE,
 	SET_VERSION_LIST_STATE,
 	SET_LANGUAGE_LIST_STATE,
-	SET_BOOK_LIST_STATE,
+	SET_COUNTRY_LIST_STATE,
 } from './constants';
 
 const initialState = fromJS({
@@ -66,8 +67,9 @@ const initialState = fromJS({
 	books: [],
 	languageListActive: false,
 	versionListActive: false,
-	bookTableActive: true,
+	countryListActive: true,
 	activeLanguageName: 'English',
+	activeCountryName: 'United States',
 	activeTextName: 'ENGESV',
 	activeTextId: 'ENGESV',
 	initialBookId: 'GEN',
@@ -80,8 +82,8 @@ function textSelectionReducer(state = initialState, action) {
 		return state.set('languageListActive', action.state);
 	case SET_VERSION_LIST_STATE:
 		return state.set('versionListActive', action.state);
-	case SET_BOOK_LIST_STATE:
-		return state.set('bookTableActive', action.state);
+	case SET_COUNTRY_LIST_STATE:
+		return state.set('countryListActive', action.state);
 	case LOAD_TEXTS:
 		return state.set('texts', fromJS(action.texts));
 	case SET_ACTIVE_TEXT:
@@ -94,6 +96,8 @@ function textSelectionReducer(state = initialState, action) {
 			.set('books', fromJS(action.books));
 	case SET_LANGUAGES:
 		return state.set('languages', fromJS(action.languages));
+	case SET_COUNTRY_NAME:
+		return state.set('activeCountryName', action.name);
 	case SET_ISO_CODE:
 		return state
 			.set('activeLanguageName', action.name)

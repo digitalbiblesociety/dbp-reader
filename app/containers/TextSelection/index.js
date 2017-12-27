@@ -11,6 +11,7 @@ import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
+import CountryList from 'components/CountryList';
 import LanguageList from 'components/LanguageList';
 import VersionList from 'components/VersionList';
 import menu from 'images/menu.svg';
@@ -18,13 +19,14 @@ import {
 	setVersionListState,
 	setLanguageListState,
 	setActiveIsoCode,
-	setBookListState,
+	setCountryListState,
 	getBooks,
 	getLanguages,
 	getTexts,
 	setActiveText,
+	setCountryName,
 } from './actions';
-import makeSelectTextSelection, { selectLanguages, selectTexts } from './selectors';
+import makeSelectTextSelection, { selectLanguages, selectTexts, selectCountries } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 // import { FormattedMessage } from 'react-intl';
@@ -41,11 +43,13 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 
 	getBooksForText = ({ textId }) => this.props.dispatch(getBooks({ textId }));
 
-	setBookListState = ({ state }) => this.props.dispatch(setBookListState({ state }));
+	setBookListState = ({ state }) => this.props.dispatch(setCountryListState({ state }));
 
 	setActiveIsoCode = ({ iso, name }) => this.props.dispatch(setActiveIsoCode({ iso, name }));
 
 	setActiveText = ({ textName, textId }) => this.props.dispatch(setActiveText({ textName, textId }));
+
+	setCountryName = (name) => this.props.dispatch(setCountryName(name))
 
 	toggleLanguageList = ({ state }) => this.props.dispatch(setLanguageListState({ state }));
 
@@ -57,19 +61,21 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 			languageListActive,
 			versionListActive,
 			activeLanguageName,
-			bookTableActive,
+			countryListActive,
 			activeTextName,
+			activeCountryName,
 		} = this.props.textselection;
 		const {
 			bibles,
 			languages,
+			countries,
 			toggleVersionSelection,
 		} = this.props;
 		let sectionTitle = 'LANGUAGE';
 		if (versionListActive) {
 			sectionTitle = 'VERSION';
-		} else if (bookTableActive) {
-			sectionTitle = 'BOOK';
+		} else if (countryListActive) {
+			sectionTitle = 'COUNTRY';
 		}
 		return (
 			<aside className="settings">
@@ -79,6 +85,7 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 						<svg className="icon"><use xmlnsXlink="http://www.w3.org/1999/xlink" xlinkHref={`${menu}#close`}></use></svg>
 					</span>
 				</header>
+				<CountryList active={countryListActive} setCountryListState={this.setBookListState} toggleVersionList={this.toggleVersionList} activeCountryName={activeCountryName} toggleLanguageList={this.toggleLanguageList} countries={countries} setCountryName={this.setCountryName} />
 				<LanguageList active={languageListActive} setBookListState={this.setBookListState} toggleVersionList={this.toggleVersionList} activeLanguageName={activeLanguageName} toggleLanguageList={this.toggleLanguageList} languages={languages} setActiveIsoCode={this.setActiveIsoCode} />
 				<VersionList active={versionListActive} setBookListState={this.setBookListState} activeTextName={activeTextName} toggleVersionList={this.toggleVersionList} activeIsoCode={activeIsoCode} setActiveText={this.setActiveText} getBooksForText={this.getBooksForText} bibles={bibles} toggleLanguageList={this.toggleLanguageList} />
 			</aside>
@@ -90,6 +97,7 @@ TextSelection.propTypes = {
 	dispatch: PropTypes.func.isRequired,
 	bibles: PropTypes.object,
 	languages: PropTypes.object,
+	countries: PropTypes.object,
 	textselection: PropTypes.object,
 	toggleVersionSelection: PropTypes.func,
 };
@@ -98,6 +106,7 @@ const mapStateToProps = createStructuredSelector({
 	textselection: makeSelectTextSelection(),
 	languages: selectLanguages(),
 	bibles: selectTexts(),
+	countries: selectCountries(),
 });
 
 function mapDispatchToProps(dispatch) {
