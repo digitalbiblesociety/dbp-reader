@@ -7,8 +7,6 @@
 import {
 	LOAD_TEXTS,
 	GET_DPB_TEXTS,
-	LOAD_BOOKS,
-	GET_BOOKS,
 	GET_LANGUAGES,
 	SET_LANGUAGES,
 	SET_ISO_CODE,
@@ -17,11 +15,6 @@ import {
 	SET_COUNTRY_LIST_STATE,
 	SET_COUNTRY_NAME,
 } from './constants';
-
-export const loadBooks = ({ books }) => ({
-	type: LOAD_BOOKS,
-	books,
-});
 
 export const loadTexts = ({ texts }) => ({
 	type: LOAD_TEXTS,
@@ -34,11 +27,6 @@ export const getTexts = () => ({
 
 export const getLanguages = () => ({
 	type: GET_LANGUAGES,
-});
-
-export const getBooks = ({ textId }) => ({
-	type: GET_BOOKS,
-	textId,
 });
 
 export const setCountryListState = ({ state }) => ({

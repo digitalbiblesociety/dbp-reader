@@ -20,7 +20,6 @@ import {
 	setLanguageListState,
 	setActiveIsoCode,
 	setCountryListState,
-	getBooks,
 	getLanguages,
 	getTexts,
 	setCountryName,
@@ -33,14 +32,10 @@ import saga from './saga';
 
 export class TextSelection extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	componentDidMount() {
-		const { activeTextName } = this.props;
 		// TODO: use a conditional to ensure the actions below only happen on the first mount
-		this.props.dispatch(getBooks({ textId: activeTextName }));
 		this.props.dispatch(getLanguages());
 		this.props.dispatch(getTexts());
 	}
-
-	getBooksForText = ({ textId }) => this.props.dispatch(getBooks({ textId }));
 
 	setCountryListState = ({ state }) => this.props.dispatch(setCountryListState({ state }));
 
@@ -110,7 +105,6 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 					toggleVersionList={this.toggleVersionList}
 					activeIsoCode={activeIsoCode}
 					setActiveText={setActiveText}
-					getBooksForText={this.getBooksForText}
 					bibles={bibles}
 					toggleLanguageList={this.toggleLanguageList}
 					toggleTextSelection={toggleVersionSelection}
