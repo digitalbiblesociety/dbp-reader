@@ -43,7 +43,7 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 			getChapterText,
 		} = this.props;
 		return (
-			<div className="text-selection-section">
+			<div className="chapter-selection-section">
 				<div ref={(el) => this.handleRef(el, 'container')} className="book-container">
 					{
 						books.map((book) => (

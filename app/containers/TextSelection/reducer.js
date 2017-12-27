@@ -65,6 +65,7 @@ const initialState = fromJS({
 		},
 	],
 	books: [],
+	countryLanguages: [],
 	languageListActive: false,
 	versionListActive: false,
 	countryListActive: true,
@@ -97,7 +98,9 @@ function textSelectionReducer(state = initialState, action) {
 	case SET_LANGUAGES:
 		return state.set('languages', fromJS(action.languages));
 	case SET_COUNTRY_NAME:
-		return state.set('activeCountryName', action.name);
+		return state
+			.set('countryLanguages', action.languages)
+			.set('activeCountryName', action.name);
 	case SET_ISO_CODE:
 		return state
 			.set('activeLanguageName', action.name)

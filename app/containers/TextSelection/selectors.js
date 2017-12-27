@@ -26,7 +26,7 @@ const selectLanguages = () => createSelector(
 		const languages = substate.get('languages');
 		const activeCountry = substate.get('activeCountryName');
 		const activeCountryLanguages = countryMap.getIn([activeCountry, 'languages']);
-		return languages.filter((language) => activeCountryLanguages[language.get('iso_code')]);
+		return languages.filter((language) => activeCountryLanguages.has(language.get('iso_code')));
 	}
 );
 

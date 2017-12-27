@@ -49,7 +49,7 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 
 	setActiveText = ({ textName, textId }) => this.props.dispatch(setActiveText({ textName, textId }));
 
-	setCountryName = (name) => this.props.dispatch(setCountryName(name))
+	setCountryName = ({ name, languages }) => this.props.dispatch(setCountryName({ name, languages }));
 
 	toggleLanguageList = ({ state }) => this.props.dispatch(setLanguageListState({ state }));
 
@@ -64,6 +64,7 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 			countryListActive,
 			activeTextName,
 			activeCountryName,
+			countryLanguages,
 		} = this.props.textselection;
 		const {
 			bibles,
@@ -86,7 +87,7 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 					</span>
 				</header>
 				<CountryList active={countryListActive} setCountryListState={this.setBookListState} toggleVersionList={this.toggleVersionList} activeCountryName={activeCountryName} toggleLanguageList={this.toggleLanguageList} countries={countries} setCountryName={this.setCountryName} />
-				<LanguageList active={languageListActive} setBookListState={this.setBookListState} toggleVersionList={this.toggleVersionList} activeLanguageName={activeLanguageName} toggleLanguageList={this.toggleLanguageList} languages={languages} setActiveIsoCode={this.setActiveIsoCode} />
+				<LanguageList active={languageListActive} countryLanguages={countryLanguages} setBookListState={this.setBookListState} toggleVersionList={this.toggleVersionList} activeLanguageName={activeLanguageName} toggleLanguageList={this.toggleLanguageList} languages={languages} setActiveIsoCode={this.setActiveIsoCode} />
 				<VersionList active={versionListActive} setBookListState={this.setBookListState} activeTextName={activeTextName} toggleVersionList={this.toggleVersionList} activeIsoCode={activeIsoCode} setActiveText={this.setActiveText} getBooksForText={this.getBooksForText} bibles={bibles} toggleLanguageList={this.toggleLanguageList} />
 			</aside>
 		);

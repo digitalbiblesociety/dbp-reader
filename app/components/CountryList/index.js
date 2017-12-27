@@ -63,10 +63,10 @@ class CountryList extends React.PureComponent { // eslint-disable-line react/pre
 									role="button"
 									tabIndex={0}
 									onClick={() => {
-										setCountryName(country.get('name'));
+										setCountryName({ name: country.get('name'), languages: country.get('languages') });
 										setCountryListState({ state: false });
-										toggleVersionList({ state: true });
-										toggleLanguageList({ state: false });
+										toggleVersionList({ state: false });
+										toggleLanguageList({ state: true });
 									}}
 								>
 									<h4 className={activeCountryName === country.get('name') ? 'active-language-name' : 'inactive-country'}>{country.get('name')}</h4>

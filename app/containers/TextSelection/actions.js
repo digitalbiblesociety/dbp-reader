@@ -47,9 +47,10 @@ export const setCountryListState = ({ state }) => ({
 	state,
 });
 
-export const setCountryName = (name) => ({
+export const setCountryName = ({ name, languages }) => ({
 	type: SET_COUNTRY_NAME,
 	name,
+	languages,
 });
 
 export const setLanguageListState = ({ state }) => ({
