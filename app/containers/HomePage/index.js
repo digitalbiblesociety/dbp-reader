@@ -15,6 +15,7 @@ import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
+import { TransitionGroup } from 'react-transition-group';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import Settings from 'containers/Settings';
@@ -27,6 +28,7 @@ import Text from 'components/Text';
 import MenuBar from 'components/MenuBar';
 import Footer from 'components/Footer';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
+import FadeTransition from 'components/FadeTransition';
 import {
 	toggleMenuBar,
 	toggleProfile,
@@ -103,53 +105,67 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					toggleVersionSelection={this.toggleVersionSelection}
 				/>
 				<AudioPlayer />
-				{
-					isChapterSelectionActive ? (
-						<ChapterSelection
-							activeBookName={activeBookName}
-							activeChapter={activeChapter}
-							activeTextId={activeTextId}
-							getChapters={this.getChapters}
-							setActiveBookName={this.setActiveBookName}
-							setActiveChapter={this.setActiveChapter}
-							toggleChapterSelection={this.toggleChapterSelection}
-						/>
-					) : null
-				}
-				{
-					isVersionSelectionActive ? (
-						<TextSelection
-							activeBookName={activeBookName}
-							activeChapter={activeChapter}
-							activeTextName={activeTextName}
-							setActiveText={this.setActiveTextId}
-							getChapters={this.getChapters}
-							setActiveBookName={this.setActiveBookName}
-							setActiveChapter={this.setActiveChapter}
-							toggleVersionSelection={this.toggleVersionSelection}
-						/>
-					) : null
-				}
-				{
-					isChapterActive ? (
-						<Text text={chapterText} />
-					) : null
-				}
-				{
-					isSettingsModalActive ? (
-						<Settings toggleSettingsModal={this.toggleSettingsModal} />
-					) : null
-				}
-				{
-					isMenuBarActive ? (
-						<MenuBar toggleMenuBar={this.toggleMenuBar} />
-					) : null
-				}
-				{
-					isProfileActive ? (
-						<Profile toggleProfile={this.toggleProfile} />
-					) : null
-				}
+				<TransitionGroup>
+					{
+						isChapterSelectionActive ? (
+							<FadeTransition in={isSettingsModalActive}>
+								<ChapterSelection
+									activeBookName={activeBookName}
+									activeChapter={activeChapter}
+									activeTextId={activeTextId}
+									getChapters={this.getChapters}
+									setActiveBookName={this.setActiveBookName}
+									setActiveChapter={this.setActiveChapter}
+									toggleChapterSelection={this.toggleChapterSelection}
+								/>
+							</FadeTransition>
+						) : null
+					}
+					{
+						isVersionSelectionActive ? (
+							<FadeTransition in={isSettingsModalActive}>
+								<TextSelection
+									activeBookName={activeBookName}
+									activeChapter={activeChapter}
+									activeTextName={activeTextName}
+									setActiveText={this.setActiveTextId}
+									getChapters={this.getChapters}
+									setActiveBookName={this.setActiveBookName}
+									setActiveChapter={this.setActiveChapter}
+									toggleVersionSelection={this.toggleVersionSelection}
+								/>
+							</FadeTransition>
+						) : null
+					}
+					{
+						isChapterActive ? (
+							<FadeTransition in={isSettingsModalActive}>
+								<Text text={chapterText} />
+							</FadeTransition>
+						) : null
+					}
+					{
+						isSettingsModalActive ? (
+							<FadeTransition in={isSettingsModalActive}>
+								<Settings toggleSettingsModal={this.toggleSettingsModal} />
+							</FadeTransition>
+						) : null
+					}
+					{
+						isMenuBarActive ? (
+							<FadeTransition in={isSettingsModalActive}>
+								<MenuBar toggleMenuBar={this.toggleMenuBar} />
+							</FadeTransition>
+						) : null
+					}
+					{
+						isProfileActive ? (
+							<FadeTransition in={isSettingsModalActive}>
+								<Profile toggleProfile={this.toggleProfile} />
+							</FadeTransition>
+						) : null
+					}
+				</TransitionGroup>
 				<Footer toggleSettingsModal={this.toggleSettingsModal} />
 			</GenericErrorBoundary>
 		);
