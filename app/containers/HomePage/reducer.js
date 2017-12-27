@@ -14,6 +14,7 @@ import {
 	TOGGLE_VERSION_SELECTION,
 	TOGGLE_PROFILE,
 	SET_ACTIVE_CHAPTER,
+	ACTIVE_TEXT_ID,
 } from './constants';
 
 const initialState = fromJS({
@@ -24,6 +25,7 @@ const initialState = fromJS({
 	isMenuBarActive: false,
 	isProfileActive: false,
 	activeBookName: 'Genesis',
+	activeTextName: 'ENGESV',
 	activeTextId: 'ENGESV',
 	initialBookId: 'GEN',
 	isSettingsModalActive: false,
@@ -55,6 +57,10 @@ function homePageReducer(state = initialState, action) {
 		return state.set('activeBookName', action.book);
 	case SET_ACTIVE_CHAPTER:
 		return state.set('activeChapter', action.chapter);
+	case ACTIVE_TEXT_ID:
+		return state
+			.set('activeTextName', action.textName)
+			.set('activeTextId', action.textId);
 	case LOAD_CHAPTER_TEXT:
 		return state
 			.set('chapterText', fromJS(action.text))

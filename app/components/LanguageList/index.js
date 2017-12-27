@@ -40,7 +40,7 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 			active,
 			toggleLanguageList,
 			activeLanguageName,
-			setBookListState,
+			setCountryListState,
 			toggleVersionList,
 		} = this.props;
 		const { filterText } = this.state;
@@ -57,7 +57,7 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 					<div className="language-name-list">
 						{
 							filteredLanguages.map((language) => (
-								<div className="language-name" key={language.get('iso_code')} role="button" tabIndex={0} onClick={() => { setActiveIsoCode({ iso: language.get('iso_code'), name: language.get('name') }); toggleLanguageList({ state: false }); toggleVersionList({ state: true }); setBookListState({ state: false }); }}>
+								<div className="language-name" key={language.get('iso_code')} role="button" tabIndex={0} onClick={() => { setActiveIsoCode({ iso: language.get('iso_code'), name: language.get('name') }); toggleLanguageList({ state: false }); toggleVersionList({ state: true }); setCountryListState({ state: false }); }}>
 									<h4 className={language.get('name') === activeLanguageName ? 'active-language-name' : ''}>{language.get('name')}</h4>
 								</div>
 							))
@@ -67,7 +67,7 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 			);
 		}
 		return (
-			<div className="text-selection-section closed" role="button" tabIndex={0} onClick={() => { toggleLanguageList({ state: true }); toggleVersionList({ state: false }); setBookListState({ state: false }); }}>
+			<div className="text-selection-section closed" role="button" tabIndex={0} onClick={() => { toggleLanguageList({ state: true }); toggleVersionList({ state: false }); setCountryListState({ state: false }); }}>
 				<div className="text-selection-title">
 					<SvgWrapper height="25px" width="25px" fill="#fff" svgid="world" />
 					<span className="text">LANGUAGE:</span>
@@ -82,7 +82,7 @@ LanguageList.propTypes = {
 	languages: PropTypes.object,
 	setActiveIsoCode: PropTypes.func,
 	toggleLanguageList: PropTypes.func,
-	setBookListState: PropTypes.func,
+	setCountryListState: PropTypes.func,
 	toggleVersionList: PropTypes.func,
 	active: PropTypes.bool,
 	activeLanguageName: PropTypes.string,

@@ -40,7 +40,7 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 	handleChange = (e) => this.setState({ filterText: e.target.value });
 
 	render() {
-		const { bibles, setBookListState, toggleLanguageList, getBooksForText, setActiveText, activeTextName, activeIsoCode, active, toggleVersionList } = this.props;
+		const { bibles, setCountryListState, toggleTextSelection, toggleLanguageList, getBooksForText, setActiveText, activeTextName, activeIsoCode, active, toggleVersionList } = this.props;
 		const { filterText } = this.state;
 		const filteredBibles = filterText ? bibles.filter((bible) => this.filterFunction(bible, filterText, activeIsoCode)) : bibles.filter((bible) => bible.get('iso') === activeIsoCode);
 		if (active) {
@@ -65,7 +65,7 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 										setActiveText({ textId: abbr, textName: abbr });
 										getBooksForText({ textId: abbr });
 										toggleVersionList({ state: false });
-										setBookListState({ state: true });
+										toggleTextSelection();
 									}}
 								>
 									<h4 className={bible.get('abbr') === activeTextName ? 'active-version' : ''}>{bible.get('name')}</h4>
@@ -81,7 +81,7 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 				className="text-selection-section closed"
 				tabIndex="0"
 				role="button"
-				onClick={() => { toggleVersionList({ state: true }); setBookListState({ state: false }); toggleLanguageList({ state: false }); }}
+				onClick={() => { toggleVersionList({ state: true }); setCountryListState({ state: false }); toggleLanguageList({ state: false }); }}
 			>
 				<div className="text-selection-title">
 					<SvgWrapper height="25px" width="25px" fill="#fff" svgid="resources" />
@@ -97,12 +97,13 @@ BiblesTable.propTypes = {
 	bibles: PropTypes.object,
 	getBooksForText: PropTypes.func,
 	setActiveText: PropTypes.func,
-	setBookListState: PropTypes.func,
+	setCountryListState: PropTypes.func,
 	activeIsoCode: PropTypes.string,
 	activeTextName: PropTypes.string,
 	active: PropTypes.bool,
 	toggleVersionList: PropTypes.func,
 	toggleLanguageList: PropTypes.func,
+	toggleTextSelection: PropTypes.func,
 };
 
 export default BiblesTable;

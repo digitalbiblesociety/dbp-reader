@@ -10,7 +10,6 @@ import {
 	LOAD_BOOKS,
 	GET_BOOKS,
 	GET_LANGUAGES,
-	SET_ACTIVE_TEXT,
 	SET_LANGUAGES,
 	SET_ISO_CODE,
 	SET_LANGUAGE_LIST_STATE,
@@ -67,12 +66,6 @@ export const setActiveIsoCode = ({ iso, name }) => ({
 	type: SET_ISO_CODE,
 	iso,
 	name,
-});
-
-export const setActiveText = ({ textName, textId }) => ({
-	type: SET_ACTIVE_TEXT,
-	textName,
-	textId,
 });
 
 export const setLanguages = ({ languages }) => ({

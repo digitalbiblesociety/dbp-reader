@@ -14,6 +14,7 @@ import {
 	TOGGLE_MENU_BAR,
 	SET_ACTIVE_CHAPTER,
 	TOGGLE_VERSION_SELECTION,
+	ACTIVE_TEXT_ID,
 } from './constants';
 
 export const loadChapter = ({ text }) => ({
@@ -46,6 +47,12 @@ export const toggleChapterSelection = () => ({
 
 export const toggleVersionSelection = () => ({
 	type: TOGGLE_VERSION_SELECTION,
+});
+
+export const setActiveTextId = ({ textName, textId }) => ({
+	type: ACTIVE_TEXT_ID,
+	textName,
+	textId,
 });
 
 export const setActiveBookName = (book) => ({

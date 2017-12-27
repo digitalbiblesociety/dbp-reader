@@ -13,3 +13,4 @@ export const TOGGLE_SETTINGS_MODAL = 'app/HomePage/TOGGLE_SETTINGS_MODAL';
 export const TOGGLE_MENU_BAR = 'app/HomePage/TOGGLE_MENU_BAR';
 export const TOGGLE_PROFILE = 'app/HomePage/TOGGLE_PROFILE';
 export const TOGGLE_VERSION_SELECTION = 'app/HomePage/TOGGLE_VERSION_SELECTION';
+export const ACTIVE_TEXT_ID = 'app/HomePage/ACTIVE_TEXT_ID';

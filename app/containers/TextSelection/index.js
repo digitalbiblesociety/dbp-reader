@@ -23,7 +23,6 @@ import {
 	getBooks,
 	getLanguages,
 	getTexts,
-	setActiveText,
 	setCountryName,
 } from './actions';
 import makeSelectTextSelection, { selectLanguages, selectTexts, selectCountries } from './selectors';
@@ -34,20 +33,18 @@ import saga from './saga';
 
 export class TextSelection extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	componentDidMount() {
-		const { activeTextId } = this.props.textselection;
+		const { activeTextName } = this.props;
 		// TODO: use a conditional to ensure the actions below only happen on the first mount
-		this.props.dispatch(getBooks({ textId: activeTextId }));
+		this.props.dispatch(getBooks({ textId: activeTextName }));
 		this.props.dispatch(getLanguages());
 		this.props.dispatch(getTexts());
 	}
 
 	getBooksForText = ({ textId }) => this.props.dispatch(getBooks({ textId }));
 
-	setBookListState = ({ state }) => this.props.dispatch(setCountryListState({ state }));
+	setCountryListState = ({ state }) => this.props.dispatch(setCountryListState({ state }));
 
 	setActiveIsoCode = ({ iso, name }) => this.props.dispatch(setActiveIsoCode({ iso, name }));
-
-	setActiveText = ({ textName, textId }) => this.props.dispatch(setActiveText({ textName, textId }));
 
 	setCountryName = ({ name, languages }) => this.props.dispatch(setCountryName({ name, languages }));
 
@@ -62,7 +59,6 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 			versionListActive,
 			activeLanguageName,
 			countryListActive,
-			activeTextName,
 			activeCountryName,
 			countryLanguages,
 		} = this.props.textselection;
@@ -70,6 +66,8 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 			bibles,
 			languages,
 			countries,
+			setActiveText,
+			activeTextName,
 			toggleVersionSelection,
 		} = this.props;
 		let sectionTitle = 'LANGUAGE';
@@ -86,9 +84,37 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 						<svg className="icon"><use xmlnsXlink="http://www.w3.org/1999/xlink" xlinkHref={`${menu}#close`}></use></svg>
 					</span>
 				</header>
-				<CountryList active={countryListActive} setCountryListState={this.setBookListState} toggleVersionList={this.toggleVersionList} activeCountryName={activeCountryName} toggleLanguageList={this.toggleLanguageList} countries={countries} setCountryName={this.setCountryName} />
-				<LanguageList active={languageListActive} countryLanguages={countryLanguages} setBookListState={this.setBookListState} toggleVersionList={this.toggleVersionList} activeLanguageName={activeLanguageName} toggleLanguageList={this.toggleLanguageList} languages={languages} setActiveIsoCode={this.setActiveIsoCode} />
-				<VersionList active={versionListActive} setBookListState={this.setBookListState} activeTextName={activeTextName} toggleVersionList={this.toggleVersionList} activeIsoCode={activeIsoCode} setActiveText={this.setActiveText} getBooksForText={this.getBooksForText} bibles={bibles} toggleLanguageList={this.toggleLanguageList} />
+				<CountryList
+					active={countryListActive}
+					setCountryListState={this.setCountryListState}
+					toggleVersionList={this.toggleVersionList}
+					activeCountryName={activeCountryName}
+					toggleLanguageList={this.toggleLanguageList}
+					countries={countries}
+					setCountryName={this.setCountryName}
+				/>
+				<LanguageList
+					active={languageListActive}
+					countryLanguages={countryLanguages}
+					setCountryListState={this.setCountryListState}
+					toggleVersionList={this.toggleVersionList}
+					activeLanguageName={activeLanguageName}
+					toggleLanguageList={this.toggleLanguageList}
+					languages={languages}
+					setActiveIsoCode={this.setActiveIsoCode}
+				/>
+				<VersionList
+					active={versionListActive}
+					setCountryListState={this.setCountryListState}
+					activeTextName={activeTextName}
+					toggleVersionList={this.toggleVersionList}
+					activeIsoCode={activeIsoCode}
+					setActiveText={setActiveText}
+					getBooksForText={this.getBooksForText}
+					bibles={bibles}
+					toggleLanguageList={this.toggleLanguageList}
+					toggleTextSelection={toggleVersionSelection}
+				/>
 			</aside>
 		);
 	}
@@ -100,6 +126,8 @@ TextSelection.propTypes = {
 	languages: PropTypes.object,
 	countries: PropTypes.object,
 	textselection: PropTypes.object,
+	setActiveText: PropTypes.func,
+	activeTextName: PropTypes.string,
 	toggleVersionSelection: PropTypes.func,
 };
 
