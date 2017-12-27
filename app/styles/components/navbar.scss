@@ -1,4 +1,4 @@
-.nav-container                   {display:flex;justify-content:space-around;align-items:center;background:$header-footer;height:54px;width:100%;position:fixed;top:0;}
+.nav-container                   {display:flex;justify-content:space-around;align-items:center;background:$header-footer;height:54px;width:100%;}
 .nav-container .logo             {width:120px;}
 .nav-container .menu             {flex-grow:1;}
 .nav-container .chapter-selector {flex-grow:10;text-align:center;font-size:1.3em;color:#fff;}
