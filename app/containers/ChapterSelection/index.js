@@ -41,7 +41,7 @@ export class ChapterSelection extends React.PureComponent { // eslint-disable-li
 			activeBookName,
 		} = this.props;
 		return (
-			<aside className="settings">
+			<aside className="chapter-text-dropdown">
 				<header>
 					<h2 className="text-selection">{`${activeBookName} ${activeChapter}`}</h2>
 					<span role="button" tabIndex={0} className="close-icon" onClick={toggleChapterSelection}>

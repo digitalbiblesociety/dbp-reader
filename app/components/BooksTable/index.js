@@ -19,12 +19,12 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 			this.container.scrollTop = this.button.offsetTop - this.container.offsetTop;
 		}
 	}
-
+	// Doesn't quite work, need to account for the closing of the chapters
 	handleBookClick = (e, name) => {
 		const book = e.target;
 		const bookButton = book.parentElement;
 		const bookContainer = bookButton.parentElement;
-		bookContainer.scrollTop = bookButton.offsetTop - bookContainer.offsetTop;
+		bookContainer.scrollTop = (bookButton.offsetTop - bookContainer.offsetTop) - 5;
 		this.props.setSelectedBookName(name);
 	}
 

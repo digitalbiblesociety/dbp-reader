@@ -72,7 +72,7 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 			sectionTitle = 'COUNTRY';
 		}
 		return (
-			<aside className="settings">
+			<aside className="chapter-text-dropdown">
 				<header>
 					<h2 className="text-selection">{`${sectionTitle} SELECTION`}</h2>
 					<span role="button" tabIndex={0} className="close-icon" onClick={toggleVersionSelection}>

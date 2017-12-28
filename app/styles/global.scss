@@ -1,11 +1,12 @@
 *, *::after, *::before {box-sizing:border-box;margin:0;padding:0}
 body, html 	           {height:100%}
 body 				   {margin:0 auto;color:#222;font-size:.98em;font-family:$font-primary}
+div:focus              {outline:none;}
 a                      {text-decoration:none}
-aside {position:absolute;top:0;right:0;height:100%;width:320px;background-color:#2C3036;color:rgba(244,245,246,.5);}
-main {overflow-x:hidden;overflow-y:scroll;max-height:calc(100% - 162px);}
-#app {background-color:$paper-background;}
-#app > div {height:100vh;}
+aside                  {position:absolute;top:0;right:0;height:100%;width:320px;background-color:#2C3036;color:rgba(244,245,246,.5);}
+main                   {overflow-x:hidden;overflow-y:scroll;max-height:calc(100% - 162px);}
+#app                   {background-color:$paper-background;}
+#app > div             {height:100vh;}
 // images
 img                    {max-width:100%;height:auto}
 img[data-src]          {filter:blur(15px)}

@@ -21,7 +21,6 @@ const initialState = fromJS({
 	chapterText: [],
 	activeChapter: 1,
 	isChapterSelectionActive: false,
-	isChapterActive: false,
 	isMenuBarActive: false,
 	isProfileActive: false,
 	activeBookName: 'Genesis',
@@ -62,9 +61,7 @@ function homePageReducer(state = initialState, action) {
 			.set('activeTextName', action.textName)
 			.set('activeTextId', action.textId);
 	case LOAD_CHAPTER_TEXT:
-		return state
-			.set('chapterText', fromJS(action.text))
-			.set('isChapterActive', true);
+		return state.set('chapterText', fromJS(action.text));
 	default:
 		return state;
 	}
