@@ -18,10 +18,11 @@
 .prev-arrow-svg:hover {animation:thicken 0.3s forwards;}
 .next-arrow-svg:hover {animation:thicken 0.3s forwards;}
 
+// TODO: Figure out how to use the variable instead of rgba in keyframes
 @keyframes thicken {
-	0%   { transform: scale(1);    }
-	25%  { transform: scale(1.1);  }
-	50%  { transform: scale(1.15); }
-	75%  { transform: scale(1.2);  }
-	100% { transform: scale(1.25); }
+	0%   { transform: scale(1.00); fill:rgba(158, 30, 53, 0.253); }
+	25%  { transform: scale(1.10); fill:rgba(158, 30, 53, 0.453); }
+	50%  { transform: scale(1.15); fill:rgba(158, 30, 53, 0.653); }
+	75%  { transform: scale(1.20); fill:rgba(158, 30, 53, 0.853); }
+	100% { transform: scale(1.25); fill:rgba(158, 30, 53, 1.000); }
 }
