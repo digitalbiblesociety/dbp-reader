@@ -14,7 +14,7 @@ import injectReducer from 'utils/injectReducer';
 import CountryList from 'components/CountryList';
 import LanguageList from 'components/LanguageList';
 import VersionList from 'components/VersionList';
-import menu from 'images/menu.svg';
+import SvgWrapper from 'components/SvgWrapper';
 import {
 	setVersionListState,
 	setLanguageListState,
@@ -75,9 +75,7 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 			<aside className="chapter-text-dropdown">
 				<header>
 					<h2 className="text-selection">{`${sectionTitle} SELECTION`}</h2>
-					<span role="button" tabIndex={0} className="close-icon" onClick={toggleVersionSelection}>
-						<svg className="icon"><use xmlnsXlink="http://www.w3.org/1999/xlink" xlinkHref={`${menu}#close`}></use></svg>
-					</span>
+					<SvgWrapper role="button" tabIndex={0} className="close-icon icon" onClick={toggleVersionSelection} svgid="circle_up" />
 				</header>
 				<CountryList
 					active={countryListActive}

@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import BooksTable from 'components/BooksTable';
-import menu from 'images/menu.svg';
+import SvgWrapper from 'components/SvgWrapper';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import { getBooks, setSelectedBookName } from './actions';
@@ -44,9 +44,7 @@ export class ChapterSelection extends React.PureComponent { // eslint-disable-li
 			<aside className="chapter-text-dropdown">
 				<header>
 					<h2 className="text-selection">{`${activeBookName} ${activeChapter}`}</h2>
-					<span role="button" tabIndex={0} className="close-icon" onClick={toggleChapterSelection}>
-						<svg className="icon"><use xmlnsXlink="http://www.w3.org/1999/xlink" xlinkHref={`${menu}#close`}></use></svg>
-					</span>
+					<SvgWrapper role="button" tabIndex={0} className="close-icon icon" onClick={toggleChapterSelection} svgid="circle_up" />
 				</header>
 				<BooksTable
 					activeChapter={activeChapter}
