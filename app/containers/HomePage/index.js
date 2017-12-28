@@ -78,7 +78,6 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			activeTextName,
 			activeTextId,
 			chapterText,
-			isChapterActive,
 			isSettingsModalActive,
 			isVersionSelectionActive,
 			isChapterSelectionActive,
@@ -138,34 +137,28 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 						) : null
 					}
 					{
-						isChapterActive ? (
-							<FadeTransition in={isSettingsModalActive}>
-								<Text text={chapterText} />
-							</FadeTransition>
-						) : null
-					}
-					{
 						isSettingsModalActive ? (
-							<FadeTransition in={isSettingsModalActive}>
+							<FadeTransition classNames="slide-from-right" in={isSettingsModalActive}>
 								<Settings toggleSettingsModal={this.toggleSettingsModal} />
 							</FadeTransition>
 						) : null
 					}
 					{
 						isMenuBarActive ? (
-							<FadeTransition in={isSettingsModalActive}>
+							<FadeTransition classNames="slide-from-left" in={isSettingsModalActive}>
 								<MenuBar toggleMenuBar={this.toggleMenuBar} />
 							</FadeTransition>
 						) : null
 					}
 					{
 						isProfileActive ? (
-							<FadeTransition in={isSettingsModalActive}>
+							<FadeTransition classNames="slide-from-right" in={isSettingsModalActive}>
 								<Profile toggleProfile={this.toggleProfile} />
 							</FadeTransition>
 						) : null
 					}
 				</TransitionGroup>
+				<Text text={chapterText} />
 				<Footer toggleSettingsModal={this.toggleSettingsModal} />
 			</GenericErrorBoundary>
 		);
