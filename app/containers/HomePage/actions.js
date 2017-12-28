@@ -67,9 +67,10 @@ export const setActiveTextId = ({ textName, textId }) => ({
 	textId,
 });
 
-export const setActiveBookName = (book) => ({
+export const setActiveBookName = (book, id) => ({
 	type: SET_ACTIVE_BOOK_NAME,
 	book,
+	id,
 });
 
 export const setActiveChapter = (chapter) => ({

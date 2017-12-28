@@ -50,10 +50,10 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 	componentDidMount() {
 		const {
 			activeTextId,
-			initialBookId,
+			activeBookId,
 		} = this.props.homepage;
 
-		this.props.dispatch(getChapterText({ bible: activeTextId, book: initialBookId, chapter: 1 }));
+		this.props.dispatch(getChapterText({ bible: activeTextId, book: activeBookId, chapter: 1 }));
 		this.props.dispatch(getBooks({ textId: activeTextId }));
 	}
 
@@ -63,12 +63,30 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		}
 	}
 
-	getNextChapter = () => console.log('get next chapter');
+	getNextChapter = () => {
+		const {
+			activeTextId,
+			activeChapter,
+			activeBookId,
+		} = this.props.homepage;
+
+		this.props.dispatch(getChapterText({ bible: activeTextId, book: activeBookId, chapter: activeChapter + 1 }));
+		this.setActiveChapter(activeChapter + 1);
+	};
 	// increase the current chapter by 1
 	// if new current chapter is greater than the length of the book
 	// 	 get the next book in the list
 	// otherwise load the new chapter
-	getPrevChapter = () => console.log('get prev chapter');
+	getPrevChapter = () => {
+		const {
+			activeTextId,
+			activeChapter,
+			activeBookId,
+		} = this.props.homepage;
+
+		this.props.dispatch(getChapterText({ bible: activeTextId, book: activeBookId, chapter: activeChapter - 1 }));
+		this.setActiveChapter(activeChapter - 1);
+	};
 	// decrease the current chapter by 1
 	// if new current chapter is equal to 0
 	// 	 get the previous book in the list
@@ -78,7 +96,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 
 	getChapters = ({ bible, book, chapter }) => this.props.dispatch(getChapterText({ bible, book, chapter }));
 
-	setActiveBookName = (bookName) => this.props.dispatch(setActiveBookName(bookName));
+	setActiveBookName = (bookName, id) => this.props.dispatch(setActiveBookName(bookName, id));
 
 	setActiveChapter = (chapter) => this.props.dispatch(setActiveChapter(chapter));
 
@@ -152,7 +170,6 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 									activeTextName={activeTextName}
 									setActiveText={this.setActiveTextId}
 									getChapters={this.getChapters}
-									setActiveBookName={this.setActiveBookName}
 									setActiveChapter={this.setActiveChapter}
 									toggleVersionSelection={this.toggleVersionSelection}
 								/>

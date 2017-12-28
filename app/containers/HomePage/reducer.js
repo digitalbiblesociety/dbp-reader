@@ -28,7 +28,7 @@ const initialState = fromJS({
 	activeBookName: 'Genesis',
 	activeTextName: 'ENGESV',
 	activeTextId: 'ENGESV',
-	initialBookId: 'GEN',
+	activeBookId: 'GEN',
 	isSettingsModalActive: false,
 	isVersionSelectionActive: false,
 });
@@ -58,7 +58,9 @@ function homePageReducer(state = initialState, action) {
 			.set('isChapterSelectionActive', false)
 			.set('isVersionSelectionActive', !(state.get('isVersionSelectionActive')));
 	case SET_ACTIVE_BOOK_NAME:
-		return state.set('activeBookName', action.book);
+		return state
+			.set('activeBookId', action.id)
+			.set('activeBookName', action.book);
 	case SET_ACTIVE_CHAPTER:
 		return state.set('activeChapter', action.chapter);
 	case ACTIVE_TEXT_ID:
