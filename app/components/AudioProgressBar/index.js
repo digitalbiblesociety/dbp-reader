@@ -38,7 +38,9 @@ class AudioProgressBar extends React.PureComponent {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		this.movePlayhead(nextProps.currentTime);
+		if (nextProps.currentTime !== this.props.currentTime) {
+			this.movePlayhead({}, true);
+		}
 	}
 
 	componentWillUnmount() {
@@ -59,10 +61,19 @@ class AudioProgressBar extends React.PureComponent {
 
 	clickPercent = (e) => (e.clientX - this.state.position) / (this.state.timelineOffset - this.state.playheadOffset || 0);
 
-	movePlayhead = (e) => {
-		// console.log(e.clientX);
-		// console.log(this.playhead.getBoundingClientRect());
-		const newMargLeft = (e.clientX || this.playhead.getBoundingClientRect().left) - this.state.position;
+	movePlayhead = (e, fromProps) => {
+		// console.log('clientX', e.clientX);
+		// console.log('get timeline rect', this.timeline.offsetWidth);
+		// console.log('position', this.state.position);
+		// console.log('timeline', this.state.timelineOffset * posPercent);
+		// console.log('playhead', this.state.playheadOffset);
+		// console.log('current time divided duration', posPercent);
+		let newMargLeft;
+		if (fromProps) {
+			newMargLeft = this.timeline.offsetWidth;
+		} else {
+			newMargLeft = (e.clientX || this.playhead.getBoundingClientRect().left) - this.state.position;
+		}
 
 		if (newMargLeft >= 0 && newMargLeft <= (this.state.timelineOffset - this.state.playheadOffset || 0)) {
 			this.setState({
@@ -80,7 +91,7 @@ class AudioProgressBar extends React.PureComponent {
 	};
 
 	handleTimeClick = (e) => {
-		this.movePlayhead(e);
+		this.movePlayhead({ e });
 		this.props.setCurrentTime(this.props.duration * this.clickPercent(e));
 	};
 
@@ -91,6 +102,10 @@ class AudioProgressBar extends React.PureComponent {
 
 	handleTimelineRef = (el) => {
 		this.timeline = el;
+	}
+
+	handleOuterDivRef = (el) => {
+		this.outerDiv = el;
 		if (el) {
 			this.setState({
 				position: el.getBoundingClientRect().left,
@@ -110,8 +125,8 @@ class AudioProgressBar extends React.PureComponent {
 
 	render() {
 		return (
-			<div role="button" tabIndex={0} className="progress-bar" ref={this.handleTimelineRef} onClick={this.handleTimeClick}>
-				<Timeline percent={(100 * (this.props.currentTime / this.props.duration)) || 0} />
+			<div role="button" tabIndex={0} className="progress-bar" ref={this.handleOuterDivRef} onClick={this.handleTimeClick}>
+				<Timeline innerRef={this.handleTimelineRef} percent={(100 * (this.props.currentTime / this.props.duration)) || 0} />
 				<Playhead innerRef={this.handlePlayheadRef} onMouseDown={this.mouseDown} marginleft={this.state.marginLeft} />
 			</div>
 		);
