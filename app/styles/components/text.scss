@@ -1,5 +1,6 @@
 .text-container {
 	display: flex;
+	height:calc(100vh - 162px);
 }
 
 .verse-number {
@@ -10,4 +11,17 @@
 	margin-top: auto;
 	margin-bottom: auto;
 	padding-left: 5px;
+}
+
+.prev-arrow-svg {cursor:pointer;fill:$prev-next-button-color;margin-left:10px;width:25px;min-width:25px;min-height:52px;height:52px;margin-top:calc(50vh - 104px);}
+.next-arrow-svg {cursor:pointer;fill:$prev-next-button-color;margin-right:10px;width:25px;min-width:25px;min-height:52px;height:52px;margin-top:calc(50vh - 104px);}
+.prev-arrow-svg:hover {animation:thicken 0.3s forwards;}
+.next-arrow-svg:hover {animation:thicken 0.3s forwards;}
+
+@keyframes thicken {
+	0%   { transform: scale(1);    }
+	25%  { transform: scale(1.1);  }
+	50%  { transform: scale(1.15); }
+	75%  { transform: scale(1.2);  }
+	100% { transform: scale(1.25); }
 }

@@ -4,7 +4,7 @@ body 				   {margin:0 auto;color:#222;font-size:.98em;font-family:$font-primary}
 div:focus              {outline:none;}
 a                      {text-decoration:none}
 aside                  {position:absolute;top:0;right:0;height:100%;width:320px;background-color:#2C3036;color:rgba(244,245,246,.5);}
-main                   {overflow-x:hidden;overflow-y:scroll;max-height:calc(100% - 162px);}
+main                   {overflow-x:hidden;overflow-y:scroll;max-height:100%;}
 #app                   {background-color:$paper-background;}
 #app > div             {height:100vh;}
 // images
