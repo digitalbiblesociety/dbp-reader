@@ -12,11 +12,13 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 	render() {
 		const {
 			text,
+			nextChapter,
+			prevChapter,
 		} = this.props;
 
 		return (
 			<div className="text-container">
-				<SvgWrapper className="prev-arrow-svg" svgid="prev-arrow" />
+				<SvgWrapper onClick={prevChapter} className="prev-arrow-svg" svgid="prev-arrow" />
 				<main className="chapter">
 					{
 						text.map((verse) => (
@@ -24,7 +26,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 						))
 					}
 				</main>
-				<SvgWrapper className="next-arrow-svg" svgid="next-arrow" />
+				<SvgWrapper onClick={nextChapter} className="next-arrow-svg" svgid="next-arrow" />
 			</div>
 		);
 	}
@@ -32,6 +34,8 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 
 Text.propTypes = {
 	text: PropTypes.array,
+	nextChapter: PropTypes.func,
+	prevChapter: PropTypes.func,
 };
 
 export default Text;

@@ -8,6 +8,7 @@ import { fromJS } from 'immutable';
 import {
 	SET_ACTIVE_BOOK_NAME,
 	LOAD_CHAPTER_TEXT,
+	LOAD_BOOKS,
 	TOGGLE_SETTINGS_MODAL,
 	TOGGLE_CHAPTER_SELECTION,
 	TOGGLE_MENU_BAR,
@@ -18,6 +19,7 @@ import {
 } from './constants';
 
 const initialState = fromJS({
+	books: [],
 	chapterText: [],
 	activeChapter: 1,
 	isChapterSelectionActive: false,
@@ -33,6 +35,9 @@ const initialState = fromJS({
 
 function homePageReducer(state = initialState, action) {
 	switch (action.type) {
+	case LOAD_BOOKS:
+		return state
+			.set('books', fromJS(action.books));
 	case TOGGLE_MENU_BAR:
 		return state.set('isMenuBarActive', !state.get('isMenuBarActive'));
 	case TOGGLE_PROFILE:

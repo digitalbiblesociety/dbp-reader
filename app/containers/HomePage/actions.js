@@ -7,6 +7,8 @@
 import {
 	SET_ACTIVE_BOOK_NAME,
 	LOAD_CHAPTER_TEXT,
+	GET_BOOKS,
+	LOAD_BOOKS,
 	GET_CHAPTER_TEXT,
 	TOGGLE_SETTINGS_MODAL,
 	TOGGLE_CHAPTER_SELECTION,
@@ -20,6 +22,16 @@ import {
 export const loadChapter = ({ text }) => ({
 	type: LOAD_CHAPTER_TEXT,
 	text,
+});
+
+export const loadBooks = ({ books }) => ({
+	type: LOAD_BOOKS,
+	books,
+});
+
+export const getBooks = ({ textId }) => ({
+	type: GET_BOOKS,
+	textId,
 });
 
 export const getChapterText = ({ bible, book, chapter }) => ({

@@ -30,6 +30,7 @@ import Footer from 'components/Footer';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
 import FadeTransition from 'components/FadeTransition';
 import {
+	getBooks,
 	toggleMenuBar,
 	toggleProfile,
 	toggleChapterSelection,
@@ -53,7 +54,27 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		} = this.props.homepage;
 
 		this.props.dispatch(getChapterText({ bible: activeTextId, book: initialBookId, chapter: 1 }));
+		this.props.dispatch(getBooks({ textId: activeTextId }));
 	}
+
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.homepage.activeTextId !== this.props.homepage.activeTextId) {
+			this.getBooks(nextProps.homepage.activeTextId);
+		}
+	}
+
+	getNextChapter = () => console.log('get next chapter');
+	// increase the current chapter by 1
+	// if new current chapter is greater than the length of the book
+	// 	 get the next book in the list
+	// otherwise load the new chapter
+	getPrevChapter = () => console.log('get prev chapter');
+	// decrease the current chapter by 1
+	// if new current chapter is equal to 0
+	// 	 get the previous book in the list
+	// otherwise load the new chapter
+
+	getBooks = (textId) => this.props.dispatch(getBooks({ textId }));
 
 	getChapters = ({ bible, book, chapter }) => this.props.dispatch(getChapterText({ bible, book, chapter }));
 
@@ -78,6 +99,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			activeTextName,
 			activeTextId,
 			chapterText,
+			books,
 			isSettingsModalActive,
 			isVersionSelectionActive,
 			isChapterSelectionActive,
@@ -112,6 +134,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 									activeBookName={activeBookName}
 									activeChapter={activeChapter}
 									activeTextId={activeTextId}
+									books={books}
 									getChapters={this.getChapters}
 									setActiveBookName={this.setActiveBookName}
 									setActiveChapter={this.setActiveChapter}
@@ -158,7 +181,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 						) : null
 					}
 				</TransitionGroup>
-				<Text text={chapterText} />
+				<Text text={chapterText} nextChapter={this.getNextChapter} prevChapter={this.getPrevChapter} />
 				<Footer toggleSettingsModal={this.toggleSettingsModal} />
 			</GenericErrorBoundary>
 		);
@@ -169,7 +192,7 @@ HomePage.propTypes = {
 	dispatch: PropTypes.func.isRequired,
 	homepage: PropTypes.object.isRequired,
 };
-
+// TODO: Make selector for books and sort them in selector
 const mapStateToProps = createStructuredSelector({
 	homepage: makeSelectHomePage(),
 });

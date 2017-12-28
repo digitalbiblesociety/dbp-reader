@@ -13,7 +13,7 @@ import BooksTable from 'components/BooksTable';
 import SvgWrapper from 'components/SvgWrapper';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
-import { getBooks, setSelectedBookName } from './actions';
+import { setSelectedBookName } from './actions';
 import makeSelectChapterSelection from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -21,21 +21,16 @@ import saga from './saga';
 // import messages from './messages';
 
 export class ChapterSelection extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
-	componentDidMount() {
-		const { activeTextId } = this.props;
-
-		this.props.dispatch(getBooks({ textId: activeTextId }));
-	}
-
 	setSelectedBookName = (book) => this.props.dispatch(setSelectedBookName(book))
 
 	render() {
-		const { books, selectedBookName } = this.props.chapterselection;
+		const { selectedBookName } = this.props.chapterselection;
 		const {
 			setActiveChapter,
 			setActiveBookName,
 			activeChapter,
 			getChapters,
+			books,
 			activeTextId,
 			toggleChapterSelection,
 			activeBookName,
@@ -66,6 +61,7 @@ export class ChapterSelection extends React.PureComponent { // eslint-disable-li
 ChapterSelection.propTypes = {
 	dispatch: PropTypes.func.isRequired,
 	activeChapter: PropTypes.number.isRequired,
+	books: PropTypes.array,
 	activeBookName: PropTypes.string.isRequired,
 	activeTextId: PropTypes.string.isRequired,
 	getChapters: PropTypes.func.isRequired,
