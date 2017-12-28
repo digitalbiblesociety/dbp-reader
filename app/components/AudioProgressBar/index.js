@@ -14,7 +14,7 @@ const Timeline = styled.div`
 	height: 2px;
 `;
 
-const Playhead = styled.div`
+const Tracker = styled.div`
 	width: 15px;
   height: 15px;
   border-radius: 50%;
@@ -29,7 +29,7 @@ class AudioProgressBar extends React.PureComponent {
 		super(props);
 		this.state = {
 			marginLeft: 0,
-			onplayhead: false,
+			ontracker: false,
 		};
 	}
 
@@ -39,43 +39,37 @@ class AudioProgressBar extends React.PureComponent {
 
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.currentTime !== this.props.currentTime) {
-			this.movePlayhead({}, true);
+			this.moveTracker({}, true);
 		}
 	}
 
 	componentWillUnmount() {
 		window.removeEventListener('mouseup', this.mouseUp);
-		window.removeEventListener('mousemove', this.movePlayhead);
+		window.removeEventListener('mousemove', this.moveTracker);
 	}
 
 	mouseUp = (e) => {
-		if (this.state.onplayhead) {
-			this.movePlayhead(e);
-			window.removeEventListener('mousemove', this.movePlayhead, true);
+		if (this.state.ontracker) {
+			this.moveTracker(e);
+			window.removeEventListener('mousemove', this.moveTracker, true);
 			this.props.setCurrentTime(this.props.duration * this.clickPercent(e));
 		}
 		this.setState({
-			onplayhead: false,
+			ontracker: false,
 		});
 	}
 
-	clickPercent = (e) => (e.clientX - this.state.position) / (this.state.timelineOffset - this.state.playheadOffset || 0);
+	clickPercent = (e) => (e.clientX - this.state.position) / (this.state.timelineOffset - this.state.trackerOffset || 0);
 
-	movePlayhead = (e, fromProps) => {
-		// console.log('clientX', e.clientX);
-		// console.log('get timeline rect', this.timeline.offsetWidth);
-		// console.log('position', this.state.position);
-		// console.log('timeline', this.state.timelineOffset * posPercent);
-		// console.log('playhead', this.state.playheadOffset);
-		// console.log('current time divided duration', posPercent);
+	moveTracker = (e, fromProps) => {
 		let newMargLeft;
 		if (fromProps) {
 			newMargLeft = this.timeline.offsetWidth;
 		} else {
-			newMargLeft = (e.clientX || this.playhead.getBoundingClientRect().left) - this.state.position;
+			newMargLeft = (e.clientX || this.tracker.getBoundingClientRect().left) - this.state.position;
 		}
 
-		if (newMargLeft >= 0 && newMargLeft <= (this.state.timelineOffset - this.state.playheadOffset || 0)) {
+		if (newMargLeft >= 0 && newMargLeft <= (this.state.timelineOffset - this.state.trackerOffset || 0)) {
 			this.setState({
 				marginLeft: newMargLeft,
 			});
@@ -83,21 +77,21 @@ class AudioProgressBar extends React.PureComponent {
 			this.setState({
 				marginLeft: 0,
 			});
-		} else if (newMargLeft > (this.state.timelineOffset - this.state.playheadOffset || 0)) {
+		} else if (newMargLeft > (this.state.timelineOffset - this.state.trackerOffset || 0)) {
 			this.setState({
-				marginLeft: (this.state.timelineOffset - this.state.playheadOffset || 0),
+				marginLeft: (this.state.timelineOffset - this.state.trackerOffset || 0),
 			});
 		}
 	};
 
 	handleTimeClick = (e) => {
-		this.movePlayhead({ e });
+		this.moveTracker({ e });
 		this.props.setCurrentTime(this.props.duration * this.clickPercent(e));
 	};
 
 	mouseDown = () => {
-		this.state.onplayhead = true;
-		window.addEventListener('mousemove', this.movePlayhead, true);
+		this.state.ontracker = true;
+		window.addEventListener('mousemove', this.moveTracker, true);
 	}
 
 	handleTimelineRef = (el) => {
@@ -114,11 +108,11 @@ class AudioProgressBar extends React.PureComponent {
 		}
 	}
 
-	handlePlayheadRef = (el) => {
-		this.playhead = el;
+	handleTrackerRef = (el) => {
+		this.tracker = el;
 		if (el) {
 			this.setState({
-				playheadOffset: el.offsetWidth,
+				trackerOffset: el.offsetWidth,
 			});
 		}
 	}
@@ -127,7 +121,7 @@ class AudioProgressBar extends React.PureComponent {
 		return (
 			<div role="button" tabIndex={0} className="progress-bar" ref={this.handleOuterDivRef} onClick={this.handleTimeClick}>
 				<Timeline innerRef={this.handleTimelineRef} percent={(100 * (this.props.currentTime / this.props.duration)) || 0} />
-				<Playhead innerRef={this.handlePlayheadRef} onMouseDown={this.mouseDown} marginleft={this.state.marginLeft} />
+				<Tracker innerRef={this.handleTrackerRef} onMouseDown={this.mouseDown} marginleft={this.state.marginLeft} />
 			</div>
 		);
 	}
