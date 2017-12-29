@@ -23,6 +23,7 @@ import AudioPlayer from 'containers/AudioPlayer';
 import TextSelection from 'containers/TextSelection';
 import ChapterSelection from 'containers/ChapterSelection';
 import Profile from 'containers/Profile';
+import Notes from 'containers/Notes';
 import NavigationBar from 'components/NavigationBar';
 import Text from 'components/Text';
 import MenuBar from 'components/MenuBar';
@@ -34,6 +35,7 @@ import {
 	toggleMenuBar,
 	toggleProfile,
 	toggleChapterSelection,
+	toggleNotesModal,
 	toggleSettingsModal,
 	toggleVersionSelection,
 	setActiveBookName,
@@ -116,6 +118,8 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 
 	toggleProfile = () => this.props.dispatch(toggleProfile());
 
+	toggleNotesModal = () => this.props.dispatch(toggleNotesModal());
+
 	toggleSettingsModal = () => this.props.dispatch(toggleSettingsModal());
 
 	toggleChapterSelection = () => this.props.dispatch(toggleChapterSelection());
@@ -129,6 +133,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			chapterText,
 			books,
 			isSettingsModalActive,
+			isNotesModalActive,
 			isVersionSelectionActive,
 			isChapterSelectionActive,
 			activeBookName,
@@ -205,9 +210,16 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 							</FadeTransition>
 						) : null
 					}
+					{
+						isNotesModalActive ? (
+							<FadeTransition classNames="slide-from-right" in={isNotesModalActive}>
+								<Notes toggleNotesModal={this.toggleNotesModal} />
+							</FadeTransition>
+						) : null
+					}
 				</TransitionGroup>
 				<Text activeBookName={activeBookName} activeChapter={activeChapter} text={chapterText} nextChapter={this.getNextChapter} prevChapter={this.getPrevChapter} />
-				<Footer toggleSettingsModal={this.toggleSettingsModal} />
+				<Footer toggleNotesModal={this.toggleNotesModal} toggleSettingsModal={this.toggleSettingsModal} />
 			</GenericErrorBoundary>
 		);
 	}

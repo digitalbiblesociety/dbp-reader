@@ -10,6 +10,7 @@ import {
 	GET_BOOKS,
 	LOAD_BOOKS,
 	GET_CHAPTER_TEXT,
+	TOGGLE_NOTES_MODAL,
 	TOGGLE_SETTINGS_MODAL,
 	TOGGLE_CHAPTER_SELECTION,
 	TOGGLE_PROFILE,
@@ -51,6 +52,10 @@ export const toggleProfile = () => ({
 
 export const toggleSettingsModal = () => ({
 	type: TOGGLE_SETTINGS_MODAL,
+});
+
+export const toggleNotesModal = () => ({
+	type: TOGGLE_NOTES_MODAL,
 });
 
 export const toggleChapterSelection = () => ({

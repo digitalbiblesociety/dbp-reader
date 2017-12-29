@@ -10,6 +10,7 @@ export const SET_ACTIVE_BOOK_NAME = 'app/HomePage/SET_ACTIVE_BOOK_NAME';
 export const SET_ACTIVE_CHAPTER = 'app/HomePage/SET_ACTIVE_CHAPTER';
 export const TOGGLE_CHAPTER_SELECTION = 'app/HomePage/TOGGLE_CHAPTER_SELECTION';
 export const TOGGLE_SETTINGS_MODAL = 'app/HomePage/TOGGLE_SETTINGS_MODAL';
+export const TOGGLE_NOTES_MODAL = 'app/HomePage/TOGGLE_NOTES_MODAL';
 export const TOGGLE_MENU_BAR = 'app/HomePage/TOGGLE_MENU_BAR';
 export const TOGGLE_PROFILE = 'app/HomePage/TOGGLE_PROFILE';
 export const TOGGLE_VERSION_SELECTION = 'app/HomePage/TOGGLE_VERSION_SELECTION';

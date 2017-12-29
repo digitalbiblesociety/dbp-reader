@@ -3,14 +3,14 @@ import {
 	defaultAction,
 } from '../actions';
 import {
-	DEFAULT_ACTION,
+	SET_ACTIVE_CHILD,
 } from '../constants';
 
-describe('ChapterSelection actions', () => {
+describe('Notes actions', () => {
 	describe('Default Action', () => {
 		it('has a type of SET_ACTIVE_CHILD', () => {
 			const expected = {
-				type: DEFAULT_ACTION,
+				type: SET_ACTIVE_CHILD,
 			};
 			expect(defaultAction()).toEqual(expected);
 		});
