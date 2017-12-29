@@ -35,6 +35,15 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 		// TODO: use a conditional to ensure the actions below only happen on the first mount
 		this.props.dispatch(getLanguages());
 		this.props.dispatch(getTexts());
+		document.addEventListener('click', this.handleClickOutside);
+	}
+
+	componentWillUnmount() {
+		document.removeEventListener('click', this.handleClickOutside);
+	}
+
+	setRef = (node) => {
+		this.ref = node;
 	}
 
 	setCountryListState = ({ state }) => this.props.dispatch(setCountryListState({ state }));
@@ -46,6 +55,12 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 	toggleLanguageList = ({ state }) => this.props.dispatch(setLanguageListState({ state }));
 
 	toggleVersionList = ({ state }) => this.props.dispatch(setVersionListState({ state }));
+
+	handleClickOutside = (event) => {
+		if (this.ref && !this.ref.contains(event.target)) {
+			this.props.toggleVersionSelection();
+		}
+	}
 
 	render() {
 		const {
@@ -72,7 +87,7 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 			sectionTitle = 'COUNTRY';
 		}
 		return (
-			<aside className="chapter-text-dropdown">
+			<aside ref={this.setRef} className="chapter-text-dropdown">
 				<header>
 					<h2 className="text-selection">{`${sectionTitle} SELECTION`}</h2>
 					<SvgWrapper role="button" tabIndex={0} className="close-icon icon" onClick={toggleVersionSelection} svgid="circle_up" />

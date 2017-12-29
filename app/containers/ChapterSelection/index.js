@@ -21,7 +21,25 @@ import saga from './saga';
 // import messages from './messages';
 
 export class ChapterSelection extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+	componentDidMount() {
+		document.addEventListener('click', this.handleClickOutside);
+	}
+
+	componentWillUnmount() {
+		document.removeEventListener('click', this.handleClickOutside);
+	}
+
+	setRef = (node) => {
+		this.ref = node;
+	}
+
 	setSelectedBookName = (book) => this.props.dispatch(setSelectedBookName(book))
+
+	handleClickOutside = (event) => {
+		if (this.ref && !this.ref.contains(event.target)) {
+			this.props.toggleChapterSelection();
+		}
+	}
 
 	render() {
 		const { selectedBookName } = this.props.chapterselection;
@@ -36,7 +54,7 @@ export class ChapterSelection extends React.PureComponent { // eslint-disable-li
 			activeBookName,
 		} = this.props;
 		return (
-			<aside className="chapter-text-dropdown">
+			<aside ref={this.setRef} className="chapter-text-dropdown">
 				<header>
 					<h2 className="text-selection">{`${activeBookName} ${activeChapter}`}</h2>
 					<SvgWrapper role="button" tabIndex={0} className="close-icon icon" onClick={toggleChapterSelection} svgid="circle_up" />

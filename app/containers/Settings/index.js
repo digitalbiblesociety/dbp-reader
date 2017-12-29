@@ -30,6 +30,24 @@ import {
 
 // add icon for settings close button
 export class Settings extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+	componentDidMount() {
+		document.addEventListener('click', this.handleClickOutside);
+	}
+
+	componentWillUnmount() {
+		document.removeEventListener('click', this.handleClickOutside);
+	}
+
+	setRef = (node) => {
+		this.ref = node;
+	}
+
+	handleClickOutside = (event) => {
+		if (this.ref && !this.ref.contains(event.target)) {
+			this.props.toggleSettingsModal();
+		}
+	}
+
 	updateTheme = ({ theme }) => this.props.dispatch(updateTheme({ theme }));
 	updateFontType = ({ font }) => this.props.dispatch(updateFontType({ font }));
 	updateFontSize = ({ size }) => this.props.dispatch(updateFontSize({ size }));
@@ -57,7 +75,7 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 		} = this.props;
 
 		return (
-			<aside className="settings">
+			<aside ref={this.setRef} className="settings">
 				<header>
 					<h2 className="section-title">Settings</h2>
 					<span role="button" tabIndex={0} className="close-icon" onClick={toggleSettingsModal}>

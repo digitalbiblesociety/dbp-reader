@@ -23,6 +23,24 @@ import saga from './saga';
 // import messages from './messages';
 
 export class Profile extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+	componentDidMount() {
+		document.addEventListener('click', this.handleClickOutside);
+	}
+
+	componentWillUnmount() {
+		document.removeEventListener('click', this.handleClickOutside);
+	}
+
+	setRef = (node) => {
+		this.ref = node;
+	}
+
+	handleClickOutside = (event) => {
+		if (this.ref && !this.ref.contains(event.target)) {
+			this.props.toggleProfile();
+		}
+	}
+
 	selectAccountOption = (option) => this.props.dispatch(selectAccountOption(option))
 	toggleSignInForm = (state) => this.props.dispatch(toggleSignInForm(state))
 
@@ -30,7 +48,7 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 		const { activeOption, signInActive, userAuthenticated } = this.props.profile;
 		const { toggleProfile } = this.props;
 		return (
-			<aside className="profile">
+			<aside ref={this.setRef} className="profile">
 				<header>
 					<h2>ACCOUNT</h2>
 					<span role="button" tabIndex={0} className="close-icon" onClick={toggleProfile}>
