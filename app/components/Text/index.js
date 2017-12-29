@@ -14,11 +14,17 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			text,
 			nextChapter,
 			prevChapter,
+			activeBookName,
+			activeChapter,
 		} = this.props;
 
 		return (
 			<div className="text-container">
-				<SvgWrapper onClick={prevChapter} className="prev-arrow-svg" svgid="prev-arrow" />
+				{
+					activeBookName === 'Genesis' && activeChapter === 1 ? null : (
+						<SvgWrapper onClick={prevChapter} className="prev-arrow-svg" svgid="prev-arrow" />
+					)
+				}
 				<main className="chapter">
 					{
 						text.map((verse) => (
@@ -26,7 +32,11 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 						))
 					}
 				</main>
-				<SvgWrapper onClick={nextChapter} className="next-arrow-svg" svgid="next-arrow" />
+				{
+					activeBookName === 'Revelation' && activeChapter === 22 ? null : (
+						<SvgWrapper onClick={nextChapter} className="next-arrow-svg" svgid="next-arrow" />
+					)
+				}
 			</div>
 		);
 	}
@@ -36,6 +46,8 @@ Text.propTypes = {
 	text: PropTypes.array,
 	nextChapter: PropTypes.func,
 	prevChapter: PropTypes.func,
+	activeBookName: PropTypes.string,
+	activeChapter: PropTypes.number,
 };
 
 export default Text;

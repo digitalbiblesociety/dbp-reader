@@ -41,7 +41,7 @@ import {
 	setActiveTextId,
 	getChapterText,
 } from './actions';
-import makeSelectHomePage from './selectors';
+import makeSelectHomePage, { selectActiveBook, selectPrevBook, selectNextBook } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 // import messages from './messages';
@@ -69,28 +69,36 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			activeChapter,
 			activeBookId,
 		} = this.props.homepage;
+		const { activeBook, nextBook } = this.props;
+		const maxChapter = activeBook.get('chapters').size;
 
-		this.props.dispatch(getChapterText({ bible: activeTextId, book: activeBookId, chapter: activeChapter + 1 }));
-		this.setActiveChapter(activeChapter + 1);
+		if (activeChapter > maxChapter) {
+			this.setActiveBookName(nextBook.get('name'), nextBook.get('book_id'));
+			this.getChapters({ bible: activeTextId, book: nextBook.get('book_id'), chapter: 1 });
+		} else {
+			this.getChapters({ bible: activeTextId, book: activeBookId, chapter: activeChapter + 1 });
+			this.setActiveChapter(activeChapter + 1);
+		}
 	};
-	// increase the current chapter by 1
-	// if new current chapter is greater than the length of the book
-	// 	 get the next book in the list
-	// otherwise load the new chapter
+
 	getPrevChapter = () => {
 		const {
 			activeTextId,
 			activeChapter,
 			activeBookId,
 		} = this.props.homepage;
+		const { previousBook } = this.props;
 
-		this.props.dispatch(getChapterText({ bible: activeTextId, book: activeBookId, chapter: activeChapter - 1 }));
-		this.setActiveChapter(activeChapter - 1);
+		if (activeChapter - 1 === 0) {
+			const lastChapter = previousBook.get('chapters').size + 1;
+
+			this.setActiveBookName(previousBook.get('name'), previousBook.get('book_id'));
+			this.getChapters({ bible: activeTextId, book: previousBook.get('book_id'), chapter: lastChapter });
+		} else {
+			this.getChapters({ bible: activeTextId, book: activeBookId, chapter: activeChapter - 1 });
+			this.setActiveChapter(activeChapter - 1);
+		}
 	};
-	// decrease the current chapter by 1
-	// if new current chapter is equal to 0
-	// 	 get the previous book in the list
-	// otherwise load the new chapter
 
 	getBooks = (textId) => this.props.dispatch(getBooks({ textId }));
 
@@ -166,10 +174,8 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 							<FadeTransition in={isSettingsModalActive}>
 								<TextSelection
 									activeBookName={activeBookName}
-									activeChapter={activeChapter}
 									activeTextName={activeTextName}
 									setActiveText={this.setActiveTextId}
-									getChapters={this.getChapters}
 									setActiveChapter={this.setActiveChapter}
 									toggleVersionSelection={this.toggleVersionSelection}
 								/>
@@ -198,7 +204,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 						) : null
 					}
 				</TransitionGroup>
-				<Text text={chapterText} nextChapter={this.getNextChapter} prevChapter={this.getPrevChapter} />
+				<Text activeBookName={activeBookName} activeChapter={activeChapter} text={chapterText} nextChapter={this.getNextChapter} prevChapter={this.getPrevChapter} />
 				<Footer toggleSettingsModal={this.toggleSettingsModal} />
 			</GenericErrorBoundary>
 		);
@@ -208,10 +214,16 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 HomePage.propTypes = {
 	dispatch: PropTypes.func.isRequired,
 	homepage: PropTypes.object.isRequired,
+	activeBook: PropTypes.object,
+	previousBook: PropTypes.object,
+	nextBook: PropTypes.object,
 };
 // TODO: Make selector for books and sort them in selector
 const mapStateToProps = createStructuredSelector({
 	homepage: makeSelectHomePage(),
+	previousBook: selectPrevBook(),
+	nextBook: selectNextBook(),
+	activeBook: selectActiveBook(),
 });
 
 function mapDispatchToProps(dispatch) {
