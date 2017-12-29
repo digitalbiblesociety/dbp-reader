@@ -57,7 +57,11 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 	toggleVersionList = ({ state }) => this.props.dispatch(setVersionListState({ state }));
 
 	handleClickOutside = (event) => {
-		if (this.ref && !this.ref.contains(event.target)) {
+		const bounds = this.ref.getBoundingClientRect();
+		const insideWidth = event.x >= bounds.x && event.x <= bounds.x + bounds.width;
+		const insideHeight = event.y >= bounds.y && event.y <= bounds.y + bounds.height;
+
+		if (this.ref && !(insideWidth && insideHeight)) {
 			this.props.toggleVersionSelection();
 		}
 	}
