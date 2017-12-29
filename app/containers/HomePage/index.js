@@ -72,9 +72,10 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		const { activeBook, nextBook } = this.props;
 		const maxChapter = activeBook.get('chapters').size;
 
-		if (activeChapter > maxChapter) {
+		if (activeChapter === maxChapter) {
 			this.setActiveBookName(nextBook.get('name'), nextBook.get('book_id'));
 			this.getChapters({ bible: activeTextId, book: nextBook.get('book_id'), chapter: 1 });
+			this.setActiveChapter(1);
 		} else {
 			this.getChapters({ bible: activeTextId, book: activeBookId, chapter: activeChapter + 1 });
 			this.setActiveChapter(activeChapter + 1);
@@ -90,10 +91,11 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		const { previousBook } = this.props;
 
 		if (activeChapter - 1 === 0) {
-			const lastChapter = previousBook.get('chapters').size + 1;
+			const lastChapter = previousBook.get('chapters').size;
 
 			this.setActiveBookName(previousBook.get('name'), previousBook.get('book_id'));
 			this.getChapters({ bible: activeTextId, book: previousBook.get('book_id'), chapter: lastChapter });
+			this.setActiveChapter(lastChapter);
 		} else {
 			this.getChapters({ bible: activeTextId, book: activeBookId, chapter: activeChapter - 1 });
 			this.setActiveChapter(activeChapter - 1);
