@@ -28,6 +28,7 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 			speedControlState: false,
 			duration: 100,
 			currentTime: 0,
+			playerState: true,
 		};
 	}
 
@@ -113,9 +114,13 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 		playing: false,
 	})
 
+	toggleAudioPlayer = () => this.setState({
+		playerState: !this.state.playerState,
+	})
+
 	render() {
 		return (
-			<div className="audio-player-container">
+			<div className={this.state.playerState ? 'audio-player-container open' : 'audio-player-container closed'}>
 				<SvgWrapper onClick={this.skipBackward} className="item" width="25px" height="25px" fill="#fff" svgid="backward" />
 				<SvgWrapper onClick={this.state.playing ? this.pauseVideo : this.playVideo} className="item" width="25px" height="25px" fill="#fff" svgid={this.state.playing ? 'pause' : 'play_audio'} />
 				<SvgWrapper onClick={this.skipForward} className="item" width="25px" height="25px" fill="#fff" svgid="forward" />
@@ -128,6 +133,7 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 					this.state.speedControlState ? (<SpeedControl options={[0.5, 1, 1.25, 1.5, 2]} setSpeed={this.updatePlayerSpeed} closeControl={this.closeSpeedControl} />) : null
 				}
 				<audio ref={this.handleRef} className="audio-player" src={this.state.src}></audio>
+				<SvgWrapper onClick={this.toggleAudioPlayer} width="50px" height="5px" className="audio-gripper" fill="#aeaeae" svgid="gripper" />
 			</div>
 		);
 	}

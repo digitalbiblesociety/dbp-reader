@@ -4,6 +4,8 @@
 .audio-player-container .item       {cursor:pointer;}
 .audio-player-container .item:hover {opacity:.65;}
 .audio-player                       {width:300px;display:none;}
+.audio-player-container.open        {position:inherit;top:54px;}
+.audio-player-container.closed      {position:absolute;background-color:rgba(0,0,0,0);top:4px;:not(:last-child){z-index:-1;}}
 
 // Speed Control Styles
 .speed-control-container {display:flex;align-items:center;justify-content:space-around;background-color:#222;position:relative;top:0;left:0;height:30px;width:150px;}
@@ -12,3 +14,6 @@
 // Progress Bar Styles
 .progress-bar {width:50%;background-color:rgb(32,34,39);height:2px;cursor:pointer;}
 .progress-bar:focus {outline: none;}
+
+// Gripper Styles
+.audio-gripper {display:block;position:relative;left:calc(-50% + 25px);bottom:-50%;cursor:pointer;}
