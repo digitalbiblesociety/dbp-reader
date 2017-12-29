@@ -14,7 +14,7 @@
 }
 
 .prev-arrow-svg {cursor:pointer;fill:$prev-next-button-color;margin-left:10px;width:25px;min-width:25px;min-height:52px;height:52px;margin-top:calc(50vh - 104px);}
-.next-arrow-svg {cursor:pointer;fill:$prev-next-button-color;margin-right:10px;width:25px;min-width:25px;min-height:52px;height:52px;margin-top:calc(50vh - 104px);}
+.next-arrow-svg {cursor:pointer;fill:$prev-next-button-color;margin-right:5px;width:25px;min-width:25px;min-height:52px;height:52px;margin-top:calc(50vh - 104px);}
 .prev-arrow-svg:hover {animation:thicken 0.3s forwards;}
 .next-arrow-svg:hover {animation:thicken 0.3s forwards;}
 
