@@ -1,0 +1,12 @@
+.notes                    {position:fixed;top:0;height:100%;width:320px;background-color:#2C3036;color:rgba(244,245,246,.5)}
+.notes header             {position:relative;background:#7E0E2A;color:#FFF;text-align:center;height:54px;line-height:54px}
+.notes header .close-icon {position:absolute;top:0px;right:10px}
+.notes section            {padding:15px}
+.notes .option:hover      {color:rgba(244,245,246,1);cursor:pointer}
+
+// Svg Buttons
+.notes .top-bar             {display:flex;height:50px;width:100%;align-items:center;}
+.notes .top-bar *:focus     {outline:none;}
+.notes .top-bar .svg.active {fill:$menu-active-color;}
+.notes .top-bar .svg        {cursor:pointer;fill:$paper-primary;margin-left:15px;}
+.notes .top-bar .text       {color:$paper-primary;margin-left:15px;}

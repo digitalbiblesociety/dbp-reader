@@ -13,7 +13,16 @@ import messages from './messages';
 class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	render() {
 		return (
-			<div>
+			<div className="my-notes">
+				<div className="searchbar">
+					<div className="add-note">+</div>
+					<input placeholder="SEARCH NOTES" />
+				</div>
+				<section className="note-list"></section>
+				<div className="pagination">
+					<span>1</span>
+					<input type="dropdown" placeholder="10 PER PAGE" />
+				</div>
 				<FormattedMessage {...messages.header} />
 			</div>
 		);

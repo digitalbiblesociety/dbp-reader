@@ -39,6 +39,13 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 
 	setActiveChild = (child) => this.props.dispatch(setActiveChild(child))
 
+	titleOptions = {
+		edit: 'EDIT NOTE',
+		notes: 'MY NOTES',
+		bookmark: 'MY BOOKMARKS',
+		highlight: 'MY HIGHLIGHTS',
+	}
+
 	handleClickOutside = (event) => {
 		const bounds = this.ref.getBoundingClientRect();
 		const insideWidth = event.x >= bounds.x && event.x <= bounds.x + bounds.width;
@@ -58,7 +65,7 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 		} = this.props;
 
 		return (
-			<aside ref={this.setRef} className="settings">
+			<aside ref={this.setRef} className="notes">
 				<header>
 					<h2 className="section-title">NOTEBOOK</h2>
 					<span role="button" tabIndex={0} className="close-icon" onClick={() => { setActiveChild('notes'); toggleNotesModal(); }}>
@@ -66,9 +73,10 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 					</span>
 				</header>
 				<div className="top-bar">
-					<SvgWrapper role="button" tabIndex={0} onClick={() => this.setActiveChild('edit')} className={activeChild === 'edit' ? 'svg' : 'svg active'} height="30px" width="30px" svgid="notes" />
-					<SvgWrapper role="button" tabIndex={0} onClick={() => this.setActiveChild('bookmark')} className={activeChild === 'bookmark' ? 'svg' : 'svg active'} height="30px" width="30px" svgid="bookmarks" />
-					<SvgWrapper role="button" tabIndex={0} onClick={() => this.setActiveChild('highlight')} className={activeChild === 'highlight' ? 'svg' : 'svg active'} height="30px" width="30px" svgid="highlights" />
+					<SvgWrapper role="button" tabIndex={0} onClick={() => this.setActiveChild('edit')} className={activeChild === 'edit' ? 'svg active' : 'svg'} height="30px" width="30px" svgid="notes" />
+					<SvgWrapper role="button" tabIndex={0} onClick={() => this.setActiveChild('bookmark')} className={activeChild === 'bookmark' ? 'svg active' : 'svg'} height="30px" width="30px" svgid="bookmarks" />
+					<SvgWrapper role="button" tabIndex={0} onClick={() => this.setActiveChild('highlight')} className={activeChild === 'highlight' ? 'svg active' : 'svg'} height="30px" width="30px" svgid="highlights" />
+					<span className="text">{this.titleOptions[activeChild]}</span>
 				</div>
 				{
 					activeChild === 'edit' ? (
