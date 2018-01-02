@@ -17,3 +17,8 @@
 
 // Gripper Styles
 .audio-gripper {display:block;position:relative;left:calc(-50% + 25px);bottom:-50%;cursor:pointer;}
+
+// Volume Slider
+.volume-slider          {display:flex;align-items:center;justify-content:center;height:100%;background-color:#2C3036;width:150px;}
+.volume-slider .tracker {background-color:$menu-active-color;border-radius:50%;width:15px;height:15px;margin-top:-6px;}
+.volume-slider .fill    {height:3px;background-color:$menu-active-color;width:100px;border-radius:5px;}

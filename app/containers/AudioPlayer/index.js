@@ -13,6 +13,7 @@ import injectReducer from 'utils/injectReducer';
 import SvgWrapper from 'components/SvgWrapper';
 import SpeedControl from 'components/SpeedControl';
 import AudioProgressBar from 'components/AudioProgressBar';
+import VolumeSlider from 'components/VolumeSlider';
 import makeSelectAudioPlayer from './selectors';
 import reducer from './reducer';
 /* eslint-disable jsx-a11y/media-has-caption */
@@ -26,6 +27,8 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 			playing: false,
 			src: 'http://cloud.faithcomesbyhearing.com/mp3audiobibles2/ENGESVO2DA/A01___02_Genesis_____ENGESVO2DA.mp3',
 			speedControlState: false,
+			volumeSliderActive: false,
+			volume: 1,
 			duration: 100,
 			currentTime: 0,
 			playerState: true,
@@ -67,10 +70,17 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 		speedControlState: false,
 	})
 
+	closeVolumeSlider = () => this.setState({
+		volumeSliderActive: false,
+	})
+
 	decreaseVolume = () => {
-		const volume = this.audioRef.volume;
-		if (volume - 0.1 >= 0) {
-			this.audioRef.volume = volume - 0.1;
+		const volume = this.audioRef.volume - 0.1;
+		if (volume >= 0) {
+			this.audioRef.volume = volume;
+			this.setState({
+				volume,
+			});
 		}
 	}
 
@@ -79,15 +89,22 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 	}
 
 	increaseVolume = () => {
-		const volume = this.audioRef.volume;
-		if (volume + 0.1 <= 1) {
-			this.audioRef.volume = volume + 0.1;
+		const volume = this.audioRef.volume + 0.1;
+		if (volume <= 1) {
+			this.audioRef.volume = volume;
+			this.setState({
+				volume,
+			});
 		}
 	}
 
 	openSpeedControl = () => this.setState({
 		speedControlState: true,
 	});
+
+	openVolumeSlider = () => this.setState({
+		volumeSliderActive: true,
+	})
 
 	pauseVideo = () => {
 		this.audioRef.pause();
@@ -125,10 +142,14 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 				<SvgWrapper onClick={this.state.playing ? this.pauseVideo : this.playVideo} className="item" width="25px" height="25px" fill="#fff" svgid={this.state.playing ? 'pause' : 'play_audio'} />
 				<SvgWrapper onClick={this.skipForward} className="item" width="25px" height="25px" fill="#fff" svgid="forward" />
 				<AudioProgressBar setCurrentTime={this.setCurrentTime} duration={this.state.duration} currentTime={this.state.currentTime} />
-				<SvgWrapper onClick={this.decreaseVolume} className="item" width="25px" height="25px" fill="#fff" svgid="volume_down" />
-				<SvgWrapper onClick={this.increaseVolume} className="item" width="25px" height="25px" fill="#fff" svgid="volume_up" />
+				<SvgWrapper onClick={this.state.volumeSliderActive ? this.closeVolumeSlider : this.openVolumeSlider} className="item" width="25px" height="25px" fill="#fff" svgid="volume" />
 				<SvgWrapper onClick={this.state.speedControlState ? this.closeSpeedControl : this.openSpeedControl} className="item" width="25px" height="25px" fill="#fff" svgid="play_speed" />
 				<SvgWrapper className="item" width="25px" height="25px" fill="#fff" svgid="more_menu" />
+				{
+					this.state.volumeSliderActive ? (
+						<VolumeSlider increaseVolume={this.increaseVolume} decreaseVolume={this.decreaseVolume} volume={this.state.volume} />
+					) : null
+				}
 				{
 					this.state.speedControlState ? (<SpeedControl options={[0.5, 1, 1.25, 1.5, 2]} setSpeed={this.updatePlayerSpeed} closeControl={this.closeSpeedControl} />) : null
 				}
