@@ -219,7 +219,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					}
 				</TransitionGroup>
 				<Text activeBookName={activeBookName} activeChapter={activeChapter} text={chapterText} nextChapter={this.getNextChapter} prevChapter={this.getPrevChapter} />
-				<Footer toggleNotesModal={this.toggleNotesModal} toggleSettingsModal={this.toggleSettingsModal} />
+				<Footer settingsActive={isSettingsModalActive} notesActive={isNotesModalActive} toggleNotesModal={this.toggleNotesModal} toggleSettingsModal={this.toggleSettingsModal} />
 			</GenericErrorBoundary>
 		);
 	}
