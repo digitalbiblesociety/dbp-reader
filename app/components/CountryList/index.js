@@ -50,7 +50,7 @@ class CountryList extends React.PureComponent { // eslint-disable-line react/pre
 			return (
 				<div className="text-selection-section">
 					<div className="text-selection-title">
-						<SvgWrapper height="25px" width="25px" fill="#fff" svgid="world" />
+						<SvgWrapper height="25px" width="25px" fill="#fff" svgid="globe" />
 						<span className="text">COUNTRY:</span>
 						<span className="active-language-name">{activeCountryName || 'ALL'}</span>
 					</div>

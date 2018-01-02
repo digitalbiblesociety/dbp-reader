@@ -35,12 +35,12 @@ class NavigationBar extends React.PureComponent { // eslint-disable-line react/p
 					<Logo />
 				</div>
 				<div className="chapter-selector">
-					<span role="button" tabIndex={0} onClick={toggleChapterSelection} className="text">{`${activeBookName} ${activeChapter}`}<SvgWrapper className="svg" height="15px" width="15px" fill="#fff" svgid="circle_down" /></span>
-					<span role="button" tabIndex={0} onClick={toggleVersionSelection} className="text version">{activeTextId}<SvgWrapper className="svg" height="15px" width="15px" fill="#fff" svgid="circle_down" /></span>
+					<span role="button" tabIndex={0} onClick={toggleChapterSelection} className="text">{`${activeBookName} ${activeChapter}`}<SvgWrapper className="svg" height="15px" width="15px" fill="#fff" svgid="go-down" opacity=".5" /></span>
+					<span role="button" tabIndex={0} onClick={toggleVersionSelection} className="text version">{activeTextId}<SvgWrapper className="svg" height="15px" width="15px" fill="#fff" svgid="go-down" opacity=".5" /></span>
 				</div>
 				<div className="buttons">
 					<span><SvgWrapper className="navbar-button" height="30px" width="30px" fill="#fff" svgid="search" /></span>
-					<span role="button" tabIndex={0} onClick={toggleProfile}><SvgWrapper className="navbar-button" height="30px" width="30px" fill="#fff" svgid="profile" /></span>
+					<span role="button" tabIndex={0} onClick={toggleProfile}><SvgWrapper className="navbar-button" height="30px" width="30px" fill="#fff" svgid="profile_circle" /></span>
 					<LocaleToggle />
 				</div>
 			</div>

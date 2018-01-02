@@ -61,7 +61,7 @@ export class ChapterSelection extends React.PureComponent { // eslint-disable-li
 			<aside ref={this.setRef} className="chapter-text-dropdown">
 				<header>
 					<h2 className="text-selection">{`${activeBookName} ${activeChapter}`}</h2>
-					<SvgWrapper role="button" tabIndex={0} className="close-icon icon" onClick={toggleChapterSelection} svgid="circle_up" />
+					<SvgWrapper role="button" tabIndex={0} className="close-icon icon" onClick={toggleChapterSelection} svgid="go-up" opacity=".5" />
 				</header>
 				<BooksTable
 					activeChapter={activeChapter}
