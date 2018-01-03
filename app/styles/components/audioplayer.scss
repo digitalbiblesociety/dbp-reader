@@ -8,7 +8,7 @@
 .audio-player-container.closed      {position:absolute;background-color:rgba(0,0,0,0);top:4px;:not(:last-child){z-index:-1;}}
 
 // Speed Control Styles
-.speed-control-container {display:flex;align-items:center;justify-content:space-around;background-color:#222;position:relative;top:0;left:0;height:30px;width:150px;}
+.speed-control-container {display:flex;align-items:center;justify-content:space-around;background-color:#222;position:relative;top:0;left:0;height:30px;width:150px;border:1px solid $menu-active-color;}
 .speed-control-container .item {color:#fff;cursor:pointer;}
 
 // Progress Bar Styles
@@ -19,11 +19,11 @@
 .audio-gripper {display:block;position:relative;left:calc(-50% + 25px);bottom:-50%;cursor:pointer;}
 
 // Volume Slider
-.volume-slider          {display:flex;align-items:center;justify-content:center;height:100%;background-color:#2C3036;width:150px;}
+.volume-slider          {display:flex;align-items:center;justify-content:center;height:100%;background-color:#2C3036;width:150px;border:1px solid $menu-active-color;}
 .volume-slider .tracker {background-color:$menu-active-color;border-radius:50%;width:15px;height:15px;margin-top:-6px;}
 .volume-slider .fill    {height:3px;background-color:$menu-active-color;width:100px;border-radius:5px;}
 
-// Elipsis
+// Elipsis TODO: update styles to make the element match the wireframe
 .more-menu.active {background-color:rgba(25,25,25,0.7);border:1px solid $menu-active-color;}
 .elipsis {padding:15px;display:flex;justify-content:space-between;flex-direction:column;color:$paper-primary;position:absolute;width:320px;height:120px;background-color:rgba(25,25,25,0.7);border:1px solid $menu-active-color;}
 .elipsis div {display:flex;align-items:center;}
