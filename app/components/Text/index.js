@@ -7,18 +7,48 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import SvgWrapper from 'components/SvgWrapper';
+import ContextPortal from 'components/ContextPortal';
 /* Disabling the jsx-a11y linting because we need to capture the selected text
 	 and the most straight forward way of doing so is with the onMouseUp event */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 class Text extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
-	handleRightClick = () => {
+	constructor(props) {
+		super(props);
+		this.state = {
+			currentSelection: '',
+			contextMenuState: false,
+			coords: {},
+		};
+	}
+
+	setMainRef = (el) => {
+		this.main = el;
+	}
+
+	handleRightClick = (e) => {
 		// Can potentially use the below menu to activate the menu for note taking
-		// if (e.button === 2) {}
+		if (e.button === 2) {
+			const x = e.clientX;
+			const y = e.clientY;
+			this.setState({
+				coords: { x, y },
+			});
+			this.openContextMenu();
+		}
+		if (e.button === 0) {
+			this.setState({
+				currentSelection: window.getSelection().toString(),
+			});
+		}
 		// Below code gets the highlighted text
 		// window.getSelection().toString();
 	}
 	// Allows us to use the right mouse button to toggle menu's or perform different actions
 	handleContext = (e) => e.preventDefault()
+
+	openContextMenu = () => this.setState({ contextMenuState: true })
+
+	closeContextMenu = () => this.setState({ contextMenuState: false })
 
 	render() {
 		const {
@@ -36,7 +66,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 						<SvgWrapper onClick={prevChapter} className="prev-arrow-svg" svgid="prev-arrow" />
 					)
 				}
-				<main onMouseUp={this.handleRightClick} className="chapter" onContextMenu={this.handleContext}>
+				<main ref={this.setMainRef} onMouseUp={this.handleRightClick} className="chapter" onContextMenu={this.handleContext}>
 					<h1 className="active-chapter-title">{activeChapter}</h1>
 					{
 						text.map((verse) => (
@@ -48,6 +78,11 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 					activeBookName === 'Revelation' && activeChapter === 22 ? null : (
 						<SvgWrapper onClick={nextChapter} className="next-arrow-svg" svgid="next-arrow" />
 					)
+				}
+				{
+					this.state.contextMenuState ? (
+						<ContextPortal parentNode={this.main} coordinates={this.state.coords} />
+					) : null
 				}
 			</div>
 		);
