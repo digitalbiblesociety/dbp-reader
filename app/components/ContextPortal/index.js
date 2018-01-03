@@ -34,6 +34,11 @@ const Item = styled.div`
 	fill:#fff;
 	width:40px;
 	height:40px;
+	cursor:pointer;
+	&:hover {
+		opacity: 0.6;
+		fill:rgba(0,0,0,0.65);
+	}
 `;
 // TODO: Clean up this component
 // Remove use of styled components
