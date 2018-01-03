@@ -18,6 +18,7 @@ import {
 	SET_ACTIVE_CHAPTER,
 	TOGGLE_VERSION_SELECTION,
 	ACTIVE_TEXT_ID,
+	TOGGLE_INFORMATION_MODAL,
 } from './constants';
 
 export const loadChapter = ({ text }) => ({
@@ -25,9 +26,10 @@ export const loadChapter = ({ text }) => ({
 	text,
 });
 
-export const loadBooks = ({ books }) => ({
+export const loadBooksAndCopywrite = ({ books, copywrite }) => ({
 	type: LOAD_BOOKS,
 	books,
+	copywrite,
 });
 
 export const getBooks = ({ textId }) => ({
@@ -64,6 +66,10 @@ export const toggleChapterSelection = () => ({
 
 export const toggleVersionSelection = () => ({
 	type: TOGGLE_VERSION_SELECTION,
+});
+
+export const toggleInformationModal = () => ({
+	type: TOGGLE_INFORMATION_MODAL,
 });
 
 export const setActiveTextId = ({ textName, textId }) => ({

@@ -1,7 +1,7 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
 import request from 'utils/request';
 import { GET_CHAPTER_TEXT, GET_BOOKS } from './constants';
-import { loadChapter, loadBooks } from './actions';
+import { loadChapter, loadBooksAndCopywrite } from './actions';
 
 export function* getBooks({ textId }) {
 	const requestUrl = `https://api.bible.build/bibles/${textId}?key=${process.env.DBP_API_KEY}&v=4&pretty`;
@@ -12,8 +12,14 @@ export function* getBooks({ textId }) {
 			...book,
 			chapters: book.chapters.split(',').map(Number).sort((a, b) => a - b),
 		}));
+		const copywrite = {
+			mark: response.data.mark,
+			name: response.data.name,
+			date: response.data.date,
+			country: response.data.country,
+		};
 
-		yield put(loadBooks({ books }));
+		yield put(loadBooksAndCopywrite({ books, copywrite }));
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error(err); // eslint-disable-line no-console

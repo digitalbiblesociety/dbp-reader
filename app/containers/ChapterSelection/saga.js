@@ -1,7 +1,7 @@
 // import { takeLatest, call, put } from 'redux-saga/effects';
 // import request from 'utils/request';
 // import { GET_BOOKS } from './constants';
-// import { loadBooks } from './actions';
+// import { loadBooksAndCopywrite } from './actions';
 //
 // export function* getBooks({ textId }) {
 // 	const requestUrl = `https://api.bible.build/bibles/${textId}?key=${process.env.DBP_API_KEY}&v=4&pretty`;
@@ -13,7 +13,7 @@
 // 			chapters: book.chapters.split(',').map(Number),
 // 		}));
 //
-// 		yield put(loadBooks({ books }));
+// 		yield put(loadBooksAndCopywrite({ books }));
 // 	} catch (err) {
 // 		if (process.env.NODE_ENV === 'development') {
 // 			console.error(err); // eslint-disable-line no-console

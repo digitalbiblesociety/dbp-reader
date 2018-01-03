@@ -57,6 +57,8 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			prevChapter,
 			activeBookName,
 			activeChapter,
+			toggleNotesModal,
+			notesActive,
 		} = this.props;
 
 		return (
@@ -81,7 +83,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				}
 				{
 					this.state.contextMenuState ? (
-						<ContextPortal parentNode={this.main} coordinates={this.state.coords} />
+						<ContextPortal closeContextMenu={this.closeContextMenu} toggleNotesModal={toggleNotesModal} notesActive={notesActive} parentNode={this.main} coordinates={this.state.coords} />
 					) : null
 				}
 			</div>
@@ -93,8 +95,10 @@ Text.propTypes = {
 	text: PropTypes.array,
 	nextChapter: PropTypes.func,
 	prevChapter: PropTypes.func,
+	toggleNotesModal: PropTypes.func,
 	activeBookName: PropTypes.string,
 	activeChapter: PropTypes.number,
+	notesActive: PropTypes.bool,
 };
 
 export default Text;

@@ -8,7 +8,7 @@
 .audio-player-container.closed      {position:absolute;background-color:rgba(0,0,0,0);top:4px;:not(:last-child){z-index:-1;}}
 
 // Speed Control Styles
-.speed-control-container {display:flex;align-items:center;justify-content:space-around;background-color:#222;position:relative;top:0;left:0;height:30px;width:150px;border:1px solid $menu-active-color;}
+.speed-control-container {display:flex;align-items:center;justify-content:space-around;background-color:#222;height:30px;width:150px;border:1px solid $menu-active-color;}
 .speed-control-container .item {color:#fff;cursor:pointer;}
 
 // Progress Bar Styles

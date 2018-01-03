@@ -27,6 +27,7 @@ import Notes from 'containers/Notes';
 import NavigationBar from 'components/NavigationBar';
 import Text from 'components/Text';
 import MenuBar from 'components/MenuBar';
+import Information from 'components/Information';
 import Footer from 'components/Footer';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
 import FadeTransition from 'components/FadeTransition';
@@ -38,6 +39,7 @@ import {
 	toggleNotesModal,
 	toggleSettingsModal,
 	toggleVersionSelection,
+	toggleInformationModal,
 	setActiveBookName,
 	setActiveChapter,
 	setActiveTextId,
@@ -126,6 +128,8 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 
 	toggleVersionSelection = () => this.props.dispatch(toggleVersionSelection());
 
+	toggleInformationModal = () => this.props.dispatch(toggleInformationModal());
+
 	render() {
 		const {
 			activeTextName,
@@ -136,10 +140,12 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			isNotesModalActive,
 			isVersionSelectionActive,
 			isChapterSelectionActive,
+			isInformationModalActive,
 			activeBookName,
 			isMenuBarActive,
 			activeChapter,
 			isProfileActive,
+			copywrite,
 		} = this.props.homepage;
 
 		return (
@@ -217,9 +223,16 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 							</FadeTransition>
 						) : null
 					}
+					{
+						isInformationModalActive ? (
+							<FadeTransition classNames="slide-from-right" in={isInformationModalActive}>
+								<Information copywrite={copywrite} toggleInformationModal={this.toggleInformationModal} />
+							</FadeTransition>
+						) : null
+					}
 				</TransitionGroup>
-				<Text activeBookName={activeBookName} activeChapter={activeChapter} text={chapterText} nextChapter={this.getNextChapter} prevChapter={this.getPrevChapter} />
-				<Footer settingsActive={isSettingsModalActive} notesActive={isNotesModalActive} toggleNotesModal={this.toggleNotesModal} toggleSettingsModal={this.toggleSettingsModal} />
+				<Text activeBookName={activeBookName} activeChapter={activeChapter} notesActive={isNotesModalActive} toggleNotesModal={this.toggleNotesModal} text={chapterText} nextChapter={this.getNextChapter} prevChapter={this.getPrevChapter} />
+				<Footer settingsActive={isSettingsModalActive} isInformationModalActive={isInformationModalActive} toggleInformationModal={this.toggleInformationModal} toggleSettingsModal={this.toggleSettingsModal} />
 			</GenericErrorBoundary>
 		);
 	}
@@ -232,7 +245,7 @@ HomePage.propTypes = {
 	previousBook: PropTypes.object,
 	nextBook: PropTypes.object,
 };
-// TODO: Make selector for books and sort them in selector
+// TODO: Sort books in selector
 const mapStateToProps = createStructuredSelector({
 	homepage: makeSelectHomePage(),
 	previousBook: selectPrevBook(),

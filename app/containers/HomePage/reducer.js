@@ -17,11 +17,18 @@ import {
 	SET_ACTIVE_CHAPTER,
 	ACTIVE_TEXT_ID,
 	TOGGLE_NOTES_MODAL,
+	TOGGLE_INFORMATION_MODAL,
 } from './constants';
 
 const initialState = fromJS({
 	books: [],
 	chapterText: [],
+	copywrite: {
+		mark: 'Good News Publishers, Crossway Bibles',
+		name: 'English Standard Version',
+		date: '2001',
+		country: 'United Kingdom',
+	},
 	activeChapter: 1,
 	isChapterSelectionActive: false,
 	isMenuBarActive: false,
@@ -33,12 +40,14 @@ const initialState = fromJS({
 	isSettingsModalActive: false,
 	isNotesModalActive: false,
 	isVersionSelectionActive: false,
+	isInformationModalActive: false,
 });
 
 function homePageReducer(state = initialState, action) {
 	switch (action.type) {
 	case LOAD_BOOKS:
 		return state
+			.set('copywrite', fromJS(action.copywrite))
 			.set('books', fromJS(action.books));
 	case TOGGLE_MENU_BAR:
 		return state.set('isMenuBarActive', !state.get('isMenuBarActive'));
@@ -52,6 +61,8 @@ function homePageReducer(state = initialState, action) {
 		return state.set('isNotesModalActive', !state.get('isNotesModalActive'));
 	case TOGGLE_VERSION_SELECTION:
 		return state.set('isVersionSelectionActive', !(state.get('isVersionSelectionActive')));
+	case TOGGLE_INFORMATION_MODAL:
+		return state.set('isInformationModalActive', !(state.get('isInformationModalActive')));
 	case SET_ACTIVE_BOOK_NAME:
 		return state
 			.set('activeBookId', action.id)

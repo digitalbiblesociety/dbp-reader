@@ -14,6 +14,7 @@ export const TOGGLE_NOTES_MODAL = 'app/HomePage/TOGGLE_NOTES_MODAL';
 export const TOGGLE_MENU_BAR = 'app/HomePage/TOGGLE_MENU_BAR';
 export const TOGGLE_PROFILE = 'app/HomePage/TOGGLE_PROFILE';
 export const TOGGLE_VERSION_SELECTION = 'app/HomePage/TOGGLE_VERSION_SELECTION';
+export const TOGGLE_INFORMATION_MODAL = 'app/HomePage/TOGGLE_INFORMATION_MODAL';
 export const ACTIVE_TEXT_ID = 'app/HomePage/ACTIVE_TEXT_ID';
 export const GET_BOOKS = 'app/TextSelection/GET_BIBLES_BOOKS';
 export const LOAD_BOOKS = 'app/TextSelection/LOAD_BOOKS';
