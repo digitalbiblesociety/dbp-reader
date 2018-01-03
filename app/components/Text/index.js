@@ -66,7 +66,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 						<SvgWrapper onClick={prevChapter} className="prev-arrow-svg" svgid="prev-arrow" />
 					)
 				}
-				<main ref={this.setMainRef} onMouseUp={this.handleRightClick} className="chapter" onContextMenu={this.handleContext}>
+				<main ref={this.setMainRef} onClick={(e) => e.button === 0 && this.closeContextMenu()} onMouseUp={this.handleRightClick} className="chapter" onContextMenu={this.handleContext}>
 					<h1 className="active-chapter-title">{activeChapter}</h1>
 					{
 						text.map((verse) => (
