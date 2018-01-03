@@ -14,6 +14,7 @@ import SvgWrapper from 'components/SvgWrapper';
 import SpeedControl from 'components/SpeedControl';
 import AudioProgressBar from 'components/AudioProgressBar';
 import VolumeSlider from 'components/VolumeSlider';
+import AudioPlayerMenu from 'components/AudioPlayerMenu';
 import makeSelectAudioPlayer from './selectors';
 import reducer from './reducer';
 /* eslint-disable jsx-a11y/media-has-caption */
@@ -135,6 +136,10 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 		playerState: !this.state.playerState,
 	})
 
+	toggleMoreMenu = () => this.setState({
+		elipsisActive: !this.state.elipsisActive,
+	})
+
 	render() {
 		return (
 			<div className={this.state.playerState ? 'audio-player-container open' : 'audio-player-container closed'}>
@@ -144,7 +149,7 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 				<AudioProgressBar setCurrentTime={this.setCurrentTime} duration={this.state.duration} currentTime={this.state.currentTime} />
 				<SvgWrapper onClick={this.state.volumeSliderActive ? this.closeVolumeSlider : this.openVolumeSlider} className="item" width="25px" height="25px" fill="#fff" svgid="volume" />
 				<SvgWrapper onClick={this.state.speedControlState ? this.closeSpeedControl : this.openSpeedControl} className="item" width="25px" height="25px" fill="#fff" svgid="play_speed" />
-				<SvgWrapper className="item" width="25px" height="25px" fill="#fff" svgid="more_menu" />
+				<SvgWrapper onClick={this.toggleMoreMenu} className="item" width="25px" height="25px" fill="#fff" svgid="more_menu" />
 				{
 					this.state.volumeSliderActive ? (
 						<VolumeSlider increaseVolume={this.increaseVolume} decreaseVolume={this.decreaseVolume} volume={this.state.volume} />
@@ -152,6 +157,11 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 				}
 				{
 					this.state.speedControlState ? (<SpeedControl options={[0.5, 1, 1.25, 1.5, 2]} setSpeed={this.updatePlayerSpeed} closeControl={this.closeSpeedControl} />) : null
+				}
+				{
+					this.state.elipsisActive ? (
+						<AudioPlayerMenu />
+					) : null
 				}
 				<audio ref={this.handleRef} className="audio-player" src={this.state.src}></audio>
 				<SvgWrapper onClick={this.toggleAudioPlayer} width="50px" height="5px" className="audio-gripper" fill="#aeaeae" svgid="gripper" />
