@@ -45,22 +45,13 @@ function homePageReducer(state = initialState, action) {
 	case TOGGLE_PROFILE:
 		return state.set('isProfileActive', !state.get('isProfileActive'));
 	case TOGGLE_CHAPTER_SELECTION:
-		return state
-			.set('isChapterSelectionActive', !state.get('isChapterSelectionActive'))
-			.set('isVersionSelectionActive', false)
-			.set('isSettingsModalActive', false);
+		return state.set('isChapterSelectionActive', !state.get('isChapterSelectionActive'));
 	case TOGGLE_SETTINGS_MODAL:
-		return state
-			.set('isSettingsModalActive', !state.get('isSettingsModalActive'))
-			.set('isVersionSelectionActive', false)
-			.set('isChapterSelectionActive', false);
+		return state.set('isSettingsModalActive', !state.get('isSettingsModalActive'));
 	case TOGGLE_NOTES_MODAL:
 		return state.set('isNotesModalActive', !state.get('isNotesModalActive'));
 	case TOGGLE_VERSION_SELECTION:
-		return state
-			.set('isSettingsModalActive', false)
-			.set('isChapterSelectionActive', false)
-			.set('isVersionSelectionActive', !(state.get('isVersionSelectionActive')));
+		return state.set('isVersionSelectionActive', !(state.get('isVersionSelectionActive')));
 	case SET_ACTIVE_BOOK_NAME:
 		return state
 			.set('activeBookId', action.id)
