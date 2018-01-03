@@ -37,6 +37,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 					)
 				}
 				<main onMouseUp={this.handleRightClick} className="chapter" onContextMenu={this.handleContext}>
+					<h1 className="active-chapter-title">{activeChapter}</h1>
 					{
 						text.map((verse) => (
 							<span key={verse.verse_start}>&nbsp;<sup>{verse.verse_start}</sup>&nbsp;{verse.verse_text}</span>
