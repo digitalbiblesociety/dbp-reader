@@ -24,7 +24,7 @@
 .language-name:hover       {color:$menu-active-color;}
 .active-language-name      {color:$menu-active-color;}
 .language-section-expanded {color:#FFF;}
-.language-name-list        {max-height:500px;overflow-y:scroll;overflow-x:hidden;padding-left:15px;}
+.language-name-list        {max-height:calc(100% - 90px);overflow-y:scroll;overflow-x:hidden;padding-left:15px;}
 
 // Chapter Selection Styles
 .chapter-selection-section {color:#FFF;max-height:calc(100% - 108px);height:calc(100% - 108px);text-transform:uppercase;}

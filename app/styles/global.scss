@@ -11,9 +11,6 @@ main                   {overflow-x:hidden;overflow-y:scroll;max-height:100%;}
 img                    {max-width:100%;height:auto}
 img[data-src]          {filter:blur(15px)}
 img.loaded             {transition:all .5s linear;filter:blur(0)}
-/* for making svg fill dynamic to support light/dark modes
-svg {fill: currentColor;}
-*/
 
 // Icons Style Applied to All SVG Sprites
 .icon                  {width:1em;height:1em;vertical-align:-0.15em;fill:currentColor;overflow:hidden;cursor:pointer;}
@@ -21,10 +18,13 @@ li                     {list-style:none}
 .shadow                {box-shadow:0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24)!important}
 
 // Input Box Styles
-input:focus                            {background-image:none;}
+input:focus                            {background-image:none;outline:none;}
 input:focus::-webkit-input-placeholder {color:transparent;}
 input:focus::-moz-placeholder          {color:transparent;}
 input:focus:-ms-input-placeholder      {color:transparent;}
+
+// Remove blue outline for divs that have event handlers
+div:focus {outline:none;}
 
 // font sizes
 h2 {font-size: 1.3em;}

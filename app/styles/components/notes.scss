@@ -7,8 +7,8 @@
 // Svg Buttons
 .notes .top-bar             {display:flex;height:50px;width:100%;align-items:center;}
 .notes .top-bar *:focus     {outline:none;}
-.notes .top-bar .svg.active {fill:$menu-active-color;}
-.notes .top-bar .svg        {cursor:pointer;fill:$paper-primary;margin-left:15px;}
+.notes .top-bar .svg.active {fill:$menu-active-color;opacity:1;}
+.notes .top-bar .svg        {opacity:1;cursor:pointer;fill:$paper-primary;margin-left:15px;}
 .notes .top-bar .text       {color:$paper-primary;margin-left:15px;}
 
 // Edit Notes Section
@@ -25,3 +25,21 @@
 .add-verse .plus       {fill:currentColor;}
 .add-verse .text       {color:$paper-primary;margin-left:15px;font-style:italic;}
 .edit-notes .note-text {color:$paper-primary;width:100%;font-style:italic;margin-top:15px;font-weight:200;}
+
+// List Sections
+.list-sections                         {display:flex;flex-direction:column;height:calc(100% - 160px);}
+.list-sections .searchbar              {display:flex;width:100%;}
+.searchbar .add-note                   {display:flex;align-items:center;justify-content:center;background-color:$menu-active-color;width:50px;height:50px;}
+.searchbar ::-webkit-input-placeholder {color:#FFF;padding-left:45px;}
+.searchbar ::-moz-placeholder          {color:#FFF;padding-left:45px;}
+.searchbar :-ms-input-placeholder      {color:#FFF;padding-left:45px;}
+.search                                {width:calc(100% - 50px);background:url("../images/input_search_icon.svg") no-repeat 5px 10px;border:none;height:50px;background-color:$input-background-color;color:#FFF;font-size:.9em;font-weight:200;caret-color:#000;padding-left:10px;}
+
+.note-list                    {height:calc(100% - 50px);max-height:calc(100% - 50px);overflow-y:scroll;overflow-x:hidden;}
+.note-list .list-item         {display:flex;}
+.list-item .date              {color:$menu-active-color;}
+.list-item .title-text        {margin-left:15px;}
+.list-item .title-text .title {color:$menu-active-color;}
+.list-item .title-text .text  {color:$paper-primary;}
+
+.list-sections .pagination {align-self:flex-end;}

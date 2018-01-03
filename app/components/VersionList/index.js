@@ -52,7 +52,7 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 						<span className="active-iso-code">{activeTextName}</span>
 					</div>
 					<input className="text-selection-input" onChange={this.handleChange} placeholder="SEARCH VERSIONS" />
-					<div>
+					<div className="language-name-list">
 						{
 							filteredBibles.map((bible) => (
 								<div

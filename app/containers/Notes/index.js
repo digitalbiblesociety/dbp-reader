@@ -11,8 +11,6 @@ import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import SvgWrapper from 'components/SvgWrapper';
 import EditNote from 'components/EditNote';
-import MyBookmarks from 'components/MyBookmarks';
-import MyHighlights from 'components/MyHighlights';
 import MyNotes from 'components/MyNotes';
 import menu from 'images/menu.svg';
 import injectSaga from 'utils/injectSaga';
@@ -42,8 +40,8 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 	titleOptions = {
 		edit: 'EDIT NOTE',
 		notes: 'MY NOTES',
-		bookmark: 'MY BOOKMARKS',
-		highlight: 'MY HIGHLIGHTS',
+		bookmarks: 'MY BOOKMARKS',
+		highlights: 'MY HIGHLIGHTS',
 	}
 
 	handleClickOutside = (event) => {
@@ -59,6 +57,7 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 	render() {
 		const {
 			activeChild,
+			listData,
 		} = this.props.notes;
 		const {
 			toggleNotesModal,
@@ -73,30 +72,24 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 					</span>
 				</header>
 				<div className="top-bar">
-					<SvgWrapper role="button" tabIndex={0} onClick={() => this.setActiveChild('edit')} className={activeChild === 'edit' ? 'svg active' : 'svg'} height="30px" width="30px" svgid="notes" />
-					<SvgWrapper role="button" tabIndex={0} onClick={() => this.setActiveChild('bookmark')} className={activeChild === 'bookmark' ? 'svg active' : 'svg'} height="30px" width="30px" svgid="bookmarks" />
-					<SvgWrapper role="button" tabIndex={0} onClick={() => this.setActiveChild('highlight')} className={activeChild === 'highlight' ? 'svg active' : 'svg'} height="30px" width="30px" svgid="highlights" />
+					{
+						activeChild === 'notes' ? (
+							<SvgWrapper role="button" tabIndex={0} onClick={() => this.setActiveChild('edit')} className={activeChild === 'notes' ? 'svg active' : 'svg'} height="30px" width="30px" svgid="notes" />
+						) : null
+					}
+					{
+						activeChild !== 'notes' ? (
+							<SvgWrapper role="button" tabIndex={0} onClick={() => this.setActiveChild('notes')} className={activeChild === 'edit' ? 'svg active' : 'svg'} height="30px" width="30px" svgid="note-list" />
+						) : null
+					}
+					<SvgWrapper role="button" tabIndex={0} onClick={() => this.setActiveChild('bookmarks')} className={activeChild === 'bookmarks' ? 'svg active' : 'svg'} height="30px" width="30px" svgid="bookmarks" />
+					<SvgWrapper role="button" tabIndex={0} onClick={() => this.setActiveChild('highlights')} className={activeChild === 'highlights' ? 'svg active' : 'svg'} height="30px" width="30px" svgid="highlights" />
 					<span className="text">{this.titleOptions[activeChild]}</span>
 				</div>
 				{
 					activeChild === 'edit' ? (
 						<EditNote />
-					) : null
-				}
-				{
-					activeChild === 'highlight' ? (
-						<MyHighlights />
-					) : null
-				}
-				{
-					activeChild === 'bookmark' ? (
-						<MyBookmarks />
-					) : null
-				}
-				{
-					activeChild === 'notes' ? (
-						<MyNotes />
-					) : null
+					) : <MyNotes listData={listData} sectionType={activeChild} />
 				}
 			</aside>
 		);

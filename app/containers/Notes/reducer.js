@@ -11,6 +11,7 @@ import {
 
 const initialState = fromJS({
 	activeChild: 'notes',
+	listData: [{ date: '01.15.18', text: 'This is an example note', title: 'Psalm 23:3' }],
 });
 
 function notesReducer(state = initialState, action) {
