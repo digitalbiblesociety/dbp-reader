@@ -18,6 +18,7 @@ const StyledDiv = styled.div`
 	top:${(props) => props.y}px;
 	background-color:#fff;
 	border:1px solid grey;
+	box-shadow: 1px 2px 1px 1px grey;
 `;
 
 const Row = styled.div`
