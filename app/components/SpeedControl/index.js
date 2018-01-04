@@ -5,11 +5,12 @@
 */
 
 import React from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 // import styled from 'styled-components';
 
-function SpeedControl({ options, setSpeed, closeControl }) {
-	return (
+function SpeedControl({ options, setSpeed, parentNode, closeControl }) {
+	const component = (
 		<div className="speed-control-container">
 			{
 				options.map((option) => (
@@ -18,9 +19,11 @@ function SpeedControl({ options, setSpeed, closeControl }) {
 			}
 		</div>
 	);
+	return ReactDOM.createPortal(component, parentNode);
 }
 
 SpeedControl.propTypes = {
+	parentNode: PropTypes.node,
 	options: PropTypes.array,
 	setSpeed: PropTypes.func,
 	closeControl: PropTypes.func,
