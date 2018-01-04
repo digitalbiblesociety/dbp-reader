@@ -19,8 +19,8 @@ import {
 
 const initialState = fromJS({
 	activeTheme: 'default',
-	activeFont: 'sans-serif',
-	activeFontSize: '14px',
+	activeFontType: 'sans',
+	activeFontSize: 4,
 	readerMode: false,
 	crossReferences: false,
 	redLetter: false,
@@ -42,7 +42,7 @@ function settingsReducer(state = initialState, action) {
 	case UPDATE_THEME:
 		return state.set('activeTheme', action.theme);
 	case UPDATE_FONT_TYPE:
-		return state.set('activeFont', action.font);
+		return state.set('activeFontType', action.font);
 	case UPDATE_FONT_SIZE:
 		return state.set('activeFontSize', action.size);
 	case TOGGLE_READERS_MODE:

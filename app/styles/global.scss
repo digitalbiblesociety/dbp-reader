@@ -29,10 +29,12 @@ input:focus::-moz-placeholder          {color:transparent;}
 input:focus:-ms-input-placeholder      {color:transparent;}
 
 // Remove blue outline for divs that have event handlers
-div:focus {outline:none;}
+div:focus  {outline:none;}
+span:focus {outline:none;}
 
 // font sizes
 h2 {font-size: 1.3em;}
+
 // GRID
 section                 {position:relative}
 .row 					{margin:0 auto;max-width:1200px;width:100%}
