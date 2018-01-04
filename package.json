@@ -234,6 +234,7 @@
     "lodash": "4.17.4",
     "minimist": "1.2.0",
     "prop-types": "15.5.10",
+    "rc-slider": "^8.5.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-helmet": "5.1.3",

@@ -79,28 +79,15 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 		volumeSliderActive: false,
 	})
 
-	decreaseVolume = () => {
-		const volume = this.audioRef.volume - 0.1;
-		if (volume >= 0) {
-			this.audioRef.volume = volume;
-			this.setState({
-				volume,
-			});
-		}
-	}
-
 	handleRef = (el) => {
 		this.audioRef = el;
 	}
 
-	increaseVolume = () => {
-		const volume = this.audioRef.volume + 0.1;
-		if (volume <= 1) {
-			this.audioRef.volume = volume;
-			this.setState({
-				volume,
-			});
-		}
+	updateVolume = (volume) => {
+		this.audioRef.volume = volume;
+		this.setState({
+			volume,
+		});
 	}
 
 	openSpeedControl = () => this.setState({
@@ -148,8 +135,17 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 		return (
 			<div ref={this.setAudioPlayerRef}>
 				<div className={this.state.playerState ? 'audio-player-container open' : 'audio-player-container closed'}>
-					<SvgWrapper onClick={this.skipBackward} className="item" width="25px" height="25px" fill="#fff" svgid="backward" />
-					<SvgWrapper onClick={this.state.playing ? this.pauseVideo : this.playVideo} className="item" width="25px" height="25px" fill="#fff" svgid={this.state.playing ? 'pause' : 'play_audio'} />
+					<SvgWrapper onClick={this.skipBackward} className="svgitem" width="25px" height="25px" fill="#fff" svgid="backward" />
+					{
+						!this.state.playing ? (
+							<SvgWrapper onClick={this.playVideo} className="svgitem" width="25px" height="25px" fill="#fff" svgid="play_audio" />
+						) : null
+					}
+					{
+						this.state.playing ? (
+							<SvgWrapper onClick={this.pauseVideo} className="svgitem" width="25px" height="25px" fill="#fff" svgid="pause" />
+						) : null
+					}
 					<SvgWrapper onClick={this.skipForward} className="item" width="25px" height="25px" fill="#fff" svgid="forward" />
 					<AudioProgressBar setCurrentTime={this.setCurrentTime} duration={this.state.duration} currentTime={this.state.currentTime} />
 					<div role="button" tabIndex="0" className={this.state.volumeSliderActive ? 'item active' : 'item'} onClick={this.state.volumeSliderActive ? this.closeVolumeSlider : this.openVolumeSlider}><SvgWrapper width="25px" height="25px" fill="#fff" svgid="volume" /></div>
@@ -157,7 +153,7 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 					<div role="button" tabIndex="0" className={this.state.elipsisActive ? 'item active' : 'item'} onClick={this.toggleMoreMenu}><SvgWrapper width="25px" height="25px" fill="#fff" svgid="more_menu" /></div>
 					{
 						this.state.volumeSliderActive ? (
-							<VolumeSlider parentNode={this.audioPlayerContainer} increaseVolume={this.increaseVolume} decreaseVolume={this.decreaseVolume} volume={this.state.volume} />
+							<VolumeSlider parentNode={this.audioPlayerContainer} updateVolume={this.updateVolume} volume={this.state.volume} />
 						) : null
 					}
 					{
