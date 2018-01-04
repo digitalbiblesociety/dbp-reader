@@ -10,8 +10,8 @@
 
 // Speed Control Styles
 .speed-control-container-container {display:block;top:-6px;left:calc(100vw - 150px);position:relative;}
-.speed-control-container       {position:absolute;display:flex;align-items:center;justify-content:space-around;background-color:rgba(0,0,0,.8);height:30px;width:150px;border:1px solid $menu-active-color;}
-.speed-control-container .item {color:#fff;cursor:pointer;}
+.speed-control-container           {position:absolute;display:flex;align-items:center;justify-content:space-around;background-color:rgba(0,0,0,.8);height:30px;width:150px;border:1px solid $menu-active-color;}
+.speed-control-container .item     {color:#fff;cursor:pointer;}
 
 // Progress Bar Styles
 .progress-bar       {width:50%;background-color:rgb(32,34,39);height:2px;cursor:pointer;}
@@ -22,9 +22,9 @@
 
 // Volume Slider
 .volume-slider-container {display:block;top:-6px;left:calc(100vw - 275px);position:relative;}
-.volume-slider          {height:25px;position:absolute;display:flex;align-items:center;justify-content:center;background-color:rgba(0,0,0,.8);width:175px;border:1px solid $menu-active-color;}
-.volume-slider .tracker {background-color:$menu-active-color;border-radius:50%;width:15px;height:15px;margin-top:-6px;}
-.volume-slider .fill    {height:3px;background-color:$menu-active-color;width:100px;border-radius:5px;}
+.volume-slider           {height:25px;position:absolute;display:flex;align-items:center;justify-content:center;background-color:rgba(0,0,0,.8);width:175px;border:1px solid $menu-active-color;}
+.volume-slider .tracker  {background-color:$menu-active-color;border-radius:50%;width:15px;height:15px;margin-top:-6px;}
+.volume-slider .fill     {height:3px;background-color:$menu-active-color;width:100px;border-radius:5px;}
 
 // Elipsis TODO: update styles to make the element match the wireframe
 .audio-player-container .item.active   {background-color:rgba(0,0,0,0.4);border:1px solid $menu-active-color;border-bottom:1px solid rgb(55,55,55);z-index:2;}
