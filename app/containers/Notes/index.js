@@ -15,7 +15,7 @@ import MyNotes from 'components/MyNotes';
 import menu from 'images/menu.svg';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
-import { setActiveChild } from './actions';
+import { setActiveChild, toggleVerseText, toggleAddVerseMenu } from './actions';
 import makeSelectNotes from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -39,6 +39,10 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 
 	setActiveChild = (child) => this.props.dispatch(setActiveChild(child))
 
+	toggleVerseText = () => this.props.dispatch(toggleVerseText())
+
+	toggleAddVerseMenu = () => this.props.dispatch(toggleAddVerseMenu())
+
 	titleOptions = {
 		edit: 'EDIT NOTE',
 		notes: 'MY NOTES',
@@ -61,6 +65,9 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 		const {
 			activeChild,
 			listData,
+			note,
+			isAddVerseExpanded,
+			isVerseTextVisible,
 		} = this.props.notes;
 		const {
 			toggleNotesModal,
@@ -77,12 +84,12 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 				<div className="top-bar">
 					{
 						activeChild === 'notes' ? (
-							<SvgWrapper role="button" tabIndex={0} onClick={() => this.setActiveChild('edit')} className={activeChild === 'notes' ? 'svg active' : 'svg'} height="30px" width="30px" svgid="notes" />
+							<SvgWrapper role="button" tabIndex={0} onClick={() => this.setActiveChild('edit')} className={activeChild === 'notes' ? 'svg active' : 'svg'} height="30px" width="30px" svgid="note-list" />
 						) : null
 					}
 					{
 						activeChild !== 'notes' ? (
-							<SvgWrapper role="button" tabIndex={0} onClick={() => this.setActiveChild('notes')} className={activeChild === 'edit' ? 'svg active' : 'svg'} height="30px" width="30px" svgid="note-list" />
+							<SvgWrapper role="button" tabIndex={0} onClick={() => this.setActiveChild('notes')} className={activeChild === 'edit' ? 'svg active' : 'svg'} height="30px" width="30px" svgid="notes" />
 						) : null
 					}
 					<SvgWrapper role="button" tabIndex={0} onClick={() => this.setActiveChild('bookmarks')} className={activeChild === 'bookmarks' ? 'svg active' : 'svg'} height="30px" width="30px" svgid="bookmarks" />
@@ -91,7 +98,7 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 				</div>
 				{
 					activeChild === 'edit' ? (
-						<EditNote />
+						<EditNote toggleVerseText={this.toggleVerseText} toggleAddVerseMenu={this.toggleAddVerseMenu} note={note} isAddVerseExpanded={isAddVerseExpanded} isVerseTextVisible={isVerseTextVisible} />
 					) : <MyNotes listData={listData} sectionType={activeChild} />
 				}
 			</aside>
