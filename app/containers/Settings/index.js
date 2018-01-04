@@ -39,7 +39,9 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 	}
 
 	componentWillUnmount() {
-		document.removeEventListener('click', this.handleClickOutside);
+		if (document.onclick) {
+			document.removeEventListener('click', this.handleClickOutside);
+		}
 	}
 
 	setRef = (node) => {
@@ -55,6 +57,7 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 
 		if (this.ref && !(insideWidth && insideHeight)) {
 			this.props.toggleSettingsModal();
+			document.removeEventListener('click', this.handleClickOutside);
 		}
 	}
 

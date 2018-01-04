@@ -28,7 +28,9 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 	}
 
 	componentWillUnmount() {
-		document.removeEventListener('click', this.handleClickOutside);
+		if (document.onclick) {
+			document.removeEventListener('click', this.handleClickOutside);
+		}
 	}
 
 	setRef = (node) => {
@@ -51,6 +53,7 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 
 		if (this.ref && !(insideWidth && insideHeight)) {
 			this.props.toggleNotesModal();
+			document.removeEventListener('click', this.handleClickOutside);
 		}
 	}
 

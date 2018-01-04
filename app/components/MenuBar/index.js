@@ -17,7 +17,9 @@ class MenuBar extends React.PureComponent {
 	}
 
 	componentWillUnmount() {
-		document.removeEventListener('click', this.handleClickOutside);
+		if (document) {
+			document.removeEventListener('click', this.handleClickOutside);
+		}
 	}
 
 	setRef = (node) => {
@@ -31,6 +33,7 @@ class MenuBar extends React.PureComponent {
 
 		if (this.ref && !(insideWidth && insideHeight)) {
 			this.props.toggleMenuBar();
+			document.removeEventListener('click', this.handleClickOutside);
 		}
 	}
 

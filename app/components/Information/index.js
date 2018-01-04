@@ -15,7 +15,9 @@ class Information extends React.PureComponent {// eslint-disable-line react/pref
 	}
 
 	componentWillUnmount() {
-		document.removeEventListener('click', this.handleClickOutside);
+		if (document.onclick) {
+			document.removeEventListener('click', this.handleClickOutside);
+		}
 	}
 
 	setRef = (node) => {
@@ -29,6 +31,7 @@ class Information extends React.PureComponent {// eslint-disable-line react/pref
 
 		if (this.ref && !(insideWidth && insideHeight)) {
 			this.props.toggleInformationModal();
+			document.removeEventListener('click', this.handleClickOutside);
 		}
 	}
 

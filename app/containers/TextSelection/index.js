@@ -39,7 +39,9 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 	}
 
 	componentWillUnmount() {
-		document.removeEventListener('click', this.handleClickOutside);
+		if (document.onclick) {
+			document.removeEventListener('click', this.handleClickOutside);
+		}
 	}
 
 	setRef = (node) => {
@@ -63,6 +65,7 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 
 		if (this.ref && !(insideWidth && insideHeight)) {
 			this.props.toggleVersionSelection();
+			document.removeEventListener('click', this.handleClickOutside);
 		}
 	}
 

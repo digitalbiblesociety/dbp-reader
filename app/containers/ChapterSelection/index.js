@@ -26,7 +26,9 @@ export class ChapterSelection extends React.PureComponent { // eslint-disable-li
 	}
 
 	componentWillUnmount() {
-		document.removeEventListener('click', this.handleClickOutside);
+		if (document.onclick) {
+			document.removeEventListener('click', this.handleClickOutside);
+		}
 	}
 
 	setRef = (node) => {
@@ -42,6 +44,7 @@ export class ChapterSelection extends React.PureComponent { // eslint-disable-li
 
 		if (this.ref && !(insideWidth && insideHeight)) {
 			this.props.toggleChapterSelection();
+			document.removeEventListener('click', this.handleClickOutside);
 		}
 	}
 
