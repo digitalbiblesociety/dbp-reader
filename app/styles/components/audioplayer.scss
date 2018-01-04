@@ -16,7 +16,7 @@
 .progress-bar:focus {outline: none;}
 
 // Gripper Styles
-.audio-gripper {display:block;position:relative;left:calc(-50% + 25px);bottom:-50%;cursor:pointer;}
+.audio-gripper {display:block;position:relative;left:calc(50% - 25px);bottom:-50%;cursor:pointer;}
 
 // Volume Slider
 .volume-slider          {top:-1px;left:calc(100vw - 150px);height:25px;position:relative;display:flex;align-items:center;justify-content:center;background-color:rgba(0,0,0,.8);width:150px;border:1px solid $menu-active-color;}
