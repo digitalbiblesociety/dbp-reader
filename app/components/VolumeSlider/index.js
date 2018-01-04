@@ -9,7 +9,7 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import Slider from 'rc-slider/lib/Slider';
 // import styled from 'styled-components';
-// TODO: stop using inline styles and move to css class if possible
+// rc-slider Slider component doesn't accept classes for styles other than classname
 class VolumeSlider extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	handleChange = (value) => {
 		this.props.updateVolume(value / 100 || 0);

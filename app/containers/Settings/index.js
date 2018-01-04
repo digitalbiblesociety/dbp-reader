@@ -11,9 +11,10 @@ import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import injectReducer from 'utils/injectReducer';
 import SettingsToggle from 'components/SettingsToggle/index';
+import menu from 'images/menu.svg';
+import Slider from 'rc-slider/lib/Slider';
 import makeSelectSettings from './selectors';
 import reducer from './reducer';
-import menu from '../../images/menu.svg';
 import {
 	updateTheme,
 	updateFontType,
@@ -30,6 +31,9 @@ import {
 
 // add icon for settings close button
 export class Settings extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+	state = {
+		fontSize: 4,
+	}
 	componentDidMount() {
 		document.addEventListener('click', this.handleClickOutside);
 	}
@@ -41,6 +45,8 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 	setRef = (node) => {
 		this.ref = node;
 	}
+
+	handleSliderChange = (position) => this.setState({ fontSize: position })
 
 	handleClickOutside = (event) => {
 		const bounds = this.ref.getBoundingClientRect();
@@ -109,12 +115,13 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 					</span>
 				</section>
 				<section className="font-sizes">
-					<span className="option smallest">Aa</span>
-					<span className="option small">Aa</span>
-					<span className="option medium">Aa</span>
-					<span className="option large">Aa</span>
-					<span className="option largest">Aa</span>
+					<span className={`option smallest${this.state.fontSize === 1 ? ' active' : ''}`}>Aa</span>
+					<span className={`option small${this.state.fontSize === 2 ? ' active' : ''}`}>Aa</span>
+					<span className={`option medium${this.state.fontSize === 3 ? ' active' : ''}`}>Aa</span>
+					<span className={`option large${this.state.fontSize === 4 ? ' active' : ''}`}>Aa</span>
+					<span className={`option largest${this.state.fontSize === 5 ? ' active' : ''}`}>Aa</span>
 				</section>
+				<Slider className="font-sizes-slider" onChange={this.handleSliderChange} defaultValue={this.state.fontSize} handleStyle={{ border: 'none', backgroundColor: 'rgb(98,177,130)' }} railStyle={{ backgroundColor: 'rgb(26,29,33)' }} trackStyle={{ backgroundColor: 'rgb(98,177,130)' }} step={1} min={1} max={5} />
 				<section className="option-toggles">
 					{
 						settingsToggleOptions.map((option) => <SettingsToggle key={option} name={option} action={this.toggle[option]} />)
