@@ -149,7 +149,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		} = this.props.homepage;
 
 		return (
-			<GenericErrorBoundary>
+			<GenericErrorBoundary affectedArea="Your entire app is corrupted and bad, try again!">
 				<Helmet>
 					<title>Home Page</title>
 					<meta name="description" content="Home page for bible.is" />

@@ -16,6 +16,7 @@ import SignUp from 'components/SignUp';
 import Login from 'components/Login';
 import PasswordReset from 'components/PasswordReset';
 import AccountSettings from 'components/AccountSettings';
+import GenericErrorBoundary from 'components/GenericErrorBoundary';
 import { selectAccountOption, toggleSignInForm } from './actions';
 import makeSelectProfile from './selectors';
 import reducer from './reducer';
@@ -28,9 +29,7 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 	}
 
 	componentWillUnmount() {
-		if (document.onclick) {
-			document.removeEventListener('click', this.handleClickOutside);
-		}
+		document.removeEventListener('click', this.handleClickOutside);
 	}
 
 	setRef = (node) => {
@@ -55,45 +54,47 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 		const { activeOption, signInActive, userAuthenticated } = this.props.profile;
 		const { toggleProfile } = this.props;
 		return (
-			<aside ref={this.setRef} className="profile">
-				<header>
-					<h2>ACCOUNT</h2>
-					<span role="button" tabIndex={0} className="close-icon" onClick={toggleProfile}>
-						<svg className="icon"><use xmlnsXlink="http://www.w3.org/1999/xlink" xlinkHref={`${menu}#close`}></use></svg>
-					</span>
-				</header>
-				{
-					userAuthenticated ? (
-						<AccountSettings />
-					) : (
-						<React.Fragment>
-							<div className="form-options">
-								<span role="button" tabIndex={0} onClick={() => this.selectAccountOption('login')} className={activeOption === 'login' ? 'login active' : 'login'}>LOGIN</span>
-								<span role="button" tabIndex={0} onClick={() => this.selectAccountOption('signup')} className={activeOption === 'signup' ? 'signup active' : 'signup'}>SIGN UP</span>
-							</div>
-							{
-								activeOption === 'login' ? (
-									<Login
-										signInActive={signInActive}
-										toggleSignInForm={this.toggleSignInForm}
-										selectAccountOption={this.selectAccountOption}
-									/>
-								) : null
-							}
-							{
-								activeOption === 'signup' ? (
-									<SignUp />
-								) : null
-							}
-							{
-								activeOption === 'password_reset' ? (
-									<PasswordReset />
-								) : null
-							}
-						</React.Fragment>
-					)
-				}
-			</aside>
+			<GenericErrorBoundary affectedArea="Profile">
+				<aside ref={this.setRef} className="profile">
+					<header>
+						<h2>ACCOUNT</h2>
+						<span role="button" tabIndex={0} className="close-icon" onClick={toggleProfile}>
+							<svg className="icon"><use xmlnsXlink="http://www.w3.org/1999/xlink" xlinkHref={`${menu}#close`}></use></svg>
+						</span>
+					</header>
+					{
+						userAuthenticated ? (
+							<AccountSettings />
+						) : (
+							<React.Fragment>
+								<div className="form-options">
+									<span role="button" tabIndex={0} onClick={() => this.selectAccountOption('login')} className={activeOption === 'login' ? 'login active' : 'login'}>LOGIN</span>
+									<span role="button" tabIndex={0} onClick={() => this.selectAccountOption('signup')} className={activeOption === 'signup' ? 'signup active' : 'signup'}>SIGN UP</span>
+								</div>
+								{
+									activeOption === 'login' ? (
+										<Login
+											signInActive={signInActive}
+											toggleSignInForm={this.toggleSignInForm}
+											selectAccountOption={this.selectAccountOption}
+										/>
+									) : null
+								}
+								{
+									activeOption === 'signup' ? (
+										<SignUp />
+									) : null
+								}
+								{
+									activeOption === 'password_reset' ? (
+										<PasswordReset />
+									) : null
+								}
+							</React.Fragment>
+						)
+					}
+				</aside>
+			</GenericErrorBoundary>
 		);
 	}
 }

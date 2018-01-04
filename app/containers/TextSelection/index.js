@@ -15,6 +15,7 @@ import CountryList from 'components/CountryList';
 import LanguageList from 'components/LanguageList';
 import VersionList from 'components/VersionList';
 import SvgWrapper from 'components/SvgWrapper';
+import GenericErrorBoundary from 'components/GenericErrorBoundary';
 import {
 	setVersionListState,
 	setLanguageListState,
@@ -39,9 +40,7 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 	}
 
 	componentWillUnmount() {
-		if (document.onclick) {
-			document.removeEventListener('click', this.handleClickOutside);
-		}
+		document.removeEventListener('click', this.handleClickOutside);
 	}
 
 	setRef = (node) => {
@@ -94,42 +93,44 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 			sectionTitle = 'COUNTRY';
 		}
 		return (
-			<aside ref={this.setRef} className="chapter-text-dropdown">
-				<header>
-					<h2 className="text-selection">{`${sectionTitle} SELECTION`}</h2>
-					<SvgWrapper role="button" tabIndex={0} className="close-icon icon" onClick={toggleVersionSelection} svgid="go-up" opacity=".5" />
-				</header>
-				<CountryList
-					active={countryListActive}
-					setCountryListState={this.setCountryListState}
-					toggleVersionList={this.toggleVersionList}
-					activeCountryName={activeCountryName}
-					toggleLanguageList={this.toggleLanguageList}
-					countries={countries}
-					setCountryName={this.setCountryName}
-				/>
-				<LanguageList
-					active={languageListActive}
-					countryLanguages={countryLanguages}
-					setCountryListState={this.setCountryListState}
-					toggleVersionList={this.toggleVersionList}
-					activeLanguageName={activeLanguageName}
-					toggleLanguageList={this.toggleLanguageList}
-					languages={languages}
-					setActiveIsoCode={this.setActiveIsoCode}
-				/>
-				<VersionList
-					active={versionListActive}
-					setCountryListState={this.setCountryListState}
-					activeTextName={activeTextName}
-					toggleVersionList={this.toggleVersionList}
-					activeIsoCode={activeIsoCode}
-					setActiveText={setActiveText}
-					bibles={bibles}
-					toggleLanguageList={this.toggleLanguageList}
-					toggleTextSelection={toggleVersionSelection}
-				/>
-			</aside>
+			<GenericErrorBoundary affectedArea="TextSelection">
+				<aside ref={this.setRef} className="chapter-text-dropdown">
+					<header>
+						<h2 className="text-selection">{`${sectionTitle} SELECTION`}</h2>
+						<SvgWrapper role="button" tabIndex={0} className="close-icon icon" onClick={toggleVersionSelection} svgid="go-up" opacity=".5" />
+					</header>
+					<CountryList
+						active={countryListActive}
+						setCountryListState={this.setCountryListState}
+						toggleVersionList={this.toggleVersionList}
+						activeCountryName={activeCountryName}
+						toggleLanguageList={this.toggleLanguageList}
+						countries={countries}
+						setCountryName={this.setCountryName}
+					/>
+					<LanguageList
+						active={languageListActive}
+						countryLanguages={countryLanguages}
+						setCountryListState={this.setCountryListState}
+						toggleVersionList={this.toggleVersionList}
+						activeLanguageName={activeLanguageName}
+						toggleLanguageList={this.toggleLanguageList}
+						languages={languages}
+						setActiveIsoCode={this.setActiveIsoCode}
+					/>
+					<VersionList
+						active={versionListActive}
+						setCountryListState={this.setCountryListState}
+						activeTextName={activeTextName}
+						toggleVersionList={this.toggleVersionList}
+						activeIsoCode={activeIsoCode}
+						setActiveText={setActiveText}
+						bibles={bibles}
+						toggleLanguageList={this.toggleLanguageList}
+						toggleTextSelection={toggleVersionSelection}
+					/>
+				</aside>
+			</GenericErrorBoundary>
 		);
 	}
 }

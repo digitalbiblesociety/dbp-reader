@@ -13,6 +13,7 @@ import BooksTable from 'components/BooksTable';
 import SvgWrapper from 'components/SvgWrapper';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
+import GenericErrorBoundary from 'components/GenericErrorBoundary';
 import { setSelectedBookName } from './actions';
 import makeSelectChapterSelection from './selectors';
 import reducer from './reducer';
@@ -26,9 +27,7 @@ export class ChapterSelection extends React.PureComponent { // eslint-disable-li
 	}
 
 	componentWillUnmount() {
-		if (document.onclick) {
-			document.removeEventListener('click', this.handleClickOutside);
-		}
+		document.removeEventListener('click', this.handleClickOutside);
 	}
 
 	setRef = (node) => {
@@ -61,24 +60,26 @@ export class ChapterSelection extends React.PureComponent { // eslint-disable-li
 			activeBookName,
 		} = this.props;
 		return (
-			<aside ref={this.setRef} className="chapter-text-dropdown">
-				<header>
-					<h2 className="text-selection">{`${activeBookName} ${activeChapter}`}</h2>
-					<SvgWrapper role="button" tabIndex={0} className="close-icon icon" onClick={toggleChapterSelection} svgid="go-up" opacity=".5" />
-				</header>
-				<BooksTable
-					activeChapter={activeChapter}
-					setActiveChapter={setActiveChapter}
-					activeTextId={activeTextId}
-					selectedBookName={selectedBookName}
-					setSelectedBookName={this.setSelectedBookName}
-					toggleChapterSelection={toggleChapterSelection}
-					getChapterText={getChapters}
-					setActiveBookName={setActiveBookName}
-					activeBookName={activeBookName}
-					books={books}
-				/>
-			</aside>
+			<GenericErrorBoundary affectedArea="ChapterSelection">
+				<aside ref={this.setRef} className="chapter-text-dropdown">
+					<header>
+						<h2 className="text-selection">{`${activeBookName} ${activeChapter}`}</h2>
+						<SvgWrapper role="button" tabIndex={0} className="close-icon icon" onClick={toggleChapterSelection} svgid="go-up" opacity=".5" />
+					</header>
+					<BooksTable
+						activeChapter={activeChapter}
+						setActiveChapter={setActiveChapter}
+						activeTextId={activeTextId}
+						selectedBookName={selectedBookName}
+						setSelectedBookName={this.setSelectedBookName}
+						toggleChapterSelection={toggleChapterSelection}
+						getChapterText={getChapters}
+						setActiveBookName={setActiveBookName}
+						activeBookName={activeBookName}
+						books={books}
+					/>
+				</aside>
+			</GenericErrorBoundary>
 		);
 	}
 }

@@ -15,6 +15,7 @@ import MyNotes from 'components/MyNotes';
 import menu from 'images/menu.svg';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
+import GenericErrorBoundary from 'components/GenericErrorBoundary';
 import { setActiveChild, toggleVerseText, toggleAddVerseMenu } from './actions';
 import makeSelectNotes from './selectors';
 import reducer from './reducer';
@@ -28,9 +29,7 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 	}
 
 	componentWillUnmount() {
-		if (document.onclick) {
-			document.removeEventListener('click', this.handleClickOutside);
-		}
+		document.removeEventListener('click', this.handleClickOutside);
 	}
 
 	setRef = (node) => {
@@ -74,34 +73,36 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 		} = this.props;
 
 		return (
-			<aside ref={this.setRef} className="notes">
-				<header>
-					<h2 className="section-title">NOTEBOOK</h2>
-					<span role="button" tabIndex={0} className="close-icon" onClick={() => { setActiveChild('notes'); toggleNotesModal(); }}>
-						<svg className="icon"><use xmlnsXlink="http://www.w3.org/1999/xlink" xlinkHref={`${menu}#close`}></use></svg>
-					</span>
-				</header>
-				<div className="top-bar">
+			<GenericErrorBoundary affectedArea="Notes">
+				<aside ref={this.setRef} className="notes">
+					<header>
+						<h2 className="section-title">NOTEBOOK</h2>
+						<span role="button" tabIndex={0} className="close-icon" onClick={() => { setActiveChild('notes'); toggleNotesModal(); }}>
+							<svg className="icon"><use xmlnsXlink="http://www.w3.org/1999/xlink" xlinkHref={`${menu}#close`}></use></svg>
+						</span>
+					</header>
+					<div className="top-bar">
+						{
+							activeChild === 'notes' ? (
+								<SvgWrapper role="button" tabIndex={0} onClick={() => this.setActiveChild('edit')} className={activeChild === 'notes' ? 'svg active' : 'svg'} height="30px" width="30px" svgid="note-list" />
+							) : null
+						}
+						{
+							activeChild !== 'notes' ? (
+								<SvgWrapper role="button" tabIndex={0} onClick={() => this.setActiveChild('notes')} className={activeChild === 'edit' ? 'svg active' : 'svg'} height="30px" width="30px" svgid="notes" />
+							) : null
+						}
+						<SvgWrapper role="button" tabIndex={0} onClick={() => this.setActiveChild('bookmarks')} className={activeChild === 'bookmarks' ? 'svg active' : 'svg'} height="30px" width="30px" svgid="bookmarks" />
+						<SvgWrapper role="button" tabIndex={0} onClick={() => this.setActiveChild('highlights')} className={activeChild === 'highlights' ? 'svg active' : 'svg'} height="30px" width="30px" svgid="highlights" />
+						<span className="text">{this.titleOptions[activeChild]}</span>
+					</div>
 					{
-						activeChild === 'notes' ? (
-							<SvgWrapper role="button" tabIndex={0} onClick={() => this.setActiveChild('edit')} className={activeChild === 'notes' ? 'svg active' : 'svg'} height="30px" width="30px" svgid="note-list" />
-						) : null
+						activeChild === 'edit' ? (
+							<EditNote toggleVerseText={this.toggleVerseText} toggleAddVerseMenu={this.toggleAddVerseMenu} note={note} isAddVerseExpanded={isAddVerseExpanded} isVerseTextVisible={isVerseTextVisible} />
+						) : <MyNotes listData={listData} sectionType={activeChild} />
 					}
-					{
-						activeChild !== 'notes' ? (
-							<SvgWrapper role="button" tabIndex={0} onClick={() => this.setActiveChild('notes')} className={activeChild === 'edit' ? 'svg active' : 'svg'} height="30px" width="30px" svgid="notes" />
-						) : null
-					}
-					<SvgWrapper role="button" tabIndex={0} onClick={() => this.setActiveChild('bookmarks')} className={activeChild === 'bookmarks' ? 'svg active' : 'svg'} height="30px" width="30px" svgid="bookmarks" />
-					<SvgWrapper role="button" tabIndex={0} onClick={() => this.setActiveChild('highlights')} className={activeChild === 'highlights' ? 'svg active' : 'svg'} height="30px" width="30px" svgid="highlights" />
-					<span className="text">{this.titleOptions[activeChild]}</span>
-				</div>
-				{
-					activeChild === 'edit' ? (
-						<EditNote toggleVerseText={this.toggleVerseText} toggleAddVerseMenu={this.toggleAddVerseMenu} note={note} isAddVerseExpanded={isAddVerseExpanded} isVerseTextVisible={isVerseTextVisible} />
-					) : <MyNotes listData={listData} sectionType={activeChild} />
-				}
-			</aside>
+				</aside>
+			</GenericErrorBoundary>
 		);
 	}
 }

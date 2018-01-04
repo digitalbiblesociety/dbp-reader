@@ -12,6 +12,7 @@ import { compose } from 'redux';
 import injectReducer from 'utils/injectReducer';
 import SettingsToggle from 'components/SettingsToggle/index';
 import menu from 'images/menu.svg';
+import GenericErrorBoundary from 'components/GenericErrorBoundary';
 import Slider from 'rc-slider/lib/Slider';
 import makeSelectSettings from './selectors';
 import reducer from './reducer';
@@ -39,9 +40,7 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 	}
 
 	componentWillUnmount() {
-		if (document.onclick) {
-			document.removeEventListener('click', this.handleClickOutside);
-		}
+		document.removeEventListener('click', this.handleClickOutside);
 	}
 
 	setRef = (node) => {
@@ -91,46 +90,48 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 		} = this.props;
 
 		return (
-			<aside ref={this.setRef} className="settings">
-				<header>
-					<h2 className="section-title">Settings</h2>
-					<span role="button" tabIndex={0} className="close-icon" onClick={toggleSettingsModal}>
-						<svg className="icon"><use xmlnsXlink="http://www.w3.org/1999/xlink" xlinkHref={`${menu}#close`}></use></svg>
-					</span>
-				</header>
-				<section className="color-schemes">
-					<span role="button" tabIndex={0} onClick={() => this.updateTheme({ theme: 'paper' })} className={`option paper${activeTheme === 'paper' ? ' active' : ''}`}>
-					</span>
-					<span role="button" tabIndex={0} onClick={() => this.updateTheme({ theme: 'default' })} className={`option red${activeTheme === 'default' ? ' active' : ''}`}>
-					</span>
-					<span role="button" tabIndex={0} onClick={() => this.updateTheme({ theme: 'dark' })} className={`option dark${activeTheme === 'dark' ? ' active' : ''}`}>
-					</span>
-				</section>
-				<section className="font-settings">
-					<span role="button" tabIndex={0} onClick={() => this.updateFontType({ font: 'sans' })} className={`option sans${activeFontType === 'sans' ? ' active' : ''}`}>
-						<span className="title">Aa <small>Sans Serif</small></span>
-					</span>
-					<span role="button" tabIndex={0} onClick={() => this.updateFontType({ font: 'serif' })} className={`option serif${activeFontType === 'serif' ? ' active' : ''}`}>
-						<span className="title">Aa <small>Serif</small></span>
-					</span>
-					<span role="button" tabIndex={0} onClick={() => this.updateFontType({ font: 'slab' })} className={`option slab${activeFontType === 'slab' ? ' active' : ''}`}>
-						<span className="title">Aa <small>Slab Serif</small></span>
-					</span>
-				</section>
-				<section className="font-sizes">
-					<span role="button" tabIndex={0} onClick={() => this.updateFontSize({ size: 1 })} className={`option smallest${activeFontSize === 1 ? ' active' : ''}`}>Aa</span>
-					<span role="button" tabIndex={0} onClick={() => this.updateFontSize({ size: 2 })} className={`option small${activeFontSize === 2 ? ' active' : ''}`}>Aa</span>
-					<span role="button" tabIndex={0} onClick={() => this.updateFontSize({ size: 3 })} className={`option medium${activeFontSize === 3 ? ' active' : ''}`}>Aa</span>
-					<span role="button" tabIndex={0} onClick={() => this.updateFontSize({ size: 4 })} className={`option large${activeFontSize === 4 ? ' active' : ''}`}>Aa</span>
-					<span role="button" tabIndex={0} onClick={() => this.updateFontSize({ size: 5 })} className={`option largest${activeFontSize === 5 ? ' active' : ''}`}>Aa</span>
-				</section>
-				<Slider className="font-sizes-slider" onChange={this.handleSliderChange} defaultValue={activeFontSize} value={activeFontSize} handleStyle={{ border: 'none', backgroundColor: 'rgb(98,177,130)' }} railStyle={{ backgroundColor: 'rgb(26,29,33)' }} trackStyle={{ backgroundColor: 'rgb(98,177,130)' }} step={1} min={1} max={5} />
-				<section className="option-toggles">
-					{
-						settingsToggleOptions.map((option) => <SettingsToggle key={option} name={option} action={this.toggle[option]} />)
-					}
-				</section>
-			</aside>
+			<GenericErrorBoundary affectedArea="Settings">
+				<aside ref={this.setRef} className="settings">
+					<header>
+						<h2 className="section-title">Settings</h2>
+						<span role="button" tabIndex={0} className="close-icon" onClick={toggleSettingsModal}>
+							<svg className="icon"><use xmlnsXlink="http://www.w3.org/1999/xlink" xlinkHref={`${menu}#close`}></use></svg>
+						</span>
+					</header>
+					<section className="color-schemes">
+						<span role="button" tabIndex={0} onClick={() => this.updateTheme({ theme: 'paper' })} className={`option paper${activeTheme === 'paper' ? ' active' : ''}`}>
+						</span>
+						<span role="button" tabIndex={0} onClick={() => this.updateTheme({ theme: 'default' })} className={`option red${activeTheme === 'default' ? ' active' : ''}`}>
+						</span>
+						<span role="button" tabIndex={0} onClick={() => this.updateTheme({ theme: 'dark' })} className={`option dark${activeTheme === 'dark' ? ' active' : ''}`}>
+						</span>
+					</section>
+					<section className="font-settings">
+						<span role="button" tabIndex={0} onClick={() => this.updateFontType({ font: 'sans' })} className={`option sans${activeFontType === 'sans' ? ' active' : ''}`}>
+							<span className="title">Aa <small>Sans Serif</small></span>
+						</span>
+						<span role="button" tabIndex={0} onClick={() => this.updateFontType({ font: 'serif' })} className={`option serif${activeFontType === 'serif' ? ' active' : ''}`}>
+							<span className="title">Aa <small>Serif</small></span>
+						</span>
+						<span role="button" tabIndex={0} onClick={() => this.updateFontType({ font: 'slab' })} className={`option slab${activeFontType === 'slab' ? ' active' : ''}`}>
+							<span className="title">Aa <small>Slab Serif</small></span>
+						</span>
+					</section>
+					<section className="font-sizes">
+						<span role="button" tabIndex={0} onClick={() => this.updateFontSize({ size: 1 })} className={`option smallest${activeFontSize === 1 ? ' active' : ''}`}>Aa</span>
+						<span role="button" tabIndex={0} onClick={() => this.updateFontSize({ size: 2 })} className={`option small${activeFontSize === 2 ? ' active' : ''}`}>Aa</span>
+						<span role="button" tabIndex={0} onClick={() => this.updateFontSize({ size: 3 })} className={`option medium${activeFontSize === 3 ? ' active' : ''}`}>Aa</span>
+						<span role="button" tabIndex={0} onClick={() => this.updateFontSize({ size: 4 })} className={`option large${activeFontSize === 4 ? ' active' : ''}`}>Aa</span>
+						<span role="button" tabIndex={0} onClick={() => this.updateFontSize({ size: 5 })} className={`option largest${activeFontSize === 5 ? ' active' : ''}`}>Aa</span>
+					</section>
+					<Slider className="font-sizes-slider" onChange={this.handleSliderChange} defaultValue={activeFontSize} value={activeFontSize} handleStyle={{ border: 'none', backgroundColor: 'rgb(98,177,130)' }} railStyle={{ backgroundColor: 'rgb(26,29,33)' }} trackStyle={{ backgroundColor: 'rgb(98,177,130)' }} step={1} min={1} max={5} />
+					<section className="option-toggles">
+						{
+							settingsToggleOptions.map((option) => <SettingsToggle key={option} name={option} action={this.toggle[option]} />)
+						}
+					</section>
+				</aside>
+			</GenericErrorBoundary>
 		);
 	}
 }
