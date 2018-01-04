@@ -16,6 +16,7 @@ import {
 	TOGGLE_PROFILE,
 	TOGGLE_MENU_BAR,
 	SET_ACTIVE_CHAPTER,
+	SET_ACTIVE_NOTES_VIEW,
 	TOGGLE_VERSION_SELECTION,
 	ACTIVE_TEXT_ID,
 	TOGGLE_INFORMATION_MODAL,
@@ -87,4 +88,9 @@ export const setActiveBookName = (book, id) => ({
 export const setActiveChapter = (chapter) => ({
 	type: SET_ACTIVE_CHAPTER,
 	chapter,
+});
+
+export const setActiveNotesView = (view) => ({
+	type: SET_ACTIVE_NOTES_VIEW,
+	view,
 });

@@ -45,13 +45,13 @@ const Item = styled.div`
 // Remove use of styled components
 // change to pure component and handle outside clicks instead of click handler
 // on each item
-function ContextPortal({ coordinates, parentNode, toggleNotesModal, notesActive, closeContextMenu }) {
+function ContextPortal({ coordinates, parentNode, toggleNotesModal, notesActive, closeContextMenu, setActiveNotesView }) {
 	const component = (
 		<StyledDiv x={coordinates.x} y={coordinates.y}>
 			<Row>
-				<Item onClick={() => !notesActive && toggleNotesModal() && closeContextMenu()}><SvgWrapper height="25px" width="25px" svgid="note-list" /></Item>
-				<Item onClick={closeContextMenu}><SvgWrapper height="25px" width="25px" svgid="highlights" /></Item>
-				<Item onClick={closeContextMenu}><SvgWrapper height="25px" width="25px" svgid="bookmarks" /></Item>
+				<Item onClick={() => !notesActive && setActiveNotesView('notes') && toggleNotesModal() && closeContextMenu()}><SvgWrapper height="25px" width="25px" svgid="note-list" /></Item>
+				<Item onClick={() => !notesActive && setActiveNotesView('highlights') && toggleNotesModal() && closeContextMenu()}><SvgWrapper height="25px" width="25px" svgid="highlights" /></Item>
+				<Item onClick={() => !notesActive && setActiveNotesView('bookmarks') && toggleNotesModal() && closeContextMenu()}><SvgWrapper height="25px" width="25px" svgid="bookmarks" /></Item>
 				<Item onClick={closeContextMenu} className="facebook"><SvgWrapper height="35px" width="35px" svgid="fb-thumb" /></Item>
 			</Row>
 			<Row>
@@ -66,11 +66,12 @@ function ContextPortal({ coordinates, parentNode, toggleNotesModal, notesActive,
 }
 
 ContextPortal.propTypes = {
-	parentNode: PropTypes.node,
+	parentNode: PropTypes.object,
 	coordinates: PropTypes.object,
 	notesActive: PropTypes.bool,
 	toggleNotesModal: PropTypes.func,
 	closeContextMenu: PropTypes.func,
+	setActiveNotesView: PropTypes.func,
 };
 
 export default ContextPortal;

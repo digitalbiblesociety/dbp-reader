@@ -15,6 +15,7 @@ import {
 	TOGGLE_VERSION_SELECTION,
 	TOGGLE_PROFILE,
 	SET_ACTIVE_CHAPTER,
+	SET_ACTIVE_NOTES_VIEW,
 	ACTIVE_TEXT_ID,
 	TOGGLE_NOTES_MODAL,
 	TOGGLE_INFORMATION_MODAL,
@@ -41,6 +42,7 @@ const initialState = fromJS({
 	isNotesModalActive: false,
 	isVersionSelectionActive: false,
 	isInformationModalActive: false,
+	activeNotesView: 'notes',
 });
 
 function homePageReducer(state = initialState, action) {
@@ -75,6 +77,8 @@ function homePageReducer(state = initialState, action) {
 			.set('activeTextId', action.textId);
 	case LOAD_CHAPTER_TEXT:
 		return state.set('chapterText', fromJS(action.text));
+	case SET_ACTIVE_NOTES_VIEW:
+		return state.set('activeNotesView', action.view);
 	default:
 		return state;
 	}

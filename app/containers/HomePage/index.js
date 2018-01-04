@@ -43,6 +43,7 @@ import {
 	setActiveBookName,
 	setActiveChapter,
 	setActiveTextId,
+	setActiveNotesView,
 	getChapterText,
 } from './actions';
 import makeSelectHomePage, { selectActiveBook, selectPrevBook, selectNextBook } from './selectors';
@@ -116,6 +117,8 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 
 	setActiveTextId = (props) => this.props.dispatch(setActiveTextId(props));
 
+	setActiveNotesView = (view) => this.props.dispatch(setActiveNotesView(view));
+
 	toggleMenuBar = () => this.props.dispatch(toggleMenuBar());
 
 	toggleProfile = () => this.props.dispatch(toggleProfile());
@@ -146,6 +149,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			activeChapter,
 			isProfileActive,
 			copywrite,
+			activeNotesView,
 		} = this.props.homepage;
 
 		return (
@@ -219,7 +223,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					{
 						isNotesModalActive ? (
 							<FadeTransition classNames="slide-from-right" in={isNotesModalActive}>
-								<Notes toggleNotesModal={this.toggleNotesModal} />
+								<Notes toggleNotesModal={this.toggleNotesModal} openView={activeNotesView} />
 							</FadeTransition>
 						) : null
 					}
@@ -231,7 +235,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 						) : null
 					}
 				</TransitionGroup>
-				<Text activeBookName={activeBookName} activeChapter={activeChapter} notesActive={isNotesModalActive} toggleNotesModal={this.toggleNotesModal} text={chapterText} nextChapter={this.getNextChapter} prevChapter={this.getPrevChapter} />
+				<Text setActiveNotesView={this.setActiveNotesView} activeBookName={activeBookName} activeChapter={activeChapter} notesActive={isNotesModalActive} toggleNotesModal={this.toggleNotesModal} text={chapterText} nextChapter={this.getNextChapter} prevChapter={this.getPrevChapter} />
 				<Footer settingsActive={isSettingsModalActive} isInformationModalActive={isInformationModalActive} toggleInformationModal={this.toggleInformationModal} toggleSettingsModal={this.toggleSettingsModal} />
 			</GenericErrorBoundary>
 		);

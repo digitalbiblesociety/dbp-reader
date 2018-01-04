@@ -24,6 +24,10 @@ import saga from './saga';
 // import messages from './messages';
 
 export class Notes extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+	constructor(props) {
+		super(props);
+		this.props.dispatch(setActiveChild(props.openView));
+	}
 	componentDidMount() {
 		document.addEventListener('click', this.handleClickOutside);
 	}
@@ -111,6 +115,7 @@ Notes.propTypes = {
 	dispatch: PropTypes.func.isRequired,
 	notes: PropTypes.object.isRequired,
 	toggleNotesModal: PropTypes.func.isRequired,
+	openView: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
