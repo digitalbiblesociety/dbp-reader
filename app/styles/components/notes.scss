@@ -33,22 +33,22 @@
 .edit-notes .verse-text {background-color:#111;padding:5px;}
 
 // List Sections
-.list-sections                         {display:flex;flex-direction:column;height:calc(100% - 160px);}
-.list-sections .searchbar              {display:flex;width:100%;}
+.list-sections                         {height:calc(100% - 160px);max-height:calc(100% - 160px);}
+.list-sections .searchbar              {display:flex;width:100%;height:50px;}
 .searchbar .add-note                   {display:flex;align-items:center;justify-content:center;background-color:$menu-active-color;width:50px;height:50px;cursor:pointer;}
 .searchbar ::-webkit-input-placeholder {color:#FFF;padding-left:45px;}
 .searchbar ::-moz-placeholder          {color:#FFF;padding-left:45px;}
 .searchbar :-ms-input-placeholder      {color:#FFF;padding-left:45px;}
 .search                                {width:calc(100% - 50px);background:url("../images/input_search_icon.svg") no-repeat 5px 10px;border:none;height:50px;background-color:$input-background-color;color:#FFF;font-size:.9em;font-weight:200;caret-color:#000;padding-left:10px;}
 
-.note-list                    {height:calc(100% - 50px);max-height:calc(100% - 50px);overflow-y:scroll;overflow-x:hidden;}
+.note-list                    {height:calc(100% - 100px);max-height:calc(100% - 100px);overflow-y:scroll;overflow-x:hidden;background-color:rgb(26,29,33);}
 .note-list .list-item         {display:flex;}
 .list-item .date              {color:$menu-active-color;}
 .list-item .title-text        {margin-left:15px;}
 .list-item .title-text .title {color:$menu-active-color;}
 .list-item .title-text .text  {color:$paper-primary;}
 
-.list-sections .pagination {align-self:flex-end;}
+.list-sections .pagination {height:50px;background-color:#2C3036;}
 
 // Keyframe animations
 @keyframes rotate90deg {
