@@ -48,7 +48,11 @@
 .list-item .title-text .title {color:$menu-active-color;}
 .list-item .title-text .text  {color:$paper-primary;}
 
-.list-sections .pagination {height:50px;background-color:#2C3036;}
+.list-sections .pagination          {display:flex;align-items:center;height:50px;background-color:#2C3036;}
+.pagination .item-list              {display:flex;align-items:center;justify-content:space-between;height:50px;width:100%;margin:0 15px;}
+.pagination .item-list .item        {cursor:pointer;}
+.pagination .item-list .item:hover  {color:$menu-active-color;}
+.pagination .item-list .item.active {color:$menu-active-color;}
 
 // Keyframe animations
 @keyframes rotate90deg {

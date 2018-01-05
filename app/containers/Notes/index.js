@@ -16,7 +16,7 @@ import menu from 'images/menu.svg';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
-import { setActiveChild, toggleVerseText, toggleAddVerseMenu } from './actions';
+import { setActiveChild, toggleVerseText, toggleAddVerseMenu, setActivePageData } from './actions';
 import makeSelectNotes from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -41,6 +41,8 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 	}
 
 	setActiveChild = (child) => this.props.dispatch(setActiveChild(child))
+
+	setActivePageData = (page) => this.props.dispatch(setActivePageData(page))
 
 	toggleVerseText = () => this.props.dispatch(toggleVerseText())
 
@@ -71,6 +73,7 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 			note,
 			isAddVerseExpanded,
 			isVerseTextVisible,
+			activePageData,
 		} = this.props.notes;
 		const {
 			toggleNotesModal,
@@ -103,7 +106,7 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 					{
 						activeChild === 'edit' ? (
 							<EditNote toggleVerseText={this.toggleVerseText} toggleAddVerseMenu={this.toggleAddVerseMenu} note={note} isAddVerseExpanded={isAddVerseExpanded} isVerseTextVisible={isVerseTextVisible} />
-						) : <MyNotes setActiveChild={this.setActiveChild} listData={listData} sectionType={activeChild} />
+						) : <MyNotes setActivePageData={this.setActivePageData} setActiveChild={this.setActiveChild} activePageData={activePageData} listData={listData} sectionType={activeChild} />
 					}
 				</aside>
 			</GenericErrorBoundary>

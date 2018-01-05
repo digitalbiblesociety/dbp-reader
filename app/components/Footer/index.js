@@ -17,7 +17,7 @@ function Footer({ isInformationModalActive, settingsActive, toggleSettingsModal,
 				<span className="item" role="button" tabIndex={0} onClick={() => !settingsActive && toggleSettingsModal()}><SvgWrapper className="navbar-button" height="30px" width="30px" fill="#fff" svgid="settings" /></span>
 			</div>
 			<div className="right-buttons">
-				<span className="item"><SvgWrapper className="navbar-button" height="30px" width="30px" fill="#fff" svgid="share" /></span>
+				<span className="item"><SvgWrapper className="navbar-button" height="30px" width="30px" fill="#fff" svgid="upload" /></span>
 			</div>
 		</div>
 	);
