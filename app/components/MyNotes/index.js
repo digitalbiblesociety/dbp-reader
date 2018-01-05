@@ -14,11 +14,12 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 		const {
 			sectionType,
 			listData,
+			setActiveChild,
 		} = this.props;
 		return (
 			<div className="list-sections">
 				<div className="searchbar">
-					<div className="add-note"><SvgWrapper height="20px" width="20px" svgid="plus"></SvgWrapper></div>
+					<div role="button" tabIndex={0} className="add-note" onClick={() => setActiveChild('edit')}><SvgWrapper height="20px" width="20px" svgid="plus"></SvgWrapper></div>
 					<input className="search" placeholder={`SEARCH ${sectionType.toUpperCase()}`} />
 				</div>
 				<section className="note-list">
@@ -46,6 +47,7 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 MyNotes.propTypes = {
 	sectionType: PropTypes.string.isRequired,
 	listData: PropTypes.array.isRequired,
+	setActiveChild: PropTypes.func.isRequired,
 };
 
 export default MyNotes;

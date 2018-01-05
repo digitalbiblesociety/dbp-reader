@@ -103,7 +103,7 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 					{
 						activeChild === 'edit' ? (
 							<EditNote toggleVerseText={this.toggleVerseText} toggleAddVerseMenu={this.toggleAddVerseMenu} note={note} isAddVerseExpanded={isAddVerseExpanded} isVerseTextVisible={isVerseTextVisible} />
-						) : <MyNotes listData={listData} sectionType={activeChild} />
+						) : <MyNotes setActiveChild={this.setActiveChild} listData={listData} sectionType={activeChild} />
 					}
 				</aside>
 			</GenericErrorBoundary>

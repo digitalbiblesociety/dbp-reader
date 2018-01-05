@@ -35,7 +35,7 @@
 // List Sections
 .list-sections                         {display:flex;flex-direction:column;height:calc(100% - 160px);}
 .list-sections .searchbar              {display:flex;width:100%;}
-.searchbar .add-note                   {display:flex;align-items:center;justify-content:center;background-color:$menu-active-color;width:50px;height:50px;}
+.searchbar .add-note                   {display:flex;align-items:center;justify-content:center;background-color:$menu-active-color;width:50px;height:50px;cursor:pointer;}
 .searchbar ::-webkit-input-placeholder {color:#FFF;padding-left:45px;}
 .searchbar ::-moz-placeholder          {color:#FFF;padding-left:45px;}
 .searchbar :-ms-input-placeholder      {color:#FFF;padding-left:45px;}
