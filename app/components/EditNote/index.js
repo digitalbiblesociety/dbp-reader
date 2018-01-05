@@ -25,7 +25,7 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 					<span className="date">01.01.18</span>
 					<span className="title">{note.title || 'ADD TITLE'}</span>
 				</div>
-				<div className="verse-dropdown">
+				<div className={`verse-dropdown${isVerseTextVisible ? ' open' : ''}`}>
 					<SvgWrapper onClick={toggleVerseText} className="svg" height="20px" width="20px" svgid="go-right" />
 					<span className="text">{note.verseTitle || 'Verse Title Goes Here'}</span>
 					<span className="version-dropdown">ENGESV</span>
