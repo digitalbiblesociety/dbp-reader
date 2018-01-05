@@ -9,13 +9,13 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 // import styled from 'styled-components';
 
-function SpeedControl({ options, setSpeed, parentNode, closeControl }) {
+function SpeedControl({ options, setSpeed, parentNode }) {
 	const component = (
 		<div className="speed-control-container-container">
 			<div className="speed-control-container">
 				{
 					options.map((option) => (
-						<span className="item" role="button" tabIndex={0} onClick={() => { setSpeed(option); closeControl(); }}>{option}</span>
+						<span className="item" role="button" tabIndex={0} onClick={() => setSpeed(option)}>{option}</span>
 					))
 				}
 			</div>
@@ -28,7 +28,6 @@ SpeedControl.propTypes = {
 	parentNode: PropTypes.node,
 	options: PropTypes.array,
 	setSpeed: PropTypes.func,
-	closeControl: PropTypes.func,
 };
 
 export default SpeedControl;

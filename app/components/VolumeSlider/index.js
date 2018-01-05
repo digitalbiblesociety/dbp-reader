@@ -21,7 +21,7 @@ class VolumeSlider extends React.PureComponent { // eslint-disable-line react/pr
 		const component = (
 			<div className="volume-slider-container">
 				<div className="volume-slider">
-					<Slider onChange={this.handleChange} handleStyle={{ border: 'none', backgroundColor: 'rgb(98,177,130)' }} railStyle={{ backgroundColor: 'rgba(78,69,76,.9)' }} trackStyle={{ backgroundColor: 'rgb(98,177,130)' }} defaultValue={volume * 100} step={10} min={0} max={100} />
+					<Slider className="slider" onChange={this.handleChange} handleStyle={{ border: 'none', backgroundColor: 'rgb(98,177,130)' }} railStyle={{ backgroundColor: '#111' }} trackStyle={{ backgroundColor: 'rgb(98,177,130)' }} defaultValue={volume * 100} step={10} min={0} max={100} />
 				</div>
 			</div>
 		);
