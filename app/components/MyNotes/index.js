@@ -8,6 +8,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import SvgWrapper from 'components/SvgWrapper';
 import Pagination from 'components/Pagination';
+import PageSizeSelector from 'components/PageSizeSelector';
 // import styled from 'styled-components';
 // TODO: Provide way of differentiating between notes, bookmarks and highlights
 class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
@@ -15,9 +16,13 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 	render() {
 		const {
 			sectionType,
+			setPageSize,
 			listData,
 			setActiveChild,
 			activePageData,
+			pageSize,
+			pageSelectorState,
+			togglePageSelector,
 		} = this.props;
 		return (
 			<div className="list-sections">
@@ -43,7 +48,9 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 						items={listData}
 						onChangePage={this.handlePageClick}
 						initialPage={1}
+						pageSize={pageSize}
 					/>
+					<PageSizeSelector togglePageSelector={togglePageSelector} pageSelectorState={pageSelectorState} pageSize={pageSize} setPageSize={setPageSize} />
 				</div>
 			</div>
 		);
@@ -56,6 +63,10 @@ MyNotes.propTypes = {
 	activePageData: PropTypes.array.isRequired,
 	setActiveChild: PropTypes.func.isRequired,
 	setActivePageData: PropTypes.func.isRequired,
+	setPageSize: PropTypes.func.isRequired,
+	togglePageSelector: PropTypes.func.isRequired,
+	pageSize: PropTypes.number.isRequired,
+	pageSelectorState: PropTypes.bool.isRequired,
 };
 
 export default MyNotes;

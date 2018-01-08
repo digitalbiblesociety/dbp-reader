@@ -16,7 +16,7 @@ import menu from 'images/menu.svg';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
-import { setActiveChild, toggleVerseText, toggleAddVerseMenu, setActivePageData } from './actions';
+import { setActiveChild, setPageSize, toggleVerseText, toggleAddVerseMenu, togglePageSelector, setActivePageData } from './actions';
 import makeSelectNotes from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -44,9 +44,13 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 
 	setActivePageData = (page) => this.props.dispatch(setActivePageData(page))
 
+	setPageSize = (size) => this.props.dispatch(setPageSize(size))
+
 	toggleVerseText = () => this.props.dispatch(toggleVerseText())
 
 	toggleAddVerseMenu = () => this.props.dispatch(toggleAddVerseMenu())
+
+	togglePageSelector = () => this.props.dispatch(togglePageSelector())
 
 	titleOptions = {
 		edit: 'EDIT NOTE',
@@ -74,6 +78,8 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 			isAddVerseExpanded,
 			isVerseTextVisible,
 			activePageData,
+			paginationPageSize: pageSize,
+			pageSelectorState,
 		} = this.props.notes;
 		const {
 			toggleNotesModal,
@@ -106,7 +112,7 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 					{
 						activeChild === 'edit' ? (
 							<EditNote toggleVerseText={this.toggleVerseText} toggleAddVerseMenu={this.toggleAddVerseMenu} note={note} isAddVerseExpanded={isAddVerseExpanded} isVerseTextVisible={isVerseTextVisible} />
-						) : <MyNotes setActivePageData={this.setActivePageData} setActiveChild={this.setActiveChild} activePageData={activePageData} listData={listData} sectionType={activeChild} />
+						) : <MyNotes pageSelectorState={pageSelectorState} setPageSize={this.setPageSize} togglePageSelector={this.togglePageSelector} pageSize={pageSize} setActivePageData={this.setActivePageData} setActiveChild={this.setActiveChild} activePageData={activePageData} listData={listData} sectionType={activeChild} />
 					}
 				</aside>
 			</GenericErrorBoundary>

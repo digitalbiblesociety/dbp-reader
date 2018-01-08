@@ -11,6 +11,8 @@ import {
 	TOGGLE_ADD_VERSE_MENU,
 	SET_ACTIVE_PAGE_DATA,
 	initialNotesListForTesting,
+	SET_PAGE_SIZE,
+	T0GGLE_PAGE_SELECTOR,
 } from './constants';
 
 const initialState = fromJS({
@@ -25,6 +27,8 @@ const initialState = fromJS({
 	listData: initialNotesListForTesting,
 	isAddVerseExpanded: false,
 	isVerseTextVisible: false,
+	pageSelectorState: false,
+	paginationPageSize: 10,
 });
 
 function notesReducer(state = initialState, action) {
@@ -37,6 +41,10 @@ function notesReducer(state = initialState, action) {
 		return state.set('isAddVerseExpanded', !state.get('isAddVerseExpanded'));
 	case SET_ACTIVE_PAGE_DATA:
 		return state.set('activePageData', action.page);
+	case SET_PAGE_SIZE:
+		return state.set('paginationPageSize', action.size);
+	case T0GGLE_PAGE_SELECTOR:
+		return state.set('pageSelectorState', !state.get('pageSelectorState'));
 	default:
 		return state;
 	}

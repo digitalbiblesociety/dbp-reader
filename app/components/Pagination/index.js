@@ -12,32 +12,32 @@ import range from 'lodash/range';
 class Pagination extends React.PureComponent {
 	constructor(props) {
 		super(props);
-		this.state = { pager: {} };
+		this.state = { pageObject: {} };
 	}
 
 	componentWillMount() {
 		if (this.props.items && this.props.items.length) {
-			this.setPage(this.props.initialPage);
+			this.setActivePage(this.props.initialPage);
 		}
 	}
 
-	setPage(page) {
+	setActivePage(page) {
 		const items = this.props.items;
-		let pager = this.state.pager;
+		let pageObject = this.state.pageObject;
 		// only needed if we decide to have prev/next buttons
-		if (page < 1 || page > pager.totalPages) {
-			return;
-		}
+		// if (page < 1 || page > pageObject.totalPages) {
+		// 	return;
+		// }
 
-		pager = this.getPager(items.length, page);
-		const pageOfItems = items.slice(pager.startIndex, pager.endIndex + 1);
+		pageObject = this.getPageObject(items.length, page);
+		const pageOfItems = items.slice(pageObject.startIndex, pageObject.endIndex + 1);
 
-		this.setState({ pager });
+		this.setState({ pageObject });
 
 		this.props.onChangePage(pageOfItems);
 	}
 
-	getPager(totalItems, currentPage = 1, pageSize = 10) {
+	getPageObject(totalItems, currentPage = 1, pageSize = 10) {
 		const totalPages = Math.ceil(totalItems / pageSize);
 		let startPage;
 		let	endPage;
@@ -74,19 +74,21 @@ class Pagination extends React.PureComponent {
 	}
 
 	render() {
-		const pager = this.state.pager;
+		const pageObject = this.state.pageObject;
 
-		if (!pager.pages || pager.pages.length <= 1) {
+		if (!pageObject.pages || pageObject.pages.length <= 1) {
 			return null;
 		}
 
 		return (
 			<div className="item-list">
-				{pager.pages.map((page) =>
-					(<div key={page} className={pager.currentPage === page ? 'item active' : 'item'}>
-						<span role="button" tabIndex={0} onClick={() => this.setPage(page)}>{page}</span>
-					</div>)
-				)}
+				{
+					pageObject.pages.map((page) => (
+						<div key={page} className={pageObject.currentPage === page ? 'item active' : 'item'}>
+							<span role="button" tabIndex={0} onClick={() => this.setActivePage(page)}>{page}</span>
+						</div>
+					))
+				}
 			</div>
 		);
 	}

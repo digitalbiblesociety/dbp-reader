@@ -49,11 +49,14 @@
 .list-item .title-text .text  {color:$paper-primary;}
 
 .list-sections .pagination          {display:flex;align-items:center;height:50px;background-color:#2C3036;}
-.pagination .item-list              {display:flex;align-items:center;justify-content:space-between;height:50px;width:100%;margin:0 15px;}
+.pagination .item-list              {display:flex;align-items:center;justify-content:space-between;height:50px;width:calc(100% - 120px);margin:0 15px;}
 .pagination .item-list .item        {cursor:pointer;}
 .pagination .item-list .item:hover  {color:$menu-active-color;}
 .pagination .item-list .item.active {color:$menu-active-color;}
 
+.page-size-selector         {display:flex;align-items:center;height:50px;width:120px;color:white;font-size:.98em;font-weight:200;}
+.page-size-selector .open   {display:flex;background-color:$input-background-color;flex-direction:column;align-items:center;justify-content:space-between;position:absolute;height:150px;width:120px;bottom:55px;right:0;border:1px solid $menu-active-color;:first-child{margin-top:10px;}:last-child{margin-bottom:10px;}}
+.page-size-selector .closed {background-color:inherit;}
 // Keyframe animations
 @keyframes rotate90deg {
   0%   {transform:rotate(0turn);}
