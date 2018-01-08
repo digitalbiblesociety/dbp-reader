@@ -17,11 +17,17 @@ class Pagination extends React.PureComponent {
 
 	componentWillMount() {
 		if (this.props.items && this.props.items.length) {
-			this.setActivePage(this.props.initialPage);
+			this.setActivePage(this.props.initialPage, this.props.pageSize);
 		}
 	}
 
-	setActivePage(page) {
+	componentWillReceiveProps(nextProps) {
+		if (this.props.pageSize !== nextProps.pageSize) {
+			this.setActivePage(this.props.initialPage, nextProps.pageSize);
+		}
+	}
+
+	setActivePage(page, pageSize) {
 		const items = this.props.items;
 		let pageObject = this.state.pageObject;
 		// only needed if we decide to have prev/next buttons
@@ -29,7 +35,7 @@ class Pagination extends React.PureComponent {
 		// 	return;
 		// }
 
-		pageObject = this.getPageObject(items.length, page);
+		pageObject = this.getPageObject(items.length, page, pageSize);
 		const pageOfItems = items.slice(pageObject.startIndex, pageObject.endIndex + 1);
 
 		this.setState({ pageObject });
@@ -85,7 +91,7 @@ class Pagination extends React.PureComponent {
 				{
 					pageObject.pages.map((page) => (
 						<div key={page} className={pageObject.currentPage === page ? 'item active' : 'item'}>
-							<span role="button" tabIndex={0} onClick={() => this.setActivePage(page)}>{page}</span>
+							<span role="button" tabIndex={0} onClick={() => this.setActivePage(page, this.props.pageSize)}>{page}</span>
 						</div>
 					))
 				}
@@ -98,6 +104,7 @@ Pagination.propTypes = {
 	items: PropTypes.array.isRequired,
 	onChangePage: PropTypes.func.isRequired,
 	initialPage: PropTypes.number,
+	pageSize: PropTypes.number,
 };
 
 export default Pagination;
