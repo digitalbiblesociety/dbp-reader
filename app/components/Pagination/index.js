@@ -29,13 +29,13 @@ class Pagination extends React.PureComponent {
 
 	setActivePage(page, pageSize) {
 		const items = this.props.items;
-		let pageObject = this.state.pageObject;
 		// only needed if we decide to have prev/next buttons
+		// let pageObject = this.state.pageObject;
 		// if (page < 1 || page > pageObject.totalPages) {
 		// 	return;
 		// }
 
-		pageObject = this.getPageObject(items.length, page, pageSize);
+		const pageObject = this.getPageObject(items.length, page, pageSize);
 		const pageOfItems = items.slice(pageObject.startIndex, pageObject.endIndex + 1);
 
 		this.setState({ pageObject });
