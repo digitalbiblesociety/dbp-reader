@@ -8,8 +8,9 @@ export function* getTexts() {
 	const requestUrl = `https://api.bible.build/bibles?key=${process.env.DBP_API_KEY}&v=4&pretty`;
 	try {
 		const response = yield call(request, requestUrl);
+		const texts = response.data.filter((text) => !Array.isArray(text.filesets) && Object.keys(text.filesets).length);
 
-		yield put(loadTexts({ texts: response.data }));
+		yield put(loadTexts({ texts }));
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error(err); // eslint-disable-line no-console
