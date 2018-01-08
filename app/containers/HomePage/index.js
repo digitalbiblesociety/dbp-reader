@@ -46,7 +46,14 @@ import {
 	setActiveNotesView,
 	getChapterText,
 } from './actions';
-import makeSelectHomePage, { selectActiveBook, selectPrevBook, selectNextBook } from './selectors';
+import
+	makeSelectHomePage,
+	{
+		selectActiveBook,
+		selectPrevBook,
+		selectNextBook,
+		selectSettings,
+	} from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 // import messages from './messages';
@@ -152,6 +159,9 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			activeNotesView,
 		} = this.props.homepage;
 
+		const {
+			userSettings,
+		} = this.props;
 		return (
 			<GenericErrorBoundary affectedArea="Your entire app is corrupted and bad, try again!">
 				<Helmet>
@@ -202,7 +212,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					{
 						isSettingsModalActive ? (
 							<FadeTransition classNames="slide-from-right" in={isSettingsModalActive}>
-								<Settings toggleSettingsModal={this.toggleSettingsModal} />
+								<Settings userSettings={userSettings} toggleSettingsModal={this.toggleSettingsModal} />
 							</FadeTransition>
 						) : null
 					}
@@ -235,7 +245,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 						) : null
 					}
 				</TransitionGroup>
-				<Text setActiveNotesView={this.setActiveNotesView} activeBookName={activeBookName} activeChapter={activeChapter} notesActive={isNotesModalActive} toggleNotesModal={this.toggleNotesModal} text={chapterText} nextChapter={this.getNextChapter} prevChapter={this.getPrevChapter} />
+				<Text oneVersePerLine={userSettings.getIn(['toggleOptions', 'oneVersePerLine', 'active'])} readersMode={userSettings.getIn(['toggleOptions', 'readersMode', 'active'])} setActiveNotesView={this.setActiveNotesView} activeBookName={activeBookName} activeChapter={activeChapter} notesActive={isNotesModalActive} toggleNotesModal={this.toggleNotesModal} text={chapterText} nextChapter={this.getNextChapter} prevChapter={this.getPrevChapter} />
 				<Footer settingsActive={isSettingsModalActive} isInformationModalActive={isInformationModalActive} toggleInformationModal={this.toggleInformationModal} toggleSettingsModal={this.toggleSettingsModal} />
 			</GenericErrorBoundary>
 		);
@@ -248,6 +258,7 @@ HomePage.propTypes = {
 	activeBook: PropTypes.object,
 	previousBook: PropTypes.object,
 	nextBook: PropTypes.object,
+	userSettings: PropTypes.object,
 };
 // TODO: Sort books in selector
 const mapStateToProps = createStructuredSelector({
@@ -255,6 +266,7 @@ const mapStateToProps = createStructuredSelector({
 	previousBook: selectPrevBook(),
 	nextBook: selectNextBook(),
 	activeBook: selectActiveBook(),
+	userSettings: selectSettings(),
 });
 
 function mapDispatchToProps(dispatch) {

@@ -9,7 +9,6 @@ const selectSettingsDomain = (state) => state.get('settings');
  * Other specific selectors
  */
 
-
 /**
  * Default selector used by Settings
  */

@@ -32,9 +32,6 @@ import {
 
 // add icon for settings close button
 export class Settings extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
-	state = {
-		fontSize: 4,
-	}
 	componentDidMount() {
 		document.addEventListener('click', this.handleClickOutside);
 	}
@@ -79,16 +76,11 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 	}
 
 	render() {
-		const {
-			settingsToggleOptions,
-			activeTheme,
-			activeFontSize,
-			activeFontType,
-		} = this.props.settings;
-		const {
-			toggleSettingsModal,
-		} = this.props;
-
+		const activeTheme = this.props.userSettings.get('activeTheme');
+		const activeFontSize = this.props.userSettings.get('activeFontSize');
+		const activeFontType = this.props.userSettings.get('activeFontType');
+		const toggleOptions = this.props.userSettings.get('toggleOptions');
+		const { toggleSettingsModal } = this.props;
 		return (
 			<GenericErrorBoundary affectedArea="Settings">
 				<aside ref={this.setRef} className="settings">
@@ -127,7 +119,7 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 					<Slider className="font-sizes-slider" onChange={this.handleSliderChange} defaultValue={activeFontSize} value={activeFontSize} handleStyle={{ border: 'none', backgroundColor: 'rgb(98,177,130)' }} railStyle={{ backgroundColor: 'rgb(26,29,33)' }} trackStyle={{ backgroundColor: 'rgb(98,177,130)' }} step={1} min={1} max={5} />
 					<section className="option-toggles">
 						{
-							settingsToggleOptions.map((option) => <SettingsToggle key={option} name={option} action={this.toggle[option]} />)
+							toggleOptions.valueSeq().map((option) => (<SettingsToggle key={option.get('name')} checked={option.get('active')} name={option.get('name')} action={this.toggle[option.get('name')]} />))
 						}
 					</section>
 				</aside>
@@ -138,8 +130,8 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 
 Settings.propTypes = {
 	dispatch: PropTypes.func.isRequired,
-	settings: PropTypes.object,
-	toggleSettingsModal: PropTypes.func,
+	userSettings: PropTypes.object.isRequired,
+	toggleSettingsModal: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({

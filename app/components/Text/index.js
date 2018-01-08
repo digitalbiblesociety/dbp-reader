@@ -60,8 +60,23 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			toggleNotesModal,
 			notesActive,
 			setActiveNotesView,
+			readersMode,
+			oneVersePerLine,
 		} = this.props;
-
+		let textComponents;
+		if (readersMode) {
+			textComponents = text.map((verse) => (
+				<span key={verse.verse_start}>{verse.verse_text}</span>
+			));
+		} else if (oneVersePerLine) {
+			textComponents = text.map((verse) => (
+				<span key={verse.verse_start}><br />{verse.verse_text}<br /></span>
+			));
+		} else {
+			textComponents = text.map((verse) => (
+				<span key={verse.verse_start}>&nbsp;<sup>{verse.verse_start}</sup>&nbsp;{verse.verse_text}</span>
+			));
+		}
 		return (
 			<div className="text-container">
 				{
@@ -71,11 +86,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				}
 				<main ref={this.setMainRef} onClick={(e) => e.button === 0 && this.closeContextMenu()} onMouseUp={this.handleRightClick} className="chapter" onContextMenu={this.handleContext}>
 					<h1 className="active-chapter-title">{activeChapter}</h1>
-					{
-						text.map((verse) => (
-							<span key={verse.verse_start}>&nbsp;<sup>{verse.verse_start}</sup>&nbsp;{verse.verse_text}</span>
-						))
-					}
+					{textComponents}
 				</main>
 				{
 					activeBookName === 'Revelation' && activeChapter === 22 ? null : (
@@ -101,6 +112,8 @@ Text.propTypes = {
 	activeBookName: PropTypes.string,
 	activeChapter: PropTypes.number,
 	notesActive: PropTypes.bool,
+	readersMode: PropTypes.bool,
+	oneVersePerLine: PropTypes.bool,
 };
 
 export default Text;

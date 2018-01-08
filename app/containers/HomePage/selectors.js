@@ -42,6 +42,16 @@ const selectPrevBook = () => createSelector(
 	}
 );
 
+const selectSettings = () => createSelector(
+	selectHomePageDomain,
+	(substate) => {
+		const toggleOptions = substate.getIn(['userSettings', 'toggleOptions']);
+		const filteredToggleOptions = toggleOptions.filter((option) => option.get('available'));
+		const userSettings = substate.get('userSettings').set('toggleOptions', filteredToggleOptions);
+		return userSettings;
+	}
+);
+
 // Most of function needed to determine which books are available for the selected text
 // const selectAvailableBookNames = () => createSelector(
 //   selectHomePageDomain,
@@ -68,4 +78,5 @@ export {
   selectActiveBook,
 	selectNextBook,
 	selectPrevBook,
+	selectSettings,
 };
