@@ -9,6 +9,8 @@ import {
 	LOAD_CHAPTER_TEXT,
 	GET_BOOKS,
 	LOAD_BOOKS,
+	GET_AUDIO,
+	LOAD_AUDIO,
 	GET_CHAPTER_TEXT,
 	TOGGLE_NOTES_MODAL,
 	TOGGLE_SETTINGS_MODAL,
@@ -33,9 +35,19 @@ export const loadBooksAndCopywrite = ({ books, copywrite }) => ({
 	copywrite,
 });
 
+export const loadAudio = (stuff) => ({
+	type: LOAD_AUDIO,
+	...stuff,
+});
+
 export const getBooks = ({ textId }) => ({
 	type: GET_BOOKS,
 	textId,
+});
+
+export const getAudio = ({ filesetId }) => ({
+	type: GET_AUDIO,
+	filesetId,
 });
 
 export const getChapterText = ({ bible, book, chapter }) => ({

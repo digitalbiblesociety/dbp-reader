@@ -9,6 +9,7 @@ import {
 	SET_ACTIVE_BOOK_NAME,
 	LOAD_CHAPTER_TEXT,
 	LOAD_BOOKS,
+	LOAD_AUDIO,
 	TOGGLE_SETTINGS_MODAL,
 	TOGGLE_CHAPTER_SELECTION,
 	TOGGLE_MENU_BAR,
@@ -51,6 +52,8 @@ function homePageReducer(state = initialState, action) {
 		return state
 			.set('copywrite', fromJS(action.copywrite))
 			.set('books', fromJS(action.books));
+	case LOAD_AUDIO:
+		return state.set('audioData', action.stuff);
 	case TOGGLE_MENU_BAR:
 		return state.set('isMenuBarActive', !state.get('isMenuBarActive'));
 	case TOGGLE_PROFILE:

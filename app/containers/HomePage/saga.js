@@ -1,9 +1,24 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
 import request from 'utils/request';
-import { GET_CHAPTER_TEXT, GET_BOOKS } from './constants';
-import { loadChapter, loadBooksAndCopywrite } from './actions';
+import { GET_CHAPTER_TEXT, GET_BOOKS, GET_AUDIO } from './constants';
+import { loadChapter, loadBooksAndCopywrite, loadAudio } from './actions';
+
+export function* getAudio({ filesetId }) {
+	const requestUrl = `https://api.bible.build/bibles/filesets/${filesetId}?key=${process.env.DBP_API_KEY}&v=4&pretty`;
+
+	try {
+		const response = yield call(request, requestUrl);
+
+		yield put(loadAudio(response));
+	} catch (err) {
+		if (process.env.NODE_ENV === 'development') {
+			console.error(err); // eslint-disable-line no-console
+		}
+	}
+}
 
 export function* getBooks({ textId }) {
+	// Plain Text -> https://api.bible.build/bibles/${textId}
 	const requestUrl = `https://api.bible.build/bibles/${textId}?key=${process.env.DBP_API_KEY}&v=4&pretty`;
 
 	try {
@@ -28,6 +43,7 @@ export function* getBooks({ textId }) {
 }
 
 export function* getChapter({ bible, book, chapter }) {
+	// TODO: Add ability to make calls for plaintext and formatted text
 	const requestUrl = `https://api.bible.build/bible/${bible}/${book}/${chapter}?key=${process.env.DBP_API_KEY}&v=4&pretty`;
 
 	try {
@@ -45,4 +61,5 @@ export function* getChapter({ bible, book, chapter }) {
 export default function* defaultSaga() {
 	yield takeLatest(GET_CHAPTER_TEXT, getChapter);
 	yield takeLatest(GET_BOOKS, getBooks);
+	yield takeLatest(GET_AUDIO, getAudio);
 }
