@@ -35,6 +35,7 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 			duration: 100,
 			currentTime: 0,
 			playerState: true,
+			currentSpeed: 1,
 		};
 	}
 
@@ -108,7 +109,12 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 	}))
 
 	updatePlayerSpeed = (rate) => {
-		this.audioRef.playbackRate = rate;
+		if (this.state.currentSpeed !== rate) {
+			this.audioRef.playbackRate = rate;
+			this.setState({
+				currentSpeed: rate,
+			});
+		}
 	}
 
 	skipBackward = () => this.setState({
@@ -153,7 +159,7 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 						}
 						{
 							this.state.speedControlState ? (
-								<SpeedControl parentNode={this.audioPlayerContainer} options={[0.5, 1, 1.25, 1.5, 2]} setSpeed={this.updatePlayerSpeed} />
+								<SpeedControl parentNode={this.audioPlayerContainer} currentSpeed={this.state.currentSpeed} options={[0.5, 1, 1.25, 1.5, 2]} setSpeed={this.updatePlayerSpeed} />
 							) : null
 						}
 						{

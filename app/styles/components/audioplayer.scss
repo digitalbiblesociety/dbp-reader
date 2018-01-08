@@ -9,9 +9,11 @@
 .audio-player-container.closed         {position:absolute;background-color:rgba(0,0,0,0);top:4px;:not(:last-child){z-index:-1;}}
 
 // Speed Control Styles
-.speed-control-container-container {display:block;top:-6px;left:calc(100vw - 150px);position:relative;}
-.speed-control-container           {position:absolute;display:flex;align-items:center;justify-content:space-around;background-color:rgba(0,0,0,.8);height:30px;width:150px;border:1px solid $menu-active-color;}
-.speed-control-container .item     {color:#fff;cursor:pointer;}
+.speed-control-container-container    {display:block;top:-6px;left:calc(100vw - 150px);position:relative;}
+.speed-control-container              {position:absolute;display:flex;align-items:center;justify-content:space-around;background-color:rgba(0,0,0,.8);height:30px;width:150px;border:1px solid $menu-active-color;}
+.speed-control-container .item        {color:#fff;cursor:pointer;}
+.speed-control-container .item:hover  {color:$menu-active-color;}
+.speed-control-container .item.active {color:$menu-active-color;}
 
 // Progress Bar Styles
 .progress-bar       {width:50%;background-color:rgb(32,34,39);height:2px;cursor:pointer;}
