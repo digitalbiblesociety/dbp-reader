@@ -75,7 +75,7 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 										)
 									}
 									{
-										bible.get('filesets').includes('text') ? (
+										bible.get('filesets').includes('text_rich') || bible.get('filesets').includes('text_plain') ? (
 											<SvgWrapper className="svg active" height="20px" width="20px" svgid="volume" />
 										) : (
 											<SvgWrapper className="svg inactive" height="20px" width="20px" svgid="volume" />
