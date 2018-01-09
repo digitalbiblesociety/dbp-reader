@@ -6,8 +6,10 @@
 
 import {
 	LOAD_TEXTS,
+	LOAD_COUNTRIES,
 	GET_DPB_TEXTS,
 	GET_LANGUAGES,
+	GET_COUNTRIES,
 	SET_LANGUAGES,
 	SET_ISO_CODE,
 	SET_LANGUAGE_LIST_STATE,
@@ -21,12 +23,21 @@ export const loadTexts = ({ texts }) => ({
 	texts,
 });
 
+export const loadCountries = (countries) => ({
+	type: LOAD_COUNTRIES,
+	countries,
+});
+
 export const getTexts = () => ({
 	type: GET_DPB_TEXTS,
 });
 
 export const getLanguages = () => ({
 	type: GET_LANGUAGES,
+});
+
+export const getCountries = () => ({
+	type: GET_COUNTRIES,
 });
 
 export const setCountryListState = ({ state }) => ({

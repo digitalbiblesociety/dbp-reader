@@ -1,8 +1,8 @@
 // Chapter and Version Shared Styles
 .chapter-text-dropdown                              {display:flex;flex-direction:column;position:fixed;top:0;left:calc(50% - 116px);height:100%;width:320px;background-color:#2C3036;color:rgba(244,245,246,.5)}
 .chapter-text-dropdown header                       {display:flex;align-items:center;justify-content:center;background:#7E0E2A;color:#FFF;text-align:center;height:54px;line-height:54px}
-.chapter-text-dropdown header .text-selection       {}
 .chapter-text-dropdown header .close-icon           {margin-left:20px;}
+.text-selection-section .active-header-name         {color:$menu-active-color;margin-left:5px;}
 .text-selection-section                             {color:#FFF;max-height:calc(100% - 216px);height:calc(100% - 216px);text-transform:uppercase;}
 .text-selection-section ::-webkit-input-placeholder {color:#FFF;padding-left:45px;}
 .text-selection-section ::-moz-placeholder          {color:#FFF;padding-left:45px;}
@@ -19,12 +19,11 @@
 .country-name:hover {color:$menu-active-color;}
 
 // Language Selection Styles
-.active-language-name      {color:$menu-active-color;margin-left:5px;}
+.active-language-name      {color:$menu-active-color;}
 .language-name             {cursor:pointer;margin-top:5px;}
 .language-name:hover       {color:$menu-active-color;}
 .active-language-name      {color:$menu-active-color;}
-.language-section-expanded {color:#FFF;}
-.language-name-list        {max-height:calc(100% - 90px);overflow-y:scroll;overflow-x:hidden;padding-left:15px;}
+.language-name-list        {color:$paper-primary;font-size:.98em;height:calc(100% - 90px);max-height:calc(100% - 90px);overflow-y:scroll;overflow-x:hidden;padding:15px;background-color:#222;}
 
 // Chapter Selection Styles
 .chapter-selection-section {color:#FFF;max-height:calc(100% - 108px);height:calc(100% - 108px);text-transform:uppercase;}
@@ -36,7 +35,9 @@
 .active-chapter            {color:$menu-active-color;}
 
 // Version Selection Styles
-.active-iso-code           {color:$menu-active-color;margin-left:5px;}
-.version-item-button       {cursor:pointer;}
-.version-item-button:hover {color:$menu-active-color;}
-.active-version            {color:$menu-active-color;}
+.version-item-button               {display:flex;align-items:flex-start;margin:10px 0;cursor:pointer;:nth-child(2){margin:0 10px;}}
+.version-item-button:hover         {color:$menu-active-color;fill:$menu-active-color;}
+.version-item-button .svg          {min-height: 20px;min-width:20px;}
+.version-item-button .svg.active   {fill:$paper-primary;}
+.version-item-button .svg.inactive {fill:rgb(61,65,68);}
+.active-version                    {color:$menu-active-color;}

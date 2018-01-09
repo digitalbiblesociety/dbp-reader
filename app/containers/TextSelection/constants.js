@@ -13,3 +13,5 @@ export const SET_VERSION_LIST_STATE = 'app/TextSelection/SET_VERSION_LIST_STATE'
 export const SET_LANGUAGE_LIST_STATE = 'app/TextSelection/SET_LANGUAGE_LIST_STATE';
 export const SET_COUNTRY_LIST_STATE = 'app/TextSelection/SET_COUNTRY_LIST_STATE';
 export const SET_COUNTRY_NAME = 'app/TextSelection/SET_COUNTRY_NAME';
+export const GET_COUNTRIES = 'app/TextSelection/GET_COUNTRIES';
+export const LOAD_COUNTRIES = 'app/TextSelection/LOAD_COUNTRIES';

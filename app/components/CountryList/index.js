@@ -52,7 +52,7 @@ class CountryList extends React.PureComponent { // eslint-disable-line react/pre
 					<div className="text-selection-title">
 						<SvgWrapper height="25px" width="25px" fill="#fff" svgid="globe" />
 						<span className="text">COUNTRY:</span>
-						<span className="active-language-name">{activeCountryName || 'ALL'}</span>
+						<span className="active-header-name">{activeCountryName || 'ALL'}</span>
 					</div>
 					<input className="text-selection-input" onChange={this.handleChange} placeholder="SEARCH LANGUAGES" />
 					<div className="language-name-list">
@@ -86,7 +86,7 @@ class CountryList extends React.PureComponent { // eslint-disable-line react/pre
 				<div className="text-selection-title">
 					<SvgWrapper height="25px" width="25px" fill="#fff" svgid="world" />
 					<span className="text">COUNTRY:</span>
-					<span className="active-language-name">{activeCountryName || 'ALL'}</span>
+					<span className="active-header-name">{activeCountryName || 'ALL'}</span>
 				</div>
 			</div>
 		);

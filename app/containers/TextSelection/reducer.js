@@ -7,6 +7,7 @@
 import { fromJS } from 'immutable';
 import {
 	LOAD_TEXTS,
+	LOAD_COUNTRIES,
 	SET_COUNTRY_NAME,
 	SET_LANGUAGES,
 	SET_ISO_CODE,
@@ -62,6 +63,7 @@ const initialState = fromJS({
 			date: 1905,
 		},
 	],
+	countries: [],
 	countryLanguages: [],
 	languageListActive: false,
 	versionListActive: false,
@@ -82,6 +84,8 @@ function textSelectionReducer(state = initialState, action) {
 		return state.set('countryListActive', action.state);
 	case LOAD_TEXTS:
 		return state.set('texts', fromJS(action.texts));
+	case LOAD_COUNTRIES:
+		return state.set('countries', fromJS(action.countries));
 	case SET_LANGUAGES:
 		return state.set('languages', fromJS(action.languages));
 	case SET_COUNTRY_NAME:

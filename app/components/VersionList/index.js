@@ -49,7 +49,7 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 					<div className="text-selection-title">
 						<SvgWrapper height="25px" width="25px" fill="#fff" svgid="resources" />
 						<span className="text">VERSION:</span>
-						<span className="active-iso-code">{activeTextName}</span>
+						<span className="active-header-name">{activeTextName}</span>
 					</div>
 					<input className="text-selection-input" onChange={this.handleChange} placeholder="SEARCH VERSIONS" />
 					<div className="language-name-list">
@@ -67,6 +67,20 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 										toggleTextSelection();
 									}}
 								>
+									{
+										bible.get('filesets').includes('audio_drama') ? (
+											<SvgWrapper className="svg active" height="20px" width="20px" svgid="text" />
+										) : (
+											<SvgWrapper className="svg inactive" height="20px" width="20px" svgid="text" />
+										)
+									}
+									{
+										bible.get('filesets').includes('text') ? (
+											<SvgWrapper className="svg active" height="20px" width="20px" svgid="volume" />
+										) : (
+											<SvgWrapper className="svg inactive" height="20px" width="20px" svgid="volume" />
+										)
+									}
 									<h4 className={bible.get('abbr') === activeTextName ? 'active-version' : ''}>{bible.get('name')}</h4>
 								</div>
 							))
@@ -85,7 +99,7 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 				<div className="text-selection-title">
 					<SvgWrapper height="25px" width="25px" fill="#fff" svgid="resources" />
 					<span className="text">VERSION:</span>
-					<span className="active-iso-code">{activeTextName}</span>
+					<span className="active-header-name">{activeTextName}</span>
 				</div>
 			</div>
 		);

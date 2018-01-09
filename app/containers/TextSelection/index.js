@@ -24,6 +24,7 @@ import {
 	getLanguages,
 	getTexts,
 	setCountryName,
+	getCountries,
 } from './actions';
 import makeSelectTextSelection, { selectLanguages, selectTexts, selectCountries } from './selectors';
 import reducer from './reducer';
@@ -34,6 +35,7 @@ import saga from './saga';
 export class TextSelection extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	componentDidMount() {
 		// TODO: use a conditional to ensure the actions below only happen on the first mount
+		this.props.dispatch(getCountries());
 		this.props.dispatch(getLanguages());
 		this.props.dispatch(getTexts());
 		document.addEventListener('click', this.handleClickOutside);
