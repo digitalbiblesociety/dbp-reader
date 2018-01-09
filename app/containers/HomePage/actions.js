@@ -35,9 +35,9 @@ export const loadBooksAndCopywrite = ({ books, copywrite }) => ({
 	copywrite,
 });
 
-export const loadAudio = (stuff) => ({
+export const loadAudio = ({ audioObjects }) => ({
 	type: LOAD_AUDIO,
-	...stuff,
+	audioObjects,
 });
 
 export const getBooks = ({ textId }) => ({
@@ -45,9 +45,9 @@ export const getBooks = ({ textId }) => ({
 	textId,
 });
 
-export const getAudio = ({ filesetId }) => ({
+export const getAudio = ({ filesetId, list }) => ({
 	type: GET_AUDIO,
-	filesetId,
+	filesetId,list,
 });
 
 export const getChapterText = ({ bible, book, chapter }) => ({
@@ -85,10 +85,11 @@ export const toggleInformationModal = () => ({
 	type: TOGGLE_INFORMATION_MODAL,
 });
 
-export const setActiveTextId = ({ textName, textId }) => ({
+export const setActiveTextId = ({ textName, textId, filesets }) => ({
 	type: ACTIVE_TEXT_ID,
 	textName,
 	textId,
+	filesets,
 });
 
 export const setActiveBookName = (book, id) => ({

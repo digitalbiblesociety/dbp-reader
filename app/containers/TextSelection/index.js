@@ -128,6 +128,7 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 						activeIsoCode={activeIsoCode}
 						setActiveText={setActiveText}
 						bibles={bibles}
+						getAudio={this.props.getAudio}
 						toggleLanguageList={this.toggleLanguageList}
 						toggleTextSelection={toggleVersionSelection}
 					/>

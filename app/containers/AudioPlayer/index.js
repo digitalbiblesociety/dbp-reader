@@ -27,7 +27,6 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 		// needs next and prev audio tracks
 		this.state = {
 			playing: false,
-			src: 'http://cloud.faithcomesbyhearing.com/mp3audiobibles2/ENGESVO2DA/A01___02_Genesis_____ENGESVO2DA.mp3',
 			speedControlState: false,
 			volumeSliderState: false,
 			elipsisState: false,
@@ -117,21 +116,28 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 		}
 	}
 
-	skipBackward = () => this.setState({
-		src: 'http://cloud.faithcomesbyhearing.com/mp3audiobibles2/ENGESVO2DA/A01___01_Genesis_____ENGESVO2DA.mp3',
-		playing: false,
-	})
+	skipBackward = () => {
+		this.props.skipBackward();
+		this.setState({
+			playing: false,
+		});
+	}
 
-	skipForward = () => this.setState({
-		src: 'http://cloud.faithcomesbyhearing.com/mp3audiobibles2/ENGESVO2DA/A01___03_Genesis_____ENGESVO2DA.mp3',
-		playing: false,
-	})
+	skipForward = () => {
+		this.props.skipForward();
+		this.setState({
+			playing: false,
+		});
+	}
 
 	toggleAudioPlayer = () => this.setState({
 		playerState: !this.state.playerState,
 	})
 
 	render() {
+		const {
+			audioPlayerSource: source,
+		} = this.props;
 		return (
 			<GenericErrorBoundary affectedArea="AudioPlayer">
 				<div ref={this.setAudioPlayerRef}>
@@ -167,7 +173,7 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 								<AudioPlayerMenu parentNode={this.audioPlayerContainer} />
 							) : null
 						}
-						<audio ref={this.handleRef} className="audio-player" src={this.state.src}></audio>
+						<audio ref={this.handleRef} className="audio-player" src={source}></audio>
 					</div>
 					<SvgWrapper onClick={this.toggleAudioPlayer} width="50px" height="5px" className="audio-gripper" fill="#aeaeae" svgid="gripper" />
 				</div>
@@ -177,7 +183,9 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 }
 
 AudioPlayer.propTypes = {
-	dispatch: PropTypes.func.isRequired,
+	audioPlayerSource: PropTypes.string.isRequired,
+	skipBackward: PropTypes.func.isRequired,
+	skipForward: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({

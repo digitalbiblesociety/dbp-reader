@@ -52,6 +52,18 @@ const selectSettings = () => createSelector(
 	}
 );
 
+const selectActiveAudio = () => createSelector(
+	selectHomePageDomain,
+	(substate) => {
+		const audioObjects = substate.get('audioObjects');
+		const activeChapter = substate.get('activeChapter');
+		const activeBook = substate.get('activeBookId');
+		const audioSource = audioObjects.filter((obj) => obj.get('book_id') === activeBook && obj.get('chapter_start') === activeChapter);
+		console.log(audioSource);
+		return audioSource.getIn([0, 'path']);
+	}
+);
+
 // Most of function needed to determine which books are available for the selected text
 // const selectAvailableBookNames = () => createSelector(
 //   selectHomePageDomain,
@@ -79,4 +91,5 @@ export {
 	selectNextBook,
 	selectPrevBook,
 	selectSettings,
+	selectActiveAudio,
 };

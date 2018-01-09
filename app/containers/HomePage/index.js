@@ -33,6 +33,7 @@ import GenericErrorBoundary from 'components/GenericErrorBoundary';
 import FadeTransition from 'components/FadeTransition';
 import {
 	getBooks,
+	getAudio,
 	toggleMenuBar,
 	toggleProfile,
 	toggleChapterSelection,
@@ -48,16 +49,16 @@ import {
 } from './actions';
 import
 	makeSelectHomePage,
-	{
-		selectActiveBook,
-		selectPrevBook,
-		selectNextBook,
-		selectSettings,
-	} from './selectors';
+{
+	selectActiveBook,
+	selectPrevBook,
+	selectNextBook,
+	selectSettings,
+	selectActiveAudio,
+} from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 // import messages from './messages';
-
 class HomePage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	componentDidMount() {
 		const {
@@ -92,7 +93,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			this.getChapters({ bible: activeTextId, book: activeBookId, chapter: activeChapter + 1 });
 			this.setActiveChapter(activeChapter + 1);
 		}
-	};
+	}
 
 	getPrevChapter = () => {
 		const {
@@ -112,33 +113,35 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			this.getChapters({ bible: activeTextId, book: activeBookId, chapter: activeChapter - 1 });
 			this.setActiveChapter(activeChapter - 1);
 		}
-	};
+	}
 
-	getBooks = (textId) => this.props.dispatch(getBooks({ textId }));
+	getBooks = (textId) => this.props.dispatch(getBooks({ textId }))
 
-	getChapters = ({ bible, book, chapter }) => this.props.dispatch(getChapterText({ bible, book, chapter }));
+	getAudio = ({ list }) => this.props.dispatch(getAudio({ list }));
 
-	setActiveBookName = (bookName, id) => this.props.dispatch(setActiveBookName(bookName, id));
+	getChapters = ({ bible, book, chapter }) => this.props.dispatch(getChapterText({ bible, book, chapter }))
 
-	setActiveChapter = (chapter) => this.props.dispatch(setActiveChapter(chapter));
+	setActiveBookName = (bookName, id) => this.props.dispatch(setActiveBookName(bookName, id))
 
-	setActiveTextId = (props) => this.props.dispatch(setActiveTextId(props));
+	setActiveChapter = (chapter) => this.props.dispatch(setActiveChapter(chapter))
 
-	setActiveNotesView = (view) => this.props.dispatch(setActiveNotesView(view));
+	setActiveTextId = (props) => this.props.dispatch(setActiveTextId(props))
 
-	toggleMenuBar = () => this.props.dispatch(toggleMenuBar());
+	setActiveNotesView = (view) => this.props.dispatch(setActiveNotesView(view))
 
-	toggleProfile = () => this.props.dispatch(toggleProfile());
+	toggleMenuBar = () => this.props.dispatch(toggleMenuBar())
 
-	toggleNotesModal = () => this.props.dispatch(toggleNotesModal());
+	toggleProfile = () => this.props.dispatch(toggleProfile())
 
-	toggleSettingsModal = () => this.props.dispatch(toggleSettingsModal());
+	toggleNotesModal = () => this.props.dispatch(toggleNotesModal())
 
-	toggleChapterSelection = () => this.props.dispatch(toggleChapterSelection());
+	toggleSettingsModal = () => this.props.dispatch(toggleSettingsModal())
 
-	toggleVersionSelection = () => this.props.dispatch(toggleVersionSelection());
+	toggleChapterSelection = () => this.props.dispatch(toggleChapterSelection())
 
-	toggleInformationModal = () => this.props.dispatch(toggleInformationModal());
+	toggleVersionSelection = () => this.props.dispatch(toggleVersionSelection())
+
+	toggleInformationModal = () => this.props.dispatch(toggleInformationModal())
 
 	render() {
 		const {
@@ -161,7 +164,9 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 
 		const {
 			userSettings,
+			audioPlayerSource,
 		} = this.props;
+		console.log(audioPlayerSource);
 		return (
 			<GenericErrorBoundary affectedArea="Your entire app is corrupted and bad, try again!">
 				<Helmet>
@@ -178,7 +183,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					toggleChapterSelection={this.toggleChapterSelection}
 					toggleVersionSelection={this.toggleVersionSelection}
 				/>
-				<AudioPlayer />
+				<AudioPlayer audioPlayerSource={audioPlayerSource} skipBackward={this.getPrevChapter} skipForward={this.getNextChapter} />
 				<TransitionGroup>
 					{
 						isChapterSelectionActive ? (
@@ -202,6 +207,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 								<TextSelection
 									activeBookName={activeBookName}
 									activeTextName={activeTextName}
+									getAudio={this.getAudio}
 									setActiveText={this.setActiveTextId}
 									setActiveChapter={this.setActiveChapter}
 									toggleVersionSelection={this.toggleVersionSelection}
@@ -259,6 +265,7 @@ HomePage.propTypes = {
 	previousBook: PropTypes.object,
 	nextBook: PropTypes.object,
 	userSettings: PropTypes.object,
+	audioPlayerSource: PropTypes.string,
 };
 // TODO: Sort books in selector
 const mapStateToProps = createStructuredSelector({
@@ -267,6 +274,7 @@ const mapStateToProps = createStructuredSelector({
 	nextBook: selectNextBook(),
 	activeBook: selectActiveBook(),
 	userSettings: selectSettings(),
+	audioPlayerSource: selectActiveAudio(),
 });
 
 function mapDispatchToProps(dispatch) {
