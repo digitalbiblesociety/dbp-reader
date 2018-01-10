@@ -54,7 +54,7 @@ class CountryList extends React.PureComponent { // eslint-disable-line react/pre
 						<span className="text">COUNTRY:</span>
 						<span className="active-header-name">{activeCountryName || 'ALL'}</span>
 					</div>
-					<input className="text-selection-input" onChange={this.handleChange} placeholder="SEARCH LANGUAGES" />
+					<input className="text-selection-input" onChange={this.handleChange} placeholder="SEARCH LANGUAGES" value={this.state.filterText} />
 					<div className="language-name-list">
 						{
 							filteredCountries.valueSeq().map((country) => (

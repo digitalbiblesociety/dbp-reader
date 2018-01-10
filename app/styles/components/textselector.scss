@@ -4,14 +4,15 @@
 .chapter-text-dropdown header .close-icon           {margin-left:20px;}
 .text-selection-section .active-header-name         {color:$menu-active-color;margin-left:5px;}
 .text-selection-section                             {color:#FFF;max-height:calc(100% - 216px);height:calc(100% - 216px);text-transform:uppercase;}
-.text-selection-section ::-webkit-input-placeholder {color:#FFF;padding-left:45px;}
-.text-selection-section ::-moz-placeholder          {color:#FFF;padding-left:45px;}
-.text-selection-section :-ms-input-placeholder      {color:#FFF;padding-left:45px;}
+.text-selection-section ::-webkit-input-placeholder {color:#FFF;}
+.text-selection-section ::-moz-placeholder          {color:#FFF;}
+.text-selection-section :-ms-input-placeholder      {color:#FFF;}
 .text-selection-section.closed                      {cursor:pointer;height:54px;}
 .text-selection-title                               {display:flex;align-items:center;justify-content:flex-start;margin:10px 0 5px 10px;}
 .text-selection-title .text                         {margin-left:10px;}
 // Change from using background url to using an absolutely positioned element
-.text-selection-input                               {background:url("../images/input_search_icon.svg") no-repeat 5px 10px;border:none;width:100%;height:50px;background-color:$input-background-color;color:#FFF;font-size:.9em;font-weight:200;caret-color:#000;padding-left:10px;}
+.text-selection-input                               {background:url("../images/input_search_icon.svg") no-repeat 5px 10px;border:none;width:100%;height:50px;background-color:$input-background-color;color:#FFF;font-size:.9em;font-weight:200;caret-color:#000;padding-left:45px;}
+.text-selection-input:focus                         {padding-left:10px;}
 
 // Country Selection Styles
 .country-name       {display:flex;align-items:center;cursor:pointer;}
