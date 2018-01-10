@@ -40,10 +40,20 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 	handleChange = (e) => this.setState({ filterText: e.target.value });
 
 	render() {
-		const { bibles, setCountryListState, toggleTextSelection, toggleLanguageList, setActiveText, activeTextName, activeIsoCode, active, toggleVersionList } = this.props;
+		const {
+			bibles,
+			setCountryListState,
+			toggleTextSelection,
+			toggleLanguageList,
+			setActiveText,
+			activeTextName,
+			activeIsoCode,
+			active,
+			toggleVersionList,
+			getAudio,
+		} = this.props;
 		const { filterText } = this.state;
 		const filteredBibles = filterText ? bibles.filter((bible) => this.filterFunction(bible, filterText, activeIsoCode)) : bibles.filter((bible) => bible.get('iso') === activeIsoCode);
-		filteredBibles.forEach(bible => bible.get('filesets') ? '' : console.log('no fileset', bible.get('abbr')))
 		if (active) {
 			return (
 				<div className="text-selection-section">
@@ -64,7 +74,7 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 									onClick={() => {
 										const abbr = bible.get('abbr');
 										setActiveText({ textId: abbr, textName: abbr, filesets: bible.get('filesets') });
-										this.props.getAudio({ list: bible.get('filesets')});
+										getAudio({ list: bible.get('filesets') });
 										toggleTextSelection();
 									}}
 								>
@@ -117,6 +127,7 @@ BiblesTable.propTypes = {
 	toggleVersionList: PropTypes.func,
 	toggleLanguageList: PropTypes.func,
 	toggleTextSelection: PropTypes.func,
+	getAudio: PropTypes.func,
 };
 
 export default BiblesTable;

@@ -15,7 +15,7 @@ import {
 	SET_LANGUAGE_LIST_STATE,
 	SET_COUNTRY_LIST_STATE,
 } from './constants';
-
+// TODO: Ensure default state has a way of staying up to date
 const initialState = fromJS({
 	languages: [
 		{

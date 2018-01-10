@@ -87,6 +87,7 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 			setActiveText,
 			activeTextName,
 			toggleVersionSelection,
+			getAudio,
 		} = this.props;
 		let sectionTitle = 'LANGUAGE';
 		if (versionListActive) {
@@ -128,7 +129,7 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 						activeIsoCode={activeIsoCode}
 						setActiveText={setActiveText}
 						bibles={bibles}
-						getAudio={this.props.getAudio}
+						getAudio={getAudio}
 						toggleLanguageList={this.toggleLanguageList}
 						toggleTextSelection={toggleVersionSelection}
 					/>
@@ -147,6 +148,7 @@ TextSelection.propTypes = {
 	setActiveText: PropTypes.func,
 	activeTextName: PropTypes.string,
 	toggleVersionSelection: PropTypes.func,
+	getAudio: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
