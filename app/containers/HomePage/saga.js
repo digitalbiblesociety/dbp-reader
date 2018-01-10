@@ -1,6 +1,5 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
 import request from 'utils/request';
-// import fetch from 'whatwg-fetch';
 import unionWith from 'lodash/unionWith';
 import { GET_CHAPTER_TEXT, GET_BOOKS, GET_AUDIO } from './constants';
 import { loadChapter, loadBooksAndCopywrite, loadAudio } from './actions';
@@ -20,11 +19,10 @@ export function* getAudio({ list }/* { filesetId, list } */) {
 
 	try {
 		// const response = yield call(request, requestUrl);
-		// const res2 = yield fetch(`https://api.bible.build/bibles/filesets/CHNUNVN2DA?key=${process.env.DBP_API_KEY}&v=4&pretty`).then(res => res.headers);
 
 		const results = yield (async (urls) => {
 			const data = [];
-			// Figure out a cleaner way of doing this
+			// Figure out a cleaner/faster way of doing this
 			for (const url of urls) { // eslint-disable-line no-restricted-syntax
 				const res = await request(url);// eslint-disable-line no-await-in-loop
 				data.push(res.data);

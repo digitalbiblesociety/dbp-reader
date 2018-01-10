@@ -18,6 +18,7 @@ import { compose } from 'redux';
 import { TransitionGroup } from 'react-transition-group';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
+import { fromJS, is } from 'immutable';
 import Settings from 'containers/Settings';
 import AudioPlayer from 'containers/AudioPlayer';
 import TextSelection from 'containers/TextSelection';
@@ -74,8 +75,17 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 	}
 
 	componentWillReceiveProps(nextProps) {
+		const nextBooks = fromJS(nextProps.homepage.books);
+		const curBooks = fromJS(this.props.homepage.books);
+		const nextBookId = nextBooks.getIn([0, 'book_id']);
+		const chapter = nextBooks.getIn([0, 'chapters', 0]);
+		// Solving the issue of requesting the new data from the
+		// api when a new version is clicked
 		if (nextProps.homepage.activeTextId !== this.props.homepage.activeTextId) {
 			this.getBooks(nextProps.homepage.activeTextId);
+			this.toggleChapterSelection();
+		} else if (!is(nextBooks, curBooks) && curBooks.size) {
+			this.getChapters({ bible: nextProps.homepage.activeTextId, book: nextBookId, chapter });
 		}
 	}
 
@@ -211,6 +221,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 									activeBookName={activeBookName}
 									activeTextName={activeTextName}
 									getAudio={this.getAudio}
+									getChapters={this.getChapters}
 									setActiveText={this.setActiveTextId}
 									setActiveChapter={this.setActiveChapter}
 									toggleVersionSelection={this.toggleVersionSelection}

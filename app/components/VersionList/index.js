@@ -73,8 +73,9 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 									key={`${bible.get('abbr')}${bible.get('date')}`}
 									onClick={() => {
 										const abbr = bible.get('abbr');
-										setActiveText({ textId: abbr, textName: abbr, filesets: bible.get('filesets') });
+
 										getAudio({ list: bible.get('filesets') });
+										setActiveText({ textId: abbr, textName: abbr, filesets: bible.get('filesets') });
 										toggleTextSelection();
 									}}
 								>
