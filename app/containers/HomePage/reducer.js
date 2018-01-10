@@ -36,68 +36,7 @@ import {
 const initialState = fromJS({
 	books: [],
 	chapterText: [],
-	audioObjects: [
-	{
-		"book_id": "MAT",
-		"book_name": "Matthew",
-		"chapter_start": 1,
-		"chapter_end": null,
-		"verse_start": 1,
-		"verse_end": null,
-		"timestamp": null,
-		"path": "https://dbp-dev.s3.us-west-2.amazonaws.com/audio/CHNUNVN2DA/B01___01_Matthew_____CHNUNVN2DA.mp3?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAJOMYRUAEFXAK5KDQ%2F20180109%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20180109T222919Z&X-Amz-SignedHeaders=host&X-Amz-Expires=300&X-Amz-Signature=3db10c28c2f813db3d779df93631b7534401d5bfcb344c0bd582801c7a697c79"
-	},
-	{
-		"book_id": "MAT",
-		"book_name": "Matthew",
-		"chapter_start": 2,
-		"chapter_end": null,
-		"verse_start": 1,
-		"verse_end": null,
-		"timestamp": null,
-		"path": "https://dbp-dev.s3.us-west-2.amazonaws.com/audio/CHNUNVN2DA/B01___02_Matthew_____CHNUNVN2DA.mp3?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAJOMYRUAEFXAK5KDQ%2F20180109%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20180109T222919Z&X-Amz-SignedHeaders=host&X-Amz-Expires=300&X-Amz-Signature=cfd48fd60ae78b2d47877c3b85799b04fe3202334619d09f650ee6dde86a6276"
-	},
-	{
-		"book_id": "MAT",
-		"book_name": "Matthew",
-		"chapter_start": 3,
-		"chapter_end": null,
-		"verse_start": 1,
-		"verse_end": null,
-		"timestamp": null,
-		"path": "https://dbp-dev.s3.us-west-2.amazonaws.com/audio/CHNUNVN2DA/B01___03_Matthew_____CHNUNVN2DA.mp3?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAJOMYRUAEFXAK5KDQ%2F20180109%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20180109T222919Z&X-Amz-SignedHeaders=host&X-Amz-Expires=300&X-Amz-Signature=b926c23cd811dd68aa2b4c16eaee3c86393677d9d3c776998e46dd03bd08691c"
-	},
-	{
-		"book_id": "MAT",
-		"book_name": "Matthew",
-		"chapter_start": 4,
-		"chapter_end": null,
-		"verse_start": 1,
-		"verse_end": null,
-		"timestamp": null,
-		"path": "https://dbp-dev.s3.us-west-2.amazonaws.com/audio/CHNUNVN2DA/B01___04_Matthew_____CHNUNVN2DA.mp3?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAJOMYRUAEFXAK5KDQ%2F20180109%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20180109T222919Z&X-Amz-SignedHeaders=host&X-Amz-Expires=300&X-Amz-Signature=12c929d73759d3611deb543cb6b8b15e88edbf3f3bef751cbf55831fda4a1911"
-	},
-	{
-		"book_id": "MAT",
-		"book_name": "Matthew",
-		"chapter_start": 5,
-		"chapter_end": null,
-		"verse_start": 1,
-		"verse_end": null,
-		"timestamp": null,
-		"path": "https://dbp-dev.s3.us-west-2.amazonaws.com/audio/CHNUNVN2DA/B01___05_Matthew_____CHNUNVN2DA.mp3?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAJOMYRUAEFXAK5KDQ%2F20180109%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20180109T222919Z&X-Amz-SignedHeaders=host&X-Amz-Expires=300&X-Amz-Signature=ac1a3d495430d93057db26c6217f651190df23c7831ee1abf8e5926f28a4bcae"
-	},
-	{
-		"book_id": "MAT",
-		"book_name": "Matthew",
-		"chapter_start": 6,
-		"chapter_end": null,
-		"verse_start": 1,
-		"verse_end": null,
-		"timestamp": null,
-		"path": "https://dbp-dev.s3.us-west-2.amazonaws.com/audio/CHNUNVN2DA/B01___06_Matthew_____CHNUNVN2DA.mp3?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAJOMYRUAEFXAK5KDQ%2F20180109%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20180109T222919Z&X-Amz-SignedHeaders=host&X-Amz-Expires=300&X-Amz-Signature=68381a7b339c35fcfbc9d01d68a39c0a98c7fb9e82f6f09fbe8a7a6cf12bcb7c"
-	},
-	],
+	audioObjects: [],
 	activeFilesets: {},
 	copywrite: {
 		mark: 'Good News Publishers, Crossway Bibles',

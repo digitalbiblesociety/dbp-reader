@@ -33,7 +33,7 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 			volume: 1,
 			duration: 100,
 			currentTime: 0,
-			playerState: true,
+			playerState: !!this.props.audioPlayerSource,
 			currentSpeed: 1,
 		};
 	}
@@ -117,16 +117,16 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 	}
 
 	skipBackward = () => {
-		this.props.skipBackward();
 		this.setCurrentTime(0);
+		this.props.skipBackward();
 		this.setState({
 			playing: false,
 		});
 	}
 
 	skipForward = () => {
-		this.props.skipForward();
 		this.setCurrentTime(0);
+		this.props.skipForward();
 		this.setState({
 			playing: false,
 		});
@@ -143,40 +143,44 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 		return (
 			<GenericErrorBoundary affectedArea="AudioPlayer">
 				<div ref={this.setAudioPlayerRef}>
-					<div className={this.state.playerState ? 'audio-player-container open' : 'audio-player-container closed'}>
-						<SvgWrapper onClick={this.skipBackward} className="svgitem" width="25px" height="25px" fill="#fff" svgid="backward" />
-						{
-							!this.state.playing ? (
-								<SvgWrapper onClick={this.playVideo} className="svgitem" width="25px" height="25px" fill="#fff" svgid="play_audio" />
-							) : null
-						}
-						{
-							this.state.playing ? (
-								<SvgWrapper onClick={this.pauseVideo} className="svgitem" width="25px" height="25px" fill="#fff" svgid="pause" />
-							) : null
-						}
-						<SvgWrapper onClick={this.skipForward} className="item" width="25px" height="25px" fill="#fff" svgid="forward" />
-						<AudioProgressBar setCurrentTime={this.setCurrentTime} duration={this.state.duration} currentTime={this.state.currentTime} />
-						<div role="button" tabIndex="0" className={this.state.volumeSliderState ? 'item active' : 'item'} onClick={() => { this.state.volumeSliderState ? this.setVolumeSliderState(false) : this.setVolumeSliderState(true); this.setSpeedControlState(false); this.setElipsisState(false); }}><SvgWrapper width="25px" height="25px" fill="#fff" svgid="volume" /></div>
-						<div role="button" tabIndex="0" className={this.state.speedControlState ? 'item active' : 'item'} onClick={() => { this.state.speedControlState ? this.setSpeedControlState(false) : this.setSpeedControlState(true); this.setElipsisState(false); this.setVolumeSliderState(false); }}><SvgWrapper width="25px" height="25px" fill="#fff" svgid="play_speed" /></div>
-						<div role="button" tabIndex="0" className={this.state.elipsisState ? 'item active' : 'item'} onClick={() => { this.state.elipsisState ? this.setElipsisState(false) : this.setElipsisState(true); this.setVolumeSliderState(false); this.setSpeedControlState(false); }}><SvgWrapper width="25px" height="25px" fill="#fff" svgid="more_menu" /></div>
-						{
-							this.state.volumeSliderState ? (
-								<VolumeSlider parentNode={this.audioPlayerContainer} updateVolume={this.updateVolume} volume={this.state.volume} />
-							) : null
-						}
-						{
-							this.state.speedControlState ? (
-								<SpeedControl parentNode={this.audioPlayerContainer} currentSpeed={this.state.currentSpeed} options={[0.5, 1, 1.25, 1.5, 2]} setSpeed={this.updatePlayerSpeed} />
-							) : null
-						}
-						{
-							this.state.elipsisState ? (
-								<AudioPlayerMenu parentNode={this.audioPlayerContainer} />
-							) : null
-						}
-						<audio ref={this.handleRef} className="audio-player" src={source}></audio>
-					</div>
+					{
+						this.state.playerState ? (
+							<div className="audio-player-container">
+								<SvgWrapper onClick={this.skipBackward} className="svgitem" width="25px" height="25px" fill="#fff" svgid="backward" />
+								{
+									!this.state.playing ? (
+										<SvgWrapper onClick={this.playVideo} className="svgitem" width="25px" height="25px" fill="#fff" svgid="play_audio" />
+									) : null
+								}
+								{
+									this.state.playing ? (
+										<SvgWrapper onClick={this.pauseVideo} className="svgitem" width="25px" height="25px" fill="#fff" svgid="pause" />
+									) : null
+								}
+								<SvgWrapper onClick={this.skipForward} className="item" width="25px" height="25px" fill="#fff" svgid="forward" />
+								<AudioProgressBar setCurrentTime={this.setCurrentTime} duration={this.state.duration} currentTime={this.state.currentTime} />
+								<div role="button" tabIndex="0" className={this.state.volumeSliderState ? 'item active' : 'item'} onClick={() => { this.state.volumeSliderState ? this.setVolumeSliderState(false) : this.setVolumeSliderState(true); this.setSpeedControlState(false); this.setElipsisState(false); }}><SvgWrapper width="25px" height="25px" fill="#fff" svgid="volume" /></div>
+								<div role="button" tabIndex="0" className={this.state.speedControlState ? 'item active' : 'item'} onClick={() => { this.state.speedControlState ? this.setSpeedControlState(false) : this.setSpeedControlState(true); this.setElipsisState(false); this.setVolumeSliderState(false); }}><SvgWrapper width="25px" height="25px" fill="#fff" svgid="play_speed" /></div>
+								<div role="button" tabIndex="0" className={this.state.elipsisState ? 'item active' : 'item'} onClick={() => { this.state.elipsisState ? this.setElipsisState(false) : this.setElipsisState(true); this.setVolumeSliderState(false); this.setSpeedControlState(false); }}><SvgWrapper width="25px" height="25px" fill="#fff" svgid="more_menu" /></div>
+								{
+									this.state.volumeSliderState ? (
+										<VolumeSlider parentNode={this.audioPlayerContainer} updateVolume={this.updateVolume} volume={this.state.volume} />
+									) : null
+								}
+								{
+									this.state.speedControlState ? (
+										<SpeedControl parentNode={this.audioPlayerContainer} currentSpeed={this.state.currentSpeed} options={[0.5, 1, 1.25, 1.5, 2]} setSpeed={this.updatePlayerSpeed} />
+									) : null
+								}
+								{
+									this.state.elipsisState ? (
+										<AudioPlayerMenu parentNode={this.audioPlayerContainer} />
+									) : null
+								}
+							</div>
+						) : null
+					}
+					<audio ref={this.handleRef} className="audio-player" src={source}></audio>
 					<SvgWrapper onClick={this.toggleAudioPlayer} width="50px" height="5px" className="audio-gripper" fill="#aeaeae" svgid="gripper" />
 				</div>
 			</GenericErrorBoundary>
@@ -185,7 +189,7 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 }
 
 AudioPlayer.propTypes = {
-	audioPlayerSource: PropTypes.string.isRequired,
+	audioPlayerSource: PropTypes.string,
 	skipBackward: PropTypes.func.isRequired,
 	skipForward: PropTypes.func.isRequired,
 };

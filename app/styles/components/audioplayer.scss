@@ -4,7 +4,7 @@
 .audio-player-container .svgitem       {cursor:pointer;}
 .audio-player-container .item:hover    {opacity:.65;}
 .audio-player-container .svgitem:hover {opacity:.65;}
-.audio-player                          {width:300px;display:none;}
+.audio-player                          {display:none;}
 .audio-player-container.open           {position:inherit;top:54px;}
 .audio-player-container.closed         {position:absolute;background-color:rgba(0,0,0,0);top:4px;:not(:last-child){z-index:-1;}}
 

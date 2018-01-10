@@ -38,7 +38,9 @@ class AudioProgressBar extends React.PureComponent {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		if (nextProps.currentTime !== this.props.currentTime) {
+		if (nextProps.currentTime === 0) {
+			this.setState({ marginLeft: 0 });
+		} else if (nextProps.currentTime !== this.props.currentTime) {
 			this.moveTracker({}, true);
 		}
 	}
