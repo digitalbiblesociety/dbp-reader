@@ -47,7 +47,8 @@ export const getBooks = ({ textId }) => ({
 
 export const getAudio = ({ filesetId, list }) => ({
 	type: GET_AUDIO,
-	filesetId,list,
+	filesetId,
+	list,
 });
 
 export const getChapterText = ({ bible, book, chapter }) => ({

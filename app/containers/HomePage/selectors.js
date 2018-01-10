@@ -59,7 +59,6 @@ const selectActiveAudio = () => createSelector(
 		const activeChapter = substate.get('activeChapter');
 		const activeBook = substate.get('activeBookId');
 		const audioSource = audioObjects.filter((obj) => obj.get('book_id') === activeBook && obj.get('chapter_start') === activeChapter);
-		console.log(audioSource);
 		return audioSource.getIn([0, 'path']);
 	}
 );

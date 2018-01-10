@@ -23,7 +23,7 @@ export const loadTexts = ({ texts }) => ({
 	texts,
 });
 
-export const loadCountries = (countries) => ({
+export const loadCountries = ({ countries }) => ({
 	type: LOAD_COUNTRIES,
 	countries,
 });

@@ -1,6 +1,4 @@
 import { createSelector } from 'reselect';
-import { fromJS } from 'immutable';
-import countries from 'utils/parsedCountries.json';
 
 /**
  * Direct selector to the textSelection state domain
@@ -11,7 +9,8 @@ const selectTextSelectionDomain = (state) => state.get('textSelection');
  * Other specific selectors
  */
 const selectCountries = () => createSelector(
-	() => fromJS(countries)
+	selectTextSelectionDomain,
+	(substate) => substate.get('countries')
 );
 
 const selectTexts = () => createSelector(
@@ -22,7 +21,7 @@ const selectTexts = () => createSelector(
 const selectLanguages = () => createSelector(
 	selectTextSelectionDomain,
 	(substate) => {
-		const countryMap = fromJS(countries);
+		const countryMap = substate.get('countries');
 		const languages = substate.get('languages');
 		const activeCountry = substate.get('activeCountryName');
 		const activeCountryLanguages = countryMap.getIn([activeCountry, 'languages']);

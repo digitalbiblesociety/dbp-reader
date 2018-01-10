@@ -8,8 +8,19 @@ export function* getCountries() {
 
 	try {
 		const response = yield call(request, requestUrl);
+		const countries = response.data.reduce((acc, country) => {
+			const tempObj = acc;
+			if (typeof country.name !== 'string') {
+				tempObj[country.name.name] = { ...country, name: country.name.name };
+			} else if (country.name === '') {
+				return acc;
+			} else {
+				tempObj[country.name] = country;
+			}
+			return tempObj;
+		}, {});
 
-		yield put(loadCountries({ countries: response.data }));
+		yield put(loadCountries({ countries }));
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error(err); // eslint-disable-line no-console

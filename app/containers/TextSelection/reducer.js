@@ -14,6 +14,7 @@ import {
 	SET_VERSION_LIST_STATE,
 	SET_LANGUAGE_LIST_STATE,
 	SET_COUNTRY_LIST_STATE,
+	unitedStates,
 } from './constants';
 // TODO: Ensure default state has a way of staying up to date
 const initialState = fromJS({
@@ -59,7 +60,9 @@ const initialState = fromJS({
 			},
 		},
 	],
-	countries: [],
+	countries: {
+		'United States': unitedStates,
+	},
 	countryLanguages: [],
 	languageListActive: false,
 	versionListActive: false,

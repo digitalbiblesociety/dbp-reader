@@ -24,7 +24,7 @@ class CountryList extends React.PureComponent { // eslint-disable-line react/pre
 	filterFunction = (country, filterText) => {
 		const lowerCaseText = filterText.toLowerCase();
 
-		if (country.get('iso').toLowerCase().includes(lowerCaseText)) {
+		if (country.getIn(['codes', 'iso_a2']).toLowerCase().includes(lowerCaseText)) {
 			return true;
 		} else if (country.get('name') !== '' && country.get('name').toLowerCase().includes(lowerCaseText)) {
 			return true;
@@ -60,7 +60,7 @@ class CountryList extends React.PureComponent { // eslint-disable-line react/pre
 							filteredCountries.valueSeq().map((country) => (
 								<div
 									className="country-name"
-									key={country.get('iso')}
+									key={country.getIn(['codes', 'iso_a2'])}
 									role="button"
 									tabIndex={0}
 									onClick={() => {
@@ -71,7 +71,7 @@ class CountryList extends React.PureComponent { // eslint-disable-line react/pre
 									}}
 								>
 									<svg className="svg" height="25px" width="25px">
-										<use xmlnsXlink="http://www.w3.org/1999/xlink" xlinkHref={`${flags}#${country.get('iso')}`}></use>
+										<use xmlnsXlink="http://www.w3.org/1999/xlink" xlinkHref={`${flags}#${country.getIn(['codes', 'iso_a2'])}`}></use>
 									</svg>
 									<h4 className={activeCountryName === country.get('name') ? 'active-language-name' : 'inactive-country'}>{country.get('name')}</h4>
 								</div>

@@ -118,6 +118,7 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 
 	skipBackward = () => {
 		this.props.skipBackward();
+		this.setCurrentTime(0);
 		this.setState({
 			playing: false,
 		});
@@ -125,6 +126,7 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 
 	skipForward = () => {
 		this.props.skipForward();
+		this.setCurrentTime(0);
 		this.setState({
 			playing: false,
 		});

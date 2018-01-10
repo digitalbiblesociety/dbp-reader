@@ -3,17 +3,16 @@ import request from 'utils/request';
 import { GET_CHAPTER_TEXT, GET_BOOKS, GET_AUDIO } from './constants';
 import { loadChapter, loadBooksAndCopywrite, loadAudio } from './actions';
 
-export function* getAudio({ filesetId, list }) {
+export function* getAudio(/* { filesetId, list } */) {
 	// console.log('this is the fileset id', filesetId);
 	// console.log('list', list);
 
-	let requestUrl = `https://api.bible.build/bibles/filesets/CHNUNVN2DA?key=${process.env.DBP_API_KEY}&v=4&pretty`
+	const requestUrl = `https://api.bible.build/bibles/filesets/CHNUNVN2DA?key=${process.env.DBP_API_KEY}&v=4&pretty`;
 	// const requestUrls = [];
 	// list.forEach((n, fid) => requestUrls.push(`https://api.bible.build/bibles/filesets/${fid}?key=${process.env.DBP_API_KEY}&v=4&pretty`));
 	// console.log(requestUrls);
 	try {
 		const response = yield call(request, requestUrl);
-		console.log(response);
 		// const results = yield (async (urls) => {
 		// 	const data = {};
 		// 	await urls.forEach(async (url, k) => {

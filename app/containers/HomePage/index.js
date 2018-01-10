@@ -167,7 +167,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			userSettings,
 			audioPlayerSource,
 		} = this.props;
-		console.log(audioPlayerSource);
+
 		return (
 			<GenericErrorBoundary affectedArea="Your entire app is corrupted and bad, try again!">
 				<Helmet>
