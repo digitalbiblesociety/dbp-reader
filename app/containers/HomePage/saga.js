@@ -1,28 +1,39 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
 import request from 'utils/request';
+// import fetch from 'whatwg-fetch';
+import unionWith from 'lodash/unionWith';
 import { GET_CHAPTER_TEXT, GET_BOOKS, GET_AUDIO } from './constants';
 import { loadChapter, loadBooksAndCopywrite, loadAudio } from './actions';
 
-export function* getAudio(/* { filesetId, list } */) {
-	// console.log('this is the fileset id', filesetId);
-	// console.log('list', list);
+export function* getAudio({ list }/* { filesetId, list } */) {
+	// Will need to save the cookie returned in the header
+	// cookie will be used to set a timeout function to re-request
+	// the resource once its time limit has been reached. time is 300s
 
-	const requestUrl = `https://api.bible.build/bibles/filesets/CHNUNVN2DA?key=${process.env.DBP_API_KEY}&v=4&pretty`;
-	// const requestUrls = [];
-	// list.forEach((n, fid) => requestUrls.push(`https://api.bible.build/bibles/filesets/${fid}?key=${process.env.DBP_API_KEY}&v=4&pretty`));
-	// console.log(requestUrls);
+	// const requestUrl = `https://api.bible.build/bibles/filesets/CHNUNVN2DA?key=${process.env.DBP_API_KEY}&v=4&pretty`;
+	const requestUrls = [];
+	list.forEach((n, fid) => {
+		if (n === 'audio_drama') {
+			requestUrls.push(`https://api.bible.build/bibles/filesets/${fid}?key=${process.env.DBP_API_KEY}&v=4&pretty`);
+		}
+	});
+
 	try {
-		const response = yield call(request, requestUrl);
-		// const results = yield (async (urls) => {
-		// 	const data = {};
-		// 	await urls.forEach(async (url, k) => {
-		// 		const res = await request(url);
-		// 		data[k] = res.data;
-		// 	});
-		// 	return data;
-		// })(requestUrls);
-		// console.log(results);
-		yield put(loadAudio({ audioObjects: response.data }));
+		// const response = yield call(request, requestUrl);
+		// const res2 = yield fetch(`https://api.bible.build/bibles/filesets/CHNUNVN2DA?key=${process.env.DBP_API_KEY}&v=4&pretty`).then(res => res.headers);
+
+		const results = yield (async (urls) => {
+			const data = [];
+			// Figure out a cleaner way of doing this
+			for (const url of urls) { // eslint-disable-line no-restricted-syntax
+				const res = await request(url);// eslint-disable-line no-await-in-loop
+				data.push(res.data);
+			}
+			return data;
+		})(requestUrls);
+		const audioObjects = unionWith(...results, (resource, next) => resource.book_id === next.book_id && resource.chapter_start === next.chapter_start);
+
+		yield put(loadAudio({ audioObjects }));
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error(err); // eslint-disable-line no-console
