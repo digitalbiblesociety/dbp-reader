@@ -84,7 +84,7 @@ class CountryList extends React.PureComponent { // eslint-disable-line react/pre
 		return (
 			<div className="text-selection-section closed" role="button" tabIndex={0} onClick={() => { setCountryListState({ state: true }); toggleVersionList({ state: false }); toggleLanguageList({ state: false }); }}>
 				<div className="text-selection-title">
-					<SvgWrapper height="25px" width="25px" fill="#fff" svgid="world" />
+					<SvgWrapper height="25px" width="25px" fill="#fff" svgid="globe" />
 					<span className="text">COUNTRY:</span>
 					<span className="active-header-name">{activeCountryName || 'ALL'}</span>
 				</div>
