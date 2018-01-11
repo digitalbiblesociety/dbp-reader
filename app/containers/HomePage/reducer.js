@@ -52,6 +52,7 @@ const initialState = fromJS({
 	isNotesModalActive: false,
 	isVersionSelectionActive: false,
 	isInformationModalActive: false,
+	formattedTextActive: false,
 	activeBookName: 'Genesis',
 	activeTextName: 'ENGESV',
 	activeNotesView: 'notes',
@@ -125,7 +126,15 @@ function homePageReducer(state = initialState, action) {
 	case SET_ACTIVE_CHAPTER:
 		return state.set('activeChapter', action.chapter);
 	case ACTIVE_TEXT_ID:
+		if (action.textName === 'ENGKJV') {
+			return state
+				.set('formattedTextActive', true)
+				.set('activeFilesets', fromJS(action.filesets))
+				.set('activeTextName', action.textName)
+				.set('activeTextId', action.textId);
+		}
 		return state
+			.set('formattedTextActive', false)
 			.set('activeFilesets', fromJS(action.filesets))
 			.set('activeTextName', action.textName)
 			.set('activeTextId', action.textId);
