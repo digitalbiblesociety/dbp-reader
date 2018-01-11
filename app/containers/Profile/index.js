@@ -17,7 +17,7 @@ import Login from 'components/Login';
 import PasswordReset from 'components/PasswordReset';
 import AccountSettings from 'components/AccountSettings';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
-import { selectAccountOption, toggleSignInForm } from './actions';
+import { selectAccountOption, sendLoginForm, toggleSignInForm } from './actions';
 import makeSelectProfile from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -47,6 +47,7 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 		}
 	}
 
+	sendLoginForm = ({ email, username, password }) => this.props.dispatch(sendLoginForm({ email, username, password }))
 	selectAccountOption = (option) => this.props.dispatch(selectAccountOption(option))
 	toggleSignInForm = (state) => this.props.dispatch(toggleSignInForm(state))
 
@@ -75,6 +76,7 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 									activeOption === 'login' ? (
 										<Login
 											signInActive={signInActive}
+											sendLoginForm={this.sendLoginForm}
 											toggleSignInForm={this.toggleSignInForm}
 											selectAccountOption={this.selectAccountOption}
 										/>

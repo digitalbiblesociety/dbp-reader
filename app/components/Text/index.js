@@ -43,7 +43,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		// Below code gets the highlighted text
 		// window.getSelection().toString();
 	}
-	// Allows us to use the right mouse button to toggle menu's or perform different actions
+	// Allows use of the right mouse button to toggle menu's or perform different actions
 	handleContext = (e) => e.preventDefault()
 
 	openContextMenu = () => this.setState({ contextMenuState: true })

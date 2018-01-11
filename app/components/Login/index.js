@@ -11,18 +11,35 @@ import SvgWrapper from 'components/SvgWrapper';
 // import { FormattedMessage } from 'react-intl';
 // import messages from './messages';
 
-function Login({ toggleSignInForm, signInActive, selectAccountOption }) {
+function Login({ toggleSignInForm, signInActive, selectAccountOption, sendLoginForm }) {
+	let username = '';
+	let password = '';
+	let email = '';
+
+	const handlePasswordChange = (e) => {
+		password = e.target.value;
+	};
+
+	const handleEmailChange = (e) => {
+		const value = e.target.value;
+		const indexOfAt = value.indexOf('@');
+		email = value;
+		if (indexOfAt !== -1) {
+			username = value.slice(0, indexOfAt);
+		}
+	};
+
 	return (
 		<React.Fragment>
 			{
 				signInActive ? (
 					<React.Fragment>
-						<input className="email" placeholder="Enter E-mail" />
-						<input className="first-password" placeholder="Enter Password" />
+						<input className="email" placeholder="Enter E-mail" onChange={handleEmailChange} />
+						<input className="first-password" placeholder="Enter Password" onChange={handlePasswordChange} />
 						<div className="sign-in-button">
 							<input className="login-checkbox" type="checkbox" />
 							<span className="text">KEEP ME LOGGED IN</span>
-							<span role="button" tabIndex={0} className="login-button" onClick={() => toggleSignInForm(false)}>LOGIN</span>
+							<span role="button" tabIndex={0} className="login-button" onClick={() => { toggleSignInForm(false); sendLoginForm({ email, password, username }); }}>LOGIN</span>
 						</div>
 					</React.Fragment>
 				) : (
@@ -54,6 +71,7 @@ function Login({ toggleSignInForm, signInActive, selectAccountOption }) {
 Login.propTypes = {
 	toggleSignInForm: PropTypes.func,
 	selectAccountOption: PropTypes.func,
+	sendLoginForm: PropTypes.func,
 	signInActive: PropTypes.bool,
 };
 
