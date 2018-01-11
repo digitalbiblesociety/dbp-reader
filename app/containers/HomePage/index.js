@@ -47,6 +47,7 @@ import {
 	setActiveTextId,
 	setActiveNotesView,
 	getChapterText,
+	updateSelectedText,
 } from './actions';
 import
 	makeSelectHomePage,
@@ -142,6 +143,8 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 	setActiveTextId = (props) => this.props.dispatch(setActiveTextId(props))
 
 	setActiveNotesView = (view) => this.props.dispatch(setActiveNotesView(view))
+
+	updateSelectedText = ({ text }) => this.props.dispatch(updateSelectedText({ text }))
 
 	toggleMenuBar = () => this.props.dispatch(toggleMenuBar())
 
@@ -268,7 +271,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 						) : null
 					}
 				</TransitionGroup>
-				<Text formattedText={formattedText} formattedTextActive={formattedTextActive} oneVersePerLine={userSettings.getIn(['toggleOptions', 'oneVersePerLine', 'active'])} readersMode={userSettings.getIn(['toggleOptions', 'readersMode', 'active'])} setActiveNotesView={this.setActiveNotesView} activeBookName={activeBookName} activeChapter={activeChapter} notesActive={isNotesModalActive} toggleNotesModal={this.toggleNotesModal} text={chapterText} nextChapter={this.getNextChapter} prevChapter={this.getPrevChapter} />
+				<Text updateSelectedText={this.updateSelectedText} formattedText={formattedText} formattedTextActive={formattedTextActive} oneVersePerLine={userSettings.getIn(['toggleOptions', 'oneVersePerLine', 'active'])} readersMode={userSettings.getIn(['toggleOptions', 'readersMode', 'active'])} setActiveNotesView={this.setActiveNotesView} activeBookName={activeBookName} activeChapter={activeChapter} notesActive={isNotesModalActive} toggleNotesModal={this.toggleNotesModal} text={chapterText} nextChapter={this.getNextChapter} prevChapter={this.getPrevChapter} />
 				<Footer settingsActive={isSettingsModalActive} isInformationModalActive={isInformationModalActive} toggleInformationModal={this.toggleInformationModal} toggleSettingsModal={this.toggleSettingsModal} />
 			</GenericErrorBoundary>
 		);

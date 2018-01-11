@@ -27,7 +27,7 @@ import {
 	addBookmark,
 	addHighlight,
 } from './actions';
-import makeSelectNotes from './selectors';
+import makeSelectNotes, { selectHighlightedText } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 // import { FormattedMessage } from 'react-intl';
@@ -50,17 +50,17 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 		this.ref = node;
 	}
 
-	addBookmark = ({ userId, data }) => this.props.dispatch(addBookmark({ userId, data }))
-
-	addHighlight = ({ userId, data }) => this.props.dispatch(addHighlight({ userId, data }))
-
-	addNote = ({ userId, data }) => this.props.dispatch(addNote({ userId, data }))
-
 	setActiveChild = (child) => this.props.dispatch(setActiveChild(child))
 
 	setActivePageData = (page) => this.props.dispatch(setActivePageData(page))
 
 	setPageSize = (size) => this.props.dispatch(setPageSize(size))
+
+	addBookmark = ({ userId, data }) => this.props.dispatch(addBookmark({ userId, data }))
+
+	addHighlight = ({ userId, data }) => this.props.dispatch(addHighlight({ userId, data }))
+
+	addNote = ({ userId, data }) => this.props.dispatch(addNote({ userId, data }))
 
 	toggleVerseText = () => this.props.dispatch(toggleVerseText())
 
@@ -99,6 +99,7 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 		} = this.props.notes;
 		const {
 			toggleNotesModal,
+			selectedText,
 		} = this.props;
 
 		return (
@@ -127,7 +128,7 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 					</div>
 					{
 						activeChild === 'edit' ? (
-							<EditNote toggleVerseText={this.toggleVerseText} toggleAddVerseMenu={this.toggleAddVerseMenu} note={note} isAddVerseExpanded={isAddVerseExpanded} isVerseTextVisible={isVerseTextVisible} />
+							<EditNote selectedText={selectedText} toggleVerseText={this.toggleVerseText} toggleAddVerseMenu={this.toggleAddVerseMenu} note={note} isAddVerseExpanded={isAddVerseExpanded} isVerseTextVisible={isVerseTextVisible} />
 						) : <MyNotes pageSelectorState={pageSelectorState} setPageSize={this.setPageSize} togglePageSelector={this.togglePageSelector} pageSize={pageSize} setActivePageData={this.setActivePageData} setActiveChild={this.setActiveChild} activePageData={activePageData} listData={listData} sectionType={activeChild} />
 					}
 				</aside>
@@ -141,10 +142,12 @@ Notes.propTypes = {
 	notes: PropTypes.object.isRequired,
 	toggleNotesModal: PropTypes.func.isRequired,
 	openView: PropTypes.string.isRequired,
+	selectedText: PropTypes.string,
 };
 
 const mapStateToProps = createStructuredSelector({
 	notes: makeSelectNotes(),
+	selectedText: selectHighlightedText(),
 });
 
 function mapDispatchToProps(dispatch) {

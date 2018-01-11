@@ -49,7 +49,7 @@ function ContextPortal({ coordinates, parentNode, toggleNotesModal, notesActive,
 	const component = (
 		<StyledDiv x={coordinates.x} y={coordinates.y}>
 			<Row>
-				<Item onClick={() => !notesActive && setActiveNotesView('notes') && toggleNotesModal() && closeContextMenu()}><SvgWrapper height="25px" width="25px" svgid="note-list" /></Item>
+				<Item onClick={() => !notesActive && setActiveNotesView('edit') && toggleNotesModal() && closeContextMenu()}><SvgWrapper height="25px" width="25px" svgid="note-list" /></Item>
 				<Item onClick={() => !notesActive && setActiveNotesView('highlights') && toggleNotesModal() && closeContextMenu()}><SvgWrapper height="25px" width="25px" svgid="highlights" /></Item>
 				<Item onClick={() => !notesActive && setActiveNotesView('bookmarks') && toggleNotesModal() && closeContextMenu()}><SvgWrapper height="25px" width="25px" svgid="bookmarks" /></Item>
 				<Item onClick={closeContextMenu} className="facebook"><SvgWrapper height="35px" width="35px" svgid="fb-thumb" /></Item>

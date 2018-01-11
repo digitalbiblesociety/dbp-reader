@@ -20,7 +20,7 @@ const initialState = fromJS({
 	note: {
 		title: 'Abram Speaks to Sarai',
 		verseTitle: 'Genesis 12:13',
-		verseText: '"Say you are my sister, that it may go well with me because of you, and that my life may be spared for your sake."',
+		verseText: '',
 		text: 'Abram shows a lack of faith in God and a great fear of man with this statement.',
 	},
 	activePageData: initialNotesListForTesting.slice(0, 10),

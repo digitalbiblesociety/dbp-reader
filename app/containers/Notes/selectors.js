@@ -8,7 +8,10 @@ const selectNotesDomain = (state) => state.get('notes');
 /**
  * Other specific selectors
  */
-
+const selectHighlightedText = () => createSelector(
+	(state) => state.get('homepage'),
+	(homepage) => homepage.get('selectedText')
+);
 
 /**
  * Default selector used by Notes
@@ -22,4 +25,5 @@ const makeSelectNotes = () => createSelector(
 export default makeSelectNotes;
 export {
 	selectNotesDomain,
+	selectHighlightedText,
 };

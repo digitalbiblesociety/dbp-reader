@@ -31,6 +31,7 @@ import {
 	TOGGLE_JUSTIFIED_TEXT,
 	TOGGLE_ONE_VERSE_PER_LINE,
 	TOGGLE_VERTICAL_SCROLLING,
+	UPDATE_SELECTED_TEXT,
 } from './constants';
 
 const initialState = fromJS({
@@ -95,6 +96,7 @@ const initialState = fromJS({
 			},
 		},
 	},
+	selectedText: '',
 });
 
 function homePageReducer(state = initialState, action) {
@@ -160,6 +162,8 @@ function homePageReducer(state = initialState, action) {
 		return state.setIn(['userSettings', 'toggleOptions', 'oneVersePerLine', 'active'], !state.getIn(['userSettings', 'toggleOptions', 'oneVersePerLine', 'active']));
 	case TOGGLE_VERTICAL_SCROLLING:
 		return state.setIn(['userSettings', 'toggleOptions', 'verticalScrolling', 'active'], !state.getIn(['userSettings', 'toggleOptions', 'verticalScrolling', 'active']));
+	case UPDATE_SELECTED_TEXT:
+		return state.set('selectedText', action.text);
 	default:
 		return state;
 	}

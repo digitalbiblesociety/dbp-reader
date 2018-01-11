@@ -18,6 +18,7 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 			note,
 			isAddVerseExpanded,
 			isVerseTextVisible,
+			selectedText,
 		} = this.props;
 		return (
 			<section className="edit-notes">
@@ -33,7 +34,7 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 				{
 					isVerseTextVisible ? (
 						<div className="verse-text">
-							{note.verseText || 'Verse Text Goes Here'}
+							{note.verseText || selectedText}
 						</div>
 					) : null
 				}
@@ -41,7 +42,7 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 					isAddVerseExpanded ? (
 						<div className="add-verse-expanded">
 							<div className="plus-expanded">
-								<SvgWrapper className="plus-expanded" width="20px" height="20px" svgid="plus" />
+								<SvgWrapper onClick={toggleAddVerseMenu} className="plus-expanded" width="20px" height="20px" svgid="plus" />
 							</div>
 							<div>
 								<span>Need to reuse books table here but </span>
@@ -67,6 +68,7 @@ EditNote.propTypes = {
 	note: PropTypes.object.isRequired,
 	isAddVerseExpanded: PropTypes.bool.isRequired,
 	isVerseTextVisible: PropTypes.bool.isRequired,
+	selectedText: PropTypes.string,
 };
 
 export default EditNote;

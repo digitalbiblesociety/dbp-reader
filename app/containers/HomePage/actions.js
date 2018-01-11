@@ -22,7 +22,13 @@ import {
 	TOGGLE_VERSION_SELECTION,
 	ACTIVE_TEXT_ID,
 	TOGGLE_INFORMATION_MODAL,
+	UPDATE_SELECTED_TEXT,
 } from './constants';
+
+export const updateSelectedText = ({ text }) => ({
+	type: UPDATE_SELECTED_TEXT,
+	text,
+});
 
 export const loadChapter = ({ text }) => ({
 	type: LOAD_CHAPTER_TEXT,

@@ -15,7 +15,6 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 	constructor(props) {
 		super(props);
 		this.state = {
-			currentSelection: '',
 			contextMenuState: false,
 			coords: {},
 		};
@@ -36,9 +35,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			this.openContextMenu();
 		}
 		if (e.button === 0) {
-			this.setState({
-				currentSelection: window.getSelection().toString(),
-			});
+			this.props.updateSelectedText({ text: window.getSelection().toString() });
 		}
 		// Below code gets the highlighted text
 		// window.getSelection().toString();
@@ -122,6 +119,7 @@ Text.propTypes = {
 	prevChapter: PropTypes.func,
 	toggleNotesModal: PropTypes.func,
 	setActiveNotesView: PropTypes.func,
+	updateSelectedText: PropTypes.func,
 	activeBookName: PropTypes.string,
 	formattedText: PropTypes.string,
 	activeChapter: PropTypes.number,
