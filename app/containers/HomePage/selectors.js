@@ -1,10 +1,25 @@
 import { createSelector } from 'reselect';
+import * as pages from 'utils/ENGKJV/list';
 // import bookNames from 'utils/listOfBooksInBible';
 
 /**
  * Direct selector to the homepage state domain
  */
 const selectHomePageDomain = (state) => state.get('homepage');
+const selectFormattedText = () => createSelector(
+	selectHomePageDomain,
+	(substate) => {
+		const book = substate.get('activeBookId');
+		const chapter = substate.get('activeChapter');
+		const page = pages[`_${book}_${chapter}`];
+		const firstIndex = page.indexOf('<div class="chapter');
+		const secondIndex = page.indexOf('<div class="footnotes">', firstIndex);
+		const main = page.slice(firstIndex, secondIndex);
+		// const reactJsx = main.replace(/class="/g, 'className="')
+
+		return main;
+	}
+);
 
 /**
  * Other specific selectors
@@ -91,4 +106,5 @@ export {
 	selectPrevBook,
 	selectSettings,
 	selectActiveAudio,
+	selectFormattedText,
 };

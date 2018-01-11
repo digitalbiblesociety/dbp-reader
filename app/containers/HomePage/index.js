@@ -56,6 +56,7 @@ import
 	selectNextBook,
 	selectSettings,
 	selectActiveAudio,
+	selectFormattedText,
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -178,6 +179,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		const {
 			userSettings,
 			audioPlayerSource,
+			formattedText,
 		} = this.props;
 
 		return (
@@ -265,7 +267,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 						) : null
 					}
 				</TransitionGroup>
-				<Text oneVersePerLine={userSettings.getIn(['toggleOptions', 'oneVersePerLine', 'active'])} readersMode={userSettings.getIn(['toggleOptions', 'readersMode', 'active'])} setActiveNotesView={this.setActiveNotesView} activeBookName={activeBookName} activeChapter={activeChapter} notesActive={isNotesModalActive} toggleNotesModal={this.toggleNotesModal} text={chapterText} nextChapter={this.getNextChapter} prevChapter={this.getPrevChapter} />
+				<Text formattedText={formattedText} oneVersePerLine={userSettings.getIn(['toggleOptions', 'oneVersePerLine', 'active'])} readersMode={userSettings.getIn(['toggleOptions', 'readersMode', 'active'])} setActiveNotesView={this.setActiveNotesView} activeBookName={activeBookName} activeChapter={activeChapter} notesActive={isNotesModalActive} toggleNotesModal={this.toggleNotesModal} text={chapterText} nextChapter={this.getNextChapter} prevChapter={this.getPrevChapter} />
 				<Footer settingsActive={isSettingsModalActive} isInformationModalActive={isInformationModalActive} toggleInformationModal={this.toggleInformationModal} toggleSettingsModal={this.toggleSettingsModal} />
 			</GenericErrorBoundary>
 		);
@@ -280,6 +282,7 @@ HomePage.propTypes = {
 	nextBook: PropTypes.object,
 	userSettings: PropTypes.object,
 	audioPlayerSource: PropTypes.string,
+	formattedText: PropTypes.string,
 };
 // TODO: Sort books in selector
 const mapStateToProps = createStructuredSelector({
@@ -289,6 +292,7 @@ const mapStateToProps = createStructuredSelector({
 	activeBook: selectActiveBook(),
 	userSettings: selectSettings(),
 	audioPlayerSource: selectActiveAudio(),
+	formattedText: selectFormattedText(),
 });
 
 function mapDispatchToProps(dispatch) {
