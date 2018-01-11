@@ -10,7 +10,11 @@ const selectTextSelectionDomain = (state) => state.get('textSelection');
  */
 const selectCountries = () => createSelector(
 	selectTextSelectionDomain,
-	(substate) => substate.get('countries')
+	(substate) => {
+		const countries = substate.get('countries');
+		const filteredCountries = countries.filter((country) => country.get('languages').size > 0);
+		return filteredCountries;
+	}
 );
 
 const selectTexts = () => createSelector(
