@@ -15,27 +15,9 @@ export function* getUserNotes({ userId }) {
 	const requestUrl = `https://api.bible.build/users/${userId}/notes?key=${process.env.NODE_ENV}&v=4&pretty`;
 
 	try {
-		const response = yield call(request, requestUrl);
-
-		yield put('action', response);
-	} catch (err) {
-		if (process.env.NODE_ENV === 'development') {
-			console.error(err); // eslint-ignore-line no-console
-		}
-	}
-}
-
-export function* addUserNote({ userId, noteInfo }) {
-	const requestUrl = `https://api.bible.build/users/${userId}/notes?key=${process.env.NODE_ENV}&v=4&pretty`;
-	const options = {
-		body: noteInfo,
-		method: 'POST',
-	};
-
-	try {
-		const response = yield call(request, requestUrl, options);
-		console.log('user note response', response);
-		yield put('action', response);
+		// const response = yield call(request, requestUrl);
+		//
+		// yield put('action', response);
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error(err); // eslint-ignore-line no-console
@@ -47,10 +29,10 @@ export function* getUserData({ userId }) {
 	const requestUrl = `https://api.bible.build/users/${userId}?key=${process.env.NODE_ENV}&v=4&pretty`;
 
 	try {
-		const response = yield call(request, requestUrl);
-		console.log(response);
-
-		yield put(LOAD_USER_DATA, { data: 'data' });
+		// const response = yield call(request, requestUrl);
+		// console.log(response);
+		//
+		// yield put(LOAD_USER_DATA, { data: 'data' });
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error(err); // eslint-ignore-line no-console
@@ -70,14 +52,14 @@ export function* sendSignUpForm({ password, email, username }) {
 	};
 
 	try {
-		const response = yield call(request, requestUrl, options);
-		console.log(response);
-
-		if (response.data.user_id) {
-			yield put(USER_LOGGED_IN, response.data.user_id);
-		} else {
-			yield put('user-login-failed', response);
-		}
+		// const response = yield call(request, requestUrl, options);
+		// console.log(response);
+		//
+		// if (response.data.user_id) {
+		// 	yield put(USER_LOGGED_IN, response.data.user_id);
+		// } else {
+		// 	yield put('user-login-failed', response);
+		// }
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error(err); // eslint-ignore-line no-console
@@ -96,9 +78,6 @@ export function* sendLoginForm({ password, email, username }) {
 		},
 	};
 
-	console.log(password, 'password');
-	console.log(email, 'email');
-	console.log(username, 'username');
 	try {
 		// const response = yield call(request, requestUrl, options);
 
@@ -118,9 +97,9 @@ export function* updatePassword() {
 	const requestUrl = `https://api.bible.build/?key=${process.env.NODE_ENV}&v=4&pretty`;
 
 	try {
-		const response = yield call(request, requestUrl);
-
-		yield put('action', response);
+		// const response = yield call(request, requestUrl);
+		//
+		// yield put('action', response);
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error(err); // eslint-ignore-line no-console
@@ -132,9 +111,9 @@ export function* resetPassword() {
 	const requestUrl = `https://api.bible.build/?key=${process.env.NODE_ENV}&v=4&pretty`;
 
 	try {
-		const response = yield call(request, requestUrl);
-
-		yield put('action', response);
+		// const response = yield call(request, requestUrl);
+		//
+		// yield put('action', response);
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error(err); // eslint-ignore-line no-console
@@ -142,13 +121,13 @@ export function* resetPassword() {
 	}
 }
 
-export function* deleteUser() {
+export function* deleteUser({ userId, email, username }) {
 	const requestUrl = `https://api.bible.build/?key=${process.env.NODE_ENV}&v=4&pretty`;
 
 	try {
-		const response = yield call(request, requestUrl);
-
-		yield put('action', response);
+		// const response = yield call(request, requestUrl);
+		//
+		// yield put('action', response);
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error(err); // eslint-ignore-line no-console

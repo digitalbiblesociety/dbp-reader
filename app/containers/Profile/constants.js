@@ -14,6 +14,3 @@ export const SEND_SIGNUP_FORM = 'app/Profile/SEND_SIGNUP_FORM';
 export const UPDATE_PASSWORD = 'app/Profile/UPDATE_PASSWORD';
 export const RESET_PASSWORD = 'app/Profile/RESET_PASSWORD';
 export const DELETE_USER = 'app/Profile/DELETE_USER';
-export const ADD_NOTE = 'app/Profile/ADD_NOTE';
-export const ADD_HIGHLIGHT = 'app/Profile/ADD_HIGHLIGHT';
-export const ADD_BOOKMARK = 'app/Profile/ADD_BOOKMARK';

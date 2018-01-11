@@ -14,28 +14,7 @@ import {
 	UPDATE_PASSWORD,
 	RESET_PASSWORD,
 	DELETE_USER,
-	ADD_NOTE,
-	ADD_HIGHLIGHT,
-	ADD_BOOKMARK,
 } from './constants';
-
-export const addNote = ({ data, userId }) => ({
-	type: ADD_NOTE,
-	data,
-	userId,
-});
-
-export const addBookmark = ({ data, userId }) => ({
-	type: ADD_BOOKMARK,
-	data,
-	userId,
-});
-
-export const addHighlight = ({ data, userId }) => ({
-	type: ADD_HIGHLIGHT,
-	data,
-	userId,
-});
 
 export const getUserData = (userId) => ({
 	type: GET_USER_DATA,
@@ -57,10 +36,11 @@ export const toggleSignInForm = (state) => ({
 	state,
 });
 
-export const deleteUser = ({ username, email }) => ({
+export const deleteUser = ({ username, email, userId }) => ({
 	type: DELETE_USER,
 	username,
 	email,
+	userId,
 });
 
 export const resetPassword = ({ newPassword, email }) => ({
@@ -69,10 +49,11 @@ export const resetPassword = ({ newPassword, email }) => ({
 	email,
 });
 
-export const updatePassword = ({ previousPassword, newPassword }) => ({
+export const updatePassword = ({ previousPassword, newPassword, userId }) => ({
 	type: UPDATE_PASSWORD,
 	previousPassword,
 	newPassword,
+	userId,
 });
 
 export const sendLoginForm = ({ password, username, email }) => ({

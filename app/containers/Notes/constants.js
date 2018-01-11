@@ -11,6 +11,9 @@ export const TOGGLE_VERSE_TEXT = 'app/Notes/TOGGLE_VERSE_TEXT';
 export const SET_ACTIVE_PAGE_DATA = 'app/Notes/SET_ACTIVE_PAGE_DATA';
 export const SET_PAGE_SIZE = 'app/Notes/SET_PAGE_SIZE';
 export const T0GGLE_PAGE_SELECTOR = 'app/Notes/T0GGLE_PAGE_SELECTOR';
+export const ADD_NOTE = 'app/Profile/ADD_NOTE';
+export const ADD_HIGHLIGHT = 'app/Profile/ADD_HIGHLIGHT';
+export const ADD_BOOKMARK = 'app/Profile/ADD_BOOKMARK';
 export const initialNotesListForTesting = range(1, 103).map((note) => ({
 	title: 'Abram Speaks to Sarai',
 	date: `1.${note}.18`,

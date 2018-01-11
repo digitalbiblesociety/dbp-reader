@@ -17,7 +17,16 @@ import Login from 'components/Login';
 import PasswordReset from 'components/PasswordReset';
 import AccountSettings from 'components/AccountSettings';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
-import { selectAccountOption, sendLoginForm, toggleSignInForm } from './actions';
+import {
+	selectAccountOption,
+	sendLoginForm,
+	toggleSignInForm,
+	sendSignUpForm,
+	getUserData,
+	resetPassword,
+	updatePassword,
+	deleteUser,
+} from './actions';
 import makeSelectProfile from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -36,6 +45,8 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 		this.ref = node;
 	}
 
+	getUserData = (userId) => this.props.dispatch(getUserData(userId))
+
 	handleClickOutside = (event) => {
 		const bounds = this.ref.getBoundingClientRect();
 		const insideWidth = event.x >= bounds.x && event.x <= bounds.x + bounds.width;
@@ -47,8 +58,12 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 		}
 	}
 
+	sendSignUpForm = ({ email, password, username }) => this.props.dispatch(sendSignUpForm({ email, password, username }))
+	resetPassword = ({ email, password }) => this.props.dispatch(resetPassword({ email, password }))
+	deleteUser = ({ email, username, userId }) => this.props.dispatch(deleteUser({ email, username, userId }))
 	sendLoginForm = ({ email, username, password }) => this.props.dispatch(sendLoginForm({ email, username, password }))
 	selectAccountOption = (option) => this.props.dispatch(selectAccountOption(option))
+	updatePassword = ({ previousPassword, newPassword, userId }) => this.props.dispatch(updatePassword({ previousPassword, newPassword, userId }))
 	toggleSignInForm = (state) => this.props.dispatch(toggleSignInForm(state))
 
 	render() {
@@ -65,7 +80,7 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 					</header>
 					{
 						userAuthenticated ? (
-							<AccountSettings />
+							<AccountSettings deleteUser={this.deleteUser} updatePassword={this.updatePassword} />
 						) : (
 							<React.Fragment>
 								<div className="form-options">
@@ -84,12 +99,12 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 								}
 								{
 									activeOption === 'signup' ? (
-										<SignUp />
+										<SignUp sendSignupForm={this.sendSignUpForm} />
 									) : null
 								}
 								{
 									activeOption === 'password_reset' ? (
-										<PasswordReset />
+										<PasswordReset resetPassword={this.resetPassword} />
 									) : null
 								}
 							</React.Fragment>

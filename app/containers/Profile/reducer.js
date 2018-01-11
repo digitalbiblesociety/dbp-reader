@@ -16,9 +16,6 @@ import {
 	UPDATE_PASSWORD,
 	RESET_PASSWORD,
 	DELETE_USER,
-	ADD_NOTE,
-	ADD_HIGHLIGHT,
-	ADD_BOOKMARK,
 } from './constants';
 // TODO: When authentication is set up grab the JWT from localStorage and use JWT to set userAuthenticated
 

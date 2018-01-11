@@ -16,7 +16,17 @@ import menu from 'images/menu.svg';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
-import { setActiveChild, setPageSize, toggleVerseText, toggleAddVerseMenu, togglePageSelector, setActivePageData } from './actions';
+import {
+	setActiveChild,
+	setPageSize,
+	toggleVerseText,
+	toggleAddVerseMenu,
+	togglePageSelector,
+	setActivePageData,
+	addNote,
+	addBookmark,
+	addHighlight,
+} from './actions';
 import makeSelectNotes from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -39,6 +49,12 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 	setRef = (node) => {
 		this.ref = node;
 	}
+
+	addBookmark = ({ userId, data }) => this.props.dispatch(addBookmark({ userId, data }))
+
+	addHighlight = ({ userId, data }) => this.props.dispatch(addHighlight({ userId, data }))
+
+	addNote = ({ userId, data }) => this.props.dispatch(addNote({ userId, data }))
 
 	setActiveChild = (child) => this.props.dispatch(setActiveChild(child))
 
