@@ -1,4 +1,5 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
+import languageList from 'utils/languagesWithResources';
 import request from 'utils/request';
 import { GET_COUNTRIES, GET_DPB_TEXTS, GET_LANGUAGES } from './constants';
 import { loadTexts, loadCountries, setLanguages } from './actions';
@@ -48,8 +49,9 @@ export function* getLanguages() {
 
 	try {
 		const response = yield call(request, requestUrl);
+		const languages = response.data.filter((language) => languageList[language.iso_code.toUpperCase()]);
 
-		yield put(setLanguages({ languages: response.data }));
+		yield put(setLanguages({ languages }));
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error(err); // eslint-disable-line no-console
