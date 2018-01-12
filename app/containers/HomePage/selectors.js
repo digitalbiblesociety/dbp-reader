@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import * as pages from 'utils/ENGKJV/list';
+// import * as pages from 'utils/ENGKJV/list';
 // import bookNames from 'utils/listOfBooksInBible';
 
 /**
@@ -11,10 +11,14 @@ const selectFormattedText = () => createSelector(
 	(substate) => {
 		const book = substate.get('activeBookId');
 		const chapter = substate.get('activeChapter');
-		const page = pages[`_${book}_${chapter}`];
-		const firstIndex = page.indexOf('<div class="chapter');
-		const secondIndex = page.indexOf('<div class="footnotes">', firstIndex);
-		const main = page.slice(firstIndex, secondIndex);
+		// const page = pages[`_${book}_${chapter}`];
+		const page = false;
+		let main = '';
+		if (page) {
+			const firstIndex = page.indexOf('<div class="chapter');
+			const secondIndex = page.indexOf('<div class="footnotes">', firstIndex);
+			main = page.slice(firstIndex, secondIndex);
+		}
 		// const reactJsx = main.replace(/class="/g, 'className="')
 
 		return main;
@@ -69,14 +73,15 @@ const selectSettings = () => createSelector(
 
 const selectActiveAudio = () => createSelector(
 	selectHomePageDomain,
-	(substate) => {
-		const audioObjects = substate.get('audioObjects');
-		const activeChapter = substate.get('activeChapter');
-		const activeBook = substate.get('activeBookId');
-		const audioSource = audioObjects.filter((obj) => obj.get('book_id') === activeBook && obj.get('chapter_start') === activeChapter);
-		return audioSource.getIn([0, 'path']);
-	}
+	(substate) => substate.get('audioSource')
 );
+// Below code is needed in selectActiveAudio if we decide to request all audio resources at once
+// const audioObjects = substate.get('audioObjects');
+// const activeChapter = substate.get('activeChapter');
+// const activeBook = substate.get('activeBookId');
+// const audioSource = audioObjects.filter((obj) => obj.get('bookId') === activeBook && obj.get('chapterStart') === activeChapter);
+//
+// return audioSource.getIn([0, 'path']);
 
 // Most of function needed to determine which books are available for the selected text
 // const selectAvailableBookNames = () => createSelector(

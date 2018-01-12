@@ -38,7 +38,18 @@ const initialState = fromJS({
 	books: [],
 	chapterText: [],
 	audioObjects: [],
-	activeFilesets: {},
+	activeFilesets: {
+		ENGESVC2DA: 'audio_drama',
+		ENGESVC2ET: 'text_plain',
+		ENGESVO2DA: 'audio_drama',
+		ENGESVO2ET: 'text_plain',
+		ENGGIDC1ET: 'text_plain',
+		ENGGIDN2DA: 'audio_drama',
+		ENGGIDN2ET: 'text_plain',
+		ENGGIDO1DA: 'audio',
+		ENGGIDO2DA: 'audio_drama',
+		ENGGIDO2ET: 'text_plain',
+	},
 	copywrite: {
 		mark: 'Good News Publishers, Crossway Bibles',
 		name: 'English Standard Version',
@@ -141,7 +152,9 @@ function homePageReducer(state = initialState, action) {
 			.set('activeTextName', action.textName)
 			.set('activeTextId', action.textId);
 	case LOAD_CHAPTER_TEXT:
-		return state.set('chapterText', fromJS(action.text));
+		return state
+			.set('audioSource', action.audio)
+			.set('chapterText', fromJS(action.text));
 	case SET_ACTIVE_NOTES_VIEW:
 		return state.set('activeNotesView', action.view);
 	case UPDATE_THEME:

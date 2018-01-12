@@ -5,31 +5,22 @@ import { GET_CHAPTER_TEXT, GET_BOOKS, GET_AUDIO } from './constants';
 import { loadChapter, loadBooksAndCopywrite, loadAudio } from './actions';
 
 export function* getAudio({ list }/* { filesetId, list } */) {
-	// Will need to save the cookie returned in the header
-	// cookie will be used to set a timeout function to re-request
-	// the resource once its time limit has been reached. time is 300s
-
-	// const requestUrl = `https://api.bible.build/bibles/filesets/CHNUNVN2DA?key=${process.env.DBP_API_KEY}&v=4&pretty`;
 	const requestUrls = [];
-	list.forEach((n, fid) => {
-		if (n === 'audio_drama') {
-			requestUrls.push(`https://api.bible.build/bibles/filesets/${fid}?key=${process.env.DBP_API_KEY}&v=4&pretty`);
+	list.forEach((type, fileId) => {
+		if (type === 'audio_drama') {
+			requestUrls.push({ fileId, url: `https://api.bible.build/bibles/filesets/${fileId}?key=${process.env.DBP_API_KEY}&v=4&pretty` });
 		}
 	});
 
 	try {
-		// const response = yield call(request, requestUrl);
+		const results = [];
+		// Figure out a cleaner/faster way of doing this without using for loop
+		for (const requestUrl of requestUrls) { // eslint-disable-line no-restricted-syntax
+			const res = yield request(requestUrl.url);
+			results.push({ data: res.data, filesetId: requestUrl.fileId });
+		}
 
-		const results = yield (async (urls) => {
-			const data = [];
-			// Figure out a cleaner/faster way of doing this
-			for (const url of urls) { // eslint-disable-line no-restricted-syntax
-				const res = await request(url);// eslint-disable-line no-await-in-loop
-				data.push(res.data);
-			}
-			return data;
-		})(requestUrls);
-		const audioObjects = unionWith(...results, (resource, next) => resource.book_id === next.book_id && resource.chapter_start === next.chapter_start);
+		const audioObjects = unionWith(...results, (resource, next) => resource.book_id === next.book_id && resource.chapter_start === next.chapter_start).map((obj) => ({ bookId: obj.book_id, bookName: obj.book_name, chapter: obj.chapter_start, filesetId: obj.filesetId }));
 
 		yield put(loadAudio({ audioObjects }));
 	} catch (err) {
@@ -64,16 +55,27 @@ export function* getBooks({ textId }) {
 	}
 }
 
-export function* getChapter({ bible, book, chapter }) {
+export function* getChapter({ bible, book, chapter, audioObjects }) {
+	const hasAudio = audioObjects.filter((resource) => resource[book] && resource[chapter]);
 	// TODO: Add ability to make calls for plaintext and formatted text
+	let audioRequestUrl = '';
+	if (hasAudio.length) {
+		audioRequestUrl = `https://api.bible.build/bibles/filesets/${hasAudio[0].filesetId}?chapter_id=${chapter}&book_id=${book}&key=${process.env.DBP_API_KEY}&v=4&pretty`;
+	}
+
 	const textRequestUrl = `https://api.bible.build/bible/${bible}/${book}/${chapter}?key=${process.env.DBP_API_KEY}&v=4&pretty`;
 	// const audioRequestUrl = `https://api.bible.build/bibles/filesets/${filesetId}?key=${process.env.DBP_API_KEY}&v=4&pretty`;
 
 	try {
 		const textResponse = yield call(request, textRequestUrl);
-		// const audioResponse = yield call(request, audioRequestUrl);
+		const audioResponse = yield audioRequestUrl ? call(request, audioRequestUrl) : '';
+		let audioSource = '';
 
-		yield put(loadChapter({ text: textResponse.data }));
+		if (audioResponse) {
+			audioSource = audioResponse.data[0].path;
+		}
+
+		yield put(loadChapter({ text: textResponse.data, audioSource }));
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error(err); // eslint-disable-line no-console

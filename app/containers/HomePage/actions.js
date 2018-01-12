@@ -30,9 +30,10 @@ export const updateSelectedText = ({ text }) => ({
 	text,
 });
 
-export const loadChapter = ({ text }) => ({
+export const loadChapter = ({ text, audio }) => ({
 	type: LOAD_CHAPTER_TEXT,
 	text,
+	audio,
 });
 
 export const loadBooksAndCopywrite = ({ books, copywrite }) => ({
@@ -57,11 +58,12 @@ export const getAudio = ({ filesetId, list }) => ({
 	list,
 });
 
-export const getChapterText = ({ bible, book, chapter }) => ({
+export const getChapterText = ({ bible, book, chapter, audioObjects }) => ({
 	type: GET_CHAPTER_TEXT,
 	bible,
 	book,
 	chapter,
+	audioObjects,
 });
 
 export const toggleMenuBar = () => ({

@@ -69,10 +69,13 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			activeTextId,
 			activeBookId,
 			activeChapter,
+			activeFilesets,
+			audioObjects,
 		} = this.props.homepage;
 
-		this.props.dispatch(getChapterText({ bible: activeTextId, book: activeBookId, chapter: activeChapter }));
+		this.props.dispatch(getAudio({ list: activeFilesets }));
 		this.props.dispatch(getBooks({ textId: activeTextId }));
+		this.props.dispatch(getChapterText({ bible: activeTextId, book: activeBookId, chapter: activeChapter, audioObjects }));
 		// Need to get the audio for the initial chapter
 	}
 
@@ -96,16 +99,17 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			activeTextId,
 			activeChapter,
 			activeBookId,
+			audioObjects,
 		} = this.props.homepage;
 		const { activeBook, nextBook } = this.props;
 		const maxChapter = activeBook.get('chapters').size;
 
 		if (activeChapter === maxChapter) {
 			this.setActiveBookName(nextBook.get('name'), nextBook.get('book_id'));
-			this.getChapters({ bible: activeTextId, book: nextBook.get('book_id'), chapter: 1 });
+			this.getChapters({ bible: activeTextId, book: nextBook.get('book_id'), chapter: 1, audioObjects });
 			this.setActiveChapter(1);
 		} else {
-			this.getChapters({ bible: activeTextId, book: activeBookId, chapter: activeChapter + 1 });
+			this.getChapters({ bible: activeTextId, book: activeBookId, chapter: activeChapter + 1, audioObjects });
 			this.setActiveChapter(activeChapter + 1);
 		}
 	}
@@ -115,6 +119,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			activeTextId,
 			activeChapter,
 			activeBookId,
+			audioObjects,
 		} = this.props.homepage;
 		const { previousBook } = this.props;
 
@@ -122,10 +127,10 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			const lastChapter = previousBook.get('chapters').size;
 
 			this.setActiveBookName(previousBook.get('name'), previousBook.get('book_id'));
-			this.getChapters({ bible: activeTextId, book: previousBook.get('book_id'), chapter: lastChapter });
+			this.getChapters({ bible: activeTextId, book: previousBook.get('book_id'), chapter: lastChapter, audioObjects });
 			this.setActiveChapter(lastChapter);
 		} else {
-			this.getChapters({ bible: activeTextId, book: activeBookId, chapter: activeChapter - 1 });
+			this.getChapters({ bible: activeTextId, book: activeBookId, chapter: activeChapter - 1, audioObjects });
 			this.setActiveChapter(activeChapter - 1);
 		}
 	}
@@ -134,7 +139,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 
 	getAudio = ({ list }) => this.props.dispatch(getAudio({ list }))
 
-	getChapters = ({ bible, book, chapter }) => this.props.dispatch(getChapterText({ bible, book, chapter }))
+	getChapters = ({ bible, book, chapter }) => this.props.dispatch(getChapterText({ bible, book, chapter, audioObjects: this.props.homepage.audioObjects }))
 
 	setActiveBookName = (bookName, id) => this.props.dispatch(setActiveBookName(bookName, id))
 
