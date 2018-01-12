@@ -7,6 +7,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import SvgWrapper from 'components/SvgWrapper';
+import { TransitionGroup } from 'react-transition-group';
+import FadeTransition from 'components/FadeTransition';
 // import styled from 'styled-components';
 
 // import { FormattedMessage } from 'react-intl';
@@ -54,65 +56,57 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 		} = this.props;
 		const { filterText } = this.state;
 		const filteredBibles = filterText ? bibles.filter((bible) => this.filterFunction(bible, filterText, activeIsoCode)) : bibles.filter((bible) => bible.get('iso') === activeIsoCode);
-		if (active) {
-			return (
-				<div className="text-selection-section">
-					<div className="text-selection-title">
-						<SvgWrapper height="25px" width="25px" fill="#fff" svgid="resources" />
-						<span className="text">VERSION:</span>
-						<span className="active-header-name">{activeTextName}</span>
-					</div>
-					<input className="text-selection-input" onChange={this.handleChange} placeholder="SEARCH VERSIONS" value={this.state.filterText} />
-					<div className="language-name-list">
-						{
-							filteredBibles.map((bible) => (
-								<div
-									className="version-item-button"
-									tabIndex="0"
-									role="button"
-									key={`${bible.get('abbr')}${bible.get('date')}`}
-									onClick={() => {
-										const abbr = bible.get('abbr');
-
-										getAudio({ list: bible.get('filesets') });
-										setActiveText({ textId: abbr, textName: abbr, filesets: bible.get('filesets') });
-										toggleTextSelection();
-									}}
-								>
-									{
-										bible.get('filesets').includes('text_rich') || bible.get('filesets').includes('text_plain') ? (
-											<SvgWrapper className="svg active" height="20px" width="20px" svgid="text" />
-										) : (
-											<SvgWrapper className="svg inactive" height="20px" width="20px" svgid="text" />
-										)
-									}
-									{
-										bible.get('filesets').includes('audio_drama') ? (
-											<SvgWrapper className="svg active" height="20px" width="20px" svgid="volume" />
-										) : (
-											<SvgWrapper className="svg inactive" height="20px" width="20px" svgid="volume" />
-										)
-									}
-									<h4 className={bible.get('abbr') === activeTextName ? 'active-version' : ''}>{bible.get('name')}</h4>
-								</div>
-							))
-						}
-					</div>
-				</div>
-			);
-		}
 		return (
-			<div
-				className="text-selection-section closed"
-				tabIndex="0"
-				role="button"
-				onClick={() => { toggleVersionList({ state: true }); setCountryListState({ state: false }); toggleLanguageList({ state: false }); }}
-			>
-				<div className="text-selection-title">
+			<div className={active ? 'text-selection-section' : 'text-selection-section closed'}>
+				<div className="text-selection-title" role="button" tabIndex={0} onClick={() => { setCountryListState({ state: false }); toggleVersionList({ state: true }); toggleLanguageList({ state: false }); }}>
 					<SvgWrapper height="25px" width="25px" fill="#fff" svgid="resources" />
 					<span className="text">VERSION:</span>
 					<span className="active-header-name">{activeTextName}</span>
 				</div>
+				<input className={active ? 'text-selection-input' : 'text-selection-input closed'} onChange={this.handleChange} placeholder="SEARCH VERSIONS" value={this.state.filterText} />
+				<TransitionGroup className={active ? 'transition-group' : ''}>
+					{
+					active ? (
+						<FadeTransition classNames="slide-down" in={active}>
+							<div className="language-name-list">
+								{
+									filteredBibles.map((bible) => (
+										<div
+											className="version-item-button"
+											tabIndex="0"
+											role="button"
+											key={`${bible.get('abbr')}${bible.get('date')}`}
+											onClick={() => {
+												const abbr = bible.get('abbr');
+
+												getAudio({ list: bible.get('filesets') });
+												setActiveText({ textId: abbr, textName: abbr, filesets: bible.get('filesets') });
+												toggleTextSelection();
+											}}
+										>
+											{
+												bible.get('filesets').includes('text_rich') || bible.get('filesets').includes('text_plain') ? (
+													<SvgWrapper className="svg active" height="20px" width="20px" svgid="text" />
+												) : (
+													<SvgWrapper className="svg inactive" height="20px" width="20px" svgid="text" />
+												)
+											}
+											{
+												bible.get('filesets').includes('audio_drama') ? (
+													<SvgWrapper className="svg active" height="20px" width="20px" svgid="volume" />
+												) : (
+													<SvgWrapper className="svg inactive" height="20px" width="20px" svgid="volume" />
+												)
+											}
+											<h4 className={bible.get('abbr') === activeTextName ? 'active-version' : ''}>{bible.get('name')}</h4>
+										</div>
+									))
+								}
+							</div>
+						</FadeTransition>
+					) : null
+				}
+				</TransitionGroup>
 			</div>
 		);
 	}
