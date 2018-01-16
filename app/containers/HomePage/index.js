@@ -73,7 +73,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			audioObjects,
 		} = this.props.homepage;
 
-		this.props.dispatch(getAudio({ list: activeFilesets }));
+		this.props.dispatch(getAudio({ list: fromJS(activeFilesets) }));
 		this.props.dispatch(getBooks({ textId: activeTextId }));
 		this.props.dispatch(getChapterText({ bible: activeTextId, book: activeBookId, chapter: activeChapter, audioObjects }));
 		// Need to get the audio for the initial chapter
