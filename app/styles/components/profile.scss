@@ -13,9 +13,9 @@
 .profile input:focus::-webkit-input-placeholder {color:transparent;}
 .profile input:focus::-moz-placeholder          {color:transparent;}
 .profile input:focus:-ms-input-placeholder      {color:transparent;}
-.profile ::-webkit-input-placeholder            {color:$paper-primary;padding-left:45px;}
-.profile ::-moz-placeholder                     {color:$paper-primary;padding-left:45px;}
-.profile :-ms-input-placeholder                 {color:$paper-primary;padding-left:45px;}
+.profile ::-webkit-input-placeholder            {color:$paper-primary;}
+.profile ::-moz-placeholder                     {color:$paper-primary;}
+.profile :-ms-input-placeholder                 {color:$paper-primary;}
 
 // Social Buttons
 .profile .google   {display:flex;align-items:center;cursor:pointer;height:50px;width:100%;background:$login-google-color;color:$paper-primary;}
