@@ -9,13 +9,25 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
+import {
+	getChapterText,
+	setActiveChapter,
+	setActiveBookName,
+	toggleChapterSelection,
+} from 'containers/HomePage/actions';
 import BooksTable from 'components/BooksTable';
 import SvgWrapper from 'components/SvgWrapper';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
 import { setSelectedBookName } from './actions';
-import makeSelectChapterSelection from './selectors';
+import makeSelectChapterSelection, {
+	selectBooks,
+	selectActiveBookName,
+	selectActiveTextId,
+	selectActiveChapter,
+	selectActiveFilesets,
+} from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 
@@ -36,13 +48,21 @@ export class ChapterSelection extends React.PureComponent { // eslint-disable-li
 
 	setSelectedBookName = (book) => this.props.dispatch(setSelectedBookName(book))
 
+	getChapters = (props) => this.props.dispatch(getChapterText({ ...props, audioObjects: this.props.activeFilesets }))
+
+	setActiveChapter = (props) => this.props.dispatch(setActiveChapter(props))
+
+	setActiveBookName = (props) => this.props.dispatch(setActiveBookName(props))
+
+	toggleChapterSelection = (props) => this.props.dispatch(toggleChapterSelection(props))
+
 	handleClickOutside = (event) => {
 		const bounds = this.ref.getBoundingClientRect();
 		const insideWidth = event.x >= bounds.x && event.x <= bounds.x + bounds.width;
 		const insideHeight = event.y >= bounds.y && event.y <= bounds.y + bounds.height;
 
 		if (this.ref && !(insideWidth && insideHeight)) {
-			this.props.toggleChapterSelection();
+			this.toggleChapterSelection();
 			document.removeEventListener('click', this.handleClickOutside);
 		}
 	}
@@ -50,31 +70,28 @@ export class ChapterSelection extends React.PureComponent { // eslint-disable-li
 	render() {
 		const { selectedBookName } = this.props.chapterselection;
 		const {
-			setActiveChapter,
-			setActiveBookName,
 			activeChapter,
-			getChapters,
 			books,
 			activeTextId,
-			toggleChapterSelection,
 			activeBookName,
 		} = this.props;
+
 		return (
 			<GenericErrorBoundary affectedArea="ChapterSelection">
 				<aside ref={this.setRef} className="chapter-text-dropdown">
 					<header>
 						<h2 className="text-selection">{`${activeBookName} ${activeChapter}`}</h2>
-						<SvgWrapper role="button" tabIndex={0} className="close-icon icon" onClick={toggleChapterSelection} svgid="go-up" opacity=".5" />
+						<SvgWrapper role="button" tabIndex={0} className="close-icon icon" onClick={this.toggleChapterSelection} svgid="go-up" opacity=".5" />
 					</header>
 					<BooksTable
 						activeChapter={activeChapter}
-						setActiveChapter={setActiveChapter}
+						setActiveChapter={this.setActiveChapter}
 						activeTextId={activeTextId}
 						selectedBookName={selectedBookName}
 						setSelectedBookName={this.setSelectedBookName}
-						toggleChapterSelection={toggleChapterSelection}
-						getChapterText={getChapters}
-						setActiveBookName={setActiveBookName}
+						toggleChapterSelection={this.toggleChapterSelection}
+						getChapterText={this.getChapters}
+						setActiveBookName={this.setActiveBookName}
 						activeBookName={activeBookName}
 						books={books}
 					/>
@@ -90,15 +107,17 @@ ChapterSelection.propTypes = {
 	books: PropTypes.array,
 	activeBookName: PropTypes.string.isRequired,
 	activeTextId: PropTypes.string.isRequired,
-	getChapters: PropTypes.func.isRequired,
-	setActiveChapter: PropTypes.func.isRequired,
-	setActiveBookName: PropTypes.func.isRequired,
-	toggleChapterSelection: PropTypes.func.isRequired,
 	chapterselection: PropTypes.object.isRequired,
+	activeFilesets: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
 	chapterselection: makeSelectChapterSelection(),
+	activeBookName: selectActiveBookName(),
+	activeTextId: selectActiveTextId(),
+	activeChapter: selectActiveChapter(),
+	books: selectBooks(),
+	activeFilesets: selectActiveFilesets(),
 });
 
 function mapDispatchToProps(dispatch) {

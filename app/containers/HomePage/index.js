@@ -49,9 +49,7 @@ import {
 	getChapterText,
 	updateSelectedText,
 } from './actions';
-import
-	makeSelectHomePage,
-{
+import makeSelectHomePage, {
 	selectActiveBook,
 	selectPrevBook,
 	selectNextBook,
@@ -170,7 +168,6 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			activeTextName,
 			activeTextId,
 			chapterText,
-			books,
 			isSettingsModalActive,
 			isNotesModalActive,
 			isVersionSelectionActive,
@@ -212,16 +209,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					{
 						isChapterSelectionActive ? (
 							<FadeTransition in={isSettingsModalActive}>
-								<ChapterSelection
-									activeBookName={activeBookName}
-									activeChapter={activeChapter}
-									activeTextId={activeTextId}
-									books={books}
-									getChapters={this.getChapters}
-									setActiveBookName={this.setActiveBookName}
-									setActiveChapter={this.setActiveChapter}
-									toggleChapterSelection={this.toggleChapterSelection}
-								/>
+								<ChapterSelection />
 							</FadeTransition>
 						) : null
 					}
@@ -232,7 +220,6 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 									activeBookName={activeBookName}
 									activeTextName={activeTextName}
 									getAudio={this.getAudio}
-									getChapters={this.getChapters}
 									setActiveText={this.setActiveTextId}
 									setActiveChapter={this.setActiveChapter}
 									toggleVersionSelection={this.toggleVersionSelection}
