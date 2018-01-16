@@ -30,6 +30,12 @@
 .add-verse .text       {color:$paper-primary;margin-left:15px;font-style:italic;}
 .edit-notes .note-text {color:$paper-primary;width:100%;font-style:italic;margin-top:15px;font-weight:200;}
 
+.add-verse-expanded {height:100px;width:320px;display:flex;background-color:#111;border:1px solid $menu-active-color;}
+.add-verse-expanded .book-table {width:280px;}
+.add-verse-expanded .plus-expanded {background-color:$menu-active-color;height:100%;width:40px;}
+.add-verse-expanded .plus-expanded svg {width:20px;height:20px;margin-left:10px;margin-top:5px;cursor:pointer;}
+
+
 .edit-notes .verse-text {background-color:#111;padding:5px;}
 
 // List Sections

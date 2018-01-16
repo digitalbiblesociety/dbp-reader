@@ -42,9 +42,9 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 					isAddVerseExpanded ? (
 						<div className="add-verse-expanded">
 							<div className="plus-expanded">
-								<SvgWrapper onClick={toggleAddVerseMenu} className="plus-expanded" width="20px" height="20px" svgid="plus" />
+								<SvgWrapper onClick={toggleAddVerseMenu} width="20px" height="20px" svgid="plus" />
 							</div>
-							<div>
+							<div className="book-table">
 								<span>Need to reuse books table here but </span>
 								<span>there is an issue with obtaining the state</span>
 							</div>

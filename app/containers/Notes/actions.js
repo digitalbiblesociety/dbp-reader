@@ -10,7 +10,7 @@ import {
 	TOGGLE_ADD_VERSE_MENU,
 	SET_ACTIVE_PAGE_DATA,
 	SET_PAGE_SIZE,
-	T0GGLE_PAGE_SELECTOR,
+	TOGGLE_PAGE_SELECTOR,
 	ADD_NOTE,
 	ADD_HIGHLIGHT,
 	ADD_BOOKMARK,
@@ -58,5 +58,5 @@ export const toggleAddVerseMenu = () => ({
 });
 
 export const togglePageSelector = () => ({
-	type: T0GGLE_PAGE_SELECTOR,
+	type: TOGGLE_PAGE_SELECTOR,
 });

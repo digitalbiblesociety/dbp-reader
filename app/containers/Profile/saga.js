@@ -55,27 +55,27 @@ export function* sendSignUpForm({ password, email, username }) {
 
 	try {
 		const response = yield call(request, requestUrl, options);
-
+		// response will have the user_id now
 		if (response.success) {
-			yield put(USER_LOGGED_IN);
+			yield put({ type: USER_LOGGED_IN });
 		} else if (response.error) {
-			yield put('user-login-failed', response.error.message);
+			console.log(response.error.message); // eslint-disable-line no-console
+			// yield put('user-login-failed', response.error.message);
 		}
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
-			console.error(err); // eslint-ignore-line no-console
+			console.error(err); // eslint-disable-line no-console
 		}
 	}
 }
 
 // export function* sendLoginForm({ password, email, username }) {
-// 	const requestUrl = `https://api.bible.build/users?key=${process.env.DBP_API_KEY}&v=4&pretty`;
+// 	const requestUrl = `https://api.bible.build/users/login?key=${process.env.DBP_API_KEY}&v=4&pretty`;
 // 	const options = {
 // 		method: 'GET',
 // 		body: {
 // 			password,
 // 			email,
-// 			name,
 // 		},
 // 	};
 

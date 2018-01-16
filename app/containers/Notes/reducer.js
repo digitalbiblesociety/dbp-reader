@@ -12,7 +12,7 @@ import {
 	SET_ACTIVE_PAGE_DATA,
 	initialNotesListForTesting,
 	SET_PAGE_SIZE,
-	T0GGLE_PAGE_SELECTOR,
+	TOGGLE_PAGE_SELECTOR,
 } from './constants';
 
 const initialState = fromJS({
@@ -43,7 +43,7 @@ function notesReducer(state = initialState, action) {
 		return state.set('activePageData', action.page);
 	case SET_PAGE_SIZE:
 		return state.set('paginationPageSize', action.size);
-	case T0GGLE_PAGE_SELECTOR:
+	case TOGGLE_PAGE_SELECTOR:
 		return state.set('pageSelectorState', !state.get('pageSelectorState'));
 	default:
 		return state;
