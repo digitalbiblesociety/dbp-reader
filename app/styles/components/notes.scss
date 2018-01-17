@@ -4,6 +4,9 @@
 .notes section            {padding:15px}
 .notes .option:hover      {color:rgba(244,245,246,1);cursor:pointer}
 
+.notes textarea 			{resize:none;background-color:inherit;border:none;font-size:0.98em;}
+.notes textarea:focus {outline:none;}
+
 // Svg Buttons
 .notes .top-bar             {display:flex;height:50px;width:100%;align-items:center;}
 .notes .top-bar *:focus     {outline:none;}
@@ -28,7 +31,7 @@
 .add-verse .plus       {fill:currentColor;}
 .add-verse .plus:hover {opacity:0.65;cursor:pointer}
 .add-verse .text       {color:$paper-primary;margin-left:15px;font-style:italic;}
-.edit-notes .note-text {color:$paper-primary;width:100%;font-style:italic;margin-top:15px;font-weight:200;}
+.edit-notes .note-text {color:$paper-primary;height:100px;overflow-y:scroll;overflow-x:hidden;width:100%;font-style:italic;margin-top:15px;font-weight:200;caret-color:#fff;}
 
 .add-verse-expanded {height:100px;width:320px;display:flex;background-color:#111;border:1px solid $menu-active-color;}
 .add-verse-expanded .book-table {width:280px;}

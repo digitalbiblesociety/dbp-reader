@@ -11,6 +11,18 @@ import SvgWrapper from 'components/SvgWrapper';
 // import styled from 'styled-components';
 
 class EditNote extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+	state = {
+		textarea: this.props.note.text || 'CLICK TO ADD TEXT',
+	}
+
+	componentWillUnmount() {
+		// Dispatch api call to save the user note and hope nothing hiccups
+	}
+
+	handleTextareaChange = (e) => {
+		this.setState({ textarea: e.target.value });
+	}
+
 	render() {
 		const {
 			toggleVerseText,
@@ -76,7 +88,7 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 						</div>
 					)
 				}
-				<div className="note-text">{note.text || 'CLICK TO ENTER TEXT'}</div>
+				<textarea onChange={this.handleTextareaChange} value={this.state.textarea} className="note-text">{note.text || 'CLICK TO ENTER TEXT'}</textarea>
 			</section>
 		);
 	}
