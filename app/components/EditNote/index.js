@@ -6,7 +6,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-// import BookTable from 'components/BooksTable';
+import BooksTable from 'components/BooksTable';
 import SvgWrapper from 'components/SvgWrapper';
 // import styled from 'styled-components';
 
@@ -19,7 +19,17 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 			isAddVerseExpanded,
 			isVerseTextVisible,
 			selectedText,
+			getChapterText,
+			setActiveChapter,
+			setActiveBookName,
+			setSelectedBookName,
+			books,
+			activeTextId,
+			activeChapter,
+			activeBookName,
+			selectedBookName,
 		} = this.props;
+
 		return (
 			<section className="edit-notes">
 				<div className="date-title">
@@ -45,8 +55,18 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 								<SvgWrapper onClick={toggleAddVerseMenu} width="20px" height="20px" svgid="plus" />
 							</div>
 							<div className="book-table">
-								<span>Need to reuse books table here but </span>
-								<span>there is an issue with obtaining the state</span>
+								<BooksTable
+									getChapterText={getChapterText}
+									setActiveChapter={setActiveChapter}
+									setActiveBookName={setActiveBookName}
+									setSelectedBookName={setSelectedBookName}
+									toggleChapterSelection={toggleAddVerseMenu}
+									books={books}
+									activeTextId={activeTextId}
+									activeChapter={activeChapter}
+									activeBookName={activeBookName}
+									selectedBookName={selectedBookName}
+								/>
 							</div>
 						</div>
 					) : (
@@ -69,6 +89,15 @@ EditNote.propTypes = {
 	isAddVerseExpanded: PropTypes.bool.isRequired,
 	isVerseTextVisible: PropTypes.bool.isRequired,
 	selectedText: PropTypes.string,
+	getChapterText: PropTypes.func,
+	setActiveChapter: PropTypes.func,
+	setActiveBookName: PropTypes.func,
+	setSelectedBookName: PropTypes.func,
+	books: PropTypes.array,
+	activeTextId: PropTypes.string,
+	activeChapter: PropTypes.number,
+	activeBookName: PropTypes.string,
+	selectedBookName: PropTypes.string,
 };
 
 export default EditNote;

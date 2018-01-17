@@ -8,29 +8,30 @@
 
 import { fromJS } from 'immutable';
 import {
-	SET_ACTIVE_BOOK_NAME,
+	ACTIVE_TEXT_ID,
 	LOAD_CHAPTER_TEXT,
 	LOAD_BOOKS,
 	LOAD_AUDIO,
-	TOGGLE_SETTINGS_MODAL,
-	TOGGLE_CHAPTER_SELECTION,
-	TOGGLE_MENU_BAR,
-	TOGGLE_VERSION_SELECTION,
-	TOGGLE_PROFILE,
 	SET_ACTIVE_CHAPTER,
+	SET_ACTIVE_BOOK_NAME,
 	SET_ACTIVE_NOTES_VIEW,
-	ACTIVE_TEXT_ID,
+	SET_SELECTED_BOOK_NAME,
+	TOGGLE_PROFILE,
+	TOGGLE_MENU_BAR,
+	TOGGLE_RED_LETTER,
 	TOGGLE_NOTES_MODAL,
+	TOGGLE_READERS_MODE,
+	TOGGLE_SETTINGS_MODAL,
+	TOGGLE_JUSTIFIED_TEXT,
+	TOGGLE_CROSS_REFERENCES,
 	TOGGLE_INFORMATION_MODAL,
+	TOGGLE_VERSION_SELECTION,
+	TOGGLE_CHAPTER_SELECTION,
+	TOGGLE_ONE_VERSE_PER_LINE,
+	TOGGLE_VERTICAL_SCROLLING,
 	UPDATE_THEME,
 	UPDATE_FONT_TYPE,
 	UPDATE_FONT_SIZE,
-	TOGGLE_READERS_MODE,
-	TOGGLE_CROSS_REFERENCES,
-	TOGGLE_RED_LETTER,
-	TOGGLE_JUSTIFIED_TEXT,
-	TOGGLE_ONE_VERSE_PER_LINE,
-	TOGGLE_VERTICAL_SCROLLING,
 	UPDATE_SELECTED_TEXT,
 } from './constants';
 
@@ -108,6 +109,7 @@ const initialState = fromJS({
 		},
 	},
 	selectedText: '',
+	selectedBookName: 'Genesis',
 });
 
 function homePageReducer(state = initialState, action) {
@@ -177,6 +179,8 @@ function homePageReducer(state = initialState, action) {
 		return state.setIn(['userSettings', 'toggleOptions', 'verticalScrolling', 'active'], !state.getIn(['userSettings', 'toggleOptions', 'verticalScrolling', 'active']));
 	case UPDATE_SELECTED_TEXT:
 		return state.set('selectedText', action.text);
+	case SET_SELECTED_BOOK_NAME:
+		return state.set('selectedBookName', action.book);
 	default:
 		return state;
 	}

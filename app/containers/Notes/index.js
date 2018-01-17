@@ -17,6 +17,12 @@ import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
 import {
+	getChapterText,
+	setActiveChapter,
+	setActiveBookName,
+	setSelectedBookName,
+} from 'containers/HomePage/actions';
+import {
 	setActiveChild,
 	setPageSize,
 	toggleVerseText,
@@ -27,7 +33,15 @@ import {
 	addBookmark,
 	addHighlight,
 } from './actions';
-import makeSelectNotes, { selectHighlightedText } from './selectors';
+import makeSelectNotes, {
+	selectHighlightedText,
+	selectBooks,
+	selectActiveBookName,
+	selectActiveTextId,
+	selectActiveChapter,
+	selectActiveFilesets,
+	selectSelectedBookName,
+} from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 // import { FormattedMessage } from 'react-intl';
@@ -56,17 +70,25 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 
 	setPageSize = (size) => this.props.dispatch(setPageSize(size))
 
-	addBookmark = ({ userId, data }) => this.props.dispatch(addBookmark({ userId, data }))
+	setActiveChapter = (props) => this.props.dispatch(setActiveChapter(props))
 
-	addHighlight = ({ userId, data }) => this.props.dispatch(addHighlight({ userId, data }))
+	setActiveBookName = (props) => this.props.dispatch(setActiveBookName(props))
 
-	addNote = ({ userId, data }) => this.props.dispatch(addNote({ userId, data }))
+	setSelectedBookName = (book) => this.props.dispatch(setSelectedBookName(book))
+
+	getChapters = (props) => this.props.dispatch(getChapterText({ ...props, audioObjects: this.props.activeFilesets }))
 
 	toggleVerseText = () => this.props.dispatch(toggleVerseText())
 
 	toggleAddVerseMenu = () => this.props.dispatch(toggleAddVerseMenu())
 
 	togglePageSelector = () => this.props.dispatch(togglePageSelector())
+
+	addBookmark = ({ userId, data }) => this.props.dispatch(addBookmark({ userId, data }))
+
+	addHighlight = ({ userId, data }) => this.props.dispatch(addHighlight({ userId, data }))
+
+	addNote = ({ userId, data }) => this.props.dispatch(addNote({ userId, data }))
 
 	titleOptions = {
 		edit: 'EDIT NOTE',
@@ -100,6 +122,11 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 		const {
 			toggleNotesModal,
 			selectedText,
+			activeTextId,
+			activeChapter,
+			books,
+			activeBookName,
+			selectedBookName,
 		} = this.props;
 
 		return (
@@ -128,7 +155,23 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 					</div>
 					{
 						activeChild === 'edit' ? (
-							<EditNote selectedText={selectedText} toggleVerseText={this.toggleVerseText} toggleAddVerseMenu={this.toggleAddVerseMenu} note={note} isAddVerseExpanded={isAddVerseExpanded} isVerseTextVisible={isVerseTextVisible} />
+							<EditNote
+								note={note}
+								selectedText={selectedText}
+								isVerseTextVisible={isVerseTextVisible}
+								isAddVerseExpanded={isAddVerseExpanded}
+								toggleVerseText={this.toggleVerseText}
+								toggleAddVerseMenu={this.toggleAddVerseMenu}
+								getChapterText={this.getChapters}
+								setActiveChapter={this.setActiveChapter}
+								setActiveBookName={this.setActiveBookName}
+								setSelectedBookName={this.setSelectedBookName}
+								books={books}
+								activeTextId={activeTextId}
+								activeChapter={activeChapter}
+								activeBookName={activeBookName}
+								selectedBookName={selectedBookName}
+							/>
 						) : <MyNotes pageSelectorState={pageSelectorState} setPageSize={this.setPageSize} togglePageSelector={this.togglePageSelector} pageSize={pageSize} setActivePageData={this.setActivePageData} setActiveChild={this.setActiveChild} activePageData={activePageData} listData={listData} sectionType={activeChild} />
 					}
 				</aside>
@@ -143,11 +186,23 @@ Notes.propTypes = {
 	toggleNotesModal: PropTypes.func.isRequired,
 	openView: PropTypes.string.isRequired,
 	selectedText: PropTypes.string,
+	activeChapter: PropTypes.number.isRequired,
+	books: PropTypes.array,
+	activeBookName: PropTypes.string.isRequired,
+	activeTextId: PropTypes.string.isRequired,
+	activeFilesets: PropTypes.object.isRequired,
+	selectedBookName: PropTypes.string,
 };
 
 const mapStateToProps = createStructuredSelector({
 	notes: makeSelectNotes(),
 	selectedText: selectHighlightedText(),
+	activeBookName: selectActiveBookName(),
+	activeTextId: selectActiveTextId(),
+	activeChapter: selectActiveChapter(),
+	books: selectBooks(),
+	activeFilesets: selectActiveFilesets(),
+	selectedBookName: selectSelectedBookName(),
 });
 
 function mapDispatchToProps(dispatch) {

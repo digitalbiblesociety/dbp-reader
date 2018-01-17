@@ -21,6 +21,7 @@ export const GET_BOOKS = 'app/TextSelection/GET_BIBLES_BOOKS';
 export const LOAD_BOOKS = 'app/TextSelection/LOAD_BOOKS';
 export const GET_AUDIO = 'app/TextSelection/GET_AUDIO';
 export const LOAD_AUDIO = 'app/TextSelection/LOAD_AUDIO';
+export const SET_SELECTED_BOOK_NAME = 'app/TextSelection/SET_SELECTED_BOOK_NAME';
 export const UPDATE_THEME = 'app/Settings/UPDATE_THEME';
 export const UPDATE_FONT_TYPE = 'app/Settings/UPDATE_FONT_TYPE';
 export const UPDATE_FONT_SIZE = 'app/Settings/UPDATE_FONT_SIZE';

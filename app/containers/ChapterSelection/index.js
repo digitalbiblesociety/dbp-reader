@@ -42,8 +42,8 @@ export class ChapterSelection extends React.PureComponent { // eslint-disable-li
 		document.removeEventListener('click', this.handleClickOutside);
 	}
 
-	setRef = (node) => {
-		this.ref = node;
+	setAsideRef = (el) => {
+		this.aside = el;
 	}
 
 	setSelectedBookName = (book) => this.props.dispatch(setSelectedBookName(book))
@@ -57,11 +57,11 @@ export class ChapterSelection extends React.PureComponent { // eslint-disable-li
 	toggleChapterSelection = (props) => this.props.dispatch(toggleChapterSelection(props))
 
 	handleClickOutside = (event) => {
-		const bounds = this.ref.getBoundingClientRect();
+		const bounds = this.aside.getBoundingClientRect();
 		const insideWidth = event.x >= bounds.x && event.x <= bounds.x + bounds.width;
 		const insideHeight = event.y >= bounds.y && event.y <= bounds.y + bounds.height;
 
-		if (this.ref && !(insideWidth && insideHeight)) {
+		if (this.aside && !(insideWidth && insideHeight)) {
 			this.toggleChapterSelection();
 			document.removeEventListener('click', this.handleClickOutside);
 		}
@@ -78,7 +78,7 @@ export class ChapterSelection extends React.PureComponent { // eslint-disable-li
 
 		return (
 			<GenericErrorBoundary affectedArea="ChapterSelection">
-				<aside ref={this.setRef} className="chapter-text-dropdown">
+				<aside ref={this.setAsideRef} className="chapter-text-dropdown">
 					<header>
 						<h2 className="text-selection">{`${activeBookName} ${activeChapter}`}</h2>
 						<SvgWrapper role="button" tabIndex={0} className="close-icon icon" onClick={this.toggleChapterSelection} svgid="go-up" opacity=".5" />
