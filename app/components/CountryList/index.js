@@ -6,10 +6,8 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { TransitionGroup } from 'react-transition-group';
 import SvgWrapper from 'components/SvgWrapper';
 import flags from 'images/flags.svg';
-import FadeTransition from 'components/FadeTransition';
 // import styled from 'styled-components';
 
 // import { FormattedMessage } from 'react-intl';
@@ -48,46 +46,48 @@ class CountryList extends React.PureComponent { // eslint-disable-line react/pre
 		} = this.props;
 		const { filterText } = this.state;
 		const filteredCountries = filterText ? countries.filter((country) => this.filterFunction(country, filterText)) : countries;
-
+		if (active) {
+			return (
+				<div className="text-selection-section">
+					<div className="text-selection-title">
+						<SvgWrapper height="25px" width="25px" fill="#fff" svgid="globe" />
+						<span className="text">COUNTRY:</span>
+						<span className="active-header-name">{activeCountryName || 'ALL'}</span>
+					</div>
+					<input className="text-selection-input" onChange={this.handleChange} placeholder="SEARCH LANGUAGES" value={this.state.filterText} />
+					<div className="language-name-list">
+						{
+							filteredCountries.valueSeq().map((country) => (
+								<div
+									className="country-name"
+									key={country.getIn(['codes', 'iso_a2'])}
+									role="button"
+									tabIndex={0}
+									onClick={() => {
+										setCountryName({ name: country.get('name'), languages: country.get('languages') });
+										setCountryListState({ state: false });
+										toggleVersionList({ state: false });
+										toggleLanguageList({ state: true });
+									}}
+								>
+									<svg className="svg" height="25px" width="25px">
+										<use xmlnsXlink="http://www.w3.org/1999/xlink" xlinkHref={`${flags}#${country.getIn(['codes', 'iso_a2'])}`}></use>
+									</svg>
+									<h4 className={activeCountryName === country.get('name') ? 'active-language-name' : 'inactive-country'}>{country.get('name')}</h4>
+								</div>
+							))
+						}
+					</div>
+				</div>
+			);
+		}
 		return (
-			<div className={active ? 'text-selection-section' : 'text-selection-section closed'}>
-				<div className="text-selection-title" role="button" tabIndex={0} onClick={() => { setCountryListState({ state: true }); toggleVersionList({ state: false }); toggleLanguageList({ state: false }); }}>
+			<div className="text-selection-section closed" role="button" tabIndex={0} onClick={() => { setCountryListState({ state: true }); toggleVersionList({ state: false }); toggleLanguageList({ state: false }); }}>
+				<div className="text-selection-title">
 					<SvgWrapper height="25px" width="25px" fill="#fff" svgid="globe" />
 					<span className="text">COUNTRY:</span>
 					<span className="active-header-name">{activeCountryName || 'ALL'}</span>
 				</div>
-				<input className={active ? 'text-selection-input' : 'text-selection-input closed'} onChange={this.handleChange} placeholder="SEARCH LANGUAGES" value={this.state.filterText} />
-				<TransitionGroup className={active ? 'transition-group' : ''}>
-					{
-						active ? (
-							<FadeTransition classNames="slide-down" in={active}>
-								<div className="language-name-list">
-									{
-										filteredCountries.valueSeq().map((country) => (
-											<div
-												className="country-name"
-												key={country.getIn(['codes', 'iso_a2'])}
-												role="button"
-												tabIndex={0}
-												onClick={() => {
-													setCountryName({ name: country.get('name'), languages: country.get('languages') });
-													setCountryListState({ state: false });
-													toggleVersionList({ state: false });
-													toggleLanguageList({ state: true });
-												}}
-											>
-												<svg className="svg" height="25px" width="25px">
-													<use xmlnsXlink="http://www.w3.org/1999/xlink" xlinkHref={`${flags}#${country.getIn(['codes', 'iso_a2'])}`}></use>
-												</svg>
-												<h4 className={activeCountryName === country.get('name') ? 'active-language-name' : 'inactive-country'}>{country.get('name')}</h4>
-											</div>
-										))
-									}
-								</div>
-							</FadeTransition>
-						) : null
-					}
-				</TransitionGroup>
 			</div>
 		);
 	}

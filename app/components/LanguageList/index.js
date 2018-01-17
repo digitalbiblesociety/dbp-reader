@@ -7,9 +7,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import SvgWrapper from 'components/SvgWrapper';
-import { TransitionGroup } from 'react-transition-group';
-import FadeTransition from 'components/FadeTransition';
-
 // import styled from 'styled-components';
 
 // import { FormattedMessage } from 'react-intl';
@@ -48,31 +45,34 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 		} = this.props;
 		const { filterText } = this.state;
 		const filteredLanguages = filterText ? languages.filter((language) => this.filterFunction(language, filterText)) : languages;
+		if (active) {
+			return (
+				<div className="text-selection-section">
+					<div className="text-selection-title">
+						<SvgWrapper height="25px" width="25px" fill="#fff" svgid="world" />
+						<span className="text">LANGUAGE:</span>
+						<span className="active-header-name">{activeLanguageName}</span>
+					</div>
+					<input className="text-selection-input" onChange={this.handleChange} placeholder="SEARCH LANGUAGES" value={this.state.filterText} />
+					<div className="language-name-list">
+						{
+							filteredLanguages.map((language) => (
+								<div className="language-name" key={language.get('iso_code')} role="button" tabIndex={0} onClick={() => { setActiveIsoCode({ iso: language.get('iso_code'), name: language.get('name') }); toggleLanguageList({ state: false }); toggleVersionList({ state: true }); setCountryListState({ state: false }); }}>
+									<h4 className={language.get('name') === activeLanguageName ? 'active-language-name' : ''}>{language.get('name')}</h4>
+								</div>
+							))
+						}
+					</div>
+				</div>
+			);
+		}
 		return (
-			<div className={active ? 'text-selection-section' : 'text-selection-section closed'}>
-				<div className="text-selection-title" role="button" tabIndex={0} onClick={() => { setCountryListState({ state: false }); toggleVersionList({ state: false }); toggleLanguageList({ state: true }); }}>
+			<div className="text-selection-section closed" role="button" tabIndex={0} onClick={() => { toggleLanguageList({ state: true }); toggleVersionList({ state: false }); setCountryListState({ state: false }); }}>
+				<div className="text-selection-title">
 					<SvgWrapper height="25px" width="25px" fill="#fff" svgid="world" />
 					<span className="text">LANGUAGE:</span>
 					<span className="active-header-name">{activeLanguageName}</span>
 				</div>
-				<input className={active ? 'text-selection-input' : 'text-selection-input closed'} onChange={this.handleChange} placeholder="SEARCH LANGUAGES" value={this.state.filterText} />
-				<TransitionGroup className={active ? 'transition-group' : ''}>
-					{
-						active ? (
-							<FadeTransition classNames="slide-down" in={active}>
-								<div className="language-name-list">
-									{
-										filteredLanguages.map((language) => (
-											<div className="language-name" key={language.get('iso_code')} role="button" tabIndex={0} onClick={() => { setActiveIsoCode({ iso: language.get('iso_code'), name: language.get('name') }); toggleLanguageList({ state: false }); toggleVersionList({ state: true }); setCountryListState({ state: false }); }}>
-												<h4 className={language.get('name') === activeLanguageName ? 'active-language-name' : ''}>{language.get('name')}</h4>
-											</div>
-										))
-									}
-								</div>
-							</FadeTransition>
-						) : null
-					}
-				</TransitionGroup>
 			</div>
 		);
 	}
