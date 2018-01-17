@@ -33,7 +33,7 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 			volume: 1,
 			duration: 100,
 			currentTime: 0,
-			playerState: !!this.props.audioPlayerSource,
+			playerState: true,
 			currentSpeed: 1,
 		};
 	}
