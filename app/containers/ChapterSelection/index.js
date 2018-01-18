@@ -30,7 +30,6 @@ import makeSelectChapterSelection, {
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
-
 // import messages from './messages';
 
 export class ChapterSelection extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function

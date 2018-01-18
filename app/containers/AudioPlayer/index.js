@@ -33,7 +33,7 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 			volume: 1,
 			duration: 100,
 			currentTime: 0,
-			playerState: true,
+			playerState: !!this.props.audioPlayerSource,
 			currentSpeed: 1,
 		};
 	}
@@ -60,6 +60,16 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 				currentTime: e.target.currentTime,
 			});
 		});
+	}
+
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.audioPlayerSource !== this.props.audioPlayerSource) {
+			if (nextProps.audioPlayerSource) {
+				this.setState({ playerState: true });
+			} else if (this.state.playerState) {
+				this.setState({ playerState: false });
+			}
+		}
 	}
 
 	setCurrentTime = (time) => {
