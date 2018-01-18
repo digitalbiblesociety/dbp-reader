@@ -5,7 +5,7 @@ node_modules
 stats.json
 .env
 app/utils/ENGKJV
-
+reduxStoreShape.js
 # Cruft
 .DS_Store
 npm-debug.log
