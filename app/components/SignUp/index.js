@@ -73,9 +73,9 @@ class SignUp extends React.PureComponent {
 				<section className="message">
 					<p>Signing up lets you create Bookmarks, Highlights and Notes, and access them wherever you use Bible.is!</p>
 				</section>
-				<input style={{ border: !this.state.validEmail ? '2px solid red' : 'none' }} onChange={this.handleEmailChange} className="email" placeholder="Enter E-mail" value={this.state.email} />
+				<input onChange={this.handleEmailChange} className="email" placeholder="Enter E-mail" value={this.state.email} />
 				<input type="password" onChange={this.handlePasswordChange} className="first-password" placeholder="Enter Password" value={this.state.password} />
-				<input type="password" style={{ border: !this.state.validPassword ? '2px solid red' : 'none' }} onChange={this.handleConfirmPassword} className="second-password" placeholder="Confirm Password" value={this.state.confirmPassword} />
+				<input type="password" onChange={this.handleConfirmPassword} className="second-password" placeholder="Confirm Password" value={this.state.confirmPassword} />
 				<div className="sign-up-button"><span role="button" tabIndex={0} onClick={() => this.handleSignup()} className="text">SIGN UP</span></div>
 				<div className="google">
 					<SvgWrapper className="svg" height="30px" width="30px" fill="#fff" svgid="google_plus" />

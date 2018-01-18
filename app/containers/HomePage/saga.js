@@ -3,7 +3,7 @@ import request from 'utils/request';
 import unionWith from 'lodash/unionWith';
 import { GET_CHAPTER_TEXT, GET_BOOKS, GET_AUDIO } from './constants';
 import { loadChapter, loadBooksAndCopywrite, loadAudio } from './actions';
-
+// TODO: Fix issue with audio coming back after the chapters have already been called
 export function* getAudio({ list }/* { filesetId, list } */) {
 	const requestUrls = [];
 	list.forEach((type, fileId) => {
