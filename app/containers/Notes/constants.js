@@ -14,8 +14,11 @@ export const TOGGLE_PAGE_SELECTOR = 'app/Notes/TOGGLE_PAGE_SELECTOR';
 export const ADD_NOTE = 'app/Profile/ADD_NOTE';
 export const ADD_HIGHLIGHT = 'app/Profile/ADD_HIGHLIGHT';
 export const ADD_BOOKMARK = 'app/Profile/ADD_BOOKMARK';
+export const SET_ACTIVE_NOTE = 'app/Notes/SET_ACTIVE_NOTE';
 export const initialNotesListForTesting = range(1, 103).map((note) => ({
 	title: 'Abram Speaks to Sarai',
 	date: `1.${note}.18`,
 	text: 'Abram shows a lack of faith in God and a great fear of man with this statement.',
+	reference: 'Matthew 1:6',
+	verseText: 'and Jesse the father of David the king. And David was the father of Solomon by the wife of Uriah',
 }));

@@ -25,8 +25,8 @@ import TextSelection from 'containers/TextSelection';
 import ChapterSelection from 'containers/ChapterSelection';
 import Profile from 'containers/Profile';
 import Notes from 'containers/Notes';
+import Text from 'containers/Text';
 import NavigationBar from 'components/NavigationBar';
-import Text from 'components/Text';
 import MenuBar from 'components/MenuBar';
 import Information from 'components/Information';
 import Footer from 'components/Footer';
@@ -182,7 +182,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			activeNotesView,
 			formattedTextActive,
 		} = this.props.homepage;
-
+		console.log(chapterText)
 		const {
 			userSettings,
 			formattedText,
@@ -263,7 +263,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 						) : null
 					}
 				</TransitionGroup>
-				<Text updateSelectedText={this.updateSelectedText} formattedText={formattedText} formattedTextActive={formattedTextActive} oneVersePerLine={userSettings.getIn(['toggleOptions', 'oneVersePerLine', 'active'])} readersMode={userSettings.getIn(['toggleOptions', 'readersMode', 'active'])} setActiveNotesView={this.setActiveNotesView} activeBookName={activeBookName} activeChapter={activeChapter} notesActive={isNotesModalActive} toggleNotesModal={this.toggleNotesModal} text={chapterText} nextChapter={this.getNextChapter} prevChapter={this.getPrevChapter} />
+				<Text formattedText={formattedText} formattedTextActive={formattedTextActive} oneVersePerLine={userSettings.getIn(['toggleOptions', 'oneVersePerLine', 'active'])} readersMode={userSettings.getIn(['toggleOptions', 'readersMode', 'active'])} setActiveNotesView={this.setActiveNotesView} activeBookName={activeBookName} activeChapter={activeChapter} notesActive={isNotesModalActive} toggleNotesModal={this.toggleNotesModal} text={chapterText} nextChapter={this.getNextChapter} prevChapter={this.getPrevChapter} />
 				<Footer settingsActive={isSettingsModalActive} isInformationModalActive={isInformationModalActive} toggleInformationModal={this.toggleInformationModal} toggleSettingsModal={this.toggleSettingsModal} />
 			</GenericErrorBoundary>
 		);

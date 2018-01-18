@@ -12,13 +12,11 @@ import ContextPortal from 'components/ContextPortal';
 	 and the most straight forward way of doing so is with the onMouseUp event */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 class Text extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
-	constructor(props) {
-		super(props);
-		this.state = {
-			contextMenuState: false,
-			coords: {},
-		};
-	}
+	state = {
+		contextMenuState: false,
+		coords: {},
+		selectedText: '',
+	};
 
 	setMainRef = (el) => {
 		this.main = el;
@@ -27,6 +25,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 	handleRightClick = (e) => {
 		// Can potentially use the below menu to activate the menu for note taking
 		if (e.button === 2) {
+			console.log(e.target);
 			const x = e.clientX;
 			const y = e.clientY;
 			this.setState({
@@ -34,8 +33,12 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			});
 			this.openContextMenu();
 		}
-		if (e.button === 0) {
-			this.props.updateSelectedText({ text: window.getSelection().toString() });
+		// anchor node
+		// extent node
+		if (e.button === 0 && window.getSelection().toString()) {
+			console.log('base node', window.getSelection());
+			console.log('extent node', window.getSelection());
+			this.setState({ selectedText: window.getSelection().toString() });
 		}
 		// Below code gets the highlighted text
 		// window.getSelection().toString();
@@ -76,11 +79,11 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			// find way of providing the html without using dangerouslySetInnerHTML
 			// eslint-disable react/no-danger
 			textComponents = (
-				<div dangerouslySetInnerHTML={{ __html: formattedText }}></div>
+				<div dangerouslySetInnerHTML={{__html: formattedText}}></div>
 			);
 		} else {
 			textComponents = text.map((verse) => (
-				<span key={verse.verse_start}>&nbsp;<sup>{verse.verse_start}</sup>&nbsp;{verse.verse_text}</span>
+				<span key={verse.verse_start}><span dir="rtl" style={{ whiteSpace: 'nowrap', display: 'inline-block' }}><sup>{verse.verse_start_vernacular}</sup></span>{verse.verse_text}</span>
 			));
 		}
 		return (
@@ -119,7 +122,6 @@ Text.propTypes = {
 	prevChapter: PropTypes.func,
 	toggleNotesModal: PropTypes.func,
 	setActiveNotesView: PropTypes.func,
-	updateSelectedText: PropTypes.func,
 	activeBookName: PropTypes.string,
 	formattedText: PropTypes.string,
 	activeChapter: PropTypes.number,

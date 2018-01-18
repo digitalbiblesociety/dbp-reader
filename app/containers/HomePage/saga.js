@@ -71,6 +71,7 @@ export function* getChapter({ bible, book, chapter, audioObjects }) {
 
 	try {
 		const textResponse = yield call(request, textRequestUrl);
+		console.log('verses object', textResponse)
 		const audioResponse = yield audioRequestUrl ? call(request, audioRequestUrl) : '';
 		let audioSource = '';
 
@@ -78,7 +79,7 @@ export function* getChapter({ bible, book, chapter, audioObjects }) {
 			audioSource = audioResponse.data[0].path;
 		}
 		// console.log(audioSource)
-		yield put(loadChapter({ text: textResponse.data, audioSource }));
+		yield put(loadChapter({ text: textResponse, audioSource }));
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error(err); // eslint-disable-line no-console

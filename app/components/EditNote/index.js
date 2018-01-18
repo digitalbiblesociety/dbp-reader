@@ -13,14 +13,28 @@ import SvgWrapper from 'components/SvgWrapper';
 class EditNote extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	state = {
 		textarea: this.props.note.text || 'CLICK TO ADD TEXT',
+		titleText: this.props.note.title || 'CLICK TO ADD TITLE',
 	}
 
 	componentWillUnmount() {
 		// Dispatch api call to save the user note and hope nothing hiccups
 	}
 
+	getCurrentDate = () => {
+		const date = new Date();
+		const day = date.getDate();
+		const year = date.getFullYear().toFixed().slice(2);
+		const month = (date.getMonth() + 1).toFixed();
+
+		return `${month.length === 1 ? `0${month}` : month}.${day}.${year}`;
+	}
+
 	handleTextareaChange = (e) => {
 		this.setState({ textarea: e.target.value });
+	}
+
+	handleNoteTitleChange = (e) => {
+		this.setState({ titleText: e.target.value });
 	}
 
 	render() {
@@ -45,12 +59,12 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 		return (
 			<section className="edit-notes">
 				<div className="date-title">
-					<span className="date">01.01.18</span>
-					<span className="title">{note.title || 'ADD TITLE'}</span>
+					<span className="date">{note.date || this.getCurrentDate()}</span>
+					<input onChange={this.handleNoteTitleChange} className="title" value={this.state.titleText} />
 				</div>
 				<div className={`verse-dropdown${isVerseTextVisible ? ' open' : ''}`}>
 					<SvgWrapper onClick={toggleVerseText} className="svg" height="20px" width="20px" svgid="go-right" />
-					<span className="text">{note.verseTitle || 'Verse Title Goes Here'}</span>
+					<span className="text">{note.reference || 'Verse Title Goes Here'}</span>
 					<span className="version-dropdown">ENGESV</span>
 				</div>
 				{
@@ -88,7 +102,7 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 						</div>
 					)
 				}
-				<textarea onChange={this.handleTextareaChange} value={this.state.textarea} className="note-text">{note.text || 'CLICK TO ENTER TEXT'}</textarea>
+				<textarea onChange={this.handleTextareaChange} value={this.state.textarea} className="note-text" />
 			</section>
 		);
 	}

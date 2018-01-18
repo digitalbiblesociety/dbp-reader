@@ -24,6 +24,7 @@ import {
 } from 'containers/HomePage/actions';
 import {
 	setActiveChild,
+	setActiveNote,
 	setPageSize,
 	toggleVerseText,
 	toggleAddVerseMenu,
@@ -68,6 +69,8 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 	setActiveChild = (child) => this.props.dispatch(setActiveChild(child))
 
 	setActivePageData = (page) => this.props.dispatch(setActivePageData(page))
+
+	setActiveNote = ({ note }) => this.props.dispatch(setActiveNote({ note }))
 
 	setPageSize = (size) => this.props.dispatch(setPageSize(size))
 
@@ -157,23 +160,36 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 					{
 						activeChild === 'edit' ? (
 							<EditNote
-								note={note}
-								selectedText={selectedText}
-								isVerseTextVisible={isVerseTextVisible}
-								isAddVerseExpanded={isAddVerseExpanded}
-								toggleVerseText={this.toggleVerseText}
-								toggleAddVerseMenu={this.toggleAddVerseMenu}
 								getChapterText={this.getChapters}
+								toggleVerseText={this.toggleVerseText}
 								setActiveChapter={this.setActiveChapter}
 								setActiveBookName={this.setActiveBookName}
+								toggleAddVerseMenu={this.toggleAddVerseMenu}
 								setSelectedBookName={this.setSelectedBookName}
+								note={note}
 								books={books}
+								selectedText={selectedText}
 								activeTextId={activeTextId}
 								activeChapter={activeChapter}
 								activeBookName={activeBookName}
 								selectedBookName={selectedBookName}
+								isVerseTextVisible={isVerseTextVisible}
+								isAddVerseExpanded={isAddVerseExpanded}
 							/>
-						) : <MyNotes pageSelectorState={pageSelectorState} setPageSize={this.setPageSize} togglePageSelector={this.togglePageSelector} pageSize={pageSize} setActivePageData={this.setActivePageData} setActiveChild={this.setActiveChild} activePageData={activePageData} listData={listData} sectionType={activeChild} />
+						) : (
+							<MyNotes
+								setPageSize={this.setPageSize}
+								setActiveNote={this.setActiveNote}
+								setActiveChild={this.setActiveChild}
+								setActivePageData={this.setActivePageData}
+								togglePageSelector={this.togglePageSelector}
+								listData={listData}
+								pageSize={pageSize}
+								sectionType={activeChild}
+								activePageData={activePageData}
+								pageSelectorState={pageSelectorState}
+							/>
+						)
 					}
 				</aside>
 			</GenericErrorBoundary>

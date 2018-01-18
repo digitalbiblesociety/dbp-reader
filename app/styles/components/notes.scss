@@ -5,8 +5,8 @@
 .notes .option:hover      {color:rgba(244,245,246,1);cursor:pointer}
 
 .notes textarea 			{resize:none;background-color:inherit;border:none;font-size:0.98em;}
-.notes textarea:focus {outline:none;}
-
+.notes textarea:focus       {outline:none;}
+.notes input                {background-color:inherit;font-size:0.98em;border:none;}
 // Svg Buttons
 .notes .top-bar             {display:flex;height:50px;width:100%;align-items:center;}
 .notes .top-bar *:focus     {outline:none;}

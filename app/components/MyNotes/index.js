@@ -13,6 +13,13 @@ import PageSizeSelector from 'components/PageSizeSelector';
 // TODO: Provide way of differentiating between notes, bookmarks and highlights
 class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	handlePageClick = (page) => this.props.setActivePageData(page);
+	handleClick = (listItem) => {
+		if (this.props.sectionType === 'notes') {
+			this.props.setActiveNote({ note: listItem });
+			this.props.setActiveChild('edit');
+		}
+	}
+
 	render() {
 		const {
 			sectionType,
@@ -24,6 +31,7 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 			pageSelectorState,
 			togglePageSelector,
 		} = this.props;
+
 		return (
 			<div className="list-sections">
 				<div className="searchbar">
@@ -33,7 +41,7 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 				<section className="note-list">
 					{
 						activePageData.map((listItem) => (
-							<div key={listItem.date + listItem.title} className="list-item">
+							<div role="button" tabIndex={0} onClick={() => this.handleClick(listItem)} key={listItem.date + listItem.title} className="list-item">
 								<div className="date">{listItem.date}</div>
 								<div className="title-text">
 									<h4 className="title">{listItem.title}</h4>
@@ -62,6 +70,7 @@ MyNotes.propTypes = {
 	listData: PropTypes.array.isRequired,
 	activePageData: PropTypes.array.isRequired,
 	setActiveChild: PropTypes.func.isRequired,
+	setActiveNote: PropTypes.func.isRequired,
 	setActivePageData: PropTypes.func.isRequired,
 	setPageSize: PropTypes.func.isRequired,
 	togglePageSelector: PropTypes.func.isRequired,
