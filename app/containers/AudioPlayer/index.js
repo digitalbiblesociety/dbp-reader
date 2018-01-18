@@ -33,7 +33,7 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 			volume: 1,
 			duration: 100,
 			currentTime: 0,
-			playerState: !!this.props.audioPlayerSource,
+			playerState: !!this.props.audioSource,
 			currentSpeed: 1,
 		};
 	}
@@ -63,8 +63,8 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 	}
 
 	componentWillReceiveProps(nextProps) {
-		if (nextProps.audioPlayerSource !== this.props.audioPlayerSource) {
-			if (nextProps.audioPlayerSource) {
+		if (nextProps.audioSource !== this.props.audioSource) {
+			if (nextProps.audioSource) {
 				this.setState({ playerState: true });
 			} else if (this.state.playerState) {
 				this.setState({ playerState: false });
@@ -148,7 +148,7 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 
 	render() {
 		const {
-			audioPlayerSource: source,
+			audioSource: source,
 		} = this.props;
 		return (
 			<GenericErrorBoundary affectedArea="AudioPlayer">
@@ -199,7 +199,7 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 }
 
 AudioPlayer.propTypes = {
-	audioPlayerSource: PropTypes.string,
+	audioSource: PropTypes.string,
 	skipBackward: PropTypes.func.isRequired,
 	skipForward: PropTypes.func.isRequired,
 };

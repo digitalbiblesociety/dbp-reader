@@ -108,7 +108,7 @@ export const setActiveTextId = ({ textName, textId, filesets }) => ({
 	filesets,
 });
 
-export const setActiveBookName = (book, id) => ({
+export const setActiveBookName = ({ book, id }) => ({
 	type: SET_ACTIVE_BOOK_NAME,
 	book,
 	id,

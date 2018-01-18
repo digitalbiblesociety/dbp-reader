@@ -51,7 +51,7 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 								<div className="chapter-container">
 									{
 										book.name === selectedBookName ? book.chapters.map((chapter) => (
-											<div role="button" tabIndex="0" key={chapter} className="chapter-box" onClick={() => { getChapterText({ bible: activeTextId, book: book.book_id, chapter }); setActiveChapter(chapter); setActiveBookName(book.name, book.book_id); }}>
+											<div role="button" tabIndex="0" key={chapter} className="chapter-box" onClick={() => { getChapterText({ bible: activeTextId, book: book.book_id, chapter }); setActiveChapter(chapter); setActiveBookName({ book: book.name, id: book.book_id }); }}>
 												<span className={activeChapter === chapter ? 'active-chapter' : ''}>{chapter}</span>
 											</div>
 										)) : null

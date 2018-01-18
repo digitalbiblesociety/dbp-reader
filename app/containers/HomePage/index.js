@@ -54,7 +54,6 @@ import makeSelectHomePage, {
 	selectPrevBook,
 	selectNextBook,
 	selectSettings,
-	selectActiveAudio,
 	selectFormattedText,
 } from './selectors';
 import reducer from './reducer';
@@ -80,6 +79,8 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 	componentWillReceiveProps(nextProps) {
 		const nextBooks = fromJS(nextProps.homepage.books);
 		const curBooks = fromJS(this.props.homepage.books);
+		// can probably use find to get the current book if the new version
+		// has it
 		const nextBookId = nextBooks.getIn([0, 'book_id']);
 		const chapter = nextBooks.getIn([0, 'chapters', 0]);
 		// Solving the issue of requesting the new data from the
@@ -103,7 +104,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		const maxChapter = activeBook.get('chapters').size;
 
 		if (activeChapter === maxChapter) {
-			this.setActiveBookName(nextBook.get('name'), nextBook.get('book_id'));
+			this.setActiveBookName({ book: nextBook.get('name'), id: nextBook.get('book_id') });
 			this.getChapters({ bible: activeTextId, book: nextBook.get('book_id'), chapter: 1, audioObjects });
 			this.setActiveChapter(1);
 		} else {
@@ -123,8 +124,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 
 		if (activeChapter - 1 === 0) {
 			const lastChapter = previousBook.get('chapters').size;
-
-			this.setActiveBookName(previousBook.get('name'), previousBook.get('book_id'));
+			this.setActiveBookName({ book: previousBook.get('name'), id: previousBook.get('book_id') });
 			this.getChapters({ bible: activeTextId, book: previousBook.get('book_id'), chapter: lastChapter, audioObjects });
 			this.setActiveChapter(lastChapter);
 		} else {
@@ -139,7 +139,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 
 	getChapters = ({ bible, book, chapter }) => this.props.dispatch(getChapterText({ bible, book, chapter, audioObjects: this.props.homepage.audioObjects }))
 
-	setActiveBookName = (bookName, id) => this.props.dispatch(setActiveBookName(bookName, id))
+	setActiveBookName = ({ book, id }) => this.props.dispatch(setActiveBookName({ book, id }))
 
 	setActiveChapter = (chapter) => this.props.dispatch(setActiveChapter(chapter))
 
@@ -178,13 +178,13 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			activeChapter,
 			isProfileActive,
 			copywrite,
+			audioSource,
 			activeNotesView,
 			formattedTextActive,
 		} = this.props.homepage;
 
 		const {
 			userSettings,
-			audioPlayerSource,
 			formattedText,
 		} = this.props;
 
@@ -204,7 +204,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					toggleChapterSelection={this.toggleChapterSelection}
 					toggleVersionSelection={this.toggleVersionSelection}
 				/>
-				<AudioPlayer audioPlayerSource={audioPlayerSource} skipBackward={this.getPrevChapter} skipForward={this.getNextChapter} />
+				<AudioPlayer audioPlayerSource={audioSource} skipBackward={this.getPrevChapter} skipForward={this.getNextChapter} />
 				<TransitionGroup>
 					{
 						isChapterSelectionActive ? (
@@ -277,7 +277,6 @@ HomePage.propTypes = {
 	previousBook: PropTypes.object,
 	nextBook: PropTypes.object,
 	userSettings: PropTypes.object,
-	audioPlayerSource: PropTypes.string,
 	formattedText: PropTypes.string,
 };
 // TODO: Sort books in selector
@@ -287,7 +286,6 @@ const mapStateToProps = createStructuredSelector({
 	nextBook: selectNextBook(),
 	activeBook: selectActiveBook(),
 	userSettings: selectSettings(),
-	audioPlayerSource: selectActiveAudio(),
 	formattedText: selectFormattedText(),
 });
 

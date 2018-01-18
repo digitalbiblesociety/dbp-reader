@@ -11,18 +11,18 @@ export function* getAudio({ list }/* { filesetId, list } */) {
 			requestUrls.push({ fileId, url: `https://api.bible.build/bibles/filesets/${fileId}?key=${process.env.DBP_API_KEY}&v=4&pretty` });
 		}
 	});
-	console.log(list)
+
 	try {
 		const results = [];
 		// Figure out a cleaner/faster way of doing this without using for loop
 		for (const requestUrl of requestUrls) { // eslint-disable-line no-restricted-syntax
 			const res = yield request(requestUrl.url);
-			const data = res.data.map((obj) => ({ bookId: obj.book_id, bookName: obj.book_name, chapter: obj.chapter_start, filesetId: requestUrl.fileId }))
+			const data = res.data.map((obj) => ({ bookId: obj.book_id, bookName: obj.book_name, chapter: obj.chapter_start, filesetId: requestUrl.fileId }));
 			results.push(data);
 		}
-		console.log(results)
+
 		const audioObjects = unionWith(...results, (resource, next) => resource.bookId === next.bookId && resource.chapter === next.chapter);
-		console.log(audioObjects);
+
 		yield put(loadAudio({ audioObjects }));
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
@@ -57,10 +57,11 @@ export function* getBooks({ textId }) {
 }
 
 export function* getChapter({ bible, book, chapter, audioObjects }) {
-	const hasAudio = audioObjects.filter((resource) => resource[book] && resource[chapter]);
+	const hasAudio = audioObjects.filter((resource) => resource.bookId === book && resource.chapter === chapter);
 	// TODO: Add ability to make calls for plaintext and formatted text
 	let audioRequestUrl = '';
-
+	// console.log('has audio', hasAudio)
+	// console.log('audio objects', audioObjects)
 	if (hasAudio.length) {
 		audioRequestUrl = `https://api.bible.build/bibles/filesets/${hasAudio[0].filesetId}?chapter_id=${chapter}&book_id=${book}&key=${process.env.DBP_API_KEY}&v=4&pretty`;
 	}
@@ -76,7 +77,7 @@ export function* getChapter({ bible, book, chapter, audioObjects }) {
 		if (audioResponse) {
 			audioSource = audioResponse.data[0].path;
 		}
-		console.log(audioSource)
+		// console.log(audioSource)
 		yield put(loadChapter({ text: textResponse.data, audioSource }));
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {

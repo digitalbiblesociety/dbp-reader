@@ -155,7 +155,7 @@ function homePageReducer(state = initialState, action) {
 			.set('activeTextId', action.textId);
 	case LOAD_CHAPTER_TEXT:
 		return state
-			.set('audioSource', action.audio)
+			.set('audioSource', action.audioSource)
 			.set('chapterText', fromJS(action.text));
 	case SET_ACTIVE_NOTES_VIEW:
 		return state.set('activeNotesView', action.view);

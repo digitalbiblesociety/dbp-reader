@@ -9,10 +9,11 @@ const selectHomePageDomain = (state) => state.get('homepage');
 const selectFormattedText = () => createSelector(
 	selectHomePageDomain,
 	(substate) => {
+		const pages = {};
 		const book = substate.get('activeBookId');
 		const chapter = substate.get('activeChapter');
-		// const page = pages[`_${book}_${chapter}`];
-		const page = false;
+		const page = pages[`_${book}_${chapter}`];
+
 		let main = '';
 		if (page) {
 			const firstIndex = page.indexOf('<div class="chapter');
@@ -46,6 +47,7 @@ const selectNextBook = () => createSelector(
 		const activeBookId = substate.get('activeBookId');
 		const activeBookIndex = books.findIndex((book) => book.get('book_id') === activeBookId);
 		const nextBook = books.get(activeBookIndex + 1);
+
 		return nextBook;
 	}
 );
@@ -71,10 +73,6 @@ const selectSettings = () => createSelector(
 	}
 );
 
-const selectActiveAudio = () => createSelector(
-	selectHomePageDomain,
-	(substate) => substate.get('audioSource')
-);
 // Below code is needed in selectActiveAudio if we decide to request all audio resources at once
 // const audioObjects = substate.get('audioObjects');
 // const activeChapter = substate.get('activeChapter');
@@ -110,6 +108,5 @@ export {
 	selectNextBook,
 	selectPrevBook,
 	selectSettings,
-	selectActiveAudio,
 	selectFormattedText,
 };
