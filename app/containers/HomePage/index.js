@@ -182,7 +182,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			activeNotesView,
 			formattedTextActive,
 		} = this.props.homepage;
-		console.log(chapterText)
+
 		const {
 			userSettings,
 			formattedText,

@@ -71,7 +71,6 @@ export function* getChapter({ bible, book, chapter, audioObjects }) {
 
 	try {
 		const textResponse = yield call(request, textRequestUrl);
-		console.log('verses object', textResponse)
 		const audioResponse = yield audioRequestUrl ? call(request, audioRequestUrl) : '';
 		let audioSource = '';
 

@@ -22,6 +22,28 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		this.main = el;
 	}
 
+	getSelectedText = () => {
+		// On mousedown get the first verse number / dom node
+		// On mouseup
+		// check if the mouse up was in the text dom node
+		// if it was then get the last verse number / dom node and get
+		// the selected text on the window object
+		// if the numbers are the same then the selected text is in
+		// one verse
+		// if the selection spans multiple verses match the beginning
+		// of the selected text
+		// with the first verse to find where the selection starts
+		// then match the ending of the selected text with the last verse
+		// to find its end
+
+		// if the user chooses to create a note
+		// take the start and end verse and use them as the reference
+		// if the user creates a highlight, mark the index of the beginning
+		// word in the first verse and the ending word in the last verse
+		// as well as recording the version
+
+	}
+
 	handleRightClick = (e) => {
 		// Can potentially use the below menu to activate the menu for note taking
 		if (e.button === 2) {
@@ -33,8 +55,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			});
 			this.openContextMenu();
 		}
-		// anchor node
-		// extent node
+
 		if (e.button === 0 && window.getSelection().toString()) {
 			console.log('base node', window.getSelection());
 			console.log('extent node', window.getSelection());
@@ -79,11 +100,11 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			// find way of providing the html without using dangerouslySetInnerHTML
 			// eslint-disable react/no-danger
 			textComponents = (
-				<div dangerouslySetInnerHTML={{__html: formattedText}}></div>
+				<div dangerouslySetInnerHTML={{ __html: formattedText }}></div>
 			);
 		} else {
 			textComponents = text.map((verse) => (
-				<span key={verse.verse_start}><span dir="rtl" style={{ whiteSpace: 'nowrap', display: 'inline-block' }}><sup>{verse.verse_start_vernacular}</sup></span>{verse.verse_text}</span>
+				<span key={verse.verse_start}>&nbsp;<sup>{verse.verse_start_vernacular}</sup>&nbsp;{verse.verse_text}</span>
 			));
 		}
 		return (
