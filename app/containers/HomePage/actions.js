@@ -37,10 +37,10 @@ export const updateSelectedText = ({ text }) => ({
 	text,
 });
 
-export const loadChapter = ({ text, audio }) => ({
+export const loadChapter = ({ text, audioSource }) => ({
 	type: LOAD_CHAPTER_TEXT,
 	text,
-	audio,
+	audioSource,
 });
 
 export const loadBooksAndCopywrite = ({ books, copywrite }) => ({

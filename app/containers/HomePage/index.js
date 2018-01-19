@@ -82,6 +82,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		// can probably use find to get the current book if the new version
 		// has it
 		const nextBookId = nextBooks.getIn([0, 'book_id']);
+		const nextBookName = nextBooks.getIn([0, 'name']);
 		const chapter = nextBooks.getIn([0, 'chapters', 0]);
 		// Solving the issue of requesting the new data from the
 		// api when a new version is clicked
@@ -89,7 +90,8 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			this.getBooks(nextProps.homepage.activeTextId);
 			this.toggleChapterSelection();
 		} else if (!is(nextBooks, curBooks) && curBooks.size) {
-			this.getChapters({ bible: nextProps.homepage.activeTextId, book: nextBookId, chapter });
+			this.setActiveBookName({ book: nextBookName, id: nextBookId });
+			this.getChapters({ bible: nextProps.homepage.activeTextId, book: nextBookId, chapter, audioObjects: nextProps.audioObjects });
 		}
 	}
 
@@ -204,7 +206,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					toggleChapterSelection={this.toggleChapterSelection}
 					toggleVersionSelection={this.toggleVersionSelection}
 				/>
-				<AudioPlayer audioPlayerSource={audioSource} skipBackward={this.getPrevChapter} skipForward={this.getNextChapter} />
+				<AudioPlayer audioSource={audioSource} skipBackward={this.getPrevChapter} skipForward={this.getNextChapter} />
 				<TransitionGroup>
 					{
 						isChapterSelectionActive ? (

@@ -60,8 +60,8 @@ export function* getChapter({ bible, book, chapter, audioObjects }) {
 	const hasAudio = audioObjects.filter((resource) => resource.bookId === book && resource.chapter === chapter);
 	// TODO: Add ability to make calls for plaintext and formatted text
 	let audioRequestUrl = '';
-	// console.log('has audio', hasAudio)
-	// console.log('audio objects', audioObjects)
+	console.log('has audio', hasAudio)
+	console.log('audio objects', audioObjects)
 	if (hasAudio.length) {
 		audioRequestUrl = `https://api.bible.build/bibles/filesets/${hasAudio[0].filesetId}?chapter_id=${chapter}&book_id=${book}&key=${process.env.DBP_API_KEY}&v=4&pretty`;
 	}
@@ -73,7 +73,7 @@ export function* getChapter({ bible, book, chapter, audioObjects }) {
 		const textResponse = yield call(request, textRequestUrl);
 		const audioResponse = yield audioRequestUrl ? call(request, audioRequestUrl) : '';
 		let audioSource = '';
-
+		console.log(audioResponse)
 		if (audioResponse) {
 			audioSource = audioResponse.data[0].path;
 		}
