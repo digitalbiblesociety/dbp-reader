@@ -22,7 +22,23 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		this.main = el;
 	}
 
-	getSelectedText = () => {
+	getFirstVerse = (e) => {
+		if (this.main.contains(e.target) && e.target.attributes.verseid) {
+			console.log('verse id', e.target.attributes.verseid);
+		}
+		// else if (this.main.contains(e.target)) {
+		// 	let node = e.target;
+		// 	let counter = 5;
+		// 	while (!node.attributes.verseid) {
+		// 		node = node.parentNode;
+		// 		if (counter === 0) {
+		// 			break;
+		// 		}
+		// 		counter--;
+		// 	}
+		// 	console.log('verse id when child is clicked', node.attributes.verseid);
+		// }
+
 		// On mousedown get the first verse number / dom node
 		// On mouseup
 		// check if the mouse up was in the text dom node
@@ -38,28 +54,22 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 
 		// if the user chooses to create a note
 		// take the start and end verse and use them as the reference
+
 		// if the user creates a highlight, mark the index of the beginning
 		// word in the first verse and the ending word in the last verse
 		// as well as recording the version
-
 	}
 
-	handleRightClick = (e) => {
-		// Can potentially use the below menu to activate the menu for note taking
-		if (e.button === 2) {
-			console.log(e.target);
-			const x = e.clientX;
-			const y = e.clientY;
-			this.setState({
-				coords: { x, y },
-			});
-			this.openContextMenu();
-		}
+	getLastVerse = (e) => {
+		if (window.getSelection().toString() && this.main.contains(e.target)) {
+			console.log(e.target.attributes.verseid);
+			const s = window.getSelection();
+			const selection = {};
 
-		if (e.button === 0 && window.getSelection().toString()) {
-			console.log('base node', window.getSelection());
-			console.log('extent node', window.getSelection());
-			this.setState({ selectedText: window.getSelection().toString() });
+			selection.firstOffset = s.anchorOffset;
+			selection.lastOffset = s.focusOffset;
+			selection.text = s.toString();
+			console.log(selection);
 		}
 		// Below code gets the highlighted text
 		// window.getSelection().toString();
@@ -67,7 +77,23 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 	// Allows use of the right mouse button to toggle menu's or perform different actions
 	handleContext = (e) => e.preventDefault()
 
-	openContextMenu = () => this.setState({ contextMenuState: true })
+	handleMouseUp = (e) => {
+		if (e.button === 2) {
+			this.openContextMenu(e);
+		} else {
+			this.getLastVerse(e);
+		}
+	}
+
+	openContextMenu = (e) => {
+		const x = e.clientX;
+		const y = e.clientY;
+
+		this.setState({
+			coords: { x, y },
+			contextMenuState: true,
+		});
+	}
 
 	closeContextMenu = () => this.setState({ contextMenuState: false })
 
@@ -94,17 +120,17 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			));
 		} else if (oneVersePerLine) {
 			textComponents = text.map((verse) => (
-				<span key={verse.verse_start}><br />{verse.verse_text}<br /></span>
+				<span key={verse.verse_start}><br />&nbsp;<sup>{verse.verse_start_vernacular}</sup>&nbsp;{verse.verse_text}<br /></span>
 			));
 		} else if (formattedTextActive) {
-			// find way of providing the html without using dangerouslySetInnerHTML
+			// TODO: find way of providing the html without using dangerouslySetInnerHTML
 			// eslint-disable react/no-danger
 			textComponents = (
 				<div dangerouslySetInnerHTML={{ __html: formattedText }}></div>
 			);
 		} else {
 			textComponents = text.map((verse) => (
-				<span key={verse.verse_start}>&nbsp;<sup>{verse.verse_start_vernacular}</sup>&nbsp;{verse.verse_text}</span>
+				<span verseid={verse.verse_start} key={verse.verse_start}>&nbsp;<sup verseid={verse.verse_start}>{verse.verse_start_vernacular}</sup>&nbsp;{verse.verse_text}</span>
 			));
 		}
 		return (
@@ -114,7 +140,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 						<SvgWrapper onClick={prevChapter} className="prev-arrow-svg" svgid="prev-arrow" />
 					)
 				}
-				<main ref={this.setMainRef} onClick={(e) => e.button === 0 && this.closeContextMenu()} onMouseUp={this.handleRightClick} className="chapter" onContextMenu={this.handleContext}>
+				<main ref={this.setMainRef} onClick={(e) => e.button === 0 && this.closeContextMenu()} onMouseDown={this.getFirstVerse} onMouseUp={this.handleMouseUp} className="chapter" onContextMenu={this.handleContext}>
 					{
 						readersMode || formattedTextActive ? null : (
 							<h1 className="active-chapter-title">{activeChapter}</h1>
