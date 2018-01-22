@@ -20,7 +20,6 @@ import GenericErrorBoundary from 'components/GenericErrorBoundary';
 import {
 	selectAccountOption,
 	sendLoginForm,
-	toggleSignInForm,
 	sendSignUpForm,
 	getUserData,
 	resetPassword,
@@ -58,16 +57,15 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 		}
 	}
 
-	sendSignUpForm = ({ email, password, username }) => this.props.dispatch(sendSignUpForm({ email, password, username }))
+	sendSignUpForm = ({ email, password, username, firstName, lastName }) => this.props.dispatch(sendSignUpForm({ email, password, username, firstName, lastName }))
 	resetPassword = ({ email, password }) => this.props.dispatch(resetPassword({ email, password }))
 	deleteUser = ({ email, username, userId }) => this.props.dispatch(deleteUser({ email, username, userId }))
-	sendLoginForm = ({ email, username, password }) => this.props.dispatch(sendLoginForm({ email, username, password }))
+	sendLoginForm = ({ email, password }) => this.props.dispatch(sendLoginForm({ email, password }))
 	selectAccountOption = (option) => this.props.dispatch(selectAccountOption(option))
 	updatePassword = ({ previousPassword, newPassword, userId }) => this.props.dispatch(updatePassword({ previousPassword, newPassword, userId }))
-	toggleSignInForm = (state) => this.props.dispatch(toggleSignInForm(state))
 
 	render() {
-		const { activeOption, signInActive, userAuthenticated } = this.props.profile;
+		const { activeOption, userAuthenticated } = this.props.profile;
 		const { toggleProfile } = this.props;
 		return (
 			<GenericErrorBoundary affectedArea="Profile">
@@ -90,9 +88,7 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 								{
 									activeOption === 'login' ? (
 										<Login
-											signInActive={signInActive}
 											sendLoginForm={this.sendLoginForm}
-											toggleSignInForm={this.toggleSignInForm}
 											selectAccountOption={this.selectAccountOption}
 										/>
 									) : null

@@ -4,7 +4,7 @@ import {
 	// LOAD_USER_DATA,
 	USER_LOGGED_IN,
 	// GET_USER_DATA,
-	// SEND_LOGIN_FORM,
+	SEND_LOGIN_FORM,
 	SEND_SIGNUP_FORM,
 	// UPDATE_PASSWORD,
 	// RESET_PASSWORD,
@@ -40,13 +40,15 @@ import {
 // 	}
 // }
 
-export function* sendSignUpForm({ password, email, username }) {
+export function* sendSignUpForm({ password, email, username, firstName, lastName }) {
 	const requestUrl = `https://api.bible.build/users?key=${process.env.DBP_API_KEY}&v=4&pretty`;
 	const data = new FormData();
 
 	data.append('email', email);
 	data.append('password', password);
 	data.append('name', username);
+	data.append('firstName', firstName);
+	data.append('lastName', lastName);
 
 	const options = {
 		method: 'POST',
@@ -57,7 +59,7 @@ export function* sendSignUpForm({ password, email, username }) {
 		const response = yield call(request, requestUrl, options);
 		// response will have the user_id now
 		if (response.success) {
-			yield put({ type: USER_LOGGED_IN });
+			yield put({ type: USER_LOGGED_IN, userId: response.user_id });
 		} else if (response.error) {
 			console.log(response.error.message); // eslint-disable-line no-console
 			// yield put('user-login-failed', response.error.message);
@@ -69,30 +71,32 @@ export function* sendSignUpForm({ password, email, username }) {
 	}
 }
 
-// export function* sendLoginForm({ password, email, username }) {
-// 	const requestUrl = `https://api.bible.build/users/login?key=${process.env.DBP_API_KEY}&v=4&pretty`;
-// 	const options = {
-// 		method: 'GET',
-// 		body: {
-// 			password,
-// 			email,
-// 		},
-// 	};
+export function* sendLoginForm({ password, email }) {
+	const requestUrl = `https://api.bible.build/users/login?key=${process.env.DBP_API_KEY}&v=4&pretty`;
+	const formData = new FormData();
 
-// 	try {
-// 		// const response = yield call(request, requestUrl, options);
+	formData.append('password', password);
+	formData.append('email', email);
 
-// 		// if (response.data.user_id) {
-// 		// 	yield put(USER_LOGGED_IN, response.data.user_id);
-// 		// } else {
-// 		// 	yield put('user-login-failed', response);
-// 		// }
-// 	} catch (err) {
-// 		if (process.env.NODE_ENV === 'development') {
-// 			console.error(err); // eslint-ignore-line no-console
-// 		}
-// 	}
-// }
+	const options = {
+		method: 'POST',
+		body: formData,
+	};
+
+	try {
+		const response = yield call(request, requestUrl, options);
+		// console.log('response in login', response);
+		if (response.data.user_id) {
+			yield put({ type: USER_LOGGED_IN });
+		} else {
+			yield put('user-login-failed', response);
+		}
+	} catch (err) {
+		if (process.env.NODE_ENV === 'development') {
+			console.error(err); // eslint-disable-line no-console
+		}
+	}
+}
 
 // export function* updatePassword() {
 // 	const requestUrl = `https://api.bible.build/?key=${process.env.DBP_API_KEY}&v=4&pretty`;
@@ -140,7 +144,7 @@ export function* sendSignUpForm({ password, email, username }) {
 export default function* defaultSaga() {
 	// yield takeLatest(GET_USER_DATA, getUserData);
 	yield takeLatest(SEND_SIGNUP_FORM, sendSignUpForm);
-	// yield takeLatest(SEND_LOGIN_FORM, sendLoginForm);
+	yield takeLatest(SEND_LOGIN_FORM, sendLoginForm);
 	// yield takeLatest(UPDATE_PASSWORD, updatePassword);
 	// yield takeLatest(RESET_PASSWORD, resetPassword);
 	// yield takeLatest(DELETE_USER, deleteUser);

@@ -1,12 +1,11 @@
 /*
  *
  * Profile actions
- *
+ * TODO: Add factory function for actions to reduce boilerplate
  */
 
 import {
 	SELECT_ACCOUNT_OPTION,
-	TOGGLE_SIGN_IN,
 	LOAD_USER_DATA,
 	GET_USER_DATA,
 	SEND_LOGIN_FORM,
@@ -31,11 +30,6 @@ export const selectAccountOption = (option) => ({
 	option,
 });
 
-export const toggleSignInForm = (state) => ({
-	type: TOGGLE_SIGN_IN,
-	state,
-});
-
 export const deleteUser = ({ username, email, userId }) => ({
 	type: DELETE_USER,
 	username,
@@ -56,11 +50,13 @@ export const updatePassword = ({ previousPassword, newPassword, userId }) => ({
 	userId,
 });
 
-export const sendLoginForm = ({ password, username, email }) => ({
+export const sendLoginForm = ({ password, username, email, firstName, lastName }) => ({
 	type: SEND_LOGIN_FORM,
 	password,
 	username,
 	email,
+	firstName,
+	lastName,
 });
 
 export const sendSignUpForm = ({ password, username, email }) => ({

@@ -18,6 +18,8 @@ class SignUp extends React.PureComponent {
 		password: '',
 		confirmPassword: '',
 		email: '',
+		firstName: '',
+		lastName: '',
 		validPassword: false,
 		validEmail: false,
 		wasSignupSent: false,
@@ -37,6 +39,14 @@ class SignUp extends React.PureComponent {
 
 	handlePasswordChange = (e) => {
 		this.setState({ password: e.target.value });
+	}
+
+	handleFirstName = (e) => {
+		this.setState({ firstName: e.target.value });
+	}
+
+	handleLastName = (e) => {
+		this.setState({ lastName: e.target.value });
 	}
 
 	handleEmailChange = (e) => {
@@ -62,7 +72,13 @@ class SignUp extends React.PureComponent {
 
 	handleSignup = () => {
 		if (this.state.validPassword && this.state.validEmail) {
-			this.props.sendSignupForm({ email: this.state.email, password: this.state.password, username: this.state.username });
+			this.props.sendSignupForm({
+				email: this.state.email,
+				password: this.state.password,
+				username: this.state.username,
+				firstName: this.state.firstName,
+				lastName: this.state.lastName,
+			});
 			this.setState({ wasSignupSent: true });
 		}
 	}
@@ -74,6 +90,8 @@ class SignUp extends React.PureComponent {
 					<p>Signing up lets you create Bookmarks, Highlights and Notes, and access them wherever you use Bible.is!</p>
 				</section>
 				<input onChange={this.handleEmailChange} className="email" placeholder="Enter E-mail" value={this.state.email} />
+				<input onChange={this.handleFirstName} className="name-inputs" placeholder="Enter First Name" value={this.state.firstName} />
+				<input onChange={this.handleLastName} className="name-inputs" placeholder="Enter Last Name" value={this.state.lastName} />
 				<input type="password" onChange={this.handlePasswordChange} className="first-password" placeholder="Enter Password" value={this.state.password} />
 				<input type="password" onChange={this.handleConfirmPassword} className="second-password" placeholder="Confirm Password" value={this.state.confirmPassword} />
 				<div className="sign-up-button"><span role="button" tabIndex={0} onClick={() => this.handleSignup()} className="text">SIGN UP</span></div>
