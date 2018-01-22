@@ -42,6 +42,7 @@ import makeSelectNotes, {
 	selectActiveChapter,
 	selectActiveFilesets,
 	selectSelectedBookName,
+	selectUserAuthenticationStatus,
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -131,6 +132,8 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 			books,
 			activeBookName,
 			selectedBookName,
+			authenticationStatus,
+			toggleProfile,
 		} = this.props;
 
 		return (
@@ -142,53 +145,63 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 							<svg className="icon"><use xmlnsXlink="http://www.w3.org/1999/xlink" xlinkHref={`${menu}#close`}></use></svg>
 						</span>
 					</header>
-					<div className="top-bar">
-						{
-							activeChild === 'notes' ? (
-								<SvgWrapper role="button" tabIndex={0} onClick={() => this.setActiveChild('edit')} className={activeChild === 'notes' ? 'svg active' : 'svg'} height="30px" width="30px" svgid="note-list" />
-							) : null
-						}
-						{
-							activeChild !== 'notes' ? (
-								<SvgWrapper role="button" tabIndex={0} onClick={() => this.setActiveChild('notes')} className={activeChild === 'edit' ? 'svg active' : 'svg'} height="30px" width="30px" svgid="notes" />
-							) : null
-						}
-						<SvgWrapper role="button" tabIndex={0} onClick={() => this.setActiveChild('highlights')} className={activeChild === 'highlights' ? 'svg active' : 'svg'} height="30px" width="30px" svgid="highlights" />
-						<SvgWrapper role="button" tabIndex={0} onClick={() => this.setActiveChild('bookmarks')} className={activeChild === 'bookmarks' ? 'svg active' : 'svg'} height="30px" width="30px" svgid="bookmarks" />
-						<span className="text">{this.titleOptions[activeChild]}</span>
-					</div>
 					{
-						activeChild === 'edit' ? (
-							<EditNote
-								getChapterText={this.getChapters}
-								toggleVerseText={this.toggleVerseText}
-								setActiveChapter={this.setActiveChapter}
-								setActiveBookName={this.setActiveBookName}
-								toggleAddVerseMenu={this.toggleAddVerseMenu}
-								setSelectedBookName={this.setSelectedBookName}
-								note={note}
-								books={books}
-								selectedText={selectedText}
-								activeTextId={activeTextId}
-								activeChapter={activeChapter}
-								activeBookName={activeBookName}
-								selectedBookName={selectedBookName}
-								isVerseTextVisible={isVerseTextVisible}
-								isAddVerseExpanded={isAddVerseExpanded}
-							/>
+						authenticationStatus ? (
+							<React.Fragment>
+								<div className="top-bar">
+									{
+										activeChild === 'notes' ? (
+											<SvgWrapper role="button" tabIndex={0} onClick={() => this.setActiveChild('edit')} className={activeChild === 'notes' ? 'svg active' : 'svg'} height="30px" width="30px" svgid="note-list" />
+										) : null
+									}
+									{
+										activeChild !== 'notes' ? (
+											<SvgWrapper role="button" tabIndex={0} onClick={() => this.setActiveChild('notes')} className={activeChild === 'edit' ? 'svg active' : 'svg'} height="30px" width="30px" svgid="notes" />
+										) : null
+									}
+									<SvgWrapper role="button" tabIndex={0} onClick={() => this.setActiveChild('highlights')} className={activeChild === 'highlights' ? 'svg active' : 'svg'} height="30px" width="30px" svgid="highlights" />
+									<SvgWrapper role="button" tabIndex={0} onClick={() => this.setActiveChild('bookmarks')} className={activeChild === 'bookmarks' ? 'svg active' : 'svg'} height="30px" width="30px" svgid="bookmarks" />
+									<span className="text">{this.titleOptions[activeChild]}</span>
+								</div>
+								{
+									activeChild === 'edit' ? (
+										<EditNote
+											getChapterText={this.getChapters}
+											toggleVerseText={this.toggleVerseText}
+											setActiveChapter={this.setActiveChapter}
+											setActiveBookName={this.setActiveBookName}
+											toggleAddVerseMenu={this.toggleAddVerseMenu}
+											setSelectedBookName={this.setSelectedBookName}
+											note={note}
+											books={books}
+											selectedText={selectedText}
+											activeTextId={activeTextId}
+											activeChapter={activeChapter}
+											activeBookName={activeBookName}
+											selectedBookName={selectedBookName}
+											isVerseTextVisible={isVerseTextVisible}
+											isAddVerseExpanded={isAddVerseExpanded}
+										/>
+									) : (
+										<MyNotes
+											setPageSize={this.setPageSize}
+											setActiveNote={this.setActiveNote}
+											setActiveChild={this.setActiveChild}
+											setActivePageData={this.setActivePageData}
+											togglePageSelector={this.togglePageSelector}
+											listData={listData}
+											pageSize={pageSize}
+											sectionType={activeChild}
+											activePageData={activePageData}
+											pageSelectorState={pageSelectorState}
+										/>
+									)
+								}
+							</React.Fragment>
 						) : (
-							<MyNotes
-								setPageSize={this.setPageSize}
-								setActiveNote={this.setActiveNote}
-								setActiveChild={this.setActiveChild}
-								setActivePageData={this.setActivePageData}
-								togglePageSelector={this.togglePageSelector}
-								listData={listData}
-								pageSize={pageSize}
-								sectionType={activeChild}
-								activePageData={activePageData}
-								pageSelectorState={pageSelectorState}
-							/>
+							<div className="need-to-login">
+								Please <span className="login-text" role="button" tabIndex={0} onClick={() => { toggleNotesModal(); toggleProfile(); }}>Login</span> to access the notebook
+							</div>
 						)
 					}
 				</aside>
@@ -209,6 +222,8 @@ Notes.propTypes = {
 	activeTextId: PropTypes.string.isRequired,
 	activeFilesets: PropTypes.object.isRequired,
 	selectedBookName: PropTypes.string,
+	authenticationStatus: PropTypes.bool,
+	toggleProfile: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -220,6 +235,7 @@ const mapStateToProps = createStructuredSelector({
 	books: selectBooks(),
 	activeFilesets: selectActiveFilesets(),
 	selectedBookName: selectSelectedBookName(),
+	authenticationStatus: selectUserAuthenticationStatus(),
 });
 
 function mapDispatchToProps(dispatch) {

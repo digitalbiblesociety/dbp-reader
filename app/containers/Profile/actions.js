@@ -13,7 +13,12 @@ import {
 	UPDATE_PASSWORD,
 	RESET_PASSWORD,
 	DELETE_USER,
+	LOG_OUT,
 } from './constants';
+
+export const logout = () => ({
+	type: LOG_OUT,
+});
 
 export const getUserData = (userId) => ({
 	type: GET_USER_DATA,

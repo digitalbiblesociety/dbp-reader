@@ -13,3 +13,4 @@ export const SEND_SIGNUP_FORM = 'app/Profile/SEND_SIGNUP_FORM';
 export const UPDATE_PASSWORD = 'app/Profile/UPDATE_PASSWORD';
 export const RESET_PASSWORD = 'app/Profile/RESET_PASSWORD';
 export const DELETE_USER = 'app/Profile/DELETE_USER';
+export const LOG_OUT = 'app/Profile/LOG_OUT';

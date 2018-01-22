@@ -20,11 +20,11 @@ class Login extends React.PureComponent {
 
 	handlePasswordChange = (e) => {
 		this.setState({ password: e.target.value });
-	};
+	}
 
 	handleEmailChange = (e) => {
 		this.setState({ email: e.target.value });
-	};
+	}
 
 	handleSendingLogin = () => {
 		this.props.sendLoginForm({

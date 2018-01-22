@@ -91,7 +91,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			this.toggleChapterSelection();
 		} else if (!is(nextBooks, curBooks) && curBooks.size) {
 			this.setActiveBookName({ book: nextBookName, id: nextBookId });
-			this.getChapters({ bible: nextProps.homepage.activeTextId, book: nextBookId, chapter, audioObjects: nextProps.audioObjects });
+			this.getChapters({ bible: nextProps.homepage.activeTextId, book: nextBookId, chapter, audioObjects: nextProps.homepage.audioObjects });
 		}
 	}
 
@@ -253,7 +253,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					{
 						isNotesModalActive ? (
 							<FadeTransition classNames="slide-from-right" in={isNotesModalActive}>
-								<Notes toggleNotesModal={this.toggleNotesModal} openView={activeNotesView} />
+								<Notes toggleProfile={this.toggleProfile} toggleNotesModal={this.toggleNotesModal} openView={activeNotesView} />
 							</FadeTransition>
 						) : null
 					}

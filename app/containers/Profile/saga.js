@@ -86,10 +86,10 @@ export function* sendLoginForm({ password, email }) {
 	try {
 		const response = yield call(request, requestUrl, options);
 		// console.log('response in login', response);
-		if (response.data.user_id) {
-			yield put({ type: USER_LOGGED_IN });
+		if (response.error) {
+			console.log('login error', response); // eslint-disable-line no-console
 		} else {
-			yield put('user-login-failed', response);
+			yield put({ type: USER_LOGGED_IN });
 		}
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {

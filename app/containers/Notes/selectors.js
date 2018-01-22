@@ -4,11 +4,16 @@ import { createSelector } from 'reselect';
  * Direct selector to the notes state domain
  */
 const selectNotesDomain = (state) => state.get('notes');
+const selectProfileDomain = (state) => state.get('profile');
+const selectHomepageDomain = (state) => state.get('homepage');
 
 /**
  * Other specific selectors
  */
-const selectHomepageDomain = (state) => state.get('homepage');
+const selectUserAuthenticationStatus = () => createSelector(
+	selectProfileDomain,
+	(substate) => substate ? substate.get('userAuthenticated') : false
+);
 
 const selectHighlightedText = () => createSelector(
 	(state) => state.get('homepage'),
@@ -64,4 +69,5 @@ export {
 	selectBooks,
 	selectActiveFilesets,
 	selectSelectedBookName,
+	selectUserAuthenticationStatus,
 };

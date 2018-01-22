@@ -25,6 +25,7 @@ import {
 	resetPassword,
 	updatePassword,
 	deleteUser,
+	logout,
 } from './actions';
 import makeSelectProfile from './selectors';
 import reducer from './reducer';
@@ -63,6 +64,7 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 	sendLoginForm = ({ email, password }) => this.props.dispatch(sendLoginForm({ email, password }))
 	selectAccountOption = (option) => this.props.dispatch(selectAccountOption(option))
 	updatePassword = ({ previousPassword, newPassword, userId }) => this.props.dispatch(updatePassword({ previousPassword, newPassword, userId }))
+	logout = () => this.props.dispatch(logout())
 
 	render() {
 		const { activeOption, userAuthenticated } = this.props.profile;
@@ -78,7 +80,7 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 					</header>
 					{
 						userAuthenticated ? (
-							<AccountSettings deleteUser={this.deleteUser} updatePassword={this.updatePassword} />
+							<AccountSettings logout={this.logout} deleteUser={this.deleteUser} updatePassword={this.updatePassword} />
 						) : (
 							<React.Fragment>
 								<div className="form-options">

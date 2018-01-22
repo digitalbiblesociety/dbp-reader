@@ -38,7 +38,6 @@
 .add-verse-expanded .plus-expanded {background-color:$menu-active-color;height:100%;width:40px;}
 .add-verse-expanded .plus-expanded svg {width:20px;height:20px;margin-left:10px;margin-top:5px;cursor:pointer;}
 
-
 .edit-notes .verse-text {background-color:#111;padding:5px;}
 
 // List Sections
@@ -68,6 +67,10 @@
 .page-size-selector .open div:hover {opacity:0.65;}
 .page-size-selector .closed         {background-color:inherit;}
 .page-size-selector .closed:hover   {opacity:0.65;cursor:pointer;}
+
+.notes .need-to-login                   {color:$paper-primary;padding:15px;font-size:1.1em;}
+.notes .need-to-login .login-text       {color:$menu-active-color;cursor:pointer;}
+.notes .need-to-login .login-text:hover {opacity:0.65;}
 
 // Keyframe animations
 @keyframes rotate90deg {
