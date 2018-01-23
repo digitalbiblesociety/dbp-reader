@@ -26,19 +26,31 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 		this.props.setSelectedBookName(name);
 	}
 
+	handleChapterClick = (book, chapter) => {
+		const {
+			activeTextId,
+			setActiveBookName,
+			setActiveChapter,
+			getChapterText,
+			toggleChapterSelection,
+		} = this.props;
+
+		getChapterText({ bible: activeTextId, book: book.book_id, chapter });
+		setActiveChapter(chapter);
+		setActiveBookName({ book: book.name, id: book.book_id });
+		toggleChapterSelection();
+	}
+
 	handleRef = (el, name) => {
 		this[name] = el;
 	}
 
 	render() {
 		const {
-			activeTextId,
 			books,
 			selectedBookName,
 			activeChapter,
-			setActiveBookName,
-			setActiveChapter,
-			getChapterText,
+			activeBookName,
 		} = this.props;
 
 		return (
@@ -51,8 +63,8 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 								<div className="chapter-container">
 									{
 										book.name === selectedBookName ? book.chapters.map((chapter) => (
-											<div role="button" tabIndex="0" key={chapter} className="chapter-box" onClick={() => { getChapterText({ bible: activeTextId, book: book.book_id, chapter }); setActiveChapter(chapter); setActiveBookName({ book: book.name, id: book.book_id }); }}>
-												<span className={activeChapter === chapter ? 'active-chapter' : ''}>{chapter}</span>
+											<div role="button" tabIndex="0" key={chapter} className="chapter-box" onClick={() => this.handleChapterClick(book, chapter)}>
+												<span className={(activeChapter === chapter && book.name === activeBookName) ? 'active-chapter' : ''}>{chapter}</span>
 											</div>
 										)) : null
 									}
@@ -69,11 +81,13 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 BooksTable.propTypes = {
 	books: PropTypes.array,
 	setActiveBookName: PropTypes.func.isRequired,
+	toggleChapterSelection: PropTypes.func,
 	setSelectedBookName: PropTypes.func,
 	setActiveChapter: PropTypes.func,
 	selectedBookName: PropTypes.string,
 	getChapterText: PropTypes.func,
 	activeTextId: PropTypes.string,
+	activeBookName: PropTypes.string,
 	activeChapter: PropTypes.number,
 };
 
