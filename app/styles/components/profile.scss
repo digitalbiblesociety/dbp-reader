@@ -1,0 +1,55 @@
+// GLOBAL SETTINGS
+.profile                              {position:fixed;top:0;height:100%;width:320px;background-color:#2C3036;color:rgba(244,245,246,.5)}
+.profile header                       {position:relative;background:#7E0E2A;color:$paper-primary;text-align:center;height:54px;line-height:54px}
+.profile header .close-icon           {position:absolute;top:0px;right:10px}
+.profile section                      {padding:15px}
+.profile .option:hover                {color:rgba(244,245,246,1);cursor:pointer}
+.profile .active                      {color:rgba(244,245,246,1)}
+
+// Input boxes
+.profile input                                  {border:none;width:100%;height:50px;background-color:$input-background-color;color:$paper-primary;font-size:.9em;font-weight:200;caret-color:#000;padding-left:10px;}
+.profile input.email                            {background:url("../images/email.svg") no-repeat 5px 10px;background-color:$input-background-color;padding-left:45px;}
+.profile input.email:focus                      {background-image:none;padding-left:10px;}
+.profile input:focus::-webkit-input-placeholder {color:transparent;}
+.profile input:focus::-moz-placeholder          {color:transparent;}
+.profile input:focus:-ms-input-placeholder      {color:transparent;}
+.profile ::-webkit-input-placeholder            {color:$paper-primary;}
+.profile ::-moz-placeholder                     {color:$paper-primary;}
+.profile :-ms-input-placeholder                 {color:$paper-primary;}
+
+// Social Buttons
+.profile .google   {display:flex;align-items:center;cursor:pointer;height:50px;width:100%;background:$login-google-color;color:$paper-primary;}
+.profile .facebook {display:flex;align-items:center;cursor:pointer;height:50px;width:100%;background:$login-facebook-color;color:$paper-primary;}
+.profile .svg      {margin-right:20px;margin-left:20px;}
+
+// Links
+.profile .link               {color:$menu-active-color;font-weight:200;cursor:pointer;}
+.profile .link:hover         {opacity:.75;}
+.profile .sign-up-free .link {font-style: italic;}
+
+// Sign up
+.profile .sign-up-button       {text-align:right;height:30px;width:100%;background:$input-background-color;color:$paper-primary;}
+.profile .sign-up-button .text {padding:5px 10px;cursor:pointer;}
+
+// Login or Sign up options
+.profile .form-options         {display:flex;align-items:center;justify-content:space-between;}
+.profile .form-options .login  {margin:10px 0 10px 10px;color:$paper-primary;cursor:pointer;}
+.profile .form-options .signup {margin:10px 10px 10px 0;color:$paper-primary;cursor:pointer;}
+.profile .form-options .active {color:$menu-active-color}
+.profile .form-options .active {color:$menu-active-color}
+
+// Message
+.profile .message    {color:$paper-primary;}
+
+// Disclaimer
+.profile .disclaimer {color:$paper-primary;}
+
+// Sign in
+.profile .sign-in      {display:flex;align-items:center;cursor:pointer;width:100%;height:50px;background-color:$input-background-color;color:$paper-primary;}
+.profile .sign-up-free {color:$paper-primary;}
+.profile .sign-in-button {display:flex;align-items:center;justify-content:space-around;width:100%;background-color:$input-background-color;color:$paper-primary;}
+.profile .sign-in-button .text {font-size:.9em;font-weight:200;}
+.profile .login-checkbox {width: unset;}
+.profile .login-button {cursor:pointer;}
+
+// Forgot Password

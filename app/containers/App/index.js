@@ -17,15 +17,19 @@ import { Switch, Route } from 'react-router-dom';
 import HomePage from 'containers/HomePage/Loadable';
 import AboutPage from 'containers/AboutPage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
+import PrivacyPolicy from 'components/PrivacyPolicy';
+import TermsAndConditions from 'components/TermsAndConditions';
 
 export default function App() {
-  return (
-    <div>
-      <Switch>
-        <Route exact path="/" component={HomePage} />
-        <Route exact path="/" component={AboutPage} />
-        <Route component={NotFoundPage} />
-      </Switch>
-    </div>
-  );
+	return (
+		<div>
+			<Switch>
+				<Route exact path="/" component={HomePage} />
+				<Route exact path="/about" component={AboutPage} />
+				<Route exact path="/privacy-policy" component={PrivacyPolicy} />
+				<Route exact path="/terms-of-use" component={TermsAndConditions} />
+				<Route component={NotFoundPage} />
+			</Switch>
+		</div>
+	);
 }

@@ -1,0 +1,32 @@
+// Account Settings
+.account-settings {}
+.account-settings .logout-button {margin-top:20px;margin-left:20px;cursor:pointer;&:hover{color:$menu-active-color;}}
+.account-settings .button {color:$paper-primary;font-weight:400;cursor:pointer;&:hover{color:$menu-active-color;}align-self:flex-end;margin:10px 20px 0 0;font-size:.9em;}
+.account-settings .delete-account {color:inherit;align-self:flex-end;margin-top:20px;font-style:italic;font-weight:200;}
+.account-settings .svg {fill:currentColor;}
+.account-settings .title {color:$menu-active-color;padding-left:20px;margin-bottom:5px;}
+
+// Personal Information Styles
+.personal-info {display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.personal-info .profile-picture {width:150px;height:150px;border-radius:50%;}
+.personal-info .change-picture {color:$paper-primary;}
+.personal-info .name {color:$menu-active-color;font-style:italic;margin-top:5px;}
+
+// Email Section Styles
+.email-section {display:flex;flex-direction:column;color:$menu-active-color;margin-top:15px;}
+.email-section .email {background-color:$input-background-color;color:$paper-primary;width:100%;height:50px;display:flex;align-items:center;}
+
+// Password Section Styles
+.password-section {display:flex;flex-direction:column;color:$menu-active-color;margin-top:15px;}
+.password-section .password {background-color:$input-background-color;color:#fff;width:100%;height:50px;display:flex;align-items:center;}
+
+// Address Section Styles
+.address-section {margin-top:15px;display:flex;flex-direction:column;}
+.address-section .input-svg {display:block;position:absolute;margin-top:10px;margin-left:20px;fill:$paper-primary;}
+.address-section input {height:40px;font-size:.8em;font-style:italic;}
+.address-section .country {}
+.address-section .address-1 {}
+.address-section .address-2 {}
+.address-section .city {}
+.address-section .state {}
+.address-section .postal-code {}

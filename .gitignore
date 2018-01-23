@@ -4,8 +4,11 @@ build
 node_modules
 stats.json
 .env
-
+app/utils/ENGKJV
+reduxStoreShape.js
 # Cruft
 .DS_Store
 npm-debug.log
 .idea
+# Don't check the temp json file into source
+app/utils/parsedCountries.json

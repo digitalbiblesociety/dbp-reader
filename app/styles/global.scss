@@ -1,20 +1,42 @@
 *, *::after, *::before {box-sizing:border-box;margin:0;padding:0}
 body, html 	           {height:100%}
-body 				   {margin:0 auto;color:#222;overflow-x: hidden;overflow-y: scroll;font-size: .98em;font-family: 'Open Sans', sans-serif;}
-a                      {text-decoration: none;}
-
+body 				   {margin:0 auto;color:#222;font-size:.98em;font-family:$font-primary}
+div:focus              {outline:none;}
+a                      {text-decoration:none}
+aside                  {position:absolute;top:0;right:0;height:100%;width:320px;background-color:#2C3036;color:rgba(244,245,246,.5);}
+main                   {overflow-x:hidden;overflow-y:scroll;max-height:100%;}
+#app                   {background-color:$paper-background;}
+#app > div             {height:100vh;}
 // images
 img                    {max-width:100%;height:auto}
-img[data-src]          {filter: blur(15px);}
-img.loaded             {transition: all .5s linear;filter:blur(0)}
+img[data-src]          {filter:blur(15px)}
+img.loaded             {transition:all .5s linear;filter:blur(0)}
 
 // Icons Style Applied to All SVG Sprites
-.icon                  {width: 1em; height: 1em;vertical-align: -0.15em;fill: currentColor;overflow: hidden}
-li                     {list-style: none}
-.shadow                {box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24)!important}
+.icon                  {width:1em;height:1em;vertical-align:-0.15em;fill:currentColor;overflow:hidden;cursor:pointer;}
+li                     {list-style:none}
+.shadow                {box-shadow:0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24)!important}
+
+// Google and Facebook color
+body .google   {background-color:$login-google-color;}
+body .facebook {background-color:$login-facebook-color;}
+body .twitter  {background-color:$login-twitter-color;}
+
+// Input Box Styles
+input:focus                            {background-image:none;outline:none;}
+input:focus::-webkit-input-placeholder {color:transparent;}
+input:focus::-moz-placeholder          {color:transparent;}
+input:focus:-ms-input-placeholder      {color:transparent;}
+
+// Remove blue outline for divs that have event handlers
+div:focus  {outline:none;}
+span:focus {outline:none;}
+
+// font sizes
+h2 {font-size: 1.3em;}
 
 // GRID
-section {position: relative}
+section                 {position:relative}
 .row 					{margin:0 auto;max-width:1200px;width:100%}
 main:after,
 .row:before, .row:after {content:" ";display:table;clear:both}
@@ -27,14 +49,14 @@ main:after,
 .columns 				{padding-left:1.1rem;padding-right:1.1rem;width:100%;float:left}
 .centered 				{margin-left:auto;margin-right:auto;float:none}
 .centered:last-child 	{float:none}
-.clearfix:after {content: ""; display: table; clear: both; }
-.hidden {border: 0;height: 1px;margin: -1px; overflow: hidden;padding: 0; position: absolute; width: 1px;}
+.clearfix:after {content:"";display:table;clear:both}
+.hidden {border:0;height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px}
 .disabled {opacity:.5}
 
-.visuallyhidden, .hide {display: none}
+.visuallyhidden, .hide {display:none}
 
 @media only screen and (max-width:400px) {
-  .x-small-hide {display: none}
+  .x-small-hide {display:none}
 }
 
 @media only screen {
@@ -86,4 +108,14 @@ main:after,
   .large-10 		{width:83.33333%}
   .large-11 		{width:91.66667%}
   .large-12 		{width:100%}
+}
+::-webkit-scrollbar {
+  -webkit-appearance: none;
+  display: none;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 0;
+  background-color: rgba(255, 255, 255, .5);
+  -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
 }

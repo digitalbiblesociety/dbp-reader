@@ -13,15 +13,15 @@ import messages from './messages';
 {{/if}}
 
 class {{ properCase name }} extends {{{ type }}} { // eslint-disable-line react/prefer-stateless-function
-  render() {
-    return (
-      <div>
-      {{#if wantMessages}}
-        <FormattedMessage {...messages.header} />
-      {{/if}}
-      </div>
-    );
-  }
+	render() {
+		return (
+			<div>
+			{{#if wantMessages}}
+				<FormattedMessage {...messages.header} />
+			{{/if}}
+			</div>
+		);
+	}
 }
 
 {{ properCase name }}.propTypes = {

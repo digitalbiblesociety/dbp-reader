@@ -6,8 +6,8 @@
 import { defineMessages } from 'react-intl';
 
 export default defineMessages({
-  header: {
-    id: 'app.components.SearchButton.header',
-    defaultMessage: 'This is the SearchButton component !',
-  },
+	header: {
+		id: 'app.components.SearchButton.header',
+		defaultMessage: 'This is the SearchButton component !',
+	},
 });

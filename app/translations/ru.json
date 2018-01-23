@@ -1,0 +1,21 @@
+{
+  "app.components.BooksTable.header": "",
+  "app.components.ChapterButton.header": "",
+  "app.components.GenericErrorBoundary.header": "",
+  "app.components.HomePage.header": "",
+  "app.components.Logo.header": "",
+  "app.components.NavigationBar.header": "",
+  "app.components.NotFoundPage.header": "",
+  "app.components.SearchButton.header": "",
+  "app.components.TableOfContents.header": "",
+  "app.containers.AboutPage.faq_title": "",
+  "app.containers.AboutPage.header": "",
+  "app.containers.LocaleToggle.ar": "",
+  "app.containers.LocaleToggle.en": "",
+  "app.components.NavigationBar.readersMode": "",
+  "app.components.NavigationBar.crossReference": "",
+  "app.components.NavigationBar.redLetter": "",
+  "app.components.NavigationBar.justifiedText": "",
+  "app.components.NavigationBar.oneVersePerLine": "",
+  "app.components.NavigationBar.verticalScrolling": ""
+}
