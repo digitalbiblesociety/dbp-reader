@@ -77,7 +77,7 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 			<section className="edit-notes">
 				<div className="date-title">
 					<span className="date">{note.get('date') || this.getCurrentDate()}</span>
-					<input onChange={this.handleNoteTitleChange} className="title" value={this.state.titleText} />
+					<input onChange={this.handleNoteTitleChange} className="title" value={note.get('title') || this.state.titleText} />
 				</div>
 				<div className={`verse-dropdown${isVerseTextVisible ? ' open' : ''}`}>
 					<SvgWrapper onClick={toggleVerseText} className="svg" height="20px" width="20px" svgid="go-right" />
@@ -119,7 +119,7 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 						</div>
 					)
 				}
-				<textarea onChange={this.handleTextareaChange} value={this.state.textarea} className="note-text" />
+				<textarea onChange={this.handleTextareaChange} value={note.get('notes') || this.state.textarea} className="note-text" />
 				<span className="save-button" role="button" tabIndex={0} onClick={this.handleSave}>SAVE</span>
 			</section>
 		);

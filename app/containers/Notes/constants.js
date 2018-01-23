@@ -19,7 +19,6 @@ export const ADD_BOOKMARK = 'app/Profile/ADD_BOOKMARK';
 export const initialNotesListForTesting = range(1, 103).map((note) => ({
 	title: 'Abram Speaks to Sarai',
 	date: `1.${note}.18`,
-	text: 'Abram shows a lack of faith in God and a great fear of man with this statement.',
-	referenceId: 'Matthew 1:6',
-	verseText: 'and Jesse the father of David the king. And David was the father of Solomon by the wife of Uriah',
+	notes: 'Abram shows a lack of faith in God and a great fear of man with this statement.',
+	referenceId: 'GEN_12_13',
 }));

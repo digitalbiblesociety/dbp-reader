@@ -44,7 +44,7 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 								<div className="date">{listItem.date}</div>
 								<div className="title-text">
 									<h4 className="title">{listItem.title}</h4>
-									<p className="text">{listItem.text}</p>
+									<p className="text">{listItem.notes}</p>
 								</div>
 							</div>
 						))
