@@ -42,7 +42,7 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 			note: this.state.textarea,
 			reference_id: this.props.note.get('referenceId'),
 			title: this.state.titleText,
-			versionId: this.props.activeTextId,
+			bible_id: this.props.activeTextId,
 		});
 	}
 
