@@ -34,9 +34,9 @@
 .add-verse .text       {color:$paper-primary;margin-left:15px;font-style:italic;}
 .edit-notes .note-text {padding:15px;color:$paper-primary;height:100px;overflow-y:scroll;overflow-x:hidden;width:100%;font-style:italic;margin-top:15px;font-weight:200;caret-color:#fff;}
 
-.add-verse-expanded {padding:15px;height:100px;width:320px;display:flex;background-color:#111;border:1px solid $menu-active-color;}
-.add-verse-expanded .book-table {width:280px;}
-.add-verse-expanded .plus-expanded {background-color:$menu-active-color;height:100%;width:40px;}
+.add-verse-expanded                    {padding:15px;height:100px;width:320px;display:flex;background-color:#111;border:1px solid $menu-active-color;}
+.add-verse-expanded .book-table        {width:280px;}
+.add-verse-expanded .plus-expanded     {background-color:$menu-active-color;height:100%;width:40px;}
 .add-verse-expanded .plus-expanded svg {width:20px;height:20px;margin-left:10px;margin-top:5px;cursor:pointer;}
 
 .edit-notes .verse-text {padding:10px 15px 10px 30px;background-color:#111;color:$paper-primary;max-height:100px;overflow-y:scroll;overflow-x:hidden;}
@@ -52,6 +52,7 @@
 
 .note-list                    {height:calc(100% - 100px);max-height:calc(100% - 100px);overflow-y:scroll;overflow-x:hidden;background-color:rgb(26,29,33);}
 .note-list .list-item         {display:flex;}
+.note-list .list-item:hover   {cursor:pointer;opacity:0.85;}
 .list-item .date              {color:$menu-active-color;}
 .list-item .title-text        {margin-left:15px;}
 .list-item .title-text .title {color:$menu-active-color;}

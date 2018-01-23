@@ -16,7 +16,6 @@ import SvgWrapper from 'components/SvgWrapper';
 class NavigationBar extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	render() {
 		const {
-      // toggleVersionSelect,
 			activeBookName,
 			activeTextId,
       toggleChapterSelection,

@@ -12,8 +12,8 @@ import SvgWrapper from 'components/SvgWrapper';
 
 class EditNote extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	state = {
-		textarea: this.props.note.text || 'CLICK TO ADD TEXT',
-		titleText: this.props.note.title || 'CLICK TO ADD TITLE',
+		textarea: this.props.note.get('notes') || '',
+		titleText: this.props.note.get('title') || '',
 	}
 
 	componentWillUnmount() {
@@ -39,7 +39,7 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 
 	handleSave = () => {
 		this.props.addNote({
-			note: this.state.textarea,
+			notes: this.state.textarea,
 			reference_id: this.props.note.get('referenceId'),
 			title: this.state.titleText,
 			bible_id: this.props.activeTextId,
@@ -47,8 +47,11 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 	}
 
 	get verseReference() {
-		const bookChapterVerse = this.props.note.get('referenceId').split('_');
-		return `${bookChapterVerse[0]} ${bookChapterVerse[1]}:${bookChapterVerse[2]}`;
+		if (this.props.note.get('referenceId')) {
+			const bookChapterVerse = this.props.note.get('referenceId').split('_');
+			return `${bookChapterVerse[0]} ${bookChapterVerse[1]}:${bookChapterVerse[2]}`;
+		}
+		return 'Please Add a Verse';
 	}
 
 	render() {
@@ -74,7 +77,7 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 			<section className="edit-notes">
 				<div className="date-title">
 					<span className="date">{note.get('date') || this.getCurrentDate()}</span>
-					<input onChange={this.handleNoteTitleChange} className="title" value={this.state.titleText} />
+					<input onChange={this.handleNoteTitleChange} placeholder="CLICK TO ADD TITLE" className="title" value={this.state.titleText} />
 				</div>
 				<div className={`verse-dropdown${isVerseTextVisible ? ' open' : ''}`}>
 					<SvgWrapper onClick={toggleVerseText} className="svg" height="20px" width="20px" svgid="go-right" />
@@ -116,7 +119,7 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 						</div>
 					)
 				}
-				<textarea onChange={this.handleTextareaChange} value={this.state.textarea} className="note-text" />
+				<textarea onChange={this.handleTextareaChange} placeholder="CLICK TO ADD NOTE" value={this.state.textarea} className="note-text" />
 				<span className="save-button" role="button" tabIndex={0} onClick={this.handleSave}>SAVE</span>
 			</section>
 		);
