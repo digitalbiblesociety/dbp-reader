@@ -39,7 +39,7 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 
 	handleSave = () => {
 		this.props.addNote({
-			note: this.state.textarea,
+			notes: this.state.textarea,
 			reference_id: this.props.note.get('referenceId'),
 			title: this.state.titleText,
 			bible_id: this.props.activeTextId,
@@ -47,8 +47,11 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 	}
 
 	get verseReference() {
-		const bookChapterVerse = this.props.note.get('referenceId').split('_');
-		return `${bookChapterVerse[0]} ${bookChapterVerse[1]}:${bookChapterVerse[2]}`;
+		if (this.props.note.get('referenceId')) {
+			const bookChapterVerse = this.props.note.get('referenceId').split('_');
+			return `${bookChapterVerse[0]} ${bookChapterVerse[1]}:${bookChapterVerse[2]}`;
+		}
+		return 'Please Add a Verse';
 	}
 
 	render() {
