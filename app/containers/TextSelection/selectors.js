@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+import { fromJS } from 'immutable';
 
 /**
  * Direct selector to the textSelection state domain
@@ -12,7 +13,9 @@ const selectCountries = () => createSelector(
 	selectTextSelectionDomain,
 	(substate) => {
 		const countries = substate.get('countries');
-		const filteredCountries = countries.filter((country) => country.get('languages').size > 0);
+		const addAnyOption = countries.set('ANY', fromJS({ name: 'ANY', languages: { ANY: 'ANY' } }));
+		const filteredCountries = addAnyOption.filter((country) => country.get('languages').size > 0);
+
 		return filteredCountries;
 	}
 );
@@ -29,7 +32,8 @@ const selectLanguages = () => createSelector(
 		const languages = substate.get('languages');
 		const activeCountry = substate.get('activeCountryName');
 		const activeCountryLanguages = countryMap.getIn([activeCountry, 'languages']);
-		return languages.filter((language) => activeCountryLanguages.has(language.get('iso_code')));
+
+		return activeCountry === 'ANY' ? languages : languages.filter((language) => activeCountryLanguages.has(language.get('iso_code')));
 	}
 );
 

@@ -21,6 +21,41 @@ class CountryList extends React.PureComponent { // eslint-disable-line react/pre
 		};
 	}
 
+	get filteredCountries() {
+		const {
+			countries,
+			setCountryName,
+			toggleLanguageList,
+			activeCountryName,
+			setCountryListState,
+			toggleVersionList,
+		} = this.props;
+		const { filterText } = this.state;
+		const filteredCountries = filterText ? countries.filter((country) => this.filterFunction(country, filterText)) : countries;
+
+		const components = filteredCountries.valueSeq().map((country) => (
+			<div
+				className="country-name"
+				key={country.getIn(['codes', 'iso_a2']) || 'ANY'}
+				role="button"
+				tabIndex={0}
+				onClick={() => {
+					setCountryName({ name: country.get('name'), languages: country.get('languages') });
+					setCountryListState({ state: false });
+					toggleVersionList({ state: false });
+					toggleLanguageList({ state: true });
+				}}
+			>
+				<svg className="svg" height="25px" width="25px">
+					<use xmlnsXlink="http://www.w3.org/1999/xlink" xlinkHref={`${flags}#${country.getIn(['codes', 'iso_a2'])}`}></use>
+				</svg>
+				<h4 className={activeCountryName === country.get('name') ? 'active-language-name' : 'inactive-country'}>{country.get('name')}</h4>
+			</div>
+		));
+
+		return components;
+	}
+
 	filterFunction = (country, filterText) => {
 		const lowerCaseText = filterText.toLowerCase();
 
@@ -36,47 +71,24 @@ class CountryList extends React.PureComponent { // eslint-disable-line react/pre
 
 	render() {
 		const {
-			countries,
-			setCountryName,
 			active,
 			toggleLanguageList,
 			activeCountryName,
 			setCountryListState,
 			toggleVersionList,
 		} = this.props;
-		const { filterText } = this.state;
-		const filteredCountries = filterText ? countries.filter((country) => this.filterFunction(country, filterText)) : countries;
+
 		if (active) {
 			return (
 				<div className="text-selection-section">
 					<div className="text-selection-title">
 						<SvgWrapper height="25px" width="25px" fill="#fff" svgid="globe" />
 						<span className="text">COUNTRY:</span>
-						<span className="active-header-name">{activeCountryName || 'ALL'}</span>
+						<span className="active-header-name">{activeCountryName || 'ANY'}</span>
 					</div>
 					<input className="text-selection-input" onChange={this.handleChange} placeholder="SEARCH COUNTRIES" value={this.state.filterText} />
 					<div className="language-name-list">
-						{
-							filteredCountries.valueSeq().map((country) => (
-								<div
-									className="country-name"
-									key={country.getIn(['codes', 'iso_a2'])}
-									role="button"
-									tabIndex={0}
-									onClick={() => {
-										setCountryName({ name: country.get('name'), languages: country.get('languages') });
-										setCountryListState({ state: false });
-										toggleVersionList({ state: false });
-										toggleLanguageList({ state: true });
-									}}
-								>
-									<svg className="svg" height="25px" width="25px">
-										<use xmlnsXlink="http://www.w3.org/1999/xlink" xlinkHref={`${flags}#${country.getIn(['codes', 'iso_a2'])}`}></use>
-									</svg>
-									<h4 className={activeCountryName === country.get('name') ? 'active-language-name' : 'inactive-country'}>{country.get('name')}</h4>
-								</div>
-							))
-						}
+						{this.filteredCountries}
 					</div>
 				</div>
 			);
@@ -86,7 +98,7 @@ class CountryList extends React.PureComponent { // eslint-disable-line react/pre
 				<div className="text-selection-title">
 					<SvgWrapper height="25px" width="25px" fill="#fff" svgid="globe" />
 					<span className="text">COUNTRY:</span>
-					<span className="active-header-name">{activeCountryName || 'ALL'}</span>
+					<span className="active-header-name">{activeCountryName || 'ANY'}</span>
 				</div>
 			</div>
 		);

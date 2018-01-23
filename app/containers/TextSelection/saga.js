@@ -1,6 +1,7 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
 import languageList from 'utils/languagesWithResources';
 import request from 'utils/request';
+import { fromJS } from 'immutable';
 import { GET_COUNTRIES, GET_DPB_TEXTS, GET_LANGUAGES } from './constants';
 import { loadTexts, loadCountries, setLanguages } from './actions';
 
@@ -9,7 +10,7 @@ export function* getCountries() {
 
 	try {
 		const response = yield call(request, requestUrl);
-		const countries = response.data.reduce((acc, country) => {
+		const countriesObject = response.data.reduce((acc, country) => {
 			const tempObj = acc;
 			if (typeof country.name !== 'string') {
 				tempObj[country.name.name] = { ...country, name: country.name.name };
@@ -20,6 +21,10 @@ export function* getCountries() {
 			}
 			return tempObj;
 		}, {});
+
+		countriesObject.ANY = { name: 'ANY', languages: { ANY: 'ANY' } };
+
+		const countries = fromJS(countriesObject).sort((a, b) => a.get('name').localeCompare(b.get('name')));
 
 		yield put(loadCountries({ countries }));
 	} catch (err) {
