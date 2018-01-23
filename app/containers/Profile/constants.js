@@ -14,3 +14,5 @@ export const UPDATE_PASSWORD = 'app/Profile/UPDATE_PASSWORD';
 export const RESET_PASSWORD = 'app/Profile/RESET_PASSWORD';
 export const DELETE_USER = 'app/Profile/DELETE_USER';
 export const LOG_OUT = 'app/Profile/LOG_OUT';
+export const GET_USER_NOTES = 'app/Profile/GET_USER_NOTES';
+export const LOAD_USER_NOTES = 'app/Notes/LOAD_USER_NOTES';

@@ -16,15 +16,29 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		contextMenuState: false,
 		coords: {},
 		selectedText: '',
+		firstVerse: 0,
+		lastVerse: 0,
 	};
 
 	setMainRef = (el) => {
 		this.main = el;
 	}
 
+	setActiveNote = () => {
+		const { firstVerse, lastVerse, selectedText } = this.state;
+		const verseRange = firstVerse === lastVerse ? firstVerse : `${firstVerse}-${lastVerse}`;
+		const referenceId = `${this.props.activeBookId}_${this.props.activeChapter}_${verseRange}`;
+		const note = {
+			referenceId,
+			selectedText,
+		};
+
+		this.props.setActiveNote({ note });
+	}
+
 	getFirstVerse = (e) => {
-		if (this.main.contains(e.target) && e.target.attributes.verseid) {
-			console.log('verse id', e.target.attributes.verseid);
+		if (e.button === 0 && this.main.contains(e.target) && e.target.attributes.verseid) {
+			this.setState({ firstVerse: e.target.attributes.verseid.value });
 		}
 		// else if (this.main.contains(e.target)) {
 		// 	let node = e.target;
@@ -61,15 +75,16 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 	}
 
 	getLastVerse = (e) => {
-		if (window.getSelection().toString() && this.main.contains(e.target)) {
-			console.log(e.target.attributes.verseid);
-			const s = window.getSelection();
-			const selection = {};
+		if (e.button === 0 && window.getSelection().toString() && this.main.contains(e.target) && e.target.attributes.verseid) {
+			// console.log(e.target.attributes.verseid);
+			const selectedText = window.getSelection().toString();
+			// const selection = {};
 
-			selection.firstOffset = s.anchorOffset;
-			selection.lastOffset = s.focusOffset;
-			selection.text = s.toString();
-			console.log(selection);
+			// selection.firstOffset = s.anchorOffset;
+			// selection.lastOffset = s.focusOffset;
+			// selection.text = s.toString();
+			// console.log(selection);
+			this.setState({ lastVerse: e.target.attributes.verseid.value, selectedText });
 		}
 		// Below code gets the highlighted text
 		// window.getSelection().toString();
@@ -102,7 +117,6 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			text,
 			nextChapter,
 			prevChapter,
-			activeBookName,
 			activeChapter,
 			toggleNotesModal,
 			notesActive,
@@ -110,8 +124,13 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			readersMode,
 			oneVersePerLine,
 			formattedText,
+			activeBookId,
 			formattedTextActive,
 		} = this.props;
+		const {
+			coords,
+			contextMenuState,
+		} = this.state;
 		let textComponents;
 
 		if (readersMode) {
@@ -124,7 +143,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			));
 		} else if (formattedTextActive) {
 			// TODO: find way of providing the html without using dangerouslySetInnerHTML
-			// eslint-disable react/no-danger
+			/* eslint-disable react/no-danger */
 			textComponents = (
 				<div dangerouslySetInnerHTML={{ __html: formattedText }}></div>
 			);
@@ -133,10 +152,11 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				<span verseid={verse.verse_start} key={verse.verse_start}>&nbsp;<sup verseid={verse.verse_start}>{verse.verse_start_vernacular}</sup>&nbsp;{verse.verse_text}</span>
 			));
 		}
+
 		return (
 			<div className="text-container">
 				{
-					activeBookName === 'Genesis' && activeChapter === 1 ? null : (
+					activeBookId === 'GEN' && activeChapter === 1 ? null : (
 						<SvgWrapper onClick={prevChapter} className="prev-arrow-svg" svgid="prev-arrow" />
 					)
 				}
@@ -149,13 +169,13 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 					{textComponents}
 				</main>
 				{
-					activeBookName === 'Revelation' && activeChapter === 22 ? null : (
+					activeBookId === 'REV' && activeChapter === 22 ? null : (
 						<SvgWrapper onClick={nextChapter} className="next-arrow-svg" svgid="next-arrow" />
 					)
 				}
 				{
-					this.state.contextMenuState ? (
-						<ContextPortal setActiveNotesView={setActiveNotesView} closeContextMenu={this.closeContextMenu} toggleNotesModal={toggleNotesModal} notesActive={notesActive} parentNode={this.main} coordinates={this.state.coords} />
+					contextMenuState ? (
+						<ContextPortal setActiveNote={this.setActiveNote} setActiveNotesView={setActiveNotesView} closeContextMenu={this.closeContextMenu} toggleNotesModal={toggleNotesModal} notesActive={notesActive} parentNode={this.main} coordinates={coords} />
 					) : null
 				}
 			</div>
@@ -169,13 +189,14 @@ Text.propTypes = {
 	prevChapter: PropTypes.func,
 	toggleNotesModal: PropTypes.func,
 	setActiveNotesView: PropTypes.func,
-	activeBookName: PropTypes.string,
 	formattedText: PropTypes.string,
 	activeChapter: PropTypes.number,
 	notesActive: PropTypes.bool,
 	readersMode: PropTypes.bool,
 	oneVersePerLine: PropTypes.bool,
 	formattedTextActive: PropTypes.bool,
+	setActiveNote: PropTypes.func,
+	activeBookId: PropTypes.string,
 };
 
 export default Text;

@@ -16,6 +16,11 @@ import {
 	LOG_OUT,
 } from './constants';
 
+export const getUserNotes = ({ userId }) => ({
+	type: GET_USER_DATA,
+	userId,
+});
+
 export const logout = () => ({
 	type: LOG_OUT,
 });

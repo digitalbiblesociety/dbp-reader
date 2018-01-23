@@ -10,6 +10,11 @@ const selectHomepageDomain = (state) => state.get('homepage');
 /**
  * Other specific selectors
  */
+const selectUserId = () => createSelector(
+	selectProfileDomain,
+	(substate) => substate ? substate.get('userId') : ''
+);
+
 const selectUserAuthenticationStatus = () => createSelector(
 	selectProfileDomain,
 	(substate) => substate ? substate.get('userAuthenticated') : false
@@ -50,6 +55,28 @@ const selectSelectedBookName = () => createSelector(
 	(substate) => substate.get('selectedBookName')
 );
 
+const selectActiveNote = () => createSelector(
+	selectHomepageDomain,
+	(substate) => substate.get('note')
+);
+
+const selectNotePassage = () => createSelector(
+	selectHomepageDomain,
+	(substate) => {
+		const text = substate.get('chapterText');
+		const referenceId = substate.getIn(['note', 'referenceId']);
+		if (!referenceId) {
+			return '';
+		}
+		const idPieces = referenceId.split('_');
+		const verseId = (idPieces[2].indexOf('-') ? idPieces[2].split('-') : idPieces[2]).map(Number);
+		const verses = text.filter((chapter) => verseId.length > 1 ? chapter.get('verse_start') >= verseId[0] && chapter.get('verse_start') <= verseId[1] : chapter.get('verse_start') === verseId[0]);
+		const passage = verses.reduce((passageText, verse) => passageText.concat(verse.get('verse_text')), '');
+
+		return passage;
+	}
+);
+
 /**
  * Default selector used by Notes
  */
@@ -61,13 +88,16 @@ const makeSelectNotes = () => createSelector(
 
 export default makeSelectNotes;
 export {
-	selectNotesDomain,
-	selectHighlightedText,
-	selectActiveChapter,
-	selectActiveTextId,
-	selectActiveBookName,
 	selectBooks,
+	selectUserId,
+	selectActiveNote,
+	selectNotesDomain,
+	selectNotePassage,
+	selectActiveTextId,
+	selectActiveChapter,
+	selectActiveBookName,
 	selectActiveFilesets,
+	selectHighlightedText,
 	selectSelectedBookName,
 	selectUserAuthenticationStatus,
 };

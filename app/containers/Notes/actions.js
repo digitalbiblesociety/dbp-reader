@@ -10,17 +10,11 @@ import {
 	TOGGLE_ADD_VERSE_MENU,
 	SET_ACTIVE_PAGE_DATA,
 	SET_PAGE_SIZE,
-	SET_ACTIVE_NOTE,
 	TOGGLE_PAGE_SELECTOR,
 	ADD_NOTE,
 	ADD_HIGHLIGHT,
 	ADD_BOOKMARK,
 } from './constants';
-
-export const setActiveNote = ({ note }) => ({
-	type: SET_ACTIVE_NOTE,
-	note,
-});
 
 export const addNote = ({ data, userId }) => ({
 	type: ADD_NOTE,

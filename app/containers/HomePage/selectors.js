@@ -30,14 +30,14 @@ const selectFormattedText = () => createSelector(
  * Other specific selectors
  */
 const selectActiveBook = () => createSelector(
-  selectHomePageDomain,
-  (substate) => {
-	const books = substate.get('books');
-	const activeBookId = substate.get('activeBookId');
-	const activeBook = books.filter((book) => book.get('book_id') === activeBookId).get(0);
+	selectHomePageDomain,
+	(substate) => {
+		const books = substate.get('books');
+		const activeBookId = substate.get('activeBookId');
+		const activeBook = books.filter((book) => book.get('book_id') === activeBookId).get(0);
 
-	return activeBook;
-}
+		return activeBook;
+	}
 );
 
 const selectNextBook = () => createSelector(

@@ -12,11 +12,11 @@ import { compose } from 'redux';
 import SvgWrapper from 'components/SvgWrapper';
 import EditNote from 'components/EditNote';
 import MyNotes from 'components/MyNotes';
-import menu from 'images/menu.svg';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
 import {
+	setActiveNote,
 	getChapterText,
 	setActiveChapter,
 	setActiveBookName,
@@ -24,7 +24,6 @@ import {
 } from 'containers/HomePage/actions';
 import {
 	setActiveChild,
-	setActiveNote,
 	setPageSize,
 	toggleVerseText,
 	toggleAddVerseMenu,
@@ -35,14 +34,17 @@ import {
 	addHighlight,
 } from './actions';
 import makeSelectNotes, {
-	selectHighlightedText,
 	selectBooks,
-	selectActiveBookName,
+	selectUserId,
+	selectActiveNote,
 	selectActiveTextId,
 	selectActiveChapter,
+	selectActiveBookName,
 	selectActiveFilesets,
+	selectHighlightedText,
 	selectSelectedBookName,
 	selectUserAuthenticationStatus,
+	selectNotePassage,
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -89,11 +91,11 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 
 	togglePageSelector = () => this.props.dispatch(togglePageSelector())
 
-	addBookmark = ({ userId, data }) => this.props.dispatch(addBookmark({ userId, data }))
+	addBookmark = (data) => this.props.dispatch(addBookmark({ userId: this.props.userId, data }))
 
-	addHighlight = ({ userId, data }) => this.props.dispatch(addHighlight({ userId, data }))
+	addHighlight = (data) => this.props.dispatch(addHighlight({ userId: this.props.userId, data }))
 
-	addNote = ({ userId, data }) => this.props.dispatch(addNote({ userId, data }))
+	addNote = (data) => this.props.dispatch(addNote({ userId: this.props.userId, data }))
 
 	titleOptions = {
 		edit: 'EDIT NOTE',
@@ -117,7 +119,6 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 		const {
 			activeChild,
 			listData,
-			note,
 			isAddVerseExpanded,
 			isVerseTextVisible,
 			activePageData,
@@ -133,17 +134,19 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 			activeBookName,
 			selectedBookName,
 			authenticationStatus,
+			note,
 			toggleProfile,
+			notePassage,
 		} = this.props;
 
 		return (
 			<GenericErrorBoundary affectedArea="Notes">
 				<aside ref={this.setRef} className="notes">
 					<header>
-						<h2 className="section-title">NOTEBOOK</h2>
 						<span role="button" tabIndex={0} className="close-icon" onClick={() => { setActiveChild('notes'); toggleNotesModal(); }}>
-							<svg className="icon"><use xmlnsXlink="http://www.w3.org/1999/xlink" xlinkHref={`${menu}#close`}></use></svg>
+							<SvgWrapper height="25px" width="25px" fill="#fff" opacity="0.5" svgid="go-left" />
 						</span>
+						<h2 className="section-title">NOTEBOOK</h2>
 					</header>
 					{
 						authenticationStatus ? (
@@ -166,6 +169,7 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 								{
 									activeChild === 'edit' ? (
 										<EditNote
+											addNote={this.addNote}
 											getChapterText={this.getChapters}
 											toggleVerseText={this.toggleVerseText}
 											setActiveChapter={this.setActiveChapter}
@@ -174,6 +178,7 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 											setSelectedBookName={this.setSelectedBookName}
 											note={note}
 											books={books}
+											notePassage={notePassage}
 											selectedText={selectedText}
 											activeTextId={activeTextId}
 											activeChapter={activeChapter}
@@ -224,6 +229,9 @@ Notes.propTypes = {
 	selectedBookName: PropTypes.string,
 	authenticationStatus: PropTypes.bool,
 	toggleProfile: PropTypes.func,
+	note: PropTypes.object,
+	userId: PropTypes.string,
+	notePassage: PropTypes.string,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -236,6 +244,9 @@ const mapStateToProps = createStructuredSelector({
 	activeFilesets: selectActiveFilesets(),
 	selectedBookName: selectSelectedBookName(),
 	authenticationStatus: selectUserAuthenticationStatus(),
+	userId: selectUserId(),
+	note: selectActiveNote(),
+	notePassage: selectNotePassage(),
 });
 
 function mapDispatchToProps(dispatch) {

@@ -7,6 +7,7 @@
 import {
 	ACTIVE_TEXT_ID,
 	GET_BOOKS,
+	SET_ACTIVE_NOTE,
 	GET_AUDIO,
 	GET_CHAPTER_TEXT,
 	LOAD_BOOKS,
@@ -25,6 +26,12 @@ import {
 	TOGGLE_INFORMATION_MODAL,
 	UPDATE_SELECTED_TEXT,
 } from './constants';
+
+export const setActiveNote = ({ note }) => ({
+	type: SET_ACTIVE_NOTE,
+	note,
+});
+
 
 export const setSelectedBookName = (book) => ({
 	type: SET_SELECTED_BOOK_NAME,

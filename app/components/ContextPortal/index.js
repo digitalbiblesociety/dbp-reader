@@ -45,13 +45,38 @@ const Item = styled.div`
 // Remove use of styled components
 // change to pure component and handle outside clicks instead of click handler
 // on each item
-function ContextPortal({ coordinates, parentNode, toggleNotesModal, notesActive, closeContextMenu, setActiveNotesView }) {
+function ContextPortal({ setActiveNote, coordinates, parentNode, toggleNotesModal, notesActive, closeContextMenu, setActiveNotesView }) {
+	const handleNoteClick = () => {
+		if (!notesActive) {
+			setActiveNotesView('edit');
+			toggleNotesModal();
+			closeContextMenu();
+			setActiveNote();
+		}
+	};
+
+	const handleBookmarkClick = () => {
+		if (!notesActive) {
+			setActiveNotesView('edit');
+			toggleNotesModal();
+			closeContextMenu();
+		}
+	};
+
+	const handleHighlightClick = () => {
+		if (!notesActive) {
+			setActiveNotesView('edit');
+			toggleNotesModal();
+			closeContextMenu();
+		}
+	};
+
 	const component = (
 		<StyledDiv x={coordinates.x} y={coordinates.y}>
 			<Row>
-				<Item onClick={() => !notesActive && setActiveNotesView('edit') && toggleNotesModal() && closeContextMenu()}><SvgWrapper height="25px" width="25px" svgid="note-list" /></Item>
-				<Item onClick={() => !notesActive && setActiveNotesView('highlights') && toggleNotesModal() && closeContextMenu()}><SvgWrapper height="25px" width="25px" svgid="highlights" /></Item>
-				<Item onClick={() => !notesActive && setActiveNotesView('bookmarks') && toggleNotesModal() && closeContextMenu()}><SvgWrapper height="25px" width="25px" svgid="bookmarks" /></Item>
+				<Item onClick={handleNoteClick}><SvgWrapper height="25px" width="25px" svgid="note-list" /></Item>
+				<Item onClick={handleBookmarkClick}><SvgWrapper height="25px" width="25px" svgid="highlights" /></Item>
+				<Item onClick={handleHighlightClick}><SvgWrapper height="25px" width="25px" svgid="bookmarks" /></Item>
 				<Item onClick={closeContextMenu} className="facebook"><SvgWrapper height="35px" width="35px" svgid="fb-thumb" /></Item>
 			</Row>
 			<Row>
@@ -72,6 +97,7 @@ ContextPortal.propTypes = {
 	toggleNotesModal: PropTypes.func,
 	closeContextMenu: PropTypes.func,
 	setActiveNotesView: PropTypes.func,
+	setActiveNote: PropTypes.func,
 };
 
 export default ContextPortal;

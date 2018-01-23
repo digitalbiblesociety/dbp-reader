@@ -37,6 +37,20 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 		this.setState({ titleText: e.target.value });
 	}
 
+	handleSave = () => {
+		this.props.addNote({
+			note: this.state.textarea,
+			reference_id: this.props.note.get('referenceId'),
+			title: this.state.titleText,
+			versionId: this.props.activeTextId,
+		});
+	}
+
+	get verseReference() {
+		const bookChapterVerse = this.props.note.get('referenceId').split('_');
+		return `${bookChapterVerse[0]} ${bookChapterVerse[1]}:${bookChapterVerse[2]}`;
+	}
+
 	render() {
 		const {
 			toggleVerseText,
@@ -44,7 +58,6 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 			note,
 			isAddVerseExpanded,
 			isVerseTextVisible,
-			selectedText,
 			getChapterText,
 			setActiveChapter,
 			setActiveBookName,
@@ -54,23 +67,24 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 			activeChapter,
 			activeBookName,
 			selectedBookName,
+			notePassage,
 		} = this.props;
 
 		return (
 			<section className="edit-notes">
 				<div className="date-title">
-					<span className="date">{note.date || this.getCurrentDate()}</span>
+					<span className="date">{note.get('date') || this.getCurrentDate()}</span>
 					<input onChange={this.handleNoteTitleChange} className="title" value={this.state.titleText} />
 				</div>
 				<div className={`verse-dropdown${isVerseTextVisible ? ' open' : ''}`}>
 					<SvgWrapper onClick={toggleVerseText} className="svg" height="20px" width="20px" svgid="go-right" />
-					<span className="text">{note.reference || 'Verse Title Goes Here'}</span>
-					<span className="version-dropdown">ENGESV</span>
+					<span className="text">{this.verseReference}</span>
+					<span className="version-dropdown">{activeTextId}</span>
 				</div>
 				{
 					isVerseTextVisible ? (
 						<div className="verse-text">
-							{note.verseText || selectedText}
+							{notePassage}
 						</div>
 					) : null
 				}
@@ -103,6 +117,7 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 					)
 				}
 				<textarea onChange={this.handleTextareaChange} value={this.state.textarea} className="note-text" />
+				<span className="save-button" role="button" tabIndex={0} onClick={this.handleSave}>SAVE</span>
 			</section>
 		);
 	}
@@ -114,7 +129,6 @@ EditNote.propTypes = {
 	note: PropTypes.object.isRequired,
 	isAddVerseExpanded: PropTypes.bool.isRequired,
 	isVerseTextVisible: PropTypes.bool.isRequired,
-	selectedText: PropTypes.string,
 	getChapterText: PropTypes.func,
 	setActiveChapter: PropTypes.func,
 	setActiveBookName: PropTypes.func,
@@ -124,6 +138,8 @@ EditNote.propTypes = {
 	activeChapter: PropTypes.number,
 	activeBookName: PropTypes.string,
 	selectedBookName: PropTypes.string,
+	addNote: PropTypes.func,
+	notePassage: PropTypes.string,
 };
 
 export default EditNote;

@@ -6,26 +6,22 @@
 
 import { fromJS } from 'immutable';
 import {
+	LOAD_USER_NOTES,
+} from 'containers/Profile/constants';
+import {
 	SET_ACTIVE_CHILD,
 	TOGGLE_VERSE_TEXT,
 	TOGGLE_ADD_VERSE_MENU,
 	SET_ACTIVE_PAGE_DATA,
-	initialNotesListForTesting,
 	SET_PAGE_SIZE,
-	SET_ACTIVE_NOTE,
 	TOGGLE_PAGE_SELECTOR,
 } from './constants';
 
 const initialState = fromJS({
 	activeChild: 'notes',
-	note: {
-		title: 'Abram Speaks to Sarai',
-		verseTitle: 'Genesis 12:13',
-		verseText: '',
-		text: 'Abram shows a lack of faith in God and a great fear of man with this statement.',
-	},
-	activePageData: initialNotesListForTesting.slice(0, 10),
-	listData: initialNotesListForTesting,
+	note: {},
+	activePageData: [],
+	listData: [],
 	isAddVerseExpanded: false,
 	isVerseTextVisible: false,
 	pageSelectorState: false,
@@ -44,10 +40,10 @@ function notesReducer(state = initialState, action) {
 		return state.set('activePageData', action.page);
 	case SET_PAGE_SIZE:
 		return state.set('paginationPageSize', action.size);
-	case SET_ACTIVE_NOTE:
-		return state.set('note', action.note);
 	case TOGGLE_PAGE_SELECTOR:
 		return state.set('pageSelectorState', !state.get('pageSelectorState'));
+	case LOAD_USER_NOTES:
+		return state.set('listData', action.noteData);
 	default:
 		return state;
 	}

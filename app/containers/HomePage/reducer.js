@@ -32,11 +32,13 @@ import {
 	UPDATE_THEME,
 	UPDATE_FONT_TYPE,
 	UPDATE_FONT_SIZE,
+	SET_ACTIVE_NOTE,
 	UPDATE_SELECTED_TEXT,
 } from './constants';
 
 const initialState = fromJS({
 	books: [],
+	note: {},
 	chapterText: [],
 	audioObjects: [],
 	activeFilesets: {
@@ -121,6 +123,8 @@ function homePageReducer(state = initialState, action) {
 			.set('books', fromJS(action.books));
 	case LOAD_AUDIO:
 		return state.set('audioObjects', fromJS(action.audioObjects));
+	case SET_ACTIVE_NOTE:
+		return state.set('note', fromJS(action.note));
 	case TOGGLE_MENU_BAR:
 		return state.set('isMenuBarActive', !state.get('isMenuBarActive'));
 	case TOGGLE_PROFILE:
