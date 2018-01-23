@@ -22,7 +22,7 @@ export function* getCountries() {
 			return tempObj;
 		}, {});
 
-		countriesObject.ANY = { name: 'ANY', languages: { ANY: 'ANY' } };
+		countriesObject.ANY = { name: 'ANY', languages: { ANY: 'ANY' }, codes: { iso_a2: 'ANY' } };
 
 		const countries = fromJS(countriesObject).sort((a, b) => a.get('name').localeCompare(b.get('name')));
 

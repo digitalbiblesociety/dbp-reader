@@ -67,7 +67,7 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 			if (nextProps.audioSource) {
 				this.setState({ playerState: true });
 			} else if (this.state.playerState) {
-				this.setState({ playerState: false });
+				this.setState({ playerState: false, playing: false });
 			}
 		}
 	}

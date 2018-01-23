@@ -10,7 +10,6 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import {
-	getChapterText,
 	setActiveChapter,
 	setActiveBookName,
 	toggleChapterSelection,
@@ -47,7 +46,7 @@ export class ChapterSelection extends React.PureComponent { // eslint-disable-li
 
 	setSelectedBookName = (book) => this.props.dispatch(setSelectedBookName(book))
 
-	getChapters = (props) => this.props.dispatch(getChapterText({ ...props, audioObjects: this.props.activeFilesets }))
+	getChapters = (props) => this.props.dispatch(this.props.getChapterText({ ...props }))
 
 	setActiveChapter = (props) => this.props.dispatch(setActiveChapter(props))
 
@@ -107,7 +106,7 @@ ChapterSelection.propTypes = {
 	activeBookName: PropTypes.string.isRequired,
 	activeTextId: PropTypes.string.isRequired,
 	chapterselection: PropTypes.object.isRequired,
-	activeFilesets: PropTypes.object.isRequired,
+	getChapterText: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({

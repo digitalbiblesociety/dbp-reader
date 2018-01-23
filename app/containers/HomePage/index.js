@@ -215,7 +215,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					{
 						isChapterSelectionActive ? (
 							<FadeTransition in={isSettingsModalActive}>
-								<ChapterSelection />
+								<ChapterSelection getChapterText={this.getChapters} />
 							</FadeTransition>
 						) : null
 					}
