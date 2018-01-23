@@ -146,13 +146,13 @@ function homePageReducer(state = initialState, action) {
 	case SET_ACTIVE_CHAPTER:
 		return state.set('activeChapter', action.chapter);
 	case ACTIVE_TEXT_ID:
-		if (action.textName === 'ENGKJV') {
-			return state
-				.set('formattedTextActive', true)
-				.set('activeFilesets', fromJS(action.filesets))
-				.set('activeTextName', action.textName)
-				.set('activeTextId', action.textId);
-		}
+		// if (action.textName === 'ENGKJV') {
+		// 	return state
+		// 		.set('formattedTextActive', true)
+		// 		.set('activeFilesets', fromJS(action.filesets))
+		// 		.set('activeTextName', action.textName)
+		// 		.set('activeTextId', action.textId);
+		// }
 		return state
 			.set('formattedTextActive', false)
 			.set('activeFilesets', fromJS(action.filesets))

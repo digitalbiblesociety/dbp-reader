@@ -15,13 +15,15 @@ import {
 	SET_ACTIVE_PAGE_DATA,
 	SET_PAGE_SIZE,
 	TOGGLE_PAGE_SELECTOR,
+	initialNotesListForTesting,
 } from './constants';
 
 const initialState = fromJS({
 	activeChild: 'notes',
-	note: {},
-	activePageData: [],
-	listData: [],
+	// activePageData: [],
+	activePageData: initialNotesListForTesting.slice(0, 10),
+	// listData: [],
+	listData: initialNotesListForTesting,
 	isAddVerseExpanded: false,
 	isVerseTextVisible: false,
 	pageSelectorState: false,
