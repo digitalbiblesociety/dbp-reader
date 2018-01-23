@@ -40,7 +40,7 @@ export function* getTexts() {
 	try {
 		const response = yield call(request, requestUrl);
 		// Some texts may have plain text in the database but no filesets
-		const texts = response.data; // .filter((text) => !Array.isArray(text.filesets) && Object.keys(text.filesets).length);
+		const texts = response.data.filter((text) => !Array.isArray(text.filesets) && Object.keys(text.filesets).length);
 		yield put(loadTexts({ texts }));
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {

@@ -1,6 +1,6 @@
 // Chapter and Version Shared Styles
 .chapter-text-dropdown                              {display:flex;flex-direction:column;position:fixed;top:0;left:calc(50% - 116px);height:100%;width:320px;background-color:#2C3036;color:rgba(244,245,246,.5)}
-.chapter-text-dropdown header                       {display:flex;align-items:center;justify-content:center;background:#7E0E2A;color:#FFF;text-align:center;height:54px;line-height:54px}
+.chapter-text-dropdown header                       {display:flex;align-items:center;justify-content:center;background:#7E0E2A;color:#FFF;text-align:center;height:54px;line-height:54px;white-space:nowrap;}
 .chapter-text-dropdown header .close-icon           {margin-left:20px;}
 .text-selection-section .active-header-name         {color:$menu-active-color;margin-left:5px;}
 .text-selection-section                             {color:#FFF;max-height:calc(100% - 216px);height:calc(100% - 216px);text-transform:uppercase;}
