@@ -84,7 +84,7 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 				{
 					isVerseTextVisible ? (
 						<div className="verse-text">
-							{notePassage}
+							&quot;&nbsp;{notePassage}&nbsp;&quot;
 						</div>
 					) : null
 				}
