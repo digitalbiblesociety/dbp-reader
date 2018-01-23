@@ -7,7 +7,7 @@ import {
 } from './constants';
 
 export function* addBookmark({ userId, data }) {
-	const requestUrl = `https://api.bible.build/users/${userId}/notes?key=${process.env.NODE_ENV}&v=4&pretty`;
+	const requestUrl = `https://api.bible.build/users/${userId}/notes?key=${process.env.DBP_API_KEY}&v=4&pretty`;
 	const options = {
 		body: data,
 		method: 'POST',
@@ -25,7 +25,7 @@ export function* addBookmark({ userId, data }) {
 }
 
 export function* addHighlight({ userId, data }) {
-	const requestUrl = `https://api.bible.build/users/${userId}/notes?key=${process.env.NODE_ENV}&v=4&pretty`;
+	const requestUrl = `https://api.bible.build/users/${userId}/notes?key=${process.env.DBP_API_KEY}&v=4&pretty`;
 	const options = {
 		body: data,
 		method: 'POST',
@@ -43,10 +43,10 @@ export function* addHighlight({ userId, data }) {
 }
 
 export function* addNote({ userId, data }) {
-	const requestUrl = `https://api.bible.build/users/${userId}/notes?key=${process.env.NODE_ENV}&v=4&pretty`;
+	const requestUrl = `https://api.bible.build/users/${userId}/notes?key=${process.env.DBP_API_KEY}&v=4&pretty`;
 	const formData = new FormData();
 
-	data.forEach((piece, key) => formData.append(key, piece));
+	Object.entries(data).forEach((item) => formData.set(item[0], item[1]));
 
 	const options = {
 		body: formData,
