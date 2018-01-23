@@ -1,5 +1,4 @@
 import { createSelector } from 'reselect';
-import { fromJS } from 'immutable';
 
 /**
  * Direct selector to the textSelection state domain
@@ -13,8 +12,7 @@ const selectCountries = () => createSelector(
 	selectTextSelectionDomain,
 	(substate) => {
 		const countries = substate.get('countries');
-		const addAnyOption = countries.set('ANY', fromJS({ name: 'ANY', languages: { ANY: 'ANY' } }));
-		const filteredCountries = addAnyOption.filter((country) => country.get('languages').size > 0);
+		const filteredCountries = countries.filter((country) => country.get('languages').size > 0);
 
 		return filteredCountries;
 	}
