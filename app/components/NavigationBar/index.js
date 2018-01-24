@@ -20,6 +20,7 @@ class NavigationBar extends React.PureComponent { // eslint-disable-line react/p
 			activeTextId,
       toggleChapterSelection,
 			toggleVersionSelection,
+			toggleSearchModal,
 			toggleMenuBar,
 			toggleProfile,
 			activeChapter,
@@ -38,7 +39,7 @@ class NavigationBar extends React.PureComponent { // eslint-disable-line react/p
 					<span role="button" tabIndex={0} onClick={toggleVersionSelection} className="text version">{activeTextId}<SvgWrapper className="svg" height="15px" width="15px" fill="#fff" svgid="go-down" opacity=".5" /></span>
 				</div>
 				<div className="small-2 buttons">
-					<span><SvgWrapper className="navbar-button" height="30px" width="30px" fill="#fff" svgid="search" /></span>
+					<span role="button" tabIndex={0} onClick={toggleSearchModal}><SvgWrapper className="navbar-button" height="30px" width="30px" fill="#fff" svgid="search" /></span>
 					<span role="button" tabIndex={0} onClick={toggleProfile}><SvgWrapper className="navbar-button" height="30px" width="30px" fill="#fff" svgid="profile_circle" /></span>
 				</div>
 			</div>
@@ -51,6 +52,7 @@ NavigationBar.propTypes = {
 	activeTextId: PropTypes.string,
 	toggleChapterSelection: PropTypes.func,
 	toggleVersionSelection: PropTypes.func,
+	toggleSearchModal: PropTypes.func,
 	toggleMenuBar: PropTypes.func,
 	toggleProfile: PropTypes.func,
 	activeChapter: PropTypes.number,

@@ -20,6 +20,7 @@ import {
 	TOGGLE_PROFILE,
 	TOGGLE_MENU_BAR,
 	TOGGLE_NOTES_MODAL,
+	TOGGLE_SEARCH_MODAL,
 	TOGGLE_SETTINGS_MODAL,
 	TOGGLE_CHAPTER_SELECTION,
 	TOGGLE_VERSION_SELECTION,
@@ -90,6 +91,10 @@ export const toggleProfile = () => ({
 
 export const toggleSettingsModal = () => ({
 	type: TOGGLE_SETTINGS_MODAL,
+});
+
+export const toggleSearchModal = () => ({
+	type: TOGGLE_SEARCH_MODAL,
 });
 
 export const toggleNotesModal = () => ({
