@@ -52,7 +52,7 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 		const insideWidth = event.x >= bounds.x && event.x <= bounds.x + bounds.width;
 		const insideHeight = event.y >= bounds.y && event.y <= bounds.y + bounds.height;
 
-		if (this.ref && !(insideWidth && insideHeight)) {
+		if (this.ref && !(insideWidth && insideHeight) && !this.ref.contains(event.target)) {
 			this.props.toggleProfile();
 			document.removeEventListener('click', this.handleClickOutside);
 		}

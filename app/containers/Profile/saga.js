@@ -14,7 +14,6 @@ import {
 	// RESET_PASSWORD,
 	// UPDATE_PASSWORD,
 } from './constants';
-
 import { getUserNotes } from './actions';
 
 export function* getNotes({ userId }) {

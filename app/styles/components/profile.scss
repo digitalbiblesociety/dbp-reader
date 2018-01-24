@@ -9,8 +9,8 @@
 
 // Input boxes
 .profile input                                  {border:none;border-bottom:1px solid white;width:100%;height:50px;background-color:$input-background-color;color:$paper-primary;font-size:.9em;font-weight:200;caret-color:#000;padding-left:10px;}
-.profile input.email                            {background:url("../images/email.svg") no-repeat 5px 10px;background-color:$input-background-color;padding-left:45px;}
-.profile input.email:focus                      {background-image:none;padding-left:10px;}
+.profile form input.email                       {background:url("../images/email.svg") no-repeat 5px 10px;background-color:$input-background-color;padding-left:45px;}
+.profile form input.email:focus                 {background-image:none;padding-left:10px;}
 .profile input:focus::-webkit-input-placeholder {color:transparent;}
 .profile input:focus::-moz-placeholder          {color:transparent;}
 .profile input:focus:-ms-input-placeholder      {color:transparent;}
@@ -30,7 +30,7 @@
 
 // Sign up
 .profile .sign-up-button             {padding:5px 10px;text-align:right;height:30px;width:100%;background:$input-background-color;color:$paper-primary;}
-.profile .sign-up-button .text       {cursor:pointer;}
+.profile .sign-up-button .text       {cursor:pointer;background-color:inherit;border:none;font-size:0.98em;color:$paper-primary;}
 .profile .sign-up-button .text:hover {color:$menu-active-color;}
   // Login or Sign up options
 .profile .form-options         {display:flex;align-items:center;justify-content:space-between;}

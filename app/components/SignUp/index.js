@@ -70,7 +70,9 @@ class SignUp extends React.PureComponent {
 		this.setState({ confirmPassword: value });
 	}
 
-	handleSignup = () => {
+	handleSignup = (e) => {
+		e.preventDefault();
+		console.log('handling signup');
 		if (this.state.validPassword && this.state.validEmail) {
 			this.props.sendSignupForm({
 				email: this.state.email,
@@ -83,18 +85,20 @@ class SignUp extends React.PureComponent {
 		}
 	}
 
-	// get signupForm() {
-	// 	return (
-	// 		<form>
-	// 			<input onChange={this.handleEmailChange} className="email" placeholder="Enter E-mail" value={this.state.email} />
-	// 			<input onChange={this.handleFirstName} className="name-inputs" placeholder="Enter First Name" value={this.state.firstName} />
-	// 			<input onChange={this.handleLastName} className="name-inputs" placeholder="Enter Last Name" value={this.state.lastName} />
-	// 			<input type="password" onChange={this.handlePasswordChange} className="first-password" placeholder="Enter Password" value={this.state.password} />
-	// 			<input type="password" onChange={this.handleConfirmPassword} className="second-password" placeholder="Confirm Password" value={this.state.confirmPassword} />
-	// 			<div className="sign-up-button"><span role="button" tabIndex={0} onClick={() => this.handleSignup()} className="text">SIGN UP</span></div>
-	// 		</form>
-	// 	);
-	// }
+	get signupForm() {
+		return (
+			<form onSubmit={this.handleSignup}>
+				<input onChange={this.handleEmailChange} className="email" placeholder="Enter E-mail" value={this.state.email} />
+				<input onChange={this.handleFirstName} className="name-inputs" placeholder="Enter First Name" value={this.state.firstName} />
+				<input onChange={this.handleLastName} className="name-inputs" placeholder="Enter Last Name" value={this.state.lastName} />
+				<input autoComplete="new-password" type="password" onChange={this.handlePasswordChange} className="first-password" placeholder="Enter Password" value={this.state.password} />
+				<input autoComplete="new-password" type="password" onChange={this.handleConfirmPassword} className="second-password" placeholder="Confirm Password" value={this.state.confirmPassword} />
+				<div className="sign-up-button">
+					<button type="submit" className="text">SIGN UP</button>
+				</div>
+			</form>
+		);
+	}
 
 	render() {
 		const { errorMessage } = this.props;
@@ -109,12 +113,7 @@ class SignUp extends React.PureComponent {
 						<div className="signup-error-message">{errorMessage}</div>
 					) : null
 				}
-				<input onChange={this.handleEmailChange} className="email" placeholder="Enter E-mail" value={this.state.email} />
-				<input onChange={this.handleFirstName} className="name-inputs" placeholder="Enter First Name" value={this.state.firstName} />
-				<input onChange={this.handleLastName} className="name-inputs" placeholder="Enter Last Name" value={this.state.lastName} />
-				<input type="password" onChange={this.handlePasswordChange} className="first-password" placeholder="Enter Password" value={this.state.password} />
-				<input type="password" onChange={this.handleConfirmPassword} className="second-password" placeholder="Confirm Password" value={this.state.confirmPassword} />
-				<div className="sign-up-button"><span role="button" tabIndex={0} onClick={() => this.handleSignup()} className="text">SIGN UP</span></div>
+				{this.signupForm}
 				<div className="google">
 					<SvgWrapper className="svg" height="30px" width="30px" fill="#fff" svgid="google_plus" />
 					Sign up with Google
