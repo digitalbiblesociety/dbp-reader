@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import injectReducer from 'utils/injectReducer';
+import closeEventHoc from 'components/CloseEventHoc';
 import SvgWrapper from 'components/SvgWrapper';
 import SpeedControl from 'components/SpeedControl';
 import AudioProgressBar from 'components/AudioProgressBar';
@@ -23,8 +24,7 @@ import reducer from './reducer';
 export class AudioPlayer extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	constructor(props) {
 		super(props);
-		// src state will come from parent once api is finished
-		// needs next and prev audio tracks
+		// need to get next and prev audio tracks if I want to enable continuous playing
 		this.state = {
 			playing: false,
 			speedControlState: false,
@@ -39,7 +39,7 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 	}
 
 	componentDidMount() {
-		// canplaythrough might be a safe event to listen for
+		// canplaythrough might be a safer event to listen for
 		this.audioRef.addEventListener('durationchange', (e) => {
 			this.setState({
 				duration: e.target.duration,
@@ -145,11 +145,32 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 	toggleAudioPlayer = () => this.setState({
 		playerState: !this.state.playerState,
 	})
+	// Simpler to close all modals than to try and figure out which one to close
+	closeModals = () => {
+		this.setState({
+			volumeSliderState: false,
+			speedControlState: false,
+			elipsisState: false,
+		});
+	}
+
+	get volumeControl() {
+		return closeEventHoc(VolumeSlider, this.closeModals);
+	}
+
+	get speedControl() {
+		return closeEventHoc(SpeedControl, this.closeModals);
+	}
+
+	get playerMenu() {
+		return closeEventHoc(AudioPlayerMenu, this.closeModals);
+	}
 
 	render() {
 		const {
 			audioSource: source,
 		} = this.props;
+
 		return (
 			<GenericErrorBoundary affectedArea="AudioPlayer">
 				<div ref={this.setAudioPlayerRef}>
@@ -173,18 +194,17 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 								<div role="button" tabIndex="0" className={this.state.speedControlState ? 'item active' : 'item'} onClick={() => { this.state.speedControlState ? this.setSpeedControlState(false) : this.setSpeedControlState(true); this.setElipsisState(false); this.setVolumeSliderState(false); }}><SvgWrapper width="25px" height="25px" fill="#fff" svgid="play_speed" /></div>
 								<div role="button" tabIndex="0" className={this.state.elipsisState ? 'item active' : 'item'} onClick={() => { this.state.elipsisState ? this.setElipsisState(false) : this.setElipsisState(true); this.setVolumeSliderState(false); this.setSpeedControlState(false); }}><SvgWrapper width="25px" height="25px" fill="#fff" svgid="more_menu" /></div>
 								{
-									this.state.volumeSliderState ? (
-										<VolumeSlider parentNode={this.audioPlayerContainer} updateVolume={this.updateVolume} volume={this.state.volume} />
-									) : null
+									this.state.volumeSliderState ? <this.volumeControl parentNode={this.audioPlayerContainer} updateVolume={this.updateVolume} volume={this.state.volume} />
+										: null
 								}
 								{
 									this.state.speedControlState ? (
-										<SpeedControl parentNode={this.audioPlayerContainer} currentSpeed={this.state.currentSpeed} options={[0.5, 1, 1.25, 1.5, 2]} setSpeed={this.updatePlayerSpeed} />
+										<this.speedControl parentNode={this.audioPlayerContainer} currentSpeed={this.state.currentSpeed} options={[0.5, 1, 1.25, 1.5, 2]} setSpeed={this.updatePlayerSpeed} />
 									) : null
 								}
 								{
 									this.state.elipsisState ? (
-										<AudioPlayerMenu parentNode={this.audioPlayerContainer} />
+										<this.playerMenu parentNode={this.audioPlayerContainer} />
 									) : null
 								}
 							</div>

@@ -30,17 +30,21 @@ export class SearchContainer extends React.PureComponent { // eslint-disable-lin
 		this.ref = node;
 	}
 
-	handleSliderChange = (position) => this.updateFontSize({ size: position })
-
 	handleClickOutside = (event) => {
 		const bounds = this.ref.getBoundingClientRect();
 		const insideWidth = event.x >= bounds.x && event.x <= bounds.x + bounds.width;
 		const insideHeight = event.y >= bounds.y && event.y <= bounds.y + bounds.height;
 
 		if (this.ref && !(insideWidth && insideHeight)) {
-			// this.props.toggleSearchModal();
+			this.props.toggleSearchContainer();
 			document.removeEventListener('click', this.handleClickOutside);
 		}
+	}
+
+	handleSearchContainerToggle = () => {
+		document.removeEventListener('click', this.handleClickOutside);
+
+		this.props.toggleSearchContainer();
 	}
 
 	render() {
@@ -49,7 +53,7 @@ export class SearchContainer extends React.PureComponent { // eslint-disable-lin
 				<aside ref={this.setRef} className="settings">
 					<header>
 						<h2 className="section-title">Search</h2>
-						<span role="button" tabIndex={0} className="close-icon">
+						<span role="button" tabIndex={0} className="close-icon" onClick={this.handleSearchContainerToggle}>
 							<svg className="icon"><use xmlnsXlink="http://www.w3.org/1999/xlink" xlinkHref={`${menu}#close`}></use></svg>
 						</span>
 					</header>
@@ -60,7 +64,7 @@ export class SearchContainer extends React.PureComponent { // eslint-disable-lin
 }
 
 SearchContainer.propTypes = {
-	dispatch: PropTypes.func.isRequired,
+	toggleSearchContainer: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({

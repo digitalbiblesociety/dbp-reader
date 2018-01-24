@@ -57,6 +57,12 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 		}
 	}
 
+	handleSettingsModalToggle = () => {
+		document.removeEventListener('click', this.handleClickOutside);
+
+		this.props.toggleSettingsModal();
+	}
+
 	updateTheme = ({ theme }) => this.props.dispatch(updateTheme({ theme }));
 	updateFontType = ({ font }) => this.props.dispatch(updateFontType({ font }));
 	updateFontSize = ({ size }) => this.props.dispatch(updateFontSize({ size }));
@@ -80,13 +86,13 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 		const activeFontSize = this.props.userSettings.get('activeFontSize');
 		const activeFontType = this.props.userSettings.get('activeFontType');
 		const toggleOptions = this.props.userSettings.get('toggleOptions');
-		const { toggleSettingsModal } = this.props;
+
 		return (
 			<GenericErrorBoundary affectedArea="Settings">
 				<aside ref={this.setRef} className="settings">
 					<header>
 						<h2 className="section-title">Settings</h2>
-						<span role="button" tabIndex={0} className="close-icon" onClick={toggleSettingsModal}>
+						<span role="button" tabIndex={0} className="close-icon" onClick={this.handleSettingsModalToggle}>
 							<svg className="icon"><use xmlnsXlink="http://www.w3.org/1999/xlink" xlinkHref={`${menu}#close`}></use></svg>
 						</span>
 					</header>
