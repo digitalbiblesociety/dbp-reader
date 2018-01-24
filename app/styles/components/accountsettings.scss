@@ -1,8 +1,8 @@
 // Account Settings
-.account-settings {}
+.account-settings {max-height:calc(100% - 110px);overflow-y:scroll;overflow-x:hidden;}
 .account-settings .logout-button {margin-top:20px;margin-left:20px;cursor:pointer;&:hover{color:$menu-active-color;}}
 .account-settings .button {color:$paper-primary;font-weight:400;cursor:pointer;&:hover{color:$menu-active-color;}align-self:flex-end;margin:10px 20px 0 0;font-size:.9em;}
-.account-settings .delete-account {color:inherit;align-self:flex-end;margin-top:20px;font-style:italic;font-weight:200;}
+.account-settings .delete-account {margin-bottom:20px;color:inherit;align-self:flex-end;margin-top:20px;font-style:italic;font-weight:200;}
 .account-settings .svg {fill:currentColor;}
 .account-settings .title {color:$menu-active-color;padding-left:20px;margin-bottom:5px;}
 
@@ -23,7 +23,7 @@
 // Address Section Styles
 .address-section {margin-top:15px;display:flex;flex-direction:column;}
 .address-section .input-svg {display:block;position:absolute;margin-top:10px;margin-left:20px;fill:$paper-primary;}
-.address-section input {height:40px;font-size:.8em;font-style:italic;}
+.address-section input {height:40px;font-size:.8em;font-style:italic;border-bottom:1px solid white;}
 .address-section .country {}
 .address-section .address-1 {}
 .address-section .address-2 {}
