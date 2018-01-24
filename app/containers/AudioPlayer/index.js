@@ -99,6 +99,12 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 		this.audioRef = el;
 	}
 
+	handleBackgroundClick = () => {
+		if (!this.state.playerState) {
+			this.toggleAudioPlayer();
+		}
+	}
+
 	updateVolume = (volume) => {
 		this.audioRef.volume = volume;
 		this.setState({
@@ -173,7 +179,7 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 
 		return (
 			<GenericErrorBoundary affectedArea="AudioPlayer">
-				<div ref={this.setAudioPlayerRef}>
+				<div role="button" tabIndex={0} className="audio-player-background" ref={this.setAudioPlayerRef} onClick={this.handleBackgroundClick}>
 					{
 						this.state.playerState ? (
 							<div className="audio-player-container">
@@ -211,7 +217,7 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 						) : null
 					}
 					<audio ref={this.handleRef} className="audio-player" src={source}></audio>
-					<SvgWrapper onClick={this.toggleAudioPlayer} width="50px" height="5px" className="audio-gripper" fill="#aeaeae" svgid="gripper" />
+					<SvgWrapper onClick={(e) => { e.stopPropagation(); this.toggleAudioPlayer(); }} width="50px" height="5px" className="audio-gripper" fill="#aeaeae" svgid="gripper" />
 				</div>
 			</GenericErrorBoundary>
 		);
