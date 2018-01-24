@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import injectReducer from 'utils/injectReducer';
+import closeEventHoc from 'components/CloseEventHoc';
 import SvgWrapper from 'components/SvgWrapper';
 import SpeedControl from 'components/SpeedControl';
 import AudioProgressBar from 'components/AudioProgressBar';
@@ -146,6 +147,26 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 		playerState: !this.state.playerState,
 	})
 
+	closeModals = () => {
+		this.setState({
+			volumeSliderState: false,
+			speedControlState: false,
+			elipsisState: false,
+		});
+	}
+
+	get volumeControl() {
+		return closeEventHoc(VolumeSlider, this.closeModals);
+	}
+
+	get speedControl() {
+		return closeEventHoc(SpeedControl, this.closeModals);
+	}
+
+	get playerMenu() {
+		return closeEventHoc(AudioPlayerMenu, this.closeModals);
+	}
+
 	render() {
 		const {
 			audioSource: source,
@@ -173,18 +194,18 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 								<div role="button" tabIndex="0" className={this.state.speedControlState ? 'item active' : 'item'} onClick={() => { this.state.speedControlState ? this.setSpeedControlState(false) : this.setSpeedControlState(true); this.setElipsisState(false); this.setVolumeSliderState(false); }}><SvgWrapper width="25px" height="25px" fill="#fff" svgid="play_speed" /></div>
 								<div role="button" tabIndex="0" className={this.state.elipsisState ? 'item active' : 'item'} onClick={() => { this.state.elipsisState ? this.setElipsisState(false) : this.setElipsisState(true); this.setVolumeSliderState(false); this.setSpeedControlState(false); }}><SvgWrapper width="25px" height="25px" fill="#fff" svgid="more_menu" /></div>
 								{
-									this.state.volumeSliderState ? (
-										<VolumeSlider parentNode={this.audioPlayerContainer} updateVolume={this.updateVolume} volume={this.state.volume} />
-									) : null
+									// this.state.volumeSliderState ? (<VolumeSlider parentNode={this.audioPlayerContainer} updateVolume={this.updateVolume} volume={this.state.volume} />)
+									this.state.volumeSliderState ? <this.volumeControl parentNode={this.audioPlayerContainer} updateVolume={this.updateVolume} volume={this.state.volume} />
+										: null
 								}
 								{
 									this.state.speedControlState ? (
-										<SpeedControl parentNode={this.audioPlayerContainer} currentSpeed={this.state.currentSpeed} options={[0.5, 1, 1.25, 1.5, 2]} setSpeed={this.updatePlayerSpeed} />
+										<this.speedControl parentNode={this.audioPlayerContainer} currentSpeed={this.state.currentSpeed} options={[0.5, 1, 1.25, 1.5, 2]} setSpeed={this.updatePlayerSpeed} />
 									) : null
 								}
 								{
 									this.state.elipsisState ? (
-										<AudioPlayerMenu parentNode={this.audioPlayerContainer} />
+										<this.playerMenu parentNode={this.audioPlayerContainer} />
 									) : null
 								}
 							</div>
