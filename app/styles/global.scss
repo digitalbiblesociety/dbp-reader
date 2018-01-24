@@ -22,6 +22,16 @@ body .google   {background-color:$login-google-color;}
 body .facebook {background-color:$login-facebook-color;}
 body .twitter  {background-color:$login-twitter-color;}
 
+// Change Highlighting Color
+::selection {
+  background: $default-highlight-color; /* WebKit/Blink Browsers */
+  color: $paper-primary;
+}
+::-moz-selection {
+  background: $default-highlight-color; /* Gecko Browsers */
+  color: $paper-primary;
+}
+
 // Input Box Styles
 input:focus                            {background-image:none;outline:none;}
 input:focus::-webkit-input-placeholder {color:transparent;}
