@@ -69,13 +69,12 @@ export function* sendSignUpForm({ password, email, username, firstName, lastName
 
 	try {
 		const response = yield call(request, requestUrl, options);
-		// response will have the user_id now
+
 		if (response.success) {
 			yield put({ type: USER_LOGGED_IN, userId: response.user_id });
 		} else if (response.error) {
 			const message = Object.values(response.error.message).reduce((acc, cur) => acc.concat(cur), '');
 			yield put({ type: SIGNUP_ERROR, message });
-			console.log('signup error', message); // eslint-disable-line no-console
 			// yield put('user-login-failed', response.error.message);
 		}
 	} catch (err) {
@@ -99,10 +98,9 @@ export function* sendLoginForm({ password, email }) {
 
 	try {
 		const response = yield call(request, requestUrl, options);
-		// console.log('response in login', response);
+
 		if (response.error) {
 			yield put({ type: LOGIN_ERROR, message: response.error.message });
-			console.log('login error', response); // eslint-disable-line no-console
 		} else {
 			yield put({ type: USER_LOGGED_IN, userId: response.user_id });
 			yield put(getUserNotes({ userId: response.user_id }));
