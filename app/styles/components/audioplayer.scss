@@ -1,5 +1,6 @@
+.audio-player-background {background-color:rgba(78,69,76,.9);min-height:10px;padding:2.5px;}
 // General Audio Player Styles
-.audio-player-container                {display:flex;justify-content:space-around;align-items:center;width:100%;height:50px;background-color:rgba(78,69,76,.9);}
+.audio-player-container                {display:flex;justify-content:space-around;align-items:center;width:100%;height:50px;}
 .audio-player-container .item          {cursor:pointer;height:50px;display:flex;align-items:center;justify-content:center;}
 .audio-player-container .svgitem       {cursor:pointer;}
 .audio-player-container .item:hover    {opacity:.65;}

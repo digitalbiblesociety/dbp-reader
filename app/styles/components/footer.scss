@@ -1,6 +1,8 @@
-.footer                      {display:flex;position:fixed;bottom:0;left:0;height:56px;width:100%;background-color:$header-footer;}
-.footer div                  {display:flex;}
-.footer .left-buttons        {width:50%;justify-content:flex-start;align-items:center;}
-.footer .right-buttons       {width:50%;justify-content:flex-end;align-items:center;}
-.footer .left-buttons .item  {margin-left:15px;}
-.footer .right-buttons .item {margin-right:15px;}
+.footer                            {display:flex;position:fixed;bottom:0;left:0;height:56px;width:100%;background-color:$header-footer;}
+.footer div                        {display:flex;}
+.footer .left-buttons              {width:50%;justify-content:flex-start;align-items:center;}
+.footer .right-buttons             {width:50%;justify-content:flex-end;align-items:center;}
+.footer .left-buttons .item        {margin-left:15px;cursor:pointer;}
+.footer .right-buttons .item       {margin-right:15px;cursor:pointer;}
+.footer .left-buttons .item:hover  {opacity:0.65;}
+.footer .right-buttons .item:hover {opacity:0.65;}
