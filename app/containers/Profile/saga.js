@@ -1,16 +1,18 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
 import request from 'utils/request';
 import {
-	// LOAD_USER_DATA,
-	USER_LOGGED_IN,
-	// GET_USER_DATA,
 	GET_USER_NOTES,
-	LOAD_USER_NOTES,
+	// GET_USER_DATA,
+	// LOAD_USER_DATA,
+	LOGIN_ERROR,
+	USER_LOGGED_IN,
 	SEND_LOGIN_FORM,
+	SIGNUP_ERROR,
+	LOAD_USER_NOTES,
 	SEND_SIGNUP_FORM,
-	// UPDATE_PASSWORD,
-	// RESET_PASSWORD,
 	// DELETE_USER,
+	// RESET_PASSWORD,
+	// UPDATE_PASSWORD,
 } from './constants';
 
 import { getUserNotes } from './actions';
@@ -71,7 +73,9 @@ export function* sendSignUpForm({ password, email, username, firstName, lastName
 		if (response.success) {
 			yield put({ type: USER_LOGGED_IN, userId: response.user_id });
 		} else if (response.error) {
-			console.log(response.error.message); // eslint-disable-line no-console
+			const message = Object.values(response.error.message).reduce((acc, cur) => acc.concat(cur), '');
+			yield put({ type: SIGNUP_ERROR, message });
+			console.log('signup error', message); // eslint-disable-line no-console
 			// yield put('user-login-failed', response.error.message);
 		}
 	} catch (err) {
@@ -97,6 +101,7 @@ export function* sendLoginForm({ password, email }) {
 		const response = yield call(request, requestUrl, options);
 		// console.log('response in login', response);
 		if (response.error) {
+			yield put({ type: LOGIN_ERROR, message: response.error.message });
 			console.log('login error', response); // eslint-disable-line no-console
 		} else {
 			yield put({ type: USER_LOGGED_IN, userId: response.user_id });

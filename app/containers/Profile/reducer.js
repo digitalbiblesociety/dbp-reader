@@ -9,6 +9,8 @@ import {
 	SELECT_ACCOUNT_OPTION,
 	USER_LOGGED_IN,
 	LOG_OUT,
+	SIGNUP_ERROR,
+	LOGIN_ERROR,
 	// LOAD_USER_DATA,
 	// GET_USER_DATA,
 	// SEND_LOGIN_FORM,
@@ -23,6 +25,8 @@ const initialState = fromJS({
 	activeOption: 'login',
 	userAuthenticated: false,
 	userId: '',
+	loginErrorMessage: '',
+	signupErrorMessage: '',
 });
 
 function profileReducer(state = initialState, action) {
@@ -37,6 +41,10 @@ function profileReducer(state = initialState, action) {
 		return state
 			.set('userId', '')
 			.set('userAuthenticated', false);
+	case SIGNUP_ERROR:
+		return state.set('signupErrorMessage', action.message);
+	case LOGIN_ERROR:
+		return state.set('loginErrorMessage', action.message);
 	default:
 		return state;
 	}

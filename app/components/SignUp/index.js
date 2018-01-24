@@ -83,12 +83,32 @@ class SignUp extends React.PureComponent {
 		}
 	}
 
+	// get signupForm() {
+	// 	return (
+	// 		<form>
+	// 			<input onChange={this.handleEmailChange} className="email" placeholder="Enter E-mail" value={this.state.email} />
+	// 			<input onChange={this.handleFirstName} className="name-inputs" placeholder="Enter First Name" value={this.state.firstName} />
+	// 			<input onChange={this.handleLastName} className="name-inputs" placeholder="Enter Last Name" value={this.state.lastName} />
+	// 			<input type="password" onChange={this.handlePasswordChange} className="first-password" placeholder="Enter Password" value={this.state.password} />
+	// 			<input type="password" onChange={this.handleConfirmPassword} className="second-password" placeholder="Confirm Password" value={this.state.confirmPassword} />
+	// 			<div className="sign-up-button"><span role="button" tabIndex={0} onClick={() => this.handleSignup()} className="text">SIGN UP</span></div>
+	// 		</form>
+	// 	);
+	// }
+
 	render() {
+		const { errorMessage } = this.props;
+
 		return (
 			<React.Fragment>
 				<section className="message">
 					<p>Signing up lets you create Bookmarks, Highlights and Notes, and access them wherever you use Bible.is!</p>
 				</section>
+				{
+					errorMessage ? (
+						<div className="signup-error-message">{errorMessage}</div>
+					) : null
+				}
 				<input onChange={this.handleEmailChange} className="email" placeholder="Enter E-mail" value={this.state.email} />
 				<input onChange={this.handleFirstName} className="name-inputs" placeholder="Enter First Name" value={this.state.firstName} />
 				<input onChange={this.handleLastName} className="name-inputs" placeholder="Enter Last Name" value={this.state.lastName} />
@@ -115,6 +135,7 @@ class SignUp extends React.PureComponent {
 
 SignUp.propTypes = {
 	sendSignupForm: PropTypes.func,
+	errorMessage: PropTypes.string,
 };
 
 export default SignUp;

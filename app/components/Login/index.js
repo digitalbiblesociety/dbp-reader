@@ -31,11 +31,31 @@ class Login extends React.PureComponent {
 			email: this.state.email,
 			password: this.state.password,
 		});
-		this.toggleSignInForm(false);
 	}
 
 	toggleSignInForm = (state) => {
 		this.setState({ signInActive: state });
+	}
+
+	get signInComponent() {
+		const { errorMessage } = this.props;
+
+		return (
+			<React.Fragment>
+				<input className="email" placeholder="Enter E-mail" onChange={this.handleEmailChange} value={this.state.email} />
+				<input className="first-password" type="password" placeholder="Enter Password" onChange={this.handlePasswordChange} value={this.state.password} />
+				<div className="sign-in-button">
+					<input className="login-checkbox" type="checkbox" />
+					<span className="text">KEEP ME LOGGED IN</span>
+					<span role="button" tabIndex={0} className="login-button" onClick={this.handleSendingLogin}>LOGIN</span>
+				</div>
+				{
+					errorMessage ? (
+						<div className="login-error-message">{errorMessage}</div>
+					) : null
+				}
+			</React.Fragment>
+		);
 	}
 
 	render() {
@@ -45,17 +65,7 @@ class Login extends React.PureComponent {
 		return (
 			<React.Fragment>
 				{
-					this.state.signInActive ? (
-						<React.Fragment>
-							<input className="email" placeholder="Enter E-mail" onChange={this.handleEmailChange} value={this.state.email} />
-							<input className="first-password" type="password" placeholder="Enter Password" onChange={this.handlePasswordChange} value={this.state.password} />
-							<div className="sign-in-button">
-								<input className="login-checkbox" type="checkbox" />
-								<span className="text">KEEP ME LOGGED IN</span>
-								<span role="button" tabIndex={0} className="login-button" onClick={this.handleSendingLogin}>LOGIN</span>
-							</div>
-						</React.Fragment>
-					) : (
+					this.state.signInActive ? this.signInComponent : (
 						<div role="button" tabIndex={0} onClick={() => this.toggleSignInForm(true)} className="sign-in">
 							<SvgWrapper className="svg" width="30px" height="30px" fill="#fff" svgid="email" />
 							<span className="text">Sign in with E-mail</span>
@@ -85,6 +95,7 @@ class Login extends React.PureComponent {
 Login.propTypes = {
 	selectAccountOption: PropTypes.func,
 	sendLoginForm: PropTypes.func,
+	errorMessage: PropTypes.string,
 };
 
 export default Login;
