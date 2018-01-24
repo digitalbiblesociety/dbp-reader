@@ -35,6 +35,7 @@ import saga from './saga';
 export class TextSelection extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	componentDidMount() {
 		// TODO: use a conditional to ensure the actions below only happen on the first mount
+		// move these calls to CDM of homepage to ensure they are loaded by the time the user is here
 		this.props.dispatch(getCountries());
 		this.props.dispatch(getLanguages());
 		this.props.dispatch(getTexts());
@@ -70,6 +71,12 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 		}
 	}
 
+	handleVersionSelectionToggle = () => {
+		document.removeEventListener('click', this.handleClickOutside);
+
+		this.props.toggleVersionSelection();
+	}
+
 	render() {
 		const {
 			activeIsoCode,
@@ -100,7 +107,7 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 				<aside ref={this.setRef} className="chapter-text-dropdown">
 					<header>
 						<h2 className="text-selection">{`${sectionTitle} SELECTION`}</h2>
-						<SvgWrapper role="button" tabIndex={0} className="close-icon icon" onClick={toggleVersionSelection} svgid="go-up" opacity=".5" />
+						<SvgWrapper role="button" tabIndex={0} className="close-icon icon" onClick={this.handleVersionSelectionToggle} svgid="go-up" opacity=".5" />
 					</header>
 					<CountryList
 						active={countryListActive}
