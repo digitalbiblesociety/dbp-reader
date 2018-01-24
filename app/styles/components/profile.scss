@@ -52,7 +52,8 @@
 .profile .sign-in-button       {display:flex;align-items:center;justify-content:space-around;width:100%;background-color:$input-background-color;color:$paper-primary;}
 .profile .sign-in-button .text {margin-top:10px;font-size:.9em;font-weight:200;}
 .profile .login-checkbox       {width: unset;}
-.profile .login-button         {cursor:pointer;}
+.profile .login-button         {font-size:0.98em;cursor:pointer;background-color:inherit;border:none;color:$paper-primary;}
+.profile .login-button:hover   {color:$menu-active-color;}
 .profile .login-error-message  {color:red;font-weight:200;}
 
 // Forgot Password

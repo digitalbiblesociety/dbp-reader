@@ -26,7 +26,8 @@ class Login extends React.PureComponent {
 		this.setState({ email: e.target.value });
 	}
 
-	handleSendingLogin = () => {
+	handleSendingLogin = (e) => {
+		e.preventDefault();
 		this.props.sendLoginForm({
 			email: this.state.email,
 			password: this.state.password,
@@ -42,13 +43,15 @@ class Login extends React.PureComponent {
 
 		return (
 			<React.Fragment>
-				<input className="email" placeholder="Enter E-mail" onChange={this.handleEmailChange} value={this.state.email} />
-				<input className="first-password" type="password" placeholder="Enter Password" onChange={this.handlePasswordChange} value={this.state.password} />
-				<div className="sign-in-button">
-					<input className="login-checkbox" type="checkbox" />
-					<span className="text">KEEP ME LOGGED IN</span>
-					<span role="button" tabIndex={0} className="login-button" onClick={this.handleSendingLogin}>LOGIN</span>
-				</div>
+				<form onSubmit={this.handleSendingLogin}>
+					<input className="email" placeholder="Enter E-mail" onChange={this.handleEmailChange} value={this.state.email} />
+					<input className="first-password" type="password" placeholder="Enter Password" onChange={this.handlePasswordChange} value={this.state.password} />
+					<div className="sign-in-button">
+						<input className="login-checkbox" type="checkbox" />
+						<span className="text">KEEP ME LOGGED IN</span>
+						<button type="submit" className="login-button">LOGIN</button>
+					</div>
+				</form>
 				{
 					errorMessage ? (
 						<div className="login-error-message">{errorMessage}</div>
