@@ -16,3 +16,5 @@ export const DELETE_USER = 'app/Profile/DELETE_USER';
 export const LOG_OUT = 'app/Profile/LOG_OUT';
 export const GET_USER_NOTES = 'app/Profile/GET_USER_NOTES';
 export const LOAD_USER_NOTES = 'app/Notes/LOAD_USER_NOTES';
+export const LOGIN_ERROR = 'app/Notes/LOGIN_ERROR';
+export const SIGNUP_ERROR = 'app/Notes/SIGNUP_ERROR';

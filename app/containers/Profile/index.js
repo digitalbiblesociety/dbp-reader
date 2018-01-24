@@ -52,7 +52,7 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 		const insideWidth = event.x >= bounds.x && event.x <= bounds.x + bounds.width;
 		const insideHeight = event.y >= bounds.y && event.y <= bounds.y + bounds.height;
 
-		if (this.ref && !(insideWidth && insideHeight)) {
+		if (this.ref && !(insideWidth && insideHeight) && !this.ref.contains(event.target)) {
 			this.props.toggleProfile();
 			document.removeEventListener('click', this.handleClickOutside);
 		}
@@ -67,8 +67,14 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 	logout = () => this.props.dispatch(logout())
 
 	render() {
-		const { activeOption, userAuthenticated } = this.props.profile;
+		const {
+			activeOption,
+			userAuthenticated,
+			loginErrorMessage,
+			signupErrorMessage,
+		} = this.props.profile;
 		const { toggleProfile } = this.props;
+
 		return (
 			<GenericErrorBoundary affectedArea="Profile">
 				<aside ref={this.setRef} className="profile">
@@ -78,36 +84,39 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 							<svg className="icon"><use xmlnsXlink="http://www.w3.org/1999/xlink" xlinkHref={`${menu}#close`}></use></svg>
 						</span>
 					</header>
-					{
-						userAuthenticated ? (
-							<AccountSettings logout={this.logout} deleteUser={this.deleteUser} updatePassword={this.updatePassword} />
-						) : (
-							<React.Fragment>
-								<div className="form-options">
-									<span role="button" tabIndex={0} onClick={() => this.selectAccountOption('login')} className={activeOption === 'login' ? 'login active' : 'login'}>LOGIN</span>
-									<span role="button" tabIndex={0} onClick={() => this.selectAccountOption('signup')} className={activeOption === 'signup' ? 'signup active' : 'signup'}>SIGN UP</span>
-								</div>
-								{
-									activeOption === 'login' ? (
-										<Login
-											sendLoginForm={this.sendLoginForm}
-											selectAccountOption={this.selectAccountOption}
-										/>
-									) : null
-								}
-								{
-									activeOption === 'signup' ? (
-										<SignUp sendSignupForm={this.sendSignUpForm} />
-									) : null
-								}
-								{
-									activeOption === 'password_reset' ? (
-										<PasswordReset resetPassword={this.resetPassword} />
-									) : null
-								}
-							</React.Fragment>
-						)
-					}
+					<div className="profile-content">
+						{
+							userAuthenticated ? (
+								<AccountSettings logout={this.logout} deleteUser={this.deleteUser} updatePassword={this.updatePassword} />
+							) : (
+								<React.Fragment>
+									<div className="form-options">
+										<span role="button" tabIndex={0} onClick={() => this.selectAccountOption('login')} className={activeOption === 'login' ? 'login active' : 'login'}>LOGIN</span>
+										<span role="button" tabIndex={0} onClick={() => this.selectAccountOption('signup')} className={activeOption === 'signup' ? 'signup active' : 'signup'}>SIGN UP</span>
+									</div>
+									{
+										activeOption === 'login' ? (
+											<Login
+												sendLoginForm={this.sendLoginForm}
+												selectAccountOption={this.selectAccountOption}
+												errorMessage={loginErrorMessage}
+											/>
+										) : null
+									}
+									{
+										activeOption === 'signup' ? (
+											<SignUp sendSignupForm={this.sendSignUpForm} errorMessage={signupErrorMessage} />
+										) : null
+									}
+									{
+										activeOption === 'password_reset' ? (
+											<PasswordReset resetPassword={this.resetPassword} />
+										) : null
+									}
+								</React.Fragment>
+							)
+						}
+					</div>
 				</aside>
 			</GenericErrorBoundary>
 		);
