@@ -89,7 +89,7 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 
 		return (
 			<GenericErrorBoundary affectedArea="Settings">
-				<aside ref={this.setRef} className="settings">
+				<aside ref={this.setRef} className="menu-sidebar settings">
 					<header>
 						<h2 className="section-title">Settings</h2>
 						<span role="button" tabIndex={0} className="close-icon" onClick={this.handleSettingsModalToggle}>

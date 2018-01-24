@@ -30,31 +30,33 @@ import NavigationBar from 'components/NavigationBar';
 import MenuBar from 'components/MenuBar';
 import Information from 'components/Information';
 import Footer from 'components/Footer';
+import SearchContainer from 'containers/SearchContainer';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
 import FadeTransition from 'components/FadeTransition';
 import {
 	getBooks,
 	getAudio,
+	getChapterText,
 	toggleMenuBar,
 	toggleProfile,
-	toggleChapterSelection,
 	toggleNotesModal,
+	toggleSearchModal,
 	toggleSettingsModal,
+	toggleChapterSelection,
 	toggleVersionSelection,
 	toggleInformationModal,
-	setActiveBookName,
-	setActiveChapter,
-	setActiveTextId,
-	setActiveNotesView,
 	setActiveNote,
-	getChapterText,
+	setActiveTextId,
+	setActiveChapter,
+	setActiveBookName,
+	setActiveNotesView,
 	updateSelectedText,
 } from './actions';
 import makeSelectHomePage, {
-	selectActiveBook,
+	selectSettings,
 	selectPrevBook,
 	selectNextBook,
-	selectSettings,
+	selectActiveBook,
 	selectFormattedText,
 } from './selectors';
 import reducer from './reducer';
@@ -162,6 +164,8 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 
 	toggleSettingsModal = () => this.props.dispatch(toggleSettingsModal())
 
+	toggleSearchModal = () => this.props.dispatch(toggleSearchModal())
+
 	toggleChapterSelection = () => this.props.dispatch(toggleChapterSelection())
 
 	toggleVersionSelection = () => this.props.dispatch(toggleVersionSelection())
@@ -179,6 +183,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			isVersionSelectionActive,
 			isChapterSelectionActive,
 			isInformationModalActive,
+			isSearchModalActive,
 			activeBookName,
 			isMenuBarActive,
 			activeChapter,
@@ -209,6 +214,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					toggleProfile={this.toggleProfile}
 					toggleChapterSelection={this.toggleChapterSelection}
 					toggleVersionSelection={this.toggleVersionSelection}
+					toggleSearchModal={this.toggleSearchModal}
 				/>
 				<AudioPlayer audioSource={audioSource} skipBackward={this.getPrevChapter} skipForward={this.getNextChapter} />
 				<TransitionGroup>
@@ -235,21 +241,21 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					}
 					{
 						isSettingsModalActive ? (
-							<FadeTransition classNames="slide-from-right" in={isSettingsModalActive}>
+							<FadeTransition classNames="slide-from-left" in={isSettingsModalActive}>
 								<Settings userSettings={userSettings} toggleSettingsModal={this.toggleSettingsModal} />
 							</FadeTransition>
 						) : null
 					}
 					{
 						isMenuBarActive ? (
-							<FadeTransition classNames="slide-from-left" in={isSettingsModalActive}>
+							<FadeTransition classNames="slide-from-left" in={isMenuBarActive}>
 								<MenuBar toggleMenuBar={this.toggleMenuBar} />
 							</FadeTransition>
 						) : null
 					}
 					{
 						isProfileActive ? (
-							<FadeTransition classNames="slide-from-right" in={isSettingsModalActive}>
+							<FadeTransition classNames="slide-from-right" in={isProfileActive}>
 								<Profile toggleProfile={this.toggleProfile} />
 							</FadeTransition>
 						) : null
@@ -263,8 +269,15 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					}
 					{
 						isInformationModalActive ? (
-							<FadeTransition classNames="slide-from-right" in={isInformationModalActive}>
+							<FadeTransition classNames="slide-from-left" in={isInformationModalActive}>
 								<Information copywrite={copywrite} toggleInformationModal={this.toggleInformationModal} />
+							</FadeTransition>
+						) : null
+					}
+					{
+						isSearchModalActive ? (
+							<FadeTransition classNames="slide-from-right" in={isSearchModalActive}>
+								<SearchContainer toggleSearchModal={this.toggleSearchModal} />
 							</FadeTransition>
 						) : null
 					}

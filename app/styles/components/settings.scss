@@ -1,5 +1,5 @@
 // GLOBAL SETTINGS
-.settings                              {position:fixed;top:0;height:100%;width:320px;background-color:#2C3036;color:rgba(244,245,246,.5)}
+.settings                              {position:fixed;top:0;height:calc(100% - 54px);width:320px;background-color:#2C3036;color:rgba(244,245,246,.5)}
 .settings header                       {position:relative;background:#7E0E2A;color:#FFF;text-align:center;height:54px;line-height:54px}
 .settings header .close-icon           {position:absolute;top:0px;right:10px}
 .settings section                      {padding:15px}

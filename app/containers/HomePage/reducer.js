@@ -20,6 +20,7 @@ import {
 	TOGGLE_MENU_BAR,
 	TOGGLE_RED_LETTER,
 	TOGGLE_NOTES_MODAL,
+	TOGGLE_SEARCH_MODAL,
 	TOGGLE_READERS_MODE,
 	TOGGLE_SETTINGS_MODAL,
 	TOGGLE_JUSTIFIED_TEXT,
@@ -64,6 +65,7 @@ const initialState = fromJS({
 	isMenuBarActive: false,
 	isProfileActive: false,
 	isSettingsModalActive: false,
+	isSearchModalActive: false,
 	isNotesModalActive: false,
 	isVersionSelectionActive: false,
 	isInformationModalActive: false,
@@ -133,6 +135,8 @@ function homePageReducer(state = initialState, action) {
 		return state.set('isChapterSelectionActive', !state.get('isChapterSelectionActive'));
 	case TOGGLE_SETTINGS_MODAL:
 		return state.set('isSettingsModalActive', !state.get('isSettingsModalActive'));
+	case TOGGLE_SEARCH_MODAL:
+		return state.set('isSearchModalActive', !state.get('isSearchModalActive'));
 	case TOGGLE_NOTES_MODAL:
 		return state.set('isNotesModalActive', !state.get('isNotesModalActive'));
 	case TOGGLE_VERSION_SELECTION:

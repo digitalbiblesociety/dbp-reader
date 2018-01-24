@@ -40,17 +40,19 @@ class Information extends React.PureComponent {// eslint-disable-line react/pref
 			copywrite,
 		} = this.props;
 		return (
-			<aside ref={this.setRef} className="settings">
+			<aside ref={this.setRef} className="menu-sidebar settings">
 				<header>
 					<h2 className="section-title">Information</h2>
 					<span role="button" tabIndex={0} className="close-icon" onClick={this.props.toggleInformationModal}>
 						<svg className="icon"><use xmlnsXlink="http://www.w3.org/1999/xlink" xlinkHref={`${menu}#close`}></use></svg>
 					</span>
 				</header>
-				<h1>{copywrite.name}</h1>
-				<h1>{copywrite.mark}</h1>
-				<h1>{copywrite.date}</h1>
-				<h1>{copywrite.country}</h1>
+				<section className="copywrite">
+					<h1 className="text">{copywrite.name}</h1>
+					<h1 className="text">{copywrite.mark}</h1>
+					<h1 className="text">{copywrite.date}</h1>
+					<h1 className="text">{copywrite.country}</h1>
+				</section>
 			</aside>
 		);
 	}

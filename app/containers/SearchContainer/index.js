@@ -36,15 +36,15 @@ export class SearchContainer extends React.PureComponent { // eslint-disable-lin
 		const insideHeight = event.y >= bounds.y && event.y <= bounds.y + bounds.height;
 
 		if (this.ref && !(insideWidth && insideHeight)) {
-			this.props.toggleSearchContainer();
+			this.props.toggleSearchModal();
 			document.removeEventListener('click', this.handleClickOutside);
 		}
 	}
 
-	handleSearchContainerToggle = () => {
+	handleSearchModalToggle = () => {
 		document.removeEventListener('click', this.handleClickOutside);
 
-		this.props.toggleSearchContainer();
+		this.props.toggleSearchModal();
 	}
 
 	render() {
@@ -53,7 +53,7 @@ export class SearchContainer extends React.PureComponent { // eslint-disable-lin
 				<aside ref={this.setRef} className="settings">
 					<header>
 						<h2 className="section-title">Search</h2>
-						<span role="button" tabIndex={0} className="close-icon" onClick={this.handleSearchContainerToggle}>
+						<span role="button" tabIndex={0} className="close-icon" onClick={this.handleSearchModalToggle}>
 							<svg className="icon"><use xmlnsXlink="http://www.w3.org/1999/xlink" xlinkHref={`${menu}#close`}></use></svg>
 						</span>
 					</header>
@@ -64,7 +64,7 @@ export class SearchContainer extends React.PureComponent { // eslint-disable-lin
 }
 
 SearchContainer.propTypes = {
-	toggleSearchContainer: PropTypes.func.isRequired,
+	toggleSearchModal: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
