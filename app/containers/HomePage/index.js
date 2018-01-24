@@ -241,21 +241,21 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					}
 					{
 						isSettingsModalActive ? (
-							<FadeTransition classNames="slide-from-right" in={isSettingsModalActive}>
+							<FadeTransition classNames="slide-from-left" in={isSettingsModalActive}>
 								<Settings userSettings={userSettings} toggleSettingsModal={this.toggleSettingsModal} />
 							</FadeTransition>
 						) : null
 					}
 					{
 						isMenuBarActive ? (
-							<FadeTransition classNames="slide-from-left" in={isSettingsModalActive}>
+							<FadeTransition classNames="slide-from-left" in={isMenuBarActive}>
 								<MenuBar toggleMenuBar={this.toggleMenuBar} />
 							</FadeTransition>
 						) : null
 					}
 					{
 						isProfileActive ? (
-							<FadeTransition classNames="slide-from-right" in={isSettingsModalActive}>
+							<FadeTransition classNames="slide-from-right" in={isProfileActive}>
 								<Profile toggleProfile={this.toggleProfile} />
 							</FadeTransition>
 						) : null
@@ -269,7 +269,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					}
 					{
 						isInformationModalActive ? (
-							<FadeTransition classNames="slide-from-right" in={isInformationModalActive}>
+							<FadeTransition classNames="slide-from-left" in={isInformationModalActive}>
 								<Information copywrite={copywrite} toggleInformationModal={this.toggleInformationModal} />
 							</FadeTransition>
 						) : null

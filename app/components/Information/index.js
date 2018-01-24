@@ -40,7 +40,7 @@ class Information extends React.PureComponent {// eslint-disable-line react/pref
 			copywrite,
 		} = this.props;
 		return (
-			<aside ref={this.setRef} className="settings">
+			<aside ref={this.setRef} className="menu-sidebar settings">
 				<header>
 					<h2 className="section-title">Information</h2>
 					<span role="button" tabIndex={0} className="close-icon" onClick={this.props.toggleInformationModal}>
