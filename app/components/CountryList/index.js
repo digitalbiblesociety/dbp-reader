@@ -7,11 +7,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import SvgWrapper from 'components/SvgWrapper';
+import LoadingSpinner from 'components/LoadingSpinner';
 import flags from 'images/flags.svg';
-// import styled from 'styled-components';
-
-// import { FormattedMessage } from 'react-intl';
-// import messages from './messages';
 
 class CountryList extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	constructor(props) {
@@ -53,7 +50,7 @@ class CountryList extends React.PureComponent { // eslint-disable-line react/pre
 			</div>
 		));
 
-		return components;
+		return components.size ? components : <LoadingSpinner />;
 	}
 
 	filterFunction = (country, filterText) => {

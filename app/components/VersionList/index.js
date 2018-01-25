@@ -7,10 +7,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import SvgWrapper from 'components/SvgWrapper';
-// import styled from 'styled-components';
-
-// import { FormattedMessage } from 'react-intl';
-// import messages from './messages';
+import LoadingSpinner from 'components/LoadingSpinner';
 
 class BiblesTable extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	constructor(props) {
@@ -18,6 +15,44 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 		this.state = {
 			filterText: '',
 		};
+	}
+
+	get filteredVersionList() {
+		const {
+			bibles,
+			activeIsoCode,
+			activeTextName,
+		} = this.props;
+		const { filterText } = this.state;
+		const filteredBibles = filterText ? bibles.filter((bible) => this.filterFunction(bible, filterText, activeIsoCode)) : bibles.filter((bible) => bible.get('iso') === activeIsoCode);
+
+		const components = filteredBibles.map((bible) => (
+			<div
+				className="version-item-button"
+				tabIndex="0"
+				role="button"
+				key={`${bible.get('abbr')}${bible.get('date')}`}
+				onClick={() => this.handleVersionListClick(bible)}
+			>
+				{
+					bible.get('filesets').includes('text_rich') || bible.get('filesets').includes('text_plain') ? (
+						<SvgWrapper className="svg active" height="20px" width="20px" svgid="text" />
+					) : (
+						<SvgWrapper className="svg inactive" height="20px" width="20px" svgid="text" />
+					)
+				}
+				{
+					bible.get('filesets').includes('audio_drama') ? (
+						<SvgWrapper className="svg active" height="20px" width="20px" svgid="volume" />
+					) : (
+						<SvgWrapper className="svg inactive" height="20px" width="20px" svgid="volume" />
+					)
+				}
+				<h4 className={bible.get('abbr') === activeTextName ? 'active-version' : ''}>{bible.get('name')}</h4>
+			</div>
+		));
+
+		return components.size ? components : <LoadingSpinner />;
 	}
 
 	filterFunction = (bible, filterText, iso) => {
@@ -37,23 +72,37 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 		return false;
 	}
 
+	handleVersionListClick = (bible) => {
+		const {
+			setCountryListState,
+			toggleLanguageList,
+			toggleVersionList,
+			toggleTextSelection,
+			setActiveText,
+			getAudio,
+		} = this.props;
+
+		if (bible) {
+			const abbr = bible.get('abbr');
+
+			getAudio({ list: bible.get('filesets') });
+			setActiveText({ textId: abbr, textName: abbr, filesets: bible.get('filesets') });
+			toggleTextSelection();
+		} else {
+			setCountryListState({ state: false });
+			toggleLanguageList({ state: false });
+			toggleVersionList({ state: true });
+		}
+	}
+
 	handleChange = (e) => this.setState({ filterText: e.target.value });
 
 	render() {
 		const {
-			bibles,
-			setCountryListState,
-			toggleTextSelection,
-			toggleLanguageList,
-			setActiveText,
 			activeTextName,
-			activeIsoCode,
 			active,
-			toggleVersionList,
-			getAudio,
 		} = this.props;
-		const { filterText } = this.state;
-		const filteredBibles = filterText ? bibles.filter((bible) => this.filterFunction(bible, filterText, activeIsoCode)) : bibles.filter((bible) => bible.get('iso') === activeIsoCode);
+
 		if (active) {
 			return (
 				<div className="text-selection-section">
@@ -64,39 +113,7 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 					</div>
 					<input className="text-selection-input" onChange={this.handleChange} placeholder="SEARCH VERSIONS" value={this.state.filterText} />
 					<div className="language-name-list">
-						{
-							filteredBibles.map((bible) => (
-								<div
-									className="version-item-button"
-									tabIndex="0"
-									role="button"
-									key={`${bible.get('abbr')}${bible.get('date')}`}
-									onClick={() => {
-										const abbr = bible.get('abbr');
-
-										getAudio({ list: bible.get('filesets') });
-										setActiveText({ textId: abbr, textName: abbr, filesets: bible.get('filesets') });
-										toggleTextSelection();
-									}}
-								>
-									{
-										bible.get('filesets').includes('text_rich') || bible.get('filesets').includes('text_plain') ? (
-											<SvgWrapper className="svg active" height="20px" width="20px" svgid="text" />
-										) : (
-											<SvgWrapper className="svg inactive" height="20px" width="20px" svgid="text" />
-										)
-									}
-									{
-										bible.get('filesets').includes('audio_drama') ? (
-											<SvgWrapper className="svg active" height="20px" width="20px" svgid="volume" />
-										) : (
-											<SvgWrapper className="svg inactive" height="20px" width="20px" svgid="volume" />
-										)
-									}
-									<h4 className={bible.get('abbr') === activeTextName ? 'active-version' : ''}>{bible.get('name')}</h4>
-								</div>
-							))
-						}
+						{this.filteredVersionList}
 					</div>
 				</div>
 			);
@@ -106,7 +123,7 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 				className="text-selection-section closed"
 				tabIndex="0"
 				role="button"
-				onClick={() => { toggleVersionList({ state: true }); setCountryListState({ state: false }); toggleLanguageList({ state: false }); }}
+				onClick={() => this.handleVersionListClick()}
 			>
 				<div className="text-selection-title">
 					<SvgWrapper height="25px" width="25px" fill="#fff" svgid="resources" />
