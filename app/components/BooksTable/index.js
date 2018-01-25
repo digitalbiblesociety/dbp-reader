@@ -22,8 +22,14 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 		const book = e.target;
 		const bookButton = book.parentElement;
 		const bookContainer = bookButton.parentElement;
+
 		bookContainer.scrollTop = (bookButton.offsetTop - bookContainer.offsetTop) - 5;
-		this.props.setSelectedBookName(name);
+
+		if (this.props.selectedBookName === name) {
+			this.props.setSelectedBookName('');
+		} else {
+			this.props.setSelectedBookName(name);
+		}
 	}
 
 	handleChapterClick = (book, chapter) => {
