@@ -13,7 +13,7 @@ import messages from './messages';
 function SettingsToggle({ action, name, checked }) {
 	return (
 		<div className="checkbox-settings">
-			<label>
+			<label className={checked ? 'active' : ''}>
 				<FormattedMessage {...messages[name]} />
 				<div className="switch">
 					<input type="checkbox" checked={checked} onChange={action} />
