@@ -97,11 +97,13 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 			getAudio,
 		} = this.props;
 		let sectionTitle = 'LANGUAGE';
+
 		if (versionListActive) {
 			sectionTitle = 'VERSION';
 		} else if (countryListActive) {
 			sectionTitle = 'COUNTRY';
 		}
+
 		return (
 			<GenericErrorBoundary affectedArea="TextSelection">
 				<aside ref={this.setRef} className="chapter-text-dropdown">

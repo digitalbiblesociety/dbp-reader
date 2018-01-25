@@ -12,9 +12,8 @@ const selectCountries = () => createSelector(
 	selectTextSelectionDomain,
 	(substate) => {
 		const countries = substate.get('countries');
-		const filteredCountries = countries.filter((country) => country.get('languages').size > 0);
 
-		return filteredCountries;
+		return countries.filter((country) => country.get('languages').size > 0);
 	}
 );
 
@@ -31,7 +30,10 @@ const selectLanguages = () => createSelector(
 		const activeCountry = substate.get('activeCountryName');
 		const activeCountryLanguages = countryMap.getIn([activeCountry, 'languages']);
 
-		return activeCountry === 'ANY' ? languages : languages.filter((language) => activeCountryLanguages.has(language.get('iso_code')));
+		if (activeCountryLanguages && activeCountry !== 'ANY') {
+			return languages.filter((language) => activeCountryLanguages.has(language.get('iso_code')));
+		}
+		return languages;
 	}
 );
 
