@@ -39,8 +39,10 @@
 .font-sizes-slider                     {width:80%;margin-left:25px;}
 
 // CHECKBOX SETTINGS
-.checkbox-settings label               {height:40px;display:block}
-.checkbox-settings label span          {float: left}
+.checkbox-settings label               {height:40px;display:block;}
+.checkbox-settings label.active        {color:#fff;}
+.checkbox-settings label span          {float: left;cursor:pointer;}
+.checkbox-settings label span:hover    {color:#fff;}
 
 // SWITCH
 .switch                                {position:relative;display:inline-block;width:37px;height:34px;float:right}
