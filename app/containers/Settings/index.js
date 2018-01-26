@@ -63,7 +63,16 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 		this.props.toggleSettingsModal();
 	}
 
-	updateTheme = ({ theme }) => this.props.dispatch(updateTheme({ theme }));
+	updateTheme = ({ theme }) => {
+		if (theme === 'paper') {
+			document.documentElement.style.setProperty('--navbar-header-background', 'rgb(101, 55, 45');
+		} else if (theme === 'dark') {
+			document.documentElement.style.setProperty('--navbar-header-background', 'rgb(39, 42, 47');
+		} else {
+			document.documentElement.style.setProperty('--navbar-header-background', 'rgb(158, 30, 53');
+		}
+		this.props.dispatch(updateTheme({ theme }));
+	}
 	updateFontType = ({ font }) => this.props.dispatch(updateFontType({ font }));
 	updateFontSize = ({ size }) => this.props.dispatch(updateFontSize({ size }));
 	toggleReadersMode = () => this.props.dispatch(toggleReadersMode());
