@@ -217,7 +217,7 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 						) : null
 					}
 					<audio ref={this.handleRef} className="audio-player" src={source}></audio>
-					<SvgWrapper onClick={(e) => { e.stopPropagation(); this.toggleAudioPlayer(); }} width="50px" height="5px" className="audio-gripper" fill="#aeaeae" svgid="gripper" />
+					<SvgWrapper onClick={(e) => { e.stopPropagation(); this.toggleAudioPlayer(); }} width="50px" height="5px" className={this.state.playerState ? 'audio-gripper' : 'audio-gripper closed'} fill="#aeaeae" svgid="gripper" />
 				</div>
 			</GenericErrorBoundary>
 		);

@@ -6,9 +6,6 @@
 .audio-player-container .item:hover    {opacity:.65;}
 .audio-player-container .svgitem:hover {opacity:.65;}
 .audio-player                          {display:none;}
-.audio-player-container.open           {position:inherit;top:54px;}
-// Will need to adjust this once I figure out the correct way to hide the audio player
-.audio-player-container.closed         {position:absolute;@include css4{background-color:rgba(0,0,0,0);};top:4px;:not(:last-child){z-index:-1;}}
 
 // Speed Control Styles
 .speed-control-container-container    {display:block;top:-6px;left:calc(100vw - 150px);position:relative;}
@@ -18,8 +15,8 @@
 .speed-control-container .item.active {@include css4{color:var(--menu-active-color);};}
 
 // Progress Bar Styles
-.progress-bar       {width:50%;@include css4{background-color:var(--audio-player-progress-background);};height:2px;cursor:pointer;}
-.progress-bar:focus {outline: none;}
+.progress-bar         {width:50%;@include css4{background-color:var(--audio-player-progress-background);};height:3px;cursor:pointer;}
+.progress-bar:focus   {outline: none;}
 
 // Gripper Styles
 .audio-gripper {display:block;position:relative;left:calc(50% - 25px);bottom:-50%;cursor:pointer;}
@@ -37,3 +34,10 @@
 .elipsis .container                    {position:absolute;padding:15px;display:flex;justify-content:space-between;flex-direction:column;width:320px;height:120px;@include css4{color:var(--menu-font-color);border:1px solid var(--menu-active-color);background-color:var(--transparent-grey);};}
 .container div                         {display:flex;align-items:center;}
 .container span                        {margin-left:15px;}
+
+// Media Queries
+@media only screen and (max-width:600px) {
+  .audio-player-background {position:fixed;width:100%;bottom:56px;}
+  .audio-gripper {bottom:50px;}
+  .audio-gripper.closed {bottom:0;}
+}

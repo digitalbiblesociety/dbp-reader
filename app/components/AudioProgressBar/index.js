@@ -11,7 +11,7 @@ import styled from 'styled-components';
 const Timeline = styled.div`
 	width: ${(props) => props.percent > 0 ? `${props.percent}%` : '0px'};
 	background-color: rgb(98,177,130);
-	height: 2px;
+	height: 3px;
 `;
 
 const Tracker = styled.div`
@@ -20,7 +20,7 @@ const Tracker = styled.div`
   border-radius: 50%;
   background: rgb(98,177,130);
   margin-left: ${(props) => props.marginleft}px;
-  margin-top: -8px;
+  margin-top: -9px;
   cursor: pointer;
 `;
 
