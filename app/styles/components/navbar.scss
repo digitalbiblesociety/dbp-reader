@@ -1,6 +1,11 @@
-.nav-container                        {display:flex;justify-content:space-around;align-items:center;background:$header-footer;height:54px;width:100%;}
+.nav-container                        {
+  @include css4 {
+    background:var(--header-footer-background);
+  };
+  display:flex;justify-content:space-around;align-items:center;height:54px;width:100%;
+}
 .nav-container .logo                  {width:120px;}
-.nav-container .chapter-selector      {text-align:center;font-size:1.3em;color:#fff;}
+.nav-container .chapter-selector      {text-align:center;font-size:1.3em;@include css4{color:var(--menu-font-color)}}
 .nav-container .right-buttons         {justify-content:flex-end;}
 .nav-container .right-buttons .button {margin-right:15px;}
 .nav-container .left-buttons          {justify-content:flex-start;}

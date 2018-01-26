@@ -1,6 +1,6 @@
 // GLOBAL SETTINGS
-.settings                              {position:fixed;top:0;height:calc(100% - 54px);width:320px;background-color:#2C3036;color:rgba(244,245,246,.5)}
-.settings header                       {position:relative;background:#7E0E2A;color:#FFF;text-align:center;height:54px;line-height:54px}
+.settings                              {position:fixed;top:0;height:calc(100% - 54px);width:320px;@include css4{background-color:var(--menu-secondary-background-color);color:var(--settings-font-color);};}
+.settings header                       {position:relative;text-align:center;height:54px;line-height:54px;@include css4{background-color:var(--menu-header-background);color:var(--menu-font-color);};}
 .settings header .close-icon           {position:absolute;top:0px;right:10px}
 .settings section                      {padding:15px}
 .settings .option:hover                {color:rgba(244,245,246,1);cursor:pointer}
@@ -14,16 +14,16 @@
 //.color-schemes .option.paper           {background-color:$paper-sidebar;border-color:$paper-secondary}
 //.color-schemes .title                  {text-transform:uppercase;font-size:14px;font-weight:bold;text-align:center}
 .color-schemes                         {display:flex;align-items:center;justify-content:space-around;margin-top:10px;}
-.color-schemes .option                 {background-color:$dark-primary;border-radius:50%;width:50px;height:50px;}
-.color-schemes .option.red             {background-color:$color-primary;border-color:$color-secondary}
-.color-schemes .option.paper           {background-color:$paper-sidebar;border-color:$paper-secondary}
-.color-schemes .option.active          {border:4px solid rgb(26,29,33);}
-.color-schemes .option.active:after    {content:"";margin:-4px -4px -4px -4px;border-radius:50%;width:50px;height:50px;border:2px solid $menu-active-color;display:block;}
+.color-schemes .option                 {@include css4{background-color:var(--dark-theme-primary);};border-radius:50%;width:50px;height:50px;}
+.color-schemes .option.red             {@include css4{background-color:var(--red-theme-primary);border-color:var(--menu-background-color)};}
+.color-schemes .option.paper           {@include css4{background-color:var(--paper-theme-primary);border-color:var(--menu-background-color)};}
+.color-schemes .option.active          {@include css4{border:4px solid var(--menu-background-color)};}
+.color-schemes .option.active:after    {content:"";margin:-4px -4px -4px -4px;border-radius:50%;width:50px;height:50px;@include css4{border:2px solid var(--menu-active-color);};display:block;}
 
 // FONT SETTINGS
 .font-settings .option                 {display:inline-block;text-align:center;font-size:36px;width:33%}
 .font-settings .option small           {display:block;text-transform:uppercase;font-size:14px}
-.font-settings .option.active          {color:#fff;}
+.font-settings .option.active          {@include css4{color:var(--menu-active-color);};}
 
 // FONT SIZES
 .font-sizes                            {height:60px;align-items:flex-end;display:flex;justify-content:space-between;line-height:.75;}
@@ -33,21 +33,22 @@
 .font-sizes .option.medium             {font-size:2rem}
 .font-sizes .option.large              {font-size:2.5rem}
 .font-sizes .option.largest            {font-size:3rem}
-.font-sizes .option.active             {color:#fff;}
+.font-sizes .option.active             {@include css4{color:var(--menu-active-color);};}
 
 // FONT SIZES SLIDER
 .font-sizes-slider                     {width:80%;margin-left:25px;}
 
 // CHECKBOX SETTINGS
 .checkbox-settings label               {height:40px;display:block;}
-.checkbox-settings label.active        {color:#fff;}
+.checkbox-settings label.active        {@include css4{color:var(--menu-active-color);};}
 .checkbox-settings label span          {float: left;cursor:pointer;}
-.checkbox-settings label span:hover    {color:#fff;}
+.checkbox-settings label span:hover    {@include css4{color:var(--menu-active-color);};}
 
 // SWITCH
+// make these variables in case they need to change
 .switch                                {position:relative;display:inline-block;width:37px;height:34px;float:right}
 .switch input                          {display:none;}
 .switch .slider                        {position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:#1B1F24;transition:.4s;height:14px;border-radius:34px;}
-.switch .slider:before                 {position:absolute;content:"";height:20px;width:20px;left:0;bottom:-3px;background-color:#6E747F;transition:.4s;border-radius:50%;}
-.switch input:checked + .slider        {background-color:rgba(111,188,143,.5)}
-.switch input:checked + .slider:before {background-color:#6FBC8F;transform:translateX(17px)}
+.switch .slider:before                 {position:absolute;content:"";height:20px;width:20px;left:0;bottom:-3px;@include css4{background-color:var(--menu-active-color);};transition:.4s;border-radius:50%;}
+.switch input:checked + .slider        {@include css4{background-color:var(--manu-active-color);};opacity:0.5;}
+.switch input:checked + .slider:before {@include css4{background-color:var(--menu-active-color);}transform:translateX(17px)}

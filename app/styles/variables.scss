@@ -1,25 +1,125 @@
 $font-primary: 'Open Sans', sans-serif;
-
 $color-primary: #9e1e35;
 $color-secondary: #8e1e35;
-
 $dark-primary: #1b1f24;
 $dark-secondary: #2c3036;
-
 $paper-primary: #f1f1f1;
 $paper-secondary: rgba(112,63,51,.5);
 $paper-sidebar: #F8E4D3;
 $paper-background: #FDF9F3;
-
 $login-email-color: #6E747F;
 $login-facebook-color: #4267B2;
 $login-google-color: #DC4E41;
 $login-twitter-color: rgb(42,163,239);
-
 $menu-active-color: rgb(98,177,130);
 $header-footer: rgb(158,30,53);
 $input-background-color: rgb(110,116,127);
-
 $prev-next-button-color: rgba(158, 30, 53, 0.253);
-
 $default-highlight-color: rgb(166, 63, 77);
+
+$css4: true;
+$compatibility: true;
+//it is nessesary to define the variables in sass map instead of :root, for compatibility reasons.
+$variables: (
+        --header-footer-background: rgb(148, 27, 47),
+        --audio-player-background: rgb(78, 70, 75),
+        --text-selection-color: rgb(216, 182, 185),
+        --text-contextmenu-background: rgb(71, 64, 70),
+        --text-arrow-color: rgb(229, 195, 195),
+        --settings-font-color: rgb(99, 105, 116),
+        --menu-font-color: rgb(255, 255, 255),
+        --menu-background-color: rgb(39, 42, 47),
+        --menu-secondary-background-color: rgb(26, 29, 33),
+        --menu-hover-color: rgb(98, 177, 130),
+        --menu-active-color: rgb(98, 177, 130),
+        --menu-title-text-color: rgb(255, 255, 255),
+        --menu-secondary-header-background: rgb(39, 42, 47),
+        --menu-header-background: rgb(115, 16, 37),
+        --application-input-background: rgb(110, 116, 127),
+        --application-placeholder-color: rgb(255, 255, 255),
+        --application-background: rgb(253, 248, 241),
+        --application-base-color: rgb(50, 53, 58),
+        --dark-theme-primary: #1b1f24,
+        --red-theme-primary: #9e1e35,
+        --paper-theme-primary: #F8E4D3,
+        --application-font-type: 'Open Sans',
+        --text-super-color: rgb(33, 33, 33),
+        --menu-inactive-svg-color: rgb(61,65,68),
+        --dark-caret-color: #000,
+        --light-caret-color: #fff,
+        --transparent-grey: rgba(0,0,0,.8),
+        --audio-player-progress-background: rgb(32,34,39),
+        --loading-spinner-color: #aeaeae
+//--application-base-font-size:
+);
+
+//Here we transfer the variables from the map to the :root element
+@if($css4) {
+  :root {
+    @each $variable, $value in $variables {
+      #{$variable}: $value;
+    }
+  }
+}
+
+//this is the "magic" function
+@function var($variable) {
+  @if($css4) {
+    @return unquote('var(' + $variable + ')');
+  } @else {
+    @return map-get($variables, $variable);
+  }
+}
+
+//the mixin temporally sets the $css4 variable to false, compiles the css3 fallback, then makes the variable true again and compiles the css4 code. It should contain properties that use css4 variables, otherwise there will be unnessesary duplication of properties.
+@mixin css4 {
+  @if ($css4) {
+    $css4-backup: $css4;
+    @if($compatibility) {
+      $css4: false !global;
+      @content;
+    }
+    $css4: true !global;
+    @content;
+    $css4: $css4-backup;
+  }
+  @else {
+    @content;
+  }
+}
+
+//the body does not use fallback, its styles will be visible only in compatible browsers
+//body {
+//  max-width: 500px;
+//  margin: 0 auto;
+//  padding: 30px;
+//  color: var(--color);
+//  background: var(--background);
+//  font: {
+//    family: var(--font);
+//  };
+//}
+//
+//// the p and button tags uses the css4 mixin so a fall-back is provided and they will work on all browsers.
+//p {
+//  text-align: justify;
+//  @include css4 {
+//    color: var(--color);
+//  }
+//}
+//
+//button {
+//  @include css4 {
+//    background: var(--color);
+//    color: var(--background);
+//    border: 2px solid currentcolor;
+//    box-shadow: 0 0 0 5px var(--color);
+//  };
+//  &:hover {
+//    @include css4 {
+//      background: var(--background);
+//      color: var(--color);
+//      box-shadow: 0 0 0 5px var(--background);
+//    }
+//  }
+//}

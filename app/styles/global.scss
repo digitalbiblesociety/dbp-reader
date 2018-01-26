@@ -1,11 +1,11 @@
 *, *::after, *::before {box-sizing:border-box;margin:0;padding:0}
 body, html 	           {height:100%}
-body 				   {margin:0 auto;color:#222;font-size:.98em;font-family:$font-primary}
+body 				   {@include css4{color:var(--application-base-color);font-family:var(--application-font-type), sans-serif;};margin:0 auto;font-size:.98em;}
 div:focus              {outline:none;}
 a                      {text-decoration:none}
-aside                  {position:absolute;top:0;right:0;height:100%;width:320px;background-color:#2C3036;color:rgba(244,245,246,.5);}
+aside                  {position:absolute;top:0;right:0;height:100%;width:320px;}
 main                   {overflow-x:hidden;overflow-y:scroll;max-height:100%;}
-#app                   {background-color:$paper-background;}
+#app                   {@include css4{background-color:var(--application-background);};}
 #app > div             {height:100vh;}
 // images
 img                    {max-width:100%;height:auto}
@@ -24,12 +24,17 @@ body .twitter  {background-color:$login-twitter-color;}
 
 // Change Highlighting Color
 ::selection {
-  background: $default-highlight-color; /* WebKit/Blink Browsers */
-  color: $paper-primary;
+  @include css4{
+    background: var(--text-selection-color);
+    color: var(--application-base-color);
+  }
 }
+
 ::-moz-selection {
-  background: $default-highlight-color; /* Gecko Browsers */
-  color: $paper-primary;
+  @include css4{
+    background: var(--text-selection-color);
+    color: var(--application-base-color);
+  }
 }
 
 // Input Box Styles

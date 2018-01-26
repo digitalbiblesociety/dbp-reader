@@ -14,6 +14,7 @@ import SettingsToggle from 'components/SettingsToggle/index';
 import menu from 'images/menu.svg';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
 import Slider from 'rc-slider/lib/Slider';
+import applyTheme from './themes';
 import makeSelectSettings from './selectors';
 import reducer from './reducer';
 import {
@@ -34,6 +35,13 @@ import {
 export class Settings extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	componentDidMount() {
 		document.addEventListener('click', this.handleClickOutside);
+	}
+
+	componentWillReceiveProps(nextProps) {
+		const activeTheme = nextProps.userSettings.get('activeTheme');
+		if (activeTheme !== this.props.userSettings.get('acitveTheme')) {
+			applyTheme(activeTheme);
+		}
 	}
 
 	componentWillUnmount() {
@@ -63,7 +71,9 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 		this.props.toggleSettingsModal();
 	}
 
-	updateTheme = ({ theme }) => this.props.dispatch(updateTheme({ theme }));
+	updateTheme = ({ theme }) => {
+		this.props.dispatch(updateTheme({ theme }));
+	}
 	updateFontType = ({ font }) => this.props.dispatch(updateFontType({ font }));
 	updateFontSize = ({ size }) => this.props.dispatch(updateFontSize({ size }));
 	toggleReadersMode = () => this.props.dispatch(toggleReadersMode());
@@ -99,7 +109,7 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 					<section className="color-schemes">
 						<span role="button" tabIndex={0} onClick={() => this.updateTheme({ theme: 'paper' })} className={`option paper${activeTheme === 'paper' ? ' active' : ''}`}>
 						</span>
-						<span role="button" tabIndex={0} onClick={() => this.updateTheme({ theme: 'default' })} className={`option red${activeTheme === 'default' ? ' active' : ''}`}>
+						<span role="button" tabIndex={0} onClick={() => this.updateTheme({ theme: 'red' })} className={`option red${activeTheme === 'default' ? ' active' : ''}`}>
 						</span>
 						<span role="button" tabIndex={0} onClick={() => this.updateTheme({ theme: 'dark' })} className={`option dark${activeTheme === 'dark' ? ' active' : ''}`}>
 						</span>
