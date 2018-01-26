@@ -2,6 +2,7 @@
  *
  * Settings
  *
+ * NOTE: The <Slider /> component requires inline styles to be passed into it
  */
 
 import React from 'react';
@@ -14,7 +15,7 @@ import SettingsToggle from 'components/SettingsToggle/index';
 import menu from 'images/menu.svg';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
 import Slider from 'rc-slider/lib/Slider';
-import applyTheme from './themes';
+import { applyTheme, applyFontFamily, applyFontSize } from './themes';
 import makeSelectSettings from './selectors';
 import reducer from './reducer';
 import {
@@ -39,8 +40,19 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 
 	componentWillReceiveProps(nextProps) {
 		const activeTheme = nextProps.userSettings.get('activeTheme');
+		const activeFontFamily = nextProps.userSettings.get('activeFontType');
+		const activeFontSize = nextProps.userSettings.get('activeFontSize');
+
 		if (activeTheme !== this.props.userSettings.get('acitveTheme')) {
 			applyTheme(activeTheme);
+		}
+
+		if (activeFontFamily !== this.props.userSettings.get('activeFontType')) {
+			applyFontFamily(activeFontFamily);
+		}
+
+		if (activeFontSize !== this.props.userSettings.get('activeFontSize')) {
+			applyFontSize(activeFontSize);
 		}
 	}
 
@@ -109,7 +121,7 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 					<section className="color-schemes">
 						<span role="button" tabIndex={0} onClick={() => this.updateTheme({ theme: 'paper' })} className={`option paper${activeTheme === 'paper' ? ' active' : ''}`}>
 						</span>
-						<span role="button" tabIndex={0} onClick={() => this.updateTheme({ theme: 'red' })} className={`option red${activeTheme === 'default' ? ' active' : ''}`}>
+						<span role="button" tabIndex={0} onClick={() => this.updateTheme({ theme: 'red' })} className={`option red${activeTheme === 'red' ? ' active' : ''}`}>
 						</span>
 						<span role="button" tabIndex={0} onClick={() => this.updateTheme({ theme: 'dark' })} className={`option dark${activeTheme === 'dark' ? ' active' : ''}`}>
 						</span>

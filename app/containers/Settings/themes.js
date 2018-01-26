@@ -67,10 +67,30 @@ const themes = {
 	red,
 };
 
-const applyTheme = (theme) => {
+const fonts = {
+	sans: '"Noto Sans", (Google Font), Helvetica, sans serif',
+	serif: '"Alegreva", (Google Font), "Palatino Linotype", Palatino, serif',
+	slab: '"Roboto Slab", (Google Font), Rockwell, Courier, monospace',
+};
+
+const sizes = {
+	1: '0.78em',
+	2: '0.88em',
+	3: '0.98em',
+	4: '1.08em',
+	5: '1.18em',
+};
+
+export const applyFontFamily = (fontFamily) => {
+	document.documentElement.style.setProperty('--application-font-family', fonts[fontFamily]);
+};
+
+export const applyFontSize = (fontSize) => {
+	document.documentElement.style.setProperty('--application-base-font-size', sizes[fontSize]);
+};
+
+export const applyTheme = (theme) => {
 	Object.entries(themes[theme]).forEach((property) => {
 		document.documentElement.style.setProperty(property[0], property[1]);
 	});
 };
-
-export default applyTheme;

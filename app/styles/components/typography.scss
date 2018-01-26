@@ -13,7 +13,9 @@
 }
 
 .chapter {
-  font-family:"Open Sans";
+  @include css4 {
+    font-family:var(--application-font-family);
+  };
   line-height:1.75;
   text-align:justify;
   max-width:800px;

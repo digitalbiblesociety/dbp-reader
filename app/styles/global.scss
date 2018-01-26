@@ -1,6 +1,14 @@
 *, *::after, *::before {box-sizing:border-box;margin:0;padding:0}
 body, html 	           {height:100%}
-body 				   {@include css4{color:var(--application-base-color);font-family:var(--application-font-type), sans-serif;};margin:0 auto;font-size:.98em;}
+body 				   {
+  --test-font-family: "Noto Sans", (Google Font), sans serif, Helvetica;
+  @include css4{
+    color:var(--application-base-color);
+    font-family:var(--test-font-family);
+    font-size:var(--application-base-font-size);
+  };
+  margin:0 auto;
+}
 div:focus              {outline:none;}
 a                      {text-decoration:none}
 aside                  {position:absolute;top:0;right:0;height:100%;width:320px;}
@@ -49,7 +57,7 @@ div:focus  {outline:none;}
 span:focus {outline:none;}
 
 // font sizes
-h2 {font-size: 1.3em;}
+h2 {@include css4{font-size:calc(var(--application-base-font-size) * 1.4)};}
 
 // GRID
 section                 {position:relative}
