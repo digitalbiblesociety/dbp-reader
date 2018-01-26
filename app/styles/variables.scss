@@ -42,8 +42,15 @@ $variables: (
         --dark-theme-primary: #1b1f24,
         --red-theme-primary: #9e1e35,
         --paper-theme-primary: #F8E4D3,
-        --application-font-type: 'Open Sans'
-        //--application-base-font-size:
+        --application-font-type: 'Open Sans',
+        --text-super-color: rgb(33, 33, 33),
+        --menu-inactive-svg-color: rgb(61,65,68),
+        --dark-caret-color: #000,
+        --light-caret-color: #fff,
+        --transparent-grey: rgba(0,0,0,.8),
+        --audio-player-progress-background: rgb(32,34,39),
+        --loading-spinner-color: #aeaeae
+//--application-base-font-size:
 );
 
 //Here we transfer the variables from the map to the :root element

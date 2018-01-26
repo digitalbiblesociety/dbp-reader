@@ -22,9 +22,10 @@
 
   sup {
     font-size:smaller;
-    color:#333;
+    @include css4 {
+      color:var(--text-super-color);
+    }
   }
-
 }
 
 /* Available font stacks for options in settings

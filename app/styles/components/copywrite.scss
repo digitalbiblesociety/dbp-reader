@@ -1,4 +1,4 @@
 // Leaving unused class here because the copywrite component
 // will need more styling once we have all the correct data
 .copywrite {}
-.copywrite .text {color:$paper-primary;margin-top:5px;}
+.copywrite .text {@include css4{color:var(--menu-font-color);};margin-top:5px;}

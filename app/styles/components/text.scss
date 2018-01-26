@@ -1,6 +1,9 @@
 .text-container {
 	display: flex;
 	height:calc(100vh - 162px);
+	@include css4 {
+		color: var(--application-base-color);
+	}
 }
 
 .verse-number {

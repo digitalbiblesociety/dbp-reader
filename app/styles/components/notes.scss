@@ -15,8 +15,8 @@
 
 // Edit Notes Section
 .edit-notes .date-title     {display:flex;align-items:center;height:50px;width:100%;padding:15px;}
-.date-title .date           {@include css4{color:var(--menu-active-color)};}
-.date-title .title          {@include css4{color:var(--menu-font-color)};margin-left:15px;font-style:italic;width:100%;font-weight:200;}
+.date-title .date           {@include css4{color:var(--menu-active-color);};}
+.date-title .title          {@include css4{color:var(--menu-font-color);};margin-left:15px;font-style:italic;width:100%;font-weight:200;}
 
 .edit-notes .verse-dropdown       {display:flex;align-items:center;justify-content:space-around;width:100%;height:40px;padding:15px;}
 .verse-dropdown .version-dropdown {@include css4{color:var(--menu-active-color)};}
@@ -31,7 +31,7 @@
 .add-verse .plus       {fill:currentColor;}
 .add-verse .plus:hover {opacity:0.65;cursor:pointer}
 .add-verse .text       {@include css4{color:var(--menu-font-color)};margin-left:15px;font-style:italic;}
-.edit-notes .note-text {padding:15px;@include css4{color:var(--menu-font-color)};height:100px;overflow-y:scroll;overflow-x:hidden;width:100%;font-style:italic;margin-top:15px;font-weight:200;caret-color:#fff;}
+.edit-notes .note-text {padding:15px;@include css4{color:var(--menu-font-color);caret-color:var(--light-caret-color);};height:100px;overflow-y:scroll;overflow-x:hidden;width:100%;font-style:italic;margin-top:15px;font-weight:200;}
 
 .add-verse-expanded                    {padding:15px;height:100px;width:320px;display:flex;@include css4 {background-color:var(--menu-background-color);border:1px solid var(--menu-active-color);};}
 .add-verse-expanded .book-table        {width:280px;}
@@ -47,7 +47,7 @@
 .searchbar ::-webkit-input-placeholder {@include css4{color:var(--application-placeholder-color);}padding-left:45px;}
 .searchbar ::-moz-placeholder          {@include css4{color:var(--application-placeholder-color);}padding-left:45px;}
 .searchbar :-ms-input-placeholder      {@include css4{color:var(--application-placeholder-color);}padding-left:45px;}
-.search                                {width:calc(100% - 50px);background:url("../images/input_search_icon.svg") no-repeat 5px 10px;border:none;height:50px;@include css4{background-color:var(--application-input-background);color:var(--menu-font-color);};font-size:.9em;font-weight:200;caret-color:#000;padding-left:10px;}
+.search                                {width:calc(100% - 50px);background:url("../images/input_search_icon.svg") no-repeat 5px 10px;border:none;height:50px;@include css4{background-color:var(--application-input-background);color:var(--menu-font-color);caret-color:var(--dark-caret-color);};font-size:.9em;font-weight:200;padding-left:10px;}
 
 .note-list                    {height:calc(100% - 100px);max-height:calc(100% - 100px);overflow-y:scroll;overflow-x:hidden;background-color:rgb(26,29,33);}
 .note-list .list-item         {display:flex;}
