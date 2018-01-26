@@ -41,7 +41,7 @@
 // CHECKBOX SETTINGS
 .checkbox-settings label               {height:40px;display:block;}
 .checkbox-settings label.active        {@include css4{color:var(--menu-active-color);};}
-.checkbox-settings label span          {float: left;cursor:pointer;}
+.checkbox-settings label span          {@include css4{font-size:var(--application-base-font-size)};float: left;cursor:pointer;}
 .checkbox-settings label span:hover    {@include css4{color:var(--menu-active-color);};}
 
 // SWITCH

@@ -29,7 +29,7 @@ $variables: (
         --settings-font-color: rgb(99, 105, 116),
         --menu-font-color: rgb(255, 255, 255),
         --menu-background-color: rgb(39, 42, 47),
-        --menu-secondary-background-color: rgb(26, 29, 33),
+        --menu-secondary-background-color: rgb(39, 42, 47),
         --menu-hover-color: rgb(98, 177, 130),
         --menu-active-color: rgb(98, 177, 130),
         --menu-title-text-color: rgb(255, 255, 255),
@@ -42,14 +42,15 @@ $variables: (
         --dark-theme-primary: #1b1f24,
         --red-theme-primary: #9e1e35,
         --paper-theme-primary: #F8E4D3,
-        --application-font-type: 'Open Sans',
+        --application-font-family: 'Open Sans' sans serif,
         --text-super-color: rgb(33, 33, 33),
         --menu-inactive-svg-color: rgb(61,65,68),
         --dark-caret-color: #000,
         --light-caret-color: #fff,
         --transparent-grey: rgba(0,0,0,.8),
         --audio-player-progress-background: rgb(32,34,39),
-        --loading-spinner-color: #aeaeae
+        --loading-spinner-color: #aeaeae,
+        --application-base-font-size: 0.98em
 //--application-base-font-size:
 );
 
