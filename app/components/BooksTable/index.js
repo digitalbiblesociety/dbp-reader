@@ -7,10 +7,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-// import { FormattedMessage } from 'react-intl';
-// import messages from './messages';
-// TODO: change logic for rendering chapter to use isBookActive instead of activeBookName
-
 class BooksTable extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	componentDidMount() {
 		if (this.button && this.container) {
@@ -88,7 +84,7 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 
 		getChapterText({ bible: activeTextId, book: book.book_id, chapter });
 		setActiveChapter(chapter);
-		setActiveBookName({ book: book.name, id: book.book_id });
+		setActiveBookName({ book: book.name || book.name_short, id: book.book_id });
 		toggleChapterSelection();
 	}
 
@@ -121,13 +117,13 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 				<div ref={(el) => this.handleRef(el, 'container')} className="book-container">
 					{
 						books.map((book) => (
-							<div className={'book-button'} ref={book.name === selectedBookName ? (el) => this.handleRef(el, 'button') : null} tabIndex="0" role="button" key={book.name} onClick={(e) => this.handleBookClick(e, book.name)}>
-								<h4 className={book.name === selectedBookName ? 'active-book' : ''}>{book.name}</h4>
+							<div className={'book-button'} ref={(book.name || book.name_short) === selectedBookName ? (el) => this.handleRef(el, 'button') : null} tabIndex="0" role="button" key={book.name || book.name_short} onClick={(e) => this.handleBookClick(e, book.name || book.name_short)}>
+								<h4 className={(book.name || book.name_short) === selectedBookName ? 'active-book' : ''}>{book.name || book.name_short}</h4>
 								<div className="chapter-container">
 									{
 										book.name === selectedBookName ? book.chapters.map((chapter) => (
 											<div role="button" tabIndex="0" key={chapter} className="chapter-box" onClick={() => this.handleChapterClick(book, chapter)}>
-												<span className={(activeChapter === chapter && book.name === activeBookName) ? 'active-chapter' : ''}>{chapter}</span>
+												<span className={(activeChapter === chapter && (book.name || book.name_short) === activeBookName) ? 'active-chapter' : ''}>{chapter}</span>
 											</div>
 										)) : null
 									}

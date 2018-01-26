@@ -7,6 +7,7 @@ aside                  {position:absolute;top:0;right:0;height:100%;width:320px;
 main                   {overflow-x:hidden;overflow-y:scroll;max-height:100%;}
 #app                   {@include css4{background-color:var(--application-background);};}
 #app > div             {height:100vh;}
+
 // images
 img                    {max-width:100%;height:auto}
 img[data-src]          {filter:blur(15px)}
@@ -64,9 +65,9 @@ main:after,
 .columns 				{padding-left:1.1rem;padding-right:1.1rem;width:100%;float:left}
 .centered 				{margin-left:auto;margin-right:auto;float:none}
 .centered:last-child 	{float:none}
-.clearfix:after {content:"";display:table;clear:both}
-.hidden {border:0;height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px}
-.disabled {opacity:.5}
+.clearfix:after         {content:"";display:table;clear:both}
+.hidden                 {border:0;height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px}
+.disabled               {opacity:.5}
 
 .visuallyhidden, .hide {display:none}
 
@@ -90,6 +91,7 @@ main:after,
   .small-11 		{width:91.66667%}
   .small-12 		{width:100%}
 }
+
 @media only screen and (min-width:600px) {
   .small-show       {display:none}
   .small-hide       {display:inherit}
@@ -107,6 +109,7 @@ main:after,
   .medium-11 		{width:91.66667%}
   .medium-12 		{width:100%}
 }
+
 @media only screen and (min-width:960px) {
   .small-show       {display:none}
   .small-hide       {display:inherit}
@@ -124,6 +127,7 @@ main:after,
   .large-11 		{width:91.66667%}
   .large-12 		{width:100%}
 }
+
 ::-webkit-scrollbar {
   -webkit-appearance: none;
   display: none;
