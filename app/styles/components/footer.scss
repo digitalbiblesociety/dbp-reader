@@ -1,4 +1,8 @@
-.footer                            {display:flex;position:fixed;bottom:0;left:0;height:56px;width:100%;background-color:$header-footer;}
+.footer                            {
+  @include css4 {
+    background:var(--navbar-header-background);
+  };
+  display:flex;position:fixed;bottom:0;left:0;height:56px;width:100%;}
 .footer div                        {display:flex;}
 .footer .left-buttons              {width:50%;justify-content:flex-start;align-items:center;}
 .footer .right-buttons             {width:50%;justify-content:flex-end;align-items:center;}
