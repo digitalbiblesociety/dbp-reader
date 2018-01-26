@@ -7,10 +7,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-// import { FormattedMessage } from 'react-intl';
-// import messages from './messages';
-// TODO: change logic for rendering chapter to use isBookActive instead of activeBookName
-
 class BooksTable extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	componentDidMount() {
 		if (this.button && this.container) {
