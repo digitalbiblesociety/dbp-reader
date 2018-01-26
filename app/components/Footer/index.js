@@ -18,7 +18,7 @@ function Footer({ isInformationModalActive, toggleProfile, settingsActive, toggl
 			</div>
 			<div className="right-buttons">
 				<span className="item"><SvgWrapper className="navbar-button" height="30px" width="30px" fill="#fff" svgid="upload" /></span>
-				<span className="small-show medium-hide button" role="button" tabIndex={0} onClick={toggleProfile}><SvgWrapper height="30px" width="30px" fill="#fff" svgid="profile_circle" /></span>
+				<span className="medium-hide large-hide button" role="button" tabIndex={0} onClick={toggleProfile}><SvgWrapper height="30px" width="30px" fill="#fff" svgid="profile_circle" /></span>
 			</div>
 		</div>
 	);
