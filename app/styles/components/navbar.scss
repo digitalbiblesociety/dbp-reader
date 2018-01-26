@@ -1,6 +1,6 @@
 .nav-container                        {
   @include css4 {
-    background:var(--navbar-header-background);
+    background:var(--header-footer-background);
   };
   display:flex;justify-content:space-around;align-items:center;height:54px;width:100%;
 }

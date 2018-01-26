@@ -76,7 +76,7 @@ const initialState = fromJS({
 	activeTextId: 'ENGESV',
 	activeBookId: 'GEN',
 	userSettings: {
-		activeTheme: 'default',
+		activeTheme: 'red',
 		activeFontType: 'sans',
 		activeFontSize: 4,
 		toggleOptions: {

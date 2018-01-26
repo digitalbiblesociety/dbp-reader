@@ -1,6 +1,6 @@
 .footer                            {
   @include css4 {
-    background:var(--navbar-header-background);
+    background:var(--header-footer-background);
   };
   display:flex;position:fixed;bottom:0;left:0;height:56px;width:100%;}
 .footer div                        {display:flex;}

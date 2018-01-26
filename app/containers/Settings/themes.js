@@ -61,4 +61,10 @@ const themes = {
 	red,
 };
 
-export default themes;
+const applyTheme = (theme) => {
+	Object.entries(themes[theme]).forEach((property) => {
+		document.documentElement.style.setProperty(property[0], property[1]);
+	});
+};
+
+export default applyTheme;
