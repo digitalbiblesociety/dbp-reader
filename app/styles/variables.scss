@@ -42,7 +42,7 @@ $variables: (
         --dark-theme-primary: #1b1f24,
         --red-theme-primary: #9e1e35,
         --paper-theme-primary: #F8E4D3,
-        --application-font-family: 'Open Sans' sans serif,
+        --application-font-family: "'Open Sans', Courier, sans serif",
         --text-super-color: rgb(33, 33, 33),
         --menu-inactive-svg-color: rgb(61,65,68),
         --dark-caret-color: #000,
@@ -50,7 +50,10 @@ $variables: (
         --transparent-grey: rgba(0,0,0,.8),
         --audio-player-progress-background: rgb(32,34,39),
         --loading-spinner-color: #aeaeae,
-        --application-base-font-size: 0.98em
+        --application-base-font-size: 0.98em,
+        --sans-font-family-option: "'Noto Sans', Helvetica, sans serif",
+        --serif-font-family-option: "'Alegreva', 'Palatino Linotype', Palatino, serif",
+        --slab-font-family-option: "'Roboto Slab', Rockwell, Courier, monospace"
 //--application-base-font-size:
 );
 

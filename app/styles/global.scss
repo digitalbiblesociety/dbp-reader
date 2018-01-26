@@ -1,10 +1,9 @@
 *, *::after, *::before {box-sizing:border-box;margin:0;padding:0}
 body, html 	           {height:100%}
 body 				   {
-  --test-font-family: "Noto Sans", (Google Font), sans serif, Helvetica;
   @include css4{
     color:var(--application-base-color);
-    font-family:var(--test-font-family);
+    font-family:var(--application-font-family);
     font-size:var(--application-base-font-size);
   };
   margin:0 auto;

@@ -21,9 +21,12 @@
 .color-schemes .option.active:after    {content:"";margin:-4px -4px -4px -4px;border-radius:50%;width:50px;height:50px;@include css4{border:2px solid var(--menu-active-color);};display:block;}
 
 // FONT SETTINGS
-.font-settings .option                 {display:inline-block;text-align:center;font-size:36px;width:33%}
-.font-settings .option small           {display:block;text-transform:uppercase;font-size:14px}
-.font-settings .option.active          {@include css4{color:var(--menu-active-color);};}
+.font-settings .option            {display:inline-block;text-align:center;font-size:36px;width:33%}
+.font-settings .option small      {display:block;text-transform:uppercase;font-size:14px}
+.font-settings .option.active     {@include css4{color:var(--menu-active-color);};}
+.font-settings .option.sans       {@include css4{font-family:var(--sans-font-family-option) !important;};}
+.font-settings .option.serif      {@include css4{font-family:var(--serif-font-family-option) !important;};}
+.font-settings .option.slab       {@include css4{font-family:var(--slab-font-family-option) !important;};}
 
 // FONT SIZES
 .font-sizes                            {height:60px;align-items:flex-end;display:flex;justify-content:space-between;line-height:.75;}

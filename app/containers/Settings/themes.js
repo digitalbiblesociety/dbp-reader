@@ -68,9 +68,9 @@ const themes = {
 };
 
 const fonts = {
-	sans: '"Noto Sans", (Google Font), Helvetica, sans serif',
-	serif: '"Alegreva", (Google Font), "Palatino Linotype", Palatino, serif',
-	slab: '"Roboto Slab", (Google Font), Rockwell, Courier, monospace',
+	sans: '"Noto Sans", Helvetica, sans serif',
+	serif: '"Alegreva", "Palatino Linotype", Palatino, serif',
+	slab: '"Roboto Slab", Rockwell, Courier, monospace',
 };
 
 const sizes = {
