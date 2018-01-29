@@ -19,13 +19,9 @@ import SvgWrapper from 'components/SvgWrapper';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
-import { setSelectedBookName } from './actions';
-import makeSelectChapterSelection, {
-	selectBooks,
+import {
 	selectActiveBookName,
-	selectActiveTextId,
 	selectActiveChapter,
-	selectActiveFilesets,
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -43,10 +39,6 @@ export class ChapterSelection extends React.PureComponent { // eslint-disable-li
 	setAsideRef = (el) => {
 		this.aside = el;
 	}
-
-	setSelectedBookName = (book) => this.props.dispatch(setSelectedBookName(book))
-
-	getChapters = (props) => this.props.dispatch(this.props.getChapterText({ ...props }))
 
 	setActiveChapter = (props) => this.props.dispatch(setActiveChapter(props))
 
@@ -72,11 +64,8 @@ export class ChapterSelection extends React.PureComponent { // eslint-disable-li
 	}
 
 	render() {
-		const { selectedBookName } = this.props.chapterselection;
 		const {
 			activeChapter,
-			books,
-			activeTextId,
 			activeBookName,
 		} = this.props;
 
@@ -88,16 +77,10 @@ export class ChapterSelection extends React.PureComponent { // eslint-disable-li
 						<SvgWrapper role="button" tabIndex={0} className="close-icon icon" onClick={this.handleChapterToggle} svgid="go-up" opacity=".5" />
 					</header>
 					<BooksTable
-						activeChapter={activeChapter}
 						setActiveChapter={this.setActiveChapter}
-						activeTextId={activeTextId}
-						selectedBookName={selectedBookName}
-						setSelectedBookName={this.setSelectedBookName}
-						toggleChapterSelection={this.toggleChapterSelection}
-						getChapterText={this.getChapters}
+						closeBookTable={this.toggleChapterSelection}
 						setActiveBookName={this.setActiveBookName}
-						activeBookName={activeBookName}
-						books={books}
+						initialBookName={activeBookName}
 					/>
 				</aside>
 			</GenericErrorBoundary>
@@ -108,20 +91,12 @@ export class ChapterSelection extends React.PureComponent { // eslint-disable-li
 ChapterSelection.propTypes = {
 	dispatch: PropTypes.func.isRequired,
 	activeChapter: PropTypes.number.isRequired,
-	books: PropTypes.array,
 	activeBookName: PropTypes.string.isRequired,
-	activeTextId: PropTypes.string.isRequired,
-	chapterselection: PropTypes.object.isRequired,
-	getChapterText: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
-	chapterselection: makeSelectChapterSelection(),
 	activeBookName: selectActiveBookName(),
-	activeTextId: selectActiveTextId(),
 	activeChapter: selectActiveChapter(),
-	books: selectBooks(),
-	activeFilesets: selectActiveFilesets(),
 });
 
 function mapDispatchToProps(dispatch) {

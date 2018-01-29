@@ -5,14 +5,38 @@
 */
 
 import React from 'react';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 import PropTypes from 'prop-types';
+import {
+	getChapterText,
+	// setActiveBookName,
+	// setActiveChapter,
+} from 'containers/HomePage/actions';
+import {
+	selectActiveTextId,
+	selectBooks,
+	selectActiveBookName,
+	selectActiveChapter,
+	selectAudioObjects,
+} from './selectors';
 
 class BooksTable extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+	state = {
+		selectedBookName: this.props.initialBookName || '',
+	}
+
 	componentDidMount() {
 		if (this.button && this.container) {
 			this.container.scrollTop = this.button.offsetTop - 54 - 10;
 		}
 	}
+
+	setSelectedBookName = (name) => this.setState({ selectedBookName: name })
+	// setActiveBookName = ({ book, id }) => this.props.dispatch(setActiveBookName({ book, id }))
+	// setActiveChapter = (chapter) => this.props.dispatch(setActiveChapter(chapter))
+	getChapterText = ({ bible, book, chapter }) => this.props.dispatch(getChapterText({ bible, book, chapter, audioObjects: this.props.audioObjects }))
 	// Doesn't quite work, need to account for the overall height of the scroll container
 	// Consider calculating the difference between the top of the clicked button and the
 	// top of the active button, then if the clicked button is above the active button: move
@@ -55,10 +79,10 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 		// console.log('scroll container distance to top', this.container.offsetTop);
 		// Could potentially use scrollIntoView() to account for the part of the container that is off the screen
 
-		if (this.props.selectedBookName === name) {
-			this.props.setSelectedBookName('');
+		if (this.state.selectedBookName === name) {
+			this.setSelectedBookName('');
 		} else {
-			this.props.setSelectedBookName(name);
+			this.setSelectedBookName(name);
 		}
 	}
 
@@ -76,16 +100,15 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 	handleChapterClick = (book, chapter) => {
 		const {
 			activeTextId,
-			setActiveBookName,
+			closeBookTable,
 			setActiveChapter,
-			getChapterText,
-			toggleChapterSelection,
+			setActiveBookName,
 		} = this.props;
 
-		getChapterText({ bible: activeTextId, book: book.book_id, chapter });
+		this.getChapterText({ bible: activeTextId, book: book.book_id, chapter });
 		setActiveChapter(chapter);
 		setActiveBookName({ book: book.name || book.name_short, id: book.book_id });
-		toggleChapterSelection();
+		closeBookTable();
 	}
 
 	handleRef = (el, name) => {
@@ -107,10 +130,10 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 	render() {
 		const {
 			books,
-			selectedBookName,
 			activeChapter,
 			activeBookName,
 		} = this.props;
+		const { selectedBookName } = this.state;
 
 		return (
 			<div className="chapter-selection-section">
@@ -121,7 +144,7 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 								<h4 className={(book.name || book.name_short) === selectedBookName ? 'active-book' : ''}>{book.name || book.name_short}</h4>
 								<div className="chapter-container">
 									{
-										book.name === selectedBookName ? book.chapters.map((chapter) => (
+										(book.name || book.name_short) === selectedBookName ? book.chapters.map((chapter) => (
 											<div role="button" tabIndex="0" key={chapter} className="chapter-box" onClick={() => this.handleChapterClick(book, chapter)}>
 												<span className={(activeChapter === chapter && (book.name || book.name_short) === activeBookName) ? 'active-chapter' : ''}>{chapter}</span>
 											</div>
@@ -138,16 +161,32 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 }
 
 BooksTable.propTypes = {
+	dispatch: PropTypes.func.isRequired,
+	setActiveBookName: PropTypes.func.isRequired, // Set book in parent component
+	closeBookTable: PropTypes.func, // closes the window open
+	setActiveChapter: PropTypes.func, // Set chapter in parent component
 	books: PropTypes.array,
-	setActiveBookName: PropTypes.func.isRequired,
-	toggleChapterSelection: PropTypes.func,
-	setSelectedBookName: PropTypes.func,
-	setActiveChapter: PropTypes.func,
-	selectedBookName: PropTypes.string,
-	getChapterText: PropTypes.func,
-	activeTextId: PropTypes.string,
-	activeBookName: PropTypes.string,
-	activeChapter: PropTypes.number,
+	audioObjects: PropTypes.object,
+	activeTextId: PropTypes.string, // parent components active text id
+	activeBookName: PropTypes.string, // parent components active book name
+	initialBookName: PropTypes.string,
+	activeChapter: PropTypes.number, // parent components active chapter
 };
 
-export default BooksTable;
+const mapStateToProps = createStructuredSelector({
+	books: selectBooks(),
+	activeTextId: selectActiveTextId(),
+	activeBookName: selectActiveBookName(),
+	activeChapter: selectActiveChapter(),
+	audioObjects: selectAudioObjects(),
+});
+
+function mapDispatchToProps(dispatch) {
+	return {
+		dispatch,
+	};
+}
+
+const withConnect = connect(mapStateToProps, mapDispatchToProps);
+
+export default compose(withConnect)(BooksTable);
