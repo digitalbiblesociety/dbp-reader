@@ -36,19 +36,41 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 	handleNoteTitleChange = (e) => {
 		this.setState({ titleText: e.target.value });
 	}
-	//
+	/*
+	{
+		user_id,
+		bible_id,
+		chapter,
+		verse_start,
+		verse_end,
+		highlights,
+		notes,
+	}
+	*/
 	handleSave = () => {
+		const referenceArray = this.props.note.get('referenceId').split('_');
+		const chapter = referenceArray[1];
+		const hasVerseEnd = referenceArray[2].indexOf('-') !== -1;
+		const verseStart = hasVerseEnd ? referenceArray[2].split('-')[0] : referenceArray[2];
+		const verseEnd = hasVerseEnd ? referenceArray[2].split('-')[0] : null;
+		const bookId = referenceArray[0];
+
 		this.props.addNote({
-			notes: this.state.textarea,
-			reference_id: this.props.note.get('referenceId'),
-			title: this.state.titleText,
 			bible_id: this.props.activeTextId,
+			title: this.state.titleText,
+			notes: this.state.textarea,
+			book_id: bookId,
+			highlights: '',
+			verse_start: verseStart,
+			verse_end: verseEnd,
+			chapter,
 		});
 	}
 
 	get verseReference() {
 		if (this.props.note.get('referenceId')) {
 			const bookChapterVerse = this.props.note.get('referenceId').split('_');
+			// TODO: Use bookChapterVerse[0] to get the appropriate book name
 			return `${bookChapterVerse[0]} ${bookChapterVerse[1]}:${bookChapterVerse[2]}`;
 		}
 		return 'Please Add a Verse';
@@ -112,7 +134,7 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 		);
 	}
 }
-// TODO: Add toggleAddVerseMenu as click handler for 104 svg
+// TODO: Add toggleAddVerseMenu as click handler for 123 svg
 EditNote.propTypes = {
 	toggleVerseText: PropTypes.func.isRequired,
 	toggleAddVerseMenu: PropTypes.func.isRequired,

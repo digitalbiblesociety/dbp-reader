@@ -26,6 +26,7 @@ import {
 	togglePageSelector,
 	setActivePageData,
 	addNote,
+	getNotes,
 	addBookmark,
 	addHighlight,
 } from './actions';
@@ -35,6 +36,8 @@ import makeSelectNotes, {
 	selectHighlightedText,
 	selectUserAuthenticationStatus,
 	selectNotePassage,
+	selectActiveTextId,
+	vernacularBookNameObject,
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -63,12 +66,13 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 	setActivePageData = (page) => this.props.dispatch(setActivePageData(page))
 	setActiveNote = ({ note }) => this.props.dispatch(setActiveNote({ note }))
 	setPageSize = (size) => this.props.dispatch(setPageSize(size))
+	getNotes = () => this.props.dispatch(getNotes({ userId: this.props.userId }))
 	toggleVerseText = () => this.props.dispatch(toggleVerseText())
 	toggleAddVerseMenu = () => this.props.dispatch(toggleAddVerseMenu())
 	togglePageSelector = () => this.props.dispatch(togglePageSelector())
 	addBookmark = (data) => this.props.dispatch(addBookmark({ userId: this.props.userId, data }))
 	addHighlight = (data) => this.props.dispatch(addHighlight({ userId: this.props.userId, data }))
-	addNote = (data) => this.props.dispatch(addNote({ userId: this.props.userId, data }))
+	addNote = (data) => this.props.dispatch(addNote({ userId: this.props.userId, data: { ...data, user_id: this.props.userId } }))
 
 	titleOptions = {
 		edit: 'EDIT NOTE',
@@ -105,6 +109,8 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 			note,
 			toggleProfile,
 			notePassage,
+			activeTextId,
+			vernacularNamesObject,
 		} = this.props;
 
 		return (
@@ -141,13 +147,16 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 											toggleVerseText={this.toggleVerseText}
 											toggleAddVerseMenu={this.toggleAddVerseMenu}
 											note={note}
+											activeTextId={activeTextId}
 											notePassage={notePassage}
 											selectedText={selectedText}
 											isVerseTextVisible={isVerseTextVisible}
 											isAddVerseExpanded={isAddVerseExpanded}
+											vernacularNamesObject={vernacularNamesObject}
 										/>
 									) : (
 										<MyNotes
+											getNotes={this.getNotes}
 											setPageSize={this.setPageSize}
 											setActiveNote={this.setActiveNote}
 											setActiveChild={this.setActiveChild}
@@ -158,6 +167,7 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 											sectionType={activeChild}
 											activePageData={activePageData}
 											pageSelectorState={pageSelectorState}
+											vernacularNamesObject={vernacularNamesObject}
 										/>
 									)
 								}
@@ -183,6 +193,8 @@ Notes.propTypes = {
 	authenticationStatus: PropTypes.bool,
 	toggleProfile: PropTypes.func,
 	note: PropTypes.object,
+	vernacularNamesObject: PropTypes.object,
+	activeTextId: PropTypes.string,
 	userId: PropTypes.string,
 	notePassage: PropTypes.string,
 };
@@ -194,6 +206,8 @@ const mapStateToProps = createStructuredSelector({
 	userId: selectUserId(),
 	note: selectActiveNote(),
 	notePassage: selectNotePassage(),
+	activeTextId: selectActiveTextId(),
+	vernacularNamesObject: vernacularBookNameObject(),
 });
 
 function mapDispatchToProps(dispatch) {

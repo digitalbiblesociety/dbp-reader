@@ -30,29 +30,9 @@ const selectBooks = () => createSelector(
 	(substate) => substate.get('books').toJS()
 );
 
-const selectActiveBookName = () => createSelector(
-	selectHomepageDomain,
-	(substate) => substate.get('activeBookName')
-);
-
-const selectActiveChapter = () => createSelector(
-	selectHomepageDomain,
-	(substate) => substate.get('activeChapter')
-);
-
 const selectActiveTextId = () => createSelector(
 	selectHomepageDomain,
 	(substate) => substate.get('activeTextId')
-);
-
-const selectActiveFilesets = () => createSelector(
-	selectHomepageDomain,
-	(substate) => substate.get('activeFilesets')
-);
-
-const selectSelectedBookName = () => createSelector(
-	selectHomepageDomain,
-	(substate) => substate.get('selectedBookName')
 );
 
 const selectActiveNote = () => createSelector(
@@ -77,6 +57,11 @@ const selectNotePassage = () => createSelector(
 	}
 );
 
+const vernacularBookNameObject = () => createSelector(
+	selectBooks(),
+	(books) => books.reduce((names, book) => ({ ...names, [book.book_id]: [book.name] || [book.name_short] }), {})
+);
+
 /**
  * Default selector used by Notes
  */
@@ -94,10 +79,7 @@ export {
 	selectNotesDomain,
 	selectNotePassage,
 	selectActiveTextId,
-	selectActiveChapter,
-	selectActiveBookName,
-	selectActiveFilesets,
 	selectHighlightedText,
-	selectSelectedBookName,
 	selectUserAuthenticationStatus,
+	vernacularBookNameObject,
 };

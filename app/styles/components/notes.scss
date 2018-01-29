@@ -49,7 +49,7 @@
 .searchbar :-ms-input-placeholder      {@include css4{color:var(--application-placeholder-color);}padding-left:45px;}
 .search                                {width:calc(100% - 50px);background:url("../images/input_search_icon.svg") no-repeat 5px 10px;border:none;height:50px;@include css4{background-color:var(--application-input-background);color:var(--menu-font-color);caret-color:var(--dark-caret-color);};font-size:.9em;font-weight:200;padding-left:10px;}
 
-.note-list                    {height:calc(100% - 100px);max-height:calc(100% - 100px);overflow-y:scroll;overflow-x:hidden;background-color:rgb(26,29,33);}
+.note-list                    {height:calc(100% - 100px);max-height:calc(100% - 100px);overflow-y:scroll;overflow-x:hidden;background-color:rgb(26,29,33);padding:15px;}
 .note-list .list-item         {display:flex;}
 .note-list .list-item:hover   {cursor:pointer;opacity:0.85;}
 .list-item .date              {@include css4{color:var(--menu-active-color)};}
