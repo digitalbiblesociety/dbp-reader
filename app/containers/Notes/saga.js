@@ -22,7 +22,7 @@ export function* getNotes({ userId, params = {} }) {
 			pageSize: response.per_page,
 			pages: response.total,
 		};
-		console.log('note data in saga', noteData);
+
 		yield put({ type: LOAD_USER_NOTES, noteData });
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {

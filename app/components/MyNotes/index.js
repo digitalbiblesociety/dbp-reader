@@ -43,7 +43,7 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 			pageSelectorState,
 			togglePageSelector,
 		} = this.props;
-		console.log('list data in myNotes', listData);
+
 		return (
 			<div className="list-sections">
 				<div className="searchbar">
@@ -53,8 +53,8 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 				<section className="note-list">
 					{
 						activePageData.map((listItem) => (
-							<div role="button" tabIndex={0} onClick={() => this.handleClick(listItem)} key={listItem.created_at + listItem.bible_id} className="list-item">
-								<div className="date">{listItem.created_at}</div>
+							<div role="button" tabIndex={0} onClick={() => this.handleClick(listItem)} key={listItem.id} className="list-item">
+								<div className="date">{listItem.created_at.slice(0, 10)}</div>
 								<div className="title-text">
 									<h4 className="title">{this.getNoteReference(listItem)}</h4>
 									<p className="text">{listItem.notes}</p>
