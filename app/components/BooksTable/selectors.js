@@ -26,7 +26,7 @@ const selectActiveChapter = () => createSelector(
 const selectAudioObjects = () => createSelector(
 	selectHomepageDomain,
 	(substate) => substate.get('audioObjects')
-)
+);
 
 export {
 	selectActiveTextId,

@@ -36,7 +36,7 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 	handleNoteTitleChange = (e) => {
 		this.setState({ titleText: e.target.value });
 	}
-
+	//
 	handleSave = () => {
 		this.props.addNote({
 			notes: this.state.textarea,
@@ -61,15 +61,9 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 			note,
 			isAddVerseExpanded,
 			isVerseTextVisible,
-			getChapterText,
 			setActiveChapter,
 			setActiveBookName,
-			setSelectedBookName,
-			books,
 			activeTextId,
-			activeChapter,
-			activeBookName,
-			selectedBookName,
 			notePassage,
 		} = this.props;
 
@@ -99,22 +93,15 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 							</div>
 							<div className="book-table">
 								<BooksTable
-									getChapterText={getChapterText}
 									setActiveChapter={setActiveChapter}
 									setActiveBookName={setActiveBookName}
-									setSelectedBookName={setSelectedBookName}
-									toggleChapterSelection={toggleAddVerseMenu}
-									books={books}
-									activeTextId={activeTextId}
-									activeChapter={activeChapter}
-									activeBookName={activeBookName}
-									selectedBookName={selectedBookName}
+									closeBookTable={toggleAddVerseMenu}
 								/>
 							</div>
 						</div>
 					) : (
 						<div className="add-verse">
-							<SvgWrapper onClick={toggleAddVerseMenu} className="plus" width="20px" height="20px" svgid="plus" />
+							<SvgWrapper className="plus" width="20px" height="20px" svgid="plus" />
 							<span className="text">ADD VERSE</span>
 						</div>
 					)
@@ -125,22 +112,16 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 		);
 	}
 }
-
+// TODO: Add toggleAddVerseMenu as click handler for 104 svg
 EditNote.propTypes = {
 	toggleVerseText: PropTypes.func.isRequired,
 	toggleAddVerseMenu: PropTypes.func.isRequired,
 	note: PropTypes.object.isRequired,
 	isAddVerseExpanded: PropTypes.bool.isRequired,
 	isVerseTextVisible: PropTypes.bool.isRequired,
-	getChapterText: PropTypes.func,
 	setActiveChapter: PropTypes.func,
 	setActiveBookName: PropTypes.func,
-	setSelectedBookName: PropTypes.func,
-	books: PropTypes.array,
 	activeTextId: PropTypes.string,
-	activeChapter: PropTypes.number,
-	activeBookName: PropTypes.string,
-	selectedBookName: PropTypes.string,
 	addNote: PropTypes.func,
 	notePassage: PropTypes.string,
 };

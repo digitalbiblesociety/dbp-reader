@@ -17,10 +17,6 @@ import injectReducer from 'utils/injectReducer';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
 import {
 	setActiveNote,
-	getChapterText,
-	setActiveChapter,
-	setActiveBookName,
-	setSelectedBookName,
 } from 'containers/HomePage/actions';
 import {
 	setActiveChild,
@@ -34,15 +30,9 @@ import {
 	addHighlight,
 } from './actions';
 import makeSelectNotes, {
-	selectBooks,
 	selectUserId,
 	selectActiveNote,
-	selectActiveTextId,
-	selectActiveChapter,
-	selectActiveBookName,
-	selectActiveFilesets,
 	selectHighlightedText,
-	selectSelectedBookName,
 	selectUserAuthenticationStatus,
 	selectNotePassage,
 } from './selectors';
@@ -70,31 +60,14 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 	}
 
 	setActiveChild = (child) => this.props.dispatch(setActiveChild(child))
-
 	setActivePageData = (page) => this.props.dispatch(setActivePageData(page))
-
 	setActiveNote = ({ note }) => this.props.dispatch(setActiveNote({ note }))
-
 	setPageSize = (size) => this.props.dispatch(setPageSize(size))
-
-	setActiveChapter = (props) => this.props.dispatch(setActiveChapter(props))
-
-	setActiveBookName = (props) => this.props.dispatch(setActiveBookName(props))
-
-	setSelectedBookName = (book) => this.props.dispatch(setSelectedBookName(book))
-
-	getChapters = (props) => this.props.dispatch(getChapterText({ ...props, audioObjects: this.props.activeFilesets }))
-
 	toggleVerseText = () => this.props.dispatch(toggleVerseText())
-
 	toggleAddVerseMenu = () => this.props.dispatch(toggleAddVerseMenu())
-
 	togglePageSelector = () => this.props.dispatch(togglePageSelector())
-
 	addBookmark = (data) => this.props.dispatch(addBookmark({ userId: this.props.userId, data }))
-
 	addHighlight = (data) => this.props.dispatch(addHighlight({ userId: this.props.userId, data }))
-
 	addNote = (data) => this.props.dispatch(addNote({ userId: this.props.userId, data }))
 
 	titleOptions = {
@@ -128,11 +101,6 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 		const {
 			toggleNotesModal,
 			selectedText,
-			activeTextId,
-			activeChapter,
-			books,
-			activeBookName,
-			selectedBookName,
 			authenticationStatus,
 			note,
 			toggleProfile,
@@ -170,20 +138,11 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 									activeChild === 'edit' ? (
 										<EditNote
 											addNote={this.addNote}
-											getChapterText={this.getChapters}
 											toggleVerseText={this.toggleVerseText}
-											setActiveChapter={this.setActiveChapter}
-											setActiveBookName={this.setActiveBookName}
 											toggleAddVerseMenu={this.toggleAddVerseMenu}
-											setSelectedBookName={this.setSelectedBookName}
 											note={note}
-											books={books}
 											notePassage={notePassage}
 											selectedText={selectedText}
-											activeTextId={activeTextId}
-											activeChapter={activeChapter}
-											activeBookName={activeBookName}
-											selectedBookName={selectedBookName}
 											isVerseTextVisible={isVerseTextVisible}
 											isAddVerseExpanded={isAddVerseExpanded}
 										/>
@@ -221,12 +180,6 @@ Notes.propTypes = {
 	toggleNotesModal: PropTypes.func.isRequired,
 	openView: PropTypes.string.isRequired,
 	selectedText: PropTypes.string,
-	activeChapter: PropTypes.number.isRequired,
-	books: PropTypes.array,
-	activeBookName: PropTypes.string.isRequired,
-	activeTextId: PropTypes.string.isRequired,
-	activeFilesets: PropTypes.object.isRequired,
-	selectedBookName: PropTypes.string,
 	authenticationStatus: PropTypes.bool,
 	toggleProfile: PropTypes.func,
 	note: PropTypes.object,
@@ -237,12 +190,6 @@ Notes.propTypes = {
 const mapStateToProps = createStructuredSelector({
 	notes: makeSelectNotes(),
 	selectedText: selectHighlightedText(),
-	activeBookName: selectActiveBookName(),
-	activeTextId: selectActiveTextId(),
-	activeChapter: selectActiveChapter(),
-	books: selectBooks(),
-	activeFilesets: selectActiveFilesets(),
-	selectedBookName: selectSelectedBookName(),
 	authenticationStatus: selectUserAuthenticationStatus(),
 	userId: selectUserId(),
 	note: selectActiveNote(),
