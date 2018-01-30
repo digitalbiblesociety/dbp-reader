@@ -78,7 +78,7 @@ const initialState = fromJS({
 	userSettings: {
 		activeTheme: 'red',
 		activeFontType: 'sans',
-		activeFontSize: 4,
+		activeFontSize: 3,
 		toggleOptions: {
 			readersMode: {
 				name: 'READER\'S MODE',
