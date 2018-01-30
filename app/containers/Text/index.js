@@ -23,16 +23,15 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 	setMainRef = (el) => {
 		this.main = el;
 	}
-
+	// Use selected text only when marking highlights
 	setActiveNote = () => {
-		const { firstVerse, lastVerse, selectedText } = this.state;
+		const { firstVerse, lastVerse } = this.state;
 		const { activeBookId, activeChapter } = this.props;
 		const note = {
 			verse_start: firstVerse,
 			verse_end: lastVerse,
 			book_id: activeBookId,
 			chapter: activeChapter,
-			selectedText,
 		};
 
 		this.props.setActiveNote({ note });

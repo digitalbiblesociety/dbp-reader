@@ -44,13 +44,17 @@ const selectNotePassage = () => createSelector(
 	selectHomepageDomain,
 	(substate) => {
 		const text = substate.get('chapterText');
-		const referenceId = substate.getIn(['note', 'referenceId']);
-		if (!referenceId) {
+		const note = substate.get('note');
+		const chapterNumber = note.get('chapter');
+		const verseStart = note.get('verse_start');
+		const verseEnd = note.get('verse_end');
+		const bookId = note.get('book_id');
+
+		if (!bookId || !chapterNumber || !verseStart) {
 			return '';
 		}
-		const idPieces = referenceId.split('_');
-		const verseId = (idPieces[2].indexOf('-') ? idPieces[2].split('-') : idPieces[2]).map(Number);
-		const verses = text.filter((chapter) => verseId.length > 1 ? chapter.get('verse_start') >= verseId[0] && chapter.get('verse_start') <= verseId[1] : chapter.get('verse_start') === verseId[0]);
+
+		const verses = text.filter((verse) => chapterNumber === verse.get('chapter') && (verseStart <= verse.get('verse_start') && verseEnd >= verse.get('verse_end')));
 		const passage = verses.reduce((passageText, verse) => passageText.concat(verse.get('verse_text')), '');
 
 		return passage;
