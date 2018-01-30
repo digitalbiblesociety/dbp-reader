@@ -17,6 +17,8 @@ export const ADD_NOTE = 'app/Profile/ADD_NOTE';
 export const ADD_NOTE_SUCCESS = 'app/Notes/ADD_NOTE_SUCCESS';
 export const ADD_HIGHLIGHT = 'app/Profile/ADD_HIGHLIGHT';
 export const ADD_BOOKMARK = 'app/Profile/ADD_BOOKMARK';
+export const UPDATE_NOTE = 'app/Profile/UPDATE_NOTE';
+export const DELETE_NOTE = 'app/Profile/DELETE_NOTE';
 
 // Note generator for testing
 // export const initialNotesListForTesting = range(1, 103).map((note) => ({

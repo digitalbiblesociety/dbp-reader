@@ -14,10 +14,12 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 	state = {
 		textarea: this.props.note.get('notes') || '',
 		titleText: this.props.note.get('title') || '',
+		savedNote: !!this.props.note.get('id'),
 	}
 
 	componentWillUnmount() {
 		// Dispatch api call to save the user note and hope nothing hiccups
+		this.handleSave();
 	}
 
 	getCurrentDate = () => {
@@ -36,42 +38,52 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 	handleNoteTitleChange = (e) => {
 		this.setState({ titleText: e.target.value });
 	}
-	/*
-	{
-		user_id,
-		bible_id,
-		chapter,
-		verse_start,
-		verse_end,
-		highlights,
-		notes,
-	}
-	*/
-	handleSave = () => {
-		const referenceArray = this.props.note.get('referenceId').split('_');
-		const chapter = referenceArray[1];
-		const hasVerseEnd = referenceArray[2].indexOf('-') !== -1;
-		const verseStart = hasVerseEnd ? referenceArray[2].split('-')[0] : referenceArray[2];
-		const verseEnd = hasVerseEnd ? referenceArray[2].split('-')[0] : null;
-		const bookId = referenceArray[0];
 
-		this.props.addNote({
-			bible_id: this.props.activeTextId,
-			title: this.state.titleText,
-			notes: this.state.textarea,
-			book_id: bookId,
-			highlights: '',
-			verse_start: verseStart,
-			verse_end: verseEnd,
-			chapter,
-		});
+	handleSave = () => {
+		const { note, activeTextId } = this.props;
+		const { titleText, textarea } = this.state;
+		const chapter = note.get('chapter');
+		const verseStart = note.get('verse_start');
+		const verseEnd = note.get('verse_end');
+		const bookId = note.get('book_id');
+
+		if (this.state.savedNote) {
+			this.props.updateNote({
+				bible_id: activeTextId,
+				title: titleText,
+				notes: textarea,
+				book_id: bookId,
+				highlights: '',
+				verse_start: verseStart,
+				verse_end: verseEnd,
+				chapter,
+			});
+		} else {
+			this.props.addNote({
+				bible_id: activeTextId,
+				title: titleText,
+				notes: textarea,
+				book_id: bookId,
+				highlights: '',
+				verse_start: verseStart,
+				verse_end: verseEnd,
+				chapter,
+			});
+		}
+
+		this.setState({ savedNote: true });
 	}
 
 	get verseReference() {
-		if (this.props.note.get('referenceId')) {
-			const bookChapterVerse = this.props.note.get('referenceId').split('_');
-			// TODO: Use bookChapterVerse[0] to get the appropriate book name
-			return `${bookChapterVerse[0]} ${bookChapterVerse[1]}:${bookChapterVerse[2]}`;
+		const { vernacularNamesObject, note } = this.props;
+		const book = note.get('book_id');
+		const start = note.get('verse_start');
+		const end = note.get('verse_end');
+		const chapter = note.get('chapter');
+		const verses = (start === end || !end) ? start : `${start}-${end}`;
+
+		if (book && chapter && start) {
+			return `${vernacularNamesObject[book]} ${chapter}:${verses}`;
 		}
 		return 'Please Add a Verse';
 	}
@@ -129,23 +141,25 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 					)
 				}
 				<textarea onChange={this.handleTextareaChange} placeholder="CLICK TO ADD NOTE" value={this.state.textarea} className="note-text" />
-				<span className="save-button" role="button" tabIndex={0} onClick={this.handleSave}>SAVE</span>
+				<span className="save-button" role="button" tabIndex={0} onClick={() => this.handleSave()}>SAVE</span>
 			</section>
 		);
 	}
 }
 // TODO: Add toggleAddVerseMenu as click handler for 123 svg
 EditNote.propTypes = {
-	toggleVerseText: PropTypes.func.isRequired,
-	toggleAddVerseMenu: PropTypes.func.isRequired,
-	note: PropTypes.object.isRequired,
-	isAddVerseExpanded: PropTypes.bool.isRequired,
-	isVerseTextVisible: PropTypes.bool.isRequired,
+	addNote: PropTypes.func,
+	updateNote: PropTypes.func,
+	toggleVerseText: PropTypes.func,
 	setActiveChapter: PropTypes.func,
 	setActiveBookName: PropTypes.func,
-	activeTextId: PropTypes.string,
-	addNote: PropTypes.func,
+	toggleAddVerseMenu: PropTypes.func,
+	note: PropTypes.object,
+	vernacularNamesObject: PropTypes.object,
+	isAddVerseExpanded: PropTypes.bool,
+	isVerseTextVisible: PropTypes.bool,
 	notePassage: PropTypes.string,
+	activeTextId: PropTypes.string,
 };
 
 export default EditNote;

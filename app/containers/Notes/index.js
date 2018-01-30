@@ -29,6 +29,8 @@ import {
 	getNotes,
 	addBookmark,
 	addHighlight,
+	updateNote,
+	deleteNote,
 } from './actions';
 import makeSelectNotes, {
 	selectUserId,
@@ -73,6 +75,8 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 	addBookmark = (data) => this.props.dispatch(addBookmark({ userId: this.props.userId, data }))
 	addHighlight = (data) => this.props.dispatch(addHighlight({ userId: this.props.userId, data }))
 	addNote = (data) => this.props.dispatch(addNote({ userId: this.props.userId, data: { ...data, user_id: this.props.userId } }))
+	updateNote = (data) => this.props.dispatch(updateNote({ userId: this.props.userId, data: { ...data, user_id: this.props.userId } }))
+	deleteNote = (noteId) => this.props.dispatch(deleteNote({ userId: this.props.userId, noteId }))
 
 	titleOptions = {
 		edit: 'EDIT NOTE',
@@ -144,11 +148,13 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 									activeChild === 'edit' ? (
 										<EditNote
 											addNote={this.addNote}
+											deleteNote={this.deleteNote}
+											updateNote={this.updateNote}
 											toggleVerseText={this.toggleVerseText}
 											toggleAddVerseMenu={this.toggleAddVerseMenu}
 											note={note}
-											activeTextId={activeTextId}
 											notePassage={notePassage}
+											activeTextId={activeTextId}
 											selectedText={selectedText}
 											isVerseTextVisible={isVerseTextVisible}
 											isAddVerseExpanded={isAddVerseExpanded}
