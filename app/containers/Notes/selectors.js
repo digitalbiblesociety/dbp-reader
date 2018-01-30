@@ -55,9 +55,8 @@ const selectNotePassage = () => createSelector(
 		}
 
 		const verses = text.filter((verse) => chapterNumber === verse.get('chapter') && (verseStart <= verse.get('verse_start') && verseEnd >= verse.get('verse_end')));
-		const passage = verses.reduce((passageText, verse) => passageText.concat(verse.get('verse_text')), '');
 
-		return passage;
+		return verses.reduce((passageText, verse) => passageText.concat(verse.get('verse_text')), '');
 	}
 );
 
