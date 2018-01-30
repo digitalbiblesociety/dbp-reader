@@ -25,6 +25,12 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 		return `${vernacularNamesObject[listItem.book_id]} ${listItem.chapter}:${verseRef}`;
 	}
 
+	getFormattedNoteDate(timestamp) {
+		const date = timestamp.slice(0, 10).split('-');
+
+		return `${date[1]}.${date[2]}.${date[0].slice(2)}`;
+	}
+
 	handlePageClick = (page) => this.props.setActivePageData(page);
 	handleClick = (listItem) => {
 		if (this.props.sectionType === 'notes') {
@@ -54,7 +60,7 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 					{
 						activePageData.map((listItem) => (
 							<div role="button" tabIndex={0} onClick={() => this.handleClick(listItem)} key={listItem.id} className="list-item">
-								<div className="date">{listItem.created_at.slice(0, 10)}</div>
+								<div className="date">{this.getFormattedNoteDate(listItem.created_at)}</div>
 								<div className="title-text">
 									<h4 className="title">{this.getNoteReference(listItem)}</h4>
 									<p className="text">{listItem.notes}</p>

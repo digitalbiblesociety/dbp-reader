@@ -1,21 +1,21 @@
 $font-primary: 'Open Sans', sans-serif;
-$color-primary: #9e1e35;
-$color-secondary: #8e1e35;
-$dark-primary: #1b1f24;
-$dark-secondary: #2c3036;
-$paper-primary: #f1f1f1;
-$paper-secondary: rgba(112,63,51,.5);
-$paper-sidebar: #F8E4D3;
-$paper-background: #FDF9F3;
+//$color-primary: #9e1e35;
+//$color-secondary: #8e1e35;
+//$dark-primary: #1b1f24;
+//$dark-secondary: #2c3036;
+//$paper-primary: #f1f1f1;
+//$paper-secondary: rgba(112,63,51,.5);
+//$paper-sidebar: #F8E4D3;
+//$paper-background: #FDF9F3;
 $login-email-color: #6E747F;
 $login-facebook-color: #4267B2;
 $login-google-color: #DC4E41;
 $login-twitter-color: rgb(42,163,239);
-$menu-active-color: rgb(98,177,130);
-$header-footer: rgb(158,30,53);
-$input-background-color: rgb(110,116,127);
-$prev-next-button-color: rgba(158, 30, 53, 0.253);
-$default-highlight-color: rgb(166, 63, 77);
+//$menu-active-color: rgb(98,177,130);
+//$header-footer: rgb(158,30,53);
+//$input-background-color: rgb(110,116,127);
+//$prev-next-button-color: rgba(158, 30, 53, 0.253);
+//$default-highlight-color: rgb(166, 63, 77);
 
 $css4: true;
 $compatibility: true;
@@ -27,6 +27,7 @@ $variables: (
         --text-contextmenu-background: rgb(71, 64, 70),
         --text-arrow-color: rgb(229, 195, 195),
         --settings-font-color: rgb(99, 105, 116),
+        --settings-option-active-secondary-color: rgba(111,188,143,.5),
         --menu-font-color: rgb(255, 255, 255),
         --menu-background-color: rgb(39, 42, 47),
         --menu-secondary-background-color: rgb(39, 42, 47),
@@ -35,7 +36,7 @@ $variables: (
         --menu-title-text-color: rgb(255, 255, 255),
         --menu-secondary-header-background: rgb(39, 42, 47),
         --menu-header-background: rgb(115, 16, 37),
-        --application-input-background: rgb(110, 116, 127),
+        --application-input-color: rgb(110, 116, 127),
         --application-placeholder-color: rgb(255, 255, 255),
         --application-background: rgb(253, 248, 241),
         --application-base-color: rgb(50, 53, 58),
