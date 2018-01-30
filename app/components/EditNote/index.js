@@ -9,17 +9,22 @@ import PropTypes from 'prop-types';
 import BooksTable from 'components/BooksTable';
 import SvgWrapper from 'components/SvgWrapper';
 // import styled from 'styled-components';
-
+// TODO: Add in ability to select verses both here and in book table
 class EditNote extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	state = {
 		textarea: this.props.note.get('notes') || '',
 		titleText: this.props.note.get('title') || '',
 		savedNote: !!this.props.note.get('id'),
+		selectedChapter: '',
+		selectedBookName: '',
+		selectedBookId: '',
 	}
 
 	componentWillUnmount() {
 		// Dispatch api call to save the user note and hope nothing hiccups
-		this.handleSave();
+		if (this.state.textarea) {
+			this.handleSave();
+		}
 	}
 
 	getCurrentDate = () => {
@@ -29,6 +34,14 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 		const month = (date.getMonth() + 1).toFixed();
 
 		return `${month.length === 1 ? `0${month}` : month}.${day}.${year}`;
+	}
+
+	setSelectedChapter = (chapter) => {
+		this.setState({ selectedChapter: chapter });
+	}
+
+	setSelectedBookName = ({ book, id }) => {
+		this.setState({ selectedBookName: book, selectedBookId: id });
 	}
 
 	handleTextareaChange = (e) => {
@@ -58,6 +71,19 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 				verse_end: verseEnd,
 				chapter,
 			});
+		} else if (this.state.selectedBookId) {
+			const { selectedBookId, selectedChapter } = this.state;
+
+			this.props.addNote({
+				bible_id: activeTextId,
+				title: titleText,
+				notes: textarea,
+				book_id: selectedBookId,
+				highlights: '',
+				verse_start: verseStart,
+				verse_end: verseEnd,
+				chapter: selectedChapter,
+			});
 		} else {
 			this.props.addNote({
 				bible_id: activeTextId,
@@ -84,6 +110,8 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 
 		if (book && chapter && start) {
 			return `${vernacularNamesObject[book]} ${chapter}:${verses}`;
+		} else if (this.state.selectedBookName && this.state.selectedChapter) {
+			return `${this.state.selectedBookName} ${this.state.selectedChapter}`;
 		}
 		return 'Please Add a Verse';
 	}
@@ -95,11 +123,13 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 			note,
 			isAddVerseExpanded,
 			isVerseTextVisible,
-			setActiveChapter,
-			setActiveBookName,
 			activeTextId,
 			notePassage,
 		} = this.props;
+		const {
+			selectedBookName,
+			selectedChapter,
+		} = this.state;
 
 		return (
 			<section className="edit-notes">
@@ -127,8 +157,10 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 							</div>
 							<div className="book-table">
 								<BooksTable
-									setActiveChapter={setActiveChapter}
-									setActiveBookName={setActiveBookName}
+									setActiveChapter={this.setSelectedChapter}
+									setActiveBookName={this.setSelectedBookName}
+									initialBookName={selectedBookName}
+									activeChapter={selectedChapter}
 									closeBookTable={toggleAddVerseMenu}
 								/>
 							</div>
@@ -146,13 +178,11 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 		);
 	}
 }
-// TODO: Add toggleAddVerseMenu as click handler for 123 svg
+// TODO: Add toggleAddVerseMenu as click handler for 170 svg
 EditNote.propTypes = {
 	addNote: PropTypes.func,
 	updateNote: PropTypes.func,
 	toggleVerseText: PropTypes.func,
-	setActiveChapter: PropTypes.func,
-	setActiveBookName: PropTypes.func,
 	toggleAddVerseMenu: PropTypes.func,
 	note: PropTypes.object,
 	vernacularNamesObject: PropTypes.object,
