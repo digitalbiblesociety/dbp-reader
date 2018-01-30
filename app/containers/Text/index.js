@@ -136,7 +136,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 
 		if (readersMode) {
 			textComponents = text.map((verse) => (
-				<span key={verse.verse_start}>{verse.verse_text}</span>
+				<span key={verse.verse_start}>{verse.verse_text}&nbsp;&nbsp;</span>
 			));
 		} else if (oneVersePerLine) {
 			textComponents = text.map((verse) => (
