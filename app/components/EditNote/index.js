@@ -14,10 +14,12 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 	state = {
 		textarea: this.props.note.get('notes') || '',
 		titleText: this.props.note.get('title') || '',
+		savedNote: !!this.props.note.get('id'),
 	}
 
 	componentWillUnmount() {
 		// Dispatch api call to save the user note and hope nothing hiccups
+		this.handleSave();
 	}
 
 	getCurrentDate = () => {
@@ -38,18 +40,50 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 	}
 
 	handleSave = () => {
-		this.props.addNote({
-			notes: this.state.textarea,
-			reference_id: this.props.note.get('referenceId'),
-			title: this.state.titleText,
-			bible_id: this.props.activeTextId,
-		});
+		const { note, activeTextId } = this.props;
+		const { titleText, textarea } = this.state;
+		const chapter = note.get('chapter');
+		const verseStart = note.get('verse_start');
+		const verseEnd = note.get('verse_end');
+		const bookId = note.get('book_id');
+
+		if (this.state.savedNote) {
+			this.props.updateNote({
+				bible_id: activeTextId,
+				title: titleText,
+				notes: textarea,
+				book_id: bookId,
+				highlights: '',
+				verse_start: verseStart,
+				verse_end: verseEnd,
+				chapter,
+			});
+		} else {
+			this.props.addNote({
+				bible_id: activeTextId,
+				title: titleText,
+				notes: textarea,
+				book_id: bookId,
+				highlights: '',
+				verse_start: verseStart,
+				verse_end: verseEnd,
+				chapter,
+			});
+		}
+
+		this.setState({ savedNote: true });
 	}
 
 	get verseReference() {
-		if (this.props.note.get('referenceId')) {
-			const bookChapterVerse = this.props.note.get('referenceId').split('_');
-			return `${bookChapterVerse[0]} ${bookChapterVerse[1]}:${bookChapterVerse[2]}`;
+		const { vernacularNamesObject, note } = this.props;
+		const book = note.get('book_id');
+		const start = note.get('verse_start');
+		const end = note.get('verse_end');
+		const chapter = note.get('chapter');
+		const verses = (start === end || !end) ? start : `${start}-${end}`;
+
+		if (book && chapter && start) {
+			return `${vernacularNamesObject[book]} ${chapter}:${verses}`;
 		}
 		return 'Please Add a Verse';
 	}
@@ -61,15 +95,9 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 			note,
 			isAddVerseExpanded,
 			isVerseTextVisible,
-			getChapterText,
 			setActiveChapter,
 			setActiveBookName,
-			setSelectedBookName,
-			books,
 			activeTextId,
-			activeChapter,
-			activeBookName,
-			selectedBookName,
 			notePassage,
 		} = this.props;
 
@@ -99,50 +127,39 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 							</div>
 							<div className="book-table">
 								<BooksTable
-									getChapterText={getChapterText}
 									setActiveChapter={setActiveChapter}
 									setActiveBookName={setActiveBookName}
-									setSelectedBookName={setSelectedBookName}
-									toggleChapterSelection={toggleAddVerseMenu}
-									books={books}
-									activeTextId={activeTextId}
-									activeChapter={activeChapter}
-									activeBookName={activeBookName}
-									selectedBookName={selectedBookName}
+									closeBookTable={toggleAddVerseMenu}
 								/>
 							</div>
 						</div>
 					) : (
 						<div className="add-verse">
-							<SvgWrapper onClick={toggleAddVerseMenu} className="plus" width="20px" height="20px" svgid="plus" />
+							<SvgWrapper className="plus" width="20px" height="20px" svgid="plus" />
 							<span className="text">ADD VERSE</span>
 						</div>
 					)
 				}
 				<textarea onChange={this.handleTextareaChange} placeholder="CLICK TO ADD NOTE" value={this.state.textarea} className="note-text" />
-				<span className="save-button" role="button" tabIndex={0} onClick={this.handleSave}>SAVE</span>
+				<span className="save-button" role="button" tabIndex={0} onClick={() => this.handleSave()}>SAVE</span>
 			</section>
 		);
 	}
 }
-
+// TODO: Add toggleAddVerseMenu as click handler for 123 svg
 EditNote.propTypes = {
-	toggleVerseText: PropTypes.func.isRequired,
-	toggleAddVerseMenu: PropTypes.func.isRequired,
-	note: PropTypes.object.isRequired,
-	isAddVerseExpanded: PropTypes.bool.isRequired,
-	isVerseTextVisible: PropTypes.bool.isRequired,
-	getChapterText: PropTypes.func,
+	addNote: PropTypes.func,
+	updateNote: PropTypes.func,
+	toggleVerseText: PropTypes.func,
 	setActiveChapter: PropTypes.func,
 	setActiveBookName: PropTypes.func,
-	setSelectedBookName: PropTypes.func,
-	books: PropTypes.array,
-	activeTextId: PropTypes.string,
-	activeChapter: PropTypes.number,
-	activeBookName: PropTypes.string,
-	selectedBookName: PropTypes.string,
-	addNote: PropTypes.func,
+	toggleAddVerseMenu: PropTypes.func,
+	note: PropTypes.object,
+	vernacularNamesObject: PropTypes.object,
+	isAddVerseExpanded: PropTypes.bool,
+	isVerseTextVisible: PropTypes.bool,
 	notePassage: PropTypes.string,
+	activeTextId: PropTypes.string,
 };
 
 export default EditNote;

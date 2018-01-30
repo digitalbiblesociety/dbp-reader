@@ -12,6 +12,19 @@ import PageSizeSelector from 'components/PageSizeSelector';
 // import styled from 'styled-components';
 // TODO: Provide way of differentiating between notes, bookmarks and highlights
 class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+	componentDidMount() {
+		if (this.props.sectionType === 'notes') {
+			this.props.getNotes();
+		}
+	}
+
+	getNoteReference(listItem) {
+		const verseRef = listItem.verse_end ? `${listItem.verse_start}-${listItem.verse_end}` : listItem.verse_start;
+		const { vernacularNamesObject } = this.props;
+
+		return `${vernacularNamesObject[listItem.book_id]} ${listItem.chapter}:${verseRef}`;
+	}
+
 	handlePageClick = (page) => this.props.setActivePageData(page);
 	handleClick = (listItem) => {
 		if (this.props.sectionType === 'notes') {
@@ -40,10 +53,10 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 				<section className="note-list">
 					{
 						activePageData.map((listItem) => (
-							<div role="button" tabIndex={0} onClick={() => this.handleClick(listItem)} key={listItem.date + listItem.title} className="list-item">
-								<div className="date">{listItem.date}</div>
+							<div role="button" tabIndex={0} onClick={() => this.handleClick(listItem)} key={listItem.id} className="list-item">
+								<div className="date">{listItem.created_at.slice(0, 10)}</div>
 								<div className="title-text">
-									<h4 className="title">{listItem.title}</h4>
+									<h4 className="title">{this.getNoteReference(listItem)}</h4>
 									<p className="text">{listItem.notes}</p>
 								</div>
 							</div>
@@ -65,16 +78,18 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 }
 
 MyNotes.propTypes = {
-	sectionType: PropTypes.string.isRequired,
-	listData: PropTypes.array.isRequired,
-	activePageData: PropTypes.array.isRequired,
 	setActiveChild: PropTypes.func.isRequired,
 	setActiveNote: PropTypes.func.isRequired,
 	setActivePageData: PropTypes.func.isRequired,
-	setPageSize: PropTypes.func.isRequired,
 	togglePageSelector: PropTypes.func.isRequired,
-	pageSize: PropTypes.number.isRequired,
+	setPageSize: PropTypes.func.isRequired,
+	getNotes: PropTypes.func.isRequired,
 	pageSelectorState: PropTypes.bool.isRequired,
+	activePageData: PropTypes.array.isRequired,
+	listData: PropTypes.array.isRequired,
+	sectionType: PropTypes.string.isRequired,
+	pageSize: PropTypes.number.isRequired,
+	vernacularNamesObject: PropTypes.object,
 };
 
 export default MyNotes;

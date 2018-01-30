@@ -13,8 +13,29 @@ import {
 	TOGGLE_PAGE_SELECTOR,
 	ADD_NOTE,
 	ADD_HIGHLIGHT,
+	GET_USER_NOTES,
 	ADD_BOOKMARK,
+	UPDATE_NOTE,
+	DELETE_NOTE,
 } from './constants';
+
+export const getNotes = ({ userId, params }) => ({
+	type: GET_USER_NOTES,
+	userId,
+	params,
+});
+
+export const deleteNote = ({ userId, noteId }) => ({
+	type: DELETE_NOTE,
+	userId,
+	noteId,
+});
+
+export const updateNote = ({ userId, data }) => ({
+	type: UPDATE_NOTE,
+	userId,
+	data,
+});
 
 export const addNote = ({ data, userId }) => ({
 	type: ADD_NOTE,

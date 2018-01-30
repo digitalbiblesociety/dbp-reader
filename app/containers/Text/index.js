@@ -26,10 +26,12 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 
 	setActiveNote = () => {
 		const { firstVerse, lastVerse, selectedText } = this.state;
-		const verseRange = firstVerse === lastVerse ? firstVerse : `${firstVerse}-${lastVerse}`;
-		const referenceId = `${this.props.activeBookId}_${this.props.activeChapter}_${verseRange}`;
+		const { activeBookId, activeChapter } = this.props;
 		const note = {
-			referenceId,
+			verse_start: firstVerse,
+			verse_end: lastVerse,
+			book_id: activeBookId,
+			chapter: activeChapter,
 			selectedText,
 		};
 
