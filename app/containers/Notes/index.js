@@ -180,7 +180,7 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 							</React.Fragment>
 						) : (
 							<div className="need-to-login">
-								Please <span className="login-text" role="button" tabIndex={0} onClick={() => { toggleNotesModal(); toggleProfile(); }}>Login</span> to access the notebook
+								Please <span className="login-text" role="button" tabIndex={0} onClick={() => { toggleNotesModal(); toggleProfile(); }}>sign in</span> to access your notebook.
 							</div>
 						)
 					}
