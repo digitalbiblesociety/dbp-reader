@@ -51,10 +51,11 @@ export const loadChapter = ({ text, audioSource }) => ({
 	audioSource,
 });
 
-export const loadBooksAndCopywrite = ({ books, copywrite }) => ({
+export const loadBooksAndCopywrite = ({ books, copywrite, hasPlainText }) => ({
 	type: LOAD_BOOKS,
 	books,
 	copywrite,
+	hasPlainText,
 });
 
 export const loadAudio = ({ audioObjects }) => ({
@@ -62,9 +63,10 @@ export const loadAudio = ({ audioObjects }) => ({
 	audioObjects,
 });
 
-export const getBooks = ({ textId }) => ({
+export const getBooks = ({ textId, filesets }) => ({
 	type: GET_BOOKS,
 	textId,
+	filesets,
 });
 
 export const getAudio = ({ filesetId, list }) => ({
@@ -73,12 +75,13 @@ export const getAudio = ({ filesetId, list }) => ({
 	list,
 });
 
-export const getChapterText = ({ bible, book, chapter, audioObjects }) => ({
+export const getChapterText = ({ bible, book, chapter, audioObjects, hasPlainText }) => ({
 	type: GET_CHAPTER_TEXT,
 	bible,
 	book,
 	chapter,
 	audioObjects,
+	hasPlainText,
 });
 
 export const toggleMenuBar = () => ({

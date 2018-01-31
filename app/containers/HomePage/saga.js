@@ -42,7 +42,7 @@ export function* getAudio({ list }/* { filesetId, list } */) {
 	}
 }
 
-export function* getBooks({ textId }) {
+export function* getBooks({ textId, filesets }) {
 	// Plain Text -> https://api.bible.build/bibles/${textId}
 	const requestUrl = `https://api.bible.build/bibles/${textId}?key=${process.env.DBP_API_KEY}&v=4`;
 
@@ -52,6 +52,33 @@ export function* getBooks({ textId }) {
 			...book,
 			chapters: book.chapters.split(',').map(Number).sort((a, b) => a - b),
 		}));
+		const hasPlainText = books.length !== 0;
+		const backupBooks = [];
+
+		if (!hasPlainText) {
+			const urls = [];
+			const tempData = [];
+			filesets.forEach((type, fileId) => {
+				urls.push({ url: `https://api.bible.build/bibles/filesets/${fileId}?key=${process.env.DBP_API_KEY}&v=4` });
+			});
+
+			for (const url of urls) { // eslint-disable-line no-restricted-syntax
+				const res = yield request(url.url);
+				const data = res.data.map((obj) => ({ book_id: obj.book_id, name: obj.book_name, name_short: obj.book_name, chapter: obj.chapter_start }));
+				tempData.push(data);
+			}
+
+			const unitedData = unionWith(...tempData, (resource, next) => resource.book_id === next.book_id && resource.chapter === next.chapter);
+			const bookChapterList = unitedData.reduce((list, book) => {
+				if (list[book.book_id]) {
+					return { ...list, [book.book_id]: { ...list[book.book_id], chapters: list[book.book_id].chapters.concat(book.chapter) } };
+				}
+				return { ...list, [book.book_id]: { ...book, chapters: [book.chapter] } };
+			}, {});
+
+			Object.values(bookChapterList).forEach((value) => backupBooks.push(value));
+		}
+
 		const copywrite = {
 			mark: response.data.mark,
 			name: response.data.name,
@@ -59,7 +86,7 @@ export function* getBooks({ textId }) {
 			country: response.data.country,
 		};
 
-		yield put(loadBooksAndCopywrite({ books, copywrite }));
+		yield put(loadBooksAndCopywrite({ books: hasPlainText ? books : backupBooks, copywrite, hasPlainText }));
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error(err); // eslint-disable-line no-console
@@ -67,34 +94,31 @@ export function* getBooks({ textId }) {
 	}
 }
 
-export function* getChapter({ bible, book, chapter, audioObjects }) {
+export function* getChapter({ bible, book, chapter, audioObjects, hasPlainText }) {
 	const audio = typeof audioObjects.toJS === 'function' ? audioObjects.toJS() : audioObjects;
-
 	const hasAudio = audio.filter((resource) => resource.bookId === book && resource.chapter === chapter);
-	// TODO: Add ability to make calls for plaintext and formatted text
-
-	// TODO: There is an issue with the getAudio call not returning before this call
-	// TODO: there needs to be some sort of race, or variable that tracks whether or
-	// TODO: not the filesets have been retrieved and the audioObjects have been set
 	let audioRequestUrl = '';
-
+	let textRequestUrl = '';
+	// TODO
+	// Add ability to make calls for plaintext and formatted text
+	// There is an issue with the getAudio call not returning before this call
+	// there needs to be some sort of race, or variable that tracks whether or
+	// not the filesets have been retrieved and the audioObjects have been set
 	if (hasAudio.length) {
 		audioRequestUrl = `https://api.bible.build/bibles/filesets/${hasAudio[0].filesetId}?chapter_id=${chapter}&book_id=${book}&key=${process.env.DBP_API_KEY}&v=4`;
 	}
-
-	const textRequestUrl = `https://api.bible.build/bible/${bible}/${book}/${chapter}?key=${process.env.DBP_API_KEY}&v=4`;
+	if (hasPlainText) {
+		textRequestUrl = `https://api.bible.build/bible/${bible}/${book}/${chapter}?key=${process.env.DBP_API_KEY}&v=4`;
+	}
 	// const audioRequestUrl = `https://api.bible.build/bibles/filesets/${filesetId}?key=${process.env.DBP_API_KEY}&v=4`;
 
 	try {
-		const textResponse = yield call(request, textRequestUrl);
+		const textResponse = yield textRequestUrl ? call(request, textRequestUrl) : '';
 		const audioResponse = yield audioRequestUrl ? call(request, audioRequestUrl) : '';
-		let audioSource = '';
+		const text = textResponse || [];
+		const audioSource = audioResponse ? audioResponse.data[0].path : '';
 
-		if (audioResponse) {
-			audioSource = audioResponse.data[0].path;
-		}
-		// console.log(audioSource)
-		yield put(loadChapter({ text: textResponse, audioSource }));
+		yield put(loadChapter({ text, audioSource }));
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error(err); // eslint-disable-line no-console

@@ -7,6 +7,7 @@
  * component (SFC), hot reloading does not currently support SFCs. If hot
  * reloading is not a necessity for you then you can refactor it and remove
  * the linting exception.
+ * TODO: Refactor to have everything use immutablejs and not plain js
  */
 
 import React from 'react';
@@ -71,11 +72,12 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			activeChapter,
 			activeFilesets,
 			audioObjects,
+			hasPlainText,
 		} = this.props.homepage;
 
 		this.props.dispatch(getAudio({ list: fromJS(activeFilesets) }));
-		this.props.dispatch(getBooks({ textId: activeTextId }));
-		this.props.dispatch(getChapterText({ bible: activeTextId, book: activeBookId, chapter: activeChapter, audioObjects }));
+		this.props.dispatch(getBooks({ textId: activeTextId, filesets: fromJS(activeFilesets) }));
+		this.props.dispatch(getChapterText({ bible: activeTextId, book: activeBookId, chapter: activeChapter, audioObjects, hasPlainText }));
 		// Need to get the audio for the initial chapter
 	}
 
@@ -90,7 +92,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		// Solving the issue of requesting the new data from the
 		// api when a new version is clicked
 		if (nextProps.homepage.activeTextId !== this.props.homepage.activeTextId) {
-			this.getBooks(nextProps.homepage.activeTextId);
+			this.getBooks({ textId: nextProps.homepage.activeTextId, filesets: fromJS(nextProps.homepage.activeFilesets) });
 			this.toggleChapterSelection();
 		} else if (!is(nextBooks, curBooks) && curBooks.size) {
 			this.setActiveBookName({ book: nextBookName, id: nextBookId });
@@ -138,11 +140,11 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		}
 	}
 
-	getBooks = (textId) => this.props.dispatch(getBooks({ textId }))
+	getBooks = ({ textId, filesets }) => this.props.dispatch(getBooks({ textId, filesets }))
 
 	getAudio = ({ list }) => this.props.dispatch(getAudio({ list }))
 
-	getChapters = ({ bible, book, chapter }) => this.props.dispatch(getChapterText({ bible, book, chapter, audioObjects: this.props.homepage.audioObjects }))
+	getChapters = ({ bible, book, chapter }) => this.props.dispatch(getChapterText({ bible, book, chapter, audioObjects: this.props.homepage.audioObjects, hasPlainText: this.props.homepage.hasPlainText }))
 
 	setActiveBookName = ({ book, id }) => this.props.dispatch(setActiveBookName({ book, id }))
 
