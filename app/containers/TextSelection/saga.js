@@ -24,7 +24,16 @@ export function* getCountries() {
 
 		countriesObject.ANY = { name: 'ANY', languages: { ANY: 'ANY' }, codes: { iso_a2: 'ANY' } };
 
-		const countries = fromJS(countriesObject).sort((a, b) => a.get('name').localeCompare(b.get('name')));
+		const countries = fromJS(countriesObject).sort((a, b) => {
+			if (a.get('name') === 'ANY') {
+				return -1;
+			} else if (a.get('name') > b.get('name')) {
+				return 1;
+			} else if (a.get('name') < b.get('name')) {
+				return -1;
+			}
+			return 0;
+		});
 
 		yield put(loadCountries({ countries }));
 	} catch (err) {

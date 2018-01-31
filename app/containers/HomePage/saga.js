@@ -57,8 +57,14 @@ export function* getBooks({ textId }) {
 }
 
 export function* getChapter({ bible, book, chapter, audioObjects }) {
-	const hasAudio = audioObjects.filter((resource) => resource.bookId === book && resource.chapter === chapter);
+	const audio = typeof audioObjects.toJS === 'function' ? audioObjects.toJS() : audioObjects;
+
+	const hasAudio = audio.filter((resource) => resource.bookId === book && resource.chapter === chapter);
 	// TODO: Add ability to make calls for plaintext and formatted text
+
+	// TODO: There is an issue with the getAudio call not returning before this call
+	// TODO: there needs to be some sort of race, or variable that tracks whether or
+	// TODO: not the filesets have been retrieved and the audioObjects have been set
 	let audioRequestUrl = '';
 
 	if (hasAudio.length) {
