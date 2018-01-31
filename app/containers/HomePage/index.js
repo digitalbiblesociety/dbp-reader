@@ -284,7 +284,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 						) : null
 					}
 				</TransitionGroup>
-				<Text setActiveNote={this.setActiveNote} formattedText={formattedText} formattedTextActive={formattedTextActive} oneVersePerLine={userSettings.getIn(['toggleOptions', 'oneVersePerLine', 'active'])} readersMode={userSettings.getIn(['toggleOptions', 'readersMode', 'active'])} setActiveNotesView={this.setActiveNotesView} activeBookId={activeBookId} activeChapter={activeChapter} notesActive={isNotesModalActive} toggleNotesModal={this.toggleNotesModal} text={chapterText} nextChapter={this.getNextChapter} prevChapter={this.getPrevChapter} />
+				<Text userSettings={userSettings} setActiveNote={this.setActiveNote} formattedText={formattedText} formattedTextActive={formattedTextActive} setActiveNotesView={this.setActiveNotesView} activeBookId={activeBookId} activeChapter={activeChapter} notesActive={isNotesModalActive} toggleNotesModal={this.toggleNotesModal} text={chapterText} nextChapter={this.getNextChapter} prevChapter={this.getPrevChapter} />
 				<Footer settingsActive={isSettingsModalActive} isInformationModalActive={isInformationModalActive} toggleInformationModal={this.toggleInformationModal} toggleSettingsModal={this.toggleSettingsModal} />
 			</GenericErrorBoundary>
 		);

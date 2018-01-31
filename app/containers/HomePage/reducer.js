@@ -97,7 +97,7 @@ const initialState = fromJS({
 			},
 			justifiedText: {
 				name: 'JUSTIFIED TEXT',
-				active: false,
+				active: true,
 				available: true,
 			},
 			oneVersePerLine: {
