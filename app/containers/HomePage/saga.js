@@ -5,20 +5,31 @@ import { GET_CHAPTER_TEXT, GET_BOOKS, GET_AUDIO } from './constants';
 import { loadChapter, loadBooksAndCopywrite, loadAudio } from './actions';
 // TODO: Fix issue with audio coming back after the chapters have already been called
 export function* getAudio({ list }/* { filesetId, list } */) {
-	const requestUrls = [];
+	const dramaUrls = [];
+	const plainUrls = [];
 	list.forEach((type, fileId) => {
 		if (type === 'audio_drama') {
-			requestUrls.push({ fileId, url: `https://api.bible.build/bibles/filesets/${fileId}?key=${process.env.DBP_API_KEY}&v=4&pretty` });
+			dramaUrls.push({ fileId, url: `https://api.bible.build/bibles/filesets/${fileId}?key=${process.env.DBP_API_KEY}&v=4` });
+		} else if (type === 'audio') {
+			plainUrls.push({ fileId, url: `https://api.bible.build/bibles/filesets/${fileId}?key=${process.env.DBP_API_KEY}&v=4` });
 		}
 	});
 
 	try {
 		const results = [];
 		// Figure out a cleaner/faster way of doing this without using for loop
-		for (const requestUrl of requestUrls) { // eslint-disable-line no-restricted-syntax
+		for (const requestUrl of dramaUrls) { // eslint-disable-line no-restricted-syntax
 			const res = yield request(requestUrl.url);
 			const data = res.data.map((obj) => ({ bookId: obj.book_id, bookName: obj.book_name, chapter: obj.chapter_start, filesetId: requestUrl.fileId }));
 			results.push(data);
+		}
+
+		if (results.length === 0) {
+			for (const requestUrl of plainUrls) { // eslint-disable-line no-restricted-syntax
+				const res = yield request(requestUrl.url);
+				const data = res.data.map((obj) => ({ bookId: obj.book_id, bookName: obj.book_name, chapter: obj.chapter_start, filesetId: requestUrl.fileId }));
+				results.push(data);
+			}
 		}
 
 		const audioObjects = unionWith(...results, (resource, next) => resource.bookId === next.bookId && resource.chapter === next.chapter);
@@ -33,7 +44,7 @@ export function* getAudio({ list }/* { filesetId, list } */) {
 
 export function* getBooks({ textId }) {
 	// Plain Text -> https://api.bible.build/bibles/${textId}
-	const requestUrl = `https://api.bible.build/bibles/${textId}?key=${process.env.DBP_API_KEY}&v=4&pretty`;
+	const requestUrl = `https://api.bible.build/bibles/${textId}?key=${process.env.DBP_API_KEY}&v=4`;
 
 	try {
 		const response = yield call(request, requestUrl);
@@ -68,11 +79,11 @@ export function* getChapter({ bible, book, chapter, audioObjects }) {
 	let audioRequestUrl = '';
 
 	if (hasAudio.length) {
-		audioRequestUrl = `https://api.bible.build/bibles/filesets/${hasAudio[0].filesetId}?chapter_id=${chapter}&book_id=${book}&key=${process.env.DBP_API_KEY}&v=4&pretty`;
+		audioRequestUrl = `https://api.bible.build/bibles/filesets/${hasAudio[0].filesetId}?chapter_id=${chapter}&book_id=${book}&key=${process.env.DBP_API_KEY}&v=4`;
 	}
 
-	const textRequestUrl = `https://api.bible.build/bible/${bible}/${book}/${chapter}?key=${process.env.DBP_API_KEY}&v=4&pretty`;
-	// const audioRequestUrl = `https://api.bible.build/bibles/filesets/${filesetId}?key=${process.env.DBP_API_KEY}&v=4&pretty`;
+	const textRequestUrl = `https://api.bible.build/bible/${bible}/${book}/${chapter}?key=${process.env.DBP_API_KEY}&v=4`;
+	// const audioRequestUrl = `https://api.bible.build/bibles/filesets/${filesetId}?key=${process.env.DBP_API_KEY}&v=4`;
 
 	try {
 		const textResponse = yield call(request, textRequestUrl);
