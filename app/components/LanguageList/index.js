@@ -51,12 +51,17 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 			toggleLanguageList,
 			toggleVersionList,
 			setCountryListState,
+			active,
 		} = this.props;
 
 		if (language) {
 			setActiveIsoCode({ iso: language.get('iso_code'), name: language.get('name') });
 			toggleLanguageList({ state: false });
 			toggleVersionList({ state: true });
+		} else if (active) {
+			toggleLanguageList({ state: false });
+			toggleVersionList({ state: true });
+			setCountryListState({ state: false });
 		} else {
 			toggleLanguageList({ state: true });
 			toggleVersionList({ state: false });
@@ -75,7 +80,7 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 		if (active) {
 			return (
 				<div className="text-selection-section">
-					<div className="text-selection-title">
+					<div role={'button'} tabIndex={0} onClick={() => this.handleLanguageClick()} className="text-selection-title">
 						<SvgWrapper height="25px" width="25px" fill="#fff" svgid="world" />
 						<span className="text">LANGUAGE:</span>
 						<span className="active-header-name">{activeLanguageName}</span>
