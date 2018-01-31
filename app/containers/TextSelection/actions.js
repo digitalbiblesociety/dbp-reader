@@ -28,8 +28,9 @@ export const loadCountries = ({ countries }) => ({
 	countries,
 });
 
-export const getTexts = () => ({
+export const getTexts = ({ languageISO }) => ({
 	type: GET_DPB_TEXTS,
+	languageISO,
 });
 
 export const getLanguages = () => ({

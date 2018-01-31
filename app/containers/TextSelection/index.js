@@ -38,8 +38,14 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 		// move these calls to CDM of homepage to ensure they are loaded by the time the user is here
 		this.props.dispatch(getCountries());
 		this.props.dispatch(getLanguages());
-		this.props.dispatch(getTexts());
+		this.props.dispatch(getTexts({ languageISO: this.props.textselection.activeIsoCode }));
 		document.addEventListener('click', this.handleClickOutside);
+	}
+
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.textselection.activeIsoCode !== this.props.textselection.activeIsoCode) {
+			this.props.dispatch(getTexts({ languageISO: nextProps.textselection.activeIsoCode }));
+		}
 	}
 
 	componentWillUnmount() {
