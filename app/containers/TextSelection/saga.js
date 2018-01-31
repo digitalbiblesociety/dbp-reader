@@ -6,7 +6,7 @@ import { GET_COUNTRIES, GET_DPB_TEXTS, GET_LANGUAGES } from './constants';
 import { loadTexts, loadCountries, setLanguages } from './actions';
 
 export function* getCountries() {
-	const requestUrl = `https://api.bible.build/countries?key=${process.env.DBP_API_KEY}&v=4&pretty`;
+	const requestUrl = `https://api.bible.build/countries?key=${process.env.DBP_API_KEY}&v=4`;
 
 	try {
 		const response = yield call(request, requestUrl);
@@ -43,9 +43,9 @@ export function* getCountries() {
 	}
 }
 
-export function* getTexts() {
+export function* getTexts({ languageISO }) {
 	// need to configure the correct request url as this one is not getting a response
-	const requestUrl = `https://api.bible.build/bibles?key=${process.env.DBP_API_KEY}&v=4&pretty`;
+	const requestUrl = `https://api.bible.build/bibles?key=${process.env.DBP_API_KEY}&language_code=${languageISO}&v=4`;
 	try {
 		const response = yield call(request, requestUrl);
 		// Some texts may have plain text in the database but no filesets
@@ -59,7 +59,7 @@ export function* getTexts() {
 }
 
 export function* getLanguages() {
-	const requestUrl = `https://api.bible.build/languages?key=${process.env.DBP_API_KEY}&v=4&pretty`;
+	const requestUrl = `https://api.bible.build/languages?key=${process.env.DBP_API_KEY}&v=4`;
 
 	try {
 		const response = yield call(request, requestUrl);
