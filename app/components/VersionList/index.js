@@ -80,6 +80,7 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 			toggleTextSelection,
 			setActiveText,
 			getAudio,
+			active,
 		} = this.props;
 
 		if (bible) {
@@ -88,6 +89,9 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 			getAudio({ list: bible.get('filesets') });
 			setActiveText({ textId: abbr, textName: abbr, filesets: bible.get('filesets') });
 			toggleTextSelection();
+		} else if (active) {
+			toggleLanguageList({ state: true });
+			toggleVersionList({ state: false });
 		} else {
 			setCountryListState({ state: false });
 			toggleLanguageList({ state: false });
@@ -106,7 +110,7 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 		if (active) {
 			return (
 				<div className="text-selection-section">
-					<div className="text-selection-title">
+					<div role={'button'} tabIndex={0} onClick={() => this.handleVersionListClick()} className="text-selection-title">
 						<SvgWrapper height="25px" width="25px" fill="#fff" svgid="resources" />
 						<span className="text">VERSION:</span>
 						<span className="active-header-name">{activeTextName}</span>

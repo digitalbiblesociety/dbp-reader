@@ -28,10 +28,16 @@ const selectAudioObjects = () => createSelector(
 	(substate) => substate.get('audioObjects')
 );
 
+const selectHasPlainText = () => createSelector(
+	selectHomepageDomain,
+	(substate) => substate.get('hasPlainText')
+);
+
 export {
 	selectActiveTextId,
 	selectBooks,
 	selectActiveBookName,
 	selectActiveChapter,
 	selectAudioObjects,
+	selectHasPlainText,
 };

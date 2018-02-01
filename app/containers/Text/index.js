@@ -90,6 +90,44 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		// Below code gets the highlighted text
 		// window.getSelection().toString();
 	}
+
+	get getTextComponents() {
+		const {
+			text,
+			formattedText,
+			userSettings,
+			formattedTextActive,
+		} = this.props;
+		let textComponents;
+		const readersMode = userSettings.getIn(['toggleOptions', 'readersMode', 'active']);
+		const oneVersePerLine = userSettings.getIn(['toggleOptions', 'oneVersePerLine', 'active']);
+		const justifiedText = userSettings.getIn(['toggleOptions', 'justifiedText', 'active']);
+
+		if (readersMode) {
+			textComponents = text.map((verse) => (
+				<span key={verse.verse_start}>{verse.verse_text}&nbsp;&nbsp;</span>
+			));
+		} else if (oneVersePerLine) {
+			textComponents = text.map((verse) => (
+				<span key={verse.verse_start}><br />&nbsp;<sup>{verse.verse_start_vernacular}</sup>&nbsp;{verse.verse_text}<br /></span>
+			));
+		} else if (formattedTextActive) {
+			// TODO: find way of providing the html without using dangerouslySetInnerHTML
+			/* eslint-disable react/no-danger */
+			textComponents = (
+				<div dangerouslySetInnerHTML={{ __html: formattedText }}></div>
+			);
+		} else if (justifiedText) {
+			textComponents = text.map((verse) => (
+				<span verseid={verse.verse_start} key={verse.verse_start}>&nbsp;<sup verseid={verse.verse_start}>{verse.verse_start_vernacular}</sup>&nbsp;{verse.verse_text}</span>
+			));
+		} else {
+			textComponents = (<h5>Please select a mode for displaying text by using the options in the Settings menu locatated near the bottom left of the screen!</h5>);
+		}
+
+		return textComponents;
+	}
+
 	// Allows use of the right mouse button to toggle menu's or perform different actions
 	handleContext = (e) => e.preventDefault()
 
@@ -115,16 +153,12 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 
 	render() {
 		const {
-			text,
 			nextChapter,
 			prevChapter,
 			activeChapter,
 			toggleNotesModal,
 			notesActive,
 			setActiveNotesView,
-			readersMode,
-			oneVersePerLine,
-			formattedText,
 			activeBookId,
 			formattedTextActive,
 		} = this.props;
@@ -132,27 +166,6 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			coords,
 			contextMenuState,
 		} = this.state;
-		let textComponents;
-
-		if (readersMode) {
-			textComponents = text.map((verse) => (
-				<span key={verse.verse_start}>{verse.verse_text}&nbsp;&nbsp;</span>
-			));
-		} else if (oneVersePerLine) {
-			textComponents = text.map((verse) => (
-				<span key={verse.verse_start}><br />&nbsp;<sup>{verse.verse_start_vernacular}</sup>&nbsp;{verse.verse_text}<br /></span>
-			));
-		} else if (formattedTextActive) {
-			// TODO: find way of providing the html without using dangerouslySetInnerHTML
-			/* eslint-disable react/no-danger */
-			textComponents = (
-				<div dangerouslySetInnerHTML={{ __html: formattedText }}></div>
-			);
-		} else {
-			textComponents = text.map((verse) => (
-				<span verseid={verse.verse_start} key={verse.verse_start}>&nbsp;<sup verseid={verse.verse_start}>{verse.verse_start_vernacular}</sup>&nbsp;{verse.verse_text}</span>
-			));
-		}
 
 		return (
 			<div className="text-container">
@@ -163,11 +176,11 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				}
 				<main ref={this.setMainRef} onClick={(e) => e.button === 0 && this.closeContextMenu()} onMouseDown={this.getFirstVerse} onMouseUp={this.handleMouseUp} className="chapter" onContextMenu={this.handleContext}>
 					{
-						readersMode || formattedTextActive ? null : (
+						formattedTextActive ? null : (
 							<h1 className="active-chapter-title">{activeChapter}</h1>
 						)
 					}
-					{textComponents}
+					{this.getTextComponents}
 				</main>
 				{
 					activeBookId === 'REV' && activeChapter === 22 ? null : (
@@ -186,6 +199,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 
 Text.propTypes = {
 	text: PropTypes.array,
+	userSettings: PropTypes.object,
 	nextChapter: PropTypes.func,
 	prevChapter: PropTypes.func,
 	toggleNotesModal: PropTypes.func,
@@ -193,8 +207,6 @@ Text.propTypes = {
 	formattedText: PropTypes.string,
 	activeChapter: PropTypes.number,
 	notesActive: PropTypes.bool,
-	readersMode: PropTypes.bool,
-	oneVersePerLine: PropTypes.bool,
 	formattedTextActive: PropTypes.bool,
 	setActiveNote: PropTypes.func,
 	activeBookId: PropTypes.string,

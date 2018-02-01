@@ -106,16 +106,17 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			activeChapter,
 			activeBookId,
 			audioObjects,
+			hasPlainText,
 		} = this.props.homepage;
 		const { activeBook, nextBook } = this.props;
 		const maxChapter = activeBook.get('chapters').size;
 
 		if (activeChapter === maxChapter) {
 			this.setActiveBookName({ book: nextBook.get('name'), id: nextBook.get('book_id') });
-			this.getChapters({ bible: activeTextId, book: nextBook.get('book_id'), chapter: 1, audioObjects });
+			this.getChapters({ bible: activeTextId, book: nextBook.get('book_id'), chapter: 1, audioObjects, hasPlainText });
 			this.setActiveChapter(1);
 		} else {
-			this.getChapters({ bible: activeTextId, book: activeBookId, chapter: activeChapter + 1, audioObjects });
+			this.getChapters({ bible: activeTextId, book: activeBookId, chapter: activeChapter + 1, audioObjects, hasPlainText });
 			this.setActiveChapter(activeChapter + 1);
 		}
 	}
@@ -126,16 +127,17 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			activeChapter,
 			activeBookId,
 			audioObjects,
+			hasPlainText,
 		} = this.props.homepage;
 		const { previousBook } = this.props;
 
 		if (activeChapter - 1 === 0) {
 			const lastChapter = previousBook.get('chapters').size;
 			this.setActiveBookName({ book: previousBook.get('name'), id: previousBook.get('book_id') });
-			this.getChapters({ bible: activeTextId, book: previousBook.get('book_id'), chapter: lastChapter, audioObjects });
+			this.getChapters({ bible: activeTextId, book: previousBook.get('book_id'), chapter: lastChapter, audioObjects, hasPlainText });
 			this.setActiveChapter(lastChapter);
 		} else {
-			this.getChapters({ bible: activeTextId, book: activeBookId, chapter: activeChapter - 1, audioObjects });
+			this.getChapters({ bible: activeTextId, book: activeBookId, chapter: activeChapter - 1, audioObjects, hasPlainText });
 			this.setActiveChapter(activeChapter - 1);
 		}
 	}
@@ -284,7 +286,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 						) : null
 					}
 				</TransitionGroup>
-				<Text setActiveNote={this.setActiveNote} formattedText={formattedText} formattedTextActive={formattedTextActive} oneVersePerLine={userSettings.getIn(['toggleOptions', 'oneVersePerLine', 'active'])} readersMode={userSettings.getIn(['toggleOptions', 'readersMode', 'active'])} setActiveNotesView={this.setActiveNotesView} activeBookId={activeBookId} activeChapter={activeChapter} notesActive={isNotesModalActive} toggleNotesModal={this.toggleNotesModal} text={chapterText} nextChapter={this.getNextChapter} prevChapter={this.getPrevChapter} />
+				<Text userSettings={userSettings} setActiveNote={this.setActiveNote} formattedText={formattedText} formattedTextActive={formattedTextActive} setActiveNotesView={this.setActiveNotesView} activeBookId={activeBookId} activeChapter={activeChapter} notesActive={isNotesModalActive} toggleNotesModal={this.toggleNotesModal} text={chapterText} nextChapter={this.getNextChapter} prevChapter={this.getPrevChapter} />
 				<Footer settingsActive={isSettingsModalActive} isInformationModalActive={isInformationModalActive} toggleInformationModal={this.toggleInformationModal} toggleSettingsModal={this.toggleSettingsModal} />
 			</GenericErrorBoundary>
 		);
