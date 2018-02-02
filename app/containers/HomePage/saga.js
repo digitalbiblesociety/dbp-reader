@@ -8,10 +8,10 @@ import { loadChapter, loadBooksAndCopywrite, loadAudio } from './actions';
 export function* getAudio({ list }/* { filesetId, list } */) {
 	const dramaUrls = [];
 	const plainUrls = [];
-	list.forEach((type, fileId) => {
-		if (type === 'audio_drama') {
+	list.forEach((fileObject, fileId) => {
+		if (fileObject.get('set_type') === 'audio_drama') {
 			dramaUrls.push({ fileId, url: `https://api.bible.build/bibles/filesets/${fileId}?key=${process.env.DBP_API_KEY}&v=4` });
-		} else if (type === 'audio') {
+		} else if (fileObject.get('set_type') === 'audio') {
 			plainUrls.push({ fileId, url: `https://api.bible.build/bibles/filesets/${fileId}?key=${process.env.DBP_API_KEY}&v=4` });
 		}
 	});
@@ -60,8 +60,8 @@ export function* getBooks({ textId, filesets }) {
 		if (!hasTextInDatabase) {
 			const urls = [];
 			const tempData = [];
-			filesets.forEach((type, fileId) => {
-				urls.push({ url: `https://api.bible.build/bibles/filesets/${fileId}?key=${process.env.DBP_API_KEY}&v=4`, filesetId: fileId, type });
+			filesets.forEach((fileObject, fileId) => {
+				urls.push({ url: `https://api.bible.build/bibles/filesets/${fileId}?key=${process.env.DBP_API_KEY}&v=4`, filesetId: fileId, type: fileObject.get('set_type') });
 			});
 
 			for (const url of urls) { // eslint-disable-line no-restricted-syntax
