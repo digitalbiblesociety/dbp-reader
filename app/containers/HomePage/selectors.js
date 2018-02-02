@@ -6,20 +6,22 @@ import { createSelector } from 'reselect';
  * Direct selector to the homepage state domain
  */
 const selectHomePageDomain = (state) => state.get('homepage');
-const selectFormattedText = () => createSelector(
+
+const selectFormattedSource = () => createSelector(
 	selectHomePageDomain,
 	(substate) => {
-		const pages = {};
-		const book = substate.get('activeBookId');
-		const chapter = substate.get('activeChapter');
-		const page = pages[`_${book}_${chapter}`];
+		// Pushing update with the formatted text working but not the footnotes
+		const source = substate.get('formattedSource');
+		const chapterStart = source.indexOf('<div class="chapter');
+		const chapterEnd = source.indexOf('<div class="footnotes">', chapterStart);
+		// const footnotesStart = source.indexOf('<div class="footnotes">');
+		// const footnotesEnd = source.indexOf('<div class="footer">', footnotesStart);
 
-		let main = '';
-		if (page) {
-			const firstIndex = page.indexOf('<div class="chapter');
-			const secondIndex = page.indexOf('<div class="footnotes">', firstIndex);
-			main = page.slice(firstIndex, secondIndex);
-		}
+		const main = source.slice(chapterStart, chapterEnd);
+		// const footnotes = source.slice(footnotesStart, footnotesEnd);
+		// console.log('the footnotes', footnotes);
+		// const newSource = { main, footnotes };
+		// console.log('new source', newSource);
 		// const reactJsx = main.replace(/class="/g, 'className="')
 
 		return main;
@@ -108,5 +110,5 @@ export {
 	selectNextBook,
 	selectPrevBook,
 	selectSettings,
-	selectFormattedText,
+	selectFormattedSource,
 };

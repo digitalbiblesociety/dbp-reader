@@ -1,3 +1,4 @@
+import 'whatwg-fetch';
 import { takeLatest, call, put } from 'redux-saga/effects';
 import request from 'utils/request';
 import unionWith from 'lodash/unionWith';
@@ -46,7 +47,7 @@ export function* getAudio({ list }/* { filesetId, list } */) {
 export function* getBooks({ textId, filesets }) {
 	// Plain Text -> https://api.bible.build/bibles/${textId}
 	const requestUrl = `https://api.bible.build/bibles/${textId}?key=${process.env.DBP_API_KEY}&v=4`;
-
+	// console.log('filesets in get books', filesets)
 	try {
 		const response = yield call(request, requestUrl);
 		const books = response.data.books.map((book) => ({
@@ -56,33 +57,31 @@ export function* getBooks({ textId, filesets }) {
 		const hasTextInDatabase = books.length !== 0;
 		const filesetTypes = {};
 		const backupBooks = [];
+		const urls = [];
+		const tempData = [];
 
-		if (!hasTextInDatabase) {
-			const urls = [];
-			const tempData = [];
-			filesets.forEach((fileObject, fileId) => {
-				urls.push({ url: `https://api.bible.build/bibles/filesets/${fileId}?key=${process.env.DBP_API_KEY}&v=4`, filesetId: fileId, type: fileObject.get('set_type') });
-			});
+		filesets.forEach((fileObject, fileId) => {
+			urls.push({ url: `https://api.bible.build/bibles/filesets/${fileId}?key=${process.env.DBP_API_KEY}&v=4`, filesetId: fileId, type: fileObject.get('set_type') });
+		});
 
-			for (const url of urls) { // eslint-disable-line no-restricted-syntax
-				const res = yield request(url.url);
-				if (res.data.length !== 0) {
-					filesetTypes[url.type] = true;
-				}
-				const data = res.data.map((obj) => ({ book_id: obj.book_id, name: obj.book_name, name_short: obj.book_name, chapter: obj.chapter_start }));
-				tempData.push(data);
+		for (const url of urls) { // eslint-disable-line no-restricted-syntax
+			const res = yield request(url.url);
+			if (res.data.length !== 0) {
+				filesetTypes[url.type] = url.filesetId;
 			}
-
-			const unitedData = unionWith(...tempData, (resource, next) => resource.book_id === next.book_id && resource.chapter === next.chapter);
-			const bookChapterList = unitedData.reduce((list, book) => {
-				if (list[book.book_id]) {
-					return { ...list, [book.book_id]: { ...list[book.book_id], chapters: list[book.book_id].chapters.concat(book.chapter) } };
-				}
-				return { ...list, [book.book_id]: { ...book, chapters: [book.chapter] } };
-			}, {});
-
-			Object.values(bookChapterList).forEach((value) => backupBooks.push(value));
+			const data = res.data.map((obj) => ({ book_id: obj.book_id, name: obj.book_name, name_short: obj.book_name, chapter: obj.chapter_start }));
+			tempData.push(data);
 		}
+
+		const unitedData = unionWith(...tempData, (resource, next) => resource.book_id === next.book_id && resource.chapter === next.chapter);
+		const bookChapterList = unitedData.reduce((list, book) => {
+			if (list[book.book_id]) {
+				return { ...list, [book.book_id]: { ...list[book.book_id], chapters: list[book.book_id].chapters.concat(book.chapter) } };
+			}
+			return { ...list, [book.book_id]: { ...book, chapters: [book.chapter] } };
+		}, {});
+
+		Object.values(bookChapterList).forEach((value) => backupBooks.push(value));
 
 		const copywrite = {
 			mark: response.data.mark,
@@ -90,7 +89,8 @@ export function* getBooks({ textId, filesets }) {
 			date: response.data.date,
 			country: response.data.country,
 		};
-
+		// eventually store a key value pair for each type of resource available
+		// console.log('filesetTypes in get books', filesetTypes);
 		yield put(loadBooksAndCopywrite({ books: hasTextInDatabase ? books : backupBooks, copywrite, hasTextInDatabase, filesetTypes }));
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
@@ -99,16 +99,21 @@ export function* getBooks({ textId, filesets }) {
 	}
 }
 
-export function* getChapter({ bible, book, chapter, audioObjects, hasTextInDatabase }) {
+export function* getChapter({ bible, book, chapter, audioObjects, hasTextInDatabase, formattedText }) {
 	const audio = typeof audioObjects.toJS === 'function' ? audioObjects.toJS() : audioObjects;
 	const hasAudio = audio.filter((resource) => resource.bookId === book && resource.chapter === chapter);
 	let audioRequestUrl = '';
 	let textRequestUrl = '';
+	let formattedTextRequestUrl = '';
 	// TODO
 	// Add ability to make calls for plaintext and formatted text
 	// There is an issue with the getAudio call not returning before this call
 	// there needs to be some sort of race, or variable that tracks whether or
 	// not the filesets have been retrieved and the audioObjects have been set
+	// console.log('formatted text in get chapters', formattedText);
+	if (formattedText) {
+		formattedTextRequestUrl = `https://api.bible.build/bibles/filesets/${formattedText}?chapter_id=${chapter}&book_id=${book}&key=${process.env.DBP_API_KEY}&v=4`;
+	}
 	if (hasAudio.length) {
 		audioRequestUrl = `https://api.bible.build/bibles/filesets/${hasAudio[0].filesetId}?chapter_id=${chapter}&book_id=${book}&key=${process.env.DBP_API_KEY}&v=4`;
 	}
@@ -121,10 +126,16 @@ export function* getChapter({ bible, book, chapter, audioObjects, hasTextInDatab
 	try {
 		const textResponse = yield textRequestUrl ? call(request, textRequestUrl) : '';
 		const audioResponse = yield audioRequestUrl ? call(request, audioRequestUrl) : '';
+		const formattedResponse = yield formattedTextRequestUrl ? call(request, formattedTextRequestUrl) : '';
+		let formattedSource = '';
+		if (formattedResponse) {
+			formattedSource = yield fetch(formattedResponse.data[0].path).then((res) => res.text());
+		}
+		// console.log('formatted text source', formattedSource);
 		const text = textResponse || [];
 		const audioSource = audioResponse ? audioResponse.data[0].path : '';
 
-		yield put(loadChapter({ text, audioSource }));
+		yield put(loadChapter({ text, audioSource, formattedSource }));
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error(err); // eslint-disable-line no-console

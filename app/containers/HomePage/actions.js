@@ -43,17 +43,16 @@ export const updateSelectedText = ({ text }) => ({
 	text,
 });
 
-export const loadChapter = ({ text, audioSource }) => ({
+export const loadChapter = ({ text, audioSource, formattedSource }) => ({
 	type: LOAD_CHAPTER_TEXT,
 	text,
 	audioSource,
+	formattedSource,
 });
 
-export const loadBooksAndCopywrite = ({ books, copywrite, hasTextInDatabase }) => ({
+export const loadBooksAndCopywrite = (props) => ({
 	type: LOAD_BOOKS,
-	books,
-	copywrite,
-	hasTextInDatabase,
+	...props,
 });
 
 export const loadAudio = ({ audioObjects }) => ({
@@ -73,13 +72,9 @@ export const getAudio = ({ filesetId, list }) => ({
 	list,
 });
 
-export const getChapterText = ({ bible, book, chapter, audioObjects, hasTextInDatabase }) => ({
+export const getChapterText = (props) => ({
 	type: GET_CHAPTER_TEXT,
-	bible,
-	book,
-	chapter,
-	audioObjects,
-	hasTextInDatabase,
+	...props,
 });
 
 export const toggleMenuBar = () => ({

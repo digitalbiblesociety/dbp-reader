@@ -51,14 +51,13 @@ import {
 	setActiveChapter,
 	setActiveBookName,
 	setActiveNotesView,
-	updateSelectedText,
 } from './actions';
 import makeSelectHomePage, {
 	selectSettings,
 	selectPrevBook,
 	selectNextBook,
 	selectActiveBook,
-	selectFormattedText,
+	selectFormattedSource,
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -73,15 +72,17 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			activeFilesets,
 			audioObjects,
 			hasTextInDatabase,
+			filesetTypes,
 		} = this.props.homepage;
-
+		// handle the async request so that audio does load for the first chapter
 		this.props.dispatch(getAudio({ list: fromJS(activeFilesets) }));
 		this.props.dispatch(getBooks({ textId: activeTextId, filesets: fromJS(activeFilesets) }));
-		this.props.dispatch(getChapterText({ bible: activeTextId, book: activeBookId, chapter: activeChapter, audioObjects, hasTextInDatabase }));
+		this.props.dispatch(getChapterText({ bible: activeTextId, book: activeBookId, chapter: activeChapter, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text }));
 		// Need to get the audio for the initial chapter
 	}
 
 	componentWillReceiveProps(nextProps) {
+		const { hasTextInDatabase } = nextProps.homepage;
 		const nextBooks = fromJS(nextProps.homepage.books);
 		const curBooks = fromJS(this.props.homepage.books);
 		// can probably use find to get the current book if the new version
@@ -91,12 +92,17 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		const chapter = nextBooks.getIn([0, 'chapters', 0]);
 		// Solving the issue of requesting the new data from the
 		// api when a new version is clicked
+		// console.log('filesetTypes in receive props', nextProps.homepage.filesetTypes);
+		// Currently we only have text_plain as an option in the api, this will be changed to formatted_text at some point
+
+		// console.log('filesetTypes in next props', nextProps.homepage.filesetTypes.text);
+
 		if (nextProps.homepage.activeTextId !== this.props.homepage.activeTextId) {
 			this.getBooks({ textId: nextProps.homepage.activeTextId, filesets: fromJS(nextProps.homepage.activeFilesets) });
 			this.toggleChapterSelection();
 		} else if (!is(nextBooks, curBooks) && curBooks.size) {
 			this.setActiveBookName({ book: nextBookName, id: nextBookId });
-			this.getChapters({ bible: nextProps.homepage.activeTextId, book: nextBookId, chapter, audioObjects: nextProps.homepage.audioObjects });
+			this.getChapters({ bible: nextProps.homepage.activeTextId, book: nextBookId, chapter, audioObjects: nextProps.homepage.audioObjects, hasTextInDatabase, formattedText: nextProps.homepage.filesetTypes.text });
 		}
 	}
 
@@ -107,16 +113,17 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			activeBookId,
 			audioObjects,
 			hasTextInDatabase,
+			filesetTypes,
 		} = this.props.homepage;
 		const { activeBook, nextBook } = this.props;
 		const maxChapter = activeBook.get('chapters').size;
 
 		if (activeChapter === maxChapter) {
 			this.setActiveBookName({ book: nextBook.get('name'), id: nextBook.get('book_id') });
-			this.getChapters({ bible: activeTextId, book: nextBook.get('book_id'), chapter: 1, audioObjects, hasTextInDatabase });
+			this.getChapters({ bible: activeTextId, book: nextBook.get('book_id'), chapter: 1, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text });
 			this.setActiveChapter(1);
 		} else {
-			this.getChapters({ bible: activeTextId, book: activeBookId, chapter: activeChapter + 1, audioObjects, hasTextInDatabase });
+			this.getChapters({ bible: activeTextId, book: activeBookId, chapter: activeChapter + 1, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text });
 			this.setActiveChapter(activeChapter + 1);
 		}
 	}
@@ -128,16 +135,17 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			activeBookId,
 			audioObjects,
 			hasTextInDatabase,
+			filesetTypes,
 		} = this.props.homepage;
 		const { previousBook } = this.props;
 
 		if (activeChapter - 1 === 0) {
 			const lastChapter = previousBook.get('chapters').size;
 			this.setActiveBookName({ book: previousBook.get('name'), id: previousBook.get('book_id') });
-			this.getChapters({ bible: activeTextId, book: previousBook.get('book_id'), chapter: lastChapter, audioObjects, hasTextInDatabase });
+			this.getChapters({ bible: activeTextId, book: previousBook.get('book_id'), chapter: lastChapter, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text });
 			this.setActiveChapter(lastChapter);
 		} else {
-			this.getChapters({ bible: activeTextId, book: activeBookId, chapter: activeChapter - 1, audioObjects, hasTextInDatabase });
+			this.getChapters({ bible: activeTextId, book: activeBookId, chapter: activeChapter - 1, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text });
 			this.setActiveChapter(activeChapter - 1);
 		}
 	}
@@ -146,7 +154,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 
 	getAudio = ({ list }) => this.props.dispatch(getAudio({ list }))
 
-	getChapters = ({ bible, book, chapter }) => this.props.dispatch(getChapterText({ bible, book, chapter, audioObjects: this.props.homepage.audioObjects, hasTextInDatabase: this.props.homepage.hasTextInDatabase }))
+	getChapters = (props) => this.props.dispatch(getChapterText(props))
 
 	setActiveBookName = ({ book, id }) => this.props.dispatch(setActiveBookName({ book, id }))
 
@@ -157,8 +165,6 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 	setActiveNotesView = (view) => this.props.dispatch(setActiveNotesView(view))
 
 	setActiveNote = ({ note }) => this.props.dispatch(setActiveNote({ note }))
-
-	updateSelectedText = ({ text }) => this.props.dispatch(updateSelectedText({ text }))
 
 	toggleMenuBar = () => this.props.dispatch(toggleMenuBar())
 
@@ -195,12 +201,11 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			copywrite,
 			audioSource,
 			activeNotesView,
-			formattedTextActive,
 		} = this.props.homepage;
 
 		const {
 			userSettings,
-			formattedText,
+			formattedSource,
 		} = this.props;
 
 		return (
@@ -225,7 +230,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					{
 						isChapterSelectionActive ? (
 							<FadeTransition in={isSettingsModalActive}>
-								<ChapterSelection getChapterText={this.getChapters} />
+								<ChapterSelection />
 							</FadeTransition>
 						) : null
 					}
@@ -286,7 +291,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 						) : null
 					}
 				</TransitionGroup>
-				<Text userSettings={userSettings} setActiveNote={this.setActiveNote} formattedText={formattedText} formattedTextActive={formattedTextActive} setActiveNotesView={this.setActiveNotesView} activeBookId={activeBookId} activeChapter={activeChapter} notesActive={isNotesModalActive} toggleNotesModal={this.toggleNotesModal} text={chapterText} nextChapter={this.getNextChapter} prevChapter={this.getPrevChapter} />
+				<Text userSettings={userSettings} setActiveNote={this.setActiveNote} formattedSource={formattedSource} setActiveNotesView={this.setActiveNotesView} activeBookId={activeBookId} activeChapter={activeChapter} notesActive={isNotesModalActive} toggleNotesModal={this.toggleNotesModal} text={chapterText} nextChapter={this.getNextChapter} prevChapter={this.getPrevChapter} />
 				<Footer settingsActive={isSettingsModalActive} isInformationModalActive={isInformationModalActive} toggleInformationModal={this.toggleInformationModal} toggleSettingsModal={this.toggleSettingsModal} />
 			</GenericErrorBoundary>
 		);
@@ -300,7 +305,7 @@ HomePage.propTypes = {
 	previousBook: PropTypes.object,
 	nextBook: PropTypes.object,
 	userSettings: PropTypes.object,
-	formattedText: PropTypes.string,
+	formattedSource: PropTypes.string,
 };
 // TODO: Sort books in selector
 const mapStateToProps = createStructuredSelector({
@@ -309,7 +314,7 @@ const mapStateToProps = createStructuredSelector({
 	nextBook: selectNextBook(),
 	activeBook: selectActiveBook(),
 	userSettings: selectSettings(),
-	formattedText: selectFormattedText(),
+	formattedSource: selectFormattedSource(),
 });
 
 function mapDispatchToProps(dispatch) {

@@ -94,9 +94,8 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 	get getTextComponents() {
 		const {
 			text,
-			formattedText,
 			userSettings,
-			formattedTextActive,
+			formattedSource,
 		} = this.props;
 		let textComponents;
 		const readersMode = userSettings.getIn(['toggleOptions', 'readersMode', 'active']);
@@ -107,16 +106,17 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			textComponents = text.map((verse) => (
 				<span key={verse.verse_start}>{verse.verse_text}&nbsp;&nbsp;</span>
 			));
+		} else if (formattedSource) {
+			// TODO: find way of providing the html without using dangerouslySetInnerHTML
+			/* eslint-disable react/no-danger */
+			// console.log('formatted source in text component', formattedSource)
+			textComponents = (
+				<div dangerouslySetInnerHTML={{ __html: formattedSource }}></div>
+			);
 		} else if (oneVersePerLine) {
 			textComponents = text.map((verse) => (
 				<span key={verse.verse_start}><br />&nbsp;<sup>{verse.verse_start_vernacular}</sup>&nbsp;{verse.verse_text}<br /></span>
 			));
-		} else if (formattedTextActive) {
-			// TODO: find way of providing the html without using dangerouslySetInnerHTML
-			/* eslint-disable react/no-danger */
-			textComponents = (
-				<div dangerouslySetInnerHTML={{ __html: formattedText }}></div>
-			);
 		} else if (justifiedText) {
 			textComponents = text.map((verse) => (
 				<span verseid={verse.verse_start} key={verse.verse_start}>&nbsp;<sup verseid={verse.verse_start}>{verse.verse_start_vernacular}</sup>&nbsp;{verse.verse_text}</span>
@@ -160,7 +160,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			notesActive,
 			setActiveNotesView,
 			activeBookId,
-			formattedTextActive,
+			formattedSource,
 		} = this.props;
 		const {
 			coords,
@@ -176,7 +176,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				}
 				<main ref={this.setMainRef} onClick={(e) => e.button === 0 && this.closeContextMenu()} onMouseDown={this.getFirstVerse} onMouseUp={this.handleMouseUp} className="chapter" onContextMenu={this.handleContext}>
 					{
-						formattedTextActive ? null : (
+						formattedSource ? null : (
 							<h1 className="active-chapter-title">{activeChapter}</h1>
 						)
 					}
@@ -204,10 +204,9 @@ Text.propTypes = {
 	prevChapter: PropTypes.func,
 	toggleNotesModal: PropTypes.func,
 	setActiveNotesView: PropTypes.func,
-	formattedText: PropTypes.string,
 	activeChapter: PropTypes.number,
 	notesActive: PropTypes.bool,
-	formattedTextActive: PropTypes.bool,
+	formattedSource: PropTypes.string,
 	setActiveNote: PropTypes.func,
 	activeBookId: PropTypes.string,
 };

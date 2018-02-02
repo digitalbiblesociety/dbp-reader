@@ -59,7 +59,6 @@ const initialState = fromJS({
 	isNotesModalActive: false,
 	isVersionSelectionActive: false,
 	isInformationModalActive: false,
-	formattedTextActive: false,
 	activeBookName: 'Genesis',
 	activeTextName: 'ENGESV',
 	activeNotesView: 'notes',
@@ -105,7 +104,9 @@ const initialState = fromJS({
 	selectedText: '',
 	selectedBookName: 'Genesis',
 	audioSource: '',
+	formattedSource: '',
 	hasTextInDatabase: true,
+	filesetTypes: {},
 });
 
 function homePageReducer(state = initialState, action) {
@@ -143,21 +144,14 @@ function homePageReducer(state = initialState, action) {
 	case SET_ACTIVE_CHAPTER:
 		return state.set('activeChapter', action.chapter);
 	case ACTIVE_TEXT_ID:
-		// if (action.textName === 'ENGKJV') {
-		// 	return state
-		// 		.set('formattedTextActive', true)
-		// 		.set('activeFilesets', fromJS(action.filesets))
-		// 		.set('activeTextName', action.textName)
-		// 		.set('activeTextId', action.textId);
-		// }
 		return state
-			.set('formattedTextActive', false)
 			.set('activeFilesets', fromJS(action.filesets))
 			.set('activeTextName', action.textName)
 			.set('activeTextId', action.textId);
 	case LOAD_CHAPTER_TEXT:
 		return state
 			.set('audioSource', action.audioSource)
+			.set('formattedSource', action.formattedSource)
 			.set('chapterText', fromJS(action.text));
 	case SET_ACTIVE_NOTES_VIEW:
 		return state.set('activeNotesView', action.view);

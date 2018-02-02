@@ -25,12 +25,17 @@ const selectActiveChapter = () => createSelector(
 
 const selectAudioObjects = () => createSelector(
 	selectHomepageDomain,
-	(substate) => substate.get('audioObjects')
+	(substate) => substate.get('audioObjects').toJS()
 );
 
 const selectHasTextInDatabase = () => createSelector(
 	selectHomepageDomain,
 	(substate) => substate.get('hasTextInDatabase')
+);
+
+const selectFilesetTypes = () => createSelector(
+	selectHomepageDomain,
+	(substate) => substate.get('filesetTypes').toJS()
 );
 
 export {
@@ -40,4 +45,5 @@ export {
 	selectActiveChapter,
 	selectAudioObjects,
 	selectHasTextInDatabase,
+	selectFilesetTypes,
 };
