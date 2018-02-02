@@ -25,7 +25,7 @@ const selectActiveChapter = () => createSelector(
 
 const selectAudioObjects = () => createSelector(
 	selectHomepageDomain,
-	(substate) => substate.get('audioObjects')
+	(substate) => substate.get('audioObjects').toJS()
 );
 
 const selectHasTextInDatabase = () => createSelector(

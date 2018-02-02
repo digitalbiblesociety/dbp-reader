@@ -167,7 +167,7 @@ BooksTable.propTypes = {
 	closeBookTable: PropTypes.func, // closes the window open
 	setActiveChapter: PropTypes.func, // Set chapter in parent component
 	books: PropTypes.array,
-	audioObjects: PropTypes.object,
+	audioObjects: PropTypes.array,
 	activeTextId: PropTypes.string, // parent components active text id
 	activeBookName: PropTypes.string, // parent components active book name
 	initialBookName: PropTypes.string,

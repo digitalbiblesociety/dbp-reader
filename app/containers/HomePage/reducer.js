@@ -106,6 +106,7 @@ const initialState = fromJS({
 	selectedBookName: 'Genesis',
 	audioSource: '',
 	hasTextInDatabase: true,
+	filesetTypes: {},
 });
 
 function homePageReducer(state = initialState, action) {
