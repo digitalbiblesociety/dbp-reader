@@ -33,6 +33,11 @@ const selectHasTextInDatabase = () => createSelector(
 	(substate) => substate.get('hasTextInDatabase')
 );
 
+const selectFilesetTypes = () => createSelector(
+	selectHomepageDomain,
+	(substate) => substate.get('filesetTypes').toJS()
+);
+
 export {
 	selectActiveTextId,
 	selectBooks,
@@ -40,4 +45,5 @@ export {
 	selectActiveChapter,
 	selectAudioObjects,
 	selectHasTextInDatabase,
+	selectFilesetTypes,
 };

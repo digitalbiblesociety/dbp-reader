@@ -21,6 +21,7 @@ import {
 	selectActiveChapter,
 	selectAudioObjects,
 	selectHasTextInDatabase,
+	selectFilesetTypes,
 } from './selectors';
 
 class BooksTable extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
@@ -37,7 +38,7 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 	setSelectedBookName = (name) => this.setState({ selectedBookName: name })
 	// setActiveBookName = ({ book, id }) => this.props.dispatch(setActiveBookName({ book, id }))
 	// setActiveChapter = (chapter) => this.props.dispatch(setActiveChapter(chapter))
-	getChapterText = ({ bible, book, chapter }) => this.props.dispatch(getChapterText({ bible, book, chapter, audioObjects: this.props.audioObjects, hasTextInDatabase: this.props.hasTextInDatabase }))
+	getChapterText = ({ bible, book, chapter }) => this.props.dispatch(getChapterText({ bible, book, chapter, audioObjects: this.props.audioObjects, hasTextInDatabase: this.props.hasTextInDatabase, formattedText: this.props.filesetTypes.text }))
 	// Doesn't quite work, need to account for the overall height of the scroll container
 	// Consider calculating the difference between the top of the clicked button and the
 	// top of the active button, then if the clicked button is above the active button: move
@@ -173,6 +174,7 @@ BooksTable.propTypes = {
 	initialBookName: PropTypes.string,
 	activeChapter: PropTypes.number, // parent components active chapter
 	hasTextInDatabase: PropTypes.bool,
+	filesetTypes: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -182,6 +184,7 @@ const mapStateToProps = createStructuredSelector({
 	activeChapter: selectActiveChapter(),
 	audioObjects: selectAudioObjects(),
 	hasTextInDatabase: selectHasTextInDatabase(),
+	filesetTypes: selectFilesetTypes(),
 });
 
 function mapDispatchToProps(dispatch) {
