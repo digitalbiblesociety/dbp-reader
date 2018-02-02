@@ -45,7 +45,10 @@ export function* getAudio({ list }/* { filesetId, list } */) {
 }
 
 export function* getBooks({ textId, filesets }) {
-	// Plain Text -> https://api.bible.build/bibles/${textId}
+	// TODO: Should split getting text from the database, getting text from s3 and getting the audio into different sagas
+	// Should also find a way of determining which filesets have resources without having to make an api call to each of them
+	// This applies both to getting the chapters and getting the books
+	// Process should check for formatted text, then audio, then plain text
 	const requestUrl = `https://api.bible.build/bibles/${textId}?key=${process.env.DBP_API_KEY}&v=4`;
 	// console.log('filesets in get books', filesets)
 	try {

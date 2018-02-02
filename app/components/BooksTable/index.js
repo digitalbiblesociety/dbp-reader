@@ -14,6 +14,7 @@ import {
 	// setActiveBookName,
 	// setActiveChapter,
 } from 'containers/HomePage/actions';
+import LoadingSpinner from 'components/LoadingSpinner';
 import {
 	selectActiveTextId,
 	selectBooks,
@@ -22,6 +23,7 @@ import {
 	selectAudioObjects,
 	selectHasTextInDatabase,
 	selectFilesetTypes,
+	selectLoadingBookStatus,
 } from './selectors';
 
 class BooksTable extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
@@ -134,9 +136,13 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 			books,
 			activeChapter,
 			activeBookName,
+			loadingBooks,
 		} = this.props;
 		const { selectedBookName } = this.state;
 
+		if (loadingBooks) {
+			return <LoadingSpinner />;
+		}
 		return (
 			<div className="chapter-selection-section">
 				<div ref={(el) => this.handleRef(el, 'container')} className="book-container">
@@ -174,6 +180,7 @@ BooksTable.propTypes = {
 	initialBookName: PropTypes.string,
 	activeChapter: PropTypes.number, // parent components active chapter
 	hasTextInDatabase: PropTypes.bool,
+	loadingBooks: PropTypes.bool,
 	filesetTypes: PropTypes.object,
 };
 
@@ -185,6 +192,7 @@ const mapStateToProps = createStructuredSelector({
 	audioObjects: selectAudioObjects(),
 	hasTextInDatabase: selectHasTextInDatabase(),
 	filesetTypes: selectFilesetTypes(),
+	loadingBooks: selectLoadingBookStatus(),
 });
 
 function mapDispatchToProps(dispatch) {

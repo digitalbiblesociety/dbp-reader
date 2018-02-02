@@ -6,7 +6,6 @@
 
 import React from 'react';
 import SvgWrapper from 'components/SvgWrapper';
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 // import styled from 'styled-components';
 // import { FormattedMessage } from 'react-intl';
@@ -72,7 +71,6 @@ class SignUp extends React.PureComponent {
 
 	handleSignup = (e) => {
 		e.preventDefault();
-		console.log('handling signup');
 		if (this.state.validPassword && this.state.validEmail) {
 			this.props.sendSignupForm({
 				email: this.state.email,
@@ -124,8 +122,8 @@ class SignUp extends React.PureComponent {
 				</div>
 				<section className="disclaimer">
 					By creating an account, you agree to the Bible.is
-					<Link className="link" to="/privacy-policy"> Privacy Policy </Link> &
-					<Link className="link" to="/terms-of-use"> Terms of Use</Link>.
+					<a className="link" target={'_blank'} href="http://www.bible.is/privacy"> Privacy Policy </a> &
+					<a className="link" target={'_blank'} href="http://www.bible.is/terms"> Terms of Use</a>.
 				</section>
 			</React.Fragment>
 		);

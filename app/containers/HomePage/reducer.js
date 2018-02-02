@@ -36,6 +36,7 @@ import {
 	UPDATE_FONT_SIZE,
 	SET_ACTIVE_NOTE,
 	UPDATE_SELECTED_TEXT,
+	GET_BOOKS,
 } from './constants';
 
 const initialState = fromJS({
@@ -101,6 +102,7 @@ const initialState = fromJS({
 			},
 		},
 	},
+	loadingBooks: false,
 	selectedText: '',
 	selectedBookName: 'Genesis',
 	audioSource: '',
@@ -111,8 +113,11 @@ const initialState = fromJS({
 
 function homePageReducer(state = initialState, action) {
 	switch (action.type) {
+	case GET_BOOKS:
+		return state.set('loadingBooks', true);
 	case LOAD_BOOKS:
 		return state
+			.set('loadingBooks', false)
 			.set('hasTextInDatabase', action.hasTextInDatabase)
 			.set('filesetTypes', fromJS(action.filesetTypes))
 			.set('copywrite', fromJS(action.copywrite))
