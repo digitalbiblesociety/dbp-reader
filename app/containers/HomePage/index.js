@@ -77,7 +77,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		// handle the async request so that audio does load for the first chapter
 		this.props.dispatch(getAudio({ list: fromJS(activeFilesets) }));
 		this.props.dispatch(getBooks({ textId: activeTextId, filesets: fromJS(activeFilesets) }));
-		this.props.dispatch(getChapterText({ bible: activeTextId, book: activeBookId, chapter: activeChapter, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text }));
+		this.props.dispatch(getChapterText({ bible: activeTextId, book: activeBookId, chapter: activeChapter, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt }));
 		// Need to get the audio for the initial chapter
 	}
 
@@ -95,14 +95,14 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		// console.log('filesetTypes in receive props', nextProps.homepage.filesetTypes);
 		// Currently we only have text_plain as an option in the api, this will be changed to formatted_text at some point
 
-		// console.log('filesetTypes in next props', nextProps.homepage.filesetTypes.text);
+		// console.log('filesetTypes in next props', nextProps.homepage.filesetTypes.text_formatt);
 
 		if (nextProps.homepage.activeTextId !== this.props.homepage.activeTextId) {
 			this.getBooks({ textId: nextProps.homepage.activeTextId, filesets: fromJS(nextProps.homepage.activeFilesets) });
 			this.toggleChapterSelection();
 		} else if (!is(nextBooks, curBooks) && curBooks.size) {
 			this.setActiveBookName({ book: nextBookName, id: nextBookId });
-			this.getChapters({ bible: nextProps.homepage.activeTextId, book: nextBookId, chapter, audioObjects: nextProps.homepage.audioObjects, hasTextInDatabase, formattedText: nextProps.homepage.filesetTypes.text });
+			this.getChapters({ bible: nextProps.homepage.activeTextId, book: nextBookId, chapter, audioObjects: nextProps.homepage.audioObjects, hasTextInDatabase, formattedText: nextProps.homepage.filesetTypes.text_formatt });
 		}
 	}
 
@@ -120,10 +120,10 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 
 		if (activeChapter === maxChapter) {
 			this.setActiveBookName({ book: nextBook.get('name'), id: nextBook.get('book_id') });
-			this.getChapters({ bible: activeTextId, book: nextBook.get('book_id'), chapter: 1, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text });
+			this.getChapters({ bible: activeTextId, book: nextBook.get('book_id'), chapter: 1, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
 			this.setActiveChapter(1);
 		} else {
-			this.getChapters({ bible: activeTextId, book: activeBookId, chapter: activeChapter + 1, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text });
+			this.getChapters({ bible: activeTextId, book: activeBookId, chapter: activeChapter + 1, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
 			this.setActiveChapter(activeChapter + 1);
 		}
 	}
@@ -142,10 +142,10 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		if (activeChapter - 1 === 0) {
 			const lastChapter = previousBook.get('chapters').size;
 			this.setActiveBookName({ book: previousBook.get('name'), id: previousBook.get('book_id') });
-			this.getChapters({ bible: activeTextId, book: previousBook.get('book_id'), chapter: lastChapter, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text });
+			this.getChapters({ bible: activeTextId, book: previousBook.get('book_id'), chapter: lastChapter, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
 			this.setActiveChapter(lastChapter);
 		} else {
-			this.getChapters({ bible: activeTextId, book: activeBookId, chapter: activeChapter - 1, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text });
+			this.getChapters({ bible: activeTextId, book: activeBookId, chapter: activeChapter - 1, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
 			this.setActiveChapter(activeChapter - 1);
 		}
 	}
