@@ -111,7 +111,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			/* eslint-disable react/no-danger */
 			// console.log('formatted source in text component', formattedSource)
 			textComponents = (
-				<div dangerouslySetInnerHTML={{ __html: formattedSource }}></div>
+				<div style={{ all: 'inherit' }} dangerouslySetInnerHTML={{ __html: formattedSource }} />
 			);
 		} else if (oneVersePerLine) {
 			textComponents = text.map((verse) => (
