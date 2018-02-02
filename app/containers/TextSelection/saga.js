@@ -1,5 +1,5 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
-// import languageList from 'utils/languagesWithResources';
+import languageList from 'utils/languagesWithResources.json';
 import request from 'utils/request';
 import { fromJS } from 'immutable';
 import { GET_COUNTRIES, GET_DPB_TEXTS, GET_LANGUAGES } from './constants';
@@ -44,12 +44,13 @@ export function* getCountries() {
 }
 
 export function* getTexts({ languageISO }) {
-	// need to configure the correct request url as this one is not getting a response
 	const requestUrl = `https://api.bible.build/bibles?key=${process.env.DBP_API_KEY}&language_code=${languageISO}&v=4`;
+
 	try {
 		const response = yield call(request, requestUrl);
+		const languageTexts = response.data.filter((text) => text.iso === languageISO);
 		// Some texts may have plain text in the database but no filesets
-		const texts = response.data.filter((text) => !Array.isArray(text.filesets) && Object.keys(text.filesets).length);
+		const texts = languageTexts.filter((text) => !Array.isArray(text.filesets) && Object.keys(text.filesets).length);
 		yield put(loadTexts({ texts }));
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
@@ -63,10 +64,10 @@ export function* getLanguages() {
 
 	try {
 		const response = yield call(request, requestUrl);
-		// const languages = response.data.filter((language) => languageList[language.iso_code.toUpperCase()]);
-		// yield put(setLanguages({ languages }));
+		const languages = response.data.filter((language) => languageList[language.iso_code]);
 
-		yield put(setLanguages({ languages: response.data }));
+		yield put(setLanguages({ languages }));
+		// yield put(setLanguages({ languages: response.data }));
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error(err); // eslint-disable-line no-console

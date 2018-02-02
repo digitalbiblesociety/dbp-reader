@@ -72,12 +72,12 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			activeChapter,
 			activeFilesets,
 			audioObjects,
-			hasPlainText,
+			hasTextInDatabase,
 		} = this.props.homepage;
 
 		this.props.dispatch(getAudio({ list: fromJS(activeFilesets) }));
 		this.props.dispatch(getBooks({ textId: activeTextId, filesets: fromJS(activeFilesets) }));
-		this.props.dispatch(getChapterText({ bible: activeTextId, book: activeBookId, chapter: activeChapter, audioObjects, hasPlainText }));
+		this.props.dispatch(getChapterText({ bible: activeTextId, book: activeBookId, chapter: activeChapter, audioObjects, hasTextInDatabase }));
 		// Need to get the audio for the initial chapter
 	}
 
@@ -106,17 +106,17 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			activeChapter,
 			activeBookId,
 			audioObjects,
-			hasPlainText,
+			hasTextInDatabase,
 		} = this.props.homepage;
 		const { activeBook, nextBook } = this.props;
 		const maxChapter = activeBook.get('chapters').size;
 
 		if (activeChapter === maxChapter) {
 			this.setActiveBookName({ book: nextBook.get('name'), id: nextBook.get('book_id') });
-			this.getChapters({ bible: activeTextId, book: nextBook.get('book_id'), chapter: 1, audioObjects, hasPlainText });
+			this.getChapters({ bible: activeTextId, book: nextBook.get('book_id'), chapter: 1, audioObjects, hasTextInDatabase });
 			this.setActiveChapter(1);
 		} else {
-			this.getChapters({ bible: activeTextId, book: activeBookId, chapter: activeChapter + 1, audioObjects, hasPlainText });
+			this.getChapters({ bible: activeTextId, book: activeBookId, chapter: activeChapter + 1, audioObjects, hasTextInDatabase });
 			this.setActiveChapter(activeChapter + 1);
 		}
 	}
@@ -127,17 +127,17 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			activeChapter,
 			activeBookId,
 			audioObjects,
-			hasPlainText,
+			hasTextInDatabase,
 		} = this.props.homepage;
 		const { previousBook } = this.props;
 
 		if (activeChapter - 1 === 0) {
 			const lastChapter = previousBook.get('chapters').size;
 			this.setActiveBookName({ book: previousBook.get('name'), id: previousBook.get('book_id') });
-			this.getChapters({ bible: activeTextId, book: previousBook.get('book_id'), chapter: lastChapter, audioObjects, hasPlainText });
+			this.getChapters({ bible: activeTextId, book: previousBook.get('book_id'), chapter: lastChapter, audioObjects, hasTextInDatabase });
 			this.setActiveChapter(lastChapter);
 		} else {
-			this.getChapters({ bible: activeTextId, book: activeBookId, chapter: activeChapter - 1, audioObjects, hasPlainText });
+			this.getChapters({ bible: activeTextId, book: activeBookId, chapter: activeChapter - 1, audioObjects, hasTextInDatabase });
 			this.setActiveChapter(activeChapter - 1);
 		}
 	}
@@ -146,7 +146,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 
 	getAudio = ({ list }) => this.props.dispatch(getAudio({ list }))
 
-	getChapters = ({ bible, book, chapter }) => this.props.dispatch(getChapterText({ bible, book, chapter, audioObjects: this.props.homepage.audioObjects, hasPlainText: this.props.homepage.hasPlainText }))
+	getChapters = ({ bible, book, chapter }) => this.props.dispatch(getChapterText({ bible, book, chapter, audioObjects: this.props.homepage.audioObjects, hasTextInDatabase: this.props.homepage.hasTextInDatabase }))
 
 	setActiveBookName = ({ book, id }) => this.props.dispatch(setActiveBookName({ book, id }))
 

@@ -33,12 +33,10 @@ export const setActiveNote = ({ note }) => ({
 	note,
 });
 
-
 export const setSelectedBookName = (book) => ({
 	type: SET_SELECTED_BOOK_NAME,
 	book,
 });
-
 
 export const updateSelectedText = ({ text }) => ({
 	type: UPDATE_SELECTED_TEXT,
@@ -51,11 +49,11 @@ export const loadChapter = ({ text, audioSource }) => ({
 	audioSource,
 });
 
-export const loadBooksAndCopywrite = ({ books, copywrite, hasPlainText }) => ({
+export const loadBooksAndCopywrite = ({ books, copywrite, hasTextInDatabase }) => ({
 	type: LOAD_BOOKS,
 	books,
 	copywrite,
-	hasPlainText,
+	hasTextInDatabase,
 });
 
 export const loadAudio = ({ audioObjects }) => ({
@@ -75,13 +73,13 @@ export const getAudio = ({ filesetId, list }) => ({
 	list,
 });
 
-export const getChapterText = ({ bible, book, chapter, audioObjects, hasPlainText }) => ({
+export const getChapterText = ({ bible, book, chapter, audioObjects, hasTextInDatabase }) => ({
 	type: GET_CHAPTER_TEXT,
 	bible,
 	book,
 	chapter,
 	audioObjects,
-	hasPlainText,
+	hasTextInDatabase,
 });
 
 export const toggleMenuBar = () => ({

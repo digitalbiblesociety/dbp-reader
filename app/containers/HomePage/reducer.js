@@ -115,14 +115,15 @@ const initialState = fromJS({
 	selectedText: '',
 	selectedBookName: 'Genesis',
 	audioSource: '',
-	hasPlainText: true,
+	hasTextInDatabase: true,
 });
 
 function homePageReducer(state = initialState, action) {
 	switch (action.type) {
 	case LOAD_BOOKS:
 		return state
-			.set('hasPlainText', action.hasPlainText)
+			.set('hasTextInDatabase', action.hasTextInDatabase)
+			.set('filesetTypes', fromJS(action.filesetTypes))
 			.set('copywrite', fromJS(action.copywrite))
 			.set('books', fromJS(action.books));
 	case LOAD_AUDIO:
