@@ -11,6 +11,7 @@ import ContextPortal from 'components/ContextPortal';
 /* Disabling the jsx-a11y linting because we need to capture the selected text
 	 and the most straight forward way of doing so is with the onMouseUp event */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+// TODO: Need to consider removing the active text once the version is changed, this way a user has a clear indicator of when the new version has loaded
 class Text extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	state = {
 		contextMenuState: false,
@@ -41,38 +42,6 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		if (e.button === 0 && this.main.contains(e.target) && e.target.attributes.verseid) {
 			this.setState({ firstVerse: e.target.attributes.verseid.value });
 		}
-		// else if (this.main.contains(e.target)) {
-		// 	let node = e.target;
-		// 	let counter = 5;
-		// 	while (!node.attributes.verseid) {
-		// 		node = node.parentNode;
-		// 		if (counter === 0) {
-		// 			break;
-		// 		}
-		// 		counter--;
-		// 	}
-		// 	console.log('verse id when child is clicked', node.attributes.verseid);
-		// }
-
-		// On mousedown get the first verse number / dom node
-		// On mouseup
-		// check if the mouse up was in the text dom node
-		// if it was then get the last verse number / dom node and get
-		// the selected text on the window object
-		// if the numbers are the same then the selected text is in
-		// one verse
-		// if the selection spans multiple verses match the beginning
-		// of the selected text
-		// with the first verse to find where the selection starts
-		// then match the ending of the selected text with the last verse
-		// to find its end
-
-		// if the user chooses to create a note
-		// take the start and end verse and use them as the reference
-
-		// if the user creates a highlight, mark the index of the beginning
-		// word in the first verse and the ending word in the last verse
-		// as well as recording the version
 	}
 
 	getLastVerse = (e) => {
