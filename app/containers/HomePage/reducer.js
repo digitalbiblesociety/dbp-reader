@@ -7,6 +7,7 @@
  */
 
 import { fromJS } from 'immutable';
+import esvDefaultFilesets from 'utils/defaultFilesetsForESV.json';
 import {
 	ACTIVE_TEXT_ID,
 	LOAD_CHAPTER_TEXT,
@@ -42,18 +43,7 @@ const initialState = fromJS({
 	note: {},
 	chapterText: [],
 	audioObjects: [],
-	activeFilesets: {
-		ENGESVC2DA: 'audio_drama',
-		ENGESVC2ET: 'text_plain',
-		ENGESVO2DA: 'audio_drama',
-		ENGESVO2ET: 'text_plain',
-		ENGGIDC1ET: 'text_plain',
-		ENGGIDN2DA: 'audio_drama',
-		ENGGIDN2ET: 'text_plain',
-		ENGGIDO1DA: 'audio',
-		ENGGIDO2DA: 'audio_drama',
-		ENGGIDO2ET: 'text_plain',
-	},
+	activeFilesets: fromJS(esvDefaultFilesets),
 	copywrite: {
 		mark: 'Good News Publishers, Crossway Bibles',
 		name: 'English Standard Version',
@@ -115,14 +105,15 @@ const initialState = fromJS({
 	selectedText: '',
 	selectedBookName: 'Genesis',
 	audioSource: '',
-	hasPlainText: true,
+	hasTextInDatabase: true,
 });
 
 function homePageReducer(state = initialState, action) {
 	switch (action.type) {
 	case LOAD_BOOKS:
 		return state
-			.set('hasPlainText', action.hasPlainText)
+			.set('hasTextInDatabase', action.hasTextInDatabase)
+			.set('filesetTypes', fromJS(action.filesetTypes))
 			.set('copywrite', fromJS(action.copywrite))
 			.set('books', fromJS(action.books));
 	case LOAD_AUDIO:

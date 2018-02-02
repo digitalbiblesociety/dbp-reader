@@ -28,9 +28,9 @@ const selectAudioObjects = () => createSelector(
 	(substate) => substate.get('audioObjects')
 );
 
-const selectHasPlainText = () => createSelector(
+const selectHasTextInDatabase = () => createSelector(
 	selectHomepageDomain,
-	(substate) => substate.get('hasPlainText')
+	(substate) => substate.get('hasTextInDatabase')
 );
 
 export {
@@ -39,5 +39,5 @@ export {
 	selectActiveBookName,
 	selectActiveChapter,
 	selectAudioObjects,
-	selectHasPlainText,
+	selectHasTextInDatabase,
 };
