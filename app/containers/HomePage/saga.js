@@ -124,26 +124,45 @@ export function* getChapter({ bible, book, chapter, audioObjects, hasTextInDatab
 	if (hasTextInDatabase) {
 		textRequestUrl = `https://api.bible.build/bible/${bible}/${book}/${chapter}?key=${process.env.DBP_API_KEY}&v=4`;
 	}
+	let text = [];
+	let formattedSource = '';
+	let audioSource = '';
 	// const audioRequestUrl = `https://api.bible.build/bibles/filesets/${filesetId}?key=${process.env.DBP_API_KEY}&v=4`;
-
 	try {
 		const textResponse = yield textRequestUrl ? call(request, textRequestUrl) : '';
+
+		if (textResponse) {
+			text = textResponse;
+		}
+	} catch (err) {
+		if (process.env.NODE_ENV === 'development') {
+			console.error('Caught in database text request', err); // eslint-disable-line no-console
+		}
+	}
+
+	try {
 		const audioResponse = yield audioRequestUrl ? call(request, audioRequestUrl) : '';
+
+		audioSource = audioResponse ? audioResponse.data[0].path : '';
+	} catch (err) {
+		if (process.env.NODE_ENV === 'development') {
+			console.error('Caught in audio request', err); // eslint-disable-line no-console
+		}
+	}
+
+	try {
 		const formattedResponse = yield formattedTextRequestUrl ? call(request, formattedTextRequestUrl) : '';
-		let formattedSource = '';
+
 		if (formattedResponse) {
 			formattedSource = yield fetch(formattedResponse.data[0].path).then((res) => res.text());
 		}
-		// console.log('formatted text source', formattedSource);
-		const text = textResponse || [];
-		const audioSource = audioResponse ? audioResponse.data[0].path : '';
-
-		yield put(loadChapter({ text, audioSource, formattedSource }));
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
-			console.error(err); // eslint-disable-line no-console
+			console.error('Caught in formatted request', err); // eslint-disable-line no-console
 		}
 	}
+
+	yield put(loadChapter({ text, audioSource, formattedSource }));
 }
 
 // Individual exports for testing
