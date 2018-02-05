@@ -1,9 +1,12 @@
 import { createSelector } from 'reselect';
+import React from 'react';
+const HtmlToReact = require('html-to-react');
+const HtmlToReactParser = require('html-to-react').Parser;
 // import * as pages from 'utils/ENGKJV/list';
 // import bookNames from 'utils/listOfBooksInBible';
-
 /**
  * Direct selector to the homepage state domain
+ * TODO: Fix selectors so that they don't receive objects because that negates the benefit of using memoized functions
  */
 const selectHomePageDomain = (state) => state.get('homepage');
 
@@ -14,16 +17,50 @@ const selectFormattedSource = () => createSelector(
 		const source = substate.get('formattedSource');
 		const chapterStart = source.indexOf('<div class="chapter');
 		const chapterEnd = source.indexOf('<div class="footnotes">', chapterStart);
-		// const footnotesStart = source.indexOf('<div class="footnotes">');
-		// const footnotesEnd = source.indexOf('<div class="footer">', footnotesStart);
-
+		const footnotesStart = source.indexOf('<div class="footnotes">');
+		const footnotesEnd = source.indexOf('<div class="footer">', footnotesStart);
 		const main = source.slice(chapterStart, chapterEnd);
-		// const footnotes = source.slice(footnotesStart, footnotesEnd);
+		const footnotes = source.slice(footnotesStart, footnotesEnd);
+		console.log(footnotes.match(/<span class="ft">(.*?)<\/span>/g));
 		// console.log('the footnotes', footnotes);
 		// const newSource = { main, footnotes };
 		// console.log('new source', newSource);
 		// const reactJsx = main.replace(/class="/g, 'className="')
-
+		// const HtmlToReactParser = HtmlToReact.Parser;
+		// const isValidNode = function () {
+		// 	return true;
+		// };
+		// const processNodeDefinitions = new HtmlToReact.ProcessNodeDefinitions(React);
+		// const processingInstructions = [
+		// 	{
+		// 		// Custom <h1> processing
+		// 		shouldProcessNode(node) {
+		// 			if (node.attribs && node.attribs.class === 'note') {
+		// 				console.log('children of node in first process', node.children);
+		// 				return node.attribs.class === 'note';
+		// 			}
+		// 			return false;
+		// 			// console.log('in second should process', node)
+		// 			// return node.parent && node.parent.name && node.parent.name === 'h1';
+		// 		},
+		// 		processNode(node, children) {
+		// 			console.log('node in parser', node);
+		// 			console.log('child in parser', children);
+		// 			return node;
+		// 		},
+		// 	}, {
+		// 		shouldProcessNode(node) {
+		// 			if (node.attribs && node.attribs.class === 'note') {
+		// 				console.log('Id of note in the second should process', node.attribs.id);
+		// 			}
+		// 			return true;
+		// 		},
+		// 		processNode: processNodeDefinitions.processDefaultNode,
+		// 	}];
+		// const htmlToReactParser = new HtmlToReactParser();
+		// const reactComponent = htmlToReactParser.parseWithInstructions(source, isValidNode,
+		// 	processingInstructions);
+		// console.log('React component', reactComponent);
 		return main;
 	}
 );
@@ -55,15 +92,16 @@ const selectNextBook = () => createSelector(
 );
 
 const selectPrevBook = () => createSelector(
-	selectHomePageDomain,
-	(substate) => {
-		const books = substate.get('books');
-		const activeBookId = substate.get('activeBookId');
-		const activeBookIndex = books.findIndex((book) => book.get('book_id') === activeBookId);
-		const previousBook = books.get(activeBookIndex - 1);
-		return previousBook;
-	}
-);
+		selectHomePageDomain,
+		(substate) => {
+			const books = substate.get('books');
+			const activeBookId = substate.get('activeBookId');
+			const activeBookIndex = books.findIndex((book) => book.get('book_id') === activeBookId);
+			const previousBook = books.get(activeBookIndex - 1);
+
+			return previousBook;
+		},
+	);
 
 const selectSettings = () => createSelector(
 	selectHomePageDomain,
@@ -71,6 +109,7 @@ const selectSettings = () => createSelector(
 		const toggleOptions = substate.getIn(['userSettings', 'toggleOptions']);
 		const filteredToggleOptions = toggleOptions.filter((option) => option.get('available'));
 		const userSettings = substate.get('userSettings').set('toggleOptions', filteredToggleOptions);
+
 		return userSettings;
 	}
 );

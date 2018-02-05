@@ -21,8 +21,19 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		lastVerse: 0,
 	};
 
+	componentDidMount() {
+		if (this.formattedRef) {
+			console.log(typeof this.formattedRef);
+			console.log(Object.entries(this.formattedRef));
+		}
+	}
+
 	setMainRef = (el) => {
 		this.main = el;
+	}
+
+	setFormattedRef = (el) => {
+		this.formattedRef = el;
 	}
 	// Use selected text only when marking highlights
 	setActiveNote = () => {
@@ -80,7 +91,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			/* eslint-disable react/no-danger */
 			// console.log('formatted source in text component', formattedSource)
 			textComponents = (
-				<div style={{ all: 'inherit' }} dangerouslySetInnerHTML={{ __html: formattedSource }} />
+				<div ref={this.setFormattedRef} style={{ all: 'inherit' }} dangerouslySetInnerHTML={{ __html: formattedSource }} />
 			);
 		} else if (oneVersePerLine) {
 			textComponents = text.map((verse) => (
