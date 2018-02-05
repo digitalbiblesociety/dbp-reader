@@ -25,14 +25,15 @@ export function* getAudio({ list }/* { filesetId, list } */) {
 			const data = res.data.map((obj) => ({ bookId: obj.book_id, bookName: obj.book_name, chapter: obj.chapter_start, filesetId: requestUrl.fileId }));
 			results.push(data);
 		}
-
-		if (results.length === 0) {
-			for (const requestUrl of plainUrls) { // eslint-disable-line no-restricted-syntax
-				const res = yield request(requestUrl.url);
-				const data = res.data.map((obj) => ({ bookId: obj.book_id, bookName: obj.book_name, chapter: obj.chapter_start, filesetId: requestUrl.fileId }));
-				results.push(data);
-			}
+		// TODO: Need to get plain audio only for chapters that don't already have audio
+		// Currently getting all audio and mashing it together so that most of the chapters have something
+		// if (results.length === 0) {
+		for (const requestUrl of plainUrls) { // eslint-disable-line no-restricted-syntax
+			const res = yield request(requestUrl.url);
+			const data = res.data.map((obj) => ({ bookId: obj.book_id, bookName: obj.book_name, chapter: obj.chapter_start, filesetId: requestUrl.fileId }));
+			results.push(data);
 		}
+		// }
 
 		const audioObjects = unionWith(...results, (resource, next) => resource.bookId === next.bookId && resource.chapter === next.chapter);
 
@@ -105,10 +106,11 @@ export function* getBooks({ textId, filesets }) {
 export function* getChapter({ bible, book, chapter, audioObjects, hasTextInDatabase, formattedText }) {
 	const audio = typeof audioObjects.toJS === 'function' ? audioObjects.toJS() : audioObjects;
 	const hasAudio = audio.filter((resource) => resource.bookId === book && resource.chapter === chapter);
+
 	let audioRequestUrl = '';
 	let textRequestUrl = '';
 	let formattedTextRequestUrl = '';
-	// TODO
+	// TODO Split these calls into separate functions to reduce wait time for a user
 	// Add ability to make calls for plaintext and formatted text
 	// There is an issue with the getAudio call not returning before this call
 	// there needs to be some sort of race, or variable that tracks whether or
