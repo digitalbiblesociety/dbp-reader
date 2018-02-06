@@ -15,7 +15,7 @@ import SettingsToggle from 'components/SettingsToggle/index';
 import menu from 'images/menu.svg';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
 import Slider from 'rc-slider/lib/Slider';
-import { applyTheme, applyFontFamily, applyFontSize } from './themes';
+import { applyTheme, applyFontFamily, applyFontSize, toggleWordsOfJesus } from './themes';
 import makeSelectSettings from './selectors';
 import reducer from './reducer';
 import {
@@ -42,8 +42,13 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 		const activeTheme = nextProps.userSettings.get('activeTheme');
 		const activeFontFamily = nextProps.userSettings.get('activeFontType');
 		const activeFontSize = nextProps.userSettings.get('activeFontSize');
+		const redLetter = nextProps.userSettings.getIn(['toggleOptions', 'redLetter', 'active']);
 
-		if (activeTheme !== this.props.userSettings.get('acitveTheme')) {
+		if (redLetter !== this.props.userSettings.getIn(['toggleOptions', 'redLetter', 'active'])) {
+			toggleWordsOfJesus(redLetter);
+		}
+
+		if (activeTheme !== this.props.userSettings.getIn(['toggleOptions', 'redLetter', 'active'])) {
 			applyTheme(activeTheme);
 		}
 

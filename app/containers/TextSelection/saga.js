@@ -44,13 +44,19 @@ export function* getCountries() {
 }
 
 export function* getTexts({ languageISO }) {
-	const requestUrl = `https://api.bible.build/bibles?key=${process.env.DBP_API_KEY}&language_code=${languageISO}&v=4`;
+	let requestUrl = '';
+	if (languageISO === 'ANY') {
+		requestUrl = `https://api.bible.build/bibles?key=${process.env.DBP_API_KEY}&v=4`;
+	} else {
+		requestUrl = `https://api.bible.build/bibles?key=${process.env.DBP_API_KEY}&language_code=${languageISO}&v=4`;
+	}
 
 	try {
 		const response = yield call(request, requestUrl);
-		const languageTexts = response.data.filter((text) => text.iso === languageISO);
+		const languageTexts = response.data.filter((text) => languageISO === 'ANY' ? true : text.iso === languageISO);
 		// Some texts may have plain text in the database but no filesets
 		const texts = languageTexts.filter((text) => !Array.isArray(text.filesets) && Object.keys(text.filesets).length);
+
 		yield put(loadTexts({ texts }));
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
@@ -65,6 +71,7 @@ export function* getLanguages() {
 	try {
 		const response = yield call(request, requestUrl);
 		const languages = response.data.filter((language) => languageList[language.iso_code]);
+		languages.unshift({ name: 'ANY', iso_code: 'ANY' });
 
 		yield put(setLanguages({ languages }));
 		// yield put(setLanguages({ languages: response.data }));

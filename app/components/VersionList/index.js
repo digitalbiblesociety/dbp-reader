@@ -24,7 +24,7 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 			activeTextName,
 		} = this.props;
 		const { filterText } = this.state;
-		const filteredBibles = filterText ? bibles.filter((bible) => this.filterFunction(bible, filterText, activeIsoCode)) : bibles.filter((bible) => bible.get('iso') === activeIsoCode);
+		const filteredBibles = filterText ? bibles.filter((bible) => this.filterFunction(bible, filterText, activeIsoCode)) : bibles.filter((bible) => activeIsoCode === 'ANY' ? true : bible.get('iso') === activeIsoCode);
 
 		const components = filteredBibles.map((bible) => (
 			<div
@@ -58,7 +58,7 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 	filterFunction = (bible, filterText, iso) => {
 		const lowerCaseText = filterText.toLowerCase();
 
-		if (!(bible.get('iso') === iso)) {
+		if (!(bible.get('iso') === iso) && iso !== 'ANY') {
 			return false;
 		}
 

@@ -65,7 +65,7 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.audioSource !== this.props.audioSource) {
 			if (nextProps.audioSource) {
-				this.setState({ playerState: true });
+				this.setState({ playerState: true, playing: false });
 			} else if (this.state.playerState) {
 				this.setState({ playerState: false, playing: false });
 			}
@@ -148,9 +148,13 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 		});
 	}
 
-	toggleAudioPlayer = () => this.setState({
-		playerState: !this.state.playerState,
-	})
+	toggleAudioPlayer = () => {
+		if (this.props.audioSource) {
+			this.setState({
+				playerState: !this.state.playerState,
+			});
+		}
+	}
 	// Simpler to close all modals than to try and figure out which one to close
 	closeModals = () => {
 		this.setState({
@@ -217,7 +221,7 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 						) : null
 					}
 					<audio ref={this.handleRef} className="audio-player" src={source}></audio>
-					<SvgWrapper onClick={(e) => { e.stopPropagation(); this.toggleAudioPlayer(); }} width="50px" height="5px" className={this.state.playerState ? 'audio-gripper' : 'audio-gripper closed'} fill="#aeaeae" svgid="gripper" />
+					<SvgWrapper onClick={(e) => { e.stopPropagation(); this.toggleAudioPlayer(); }} width="50px" height="5px" className={this.state.playerState ? 'audio-gripper' : 'audio-gripper closed'} style={{ cursor: source ? 'pointer' : 'inherit' }} fill="#aeaeae" svgid="gripper" />
 				</div>
 			</GenericErrorBoundary>
 		);
