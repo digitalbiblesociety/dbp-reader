@@ -1,30 +1,31 @@
 import { createSelector } from 'reselect';
+
 // import * as pages from 'utils/ENGKJV/list';
 // import bookNames from 'utils/listOfBooksInBible';
-
 /**
  * Direct selector to the homepage state domain
+ * TODO: Fix selectors so that they don't receive objects because that negates the benefit of using memoized functions
  */
 const selectHomePageDomain = (state) => state.get('homepage');
+const selectFormattedTextSource = (state) => state.getIn(['homepage', 'formattedSource']);
 
 const selectFormattedSource = () => createSelector(
-	selectHomePageDomain,
-	(substate) => {
+	selectFormattedTextSource,
+	(source) => {
 		// Pushing update with the formatted text working but not the footnotes
-		const source = substate.get('formattedSource');
+		// const source = substate.get('formattedSource');
+		if (!source) {
+			return { main: '', footnotes: {} };
+		}
 		const chapterStart = source.indexOf('<div class="chapter');
 		const chapterEnd = source.indexOf('<div class="footnotes">', chapterStart);
-		// const footnotesStart = source.indexOf('<div class="footnotes">');
-		// const footnotesEnd = source.indexOf('<div class="footer">', footnotesStart);
-
+		const footnotesStart = source.indexOf('<div class="footnotes">');
+		const footnotesEnd = source.indexOf('<div class="footer">', footnotesStart);
 		const main = source.slice(chapterStart, chapterEnd);
-		// const footnotes = source.slice(footnotesStart, footnotesEnd);
-		// console.log('the footnotes', footnotes);
-		// const newSource = { main, footnotes };
-		// console.log('new source', newSource);
-		// const reactJsx = main.replace(/class="/g, 'className="')
+		const footnotes = source.slice(footnotesStart, footnotesEnd);
+		const footnotesObject = footnotes.match(/<span class="ft">(.*?)<\/span>/g).reduce((acc, note, i) => ({ ...acc, [`footnote-${i}`]: note.slice(17, -7) }), {});
 
-		return main;
+		return { main, footnotes: footnotesObject || {} };
 	}
 );
 
@@ -55,15 +56,16 @@ const selectNextBook = () => createSelector(
 );
 
 const selectPrevBook = () => createSelector(
-	selectHomePageDomain,
-	(substate) => {
-		const books = substate.get('books');
-		const activeBookId = substate.get('activeBookId');
-		const activeBookIndex = books.findIndex((book) => book.get('book_id') === activeBookId);
-		const previousBook = books.get(activeBookIndex - 1);
-		return previousBook;
-	}
-);
+		selectHomePageDomain,
+		(substate) => {
+			const books = substate.get('books');
+			const activeBookId = substate.get('activeBookId');
+			const activeBookIndex = books.findIndex((book) => book.get('book_id') === activeBookId);
+			const previousBook = books.get(activeBookIndex - 1);
+
+			return previousBook;
+		},
+	);
 
 const selectSettings = () => createSelector(
 	selectHomePageDomain,
@@ -71,6 +73,7 @@ const selectSettings = () => createSelector(
 		const toggleOptions = substate.getIn(['userSettings', 'toggleOptions']);
 		const filteredToggleOptions = toggleOptions.filter((option) => option.get('available'));
 		const userSettings = substate.get('userSettings').set('toggleOptions', filteredToggleOptions);
+
 		return userSettings;
 	}
 );

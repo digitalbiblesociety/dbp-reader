@@ -305,7 +305,7 @@ HomePage.propTypes = {
 	previousBook: PropTypes.object,
 	nextBook: PropTypes.object,
 	userSettings: PropTypes.object,
-	formattedSource: PropTypes.string,
+	formattedSource: PropTypes.object,
 };
 // TODO: Sort books in selector
 const mapStateToProps = createStructuredSelector({
