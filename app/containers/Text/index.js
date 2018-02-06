@@ -80,9 +80,9 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			// TODO: find way of providing the html without using dangerouslySetInnerHTML
 			/* eslint-disable react/no-danger */
 			// console.log('formatted source in text component', formattedSource)
-			// const formattedComponents = [addClickToNotes({ html: formattedSource.main, action: this.openFootnote })];
+			// textComponents = [addClickToNotes({ html: formattedSource.main, action: this.openFootnote })];
+			// console.log(textComponents);
 			textComponents = (<div style={{ all: 'inherit' }} dangerouslySetInnerHTML={{ __html: formattedSource.main }}></div>);
-			// textComponents = formattedComponents;
 		} else if (oneVersePerLine) {
 			textComponents = text.map((verse) => (
 				<span key={verse.verse_start}><br />&nbsp;<sup>{verse.verse_start_vernacular}</sup>&nbsp;{verse.verse_text}<br /></span>
@@ -148,7 +148,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				}
 				<main ref={this.setMainRef} onClick={(e) => e.button === 0 && this.closeContextMenu()} onMouseDown={this.getFirstVerse} onMouseUp={this.handleMouseUp} className="chapter" onContextMenu={this.handleContext}>
 					{
-						formattedSource ? null : (
+						formattedSource.main ? null : (
 							<h1 className="active-chapter-title">{activeChapter}</h1>
 						)
 					}

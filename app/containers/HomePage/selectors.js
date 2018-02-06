@@ -23,9 +23,10 @@ const selectFormattedSource = () => createSelector(
 		const footnotesEnd = source.indexOf('<div class="footer">', footnotesStart);
 		const main = source.slice(chapterStart, chapterEnd);
 		const footnotes = source.slice(footnotesStart, footnotesEnd);
-		const footnotesObject = footnotes.match(/<span class="ft">(.*?)<\/span>/g).reduce((acc, note, i) => ({ ...acc, [`footnote-${i}`]: note.slice(17, -7) }), {});
+		const footnotesArray = footnotes.match(/<span class="ft">(.*?)<\/span>/g);
+		const footnotesObject = Array.isArray(footnotesArray) ? footnotesArray.reduce((acc, note, i) => ({ ...acc, [`footnote-${i}`]: note.slice(17, -7) }), {}) : {};
 
-		return { main, footnotes: footnotesObject || {} };
+		return { main: `${main}${footnotes}`, footnotes: footnotesObject };
 	}
 );
 
