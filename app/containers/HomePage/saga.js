@@ -104,52 +104,44 @@ export function* getBooks({ textId, filesets }) {
 }
 
 export function* getChapter({ bible, book, chapter, audioObjects, hasTextInDatabase, formattedText }) {
-	const audio = typeof audioObjects.toJS === 'function' ? audioObjects.toJS() : audioObjects;
-	const hasAudio = audio.filter((resource) => resource.bookId === book && resource.chapter === chapter);
-
-	let audioRequestUrl = '';
-	let textRequestUrl = '';
-	let formattedTextRequestUrl = '';
 	// TODO Split these calls into separate functions to reduce wait time for a user
 	// Add ability to make calls for plaintext and formatted text
 	// There is an issue with the getAudio call not returning before this call
 	// there needs to be some sort of race, or variable that tracks whether or
 	// not the filesets have been retrieved and the audioObjects have been set
 	// console.log('formatted text in get chapters', formattedText);
-	if (formattedText) {
-		formattedTextRequestUrl = `https://api.bible.build/bibles/filesets/${formattedText}?chapter_id=${chapter}&book_id=${book}&key=${process.env.DBP_API_KEY}&v=4`;
-	}
-	if (hasAudio.length) {
-		audioRequestUrl = `https://api.bible.build/bibles/filesets/${hasAudio[0].filesetId}?chapter_id=${chapter}&book_id=${book}&key=${process.env.DBP_API_KEY}&v=4`;
-	}
+	const text = yield* getPlainText({ hasTextInDatabase, bible, book, chapter });
+	const audioSource = yield* getAudioSource({ audioObjects, book, chapter });
+	const formattedSource = yield* getFormattedText({ formattedText, chapter, book });
+	// const audioRequestUrl = `https://api.bible.build/bibles/filesets/${filesetId}?key=${process.env.DBP_API_KEY}&v=4`;
+
+	yield put(loadChapter({ text, audioSource, formattedSource }));
+}
+
+export function* getPlainText({ hasTextInDatabase, bible, book, chapter }) {
+	let textRequestUrl = '';
+	let plainText = [];
 
 	if (hasTextInDatabase) {
 		textRequestUrl = `https://api.bible.build/bible/${bible}/${book}/${chapter}?key=${process.env.DBP_API_KEY}&v=4`;
 	}
-	let text = [];
-	let formattedSource = '';
-	let audioSource = '';
-	// const audioRequestUrl = `https://api.bible.build/bibles/filesets/${filesetId}?key=${process.env.DBP_API_KEY}&v=4`;
-	try {
-		const textResponse = yield textRequestUrl ? call(request, textRequestUrl) : '';
 
-		if (textResponse) {
-			text = textResponse;
+	try {
+		plainText = yield textRequestUrl ? call(request, textRequestUrl) : [];
+	} catch (err) {
+		if (process.env.NODE_ENV === 'development') {
+			console.error('Caught in database text request', err); // eslint-disable-line no-console
 		}
-	} catch (err) {
-		// if (process.env.NODE_ENV === 'development') {
-		// 	console.error('Caught in database text request', err); // eslint-disable-line no-console
-		// }
 	}
+	return plainText;
+}
 
-	try {
-		const audioResponse = yield audioRequestUrl ? call(request, audioRequestUrl) : '';
+export function* getFormattedText({ formattedText, chapter, book }) {
+	let formattedTextRequestUrl = '';
+	let formattedSource = '';
 
-		audioSource = audioResponse ? audioResponse.data[0].path : '';
-	} catch (err) {
-		// if (process.env.NODE_ENV === 'development') {
-		// 	console.error('Caught in audio request', err); // eslint-disable-line no-console
-		// }
+	if (formattedText) {
+		formattedTextRequestUrl = `https://api.bible.build/bibles/filesets/${formattedText}?chapter_id=${chapter}&book_id=${book}&key=${process.env.DBP_API_KEY}&v=4`;
 	}
 
 	try {
@@ -159,12 +151,33 @@ export function* getChapter({ bible, book, chapter, audioObjects, hasTextInDatab
 			formattedSource = yield fetch(formattedResponse.data[0].path).then((res) => res.text());
 		}
 	} catch (err) {
-		// if (process.env.NODE_ENV === 'development') {
-		// 	console.error('Caught in formatted request', err); // eslint-disable-line no-console
-		// }
+		if (process.env.NODE_ENV === 'development') {
+			console.error('Caught in formatted request', err); // eslint-disable-line no-console
+		}
+	}
+	return formattedSource;
+}
+
+export function* getAudioSource({ audioObjects, book, chapter }) {
+	const audio = typeof audioObjects.toJS === 'function' ? audioObjects.toJS() : audioObjects;
+	const hasAudio = audio.filter((resource) => resource.bookId === book && resource.chapter === chapter);
+	let audioRequestUrl = '';
+	let audioSource = '';
+
+	if (hasAudio.length) {
+		audioRequestUrl = `https://api.bible.build/bibles/filesets/${hasAudio[0].filesetId}?chapter_id=${chapter}&book_id=${book}&key=${process.env.DBP_API_KEY}&v=4`;
 	}
 
-	yield put(loadChapter({ text, audioSource, formattedSource }));
+	try {
+		const audioResponse = yield audioRequestUrl ? call(request, audioRequestUrl) : '';
+
+		audioSource = audioResponse ? audioResponse.data[0].path : '';
+	} catch (err) {
+		if (process.env.NODE_ENV === 'development') {
+			console.error('Caught in audio request', err); // eslint-disable-line no-console
+		}
+	}
+	return audioSource;
 }
 
 // Individual exports for testing

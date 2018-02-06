@@ -148,7 +148,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				}
 				<main ref={this.setMainRef} onClick={(e) => e.button === 0 && this.closeContextMenu()} onMouseDown={this.getFirstVerse} onMouseUp={this.handleMouseUp} className="chapter" onContextMenu={this.handleContext}>
 					{
-						formattedSource ? null : (
+						formattedSource.main ? null : (
 							<h1 className="active-chapter-title">{activeChapter}</h1>
 						)
 					}
