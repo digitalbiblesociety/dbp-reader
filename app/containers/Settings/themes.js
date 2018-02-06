@@ -81,6 +81,10 @@ const sizes = {
 	5: '1.18em',
 };
 
+export const toggleWordsOfJesus = (state) => {
+	document.documentElement.style.setProperty('--application-words-of-jesus', state ? '#A00' : 'inherit');
+};
+
 export const applyFontFamily = (fontFamily) => {
 	document.documentElement.style.setProperty('--application-font-family', fonts[fontFamily]);
 };
