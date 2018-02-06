@@ -8,6 +8,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import SvgWrapper from 'components/SvgWrapper';
 import ContextPortal from 'components/ContextPortal';
+// import { addClickToNotes } from './htmlToReact';
 /* Disabling the jsx-a11y linting because we need to capture the selected text
 	 and the most straight forward way of doing so is with the onMouseUp event */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
@@ -21,19 +22,8 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		lastVerse: 0,
 	};
 
-	componentDidMount() {
-		if (this.formattedRef) {
-			console.log(typeof this.formattedRef);
-			console.log(Object.entries(this.formattedRef));
-		}
-	}
-
 	setMainRef = (el) => {
 		this.main = el;
-	}
-
-	setFormattedRef = (el) => {
-		this.formattedRef = el;
 	}
 	// Use selected text only when marking highlights
 	setActiveNote = () => {
@@ -86,13 +76,13 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			textComponents = text.map((verse) => (
 				<span key={verse.verse_start}>{verse.verse_text}&nbsp;&nbsp;</span>
 			));
-		} else if (formattedSource) {
+		} else if (formattedSource.main) {
 			// TODO: find way of providing the html without using dangerouslySetInnerHTML
 			/* eslint-disable react/no-danger */
 			// console.log('formatted source in text component', formattedSource)
-			textComponents = (
-				<div ref={this.setFormattedRef} style={{ all: 'inherit' }} dangerouslySetInnerHTML={{ __html: formattedSource }} />
-			);
+			// const formattedComponents = [addClickToNotes({ html: formattedSource.main, action: this.openFootnote })];
+			textComponents = (<div style={{ all: 'inherit' }} dangerouslySetInnerHTML={{ __html: formattedSource.main }}></div>);
+			// textComponents = formattedComponents;
 		} else if (oneVersePerLine) {
 			textComponents = text.map((verse) => (
 				<span key={verse.verse_start}><br />&nbsp;<sup>{verse.verse_start_vernacular}</sup>&nbsp;{verse.verse_text}<br /></span>
@@ -104,7 +94,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		} else {
 			textComponents = (<h5>Please select a mode for displaying text by using the options in the Settings menu locatated near the bottom left of the screen!</h5>);
 		}
-
+		// console.log('text components', textComponents);
 		return textComponents;
 	}
 
@@ -118,6 +108,8 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			this.getLastVerse(e);
 		}
 	}
+
+	// openFootnote = (props) => console.log('props in open footnote', props)
 
 	openContextMenu = (e) => {
 		const x = e.clientX;
@@ -186,7 +178,7 @@ Text.propTypes = {
 	setActiveNotesView: PropTypes.func,
 	activeChapter: PropTypes.number,
 	notesActive: PropTypes.bool,
-	formattedSource: PropTypes.string,
+	formattedSource: PropTypes.object,
 	setActiveNote: PropTypes.func,
 	activeBookId: PropTypes.string,
 };

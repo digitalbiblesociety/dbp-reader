@@ -137,9 +137,9 @@ export function* getChapter({ bible, book, chapter, audioObjects, hasTextInDatab
 			text = textResponse;
 		}
 	} catch (err) {
-		if (process.env.NODE_ENV === 'development') {
-			console.error('Caught in database text request', err); // eslint-disable-line no-console
-		}
+		// if (process.env.NODE_ENV === 'development') {
+		// 	console.error('Caught in database text request', err); // eslint-disable-line no-console
+		// }
 	}
 
 	try {
@@ -147,9 +147,9 @@ export function* getChapter({ bible, book, chapter, audioObjects, hasTextInDatab
 
 		audioSource = audioResponse ? audioResponse.data[0].path : '';
 	} catch (err) {
-		if (process.env.NODE_ENV === 'development') {
-			console.error('Caught in audio request', err); // eslint-disable-line no-console
-		}
+		// if (process.env.NODE_ENV === 'development') {
+		// 	console.error('Caught in audio request', err); // eslint-disable-line no-console
+		// }
 	}
 
 	try {
@@ -159,9 +159,9 @@ export function* getChapter({ bible, book, chapter, audioObjects, hasTextInDatab
 			formattedSource = yield fetch(formattedResponse.data[0].path).then((res) => res.text());
 		}
 	} catch (err) {
-		if (process.env.NODE_ENV === 'development') {
-			console.error('Caught in formatted request', err); // eslint-disable-line no-console
-		}
+		// if (process.env.NODE_ENV === 'development') {
+		// 	console.error('Caught in formatted request', err); // eslint-disable-line no-console
+		// }
 	}
 
 	yield put(loadChapter({ text, audioSource, formattedSource }));

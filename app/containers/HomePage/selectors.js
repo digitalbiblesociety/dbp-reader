@@ -1,7 +1,5 @@
 import { createSelector } from 'reselect';
-import React from 'react';
-const HtmlToReact = require('html-to-react');
-const HtmlToReactParser = require('html-to-react').Parser;
+
 // import * as pages from 'utils/ENGKJV/list';
 // import bookNames from 'utils/listOfBooksInBible';
 /**
@@ -9,59 +7,25 @@ const HtmlToReactParser = require('html-to-react').Parser;
  * TODO: Fix selectors so that they don't receive objects because that negates the benefit of using memoized functions
  */
 const selectHomePageDomain = (state) => state.get('homepage');
+const selectFormattedTextSource = (state) => state.getIn(['homepage', 'formattedSource']);
 
 const selectFormattedSource = () => createSelector(
-	selectHomePageDomain,
-	(substate) => {
+	selectFormattedTextSource,
+	(source) => {
 		// Pushing update with the formatted text working but not the footnotes
-		const source = substate.get('formattedSource');
+		// const source = substate.get('formattedSource');
+		if (!source) {
+			return { main: '', footnotes: {} };
+		}
 		const chapterStart = source.indexOf('<div class="chapter');
 		const chapterEnd = source.indexOf('<div class="footnotes">', chapterStart);
 		const footnotesStart = source.indexOf('<div class="footnotes">');
 		const footnotesEnd = source.indexOf('<div class="footer">', footnotesStart);
 		const main = source.slice(chapterStart, chapterEnd);
 		const footnotes = source.slice(footnotesStart, footnotesEnd);
-		console.log(footnotes.match(/<span class="ft">(.*?)<\/span>/g));
-		// console.log('the footnotes', footnotes);
-		// const newSource = { main, footnotes };
-		// console.log('new source', newSource);
-		// const reactJsx = main.replace(/class="/g, 'className="')
-		// const HtmlToReactParser = HtmlToReact.Parser;
-		// const isValidNode = function () {
-		// 	return true;
-		// };
-		// const processNodeDefinitions = new HtmlToReact.ProcessNodeDefinitions(React);
-		// const processingInstructions = [
-		// 	{
-		// 		// Custom <h1> processing
-		// 		shouldProcessNode(node) {
-		// 			if (node.attribs && node.attribs.class === 'note') {
-		// 				console.log('children of node in first process', node.children);
-		// 				return node.attribs.class === 'note';
-		// 			}
-		// 			return false;
-		// 			// console.log('in second should process', node)
-		// 			// return node.parent && node.parent.name && node.parent.name === 'h1';
-		// 		},
-		// 		processNode(node, children) {
-		// 			console.log('node in parser', node);
-		// 			console.log('child in parser', children);
-		// 			return node;
-		// 		},
-		// 	}, {
-		// 		shouldProcessNode(node) {
-		// 			if (node.attribs && node.attribs.class === 'note') {
-		// 				console.log('Id of note in the second should process', node.attribs.id);
-		// 			}
-		// 			return true;
-		// 		},
-		// 		processNode: processNodeDefinitions.processDefaultNode,
-		// 	}];
-		// const htmlToReactParser = new HtmlToReactParser();
-		// const reactComponent = htmlToReactParser.parseWithInstructions(source, isValidNode,
-		// 	processingInstructions);
-		// console.log('React component', reactComponent);
-		return main;
+		const footnotesObject = footnotes.match(/<span class="ft">(.*?)<\/span>/g).reduce((acc, note, i) => ({ ...acc, [`footnote-${i}`]: note.slice(17, -7) }), {});
+
+		return { main, footnotes: footnotesObject || {} };
 	}
 );
 
