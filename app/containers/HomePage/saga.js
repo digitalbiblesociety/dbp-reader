@@ -1,5 +1,5 @@
 import 'whatwg-fetch';
-import { takeLatest, call, put } from 'redux-saga/effects';
+import { takeLatest, call, put, all } from 'redux-saga/effects';
 import request from 'utils/request';
 import unionWith from 'lodash/unionWith';
 import { GET_CHAPTER_TEXT, GET_BOOKS, GET_AUDIO } from './constants';
@@ -110,9 +110,16 @@ export function* getChapter({ bible, book, chapter, audioObjects, hasTextInDatab
 	// there needs to be some sort of race, or variable that tracks whether or
 	// not the filesets have been retrieved and the audioObjects have been set
 	// console.log('formatted text in get chapters', formattedText);
-	const text = yield* getPlainText({ hasTextInDatabase, bible, book, chapter });
-	const audioSource = yield* getAudioSource({ audioObjects, book, chapter });
-	const formattedSource = yield* getFormattedText({ formattedText, chapter, book });
+	// console.log('before yield all')
+	const [text, audioSource, formattedSource] = yield all([
+		call(getPlainText, { hasTextInDatabase, bible, book, chapter }),
+		call(getAudioSource, { audioObjects, book, chapter }),
+		call(getFormattedText, { formattedText, chapter, book }),
+	]);
+	// console.log('after yield all, should have been a few seconds at least')
+	// const text = yield* getPlainText({ hasTextInDatabase, bible, book, chapter });
+	// const audioSource = yield* getAudioSource({ audioObjects, book, chapter });
+	// const formattedSource = yield* getFormattedText({ formattedText, chapter, book });
 	// const audioRequestUrl = `https://api.bible.build/bibles/filesets/${filesetId}?key=${process.env.DBP_API_KEY}&v=4`;
 
 	yield put(loadChapter({ text, audioSource, formattedSource }));
