@@ -50,7 +50,11 @@ class CountryList extends React.PureComponent { // eslint-disable-line react/pre
 			</div>
 		));
 
-		return components.size ? components : <LoadingSpinner />;
+		if (countries.size === 0) {
+			return <span>There was an error fetching this resource, an Admin has been notified. We apologize for the inconvenience</span>;
+		}
+
+		return components.size ? components : <span>There are no matches for your search.</span>;
 	}
 
 	filterFunction = (country, filterText) => {
@@ -73,6 +77,7 @@ class CountryList extends React.PureComponent { // eslint-disable-line react/pre
 			activeCountryName,
 			setCountryListState,
 			toggleVersionList,
+			loadingCountries,
 		} = this.props;
 
 		if (active) {
@@ -85,7 +90,11 @@ class CountryList extends React.PureComponent { // eslint-disable-line react/pre
 					</div>
 					<input className="text-selection-input" onChange={this.handleChange} placeholder="SEARCH COUNTRIES" value={this.state.filterText} />
 					<div className="language-name-list">
-						{this.filteredCountries}
+						{
+							loadingCountries ? (
+								<LoadingSpinner />
+							) : this.filteredCountries
+						}
 					</div>
 				</div>
 			);
@@ -109,6 +118,7 @@ CountryList.propTypes = {
 	setCountryListState: PropTypes.func,
 	toggleVersionList: PropTypes.func,
 	active: PropTypes.bool,
+	loadingCountries: PropTypes.bool,
 	activeCountryName: PropTypes.string,
 };
 

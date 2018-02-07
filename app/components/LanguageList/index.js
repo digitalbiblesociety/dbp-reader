@@ -31,7 +31,11 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 			</div>
 		));
 
-		return components.size ? components : <LoadingSpinner />;
+		if (languages.size === 0) {
+			return <span>There was an error fetching this resource, an Admin has been notified. We apologize for the inconvenience</span>;
+		}
+
+		return components.size ? components : <span>There are no matches for your search.</span>;
 	}
 
 	filterFunction = (language, filterText) => {
@@ -75,6 +79,7 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 		const {
 			active,
 			activeLanguageName,
+			loadingLanguages,
 		} = this.props;
 
 		if (active) {
@@ -87,7 +92,11 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 					</div>
 					<input className="text-selection-input" onChange={this.handleChange} placeholder="SEARCH LANGUAGES" value={this.state.filterText} />
 					<div className="language-name-list">
-						{this.filteredLanguages}
+						{
+							loadingLanguages ? (
+								<LoadingSpinner />
+							) : this.filteredLanguages
+						}
 					</div>
 				</div>
 			);
@@ -111,6 +120,7 @@ LanguageList.propTypes = {
 	setCountryListState: PropTypes.func,
 	toggleVersionList: PropTypes.func,
 	active: PropTypes.bool,
+	loadingLanguages: PropTypes.bool,
 	activeLanguageName: PropTypes.string,
 };
 
