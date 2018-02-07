@@ -8,6 +8,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import SvgWrapper from 'components/SvgWrapper';
 import ContextPortal from 'components/ContextPortal';
+import FootnotePortal from 'components/FootnotePortal';
 // import { addClickToNotes } from './htmlToReact';
 /* Disabling the jsx-a11y linting because we need to capture the selected text
 	 and the most straight forward way of doing so is with the onMouseUp event */
@@ -16,6 +17,7 @@ import ContextPortal from 'components/ContextPortal';
 class Text extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	state = {
 		contextMenuState: false,
+		footnoteState: false,
 		coords: {},
 		selectedText: '',
 		firstVerse: 0,
@@ -24,18 +26,35 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 
 	componentDidMount() {
 		if (this.format) {
-			// console.log(this.format);
-			const notes = [...this.format.getElementsByClassName('note')];
-			// console.log(notes);
-			notes.forEach((note) => {
-				/* eslint-disable no-param-reassign */
-				note.href = '';
-				note.onclick = (e) => {
-					// console.log(e.target.parentElement);
-					this.openFootnote({ id: e.target.parentElement.id, coords: { x: e.clientX, y: e.clientY } });
-				};
-			});
+			this.setEventHandlersForFootnotes();
 		}
+	}
+
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.formattedSource.main !== this.props.formattedSource.main) {
+			this.setState({ footnoteState: false });
+		}
+	}
+
+	componentDidUpdate(prevProps) {
+		if (this.props.formattedSource.main && prevProps.formattedSource.main !== this.props.formattedSource.main && this.format) {
+			this.setEventHandlersForFootnotes();
+		}
+	}
+
+	setEventHandlersForFootnotes = () => {
+		const notes = [...this.format.getElementsByClassName('note')];
+
+		notes.forEach((note, index) => {
+			/* eslint-disable no-param-reassign */
+			// May need to change this and change the regex if we do infinite scrolling
+			if (note.childNodes && note.childNodes[0]) {
+				note.childNodes[0].removeAttribute('href');
+			}
+			note.onclick = (e) => {
+				this.openFootnote({ id: `footnote-${index}`, coords: { x: e.clientX, y: e.clientY } });
+			};
+		});
 	}
 
 	setFormattedRef = (el) => {
@@ -102,7 +121,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			// console.log('formatted source in text component', formattedSource)
 			// textComponents = [addClickToNotes({ html: formattedSource.main, action: this.openFootnote })];
 			// console.log(textComponents);
-			textComponents = (<div ref={this.setFormattedRef} style={{ all: 'inherit' }} dangerouslySetInnerHTML={{ __html: formattedSource.main }}></div>);
+			textComponents = (<div ref={this.setFormattedRef} style={{ all: 'inherit', padding: 0 }} dangerouslySetInnerHTML={{ __html: formattedSource.main }} />);
 		} else if (oneVersePerLine) {
 			textComponents = text.map((verse) => (
 				<span key={verse.verse_start}><br />&nbsp;<sup>{verse.verse_start_vernacular}</sup>&nbsp;{verse.verse_text}<br /></span>
@@ -128,7 +147,25 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		}
 	}
 
-	openFootnote = (props) => props
+	handleMainClick = (e) => {
+		if (e.button === 0 && this.state.footnoteState && e.target.className !== 'key') {
+			this.closeFootnote();
+		} else if (e.button === 0 && this.state.contextMenuState) {
+			this.closeContextMenu();
+		}
+	}
+
+	openFootnote = ({ id, coords }) => {
+		this.setState({
+			footnoteState: true,
+			footnotePortal: {
+				parentNode: this.format,
+				message: this.props.formattedSource.footnotes[id],
+				closeFootnote: this.closeFootnote,
+				coords,
+			},
+		});
+	}
 
 	openContextMenu = (e) => {
 		const x = e.clientX;
@@ -139,6 +176,8 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			contextMenuState: true,
 		});
 	}
+
+	closeFootnote = () => this.setState({ footnoteState: false })
 
 	closeContextMenu = () => this.setState({ contextMenuState: false })
 
@@ -156,6 +195,8 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		const {
 			coords,
 			contextMenuState,
+			footnoteState,
+			footnotePortal,
 		} = this.state;
 
 		return (
@@ -165,7 +206,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 						<SvgWrapper onClick={prevChapter} className="prev-arrow-svg" svgid="prev-arrow" />
 					)
 				}
-				<main ref={this.setMainRef} onClick={(e) => e.button === 0 && this.closeContextMenu()} onMouseDown={this.getFirstVerse} onMouseUp={this.handleMouseUp} className="chapter" onContextMenu={this.handleContext}>
+				<main ref={this.setMainRef} onClick={this.handleMainClick} onMouseDown={this.getFirstVerse} onMouseUp={this.handleMouseUp} className="chapter" onContextMenu={this.handleContext}>
 					{
 						formattedSource.main ? null : (
 							<h1 className="active-chapter-title">{activeChapter}</h1>
@@ -181,6 +222,11 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				{
 					contextMenuState ? (
 						<ContextPortal setActiveNote={this.setActiveNote} setActiveNotesView={setActiveNotesView} closeContextMenu={this.closeContextMenu} toggleNotesModal={toggleNotesModal} notesActive={notesActive} parentNode={this.main} coordinates={coords} />
+					) : null
+				}
+				{
+					footnoteState ? (
+						<FootnotePortal {...footnotePortal} />
 					) : null
 				}
 			</div>

@@ -18,7 +18,7 @@ import {
 	SET_ACTIVE_NOTES_VIEW,
 	SET_SELECTED_BOOK_NAME,
 	TOGGLE_PROFILE,
-	TOGGLE_MENU_BAR,
+	// TOGGLE_MENU_BAR,
 	TOGGLE_RED_LETTER,
 	TOGGLE_NOTES_MODAL,
 	TOGGLE_SEARCH_MODAL,
@@ -53,7 +53,7 @@ const initialState = fromJS({
 	},
 	activeChapter: 1,
 	isChapterSelectionActive: false,
-	isMenuBarActive: false,
+	// isMenuBarActive: false,
 	isProfileActive: false,
 	isSettingsModalActive: false,
 	isSearchModalActive: false,
@@ -126,8 +126,8 @@ function homePageReducer(state = initialState, action) {
 		return state.set('audioObjects', fromJS(action.audioObjects));
 	case SET_ACTIVE_NOTE:
 		return state.set('note', fromJS(action.note));
-	case TOGGLE_MENU_BAR:
-		return state.set('isMenuBarActive', !state.get('isMenuBarActive'));
+	// case TOGGLE_MENU_BAR:
+	// 	return state.set('isMenuBarActive', !state.get('isMenuBarActive'));
 	case TOGGLE_PROFILE:
 		return state.set('isProfileActive', !state.get('isProfileActive'));
 	case TOGGLE_CHAPTER_SELECTION:
