@@ -119,7 +119,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			// console.log('formatted source in text component', formattedSource)
 			// textComponents = [addClickToNotes({ html: formattedSource.main, action: this.openFootnote })];
 			// console.log(textComponents);
-			textComponents = (<div ref={this.setFormattedRef} style={{ all: 'inherit' }} dangerouslySetInnerHTML={{ __html: formattedSource.main }} />);
+			textComponents = (<div ref={this.setFormattedRef} style={{ all: 'inherit', padding: 0 }} dangerouslySetInnerHTML={{ __html: formattedSource.main }} />);
 		} else if (oneVersePerLine) {
 			textComponents = text.map((verse) => (
 				<span key={verse.verse_start}><br />&nbsp;<sup>{verse.verse_start_vernacular}</sup>&nbsp;{verse.verse_text}<br /></span>
