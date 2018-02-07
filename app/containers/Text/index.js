@@ -22,6 +22,26 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		lastVerse: 0,
 	};
 
+	componentDidMount() {
+		if (this.format) {
+			// console.log(this.format);
+			const notes = [...this.format.getElementsByClassName('note')];
+			// console.log(notes);
+			notes.forEach((note) => {
+				/* eslint-disable no-param-reassign */
+				note.href = '';
+				note.onclick = (e) => {
+					// console.log(e.target.parentElement);
+					this.openFootnote({ id: e.target.parentElement.id, coords: { x: e.clientX, y: e.clientY } });
+				};
+			});
+		}
+	}
+
+	setFormattedRef = (el) => {
+		this.format = el;
+	}
+
 	setMainRef = (el) => {
 		this.main = el;
 	}
@@ -82,7 +102,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			// console.log('formatted source in text component', formattedSource)
 			// textComponents = [addClickToNotes({ html: formattedSource.main, action: this.openFootnote })];
 			// console.log(textComponents);
-			textComponents = (<div style={{ all: 'inherit' }} dangerouslySetInnerHTML={{ __html: formattedSource.main }}></div>);
+			textComponents = (<div ref={this.setFormattedRef} style={{ all: 'inherit' }} dangerouslySetInnerHTML={{ __html: formattedSource.main }}></div>);
 		} else if (oneVersePerLine) {
 			textComponents = text.map((verse) => (
 				<span key={verse.verse_start}><br />&nbsp;<sup>{verse.verse_start_vernacular}</sup>&nbsp;{verse.verse_text}<br /></span>
@@ -97,7 +117,6 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		// console.log('text components', textComponents);
 		return textComponents;
 	}
-
 	// Allows use of the right mouse button to toggle menu's or perform different actions
 	handleContext = (e) => e.preventDefault()
 
@@ -109,7 +128,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		}
 	}
 
-	// openFootnote = (props) => console.log('props in open footnote', props)
+	openFootnote = (props) => props
 
 	openContextMenu = (e) => {
 		const x = e.clientX;
