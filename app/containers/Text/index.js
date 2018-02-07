@@ -48,7 +48,9 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		notes.forEach((note, index) => {
 			/* eslint-disable no-param-reassign */
 			// May need to change this and change the regex if we do infinite scrolling
-			note.href = '';
+			if (note.childNodes && note.childNodes[0]) {
+				note.childNodes[0].removeAttribute('href');
+			}
 			note.onclick = (e) => {
 				this.openFootnote({ id: `footnote-${index}`, coords: { x: e.clientX, y: e.clientY } });
 			};
