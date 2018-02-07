@@ -34,11 +34,14 @@ import saga from './saga';
 
 export class TextSelection extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	componentDidMount() {
+		if (this.props.firstLoad) {
+			this.props.dispatch(getCountries());
+			this.props.dispatch(getLanguages());
+			this.props.dispatch(getTexts({ languageISO: this.props.textselection.activeIsoCode }));
+			this.props.toggleFirstLoadForTextSelection();
+		}
 		// TODO: use a conditional to ensure the actions below only happen on the first mount
 		// move these calls to CDM of homepage to ensure they are loaded by the time the user is here
-		this.props.dispatch(getCountries());
-		this.props.dispatch(getLanguages());
-		this.props.dispatch(getTexts({ languageISO: this.props.textselection.activeIsoCode }));
 		document.addEventListener('click', this.handleClickOutside);
 	}
 
@@ -92,6 +95,9 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 			countryListActive,
 			activeCountryName,
 			countryLanguages,
+			loadingCountries,
+			loadingLanguages,
+			loadingVersions,
 		} = this.props.textselection;
 		const {
 			bibles,
@@ -125,6 +131,7 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 						toggleLanguageList={this.toggleLanguageList}
 						countries={countries}
 						setCountryName={this.setCountryName}
+						loadingCountries={loadingCountries}
 					/>
 					<LanguageList
 						active={languageListActive}
@@ -135,6 +142,7 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 						toggleLanguageList={this.toggleLanguageList}
 						languages={languages}
 						setActiveIsoCode={this.setActiveIsoCode}
+						loadingLanguages={loadingLanguages}
 					/>
 					<VersionList
 						active={versionListActive}
@@ -147,6 +155,7 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 						getAudio={getAudio}
 						toggleLanguageList={this.toggleLanguageList}
 						toggleTextSelection={toggleVersionSelection}
+						loadingVersions={loadingVersions}
 					/>
 				</aside>
 			</GenericErrorBoundary>
@@ -160,10 +169,12 @@ TextSelection.propTypes = {
 	languages: PropTypes.object,
 	countries: PropTypes.object,
 	textselection: PropTypes.object,
-	setActiveText: PropTypes.func,
 	activeTextName: PropTypes.string,
-	toggleVersionSelection: PropTypes.func,
+	firstLoad: PropTypes.bool,
 	getAudio: PropTypes.func,
+	setActiveText: PropTypes.func,
+	toggleVersionSelection: PropTypes.func,
+	toggleFirstLoadForTextSelection: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({

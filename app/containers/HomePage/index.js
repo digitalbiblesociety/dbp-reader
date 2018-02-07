@@ -45,6 +45,7 @@ import {
 	toggleSettingsModal,
 	toggleChapterSelection,
 	toggleVersionSelection,
+	toggleFirstLoadForTextSelection,
 	toggleInformationModal,
 	setActiveNote,
 	setActiveTextId,
@@ -168,6 +169,8 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 
 	// toggleMenuBar = () => this.props.dispatch(toggleMenuBar())
 
+	toggleFirstLoadForTextSelection = () => this.props.homepage.firstLoad && this.props.dispatch(toggleFirstLoadForTextSelection())
+
 	toggleProfile = () => this.props.dispatch(toggleProfile())
 
 	toggleNotesModal = () => this.props.dispatch(toggleNotesModal())
@@ -201,6 +204,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			copywrite,
 			audioSource,
 			activeNotesView,
+			firstLoad,
 		} = this.props.homepage;
 
 		const {
@@ -237,12 +241,14 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 						isVersionSelectionActive ? (
 							<FadeTransition in={isSettingsModalActive}>
 								<TextSelection
+									firstLoad={firstLoad}
 									activeBookName={activeBookName}
 									activeTextName={activeTextName}
 									getAudio={this.getAudio}
 									setActiveText={this.setActiveTextId}
 									setActiveChapter={this.setActiveChapter}
 									toggleVersionSelection={this.toggleVersionSelection}
+									toggleFirstLoadForTextSelection={this.toggleFirstLoadForTextSelection}
 								/>
 							</FadeTransition>
 						) : null
