@@ -21,7 +21,7 @@ class NavigationBar extends React.PureComponent { // eslint-disable-line react/p
       toggleChapterSelection,
 			toggleVersionSelection,
 			toggleSearchModal,
-			toggleMenuBar,
+			// toggleMenuBar,
 			toggleProfile,
 			activeChapter,
     } = this.props;
@@ -29,7 +29,6 @@ class NavigationBar extends React.PureComponent { // eslint-disable-line react/p
 		return (
 			<div className="nav-container">
 				<div className="small-2 left-buttons">
-					<span className="small-6 button" role="button" tabIndex={0} onClick={toggleMenuBar}><SvgWrapper height="30px" width="30px" fill="#fff" svgid="menu" /></span>
 					<span className="small-hide medium-6 logo button"><Logo /></span>
 				</div>
 				<div className="small-8 chapter-selector">
@@ -51,7 +50,7 @@ NavigationBar.propTypes = {
 	toggleChapterSelection: PropTypes.func,
 	toggleVersionSelection: PropTypes.func,
 	toggleSearchModal: PropTypes.func,
-	toggleMenuBar: PropTypes.func,
+	// toggleMenuBar: PropTypes.func,
 	toggleProfile: PropTypes.func,
 	activeChapter: PropTypes.number,
 };

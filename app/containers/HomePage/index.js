@@ -28,7 +28,7 @@ import Profile from 'containers/Profile';
 import Notes from 'containers/Notes';
 import Text from 'containers/Text';
 import NavigationBar from 'components/NavigationBar';
-import MenuBar from 'components/MenuBar';
+// import MenuBar from 'components/MenuBar';
 import Information from 'components/Information';
 import Footer from 'components/Footer';
 import SearchContainer from 'containers/SearchContainer';
@@ -38,7 +38,7 @@ import {
 	getBooks,
 	getAudio,
 	getChapterText,
-	toggleMenuBar,
+	// toggleMenuBar,
 	toggleProfile,
 	toggleNotesModal,
 	toggleSearchModal,
@@ -166,7 +166,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 
 	setActiveNote = ({ note }) => this.props.dispatch(setActiveNote({ note }))
 
-	toggleMenuBar = () => this.props.dispatch(toggleMenuBar())
+	// toggleMenuBar = () => this.props.dispatch(toggleMenuBar())
 
 	toggleProfile = () => this.props.dispatch(toggleProfile())
 
@@ -195,7 +195,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			isInformationModalActive,
 			isSearchModalActive,
 			activeBookName,
-			isMenuBarActive,
+			// isMenuBarActive,
 			activeChapter,
 			isProfileActive,
 			copywrite,
@@ -219,7 +219,6 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					activeTextId={activeTextId}
 					activeBookName={activeBookName}
 					activeChapter={activeChapter}
-					toggleMenuBar={this.toggleMenuBar}
 					toggleProfile={this.toggleProfile}
 					toggleChapterSelection={this.toggleChapterSelection}
 					toggleVersionSelection={this.toggleVersionSelection}
@@ -256,11 +255,11 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 						) : null
 					}
 					{
-						isMenuBarActive ? (
-							<FadeTransition classNames="slide-from-left" in={isMenuBarActive}>
-								<MenuBar toggleMenuBar={this.toggleMenuBar} />
-							</FadeTransition>
-						) : null
+						// isMenuBarActive ? (
+						// 	<FadeTransition classNames="slide-from-left" in={isMenuBarActive}>
+						// 		<MenuBar toggleMenuBar={this.toggleMenuBar} />
+						// 	</FadeTransition>
+						// ) : null
 					}
 					{
 						isProfileActive ? (

@@ -18,7 +18,7 @@ import {
 	SET_ACTIVE_NOTES_VIEW,
 	SET_SELECTED_BOOK_NAME,
 	TOGGLE_PROFILE,
-	TOGGLE_MENU_BAR,
+	// TOGGLE_MENU_BAR,
 	TOGGLE_NOTES_MODAL,
 	TOGGLE_SEARCH_MODAL,
 	TOGGLE_SETTINGS_MODAL,
@@ -77,9 +77,9 @@ export const getChapterText = (props) => ({
 	...props,
 });
 
-export const toggleMenuBar = () => ({
-	type: TOGGLE_MENU_BAR,
-});
+// export const toggleMenuBar = () => ({
+// 	type: TOGGLE_MENU_BAR,
+// });
 
 export const toggleProfile = () => ({
 	type: TOGGLE_PROFILE,
