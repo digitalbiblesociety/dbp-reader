@@ -25,6 +25,7 @@ import {
 	TOGGLE_CHAPTER_SELECTION,
 	TOGGLE_VERSION_SELECTION,
 	TOGGLE_INFORMATION_MODAL,
+	TOGGLE_FIRST_LOAD_TEXT_SELECTION,
 	UPDATE_SELECTED_TEXT,
 } from './constants';
 
@@ -80,6 +81,10 @@ export const getChapterText = (props) => ({
 // export const toggleMenuBar = () => ({
 // 	type: TOGGLE_MENU_BAR,
 // });
+
+export const toggleFirstLoadForTextSelection = () => ({
+	type: TOGGLE_FIRST_LOAD_TEXT_SELECTION,
+});
 
 export const toggleProfile = () => ({
 	type: TOGGLE_PROFILE,

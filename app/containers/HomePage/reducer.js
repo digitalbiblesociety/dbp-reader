@@ -31,6 +31,7 @@ import {
 	TOGGLE_CHAPTER_SELECTION,
 	TOGGLE_ONE_VERSE_PER_LINE,
 	TOGGLE_VERTICAL_SCROLLING,
+	TOGGLE_FIRST_LOAD_TEXT_SELECTION,
 	UPDATE_THEME,
 	UPDATE_FONT_TYPE,
 	UPDATE_FONT_SIZE,
@@ -109,10 +110,13 @@ const initialState = fromJS({
 	formattedSource: '',
 	hasTextInDatabase: true,
 	filesetTypes: {},
+	firstLoad: true,
 });
 
 function homePageReducer(state = initialState, action) {
 	switch (action.type) {
+	case TOGGLE_FIRST_LOAD_TEXT_SELECTION:
+		return state.set('firstLoad', false);
 	case GET_BOOKS:
 		return state.set('loadingBooks', true);
 	case LOAD_BOOKS:

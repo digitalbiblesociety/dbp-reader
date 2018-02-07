@@ -1,5 +1,5 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
-import languageList from 'utils/languagesWithResources.json';
+// import languageList from 'utils/languagesWithResources.json';
 import request from 'utils/request';
 import { fromJS } from 'immutable';
 import { GET_COUNTRIES, GET_DPB_TEXTS, GET_LANGUAGES } from './constants';
@@ -70,7 +70,8 @@ export function* getLanguages() {
 
 	try {
 		const response = yield call(request, requestUrl);
-		const languages = response.data.filter((language) => languageList[language.iso_code]);
+		// const languages = response.data.filter((language) => languageList[language.iso_code]);
+		const languages = response.data.filter((language) => language.bible_count > 0);
 		languages.unshift({ name: 'ANY', iso_code: 'ANY' });
 
 		yield put(setLanguages({ languages }));

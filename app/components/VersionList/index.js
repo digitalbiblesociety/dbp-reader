@@ -52,7 +52,11 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 			</div>
 		));
 
-		return components.size ? components : <LoadingSpinner />;
+		if (bibles.size === 0) {
+			return <span>There was an error fetching this resource, an Admin has been notified. We apologize for the inconvenience</span>;
+		}
+
+		return components.size ? components : <span>There are no matches for your search.</span>;
 	}
 
 	filterFunction = (bible, filterText, iso) => {
@@ -105,6 +109,7 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 		const {
 			activeTextName,
 			active,
+			loadingVersions,
 		} = this.props;
 
 		if (active) {
@@ -117,7 +122,11 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 					</div>
 					<input className="text-selection-input" onChange={this.handleChange} placeholder="SEARCH VERSIONS" value={this.state.filterText} />
 					<div className="language-name-list">
-						{this.filteredVersionList}
+						{
+							loadingVersions ? (
+								<LoadingSpinner />
+							) : this.filteredVersionList
+						}
 					</div>
 				</div>
 			);
@@ -146,6 +155,7 @@ BiblesTable.propTypes = {
 	activeIsoCode: PropTypes.string,
 	activeTextName: PropTypes.string,
 	active: PropTypes.bool,
+	loadingVersions: PropTypes.bool,
 	toggleVersionList: PropTypes.func,
 	toggleLanguageList: PropTypes.func,
 	toggleTextSelection: PropTypes.func,
