@@ -17,7 +17,7 @@ export const addClickToNotes = ({ html, action }) => {
 	const processingInstructions = [
 		{
 			// Custom <h1> processing
-			// replaceChildren: true,
+			replaceChildren: true,
 			shouldProcessNode(node) {
 				if (node.attribs && node.attribs.class === 'note' && node.attribs.id === 'note-0') {
 					return node.attribs.class === 'note' && node.attribs.id.includes('note');
