@@ -8,9 +8,11 @@ import {
 	SEND_LOGIN_FORM,
 	SIGNUP_ERROR,
 	SEND_SIGNUP_FORM,
-	// DELETE_USER,
+	DELETE_USER,
 	// RESET_PASSWORD,
-	// UPDATE_PASSWORD,
+	UPDATE_EMAIL,
+	UPDATE_PASSWORD,
+	UPDATE_USER_INFORMATION,
 } from './constants';
 
 // export function* getUserData({ userId }) {
@@ -87,19 +89,71 @@ export function* sendLoginForm({ password, email }) {
 	}
 }
 
-// export function* updatePassword() {
-// 	const requestUrl = `https://api.bible.build/?key=${process.env.DBP_API_KEY}&v=4&pretty`;
+export function* updateEmail({ userId, email }) {
+	console.log('in update email with ', userId, email);
+	const requestUrl = `https://api.bible.build/users/${userId}?key=${process.env.DBP_API_KEY}&v=4&pretty`;
+	const formData = new FormData();
 
-// 	try {
-// 		// const response = yield call(request, requestUrl);
-// 		//
-// 		// yield put('action', response);
-// 	} catch (err) {
-// 		if (process.env.NODE_ENV === 'development') {
-// 			console.error(err); // eslint-ignore-line no-console
-// 		}
-// 	}
-// }
+	formData.append('email', email);
+
+	const options = {
+		method: 'PUT',
+		body: formData,
+	};
+
+	try {
+		const response = yield call(request, requestUrl, options);
+		console.log('update email response', response);
+	} catch (err) {
+		if (process.env.NODE_ENV === 'development') {
+			console.error(err); // eslint-ignore-line no-console
+		}
+	}
+}
+
+export function* updateUserInformation({ userId, profile }) {
+	console.log('in update profile with ', userId, profile);
+	const requestUrl = `https://api.bible.build/users/${userId}?key=${process.env.DBP_API_KEY}&v=4&pretty`;
+	const formData = new FormData();
+
+	Object.entries(profile).forEach((entry) => formData.set(entry[0], entry[1]));
+
+	const options = {
+		method: 'PUT',
+		body: formData,
+	};
+
+	try {
+		const response = yield call(request, requestUrl, options);
+		console.log('update profile response', response);
+	} catch (err) {
+		if (process.env.NODE_ENV === 'development') {
+			console.error(err); // eslint-ignore-line no-console
+		}
+	}
+}
+
+export function* updatePassword({ userId, password }) {
+	console.log('in update password with ', userId, password);
+	const requestUrl = `https://api.bible.build/users/${userId}?key=${process.env.DBP_API_KEY}&v=4&pretty`;
+	const formData = new FormData();
+
+	formData.append('password', password);
+
+	const options = {
+		method: 'PUT',
+		body: formData,
+	};
+
+	try {
+		const response = yield call(request, requestUrl, options);
+		console.log('update password response', response);
+	} catch (err) {
+		if (process.env.NODE_ENV === 'development') {
+			console.error(err); // eslint-ignore-line no-console
+		}
+	}
+}
 
 // export function* resetPassword() {
 // 	const requestUrl = `https://api.bible.build/?key=${process.env.DBP_API_KEY}&v=4&pretty`;
@@ -115,26 +169,33 @@ export function* sendLoginForm({ password, email }) {
 // 	}
 // }
 
-// export function* deleteUser({ userId, email, username }) {
-// 	const requestUrl = `https://api.bible.build/?key=${process.env.DBP_API_KEY}&v=4&pretty`;
+export function* deleteUser({ userId }) {
+	console.log('in delete user with id', userId);
+	const requestUrl = `https://api.bible.build/users/${userId}?key=${process.env.DBP_API_KEY}&v=4&pretty`;
+	const options = {
+		method: 'DELETE',
+	};
 
-// 	try {
-// 		// const response = yield call(request, requestUrl);
-// 		//
-// 		// yield put('action', response);
-// 	} catch (err) {
-// 		if (process.env.NODE_ENV === 'development') {
-// 			console.error(err); // eslint-ignore-line no-console
-// 		}
-// 	}
-// }
+	try {
+		const response = yield call(request, requestUrl, options);
+
+		console.log(response);
+		// yield put({ type: 'success', response });
+	} catch (err) {
+		if (process.env.NODE_ENV === 'development') {
+			console.error(err); // eslint-ignore-line no-console
+		}
+	}
+}
 
 // Individual exports for testing
 export default function* defaultSaga() {
 	// yield takeLatest(GET_USER_DATA, getUserData);
 	yield takeLatest(SEND_SIGNUP_FORM, sendSignUpForm);
 	yield takeLatest(SEND_LOGIN_FORM, sendLoginForm);
-	// yield takeLatest(UPDATE_PASSWORD, updatePassword);
+	yield takeLatest(UPDATE_PASSWORD, updatePassword);
 	// yield takeLatest(RESET_PASSWORD, resetPassword);
-	// yield takeLatest(DELETE_USER, deleteUser);
+	yield takeLatest(DELETE_USER, deleteUser);
+	yield takeLatest(UPDATE_USER_INFORMATION, updateUserInformation);
+	yield takeLatest(UPDATE_EMAIL, updateEmail);
 }

@@ -27,6 +27,16 @@ const initialState = fromJS({
 	userId: '',
 	loginErrorMessage: '',
 	signupErrorMessage: '',
+	userProfile: {
+		password: '',
+		email: '',
+		country: '',
+		address1: '',
+		address2: '',
+		city: '',
+		state: '',
+		zip: '',
+	},
 });
 
 function profileReducer(state = initialState, action) {

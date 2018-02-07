@@ -11,6 +11,8 @@ import {
 	SEND_LOGIN_FORM,
 	SEND_SIGNUP_FORM,
 	UPDATE_PASSWORD,
+	UPDATE_EMAIL,
+	UPDATE_USER_INFORMATION,
 	RESET_PASSWORD,
 	DELETE_USER,
 	LOG_OUT,
@@ -40,10 +42,8 @@ export const selectAccountOption = (option) => ({
 	option,
 });
 
-export const deleteUser = ({ username, email, userId }) => ({
+export const deleteUser = ({ userId }) => ({
 	type: DELETE_USER,
-	username,
-	email,
 	userId,
 });
 
@@ -53,10 +53,19 @@ export const resetPassword = ({ newPassword, email }) => ({
 	email,
 });
 
-export const updatePassword = ({ previousPassword, newPassword, userId }) => ({
+export const updateEmail = (props) => ({
+	type: UPDATE_EMAIL,
+	...props,
+});
+
+export const updateUserInformation = (props) => ({
+	type: UPDATE_USER_INFORMATION,
+	...props,
+});
+
+export const updatePassword = ({ password, userId }) => ({
 	type: UPDATE_PASSWORD,
-	previousPassword,
-	newPassword,
+	password,
 	userId,
 });
 

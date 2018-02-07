@@ -14,8 +14,8 @@ import messages from './messages';
 
 class AccountSettings extends React.PureComponent {
 	state = {
-		email: '',
-		password: '',
+		email: this.props.profile.email,
+		password: this.props.profile.password,
 		country: '',
 		address1: '',
 		address2: '',
@@ -24,31 +24,41 @@ class AccountSettings extends React.PureComponent {
 		zip: '',
 	}
 
-	handleEmailChange = () => {
-		const { currentEmail } = this.props.profile.email;
-		const { newEmail } = this.state.email;
+	sendUpdateEmail = () => {
+		const currentEmail = this.props.profile.email;
+		const newEmail = this.state.email;
+
 		if (newEmail !== currentEmail && newEmail) {
 			// Dispatch action to change email
-			// this.props.changeEmail({ email: newEmail });
+			this.props.updateEmail({ email: newEmail, userId: this.props.userId });
 		}
 	}
 
-	handlePasswordChange= () => {
-		const { currentPassword } = this.props.profile.password;
-		const { newPassword } = this.state.password;
+	handleEmailChange = (e) => {
+		this.setState({ email: e.target.value });
+	}
+
+	handlePasswordChange = (e) => {
+		this.setState({ password: e.target.value });
+	}
+
+	sendUpdatePassword = () => {
+		const currentPassword = this.props.profile.password;
+		const newPassword = this.state.password;
+
 		if (newPassword !== currentPassword && newPassword) {
-			// this.props.changePassword({ password: newPassword });
+			this.props.updatePassword({ password: newPassword, userId: this.props.userId });
 		}
 	}
 
 	handleAccountDeletion = () => {
-		// this.props.deleteAccount();
+		this.props.deleteUser({ userId: this.props.userId });
 	}
 
 	render() {
 		const {
 			logout,
-			profile = {},
+			profile,
 		} = this.props;
 		const {
 			email,
@@ -74,17 +84,17 @@ class AccountSettings extends React.PureComponent {
 					<span className="title">E-MAIL</span>
 					<div className="email">
 						<SvgWrapper className="svg" height="30px" width="30px" svgid="email" />
-						<input placeholder="emailaddress@mail.com" value={email || profile.email} />
+						<input onChange={this.handleEmailChange} placeholder="emailaddress@mail.com" value={email} />
 					</div>
-					<span role="button" tabIndex={0} className="button" onClick={this.handleEmailChange}>CHANGE E-MAIL</span>
+					<span role="button" tabIndex={0} className="button" onClick={this.sendUpdateEmail}>CHANGE E-MAIL</span>
 				</div>
 				<div className="password-section">
 					<span className="title">PASSWORD</span>
 					<div className="password">
 						<SvgWrapper className="svg" height="30px" width="30px" svgid="email" />
-						<input placeholder="**********" value={password || profile.password} />
+						<input onChange={this.handlePasswordChange} type={'password'} placeholder="**********" value={password} />
 					</div>
-					<span role="button" tabIndex={0} className="button" onClick={this.handlePasswordChange}>CHANGE PASSWORD</span>
+					<span role="button" tabIndex={0} className="button" onClick={this.sendUpdatePassword}>CHANGE PASSWORD</span>
 				</div>
 				<div className="address-section">
 					<span className="title">ADDRESS</span>
@@ -115,7 +125,12 @@ class AccountSettings extends React.PureComponent {
 
 AccountSettings.propTypes = {
 	logout: PropTypes.func,
+	deleteUser: PropTypes.func,
+	updateEmail: PropTypes.func,
+	updatePassword: PropTypes.func,
+	updateUserInformation: PropTypes.func,
 	profile: PropTypes.object,
+	userId: PropTypes.string,
 };
 
 export default AccountSettings;
