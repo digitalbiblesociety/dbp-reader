@@ -86,18 +86,16 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 
 	getLastVerse = (e) => {
 		if (e.button === 0 && window.getSelection().toString() && this.main.contains(e.target) && e.target.attributes.verseid) {
-			// console.log(e.target.attributes.verseid);
+			// Needed to persist the React Synthetic event
+			e.persist();
 			const selectedText = window.getSelection().toString();
-			// const selection = {};
 
-			// selection.firstOffset = s.anchorOffset;
-			// selection.lastOffset = s.focusOffset;
-			// selection.text = s.toString();
-			// console.log(selection);
-			this.setState({ lastVerse: e.target.attributes.verseid.value, selectedText });
+			this.setState({ lastVerse: e.target.attributes.verseid.value, selectedText }, () => {
+				this.openContextMenu(e);
+			});
+		} else {
+			this.closeContextMenu();
 		}
-		// Below code gets the highlighted text
-		// window.getSelection().toString();
 	}
 
 	get getTextComponents() {
@@ -120,9 +118,6 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		} else if (formattedSource.main) {
 			// TODO: find way of providing the html without using dangerouslySetInnerHTML
 			/* eslint-disable react/no-danger */
-			// console.log('formatted source in text component', formattedSource)
-			// textComponents = [addClickToNotes({ html: formattedSource.main, action: this.openFootnote })];
-			// console.log(textComponents);
 			textComponents = (<div ref={this.setFormattedRef} style={{ all: 'inherit', padding: 0 }} dangerouslySetInnerHTML={{ __html: formattedSource.main }} />);
 		} else if (oneVersePerLine) {
 			textComponents = text.map((verse) => (
@@ -135,25 +130,16 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		} else {
 			textComponents = (<h5>Please select a mode for displaying text by using the options in the Settings menu locatated near the bottom left of the screen!</h5>);
 		}
-		// console.log('text components', textComponents);
+
 		return textComponents;
 	}
 	// Allows use of the right mouse button to toggle menu's or perform different actions
-	handleContext = (e) => e.preventDefault()
+	// handleContext = (e) => e.preventDefault()
 
 	handleMouseUp = (e) => {
-		if (e.button === 2) {
-			this.openContextMenu(e);
-		} else {
-			this.getLastVerse(e);
-		}
-	}
-
-	handleMainClick = (e) => {
+		this.getLastVerse(e);
 		if (e.button === 0 && this.state.footnoteState && e.target.className !== 'key') {
 			this.closeFootnote();
-		} else if (e.button === 0 && this.state.contextMenuState) {
-			this.closeContextMenu();
 		}
 	}
 
@@ -209,7 +195,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 						<SvgWrapper onClick={prevChapter} className="prev-arrow-svg" svgid="prev-arrow" />
 					)
 				}
-				<main ref={this.setMainRef} onClick={this.handleMainClick} onMouseDown={this.getFirstVerse} onMouseUp={this.handleMouseUp} className="chapter" onContextMenu={this.handleContext}>
+				<main ref={this.setMainRef} onMouseDown={this.getFirstVerse} onMouseUp={this.handleMouseUp} className="chapter">
 					{
 						formattedSource.main || text.length === 0 ? null : (
 							<h1 className="active-chapter-title">{activeChapter}</h1>
