@@ -111,7 +111,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		const oneVersePerLine = userSettings.getIn(['toggleOptions', 'oneVersePerLine', 'active']);
 		const justifiedText = userSettings.getIn(['toggleOptions', 'justifiedText', 'active']);
 
-		if (text.length === 0) {
+		if (text.length === 0 && !formattedSource) {
 			textComponents = (<h5>This resource does not currently have any text.</h5>);
 		} else if (readersMode) {
 			textComponents = text.map((verse) => (

@@ -19,6 +19,7 @@ import { compose } from 'redux';
 import { TransitionGroup } from 'react-transition-group';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
+import isEqual from 'lodash/isEqual';
 import { fromJS, is } from 'immutable';
 import Settings from 'containers/Settings';
 import AudioPlayer from 'containers/AudioPlayer';
@@ -28,7 +29,6 @@ import Profile from 'containers/Profile';
 import Notes from 'containers/Notes';
 import Text from 'containers/Text';
 import NavigationBar from 'components/NavigationBar';
-// import MenuBar from 'components/MenuBar';
 import Information from 'components/Information';
 import Footer from 'components/Footer';
 import SearchContainer from 'containers/SearchContainer';
@@ -52,6 +52,7 @@ import {
 	setActiveChapter,
 	setActiveBookName,
 	setActiveNotesView,
+	initApplication,
 } from './actions';
 import makeSelectHomePage, {
 	selectSettings,
@@ -62,6 +63,7 @@ import makeSelectHomePage, {
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
+// import MenuBar from 'components/MenuBar';
 // import messages from './messages';
 
 class HomePage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
@@ -76,6 +78,9 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			filesetTypes,
 		} = this.props.homepage;
 		// handle the async request so that audio does load for the first chapter
+		if (Object.keys(activeFilesets).length === 0) {
+			this.props.dispatch(initApplication({ activeTextId }));
+		}
 		this.props.dispatch(getAudio({ list: fromJS(activeFilesets) }));
 		this.props.dispatch(getBooks({ textId: activeTextId, filesets: fromJS(activeFilesets) }));
 		this.props.dispatch(getChapterText({ bible: activeTextId, book: activeBookId, chapter: activeChapter, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt }));
@@ -83,9 +88,17 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 	}
 
 	componentWillReceiveProps(nextProps) {
-		const { hasTextInDatabase } = nextProps.homepage;
-		const nextBooks = fromJS(nextProps.homepage.books);
+		const {
+			hasTextInDatabase,
+			activeTextId,
+			activeFilesets,
+			books,
+			audioObjects,
+			filesetTypes,
+		} = nextProps.homepage;
+		const nextBooks = fromJS(books);
 		const curBooks = fromJS(this.props.homepage.books);
+		const curAudioObjects = this.props.homepage.audioObjects;
 		// can probably use find to get the current book if the new version
 		// has it
 		const nextBookId = nextBooks.getIn([0, 'book_id']);
@@ -93,17 +106,19 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		const chapter = nextBooks.getIn([0, 'chapters', 0]);
 		// Solving the issue of requesting the new data from the
 		// api when a new version is clicked
-		// console.log('filesetTypes in receive props', nextProps.homepage.filesetTypes);
+		// console.log('filesetTypes in receive props', filesetTypes);
 		// Currently we only have text_plain as an option in the api, this will be changed to formatted_text at some point
 
-		// console.log('filesetTypes in next props', nextProps.homepage.filesetTypes.text_formatt);
+		// console.log('filesetTypes in next props', filesetTypes.text_formatt);
 
-		if (nextProps.homepage.activeTextId !== this.props.homepage.activeTextId) {
-			this.getBooks({ textId: nextProps.homepage.activeTextId, filesets: fromJS(nextProps.homepage.activeFilesets) });
+		if (activeTextId !== this.props.homepage.activeTextId) {
+			this.getBooks({ textId: activeTextId, filesets: fromJS(activeFilesets) });
 			this.toggleChapterSelection();
 		} else if (!is(nextBooks, curBooks) && curBooks.size) {
 			this.setActiveBookName({ book: nextBookName, id: nextBookId });
-			this.getChapters({ bible: nextProps.homepage.activeTextId, book: nextBookId, chapter, audioObjects: nextProps.homepage.audioObjects, hasTextInDatabase, formattedText: nextProps.homepage.filesetTypes.text_formatt });
+			this.getChapters({ bible: activeTextId, book: nextBookId, chapter, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
+		} else if (!isEqual(audioObjects, curAudioObjects)) {
+			this.getChapters({ bible: activeTextId, book: nextBookId, chapter, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
 		}
 	}
 

@@ -7,7 +7,7 @@
  */
 
 import { fromJS } from 'immutable';
-import esvDefaultFilesets from 'utils/defaultFilesetsForESV.json';
+// import esvDefaultFilesets from 'utils/defaultFilesetsForESV.json';
 import {
 	ACTIVE_TEXT_ID,
 	LOAD_CHAPTER_TEXT,
@@ -45,7 +45,7 @@ const initialState = fromJS({
 	note: {},
 	chapterText: [],
 	audioObjects: [],
-	activeFilesets: fromJS(esvDefaultFilesets),
+	activeFilesets: {},
 	copywrite: {
 		mark: 'Good News Publishers, Crossway Bibles',
 		name: 'English Standard Version',
