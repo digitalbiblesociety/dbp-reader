@@ -111,7 +111,9 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		const oneVersePerLine = userSettings.getIn(['toggleOptions', 'oneVersePerLine', 'active']);
 		const justifiedText = userSettings.getIn(['toggleOptions', 'justifiedText', 'active']);
 
-		if (readersMode) {
+		if (text.length === 0) {
+			textComponents = (<h5>This resource does not currently have any text.</h5>);
+		} else if (readersMode) {
 			textComponents = text.map((verse) => (
 				<span key={verse.verse_start}>{verse.verse_text}&nbsp;&nbsp;</span>
 			));
@@ -191,6 +193,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			setActiveNotesView,
 			activeBookId,
 			formattedSource,
+			text,
 		} = this.props;
 		const {
 			coords,
@@ -208,7 +211,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				}
 				<main ref={this.setMainRef} onClick={this.handleMainClick} onMouseDown={this.getFirstVerse} onMouseUp={this.handleMouseUp} className="chapter" onContextMenu={this.handleContext}>
 					{
-						formattedSource.main ? null : (
+						formattedSource.main || text.length === 0 ? null : (
 							<h1 className="active-chapter-title">{activeChapter}</h1>
 						)
 					}
