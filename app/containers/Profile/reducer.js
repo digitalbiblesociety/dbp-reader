@@ -11,6 +11,8 @@ import {
 	LOG_OUT,
 	SIGNUP_ERROR,
 	LOGIN_ERROR,
+	SOCIAL_MEDIA_LOGIN_SUCCESS,
+	SOCIAL_MEDIA_LOGIN,
 	// LOAD_USER_DATA,
 	// GET_USER_DATA,
 	// SEND_LOGIN_FORM,
@@ -26,11 +28,25 @@ const initialState = fromJS({
 	userAuthenticated: false,
 	userId: '',
 	loginErrorMessage: '',
+	socialLoginLink: '',
 	signupErrorMessage: '',
+	activeDriver: '',
+	userProfile: {
+		password: '',
+		email: '',
+		country: '',
+		address1: '',
+		address2: '',
+		city: '',
+		state: '',
+		zip: '',
+	},
 });
 
 function profileReducer(state = initialState, action) {
 	switch (action.type) {
+	case SOCIAL_MEDIA_LOGIN:
+		return state.set('activeDriver', action.driver);
 	case SELECT_ACCOUNT_OPTION:
 		return state.set('activeOption', action.option);
 	case USER_LOGGED_IN:
@@ -45,6 +61,8 @@ function profileReducer(state = initialState, action) {
 		return state.set('signupErrorMessage', action.message);
 	case LOGIN_ERROR:
 		return state.set('loginErrorMessage', action.message);
+	case SOCIAL_MEDIA_LOGIN_SUCCESS:
+		return state.set('socialLoginLink', action.url);
 	default:
 		return state;
 	}

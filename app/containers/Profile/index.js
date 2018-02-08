@@ -21,9 +21,12 @@ import {
 	selectAccountOption,
 	sendLoginForm,
 	sendSignUpForm,
+	socialMediaLogin,
 	getUserData,
 	resetPassword,
+	updateEmail,
 	updatePassword,
+	updateUserInformation,
 	deleteUser,
 	logout,
 } from './actions';
@@ -58,12 +61,15 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 		}
 	}
 
-	sendSignUpForm = ({ email, password, username, firstName, lastName }) => this.props.dispatch(sendSignUpForm({ email, password, username, firstName, lastName }))
-	resetPassword = ({ email, password }) => this.props.dispatch(resetPassword({ email, password }))
-	deleteUser = ({ email, username, userId }) => this.props.dispatch(deleteUser({ email, username, userId }))
-	sendLoginForm = ({ email, password }) => this.props.dispatch(sendLoginForm({ email, password }))
+	sendSignUpForm = (props) => this.props.dispatch(sendSignUpForm(props))
+	socialMediaLogin = (props) => this.props.dispatch(socialMediaLogin(props))
+	resetPassword = (props) => this.props.dispatch(resetPassword(props))
+	deleteUser = (props) => this.props.dispatch(deleteUser(props))
+	sendLoginForm = (props) => this.props.dispatch(sendLoginForm(props))
 	selectAccountOption = (option) => this.props.dispatch(selectAccountOption(option))
-	updatePassword = ({ previousPassword, newPassword, userId }) => this.props.dispatch(updatePassword({ previousPassword, newPassword, userId }))
+	updatePassword = (props) => this.props.dispatch(updatePassword(props))
+	updateEmail = (props) => this.props.dispatch(updateEmail(props))
+	updateUserInformation = (props) => this.props.dispatch(updateUserInformation(props))
 	logout = () => this.props.dispatch(logout())
 
 	render() {
@@ -72,6 +78,9 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 			userAuthenticated,
 			loginErrorMessage,
 			signupErrorMessage,
+			userId,
+			socialLoginLink,
+			activeDriver,
 		} = this.props.profile;
 		const { toggleProfile } = this.props;
 
@@ -87,7 +96,15 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 					<div className="profile-content">
 						{
 							userAuthenticated ? (
-								<AccountSettings logout={this.logout} deleteUser={this.deleteUser} updatePassword={this.updatePassword} />
+								<AccountSettings
+									logout={this.logout}
+									deleteUser={this.deleteUser}
+									updatePassword={this.updatePassword}
+									profile={{ password: 'testing', email: 'jessehill108@gmail.com' }}
+									userId={userId}
+									updateEmail={this.updateEmail}
+									updateUserInformation={this.updateUserInformation}
+								/>
 							) : (
 								<React.Fragment>
 									<div className="form-options">
@@ -99,13 +116,22 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 											<Login
 												sendLoginForm={this.sendLoginForm}
 												selectAccountOption={this.selectAccountOption}
+												socialMediaLogin={this.socialMediaLogin}
+												socialLoginLink={socialLoginLink}
 												errorMessage={loginErrorMessage}
+												activeDriver={activeDriver}
 											/>
 										) : null
 									}
 									{
 										activeOption === 'signup' ? (
-											<SignUp sendSignupForm={this.sendSignUpForm} errorMessage={signupErrorMessage} />
+											<SignUp
+												sendSignupForm={this.sendSignUpForm}
+												socialMediaLogin={this.socialMediaLogin}
+												errorMessage={signupErrorMessage}
+												socialLoginLink={socialLoginLink}
+												activeDriver={activeDriver}
+											/>
 										) : null
 									}
 									{

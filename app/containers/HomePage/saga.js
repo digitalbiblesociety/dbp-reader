@@ -1,9 +1,32 @@
 import 'whatwg-fetch';
 import { takeLatest, call, put, all } from 'redux-saga/effects';
 import request from 'utils/request';
+import { fromJS } from 'immutable';
 import unionWith from 'lodash/unionWith';
-import { GET_CHAPTER_TEXT, GET_BOOKS, GET_AUDIO } from './constants';
+import { GET_CHAPTER_TEXT, GET_BOOKS, GET_AUDIO, INIT_APPLICATION } from './constants';
 import { loadChapter, loadBooksAndCopywrite, loadAudio } from './actions';
+
+export function* initApplication({ activeTextId, iso }) {
+	const activeTextUrl = `https://api.bible.build/bibles?key=${process.env.DBP_API_KEY}&v=4language_code=${iso}`;
+	let filesets = {};
+	try {
+		const response = yield call(request, activeTextUrl);
+		const activeText = response.data.filter((text) => text.abbr === activeTextId)[0];
+
+		filesets = fromJS(activeText.filesets);
+	} catch (err) {
+		if (err && process.env.NODE_ENV === 'development') {
+			console.log('error in init', err); // eslint-disable-line no-console
+		}
+	}
+
+	yield getAudio({ list: filesets });
+	// yield getBooks({ textId: activeTextId, filesets });
+	// get the active text
+	// use the fileset list in active text for getAudio call
+	// use the text id and the filesets to get a book list
+	// use the resulting data to get the chapters
+}
 
 // TODO: Fix issue with audio coming back after the chapters have already been called
 export function* getAudio({ list }/* { filesetId, list } */) {
@@ -36,7 +59,6 @@ export function* getAudio({ list }/* { filesetId, list } */) {
 		// }
 
 		const audioObjects = unionWith(...results, (resource, next) => resource.bookId === next.bookId && resource.chapter === next.chapter);
-
 		yield put(loadAudio({ audioObjects }));
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
@@ -121,7 +143,6 @@ export function* getChapter({ bible, book, chapter, audioObjects, hasTextInDatab
 	// const audioSource = yield* getAudioSource({ audioObjects, book, chapter });
 	// const formattedSource = yield* getFormattedText({ formattedText, chapter, book });
 	// const audioRequestUrl = `https://api.bible.build/bibles/filesets/${filesetId}?key=${process.env.DBP_API_KEY}&v=4`;
-
 	yield put(loadChapter({ text, audioSource, formattedSource }));
 }
 
@@ -189,6 +210,7 @@ export function* getAudioSource({ audioObjects, book, chapter }) {
 
 // Individual exports for testing
 export default function* defaultSaga() {
+	yield takeLatest(INIT_APPLICATION, initApplication);
 	yield takeLatest(GET_CHAPTER_TEXT, getChapter);
 	yield takeLatest(GET_BOOKS, getBooks);
 	yield takeLatest(GET_AUDIO, getAudio);

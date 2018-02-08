@@ -10,6 +10,7 @@ import {
 	SET_ACTIVE_NOTE,
 	GET_AUDIO,
 	GET_CHAPTER_TEXT,
+	INIT_APPLICATION,
 	LOAD_BOOKS,
 	LOAD_AUDIO,
 	LOAD_CHAPTER_TEXT,
@@ -28,6 +29,11 @@ import {
 	TOGGLE_FIRST_LOAD_TEXT_SELECTION,
 	UPDATE_SELECTED_TEXT,
 } from './constants';
+
+export const initApplication = (props) => ({
+	type: INIT_APPLICATION,
+	...props,
+});
 
 export const setActiveNote = ({ note }) => ({
 	type: SET_ACTIVE_NOTE,

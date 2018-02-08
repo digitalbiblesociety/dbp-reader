@@ -24,6 +24,14 @@ class SignUp extends React.PureComponent {
 		wasSignupSent: false,
 	}
 
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.socialLoginLink && nextProps.socialLoginLink !== this.props.socialLoginLink) {
+			const socialWindow = window.open(nextProps.socialLoginLink, '_blank');
+
+			socialWindow.focus();
+		}
+	}
+
 	componentDidUpdate(prevProps, prevState) {
 		if ((prevState.confirmPassword !== prevState.password) && (this.state.password === this.state.confirmPassword)) {
 			this.setValidPassword(true);
@@ -83,6 +91,18 @@ class SignUp extends React.PureComponent {
 		}
 	}
 
+	handleSocialLogin = ({ driver }) => {
+		const { activeDriver, socialLoginLink } = this.props;
+
+		if (driver === activeDriver && socialLoginLink) {
+			const socialWindow = window.open(socialLoginLink, '_blank');
+
+			socialWindow.focus();
+		} else {
+			this.props.socialMediaLogin({ driver });
+		}
+	}
+
 	get signupForm() {
 		return (
 			<form onSubmit={this.handleSignup}>
@@ -112,11 +132,11 @@ class SignUp extends React.PureComponent {
 					) : null
 				}
 				{this.signupForm}
-				<div className="google">
+				<div role={'button'} tabIndex={0} onClick={() => this.handleSocialLogin({ driver: 'google' })} className="google">
 					<SvgWrapper className="svg" height="30px" width="30px" fill="#fff" svgid="google_plus" />
 					Sign up with Google
 				</div>
-				<div className="facebook">
+				<div role={'button'} tabIndex={0} onClick={() => this.handleSocialLogin({ driver: 'facebook' })} className="facebook">
 					<SvgWrapper className="svg" height="30px" width="30px" fill="#fff" svgid="facebook" />
 					Sign up with Facebook
 				</div>
@@ -132,7 +152,10 @@ class SignUp extends React.PureComponent {
 
 SignUp.propTypes = {
 	sendSignupForm: PropTypes.func,
+	socialMediaLogin: PropTypes.func,
+	socialLoginLink: PropTypes.string,
 	errorMessage: PropTypes.string,
+	activeDriver: PropTypes.string,
 };
 
 export default SignUp;
