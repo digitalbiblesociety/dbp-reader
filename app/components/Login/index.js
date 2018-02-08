@@ -18,6 +18,14 @@ class Login extends React.PureComponent {
 		signInActive: false,
 	}
 
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.socialLoginLink && nextProps.socialLoginLink !== this.props.socialLoginLink) {
+			const socialWindow = window.open(nextProps.socialLoginLink, '_blank');
+
+			socialWindow.focus();
+		}
+	}
+
 	handlePasswordChange = (e) => {
 		this.setState({ password: e.target.value });
 	}
@@ -61,6 +69,18 @@ class Login extends React.PureComponent {
 		);
 	}
 
+	handleSocialLogin = ({ driver }) => {
+		const { activeDriver, socialLoginLink } = this.props;
+
+		if (driver === activeDriver && socialLoginLink) {
+			const socialWindow = window.open(socialLoginLink, '_blank');
+
+			socialWindow.focus();
+		} else {
+			this.props.socialMediaLogin({ driver });
+		}
+	}
+
 	render() {
 		const {
 			selectAccountOption,
@@ -75,11 +95,11 @@ class Login extends React.PureComponent {
 						</div>
 					)
 				}
-				<div className="google">
+				<div role={'button'} tabIndex={0} onClick={() => this.handleSocialLogin({ driver: 'google' })} className="google">
 					<SvgWrapper className="svg" height="30px" width="30px" fill="#fff" svgid="google_plus" />
 					Sign in with Google
 				</div>
-				<div className="facebook">
+				<div role={'button'} tabIndex={0} onClick={() => this.handleSocialLogin({ driver: 'facebook' })} className="facebook">
 					<SvgWrapper className="svg" height="30px" width="30px" fill="#fff" svgid="facebook" />
 					Sign in with Facebook
 				</div>
@@ -96,9 +116,12 @@ class Login extends React.PureComponent {
 }
 
 Login.propTypes = {
-	selectAccountOption: PropTypes.func,
 	sendLoginForm: PropTypes.func,
+	socialMediaLogin: PropTypes.func,
+	selectAccountOption: PropTypes.func,
+	socialLoginLink: PropTypes.string,
 	errorMessage: PropTypes.string,
+	activeDriver: PropTypes.string,
 };
 
 export default Login;

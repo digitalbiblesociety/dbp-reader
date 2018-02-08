@@ -18,3 +18,5 @@ export const LOGIN_ERROR = 'app/Notes/LOGIN_ERROR';
 export const SIGNUP_ERROR = 'app/Notes/SIGNUP_ERROR';
 export const UPDATE_USER_INFORMATION = 'app/Notes/UPDATE_USER_INFORMATION';
 export const UPDATE_EMAIL = 'app/Notes/UPDATE_EMAIL';
+export const SOCIAL_MEDIA_LOGIN = 'app/Profile/SOCIAL_MEDIA_LOGIN';
+export const SOCIAL_MEDIA_LOGIN_SUCCESS = 'app/Profile/SOCIAL_MEDIA_LOGIN_SUCCESS';

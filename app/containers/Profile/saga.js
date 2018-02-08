@@ -8,6 +8,8 @@ import {
 	SEND_LOGIN_FORM,
 	SIGNUP_ERROR,
 	SEND_SIGNUP_FORM,
+	SOCIAL_MEDIA_LOGIN,
+	SOCIAL_MEDIA_LOGIN_SUCCESS,
 	DELETE_USER,
 	// RESET_PASSWORD,
 	UPDATE_EMAIL,
@@ -190,6 +192,29 @@ export function* deleteUser({ userId }) {
 	}
 }
 
+export function* socialMediaLogin({ driver }) {
+	// const {
+	// 	name,
+	// 	email,
+	// 	picture,
+	// 	id,
+	// 	accessToken,
+	// } = res;
+	const requestUrl = `https://api.bible.build/users/login/${driver}?key=${process.env.DBP_API_KEY}&v=4`;
+
+	try {
+		const response = yield call(request, requestUrl);
+		// console.log('social response', response);
+		if (response) {
+			yield put({ type: SOCIAL_MEDIA_LOGIN_SUCCESS, url: response });
+		}
+	} catch (err) {
+		if (err && process.env.NODE_ENV === 'development') {
+			console.error(err); // eslint-disable-line no-console
+		}
+	}
+}
+
 // Individual exports for testing
 export default function* defaultSaga() {
 	// yield takeLatest(GET_USER_DATA, getUserData);
@@ -200,4 +225,5 @@ export default function* defaultSaga() {
 	yield takeLatest(DELETE_USER, deleteUser);
 	yield takeLatest(UPDATE_USER_INFORMATION, updateUserInformation);
 	yield takeLatest(UPDATE_EMAIL, updateEmail);
+	yield takeLatest(SOCIAL_MEDIA_LOGIN, socialMediaLogin);
 }

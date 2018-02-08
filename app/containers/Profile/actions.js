@@ -10,6 +10,7 @@ import {
 	GET_USER_DATA,
 	SEND_LOGIN_FORM,
 	SEND_SIGNUP_FORM,
+	SOCIAL_MEDIA_LOGIN,
 	UPDATE_PASSWORD,
 	UPDATE_EMAIL,
 	UPDATE_USER_INFORMATION,
@@ -17,6 +18,11 @@ import {
 	DELETE_USER,
 	LOG_OUT,
 } from './constants';
+
+export const socialMediaLogin = (props) => ({
+	type: SOCIAL_MEDIA_LOGIN,
+	...props,
+});
 
 export const getUserNotes = ({ userId }) => ({
 	type: GET_USER_DATA,
