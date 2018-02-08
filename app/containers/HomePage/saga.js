@@ -6,8 +6,8 @@ import unionWith from 'lodash/unionWith';
 import { GET_CHAPTER_TEXT, GET_BOOKS, GET_AUDIO, INIT_APPLICATION } from './constants';
 import { loadChapter, loadBooksAndCopywrite, loadAudio } from './actions';
 
-export function* initApplication({ activeTextId }) {
-	const activeTextUrl = `https://api.bible.build/bibles?key=${process.env.DBP_API_KEY}&v=4`;
+export function* initApplication({ activeTextId, iso }) {
+	const activeTextUrl = `https://api.bible.build/bibles?key=${process.env.DBP_API_KEY}&v=4language_code=${iso}`;
 	let filesets = {};
 	try {
 		const response = yield call(request, activeTextUrl);

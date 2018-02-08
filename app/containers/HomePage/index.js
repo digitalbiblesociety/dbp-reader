@@ -76,10 +76,11 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			audioObjects,
 			hasTextInDatabase,
 			filesetTypes,
+			defaultLanguageIso: iso,
 		} = this.props.homepage;
 		// handle the async request so that audio does load for the first chapter
 		if (Object.keys(activeFilesets).length === 0) {
-			this.props.dispatch(initApplication({ activeTextId }));
+			this.props.dispatch(initApplication({ activeTextId, iso }));
 		}
 		this.props.dispatch(getAudio({ list: fromJS(activeFilesets) }));
 		this.props.dispatch(getBooks({ textId: activeTextId, filesets: fromJS(activeFilesets) }));

@@ -65,6 +65,7 @@ const initialState = fromJS({
 	activeTextName: 'ENGESV',
 	activeNotesView: 'notes',
 	activeTextId: 'ENGESV',
+	defaultLanguageIso: 'eng',
 	activeBookId: 'GEN',
 	userSettings: {
 		activeTheme: 'red',
