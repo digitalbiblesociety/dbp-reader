@@ -25,7 +25,7 @@ import {
 // 		// yield put(LOAD_USER_DATA, { data: 'data' });
 // 	} catch (err) {
 // 		if (process.env.NODE_ENV === 'development') {
-// 			console.error(err); // eslint-ignore-line no-console
+// 			console.error(err); // eslint-disable-line no-console
 // 		}
 // 	}
 // }
@@ -90,7 +90,7 @@ export function* sendLoginForm({ password, email }) {
 }
 
 export function* updateEmail({ userId, email }) {
-	console.log('in update email with ', userId, email);
+	// console.log('in update email with ', userId, email);
 	const requestUrl = `https://api.bible.build/users/${userId}?key=${process.env.DBP_API_KEY}&v=4&pretty`;
 	const formData = new FormData();
 
@@ -103,20 +103,20 @@ export function* updateEmail({ userId, email }) {
 
 	try {
 		const response = yield call(request, requestUrl, options);
-		console.log('update email response', response);
+		// console.log('update email response', response);
+		yield put({ type: 'UPDATE_EMAIL_SUCCESS', response });
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
-			console.error(err); // eslint-ignore-line no-console
+			console.error(err); // eslint-disable-line no-console
 		}
 	}
 }
 
 export function* updateUserInformation({ userId, profile }) {
-	console.log('in update profile with ', userId, profile);
+	// console.log('in update profile with ', userId, profile);
 	const requestUrl = `https://api.bible.build/users/${userId}?key=${process.env.DBP_API_KEY}&v=4&pretty`;
 	const formData = new FormData();
-
-	Object.entries(profile).forEach((entry) => formData.set(entry[0], entry[1]));
+	Object.entries(profile).forEach((entry) => entry[1] && formData.set(entry[0], entry[1]));
 
 	const options = {
 		method: 'PUT',
@@ -125,16 +125,17 @@ export function* updateUserInformation({ userId, profile }) {
 
 	try {
 		const response = yield call(request, requestUrl, options);
-		console.log('update profile response', response);
+		// console.log('update profile response', response);
+		yield put({ type: 'UPDATE_EMAIL_SUCCESS', response });
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
-			console.error(err); // eslint-ignore-line no-console
+			console.error(err); // eslint-disable-line no-console
 		}
 	}
 }
 
 export function* updatePassword({ userId, password }) {
-	console.log('in update password with ', userId, password);
+	// console.log('in update password with ', userId, password);
 	const requestUrl = `https://api.bible.build/users/${userId}?key=${process.env.DBP_API_KEY}&v=4&pretty`;
 	const formData = new FormData();
 
@@ -147,10 +148,11 @@ export function* updatePassword({ userId, password }) {
 
 	try {
 		const response = yield call(request, requestUrl, options);
-		console.log('update password response', response);
+		// console.log('update password response', response);
+		yield put({ type: 'UPDATE_EMAIL_SUCCESS', response });
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
-			console.error(err); // eslint-ignore-line no-console
+			console.error(err); // eslint-disable-line no-console
 		}
 	}
 }
@@ -164,13 +166,13 @@ export function* updatePassword({ userId, password }) {
 // 		// yield put('action', response);
 // 	} catch (err) {
 // 		if (process.env.NODE_ENV === 'development') {
-// 			console.error(err); // eslint-ignore-line no-console
+// 			console.error(err); // eslint-disable-line no-console
 // 		}
 // 	}
 // }
 
 export function* deleteUser({ userId }) {
-	console.log('in delete user with id', userId);
+	// console.log('in delete user with id', userId);
 	const requestUrl = `https://api.bible.build/users/${userId}?key=${process.env.DBP_API_KEY}&v=4&pretty`;
 	const options = {
 		method: 'DELETE',
@@ -179,11 +181,11 @@ export function* deleteUser({ userId }) {
 	try {
 		const response = yield call(request, requestUrl, options);
 
-		console.log(response);
-		// yield put({ type: 'success', response });
+		// console.log(response);
+		yield put({ type: 'DELETE_USER_SUCCESS', response });
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
-			console.error(err); // eslint-ignore-line no-console
+			console.error(err); // eslint-disable-line no-console
 		}
 	}
 }
