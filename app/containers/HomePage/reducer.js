@@ -159,6 +159,13 @@ function homePageReducer(state = initialState, action) {
 			.set('activeTextName', action.textName)
 			.set('activeTextId', action.textId);
 	case LOAD_CHAPTER_TEXT:
+		if (action.formattedSource) {
+			return state
+				.set('audioSource', action.audioSource)
+				.set('formattedSource', action.formattedSource)
+				.setIn(['userSettings', 'toggleOptions', 'crossReferences', 'active'], true)
+				.set('chapterText', fromJS(action.text));
+		}
 		return state
 			.set('audioSource', action.audioSource)
 			.set('formattedSource', action.formattedSource)

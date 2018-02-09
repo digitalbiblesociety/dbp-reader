@@ -108,13 +108,12 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		const readersMode = userSettings.getIn(['toggleOptions', 'readersMode', 'active']);
 		const oneVersePerLine = userSettings.getIn(['toggleOptions', 'oneVersePerLine', 'active']);
 		const justifiedText = userSettings.getIn(['toggleOptions', 'justifiedText', 'active']);
-		// const crossReferences = userSettings.getIn(['toggleOptions', 'crossReferences', 'active']);
 
 		if (text.length === 0 && !formattedSource.main) {
 			textComponents = (<h5>This resource does not currently have any text.</h5>);
 		} else if (readersMode) {
 			textComponents = text.map((verse) => (
-				<span key={verse.verse_start}>{verse.verse_text}&nbsp;&nbsp;</span>
+				<span verseid={verse.verse_start} key={verse.verse_start}>{verse.verse_text}&nbsp;&nbsp;</span>
 			));
 		} else if (formattedSource.main) {
 			// TODO: find way of providing the html without using dangerouslySetInnerHTML
@@ -122,7 +121,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			textComponents = (<div ref={this.setFormattedRef} className={'chapter'} dangerouslySetInnerHTML={{ __html: formattedSource.main }} />);
 		} else if (oneVersePerLine) {
 			textComponents = text.map((verse) => (
-				<span key={verse.verse_start}><br />&nbsp;<sup>{verse.verse_start_vernacular}</sup>&nbsp;<br />{verse.verse_text}</span>
+				<span verseid={verse.verse_start} key={verse.verse_start}><br />&nbsp;<sup verseid={verse.verse_start}>{verse.verse_start_vernacular}</sup>&nbsp;<br />{verse.verse_text}</span>
 			));
 		} else if (justifiedText) {
 			textComponents = text.map((verse) => (
@@ -136,8 +135,6 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 
 		return textComponents;
 	}
-	// Allows use of the right mouse button to toggle menu's or perform different actions
-	// handleContext = (e) => e.preventDefault()
 
 	handleMouseUp = (e) => {
 		this.getLastVerse(e);
