@@ -4,6 +4,11 @@
 	@include css4 {
 		color: var(--application-base-color);
 	}
+	main {
+		padding: 15px;
+		max-width: 800px;
+		margin: 0 auto;
+	}
 }
 
 .verse-number {

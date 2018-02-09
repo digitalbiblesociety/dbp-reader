@@ -108,8 +108,9 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		const readersMode = userSettings.getIn(['toggleOptions', 'readersMode', 'active']);
 		const oneVersePerLine = userSettings.getIn(['toggleOptions', 'oneVersePerLine', 'active']);
 		const justifiedText = userSettings.getIn(['toggleOptions', 'justifiedText', 'active']);
+		// const crossReferences = userSettings.getIn(['toggleOptions', 'crossReferences', 'active']);
 
-		if (text.length === 0 && !formattedSource) {
+		if (text.length === 0 && !formattedSource.main) {
 			textComponents = (<h5>This resource does not currently have any text.</h5>);
 		} else if (readersMode) {
 			textComponents = text.map((verse) => (
@@ -118,17 +119,19 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		} else if (formattedSource.main) {
 			// TODO: find way of providing the html without using dangerouslySetInnerHTML
 			/* eslint-disable react/no-danger */
-			textComponents = (<div ref={this.setFormattedRef} style={{ all: 'inherit', padding: 0 }} dangerouslySetInnerHTML={{ __html: formattedSource.main }} />);
+			textComponents = (<div ref={this.setFormattedRef} className={'chapter'} dangerouslySetInnerHTML={{ __html: formattedSource.main }} />);
 		} else if (oneVersePerLine) {
 			textComponents = text.map((verse) => (
-				<span key={verse.verse_start}><br />&nbsp;<sup>{verse.verse_start_vernacular}</sup>&nbsp;{verse.verse_text}<br /></span>
+				<span key={verse.verse_start}><br />&nbsp;<sup>{verse.verse_start_vernacular}</sup>&nbsp;<br />{verse.verse_text}</span>
 			));
 		} else if (justifiedText) {
 			textComponents = text.map((verse) => (
 				<span verseid={verse.verse_start} key={verse.verse_start}>&nbsp;<sup verseid={verse.verse_start}>{verse.verse_start_vernacular}</sup>&nbsp;{verse.verse_text}</span>
 			));
 		} else {
-			textComponents = (<h5>Please select a mode for displaying text by using the options in the Settings menu locatated near the bottom left of the screen!</h5>);
+			textComponents = text.map((verse) => (
+				<span className={'align-left'} verseid={verse.verse_start} key={verse.verse_start}>&nbsp;<sup verseid={verse.verse_start}>{verse.verse_start_vernacular}</sup>&nbsp;{verse.verse_text}</span>
+			));
 		}
 
 		return textComponents;
@@ -195,7 +198,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 						<SvgWrapper onClick={prevChapter} className="prev-arrow-svg" svgid="prev-arrow" />
 					)
 				}
-				<main ref={this.setMainRef} onMouseDown={this.getFirstVerse} onMouseUp={this.handleMouseUp} className="chapter">
+				<main ref={this.setMainRef} onMouseDown={this.getFirstVerse} onMouseUp={this.handleMouseUp} className={formattedSource.main ? '' : 'chapter'}>
 					{
 						formattedSource.main || text.length === 0 ? null : (
 							<h1 className="active-chapter-title">{activeChapter}</h1>
