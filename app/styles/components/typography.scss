@@ -23,13 +23,15 @@
   text-align:justify;
   max-width:800px;
   margin:0 auto;
-  padding:0 25px 25px 25px;
 
   sup {
     font-size:smaller;
     @include css4 {
       color:var(--text-super-color);
     }
+  }
+  .align-left {
+    text-align: left;
   }
 }
 
