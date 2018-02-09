@@ -8,10 +8,11 @@ import { createSelector } from 'reselect';
  */
 const selectHomePageDomain = (state) => state.get('homepage');
 const selectFormattedTextSource = (state) => state.getIn(['homepage', 'formattedSource']);
+const selectCrossReferenceState = (state) => state.getIn(['homepage', 'userSettings', 'toggleOptions', 'crossReferences', 'active']);
 
 const selectFormattedSource = () => createSelector(
-	selectFormattedTextSource,
-	(source) => {
+	[selectFormattedTextSource, selectCrossReferenceState],
+	(source, hasCrossReferences) => {
 		// Pushing update with the formatted text working but not the footnotes
 		// const source = substate.get('formattedSource');
 		if (!source) {
@@ -22,6 +23,13 @@ const selectFormattedSource = () => createSelector(
 		const footnotesStart = source.indexOf('<div class="footnotes">');
 		const footnotesEnd = source.indexOf('<div class="footer">', footnotesStart);
 		const main = source.slice(chapterStart, chapterEnd);
+
+		if (!hasCrossReferences) {
+			const mainWithoutCRs = main.replace(/<span class=['"]note['"](.*?)<\/span>/g, '');
+
+			return { main: mainWithoutCRs, footnotes: {} };
+		}
+
 		const footnotes = source.slice(footnotesStart, footnotesEnd);
 		const footnotesArray = footnotes.match(/<span class="ft">(.*?)<\/span>/g);
 		const footnotesObject = Array.isArray(footnotesArray) ? footnotesArray.reduce((acc, note, i) => ({ ...acc, [`footnote-${i}`]: note.slice(17, -7) }), {}) : {};
@@ -38,9 +46,8 @@ const selectActiveBook = () => createSelector(
 	(substate) => {
 		const books = substate.get('books');
 		const activeBookId = substate.get('activeBookId');
-		const activeBook = books.filter((book) => book.get('book_id') === activeBookId).get(0);
 
-		return activeBook;
+		return books.filter((book) => book.get('book_id') === activeBookId).get(0);
 	}
 );
 
@@ -50,9 +57,8 @@ const selectNextBook = () => createSelector(
 		const books = substate.get('books');
 		const activeBookId = substate.get('activeBookId');
 		const activeBookIndex = books.findIndex((book) => book.get('book_id') === activeBookId);
-		const nextBook = books.get(activeBookIndex + 1);
 
-		return nextBook;
+		return books.get(activeBookIndex + 1);
 	}
 );
 
@@ -62,9 +68,8 @@ const selectPrevBook = () => createSelector(
 			const books = substate.get('books');
 			const activeBookId = substate.get('activeBookId');
 			const activeBookIndex = books.findIndex((book) => book.get('book_id') === activeBookId);
-			const previousBook = books.get(activeBookIndex - 1);
 
-			return previousBook;
+			return books.get(activeBookIndex - 1);
 		},
 	);
 
@@ -73,9 +78,8 @@ const selectSettings = () => createSelector(
 	(substate) => {
 		const toggleOptions = substate.getIn(['userSettings', 'toggleOptions']);
 		const filteredToggleOptions = toggleOptions.filter((option) => option.get('available'));
-		const userSettings = substate.get('userSettings').set('toggleOptions', filteredToggleOptions);
 
-		return userSettings;
+		return substate.get('userSettings').set('toggleOptions', filteredToggleOptions);
 	}
 );
 

@@ -19,7 +19,7 @@ const closeEventHoc = (WrappedComponent, onCloseFunction) =>
 		}
 
 		handleClickOutside = (event) => {
-			const bounds = this.wrappedComponent.getBoundingClientRect();
+			const bounds = this.wrappedComponent ? this.wrappedComponent.getBoundingClientRect() : { x: 0, y: 0, width: 0, height: 0 };
 			const insideWidth = event.x >= bounds.x && event.x <= bounds.x + bounds.width;
 			const insideHeight = event.y >= bounds.y && event.y <= bounds.y + bounds.height;
 
@@ -34,7 +34,7 @@ const closeEventHoc = (WrappedComponent, onCloseFunction) =>
 		}
 
 		render() {
-			return <WrappedComponent setInnerRef={this.setInnerRef} {...this.props} />;
+			return <WrappedComponent innerRef={this.setInnerRef} {...this.props} />;
 		}
 	};
 

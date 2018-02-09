@@ -11,24 +11,50 @@ import Slider from 'rc-slider/lib/Slider';
 // import styled from 'styled-components';
 // rc-slider Slider component doesn't accept classes for styles other than classname
 // TODO: Figure out why slider isn't sliding
-const VolumeSlider = ({ volume, setInnerRef, updateVolume, parentNode }) => { // eslint-disable-line react/prefer-stateless-function
-	const handleChange = (value) => {
-		updateVolume(value / 100 || 0);
-	};
-	const component = (
-		<div className="volume-slider-container">
-			<div ref={setInnerRef} className="volume-slider">
-				<Slider className="slider" onChange={handleChange} handleStyle={{ border: 'none', backgroundColor: 'rgb(98,177,130)' }} railStyle={{ backgroundColor: '#111' }} trackStyle={{ backgroundColor: 'rgb(98,177,130)' }} defaultValue={volume * 100} step={10} min={0} max={100} />
+class VolumeSlider extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+	state = {
+		stateVolume: 0,
+	}
+
+	handleChange = (value) => {
+		this.setState({ stateVolume: value / 100 || 0 });
+		this.props.updateVolume(value / 100 || 0);
+	}
+
+	render() {
+		const {
+			parentNode,
+			innerRef,
+			volume,
+		} = this.props;
+		const {
+			stateVolume,
+		} = this.state;
+
+		const component = (
+			<div className="volume-slider-container">
+				<div ref={innerRef} className="volume-slider">
+					<Slider
+						className="slider"
+						onChange={this.handleChange}
+						handleStyle={{ border: 'none', backgroundColor: 'rgb(98,177,130)' }}
+						railStyle={{ backgroundColor: '#111' }}
+						trackStyle={{ backgroundColor: 'rgb(98,177,130)' }}
+						defaultValue={stateVolume ? stateVolume * 100 : volume * 100}
+						min={0}
+						max={100}
+					/>
+				</div>
 			</div>
-		</div>
-	);
-	return ReactDOM.createPortal(component, parentNode);
-};
+		);
+		return ReactDOM.createPortal(component, parentNode);
+	}
+}
 
 VolumeSlider.propTypes = {
-	parentNode: PropTypes.node,
+	parentNode: PropTypes.object,
+	innerRef: PropTypes.func,
 	updateVolume: PropTypes.func.isRequired,
-	setInnerRef: PropTypes.func,
 	volume: PropTypes.number.isRequired,
 };
 
