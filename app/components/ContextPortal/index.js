@@ -80,7 +80,13 @@ function ContextPortal({ setActiveNote, coordinates, parentNode, toggleNotesModa
 				<Item onClick={closeContextMenu} className="facebook"><SvgWrapper height="35px" width="35px" svgid="fb-thumb" /></Item>
 			</Row>
 			<Row>
-				<Item onClick={closeContextMenu} className="facebook"><SvgWrapper height="25px" width="25px" svgid="facebook" /></Item>
+				{/*<Item onClick={closeContextMenu} className="facebook"><SvgWrapper height="25px" width="25px" svgid="facebook" /></Item>*/}
+				<div
+					className="fb-share-button"
+					data-href={window.location.href}
+					data-layout="button_count"
+				>
+				</div>
 				<Item onClick={closeContextMenu} className="google"><SvgWrapper height="25px" width="25px" svgid="google_plus" /></Item>
 				<Item onClick={closeContextMenu} className="twitter"><SvgWrapper height="35px" width="35px" svgid="twitter" /></Item>
 				<Item onClick={closeContextMenu}><SvgWrapper height="25px" width="25px" svgid="email" /></Item>

@@ -230,7 +230,16 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 
 		return (
 			<GenericErrorBoundary affectedArea="Your entire app is corrupted and bad, try again!">
-				<Helmet>
+				<Helmet
+					meta={[
+						{ name: 'description', content: 'Main page for the Bible.is web app' },
+						{ name: 'og:title', content: `${activeBookName} ${activeChapter} | Bible.is` },
+						{ name: 'og:url', content: window.location.href },
+						{ name: 'og:description', content: 'Main page for the Bible.is web app' },
+						{ name: 'og:type', content: 'website' },
+						{ name: 'og:site_name', content: 'Bible.is' },
+					]}
+				>
 					<title>{`${activeBookName} ${activeChapter}`} | Bible.is</title>
 					<meta name="description" content="Main page for the Bible.is web app" />
 				</Helmet>
