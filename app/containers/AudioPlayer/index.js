@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
+import isEqual from 'lodash/isEqual';
 import injectReducer from 'utils/injectReducer';
 import closeEventHoc from 'components/CloseEventHoc';
 import SvgWrapper from 'components/SvgWrapper';
@@ -21,7 +22,7 @@ import makeSelectAudioPlayer from './selectors';
 import reducer from './reducer';
 /* eslint-disable jsx-a11y/media-has-caption */
 /* disabled the above eslint config options because you can't add tracks to audio elements */
-export class AudioPlayer extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+export class AudioPlayer extends React.Component { // eslint-disable-line react/prefer-stateless-function
 	constructor(props) {
 		super(props);
 		// need to get next and prev audio tracks if I want to enable continuous playing
@@ -70,6 +71,16 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 				this.setState({ playerState: false, playing: false });
 			}
 		}
+	}
+
+	shouldComponentUpdate(nextProps, nextState) {
+		if (nextState.volume !== this.state.volume) {
+			return false;
+		}
+		if (!isEqual(nextProps, this.props) || !isEqual(nextState, this.state)) {
+			return true;
+		}
+		return false;
 	}
 
 	setCurrentTime = (time) => {
@@ -204,8 +215,7 @@ export class AudioPlayer extends React.PureComponent { // eslint-disable-line re
 								<div role="button" tabIndex="0" className={this.state.speedControlState ? 'item active' : 'item'} onClick={() => { this.state.speedControlState ? this.setSpeedControlState(false) : this.setSpeedControlState(true); this.setElipsisState(false); this.setVolumeSliderState(false); }}><SvgWrapper width="25px" height="25px" fill="#fff" svgid="play_speed" /></div>
 								<div role="button" tabIndex="0" className={this.state.elipsisState ? 'item active' : 'item'} onClick={() => { this.state.elipsisState ? this.setElipsisState(false) : this.setElipsisState(true); this.setVolumeSliderState(false); this.setSpeedControlState(false); }}><SvgWrapper width="25px" height="25px" fill="#fff" svgid="more_menu" /></div>
 								{
-									this.state.volumeSliderState ? <this.volumeControl parentNode={this.audioPlayerContainer} updateVolume={this.updateVolume} volume={this.state.volume} />
-										: null
+									this.state.volumeSliderState && <this.volumeControl active={this.state.volumeSliderState} parentNode={this.audioPlayerContainer} updateVolume={this.updateVolume} volume={this.state.volume} />
 								}
 								{
 									this.state.speedControlState ? (
