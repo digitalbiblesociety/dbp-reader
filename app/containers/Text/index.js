@@ -174,6 +174,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 
 		FB.ui({
 			method: 'share',
+			quote: this.state.selectedText,
 			href: 'http://is.bible.build/',
 		}, (res) => console.log('response', res)); // eslint-disable-line no-console
 	}
