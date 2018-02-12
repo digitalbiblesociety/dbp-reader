@@ -16,7 +16,7 @@ function SettingsToggle({ action, name, checked }) {
 			<label className={checked ? 'active' : ''}>
 				<FormattedMessage {...messages[name]} />
 				<div className="switch">
-					<input type="checkbox" checked={checked} onChange={action} />
+					<input type="checkbox" checked={checked} onChange={() => action({ name })} />
 					<span className="slider"></span>
 				</div>
 			</label>

@@ -27,8 +27,20 @@ import {
 	TOGGLE_VERSION_SELECTION,
 	TOGGLE_INFORMATION_MODAL,
 	TOGGLE_FIRST_LOAD_TEXT_SELECTION,
+	TOGGLE_SETTINGS_OPTION_AVAILABILITY,
 	UPDATE_SELECTED_TEXT,
+	TOGGLE_SETTINGS_OPTION,
 } from './constants';
+
+export const toggleSettingsOptionAvailability = ({ path }) => ({
+	type: TOGGLE_SETTINGS_OPTION_AVAILABILITY,
+	path,
+});
+
+export const toggleSettingsOption = ({ path }) => ({
+	type: TOGGLE_SETTINGS_OPTION,
+	path,
+});
 
 export const initApplication = (props) => ({
 	type: INIT_APPLICATION,
