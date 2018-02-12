@@ -7,8 +7,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
-import SvgWrapper from 'components/SvgWrapper';
 import styled from 'styled-components';
+import SvgWrapper from 'components/SvgWrapper';
 
 const StyledDiv = styled.div`
 	width:160px;
@@ -45,7 +45,7 @@ const Item = styled.div`
 // Remove use of styled components
 // change to pure component and handle outside clicks instead of click handler
 // on each item
-function ContextPortal({ setActiveNote, coordinates, parentNode, toggleNotesModal, notesActive, closeContextMenu, setActiveNotesView }) {
+function ContextPortal({ shareHighlightToFacebook, setActiveNote, coordinates, parentNode, toggleNotesModal, notesActive, closeContextMenu, setActiveNotesView }) {
 	const handleNoteClick = () => {
 		if (!notesActive) {
 			setActiveNotesView('edit');
@@ -80,13 +80,7 @@ function ContextPortal({ setActiveNote, coordinates, parentNode, toggleNotesModa
 				<Item onClick={closeContextMenu} className="facebook"><SvgWrapper height="35px" width="35px" svgid="fb-thumb" /></Item>
 			</Row>
 			<Row>
-				{/*<Item onClick={closeContextMenu} className="facebook"><SvgWrapper height="25px" width="25px" svgid="facebook" /></Item>*/}
-				<div
-					className="fb-share-button"
-					data-href={window.location.href}
-					data-layout="button_count"
-				>
-				</div>
+				<Item onClick={shareHighlightToFacebook} data-layout="button_count" data-href={window.location.href} className="facebook fb-share-button"><SvgWrapper height="25px" width="25px" svgid="facebook" /></Item>
 				<Item onClick={closeContextMenu} className="google"><SvgWrapper height="25px" width="25px" svgid="google_plus" /></Item>
 				<Item onClick={closeContextMenu} className="twitter"><SvgWrapper height="35px" width="35px" svgid="twitter" /></Item>
 				<Item onClick={closeContextMenu}><SvgWrapper height="25px" width="25px" svgid="email" /></Item>
@@ -104,6 +98,7 @@ ContextPortal.propTypes = {
 	closeContextMenu: PropTypes.func,
 	setActiveNotesView: PropTypes.func,
 	setActiveNote: PropTypes.func,
+	shareHighlightToFacebook: PropTypes.func,
 };
 
 export default ContextPortal;
