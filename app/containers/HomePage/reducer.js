@@ -18,20 +18,15 @@ import {
 	SET_ACTIVE_NOTES_VIEW,
 	SET_SELECTED_BOOK_NAME,
 	TOGGLE_PROFILE,
-	// TOGGLE_MENU_BAR,
-	TOGGLE_RED_LETTER,
 	TOGGLE_NOTES_MODAL,
 	TOGGLE_SEARCH_MODAL,
-	TOGGLE_READERS_MODE,
 	TOGGLE_SETTINGS_MODAL,
-	TOGGLE_JUSTIFIED_TEXT,
-	TOGGLE_CROSS_REFERENCES,
+	TOGGLE_SETTINGS_OPTION,
 	TOGGLE_INFORMATION_MODAL,
 	TOGGLE_VERSION_SELECTION,
 	TOGGLE_CHAPTER_SELECTION,
-	TOGGLE_ONE_VERSE_PER_LINE,
-	TOGGLE_VERTICAL_SCROLLING,
 	TOGGLE_FIRST_LOAD_TEXT_SELECTION,
+	TOGGLE_SETTINGS_OPTION_AVAILABILITY,
 	UPDATE_THEME,
 	UPDATE_FONT_TYPE,
 	UPDATE_FONT_SIZE,
@@ -54,7 +49,6 @@ const initialState = fromJS({
 	},
 	activeChapter: 1,
 	isChapterSelectionActive: false,
-	// isMenuBarActive: false,
 	isProfileActive: false,
 	isSettingsModalActive: false,
 	isSearchModalActive: false,
@@ -84,7 +78,7 @@ const initialState = fromJS({
 			},
 			redLetter: {
 				name: 'RED LETTER',
-				active: false,
+				active: true,
 				available: true,
 			},
 			justifiedText: {
@@ -131,8 +125,6 @@ function homePageReducer(state = initialState, action) {
 		return state.set('audioObjects', fromJS(action.audioObjects));
 	case SET_ACTIVE_NOTE:
 		return state.set('note', fromJS(action.note));
-	// case TOGGLE_MENU_BAR:
-	// 	return state.set('isMenuBarActive', !state.get('isMenuBarActive'));
 	case TOGGLE_PROFILE:
 		return state.set('isProfileActive', !state.get('isProfileActive'));
 	case TOGGLE_CHAPTER_SELECTION:
@@ -178,18 +170,10 @@ function homePageReducer(state = initialState, action) {
 		return state.setIn(['userSettings', 'activeFontType'], action.font);
 	case UPDATE_FONT_SIZE:
 		return state.setIn(['userSettings', 'activeFontSize'], action.size);
-	case TOGGLE_READERS_MODE:
-		return state.setIn(['userSettings', 'toggleOptions', 'readersMode', 'active'], !state.getIn(['userSettings', 'toggleOptions', 'readersMode', 'active']));
-	case TOGGLE_CROSS_REFERENCES:
-		return state.setIn(['userSettings', 'toggleOptions', 'crossReferences', 'active'], !state.getIn(['userSettings', 'toggleOptions', 'crossReferences', 'active']));
-	case TOGGLE_RED_LETTER:
-		return state.setIn(['userSettings', 'toggleOptions', 'redLetter', 'active'], !state.getIn(['userSettings', 'toggleOptions', 'redLetter', 'active']));
-	case TOGGLE_JUSTIFIED_TEXT:
-		return state.setIn(['userSettings', 'toggleOptions', 'justifiedText', 'active'], !state.getIn(['userSettings', 'toggleOptions', 'justifiedText', 'active']));
-	case TOGGLE_ONE_VERSE_PER_LINE:
-		return state.setIn(['userSettings', 'toggleOptions', 'oneVersePerLine', 'active'], !state.getIn(['userSettings', 'toggleOptions', 'oneVersePerLine', 'active']));
-	case TOGGLE_VERTICAL_SCROLLING:
-		return state.setIn(['userSettings', 'toggleOptions', 'verticalScrolling', 'active'], !state.getIn(['userSettings', 'toggleOptions', 'verticalScrolling', 'active']));
+	case TOGGLE_SETTINGS_OPTION:
+		return state.setIn(action.path, !state.getIn(action.path));
+	case TOGGLE_SETTINGS_OPTION_AVAILABILITY:
+		return state.setIn(action.path, !state.getIn(action.path));
 	case UPDATE_SELECTED_TEXT:
 		return state.set('selectedText', action.text);
 	case SET_SELECTED_BOOK_NAME:

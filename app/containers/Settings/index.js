@@ -15,6 +15,7 @@ import SettingsToggle from 'components/SettingsToggle/index';
 import menu from 'images/menu.svg';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
 import Slider from 'rc-slider/lib/Slider';
+import { toggleSettingsOption } from 'containers/HomePage/actions';
 import { applyTheme, applyFontFamily, applyFontSize, toggleWordsOfJesus } from './themes';
 import makeSelectSettings from './selectors';
 import reducer from './reducer';
@@ -22,12 +23,12 @@ import {
 	updateTheme,
 	updateFontType,
 	updateFontSize,
-	toggleReadersMode,
-	toggleCrossReferences,
-	toggleRedLetter,
-	toggleJustifiedText,
-	toggleOneVersePerLine,
-	toggleVerticalScrolling,
+	// toggleReadersMode,
+	// toggleCrossReferences,
+	// toggleRedLetter,
+	// toggleJustifiedText,
+	// toggleOneVersePerLine,
+	// toggleVerticalScrolling,
 } from './actions';
 // import messages from './messages';
 // import { FormattedMessage } from 'react-intl';
@@ -93,19 +94,20 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 	}
 	updateFontType = ({ font }) => this.props.dispatch(updateFontType({ font }));
 	updateFontSize = ({ size }) => this.props.dispatch(updateFontSize({ size }));
-	toggleReadersMode = () => this.props.dispatch(toggleReadersMode());
-	toggleCrossReferences = () => this.props.dispatch(toggleCrossReferences());
-	toggleRedLetter = () => this.props.dispatch(toggleRedLetter());
-	toggleJustifiedText = () => this.props.dispatch(toggleJustifiedText());
-	toggleOneVersePerLine = () => this.props.dispatch(toggleOneVersePerLine());
-	toggleVerticalScrolling = () => this.props.dispatch(toggleVerticalScrolling());
+	toggleSettingsOption = (props) => this.props.dispatch(toggleSettingsOption({ ...props, path: this.toggle[props.name] }));
+	// toggleReadersMode = () => this.props.dispatch(toggleReadersMode());
+	// toggleCrossReferences = () => this.props.dispatch(toggleCrossReferences());
+	// toggleRedLetter = () => this.props.dispatch(toggleRedLetter());
+	// toggleJustifiedText = () => this.props.dispatch(toggleJustifiedText());
+	// toggleOneVersePerLine = () => this.props.dispatch(toggleOneVersePerLine());
+	// toggleVerticalScrolling = () => this.props.dispatch(toggleVerticalScrolling());
 	toggle = {
-		'READER\'S MODE': this.toggleReadersMode,
-		'CROSS REFERENCE': this.toggleCrossReferences,
-		'RED LETTER': this.toggleRedLetter,
-		'JUSTIFIED TEXT': this.toggleJustifiedText,
-		'ONE VERSE PER LINE': this.toggleOneVersePerLine,
-		'VERTICAL SCROLLING': this.toggleVerticalScrolling,
+		'READER\'S MODE': ['userSettings', 'toggleOptions', 'readersMode', 'active'],
+		'CROSS REFERENCE': ['userSettings', 'toggleOptions', 'crossReferences', 'active'],
+		'RED LETTER': ['userSettings', 'toggleOptions', 'redLetter', 'active'],
+		'JUSTIFIED TEXT': ['userSettings', 'toggleOptions', 'justifiedText', 'active'],
+		'ONE VERSE PER LINE': ['userSettings', 'toggleOptions', 'oneVersePerLine', 'active'],
+		'VERTICAL SCROLLING': ['userSettings', 'toggleOptions', 'verticalScrolling', 'active'],
 	}
 
 	render() {
@@ -152,7 +154,7 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 					<Slider className="font-sizes-slider" onChange={this.handleSliderChange} defaultValue={activeFontSize} value={activeFontSize} handleStyle={{ border: 'none', backgroundColor: 'rgb(98,177,130)' }} railStyle={{ backgroundColor: 'rgb(26,29,33)' }} trackStyle={{ backgroundColor: 'rgb(98,177,130)' }} step={1} min={1} max={5} />
 					<section className="option-toggles">
 						{
-							toggleOptions.valueSeq().map((option) => (<SettingsToggle key={option.get('name')} checked={option.get('active')} name={option.get('name')} action={this.toggle[option.get('name')]} />))
+							toggleOptions.valueSeq().map((option) => (<SettingsToggle key={option.get('name')} checked={option.get('active')} name={option.get('name')} action={this.toggleSettingsOption} />))
 						}
 					</section>
 				</aside>

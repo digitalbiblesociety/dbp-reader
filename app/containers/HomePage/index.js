@@ -183,8 +183,6 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 
 	setActiveNote = ({ note }) => this.props.dispatch(setActiveNote({ note }))
 
-	// toggleMenuBar = () => this.props.dispatch(toggleMenuBar())
-
 	toggleFirstLoadForTextSelection = () => this.props.homepage.firstLoad && this.props.dispatch(toggleFirstLoadForTextSelection())
 
 	toggleProfile = () => this.props.dispatch(toggleProfile())
@@ -214,7 +212,6 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			isInformationModalActive,
 			isSearchModalActive,
 			activeBookName,
-			// isMenuBarActive,
 			activeChapter,
 			isProfileActive,
 			copywrite,
@@ -230,7 +227,16 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 
 		return (
 			<GenericErrorBoundary affectedArea="Your entire app is corrupted and bad, try again!">
-				<Helmet>
+				<Helmet
+					meta={[
+						{ name: 'description', content: 'Main page for the Bible.is web app' },
+						{ name: 'og:title', content: `${activeBookName} ${activeChapter}` },
+						{ name: 'og:url', content: window.location.href },
+						{ name: 'og:description', content: 'Main page for the Bible.is web app' },
+						{ name: 'og:type', content: 'website' },
+						{ name: 'og:site_name', content: 'Bible.is' },
+					]}
+				>
 					<title>{`${activeBookName} ${activeChapter}`} | Bible.is</title>
 					<meta name="description" content="Main page for the Bible.is web app" />
 				</Helmet>
@@ -277,13 +283,6 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 						) : null
 					}
 					{
-						// isMenuBarActive ? (
-						// 	<FadeTransition classNames="slide-from-left" in={isMenuBarActive}>
-						// 		<MenuBar toggleMenuBar={this.toggleMenuBar} />
-						// 	</FadeTransition>
-						// ) : null
-					}
-					{
 						isProfileActive ? (
 							<FadeTransition classNames="slide-from-right" in={isProfileActive}>
 								<Profile toggleProfile={this.toggleProfile} />
@@ -328,7 +327,7 @@ HomePage.propTypes = {
 	userSettings: PropTypes.object,
 	formattedSource: PropTypes.object,
 };
-// TODO: Sort books in selector
+
 const mapStateToProps = createStructuredSelector({
 	homepage: makeSelectHomePage(),
 	previousBook: selectPrevBook(),

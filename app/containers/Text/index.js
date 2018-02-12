@@ -169,6 +169,16 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 
 	closeContextMenu = () => this.setState({ contextMenuState: false })
 
+	shareHighlightToFacebook = () => {
+		const FB = window.FB;
+
+		FB.ui({
+			method: 'share',
+			quote: this.state.selectedText,
+			href: 'http://is.bible.build/',
+		}, (res) => console.log('response', res)); // eslint-disable-line no-console
+	}
+
 	render() {
 		const {
 			nextChapter,
@@ -210,7 +220,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				}
 				{
 					contextMenuState ? (
-						<ContextPortal setActiveNote={this.setActiveNote} setActiveNotesView={setActiveNotesView} closeContextMenu={this.closeContextMenu} toggleNotesModal={toggleNotesModal} notesActive={notesActive} parentNode={this.main} coordinates={coords} />
+						<ContextPortal shareHighlightToFacebook={this.shareHighlightToFacebook} setActiveNote={this.setActiveNote} setActiveNotesView={setActiveNotesView} closeContextMenu={this.closeContextMenu} toggleNotesModal={toggleNotesModal} notesActive={notesActive} parentNode={this.main} coordinates={coords} />
 					) : null
 				}
 				{
