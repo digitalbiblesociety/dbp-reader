@@ -33,6 +33,7 @@ import {
 	SET_ACTIVE_NOTE,
 	UPDATE_SELECTED_TEXT,
 	GET_BOOKS,
+	GET_CHAPTER_TEXT,
 } from './constants';
 
 const initialState = fromJS({
@@ -112,8 +113,12 @@ function homePageReducer(state = initialState, action) {
 	switch (action.type) {
 	case TOGGLE_FIRST_LOAD_TEXT_SELECTION:
 		return state.set('firstLoad', false);
+	case GET_CHAPTER_TEXT:
+		return state.set('loadingNewChapterText', true);
 	case GET_BOOKS:
-		return state.set('loadingBooks', true);
+		return state
+			.set('loadingNewChapterText', true)
+			.set('loadingBooks', true);
 	case LOAD_BOOKS:
 		return state
 			.set('loadingBooks', false)
@@ -153,12 +158,14 @@ function homePageReducer(state = initialState, action) {
 	case LOAD_CHAPTER_TEXT:
 		if (action.formattedSource) {
 			return state
+				.set('loadingNewChapterText', false)
 				.set('audioSource', action.audioSource)
 				.set('formattedSource', action.formattedSource)
 				.setIn(['userSettings', 'toggleOptions', 'crossReferences', 'active'], true)
 				.set('chapterText', fromJS(action.text));
 		}
 		return state
+			.set('loadingNewChapterText', false)
 			.set('audioSource', action.audioSource)
 			.set('formattedSource', action.formattedSource)
 			.set('chapterText', fromJS(action.text));

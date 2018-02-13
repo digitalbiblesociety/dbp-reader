@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 import SvgWrapper from 'components/SvgWrapper';
 import ContextPortal from 'components/ContextPortal';
 import FootnotePortal from 'components/FootnotePortal';
+import LoadingSpinner from 'components/LoadingSpinner';
 // import { addClickToNotes } from './htmlToReact';
 /* Disabling the jsx-a11y linting because we need to capture the selected text
 	 and the most straight forward way of doing so is with the onMouseUp event */
@@ -154,9 +155,9 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 	// 		}),
 	// 	}, (res) => console.log('like res', res));
 
-		fb.api('173528326559718?metadata=1', {
-			access_token: '173528326559718|948X5QGPVLwSLTlLcuTXfHaMT6I',
-		}, (res) => console.log('bible is object res', res));
+		fb.api(`${process.env.FB_APP_ID}?metadata=1`, {
+			access_token: process.env.FB_ACCESS,
+		}, (res) => res); // console.log('bible is object res', res));
 	}
 
 	openFootnote = ({ id, coords }) => {
@@ -192,7 +193,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			method: 'share',
 			quote: this.state.selectedText,
 			href: 'http://is.bible.build/',
-		}, (res) => console.log('response', res)); // eslint-disable-line no-console
+		}, (res) => res); // console.log('response', res)); // eslint-disable-line no-console
 	}
 
 	render() {
@@ -206,6 +207,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			activeBookId,
 			formattedSource,
 			text,
+			loadingNewChapterText,
 		} = this.props;
 		const {
 			coords,
@@ -214,6 +216,9 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			footnotePortal,
 		} = this.state;
 
+		if (loadingNewChapterText) {
+			return <LoadingSpinner />;
+		}
 		return (
 			<div className="text-container">
 				{
@@ -258,6 +263,7 @@ Text.propTypes = {
 	setActiveNotesView: PropTypes.func,
 	activeChapter: PropTypes.number,
 	notesActive: PropTypes.bool,
+	loadingNewChapterText: PropTypes.bool,
 	formattedSource: PropTypes.object,
 	setActiveNote: PropTypes.func,
 	activeBookId: PropTypes.string,

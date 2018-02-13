@@ -82,10 +82,29 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		if (Object.keys(activeFilesets).length === 0) {
 			this.props.dispatch(initApplication({ activeTextId, iso }));
 		}
+		// Need to get the audio for the initial chapter
 		this.props.dispatch(getAudio({ list: fromJS(activeFilesets) }));
 		this.props.dispatch(getBooks({ textId: activeTextId, filesets: fromJS(activeFilesets) }));
 		this.props.dispatch(getChapterText({ bible: activeTextId, book: activeBookId, chapter: activeChapter, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt }));
-		// Need to get the audio for the initial chapter
+
+		// Init the Facebook api here
+		window.fbAsyncInit = () => {
+			FB.init({ // eslint-disable-line no-undef
+				appId: process.env.FB_APP_ID,
+				autoLogAppEvents: true,
+				xfbml: true,
+				version: 'v2.12',
+			});
+		};
+
+		((d, s, id) => {
+			let js = d.getElementsByTagName(s)[0];
+			const fjs = d.getElementsByTagName(s)[0];
+			if (d.getElementById(id)) return;
+			js = d.createElement(s); js.id = id;
+			js.src = 'https://connect.facebook.net/en_US/sdk.js';
+			fjs.parentNode.insertBefore(js, fjs);
+		})(document, 'script', 'facebook-jssdk');
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -114,9 +133,9 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 
 		if (activeTextId !== this.props.homepage.activeTextId) {
 			this.getBooks({ textId: activeTextId, filesets: fromJS(activeFilesets) });
-			this.toggleChapterSelection();
 		} else if (!is(nextBooks, curBooks) && curBooks.size) {
 			this.setActiveBookName({ book: nextBookName, id: nextBookId });
+			this.setActiveChapter(chapter);
 			this.getChapters({ bible: activeTextId, book: nextBookId, chapter, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
 		} else if (!isEqual(audioObjects, curAudioObjects)) {
 			this.getChapters({ bible: activeTextId, book: nextBookId, chapter, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
@@ -217,6 +236,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			copywrite,
 			audioSource,
 			activeNotesView,
+			loadingNewChapterText,
 			firstLoad,
 		} = this.props.homepage;
 
@@ -311,7 +331,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 						) : null
 					}
 				</TransitionGroup>
-				<Text userSettings={userSettings} setActiveNote={this.setActiveNote} formattedSource={formattedSource} setActiveNotesView={this.setActiveNotesView} activeBookId={activeBookId} activeChapter={activeChapter} notesActive={isNotesModalActive} toggleNotesModal={this.toggleNotesModal} text={chapterText} nextChapter={this.getNextChapter} prevChapter={this.getPrevChapter} />
+				<Text loadingNewChapterText={loadingNewChapterText} userSettings={userSettings} setActiveNote={this.setActiveNote} formattedSource={formattedSource} setActiveNotesView={this.setActiveNotesView} activeBookId={activeBookId} activeChapter={activeChapter} notesActive={isNotesModalActive} toggleNotesModal={this.toggleNotesModal} text={chapterText} nextChapter={this.getNextChapter} prevChapter={this.getPrevChapter} />
 				<Footer settingsActive={isSettingsModalActive} isInformationModalActive={isInformationModalActive} toggleInformationModal={this.toggleInformationModal} toggleSettingsModal={this.toggleSettingsModal} />
 			</GenericErrorBoundary>
 		);
