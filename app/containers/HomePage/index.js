@@ -133,9 +133,9 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 
 		if (activeTextId !== this.props.homepage.activeTextId) {
 			this.getBooks({ textId: activeTextId, filesets: fromJS(activeFilesets) });
-			this.toggleChapterSelection();
 		} else if (!is(nextBooks, curBooks) && curBooks.size) {
 			this.setActiveBookName({ book: nextBookName, id: nextBookId });
+			this.setActiveChapter(chapter);
 			this.getChapters({ bible: activeTextId, book: nextBookId, chapter, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
 		} else if (!isEqual(audioObjects, curAudioObjects)) {
 			this.getChapters({ bible: activeTextId, book: nextBookId, chapter, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
@@ -236,6 +236,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			copywrite,
 			audioSource,
 			activeNotesView,
+			loadingNewChapterText,
 			firstLoad,
 		} = this.props.homepage;
 
@@ -330,7 +331,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 						) : null
 					}
 				</TransitionGroup>
-				<Text userSettings={userSettings} setActiveNote={this.setActiveNote} formattedSource={formattedSource} setActiveNotesView={this.setActiveNotesView} activeBookId={activeBookId} activeChapter={activeChapter} notesActive={isNotesModalActive} toggleNotesModal={this.toggleNotesModal} text={chapterText} nextChapter={this.getNextChapter} prevChapter={this.getPrevChapter} />
+				<Text loadingNewChapterText={loadingNewChapterText} userSettings={userSettings} setActiveNote={this.setActiveNote} formattedSource={formattedSource} setActiveNotesView={this.setActiveNotesView} activeBookId={activeBookId} activeChapter={activeChapter} notesActive={isNotesModalActive} toggleNotesModal={this.toggleNotesModal} text={chapterText} nextChapter={this.getNextChapter} prevChapter={this.getPrevChapter} />
 				<Footer settingsActive={isSettingsModalActive} isInformationModalActive={isInformationModalActive} toggleInformationModal={this.toggleInformationModal} toggleSettingsModal={this.toggleSettingsModal} />
 			</GenericErrorBoundary>
 		);
