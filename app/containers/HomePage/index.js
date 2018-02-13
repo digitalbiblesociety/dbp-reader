@@ -82,10 +82,29 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		if (Object.keys(activeFilesets).length === 0) {
 			this.props.dispatch(initApplication({ activeTextId, iso }));
 		}
+		// Need to get the audio for the initial chapter
 		this.props.dispatch(getAudio({ list: fromJS(activeFilesets) }));
 		this.props.dispatch(getBooks({ textId: activeTextId, filesets: fromJS(activeFilesets) }));
 		this.props.dispatch(getChapterText({ bible: activeTextId, book: activeBookId, chapter: activeChapter, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt }));
-		// Need to get the audio for the initial chapter
+
+		// Init the Facebook api here
+		window.fbAsyncInit = () => {
+			FB.init({ // eslint-disable-line no-undef
+				appId: process.env.FB_APP_ID,
+				autoLogAppEvents: true,
+				xfbml: true,
+				version: 'v2.12',
+			});
+		};
+
+		((d, s, id) => {
+			let js = d.getElementsByTagName(s)[0];
+			const fjs = d.getElementsByTagName(s)[0];
+			if (d.getElementById(id)) return;
+			js = d.createElement(s); js.id = id;
+			js.src = 'https://connect.facebook.net/en_US/sdk.js';
+			fjs.parentNode.insertBefore(js, fjs);
+		})(document, 'script', 'facebook-jssdk');
 	}
 
 	componentWillReceiveProps(nextProps) {

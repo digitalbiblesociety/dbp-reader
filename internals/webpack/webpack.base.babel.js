@@ -98,6 +98,8 @@ module.exports = (options) => ({
 			'process.env': {
 				NODE_ENV: JSON.stringify(process.env.NODE_ENV),
 				DBP_API_KEY: JSON.stringify(process.env.DBP_API_KEY),
+				FB_APP_ID: JSON.stringify(process.env.FB_APP_ID),
+				FB_ACCESS: JSON.stringify(process.env.FB_ACCESS),
 			},
 		}),
 		new webpack.NamedModulesPlugin(),

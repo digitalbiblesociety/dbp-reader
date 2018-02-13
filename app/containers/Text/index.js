@@ -154,9 +154,9 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 	// 		}),
 	// 	}, (res) => console.log('like res', res));
 
-		fb.api('173528326559718?metadata=1', {
-			access_token: '173528326559718|948X5QGPVLwSLTlLcuTXfHaMT6I',
-		}, (res) => console.log('bible is object res', res));
+		fb.api(`${process.env.FB_APP_ID}?metadata=1`, {
+			access_token: process.env.FB_ACCESS,
+		}, (res) => res); // console.log('bible is object res', res));
 	}
 
 	openFootnote = ({ id, coords }) => {
@@ -192,7 +192,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			method: 'share',
 			quote: this.state.selectedText,
 			href: 'http://is.bible.build/',
-		}, (res) => console.log('response', res)); // eslint-disable-line no-console
+		}, (res) => res); // console.log('response', res)); // eslint-disable-line no-console
 	}
 
 	render() {
