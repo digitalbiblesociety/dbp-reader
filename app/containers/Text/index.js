@@ -143,6 +143,22 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		}
 	}
 
+	addFacebookLike = () => {
+	// 	console.log('testing adding a like');
+		const fb = window.FB;
+	// 	fb.ui({
+	// 		method: 'share_open_graph',
+	// 		action_type: 'og.likes',
+	// 		action_properties: JSON.stringify({
+	// 			object: 'http://is.bible.build/',
+	// 		}),
+	// 	}, (res) => console.log('like res', res));
+
+		fb.api('173528326559718?metadata=1', {
+			access_token: '173528326559718|948X5QGPVLwSLTlLcuTXfHaMT6I',
+		}, (res) => console.log('bible is object res', res));
+	}
+
 	openFootnote = ({ id, coords }) => {
 		this.setState({
 			footnoteState: true,
@@ -220,7 +236,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				}
 				{
 					contextMenuState ? (
-						<ContextPortal shareHighlightToFacebook={this.shareHighlightToFacebook} setActiveNote={this.setActiveNote} setActiveNotesView={setActiveNotesView} closeContextMenu={this.closeContextMenu} toggleNotesModal={toggleNotesModal} notesActive={notesActive} parentNode={this.main} coordinates={coords} />
+						<ContextPortal addFacebookLike={this.addFacebookLike} shareHighlightToFacebook={this.shareHighlightToFacebook} setActiveNote={this.setActiveNote} setActiveNotesView={setActiveNotesView} closeContextMenu={this.closeContextMenu} toggleNotesModal={toggleNotesModal} notesActive={notesActive} parentNode={this.main} coordinates={coords} />
 					) : null
 				}
 				{
