@@ -53,9 +53,9 @@ export function* getTexts({ languageISO }) {
 
 	try {
 		const response = yield call(request, requestUrl);
-		const languageTexts = response.data.filter((text) => languageISO === 'ANY' ? true : text.iso === languageISO);
 		// Some texts may have plain text in the database but no filesets
-		const texts = languageTexts.filter((text) => !Array.isArray(text.filesets) && Object.keys(text.filesets).length);
+		// This filters out all texts that don't have a fileset
+		const texts = response.data.filter((text) => (languageISO === 'ANY' ? true : text.iso === languageISO) && (!Array.isArray(text.filesets) && Object.keys(text.filesets).length));
 
 		yield put(loadTexts({ texts }));
 	} catch (err) {

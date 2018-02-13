@@ -45,7 +45,7 @@ const Item = styled.div`
 // Remove use of styled components
 // change to pure component and handle outside clicks instead of click handler
 // on each item
-function ContextPortal({ shareHighlightToFacebook, setActiveNote, coordinates, parentNode, toggleNotesModal, notesActive, closeContextMenu, setActiveNotesView }) {
+function ContextPortal({ shareHighlightToFacebook, addFacebookLike, setActiveNote, coordinates, parentNode, toggleNotesModal, notesActive, closeContextMenu, setActiveNotesView }) {
 	const handleNoteClick = () => {
 		if (!notesActive) {
 			setActiveNotesView('edit');
@@ -77,7 +77,7 @@ function ContextPortal({ shareHighlightToFacebook, setActiveNote, coordinates, p
 				<Item onClick={handleNoteClick}><SvgWrapper height="25px" width="25px" svgid="note-list" /></Item>
 				<Item onClick={handleBookmarkClick}><SvgWrapper height="25px" width="25px" svgid="highlights" /></Item>
 				<Item onClick={handleHighlightClick}><SvgWrapper height="25px" width="25px" svgid="bookmarks" /></Item>
-				<Item onClick={closeContextMenu} className="facebook"><SvgWrapper height="35px" width="35px" svgid="fb-thumb" /></Item>
+				<Item onClick={addFacebookLike} className="facebook"><SvgWrapper height="35px" width="35px" svgid="fb-thumb" /></Item>
 			</Row>
 			<Row>
 				<Item onClick={shareHighlightToFacebook} data-layout="button_count" data-href={window.location.href} className="facebook fb-share-button"><SvgWrapper height="25px" width="25px" svgid="facebook" /></Item>
@@ -99,6 +99,7 @@ ContextPortal.propTypes = {
 	setActiveNotesView: PropTypes.func,
 	setActiveNote: PropTypes.func,
 	shareHighlightToFacebook: PropTypes.func,
+	addFacebookLike: PropTypes.func,
 };
 
 export default ContextPortal;
