@@ -7,13 +7,13 @@ import { GET_CHAPTER_TEXT, GET_BOOKS, GET_AUDIO, INIT_APPLICATION } from './cons
 import { loadChapter, loadBooksAndCopywrite, loadAudio } from './actions';
 
 export function* initApplication({ activeTextId, iso }) {
-	const activeTextUrl = `https://api.bible.build/bibles?key=${process.env.DBP_API_KEY}&v=4language_code=${iso}`;
+	const activeTextUrl = `https://api.bible.build/bibles?key=${process.env.DBP_API_KEY}&v=4&language_code=${iso}`;
 	let filesets = {};
 	try {
 		const response = yield call(request, activeTextUrl);
 		const activeText = response.data.filter((text) => text.abbr === activeTextId)[0];
 
-		filesets = fromJS(activeText.filesets);
+		filesets = fromJS(activeText.filesets || {});
 	} catch (err) {
 		if (err && process.env.NODE_ENV === 'development') {
 			console.log('error in init', err); // eslint-disable-line no-console
@@ -32,13 +32,44 @@ export function* initApplication({ activeTextId, iso }) {
 export function* getAudio({ list }/* { filesetId, list } */) {
 	const dramaUrls = [];
 	const plainUrls = [];
+	// if there is a audio drama version with size code for everything use it
+	// same for non drama
+	// otherwise get the first version for the nt and the ot
+	// last get portions if there is nothing else
+	// const allOfDrama = {};
+	// const combinedDrama = {};
+	// const combinedPlain = {};
+	// const allOfPlain = {};
+	// const portions = {};
+	const generateUrl = (fileId, sizeCode) => ({ sizeCode, fileId, url: `https://api.bible.build/bibles/filesets/${fileId}?key=${process.env.DBP_API_KEY}&v=4` });
+
 	list.forEach((fileObject, fileId) => {
-		if (fileObject.get('set_type_code') === 'audio_drama') {
-			dramaUrls.push({ fileId, url: `https://api.bible.build/bibles/filesets/${fileId}?key=${process.env.DBP_API_KEY}&v=4` });
-		} else if (fileObject.get('set_type_code') === 'audio') {
-			plainUrls.push({ fileId, url: `https://api.bible.build/bibles/filesets/${fileId}?key=${process.env.DBP_API_KEY}&v=4` });
+		const type = fileObject.get('set_type_code');
+		const sizeCode = fileObject.get('set_size_code');
+
+		// if (type === 'audio_drama' && sizeCode === 'C') {
+		// 	allOfDrama[sizeCode] = (generateUrl(fileId, sizeCode));
+		// } else if (type === 'audio' && sizeCode === 'C') {
+		// 	allOfPlain[sizeCode] = (generateUrl(fileId, sizeCode));
+		// } else if (type === 'audio_drama' && (sizeCode === 'OT' || sizeCode === 'NT')) {
+		// 	combinedDrama[sizeCode] = (generateUrl(fileId, sizeCode));
+		// } else if (type === 'audio' && (sizeCode === 'OT' || sizeCode === 'NT')) {
+		// 	combinedPlain[sizeCode] = (generateUrl(fileId, sizeCode));
+		// } else if (type === 'audio' && sizeCode.includes('P')) {
+		// 	portions[sizeCode] = (generateUrl(fileId, sizeCode));
+		// }
+
+		if (type === 'audio_drama') {
+			dramaUrls.push(generateUrl(fileId, sizeCode));
+		} else if (type === 'audio') {
+			plainUrls.push(generateUrl(fileId, sizeCode));
 		}
 	});
+	// console.log('all drama', allOfDrama);
+	// console.log('all plain', allOfPlain);
+	// console.log('combined drama', combinedDrama);
+	// console.log('combined plain', combinedPlain);
+	// console.log('portions', portions);
 
 	try {
 		const results = [];
@@ -85,7 +116,7 @@ export function* getBooks({ textId, filesets }) {
 		const backupBooks = [];
 		const urls = [];
 		const tempData = [];
-
+		// console.log('at first for each')
 		filesets.forEach((fileObject, fileId) => {
 			urls.push({ url: `https://api.bible.build/bibles/filesets/${fileId}?key=${process.env.DBP_API_KEY}&v=4`, filesetId: fileId, type: fileObject.get('set_type_code') });
 		});
@@ -116,6 +147,7 @@ export function* getBooks({ textId, filesets }) {
 			date: response.data.date,
 			country: response.data.country,
 		};
+		// console.log('loading books')
 		// eventually store a key value pair for each type of resource available
 		// console.log('filesetTypes in get books', filesetTypes);
 		yield put(loadBooksAndCopywrite({ books: hasTextInDatabase ? books : backupBooks, copywrite, hasTextInDatabase, filesetTypes }));
