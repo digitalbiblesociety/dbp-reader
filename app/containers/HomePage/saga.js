@@ -78,7 +78,7 @@ export function* getBooks({ textId, filesets }) {
 		const response = yield call(request, requestUrl);
 		const books = response.data.books.map((book) => ({
 			...book,
-			chapters: book.chapters.split(',').map(Number).sort((a, b) => a - b),
+			chapters: book.chapters.sort((a, b) => a - b),
 		}));
 		const hasTextInDatabase = books.length !== 0;
 		const filesetTypes = {};
@@ -151,7 +151,7 @@ export function* getPlainText({ hasTextInDatabase, bible, book, chapter }) {
 	let plainText = [];
 
 	if (hasTextInDatabase) {
-		textRequestUrl = `https://api.bible.build/bible/${bible}/${book}/${chapter}?key=${process.env.DBP_API_KEY}&v=4`;
+		textRequestUrl = `https://api.bible.build/bibles/${bible}/${book}/${chapter}?key=${process.env.DBP_API_KEY}&v=4`;
 	}
 
 	try {
