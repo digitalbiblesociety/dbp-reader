@@ -33,9 +33,9 @@ export function* getAudio({ list }/* { filesetId, list } */) {
 	const dramaUrls = [];
 	const plainUrls = [];
 	list.forEach((fileObject, fileId) => {
-		if (fileObject.get('set_type') === 'audio_drama') {
+		if (fileObject.get('set_type_code') === 'audio_drama') {
 			dramaUrls.push({ fileId, url: `https://api.bible.build/bibles/filesets/${fileId}?key=${process.env.DBP_API_KEY}&v=4` });
-		} else if (fileObject.get('set_type') === 'audio') {
+		} else if (fileObject.get('set_type_code') === 'audio') {
 			plainUrls.push({ fileId, url: `https://api.bible.build/bibles/filesets/${fileId}?key=${process.env.DBP_API_KEY}&v=4` });
 		}
 	});
@@ -87,9 +87,9 @@ export function* getBooks({ textId, filesets }) {
 		const tempData = [];
 
 		filesets.forEach((fileObject, fileId) => {
-			urls.push({ url: `https://api.bible.build/bibles/filesets/${fileId}?key=${process.env.DBP_API_KEY}&v=4`, filesetId: fileId, type: fileObject.get('set_type') });
+			urls.push({ url: `https://api.bible.build/bibles/filesets/${fileId}?key=${process.env.DBP_API_KEY}&v=4`, filesetId: fileId, type: fileObject.get('set_type_code') });
 		});
-
+		// console.log('urls', urls);
 		for (const url of urls) { // eslint-disable-line no-restricted-syntax
 			const res = yield request(url.url);
 			if (res.data.length !== 0) {
@@ -98,7 +98,8 @@ export function* getBooks({ textId, filesets }) {
 			const data = res.data.map((obj) => ({ book_id: obj.book_id, name: obj.book_name, name_short: obj.book_name, chapter: obj.chapter_start }));
 			tempData.push(data);
 		}
-
+		// console.log('temp data', tempData);
+		// console.log('filesetTypes', filesetTypes);
 		const unitedData = unionWith(...tempData, (resource, next) => resource.book_id === next.book_id && resource.chapter === next.chapter);
 		const bookChapterList = unitedData.reduce((list, book) => {
 			if (list[book.book_id]) {
@@ -155,7 +156,11 @@ export function* getPlainText({ hasTextInDatabase, bible, book, chapter }) {
 	}
 
 	try {
-		plainText = yield textRequestUrl ? call(request, textRequestUrl) : [];
+		const plainTextResponse = yield textRequestUrl ? call(request, textRequestUrl) : [];
+		// console.log('plain text response', plainTextResponse);
+		if (plainTextResponse.data) {
+			plainText = plainTextResponse.data;
+		}
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error('Caught in database text request', err); // eslint-disable-line no-console
