@@ -199,10 +199,17 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 
 	shareHighlightToFacebook = () => {
 		const FB = window.FB;
+		const { activeBookName: book, activeChapter: chapter } = this.props;
+		const {
+			firstVerse: v1,
+			lastVerse: v2,
+			selectedText: sl,
+		} = this.state;
+		const verseRange = v1 === v2 ? `${book} ${chapter}:${v1}\n${sl}` : `${book} ${chapter}:${v1}-${v2}\n"${sl}"`;
 
 		FB.ui({
 			method: 'share',
-			quote: this.state.selectedText,
+			quote: verseRange,
 			href: 'http://is.bible.build/',
 		}, (res) => res); // console.log('response', res)); // eslint-disable-line no-console
 	}
@@ -278,6 +285,7 @@ Text.propTypes = {
 	formattedSource: PropTypes.object,
 	setActiveNote: PropTypes.func,
 	activeBookId: PropTypes.string,
+	activeBookName: PropTypes.string,
 };
 
 export default Text;
