@@ -2,7 +2,15 @@ import { takeLatest, call, put } from 'redux-saga/effects';
 // import languageList from 'utils/languagesWithResources.json';
 import request from 'utils/request';
 import { fromJS } from 'immutable';
-import { GET_COUNTRIES, GET_DPB_TEXTS, GET_LANGUAGES } from './constants';
+import {
+	GET_COUNTRIES,
+	GET_DPB_TEXTS,
+	GET_LANGUAGES,
+	ERROR_GETTING_LANGUAGES,
+	ERROR_GETTING_VERSIONS,
+	CLEAR_ERROR_GETTING_VERSIONS,
+	CLEAR_ERROR_GETTING_LANGUAGES,
+} from './constants';
 import { loadTexts, loadCountries, setLanguages } from './actions';
 
 export function* getCountries() {
@@ -57,11 +65,14 @@ export function* getTexts({ languageISO }) {
 		// This filters out all texts that don't have a fileset
 		const texts = response.data.filter((text) => (languageISO === 'ANY' ? true : text.iso === languageISO) && (!Array.isArray(text.filesets) && Object.keys(text.filesets).length));
 
+		yield put({ type: CLEAR_ERROR_GETTING_VERSIONS });
 		yield put(loadTexts({ texts }));
-	} catch (err) {
+	} catch (error) {
 		if (process.env.NODE_ENV === 'development') {
-			console.error(err); // eslint-disable-line no-console
+			console.error(error); // eslint-disable-line no-console
 		}
+
+		yield put({ type: ERROR_GETTING_VERSIONS });
 	}
 }
 
@@ -75,11 +86,14 @@ export function* getLanguages() {
 		languages.unshift({ name: 'ANY', iso_code: 'ANY' });
 
 		yield put(setLanguages({ languages }));
+		yield put({ type: CLEAR_ERROR_GETTING_LANGUAGES });
 		// yield put(setLanguages({ languages: response.data }));
-	} catch (err) {
+	} catch (error) {
 		if (process.env.NODE_ENV === 'development') {
-			console.error(err); // eslint-disable-line no-console
+			console.error(error); // eslint-disable-line no-console
 		}
+
+		yield put({ type: ERROR_GETTING_LANGUAGES });
 	}
 }
 

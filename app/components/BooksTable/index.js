@@ -52,36 +52,6 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 		if (activeButton && activeButton.offsetTop < clickedButton.offsetTop) {
 			clickedButton.scrollIntoView();
 		}
-		// const padding = 10; // distance between each book
-		// const distanceToTop = clickedButton.offsetTop; // distance from clicked element to the top
-		// const clickedButtonHeight = clickedButton.offsetHeight;
-		// const headerHeight = this.container.offsetTop; // height of the header
-		// const offsetParentHeight = clickedButton.offsetParent.clientHeight;
-		// let distanceToMove = 0;
-		//
-		// if (activeButton && activeButton.offsetTop < clickedButton.offsetTop) {
-		// 	// clicked book is below the active book
-		// 	const chaptersHeight = activeButton ? activeButton.offsetHeight : 28; // height of the container that was closed
-		// 	distanceToMove = (distanceToTop + clickedButtonHeight) - (padding + headerHeight + chaptersHeight); // distance the clicked element needs to move towards top
-		// } else {
-		// 	// clicked book is above the active book
-		// 	distanceToMove = distanceToTop - (padding + headerHeight);
-		// }
-		// // console.log(distanceToMove);
-		// // console.log(offsetParentHeight);
-		// if (distanceToMove >= offsetParentHeight) {
-		// 	this.container.scrollTop = distanceToMove - (distanceToMove - offsetParentHeight);
-		// } else {
-		// 	this.container.scrollTop = distanceToMove;
-		// }
-		// console.log('clicked book height', clickedButton.offsetHeight);
-		// console.log('clicked book distance to top', clickedButton.offsetTop);
-		// console.log('clicked book offset parent', clickedButton.offsetParent);
-		// console.log('container scroll height', this.container.scrollHeight);
-		// console.log('container scrollTop', this.container.scrollTop);
-		// console.log('container childElementCount', this.container.childElementCount);
-		// console.log('scroll container distance to top', this.container.offsetTop);
-		// Could potentially use scrollIntoView() to account for the part of the container that is off the screen
 
 		if (this.state.selectedBookName === name) {
 			this.setSelectedBookName('');
@@ -148,11 +118,11 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 				<div ref={(el) => this.handleRef(el, 'container')} className="book-container">
 					{
 						books.map((book) => (
-							<div className={'book-button'} ref={(book.name || book.name_short) === selectedBookName ? (el) => this.handleRef(el, 'button') : null} tabIndex="0" role="button" key={book.name || book.name_short} onClick={(e) => this.handleBookClick(e, book.name || book.name_short)}>
+							<div className={'book-button'} ref={(book.name || book.name_short) === selectedBookName ? (el) => this.handleRef(el, 'button') : null} tabIndex="0" role="button" key={(book.name || book.name_short).concat(book.book_id)} onClick={(e) => this.handleBookClick(e, book.name || book.name_short)}>
 								<h4 className={(book.name || book.name_short) === selectedBookName ? 'active-book' : ''}>{book.name || book.name_short}</h4>
 								<div className="chapter-container">
 									{
-										(book.name || book.name_short) === selectedBookName ? book.chapters.map((chapter) => (
+										(book.name || book.name_short) && (book.name || book.name_short) === selectedBookName ? book.chapters.map((chapter) => (
 											<div role="button" tabIndex="0" key={chapter} className="chapter-box" onClick={() => this.handleChapterClick(book, chapter)}>
 												<span className={(activeChapter === chapter && (book.name || book.name_short) === activeBookName) ? 'active-chapter' : ''}>{chapter}</span>
 											</div>
