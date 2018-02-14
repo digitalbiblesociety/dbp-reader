@@ -80,6 +80,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 	}
 
 	getFirstVerse = (e) => {
+		// console.log('moused down', e);
 		if (e.button === 0 && this.main.contains(e.target) && e.target.attributes.verseid) {
 			this.setState({ firstVerse: e.target.attributes.verseid.value });
 		}
@@ -122,15 +123,15 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			textComponents = (<div ref={this.setFormattedRef} className={'chapter'} dangerouslySetInnerHTML={{ __html: formattedSource.main }} />);
 		} else if (oneVersePerLine) {
 			textComponents = text.map((verse) => (
-				<span verseid={verse.verse_start} key={verse.verse_start}><br />&nbsp;<sup verseid={verse.verse_start}>{verse.verse_start_vernacular}</sup>&nbsp;<br />{verse.verse_text}</span>
+				<span verseid={verse.verse_start} key={verse.verse_start}><br />&nbsp;<sup verseid={verse.verse_start}>{verse.verse_start_alt || verse.verse_start}</sup>&nbsp;<br />{verse.verse_text}</span>
 			));
 		} else if (justifiedText) {
 			textComponents = text.map((verse) => (
-				<span verseid={verse.verse_start} key={verse.verse_start}>&nbsp;<sup verseid={verse.verse_start}>{verse.verse_start_vernacular}</sup>&nbsp;{verse.verse_text}</span>
+				<span verseid={verse.verse_start} key={verse.verse_start}>&nbsp;<sup verseid={verse.verse_start}>{verse.verse_start_alt || verse.verse_start}</sup>&nbsp;{verse.verse_text}</span>
 			));
 		} else {
 			textComponents = text.map((verse) => (
-				<span className={'align-left'} verseid={verse.verse_start} key={verse.verse_start}>&nbsp;<sup verseid={verse.verse_start}>{verse.verse_start_vernacular}</sup>&nbsp;{verse.verse_text}</span>
+				<span className={'align-left'} verseid={verse.verse_start} key={verse.verse_start}>&nbsp;<sup verseid={verse.verse_start}>{verse.verse_start_alt || verse.verse_start}</sup>&nbsp;{verse.verse_text}</span>
 			));
 		}
 
@@ -138,6 +139,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 	}
 
 	handleMouseUp = (e) => {
+		// console.log('mouse up')
 		this.getLastVerse(e);
 		if (e.button === 0 && this.state.footnoteState && e.target.className !== 'key') {
 			this.closeFootnote();
