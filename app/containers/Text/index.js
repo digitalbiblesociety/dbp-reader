@@ -80,9 +80,12 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 	}
 
 	getFirstVerse = (e) => {
-		// console.log('moused down', e);
-		if (e.button === 0 && this.main.contains(e.target) && e.target.attributes.verseid) {
-			this.setState({ firstVerse: e.target.attributes.verseid.value });
+		const target = e.target;
+
+		if (e.button === 0 && this.main.contains(target) && target.attributes.verseid) {
+			this.setState({ firstVerse: target.attributes.verseid.value });
+		} else if (e.button === 0 && this.main.contains(target) && target.attributes['data-id']) {
+			this.setState({ firstVerse: target.attributes['data-id'].value.split('_')[1] });
 		}
 	}
 
@@ -93,6 +96,13 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			const selectedText = window.getSelection().toString();
 
 			this.setState({ lastVerse: e.target.attributes.verseid.value, selectedText }, () => {
+				this.openContextMenu(e);
+			});
+		} else if (e.button === 0 && window.getSelection().toString() && this.main.contains(e.target) && e.target.attributes['data-id']) {
+			e.persist();
+			const selectedText = window.getSelection().toString();
+
+			this.setState({ lastVerse: e.target.attributes['data-id'].value.split('_')[1], selectedText }, () => {
 				this.openContextMenu(e);
 			});
 		} else {
@@ -139,7 +149,6 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 	}
 
 	handleMouseUp = (e) => {
-		// console.log('mouse up')
 		this.getLastVerse(e);
 		if (e.button === 0 && this.state.footnoteState && e.target.className !== 'key') {
 			this.closeFootnote();
