@@ -6,8 +6,14 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 import SvgWrapper from 'components/SvgWrapper';
 import LoadingSpinner from 'components/LoadingSpinner';
+import {
+	getVersionsError,
+} from './selectors';
 
 class BiblesTable extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	constructor(props) {
@@ -22,6 +28,7 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 			bibles,
 			activeIsoCode,
 			activeTextName,
+			versionsError,
 		} = this.props;
 		const { filterText } = this.state;
 		const filteredBibles = filterText ? bibles.filter((bible) => this.filterFunction(bible, filterText, activeIsoCode)) : bibles.filter((bible) => activeIsoCode === 'ANY' ? true : bible.get('iso') === activeIsoCode);
@@ -52,7 +59,7 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 			</div>
 		));
 
-		if (bibles.size === 0) {
+		if (bibles.size === 0 || versionsError) {
 			return <span>There was an error fetching this resource, an Admin has been notified. We apologize for the inconvenience</span>;
 		}
 
@@ -110,6 +117,7 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 			activeTextName,
 			active,
 			loadingVersions,
+			versionsError,
 		} = this.props;
 
 		if (active) {
@@ -123,7 +131,7 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 					<input className="text-selection-input" onChange={this.handleChange} placeholder="SEARCH VERSIONS" value={this.state.filterText} />
 					<div className="language-name-list">
 						{
-							loadingVersions ? (
+							loadingVersions && !versionsError ? (
 								<LoadingSpinner />
 							) : this.filteredVersionList
 						}
@@ -150,16 +158,29 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 
 BiblesTable.propTypes = {
 	bibles: PropTypes.object,
+	getAudio: PropTypes.func,
 	setActiveText: PropTypes.func,
+	toggleVersionList: PropTypes.func,
+	toggleLanguageList: PropTypes.func,
+	toggleTextSelection: PropTypes.func,
 	setCountryListState: PropTypes.func,
 	activeIsoCode: PropTypes.string,
 	activeTextName: PropTypes.string,
 	active: PropTypes.bool,
+	versionsError: PropTypes.bool,
 	loadingVersions: PropTypes.bool,
-	toggleVersionList: PropTypes.func,
-	toggleLanguageList: PropTypes.func,
-	toggleTextSelection: PropTypes.func,
-	getAudio: PropTypes.func,
 };
 
-export default BiblesTable;
+const mapStateToProps = createStructuredSelector({
+	versionsError: getVersionsError(),
+});
+
+function mapDispatchToProps(dispatch) {
+	return {
+		dispatch,
+	};
+}
+
+const withConnect = connect(mapStateToProps, mapDispatchToProps);
+
+export default compose(withConnect)(BiblesTable);
