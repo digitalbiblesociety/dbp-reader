@@ -31,7 +31,7 @@ const selectFormattedSource = () => createSelector(
 		}
 
 		const footnotes = source.slice(footnotesStart, footnotesEnd);
-		const footnotesArray = footnotes.match(/<span class="ft">(.*?)<\/span>/g);
+		const footnotesArray = footnotes.match(/<span class="ft">(.*?)<\/span>/g) || footnotes.match(/<span class="xt">(.*?)<\/span>/g);
 		const footnotesObject = Array.isArray(footnotesArray) ? footnotesArray.reduce((acc, note, i) => ({ ...acc, [`footnote-${i}`]: note.slice(17, -7) }), {}) : {};
 
 		return { main, footnotes: footnotesObject };

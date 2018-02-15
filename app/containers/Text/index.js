@@ -60,6 +60,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			if (note.childNodes && note.childNodes[0]) {
 				note.childNodes[0].removeAttribute('href');
 			}
+
 			note.onclick = (e) => {
 				this.openFootnote({ id: `footnote-${index}`, coords: { x: e.clientX, y: e.clientY } });
 			};
