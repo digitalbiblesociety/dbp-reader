@@ -7,6 +7,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import SvgWrapper from 'components/SvgWrapper';
+import FacebookAuthentication from 'containers/FacebookAuthentication';
+import GoogleAuthentication from 'containers/GoogleAuthentication';
 // import styled from 'styled-components';
 // import { FormattedMessage } from 'react-intl';
 // import messages from './messages';
@@ -69,21 +71,12 @@ class Login extends React.PureComponent {
 		);
 	}
 
-	handleSocialLogin = ({ driver }) => {
-		const { activeDriver, socialLoginLink } = this.props;
-
-		if (driver === activeDriver && socialLoginLink) {
-			const socialWindow = window.open(socialLoginLink, '_blank');
-
-			socialWindow.focus();
-		} else {
-			this.props.socialMediaLogin({ driver });
-		}
-	}
-
 	render() {
 		const {
 			selectAccountOption,
+			socialLoginLink,
+			socialMediaLogin,
+			activeDriver,
 		} = this.props;
 		return (
 			<React.Fragment>
@@ -95,14 +88,8 @@ class Login extends React.PureComponent {
 						</div>
 					)
 				}
-				<div role={'button'} tabIndex={0} onClick={() => this.handleSocialLogin({ driver: 'google' })} className="google">
-					<SvgWrapper className="svg" height="30px" width="30px" fill="#fff" svgid="google_plus" />
-					Sign in with Google
-				</div>
-				<div role={'button'} tabIndex={0} onClick={() => this.handleSocialLogin({ driver: 'facebook' })} className="facebook">
-					<SvgWrapper className="svg" height="30px" width="30px" fill="#fff" svgid="facebook" />
-					Sign in with Facebook
-				</div>
+				<GoogleAuthentication activeDriver={activeDriver} socialMediaLogin={socialMediaLogin} socialLoginLink={socialLoginLink} />
+				<FacebookAuthentication activeDriver={activeDriver} socialMediaLogin={socialMediaLogin} socialLoginLink={socialLoginLink} />
 				<section className="sign-up-free">
 					Don&#39;t have an account yet?
 					<span role="button" tabIndex={0} className="link" onClick={() => { selectAccountOption('signup'); this.toggleSignInForm(false); }}> Sign up for free!</span>

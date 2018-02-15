@@ -5,8 +5,9 @@
 */
 
 import React from 'react';
-import SvgWrapper from 'components/SvgWrapper';
 import PropTypes from 'prop-types';
+import FacebookAuthentication from 'containers/FacebookAuthentication';
+import GoogleAuthentication from 'containers/GoogleAuthentication';
 // import styled from 'styled-components';
 // import { FormattedMessage } from 'react-intl';
 // import messages from './messages';
@@ -91,18 +92,6 @@ class SignUp extends React.PureComponent {
 		}
 	}
 
-	handleSocialLogin = ({ driver }) => {
-		const { activeDriver, socialLoginLink } = this.props;
-
-		if (driver === activeDriver && socialLoginLink) {
-			const socialWindow = window.open(socialLoginLink, '_blank');
-
-			socialWindow.focus();
-		} else {
-			this.props.socialMediaLogin({ driver });
-		}
-	}
-
 	get signupForm() {
 		return (
 			<form onSubmit={this.handleSignup}>
@@ -119,7 +108,12 @@ class SignUp extends React.PureComponent {
 	}
 
 	render() {
-		const { errorMessage } = this.props;
+		const {
+			errorMessage,
+			socialLoginLink,
+			socialMediaLogin,
+			activeDriver,
+		} = this.props;
 
 		return (
 			<React.Fragment>
@@ -132,14 +126,8 @@ class SignUp extends React.PureComponent {
 					) : null
 				}
 				{this.signupForm}
-				<div role={'button'} tabIndex={0} onClick={() => this.handleSocialLogin({ driver: 'google' })} className="google">
-					<SvgWrapper className="svg" height="30px" width="30px" fill="#fff" svgid="google_plus" />
-					Sign up with Google
-				</div>
-				<div role={'button'} tabIndex={0} onClick={() => this.handleSocialLogin({ driver: 'facebook' })} className="facebook">
-					<SvgWrapper className="svg" height="30px" width="30px" fill="#fff" svgid="facebook" />
-					Sign up with Facebook
-				</div>
+				<GoogleAuthentication activeDriver={activeDriver} socialMediaLogin={socialMediaLogin} socialLoginLink={socialLoginLink} />
+				<FacebookAuthentication activeDriver={activeDriver} socialMediaLogin={socialMediaLogin} socialLoginLink={socialLoginLink} />
 				<section className="disclaimer">
 					By creating an account, you agree to the Bible.is
 					<a className="link" target={'_blank'} href="http://www.bible.is/privacy"> Privacy Policy </a> &
