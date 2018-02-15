@@ -63,14 +63,6 @@ function ContextPortal({ shareHighlightToFacebook, addHighlight, addFacebookLike
 		}
 	};
 
-	// const handleHighlightClick = () => {
-	// 	if (!notesActive) {
-	// 		setActiveNotesView('edit');
-	// 		toggleNotesModal();
-	// 		closeContextMenu();
-	// 	}
-	// };
-
 	const component = (
 		<StyledDiv x={coordinates.x} y={coordinates.y}>
 			<Row>
@@ -87,7 +79,7 @@ function ContextPortal({ shareHighlightToFacebook, addHighlight, addFacebookLike
 			</Row>
 		</StyledDiv>
 	);
-	if (parentNode instanceof HTMLElement) {
+	if (parentNode instanceof HTMLElement || parentNode instanceof Node) {
 		return ReactDOM.createPortal(component, parentNode);
 	}
 	return null;
