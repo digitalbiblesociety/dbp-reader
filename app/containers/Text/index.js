@@ -29,6 +29,14 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		if (this.format) {
 			this.setEventHandlersForFootnotes();
 		}
+		// if (this.state.selectedText && (this.main && !this.format)) {
+		// 	const spans = [...this.main.getElementsByTagName('span')];
+		// 	spans.forEach((span) => {
+		// 		if (span.attributes.verseid >= this.state.firstVerse || span.attributes.verseid <= this.state.lastVerse) {
+		// 			span.classList.add('text-highlighted');
+		// 		}
+		// 	});
+		// }
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -155,6 +163,21 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		}
 	}
 
+	addHighlight = () => {
+		if (this.state.selectedText && (this.main && !this.format)) {
+			const spans = [...this.main.getElementsByTagName('span')];
+
+			spans.forEach((span) => {
+				const verseId = parseInt(span.attributes.verseid.value, 10);
+
+				if (verseId >= this.state.firstVerse && verseId <= this.state.lastVerse) {
+					span.classList.add('text-highlighted');
+				}
+			});
+		}
+		this.closeContextMenu();
+	}
+
 	addFacebookLike = () => {
 	// 	console.log('testing adding a like');
 		const fb = window.FB;
@@ -212,6 +235,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			quote: verseRange,
 			href: 'http://is.bible.build/',
 		}, (res) => res); // console.log('response', res)); // eslint-disable-line no-console
+		this.closeContextMenu();
 	}
 
 	render() {
@@ -259,7 +283,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				}
 				{
 					contextMenuState ? (
-						<ContextPortal addFacebookLike={this.addFacebookLike} shareHighlightToFacebook={this.shareHighlightToFacebook} setActiveNote={this.setActiveNote} setActiveNotesView={setActiveNotesView} closeContextMenu={this.closeContextMenu} toggleNotesModal={toggleNotesModal} notesActive={notesActive} parentNode={this.main} coordinates={coords} />
+						<ContextPortal addHighlight={this.addHighlight} addFacebookLike={this.addFacebookLike} shareHighlightToFacebook={this.shareHighlightToFacebook} setActiveNote={this.setActiveNote} setActiveNotesView={setActiveNotesView} closeContextMenu={this.closeContextMenu} toggleNotesModal={toggleNotesModal} notesActive={notesActive} parentNode={this.main} coordinates={coords} />
 					) : null
 				}
 				{

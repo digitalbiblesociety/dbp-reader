@@ -45,7 +45,7 @@ const Item = styled.div`
 // Remove use of styled components
 // change to pure component and handle outside clicks instead of click handler
 // on each item
-function ContextPortal({ shareHighlightToFacebook, addFacebookLike, setActiveNote, coordinates, parentNode, toggleNotesModal, notesActive, closeContextMenu, setActiveNotesView }) {
+function ContextPortal({ shareHighlightToFacebook, addHighlight, addFacebookLike, setActiveNote, coordinates, parentNode, toggleNotesModal, notesActive, closeContextMenu, setActiveNotesView }) {
 	const handleNoteClick = () => {
 		if (!notesActive) {
 			setActiveNotesView('edit');
@@ -63,20 +63,20 @@ function ContextPortal({ shareHighlightToFacebook, addFacebookLike, setActiveNot
 		}
 	};
 
-	const handleHighlightClick = () => {
-		if (!notesActive) {
-			setActiveNotesView('edit');
-			toggleNotesModal();
-			closeContextMenu();
-		}
-	};
+	// const handleHighlightClick = () => {
+	// 	if (!notesActive) {
+	// 		setActiveNotesView('edit');
+	// 		toggleNotesModal();
+	// 		closeContextMenu();
+	// 	}
+	// };
 
 	const component = (
 		<StyledDiv x={coordinates.x} y={coordinates.y}>
 			<Row>
 				<Item onClick={handleNoteClick}><SvgWrapper height="25px" width="25px" svgid="note-list" /></Item>
-				<Item onClick={handleBookmarkClick}><SvgWrapper height="25px" width="25px" svgid="highlights" /></Item>
-				<Item onClick={handleHighlightClick}><SvgWrapper height="25px" width="25px" svgid="bookmarks" /></Item>
+				<Item onClick={addHighlight}><SvgWrapper height="25px" width="25px" svgid="highlights" /></Item>
+				<Item onClick={handleBookmarkClick}><SvgWrapper height="25px" width="25px" svgid="bookmarks" /></Item>
 				<Item onClick={addFacebookLike} className="facebook"><SvgWrapper height="35px" width="35px" svgid="fb-thumb" /></Item>
 			</Row>
 			<Row>
@@ -87,7 +87,10 @@ function ContextPortal({ shareHighlightToFacebook, addFacebookLike, setActiveNot
 			</Row>
 		</StyledDiv>
 	);
-	return ReactDOM.createPortal(component, parentNode);
+	if (parentNode instanceof HTMLElement) {
+		return ReactDOM.createPortal(component, parentNode);
+	}
+	return null;
 }
 
 ContextPortal.propTypes = {
@@ -100,6 +103,7 @@ ContextPortal.propTypes = {
 	setActiveNote: PropTypes.func,
 	shareHighlightToFacebook: PropTypes.func,
 	addFacebookLike: PropTypes.func,
+	addHighlight: PropTypes.func,
 };
 
 export default ContextPortal;
