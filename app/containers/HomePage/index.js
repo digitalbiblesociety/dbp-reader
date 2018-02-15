@@ -138,7 +138,14 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			this.setActiveChapter(chapter);
 			this.getChapters({ bible: activeTextId, book: nextBookId, chapter, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
 		} else if (!isEqual(audioObjects, curAudioObjects)) {
-			this.getChapters({ bible: activeTextId, book: nextBookId, chapter, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
+			this.getChapters({
+				bible: activeTextId,
+				book: this.props.homepage.activeBookId,
+				chapter: this.props.homepage.activeChapter,
+				audioObjects,
+				hasTextInDatabase,
+				formattedText: filesetTypes.text_formatt,
+			});
 		}
 	}
 
