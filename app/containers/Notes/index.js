@@ -40,6 +40,7 @@ import makeSelectNotes, {
 	selectNotePassage,
 	selectActiveTextId,
 	vernacularBookNameObject,
+	selectHighlights,
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -114,6 +115,7 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 			toggleProfile,
 			notePassage,
 			activeTextId,
+			highlights,
 			vernacularNamesObject,
 		} = this.props;
 
@@ -168,6 +170,7 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 											setActiveChild={this.setActiveChild}
 											setActivePageData={this.setActivePageData}
 											togglePageSelector={this.togglePageSelector}
+											highlights={highlights}
 											listData={listData}
 											pageSize={pageSize}
 											sectionType={activeChild}
@@ -199,6 +202,7 @@ Notes.propTypes = {
 	authenticationStatus: PropTypes.bool,
 	toggleProfile: PropTypes.func,
 	note: PropTypes.object,
+	highlights: PropTypes.object,
 	vernacularNamesObject: PropTypes.object,
 	activeTextId: PropTypes.string,
 	userId: PropTypes.string,
@@ -214,6 +218,7 @@ const mapStateToProps = createStructuredSelector({
 	notePassage: selectNotePassage(),
 	activeTextId: selectActiveTextId(),
 	vernacularNamesObject: vernacularBookNameObject(),
+	highlights: selectHighlights(),
 });
 
 function mapDispatchToProps(dispatch) {

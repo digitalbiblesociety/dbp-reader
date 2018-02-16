@@ -44,11 +44,19 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 			sectionType,
 			setPageSize,
 			listData,
+			highlights,
 			activePageData,
 			pageSize,
 			pageSelectorState,
 			togglePageSelector,
 		} = this.props;
+		// Use concept like this to enhance modularity
+		// const dataTypes = {
+		// 	highlights,
+		// 	notes: listData,
+		// 	bookmarks: [],
+		// }
+		// const dataToMap = dataTypes[sectionType];
 
 		return (
 			<div className="list-sections">
@@ -58,12 +66,18 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 				</div>
 				<section className="note-list">
 					{
-						activePageData.map((listItem) => (
+						highlights.length ? activePageData.map((listItem) => (
 							<div role="button" tabIndex={0} onClick={() => this.handleClick(listItem)} key={listItem.id} className="list-item">
 								<div className="date">{this.getFormattedNoteDate(listItem.created_at)}</div>
 								<div className="title-text">
 									<h4 className="title">{this.getNoteReference(listItem)}</h4>
 									<p className="text">{listItem.notes}</p>
+								</div>
+							</div>
+						)) : highlights.map((highlight) => (
+							<div className="list-item">
+								<div className="title-text">
+									<h4 className="title">{`${highlight.get('bible_id')} - ${highlight.get('book_id')} - ${highlight.get('chapter')}:${highlight.get('verse_start')}`}</h4>
 								</div>
 							</div>
 						))
@@ -96,6 +110,7 @@ MyNotes.propTypes = {
 	sectionType: PropTypes.string.isRequired,
 	pageSize: PropTypes.number.isRequired,
 	vernacularNamesObject: PropTypes.object,
+	highlights: PropTypes.object,
 };
 
 export default MyNotes;
