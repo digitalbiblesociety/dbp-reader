@@ -18,13 +18,22 @@ import {
 } from './constants';
 
 // export function* getUserData({ userId }) {
-// 	const requestUrl = `https://api.bible.build/users/${userId}?key=${process.env.DBP_API_KEY}&v=4&pretty`;
-
+// 	const highlightsRequestUrl = `https://api.bible.build/users/${userId}/notes?key=${process.env.DBP_API_KEY}&v=4&pretty`;
+// 	const notesRequestUrl = `https://api.bible.build/users/${userId}/highlights?key=${process.env.DBP_API_KEY}&v=4&pretty`;
+//
 // 	try {
-// 		// const response = yield call(request, requestUrl);
-// 		// console.log(response);
+// 		const highlightsResponse = yield call(request, highlightsRequestUrl);
+// 		const notesResponse = yield call(request, notesRequestUrl);
+// 		console.log(notesResponse);
+// 		console.log(highlightsResponse);
+// 		const data = {};
+// 		if (highlightsResponse.error) {
+// 			console.log('error getting highlights', highlightsResponse.error); // eslint-disable-line no-console
+// 		} else {
+// 			data.highlights = highlightsResponse;
+// 		}
+// 		yield put({ type: LOAD_USER_DATA, data });
 // 		//
-// 		// yield put(LOAD_USER_DATA, { data: 'data' });
 // 	} catch (err) {
 // 		if (process.env.NODE_ENV === 'development') {
 // 			console.error(err); // eslint-disable-line no-console

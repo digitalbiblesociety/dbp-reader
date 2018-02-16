@@ -21,7 +21,10 @@ const StyledDiv = styled.div`
 	width: 300px;
 	padding: 15px;
 	background-color: #9a9a9a;
+	overflow-y: scroll;
+	overflow-x: hidden;
 `;
+
 const StyledX = styled.span`
 	width: 25px;
 	height: 25px;
@@ -34,6 +37,7 @@ const StyledX = styled.span`
 	text-align: center;
 	line-height: 1.3em;
 `;
+
 const P = styled.p`
 	padding: 5px;
 	margin-right: 5px;

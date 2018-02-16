@@ -7,9 +7,10 @@
 import {
 	ACTIVE_TEXT_ID,
 	GET_BOOKS,
-	SET_ACTIVE_NOTE,
 	GET_AUDIO,
 	GET_CHAPTER_TEXT,
+	GET_HIGHLIGHTS,
+	SET_ACTIVE_NOTE,
 	INIT_APPLICATION,
 	LOAD_BOOKS,
 	LOAD_AUDIO,
@@ -62,11 +63,9 @@ export const updateSelectedText = ({ text }) => ({
 	text,
 });
 
-export const loadChapter = ({ text, audioSource, formattedSource }) => ({
+export const loadChapter = (props) => ({
 	type: LOAD_CHAPTER_TEXT,
-	text,
-	audioSource,
-	formattedSource,
+	...props,
 });
 
 export const loadBooksAndCopywrite = (props) => ({
@@ -93,6 +92,11 @@ export const getAudio = ({ filesetId, list }) => ({
 
 export const getChapterText = (props) => ({
 	type: GET_CHAPTER_TEXT,
+	...props,
+});
+
+export const getHighlights = (props) => ({
+	type: GET_HIGHLIGHTS,
 	...props,
 });
 

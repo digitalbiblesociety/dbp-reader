@@ -7,8 +7,19 @@ import { createSelector } from 'reselect';
  * TODO: Fix selectors so that they don't receive objects because that negates the benefit of using memoized functions
  */
 const selectHomePageDomain = (state) => state.get('homepage');
+const selectProfilePageDomain = (state) => state.get('profile');
 const selectFormattedTextSource = (state) => state.getIn(['homepage', 'formattedSource']);
 const selectCrossReferenceState = (state) => state.getIn(['homepage', 'userSettings', 'toggleOptions', 'crossReferences', 'active']);
+
+const selectUserId = () => createSelector(
+	selectProfilePageDomain,
+	(profile) => profile.get('userId')
+);
+
+const selectAuthenticationStatus = () => createSelector(
+	selectProfilePageDomain,
+	(profile) => profile.get('userAuthenticated')
+);
 
 const selectFormattedSource = () => createSelector(
 	[selectFormattedTextSource, selectCrossReferenceState],
@@ -31,8 +42,10 @@ const selectFormattedSource = () => createSelector(
 		}
 
 		const footnotes = source.slice(footnotesStart, footnotesEnd);
-		const footnotesArray = footnotes.match(/<span class="ft">(.*?)<\/span>/g) || footnotes.match(/<span class="xt">(.*?)<\/span>/g);
-		const footnotesObject = Array.isArray(footnotesArray) ? footnotesArray.reduce((acc, note, i) => ({ ...acc, [`footnote-${i}`]: note.slice(17, -7) }), {}) : {};
+		const footnotesArray = footnotes.match(/<span class="ft">(.*?)<\/span>/g) || [];
+		const crossReferenceArray = footnotes.match(/<span class="xt">(.*?)<\/span>/g) || [];
+		const combinedArray = footnotesArray.concat(crossReferenceArray);
+		const footnotesObject = Array.isArray(combinedArray) ? combinedArray.reduce((acc, note, i) => ({ ...acc, [`footnote-${i}`]: note.slice(17, -7) }), {}) : {};
 
 		return { main, footnotes: footnotesObject };
 	}
@@ -83,25 +96,6 @@ const selectSettings = () => createSelector(
 	}
 );
 
-// Below code is needed in selectActiveAudio if we decide to request all audio resources at once
-// const audioObjects = substate.get('audioObjects');
-// const activeChapter = substate.get('activeChapter');
-// const activeBook = substate.get('activeBookId');
-// const audioSource = audioObjects.filter((obj) => obj.get('bookId') === activeBook && obj.get('chapterStart') === activeChapter);
-//
-// return audioSource.getIn([0, 'path']);
-
-// Most of function needed to determine which books are available for the selected text
-// const selectAvailableBookNames = () => createSelector(
-//   selectHomePageDomain,
-//   (substate) => {
-// 	const books = substate.get('books').filter((book) => bookNames[book.get('book_id')]);
-// 	const bookList = books.map((book) => book.get('book_id'));
-//
-// 	return bookList;
-// }
-// );
-
 /**
  * Default selector used by HomePage
  */
@@ -119,4 +113,6 @@ export {
 	selectPrevBook,
 	selectSettings,
 	selectFormattedSource,
+	selectAuthenticationStatus,
+	selectUserId,
 };

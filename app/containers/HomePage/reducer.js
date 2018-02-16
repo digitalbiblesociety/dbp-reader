@@ -10,9 +10,10 @@ import { fromJS } from 'immutable';
 // import esvDefaultFilesets from 'utils/defaultFilesetsForESV.json';
 import {
 	ACTIVE_TEXT_ID,
-	LOAD_CHAPTER_TEXT,
-	LOAD_BOOKS,
 	LOAD_AUDIO,
+	LOAD_BOOKS,
+	LOAD_CHAPTER_TEXT,
+	LOAD_HIGHLIGHTS,
 	SET_ACTIVE_CHAPTER,
 	SET_ACTIVE_BOOK_NAME,
 	SET_ACTIVE_NOTES_VIEW,
@@ -42,6 +43,7 @@ const initialState = fromJS({
 	chapterText: [],
 	audioObjects: [],
 	activeFilesets: {},
+	highlights: [],
 	copywrite: {
 		mark: 'Good News Publishers, Crossway Bibles',
 		name: 'English Standard Version',
@@ -161,6 +163,7 @@ function homePageReducer(state = initialState, action) {
 				.set('loadingNewChapterText', false)
 				.set('audioSource', action.audioSource)
 				.set('formattedSource', action.formattedSource)
+				.set('highlights', fromJS(action.highlights))
 				.setIn(['userSettings', 'toggleOptions', 'crossReferences', 'active'], true)
 				.set('chapterText', fromJS(action.text));
 		}
@@ -168,7 +171,10 @@ function homePageReducer(state = initialState, action) {
 			.set('loadingNewChapterText', false)
 			.set('audioSource', action.audioSource)
 			.set('formattedSource', action.formattedSource)
+			.set('highlights', fromJS(action.highlights))
 			.set('chapterText', fromJS(action.text));
+	case LOAD_HIGHLIGHTS:
+		return state.set('highlights', action.highlights);
 	case SET_ACTIVE_NOTES_VIEW:
 		return state.set('activeNotesView', action.view);
 	case UPDATE_THEME:
