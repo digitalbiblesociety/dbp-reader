@@ -55,7 +55,11 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			}
 
 			note.onclick = (e) => {
-				this.openFootnote({ id: `footnote-${index}`, coords: { x: e.clientX, y: e.clientY } });
+				e.stopPropagation();
+				const rightEdge = window.innerWidth - 300;
+				const x = rightEdge < e.clientX ? rightEdge : e.clientX;
+
+				this.openFootnote({ id: `footnote-${index}`, coords: { x, y: e.clientY } });
 			};
 		});
 	}
@@ -128,9 +132,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				if (highlight.chapter === activeChapter) {
 					const { verse_start, highlight_start, highlighted_words } = highlight;
 					// console.log('text passed to highlight', highlightedText);
-					const newText = this.highlightPlainText(highlightedText, verse_start, highlight_start, highlighted_words);
-					// console.log('new text for highlight', newText);
-					return newText;
+					return this.highlightPlainText(highlightedText, verse_start, highlight_start, highlighted_words);
 				}
 				return highlightedText;
 			}, initialText);
