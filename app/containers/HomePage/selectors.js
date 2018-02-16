@@ -83,25 +83,6 @@ const selectSettings = () => createSelector(
 	}
 );
 
-// Below code is needed in selectActiveAudio if we decide to request all audio resources at once
-// const audioObjects = substate.get('audioObjects');
-// const activeChapter = substate.get('activeChapter');
-// const activeBook = substate.get('activeBookId');
-// const audioSource = audioObjects.filter((obj) => obj.get('bookId') === activeBook && obj.get('chapterStart') === activeChapter);
-//
-// return audioSource.getIn([0, 'path']);
-
-// Most of function needed to determine which books are available for the selected text
-// const selectAvailableBookNames = () => createSelector(
-//   selectHomePageDomain,
-//   (substate) => {
-// 	const books = substate.get('books').filter((book) => bookNames[book.get('book_id')]);
-// 	const bookList = books.map((book) => book.get('book_id'));
-//
-// 	return bookList;
-// }
-// );
-
 /**
  * Default selector used by HomePage
  */

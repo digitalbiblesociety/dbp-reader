@@ -23,20 +23,13 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		selectedText: '',
 		firstVerse: 0,
 		lastVerse: 0,
+		highlightActive: this.props.highlights || false,
 	};
 
 	componentDidMount() {
 		if (this.format) {
 			this.setEventHandlersForFootnotes();
 		}
-		// if (this.state.selectedText && (this.main && !this.format)) {
-		// 	const spans = [...this.main.getElementsByTagName('span')];
-		// 	spans.forEach((span) => {
-		// 		if (span.attributes.verseid >= this.state.firstVerse || span.attributes.verseid <= this.state.lastVerse) {
-		// 			span.classList.add('text-highlighted');
-		// 		}
-		// 	});
-		// }
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -121,10 +114,15 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 
 	get getTextComponents() {
 		const {
-			text,
+			text: plainT,
 			userSettings,
 			formattedSource,
 		} = this.props;
+		// Need to connect to the api and get the highlights object for this chapter
+		const highlighted = true;
+		// based on whether the highlights object has any data decide whether to run this function or not
+		const text = highlighted ? this.highlightPlainText(plainT) : plainT;
+
 		let textComponents;
 		const readersMode = userSettings.getIn(['toggleOptions', 'readersMode', 'active']);
 		const oneVersePerLine = userSettings.getIn(['toggleOptions', 'oneVersePerLine', 'active']);
@@ -137,7 +135,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				<span verseid={verse.verse_start} key={verse.verse_start}>{verse.verse_text}&nbsp;&nbsp;</span>
 			));
 		} else if (formattedSource.main) {
-			// TODO: find way of providing the html without using dangerouslySetInnerHTML
+			// Need to run a function to highlight the formatted text if this option is selected
 			/* eslint-disable react/no-danger */
 			textComponents = (<div ref={this.setFormattedRef} className={'chapter'} dangerouslySetInnerHTML={{ __html: formattedSource.main }} />);
 		} else if (oneVersePerLine) {
@@ -164,18 +162,90 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		}
 	}
 
+	highlightPlainText = (plainText) => {
+		// need to pass this function these values from the api
+		// needs to run for each highlight object that the user has added
+		const verseStart = 1;
+		const highlightStart = 2;
+		const highlightedWords = 40;
+		let wordsLeftToHighlight = highlightedWords;
+
+		const chapterText = plainText.map((v) => {
+			const newVerse = [];
+			const highlightedPortion = [];
+			const plainPortion = [];
+			const verseTextLength = v.verse_text.split(' ').length;
+			const verseTextArray = v.verse_text.split(' ');
+
+			if (v.verse_start === verseStart) {
+				verseTextArray.forEach((word, index) => {
+					if (index >= (highlightStart - 1)) {
+						highlightedPortion.push(word);
+					} else {
+						plainPortion.push(word);
+					}
+				});
+
+				wordsLeftToHighlight -= (verseTextLength - highlightStart);
+				newVerse.push(plainPortion.join(' '));
+				newVerse.push(' ');
+				newVerse.push(<span className={'text-highlighted'}>{highlightedPortion.join(' ')}</span>);
+			} else if (wordsLeftToHighlight > 0 && v.verse_start > verseStart) {
+				if (wordsLeftToHighlight - verseTextLength > 0) {
+					newVerse.push(<span className={'text-highlighted'}>{v.verse_text}</span>);
+					wordsLeftToHighlight -= verseTextLength;
+				} else {
+					verseTextArray.forEach((word, index) => {
+						// may need to do <=
+						if (index < (wordsLeftToHighlight)) {
+							highlightedPortion.push(word);
+						} else {
+							plainPortion.push(word);
+						}
+					});
+					wordsLeftToHighlight -= verseTextLength;
+					newVerse.push(<span className={'text-highlighted'}>{highlightedPortion.join(' ')}</span>);
+					newVerse.push(' ');
+					newVerse.push(plainPortion.join(' '));
+				}
+			}
+
+			return { ...v, verse_text: newVerse.length ? newVerse : v.verse_text };
+		});
+		// console.log('chapter text in highlight function', chapterText);
+		return chapterText;
+	}
+
 	addHighlight = () => {
+		// needs to send an api request to the serve that adds a highlight for this passage
 		if (this.state.selectedText && (this.main && !this.format)) {
 			const spans = [...this.main.getElementsByTagName('span')];
+			const firstWord = this.state.selectedText[0];
+			const lastWord = this.state.selectedText[this.state.selectedText.length - 1];
+			console.log('firstWord, lastWord', firstWord, lastWord);
+			let firstVerse;
+			let lastVerse;
 
 			spans.forEach((span) => {
 				const verseId = parseInt(span.attributes.verseid.value, 10);
-
-				if (verseId >= this.state.firstVerse && verseId <= this.state.lastVerse) {
+				const firstVerseNumber = parseInt(this.state.firstVerse, 10);
+				const lastVerseNumber = parseInt(this.state.lastVerse, 10);
+				if (verseId === firstVerseNumber) {
+					firstVerse = span;
+				}
+				if (verseId === lastVerseNumber) {
+					lastVerse = span;
+				}
+				if (verseId >= firstVerseNumber && verseId <= lastVerseNumber) {
 					span.classList.add('text-highlighted');
 				}
 			});
+			console.log('firstVerse', firstVerse);
+			console.log('lastVerse', lastVerse);
 		}
+		// take first word in selected text
+		// find its index in the page of words
+		// take verse id of the start and find the index of the first word within that verse
 		this.closeContextMenu();
 	}
 
@@ -311,6 +381,7 @@ Text.propTypes = {
 	setActiveNote: PropTypes.func,
 	activeBookId: PropTypes.string,
 	activeBookName: PropTypes.string,
+	highlights: PropTypes.object,
 };
 
 export default Text;
