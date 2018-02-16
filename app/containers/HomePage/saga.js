@@ -159,7 +159,7 @@ export function* getBooks({ textId, filesets }) {
 }
 
 export function* getChapter({ bible, book, chapter, audioObjects, hasTextInDatabase, formattedText, userAuthenticated, userId }) {
-	// console.log('user id and auth in get chapter', userId, userAuthenticated);
+	// console.log('user id and auth in get chapter', userId, 'auth', userAuthenticated);
 	// TODO Split these calls into separate functions to reduce wait time for a user
 	// Add ability to make calls for plaintext and formatted text
 	// There is an issue with the getAudio call not returning before this call
