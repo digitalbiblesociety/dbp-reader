@@ -220,28 +220,18 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		// needs to send an api request to the serve that adds a highlight for this passage
 		if (this.state.selectedText && (this.main && !this.format)) {
 			const spans = [...this.main.getElementsByTagName('span')];
-			const firstWord = this.state.selectedText[0];
-			const lastWord = this.state.selectedText[this.state.selectedText.length - 1];
-			console.log('firstWord, lastWord', firstWord, lastWord);
-			let firstVerse;
-			let lastVerse;
 
 			spans.forEach((span) => {
-				const verseId = parseInt(span.attributes.verseid.value, 10);
-				const firstVerseNumber = parseInt(this.state.firstVerse, 10);
-				const lastVerseNumber = parseInt(this.state.lastVerse, 10);
-				if (verseId === firstVerseNumber) {
-					firstVerse = span;
-				}
-				if (verseId === lastVerseNumber) {
-					lastVerse = span;
-				}
-				if (verseId >= firstVerseNumber && verseId <= lastVerseNumber) {
-					span.classList.add('text-highlighted');
+				if (span.attributes.verseid) {
+					const verseId = parseInt(span.attributes.verseid.value, 10);
+					const firstVerseNumber = parseInt(this.state.firstVerse, 10);
+					const lastVerseNumber = parseInt(this.state.lastVerse, 10);
+
+					if (verseId >= firstVerseNumber && verseId <= lastVerseNumber) {
+						span.classList.add('text-highlighted');
+					}
 				}
 			});
-			console.log('firstVerse', firstVerse);
-			console.log('lastVerse', lastVerse);
 		}
 		// take first word in selected text
 		// find its index in the page of words
