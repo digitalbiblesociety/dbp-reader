@@ -35,6 +35,7 @@ import SearchContainer from 'containers/SearchContainer';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
 import FadeTransition from 'components/FadeTransition';
 import {
+	addHighlight,
 	getAudio,
 	getBooks,
 	getChapterText,
@@ -119,6 +120,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			books,
 			audioObjects,
 			filesetTypes,
+			highlights,
 		} = nextProps.homepage;
 		const { userAuthenticated, userId } = nextProps;
 		const nextBooks = fromJS(books);
@@ -154,6 +156,14 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 				userId,
 			});
 		} else if (userAuthenticated !== this.props.userAuthenticated && userAuthenticated && userId) {
+			this.props.dispatch(getHighlights({
+				bible: activeTextId,
+				book: this.props.homepage.activeBookId,
+				chapter: this.props.homepage.activeChapter,
+				userAuthenticated,
+				userId,
+			}));
+		} else if (!isEqual(highlights, this.props.homepage.highlights)) {
 			this.props.dispatch(getHighlights({
 				bible: activeTextId,
 				book: this.props.homepage.activeBookId,
@@ -223,6 +233,8 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 	setActiveNotesView = (view) => this.props.dispatch(setActiveNotesView(view))
 
 	setActiveNote = ({ note }) => this.props.dispatch(setActiveNote({ note }))
+
+	addHighlight = (props) => this.props.dispatch(addHighlight({ ...props, bible: this.props.homepage.activeTextId, userId: this.props.userId }))
 
 	toggleFirstLoadForTextSelection = () => this.props.homepage.firstLoad && this.props.dispatch(toggleFirstLoadForTextSelection())
 
@@ -354,7 +366,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 						) : null
 					}
 				</TransitionGroup>
-				<Text highlights={highlights} activeBookName={activeBookName} loadingNewChapterText={loadingNewChapterText} userSettings={userSettings} setActiveNote={this.setActiveNote} formattedSource={formattedSource} setActiveNotesView={this.setActiveNotesView} activeBookId={activeBookId} activeChapter={activeChapter} notesActive={isNotesModalActive} toggleNotesModal={this.toggleNotesModal} text={chapterText} nextChapter={this.getNextChapter} prevChapter={this.getPrevChapter} />
+				<Text highlights={highlights} addHighlight={this.addHighlight} activeBookName={activeBookName} loadingNewChapterText={loadingNewChapterText} userSettings={userSettings} setActiveNote={this.setActiveNote} formattedSource={formattedSource} setActiveNotesView={this.setActiveNotesView} activeBookId={activeBookId} activeChapter={activeChapter} notesActive={isNotesModalActive} toggleNotesModal={this.toggleNotesModal} text={chapterText} nextChapter={this.getNextChapter} prevChapter={this.getPrevChapter} />
 				<Footer settingsActive={isSettingsModalActive} isInformationModalActive={isInformationModalActive} toggleInformationModal={this.toggleInformationModal} toggleSettingsModal={this.toggleSettingsModal} />
 			</GenericErrorBoundary>
 		);

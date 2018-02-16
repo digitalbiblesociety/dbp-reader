@@ -3,7 +3,7 @@ import { takeLatest, call, put, all } from 'redux-saga/effects';
 import request from 'utils/request';
 import { fromJS } from 'immutable';
 import unionWith from 'lodash/unionWith';
-import { LOAD_HIGHLIGHTS, GET_CHAPTER_TEXT, GET_HIGHLIGHTS, GET_BOOKS, GET_AUDIO, INIT_APPLICATION } from './constants';
+import { ADD_HIGHLIGHTS, LOAD_HIGHLIGHTS, GET_CHAPTER_TEXT, GET_HIGHLIGHTS, GET_BOOKS, GET_AUDIO, INIT_APPLICATION } from './constants';
 import { loadChapter, loadBooksAndCopywrite, loadAudio } from './actions';
 
 export function* initApplication({ activeTextId, iso }) {
@@ -159,7 +159,7 @@ export function* getBooks({ textId, filesets }) {
 }
 
 export function* getChapter({ bible, book, chapter, audioObjects, hasTextInDatabase, formattedText, userAuthenticated, userId }) {
-	// console.log('user id and auth in get chapter', userId, userAuthenticated);
+	// console.log('user id and auth in get chapter', userId, 'auth', userAuthenticated);
 	// TODO Split these calls into separate functions to reduce wait time for a user
 	// Add ability to make calls for plaintext and formatted text
 	// There is an issue with the getAudio call not returning before this call
@@ -271,6 +271,37 @@ export function* getAudioSource({ audioObjects, book, chapter }) {
 	return audioSource;
 }
 
+export function* addHighlight({ bible, book, chapter, userId, verseStart, highlightStart, highlightedWords }) {
+	const requestUrl = `https://api.bible.build/users/${userId}/highlights?key=${process.env.DBP_API_KEY}&v=4&bible_id=${bible}&book_id=${book}&chapter=${chapter}`;
+	const formData = new FormData();
+	let highlights = [];
+	formData.append('book_id', book);
+	formData.append('user_id', userId);
+	formData.append('bible_id', bible);
+	formData.append('chapter', chapter);
+	formData.append('verse_start', verseStart);
+	formData.append('highlight_start', highlightStart);
+	formData.append('highlighted_words', highlightedWords);
+
+	const options = {
+		method: 'POST',
+		body: formData,
+	};
+
+	try {
+		const response = yield call(request, requestUrl, options);
+		if (response.data) {
+			highlights = response.data;
+		}
+
+		yield put({ type: LOAD_HIGHLIGHTS, highlights });
+	} catch (error) {
+		if (process.env.NODE_ENV === 'development') {
+			console.error('Caught in highlights request', error); // eslint-disable-line no-console
+		}
+	}
+}
+
 // Individual exports for testing
 export default function* defaultSaga() {
 	yield takeLatest(INIT_APPLICATION, initApplication);
@@ -278,4 +309,5 @@ export default function* defaultSaga() {
 	yield takeLatest(GET_BOOKS, getBooks);
 	yield takeLatest(GET_CHAPTER_TEXT, getChapter);
 	yield takeLatest(GET_HIGHLIGHTS, getHighlights);
+	yield takeLatest(ADD_HIGHLIGHTS, addHighlight);
 }

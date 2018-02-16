@@ -3,7 +3,6 @@ import request from 'utils/request';
 import { LOCATION_CHANGE } from 'react-router-redux';
 import {
 	ADD_NOTE,
-	ADD_HIGHLIGHT,
 	ADD_BOOKMARK,
 	ADD_NOTE_SUCCESS,
 	UPDATE_NOTE,
@@ -93,23 +92,6 @@ export function* addBookmark({ userId, data }) {
 	}
 }
 
-export function* addHighlight({ userId, data }) {
-	const requestUrl = `https://api.bible.build/users/${userId}/notes?key=${process.env.DBP_API_KEY}&v=4&pretty`;
-	const options = {
-		body: data,
-		method: 'POST',
-	};
-
-	try {
-		const response = yield call(request, requestUrl, options);
-		console.log('user note response', response); // eslint-disable-line no-console
-	} catch (err) {
-		if (process.env.NODE_ENV === 'development') {
-			console.error(err); // eslint-disable-line no-console
-		}
-	}
-}
-
 export function* addNote({ userId, data }) {
 	const requestUrl = `https://api.bible.build/users/${userId}/notes?key=${process.env.DBP_API_KEY}&v=4&pretty`;
 	const formData = new FormData();
@@ -137,7 +119,6 @@ export function* addNote({ userId, data }) {
 // Individual exports for testing
 export default function* defaultSaga() {
 	const addNoteSaga = yield takeLatest(ADD_NOTE, addNote);
-	const addHighlightSaga = yield takeLatest(ADD_HIGHLIGHT, addHighlight);
 	const addBookmarkSaga = yield takeLatest(ADD_BOOKMARK, addBookmark);
 	const getNotesSaga = yield takeLatest(GET_USER_NOTES, getNotes);
 	const updateNoteSaga = yield takeLatest(UPDATE_NOTE, updateNote);
@@ -145,7 +126,6 @@ export default function* defaultSaga() {
 
 	yield take(LOCATION_CHANGE);
 	yield cancel(addNoteSaga);
-	yield cancel(addHighlightSaga);
 	yield cancel(addBookmarkSaga);
 	yield cancel(getNotesSaga);
 	yield cancel(updateNoteSaga);
