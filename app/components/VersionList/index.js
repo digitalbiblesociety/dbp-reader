@@ -42,14 +42,14 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 				onClick={() => this.handleVersionListClick(bible)}
 			>
 				{
-					bible.get('filesets').filter((fileset) => fileset.get('set_type') === 'text_formatt').size || bible.get('filesets').filter((fileset) => fileset.get('set_type') === 'text_plain').size ? (
+					bible.get('filesets').filter((fileset) => fileset.get('set_type_code') === 'text_formatt').size || bible.get('filesets').filter((fileset) => fileset.get('set_type_code') === 'text_plain').size ? (
 						<SvgWrapper className="svg active" height="20px" width="20px" svgid="text" />
 					) : (
 						<SvgWrapper className="svg inactive" height="20px" width="20px" svgid="text" />
 					)
 				}
 				{
-					bible.get('filesets').filter((fileset) => fileset.get('set_type') === 'audio_drama').size || bible.get('filesets').filter((fileset) => fileset.get('set_type') === 'audio').size ? (
+					bible.get('filesets').filter((fileset) => fileset.get('set_type_code') === 'audio_drama').size || bible.get('filesets').filter((fileset) => fileset.get('set_type_code') === 'audio').size ? (
 						<SvgWrapper className="svg active" height="20px" width="20px" svgid="volume" />
 					) : (
 						<SvgWrapper className="svg inactive" height="20px" width="20px" svgid="volume" />
