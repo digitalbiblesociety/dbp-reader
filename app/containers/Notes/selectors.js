@@ -10,6 +10,11 @@ const selectHomepageDomain = (state) => state.get('homepage');
 /**
  * Other specific selectors
  */
+const selectHighlights = () => createSelector(
+	selectHomepageDomain,
+	(homepage) => homepage.get('highlights')
+);
+
 const selectUserId = () => createSelector(
 	selectProfileDomain,
 	(substate) => substate ? substate.get('userId') : ''
@@ -85,4 +90,5 @@ export {
 	selectHighlightedText,
 	selectUserAuthenticationStatus,
 	vernacularBookNameObject,
+	selectHighlights,
 };
