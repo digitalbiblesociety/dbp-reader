@@ -188,22 +188,30 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			const newVerse = [];
 			const highlightedPortion = [];
 			const plainPortion = [];
+			// The conditional is to prevent the code trying to split a verse after it has become an array
+			// This is an issue because of a flaw in the program, I will need to stop iterating over each index
 			const verseTextLength = v.verse_text.split && v.verse_text.split(' ').length;
 			const verseTextArray = v.verse_text.split && v.verse_text.split(' ');
 
 			if (v.verse_start === verseStart) {
+				const before = [];
+				const after = [];
 				verseTextArray.forEach((word, index) => {
-					if (index >= (highlightStart - 1)) {
+					if (index >= (highlightStart) && (index - highlightStart < wordsLeftToHighlight)) {
 						highlightedPortion.push(word);
+					} else if (index > (highlightStart) && index - highlightStart > wordsLeftToHighlight) {
+						after.push(word);
 					} else {
-						plainPortion.push(word);
+						before.push(word);
 					}
 				});
 
 				wordsLeftToHighlight -= (verseTextLength - highlightStart);
-				newVerse.push(plainPortion.join(' '));
+				newVerse.push(before.join(' '));
 				newVerse.push(' ');
 				newVerse.push(<span verseid={v.verse_start} className={'text-highlighted'}>{highlightedPortion.join(' ')}</span>);
+				newVerse.push(' ');
+				newVerse.push(after.join(' '));
 			} else if (wordsLeftToHighlight > 0 && v.verse_start > verseStart) {
 				if (wordsLeftToHighlight - verseTextLength > 0) {
 					newVerse.push(<span verseid={v.verse_start} className={'text-highlighted'}>{v.verse_text}</span>);
@@ -226,25 +234,24 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 
 			return { ...v, verse_text: newVerse.length ? newVerse : v.verse_text };
 		});
+		// if the previous highlight overlaps the next highlights verse id, ignore the next highlight
 	}
 
 	addHighlight = () => {
 		// needs to send an api request to the serve that adds a highlight for this passage
-		if (this.state.selectedText && (this.main && !this.format)) {
-			const spans = [...this.main.getElementsByTagName('span')];
+		// Adds userId and bible in homepage container where action is dispatched
+		// { bible, book, chapter, userId, verseStart, highlightStart, highlightedWords }
+		const firstVerse = parseInt(this.state.firstVerse, 10);
+		const firstVerseObj = this.props.text.filter((v) => v.verse_start === firstVerse)[0];
+		const highlightStart = firstVerseObj && firstVerseObj.verse_text.split && firstVerseObj.verse_text.split(' ').indexOf(this.state.selectedText.split(' ')[0]);
 
-			spans.forEach((span) => {
-				if (span.attributes.verseid) {
-					const verseId = parseInt(span.attributes.verseid.value, 10);
-					const firstVerseNumber = parseInt(this.state.firstVerse, 10);
-					const lastVerseNumber = parseInt(this.state.lastVerse, 10);
-
-					if (verseId >= firstVerseNumber && verseId <= lastVerseNumber) {
-						span.classList.add('text-highlighted');
-					}
-				}
-			});
-		}
+		this.props.addHighlight({
+			book: this.props.activeBookId,
+			chapter: this.props.activeChapter,
+			verseStart: this.state.firstVerse,
+			highlightStart,
+			highlightedWords: this.state.selectedText.split(' ').length,
+		});
 		// take first word in selected text
 		// find its index in the page of words
 		// take verse id of the start and find the index of the first word within that verse
@@ -375,6 +382,7 @@ Text.propTypes = {
 	userSettings: PropTypes.object,
 	nextChapter: PropTypes.func,
 	prevChapter: PropTypes.func,
+	addHighlight: PropTypes.func,
 	toggleNotesModal: PropTypes.func,
 	setActiveNotesView: PropTypes.func,
 	activeChapter: PropTypes.number,

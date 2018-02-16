@@ -6,6 +6,7 @@
 
 import {
 	ACTIVE_TEXT_ID,
+	ADD_HIGHLIGHTS,
 	GET_BOOKS,
 	GET_AUDIO,
 	GET_CHAPTER_TEXT,
@@ -32,6 +33,11 @@ import {
 	UPDATE_SELECTED_TEXT,
 	TOGGLE_SETTINGS_OPTION,
 } from './constants';
+
+export const addHighlight = (props) => ({
+	type: ADD_HIGHLIGHTS,
+	...props,
+});
 
 export const toggleSettingsOptionAvailability = ({ path }) => ({
 	type: TOGGLE_SETTINGS_OPTION_AVAILABILITY,
