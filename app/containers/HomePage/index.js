@@ -35,9 +35,10 @@ import SearchContainer from 'containers/SearchContainer';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
 import FadeTransition from 'components/FadeTransition';
 import {
-	getBooks,
 	getAudio,
+	getBooks,
 	getChapterText,
+	getHighlights,
 	// toggleMenuBar,
 	toggleProfile,
 	toggleNotesModal,
@@ -60,6 +61,8 @@ import makeSelectHomePage, {
 	selectNextBook,
 	selectActiveBook,
 	selectFormattedSource,
+	selectAuthenticationStatus,
+	selectUserId,
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -78,6 +81,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			filesetTypes,
 			defaultLanguageIso: iso,
 		} = this.props.homepage;
+		const { userAuthenticated, userId } = this.props;
 		// handle the async request so that audio does load for the first chapter
 		if (Object.keys(activeFilesets).length === 0) {
 			this.props.dispatch(initApplication({ activeTextId, iso }));
@@ -85,7 +89,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		// Need to get the audio for the initial chapter
 		this.props.dispatch(getAudio({ list: fromJS(activeFilesets) }));
 		this.props.dispatch(getBooks({ textId: activeTextId, filesets: fromJS(activeFilesets) }));
-		this.props.dispatch(getChapterText({ bible: activeTextId, book: activeBookId, chapter: activeChapter, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt }));
+		this.props.dispatch(getChapterText({ userAuthenticated, userId, bible: activeTextId, book: activeBookId, chapter: activeChapter, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt }));
 
 		// Init the Facebook api here
 		window.fbAsyncInit = () => {
@@ -116,6 +120,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			audioObjects,
 			filesetTypes,
 		} = nextProps.homepage;
+		const { userAuthenticated, userId } = nextProps;
 		const nextBooks = fromJS(books);
 		const curBooks = fromJS(this.props.homepage.books);
 		const curAudioObjects = this.props.homepage.audioObjects;
@@ -136,7 +141,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		} else if (!is(nextBooks, curBooks) && curBooks.size) {
 			this.setActiveBookName({ book: nextBookName, id: nextBookId });
 			this.setActiveChapter(chapter);
-			this.getChapters({ bible: activeTextId, book: nextBookId, chapter, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
+			this.getChapters({ userAuthenticated, userId, bible: activeTextId, book: nextBookId, chapter, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
 		} else if (!isEqual(audioObjects, curAudioObjects)) {
 			this.getChapters({
 				bible: activeTextId,
@@ -145,7 +150,17 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 				audioObjects,
 				hasTextInDatabase,
 				formattedText: filesetTypes.text_formatt,
+				userAuthenticated,
+				userId,
 			});
+		} else if (userAuthenticated !== this.props.userAuthenticated && userAuthenticated && userId) {
+			this.props.dispatch(getHighlights({
+				bible: activeTextId,
+				book: this.props.homepage.activeBookId,
+				chapter: this.props.homepage.activeChapter,
+				userAuthenticated,
+				userId,
+			}));
 		}
 	}
 
@@ -158,15 +173,15 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			hasTextInDatabase,
 			filesetTypes,
 		} = this.props.homepage;
-		const { activeBook, nextBook } = this.props;
+		const { activeBook, nextBook, userAuthenticated, userId } = this.props;
 		const maxChapter = activeBook.get('chapters').size;
 
 		if (activeChapter === maxChapter) {
 			this.setActiveBookName({ book: nextBook.get('name'), id: nextBook.get('book_id') });
-			this.getChapters({ bible: activeTextId, book: nextBook.get('book_id'), chapter: 1, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
+			this.getChapters({ userAuthenticated, userId, bible: activeTextId, book: nextBook.get('book_id'), chapter: 1, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
 			this.setActiveChapter(1);
 		} else {
-			this.getChapters({ bible: activeTextId, book: activeBookId, chapter: activeChapter + 1, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
+			this.getChapters({ userAuthenticated, userId, bible: activeTextId, book: activeBookId, chapter: activeChapter + 1, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
 			this.setActiveChapter(activeChapter + 1);
 		}
 	}
@@ -180,15 +195,15 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			hasTextInDatabase,
 			filesetTypes,
 		} = this.props.homepage;
-		const { previousBook } = this.props;
+		const { previousBook, userAuthenticated, userId } = this.props;
 
 		if (activeChapter - 1 === 0) {
 			const lastChapter = previousBook.get('chapters').size;
 			this.setActiveBookName({ book: previousBook.get('name'), id: previousBook.get('book_id') });
-			this.getChapters({ bible: activeTextId, book: previousBook.get('book_id'), chapter: lastChapter, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
+			this.getChapters({ userAuthenticated, userId, bible: activeTextId, book: previousBook.get('book_id'), chapter: lastChapter, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
 			this.setActiveChapter(lastChapter);
 		} else {
-			this.getChapters({ bible: activeTextId, book: activeBookId, chapter: activeChapter - 1, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
+			this.getChapters({ userAuthenticated, userId, bible: activeTextId, book: activeBookId, chapter: activeChapter - 1, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
 			this.setActiveChapter(activeChapter - 1);
 		}
 	}
@@ -245,6 +260,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			activeNotesView,
 			loadingNewChapterText,
 			firstLoad,
+			highlights,
 		} = this.props.homepage;
 
 		const {
@@ -338,7 +354,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 						) : null
 					}
 				</TransitionGroup>
-				<Text activeBookName={activeBookName} loadingNewChapterText={loadingNewChapterText} userSettings={userSettings} setActiveNote={this.setActiveNote} formattedSource={formattedSource} setActiveNotesView={this.setActiveNotesView} activeBookId={activeBookId} activeChapter={activeChapter} notesActive={isNotesModalActive} toggleNotesModal={this.toggleNotesModal} text={chapterText} nextChapter={this.getNextChapter} prevChapter={this.getPrevChapter} />
+				<Text highlights={highlights} activeBookName={activeBookName} loadingNewChapterText={loadingNewChapterText} userSettings={userSettings} setActiveNote={this.setActiveNote} formattedSource={formattedSource} setActiveNotesView={this.setActiveNotesView} activeBookId={activeBookId} activeChapter={activeChapter} notesActive={isNotesModalActive} toggleNotesModal={this.toggleNotesModal} text={chapterText} nextChapter={this.getNextChapter} prevChapter={this.getPrevChapter} />
 				<Footer settingsActive={isSettingsModalActive} isInformationModalActive={isInformationModalActive} toggleInformationModal={this.toggleInformationModal} toggleSettingsModal={this.toggleSettingsModal} />
 			</GenericErrorBoundary>
 		);
@@ -353,6 +369,8 @@ HomePage.propTypes = {
 	nextBook: PropTypes.object,
 	userSettings: PropTypes.object,
 	formattedSource: PropTypes.object,
+	userAuthenticated: PropTypes.bool,
+	userId: PropTypes.string,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -362,6 +380,8 @@ const mapStateToProps = createStructuredSelector({
 	activeBook: selectActiveBook(),
 	userSettings: selectSettings(),
 	formattedSource: selectFormattedSource(),
+	userAuthenticated: selectAuthenticationStatus(),
+	userId: selectUserId(),
 });
 
 function mapDispatchToProps(dispatch) {

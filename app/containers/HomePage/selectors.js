@@ -7,8 +7,19 @@ import { createSelector } from 'reselect';
  * TODO: Fix selectors so that they don't receive objects because that negates the benefit of using memoized functions
  */
 const selectHomePageDomain = (state) => state.get('homepage');
+const selectProfilePageDomain = (state) => state.get('profile');
 const selectFormattedTextSource = (state) => state.getIn(['homepage', 'formattedSource']);
 const selectCrossReferenceState = (state) => state.getIn(['homepage', 'userSettings', 'toggleOptions', 'crossReferences', 'active']);
+
+const selectUserId = () => createSelector(
+	selectProfilePageDomain,
+	(profile) => profile.get('userId')
+);
+
+const selectAuthenticationStatus = () => createSelector(
+	selectProfilePageDomain,
+	(profile) => profile.get('userAuthenticated')
+);
 
 const selectFormattedSource = () => createSelector(
 	[selectFormattedTextSource, selectCrossReferenceState],
@@ -100,4 +111,6 @@ export {
 	selectPrevBook,
 	selectSettings,
 	selectFormattedSource,
+	selectAuthenticationStatus,
+	selectUserId,
 };

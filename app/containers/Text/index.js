@@ -114,14 +114,29 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 
 	get getTextComponents() {
 		const {
-			text: plainT,
+			text: initialText,
 			userSettings,
 			formattedSource,
+			highlights,
+			activeChapter,
 		} = this.props;
 		// Need to connect to the api and get the highlights object for this chapter
-		const highlighted = true;
 		// based on whether the highlights object has any data decide whether to run this function or not
-		const text = highlighted ? this.highlightPlainText(plainT) : plainT;
+		let text = [];
+		if (highlights.length) {
+			text = highlights.reduce((highlightedText, highlight) => {
+				if (highlight.chapter === activeChapter) {
+					const { verse_start, highlight_start, highlighted_words } = highlight;
+					// console.log('text passed to highlight', highlightedText);
+					const newText = this.highlightPlainText(highlightedText, verse_start, highlight_start, highlighted_words);
+					// console.log('new text for highlight', newText);
+					return newText;
+				}
+				return highlightedText;
+			}, initialText);
+		} else {
+			text = initialText;
+		}
 
 		let textComponents;
 		const readersMode = userSettings.getIn(['toggleOptions', 'readersMode', 'active']);
@@ -162,20 +177,17 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		}
 	}
 
-	highlightPlainText = (plainText) => {
+	highlightPlainText = (plainText, verseStart, highlightStart, highlightedWords) => {
 		// need to pass this function these values from the api
 		// needs to run for each highlight object that the user has added
-		const verseStart = 1;
-		const highlightStart = 2;
-		const highlightedWords = 40;
 		let wordsLeftToHighlight = highlightedWords;
 
-		const chapterText = plainText.map((v) => {
+		return plainText.map((v) => {
 			const newVerse = [];
 			const highlightedPortion = [];
 			const plainPortion = [];
-			const verseTextLength = v.verse_text.split(' ').length;
-			const verseTextArray = v.verse_text.split(' ');
+			const verseTextLength = v.verse_text.split && v.verse_text.split(' ').length;
+			const verseTextArray = v.verse_text.split && v.verse_text.split(' ');
 
 			if (v.verse_start === verseStart) {
 				verseTextArray.forEach((word, index) => {
@@ -189,10 +201,10 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				wordsLeftToHighlight -= (verseTextLength - highlightStart);
 				newVerse.push(plainPortion.join(' '));
 				newVerse.push(' ');
-				newVerse.push(<span className={'text-highlighted'}>{highlightedPortion.join(' ')}</span>);
+				newVerse.push(<span verseid={v.verse_start} className={'text-highlighted'}>{highlightedPortion.join(' ')}</span>);
 			} else if (wordsLeftToHighlight > 0 && v.verse_start > verseStart) {
 				if (wordsLeftToHighlight - verseTextLength > 0) {
-					newVerse.push(<span className={'text-highlighted'}>{v.verse_text}</span>);
+					newVerse.push(<span verseid={v.verse_start} className={'text-highlighted'}>{v.verse_text}</span>);
 					wordsLeftToHighlight -= verseTextLength;
 				} else {
 					verseTextArray.forEach((word, index) => {
@@ -204,7 +216,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 						}
 					});
 					wordsLeftToHighlight -= verseTextLength;
-					newVerse.push(<span className={'text-highlighted'}>{highlightedPortion.join(' ')}</span>);
+					newVerse.push(<span verseid={v.verse_start} className={'text-highlighted'}>{highlightedPortion.join(' ')}</span>);
 					newVerse.push(' ');
 					newVerse.push(plainPortion.join(' '));
 				}
@@ -212,8 +224,6 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 
 			return { ...v, verse_text: newVerse.length ? newVerse : v.verse_text };
 		});
-		// console.log('chapter text in highlight function', chapterText);
-		return chapterText;
 	}
 
 	addHighlight = () => {
@@ -295,7 +305,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			method: 'share',
 			quote: verseRange,
 			href: 'http://is.bible.build/',
-		}, (res) => res); // console.log('response', res)); // eslint-disable-line no-console
+		}, (res) => res);
 		this.closeContextMenu();
 	}
 
@@ -359,6 +369,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 
 Text.propTypes = {
 	text: PropTypes.array,
+	highlights: PropTypes.array,
 	userSettings: PropTypes.object,
 	nextChapter: PropTypes.func,
 	prevChapter: PropTypes.func,
@@ -371,7 +382,6 @@ Text.propTypes = {
 	setActiveNote: PropTypes.func,
 	activeBookId: PropTypes.string,
 	activeBookName: PropTypes.string,
-	highlights: PropTypes.object,
 };
 
 export default Text;

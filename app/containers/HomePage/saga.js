@@ -3,7 +3,7 @@ import { takeLatest, call, put, all } from 'redux-saga/effects';
 import request from 'utils/request';
 import { fromJS } from 'immutable';
 import unionWith from 'lodash/unionWith';
-import { GET_CHAPTER_TEXT, GET_BOOKS, GET_AUDIO, INIT_APPLICATION } from './constants';
+import { LOAD_HIGHLIGHTS, GET_CHAPTER_TEXT, GET_HIGHLIGHTS, GET_BOOKS, GET_AUDIO, INIT_APPLICATION } from './constants';
 import { loadChapter, loadBooksAndCopywrite, loadAudio } from './actions';
 
 export function* initApplication({ activeTextId, iso }) {
@@ -46,7 +46,7 @@ export function* getAudio({ list }/* { filesetId, list } */) {
 	list.forEach((fileObject, fileId) => {
 		const type = fileObject.get('set_type_code');
 		const sizeCode = fileObject.get('set_size_code');
-
+		// Initial code for making sure I send as few api calls as possible
 		// if (type === 'audio_drama' && sizeCode === 'C') {
 		// 	allOfDrama[sizeCode] = (generateUrl(fileId, sizeCode));
 		// } else if (type === 'audio' && sizeCode === 'C') {
@@ -158,7 +158,8 @@ export function* getBooks({ textId, filesets }) {
 	}
 }
 
-export function* getChapter({ bible, book, chapter, audioObjects, hasTextInDatabase, formattedText }) {
+export function* getChapter({ bible, book, chapter, audioObjects, hasTextInDatabase, formattedText, userAuthenticated, userId }) {
+	// console.log('user id and auth in get chapter', userId, userAuthenticated);
 	// TODO Split these calls into separate functions to reduce wait time for a user
 	// Add ability to make calls for plaintext and formatted text
 	// There is an issue with the getAudio call not returning before this call
@@ -171,12 +172,37 @@ export function* getChapter({ bible, book, chapter, audioObjects, hasTextInDatab
 		call(getAudioSource, { audioObjects, book, chapter }),
 		call(getFormattedText, { formattedText, chapter, book }),
 	]);
+	let highlights = [];
+
+	if (userAuthenticated) {
+		highlights = yield call(getHighlights, { bible, book, chapter, userId, fromChapter: true });
+	}
 	// console.log('after yield all, should have been a few seconds at least')
 	// const text = yield* getPlainText({ hasTextInDatabase, bible, book, chapter });
 	// const audioSource = yield* getAudioSource({ audioObjects, book, chapter });
 	// const formattedSource = yield* getFormattedText({ formattedText, chapter, book });
 	// const audioRequestUrl = `https://api.bible.build/bibles/filesets/${filesetId}?key=${process.env.DBP_API_KEY}&v=4`;
-	yield put(loadChapter({ text, audioSource, formattedSource }));
+	yield put(loadChapter({ text, audioSource, formattedSource, highlights }));
+}
+
+export function* getHighlights({ bible, book, chapter, userId, fromChapter }) {
+	const requestUrl = `https://api.bible.build/users/${userId}/highlights?key=${process.env.DBP_API_KEY}&v=4&bible_id=${bible}&book_id=${book}&chapter=${chapter}`;
+	let highlights = [];
+
+	try {
+		const response = yield call(request, requestUrl);
+		if (response.data) {
+			highlights = response.data;
+		}
+		if (!fromChapter) {
+			yield put({ type: LOAD_HIGHLIGHTS, highlights });
+		}
+	} catch (error) {
+		if (process.env.NODE_ENV === 'development') {
+			console.error('Caught in highlights request', error); // eslint-disable-line no-console
+		}
+	}
+	return highlights;
 }
 
 export function* getPlainText({ hasTextInDatabase, bible, book, chapter }) {
@@ -248,7 +274,8 @@ export function* getAudioSource({ audioObjects, book, chapter }) {
 // Individual exports for testing
 export default function* defaultSaga() {
 	yield takeLatest(INIT_APPLICATION, initApplication);
-	yield takeLatest(GET_CHAPTER_TEXT, getChapter);
-	yield takeLatest(GET_BOOKS, getBooks);
 	yield takeLatest(GET_AUDIO, getAudio);
+	yield takeLatest(GET_BOOKS, getBooks);
+	yield takeLatest(GET_CHAPTER_TEXT, getChapter);
+	yield takeLatest(GET_HIGHLIGHTS, getHighlights);
 }
