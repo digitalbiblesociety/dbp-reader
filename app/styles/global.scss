@@ -4,7 +4,7 @@ body 				   {
   @include css4{
     color:var(--application-base-color);
     font-family:var(--application-font-family);
-    font-size:var(--application-base-font-size);
+    font-size:var(--application-menu-font-size);
   };
   margin:0 auto;
 }
@@ -56,7 +56,7 @@ div:focus  {outline:none;}
 span:focus {outline:none;}
 
 // font sizes
-h2 {@include css4{font-size:calc(var(--application-base-font-size) * 1.4)};}
+h2 {@include css4{font-size:calc(var(--application-menu-font-size) * 1.4)};}
 
 // GRID
 section                 {position:relative}
