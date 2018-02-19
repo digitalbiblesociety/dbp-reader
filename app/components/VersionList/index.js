@@ -103,10 +103,12 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 		} else if (active) {
 			toggleLanguageList({ state: true });
 			toggleVersionList({ state: false });
+			this.setState({ filterText: '' });
 		} else {
 			setCountryListState({ state: false });
 			toggleLanguageList({ state: false });
 			toggleVersionList({ state: true });
+			this.setState({ filterText: '' });
 		}
 	}
 

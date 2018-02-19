@@ -144,7 +144,10 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		const readersMode = userSettings.getIn(['toggleOptions', 'readersMode', 'active']);
 		const oneVersePerLine = userSettings.getIn(['toggleOptions', 'oneVersePerLine', 'active']);
 		const justifiedText = userSettings.getIn(['toggleOptions', 'justifiedText', 'active']);
-
+		// TODO: Should move each of these settings into their own HOC
+		// Each HOC would take to source and update it based on if it was toggled
+		// Each of the HOC could be wrapped in a formatTextBasedOnOptions function
+		// the function would apply each of the HOCs in order
 		if (text.length === 0 && !formattedSource.main) {
 			textComponents = (<h5>This resource does not currently have any text.</h5>);
 		} else if (readersMode) {

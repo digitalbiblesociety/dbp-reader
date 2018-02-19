@@ -18,6 +18,12 @@ class CountryList extends React.PureComponent { // eslint-disable-line react/pre
 		};
 	}
 
+	componentWillReceiveProps(nextProps) {
+		if (!nextProps.active && nextProps.active !== this.props.active) {
+			this.setState({ filterText: '' });
+		}
+	}
+
 	get filteredCountries() {
 		const {
 			countries,

@@ -61,15 +61,18 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 		if (language) {
 			setActiveIsoCode({ iso: language.get('iso_code'), name: language.get('name') });
 			toggleLanguageList({ state: false });
+			this.setState({ filterText: '' });
 			toggleVersionList({ state: true });
 		} else if (active) {
 			toggleLanguageList({ state: false });
+			this.setState({ filterText: '' });
 			toggleVersionList({ state: true });
 			setCountryListState({ state: false });
 		} else {
 			toggleLanguageList({ state: true });
 			toggleVersionList({ state: false });
 			setCountryListState({ state: false });
+			this.setState({ filterText: '' });
 		}
 	}
 
