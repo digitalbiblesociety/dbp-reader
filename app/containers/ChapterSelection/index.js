@@ -73,15 +73,19 @@ export class ChapterSelection extends React.PureComponent { // eslint-disable-li
 			<GenericErrorBoundary affectedArea="ChapterSelection">
 				<aside ref={this.setAsideRef} className="chapter-text-dropdown">
 					<header>
-						<h2 className="text-selection">{`${activeBookName} ${activeChapter}`}</h2>
+						<h2 className="text-selection">{activeBookName ? `${activeBookName} ${activeChapter}` : 'Error retrieving resource'}</h2>
 						<SvgWrapper role="button" tabIndex={0} className="close-icon icon" onClick={this.handleChapterToggle} svgid="go-up" opacity=".5" />
 					</header>
-					<BooksTable
-						setActiveChapter={this.setActiveChapter}
-						closeBookTable={this.toggleChapterSelection}
-						setActiveBookName={this.setActiveBookName}
-						initialBookName={activeBookName}
-					/>
+					{
+						activeBookName ? (
+							<BooksTable
+								setActiveChapter={this.setActiveChapter}
+								closeBookTable={this.toggleChapterSelection}
+								setActiveBookName={this.setActiveBookName}
+								initialBookName={activeBookName}
+							/>
+						) : 'There was an error retrieving this resource. We apologize for the inconvenience. An admin has been notified. '
+					}
 				</aside>
 			</GenericErrorBoundary>
 		);

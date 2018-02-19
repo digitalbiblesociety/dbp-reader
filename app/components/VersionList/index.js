@@ -60,7 +60,7 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 		));
 
 		if (bibles.size === 0 || versionsError) {
-			return <span>There was an error fetching this resource, an Admin has been notified. We apologize for the inconvenience</span>;
+			return <span>There was an error fetching this resource, an Admin has been notified. We apologize for the inconvenience.</span>;
 		}
 
 		return components.size ? components : <span>There are no matches for your search.</span>;
