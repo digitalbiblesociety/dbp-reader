@@ -41,15 +41,13 @@ import {
 // 	}
 // }
 
-export function* sendSignUpForm({ password, email, username, firstName, lastName }) {
+export function* sendSignUpForm({ password, email, firstName, lastName }) {
 	const requestUrl = `https://api.bible.build/users?key=${process.env.DBP_API_KEY}&v=4&pretty`;
 	const data = new FormData();
 
 	data.append('email', email);
 	data.append('password', password);
-	data.append('name', username);
-	data.append('firstName', firstName);
-	data.append('lastName', lastName);
+	data.append('name', `${firstName} ${lastName}`);
 
 	const options = {
 		method: 'POST',
