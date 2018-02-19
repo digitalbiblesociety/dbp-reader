@@ -26,9 +26,9 @@ li                     {list-style:none}
 .shadow                {box-shadow:0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24)!important}
 
 // Google and Facebook color
-body .google   {background-color:$login-google-color;}
-body .facebook {background-color:$login-facebook-color;}
-body .twitter  {background-color:$login-twitter-color;}
+body .google   {background-color:$login-google-color;font-family:"Roboto Medium", Roboto !important;}
+body .facebook {background-color:$login-facebook-color;font-family:"San Fransisco", Roboto, "Segoe UI" !important;}
+body .twitter  {background-color:$login-twitter-color;font-family:"Helvetica Neue", "San Fransisco", Roboto !important;}
 
 // Change Highlighting Color
 ::selection {
