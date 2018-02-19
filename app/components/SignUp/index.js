@@ -14,7 +14,6 @@ import GoogleAuthentication from 'containers/GoogleAuthentication';
 
 class SignUp extends React.PureComponent {
 	state = {
-		username: '',
 		password: '',
 		confirmPassword: '',
 		email: '',
@@ -63,12 +62,11 @@ class SignUp extends React.PureComponent {
 
 		if (indexOfAt !== -1) {
 			this.setState({
-				username: email.slice(0, indexOfAt),
 				validEmail: true,
 				email,
 			});
 		} else {
-			this.setState({ email });
+			this.setState({ email, validEmail: false });
 		}
 	}
 

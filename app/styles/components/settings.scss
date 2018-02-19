@@ -21,14 +21,17 @@
 .color-schemes .option.active:after    {content:"";margin:-4px -4px -4px -4px;border-radius:50%;width:50px;height:50px;@include css4{border:2px solid var(--menu-active-color);};display:block;}
 
 // FONT SETTINGS
-.font-settings .option            {display:inline-block;text-align:center;font-size:36px;width:33%}
-.font-settings .option small      {display:block;text-transform:uppercase;font-size:14px}
-.font-settings .option.active     {@include css4{color:var(--menu-active-color);};}
-.font-settings .option.sans       {@include css4{font-family:var(--sans-font-family-option) !important;};}
-.font-settings .option.serif      {@include css4{font-family:var(--serif-font-family-option) !important;};}
-.font-settings .option.slab       {@include css4{font-family:var(--slab-font-family-option) !important;};}
+.font-settings .option              {display:inline-block;text-align:center;font-size:36px;width:33%}
+.font-settings .option small        {display:block;text-transform:uppercase;font-size:14px}
+.font-settings .option.active       {@include css4{color:var(--menu-active-color);};}
+//.font-settings .option.sans > span  {@include css4{font-family:var(--sans-font-family-option) !important;};}
+//.font-settings .option.serif > span {@include css4{font-family:var(--serif-font-family-option) !important;};}
+//.font-settings .option.slab > span  {@include css4{font-family:var(--slab-font-family-option) !important;};}
+.font-settings .option.sans > span  {font-family:'Noto Sans', Helvetica, sans serif;}
+.font-settings .option.serif > span {font-family:'Alegreya', 'Palatino Linotype', Palatino, serif;}
+.font-settings .option.slab > span  {font-family:'Roboto Slab', Rockwell, Courier, monospace;}
 
-// FONT SIZES
+  // FONT SIZES
 .font-sizes                            {height:60px;align-items:flex-end;display:flex;justify-content:space-between;line-height:.75;}
 .font-sizes .option                    {text-align:center;font-size:36px;float:left}
 .font-sizes .option.smallest           {font-size:1rem}
@@ -44,7 +47,7 @@
 // CHECKBOX SETTINGS
 .checkbox-settings label               {height:40px;display:block;}
 .checkbox-settings label.active        {@include css4{color:var(--menu-active-color);};}
-.checkbox-settings label span          {@include css4{font-size:var(--application-base-font-size)};float: left;cursor:pointer;}
+.checkbox-settings label span          {@include css4{font-size:var(--application-menu-font-size)};float: left;cursor:pointer;}
 .checkbox-settings label span:hover    {@include css4{color:var(--menu-active-color);};}
 
 // SWITCH
