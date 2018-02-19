@@ -290,8 +290,10 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 	}
 
 	openContextMenu = (e) => {
-		const x = e.clientX;
-		const y = e.clientY;
+		const rightEdge = window.innerWidth - 160;
+		const bottomEdge = window.innerHeight - 136;
+		const x = rightEdge < e.clientX ? rightEdge : e.clientX;
+		const y = bottomEdge < e.clientY ? bottomEdge : e.clientY;
 
 		this.setState({
 			coords: { x, y },
