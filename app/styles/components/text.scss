@@ -3,6 +3,7 @@
 	height:calc(100vh - 162px);
 	@include css4 {
 		color: var(--application-base-color);
+		font-size: var(--application-base-font-size);
 	}
 	main {
 		padding: 15px;

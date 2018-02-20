@@ -135,13 +135,13 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 					</section>
 					<section className="font-settings">
 						<span role="button" tabIndex={0} onClick={() => this.updateFontType({ font: 'sans' })} className={`option sans${activeFontType === 'sans' ? ' active' : ''}`}>
-							<span className="title">Aa <small>Sans Serif</small></span>
+							<span className="title">Aa</span>
 						</span>
 						<span role="button" tabIndex={0} onClick={() => this.updateFontType({ font: 'serif' })} className={`option serif${activeFontType === 'serif' ? ' active' : ''}`}>
-							<span className="title">Aa <small>Serif</small></span>
+							<span className="title">Aa</span>
 						</span>
 						<span role="button" tabIndex={0} onClick={() => this.updateFontType({ font: 'slab' })} className={`option slab${activeFontType === 'slab' ? ' active' : ''}`}>
-							<span className="title">Aa <small>Slab Serif</small></span>
+							<span className="title">Aa</span>
 						</span>
 					</section>
 					<section className="font-sizes">
