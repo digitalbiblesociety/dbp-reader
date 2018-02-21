@@ -22,8 +22,9 @@
 .audio-gripper {display:block;position:relative;left:calc(50% - 25px);bottom:-50%;cursor:pointer;}
 
 // Volume Slider
-.volume-slider-container {display:block;top:-6px;left:calc(100vw - 275px);position:relative;}
-.volume-slider           {@include css4{border:1px solid var(--menu-active-color);background-color:var(--transparent-grey);};height:25px;position:absolute;display:flex;align-items:center;justify-content:center;width:175px;}
+#volumeWrap {position: relative}
+.volume-slider-container {display:block;bottom:0;left:0;position:absolute;}
+.volume-slider           {@include css4{border:1px solid var(--menu-active-color);background-color:var(--transparent-grey);};height:25px;position:absolute;display:flex;align-items:center;justify-content:center;width:175px;margin-left:-75px;}
 .volume-slider .tracker  {@include css4{background-color:var(--menu-active-color);};border-radius:50%;width:15px;height:15px;margin-top:-6px;}
 .volume-slider .fill     {height:3px;@include css4{background-color:var(--menu-active-color);};width:100px;border-radius:5px;}
 .volume-slider .slider   {width:80%;}
@@ -37,6 +38,7 @@
 
 // Media Queries
 @media only screen and (max-width:600px) {
+  .volume-slider-container {top:-28px;bottom:auto;}
   .audio-player-background {position:fixed;width:100%;bottom:56px;}
   .audio-gripper {bottom:50px;}
   .audio-gripper.closed {bottom:0;}
