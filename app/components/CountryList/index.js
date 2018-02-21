@@ -92,7 +92,7 @@ class CountryList extends React.PureComponent { // eslint-disable-line react/pre
 					<div role={'button'} tabIndex={0} onClick={() => { setCountryListState({ state: false }); toggleLanguageList({ state: true }); }} className="text-selection-title">
 						<SvgWrapper height="25px" width="25px" fill="#fff" svgid="globe" />
 						<span className="text">COUNTRY:</span>
-						<span className="active-header-name">{activeCountryName || 'ANY'}</span>
+						{/* <span className="active-header-name">{activeCountryName || 'ANY'}</span> */}
 					</div>
 					<input className="text-selection-input" onChange={this.handleChange} placeholder="SEARCH COUNTRIES" value={this.state.filterText} />
 					<div className="language-name-list">

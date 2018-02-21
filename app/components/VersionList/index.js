@@ -116,7 +116,7 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 
 	render() {
 		const {
-			activeTextName,
+			// activeTextName,
 			active,
 			loadingVersions,
 			versionsError,
@@ -128,7 +128,7 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 					<div role={'button'} tabIndex={0} onClick={() => this.handleVersionListClick()} className="text-selection-title">
 						<SvgWrapper height="25px" width="25px" fill="#fff" svgid="resources" />
 						<span className="text">VERSION:</span>
-						<span className="active-header-name">{activeTextName}</span>
+						{/* <span className="active-header-name">{activeTextName}</span> */}
 					</div>
 					<input className="text-selection-input" onChange={this.handleChange} placeholder="SEARCH VERSIONS" value={this.state.filterText} />
 					<div className="language-name-list">
@@ -151,7 +151,7 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 				<div className="text-selection-title">
 					<SvgWrapper height="25px" width="25px" fill="#fff" svgid="resources" />
 					<span className="text">VERSION:</span>
-					<span className="active-header-name">{activeTextName}</span>
+					{/* <span className="active-header-name">{activeTextName}</span> */}
 				</div>
 			</div>
 		);
