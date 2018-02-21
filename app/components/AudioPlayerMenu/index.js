@@ -9,10 +9,10 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 // import styled from 'styled-components';
 
-function AudioPlayerMenu({ parentNode, setInnerRef }) {
+function AudioPlayerMenu({ parentNode, innerRef }) {
 	const component = (
 		<div className="elipsis">
-			<div ref={setInnerRef} className="container">
+			<div ref={innerRef} className="container">
 				<div><input type="checkbox" /><span>DRAMATIZED PREFERRED</span></div>
 				<div><input type="checkbox" /><span>SYNC TEXT (BETA)</span></div>
 				<div><input type="checkbox" /><span>AUTOPLAY NEXT</span></div>
@@ -24,8 +24,8 @@ function AudioPlayerMenu({ parentNode, setInnerRef }) {
 }
 
 AudioPlayerMenu.propTypes = {
-	parentNode: PropTypes.node,
-	setInnerRef: PropTypes.func,
+	parentNode: PropTypes.object,
+	innerRef: PropTypes.func,
 };
 
 export default AudioPlayerMenu;

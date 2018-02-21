@@ -123,27 +123,6 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 						<h2 className="text-selection">{`${sectionTitle} SELECTION`}</h2>
 						<SvgWrapper role="button" tabIndex={0} className="close-icon icon" onClick={this.handleVersionSelectionToggle} svgid="go-up" opacity=".5" />
 					</header>
-					<CountryList
-						active={countryListActive}
-						setCountryListState={this.setCountryListState}
-						toggleVersionList={this.toggleVersionList}
-						activeCountryName={activeCountryName}
-						toggleLanguageList={this.toggleLanguageList}
-						countries={countries}
-						setCountryName={this.setCountryName}
-						loadingCountries={loadingCountries}
-					/>
-					<LanguageList
-						active={languageListActive}
-						countryLanguages={countryLanguages}
-						setCountryListState={this.setCountryListState}
-						toggleVersionList={this.toggleVersionList}
-						activeLanguageName={activeLanguageName}
-						toggleLanguageList={this.toggleLanguageList}
-						languages={languages}
-						setActiveIsoCode={this.setActiveIsoCode}
-						loadingLanguages={loadingLanguages}
-					/>
 					<VersionList
 						active={versionListActive}
 						setCountryListState={this.setCountryListState}
@@ -156,6 +135,28 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 						toggleLanguageList={this.toggleLanguageList}
 						toggleTextSelection={toggleVersionSelection}
 						loadingVersions={loadingVersions}
+					/>
+					<CountryList
+						active={countryListActive}
+						setCountryListState={this.setCountryListState}
+						toggleVersionList={this.toggleVersionList}
+						activeCountryName={activeCountryName}
+						toggleLanguageList={this.toggleLanguageList}
+						countries={countries}
+						setCountryName={this.setCountryName}
+						loadingCountries={loadingCountries}
+					/>
+					<LanguageList
+						active={languageListActive}
+						countryListActive={countryListActive}
+						countryLanguages={countryLanguages}
+						setCountryListState={this.setCountryListState}
+						toggleVersionList={this.toggleVersionList}
+						activeLanguageName={activeLanguageName}
+						toggleLanguageList={this.toggleLanguageList}
+						languages={languages}
+						setActiveIsoCode={this.setActiveIsoCode}
+						loadingLanguages={loadingLanguages}
 					/>
 				</aside>
 			</GenericErrorBoundary>
