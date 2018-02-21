@@ -91,7 +91,7 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 					<div role={'button'} tabIndex={0} onClick={() => this.handleLanguageClick()} className="text-selection-title">
 						<SvgWrapper height="25px" width="25px" fill="#fff" svgid="world" />
 						<span className="text">LANGUAGE:</span>
-						<span className="active-header-name">{activeLanguageName}</span>
+						{/* <span className="active-header-name">{activeLanguageName}</span> */}
 					</div>
 					<input className="text-selection-input" onChange={this.handleChange} placeholder="SEARCH LANGUAGES" value={this.state.filterText} />
 					<div className="language-name-list">
