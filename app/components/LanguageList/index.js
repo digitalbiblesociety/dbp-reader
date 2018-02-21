@@ -82,6 +82,7 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 		const {
 			active,
 			activeLanguageName,
+			countryListActive,
 			loadingLanguages,
 		} = this.props;
 
@@ -109,7 +110,7 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 				<div className="text-selection-title">
 					<SvgWrapper height="25px" width="25px" fill="#fff" svgid="world" />
 					<span className="text">LANGUAGE:</span>
-					<span className="active-header-name">{activeLanguageName}</span>
+					<span className="active-header-name">{countryListActive ? '' : activeLanguageName}</span>
 				</div>
 			</div>
 		);
@@ -124,6 +125,7 @@ LanguageList.propTypes = {
 	toggleVersionList: PropTypes.func,
 	active: PropTypes.bool,
 	loadingLanguages: PropTypes.bool,
+	countryListActive: PropTypes.bool,
 	activeLanguageName: PropTypes.string,
 };
 
