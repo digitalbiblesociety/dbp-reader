@@ -5,12 +5,11 @@
 */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 // import styled from 'styled-components';
 
-function AudioPlayerMenu({ parentNode, innerRef }) {
-	const component = (
+function AudioPlayerMenu({ innerRef }) {
+	return (
 		<div className="elipsis">
 			<div ref={innerRef} className="container">
 				<div><input type="checkbox" /><span>DRAMATIZED PREFERRED</span></div>
@@ -19,14 +18,9 @@ function AudioPlayerMenu({ parentNode, innerRef }) {
 			</div>
 		</div>
 	);
-	if (parentNode) {
-		return ReactDOM.createPortal(component, parentNode);
-	}
-	return component;
 }
 
 AudioPlayerMenu.propTypes = {
-	parentNode: PropTypes.object,
 	innerRef: PropTypes.func,
 };
 
