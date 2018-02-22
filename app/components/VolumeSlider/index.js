@@ -5,7 +5,6 @@
 */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import Slider from 'rc-slider/lib/Slider';
 // import styled from 'styled-components';
@@ -23,7 +22,6 @@ class VolumeSlider extends React.PureComponent { // eslint-disable-line react/pr
 
 	render() {
 		const {
-			parentNode,
 			innerRef,
 			volume,
 		} = this.props;
@@ -31,7 +29,7 @@ class VolumeSlider extends React.PureComponent { // eslint-disable-line react/pr
 			stateVolume,
 		} = this.state;
 
-		const component = (
+		return (
 			<div className="volume-slider-container">
 				<div ref={innerRef} className="volume-slider">
 					<Slider
@@ -47,12 +45,10 @@ class VolumeSlider extends React.PureComponent { // eslint-disable-line react/pr
 				</div>
 			</div>
 		);
-		return ReactDOM.createPortal(component, parentNode);
 	}
 }
 
 VolumeSlider.propTypes = {
-	parentNode: PropTypes.object,
 	innerRef: PropTypes.func,
 	updateVolume: PropTypes.func.isRequired,
 	volume: PropTypes.number.isRequired,

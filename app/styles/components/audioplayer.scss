@@ -1,6 +1,6 @@
 .audio-player-background               {@include css4{background-color:var(--audio-player-background);};min-height:10px;padding:2.5px;}
 // General Audio Player Styles
-.audio-player-container                {@include css4{background-color:var(--audio-player-background);};display:flex;justify-content:space-around;align-items:center;width:100%;height:50px;}
+.audio-player-container                {@include css4{background-color:var(--audio-player-background);};display:flex;justify-content:space-around;align-items:center;width:100%;height:50px;max-width:800px;margin:auto;}
 .audio-player-container .item          {cursor:pointer;height:50px;display:flex;align-items:center;justify-content:center;}
 .audio-player-container .svgitem       {cursor:pointer;}
 .audio-player-container .item:hover    {opacity:.65;}
@@ -8,11 +8,11 @@
 .audio-player                          {display:none;}
 
 // Speed Control Styles
-.speed-control-container-container    {display:block;top:-6px;left:calc(100vw - 150px);position:relative;}
+.speed-control-container-container    {display:block;bottom:0;right:150px;position:absolute;}
 .speed-control-container              {position:absolute;display:flex;align-items:center;justify-content:space-around;@include css4{border:1px solid var(--menu-active-color);background-color:var(--transparent-grey);};height:30px;width:150px;}
-.speed-control-container .item        {@include css4{color:var(--menu-font-color);};cursor:pointer;}
-.speed-control-container .item:hover  {@include css4{color:var(--menu-active-color);};}
-.speed-control-container .item.active {@include css4{color:var(--menu-active-color);};}
+.speed-control-container .speed-item        {@include css4{color:var(--menu-font-color);};cursor:pointer;}
+.speed-control-container .speed-item:hover  {@include css4{color:var(--menu-active-color);};}
+.speed-control-container .speed-item.active {@include css4{color:var(--menu-active-color);};}
 
 // Progress Bar Styles
 .progress-bar         {width:50%;@include css4{background-color:var(--audio-player-progress-background);};height:3px;cursor:pointer;}
@@ -22,21 +22,23 @@
 .audio-gripper {display:block;position:relative;left:calc(50% - 25px);bottom:-50%;cursor:pointer;}
 
 // Volume Slider
-.volume-slider-container {display:block;top:-6px;left:calc(100vw - 275px);position:relative;}
-.volume-slider           {@include css4{border:1px solid var(--menu-active-color);background-color:var(--transparent-grey);};height:25px;position:absolute;display:flex;align-items:center;justify-content:center;width:175px;}
+#volume-wrap {position: relative}
+.volume-slider-container {display:block;bottom:0;left:0;position:absolute;}
+.volume-slider           {@include css4{border:1px solid var(--menu-active-color);background-color:var(--transparent-grey);};height:25px;position:absolute;display:flex;align-items:center;justify-content:center;width:175px;margin-left:-75px;}
 .volume-slider .tracker  {@include css4{background-color:var(--menu-active-color);};border-radius:50%;width:15px;height:15px;margin-top:-6px;}
 .volume-slider .fill     {height:3px;@include css4{background-color:var(--menu-active-color);};width:100px;border-radius:5px;}
 .volume-slider .slider   {width:80%;}
 
 // Elipsis TODO: update styles to make the element match the wireframe
 .audio-player-container .item.active   {@include css4{border:1px solid var(--menu-active-color);background-color:var(--transparent-grey);};z-index:2;}
-.elipsis                               {display:block;position:relative;left:calc(100vw - 320px);top:-6px;}
-.elipsis .container                    {position:absolute;padding:15px;display:flex;justify-content:space-between;flex-direction:column;width:320px;height:120px;@include css4{color:var(--menu-font-color);border:1px solid var(--menu-active-color);background-color:var(--transparent-grey);};}
+.elipsis                               {display:block;position:absolute;right:320px;bottom:0;}
+.elipsis .container                    {position:absolute;padding:15px;display:flex;justify-content:space-between;flex-direction:column;width:320px;height:115px;@include css4{color:var(--menu-font-color);border:1px solid var(--menu-active-color);background-color:var(--transparent-grey);};}
 .container div                         {display:flex;align-items:center;}
 .container span                        {margin-left:15px;}
 
 // Media Queries
 @media only screen and (max-width:600px) {
+  .volume-slider-container {top:-28px;bottom:auto;}
   .audio-player-background {position:fixed;width:100%;bottom:56px;}
   .audio-gripper {bottom:50px;}
   .audio-gripper.closed {bottom:0;}
