@@ -19,7 +19,10 @@ function AudioPlayerMenu({ parentNode, innerRef }) {
 			</div>
 		</div>
 	);
-	return ReactDOM.createPortal(component, parentNode);
+	if (parentNode) {
+		return ReactDOM.createPortal(component, parentNode);
+	}
+	return component;
 }
 
 AudioPlayerMenu.propTypes = {

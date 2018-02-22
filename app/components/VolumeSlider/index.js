@@ -47,7 +47,10 @@ class VolumeSlider extends React.PureComponent { // eslint-disable-line react/pr
 				</div>
 			</div>
 		);
-		return ReactDOM.createPortal(component, parentNode);
+		if (parentNode) {
+			return ReactDOM.createPortal(component, parentNode);
+		}
+		return component;
 	}
 }
 

@@ -209,26 +209,30 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 										<SvgWrapper onClick={this.pauseVideo} className="svgitem" width="25px" height="25px" fill="#fff" svgid="pause" />
 									) : null
 								}
-								<SvgWrapper onClick={this.skipForward} className="item" width="25px" height="25px" fill="#fff" svgid="forward" />
+								<SvgWrapper onClick={this.skipForward} className="speed-item" width="25px" height="25px" fill="#fff" svgid="forward" />
 								<AudioProgressBar setCurrentTime={this.setCurrentTime} duration={this.state.duration} currentTime={this.state.currentTime} />
-								<div id="volumeWrap">
+								<div id="volume-wrap">
 									<div role="button" tabIndex="0" className={this.state.volumeSliderState ? 'item active' : 'item'} onClick={() => { this.state.volumeSliderState ? this.setVolumeSliderState(false) : this.setVolumeSliderState(true); this.setSpeedControlState(false); this.setElipsisState(false); }}><SvgWrapper width="25px" height="25px" fill="#fff" svgid="volume" /></div>
+									{
+										this.state.volumeSliderState && <this.volumeControl active={this.state.volumeSliderState} updateVolume={this.updateVolume} volume={this.state.volume} />
+									}
 								</div>
-								<div role="button" tabIndex="0" className={this.state.speedControlState ? 'item active' : 'item'} onClick={() => { this.state.speedControlState ? this.setSpeedControlState(false) : this.setSpeedControlState(true); this.setElipsisState(false); this.setVolumeSliderState(false); }}><SvgWrapper width="25px" height="25px" fill="#fff" svgid="play_speed" /></div>
-								<div role="button" tabIndex="0" className={this.state.elipsisState ? 'item active' : 'item'} onClick={() => { this.state.elipsisState ? this.setElipsisState(false) : this.setElipsisState(true); this.setVolumeSliderState(false); this.setSpeedControlState(false); }}><SvgWrapper width="25px" height="25px" fill="#fff" svgid="more_menu" /></div>
-								{
-                                    this.state.volumeSliderState && <this.volumeControl active={this.state.volumeSliderState} parentNode={document.getElementById('volumeWrap')} updateVolume={this.updateVolume} volume={this.state.volume} />
-                                }
-								{
-									this.state.speedControlState ? (
-										<this.speedControl parentNode={this.audioPlayerContainer} currentSpeed={this.state.currentSpeed} options={[0.5, 1, 1.25, 1.5, 2]} setSpeed={this.updatePlayerSpeed} />
-									) : null
-								}
-								{
-									this.state.elipsisState ? (
-										<this.playerMenu parentNode={this.audioPlayerContainer} />
-									) : null
-								}
+								<div id="volume-wrap">
+									<div role="button" tabIndex="0" className={this.state.speedControlState ? 'item active' : 'item'} onClick={() => { this.state.speedControlState ? this.setSpeedControlState(false) : this.setSpeedControlState(true); this.setElipsisState(false); this.setVolumeSliderState(false); }}><SvgWrapper width="25px" height="25px" fill="#fff" svgid="play_speed" /></div>
+									{
+										this.state.speedControlState ? (
+											<this.speedControl currentSpeed={this.state.currentSpeed} options={[0.5, 1, 1.25, 1.5, 2]} setSpeed={this.updatePlayerSpeed} />
+										) : null
+									}
+								</div>
+								<div id="volume-wrap">
+									<div role="button" tabIndex="0" className={this.state.elipsisState ? 'item active' : 'item'} onClick={() => { this.state.elipsisState ? this.setElipsisState(false) : this.setElipsisState(true); this.setVolumeSliderState(false); this.setSpeedControlState(false); }}><SvgWrapper width="25px" height="25px" fill="#fff" svgid="more_menu" /></div>
+									{
+										this.state.elipsisState ? (
+											<this.playerMenu />
+										) : null
+									}
+								</div>
 							</div>
 						) : null
 					}

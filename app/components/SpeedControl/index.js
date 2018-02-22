@@ -15,13 +15,16 @@ function SpeedControl({ options, setSpeed, parentNode, currentSpeed, innerRef })
 			<div ref={innerRef} className="speed-control-container">
 				{
 					options.map((option) => (
-						<span key={option} className={currentSpeed === option ? 'item active' : 'item'} role="button" tabIndex={0} onClick={() => setSpeed(option)}>{option}</span>
+						<span key={option} className={currentSpeed === option ? 'speed-item active' : 'speed-item'} role="button" tabIndex={0} onClick={() => setSpeed(option)}>{option}</span>
 					))
 				}
 			</div>
 		</div>
 	);
-	return ReactDOM.createPortal(component, parentNode);
+	if (parentNode) {
+		return ReactDOM.createPortal(component, parentNode);
+	}
+	return component;
 }
 
 SpeedControl.propTypes = {

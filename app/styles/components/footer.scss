@@ -6,15 +6,15 @@
 .footer div                        {display:flex;}
 .footer .left-buttons              {width:50%;justify-content:flex-start;align-items:center;}
 .footer .right-buttons             {width:50%;justify-content:flex-end;align-items:center;}
-.footer .left-buttons .item        {margin-left:15px;cursor:pointer;}
-.footer .right-buttons .item       {margin-right:15px;cursor:pointer;}
-.footer .left-buttons .item:hover  {opacity:0.65;}
-.footer .right-buttons .item:hover {opacity:0.65;}
+.footer .left-buttons .speed-item        {margin-left:15px;cursor:pointer;}
+.footer .right-buttons .speed-item       {margin-right:15px;cursor:pointer;}
+.footer .left-buttons .speed-item:hover  {opacity:0.65;}
+.footer .right-buttons .speed-item:hover {opacity:0.65;}
 
 @media only screen and (max-width:600px) {
   .footer div                  {justify-content:space-between;}
   .footer .left-buttons        {width:50%;justify-content:space-around;align-items:center;}
   .footer .right-buttons       {width:50%;justify-content:space-around;align-items:center;}
-  .footer .left-buttons .item  {margin-left:0;}
-  .footer .right-buttons .item {margin-right:0;}
+  .footer .left-buttons .speed-item  {margin-left:0;}
+  .footer .right-buttons .speed-item {margin-right:0;}
 }
