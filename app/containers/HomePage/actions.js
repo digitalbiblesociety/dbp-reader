@@ -142,11 +142,9 @@ export const toggleInformationModal = () => ({
 	type: TOGGLE_INFORMATION_MODAL,
 });
 
-export const setActiveTextId = ({ textName, textId, filesets }) => ({
+export const setActiveTextId = (props) => ({
 	type: ACTIVE_TEXT_ID,
-	textName,
-	textId,
-	filesets,
+	...props,
 });
 
 export const setActiveBookName = ({ book, id }) => ({
