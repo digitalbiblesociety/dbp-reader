@@ -93,9 +93,8 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			if (Object.keys(activeFilesets).length === 0) {
 				this.props.dispatch(initApplication({ activeTextId }));
 			}
-
-			// this.props.dispatch(getAudio({ list: fromJS(activeFilesets) }));
-			this.props.dispatch(getBooks({ textId: activeTextId, filesets: fromJS(activeFilesets) }));
+			// this.props.dispatch(getAudio({ list: fromJS(activeFilesets) })); <- probably not needed, but I left it just in case
+			this.props.dispatch(getBooks({ textId: activeTextId, filesets: fromJS(activeFilesets), activeBookId }));
 			this.props.dispatch(getChapterText({
 				userAuthenticated,
 				userId,
@@ -106,6 +105,10 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 				hasTextInDatabase,
 				formattedText: filesetTypes.text_formatt,
 			}));
+			// Needed for setting the active names based on the url params
+			this.setActiveTextId({ textId: activeTextId, filesets: activeFilesets, textName: '' });
+			this.setActiveBookName({ book: '', id: activeBookId });
+			// need to get the data for the new url and use it as the basis for my api calls instead of redux state
 		}
 
 		// Init the Facebook api here
@@ -132,7 +135,9 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		const {
 			hasTextInDatabase,
 			activeTextId,
+			activeBookId,
 			activeFilesets,
+			activeChapter,
 			books,
 			audioObjects,
 			filesetTypes,
@@ -144,9 +149,6 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		const curAudioObjects = this.props.homepage.audioObjects;
 		// can probably use find to get the current book if the new version
 		// has it
-		const nextBookId = nextBooks.getIn([0, 'book_id']);
-		const nextBookName = nextBooks.getIn([0, 'name']);
-		const chapter = nextBooks.getIn([0, 'chapters', 0]);
 		// Solving the issue of requesting the new data from the
 		// api when a new version is clicked
 		// console.log('filesetTypes in receive props', filesetTypes);
@@ -155,14 +157,21 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		if (activeTextId !== this.props.homepage.activeTextId) {
 			this.getBooks({ textId: activeTextId, filesets: fromJS(activeFilesets) });
 		} else if (!is(nextBooks, curBooks) && curBooks.size) {
+			// Determines if the next set of books has the same book that is already active
+			const nextHasCurrent = nextBooks.find((book) => book.book_id === activeBookId);
+			// Gets each piece of the next book that is needed
+			const nextBookId = nextHasCurrent ? nextBooks.getIn([0, 'book_id']) : activeBookId;
+			const nextBookName = nextHasCurrent ? nextBooks.getIn([0, 'name']) : nextHasCurrent.get('name_short');
+			const chapter = nextHasCurrent ? nextBooks.getIn([0, 'chapters', 0]) : activeChapter;
+
 			this.setActiveBookName({ book: nextBookName, id: nextBookId });
 			this.setActiveChapter(chapter);
 			this.getChapters({ userAuthenticated, userId, bible: activeTextId, book: nextBookId, chapter, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
 		} else if (!isEqual(audioObjects, curAudioObjects)) {
 			this.getChapters({
 				bible: activeTextId,
-				book: this.props.homepage.activeBookId,
-				chapter: this.props.homepage.activeChapter,
+				book: activeBookId,
+				chapter: activeChapter,
 				audioObjects,
 				hasTextInDatabase,
 				formattedText: filesetTypes.text_formatt,
@@ -172,16 +181,16 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		} else if (userAuthenticated !== this.props.userAuthenticated && userAuthenticated && userId) {
 			this.props.dispatch(getHighlights({
 				bible: activeTextId,
-				book: this.props.homepage.activeBookId,
-				chapter: this.props.homepage.activeChapter,
+				book: activeBookId,
+				chapter: activeChapter,
 				userAuthenticated,
 				userId,
 			}));
 		} else if (!isEqual(highlights, this.props.homepage.highlights)) {
 			this.props.dispatch(getHighlights({
 				bible: activeTextId,
-				book: this.props.homepage.activeBookId,
-				chapter: this.props.homepage.activeChapter,
+				book: activeBookId,
+				chapter: activeChapter,
 				userAuthenticated,
 				userId,
 			}));
