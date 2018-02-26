@@ -73,24 +73,40 @@ import saga from './saga';
 class HomePage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	componentDidMount() {
 		const {
-			activeTextId,
-			activeBookId,
-			activeChapter,
+			// activeTextId,
+			// activeBookId,
+			// activeChapter,
+			// defaultLanguageIso: iso,
 			activeFilesets,
 			audioObjects,
 			hasTextInDatabase,
 			filesetTypes,
-			defaultLanguageIso: iso,
 		} = this.props.homepage;
 		const { userAuthenticated, userId } = this.props;
-		// handle the async request so that audio does load for the first chapter
-		if (Object.keys(activeFilesets).length === 0) {
-			this.props.dispatch(initApplication({ activeTextId, iso }));
+		// Either come up with a callback/promise solution or move the progressive logic
+		// into the saga so that each call will be assured to have the data from the call before
+		if (this.props.match && this.props.match.params) {
+			const activeTextId = this.props.match.params.bibleId;
+			const activeBookId = this.props.match.params.bookId;
+			const activeChapter = this.props.match.params.chapter;
+
+			if (Object.keys(activeFilesets).length === 0) {
+				this.props.dispatch(initApplication({ activeTextId }));
+			}
+
+			// this.props.dispatch(getAudio({ list: fromJS(activeFilesets) }));
+			this.props.dispatch(getBooks({ textId: activeTextId, filesets: fromJS(activeFilesets) }));
+			this.props.dispatch(getChapterText({
+				userAuthenticated,
+				userId,
+				bible: activeTextId,
+				book: activeBookId,
+				chapter: activeChapter,
+				audioObjects,
+				hasTextInDatabase,
+				formattedText: filesetTypes.text_formatt,
+			}));
 		}
-		// Need to get the audio for the initial chapter
-		this.props.dispatch(getAudio({ list: fromJS(activeFilesets) }));
-		this.props.dispatch(getBooks({ textId: activeTextId, filesets: fromJS(activeFilesets) }));
-		this.props.dispatch(getChapterText({ userAuthenticated, userId, bible: activeTextId, book: activeBookId, chapter: activeChapter, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt }));
 
 		// Init the Facebook api here
 		window.fbAsyncInit = () => {
@@ -136,8 +152,6 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		// console.log('filesetTypes in receive props', filesetTypes);
 		// Currently we only have text_plain as an option in the api, this will be changed to formatted_text at some point
 
-		// console.log('filesetTypes in next props', filesetTypes.text_formatt);
-
 		if (activeTextId !== this.props.homepage.activeTextId) {
 			this.getBooks({ textId: activeTextId, filesets: fromJS(activeFilesets) });
 		} else if (!is(nextBooks, curBooks) && curBooks.size) {
@@ -179,7 +193,6 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			activeTextId,
 			activeChapter,
 			activeBookId,
-			activeBookName,
 			audioObjects,
 			hasTextInDatabase,
 			filesetTypes,
@@ -191,11 +204,11 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			this.setActiveBookName({ book: nextBook.get('name'), id: nextBook.get('book_id') });
 			this.getChapters({ userAuthenticated, userId, bible: activeTextId, book: nextBook.get('book_id'), chapter: 1, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
 			this.setActiveChapter(1);
-			this.props.history.push(`/${activeTextId}/${nextBook.get('name_short')}/1`);
+			this.props.history.push(`/${activeTextId}/${nextBook.get('book_id')}/1`);
 		} else {
 			this.getChapters({ userAuthenticated, userId, bible: activeTextId, book: activeBookId, chapter: activeChapter + 1, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
 			this.setActiveChapter(activeChapter + 1);
-			this.props.history.push(`/${activeTextId}/${activeBookName}/${activeChapter + 1}`);
+			this.props.history.push(`/${activeTextId}/${activeBookId}/${activeChapter + 1}`);
 		}
 	}
 
@@ -204,7 +217,6 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			activeTextId,
 			activeChapter,
 			activeBookId,
-			activeBookName,
 			audioObjects,
 			hasTextInDatabase,
 			filesetTypes,
@@ -222,12 +234,12 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			this.setActiveBookName({ book: previousBook.get('name'), id: previousBook.get('book_id') });
 			this.getChapters({ userAuthenticated, userId, bible: activeTextId, book: previousBook.get('book_id'), chapter: lastChapter, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
 			this.setActiveChapter(lastChapter);
-			this.props.history.push(`/${activeTextId}/${previousBook.get('name_short')}/${lastChapter}`);
+			this.props.history.push(`/${activeTextId}/${previousBook.get('book_id')}/${lastChapter}`);
 			// Goes to the previous Chapter
 		} else {
 			this.getChapters({ userAuthenticated, userId, bible: activeTextId, book: activeBookId, chapter: activeChapter - 1, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
 			this.setActiveChapter(activeChapter - 1);
-			this.props.history.push(`/${activeTextId}/${activeBookName}/${activeChapter - 1}`);
+			this.props.history.push(`/${activeTextId}/${activeBookId}/${activeChapter - 1}`);
 		}
 	}
 
@@ -395,6 +407,7 @@ HomePage.propTypes = {
 	userSettings: PropTypes.object,
 	formattedSource: PropTypes.object,
 	history: PropTypes.object,
+	match: PropTypes.object,
 	userAuthenticated: PropTypes.bool,
 	userId: PropTypes.string,
 };

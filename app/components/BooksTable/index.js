@@ -129,7 +129,7 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 								<div className="chapter-container">
 									{
 										(book.name || book.name_short) && (book.name || book.name_short) === selectedBookName ? book.chapters.map((chapter) => (
-											<Link to={`/${activeTextId}/${book.name_short}/${chapter}`} key={chapter} className="chapter-box" onClick={() => this.handleChapterClick(book, chapter)}>
+											<Link to={`/${activeTextId}/${book.book_id}/${chapter}`} key={chapter} className="chapter-box" onClick={() => this.handleChapterClick(book, chapter)}>
 												<span className={(activeChapter === chapter && (book.name || book.name_short) === activeBookName) ? 'active-chapter' : ''}>{chapter}</span>
 											</Link>
 										)) : null

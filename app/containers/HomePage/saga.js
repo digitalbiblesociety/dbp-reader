@@ -6,8 +6,9 @@ import unionWith from 'lodash/unionWith';
 import { ADD_HIGHLIGHTS, LOAD_HIGHLIGHTS, GET_CHAPTER_TEXT, GET_HIGHLIGHTS, GET_BOOKS, GET_AUDIO, INIT_APPLICATION } from './constants';
 import { loadChapter, loadBooksAndCopywrite, loadAudio } from './actions';
 
-export function* initApplication({ activeTextId, iso }) {
-	const activeTextUrl = `https://api.bible.build/bibles?key=${process.env.DBP_API_KEY}&v=4&language_code=${iso}`;
+export function* initApplication({ activeTextId }) {
+	// This will always have to request the full list of versions because the url will not contain language information
+	const activeTextUrl = `https://api.bible.build/bibles?key=${process.env.DBP_API_KEY}&v=4`;
 	let filesets = {};
 	try {
 		const response = yield call(request, activeTextUrl);
@@ -30,6 +31,10 @@ export function* initApplication({ activeTextId, iso }) {
 
 // TODO: Fix issue with audio coming back after the chapters have already been called
 export function* getAudio({ list }/* { filesetId, list } */) {
+	// temporary fix for if the list comes back undefined
+	if (!list) {
+		return;
+	}
 	const dramaUrls = [];
 	const plainUrls = [];
 	// if there is a audio drama version with size code for everything use it
