@@ -179,6 +179,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			activeTextId,
 			activeChapter,
 			activeBookId,
+			activeBookName,
 			audioObjects,
 			hasTextInDatabase,
 			filesetTypes,
@@ -190,9 +191,11 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			this.setActiveBookName({ book: nextBook.get('name'), id: nextBook.get('book_id') });
 			this.getChapters({ userAuthenticated, userId, bible: activeTextId, book: nextBook.get('book_id'), chapter: 1, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
 			this.setActiveChapter(1);
+			this.props.history.push(`/${activeTextId}/${nextBook.get('name_short')}/1`);
 		} else {
 			this.getChapters({ userAuthenticated, userId, bible: activeTextId, book: activeBookId, chapter: activeChapter + 1, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
 			this.setActiveChapter(activeChapter + 1);
+			this.props.history.push(`/${activeTextId}/${activeBookName}/${activeChapter + 1}`);
 		}
 	}
 
@@ -201,20 +204,30 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			activeTextId,
 			activeChapter,
 			activeBookId,
+			activeBookName,
 			audioObjects,
 			hasTextInDatabase,
 			filesetTypes,
+			books,
 		} = this.props.homepage;
 		const { previousBook, userAuthenticated, userId } = this.props;
-
+		// Keeps the button from trying to go backwards to a book that doesn't exist
+		if (activeBookId === books[0].book_id && activeChapter - 1 === 0) {
+			return;
+		}
+		// Goes to the previous book in the bible in canonical order from the current book
 		if (activeChapter - 1 === 0) {
 			const lastChapter = previousBook.get('chapters').size;
+
 			this.setActiveBookName({ book: previousBook.get('name'), id: previousBook.get('book_id') });
 			this.getChapters({ userAuthenticated, userId, bible: activeTextId, book: previousBook.get('book_id'), chapter: lastChapter, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
 			this.setActiveChapter(lastChapter);
+			this.props.history.push(`/${activeTextId}/${previousBook.get('name_short')}/${lastChapter}`);
+			// Goes to the previous Chapter
 		} else {
 			this.getChapters({ userAuthenticated, userId, bible: activeTextId, book: activeBookId, chapter: activeChapter - 1, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
 			this.setActiveChapter(activeChapter - 1);
+			this.props.history.push(`/${activeTextId}/${activeBookName}/${activeChapter - 1}`);
 		}
 	}
 
@@ -381,6 +394,7 @@ HomePage.propTypes = {
 	nextBook: PropTypes.object,
 	userSettings: PropTypes.object,
 	formattedSource: PropTypes.object,
+	history: PropTypes.object,
 	userAuthenticated: PropTypes.bool,
 	userId: PropTypes.string,
 };
