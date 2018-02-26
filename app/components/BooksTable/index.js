@@ -7,6 +7,7 @@
 import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { createStructuredSelector } from 'reselect';
 import PropTypes from 'prop-types';
 import {
@@ -108,6 +109,7 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 	render() {
 		const {
 			books,
+			activeTextId,
 			activeChapter,
 			activeBookName,
 			loadingBooks,
@@ -127,9 +129,9 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 								<div className="chapter-container">
 									{
 										(book.name || book.name_short) && (book.name || book.name_short) === selectedBookName ? book.chapters.map((chapter) => (
-											<div role="button" tabIndex="0" key={chapter} className="chapter-box" onClick={() => this.handleChapterClick(book, chapter)}>
+											<Link to={`/${activeTextId}/${book.name_short}/${chapter}`} key={chapter} className="chapter-box" onClick={() => this.handleChapterClick(book, chapter)}>
 												<span className={(activeChapter === chapter && (book.name || book.name_short) === activeBookName) ? 'active-chapter' : ''}>{chapter}</span>
-											</div>
+											</Link>
 										)) : null
 									}
 								</div>
