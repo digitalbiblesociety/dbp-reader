@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-
+import { fromJS } from 'immutable';
 // import * as pages from 'utils/ENGKJV/list';
 // import bookNames from 'utils/listOfBooksInBible';
 /**
@@ -71,7 +71,7 @@ const selectNextBook = () => createSelector(
 		const activeBookId = substate.get('activeBookId');
 		const activeBookIndex = books.findIndex((book) => book.get('book_id') === activeBookId);
 
-		return books.get(activeBookIndex + 1);
+		return books.get(activeBookIndex + 1) || fromJS({});
 	}
 );
 
@@ -82,7 +82,7 @@ const selectPrevBook = () => createSelector(
 			const activeBookId = substate.get('activeBookId');
 			const activeBookIndex = books.findIndex((book) => book.get('book_id') === activeBookId);
 
-			return books.get(activeBookIndex - 1);
+			return books.get(activeBookIndex - 1) || fromJS({});
 		},
 	);
 

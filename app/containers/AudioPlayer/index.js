@@ -209,7 +209,7 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 										<SvgWrapper onClick={this.pauseVideo} className="svgitem" width="25px" height="25px" fill="#fff" svgid="pause" />
 									) : null
 								}
-								<SvgWrapper onClick={this.skipForward} className="speed-item" width="25px" height="25px" fill="#fff" svgid="forward" />
+								<SvgWrapper onClick={this.skipForward} className="svgitem" width="25px" height="25px" fill="#fff" svgid="forward" />
 								<AudioProgressBar setCurrentTime={this.setCurrentTime} duration={this.state.duration} currentTime={this.state.currentTime} />
 								<div id="volume-wrap">
 									<div role="button" tabIndex="0" className={this.state.volumeSliderState ? 'item active' : 'item'} onClick={() => { this.state.volumeSliderState ? this.setVolumeSliderState(false) : this.setVolumeSliderState(true); this.setSpeedControlState(false); this.setElipsisState(false); }}><SvgWrapper width="25px" height="25px" fill="#fff" svgid="volume" /></div>

@@ -2,6 +2,7 @@
  *
  * HomePage actions
  *
+ * todo: Remove boilerplate by creating a function to create actions
  */
 
 import {
@@ -84,10 +85,9 @@ export const loadAudio = ({ audioObjects }) => ({
 	audioObjects,
 });
 
-export const getBooks = ({ textId, filesets }) => ({
+export const getBooks = (props) => ({
 	type: GET_BOOKS,
-	textId,
-	filesets,
+	...props,
 });
 
 export const getAudio = ({ filesetId, list }) => ({
@@ -142,11 +142,9 @@ export const toggleInformationModal = () => ({
 	type: TOGGLE_INFORMATION_MODAL,
 });
 
-export const setActiveTextId = ({ textName, textId, filesets }) => ({
+export const setActiveTextId = (props) => ({
 	type: ACTIVE_TEXT_ID,
-	textName,
-	textId,
-	filesets,
+	...props,
 });
 
 export const setActiveBookName = ({ book, id }) => ({

@@ -73,24 +73,45 @@ import saga from './saga';
 class HomePage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	componentDidMount() {
 		const {
-			activeTextId,
-			activeBookId,
-			activeChapter,
+			// activeTextId,
+			// activeBookId,
+			// activeChapter,
+			// defaultLanguageIso: iso,
 			activeFilesets,
 			audioObjects,
 			hasTextInDatabase,
 			filesetTypes,
-			defaultLanguageIso: iso,
 		} = this.props.homepage;
 		const { userAuthenticated, userId } = this.props;
-		// handle the async request so that audio does load for the first chapter
-		if (Object.keys(activeFilesets).length === 0) {
-			this.props.dispatch(initApplication({ activeTextId, iso }));
+		// Either come up with a callback/promise solution or move the progressive logic
+		// into the saga so that each call will be assured to have the data from the call before
+		if (this.props.match && this.props.match.params) {
+			const activeTextId = this.props.match.params.bibleId && this.props.match.params.bibleId.toUpperCase();
+			const activeBookId = this.props.match.params.bookId && this.props.match.params.bookId.toUpperCase();
+			const activeChapter = this.props.match.params.chapter;
+
+			if (Object.keys(activeFilesets).length === 0) {
+				this.props.dispatch(initApplication({ activeTextId }));
+			}
+			// this.props.dispatch(getAudio({ list: fromJS(activeFilesets) })); <- probably not needed, but I left it just in case
+			this.props.dispatch(getBooks({ textId: activeTextId, filesets: fromJS(activeFilesets), activeBookId }));
+			this.props.dispatch(getChapterText({
+				userAuthenticated,
+				userId,
+				bible: activeTextId,
+				book: activeBookId,
+				chapter: activeChapter,
+				audioObjects,
+				hasTextInDatabase,
+				formattedText: filesetTypes.text_formatt,
+			}));
+			// Needed for setting the active names based on the url params
+			this.setActiveTextId({ textId: activeTextId, filesets: activeFilesets, textName: '' });
+			// I don't have access to the book name at this point so I thought it best to just use the id as a filler
+			this.setActiveBookName({ book: activeBookId, id: activeBookId });
+			this.setActiveChapter(parseInt(activeChapter, 10));
+			// need to get the data for the new url and use it as the basis for my api calls instead of redux state
 		}
-		// Need to get the audio for the initial chapter
-		this.props.dispatch(getAudio({ list: fromJS(activeFilesets) }));
-		this.props.dispatch(getBooks({ textId: activeTextId, filesets: fromJS(activeFilesets) }));
-		this.props.dispatch(getChapterText({ userAuthenticated, userId, bible: activeTextId, book: activeBookId, chapter: activeChapter, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt }));
 
 		// Init the Facebook api here
 		window.fbAsyncInit = () => {
@@ -111,12 +132,17 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			fjs.parentNode.insertBefore(js, fjs);
 		})(document, 'script', 'facebook-jssdk');
 	}
-
+	// TODO: Rewrite componentWillReceiveProps to only use the route parameters and auth state
+	// The current version of the below function is gross and prone to breaking
+	// This function needs to solve the issue of requesting the new data from the api when a new version is clicked
 	componentWillReceiveProps(nextProps) {
+		// Next props supplied to component
 		const {
 			hasTextInDatabase,
 			activeTextId,
+			activeBookId,
 			activeFilesets,
+			activeChapter,
 			books,
 			audioObjects,
 			filesetTypes,
@@ -124,31 +150,79 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		} = nextProps.homepage;
 		const { userAuthenticated, userId } = nextProps;
 		const nextBooks = fromJS(books);
+		const nextUrlBibleId = nextProps.match.params.bibleId;
+		const nextUrlBookId = nextProps.match.params.bookId;
+		const nextUrlChapter = nextProps.match.params.chapter;
+
+		// Current props supplied to component
 		const curBooks = fromJS(this.props.homepage.books);
 		const curAudioObjects = this.props.homepage.audioObjects;
-		// can probably use find to get the current book if the new version
-		// has it
-		const nextBookId = nextBooks.getIn([0, 'book_id']);
-		const nextBookName = nextBooks.getIn([0, 'name']);
-		const chapter = nextBooks.getIn([0, 'chapters', 0]);
-		// Solving the issue of requesting the new data from the
-		// api when a new version is clicked
-		// console.log('filesetTypes in receive props', filesetTypes);
-		// Currently we only have text_plain as an option in the api, this will be changed to formatted_text at some point
+		// const curUrlBibleId = this.props.match.params.bibleId;
+		// const curUrlBookId = this.props.match.params.bookId;
+		const curUrlChapter = this.props.match.params.chapter;
 
-		// console.log('filesetTypes in next props', filesetTypes.text_formatt);
+		// Currently we only have text_formatt as an option in the api, this will be changed to formatted at some point
+		// We may also have the addition of a text_plain option
+
+		// Returning in each block here to keep the next if/else blocks from running
+		// This prevents the state being updated twice when a user isn't
+		// directly manipulating the url or coming from another site.
+		if (nextUrlChapter !== curUrlChapter) {
+			this.setActiveChapter(parseInt(nextUrlChapter, 10));
+			this.getChapters({
+				bible: nextUrlBibleId,
+				book: nextUrlBookId,
+				chapter: parseInt(nextUrlChapter, 10),
+				audioObjects,
+				hasTextInDatabase,
+				formattedText: filesetTypes.text_formatt,
+				userAuthenticated,
+				userId,
+			});
+
+			return;
+		}
+		// if (curUrlBibleId !== nextUrlBibleId) {
+		// 	this.setActiveTextId({ textId: nextUrlBibleId, filesets: fromJS(activeFilesets), textName: nextUrlBibleId });
+		// 	this.getBooks({ textId: nextUrlBibleId, filesets: fromJS(activeFilesets), activeBookId: curUrlBookId });
+		//
+		// 	return;
+		// } else if (nextUrlChapter !== curUrlChapter) {
+		// 	this.setActiveChapter(parseInt(nextUrlChapter, 10));
+		// 	this.getChapters({
+		// 		bible: nextUrlBibleId,
+		// 		book: nextUrlBookId,
+		// 		chapter: parseInt(nextUrlChapter, 10),
+		// 		audioObjects,
+		// 		hasTextInDatabase,
+		// 		formattedText: filesetTypes.text_formatt,
+		// 		userAuthenticated,
+		// 		userId,
+		// 	});
+		//
+		// 	return;
+		// }
 
 		if (activeTextId !== this.props.homepage.activeTextId) {
 			this.getBooks({ textId: activeTextId, filesets: fromJS(activeFilesets) });
 		} else if (!is(nextBooks, curBooks) && curBooks.size) {
+			// Determines if the next set of books has the same book that is already active
+			const nextHasCurrent = nextBooks.find((book) => book.book_id === activeBookId);
+			// Gets each piece of the next book that is needed
+			const nextBookId = nextHasCurrent ? nextBooks.getIn([0, 'book_id']) : activeBookId;
+			const nextBookName = nextHasCurrent ? nextBooks.getIn([0, 'name']) : nextHasCurrent.get('name_short');
+			const chapter = nextHasCurrent ? nextBooks.getIn([0, 'chapters', 0]) : activeChapter;
+
 			this.setActiveBookName({ book: nextBookName, id: nextBookId });
 			this.setActiveChapter(chapter);
 			this.getChapters({ userAuthenticated, userId, bible: activeTextId, book: nextBookId, chapter, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
 		} else if (!isEqual(audioObjects, curAudioObjects)) {
+			// Should change this so that it only requests the audio
+			// combining the text and audio into one call isn't the best
 			this.getChapters({
 				bible: activeTextId,
-				book: this.props.homepage.activeBookId,
-				chapter: this.props.homepage.activeChapter,
+				book: activeBookId,
+				chapter: activeChapter,
 				audioObjects,
 				hasTextInDatabase,
 				formattedText: filesetTypes.text_formatt,
@@ -158,16 +232,16 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		} else if (userAuthenticated !== this.props.userAuthenticated && userAuthenticated && userId) {
 			this.props.dispatch(getHighlights({
 				bible: activeTextId,
-				book: this.props.homepage.activeBookId,
-				chapter: this.props.homepage.activeChapter,
+				book: activeBookId,
+				chapter: activeChapter,
 				userAuthenticated,
 				userId,
 			}));
 		} else if (!isEqual(highlights, this.props.homepage.highlights)) {
 			this.props.dispatch(getHighlights({
 				bible: activeTextId,
-				book: this.props.homepage.activeBookId,
-				chapter: this.props.homepage.activeChapter,
+				book: activeBookId,
+				chapter: activeChapter,
 				userAuthenticated,
 				userId,
 			}));
@@ -190,9 +264,11 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			this.setActiveBookName({ book: nextBook.get('name'), id: nextBook.get('book_id') });
 			this.getChapters({ userAuthenticated, userId, bible: activeTextId, book: nextBook.get('book_id'), chapter: 1, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
 			this.setActiveChapter(1);
+			this.props.history.push(`/${activeTextId}/${nextBook.get('book_id')}/1`);
 		} else {
 			this.getChapters({ userAuthenticated, userId, bible: activeTextId, book: activeBookId, chapter: activeChapter + 1, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
 			this.setActiveChapter(activeChapter + 1);
+			this.props.history.push(`/${activeTextId}/${activeBookId}/${activeChapter + 1}`);
 		}
 	}
 
@@ -204,21 +280,30 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			audioObjects,
 			hasTextInDatabase,
 			filesetTypes,
+			books,
 		} = this.props.homepage;
 		const { previousBook, userAuthenticated, userId } = this.props;
-
+		// Keeps the button from trying to go backwards to a book that doesn't exist
+		if (activeBookId === books[0].book_id && activeChapter - 1 === 0) {
+			return;
+		}
+		// Goes to the previous book in the bible in canonical order from the current book
 		if (activeChapter - 1 === 0) {
 			const lastChapter = previousBook.get('chapters').size;
+
 			this.setActiveBookName({ book: previousBook.get('name'), id: previousBook.get('book_id') });
 			this.getChapters({ userAuthenticated, userId, bible: activeTextId, book: previousBook.get('book_id'), chapter: lastChapter, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
 			this.setActiveChapter(lastChapter);
+			this.props.history.push(`/${activeTextId}/${previousBook.get('book_id')}/${lastChapter}`);
+			// Goes to the previous Chapter
 		} else {
 			this.getChapters({ userAuthenticated, userId, bible: activeTextId, book: activeBookId, chapter: activeChapter - 1, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
 			this.setActiveChapter(activeChapter - 1);
+			this.props.history.push(`/${activeTextId}/${activeBookId}/${activeChapter - 1}`);
 		}
 	}
 
-	getBooks = ({ textId, filesets }) => this.props.dispatch(getBooks({ textId, filesets }))
+	getBooks = (props) => this.props.dispatch(getBooks(props))
 
 	getAudio = ({ list }) => this.props.dispatch(getAudio({ list }))
 
@@ -381,6 +466,8 @@ HomePage.propTypes = {
 	nextBook: PropTypes.object,
 	userSettings: PropTypes.object,
 	formattedSource: PropTypes.object,
+	history: PropTypes.object,
+	match: PropTypes.object,
 	userAuthenticated: PropTypes.bool,
 	userId: PropTypes.string,
 };
