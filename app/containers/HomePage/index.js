@@ -174,6 +174,8 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		// This will be changed to formatted at some point
 		// We may also have the addition of a text_plain option
 
+		// There is an issue with the audio not being fetched when using forward/backward
+		// Buttons in the browser to navigate between two versions
 		if (nextUrlBibleId !== curUrlBibleId) {
 			this.setActiveTextId({ textId: activeTextId, filesets: fromJS({}), textName: '' });
 		}
