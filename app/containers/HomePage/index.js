@@ -174,10 +174,9 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		// This will be changed to formatted at some point
 		// We may also have the addition of a text_plain option
 
-		// There is an issue with the audio not being fetched when using forward/backward
-		// Buttons in the browser to navigate between two versions
+		// There is an issue with the filesets not being fetched when navigating via url bar
 		if (nextUrlBibleId !== curUrlBibleId) {
-			this.setActiveTextId({ textId: activeTextId, filesets: fromJS({}), textName: '' });
+			this.setActiveTextId({ textId: activeTextId, filesets: fromJS(activeFilesets), textName: '' });
 		}
 		// Returning in if block here to keep the next if/else blocks from running
 		// This prevents the state being updated twice when a user isn't
@@ -205,7 +204,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		}
 
 		if (activeTextId !== this.props.homepage.activeTextId) {
-			this.getBooks({ textId: activeTextId, filesets: fromJS(activeFilesets) });
+			this.getBooks({ textId: activeTextId, filesets: fromJS(activeFilesets), activeBookId: nextUrlBookId });
 		} else if (!is(nextBooks, curBooks) && curBooks.size) {
 			// Determines if the next set of books has the same book that is already active
 			const nextHasCurrent = nextBooks.find((book) => book.book_id === activeBookId);

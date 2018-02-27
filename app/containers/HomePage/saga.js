@@ -154,14 +154,17 @@ export function* getBooks({ textId, filesets, activeBookId }) {
 		// Setting the active book here based on the bookId provided in the url
 		// Need to also account for setting the book id here
 		const activeBook = hasTextInDatabase ? books.find((book) => book.book_id === activeBookId) : backupBooks.find((book) => book.book_id === activeBookId);
-
+		console.log('backupBooks', backupBooks);
+		console.log('books', books);
+		console.log('activeBook', activeBook);
+		console.log('activeBookId', activeBookId);
 		// eventually store a key value pair for each type of resource available
 		yield put(loadBooksAndCopywrite({
 			books: hasTextInDatabase ? books : backupBooks,
 			copywrite,
 			hasTextInDatabase,
 			filesetTypes,
-			activeBookName: activeBook ? activeBook.name_short : '',
+			activeBookName: activeBook ? activeBook.name_short || activeBook.book_name : '',
 		}));
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
