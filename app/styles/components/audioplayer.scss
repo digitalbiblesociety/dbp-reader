@@ -1,15 +1,17 @@
 .audio-player-background               {@include css4{background-color:var(--audio-player-background);};min-height:10px;padding:2.5px;}
 // General Audio Player Styles
 .audio-player-container                {@include css4{background-color:var(--audio-player-background);};display:flex;justify-content:space-around;align-items:center;width:100%;height:50px;max-width:800px;margin:auto;}
-.audio-player-container .item          {cursor:pointer;height:50px;display:flex;align-items:center;justify-content:center;}
+.audio-player-container .item          {border:1px solid transparent;cursor:pointer;height:50px;display:flex;align-items:center;justify-content:center;}
 .audio-player-container .svgitem       {cursor:pointer;}
 .audio-player-container .item:hover    {opacity:.65;}
 .audio-player-container .svgitem:hover {opacity:.65;}
+.audio-player-container .item.active   {@include css4{border-bottom:1px solid var(--transparent-grey);border-top:1px solid var(--menu-active-color);;border-left:1px solid var(--menu-active-color);;border-right:1px solid var(--menu-active-color);background-color:var(--transparent-grey);};z-index:4;}
 .audio-player                          {display:none;}
 
 // Speed Control Styles
-.speed-control-container-container    {display:block;bottom:0;right:150px;position:absolute;}
-.speed-control-container              {position:absolute;display:flex;align-items:center;justify-content:space-around;@include css4{border:1px solid var(--menu-active-color);background-color:var(--transparent-grey);};height:30px;width:150px;}
+// todo refactor speed control container class to be more semantic
+.speed-control-container-container          {display:block;bottom:0;right:150px;position:absolute;z-index:3;}
+.speed-control-container                    {position:absolute;display:flex;align-items:center;justify-content:space-around;@include css4{border:1px solid var(--menu-active-color);background-color:var(--transparent-grey);};height:30px;width:150px;}
 .speed-control-container .speed-item        {@include css4{color:var(--menu-font-color);};cursor:pointer;}
 .speed-control-container .speed-item:hover  {@include css4{color:var(--menu-active-color);};}
 .speed-control-container .speed-item.active {@include css4{color:var(--menu-active-color);};}
@@ -23,22 +25,23 @@
 
 // Volume Slider
 #volume-wrap {position: relative}
-.volume-slider-container {display:block;bottom:0;left:0;position:absolute;}
+.volume-slider-container {display:block;bottom:1px;left:0;position:absolute;}
 .volume-slider           {@include css4{border:1px solid var(--menu-active-color);background-color:var(--transparent-grey);};height:25px;position:absolute;display:flex;align-items:center;justify-content:center;width:175px;margin-left:-75px;}
 .volume-slider .tracker  {@include css4{background-color:var(--menu-active-color);};border-radius:50%;width:15px;height:15px;margin-top:-6px;}
 .volume-slider .fill     {height:3px;@include css4{background-color:var(--menu-active-color);};width:100px;border-radius:5px;}
 .volume-slider .slider   {width:80%;}
 
 // Elipsis TODO: update styles to make the element match the wireframe
-.audio-player-container .item.active   {@include css4{border:1px solid var(--menu-active-color);background-color:var(--transparent-grey);};z-index:2;}
-.elipsis                               {display:block;position:absolute;right:320px;bottom:0;}
-.elipsis .container                    {position:absolute;padding:15px;display:flex;justify-content:space-between;flex-direction:column;width:320px;height:115px;@include css4{color:var(--menu-font-color);border:1px solid var(--menu-active-color);background-color:var(--transparent-grey);};}
-.container div                         {display:flex;align-items:center;}
-.container span                        {margin-left:15px;}
+.elipsis            {display:block;position:absolute;right:320px;bottom:0;z-index:3;}
+.elipsis .container {position:absolute;padding:15px;display:flex;justify-content:space-between;flex-direction:column;width:320px;height:115px;@include css4{color:var(--menu-font-color);border:1px solid var(--menu-active-color);background-color:var(--transparent-grey);};}
+.container div      {display:flex;align-items:center;}
+.container span     {margin-left:15px;}
 
 // Media Queries
 @media only screen and (max-width:600px) {
-  .volume-slider-container {top:-28px;bottom:auto;}
+  .volume-slider-container {top:-24px;bottom:auto;}
+  .speed-control-container-container {top:-24px;bottom:auto;}
+  .elipsis {top:-114px;bottom:auto;}
   .audio-player-background {position:fixed;width:100%;bottom:56px;}
   .audio-gripper {bottom:50px;}
   .audio-gripper.closed {bottom:0;}

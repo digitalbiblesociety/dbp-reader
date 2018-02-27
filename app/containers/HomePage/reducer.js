@@ -122,11 +122,14 @@ function homePageReducer(state = initialState, action) {
 			.set('loadingNewChapterText', true)
 			.set('loadingBooks', true);
 	case LOAD_BOOKS:
+		// Setting the active book name based on whether a name was introduced via
+		// the bookId in the url, this was the best I could come up with
 		return state
 			.set('loadingBooks', false)
 			.set('hasTextInDatabase', action.hasTextInDatabase)
 			.set('filesetTypes', fromJS(action.filesetTypes))
 			.set('copywrite', fromJS(action.copywrite))
+			.set('activeBookName', action.activeBookName || state.get('activeBookName'))
 			.set('books', fromJS(action.books));
 	case LOAD_AUDIO:
 		return state.set('audioObjects', fromJS(action.audioObjects));

@@ -9,7 +9,7 @@ body 				   {
   margin:0 auto;
 }
 div:focus              {outline:none;}
-a                      {text-decoration:none}
+a                      {text-decoration:none;color:inherit;}
 aside                  {position:absolute;top:0;right:0;height:100%;width:320px;z-index:1;}
 main                   {overflow-x:hidden;overflow-y:scroll;max-height:100%;}
 #app                   {@include css4{background-color:var(--application-background);};}
