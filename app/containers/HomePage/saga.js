@@ -6,9 +6,8 @@ import unionWith from 'lodash/unionWith';
 import { ADD_HIGHLIGHTS, LOAD_HIGHLIGHTS, GET_CHAPTER_TEXT, GET_HIGHLIGHTS, GET_BOOKS, GET_AUDIO, INIT_APPLICATION } from './constants';
 import { loadChapter, loadBooksAndCopywrite, loadAudio } from './actions';
 
-export function* initApplication({ activeTextId }) {
-	// This will always have to request the full list of versions because the url will not contain language information
-	const activeTextUrl = `https://api.bible.build/bibles?key=${process.env.DBP_API_KEY}&v=4`;
+export function* initApplication({ activeTextId, iso }) {
+	const activeTextUrl = `https://api.bible.build/bibles?key=${process.env.DBP_API_KEY}&v=4&language_code=${iso}`;
 	let filesets = {};
 	try {
 		const response = yield call(request, activeTextUrl);
@@ -31,10 +30,6 @@ export function* initApplication({ activeTextId }) {
 
 // TODO: Fix issue with audio coming back after the chapters have already been called
 export function* getAudio({ list }/* { filesetId, list } */) {
-	// temporary fix for if the list comes back undefined
-	if (!list) {
-		return;
-	}
 	const dramaUrls = [];
 	const plainUrls = [];
 	// if there is a audio drama version with size code for everything use it
@@ -103,13 +98,13 @@ export function* getAudio({ list }/* { filesetId, list } */) {
 	}
 }
 
-export function* getBooks({ textId, filesets, activeBookId }) {
+export function* getBooks({ textId, filesets }) {
 	// TODO: Should split getting text from the database, getting text from s3 and getting the audio into different sagas
 	// Should also find a way of determining which filesets have resources without having to make an api call to each of them
 	// This applies both to getting the chapters and getting the books
 	// Process should check for formatted text, then audio, then plain text
 	const requestUrl = `https://api.bible.build/bibles/${textId}?key=${process.env.DBP_API_KEY}&v=4`;
-
+	// console.log('filesets in get books', filesets)
 	try {
 		const response = yield call(request, requestUrl);
 		const books = response.data.books.map((book) => ({
@@ -121,11 +116,11 @@ export function* getBooks({ textId, filesets, activeBookId }) {
 		const backupBooks = [];
 		const urls = [];
 		const tempData = [];
-
+		// console.log('at first for each')
 		filesets.forEach((fileObject, fileId) => {
 			urls.push({ url: `https://api.bible.build/bibles/filesets/${fileId}?key=${process.env.DBP_API_KEY}&v=4`, filesetId: fileId, type: fileObject.get('set_type_code') });
 		});
-
+		// console.log('urls', urls);
 		for (const url of urls) { // eslint-disable-line no-restricted-syntax
 			const res = yield request(url.url);
 			if (res.data.length !== 0) {
@@ -134,7 +129,8 @@ export function* getBooks({ textId, filesets, activeBookId }) {
 			const data = res.data.map((obj) => ({ book_id: obj.book_id, name: obj.book_name, name_short: obj.book_name, chapter: obj.chapter_start }));
 			tempData.push(data);
 		}
-
+		// console.log('temp data', tempData);
+		// console.log('filesetTypes', filesetTypes);
 		const unitedData = unionWith(...tempData, (resource, next) => resource.book_id === next.book_id && resource.chapter === next.chapter);
 		const bookChapterList = unitedData.reduce((list, book) => {
 			if (list[book.book_id]) {
@@ -151,18 +147,10 @@ export function* getBooks({ textId, filesets, activeBookId }) {
 			date: response.data.date,
 			country: response.data.country,
 		};
-		// Setting the active book here based on the bookId provided in the url
-		// Need to also account for setting the book id here
-		const activeBook = hasTextInDatabase ? books.find((book) => book.book_id === activeBookId) : backupBooks.find((book) => book.book_id === activeBookId);
-
+		// console.log('loading books')
 		// eventually store a key value pair for each type of resource available
-		yield put(loadBooksAndCopywrite({
-			books: hasTextInDatabase ? books : backupBooks,
-			copywrite,
-			hasTextInDatabase,
-			filesetTypes,
-			activeBookName: activeBook ? activeBook.name_short : '',
-		}));
+		// console.log('filesetTypes in get books', filesetTypes);
+		yield put(loadBooksAndCopywrite({ books: hasTextInDatabase ? books : backupBooks, copywrite, hasTextInDatabase, filesetTypes }));
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error(err); // eslint-disable-line no-console
