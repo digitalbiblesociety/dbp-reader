@@ -172,7 +172,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			));
 		}
 
-		if (!formattedSource.main && !readersMode) {
+		if (!formattedSource.main && !readersMode && Array.isArray(textComponents)) {
 			textComponents.unshift(<span className={'drop-caps'}>{activeChapter}</span>);
 		}
 
