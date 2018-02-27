@@ -83,35 +83,44 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			filesetTypes,
 		} = this.props.homepage;
 		const { userAuthenticated, userId } = this.props;
+		// Using let here so that I can init with either the default application params or the url params
+		let {
+			activeTextId,
+			activeBookId,
+			activeChapter,
+		} = this.props.homepage;
+		// Ensure that the route has a parameter in each category
+		const hasThreeParams = this.props.match.params.bibleId && this.props.match.params.bookId && this.props.match.params.chapter;
 		// Either come up with a callback/promise solution or move the progressive logic
 		// into the saga so that each call will be assured to have the data from the call before
-		if (this.props.match && this.props.match.params) {
-			const activeTextId = this.props.match.params.bibleId && this.props.match.params.bibleId.toUpperCase();
-			const activeBookId = this.props.match.params.bookId && this.props.match.params.bookId.toUpperCase();
-			const activeChapter = this.props.match.params.chapter;
-
-			if (Object.keys(activeFilesets).length === 0) {
-				this.props.dispatch(initApplication({ activeTextId }));
-			}
-			// this.props.dispatch(getAudio({ list: fromJS(activeFilesets) })); <- probably not needed, but I left it just in case
-			this.props.dispatch(getBooks({ textId: activeTextId, filesets: fromJS(activeFilesets), activeBookId }));
-			this.props.dispatch(getChapterText({
-				userAuthenticated,
-				userId,
-				bible: activeTextId,
-				book: activeBookId,
-				chapter: activeChapter,
-				audioObjects,
-				hasTextInDatabase,
-				formattedText: filesetTypes.text_formatt,
-			}));
-			// Needed for setting the active names based on the url params
-			this.setActiveTextId({ textId: activeTextId, filesets: activeFilesets, textName: '' });
-			// I don't have access to the book name at this point so I thought it best to just use the id as a filler
-			this.setActiveBookName({ book: activeBookId, id: activeBookId });
-			this.setActiveChapter(parseInt(activeChapter, 10));
-			// need to get the data for the new url and use it as the basis for my api calls instead of redux state
+		if (hasThreeParams) {
+			activeTextId = this.props.match.params.bibleId && this.props.match.params.bibleId.toUpperCase();
+			activeBookId = this.props.match.params.bookId && this.props.match.params.bookId.toUpperCase();
+			activeChapter = this.props.match.params.chapter;
 		}
+
+		if (Object.keys(activeFilesets).length === 0) {
+			this.props.dispatch(initApplication({ activeTextId }));
+		}
+
+		// this.props.dispatch(getAudio({ list: fromJS(activeFilesets) })); <- probably not needed, but I left it just in case
+		this.props.dispatch(getBooks({ textId: activeTextId, filesets: fromJS(activeFilesets), activeBookId }));
+		this.props.dispatch(getChapterText({
+			userAuthenticated,
+			userId,
+			bible: activeTextId,
+			book: activeBookId,
+			chapter: activeChapter,
+			audioObjects,
+			hasTextInDatabase,
+			formattedText: filesetTypes.text_formatt,
+		}));
+		// Needed for setting the active names based on the url params
+		this.setActiveTextId({ textId: activeTextId, filesets: activeFilesets, textName: '' });
+		// I don't have access to the book name at this point so I thought it best to just use the id as a filler
+		this.setActiveBookName({ book: activeBookId, id: activeBookId });
+		this.setActiveChapter(parseInt(activeChapter, 10));
+		// need to get the data for the new url and use it as the basis for my api calls instead of redux state
 
 		// Init the Facebook api here
 		window.fbAsyncInit = () => {
