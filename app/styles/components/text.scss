@@ -27,6 +27,8 @@
 .prev-arrow-svg:hover {animation:thicken 0.3s forwards;}
 .next-arrow-svg:hover {animation:thicken 0.3s forwards;}
 .text-highlighted 	  {@include css4{background-color:var(--text-selection-color);};}
+.active-chapter-title {margin:auto;text-align:center;font-size:130%;}
+.drop-caps {float: left;font-size: 75px;line-height: 60px;padding-top: 4px;padding-right: 8px;padding-left: 3px;}
 
 // TODO: Figure out how to use the variable instead of rgba in keyframes
 //@keyframes thicken {

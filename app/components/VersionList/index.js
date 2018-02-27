@@ -30,7 +30,7 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 		const {
 			bibles,
 			activeIsoCode,
-			activeTextName,
+			activeTextId,
 			activeBookId,
 			activeChapter,
 			versionsError,
@@ -62,7 +62,7 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 						<SvgWrapper className="svg inactive" height="20px" width="20px" svgid="volume" />
 					)
 				}
-				<h4 className={bible.get('abbr') === activeTextName ? 'active-version' : ''}>{bible.get('name')}</h4>
+				<h4 className={bible.get('abbr') === activeTextId ? 'active-version' : ''}>{bible.get('name')}</h4>
 			</Link>
 		));
 
@@ -102,10 +102,8 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 		} = this.props;
 
 		if (bible) {
-			const abbr = bible.get('abbr');
-
 			getAudio({ list: bible.get('filesets') });
-			setActiveText({ textId: abbr, textName: abbr, filesets: bible.get('filesets') });
+			setActiveText({ textId: bible.get('abbr'), textName: bible.get('name'), filesets: bible.get('filesets') });
 			toggleTextSelection();
 		} else if (active) {
 			toggleLanguageList({ state: true });
@@ -175,7 +173,7 @@ BiblesTable.propTypes = {
 	setCountryListState: PropTypes.func,
 	activeBookId: PropTypes.string,
 	activeIsoCode: PropTypes.string,
-	activeTextName: PropTypes.string,
+	activeTextId: PropTypes.string,
 	activeChapter: PropTypes.number,
 	active: PropTypes.bool,
 	versionsError: PropTypes.bool,

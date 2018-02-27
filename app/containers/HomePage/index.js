@@ -100,6 +100,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		}
 
 		if (Object.keys(activeFilesets).length === 0) {
+			// Init will request the text, audio and filesets for the active bible
 			this.props.dispatch(initApplication({ activeTextId }));
 		}
 
@@ -405,7 +406,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 								<TextSelection
 									firstLoad={firstLoad}
 									activeBookName={activeBookName}
-									activeTextName={activeTextName}
+									activeTextId={activeTextId}
 									getAudio={this.getAudio}
 									setActiveText={this.setActiveTextId}
 									setActiveChapter={this.setActiveChapter}
