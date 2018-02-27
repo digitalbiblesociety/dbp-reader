@@ -59,7 +59,7 @@ const initialState = fromJS({
 	isVersionSelectionActive: false,
 	isInformationModalActive: false,
 	activeBookName: 'Genesis',
-	activeTextName: 'ENGESV',
+	activeTextName: 'English Standard Version',
 	activeNotesView: 'notes',
 	activeTextId: 'ENGESV',
 	defaultLanguageIso: 'eng',
