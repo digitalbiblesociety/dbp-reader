@@ -95,7 +95,38 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 	// The current version of the below function is gross and prone to breaking
 	// This function needs to solve the issue of requesting the new data from the api when a new version is clicked
 	componentWillReceiveProps(nextProps) {
-		// Next props supplied to component
+		// Deals with updating page based on the url params
+		// previous props
+		const { params } = this.props.match;
+		// next props
+		const { params: nextParams } = nextProps.match;
+		console.log('prev and next params\n', params, '\n', nextParams);
+
+		if (!isEqual(params, nextParams)) {
+			// if the route isn't the same as before find which parts changed
+			const newChapter = params.chapter !== nextParams.chapter;
+			const newBook = params.bookId !== nextParams.bookId;
+			const newBible = params.bibleId !== nextParams.bibleId;
+			console.log('new bible', newBible);
+			console.log('new book', newBook);
+			console.log('new chapter', newChapter);
+			if (newBible) {
+				this.props.dispatch({ type: 'getbible', bibleId: nextParams.bibleId, bookId: nextParams.bookId, chapter: nextParams.chapter });
+				// Need to get the bible object with /bibles/[bibleId]
+				// Need to send a request to get the audio and text once the previous request is done - (maybe handled in saga?)
+					// Needs to preserve the current book and chapter to try and use it first
+					// Needs to default to the first available book and chapter if the current option isn't available
+			} else if (newBook) {
+				// Need to get the audio and text for the new book /bibles/[bibleId]/[bookId]/chapter
+					// Preserve current chapter and try to use it first
+					// Default to first chapter if the new book doesn't have the current chapter
+			} else if (newChapter) {
+				// Need to get the audio and text for the new chapter /bibles/[bibleId]/[bookId]/chapter
+					// if the chapter is not invalid default to first chapter of the current book
+			}
+		}
+
+		// Deals with updating the interface if a user is authenticated or added highlights
 		const {
 			activeTextId,
 			activeBookId,
@@ -103,7 +134,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			highlights,
 		} = nextProps.homepage;
 		const { userAuthenticated, userId } = nextProps;
-		// Deals with updating the interface if a user is authenticated or added highlights
+
 		if (userAuthenticated !== this.props.userAuthenticated && userAuthenticated && userId) {
 			this.props.dispatch(getHighlights({
 				bible: activeTextId,
@@ -342,7 +373,7 @@ HomePage.propTypes = {
 	userSettings: PropTypes.object,
 	formattedSource: PropTypes.object,
 	history: PropTypes.object,
-	// match: PropTypes.object,
+	match: PropTypes.object,
 	userAuthenticated: PropTypes.bool,
 	userId: PropTypes.string,
 };

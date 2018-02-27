@@ -127,6 +127,7 @@ export function* getBooks({ textId, filesets, activeBookId }) {
 		});
 
 		for (const url of urls) { // eslint-disable-line no-restricted-syntax
+			// Fix this to not be so gross................
 			const res = yield request(url.url);
 			if (res.data.length !== 0) {
 				filesetTypes[url.type] = url.filesetId;
@@ -154,10 +155,6 @@ export function* getBooks({ textId, filesets, activeBookId }) {
 		// Setting the active book here based on the bookId provided in the url
 		// Need to also account for setting the book id here
 		const activeBook = hasTextInDatabase ? books.find((book) => book.book_id === activeBookId) : backupBooks.find((book) => book.book_id === activeBookId);
-		console.log('backupBooks', backupBooks);
-		console.log('books', books);
-		console.log('activeBook', activeBook);
-		console.log('activeBookId', activeBookId);
 		// eventually store a key value pair for each type of resource available
 		yield put(loadBooksAndCopywrite({
 			books: hasTextInDatabase ? books : backupBooks,
@@ -317,6 +314,25 @@ export function* addHighlight({ bible, book, chapter, userId, verseStart, highli
 	}
 }
 
+export function* getBible({ type, bibleId }) {
+	console.log(type);
+	const requestUrl = `https://api.bible.build/bibles/${bibleId}?key=${process.env.DBP_API_KEY}&v=4`;
+	// Probably need to do stuff here to get the audio and text for this new bible
+	try {
+		const response = yield call(request, requestUrl);
+		console.log('bible response', response);
+		if (response.data && Object.keys(response.data).length) {
+			yield put({ type: 'loadbible', bible: response.data });
+		} else {
+			yield put({ type: 'loadbibleerror' });
+		}
+	} catch (error) {
+		if (process.env.NODE_ENV === 'development') {
+			console.error('Caught in get bible', error); // eslint-disable-line no-console
+		}
+	}
+}
+
 // Individual exports for testing
 export default function* defaultSaga() {
 	yield takeLatest(INIT_APPLICATION, initApplication);
@@ -325,4 +341,5 @@ export default function* defaultSaga() {
 	yield takeLatest(GET_CHAPTER_TEXT, getChapter);
 	yield takeLatest(GET_HIGHLIGHTS, getHighlights);
 	yield takeLatest(ADD_HIGHLIGHTS, addHighlight);
+	yield takeLatest('getbible', getBible);
 }
