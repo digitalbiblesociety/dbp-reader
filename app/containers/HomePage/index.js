@@ -158,7 +158,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		const curBooks = fromJS(this.props.homepage.books);
 		const curAudioObjects = this.props.homepage.audioObjects;
 		// const curUrlBibleId = this.props.match.params.bibleId;
-		// const curUrlBookId = this.props.match.params.bookId;
+		const curUrlBookId = this.props.match.params.bookId;
 		const curUrlChapter = this.props.match.params.chapter;
 
 		// Currently we only have text_formatt as an option in the api, this will be changed to formatted at some point
@@ -168,6 +168,12 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		// This prevents the state being updated twice when a user isn't
 		// directly manipulating the url or coming from another site.
 		if (nextUrlChapter !== curUrlChapter) {
+			if (curUrlBookId !== nextUrlBookId) {
+				const nextBook = nextBooks.find((book) => book.get('book_id') === nextUrlBookId);
+
+				this.setActiveBookName({ book: nextBook.get('name_short'), id: nextUrlBookId });
+			}
+
 			this.setActiveChapter(parseInt(nextUrlChapter, 10));
 			this.getChapters({
 				bible: nextUrlBibleId,

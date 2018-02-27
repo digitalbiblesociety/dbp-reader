@@ -22,7 +22,7 @@ import AboutPage from 'containers/AboutPage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import PrivacyPolicy from 'components/PrivacyPolicy';
 import TermsAndConditions from 'components/TermsAndConditions';
-
+// Need to either redirect from / or add the necessary params so that the first page loads correctly
 export default function App() {
 	return (
 		<div>
