@@ -8,11 +8,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { createStructuredSelector } from 'reselect';
 import SvgWrapper from 'components/SvgWrapper';
 import LoadingSpinner from 'components/LoadingSpinner';
 import {
 	getVersionsError,
+	selectActiveChapter,
+	selectActiveBookId,
 } from './selectors';
 
 class BiblesTable extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
@@ -28,16 +31,20 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 			bibles,
 			activeIsoCode,
 			activeTextName,
+			activeBookId,
+			activeChapter,
 			versionsError,
 		} = this.props;
 		const { filterText } = this.state;
 		const filteredBibles = filterText ? bibles.filter((bible) => this.filterFunction(bible, filterText, activeIsoCode)) : bibles.filter((bible) => activeIsoCode === 'ANY' ? true : bible.get('iso') === activeIsoCode);
-
+		// Change the way I figure out if a resource has text or audio
+		// When I first get the response from the server with filesets
+		// Create three options, hasPlainText, hasAudio and hasFormatted
+		// Then pass these three options into redux and use them here
 		const components = filteredBibles.map((bible) => (
-			<div
+			<Link
+				to={`/${bible.get('abbr')}/${activeBookId}/${activeChapter}`}
 				className="version-item-button"
-				tabIndex="0"
-				role="button"
 				key={`${bible.get('abbr')}${bible.get('date')}`}
 				onClick={() => this.handleVersionListClick(bible)}
 			>
@@ -56,7 +63,7 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 					)
 				}
 				<h4 className={bible.get('abbr') === activeTextName ? 'active-version' : ''}>{bible.get('name')}</h4>
-			</div>
+			</Link>
 		));
 
 		if (bibles.size === 0 || versionsError) {
@@ -166,8 +173,10 @@ BiblesTable.propTypes = {
 	toggleLanguageList: PropTypes.func,
 	toggleTextSelection: PropTypes.func,
 	setCountryListState: PropTypes.func,
+	activeBookId: PropTypes.string,
 	activeIsoCode: PropTypes.string,
 	activeTextName: PropTypes.string,
+	activeChapter: PropTypes.number,
 	active: PropTypes.bool,
 	versionsError: PropTypes.bool,
 	loadingVersions: PropTypes.bool,
@@ -175,6 +184,8 @@ BiblesTable.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
 	versionsError: getVersionsError(),
+	activeBookId: selectActiveBookId(),
+	activeChapter: selectActiveChapter(),
 });
 
 function mapDispatchToProps(dispatch) {

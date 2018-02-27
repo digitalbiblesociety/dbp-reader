@@ -166,14 +166,18 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		// Current props supplied to component
 		const curBooks = fromJS(this.props.homepage.books);
 		const curAudioObjects = this.props.homepage.audioObjects;
-		// const curUrlBibleId = this.props.match.params.bibleId;
+		const curUrlBibleId = this.props.match.params.bibleId;
 		const curUrlBookId = this.props.match.params.bookId;
 		const curUrlChapter = this.props.match.params.chapter;
 
-		// Currently we only have text_formatt as an option in the api, this will be changed to formatted at some point
+		// Currently we only have text_formatt as an option in the api
+		// This will be changed to formatted at some point
 		// We may also have the addition of a text_plain option
 
-		// Returning in each block here to keep the next if/else blocks from running
+		if (nextUrlBibleId !== curUrlBibleId) {
+			this.setActiveTextId({ textId: activeTextId, filesets: fromJS({}), textName: '' });
+		}
+		// Returning in if block here to keep the next if/else blocks from running
 		// This prevents the state being updated twice when a user isn't
 		// directly manipulating the url or coming from another site.
 		if (nextUrlChapter !== curUrlChapter) {
@@ -197,26 +201,6 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 
 			return;
 		}
-		// if (curUrlBibleId !== nextUrlBibleId) {
-		// 	this.setActiveTextId({ textId: nextUrlBibleId, filesets: fromJS(activeFilesets), textName: nextUrlBibleId });
-		// 	this.getBooks({ textId: nextUrlBibleId, filesets: fromJS(activeFilesets), activeBookId: curUrlBookId });
-		//
-		// 	return;
-		// } else if (nextUrlChapter !== curUrlChapter) {
-		// 	this.setActiveChapter(parseInt(nextUrlChapter, 10));
-		// 	this.getChapters({
-		// 		bible: nextUrlBibleId,
-		// 		book: nextUrlBookId,
-		// 		chapter: parseInt(nextUrlChapter, 10),
-		// 		audioObjects,
-		// 		hasTextInDatabase,
-		// 		formattedText: filesetTypes.text_formatt,
-		// 		userAuthenticated,
-		// 		userId,
-		// 	});
-		//
-		// 	return;
-		// }
 
 		if (activeTextId !== this.props.homepage.activeTextId) {
 			this.getBooks({ textId: activeTextId, filesets: fromJS(activeFilesets) });
@@ -224,9 +208,9 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			// Determines if the next set of books has the same book that is already active
 			const nextHasCurrent = nextBooks.find((book) => book.book_id === activeBookId);
 			// Gets each piece of the next book that is needed
-			const nextBookId = nextHasCurrent ? nextBooks.getIn([0, 'book_id']) : activeBookId;
-			const nextBookName = nextHasCurrent ? nextBooks.getIn([0, 'name']) : nextHasCurrent.get('name_short');
-			const chapter = nextHasCurrent ? nextBooks.getIn([0, 'chapters', 0]) : activeChapter;
+			const nextBookId = nextHasCurrent ? activeBookId : nextBooks.getIn([0, 'book_id']);
+			const nextBookName = nextHasCurrent ? nextHasCurrent.get('name_short') : nextBooks.getIn([0, 'name']);
+			const chapter = nextHasCurrent ? activeChapter : nextBooks.getIn([0, 'chapters', 0]);
 
 			this.setActiveBookName({ book: nextBookName, id: nextBookId });
 			this.setActiveChapter(chapter);
