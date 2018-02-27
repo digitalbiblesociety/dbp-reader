@@ -172,6 +172,10 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			));
 		}
 
+		if (!formattedSource.main && !readersMode) {
+			textComponents.unshift(<span className={'drop-caps'}>{activeChapter}</span>);
+		}
+
 		return textComponents;
 	}
 
@@ -335,6 +339,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			formattedSource,
 			text,
 			loadingNewChapterText,
+			userSettings,
 		} = this.props;
 		const {
 			coords,
@@ -342,6 +347,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			footnoteState,
 			footnotePortal,
 		} = this.state;
+		const readersMode = userSettings.getIn(['toggleOptions', 'readersMode', 'active']);
 
 		if (loadingNewChapterText) {
 			return <LoadingSpinner />;
@@ -355,7 +361,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				}
 				<main ref={this.setMainRef} onMouseDown={this.getFirstVerse} onMouseUp={this.handleMouseUp} className={formattedSource.main ? '' : 'chapter'}>
 					{
-						formattedSource.main || text.length === 0 ? null : (
+						(formattedSource.main || text.length === 0 || !readersMode) ? null : (
 							<h1 className="active-chapter-title">{activeChapter}</h1>
 						)
 					}
