@@ -86,8 +86,8 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		// Either come up with a callback/promise solution or move the progressive logic
 		// into the saga so that each call will be assured to have the data from the call before
 		if (this.props.match && this.props.match.params) {
-			const activeTextId = this.props.match.params.bibleId;
-			const activeBookId = this.props.match.params.bookId;
+			const activeTextId = this.props.match.params.bibleId && this.props.match.params.bibleId.toUpperCase();
+			const activeBookId = this.props.match.params.bookId && this.props.match.params.bookId.toUpperCase();
 			const activeChapter = this.props.match.params.chapter;
 
 			if (Object.keys(activeFilesets).length === 0) {
@@ -107,7 +107,9 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			}));
 			// Needed for setting the active names based on the url params
 			this.setActiveTextId({ textId: activeTextId, filesets: activeFilesets, textName: '' });
-			this.setActiveBookName({ book: '', id: activeBookId });
+			// I don't have access to the book name at this point so I thought it best to just use the id as a filler
+			this.setActiveBookName({ book: activeBookId, id: activeBookId });
+			this.setActiveChapter(parseInt(activeChapter, 10));
 			// need to get the data for the new url and use it as the basis for my api calls instead of redux state
 		}
 
@@ -130,8 +132,11 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			fjs.parentNode.insertBefore(js, fjs);
 		})(document, 'script', 'facebook-jssdk');
 	}
-
+	// TODO: Rewrite componentWillReceiveProps to only use the route parameters and auth state
+	// The current version of the below function is gross and prone to breaking
+	// This function needs to solve the issue of requesting the new data from the api when a new version is clicked
 	componentWillReceiveProps(nextProps) {
+		// Next props supplied to component
 		const {
 			hasTextInDatabase,
 			activeTextId,
@@ -145,14 +150,58 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		} = nextProps.homepage;
 		const { userAuthenticated, userId } = nextProps;
 		const nextBooks = fromJS(books);
+		const nextUrlBibleId = nextProps.match.params.bibleId;
+		const nextUrlBookId = nextProps.match.params.bookId;
+		const nextUrlChapter = nextProps.match.params.chapter;
+
+		// Current props supplied to component
 		const curBooks = fromJS(this.props.homepage.books);
 		const curAudioObjects = this.props.homepage.audioObjects;
-		// can probably use find to get the current book if the new version
-		// has it
-		// Solving the issue of requesting the new data from the
-		// api when a new version is clicked
-		// console.log('filesetTypes in receive props', filesetTypes);
-		// Currently we only have text_plain as an option in the api, this will be changed to formatted_text at some point
+		// const curUrlBibleId = this.props.match.params.bibleId;
+		// const curUrlBookId = this.props.match.params.bookId;
+		const curUrlChapter = this.props.match.params.chapter;
+
+		// Currently we only have text_formatt as an option in the api, this will be changed to formatted at some point
+		// We may also have the addition of a text_plain option
+
+		// Returning in each block here to keep the next if/else blocks from running
+		// This prevents the state being updated twice when a user isn't
+		// directly manipulating the url or coming from another site.
+		if (nextUrlChapter !== curUrlChapter) {
+			this.setActiveChapter(parseInt(nextUrlChapter, 10));
+			this.getChapters({
+				bible: nextUrlBibleId,
+				book: nextUrlBookId,
+				chapter: parseInt(nextUrlChapter, 10),
+				audioObjects,
+				hasTextInDatabase,
+				formattedText: filesetTypes.text_formatt,
+				userAuthenticated,
+				userId,
+			});
+
+			return;
+		}
+		// if (curUrlBibleId !== nextUrlBibleId) {
+		// 	this.setActiveTextId({ textId: nextUrlBibleId, filesets: fromJS(activeFilesets), textName: nextUrlBibleId });
+		// 	this.getBooks({ textId: nextUrlBibleId, filesets: fromJS(activeFilesets), activeBookId: curUrlBookId });
+		//
+		// 	return;
+		// } else if (nextUrlChapter !== curUrlChapter) {
+		// 	this.setActiveChapter(parseInt(nextUrlChapter, 10));
+		// 	this.getChapters({
+		// 		bible: nextUrlBibleId,
+		// 		book: nextUrlBookId,
+		// 		chapter: parseInt(nextUrlChapter, 10),
+		// 		audioObjects,
+		// 		hasTextInDatabase,
+		// 		formattedText: filesetTypes.text_formatt,
+		// 		userAuthenticated,
+		// 		userId,
+		// 	});
+		//
+		// 	return;
+		// }
 
 		if (activeTextId !== this.props.homepage.activeTextId) {
 			this.getBooks({ textId: activeTextId, filesets: fromJS(activeFilesets) });
@@ -168,6 +217,8 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			this.setActiveChapter(chapter);
 			this.getChapters({ userAuthenticated, userId, bible: activeTextId, book: nextBookId, chapter, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
 		} else if (!isEqual(audioObjects, curAudioObjects)) {
+			// Should change this so that it only requests the audio
+			// combining the text and audio into one call isn't the best
 			this.getChapters({
 				bible: activeTextId,
 				book: activeBookId,
@@ -252,7 +303,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		}
 	}
 
-	getBooks = ({ textId, filesets }) => this.props.dispatch(getBooks({ textId, filesets }))
+	getBooks = (props) => this.props.dispatch(getBooks(props))
 
 	getAudio = ({ list }) => this.props.dispatch(getAudio({ list }))
 

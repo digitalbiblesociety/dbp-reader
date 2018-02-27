@@ -152,6 +152,7 @@ export function* getBooks({ textId, filesets, activeBookId }) {
 			country: response.data.country,
 		};
 		// Setting the active book here based on the bookId provided in the url
+		// Need to also account for setting the book id here
 		const activeBook = hasTextInDatabase ? books.find((book) => book.book_id === activeBookId) : backupBooks.find((book) => book.book_id === activeBookId);
 
 		// eventually store a key value pair for each type of resource available
