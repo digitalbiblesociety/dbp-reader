@@ -72,6 +72,16 @@ import saga from './saga';
 
 class HomePage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	componentDidMount() {
+		// Get the first bible based on the url here
+		const { params } = this.props.match;
+
+		this.props.dispatch({
+			type: 'getbible',
+			bibleId: params.bibleId,
+			bookId: params.bookId,
+			chapter: params.chapter,
+		});
+
 		// Init the Facebook api here
 		window.fbAsyncInit = () => {
 			FB.init({ // eslint-disable-line no-undef
@@ -100,15 +110,16 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		const { params } = this.props.match;
 		// next props
 		const { params: nextParams } = nextProps.match;
+		console.log('prev and next match\n', this.props.match, '\n', nextProps.match);
 
 		if (!isEqual(params, nextParams)) {
 			// if the route isn't the same as before find which parts changed
 			const newChapter = params.chapter !== nextParams.chapter;
 			const newBook = params.bookId !== nextParams.bookId;
 			const newBible = params.bibleId !== nextParams.bibleId;
-			console.log('new bible', newBible);
-			console.log('new book', newBook);
-			console.log('new chapter', newChapter);
+			// console.log('new bible', newBible);
+			// console.log('new book', newBook);
+			// console.log('new chapter', newChapter);
 			if (newBible) {
 				// Need to get the bible object with /bibles/[bibleId]
 				// Need to send a request to get the audio and text once the previous request is done - (maybe handled in saga?)
@@ -122,19 +133,28 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 				});
 				// need to update the url if the parameters given weren't valid
 			} else if (newBook) {
+				console.log('new book');
+				// This needs to be here for the case when a user goes from Genesis 7 to Mark 7 via the dropdown menu
 				// Need to get the audio and text for the new book /bibles/[bibleId]/[bookId]/chapter
 					// Preserve current chapter and try to use it first
 					// Default to first chapter if the new book doesn't have the current chapter
+				this.props.dispatch({
+					type: 'getchapter',
+					filesets: nextProps.homepage.activeFilesets,
+					bibleId: nextParams.bibleId,
+					bookId: nextParams.bookId,
+					chapter: nextParams.chapter,
+				});
 			} else if (newChapter) {
 				// Need to get the audio and text for the new chapter /bibles/[bibleId]/[bookId]/chapter
 					// if the chapter is not invalid default to first chapter of the current book
 			}
 		} else if (this.props.homepage.activeBookId !== nextProps.homepage.activeBookId) {
 		// Deals with when the new text doesn't have the same books
-			console.log('the current id doesnt match');
-			console.log(this.props);
+		// 	console.log('the current id doesnt match');
+		// 	console.log(this.props);
 			this.props.history.replace(`/${nextProps.homepage.activeTextId}/${nextProps.homepage.activeBookId}/${nextProps.homepage.activeChapter}`);
-			console.log('route that I pushed', `/${nextProps.homepage.activeTextId}/${nextProps.homepage.activeBookId}/${nextProps.homepage.activeChapter}`);
+			// console.log('route that I pushed', `/${nextProps.homepage.activeTextId}/${nextProps.homepage.activeBookId}/${nextProps.homepage.activeChapter}`);
 		}
 
 		// Deals with updating the interface if a user is authenticated or added highlights
@@ -179,11 +199,11 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 
 		if (activeChapter === maxChapter) {
 			this.setActiveBookName({ book: nextBook.get('name'), id: nextBook.get('book_id') });
-			this.getChapters({ userAuthenticated, userId, bible: activeTextId, book: nextBook.get('book_id'), chapter: 1, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
+			// this.getChapters({ userAuthenticated, userId, bible: activeTextId, book: nextBook.get('book_id'), chapter: 1, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
 			this.setActiveChapter(1);
 			this.props.history.push(`/${activeTextId}/${nextBook.get('book_id')}/1`);
 		} else {
-			this.getChapters({ userAuthenticated, userId, bible: activeTextId, book: activeBookId, chapter: activeChapter + 1, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
+			// this.getChapters({ userAuthenticated, userId, bible: activeTextId, book: activeBookId, chapter: activeChapter + 1, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
 			this.setActiveChapter(activeChapter + 1);
 			this.props.history.push(`/${activeTextId}/${activeBookId}/${activeChapter + 1}`);
 		}
@@ -209,12 +229,12 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			const lastChapter = previousBook.get('chapters').size;
 
 			this.setActiveBookName({ book: previousBook.get('name'), id: previousBook.get('book_id') });
-			this.getChapters({ userAuthenticated, userId, bible: activeTextId, book: previousBook.get('book_id'), chapter: lastChapter, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
+			// this.getChapters({ userAuthenticated, userId, bible: activeTextId, book: previousBook.get('book_id'), chapter: lastChapter, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
 			this.setActiveChapter(lastChapter);
 			this.props.history.push(`/${activeTextId}/${previousBook.get('book_id')}/${lastChapter}`);
 			// Goes to the previous Chapter
 		} else {
-			this.getChapters({ userAuthenticated, userId, bible: activeTextId, book: activeBookId, chapter: activeChapter - 1, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
+			// this.getChapters({ userAuthenticated, userId, bible: activeTextId, book: activeBookId, chapter: activeChapter - 1, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
 			this.setActiveChapter(activeChapter - 1);
 			this.props.history.push(`/${activeTextId}/${activeBookId}/${activeChapter - 1}`);
 		}

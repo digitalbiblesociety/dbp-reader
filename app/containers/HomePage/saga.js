@@ -9,7 +9,70 @@ import get from 'lodash/get';
 import { ADD_HIGHLIGHTS, LOAD_HIGHLIGHTS, GET_CHAPTER_TEXT, GET_HIGHLIGHTS, GET_BOOKS, GET_AUDIO, INIT_APPLICATION } from './constants';
 import { loadChapter, loadBooksAndCopywrite, loadAudio } from './actions';
 
-const testFiles = {
+const testEsvFiles = {
+	"ENGESVN1DA": {
+		"bucket_id": "dbp-dev",
+		"set_type_code": "audio",
+		"set_size_code": "NT",
+		"meta": []
+	},
+	"ENGGIDO1DA": {
+		"bucket_id": "dbp-dev",
+		"set_type_code": "audio",
+		"set_size_code": "OT",
+		"meta": []
+	},
+	"ENGESVN2DA": {
+		"bucket_id": "dbp-dev",
+		"set_type_code": "audio_drama",
+		"set_size_code": "NT",
+		"meta": []
+	},
+	"ENGGIDO2DA": {
+		"bucket_id": "dbp-dev",
+		"set_type_code": "audio_drama",
+		"set_size_code": "OT",
+		"meta": []
+	},
+	"ENGESVO2DA": {
+		"bucket_id": "dbp-dev",
+		"set_type_code": "audio_drama",
+		"set_size_code": "OT",
+		"meta": []
+	},
+	"ENGESVT2DA": {
+		"bucket_id": "dbp-dev",
+		"set_type_code": "audio_drama",
+		"set_size_code": "NT",
+		"meta": []
+	},
+	"ENGESVC2DA": {
+		"bucket_id": "dbp-dev",
+		"set_type_code": "audio_drama",
+		"set_size_code": "C",
+		"meta": []
+	},
+	"ENGGIDN2DA": {
+		"bucket_id": "dbp-dev",
+		"set_type_code": "audio_drama",
+		"set_size_code": "NT",
+		"meta": []
+	},
+	"ENGESVO1DA": {
+		"bucket_id": "dbp-dev",
+		"set_type_code": "audio",
+		"set_size_code": "OT",
+		"meta": []
+	},
+	"ENGGIDN1DA": {
+		"bucket_id": "dbp-dev",
+		"set_type_code": "audio",
+		"set_size_code": "NT",
+		"meta": []
+	},
+};
+
+const testKjvFiles = {
 	ENGKJVN1DA: {
 		bucket_id: 'dbp-dev',
 		set_type_code: 'audio',
@@ -373,26 +436,26 @@ export function* getBibleFromUrl({ bibleId, bookId, chapter }) {
 	// Probably need to do stuff here to get the audio and text for this new bible
 	try {
 		const response = yield call(request, requestUrl);
-		console.log('bible response', response);
+		// console.log('bible response', response);
 		if (response.data && Object.keys(response.data).length) {
 			// Creating new objects for each set of data needed to ensure I don't forget something
 			// I probably will want to use 'yield all' for getting the audio and text so they can be run async
 			const bible = response.data;
 			const books = bible.books; // Need to ensure that I have the books here
-			console.log('books in new bible', books);
+			// console.log('books in new bible', books);
 			const activeBook = books.find((b) => b.book_id === bookId);
-			console.log('active book', activeBook);
+			// console.log('active book', activeBook);
 			const activeChapter = activeBook ? parseInt(chapter, 10) : 1;
 			const activeBookId = activeBook ? activeBook.book_id : get(books, [0, 'book_id'], '');
 			const activeBookName = activeBook ? activeBook.name_short : get(books, [0, 'name_short'], '');
 			// calling a generator that will handle the api requests for getting text
 			const chapterData = yield call(getChapterFromUrl, {
-				filesets: bible.filesets || testFiles,
+				filesets: bible.filesets || (bibleId === 'ENGESV' ? testEsvFiles : testKjvFiles),
 				bibleId,
 				bookId: activeBookId,
 				chapter: activeChapter,
 			});
-			console.log('chapter data', chapterData);
+			// console.log('chapter data', chapterData);
 			// still need to include to active book name so that iteration happens here
 			yield put({
 				type: 'loadbible',
@@ -422,7 +485,7 @@ export function* getChapterFromUrl({ filesets, bibleId, bookId, chapter }) {
 	const hasAudio = some(filesets, (f) => f.set_type_code === 'audio' || f.set_type_code === 'audio_drama');
 
 	try {
-		let formattedText = [];
+		let formattedText = '';
 		let plainText = [];
 		let hasPlainText = true;
 
@@ -456,9 +519,17 @@ export function* getChapterFromUrl({ filesets, bibleId, bookId, chapter }) {
 			hasPlainText = false;
 		}
 
-		console.log('plain text array', plainText);
-		console.log('formatted text array', formattedText);
+		// console.log('plain text array', plainText);
+		// console.log('formatted text array', formattedText);
 		// Building response with all the needed data for a chapter to be usable
+		yield put({
+			type: 'loadnewchapter',
+			plainText,
+			formattedText,
+			hasPlainText,
+			hasFormattedText,
+			hasAudio,
+		});
 		return {
 			plainText,
 			formattedText,
@@ -475,7 +546,7 @@ export function* getChapterFromUrl({ filesets, bibleId, bookId, chapter }) {
 	// Return a default object in the case that none of the api calls work
 	return {
 		plainText: [],
-		formattedText: [],
+		formattedText: '',
 		hasFormattedText: false,
 		hasPlainText: false,
 		hasAudio: false,
@@ -484,10 +555,11 @@ export function* getChapterFromUrl({ filesets, bibleId, bookId, chapter }) {
 
 // Individual exports for testing
 export default function* defaultSaga() {
-	yield takeLatest(INIT_APPLICATION, initApplication);
-	yield takeLatest(GET_AUDIO, getAudio);
-	yield takeLatest(GET_BOOKS, getBooks);
-	yield takeLatest(GET_CHAPTER_TEXT, getChapter);
+	// yield takeLatest(INIT_APPLICATION, initApplication);
+	// yield takeLatest(GET_AUDIO, getAudio);
+	// yield takeLatest(GET_BOOKS, getBooks);
+	// yield takeLatest(GET_CHAPTER_TEXT, getChapter);
+	yield takeLatest('getchapter', getChapterFromUrl);
 	yield takeLatest(GET_HIGHLIGHTS, getHighlights);
 	yield takeLatest(ADD_HIGHLIGHTS, addHighlight);
 	yield takeLatest('getbible', getBibleFromUrl);
