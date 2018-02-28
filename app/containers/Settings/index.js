@@ -70,7 +70,7 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 		this.ref = node;
 	}
 
-	handleSliderChange = (position) => this.updateFontSize({ size: position })
+	handleSliderChange = (position) => this.updateFontSize({ size: position });
 
 	handleClickOutside = (event) => {
 		const bounds = this.ref.getBoundingClientRect();
@@ -145,13 +145,31 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 						</span>
 					</section>
 					<section className="font-sizes">
-						<span role="button" tabIndex={0} onClick={() => this.updateFontSize({ size: 1 })} className={`option smallest${activeFontSize === 1 ? ' active' : ''}`}>Aa</span>
-						<span role="button" tabIndex={0} onClick={() => this.updateFontSize({ size: 2 })} className={`option small${activeFontSize === 2 ? ' active' : ''}`}>Aa</span>
-						<span role="button" tabIndex={0} onClick={() => this.updateFontSize({ size: 3 })} className={`option medium${activeFontSize === 3 ? ' active' : ''}`}>Aa</span>
-						<span role="button" tabIndex={0} onClick={() => this.updateFontSize({ size: 4 })} className={`option large${activeFontSize === 4 ? ' active' : ''}`}>Aa</span>
-						<span role="button" tabIndex={0} onClick={() => this.updateFontSize({ size: 5 })} className={`option largest${activeFontSize === 5 ? ' active' : ''}`}>Aa</span>
+						<span role="button" tabIndex={0} onClick={() => this.updateFontSize({ size: 0 })} className={`option smallest${activeFontSize === 0 ? ' active' : ''}`}>Aa</span>
+						<span role="button" tabIndex={0} onClick={() => this.updateFontSize({ size: 19 })} className={`option small${activeFontSize === 18 ? ' active' : ''}`}>Aa</span>
+						<span role="button" tabIndex={0} onClick={() => this.updateFontSize({ size: 42 })} className={`option medium${activeFontSize === 42 ? ' active' : ''}`}>Aa</span>
+						<span role="button" tabIndex={0} onClick={() => this.updateFontSize({ size: 69 })} className={`option large${activeFontSize === 69 ? ' active' : ''}`}>Aa</span>
+						<span role="button" tabIndex={0} onClick={() => this.updateFontSize({ size: 100 })} className={`option largest${activeFontSize === 100 ? ' active' : ''}`}>Aa</span>
 					</section>
-					<Slider className="font-sizes-slider" onChange={this.handleSliderChange} defaultValue={activeFontSize} value={activeFontSize} handleStyle={{ border: 'none', backgroundColor: 'rgb(98,177,130)' }} railStyle={{ backgroundColor: 'rgb(26,29,33)' }} trackStyle={{ backgroundColor: 'rgb(98,177,130)' }} step={1} min={1} max={5} />
+					<Slider
+						className="font-sizes-slider"
+						onChange={this.handleSliderChange}
+						defaultValue={activeFontSize}
+						value={activeFontSize}
+						handleStyle={{ border: 'none', backgroundColor: 'rgb(98,177,130)' }}
+						railStyle={{ backgroundColor: 'rgb(26,29,33)' }}
+						trackStyle={{ backgroundColor: 'rgb(98,177,130)' }}
+						step={null}
+						marks={{
+							0: '',
+							18: '',
+							42: '',
+							69: '',
+							100: '',
+						}}
+						min={0}
+						max={100}
+					/>
 					<section className="option-toggles">
 						{
 							toggleOptions.valueSeq().map((option) => (<SettingsToggle key={option.get('name')} checked={option.get('active')} name={option.get('name')} action={this.toggleSettingsOption} />))

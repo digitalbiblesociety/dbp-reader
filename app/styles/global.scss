@@ -146,3 +146,6 @@ main:after,
   background-color: rgba(255, 255, 255, .5);
   -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
 }
+
+// rc-slider overrides
+.rc-slider-dot {background-color: transparent;border: none;}
