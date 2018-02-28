@@ -133,7 +133,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		// Deals with when the new text doesn't have the same books
 			console.log('the current id doesnt match');
 			console.log(this.props);
-			this.props.history.push(`/${nextProps.homepage.activeTextId}/${nextProps.homepage.activeBookId}/${nextProps.homepage.activeChapter}`);
+			this.props.history.replace(`/${nextProps.homepage.activeTextId}/${nextProps.homepage.activeBookId}/${nextProps.homepage.activeChapter}`);
 			console.log('route that I pushed', `/${nextProps.homepage.activeTextId}/${nextProps.homepage.activeBookId}/${nextProps.homepage.activeChapter}`);
 		}
 
