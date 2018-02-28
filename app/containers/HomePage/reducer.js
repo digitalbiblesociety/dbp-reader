@@ -196,7 +196,19 @@ function homePageReducer(state = initialState, action) {
 		return state.set('selectedBookName', action.book);
 	case 'loadbible':
 		console.log('loading bible with', action);
-		return state;
+		return state
+			.set('activeTextId', fromJS(action.bibleId))
+			.set('activeBookId', fromJS(action.activeBookId))
+			.set('activeChapter', fromJS(action.activeChapter))
+			.set('activeTextName', fromJS(action.bible.vname))
+			.set('defaultLanguageIso', fromJS(action.bible.iso))
+			.set('activeBookName', fromJS(action.activeBookName))
+			.set('hasFormattedText', fromJS(action.chapterData.hasFormattedText))
+			.set('hasTextInDatabase', fromJS(action.chapterData.hasPlainText))
+			.set('hasAudio', fromJS(action.chapterData.hasAudio))
+			.set('chapterText', fromJS(action.chapterData.plainText))
+			.set('books', fromJS(action.books))
+			.set('formattedSource', fromJS(action.chapterData.formattedText));
 	default:
 		return state;
 	}

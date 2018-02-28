@@ -110,16 +110,17 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			console.log('new book', newBook);
 			console.log('new chapter', newChapter);
 			if (newBible) {
+				// Need to get the bible object with /bibles/[bibleId]
+				// Need to send a request to get the audio and text once the previous request is done - (maybe handled in saga?)
+					// Needs to preserve the current book and chapter to try and use it first
+					// Needs to default to the first available book and chapter if the current option isn't available
 				this.props.dispatch({
 					type: 'getbible',
 					bibleId: nextParams.bibleId,
 					bookId: nextParams.bookId,
 					chapter: nextParams.chapter,
 				});
-				// Need to get the bible object with /bibles/[bibleId]
-				// Need to send a request to get the audio and text once the previous request is done - (maybe handled in saga?)
-					// Needs to preserve the current book and chapter to try and use it first
-					// Needs to default to the first available book and chapter if the current option isn't available
+				// need to update the url if the parameters given weren't valid
 			} else if (newBook) {
 				// Need to get the audio and text for the new book /bibles/[bibleId]/[bookId]/chapter
 					// Preserve current chapter and try to use it first
@@ -128,6 +129,12 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 				// Need to get the audio and text for the new chapter /bibles/[bibleId]/[bookId]/chapter
 					// if the chapter is not invalid default to first chapter of the current book
 			}
+		} else if (this.props.homepage.activeBookId !== nextProps.homepage.activeBookId) {
+		// Deals with when the new text doesn't have the same books
+			console.log('the current id doesnt match');
+			console.log(this.props);
+			this.props.history.push(`/${nextProps.homepage.activeTextId}/${nextProps.homepage.activeBookId}/${nextProps.homepage.activeChapter}`);
+			console.log('route that I pushed', `/${nextProps.homepage.activeTextId}/${nextProps.homepage.activeBookId}/${nextProps.homepage.activeChapter}`);
 		}
 
 		// Deals with updating the interface if a user is authenticated or added highlights

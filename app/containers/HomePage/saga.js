@@ -5,6 +5,7 @@ import { fromJS } from 'immutable';
 import unionWith from 'lodash/unionWith';
 import some from 'lodash/some';
 import reduce from 'lodash/reduce';
+import get from 'lodash/get';
 import { ADD_HIGHLIGHTS, LOAD_HIGHLIGHTS, GET_CHAPTER_TEXT, GET_HIGHLIGHTS, GET_BOOKS, GET_AUDIO, INIT_APPLICATION } from './constants';
 import { loadChapter, loadBooksAndCopywrite, loadAudio } from './actions';
 
@@ -381,8 +382,9 @@ export function* getBibleFromUrl({ bibleId, bookId, chapter }) {
 			console.log('books in new bible', books);
 			const activeBook = books.find((b) => b.book_id === bookId);
 			console.log('active book', activeBook);
-			const activeChapter = activeBook ? chapter : 1;
-			const activeBookId = activeBook ? activeBook.book_id : books[0].book_id;
+			const activeChapter = activeBook ? parseInt(chapter, 10) : 1;
+			const activeBookId = activeBook ? activeBook.book_id : get(books, [0, 'book_id'], '');
+			const activeBookName = activeBook ? activeBook.name_short : get(books, [0, 'name_short'], '');
 			// calling a generator that will handle the api requests for getting text
 			const chapterData = yield call(getChapterFromUrl, {
 				filesets: bible.filesets || testFiles,
@@ -391,8 +393,17 @@ export function* getBibleFromUrl({ bibleId, bookId, chapter }) {
 				chapter: activeChapter,
 			});
 			console.log('chapter data', chapterData);
-
-			yield put({ type: 'loadbible', bible, books, chapterData, activeBookId, activeChapter });
+			// still need to include to active book name so that iteration happens here
+			yield put({
+				type: 'loadbible',
+				bible,
+				books,
+				chapterData,
+				bibleId,
+				activeBookId,
+				activeChapter,
+				activeBookName,
+			});
 		} else {
 			yield put({ type: 'loadbibleerror' });
 		}
@@ -418,11 +429,12 @@ export function* getChapterFromUrl({ filesets, bibleId, bookId, chapter }) {
 		// Try to get the formatted text if it is available
 		if (hasFormattedText) {
 			try {
+				// Gets the last fileset id for a formatted text
 				const filesetId = reduce(filesets, (a, c, i) => c.set_type_code === 'text_formatt' ? i : a, '');
 				const reqUrl = `https://api.bible.build/bibles/filesets/${filesetId}?key=${process.env.DBP_API_KEY}&v=4&book_id=${bookId}&chapter_id=${chapter}`;
 				const res = yield call(request, reqUrl);
 				console.log('response for formatted text', res);
-				formattedText = res.data;
+				formattedText = get(res.data, [0, 'path'], '');
 			} catch (error) {
 				if (process.env.NODE_ENV === 'development') {
 					console.error('Caught in get formatted text block', error); // eslint-disable-line no-console
@@ -439,7 +451,7 @@ export function* getChapterFromUrl({ filesets, bibleId, bookId, chapter }) {
 			plainText = res.data;
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
-				console.error('Caught in get chapter from url', error); // eslint-disable-line no-console
+				console.error('Caught in get plain text block', error); // eslint-disable-line no-console
 			}
 			hasPlainText = false;
 		}
