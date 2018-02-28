@@ -3,8 +3,119 @@ import { takeLatest, call, put, all } from 'redux-saga/effects';
 import request from 'utils/request';
 import { fromJS } from 'immutable';
 import unionWith from 'lodash/unionWith';
+import some from 'lodash/some';
+import reduce from 'lodash/reduce';
+import get from 'lodash/get';
 import { ADD_HIGHLIGHTS, LOAD_HIGHLIGHTS, GET_CHAPTER_TEXT, GET_HIGHLIGHTS, GET_BOOKS, GET_AUDIO, INIT_APPLICATION } from './constants';
 import { loadChapter, loadBooksAndCopywrite, loadAudio } from './actions';
+
+const testEsvFiles = {
+	ENGESVN1DA: {
+		bucket_id: 'dbp-dev',
+		set_type_code: 'audio',
+		set_size_code: 'NT',
+		meta: [],
+	},
+	ENGGIDO1DA: {
+		bucket_id: 'dbp-dev',
+		set_type_code: 'audio',
+		set_size_code: 'OT',
+		meta: [],
+	},
+	ENGESVN2DA: {
+		bucket_id: 'dbp-dev',
+		set_type_code: 'audio_drama',
+		set_size_code: 'NT',
+		meta: [],
+	},
+	ENGGIDO2DA: {
+		bucket_id: 'dbp-dev',
+		set_type_code: 'audio_drama',
+		set_size_code: 'OT',
+		meta: [],
+	},
+	ENGESVO2DA: {
+		bucket_id: 'dbp-dev',
+		set_type_code: 'audio_drama',
+		set_size_code: 'OT',
+		meta: [],
+	},
+	ENGESVT2DA: {
+		bucket_id: 'dbp-dev',
+		set_type_code: 'audio_drama',
+		set_size_code: 'NT',
+		meta: [],
+	},
+	ENGESVC2DA: {
+		bucket_id: 'dbp-dev',
+		set_type_code: 'audio_drama',
+		set_size_code: 'C',
+		meta: [],
+	},
+	ENGGIDN2DA: {
+		bucket_id: 'dbp-dev',
+		set_type_code: 'audio_drama',
+		set_size_code: 'NT',
+		meta: [],
+	},
+	ENGESVO1DA: {
+		bucket_id: 'dbp-dev',
+		set_type_code: 'audio',
+		set_size_code: 'OT',
+		meta: [],
+	},
+	ENGGIDN1DA: {
+		bucket_id: 'dbp-dev',
+		set_type_code: 'audio',
+		set_size_code: 'NT',
+		meta: [],
+	},
+};
+
+const testKjvFiles = {
+	ENGKJVN1DA: {
+		bucket_id: 'dbp-dev',
+		set_type_code: 'audio',
+		set_size_code: 'NT',
+		meta: [],
+	},
+	ENGKJVC1DA: {
+		bucket_id: 'dbp-dev',
+		set_type_code: 'audio',
+		set_size_code: 'C',
+		meta: [],
+	},
+	ENGKJVO1DA: {
+		bucket_id: 'dbp-dev',
+		set_type_code: 'audio',
+		set_size_code: 'OT',
+		meta: [],
+	},
+	ENGKJVO2DA: {
+		bucket_id: 'dbp-dev',
+		set_type_code: 'audio_drama',
+		set_size_code: 'OT',
+		meta: [],
+	},
+	ENGKJVN2DA: {
+		bucket_id: 'dbp-dev',
+		set_type_code: 'audio_drama',
+		set_size_code: 'NT',
+		meta: [],
+	},
+	ENGKJVC2DA: {
+		bucket_id: 'dbp-dev',
+		set_type_code: 'audio_drama',
+		set_size_code: 'C',
+		meta: [],
+	},
+	ENGKJV: {
+		bucket_id: 'dbs-web',
+		set_type_code: 'text_formatt',
+		set_size_code: 'C',
+		meta: [],
+	},
+};
 
 export function* initApplication({ activeTextId }) {
 	// This will always have to request the full list of versions because the url will not contain language information
@@ -127,6 +238,7 @@ export function* getBooks({ textId, filesets, activeBookId }) {
 		});
 
 		for (const url of urls) { // eslint-disable-line no-restricted-syntax
+			// Fix this to not be so gross................
 			const res = yield request(url.url);
 			if (res.data.length !== 0) {
 				filesetTypes[url.type] = url.filesetId;
@@ -154,10 +266,6 @@ export function* getBooks({ textId, filesets, activeBookId }) {
 		// Setting the active book here based on the bookId provided in the url
 		// Need to also account for setting the book id here
 		const activeBook = hasTextInDatabase ? books.find((book) => book.book_id === activeBookId) : backupBooks.find((book) => book.book_id === activeBookId);
-		// console.log('backupBooks', backupBooks);
-		// console.log('books', books);
-		// console.log('activeBook', activeBook);
-		// console.log('activeBookId', activeBookId);
 		// eventually store a key value pair for each type of resource available
 		yield put(loadBooksAndCopywrite({
 			books: hasTextInDatabase ? books : backupBooks,
@@ -317,12 +425,142 @@ export function* addHighlight({ bible, book, chapter, userId, verseStart, highli
 	}
 }
 
+export function* getBibleFromUrl({ bibleId, bookId, chapter }) {
+	// This function needs to return the data listed below
+	// Books
+	// Active or first chapter text
+	// Active or first chapter audio
+	// Bible name
+	// Bible id
+	const requestUrl = `https://api.bible.build/bibles/${bibleId}?key=${process.env.DBP_API_KEY}&v=4`;
+	// Probably need to do stuff here to get the audio and text for this new bible
+	try {
+		const response = yield call(request, requestUrl);
+		// console.log('bible response', response);
+		if (response.data && Object.keys(response.data).length) {
+			// Creating new objects for each set of data needed to ensure I don't forget something
+			// I probably will want to use 'yield all' for getting the audio and text so they can be run async
+			const bible = response.data;
+			const books = bible.books; // Need to ensure that I have the books here
+			// console.log('books in new bible', books);
+			const activeBook = books.find((b) => b.book_id === bookId);
+			// console.log('active book', activeBook);
+			const activeChapter = activeBook ? parseInt(chapter, 10) : 1;
+			const activeBookId = activeBook ? activeBook.book_id : get(books, [0, 'book_id'], '');
+			const activeBookName = activeBook ? activeBook.name_short : get(books, [0, 'name_short'], '');
+			// calling a generator that will handle the api requests for getting text
+			const chapterData = yield call(getChapterFromUrl, {
+				filesets: bible.filesets || (bibleId === 'ENGESV' ? testEsvFiles : testKjvFiles),
+				bibleId,
+				bookId: activeBookId,
+				chapter: activeChapter,
+			});
+			// console.log('chapter data', chapterData);
+			// still need to include to active book name so that iteration happens here
+			yield put({
+				type: 'loadbible',
+				bible,
+				books,
+				chapterData,
+				bibleId,
+				activeBookId,
+				activeChapter,
+				activeBookName,
+			});
+		} else {
+			yield put({ type: 'loadbibleerror' });
+		}
+	} catch (error) {
+		if (process.env.NODE_ENV === 'development') {
+			console.error('Caught in get bible', error); // eslint-disable-line no-console
+		}
+	}
+}
+
+export function* getChapterFromUrl({ filesets, bibleId, bookId, chapter }) {
+	// console.log('bible, book, chapter', bibleId, bookId, chapter);
+	// console.log('filesets', filesets);
+	const hasFormattedText = some(filesets, (f) => f.set_type_code === 'text_formatt');
+	// checking for audio but not fetching it as a part of this saga
+	const hasAudio = some(filesets, (f) => f.set_type_code === 'audio' || f.set_type_code === 'audio_drama');
+
+	try {
+		let formattedText = '';
+		let plainText = [];
+		let hasPlainText = true;
+
+		// Try to get the formatted text if it is available
+		if (hasFormattedText) {
+			try {
+				// Gets the last fileset id for a formatted text
+				const filesetId = reduce(filesets, (a, c, i) => c.set_type_code === 'text_formatt' ? i : a, '');
+				const reqUrl = `https://api.bible.build/bibles/filesets/${filesetId}?key=${process.env.DBP_API_KEY}&v=4&book_id=${bookId}&chapter_id=${chapter}`;
+				const res = yield call(request, reqUrl);
+				// console.log('response for formatted text', res);
+				formattedText = get(res.data, [0, 'path'], '');
+			} catch (error) {
+				if (process.env.NODE_ENV === 'development') {
+					console.error('Caught in get formatted text block', error); // eslint-disable-line no-console
+				}
+			}
+		}
+
+		// Try to get the plain text every time
+		// When this fails it should fail gracefully and not cause anything to break
+		try {
+			const reqUrl = `https://api.bible.build/bibles/${bibleId}/${bookId}/${chapter}?key=${process.env.DBP_API_KEY}&v=4&book_id=${bookId}&chapter_id=${chapter}`;
+			const res = yield call(request, reqUrl);
+			// console.log('response for plain text', res);
+			plainText = res.data;
+		} catch (error) {
+			if (process.env.NODE_ENV === 'development') {
+				console.error('Caught in get plain text block', error); // eslint-disable-line no-console
+			}
+			hasPlainText = false;
+		}
+
+		// console.log('plain text array', plainText);
+		// console.log('formatted text array', formattedText);
+		// Building response with all the needed data for a chapter to be usable
+		yield put({
+			type: 'loadnewchapter',
+			plainText,
+			formattedText,
+			hasPlainText,
+			hasFormattedText,
+			hasAudio,
+		});
+		return {
+			plainText,
+			formattedText,
+			hasPlainText,
+			hasFormattedText,
+			hasAudio,
+		};
+	} catch (error) {
+		if (process.env.NODE_ENV === 'development') {
+			console.error('Caught in get chapter from url', error); // eslint-disable-line no-console
+		}
+	}
+
+	// Return a default object in the case that none of the api calls work
+	return {
+		plainText: [],
+		formattedText: '',
+		hasFormattedText: false,
+		hasPlainText: false,
+		hasAudio: false,
+	};
+}
+
 // Individual exports for testing
 export default function* defaultSaga() {
-	yield takeLatest(INIT_APPLICATION, initApplication);
-	yield takeLatest(GET_AUDIO, getAudio);
-	yield takeLatest(GET_BOOKS, getBooks);
-	yield takeLatest(GET_CHAPTER_TEXT, getChapter);
+	// yield takeLatest(INIT_APPLICATION, initApplication);
+	// yield takeLatest(GET_AUDIO, getAudio);
+	// yield takeLatest(GET_BOOKS, getBooks);
+	// yield takeLatest(GET_CHAPTER_TEXT, getChapter);
+	yield takeLatest('getchapter', getChapterFromUrl);
 	yield takeLatest(GET_HIGHLIGHTS, getHighlights);
 	yield takeLatest(ADD_HIGHLIGHTS, addHighlight);
+	yield takeLatest('getbible', getBibleFromUrl);
 }
