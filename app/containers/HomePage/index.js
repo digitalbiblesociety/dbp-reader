@@ -100,7 +100,6 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		const { params } = this.props.match;
 		// next props
 		const { params: nextParams } = nextProps.match;
-		console.log('prev and next params\n', params, '\n', nextParams);
 
 		if (!isEqual(params, nextParams)) {
 			// if the route isn't the same as before find which parts changed
@@ -111,7 +110,12 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			console.log('new book', newBook);
 			console.log('new chapter', newChapter);
 			if (newBible) {
-				this.props.dispatch({ type: 'getbible', bibleId: nextParams.bibleId, bookId: nextParams.bookId, chapter: nextParams.chapter });
+				this.props.dispatch({
+					type: 'getbible',
+					bibleId: nextParams.bibleId,
+					bookId: nextParams.bookId,
+					chapter: nextParams.chapter,
+				});
 				// Need to get the bible object with /bibles/[bibleId]
 				// Need to send a request to get the audio and text once the previous request is done - (maybe handled in saga?)
 					// Needs to preserve the current book and chapter to try and use it first

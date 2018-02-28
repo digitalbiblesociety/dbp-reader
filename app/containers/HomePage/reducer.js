@@ -194,6 +194,9 @@ function homePageReducer(state = initialState, action) {
 		return state.set('selectedText', action.text);
 	case SET_SELECTED_BOOK_NAME:
 		return state.set('selectedBookName', action.book);
+	case 'loadbible':
+		console.log('loading bible with', action);
+		return state;
 	default:
 		return state;
 	}
