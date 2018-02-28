@@ -10,65 +10,65 @@ import { ADD_HIGHLIGHTS, LOAD_HIGHLIGHTS, GET_CHAPTER_TEXT, GET_HIGHLIGHTS, GET_
 import { loadChapter, loadBooksAndCopywrite, loadAudio } from './actions';
 
 const testEsvFiles = {
-	"ENGESVN1DA": {
-		"bucket_id": "dbp-dev",
-		"set_type_code": "audio",
-		"set_size_code": "NT",
-		"meta": []
+	ENGESVN1DA: {
+		bucket_id: 'dbp-dev',
+		set_type_code: 'audio',
+		set_size_code: 'NT',
+		meta: [],
 	},
-	"ENGGIDO1DA": {
-		"bucket_id": "dbp-dev",
-		"set_type_code": "audio",
-		"set_size_code": "OT",
-		"meta": []
+	ENGGIDO1DA: {
+		bucket_id: 'dbp-dev',
+		set_type_code: 'audio',
+		set_size_code: 'OT',
+		meta: [],
 	},
-	"ENGESVN2DA": {
-		"bucket_id": "dbp-dev",
-		"set_type_code": "audio_drama",
-		"set_size_code": "NT",
-		"meta": []
+	ENGESVN2DA: {
+		bucket_id: 'dbp-dev',
+		set_type_code: 'audio_drama',
+		set_size_code: 'NT',
+		meta: [],
 	},
-	"ENGGIDO2DA": {
-		"bucket_id": "dbp-dev",
-		"set_type_code": "audio_drama",
-		"set_size_code": "OT",
-		"meta": []
+	ENGGIDO2DA: {
+		bucket_id: 'dbp-dev',
+		set_type_code: 'audio_drama',
+		set_size_code: 'OT',
+		meta: [],
 	},
-	"ENGESVO2DA": {
-		"bucket_id": "dbp-dev",
-		"set_type_code": "audio_drama",
-		"set_size_code": "OT",
-		"meta": []
+	ENGESVO2DA: {
+		bucket_id: 'dbp-dev',
+		set_type_code: 'audio_drama',
+		set_size_code: 'OT',
+		meta: [],
 	},
-	"ENGESVT2DA": {
-		"bucket_id": "dbp-dev",
-		"set_type_code": "audio_drama",
-		"set_size_code": "NT",
-		"meta": []
+	ENGESVT2DA: {
+		bucket_id: 'dbp-dev',
+		set_type_code: 'audio_drama',
+		set_size_code: 'NT',
+		meta: [],
 	},
-	"ENGESVC2DA": {
-		"bucket_id": "dbp-dev",
-		"set_type_code": "audio_drama",
-		"set_size_code": "C",
-		"meta": []
+	ENGESVC2DA: {
+		bucket_id: 'dbp-dev',
+		set_type_code: 'audio_drama',
+		set_size_code: 'C',
+		meta: [],
 	},
-	"ENGGIDN2DA": {
-		"bucket_id": "dbp-dev",
-		"set_type_code": "audio_drama",
-		"set_size_code": "NT",
-		"meta": []
+	ENGGIDN2DA: {
+		bucket_id: 'dbp-dev',
+		set_type_code: 'audio_drama',
+		set_size_code: 'NT',
+		meta: [],
 	},
-	"ENGESVO1DA": {
-		"bucket_id": "dbp-dev",
-		"set_type_code": "audio",
-		"set_size_code": "OT",
-		"meta": []
+	ENGESVO1DA: {
+		bucket_id: 'dbp-dev',
+		set_type_code: 'audio',
+		set_size_code: 'OT',
+		meta: [],
 	},
-	"ENGGIDN1DA": {
-		"bucket_id": "dbp-dev",
-		"set_type_code": "audio",
-		"set_size_code": "NT",
-		"meta": []
+	ENGGIDN1DA: {
+		bucket_id: 'dbp-dev',
+		set_type_code: 'audio',
+		set_size_code: 'NT',
+		meta: [],
 	},
 };
 
