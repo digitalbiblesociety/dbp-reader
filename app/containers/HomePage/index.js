@@ -104,13 +104,14 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 	// TODO: Rewrite componentWillReceiveProps to only use the route parameters and auth state
 	// The current version of the below function is gross and prone to breaking
 	// This function needs to solve the issue of requesting the new data from the api when a new version is clicked
+	// Need to fix how many times this gets called. The main issue is all the state that is managed by this one thing
 	componentWillReceiveProps(nextProps) {
 		// Deals with updating page based on the url params
 		// previous props
 		const { params } = this.props.match;
 		// next props
 		const { params: nextParams } = nextProps.match;
-		console.log('prev and next match\n', this.props.match, '\n', nextProps.match);
+		// console.log('prev and next match\n', this.props.match, '\n', nextProps.match);
 
 		if (!isEqual(params, nextParams)) {
 			// if the route isn't the same as before find which parts changed
@@ -121,6 +122,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			// console.log('new book', newBook);
 			// console.log('new chapter', newChapter);
 			if (newBible) {
+				// console.log('new bible');
 				// Need to get the bible object with /bibles/[bibleId]
 				// Need to send a request to get the audio and text once the previous request is done - (maybe handled in saga?)
 					// Needs to preserve the current book and chapter to try and use it first
@@ -133,7 +135,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 				});
 				// need to update the url if the parameters given weren't valid
 			} else if (newBook) {
-				console.log('new book');
+				// console.log('new book');
 				// This needs to be here for the case when a user goes from Genesis 7 to Mark 7 via the dropdown menu
 				// Need to get the audio and text for the new book /bibles/[bibleId]/[bookId]/chapter
 					// Preserve current chapter and try to use it first
@@ -146,8 +148,16 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					chapter: nextParams.chapter,
 				});
 			} else if (newChapter) {
+				// console.log('new chapter');
 				// Need to get the audio and text for the new chapter /bibles/[bibleId]/[bookId]/chapter
 					// if the chapter is not invalid default to first chapter of the current book
+				this.props.dispatch({
+					type: 'getchapter',
+					filesets: nextProps.homepage.activeFilesets,
+					bibleId: nextParams.bibleId,
+					bookId: nextParams.bookId,
+					chapter: nextParams.chapter,
+				});
 			}
 		} else if (this.props.homepage.activeBookId !== nextProps.homepage.activeBookId) {
 		// Deals with when the new text doesn't have the same books

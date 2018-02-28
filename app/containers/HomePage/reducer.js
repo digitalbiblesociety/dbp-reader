@@ -195,7 +195,7 @@ function homePageReducer(state = initialState, action) {
 	case SET_SELECTED_BOOK_NAME:
 		return state.set('selectedBookName', action.book);
 	case 'loadbible':
-		console.log('loading bible with', action);
+		// console.log('loading bible with', action);
 		return state
 			.set('activeTextId', fromJS(action.bibleId))
 			.set('activeBookId', fromJS(action.activeBookId))
@@ -211,13 +211,13 @@ function homePageReducer(state = initialState, action) {
 			// .set('formattedSource', fromJS(action.chapterData.formattedText))
 			.set('activeFilesets', fromJS(action.bible.filesets));
 	case 'loadnewchapter':
-		console.log('loading chapter with', action);
+		// console.log('loading chapter with', action);
 		return state
 			.set('hasFormattedText', fromJS(action.hasFormattedText))
 			.set('hasTextInDatabase', fromJS(action.hasPlainText))
 			.set('hasAudio', fromJS(action.hasAudio))
 			.set('chapterText', fromJS(action.plainText))
-			.set('loadingNewChapter', false)
+			.set('loadingNewChapterText', false)
 			.set('formattedSource', fromJS(action.formattedText));
 	default:
 		return state;

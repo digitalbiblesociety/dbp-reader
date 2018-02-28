@@ -478,8 +478,8 @@ export function* getBibleFromUrl({ bibleId, bookId, chapter }) {
 }
 
 export function* getChapterFromUrl({ filesets, bibleId, bookId, chapter }) {
-	console.log('bible, book, chapter', bibleId, bookId, chapter);
-	console.log('filesets', filesets);
+	// console.log('bible, book, chapter', bibleId, bookId, chapter);
+	// console.log('filesets', filesets);
 	const hasFormattedText = some(filesets, (f) => f.set_type_code === 'text_formatt');
 	// checking for audio but not fetching it as a part of this saga
 	const hasAudio = some(filesets, (f) => f.set_type_code === 'audio' || f.set_type_code === 'audio_drama');
@@ -496,7 +496,7 @@ export function* getChapterFromUrl({ filesets, bibleId, bookId, chapter }) {
 				const filesetId = reduce(filesets, (a, c, i) => c.set_type_code === 'text_formatt' ? i : a, '');
 				const reqUrl = `https://api.bible.build/bibles/filesets/${filesetId}?key=${process.env.DBP_API_KEY}&v=4&book_id=${bookId}&chapter_id=${chapter}`;
 				const res = yield call(request, reqUrl);
-				console.log('response for formatted text', res);
+				// console.log('response for formatted text', res);
 				formattedText = get(res.data, [0, 'path'], '');
 			} catch (error) {
 				if (process.env.NODE_ENV === 'development') {
@@ -510,7 +510,7 @@ export function* getChapterFromUrl({ filesets, bibleId, bookId, chapter }) {
 		try {
 			const reqUrl = `https://api.bible.build/bibles/${bibleId}/${bookId}/${chapter}?key=${process.env.DBP_API_KEY}&v=4&book_id=${bookId}&chapter_id=${chapter}`;
 			const res = yield call(request, reqUrl);
-			console.log('response for plain text', res);
+			// console.log('response for plain text', res);
 			plainText = res.data;
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
