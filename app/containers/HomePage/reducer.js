@@ -221,7 +221,7 @@ function homePageReducer(state = initialState, action) {
 			.set('loadingNewChapterText', false)
 			.set('formattedSource', fromJS(action.formattedText));
 	case 'loadaudio':
-		console.log('loading audio with', action);
+		// console.log('loading audio with', action);
 		return state.set('audioSource', action.audioPath);
 	default:
 		return state;
