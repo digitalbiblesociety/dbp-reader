@@ -18,7 +18,7 @@ import AudioProgressBar from 'components/AudioProgressBar';
 import VolumeSlider from 'components/VolumeSlider';
 import AudioPlayerMenu from 'components/AudioPlayerMenu';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
-import makeSelectAudioPlayer from './selectors';
+import makeSelectAudioPlayer, { selectHasAudio } from './selectors';
 import reducer from './reducer';
 /* eslint-disable jsx-a11y/media-has-caption */
 /* disabled the above eslint config options because you can't add tracks to audio elements */
@@ -34,7 +34,7 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 			volume: 1,
 			duration: 100,
 			currentTime: 0,
-			playerState: !!this.props.audioSource,
+			playerState: !!this.props.hasAudio,
 			currentSpeed: 1,
 		};
 	}
@@ -248,10 +248,12 @@ AudioPlayer.propTypes = {
 	audioSource: PropTypes.string,
 	skipBackward: PropTypes.func.isRequired,
 	skipForward: PropTypes.func.isRequired,
+	hasAudio: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
 	audioplayer: makeSelectAudioPlayer(),
+	hasAudio: selectHasAudio(),
 });
 
 function mapDispatchToProps(dispatch) {

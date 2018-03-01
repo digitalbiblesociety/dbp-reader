@@ -105,6 +105,7 @@ const initialState = fromJS({
 	selectedText: '',
 	selectedBookName: 'Genesis',
 	audioSource: '',
+	hasAudio: false,
 	formattedSource: '',
 	hasTextInDatabase: true,
 	filesetTypes: {},
@@ -219,6 +220,9 @@ function homePageReducer(state = initialState, action) {
 			.set('chapterText', fromJS(action.plainText))
 			.set('loadingNewChapterText', false)
 			.set('formattedSource', fromJS(action.formattedText));
+	case 'loadaudio':
+		console.log('loading audio with', action);
+		return state.set('audioSource', action.audioPath);
 	default:
 		return state;
 	}

@@ -1,5 +1,5 @@
 import 'whatwg-fetch';
-import { takeLatest, call, put, all } from 'redux-saga/effects';
+import { takeLatest, call, put, all , fork} from 'redux-saga/effects';
 import request from 'utils/request';
 import { fromJS } from 'immutable';
 import unionWith from 'lodash/unionWith';
@@ -504,6 +504,15 @@ export function* getChapterFromUrl({ filesets, bibleId, bookId, chapter }) {
 		let plainText = [];
 		let hasPlainText = true;
 
+		// calling this function to start it asynchronously to this one.
+		if (hasAudio) {
+			console.log('calling get chapter audio');
+			// Not yielding this as it doesn't matter when the audio comes back
+			// This function will sometimes have to make multiple api requests
+			// And I don't want it blocking the text from loading
+			yield fork(getChapterAudio, { filesets, bookId, chapter });
+		}
+
 		// Try to get the formatted text if it is available
 		if (hasFormattedText) {
 			try {
@@ -511,7 +520,7 @@ export function* getChapterFromUrl({ filesets, bibleId, bookId, chapter }) {
 				const filesetId = reduce(filesets, (a, c, i) => c.set_type_code === 'text_formatt' ? i : a, '');
 				const reqUrl = `https://api.bible.build/bibles/filesets/${filesetId}?key=${process.env.DBP_API_KEY}&v=4&book_id=${bookId}&chapter_id=${chapter}`;
 				const formattedChapterObject = yield call(request, reqUrl);
-				// console.log('response for formatted text', res);
+				console.log('response for formatted text', formattedChapterObject);
 				formattedText = yield fetch(get(formattedChapterObject.data, [0, 'path'], '')).then((res) => res.text());
 			} catch (error) {
 				if (process.env.NODE_ENV === 'development') {
@@ -525,7 +534,7 @@ export function* getChapterFromUrl({ filesets, bibleId, bookId, chapter }) {
 		try {
 			const reqUrl = `https://api.bible.build/bibles/${bibleId}/${bookId}/${chapter}?key=${process.env.DBP_API_KEY}&v=4&book_id=${bookId}&chapter_id=${chapter}`;
 			const res = yield call(request, reqUrl);
-			// console.log('response for plain text', res);
+			console.log('response for plain text', res);
 			plainText = res.data;
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
@@ -545,6 +554,7 @@ export function* getChapterFromUrl({ filesets, bibleId, bookId, chapter }) {
 			hasFormattedText,
 			hasAudio,
 		});
+
 		return {
 			plainText,
 			formattedText,
@@ -566,6 +576,86 @@ export function* getChapterFromUrl({ filesets, bibleId, bookId, chapter }) {
 		hasPlainText: false,
 		hasAudio: false,
 	};
+}
+
+// I think it makes the most sense to start this running from within
+// The getChapterFromUrl function. This may need to be adjusted when
+// RTMP streaming is implemented
+export function* getChapterAudio({ filesets, bookId, chapter }) {
+	console.log('getting audio', filesets, bookId, chapter);
+	// Parse filesets
+	const completeAudio = [];
+	const ntAudio = [];
+	const otAudio = [];
+	const partialAudio = [];
+
+	Object.entries(filesets).forEach((fileset) => {
+		if (fileset[1].set_size_code === 'C') {
+			completeAudio.push({ id: fileset[0], data: fileset[1] });
+		} else if (fileset[1].set_size_code === 'NT') {
+			ntAudio.push({ id: fileset[0], data: fileset[1] });
+		} else if (fileset[1].set_size_code === 'OT') {
+			otAudio.push({ id: fileset[0], data: fileset[1] });
+		} else {
+			partialAudio.push({ id: fileset[0], data: fileset[1] });
+		}
+	});
+
+	if (completeAudio.length) {
+		console.log('Bible has complete audio', completeAudio);
+		try {
+			const reqUrl = `https://api.bible.build/bibles/filesets/${get(completeAudio, [0, 'id'])}?key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}`;
+			const response = yield call(request, reqUrl);
+			console.log('complete audio response object', response);
+			const audioPath = get(response, ['data', 0, 'path']);
+			console.log('complete audio path', audioPath);
+			yield put({ type: 'loadaudio', audioPath });
+		} catch (error) {
+			if (process.env.NODE_ENV === 'development') {
+				console.error('Caught in getChapterAudio complete audio', error); // eslint-disable-line no-console
+			}
+		}
+	} else if (ntAudio.length) {
+		try {
+			const reqUrl = `https://api.bible.build/bibles/filesets/${get(ntAudio, [0, 'id'])}?key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}`;
+			const response = yield call(request, reqUrl);
+			console.log('nt audio response object', response);
+			const audioPath = get(response, ['data', 0, 'path']);
+			console.log('nt audio path', audioPath);
+			yield put({ type: 'loadaudio', audioPath });
+		} catch (error) {
+			if (process.env.NODE_ENV === 'development') {
+				console.error('Caught in getChapterAudio nt audio', error); // eslint-disable-line no-console
+			}
+		}
+	} else if (otAudio.length) {
+		try {
+			const reqUrl = `https://api.bible.build/bibles/filesets/${get(otAudio, [0, 'id'])}?key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}`;
+			const response = yield call(request, reqUrl);
+			console.log('ot audio response object', response);
+			const audioPath = get(response, ['data', 0, 'path']);
+			console.log('ot audio path', audioPath);
+			yield put({ type: 'loadaudio', audioPath });
+		} catch (error) {
+			if (process.env.NODE_ENV === 'development') {
+				console.error('Caught in getChapterAudio ot audio', error); // eslint-disable-line no-console
+			}
+		}
+	} else if (partialAudio.length) {
+		try {
+			// Need to iterate over each object here to see if I can find the right chapter
+			const reqUrl = `https://api.bible.build/bibles/filesets/${get(partialAudio, [0, 'id'])}?key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}`;
+			const response = yield call(request, reqUrl);
+			console.log('partial audio response object', response);
+			const audioPath = get(response, ['data', 0, 'path']);
+			console.log('partial audio path', audioPath);
+			yield put({ type: 'loadaudio', audioPath });
+		} catch (error) {
+			if (process.env.NODE_ENV === 'development') {
+				console.error('Caught in getChapterAudio partial audio', error); // eslint-disable-line no-console
+			}
+		}
+	}
 }
 
 // Individual exports for testing
