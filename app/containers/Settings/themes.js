@@ -74,11 +74,11 @@ const fonts = {
 };
 
 const sizes = {
-	1: '0.78em',
-	2: '0.88em',
-	3: '0.98em',
-	4: '1.08em',
-	5: '1.18em',
+	0: '0.78em',
+	18: '0.88em',
+	42: '0.98em',
+	69: '1.08em',
+	100: '1.18em',
 };
 
 export const toggleWordsOfJesus = (state) => {

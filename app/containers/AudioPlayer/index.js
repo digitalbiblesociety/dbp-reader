@@ -18,7 +18,7 @@ import AudioProgressBar from 'components/AudioProgressBar';
 import VolumeSlider from 'components/VolumeSlider';
 import AudioPlayerMenu from 'components/AudioPlayerMenu';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
-import makeSelectAudioPlayer from './selectors';
+import makeSelectAudioPlayer, { selectHasAudio } from './selectors';
 import reducer from './reducer';
 /* eslint-disable jsx-a11y/media-has-caption */
 /* disabled the above eslint config options because you can't add tracks to audio elements */
@@ -34,7 +34,7 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 			volume: 1,
 			duration: 100,
 			currentTime: 0,
-			playerState: !!this.props.audioSource,
+			playerState: this.props.hasAudio,
 			currentSpeed: 1,
 		};
 	}
@@ -190,13 +190,14 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 	render() {
 		const {
 			audioSource: source,
+			hasAudio,
 		} = this.props;
 
 		return (
 			<GenericErrorBoundary affectedArea="AudioPlayer">
 				<div role="button" tabIndex={0} className="audio-player-background" ref={this.setAudioPlayerRef} onClick={this.handleBackgroundClick}>
 					{
-						this.state.playerState ? (
+						(this.state.playerState && hasAudio) ? (
 							<div className="audio-player-container">
 								<SvgWrapper onClick={this.skipBackward} className="svgitem" width="25px" height="25px" fill="#fff" svgid="backward" />
 								{
@@ -248,10 +249,12 @@ AudioPlayer.propTypes = {
 	audioSource: PropTypes.string,
 	skipBackward: PropTypes.func.isRequired,
 	skipForward: PropTypes.func.isRequired,
+	hasAudio: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
 	audioplayer: makeSelectAudioPlayer(),
+	hasAudio: selectHasAudio(),
 });
 
 function mapDispatchToProps(dispatch) {

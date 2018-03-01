@@ -32,7 +32,7 @@ class GenericErrorBoundary extends React.Component {
 			// Error path
 			return (
 				<Container>
-					<h2>{`Something went wrong in the ${this.props.affectedArea} component`}</h2>
+					<h2>{`Something went wrong in the ${this.props.affectedArea} component. Please try refreshing the page, if that does not work send an email to Jesse and tell him what the error message was so he can fix it.`}</h2>
 					<details style={{ whiteSpace: 'pre-wrap' }}>
 						{this.state.error && this.state.error.toString()}
 						<br />

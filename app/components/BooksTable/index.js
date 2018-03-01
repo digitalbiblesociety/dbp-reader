@@ -84,7 +84,7 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 			setActiveBookName,
 		} = this.props;
 
-		this.getChapterText({ bible: activeTextId, book: book.book_id, chapter });
+		// this.getChapterText({ bible: activeTextId, book: book.book_id, chapter });
 		setActiveChapter(chapter);
 		setActiveBookName({ book: book.name || book.name_short, id: book.book_id });
 		closeBookTable();

@@ -67,7 +67,7 @@ const initialState = fromJS({
 	userSettings: {
 		activeTheme: 'red',
 		activeFontType: 'sans',
-		activeFontSize: 3,
+		activeFontSize: 42,
 		toggleOptions: {
 			readersMode: {
 				name: 'READER\'S MODE',
@@ -105,6 +105,7 @@ const initialState = fromJS({
 	selectedText: '',
 	selectedBookName: 'Genesis',
 	audioSource: '',
+	hasAudio: false,
 	formattedSource: '',
 	hasTextInDatabase: true,
 	filesetTypes: {},
@@ -194,6 +195,34 @@ function homePageReducer(state = initialState, action) {
 		return state.set('selectedText', action.text);
 	case SET_SELECTED_BOOK_NAME:
 		return state.set('selectedBookName', action.book);
+	case 'loadbible':
+		// console.log('loading bible with', action);
+		return state
+			.set('activeTextId', fromJS(action.bibleId))
+			.set('activeBookId', fromJS(action.activeBookId))
+			.set('activeChapter', fromJS(action.activeChapter))
+			.set('activeTextName', fromJS(action.name))
+			.set('defaultLanguageIso', fromJS(action.iso))
+			.set('activeBookName', fromJS(action.activeBookName))
+			// .set('hasFormattedText', fromJS(action.chapterData.hasFormattedText))
+			// .set('hasTextInDatabase', fromJS(action.chapterData.hasPlainText))
+			// .set('hasAudio', fromJS(action.chapterData.hasAudio))
+			// .set('chapterText', fromJS(action.chapterData.plainText))
+			.set('books', fromJS(action.books))
+			// .set('formattedSource', fromJS(action.chapterData.formattedText))
+			.set('activeFilesets', fromJS(action.filesets));
+	case 'loadnewchapter':
+		// console.log('loading chapter with', action);
+		return state
+			.set('hasFormattedText', fromJS(action.hasFormattedText))
+			.set('hasTextInDatabase', fromJS(action.hasPlainText))
+			.set('hasAudio', fromJS(action.hasAudio))
+			.set('chapterText', fromJS(action.plainText))
+			.set('loadingNewChapterText', false)
+			.set('formattedSource', fromJS(action.formattedText));
+	case 'loadaudio':
+		console.log('loading audio with', action);
+		return state.set('audioSource', action.audioPath);
 	default:
 		return state;
 	}
