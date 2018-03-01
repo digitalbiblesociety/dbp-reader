@@ -200,8 +200,8 @@ function homePageReducer(state = initialState, action) {
 			.set('activeTextId', fromJS(action.bibleId))
 			.set('activeBookId', fromJS(action.activeBookId))
 			.set('activeChapter', fromJS(action.activeChapter))
-			.set('activeTextName', fromJS(action.bible.vname))
-			.set('defaultLanguageIso', fromJS(action.bible.iso))
+			.set('activeTextName', fromJS(action.name))
+			.set('defaultLanguageIso', fromJS(action.iso))
 			.set('activeBookName', fromJS(action.activeBookName))
 			// .set('hasFormattedText', fromJS(action.chapterData.hasFormattedText))
 			// .set('hasTextInDatabase', fromJS(action.chapterData.hasPlainText))
@@ -209,7 +209,7 @@ function homePageReducer(state = initialState, action) {
 			// .set('chapterText', fromJS(action.chapterData.plainText))
 			.set('books', fromJS(action.books))
 			// .set('formattedSource', fromJS(action.chapterData.formattedText))
-			.set('activeFilesets', fromJS(action.bible.filesets));
+			.set('activeFilesets', fromJS(action.filesets));
 	case 'loadnewchapter':
 		// console.log('loading chapter with', action);
 		return state

@@ -133,13 +133,14 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					bookId: nextParams.bookId,
 					chapter: nextParams.chapter,
 				});
-				// need to update the url if the parameters given weren't valid
+				// todo need to update the url if the parameters given weren't valid
 			} else if (newBook) {
 				// console.log('new book');
 				// This needs to be here for the case when a user goes from Genesis 7 to Mark 7 via the dropdown menu
 				// Need to get the audio and text for the new book /bibles/[bibleId]/[bookId]/chapter
 					// Preserve current chapter and try to use it first
 					// Default to first chapter if the new book doesn't have the current chapter
+				// console.log('new book', nextProps.homepage.activeFilesets);
 				this.props.dispatch({
 					type: 'getchapter',
 					filesets: nextProps.homepage.activeFilesets,
@@ -200,11 +201,8 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			activeTextId,
 			activeChapter,
 			activeBookId,
-			audioObjects,
-			hasTextInDatabase,
-			filesetTypes,
 		} = this.props.homepage;
-		const { activeBook, nextBook, userAuthenticated, userId } = this.props;
+		const { activeBook, nextBook } = this.props;
 		const maxChapter = activeBook.get('chapters').size;
 
 		if (activeChapter === maxChapter) {
@@ -224,12 +222,9 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			activeTextId,
 			activeChapter,
 			activeBookId,
-			audioObjects,
-			hasTextInDatabase,
-			filesetTypes,
 			books,
 		} = this.props.homepage;
-		const { previousBook, userAuthenticated, userId } = this.props;
+		const { previousBook } = this.props;
 		// Keeps the button from trying to go backwards to a book that doesn't exist
 		if (activeBookId === books[0].book_id && activeChapter - 1 === 0) {
 			return;

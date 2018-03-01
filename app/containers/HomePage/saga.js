@@ -6,7 +6,8 @@ import unionWith from 'lodash/unionWith';
 import some from 'lodash/some';
 import reduce from 'lodash/reduce';
 import get from 'lodash/get';
-import { ADD_HIGHLIGHTS, LOAD_HIGHLIGHTS, GET_CHAPTER_TEXT, GET_HIGHLIGHTS, GET_BOOKS, GET_AUDIO, INIT_APPLICATION } from './constants';
+// import { ADD_HIGHLIGHTS, LOAD_HIGHLIGHTS, GET_CHAPTER_TEXT, GET_HIGHLIGHTS, GET_BOOKS, GET_AUDIO, INIT_APPLICATION } from './constants';
+import { ADD_HIGHLIGHTS, LOAD_HIGHLIGHTS, GET_HIGHLIGHTS } from './constants';
 import { loadChapter, loadBooksAndCopywrite, loadAudio } from './actions';
 
 const testEsvFiles = {
@@ -425,17 +426,29 @@ export function* addHighlight({ bible, book, chapter, userId, verseStart, highli
 	}
 }
 
-export function* getBibleFromUrl({ bibleId, bookId, chapter }) {
+export function* getBibleFromUrl({ bibleId: oldBibleId, bookId: oldBookId, chapter }) {
 	// This function needs to return the data listed below
 	// Books
 	// Active or first chapter text
 	// Active or first chapter audio
 	// Bible name
 	// Bible id
+	// todo Use other methods combined with the ones below to validate the url before try to use it in saga
+	const bibleId = oldBibleId.toUpperCase();
+	const bookId = oldBookId.toUpperCase();
 	const requestUrl = `https://api.bible.build/bibles/${bibleId}?key=${process.env.DBP_API_KEY}&v=4`;
 	// Probably need to do stuff here to get the audio and text for this new bible
 	try {
 		const response = yield call(request, requestUrl);
+		let filesets;
+		// todo This can be removed once the filesets have been added to the default route
+		if (!response.data.filesets) {
+			const bibleUrl = `https://api.bible.build/bibles?key=${process.env.DBP_API_KEY}&v=4&language_code=${response.data.iso}`;
+			const allBibles = yield call(request, bibleUrl);
+			// console.log('all bibles in language', allBibles);
+			const activeBible = allBibles.data.find((bible) => bible.abbr === bibleId) || {};
+			filesets = activeBible.filesets;
+		}
 		// console.log('bible response', response);
 		if (response.data && Object.keys(response.data).length) {
 			// Creating new objects for each set of data needed to ensure I don't forget something
@@ -450,7 +463,7 @@ export function* getBibleFromUrl({ bibleId, bookId, chapter }) {
 			const activeBookName = activeBook ? activeBook.name_short : get(books, [0, 'name_short'], '');
 			// calling a generator that will handle the api requests for getting text
 			const chapterData = yield call(getChapterFromUrl, {
-				filesets: bible.filesets || (bibleId === 'ENGESV' ? testEsvFiles : testKjvFiles),
+				filesets: filesets || (bibleId === 'ENGESV' ? testEsvFiles : testKjvFiles),
 				bibleId,
 				bookId: activeBookId,
 				chapter: activeChapter,
@@ -459,7 +472,9 @@ export function* getBibleFromUrl({ bibleId, bookId, chapter }) {
 			// still need to include to active book name so that iteration happens here
 			yield put({
 				type: 'loadbible',
-				bible,
+				filesets: bible.filesets || filesets,
+				name: bible.vname || bible.name,
+				iso: bible.iso,
 				books,
 				chapterData,
 				bibleId,
@@ -495,9 +510,9 @@ export function* getChapterFromUrl({ filesets, bibleId, bookId, chapter }) {
 				// Gets the last fileset id for a formatted text
 				const filesetId = reduce(filesets, (a, c, i) => c.set_type_code === 'text_formatt' ? i : a, '');
 				const reqUrl = `https://api.bible.build/bibles/filesets/${filesetId}?key=${process.env.DBP_API_KEY}&v=4&book_id=${bookId}&chapter_id=${chapter}`;
-				const res = yield call(request, reqUrl);
+				const formattedChapterObject = yield call(request, reqUrl);
 				// console.log('response for formatted text', res);
-				formattedText = get(res.data, [0, 'path'], '');
+				formattedText = yield fetch(get(formattedChapterObject.data, [0, 'path'], '')).then((res) => res.text());
 			} catch (error) {
 				if (process.env.NODE_ENV === 'development') {
 					console.error('Caught in get formatted text block', error); // eslint-disable-line no-console
