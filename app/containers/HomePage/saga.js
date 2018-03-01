@@ -1,5 +1,5 @@
 import 'whatwg-fetch';
-import { takeLatest, call, put, all , fork} from 'redux-saga/effects';
+import { takeLatest, call, put, all, fork } from 'redux-saga/effects';
 import request from 'utils/request';
 import { fromJS } from 'immutable';
 import unionWith from 'lodash/unionWith';
@@ -9,114 +9,6 @@ import get from 'lodash/get';
 // import { ADD_HIGHLIGHTS, LOAD_HIGHLIGHTS, GET_CHAPTER_TEXT, GET_HIGHLIGHTS, GET_BOOKS, GET_AUDIO, INIT_APPLICATION } from './constants';
 import { ADD_HIGHLIGHTS, LOAD_HIGHLIGHTS, GET_HIGHLIGHTS } from './constants';
 import { loadChapter, loadBooksAndCopywrite, loadAudio } from './actions';
-
-const testEsvFiles = {
-	ENGESVN1DA: {
-		bucket_id: 'dbp-dev',
-		set_type_code: 'audio',
-		set_size_code: 'NT',
-		meta: [],
-	},
-	ENGGIDO1DA: {
-		bucket_id: 'dbp-dev',
-		set_type_code: 'audio',
-		set_size_code: 'OT',
-		meta: [],
-	},
-	ENGESVN2DA: {
-		bucket_id: 'dbp-dev',
-		set_type_code: 'audio_drama',
-		set_size_code: 'NT',
-		meta: [],
-	},
-	ENGGIDO2DA: {
-		bucket_id: 'dbp-dev',
-		set_type_code: 'audio_drama',
-		set_size_code: 'OT',
-		meta: [],
-	},
-	ENGESVO2DA: {
-		bucket_id: 'dbp-dev',
-		set_type_code: 'audio_drama',
-		set_size_code: 'OT',
-		meta: [],
-	},
-	ENGESVT2DA: {
-		bucket_id: 'dbp-dev',
-		set_type_code: 'audio_drama',
-		set_size_code: 'NT',
-		meta: [],
-	},
-	ENGESVC2DA: {
-		bucket_id: 'dbp-dev',
-		set_type_code: 'audio_drama',
-		set_size_code: 'C',
-		meta: [],
-	},
-	ENGGIDN2DA: {
-		bucket_id: 'dbp-dev',
-		set_type_code: 'audio_drama',
-		set_size_code: 'NT',
-		meta: [],
-	},
-	ENGESVO1DA: {
-		bucket_id: 'dbp-dev',
-		set_type_code: 'audio',
-		set_size_code: 'OT',
-		meta: [],
-	},
-	ENGGIDN1DA: {
-		bucket_id: 'dbp-dev',
-		set_type_code: 'audio',
-		set_size_code: 'NT',
-		meta: [],
-	},
-};
-
-const testKjvFiles = {
-	ENGKJVN1DA: {
-		bucket_id: 'dbp-dev',
-		set_type_code: 'audio',
-		set_size_code: 'NT',
-		meta: [],
-	},
-	ENGKJVC1DA: {
-		bucket_id: 'dbp-dev',
-		set_type_code: 'audio',
-		set_size_code: 'C',
-		meta: [],
-	},
-	ENGKJVO1DA: {
-		bucket_id: 'dbp-dev',
-		set_type_code: 'audio',
-		set_size_code: 'OT',
-		meta: [],
-	},
-	ENGKJVO2DA: {
-		bucket_id: 'dbp-dev',
-		set_type_code: 'audio_drama',
-		set_size_code: 'OT',
-		meta: [],
-	},
-	ENGKJVN2DA: {
-		bucket_id: 'dbp-dev',
-		set_type_code: 'audio_drama',
-		set_size_code: 'NT',
-		meta: [],
-	},
-	ENGKJVC2DA: {
-		bucket_id: 'dbp-dev',
-		set_type_code: 'audio_drama',
-		set_size_code: 'C',
-		meta: [],
-	},
-	ENGKJV: {
-		bucket_id: 'dbs-web',
-		set_type_code: 'text_formatt',
-		set_size_code: 'C',
-		meta: [],
-	},
-};
 
 export function* initApplication({ activeTextId }) {
 	// This will always have to request the full list of versions because the url will not contain language information
@@ -463,7 +355,7 @@ export function* getBibleFromUrl({ bibleId: oldBibleId, bookId: oldBookId, chapt
 			const activeBookName = activeBook ? activeBook.name_short : get(books, [0, 'name_short'], '');
 			// calling a generator that will handle the api requests for getting text
 			const chapterData = yield call(getChapterFromUrl, {
-				filesets: filesets || (bibleId === 'ENGESV' ? testEsvFiles : testKjvFiles),
+				filesets: bible.filesets || filesets,
 				bibleId,
 				bookId: activeBookId,
 				chapter: activeChapter,
@@ -492,9 +384,11 @@ export function* getBibleFromUrl({ bibleId: oldBibleId, bookId: oldBookId, chapt
 	}
 }
 
-export function* getChapterFromUrl({ filesets, bibleId, bookId, chapter }) {
+export function* getChapterFromUrl({ filesets, bibleId: oldBibleId, bookId: oldBookId, chapter }) {
 	// console.log('bible, book, chapter', bibleId, bookId, chapter);
-	// console.log('filesets', filesets);
+	// console.log('filesets chapter text', filesets);
+	const bibleId = oldBibleId.toUpperCase();
+	const bookId = oldBookId.toUpperCase();
 	const hasFormattedText = some(filesets, (f) => f.set_type_code === 'text_formatt');
 	// checking for audio but not fetching it as a part of this saga
 	const hasAudio = some(filesets, (f) => f.set_type_code === 'audio' || f.set_type_code === 'audio_drama');
@@ -506,7 +400,7 @@ export function* getChapterFromUrl({ filesets, bibleId, bookId, chapter }) {
 
 		// calling this function to start it asynchronously to this one.
 		if (hasAudio) {
-			console.log('calling get chapter audio');
+			// console.log('calling get chapter audio');
 			// Not yielding this as it doesn't matter when the audio comes back
 			// This function will sometimes have to make multiple api requests
 			// And I don't want it blocking the text from loading
@@ -520,7 +414,7 @@ export function* getChapterFromUrl({ filesets, bibleId, bookId, chapter }) {
 				const filesetId = reduce(filesets, (a, c, i) => c.set_type_code === 'text_formatt' ? i : a, '');
 				const reqUrl = `https://api.bible.build/bibles/filesets/${filesetId}?key=${process.env.DBP_API_KEY}&v=4&book_id=${bookId}&chapter_id=${chapter}`;
 				const formattedChapterObject = yield call(request, reqUrl);
-				console.log('response for formatted text', formattedChapterObject);
+				// console.log('response for formatted text', formattedChapterObject);
 				formattedText = yield fetch(get(formattedChapterObject.data, [0, 'path'], '')).then((res) => res.text());
 			} catch (error) {
 				if (process.env.NODE_ENV === 'development') {
@@ -534,7 +428,7 @@ export function* getChapterFromUrl({ filesets, bibleId, bookId, chapter }) {
 		try {
 			const reqUrl = `https://api.bible.build/bibles/${bibleId}/${bookId}/${chapter}?key=${process.env.DBP_API_KEY}&v=4&book_id=${bookId}&chapter_id=${chapter}`;
 			const res = yield call(request, reqUrl);
-			console.log('response for plain text', res);
+			// console.log('response for plain text', res);
 			plainText = res.data;
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
@@ -582,7 +476,7 @@ export function* getChapterFromUrl({ filesets, bibleId, bookId, chapter }) {
 // The getChapterFromUrl function. This may need to be adjusted when
 // RTMP streaming is implemented
 export function* getChapterAudio({ filesets, bookId, chapter }) {
-	console.log('getting audio', filesets, bookId, chapter);
+	// console.log('getting audio', filesets, bookId, chapter);
 	// Parse filesets
 	const completeAudio = [];
 	const ntAudio = [];
@@ -602,13 +496,13 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 	});
 
 	if (completeAudio.length) {
-		console.log('Bible has complete audio', completeAudio);
+		// console.log('Bible has complete audio', completeAudio);
 		try {
 			const reqUrl = `https://api.bible.build/bibles/filesets/${get(completeAudio, [0, 'id'])}?key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}`;
 			const response = yield call(request, reqUrl);
-			console.log('complete audio response object', response);
+			// console.log('complete audio response object', response);
 			const audioPath = get(response, ['data', 0, 'path']);
-			console.log('complete audio path', audioPath);
+			// console.log('complete audio path', audioPath);
 			yield put({ type: 'loadaudio', audioPath });
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
@@ -619,9 +513,9 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 		try {
 			const reqUrl = `https://api.bible.build/bibles/filesets/${get(ntAudio, [0, 'id'])}?key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}`;
 			const response = yield call(request, reqUrl);
-			console.log('nt audio response object', response);
+			// console.log('nt audio response object', response);
 			const audioPath = get(response, ['data', 0, 'path']);
-			console.log('nt audio path', audioPath);
+			// console.log('nt audio path', audioPath);
 			yield put({ type: 'loadaudio', audioPath });
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
@@ -632,9 +526,9 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 		try {
 			const reqUrl = `https://api.bible.build/bibles/filesets/${get(otAudio, [0, 'id'])}?key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}`;
 			const response = yield call(request, reqUrl);
-			console.log('ot audio response object', response);
+			// console.log('ot audio response object', response);
 			const audioPath = get(response, ['data', 0, 'path']);
-			console.log('ot audio path', audioPath);
+			// console.log('ot audio path', audioPath);
 			yield put({ type: 'loadaudio', audioPath });
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
@@ -646,9 +540,9 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 			// Need to iterate over each object here to see if I can find the right chapter
 			const reqUrl = `https://api.bible.build/bibles/filesets/${get(partialAudio, [0, 'id'])}?key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}`;
 			const response = yield call(request, reqUrl);
-			console.log('partial audio response object', response);
+			// console.log('partial audio response object', response);
 			const audioPath = get(response, ['data', 0, 'path']);
-			console.log('partial audio path', audioPath);
+			// console.log('partial audio path', audioPath);
 			yield put({ type: 'loadaudio', audioPath });
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
