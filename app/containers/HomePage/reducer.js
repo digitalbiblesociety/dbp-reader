@@ -63,6 +63,7 @@ const initialState = fromJS({
 	activeNotesView: 'notes',
 	activeTextId: 'ENGESV',
 	defaultLanguageIso: 'eng',
+	defaultLanguageName: 'English',
 	activeBookId: 'GEN',
 	userSettings: {
 		activeTheme: 'red',
@@ -203,6 +204,7 @@ function homePageReducer(state = initialState, action) {
 			.set('activeChapter', fromJS(action.activeChapter))
 			.set('activeTextName', fromJS(action.name))
 			.set('defaultLanguageIso', fromJS(action.iso))
+			.set('defaultLanguageName', fromJS(action.languageName))
 			.set('activeBookName', fromJS(action.activeBookName))
 			// .set('hasFormattedText', fromJS(action.chapterData.hasFormattedText))
 			// .set('hasTextInDatabase', fromJS(action.chapterData.hasPlainText))

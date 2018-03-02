@@ -382,6 +382,8 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			loadingNewChapterText,
 			firstLoad,
 			highlights,
+			defaultLanguageIso,
+			defaultLanguageName,
 		} = this.props.homepage;
 
 		const {
@@ -432,6 +434,8 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 									firstLoad={firstLoad}
 									activeBookName={activeBookName}
 									activeTextId={activeTextId}
+									initialIsoCode={defaultLanguageIso}
+									initialLanguageName={defaultLanguageName}
 									getAudio={this.getAudio}
 									setActiveText={this.setActiveTextId}
 									setActiveChapter={this.setActiveChapter}

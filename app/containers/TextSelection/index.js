@@ -37,9 +37,10 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 		if (this.props.firstLoad) {
 			this.props.dispatch(getCountries());
 			this.props.dispatch(getLanguages());
-			this.props.dispatch(getTexts({ languageISO: this.props.textselection.activeIsoCode }));
+			this.props.dispatch(getTexts({ languageISO: this.props.initialIsoCode }));
 			this.props.toggleFirstLoadForTextSelection();
 		}
+		this.props.dispatch(setActiveIsoCode({ iso: this.props.initialIsoCode, name: this.props.initialLanguageName }));
 		// TODO: use a conditional to ensure the actions below only happen on the first mount
 		// move these calls to CDM of homepage to ensure they are loaded by the time the user is here
 		document.addEventListener('click', this.handleClickOutside);
@@ -48,6 +49,8 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.textselection.activeIsoCode !== this.props.textselection.activeIsoCode) {
 			this.props.dispatch(getTexts({ languageISO: nextProps.textselection.activeIsoCode }));
+		} else if (nextProps.initialIsoCode !== this.props.initialIsoCode) {
+			this.props.dispatch(getTexts({ languageISO: nextProps.initialIsoCode }));
 		}
 	}
 
@@ -171,6 +174,8 @@ TextSelection.propTypes = {
 	countries: PropTypes.object,
 	textselection: PropTypes.object,
 	activeTextName: PropTypes.string,
+	initialIsoCode: PropTypes.string,
+	initialLanguageName: PropTypes.string,
 	firstLoad: PropTypes.bool,
 	getAudio: PropTypes.func,
 	setActiveText: PropTypes.func,
