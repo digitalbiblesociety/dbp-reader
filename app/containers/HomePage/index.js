@@ -343,6 +343,12 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 
 	setActiveNote = ({ note }) => this.props.dispatch(setActiveNote({ note }))
 
+	goToFullChapter = () => {
+		const { bibleId, bookId, chapter } = this.props.match.params;
+
+		this.props.history.push(`/${bibleId}/${bookId}/${chapter}`);
+	}
+
 	addHighlight = (props) => this.props.dispatch(addHighlight({ ...props, bible: this.props.homepage.activeTextId, userId: this.props.userId }))
 
 	toggleFirstLoadForTextSelection = () => this.props.homepage.firstLoad && this.props.dispatch(toggleFirstLoadForTextSelection())
@@ -482,22 +488,23 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					}
 				</TransitionGroup>
 				<Text
-					highlights={highlights}
-					addHighlight={this.addHighlight}
-					activeBookName={activeBookName}
-					loadingNewChapterText={loadingNewChapterText}
-					userSettings={userSettings}
-					setActiveNote={this.setActiveNote}
-					formattedSource={formattedSource}
-					setActiveNotesView={this.setActiveNotesView}
-					activeBookId={activeBookId}
-					activeChapter={activeChapter}
-					notesActive={isNotesModalActive}
-					toggleNotesModal={this.toggleNotesModal}
 					text={chapterText}
 					verseNumber={verse}
+					highlights={highlights}
+					userSettings={userSettings}
+					activeBookId={activeBookId}
+					activeChapter={activeChapter}
+					activeBookName={activeBookName}
+					notesActive={isNotesModalActive}
+					formattedSource={formattedSource}
+					loadingNewChapterText={loadingNewChapterText}
+					addHighlight={this.addHighlight}
+					goToFullChapter={this.goToFullChapter}
 					nextChapter={this.getNextChapter}
 					prevChapter={this.getPrevChapter}
+					setActiveNote={this.setActiveNote}
+					toggleNotesModal={this.toggleNotesModal}
+					setActiveNotesView={this.setActiveNotesView}
 				/>
 				<Footer
 					settingsActive={isSettingsModalActive}

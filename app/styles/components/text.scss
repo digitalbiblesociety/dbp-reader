@@ -30,6 +30,10 @@
 .active-chapter-title {margin:auto;text-align:center;font-size:130%;}
 .drop-caps 			  {font-size:2em;line-height:1;margin: 0 .25em .5em 0;}
 
+.read-chapter {margin:0 auto;height: 35px;border-radius: 6px;width:130px;text-align:center;background-color: #FFFFF5;box-shadow: 1px 1px 1px 1px #B1A77A;cursor: pointer;padding: 5px;}
+.read-chapter:active {box-shadow: 0 0 0 0 #B1A77A;}
+.read-chapter:focus {border: 1px solid #B1A77A;outline: none;}
+
 // TODO: Figure out how to use the variable instead of rgba in keyframes
 //@keyframes thicken {
 //	0%   { transform: scale(1.00); fill:rgba(158, 30, 53, 0.253); }

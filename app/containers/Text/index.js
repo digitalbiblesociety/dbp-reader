@@ -346,6 +346,8 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			text,
 			loadingNewChapterText,
 			userSettings,
+			verseNumber,
+			goToFullChapter,
 		} = this.props;
 		const {
 			coords,
@@ -372,6 +374,11 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 						)
 					}
 					{this.getTextComponents}
+					{
+						verseNumber ? (
+							[<br />, <button onClick={goToFullChapter} className={'read-chapter'}>Read Full Chapter</button>]
+						) : null
+					}
 				</main>
 				{
 					activeBookId === 'REV' && activeChapter === 22 ? null : (
@@ -400,6 +407,7 @@ Text.propTypes = {
 	nextChapter: PropTypes.func,
 	prevChapter: PropTypes.func,
 	addHighlight: PropTypes.func,
+	goToFullChapter: PropTypes.func,
 	toggleNotesModal: PropTypes.func,
 	setActiveNotesView: PropTypes.func,
 	activeChapter: PropTypes.number,
