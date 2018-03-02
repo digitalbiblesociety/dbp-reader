@@ -178,7 +178,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			textComponents.unshift(<span key={'chapterNumber'} className={'drop-caps'}>{activeChapter}</span>);
 		}
 		// console.log('text components that are about to be mounted', textComponents);
-		if (verseNumber) {
+		if (verseNumber && Array.isArray(textComponents)) {
 			return textComponents.filter((c) => c.key === verseNumber);
 		}
 
