@@ -12,7 +12,7 @@
 .nav-container .left-buttons .logo       {height:54px;width:120px;}
 .nav-container div                       {height:54px;display:flex;align-items:center;justify-content:center;}
 .chapter-selector .version               {margin-left:15px;font-size:1em;}
-.chapter-selector .version .version-text {width:150px;overflow-x:scroll;overflow-y:hidden;scroll-behavior:auto;white-space:nowrap;}
+//.chapter-selector .version .version-text {display:inline-block;width:150px;max-width:150px;overflow:hidden;white-space:nowrap;text-overflow: ellipsis;}
 .chapter-selector .text .svg             {margin-left:10px;}
 .nav-container span                      {cursor:pointer;}
 .nav-container span:hover                {opacity:.65;}

@@ -28,7 +28,7 @@ export default function App() {
 		<div>
 			<Switch>
 				<Route exact path="/" component={HomePage} />
-				<Route path="/:bibleId/:bookId/:chapter" component={HomePage} />
+				<Route path="/:bibleId?/:bookId?/:chapter?/:verse?" component={HomePage} />
 				<Route exact path="/about" component={AboutPage} />
 				<Route exact path="/privacy-policy" component={PrivacyPolicy} />
 				<Route exact path="/terms-of-use" component={TermsAndConditions} />

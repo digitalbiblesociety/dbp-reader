@@ -74,13 +74,46 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 	componentDidMount() {
 		// Get the first bible based on the url here
 		const { params } = this.props.match;
+		const { bibleId, bookId, chapter } = params;
 
-		this.props.dispatch({
-			type: 'getbible',
-			bibleId: params.bibleId,
-			bookId: params.bookId,
-			chapter: params.chapter,
-		});
+		if (bibleId && bookId && chapter) {
+			this.props.dispatch({
+				type: 'getbible',
+				bibleId,
+				bookId,
+				chapter,
+			});
+		} else if (bibleId && bookId) {
+			// run saga but default the chapter
+			// I can auto default to 1 here because logic -_- 乁( ⁰͡ Ĺ̯ ⁰͡ ) ㄏ
+			this.props.dispatch({
+				type: 'getbible',
+				bibleId,
+				bookId,
+				chapter: 1,
+			});
+			this.props.history.replace(`/${bibleId}/${bookId}/1`);
+		} else if (bibleId) {
+			// If the user only enters a version of the bible then
+			// I want to default to the first book that bible has
+			this.props.dispatch({
+				type: 'getbible',
+				bibleId,
+				bookId: '', // This works because of how the saga fetches the next chapter
+				chapter: 1,
+			});
+			// May want to use replace here at some point
+			// this.props.history.replace(`/${bibleId}/gen/1`);
+		} else {
+			// If the user doesn't provide a url then redirect
+			// them to the default bible
+			// I think I may need a different saga for this
+			// I will use the browser language and the first
+			// version available in that language as the default
+
+			// Defaulting to esv until browser language detection is implemented
+			this.props.history.replace('/engesv/gen/1');
+		}
 
 		// Init the Facebook api here
 		window.fbAsyncInit = () => {
@@ -114,6 +147,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		// console.log('prev and next match\n', this.props.match, '\n', nextProps.match);
 
 		if (!isEqual(params, nextParams)) {
+			// console.log('received props and params are different');
 			// if the route isn't the same as before find which parts changed
 			const newChapter = params.chapter !== nextParams.chapter;
 			const newBook = params.bookId !== nextParams.bookId;
