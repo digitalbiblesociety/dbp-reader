@@ -151,7 +151,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		// Each of the HOC could be wrapped in a formatTextBasedOnOptions function
 		// the function would apply each of the HOCs in order
 		if (text.length === 0 && !formattedSource.main) {
-			textComponents = [<h5>This resource does not currently have any text.</h5>];
+			textComponents = [<h5 key={'no_text'}>This resource does not currently have any text.</h5>];
 		} else if (readersMode) {
 			textComponents = text.map((verse) => (
 				<span verseid={verse.verse_start} key={verse.verse_start}>{verse.verse_text}&nbsp;&nbsp;</span>

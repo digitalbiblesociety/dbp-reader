@@ -277,7 +277,6 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		const maxChapter = activeBook.get('chapters').size;
 
 		if (verseNumber) {
-			console.log('verse number', verseNumber);
 			this.setNextVerse(verseNumber);
 			return;
 		}
