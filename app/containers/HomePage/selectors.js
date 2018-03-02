@@ -8,7 +8,7 @@ import { fromJS } from 'immutable';
  */
 const selectHomePageDomain = (state) => state.get('homepage');
 const selectProfilePageDomain = (state) => state.get('profile');
-const selectFormattedTextSource = (state) => state.getIn(['homepage', 'formattedSource']);
+const selectFormattedTextSource = (state, props) => ({ source: state.getIn(['homepage', 'formattedSource']), props });
 const selectCrossReferenceState = (state) => state.getIn(['homepage', 'userSettings', 'toggleOptions', 'crossReferences', 'active']);
 
 const selectUserId = () => createSelector(
@@ -23,11 +23,23 @@ const selectAuthenticationStatus = () => createSelector(
 
 const selectFormattedSource = () => createSelector(
 	[selectFormattedTextSource, selectCrossReferenceState],
-	(source, hasCrossReferences) => {
+	({ source, props }, hasCrossReferences) => {
 		// Pushing update with the formatted text working but not the footnotes
 		// const source = substate.get('formattedSource');
 		if (!source) {
 			return { main: '', footnotes: {} };
+		}
+		// Getting the verse for when user selected 1 verse
+			// start <span class="verse${verseNumber}
+			// get span after data-id="${bookId}${chapter}_${verseNumber}"
+			// end </span>
+		if (props.match.params.verse) {
+			const { verse, bookId, chapter } = props.match.params;
+			const start = source.indexOf(`<span class="verse${verse}`);
+			const getAfter = source.indexOf(`data-id="${bookId}${chapter}_${verse}"`, start);
+			const end = source.indexOf('</span>', getAfter);
+
+			return { main: source.slice(start, end), footnotes: {} };
 		}
 		const chapterStart = source.indexOf('<div class="chapter');
 		const chapterEnd = source.indexOf('<div class="footnotes">', chapterStart);

@@ -367,6 +367,7 @@ export function* getBibleFromUrl({ bibleId: oldBibleId, bookId: oldBookId, chapt
 				filesets: bible.filesets || filesets,
 				name: bible.vname || bible.name,
 				iso: bible.iso,
+				languageName: bible.language,
 				books,
 				chapterData,
 				bibleId,

@@ -74,13 +74,49 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 	componentDidMount() {
 		// Get the first bible based on the url here
 		const { params } = this.props.match;
+		const { bibleId, bookId, chapter } = params;
 
-		this.props.dispatch({
-			type: 'getbible',
-			bibleId: params.bibleId,
-			bookId: params.bookId,
-			chapter: params.chapter,
-		});
+		if (bibleId && bookId && chapter) {
+			this.props.dispatch({
+				type: 'getbible',
+				bibleId,
+				bookId,
+				chapter,
+			});
+			// console.log('not redirecting in bible, book and chapter');
+		} else if (bibleId && bookId) {
+			// run saga but default the chapter
+			// I can auto default to 1 here because logic -_- 乁( ⁰͡ Ĺ̯ ⁰͡ ) ㄏ
+			this.props.dispatch({
+				type: 'getbible',
+				bibleId,
+				bookId,
+				chapter: 1,
+			});
+			// console.log('redirecting from bible and book');
+			this.props.history.replace(`/${bibleId}/${bookId}/1`);
+		} else if (bibleId) {
+			// If the user only enters a version of the bible then
+			// I want to default to the first book that bible has
+			this.props.dispatch({
+				type: 'getbible',
+				bibleId,
+				bookId: '', // This works because of how the saga fetches the next chapter
+				chapter: 1,
+			});
+			// May want to use replace here at some point
+			// this.props.history.replace(`/${bibleId}/gen/1`);
+		} else {
+			// If the user doesn't provide a url then redirect
+			// them to the default bible
+			// I think I may need a different saga for this
+			// I will use the browser language and the first
+			// version available in that language as the default
+
+			// Defaulting to esv until browser language detection is implemented
+			// console.log('redirecting from else in did mount');
+			this.props.history.replace('/engesv/gen/1');
+		}
 
 		// Init the Facebook api here
 		window.fbAsyncInit = () => {
@@ -114,6 +150,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		// console.log('prev and next match\n', this.props.match, '\n', nextProps.match);
 
 		if (!isEqual(params, nextParams)) {
+			// console.log('received props and params are different');
 			// if the route isn't the same as before find which parts changed
 			const newChapter = params.chapter !== nextParams.chapter;
 			const newBook = params.bookId !== nextParams.bookId;
@@ -164,7 +201,8 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		// Deals with when the new text doesn't have the same books
 		// 	console.log('the current id doesnt match');
 		// 	console.log(this.props);
-			this.props.history.replace(`/${nextProps.homepage.activeTextId}/${nextProps.homepage.activeBookId}/${nextProps.homepage.activeChapter}`);
+		// 	console.log('redirecting from activeBookId willReceiveProps');
+			this.props.history.replace(`/${nextProps.homepage.activeTextId}/${nextProps.homepage.activeBookId}/${nextProps.homepage.activeChapter}${nextParams.verse ? `/${nextParams.verse}` : ''}`);
 			// console.log('route that I pushed', `/${nextProps.homepage.activeTextId}/${nextProps.homepage.activeBookId}/${nextProps.homepage.activeChapter}`);
 		}
 
@@ -196,6 +234,38 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		}
 	}
 
+	setNextVerse = (verse) => {
+		const { bibleId, bookId, chapter } = this.props.match.params;
+		const { chapterText } = this.props.homepage;
+		const nextVerse = parseInt(verse, 10) + 1;
+		const lastVerse = chapterText.length;
+		// Is it past the max verses for the chapter?
+		// if not increment it by 1
+		if (nextVerse <= lastVerse && nextVerse > 0) {
+			this.props.history.replace(`/${bibleId}/${bookId}/${chapter}/${nextVerse}`);
+		} else if (nextVerse < 0) {
+			this.props.history.replace(`/${bibleId}/${bookId}/${chapter}/1`);
+		} else if (nextVerse > lastVerse) {
+			this.props.history.replace(`/${bibleId}/${bookId}/${chapter}/${lastVerse}`);
+		}
+	}
+
+	setPrevVerse = (verse) => {
+		const { bibleId, bookId, chapter } = this.props.match.params;
+		const { chapterText } = this.props.homepage;
+		const prevVerse = parseInt(verse, 10) - 1;
+		const lastVerse = chapterText.length;
+		// Is it past the max verses for the chapter?
+		// if not increment it by 1
+		if (prevVerse <= lastVerse && prevVerse > 0) {
+			this.props.history.replace(`/${bibleId}/${bookId}/${chapter}/${prevVerse}`);
+		} else if (prevVerse < 0) {
+			this.props.history.replace(`/${bibleId}/${bookId}/${chapter}/1`);
+		} else if (prevVerse > lastVerse) {
+			this.props.history.replace(`/${bibleId}/${bookId}/${chapter}/${lastVerse}`);
+		}
+	}
+
 	getNextChapter = () => {
 		const {
 			activeTextId,
@@ -203,7 +273,13 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			activeBookId,
 		} = this.props.homepage;
 		const { activeBook, nextBook } = this.props;
+		const verseNumber = this.props.match.params.verse || '';
 		const maxChapter = activeBook.get('chapters').size;
+
+		if (verseNumber) {
+			this.setNextVerse(verseNumber);
+			return;
+		}
 
 		if (activeChapter === maxChapter) {
 			this.setActiveBookName({ book: nextBook.get('name'), id: nextBook.get('book_id') });
@@ -225,6 +301,12 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			books,
 		} = this.props.homepage;
 		const { previousBook } = this.props;
+		const verseNumber = this.props.match.params.verse || '';
+
+		if (verseNumber) {
+			this.setPrevVerse(verseNumber);
+			return;
+		}
 		// Keeps the button from trying to go backwards to a book that doesn't exist
 		if (activeBookId === books[0].book_id && activeChapter - 1 === 0) {
 			return;
@@ -300,12 +382,16 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			loadingNewChapterText,
 			firstLoad,
 			highlights,
+			defaultLanguageIso,
+			defaultLanguageName,
 		} = this.props.homepage;
 
 		const {
 			userSettings,
 			formattedSource,
 		} = this.props;
+
+		const verse = this.props.match.params.verse || '';
 
 		return (
 			<GenericErrorBoundary affectedArea="Homepage">
@@ -348,6 +434,8 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 									firstLoad={firstLoad}
 									activeBookName={activeBookName}
 									activeTextId={activeTextId}
+									initialIsoCode={defaultLanguageIso}
+									initialLanguageName={defaultLanguageName}
 									getAudio={this.getAudio}
 									setActiveText={this.setActiveTextId}
 									setActiveChapter={this.setActiveChapter}
@@ -393,8 +481,30 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 						) : null
 					}
 				</TransitionGroup>
-				<Text highlights={highlights} addHighlight={this.addHighlight} activeBookName={activeBookName} loadingNewChapterText={loadingNewChapterText} userSettings={userSettings} setActiveNote={this.setActiveNote} formattedSource={formattedSource} setActiveNotesView={this.setActiveNotesView} activeBookId={activeBookId} activeChapter={activeChapter} notesActive={isNotesModalActive} toggleNotesModal={this.toggleNotesModal} text={chapterText} nextChapter={this.getNextChapter} prevChapter={this.getPrevChapter} />
-				<Footer settingsActive={isSettingsModalActive} isInformationModalActive={isInformationModalActive} toggleInformationModal={this.toggleInformationModal} toggleSettingsModal={this.toggleSettingsModal} />
+				<Text
+					highlights={highlights}
+					addHighlight={this.addHighlight}
+					activeBookName={activeBookName}
+					loadingNewChapterText={loadingNewChapterText}
+					userSettings={userSettings}
+					setActiveNote={this.setActiveNote}
+					formattedSource={formattedSource}
+					setActiveNotesView={this.setActiveNotesView}
+					activeBookId={activeBookId}
+					activeChapter={activeChapter}
+					notesActive={isNotesModalActive}
+					toggleNotesModal={this.toggleNotesModal}
+					text={chapterText}
+					verseNumber={verse}
+					nextChapter={this.getNextChapter}
+					prevChapter={this.getPrevChapter}
+				/>
+				<Footer
+					settingsActive={isSettingsModalActive}
+					isInformationModalActive={isInformationModalActive}
+					toggleInformationModal={this.toggleInformationModal}
+					toggleSettingsModal={this.toggleSettingsModal}
+				/>
 			</GenericErrorBoundary>
 		);
 	}

@@ -29,10 +29,10 @@ const initialState = fromJS({
 	countryListActive: false,
 	// use window.navigator.language to get the code, use code to find name and iso
 	// activeLanguageName: window.navigator.userLanguage || window.navigator.language || '',
-	activeLanguageName: 'english',
+	activeLanguageName: '',
 	activeCountryName: 'ANY',
 	initialBookId: 'GEN',
-	activeIsoCode: 'eng',
+	activeIsoCode: '',
 	loadingCountries: false,
 	loadingLanguages: false,
 	loadingVersions: false,

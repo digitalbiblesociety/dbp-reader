@@ -123,6 +123,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			formattedSource,
 			highlights,
 			activeChapter,
+			verseNumber,
 		} = this.props;
 		// Need to connect to the api and get the highlights object for this chapter
 		// based on whether the highlights object has any data decide whether to run this function or not
@@ -141,6 +142,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		}
 
 		let textComponents;
+
 		const readersMode = userSettings.getIn(['toggleOptions', 'readersMode', 'active']);
 		const oneVersePerLine = userSettings.getIn(['toggleOptions', 'oneVersePerLine', 'active']);
 		const justifiedText = userSettings.getIn(['toggleOptions', 'justifiedText', 'active']);
@@ -149,7 +151,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		// Each of the HOC could be wrapped in a formatTextBasedOnOptions function
 		// the function would apply each of the HOCs in order
 		if (text.length === 0 && !formattedSource.main) {
-			textComponents = (<h5>This resource does not currently have any text.</h5>);
+			textComponents = [<h5 key={'no_text'}>This resource does not currently have any text.</h5>];
 		} else if (readersMode) {
 			textComponents = text.map((verse) => (
 				<span verseid={verse.verse_start} key={verse.verse_start}>{verse.verse_text}&nbsp;&nbsp;</span>
@@ -172,8 +174,12 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			));
 		}
 
-		if (!formattedSource.main && !readersMode && Array.isArray(textComponents)) {
+		if (!formattedSource.main && !readersMode && Array.isArray(textComponents) && textComponents[0].key !== 'no_text') {
 			textComponents.unshift(<span key={'chapterNumber'} className={'drop-caps'}>{activeChapter}</span>);
+		}
+		// console.log('text components that are about to be mounted', textComponents);
+		if (verseNumber && Array.isArray(textComponents)) {
+			return textComponents.filter((c) => c.key === verseNumber);
 		}
 
 		return textComponents;
@@ -401,6 +407,7 @@ Text.propTypes = {
 	loadingNewChapterText: PropTypes.bool,
 	formattedSource: PropTypes.object,
 	setActiveNote: PropTypes.func,
+	verseNumber: PropTypes.string,
 	activeBookId: PropTypes.string,
 	activeBookName: PropTypes.string,
 };
