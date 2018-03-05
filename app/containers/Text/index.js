@@ -371,7 +371,9 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 					{this.getTextComponents}
 					{
 						verseNumber ? (
-							[<br />, <button onClick={goToFullChapter} className={'read-chapter'}>Read Full Chapter</button>]
+							<div className={'read-chapter-container'}>
+								<button onClick={goToFullChapter} className={'read-chapter'}>Read Full Chapter</button>
+							</div>
 						) : null
 					}
 				</main>
