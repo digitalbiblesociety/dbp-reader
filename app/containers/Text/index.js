@@ -341,7 +341,6 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			toggleNotesModal,
 			notesActive,
 			setActiveNotesView,
-			activeBookId,
 			formattedSource,
 			text,
 			loadingNewChapterText,

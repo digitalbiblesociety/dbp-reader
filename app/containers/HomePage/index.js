@@ -242,11 +242,11 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		// Is it past the max verses for the chapter?
 		// if not increment it by 1
 		if (nextVerse <= lastVerse && nextVerse > 0) {
-			this.props.history.replace(`/${bibleId}/${bookId}/${chapter}/${nextVerse}`);
+			this.props.history.push(`/${bibleId}/${bookId}/${chapter}/${nextVerse}`);
 		} else if (nextVerse < 0) {
-			this.props.history.replace(`/${bibleId}/${bookId}/${chapter}/1`);
+			this.props.history.push(`/${bibleId}/${bookId}/${chapter}/1`);
 		} else if (nextVerse > lastVerse) {
-			this.props.history.replace(`/${bibleId}/${bookId}/${chapter}/${lastVerse}`);
+			this.props.history.push(`/${bibleId}/${bookId}/${chapter}/${lastVerse}`);
 		}
 	}
 
@@ -258,11 +258,11 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		// Is it past the max verses for the chapter?
 		// if not increment it by 1
 		if (prevVerse <= lastVerse && prevVerse > 0) {
-			this.props.history.replace(`/${bibleId}/${bookId}/${chapter}/${prevVerse}`);
+			this.props.history.push(`/${bibleId}/${bookId}/${chapter}/${prevVerse}`);
 		} else if (prevVerse < 0) {
-			this.props.history.replace(`/${bibleId}/${bookId}/${chapter}/1`);
+			this.props.history.push(`/${bibleId}/${bookId}/${chapter}/1`);
 		} else if (prevVerse > lastVerse) {
-			this.props.history.replace(`/${bibleId}/${bookId}/${chapter}/${lastVerse}`);
+			this.props.history.push(`/${bibleId}/${bookId}/${chapter}/${lastVerse}`);
 		}
 	}
 
