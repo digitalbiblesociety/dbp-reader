@@ -394,6 +394,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			highlights,
 			defaultLanguageIso,
 			defaultLanguageName,
+			invalidBibleId,
 		} = this.props.homepage;
 
 		const {
@@ -497,6 +498,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					highlights={highlights}
 					userSettings={userSettings}
 					activeBookId={activeBookId}
+					invalidBibleId={invalidBibleId}
 					activeChapter={activeChapter}
 					activeBookName={activeBookName}
 					notesActive={isNotesModalActive}

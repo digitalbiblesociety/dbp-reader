@@ -106,6 +106,7 @@ const initialState = fromJS({
 	selectedText: '',
 	selectedBookName: 'Genesis',
 	audioSource: '',
+	invalidBibleId: false,
 	hasAudio: false,
 	formattedSource: '',
 	hasTextInDatabase: true,
@@ -206,6 +207,7 @@ function homePageReducer(state = initialState, action) {
 			.set('defaultLanguageIso', fromJS(action.iso))
 			.set('defaultLanguageName', fromJS(action.languageName))
 			.set('activeBookName', fromJS(action.activeBookName))
+			.set('invalidBibleId', false)
 			// .set('hasFormattedText', fromJS(action.chapterData.hasFormattedText))
 			// .set('hasTextInDatabase', fromJS(action.chapterData.hasPlainText))
 			// .set('hasAudio', fromJS(action.chapterData.hasAudio))
@@ -229,6 +231,10 @@ function homePageReducer(state = initialState, action) {
 		return state.set('loadingNewChapterText', true);
 	case 'getbible':
 		return state.set('loadingNewChapterText', true);
+	case 'loadbibleerror':
+		return state
+			.set('invalidBibleId', true)
+			.set('loadingNewChapterText', false);
 	default:
 		return state;
 	}

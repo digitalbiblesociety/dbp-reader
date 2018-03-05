@@ -375,13 +375,12 @@ export function* getBibleFromUrl({ bibleId: oldBibleId, bookId: oldBookId, chapt
 				activeChapter,
 				activeBookName,
 			});
-		} else {
-			yield put({ type: 'loadbibleerror' });
 		}
 	} catch (error) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error('Caught in get bible', error); // eslint-disable-line no-console
 		}
+		yield put({ type: 'loadbibleerror' });
 	}
 }
 

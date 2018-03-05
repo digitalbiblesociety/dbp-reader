@@ -124,6 +124,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			highlights,
 			activeChapter,
 			verseNumber,
+			invalidBibleId,
 		} = this.props;
 		// Need to connect to the api and get the highlights object for this chapter
 		// based on whether the highlights object has any data decide whether to run this function or not
@@ -151,7 +152,11 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		// Each of the HOC could be wrapped in a formatTextBasedOnOptions function
 		// the function would apply each of the HOCs in order
 		if (text.length === 0 && !formattedSource.main) {
-			textComponents = [<h5 key={'no_text'}>This resource does not currently have any text.</h5>];
+			if (invalidBibleId) {
+				textComponents = [<h5 key={'no_text'}>You have entered an invalid bible id, please select a bible from the list or type a different id into the url.</h5>];
+			} else {
+				textComponents = [<h5 key={'no_text'}>This resource does not currently have any text.</h5>];
+			}
 		} else if (readersMode) {
 			textComponents = text.map((verse) => (
 				<span verseid={verse.verse_start} key={verse.verse_start}>{verse.verse_text}&nbsp;&nbsp;</span>
@@ -405,6 +410,7 @@ Text.propTypes = {
 	setActiveNotesView: PropTypes.func,
 	activeChapter: PropTypes.number,
 	notesActive: PropTypes.bool,
+	invalidBibleId: PropTypes.bool,
 	loadingNewChapterText: PropTypes.bool,
 	formattedSource: PropTypes.object,
 	setActiveNote: PropTypes.func,
