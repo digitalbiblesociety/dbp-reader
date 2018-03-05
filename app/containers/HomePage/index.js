@@ -244,9 +244,9 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		if (nextVerse <= lastVerse && nextVerse > 0) {
 			this.props.history.push(`/${bibleId}/${bookId}/${chapter}/${nextVerse}`);
 		} else if (nextVerse < 0) {
-			this.props.history.push(`/${bibleId}/${bookId}/${chapter}/1`);
+			this.props.history.replace(`/${bibleId}/${bookId}/${chapter}/1`);
 		} else if (nextVerse > lastVerse) {
-			this.props.history.push(`/${bibleId}/${bookId}/${chapter}/${lastVerse}`);
+			this.props.history.replace(`/${bibleId}/${bookId}/${chapter}/${lastVerse}`);
 		}
 	}
 
@@ -260,9 +260,9 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		if (prevVerse <= lastVerse && prevVerse > 0) {
 			this.props.history.push(`/${bibleId}/${bookId}/${chapter}/${prevVerse}`);
 		} else if (prevVerse < 0) {
-			this.props.history.push(`/${bibleId}/${bookId}/${chapter}/1`);
+			this.props.history.replace(`/${bibleId}/${bookId}/${chapter}/1`);
 		} else if (prevVerse > lastVerse) {
-			this.props.history.push(`/${bibleId}/${bookId}/${chapter}/${lastVerse}`);
+			this.props.history.replace(`/${bibleId}/${bookId}/${chapter}/${lastVerse}`);
 		}
 	}
 

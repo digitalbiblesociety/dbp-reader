@@ -82,7 +82,8 @@ export function* getLanguages() {
 	try {
 		const response = yield call(request, requestUrl);
 		// const languages = response.data.filter((language) => languageList[language.iso_code]);
-		const languages = response.data.filter((language) => language.bible_count > 0);
+		// Temporary fix until the api returns the list pre-sorted
+		const languages = response.data.filter((language) => language.bible_count > 0).sort((a, b) => a.name > b.name);
 		languages.unshift({ name: 'ANY', iso_code: 'ANY' });
 
 		yield put(setLanguages({ languages }));
