@@ -20,13 +20,13 @@
 .password-section {display:flex;flex-direction:column;@include css4{color:var(--menu-active-color);};margin-top:15px;}
 .password-section .password {@include css4{background-color:var(--application-input-color);color:var(--menu-font-color);};width:100%;height:50px;display:flex;align-items:center;}
 
-// Address Section Styles
+// Address Section Styles - May have something here in the future
 .address-section {margin-top:15px;display:flex;flex-direction:column;}
-.address-section .input-svg {display:block;position:absolute;margin-top:10px;margin-left:20px;@include css4{fill:var(--menu-font-color);};}
-.address-section input {height:40px;font-size:.8em;font-style:italic;border-bottom:1px solid white;}
-.address-section .country {}
-.address-section .address-1 {}
-.address-section .address-2 {}
-.address-section .city {}
-.address-section .state {}
-.address-section .postal-code {}
+//.address-section .input-svg {display:block;position:absolute;margin-top:10px;margin-left:20px;@include css4{fill:var(--menu-font-color);};}
+//.address-section input {height:40px;font-size:.8em;font-style:italic;/* border-bottom:1px solid white; */}
+//.address-section .country {}
+//.address-section .address-1 {}
+//.address-section .address-2 {}
+//.address-section .city {}
+//.address-section .state {}
+//.address-section .postal-code {}
