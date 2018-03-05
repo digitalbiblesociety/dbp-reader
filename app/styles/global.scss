@@ -51,6 +51,8 @@ input:focus::-webkit-input-placeholder {color:transparent;}
 input:focus::-moz-placeholder          {color:transparent;}
 input:focus:-ms-input-placeholder      {color:transparent;}
 
+.input-icon {@include css4{background-color:var(--application-input-color);};width:30px;height:30px;}
+
 // Remove blue outline for divs that have event handlers
 div:focus  {outline:none;}
 span:focus {outline:none;}
