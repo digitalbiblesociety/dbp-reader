@@ -6,6 +6,7 @@
 
 // TODO: Get svg for password lock icon
 // Add element for saving the address information
+// Commented out all of the Address information code in case FCBH changes their mind and still wants it
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
@@ -17,12 +18,12 @@ class AccountSettings extends React.PureComponent {
 	state = {
 		email: this.props.profile.email,
 		password: this.props.profile.password,
-		country: this.props.profile.country,
-		address1: this.props.profile.address1,
-		address2: this.props.profile.address2,
-		city: this.props.profile.city,
-		state: this.props.profile.state,
-		zip: this.props.profile.zip,
+		// country: this.props.profile.country,
+		// address1: this.props.profile.address1,
+		// address2: this.props.profile.address2,
+		// city: this.props.profile.city,
+		// state: this.props.profile.state,
+		// zip: this.props.profile.zip,
 	}
 
 	handleEmailChange = (e) => {
@@ -37,11 +38,11 @@ class AccountSettings extends React.PureComponent {
 		this.props.deleteUser({ userId: this.props.userId });
 	}
 
-	handleAddressFieldChange = (e, field) => {
-		this.setState({
-			[field]: e.target.value,
-		});
-	}
+	// handleAddressFieldChange = (e, field) => {
+	// 	this.setState({
+	// 		[field]: e.target.value,
+	// 	});
+	// }
 
 	sendUpdateEmail = () => {
 		const currentEmail = this.props.profile.email;
@@ -62,13 +63,13 @@ class AccountSettings extends React.PureComponent {
 		}
 	}
 
-	sendUpdateUserInformation = () => {
-		const { country, address1, address2, city, state, zip } = this.state;
-		const { userId } = this.props;
-		const profile = { country, address1, address2, city, state, zip };
-
-		this.props.updateUserInformation({ profile, userId });
-	}
+	// sendUpdateUserInformation = () => {
+	// 	const { country, address1, address2, city, state, zip } = this.state;
+	// 	const { userId } = this.props;
+	// 	const profile = { country, address1, address2, city, state, zip };
+	//
+	// 	this.props.updateUserInformation({ profile, userId });
+	// }
 
 	render() {
 		const {
@@ -78,12 +79,12 @@ class AccountSettings extends React.PureComponent {
 		const {
 			email,
 			password,
-			country,
-			address1,
-			address2,
-			city,
-			state,
-			zip,
+			// country,
+			// address1,
+			// address2,
+			// city,
+			// state,
+			// zip,
 		} = this.state;
 
 		return (
@@ -112,25 +113,25 @@ class AccountSettings extends React.PureComponent {
 					<span role="button" tabIndex={0} className="button" onClick={this.sendUpdatePassword}>CHANGE PASSWORD</span>
 				</div>
 				<div className="address-section">
-					<span className="title">ADDRESS</span>
-					<div className="country">
-						<input onChange={(e) => this.handleAddressFieldChange(e, 'country')} placeholder="Country" value={country} />
-					</div>
-					<div className="address-1">
-						<input onChange={(e) => this.handleAddressFieldChange(e, 'address1')} placeholder="Address Line 1" value={address1} />
-					</div>
-					<div className="address-2">
-						<input onChange={(e) => this.handleAddressFieldChange(e, 'address2')} placeholder="Address Line 2" value={address2} />
-					</div>
-					<div className="city">
-						<input onChange={(e) => this.handleAddressFieldChange(e, 'city')} placeholder="City" value={city} />
-					</div>
-					<div className="state">
-						<input onChange={(e) => this.handleAddressFieldChange(e, 'state')} placeholder="State/Province" value={state} />
-					</div>
-					<div className="postal-code">
-						<input onChange={(e) => this.handleAddressFieldChange(e, 'zip')} placeholder="Postal Code" value={zip} />
-					</div>
+					{/* <span className="title">ADDRESS</span> */}
+					{/* <div className="country"> */}
+					{/* <input onChange={(e) => this.handleAddressFieldChange(e, 'country')} placeholder="Country" value={country} /> */}
+					{/* </div> */}
+					{/* <div className="address-1"> */}
+					{/* <input onChange={(e) => this.handleAddressFieldChange(e, 'address1')} placeholder="Address Line 1" value={address1} /> */}
+					{/* </div> */}
+					{/* <div className="address-2"> */}
+					{/* <input onChange={(e) => this.handleAddressFieldChange(e, 'address2')} placeholder="Address Line 2" value={address2} /> */}
+					{/* </div> */}
+					{/* <div className="city"> */}
+					{/* <input onChange={(e) => this.handleAddressFieldChange(e, 'city')} placeholder="City" value={city} /> */}
+					{/* </div> */}
+					{/* <div className="state"> */}
+					{/* <input onChange={(e) => this.handleAddressFieldChange(e, 'state')} placeholder="State/Province" value={state} /> */}
+					{/* </div> */}
+					{/* <div className="postal-code"> */}
+					{/* <input onChange={(e) => this.handleAddressFieldChange(e, 'zip')} placeholder="Postal Code" value={zip} /> */}
+					{/* </div> */}
 					<div className="button delete-account" role="button" tabIndex={0} onClick={this.handleAccountDeletion}>DELETE ACCOUNT</div>
 				</div>
 			</div>
@@ -143,7 +144,7 @@ AccountSettings.propTypes = {
 	deleteUser: PropTypes.func,
 	updateEmail: PropTypes.func,
 	updatePassword: PropTypes.func,
-	updateUserInformation: PropTypes.func,
+	// updateUserInformation: PropTypes.func,
 	profile: PropTypes.object,
 	userId: PropTypes.string,
 };
