@@ -29,15 +29,15 @@ class NavigationBar extends React.PureComponent { // eslint-disable-line react/p
 		return (
 			<div className="nav-container">
 				<div className="small-2 left-buttons">
-					<a className="small-hide medium-6 logo button" href={'http://www.bible.is'}><Logo /></a>
+					<a className="small-hide medium-6 logo button" href={'http://www.bible.is'} title={'http://www.bible.is'}><Logo /></a>
 				</div>
 				<div className="small-8 chapter-selector">
-					<span role="button" tabIndex={0} onClick={toggleChapterSelection} className="text">{ activeBookName ? `${activeBookName} ${activeChapter}` : 'No Book Selected' }<SvgWrapper className="svg" height="15px" width="15px" fill="#fff" svgid="go-down" opacity=".5" /></span>
-					<span role="button" tabIndex={0} onClick={toggleVersionSelection} className="text version"><span title={activeTextName} className={'version-text'}>{activeTextName}</span><SvgWrapper className="svg" height="15px" width="15px" fill="#fff" svgid="go-down" opacity=".5" /></span>
+					<span role="button" tabIndex={0} onClick={toggleChapterSelection} className="text" title={activeBookName ? `${activeBookName} ${activeChapter}` : 'No Book Selected'}>{ activeBookName ? `${activeBookName} ${activeChapter}` : 'No Book Selected' }<SvgWrapper className="svg" height="15px" width="15px" fill="#fff" svgid="go-down" opacity=".5" /></span>
+					<span role="button" tabIndex={0} onClick={toggleVersionSelection} className="text version" title={activeTextName}><span className={'version-text'}>{activeTextName}</span><SvgWrapper className="svg" height="15px" width="15px" fill="#fff" svgid="go-down" opacity=".5" /></span>
 				</div>
 				<div className="small-2 right-buttons">
-					<span className="small-6 button" role="button" tabIndex={0} onClick={toggleSearchModal}><SvgWrapper height="30px" width="30px" fill="#fff" svgid="search" /></span>
-					<span className="small-hide medium-6 button" role="button" tabIndex={0} onClick={toggleProfile}><SvgWrapper height="30px" width="30px" fill="#fff" svgid="profile_circle" /></span>
+					<span className="small-6 button" role="button" tabIndex={0} onClick={toggleSearchModal} title={'Search'}><SvgWrapper height="30px" width="30px" fill="#fff" svgid="search" /></span>
+					<span className="small-hide medium-6 button" role="button" tabIndex={0} onClick={toggleProfile} title={'Profile'}><SvgWrapper height="30px" width="30px" fill="#fff" svgid="profile_circle" /></span>
 				</div>
 			</div>
 		);

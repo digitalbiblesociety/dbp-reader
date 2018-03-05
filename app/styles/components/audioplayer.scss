@@ -17,14 +17,14 @@
 .speed-control-container .speed-item.active {@include css4{color:var(--menu-active-color);};}
 
 // Progress Bar Styles
-.progress-bar         {width:50%;@include css4{background-color:var(--audio-player-progress-background);};height:3px;cursor:pointer;}
-.progress-bar:focus   {outline: none;}
+.progress-bar       {width:50%;@include css4{background-color:var(--audio-player-progress-background);};height:3px;cursor:pointer;}
+.progress-bar:focus {outline: none;}
 
 // Gripper Styles
-.audio-gripper {display:block;position:relative;left:calc(50% - 25px);bottom:-50%;cursor:pointer;}
+.audio-gripper      {display:block;position:relative;left:calc(50% - 25px);bottom:-50%;cursor:pointer;}
 
 // Volume Slider
-#volume-wrap {position: relative;margin-left:18px;}
+#volume-wrap             {position: relative;margin-left:18px;}
 .volume-slider-container {display:block;bottom:1px;left:0;position:absolute;}
 .volume-slider           {@include css4{border:1px solid var(--menu-active-color);background-color:var(--transparent-grey);};height:25px;position:absolute;display:flex;align-items:center;justify-content:center;width:175px;margin-left:-75px;}
 .volume-slider .tracker  {@include css4{background-color:var(--menu-active-color);};border-radius:50%;width:15px;height:15px;margin-top:-6px;}
