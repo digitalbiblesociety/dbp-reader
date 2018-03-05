@@ -242,7 +242,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		// Is it past the max verses for the chapter?
 		// if not increment it by 1
 		if (nextVerse <= lastVerse && nextVerse > 0) {
-			this.props.history.replace(`/${bibleId}/${bookId}/${chapter}/${nextVerse}`);
+			this.props.history.push(`/${bibleId}/${bookId}/${chapter}/${nextVerse}`);
 		} else if (nextVerse < 0) {
 			this.props.history.replace(`/${bibleId}/${bookId}/${chapter}/1`);
 		} else if (nextVerse > lastVerse) {
@@ -258,7 +258,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		// Is it past the max verses for the chapter?
 		// if not increment it by 1
 		if (prevVerse <= lastVerse && prevVerse > 0) {
-			this.props.history.replace(`/${bibleId}/${bookId}/${chapter}/${prevVerse}`);
+			this.props.history.push(`/${bibleId}/${bookId}/${chapter}/${prevVerse}`);
 		} else if (prevVerse < 0) {
 			this.props.history.replace(`/${bibleId}/${bookId}/${chapter}/1`);
 		} else if (prevVerse > lastVerse) {
@@ -278,6 +278,10 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 
 		if (verseNumber) {
 			this.setNextVerse(verseNumber);
+			return;
+		}
+		// If the next book in line doesn't exist and we are already at the last chapter just return
+		if (!nextBook.size && activeChapter === maxChapter) {
 			return;
 		}
 
@@ -343,6 +347,12 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 
 	setActiveNote = ({ note }) => this.props.dispatch(setActiveNote({ note }))
 
+	goToFullChapter = () => {
+		const { bibleId, bookId, chapter } = this.props.match.params;
+
+		this.props.history.push(`/${bibleId}/${bookId}/${chapter}`);
+	}
+
 	addHighlight = (props) => this.props.dispatch(addHighlight({ ...props, bible: this.props.homepage.activeTextId, userId: this.props.userId }))
 
 	toggleFirstLoadForTextSelection = () => this.props.homepage.firstLoad && this.props.dispatch(toggleFirstLoadForTextSelection())
@@ -384,6 +394,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			highlights,
 			defaultLanguageIso,
 			defaultLanguageName,
+			invalidBibleId,
 		} = this.props.homepage;
 
 		const {
@@ -398,14 +409,14 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 				<Helmet
 					meta={[
 						{ name: 'description', content: 'Main page for the Bible.is web app' },
-						{ name: 'og:title', content: `${activeBookName} ${activeChapter}` },
+						{ name: 'og:title', content: `${activeBookName} ${activeChapter}${verse ? `:${verse}` : ''}` },
 						{ name: 'og:url', content: window.location.href },
 						{ name: 'og:description', content: 'Main page for the Bible.is web app' },
 						{ name: 'og:type', content: 'website' },
 						{ name: 'og:site_name', content: 'Bible.is' },
 					]}
 				>
-					<title>{`${activeBookName} ${activeChapter}`} | Bible.is</title>
+					<title>{`${activeBookName} ${activeChapter}${verse ? `:${verse}` : ''}`} | Bible.is</title>
 					<meta name="description" content="Main page for the Bible.is web app" />
 				</Helmet>
 				<NavigationBar
@@ -482,22 +493,24 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					}
 				</TransitionGroup>
 				<Text
-					highlights={highlights}
-					addHighlight={this.addHighlight}
-					activeBookName={activeBookName}
-					loadingNewChapterText={loadingNewChapterText}
-					userSettings={userSettings}
-					setActiveNote={this.setActiveNote}
-					formattedSource={formattedSource}
-					setActiveNotesView={this.setActiveNotesView}
-					activeBookId={activeBookId}
-					activeChapter={activeChapter}
-					notesActive={isNotesModalActive}
-					toggleNotesModal={this.toggleNotesModal}
 					text={chapterText}
 					verseNumber={verse}
+					highlights={highlights}
+					userSettings={userSettings}
+					activeBookId={activeBookId}
+					invalidBibleId={invalidBibleId}
+					activeChapter={activeChapter}
+					activeBookName={activeBookName}
+					notesActive={isNotesModalActive}
+					formattedSource={formattedSource}
+					loadingNewChapterText={loadingNewChapterText}
+					addHighlight={this.addHighlight}
+					goToFullChapter={this.goToFullChapter}
 					nextChapter={this.getNextChapter}
 					prevChapter={this.getPrevChapter}
+					setActiveNote={this.setActiveNote}
+					toggleNotesModal={this.toggleNotesModal}
+					setActiveNotesView={this.setActiveNotesView}
 				/>
 				<Footer
 					settingsActive={isSettingsModalActive}

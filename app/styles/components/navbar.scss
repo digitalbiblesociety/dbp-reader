@@ -11,8 +11,14 @@
 .nav-container .left-buttons .button     {height:30px;margin-left:15px;}
 .nav-container .left-buttons .logo       {height:54px;width:120px;}
 .nav-container div                       {height:54px;display:flex;align-items:center;justify-content:center;}
-.chapter-selector .version               {margin-left:15px;font-size:1em;}
-//.chapter-selector .version .version-text {display:inline-block;width:150px;max-width:150px;overflow:hidden;white-space:nowrap;text-overflow: ellipsis;}
+.chapter-selector .version               {margin-left:15px;}
+//.chapter-selector .version .version-text {width:100px;max-width:100px;overflow:hidden;white-space: nowrap;}
+//.chapter-selector .version .version-text:hover {overflow:inherit;}
 .chapter-selector .text .svg             {margin-left:10px;}
 .nav-container span                      {cursor:pointer;}
 .nav-container span:hover                {opacity:.65;}
+
+@media only screen and (max-width:600px) {
+  .chapter-selector .version .version-text {margin-top:4px;display:inline-block;width:100px;max-width:100px;overflow:hidden;white-space:nowrap;text-overflow: ellipsis;}
+  .chapter-selector .version svg {margin-bottom:4px;}
+}
