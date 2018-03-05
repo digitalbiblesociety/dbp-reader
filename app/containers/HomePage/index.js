@@ -280,6 +280,10 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			this.setNextVerse(verseNumber);
 			return;
 		}
+		// If the next book in line doesn't exist and we are already at the last chapter just return
+		if (!nextBook.size && activeChapter === maxChapter) {
+			return;
+		}
 
 		if (activeChapter === maxChapter) {
 			this.setActiveBookName({ book: nextBook.get('name'), id: nextBook.get('book_id') });

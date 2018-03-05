@@ -362,11 +362,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		}
 		return (
 			<div className="text-container">
-				{
-					activeBookId === 'GEN' && activeChapter === 1 ? null : (
-						<SvgWrapper onClick={prevChapter} className="prev-arrow-svg" svgid="prev-arrow" />
-					)
-				}
+				<SvgWrapper onClick={prevChapter} className="prev-arrow-svg" svgid="prev-arrow" />
 				<main ref={this.setMainRef} onMouseDown={this.getFirstVerse} onMouseUp={this.handleMouseUp} className={formattedSource.main ? '' : 'chapter'}>
 					{
 						(formattedSource.main || text.length === 0 || !readersMode) ? null : (
@@ -380,11 +376,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 						) : null
 					}
 				</main>
-				{
-					activeBookId === 'REV' && activeChapter === 22 ? null : (
-						<SvgWrapper onClick={nextChapter} className="next-arrow-svg" svgid="next-arrow" />
-					)
-				}
+				<SvgWrapper onClick={nextChapter} className="next-arrow-svg" svgid="next-arrow" />
 				{
 					contextMenuState ? (
 						<ContextPortal addHighlight={this.addHighlight} addFacebookLike={this.addFacebookLike} shareHighlightToFacebook={this.shareHighlightToFacebook} setActiveNote={this.setActiveNote} setActiveNotesView={setActiveNotesView} closeContextMenu={this.closeContextMenu} toggleNotesModal={toggleNotesModal} notesActive={notesActive} parentNode={this.main} coordinates={coords} />
