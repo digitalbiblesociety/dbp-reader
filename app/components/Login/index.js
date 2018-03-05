@@ -88,8 +88,8 @@ class Login extends React.PureComponent {
 						</div>
 					)
 				}
-				<GoogleAuthentication activeDriver={activeDriver} socialMediaLogin={socialMediaLogin} socialLoginLink={socialLoginLink} />
 				<FacebookAuthentication activeDriver={activeDriver} socialMediaLogin={socialMediaLogin} socialLoginLink={socialLoginLink} />
+				<GoogleAuthentication activeDriver={activeDriver} socialMediaLogin={socialMediaLogin} socialLoginLink={socialLoginLink} />
 				<section className="sign-up-free">
 					Don&#39;t have an account yet?
 					<span role="button" tabIndex={0} className="link" onClick={() => { selectAccountOption('signup'); this.toggleSignInForm(false); }}> Sign up for free!</span>
