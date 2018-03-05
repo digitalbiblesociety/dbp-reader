@@ -148,7 +148,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		const oneVersePerLine = userSettings.getIn(['toggleOptions', 'oneVersePerLine', 'active']);
 		const justifiedText = userSettings.getIn(['toggleOptions', 'justifiedText', 'active']);
 		// TODO: Should move each of these settings into their own HOC
-		// Each HOC would take to source and update it based on if it was toggled
+		// Each HOC would take the source and update it based on if it was toggled
 		// Each of the HOC could be wrapped in a formatTextBasedOnOptions function
 		// the function would apply each of the HOCs in order
 		if (text.length === 0 && !formattedSource.main) {
@@ -367,7 +367,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		return (
 			<div className="text-container">
 				<SvgWrapper onClick={prevChapter} className="prev-arrow-svg" svgid="prev-arrow" />
-				<main ref={this.setMainRef} onMouseDown={this.getFirstVerse} onMouseUp={this.handleMouseUp} className={formattedSource.main ? '' : 'chapter'}>
+				<main ref={this.setMainRef} onMouseDown={this.getFirstVerse} onMouseUp={this.handleMouseUp} className={formattedSource.main && !readersMode ? '' : 'chapter'}>
 					{
 						(formattedSource.main || text.length === 0 || !readersMode) ? null : (
 							<h1 className="active-chapter-title">{activeChapter}</h1>
