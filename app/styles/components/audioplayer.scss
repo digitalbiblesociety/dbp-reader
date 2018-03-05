@@ -38,11 +38,11 @@
 .container span     {margin-left:15px;}
 
 // Media Queries
-@media only screen and (max-width:600px) {
-  .volume-slider-container {top:-24px;bottom:auto;}
-  .speed-control-container-container {top:-24px;bottom:auto;}
-  .elipsis {top:-114px;bottom:auto;}
-  .audio-player-background {position:fixed;width:100%;bottom:56px;}
-  .audio-gripper {bottom:50px;}
-  .audio-gripper.closed {bottom:0;}
-}
+//@media only screen and (max-width:600px) {
+//  .volume-slider-container {top:-24px;bottom:auto;}
+//  .speed-control-container-container {top:-24px;bottom:auto;}
+//  .elipsis {top:-114px;bottom:auto;}
+//  .audio-player-background {position:fixed;width:100%;bottom:56px;}
+//  .audio-gripper {bottom:50px;}
+//  .audio-gripper.closed {bottom:0;}
+//}
