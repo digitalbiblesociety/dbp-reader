@@ -1,8 +1,8 @@
 .audio-player-background               {@include css4{background-color:var(--audio-player-background);};min-height:10px;padding:2.5px;}
 // General Audio Player Styles
-.audio-player-container                {@include css4{background-color:var(--audio-player-background);};display:flex;justify-content:space-around;align-items:center;width:100%;height:50px;max-width:800px;margin:auto;}
+.audio-player-container .svgitem       {cursor:pointer;margin-right:18px;}
+.audio-player-container                {@include css4{background-color:var(--audio-player-background);};display:flex;justify-content:center;align-items:center;width:100%;height:50px;max-width:800px;margin:auto;:nth-child(3) {margin-right:36px;}}
 .audio-player-container .item          {border:1px solid transparent;cursor:pointer;height:50px;display:flex;align-items:center;justify-content:center;}
-.audio-player-container .svgitem       {cursor:pointer;}
 .audio-player-container .item:hover    {opacity:.65;}
 .audio-player-container .svgitem:hover {opacity:.65;}
 .audio-player-container .item.active   {@include css4{border-bottom:1px solid var(--transparent-grey);border-top:1px solid var(--menu-active-color);;border-left:1px solid var(--menu-active-color);;border-right:1px solid var(--menu-active-color);background-color:var(--transparent-grey);};z-index:4;}
@@ -24,7 +24,7 @@
 .audio-gripper {display:block;position:relative;left:calc(50% - 25px);bottom:-50%;cursor:pointer;}
 
 // Volume Slider
-#volume-wrap {position: relative}
+#volume-wrap {position: relative;margin-left:18px;}
 .volume-slider-container {display:block;bottom:1px;left:0;position:absolute;}
 .volume-slider           {@include css4{border:1px solid var(--menu-active-color);background-color:var(--transparent-grey);};height:25px;position:absolute;display:flex;align-items:center;justify-content:center;width:175px;margin-left:-75px;}
 .volume-slider .tracker  {@include css4{background-color:var(--menu-active-color);};border-radius:50%;width:15px;height:15px;margin-top:-6px;}
@@ -38,11 +38,20 @@
 .container span     {margin-left:15px;}
 
 // Media Queries
-@media only screen and (max-width:600px) {
-  .volume-slider-container {top:-24px;bottom:auto;}
-  .speed-control-container-container {top:-24px;bottom:auto;}
-  .elipsis {top:-114px;bottom:auto;}
-  .audio-player-background {position:fixed;width:100%;bottom:56px;}
-  .audio-gripper {bottom:50px;}
-  .audio-gripper.closed {bottom:0;}
+//@media only screen and (max-width:600px) {
+//  .volume-slider-container {top:-24px;bottom:auto;}
+//  .speed-control-container-container {top:-24px;bottom:auto;}
+//  .elipsis {top:-114px;bottom:auto;}
+//  .audio-player-background {position:fixed;width:100%;bottom:56px;}
+//  .audio-gripper {bottom:50px;}
+//  .audio-gripper.closed {bottom:0;}
+//}
+
+@media only screen and (max-width: 600px) {
+  .audio-player-container {
+    flex-wrap: wrap;
+    height: 83px;
+    :nth-child(4) {order:1;width:55%;margin:0 25px 17px 25px;}
+    :nth-child(3) {margin-right:0;}
+  }
 }
