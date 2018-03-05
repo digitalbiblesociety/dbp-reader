@@ -225,6 +225,10 @@ function homePageReducer(state = initialState, action) {
 	case 'loadaudio':
 		// console.log('loading audio with', action);
 		return state.set('audioSource', action.audioPath);
+	case 'getchapter':
+		return state.set('loadingNewChapterText', true);
+	case 'getbible':
+		return state.set('loadingNewChapterText', true);
 	default:
 		return state;
 	}
