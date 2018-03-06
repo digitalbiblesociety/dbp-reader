@@ -8,6 +8,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import FacebookAuthentication from 'containers/FacebookAuthentication';
 import GoogleAuthentication from 'containers/GoogleAuthentication';
+import SvgWrapper from 'components/SvgWrapper';
 // import styled from 'styled-components';
 // import { FormattedMessage } from 'react-intl';
 // import messages from './messages';
@@ -93,7 +94,10 @@ class SignUp extends React.PureComponent {
 	get signupForm() {
 		return (
 			<form onSubmit={this.handleSignup}>
-				<input onChange={this.handleEmailChange} className="email" placeholder="Enter E-mail" value={this.state.email} />
+				<span className={'input-wrapper'}>
+					<SvgWrapper className="svg" width="30px" height="30px" fill="#fff" svgid="email" />
+					<input onChange={this.handleEmailChange} className="email" placeholder="Enter E-mail" value={this.state.email} />
+				</span>
 				<input onChange={this.handleFirstName} className="name-inputs" placeholder="Enter First Name" value={this.state.firstName} />
 				<input onChange={this.handleLastName} className="name-inputs" placeholder="Enter Last Name" value={this.state.lastName} />
 				<input autoComplete="new-password" type="password" onChange={this.handlePasswordChange} className="first-password" placeholder="Enter Password" value={this.state.password} />

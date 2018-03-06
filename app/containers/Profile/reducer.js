@@ -25,8 +25,8 @@ import {
 
 const initialState = fromJS({
 	activeOption: 'login',
-	userAuthenticated: false,
-	userId: '',
+	userAuthenticated: !!localStorage.getItem('bible_is_user_id') || false,
+	userId: localStorage.getItem('bible_is_user_id') || '',
 	loginErrorMessage: '',
 	socialLoginLink: '',
 	signupErrorMessage: '',

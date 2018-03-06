@@ -12,8 +12,10 @@
 .text-selection-title:hover                         {opacity:0.65;}
 .text-selection-title .text                         {margin-left:10px;}
 // Change from using background url to using an absolutely positioned element
-.text-selection-input                               {background:url("../images/input_search_icon.svg") no-repeat 5px 10px;border:none;width:100%;height:50px;@include css4{background-color:var(--application-input-color);caret-color:var(--dark-caret-color);};font-size:.9em;font-weight:200;padding-left:45px;}
-.text-selection-input:focus                         {padding-left:10px;}
+.text-selection-input                      {border:none;width:100%;height:50px;@include css4{background-color:var(--application-input-color);caret-color:var(--dark-caret-color);};font-size:.9em;font-weight:200;padding-left:45px;}
+// This should probably be handled differently
+.text-selection-section .input-wrapper     {position:relative;bottom:30px;}
+.text-selection-section .input-wrapper svg {position:relative;top:45px;margin:0 10px;}
 
 // Country Selection Styles
 .country-name       {display:flex;align-items:center;cursor:pointer;}
@@ -25,7 +27,8 @@
 .language-name             {cursor:pointer;margin-top:5px;}
 .language-name:hover       {@include css4{color:var(--menu-active-color);};}
 .active-language-name      {@include css4{color:var(--menu-active-color);};}
-.language-name-list        {@include css4{background-color:var(--menu-secondary-background-color);color:var(--menu-font-color);};font-size:.98em;height:calc(100% - 90px);max-height:calc(100% - 90px);overflow-y:scroll;overflow-x:hidden;padding:15px;}
+// The relative input values are affecting this as well...
+.language-name-list        {@include css4{background-color:var(--menu-secondary-background-color);color:var(--menu-font-color);};font-size:.98em;height:calc(100% - 90px);max-height:calc(100% - 90px);overflow-y:scroll;overflow-x:hidden;padding:15px;margin-top:-35px;}
 
 // Chapter Selection Styles
 .chapter-selection-section {max-height:calc(100% - 108px);height:calc(100% - 108px);text-transform:uppercase;}

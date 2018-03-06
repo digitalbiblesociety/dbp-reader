@@ -134,7 +134,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				if (highlight.chapter === activeChapter) {
 					const { verse_start, highlight_start, highlighted_words } = highlight;
 					// console.log('text passed to highlight', highlightedText);
-					return this.highlightPlainText(highlightedText, verse_start, highlight_start, highlighted_words);
+					return this.highlightPlainText({ plainText: highlightedText, verseStart: verse_start, highlightStart: highlight_start, highlightedWords: highlighted_words });
 				}
 				return highlightedText;
 			}, initialText);
@@ -196,67 +196,86 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			this.closeFootnote();
 		}
 	}
-
-	highlightPlainText = (plainText, verseStart, highlightStart, highlightedWords) => {
+	// has an issue with highlights in the same verse
+	highlightPlainText = ({ plainText, verseStart, highlightStart: originalHighlightStart, highlightedWords }) => {
+		// console.log(`text array for verse ${verseStart} and highlight ${originalHighlightStart}`, plainText);
+		// console.log('highlight verse start', verseStart);
+		// console.log('highlight highlight start', originalHighlightStart);
+		// console.log('highlight highlighted words', highlightedWords);
 		// need to pass this function these values from the api
 		// needs to run for each highlight object that the user has added
 		let wordsLeftToHighlight = highlightedWords;
+		// This has to be done because arrays have a 0 based index but the api is using a 1 based index
+		const highlightStart = parseInt(originalHighlightStart, 10) - 1;
 
-		return plainText.map((v) => {
-			const newVerse = [];
-			const highlightedPortion = [];
-			const plainPortion = [];
-			// The conditional is to prevent the code trying to split a verse after it has become an array
-			// This is an issue because of a flaw in the program, I will need to stop iterating over each index
-			const verseTextLength = v.verse_text.split && v.verse_text.split(' ').length;
-			const verseTextArray = v.verse_text.split && v.verse_text.split(' ');
+		try {
+			return plainText.map((v) => {
+				const newVerse = [];
+				const highlightedPortion = [];
+				const plainPortion = [];
+				// The conditional is to prevent the code trying to split a verse after it has become an array
+				// This is an issue because of a flaw in the program, I will need to stop iterating over each index
+				const verseTextLength = (v.verse_text.split && v.verse_text.split(' ').length);
+				const verseTextArray = (v.verse_text.split && v.verse_text.split(' '));
 
-			if (v.verse_start === verseStart) {
-				const before = [];
-				const after = [];
-				verseTextArray.forEach((word, index) => {
-					if (index >= (highlightStart) && (index - highlightStart < wordsLeftToHighlight)) {
-						highlightedPortion.push(word);
-					} else if (index > (highlightStart) && index - highlightStart > wordsLeftToHighlight) {
-						after.push(word);
-					} else {
-						before.push(word);
-					}
-				});
-
-				wordsLeftToHighlight -= (verseTextLength - highlightStart);
-				newVerse.push(before.join(' '));
-				newVerse.push(' ');
-				newVerse.push(<span verseid={v.verse_start} className={'text-highlighted'}>{highlightedPortion.join(' ')}</span>);
-				newVerse.push(' ');
-				newVerse.push(after.join(' '));
-			} else if (wordsLeftToHighlight > 0 && v.verse_start > verseStart) {
-				if (wordsLeftToHighlight - verseTextLength > 0) {
-					newVerse.push(<span verseid={v.verse_start} className={'text-highlighted'}>{v.verse_text}</span>);
-					wordsLeftToHighlight -= verseTextLength;
-				} else {
+				if (v.verse_start === verseStart) {
+					const before = [];
+					const after = [];
 					verseTextArray.forEach((word, index) => {
-						// may need to do <=
-						if (index < (wordsLeftToHighlight)) {
+						// if the index is past the start of the highlight
+						// and the index minus the starting index is less than the total number of words to highlight
+						if (index >= (highlightStart) && (index - highlightStart < wordsLeftToHighlight)) {
 							highlightedPortion.push(word);
+							// if the index is greater than the highlight start
+							// and the index minus the starting index is great than the number of words to highlight
+							// then the word must come after the end of the highlight
+						} else if (index > (highlightStart) && index - highlightStart >= wordsLeftToHighlight) {
+							after.push(word);
+							// if the index is less than the starting index
 						} else {
-							plainPortion.push(word);
+							before.push(word);
 						}
 					});
-					wordsLeftToHighlight -= verseTextLength;
-					newVerse.push(<span verseid={v.verse_start} className={'text-highlighted'}>{highlightedPortion.join(' ')}</span>);
-					newVerse.push(' ');
-					newVerse.push(plainPortion.join(' '));
-				}
-			}
 
-			return { ...v, verse_text: newVerse.length ? newVerse : v.verse_text };
-		});
+					wordsLeftToHighlight -= (verseTextLength - highlightStart);
+					newVerse.push(before.join(' '));
+					newVerse.push(' ');
+					newVerse.push(<span key={v.verse_start} verseid={v.verse_start} className={'text-highlighted'}>{highlightedPortion.join(' ')}</span>);
+					newVerse.push(' ');
+					newVerse.push(after.join(' '));
+				} else if (wordsLeftToHighlight > 0 && v.verse_start > verseStart) {
+					if (wordsLeftToHighlight - verseTextLength > 0) {
+						newVerse.push(<span key={v.verse_start} verseid={v.verse_start} className={'text-highlighted'}>{v.verse_text}</span>);
+						wordsLeftToHighlight -= verseTextLength;
+					} else {
+						verseTextArray.forEach((word, index) => {
+							// may need to do <=
+							if (index < (wordsLeftToHighlight)) {
+								highlightedPortion.push(word);
+							} else {
+								plainPortion.push(word);
+							}
+						});
+						wordsLeftToHighlight -= verseTextLength;
+						newVerse.push(<span key={v.verse_start} verseid={v.verse_start} className={'text-highlighted'}>{highlightedPortion.join(' ')}</span>);
+						newVerse.push(' ');
+						newVerse.push(plainPortion.join(' '));
+					}
+				}
+
+				return { ...v, verse_text: newVerse.length ? newVerse : v.verse_text };
+			});
+		} catch (error) {
+			if (process.env.NODE_ENV === 'development') {
+				console.warn('Error in parsing highlights', error); // eslint-disable-line no-console
+			}
+			return plainText;
+		}
 		// if the previous highlight overlaps the next highlights verse id, ignore the next highlight
 	}
 
 	addHighlight = () => {
-		// needs to send an api request to the serve that adds a highlight for this passage
+		// needs to send an api request to the server that adds a highlight for this passage
 		// Adds userId and bible in homepage container where action is dispatched
 		// { bible, book, chapter, userId, verseStart, highlightStart, highlightedWords }
 		const firstVerse = parseInt(this.state.firstVerse, 10);
