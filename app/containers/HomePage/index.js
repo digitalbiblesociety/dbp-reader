@@ -101,7 +101,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 				userId,
 			});
 			// console.log('redirecting from bible and book');
-			this.props.history.replace(`/${bibleId}/${bookId}/1`);
+			this.props.history.replace(`/${bibleId.toLowerCase()}/${bookId.toLowerCase()}/1`);
 		} else if (bibleId) {
 			// If the user only enters a version of the bible then
 			// I want to default to the first book that bible has
@@ -218,7 +218,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		// 	console.log('the current id doesnt match');
 		// 	console.log(this.props);
 		// 	console.log('redirecting from activeBookId willReceiveProps');
-			this.props.history.replace(`/${nextProps.homepage.activeTextId}/${nextProps.homepage.activeBookId}/${nextProps.homepage.activeChapter}${nextParams.verse ? `/${nextParams.verse}` : ''}`);
+			this.props.history.replace(`/${nextProps.homepage.activeTextId.toLowerCase()}/${nextProps.homepage.activeBookId.toLowerCase()}/${nextProps.homepage.activeChapter}${nextParams.verse ? `/${nextParams.verse}` : ''}`);
 			// console.log('route that I pushed', `/${nextProps.homepage.activeTextId}/${nextProps.homepage.activeBookId}/${nextProps.homepage.activeChapter}`);
 		}
 
@@ -262,11 +262,11 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		// Is it past the max verses for the chapter?
 		// if not increment it by 1
 		if (nextVerse <= lastVerse && nextVerse > 0) {
-			this.props.history.push(`/${bibleId}/${bookId}/${chapter}/${nextVerse}`);
+			this.props.history.push(`/${bibleId.toLowerCase()}/${bookId.toLowerCase()}/${chapter}/${nextVerse}`);
 		} else if (nextVerse < 0) {
-			this.props.history.replace(`/${bibleId}/${bookId}/${chapter}/1`);
+			this.props.history.replace(`/${bibleId.toLowerCase()}/${bookId.toLowerCase()}/${chapter}/1`);
 		} else if (nextVerse > lastVerse) {
-			this.props.history.replace(`/${bibleId}/${bookId}/${chapter}/${lastVerse}`);
+			this.props.history.replace(`/${bibleId.toLowerCase()}/${bookId.toLowerCase()}/${chapter}/${lastVerse}`);
 		}
 	}
 
@@ -278,11 +278,11 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		// Is it past the max verses for the chapter?
 		// if not increment it by 1
 		if (prevVerse <= lastVerse && prevVerse > 0) {
-			this.props.history.push(`/${bibleId}/${bookId}/${chapter}/${prevVerse}`);
+			this.props.history.push(`/${bibleId.toLowerCase()}/${bookId.toLowerCase()}/${chapter}/${prevVerse}`);
 		} else if (prevVerse < 0) {
-			this.props.history.replace(`/${bibleId}/${bookId}/${chapter}/1`);
+			this.props.history.replace(`/${bibleId.toLowerCase()}/${bookId.toLowerCase()}/${chapter}/1`);
 		} else if (prevVerse > lastVerse) {
-			this.props.history.replace(`/${bibleId}/${bookId}/${chapter}/${lastVerse}`);
+			this.props.history.replace(`/${bibleId.toLowerCase()}/${bookId.toLowerCase()}/${chapter}/${lastVerse}`);
 		}
 	}
 
@@ -309,11 +309,11 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			this.setActiveBookName({ book: nextBook.get('name'), id: nextBook.get('book_id') });
 			// this.getChapters({ userAuthenticated, userId, bible: activeTextId, book: nextBook.get('book_id'), chapter: 1, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
 			this.setActiveChapter(1);
-			this.props.history.push(`/${activeTextId}/${nextBook.get('book_id')}/1`);
+			this.props.history.push(`/${activeTextId.toLowerCase()}/${nextBook.get('book_id').toLowerCase()}/1`);
 		} else {
 			// this.getChapters({ userAuthenticated, userId, bible: activeTextId, book: activeBookId, chapter: activeChapter + 1, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
 			this.setActiveChapter(activeChapter + 1);
-			this.props.history.push(`/${activeTextId}/${activeBookId}/${activeChapter + 1}`);
+			this.props.history.push(`/${activeTextId.toLowerCase()}/${activeBookId.toLowerCase()}/${activeChapter + 1}`);
 		}
 	}
 
@@ -342,12 +342,12 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			this.setActiveBookName({ book: previousBook.get('name'), id: previousBook.get('book_id') });
 			// this.getChapters({ userAuthenticated, userId, bible: activeTextId, book: previousBook.get('book_id'), chapter: lastChapter, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
 			this.setActiveChapter(lastChapter);
-			this.props.history.push(`/${activeTextId}/${previousBook.get('book_id')}/${lastChapter}`);
+			this.props.history.push(`/${activeTextId.toLowerCase()}/${previousBook.get('book_id').toLowerCase()}/${lastChapter}`);
 			// Goes to the previous Chapter
 		} else {
 			// this.getChapters({ userAuthenticated, userId, bible: activeTextId, book: activeBookId, chapter: activeChapter - 1, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
 			this.setActiveChapter(activeChapter - 1);
-			this.props.history.push(`/${activeTextId}/${activeBookId}/${activeChapter - 1}`);
+			this.props.history.push(`/${activeTextId.toLowerCase()}/${activeBookId.toLowerCase()}/${activeChapter - 1}`);
 		}
 	}
 

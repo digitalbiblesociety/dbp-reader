@@ -43,7 +43,7 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 		// Then pass these three options into redux and use them here
 		const components = filteredBibles.map((bible) => (
 			<Link
-				to={`/${bible.get('abbr')}/${activeBookId}/${activeChapter}`}
+				to={`/${bible.get('abbr').toLowerCase()}/${activeBookId.toLowerCase()}/${activeChapter}`}
 				className="version-item-button"
 				key={`${bible.get('abbr')}${bible.get('date')}`}
 				onClick={() => this.handleVersionListClick(bible)}
