@@ -54,7 +54,10 @@ class Login extends React.PureComponent {
 		return (
 			<React.Fragment>
 				<form onSubmit={this.handleSendingLogin}>
-					<input className="email" placeholder="Enter E-mail" onChange={this.handleEmailChange} value={this.state.email} />
+					<span className={'input-wrapper'}>
+						<SvgWrapper className="svg" width="30px" height="30px" fill="#fff" svgid="email" />
+						<input className="email" placeholder="Enter E-mail" onChange={this.handleEmailChange} value={this.state.email} />
+					</span>
 					<input className="first-password" type="password" placeholder="Enter Password" onChange={this.handlePasswordChange} value={this.state.password} />
 					<div className="sign-in-button">
 						<input className="login-checkbox" type="checkbox" />

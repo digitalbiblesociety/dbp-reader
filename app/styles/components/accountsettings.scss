@@ -3,8 +3,8 @@
 .account-settings .logout-button {margin-top:20px;margin-left:20px;cursor:pointer;&:hover{@include css4{color:var(--menu-active-color);};}}
 .account-settings .button {@include css4{color:var(--menu-font-color);};font-weight:400;cursor:pointer;&:hover{@include css4{color:var(--menu-active-color);};}align-self:flex-end;margin:10px 20px 0 0;font-size:.9em;}
 .account-settings .delete-account {margin-bottom:20px;color:inherit;align-self:flex-end;margin-top:20px;font-style:italic;font-weight:200;}
-.account-settings .svg {fill:currentColor;}
-.account-settings .title {@include css4{color:var(--menu-active-color);};padding-left:20px;margin-bottom:5px;}
+//.account-settings .svg {fill:currentColor;}
+.account-settings .title {@include css4{color:var(--menu-active-color);};padding-left:20px;margin-bottom:5px;top:30px;position:relative;}
 
 // Personal Information Styles
 .personal-info {display:flex;flex-direction:column;align-items:center;justify-content:center;}
