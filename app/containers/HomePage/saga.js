@@ -9,6 +9,16 @@ import { ADD_HIGHLIGHTS, LOAD_HIGHLIGHTS, GET_HIGHLIGHTS } from './constants';
 // import unionWith from 'lodash/unionWith';
 // import { ADD_HIGHLIGHTS, LOAD_HIGHLIGHTS, GET_CHAPTER_TEXT, GET_HIGHLIGHTS, GET_BOOKS, GET_AUDIO, INIT_APPLICATION } from './constants';
 
+/* Highlight possibilities
+*
+* Part of a verse
+*
+* Entire verse and part of other verses
+*
+* Overlaps another highlight
+*
+* */
+
 export function* getHighlights({ bible, book, chapter, userId, fromChapter }) {
 	const requestUrl = `https://api.bible.build/users/${userId}/highlights?key=${process.env.DBP_API_KEY}&v=4&bible_id=${bible}&book_id=${book}&chapter=${chapter}`;
 	let highlights = [];
@@ -39,14 +49,14 @@ export function* addHighlight({ bible, book, chapter, userId, verseStart, highli
 	formData.append('bible_id', bible);
 	formData.append('chapter', chapter);
 	formData.append('verse_start', verseStart);
-	formData.append('highlight_start', highlightStart);
+	formData.append('highlight_start', highlightStart + 1);
 	formData.append('highlighted_words', highlightedWords);
 
 	const options = {
 		method: 'POST',
 		body: formData,
 	};
-
+	// console.log('add highlight data', { bible, book, chapter, userId, verseStart, highlightStart, highlightedWords });
 	try {
 		const response = yield call(request, requestUrl, options);
 		// console.log('add highlight response', response);

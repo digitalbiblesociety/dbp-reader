@@ -196,17 +196,17 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			this.closeFootnote();
 		}
 	}
-
+	// has an issue with highlights in the same verse
 	highlightPlainText = ({ plainText, verseStart, highlightStart: originalHighlightStart, highlightedWords }) => {
-		// console.log('plain text', plainText);
-		// console.log('verse start', verseStart);
-		// console.log('highlight start', highlightStart);
-		// console.log('highlighted words', highlightedWords);
+		// console.log(`text array for verse ${verseStart} and highlight ${originalHighlightStart}`, plainText);
+		// console.log('highlight verse start', verseStart);
+		// console.log('highlight highlight start', originalHighlightStart);
+		// console.log('highlight highlighted words', highlightedWords);
 		// need to pass this function these values from the api
 		// needs to run for each highlight object that the user has added
 		let wordsLeftToHighlight = highlightedWords;
 		// This has to be done because arrays have a 0 based index but the api is using a 1 based index
-		const highlightStart = originalHighlightStart - 1;
+		const highlightStart = parseInt(originalHighlightStart, 10) - 1;
 
 		try {
 			return plainText.map((v) => {
@@ -215,8 +215,8 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				const plainPortion = [];
 				// The conditional is to prevent the code trying to split a verse after it has become an array
 				// This is an issue because of a flaw in the program, I will need to stop iterating over each index
-				const verseTextLength = v.verse_text.split && v.verse_text.split(' ').length;
-				const verseTextArray = v.verse_text.split && v.verse_text.split(' ');
+				const verseTextLength = (v.verse_text.split && v.verse_text.split(' ').length);
+				const verseTextArray = (v.verse_text.split && v.verse_text.split(' '));
 
 				if (v.verse_start === verseStart) {
 					const before = [];
