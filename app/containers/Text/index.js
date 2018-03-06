@@ -201,62 +201,68 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		// need to pass this function these values from the api
 		// needs to run for each highlight object that the user has added
 		let wordsLeftToHighlight = highlightedWords;
+		try {
+			return plainText.map((v) => {
+				const newVerse = [];
+				const highlightedPortion = [];
+				const plainPortion = [];
+				// The conditional is to prevent the code trying to split a verse after it has become an array
+				// This is an issue because of a flaw in the program, I will need to stop iterating over each index
+				const verseTextLength = v.verse_text.split && v.verse_text.split(' ').length;
+				const verseTextArray = v.verse_text.split && v.verse_text.split(' ');
 
-		return plainText.map((v) => {
-			const newVerse = [];
-			const highlightedPortion = [];
-			const plainPortion = [];
-			// The conditional is to prevent the code trying to split a verse after it has become an array
-			// This is an issue because of a flaw in the program, I will need to stop iterating over each index
-			const verseTextLength = v.verse_text.split && v.verse_text.split(' ').length;
-			const verseTextArray = v.verse_text.split && v.verse_text.split(' ');
-
-			if (v.verse_start === verseStart) {
-				const before = [];
-				const after = [];
-				verseTextArray.forEach((word, index) => {
-					if (index >= (highlightStart) && (index - highlightStart < wordsLeftToHighlight)) {
-						highlightedPortion.push(word);
-					} else if (index > (highlightStart) && index - highlightStart > wordsLeftToHighlight) {
-						after.push(word);
-					} else {
-						before.push(word);
-					}
-				});
-
-				wordsLeftToHighlight -= (verseTextLength - highlightStart);
-				newVerse.push(before.join(' '));
-				newVerse.push(' ');
-				newVerse.push(<span verseid={v.verse_start} className={'text-highlighted'}>{highlightedPortion.join(' ')}</span>);
-				newVerse.push(' ');
-				newVerse.push(after.join(' '));
-			} else if (wordsLeftToHighlight > 0 && v.verse_start > verseStart) {
-				if (wordsLeftToHighlight - verseTextLength > 0) {
-					newVerse.push(<span verseid={v.verse_start} className={'text-highlighted'}>{v.verse_text}</span>);
-					wordsLeftToHighlight -= verseTextLength;
-				} else {
+				if (v.verse_start === verseStart) {
+					const before = [];
+					const after = [];
 					verseTextArray.forEach((word, index) => {
-						// may need to do <=
-						if (index < (wordsLeftToHighlight)) {
+						if (index >= (highlightStart) && (index - highlightStart < wordsLeftToHighlight)) {
 							highlightedPortion.push(word);
+						} else if (index > (highlightStart) && index - highlightStart > wordsLeftToHighlight) {
+							after.push(word);
 						} else {
-							plainPortion.push(word);
+							before.push(word);
 						}
 					});
-					wordsLeftToHighlight -= verseTextLength;
+
+					wordsLeftToHighlight -= (verseTextLength - highlightStart);
+					newVerse.push(before.join(' '));
+					newVerse.push(' ');
 					newVerse.push(<span verseid={v.verse_start} className={'text-highlighted'}>{highlightedPortion.join(' ')}</span>);
 					newVerse.push(' ');
-					newVerse.push(plainPortion.join(' '));
+					newVerse.push(after.join(' '));
+				} else if (wordsLeftToHighlight > 0 && v.verse_start > verseStart) {
+					if (wordsLeftToHighlight - verseTextLength > 0) {
+						newVerse.push(<span verseid={v.verse_start} className={'text-highlighted'}>{v.verse_text}</span>);
+						wordsLeftToHighlight -= verseTextLength;
+					} else {
+						verseTextArray.forEach((word, index) => {
+							// may need to do <=
+							if (index < (wordsLeftToHighlight)) {
+								highlightedPortion.push(word);
+							} else {
+								plainPortion.push(word);
+							}
+						});
+						wordsLeftToHighlight -= verseTextLength;
+						newVerse.push(<span verseid={v.verse_start} className={'text-highlighted'}>{highlightedPortion.join(' ')}</span>);
+						newVerse.push(' ');
+						newVerse.push(plainPortion.join(' '));
+					}
 				}
-			}
 
-			return { ...v, verse_text: newVerse.length ? newVerse : v.verse_text };
-		});
+				return { ...v, verse_text: newVerse.length ? newVerse : v.verse_text };
+			});
+		} catch (error) {
+			if (process.env.NODE_ENV === 'development') {
+				console.warn('Error in parsing highlights', error); // eslint-disable-line no-console
+			}
+			return plainText;
+		}
 		// if the previous highlight overlaps the next highlights verse id, ignore the next highlight
 	}
 
 	addHighlight = () => {
-		// needs to send an api request to the serve that adds a highlight for this passage
+		// needs to send an api request to the server that adds a highlight for this passage
 		// Adds userId and bible in homepage container where action is dispatched
 		// { bible, book, chapter, userId, verseStart, highlightStart, highlightedWords }
 		const firstVerse = parseInt(this.state.firstVerse, 10);

@@ -75,6 +75,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		// Get the first bible based on the url here
 		const { params } = this.props.match;
 		const { bibleId, bookId, chapter } = params;
+		const { userAuthenticated: authenticated, userId } = this.props;
 
 		if (bibleId && bookId && chapter) {
 			this.props.dispatch({
@@ -82,6 +83,8 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 				bibleId,
 				bookId,
 				chapter,
+				authenticated,
+				userId,
 			});
 			// console.log('not redirecting in bible, book and chapter');
 		} else if (bibleId && bookId) {
@@ -92,6 +95,8 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 				bibleId,
 				bookId,
 				chapter: 1,
+				authenticated,
+				userId,
 			});
 			// console.log('redirecting from bible and book');
 			this.props.history.replace(`/${bibleId}/${bookId}/1`);
@@ -103,6 +108,8 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 				bibleId,
 				bookId: '', // This works because of how the saga fetches the next chapter
 				chapter: 1,
+				authenticated,
+				userId,
 			});
 			// May want to use replace here at some point
 			// this.props.history.replace(`/${bibleId}/gen/1`);
@@ -148,6 +155,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		// next props
 		const { params: nextParams } = nextProps.match;
 		// console.log('prev and next match\n', this.props.match, '\n', nextProps.match);
+		const { userAuthenticated, userId } = nextProps;
 
 		if (!isEqual(params, nextParams)) {
 			// console.log('received props and params are different');
@@ -169,6 +177,8 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					bibleId: nextParams.bibleId,
 					bookId: nextParams.bookId,
 					chapter: nextParams.chapter,
+					authenticated: userAuthenticated,
+					userId,
 				});
 				// todo need to update the url if the parameters given weren't valid
 			} else if (newBook) {
@@ -184,6 +194,8 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					bibleId: nextParams.bibleId,
 					bookId: nextParams.bookId,
 					chapter: nextParams.chapter,
+					authenticated: userAuthenticated,
+					userId,
 				});
 			} else if (newChapter) {
 				// console.log('new chapter');
@@ -195,6 +207,8 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					bibleId: nextParams.bibleId,
 					bookId: nextParams.bookId,
 					chapter: nextParams.chapter,
+					authenticated: userAuthenticated,
+					userId,
 				});
 			}
 		} else if (this.props.homepage.activeBookId !== nextProps.homepage.activeBookId) {
@@ -211,10 +225,11 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			activeTextId,
 			activeBookId,
 			activeChapter,
-			highlights,
+			// highlights,
 		} = nextProps.homepage;
-		const { userAuthenticated, userId } = nextProps;
-
+		// console.log('nextHighlights', highlights);
+		// console.log('prevHighlights', this.props.homepage.highlights);
+		// Need to get a users highlights if they just sign in
 		if (userAuthenticated !== this.props.userAuthenticated && userAuthenticated && userId) {
 			this.props.dispatch(getHighlights({
 				bible: activeTextId,
@@ -223,15 +238,18 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 				userAuthenticated,
 				userId,
 			}));
-		} else if (!isEqual(highlights, this.props.homepage.highlights)) {
-			this.props.dispatch(getHighlights({
-				bible: activeTextId,
-				book: activeBookId,
-				chapter: activeChapter,
-				userAuthenticated,
-				userId,
-			}));
 		}
+		// I am not sure what I thought this was for... I think I don't need it
+		// } else if (!isEqual(highlights, this.props.homepage.highlights)) {
+		// 	console.log('getting the highlights');
+		// 	this.props.dispatch(getHighlights({
+		// 		bible: activeTextId,
+		// 		book: activeBookId,
+		// 		chapter: activeChapter,
+		// 		userAuthenticated,
+		// 		userId,
+		// 	}));
+		// }
 	}
 
 	setNextVerse = (verse) => {

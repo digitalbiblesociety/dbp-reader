@@ -207,6 +207,7 @@ export function* getHighlights({ bible, book, chapter, userId, fromChapter }) {
 
 	try {
 		const response = yield call(request, requestUrl);
+		console.log('highlight get response', response);
 		if (response.data) {
 			highlights = response.data;
 		}
@@ -290,7 +291,7 @@ export function* getAudioSource({ audioObjects, book, chapter }) {
 export function* addHighlight({ bible, book, chapter, userId, verseStart, highlightStart, highlightedWords }) {
 	const requestUrl = `https://api.bible.build/users/${userId}/highlights?key=${process.env.DBP_API_KEY}&v=4&bible_id=${bible}&book_id=${book}&chapter=${chapter}`;
 	const formData = new FormData();
-	let highlights = [];
+
 	formData.append('book_id', book);
 	formData.append('user_id', userId);
 	formData.append('bible_id', bible);
@@ -306,11 +307,12 @@ export function* addHighlight({ bible, book, chapter, userId, verseStart, highli
 
 	try {
 		const response = yield call(request, requestUrl, options);
-		if (response.data) {
-			highlights = response.data;
+		console.log('add highlight response', response);
+		// Need to get the highlights here because they are not being returned
+		if (response.success) {
+			yield call(getHighlights, { bible, book, chapter, userId });
 		}
-
-		yield put({ type: LOAD_HIGHLIGHTS, highlights });
+		// yield put({ type: LOAD_HIGHLIGHTS, highlights });
 	} catch (error) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error('Caught in highlights request', error); // eslint-disable-line no-console
@@ -318,7 +320,7 @@ export function* addHighlight({ bible, book, chapter, userId, verseStart, highli
 	}
 }
 
-export function* getBibleFromUrl({ bibleId: oldBibleId, bookId: oldBookId, chapter }) {
+export function* getBibleFromUrl({ bibleId: oldBibleId, bookId: oldBookId, chapter, authenticated, userId }) {
 	// This function needs to return the data listed below
 	// Books
 	// Active or first chapter text
@@ -359,6 +361,8 @@ export function* getBibleFromUrl({ bibleId: oldBibleId, bookId: oldBookId, chapt
 				bibleId,
 				bookId: activeBookId,
 				chapter: activeChapter,
+				authenticated,
+				userId,
 			});
 			// console.log('chapter data', chapterData);
 			// still need to include to active book name so that iteration happens here
@@ -384,7 +388,7 @@ export function* getBibleFromUrl({ bibleId: oldBibleId, bookId: oldBookId, chapt
 	}
 }
 
-export function* getChapterFromUrl({ filesets, bibleId: oldBibleId, bookId: oldBookId, chapter }) {
+export function* getChapterFromUrl({ filesets, bibleId: oldBibleId, bookId: oldBookId, chapter, authenticated, userId }) {
 	// console.log('bible, book, chapter', bibleId, bookId, chapter);
 	// console.log('filesets chapter text', filesets);
 	const bibleId = oldBibleId.toUpperCase();
@@ -398,6 +402,9 @@ export function* getChapterFromUrl({ filesets, bibleId: oldBibleId, bookId: oldB
 		let plainText = [];
 		let hasPlainText = true;
 
+		if (authenticated) {
+			yield fork(getHighlights, { bible: bibleId, book: bookId, chapter, userId });
+		}
 		// calling this function to start it asynchronously to this one.
 		if (hasAudio) {
 			// console.log('calling get chapter audio');
