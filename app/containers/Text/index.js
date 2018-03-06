@@ -134,7 +134,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				if (highlight.chapter === activeChapter) {
 					const { verse_start, highlight_start, highlighted_words } = highlight;
 					// console.log('text passed to highlight', highlightedText);
-					return this.highlightPlainText(highlightedText, verse_start, highlight_start, highlighted_words);
+					return this.highlightPlainText({ plainText: highlightedText, verseStart: verse_start, highlightStart: highlight_start, highlightedWords: highlighted_words });
 				}
 				return highlightedText;
 			}, initialText);
@@ -197,10 +197,17 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		}
 	}
 
-	highlightPlainText = (plainText, verseStart, highlightStart, highlightedWords) => {
+	highlightPlainText = ({ plainText, verseStart, highlightStart: originalHighlightStart, highlightedWords }) => {
+		// console.log('plain text', plainText);
+		// console.log('verse start', verseStart);
+		// console.log('highlight start', highlightStart);
+		// console.log('highlighted words', highlightedWords);
 		// need to pass this function these values from the api
 		// needs to run for each highlight object that the user has added
 		let wordsLeftToHighlight = highlightedWords;
+		// This has to be done because arrays have a 0 based index but the api is using a 1 based index
+		const highlightStart = originalHighlightStart - 1;
+
 		try {
 			return plainText.map((v) => {
 				const newVerse = [];
@@ -215,10 +222,16 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 					const before = [];
 					const after = [];
 					verseTextArray.forEach((word, index) => {
+						// if the index is past the start of the highlight
+						// and the index minus the starting index is less than the total number of words to highlight
 						if (index >= (highlightStart) && (index - highlightStart < wordsLeftToHighlight)) {
 							highlightedPortion.push(word);
-						} else if (index > (highlightStart) && index - highlightStart > wordsLeftToHighlight) {
+							// if the index is greater than the highlight start
+							// and the index minus the starting index is great than the number of words to highlight
+							// then the word must come after the end of the highlight
+						} else if (index > (highlightStart) && index - highlightStart >= wordsLeftToHighlight) {
 							after.push(word);
+							// if the index is less than the starting index
 						} else {
 							before.push(word);
 						}
@@ -227,12 +240,12 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 					wordsLeftToHighlight -= (verseTextLength - highlightStart);
 					newVerse.push(before.join(' '));
 					newVerse.push(' ');
-					newVerse.push(<span verseid={v.verse_start} className={'text-highlighted'}>{highlightedPortion.join(' ')}</span>);
+					newVerse.push(<span key={v.verse_start} verseid={v.verse_start} className={'text-highlighted'}>{highlightedPortion.join(' ')}</span>);
 					newVerse.push(' ');
 					newVerse.push(after.join(' '));
 				} else if (wordsLeftToHighlight > 0 && v.verse_start > verseStart) {
 					if (wordsLeftToHighlight - verseTextLength > 0) {
-						newVerse.push(<span verseid={v.verse_start} className={'text-highlighted'}>{v.verse_text}</span>);
+						newVerse.push(<span key={v.verse_start} verseid={v.verse_start} className={'text-highlighted'}>{v.verse_text}</span>);
 						wordsLeftToHighlight -= verseTextLength;
 					} else {
 						verseTextArray.forEach((word, index) => {
@@ -244,7 +257,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 							}
 						});
 						wordsLeftToHighlight -= verseTextLength;
-						newVerse.push(<span verseid={v.verse_start} className={'text-highlighted'}>{highlightedPortion.join(' ')}</span>);
+						newVerse.push(<span key={v.verse_start} verseid={v.verse_start} className={'text-highlighted'}>{highlightedPortion.join(' ')}</span>);
 						newVerse.push(' ');
 						newVerse.push(plainPortion.join(' '));
 					}
