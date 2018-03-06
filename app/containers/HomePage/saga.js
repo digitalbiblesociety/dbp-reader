@@ -10,29 +10,6 @@ import get from 'lodash/get';
 import { ADD_HIGHLIGHTS, LOAD_HIGHLIGHTS, GET_HIGHLIGHTS } from './constants';
 import { loadChapter, loadBooksAndCopywrite, loadAudio } from './actions';
 
-export function* initApplication({ activeTextId }) {
-	// This will always have to request the full list of versions because the url will not contain language information
-	const activeTextUrl = `https://api.bible.build/bibles?key=${process.env.DBP_API_KEY}&v=4`;
-	let filesets = {};
-	try {
-		const response = yield call(request, activeTextUrl);
-		const activeText = response.data.filter((text) => text.abbr === activeTextId)[0];
-
-		filesets = fromJS(activeText.filesets || {});
-	} catch (err) {
-		if (err && process.env.NODE_ENV === 'development') {
-			console.log('error in init', err); // eslint-disable-line no-console
-		}
-	}
-
-	yield getAudio({ list: filesets });
-	// yield getBooks({ textId: activeTextId, filesets });
-	// get the active text
-	// use the fileset list in active text for getAudio call
-	// use the text id and the filesets to get a book list
-	// use the resulting data to get the chapters
-}
-
 // TODO: Fix issue with audio coming back after the chapters have already been called
 export function* getAudio({ list }/* { filesetId, list } */) {
 	// temporary fix for if the list comes back undefined
