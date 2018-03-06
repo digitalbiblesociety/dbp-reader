@@ -71,7 +71,7 @@ export function* sendSignUpForm({ password, email, firstName, lastName }) {
 	}
 }
 
-export function* sendLoginForm({ password, email }) {
+export function* sendLoginForm({ password, email, stay }) {
 	const requestUrl = `https://api.bible.build/users/login?key=${process.env.DBP_API_KEY}&v=4&pretty`;
 	const formData = new FormData();
 
@@ -90,6 +90,11 @@ export function* sendLoginForm({ password, email }) {
 			yield put({ type: LOGIN_ERROR, message: response.error.message });
 		} else {
 			yield put({ type: USER_LOGGED_IN, userId: response.user_id });
+			// May add an else that will save the id to the session so it is persisted through a page refresh
+			if (stay) {
+				console.log('stay was true id should be saved');
+				localStorage.setItem('bible_is_user_id', response.user_id);
+			}
 		}
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {

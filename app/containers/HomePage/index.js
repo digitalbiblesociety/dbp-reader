@@ -76,6 +76,8 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		const { params } = this.props.match;
 		const { bibleId, bookId, chapter } = params;
 		const { userAuthenticated: authenticated, userId } = this.props;
+		// console.log('authenticated in home did mount', authenticated);
+		// console.log('userId in home did mount', userId);
 
 		if (bibleId && bookId && chapter) {
 			this.props.dispatch({

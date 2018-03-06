@@ -75,13 +75,9 @@ export const updatePassword = ({ password, userId }) => ({
 	userId,
 });
 
-export const sendLoginForm = ({ password, username, email, firstName, lastName }) => ({
+export const sendLoginForm = (props) => ({
 	type: SEND_LOGIN_FORM,
-	password,
-	username,
-	email,
-	firstName,
-	lastName,
+	...props,
 });
 
 export const sendSignUpForm = ({ password, username, email }) => ({
