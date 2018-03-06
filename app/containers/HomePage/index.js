@@ -231,8 +231,8 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		} = nextProps.homepage;
 		// console.log('nextHighlights', highlights);
 		// console.log('prevHighlights', this.props.homepage.highlights);
-		// Need to get a users highlights if they just sign in
-		if (userAuthenticated !== this.props.userAuthenticated && userAuthenticated && userId) {
+		// Need to get a users highlights if they just sign in or reset the highlights if they just signed out
+		if (userAuthenticated !== this.props.userAuthenticated) {
 			this.props.dispatch(getHighlights({
 				bible: activeTextId,
 				book: activeBookId,

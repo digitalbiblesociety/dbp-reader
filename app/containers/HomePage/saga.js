@@ -19,8 +19,8 @@ import { ADD_HIGHLIGHTS, LOAD_HIGHLIGHTS, GET_HIGHLIGHTS } from './constants';
 *
 * */
 
-export function* getHighlights({ bible, book, chapter, userId, fromChapter }) {
-	const requestUrl = `https://api.bible.build/users/${userId}/highlights?key=${process.env.DBP_API_KEY}&v=4&bible_id=${bible}&book_id=${book}&chapter=${chapter}`;
+export function* getHighlights({ bible, book, chapter, userId }) {
+	const requestUrl = `https://api.bible.build/users/${userId || 'no_user_id'}/highlights?key=${process.env.DBP_API_KEY}&v=4&bible_id=${bible}&book_id=${book}&chapter=${chapter}`;
 	let highlights = [];
 
 	try {
@@ -29,15 +29,13 @@ export function* getHighlights({ bible, book, chapter, userId, fromChapter }) {
 		if (response.data) {
 			highlights = response.data;
 		}
-		if (!fromChapter) {
-			yield put({ type: LOAD_HIGHLIGHTS, highlights });
-		}
+
+		yield put({ type: LOAD_HIGHLIGHTS, highlights });
 	} catch (error) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error('Caught in highlights request', error); // eslint-disable-line no-console
 		}
 	}
-	return highlights;
 }
 
 export function* addHighlight({ bible, book, chapter, userId, verseStart, highlightStart, highlightedWords }) {

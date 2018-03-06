@@ -25,8 +25,8 @@ import {
 
 const initialState = fromJS({
 	activeOption: 'login',
-	userAuthenticated: !!localStorage.getItem('bible_is_user_id') || false,
-	userId: localStorage.getItem('bible_is_user_id') || '',
+	userAuthenticated: !!localStorage.getItem('bible_is_user_id') || !!sessionStorage.getItem('bible_is_user_id') || false,
+	userId: localStorage.getItem('bible_is_user_id') || sessionStorage.getItem('bible_is_user_id') || '',
 	loginErrorMessage: '',
 	socialLoginLink: '',
 	signupErrorMessage: '',
@@ -54,6 +54,9 @@ function profileReducer(state = initialState, action) {
 			.set('userId', action.userId)
 			.set('userAuthenticated', true);
 	case LOG_OUT:
+		// Need to remove the user's id from storage when they log out
+		localStorage.removeItem('bible_is_user_id');
+		sessionStorage.removeItem('bible_is_user_id');
 		return state
 			.set('userId', '')
 			.set('userAuthenticated', false);

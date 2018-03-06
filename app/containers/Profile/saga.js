@@ -92,8 +92,9 @@ export function* sendLoginForm({ password, email, stay }) {
 			yield put({ type: USER_LOGGED_IN, userId: response.user_id });
 			// May add an else that will save the id to the session so it is persisted through a page refresh
 			if (stay) {
-				console.log('stay was true id should be saved');
 				localStorage.setItem('bible_is_user_id', response.user_id);
+			} else {
+				sessionStorage.setItem('bible_is_user_id', response.user_id);
 			}
 		}
 	} catch (err) {
