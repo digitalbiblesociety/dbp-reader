@@ -66,9 +66,9 @@ const initialState = fromJS({
 	defaultLanguageName: 'English',
 	activeBookId: 'GEN',
 	userSettings: {
-		activeTheme: 'red',
-		activeFontType: 'sans',
-		activeFontSize: 42,
+		activeTheme: sessionStorage.getItem('bible_is_theme') || 'red',
+		activeFontType: sessionStorage.getItem('bible_is_font_family') || 'sans',
+		activeFontSize: sessionStorage.getItem('bible_is_font_size') || 42,
 		toggleOptions: {
 			readersMode: {
 				name: 'READER\'S MODE',
@@ -82,7 +82,7 @@ const initialState = fromJS({
 			},
 			redLetter: {
 				name: 'RED LETTER',
-				active: true,
+				active: !!sessionStorage.getItem('bible_is_words_of_jesus'),
 				available: true,
 			},
 			justifiedText: {

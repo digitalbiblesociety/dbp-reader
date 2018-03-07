@@ -20,6 +20,7 @@ import { TransitionGroup } from 'react-transition-group';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import isEqual from 'lodash/isEqual';
+import get from 'lodash/get';
 // import { fromJS, is } from 'immutable';
 import Settings from 'containers/Settings';
 import AudioPlayer from 'containers/AudioPlayer';
@@ -34,6 +35,12 @@ import Footer from 'components/Footer';
 import SearchContainer from 'containers/SearchContainer';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
 import FadeTransition from 'components/FadeTransition';
+import {
+	applyTheme,
+	applyFontFamily,
+	applyFontSize,
+	toggleWordsOfJesus,
+} from 'containers/Settings/themes';
 import {
 	addHighlight,
 	getAudio,
@@ -125,6 +132,27 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			// Defaulting to esv until browser language detection is implemented
 			// console.log('redirecting from else in did mount');
 			this.props.history.replace('/engesv/gen/1');
+		}
+
+		const activeTheme = get(this, ['props', 'homepage', 'userSettings', 'activeTheme']);
+		const activeFontFamily = get(this, ['props', 'homepage', 'userSettings', 'activeFontType']);
+		const activeFontSize = get(this, ['props', 'homepage', 'userSettings', 'activeFontSize']);
+		const redLetter = get(this, ['props', 'homepage', 'userSettings', 'toggleOptions', 'redLetter', 'active']);
+
+		if (redLetter !== this.props.userSettings.getIn(['toggleOptions', 'redLetter', 'active'])) {
+			toggleWordsOfJesus(redLetter);
+		}
+
+		if (activeTheme !== this.props.userSettings.getIn(['toggleOptions', 'redLetter', 'active'])) {
+			applyTheme(activeTheme);
+		}
+
+		if (activeFontFamily !== this.props.userSettings.get('activeFontType')) {
+			applyFontFamily(activeFontFamily);
+		}
+
+		if (activeFontSize !== this.props.userSettings.get('activeFontSize')) {
+			applyFontSize(activeFontSize);
 		}
 
 		// Init the Facebook api here

@@ -98,18 +98,22 @@ const sizes = {
 
 export const toggleWordsOfJesus = (state) => {
 	document.documentElement.style.setProperty('--application-words-of-jesus', state ? '#A00' : 'inherit');
+	sessionStorage.setItem('bible_is_words_of_jesus', state);
 };
 
 export const applyFontFamily = (fontFamily) => {
 	document.documentElement.style.setProperty('--application-font-family', fonts[fontFamily]);
+	sessionStorage.setItem('bible_is_font_family', fontFamily);
 };
 
 export const applyFontSize = (fontSize) => {
 	document.documentElement.style.setProperty('--application-base-font-size', sizes[fontSize]);
+	sessionStorage.setItem('bible_is_font_size', fontSize);
 };
 
 export const applyTheme = (theme) => {
 	Object.entries(themes[theme]).forEach((property) => {
 		document.documentElement.style.setProperty(property[0], property[1]);
 	});
+	sessionStorage.setItem('bible_is_theme', theme);
 };
