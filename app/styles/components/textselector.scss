@@ -46,3 +46,8 @@
 .version-item-button .svg.active   {@include css4{fill:var(--menu-font-color);};}
 .version-item-button .svg.inactive {@include css4{fill:var(--menu-inactive-svg-color);};}
 .active-version                    {@include css4{color:var(--menu-active-color);};}
+// capture location of the client relative to the scroll container
+// once the previously active book is closed reset scroll height
+// if the new book is above the previous book do nothing
+// if the new book is below the previous book then subtract the
+  // height of the closed book from the saved scroll position
