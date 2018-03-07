@@ -32,7 +32,7 @@
 
 // Chapter Selection Styles
 .chapter-selection-section {max-height:calc(100% - 108px);height:calc(100% - 108px);text-transform:uppercase;}
-.chapter-box               {width:60px;height:30px;color:white;margin-bottom:5px;text-align:center;}
+.chapter-box               {width:60px;height:30px;margin-bottom:5px;text-align:center;}
 .chapter-container         {display:grid;margin:auto;padding-top:10px;grid-template-columns:repeat(5,60px);grid-template-rows:auto;}
 .active-book               {@include css4{color:var(--menu-active-color);};}
 .book-container            {max-height:100%;overflow-y:scroll;overflow-x:hidden;padding:15px;}
@@ -46,3 +46,8 @@
 .version-item-button .svg.active   {@include css4{fill:var(--menu-font-color);};}
 .version-item-button .svg.inactive {@include css4{fill:var(--menu-inactive-svg-color);};}
 .active-version                    {@include css4{color:var(--menu-active-color);};}
+// capture location of the client relative to the scroll container
+// once the previously active book is closed reset scroll height
+// if the new book is above the previous book do nothing
+// if the new book is below the previous book then subtract the
+  // height of the closed book from the saved scroll position

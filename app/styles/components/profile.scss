@@ -25,7 +25,7 @@
 .profile .svg      {margin-right:20px;margin-left:20px;}
 
 // Links
-.profile .link               {@include css4{color:var(--menu-active-text-color);};font-weight:200;cursor:pointer;}
+.profile .link               {@include css4{color:var(--menu-active-color);};font-weight:200;cursor:pointer;}
 .profile .link:hover         {opacity:.75;}
 .profile .sign-up-free .link {font-style: italic;}
 
@@ -50,7 +50,7 @@
 
 // Sign in
 .profile .sign-in              {display:flex;align-items:center;cursor:pointer;width:100%;height:50px;@include css4{background:var(--application-input-color);color:var(--menu-title-text-color);};}
-.profile .sign-up-free         {@include css4{color:var(--settings-font-color);};}
+.profile .sign-up-free         {@include css4{color:var(--menu-font-color);};}
 .profile .signup-error-message {color:red;font-weight:200;padding-left:15px;padding-bottom:15px;}
 .profile .sign-in-button       {display:flex;align-items:center;justify-content:space-around;width:100%;@include css4{background:var(--application-input-color);color:var(--menu-title-text-color);};padding:5px;}
 .profile .sign-in-button .text {font-size:.9em;font-weight:200;margin-left:-4px;}

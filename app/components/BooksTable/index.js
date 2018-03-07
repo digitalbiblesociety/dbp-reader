@@ -52,11 +52,38 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 	// add the difference to the current scroll position. Otherwise subtract the difference
 	handleBookClick = (e, name) => {
 		const book = e.target;
-		const activeButton = this.button;
+		const activeButton = this.button || { clientHeight: 0 };
 		const clickedButton = book.parentElement;
-		if (activeButton && activeButton.offsetTop < clickedButton.offsetTop) {
-			clickedButton.scrollIntoView();
+		// if the clicked book was below the active book
+		// console.log('clicked offset top', clickedButton.offsetTop);
+		// console.log('active offset top', activeButton.offsetTop);
+		// clicked offsetTop before activeButton is closed
+		// the scroll top before activeButton is closed
+		// clicked offsetTop after activeButton is closed
+		// scrollTopBefore - (offsetTopBefore - offsetTopAfter);
+		const offsetTopBefore = clickedButton.offsetTop;
+		const offsetTopAfter = clickedButton.offsetTop - (activeButton.clientHeight - 28);
+		// console.log('offset top before', offsetTopBefore);
+		// console.log('offset top after', offsetTopAfter);
+		// console.log('for this button', clickedButton);
+		const scrollTopBefore = this.container.scrollTop;
+
+		if (offsetTopBefore > offsetTopAfter) {
+			const newScrollTop = scrollTopBefore - (offsetTopBefore - offsetTopAfter);
+			// console.log('old scroll top', this.container.scrollTop);
+			// console.log('new scroll top', newScrollTop);
+			this.container.scrollTop = newScrollTop;
 		}
+
+		// if (activeButton && activeButton.offsetTop < clickedButton.offsetTop) {
+		// 	// console.log('previously active book height', activeButton.clientHeight);
+		// 	// console.log('clicked button height', clickedButton.clientHeight);
+		// 	// console.log('container element scroll position', this.container.scrollTop);
+		// 	const newScrollTop = this.container.scrollTop - (activeButton.clientHeight - clickedButton.offsetTop);
+		// 	// console.log('new scroll top', newScrollTop);
+		// 	this.container.scrollTop = newScrollTop > 0 ? newScrollTop : 0;
+		// 	// clickedButton.scrollIntoView();
+		// }
 
 		if (this.state.selectedBookName === name) {
 			this.setSelectedBookName('');
@@ -92,13 +119,14 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 		if (name === 'button' && el) {
 			const lastChapter = el.lastChild.lastChild;
 			const bookName = el.firstChild;
-
+			// console.log('the new button ref', el);
+			// console.log('the new button ref offsetTop', el.offsetTop);
 			if (!this.isElementInViewport(lastChapter)) {
-				lastChapter.scrollIntoView(false);
+				// lastChapter.scrollIntoView(false);
 			}
 
 			if (!this.isElementInViewport(bookName)) {
-				bookName.scrollIntoView();
+				// bookName.scrollIntoView();
 			}
 		}
 		this[name] = el;

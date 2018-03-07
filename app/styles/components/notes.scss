@@ -3,8 +3,11 @@
 .notes header .close-icon       {position:absolute;top:7px;left:10px}
 .notes header .close-icon:hover {cursor:pointer;opacity:0.8;}
 
-.notes textarea 			{resize:none;background-color:inherit;border:none;font-size:0.98em;}
-.notes textarea:focus       {outline:none;}
+.notes textarea 			    {resize:none;background-color:inherit;border:none;font-size:0.98em;}
+.notes textarea:focus           {outline:none;}
+.notes textarea:focus::-webkit-input-placeholder {color:transparent;}
+.notes textarea:focus::-moz-placeholder          {color:transparent;}
+.notes textarea:focus:-ms-input-placeholder      {color:transparent;}
 .notes input                {background-color:inherit;font-size:0.98em;border:none;}
 // Svg Buttons
 .notes .top-bar             {display:flex;@include css4{background-color:var(--menu-secondary-header-background);};height:50px;width:100%;align-items:center;}
