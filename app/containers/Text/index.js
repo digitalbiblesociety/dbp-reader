@@ -15,7 +15,6 @@ import createHighlights from './highlightTextFunction';
 /* Disabling the jsx-a11y linting because we need to capture the selected text
 	 and the most straight forward way of doing so is with the onMouseUp event */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-// TODO: Need to consider removing the active text once the version is changed, this way a user has a clear indicator of when the new version has loaded
 class Text extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	state = {
 		contextMenuState: false,
