@@ -1,6 +1,6 @@
 // GLOBAL SETTINGS
 .settings                              {position:fixed;z-index:1;top:0;height:calc(100% - 54px);width:320px;@include css4{background-color:var(--menu-secondary-background-color);color:var(--settings-font-color);};}
-.settings header                       {position:relative;text-align:center;height:54px;line-height:54px;@include css4{background-color:var(--menu-header-background);color:var(--menu-font-color);};}
+.settings header                       {position:relative;text-align:center;height:54px;line-height:54px;@include css4{background-color:var(--menu-header-background);color:var(--menu-title-text-color);};}
 .settings header .close-icon           {position:absolute;top:0px;right:10px}
 .settings section                      {padding:15px}
 .settings .option:hover                {color:rgba(244,245,246,1);cursor:pointer}
@@ -23,7 +23,7 @@
 // FONT SETTINGS
 .font-settings .option               {display:inline-block;text-align:center;font-size:36px;width:33%}
 .font-settings .option small         {display:block;text-transform:uppercase;font-size:14px}
-.font-settings .option.active        {@include css4{color:var(--menu-active-color);};}
+.font-settings .option.active        {@include css4{color:var(--menu-active-text-color);};}
 // Can't use the margins for positioning here because the font size changes
 // might have to do a different style for each option so that they each can be custom
 .font-settings .option.active:before {margin:-1px 0 0 -7px;position:absolute;content:"";height:56px;width:56px;border-radius:100%;@include css4{border:2px solid var(--menu-active-color);};}
@@ -43,22 +43,22 @@
 .font-sizes .option.medium          {font-size:2rem}
 .font-sizes .option.large           {font-size:2.5rem}
 .font-sizes .option.largest         {font-size:3rem}
-.font-sizes .option.active          {@include css4{color:var(--menu-active-color);};}
+.font-sizes .option.active          {@include css4{color:var(--menu-active-text-color);};}
 
 // FONT SIZES SLIDER
 .font-sizes-slider                  {width:80%;margin-left:25px;}
 
 // CHECKBOX SETTINGS
 .checkbox-settings label            {height:40px;display:block;}
-.checkbox-settings label.active     {@include css4{color:var(--menu-active-color);};}
+.checkbox-settings label.active     {@include css4{color:var(--menu-active-text-color);};}
 .checkbox-settings label span       {@include css4{font-size:var(--application-menu-font-size)};float: left;cursor:pointer;}
-.checkbox-settings label span:hover {@include css4{color:var(--menu-active-color);};}
+.checkbox-settings label span:hover {@include css4{color:var(--menu-active-text-color);};}
 
 // SWITCH
 // make these variables in case they need to change
 .switch                                {position:relative;display:inline-block;width:37px;height:34px;float:right}
 .switch input                          {display:none;}
-.switch .slider                        {position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:#1B1F24;transition:.4s;height:14px;border-radius:34px;}
+.switch .slider                        {position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;@include css4 {background-color:var(--settings-option-inactive-secondary-color);};transition:.4s;height:14px;border-radius:34px;}
 .switch .slider:before                 {position:absolute;content:"";height:20px;width:20px;left:0;bottom:-3px;@include css4{background-color:var(--settings-font-color);};transition:.4s;border-radius:50%;opacity:1;}
 .switch input:checked + .slider        {@include css4{background-color:var(--settings-option-active-secondary-color);};}
 .switch input:checked + .slider:before {@include css4{background-color:var(--menu-active-color);};transform:translateX(17px);}

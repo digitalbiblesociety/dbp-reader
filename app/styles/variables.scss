@@ -18,6 +18,12 @@ $login-twitter-color: rgb(42,163,239);
 //$prev-next-button-color: rgba(158, 30, 53, 0.253);
 //$default-highlight-color: rgb(166, 63, 77);
 
+/*
+  $header-footer-color:#FFFFFF; dark might be slightly opaque
+  $navbar-dropdown-fill: light #F4F6F9 normal #7E0E2A dark #F4F6F9 50% opacity;
+  $header-footer-background-color: light rgb(180, 145, 130) normal rgb(158, 30, 53) dark rgb(44, 48, 54)
+  $
+*/
 $css4: true;
 $compatibility: true;
 //it is nessesary to define the variables in sass map instead of :root, for compatibility reasons.
