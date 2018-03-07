@@ -1,4 +1,4 @@
-.audio-player-background               {@include css4{background-color:var(--audio-player-background);color:var(--menu-font-color);};min-height:10px;padding:2.5px;}
+.audio-player-background               {@include css4{background-color:var(--audio-player-background);color:var(--menu-title-text-color);};min-height:10px;padding:2.5px;}
 // General Audio Player Styles
 .audio-player-container .svgitem       {cursor:pointer;margin-right:18px;}
 .audio-player-container                {@include css4{background-color:var(--audio-player-background);};display:flex;justify-content:center;align-items:center;width:100%;height:50px;max-width:800px;margin:auto;:nth-child(3) {margin-right:18px;}}
@@ -9,19 +9,18 @@
 .audio-player                          {display:none;}
 
 // Speed Control Styles
-// todo refactor speed control container class to be more semantic
-.speed-control-container-container          {display:block;bottom:0;right:150px;position:absolute;z-index:3;}
-.speed-control-container                    {position:absolute;display:flex;align-items:center;justify-content:space-around;@include css4{border:1px solid var(--menu-active-color);background-color:var(--transparent-grey);};height:30px;width:150px;}
-.speed-control-container .speed-item        {@include css4{color:var(--menu-font-color);};cursor:pointer;}
-.speed-control-container .speed-item:hover  {@include css4{color:var(--menu-active-color);};}
-.speed-control-container .speed-item.active {@include css4{color:var(--menu-active-color);};}
+.speed-control-container          {display:block;bottom:0;right:150px;position:absolute;z-index:3;}
+.speed-control                    {position:absolute;display:flex;align-items:center;justify-content:space-around;@include css4{border:1px solid var(--menu-active-color);background-color:var(--transparent-grey);};height:30px;width:150px;}
+.speed-control .speed-item        {@include css4{color:var(--menu-font-color);};cursor:pointer;}
+.speed-control .speed-item:hover  {@include css4{color:var(--menu-active-color);};}
+.speed-control .speed-item.active {@include css4{color:var(--menu-active-color);};}
 
 // Progress Bar Styles
 .progress-bar       {width:50%;@include css4{background-color:var(--audio-player-progress-background);};height:3px;cursor:pointer;}
 .progress-bar:focus {outline: none;}
 
 // Gripper Styles
-.audio-gripper      {display:block;position:relative;left:calc(50% - 25px);bottom:-50%;cursor:pointer;}
+.audio-gripper      {display:block;fill:currentColor;position:relative;left:calc(50% - 25px);bottom:-50%;cursor:pointer;}
 
 // Volume Slider
 #volume-wrap             {position: relative;margin-left:18px;}
@@ -32,10 +31,10 @@
 .volume-slider .slider   {width:80%;}
 
 // Elipsis TODO: update styles to make the element match the wireframe
-.elipsis            {display:block;position:absolute;right:320px;bottom:0;z-index:3;}
-.elipsis .container {position:absolute;padding:15px;display:flex;justify-content:space-between;flex-direction:column;width:320px;height:115px;@include css4{color:var(--menu-font-color);border:1px solid var(--menu-active-color);background-color:var(--transparent-grey);};}
-.container div      {display:flex;align-items:center;}
-.container span     {margin-left:15px;}
+.elipsis                  {display:block;position:absolute;right:320px;bottom:0;z-index:3;}
+.elipsis .container       {position:absolute;padding:15px;display:flex;justify-content:space-between;flex-direction:column;width:320px;height:115px;@include css4{color:var(--menu-font-color);border:1px solid var(--menu-active-color);background-color:var(--transparent-grey);};}
+.container div            {display:flex;align-items:center;}
+.container span           {margin-left:15px;}
 
 // Media Queries
 //@media only screen and (max-width:600px) {

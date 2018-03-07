@@ -17,8 +17,6 @@ const StyledDiv = styled.div`
 	left:${(props) => props.x}px;
 	top:${(props) => props.y}px;
 	background-color:#fff;
-	border:1px solid grey;
-	box-shadow: 1px 2px 1px 1px grey;
 `;
 
 const Row = styled.div`
@@ -32,6 +30,7 @@ const Item = styled.div`
 	align-items:center;
 	justify-content:center;
 	background-color:rgb(204,178,165);
+	background-color:var(--context-menu-background-color);
 	fill:#fff;
 	width:40px;
 	height:40px;
@@ -64,7 +63,7 @@ function ContextPortal({ shareHighlightToFacebook, addHighlight, addFacebookLike
 	};
 
 	const component = (
-		<StyledDiv x={coordinates.x} y={coordinates.y}>
+		<StyledDiv className={'shadow'} x={coordinates.x} y={coordinates.y}>
 			<Row>
 				<Item onClick={handleNoteClick}><SvgWrapper height="25px" width="25px" svgid="note-list" /></Item>
 				<Item onClick={addHighlight}><SvgWrapper height="25px" width="25px" svgid="highlights" /></Item>

@@ -157,7 +157,7 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 						defaultValue={activeFontSize}
 						value={activeFontSize}
 						handleStyle={{ border: 'none', backgroundColor: 'rgb(98,177,130)' }}
-						railStyle={{ backgroundColor: 'rgb(26,29,33)' }}
+						railStyle={{ backgroundColor: activeTheme === 'paper' ? 'rgb(255, 255, 255)' : 'rgb(26,29,33)' }}
 						trackStyle={{ backgroundColor: 'rgb(98,177,130)' }}
 						step={null}
 						marks={{

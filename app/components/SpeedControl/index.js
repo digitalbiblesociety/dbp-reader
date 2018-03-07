@@ -10,8 +10,8 @@ import PropTypes from 'prop-types';
 
 function SpeedControl({ options, setSpeed, currentSpeed, innerRef }) {
 	return (
-		<div className="speed-control-container-container">
-			<div ref={innerRef} className="speed-control-container">
+		<div className="speed-control-container">
+			<div ref={innerRef} className="speed-control">
 				{
 					options.map((option) => (
 						<span key={option} className={currentSpeed === option ? 'speed-item active' : 'speed-item'} role="button" tabIndex={0} onClick={() => setSpeed(option)}>{option}</span>
