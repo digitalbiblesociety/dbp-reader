@@ -5,7 +5,7 @@ const paper = {
 	'--text-contextmenu-background': 'rgb(198, 169, 155)',
 	'--text-arrow-color': 'rgb(213, 196, 187)',
 	'--text-super-color': 'rgb(110, 67, 57)',
-	'--settings-font-color': 'rgb(134, 97, 87)',
+	'--settings-font-color': 'rgb(198, 172, 161)',
 	'--menu-header-background': 'rgb(101, 55, 45)',
 	'--menu-secondary-header-background': 'rgb(170, 134, 119)',
 	'--menu-background-color': 'rgb(101, 55, 45)',
@@ -19,6 +19,7 @@ const paper = {
 	'--application-background': 'rgb(253, 248, 241)',
 	'--application-base-color': 'rgb(110, 67, 57)',
 	'--settings-option-inactive-secondary-color': 'rgb(255, 255, 255)',
+	'--audio-player-progress-background': 'rgb(255, 255, 255)',
 };
 
 const dark = {
@@ -42,6 +43,7 @@ const dark = {
 	'--application-background': 'rgb(26, 29, 33)',
 	'--application-base-color': 'rgb(255, 255, 255)',
 	'--settings-option-inactive-secondary-color': 'rgb(27, 31, 46)',
+	'--audio-player-progress-background': 'rgb(32,34,39)',
 };
 
 const red = {
@@ -65,6 +67,7 @@ const red = {
 	'--application-background': 'rgb(253, 248, 241)',
 	'--application-base-color': 'rgb(50, 53, 58)',
 	'--settings-option-inactive-secondary-color': 'rgb(27, 31, 46)',
+	'--audio-player-progress-background': 'rgb(32,34,39)',
 };
 
 const themes = {
