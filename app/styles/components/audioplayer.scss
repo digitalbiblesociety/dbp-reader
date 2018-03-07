@@ -9,12 +9,11 @@
 .audio-player                          {display:none;}
 
 // Speed Control Styles
-// todo refactor speed control container class to be more semantic
-.speed-control-container-container          {display:block;bottom:0;right:150px;position:absolute;z-index:3;}
-.speed-control-container                    {position:absolute;display:flex;align-items:center;justify-content:space-around;@include css4{border:1px solid var(--menu-active-color);background-color:var(--transparent-grey);};height:30px;width:150px;}
-.speed-control-container .speed-item        {@include css4{color:var(--menu-font-color);};cursor:pointer;}
-.speed-control-container .speed-item:hover  {@include css4{color:var(--menu-active-color);};}
-.speed-control-container .speed-item.active {@include css4{color:var(--menu-active-color);};}
+.speed-control-container          {display:block;bottom:0;right:150px;position:absolute;z-index:3;}
+.speed-control                    {position:absolute;display:flex;align-items:center;justify-content:space-around;@include css4{border:1px solid var(--menu-active-color);background-color:var(--transparent-grey);};height:30px;width:150px;}
+.speed-control .speed-item        {@include css4{color:var(--menu-font-color);};cursor:pointer;}
+.speed-control .speed-item:hover  {@include css4{color:var(--menu-active-color);};}
+.speed-control .speed-item.active {@include css4{color:var(--menu-active-color);};}
 
 // Progress Bar Styles
 .progress-bar       {width:50%;@include css4{background-color:var(--audio-player-progress-background);};height:3px;cursor:pointer;}

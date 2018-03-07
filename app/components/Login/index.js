@@ -69,8 +69,8 @@ class Login extends React.PureComponent {
 					</span>
 					<input className="first-password" type="password" placeholder="Enter Password" onChange={this.handlePasswordChange} value={this.state.password} />
 					<div className="sign-in-button">
-						<input className="login-checkbox" type="checkbox" onChange={this.handleStayLoggedInChange} />
-						<span className="text">KEEP ME LOGGED IN</span>
+						<input className="login-checkbox" id={'login-checkbox'} type="checkbox" onChange={this.handleStayLoggedInChange} />
+						<label htmlFor={'login-checkbox'} className="text">KEEP ME LOGGED IN</label>
 						<button type="submit" className="login-button">LOGIN</button>
 					</div>
 				</form>
