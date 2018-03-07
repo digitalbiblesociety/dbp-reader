@@ -146,7 +146,7 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 					</section>
 					<section className="font-sizes">
 						<span role="button" tabIndex={0} onClick={() => this.updateFontSize({ size: 0 })} className={`option smallest${activeFontSize === 0 ? ' active' : ''}`}>Aa</span>
-						<span role="button" tabIndex={0} onClick={() => this.updateFontSize({ size: 19 })} className={`option small${activeFontSize === 18 ? ' active' : ''}`}>Aa</span>
+						<span role="button" tabIndex={0} onClick={() => this.updateFontSize({ size: 18 })} className={`option small${activeFontSize === 18 ? ' active' : ''}`}>Aa</span>
 						<span role="button" tabIndex={0} onClick={() => this.updateFontSize({ size: 42 })} className={`option medium${activeFontSize === 42 ? ' active' : ''}`}>Aa</span>
 						<span role="button" tabIndex={0} onClick={() => this.updateFontSize({ size: 69 })} className={`option large${activeFontSize === 69 ? ' active' : ''}`}>Aa</span>
 						<span role="button" tabIndex={0} onClick={() => this.updateFontSize({ size: 100 })} className={`option largest${activeFontSize === 100 ? ' active' : ''}`}>Aa</span>
