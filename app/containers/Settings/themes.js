@@ -20,12 +20,14 @@ const paper = {
 	'--application-base-color': 'rgb(110, 67, 57)',
 	'--settings-option-inactive-secondary-color': 'rgb(255, 255, 255)',
 	'--audio-player-progress-background': 'rgb(255, 255, 255)',
+	'--settings-option-inactive-color': 'rgb(112, 63, 51)',
+	'--context-menu-background-color': 'rgb(204,178,165)',
 };
 
 const dark = {
 	'--header-footer-background': 'rgb(39, 42, 47)',
 	'--audio-player-background': 'rgba(46, 49, 54, 1)',
-	'--text-selection-color': 'rgb(100, 180, 132)',
+	'--text-selection-color': 'rgb(111, 188, 143)',
 	'--text-contextmenu-background': 'rgb(46, 49, 54)',
 	'--text-arrow-color': 'rgb(73, 76, 80)',
 	'--text-super-color': 'rgb(255, 255, 255)',
@@ -44,6 +46,8 @@ const dark = {
 	'--application-base-color': 'rgb(255, 255, 255)',
 	'--settings-option-inactive-secondary-color': 'rgb(27, 31, 46)',
 	'--audio-player-progress-background': 'rgb(32,34,39)',
+	'--settings-option-inactive-color': 'rgb(98, 177, 130)',
+	'--context-menu-background-color': 'rgba(44, 48, 54, 0.75)',
 };
 
 const red = {
@@ -68,6 +72,8 @@ const red = {
 	'--application-base-color': 'rgb(50, 53, 58)',
 	'--settings-option-inactive-secondary-color': 'rgb(27, 31, 46)',
 	'--audio-player-progress-background': 'rgb(32,34,39)',
+	'--settings-option-inactive-color': 'rgb(98, 177, 130)',
+	'--context-menu-background-color': 'rgba(44, 48, 54, 0.80)',
 };
 
 const themes = {

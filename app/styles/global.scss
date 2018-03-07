@@ -33,14 +33,14 @@ body .twitter  {background-color:$login-twitter-color;font-family:"Helvetica Neu
 // Change Highlighting Color
 ::selection {
   @include css4{
-    background: var(--text-selection-color);
+    background-color: var(--text-selection-color);
     color: var(--application-base-color);
   }
 }
 
 ::-moz-selection {
   @include css4{
-    background: var(--text-selection-color);
+    background-color: var(--text-selection-color);
     color: var(--application-base-color);
   }
 }
