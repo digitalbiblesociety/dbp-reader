@@ -50,8 +50,30 @@ input:focus                            {background-image:none;outline:none;}
 input:focus::-webkit-input-placeholder {color:transparent;}
 input:focus::-moz-placeholder          {color:transparent;}
 input:focus:-ms-input-placeholder      {color:transparent;}
+.input-icon                            {@include css4{background-color:var(--application-input-color);};width:30px;height:30px;}
 
-.input-icon {@include css4{background-color:var(--application-input-color);};width:30px;height:30px;}
+// Custom Checkboxes
+// Removes the normal checkbox
+[type='checkbox']:not(:checked),
+[type='checkbox']:checked                     {display:none;}
+// The label style
+[type='checkbox']:not(:checked) + label,
+[type='checkbox']:checked + label             {position:relative;padding-left:1.9em;cursor:pointer;}
+// The checkbox
+[type='checkbox']:not(:checked) + label:before,
+[type='checkbox']:checked + label:before      {content:'';position:absolute;left:0;top:0;width:18px;height:18px;border:2px solid #fff;background:transparent;border-radius:3px;}
+[type='checkbox']:checked + label:before      {background-color:#6FBC8F;border:none;}
+// The checkmark
+[type="checkbox"]:not(:checked) + label:after,
+[type="checkbox"]:checked + label:after       {content:'\002713';position:absolute;top:.25em;left:.275em;font-size:1em;line-height:0.8;color:#fff;transition: all .2s;}
+// Small scaling for the transition between checked an not
+[type="checkbox"]:not(:checked) + label:after {opacity:0;transform:scale(0);}
+[type="checkbox"]:checked + label:after       {opacity:1;transform:scale(1);}
+// I saw this was supposed to help with accessibility so I put it in
+[type="checkbox"]:checked:focus + label:before,
+[type="checkbox"]:not(:checked):focus + label:before {border: 2px dotted blue;}
+// Hover style for checkbox - Russel probably wont like it
+label:hover:before                            {border:2px solid #4778d9;}
 
 // Remove blue outline for divs that have event handlers
 div:focus  {outline:none;}

@@ -12,9 +12,9 @@ function AudioPlayerMenu({ innerRef }) {
 	return (
 		<div className="elipsis">
 			<div ref={innerRef} className="container">
-				<div><input type="checkbox" /><span>DRAMATIZED PREFERRED</span></div>
-				<div><input type="checkbox" /><span>AUTOPLAY NEXT</span></div>
-				<div><input type="checkbox" /><span>AUTO HIDE/SHOW AUDIO BAR</span></div>
+				<div><input id={'dramatized'} className={'custom-checkbox'} type="checkbox" /><label htmlFor={'dramatized'}>DRAMATIZED PREFERRED</label></div>
+				<div><input id={'autoplay'} className={'custom-checkbox'} type="checkbox" /><label htmlFor={'autoplay'}>AUTOPLAY NEXT</label></div>
+				<div><input id={'auto-hide'} className={'custom-checkbox'} type="checkbox" /><label htmlFor={'auto-hide'}>AUTO HIDE/SHOW AUDIO BAR</label></div>
 			</div>
 		</div>
 	);

@@ -32,10 +32,10 @@
 .volume-slider .slider   {width:80%;}
 
 // Elipsis TODO: update styles to make the element match the wireframe
-.elipsis            {display:block;position:absolute;right:320px;bottom:0;z-index:3;}
-.elipsis .container {position:absolute;padding:15px;display:flex;justify-content:space-between;flex-direction:column;width:320px;height:115px;@include css4{color:var(--menu-font-color);border:1px solid var(--menu-active-color);background-color:var(--transparent-grey);};}
-.container div      {display:flex;align-items:center;}
-.container span     {margin-left:15px;}
+.elipsis                  {display:block;position:absolute;right:320px;bottom:0;z-index:3;}
+.elipsis .container       {position:absolute;padding:15px;display:flex;justify-content:space-between;flex-direction:column;width:320px;height:115px;@include css4{color:var(--menu-font-color);border:1px solid var(--menu-active-color);background-color:var(--transparent-grey);};}
+.container div            {display:flex;align-items:center;}
+.container span           {margin-left:15px;}
 
 // Media Queries
 //@media only screen and (max-width:600px) {
