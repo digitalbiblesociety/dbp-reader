@@ -40,6 +40,7 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 		if (this.button && this.container) {
 			this.container.scrollTop = this.button.offsetTop - 54 - 10;
 		}
+		// console.log('component is remounting');
 	}
 
 	setSelectedBookName = (name) => this.setState({ selectedBookName: name })
@@ -51,6 +52,9 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 	// top of the active button, then if the clicked button is above the active button: move
 	// add the difference to the current scroll position. Otherwise subtract the difference
 	handleBookClick = (e, name) => {
+		// Browsers using the Blink engine will cause the scrollTop to be set twice
+		// I need to figure out a way to identify the engine used and then half the
+		// newScrollTop for those browsers that use blink
 		const book = e.target;
 		const activeButton = this.button || { clientHeight: 0 };
 		const clickedButton = book.parentElement;
@@ -73,6 +77,7 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 			// console.log('old scroll top', this.container.scrollTop);
 			// console.log('new scroll top', newScrollTop);
 			this.container.scrollTop = newScrollTop;
+			// console.log('scroll top after it has been set', this.container.scrollTop);
 		}
 
 		// if (activeButton && activeButton.offsetTop < clickedButton.offsetTop) {
