@@ -126,31 +126,38 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			verseNumber,
 			invalidBibleId,
 		} = this.props;
+		const readersMode = userSettings.getIn(['toggleOptions', 'readersMode', 'active']);
+		const oneVersePerLine = userSettings.getIn(['toggleOptions', 'oneVersePerLine', 'active']);
+		const justifiedText = userSettings.getIn(['toggleOptions', 'justifiedText', 'active']);
+		// console.log(initialText);
 		// Need to connect to the api and get the highlights object for this chapter
 		// based on whether the highlights object has any data decide whether to run this function or not
 		let text = [];
-		if (highlights.length) {
+		if (highlights.length && (initialText.length || formattedSource.main)) {
 			text = highlights.reduce((highlightedText, highlight) => {
 				if (highlight.chapter === activeChapter) {
 					const { verse_start, highlight_start, highlighted_words } = highlight;
 					// console.log('text passed to highlight', highlightedText);
-					return this.highlightPlainText({ plainText: highlightedText, verseStart: verse_start, highlightStart: highlight_start, highlightedWords: highlighted_words });
+					return this.highlightPlainText({ readersMode, formattedText: formattedSource, plainText: highlightedText, verseStart: verse_start, highlightStart: highlight_start, highlightedWords: highlighted_words });
 				}
 				return highlightedText;
 			}, initialText);
+			// console.log('text got set to', text);
+			// if (!text.main && !text.length) {
+			// 	text = [];
+			// }
 		} else {
-			text = initialText;
+			text = initialText || [];
 		}
 
 		let textComponents;
 
-		const readersMode = userSettings.getIn(['toggleOptions', 'readersMode', 'active']);
-		const oneVersePerLine = userSettings.getIn(['toggleOptions', 'oneVersePerLine', 'active']);
-		const justifiedText = userSettings.getIn(['toggleOptions', 'justifiedText', 'active']);
 		// TODO: Should move each of these settings into their own HOC
 		// Each HOC would take the source and update it based on if it was toggled
 		// Each of the HOC could be wrapped in a formatTextBasedOnOptions function
 		// the function would apply each of the HOCs in order
+
+		// TODO: Handle exception thrown when there isn't plain text but readers mode is selected
 		if (text.length === 0 && !formattedSource.main) {
 			if (invalidBibleId) {
 				textComponents = [<h5 key={'no_text'}>You have entered an invalid bible id, please select a bible from the list or type a different id into the url.</h5>];
@@ -164,7 +171,11 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		} else if (formattedSource.main) {
 			// Need to run a function to highlight the formatted text if this option is selected
 			/* eslint-disable react/no-danger */
-			textComponents = (<div ref={this.setFormattedRef} className={'chapter'} dangerouslySetInnerHTML={{ __html: formattedSource.main }} />);
+			if (!Array.isArray(text)) {
+				textComponents = (<div ref={this.setFormattedRef} className={'chapter'} dangerouslySetInnerHTML={{ __html: text }} />);
+			} else {
+				textComponents = (<div ref={this.setFormattedRef} className={'chapter'} dangerouslySetInnerHTML={{ __html: formattedSource.main }} />);
+			}
 		} else if (oneVersePerLine) {
 			textComponents = text.map((verse) => (
 				<span verseid={verse.verse_start} key={verse.verse_start}><br />&nbsp;<sup verseid={verse.verse_start}>{verse.verse_start_alt || verse.verse_start}</sup>&nbsp;<br />{verse.verse_text}</span>
