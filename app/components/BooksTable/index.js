@@ -3,6 +3,11 @@
 * BooksTable
 *
 */
+// let $;
+// if ((window.chrome || (window.Intl && Intl.v8BreakIterator)) && 'CSS' in window) {
+// 	console.log('importing jq');
+// 	$ = require('jquery');
+// }
 
 import React from 'react';
 import { compose } from 'redux';
@@ -73,10 +78,32 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 		const scrollTopBefore = this.container.scrollTop;
 
 		if (offsetTopBefore > offsetTopAfter) {
-			const newScrollTop = scrollTopBefore - (offsetTopBefore - offsetTopAfter);
+			// The glitch is appearing in Blink browsers so I am trying to make a work around for them
+			if ((window.chrome || (window.Intl && Intl.v8BreakIterator)) && 'CSS' in window) {
+				// console.log('inside blink browser');
+				// console.log('old container scroll top', this.container.scrollTop);
+				// const newScrollTop = scrollTopBefore - (offsetTopBefore - (offsetTopAfter / 2));
+				const newScrollTop = scrollTopBefore - (offsetTopBefore - offsetTopAfter);
+				this.container.scrollTop = newScrollTop;
+				// console.log('new container scroll top', this.container.scrollTop);
+			} else {
+				// console.log('inside non blink browser');
+				// console.log('old container scroll top', this.container.scrollTop);
+				const newScrollTop = scrollTopBefore - (offsetTopBefore - offsetTopAfter);
+				this.container.scrollTop = newScrollTop;
+				// console.log('new container scroll top', this.container.scrollTop);
+			}
+			// if ($) {
+			// 	console.log('setting scroll top for blink');
+			// 	$('.book-container').scrollTop(newScrollTop);
+			// 	// this.container.scrollTop(newScrollTop);
+			// } else {
+			// 	console.log('setting scroll for other browsers');
+			// 	this.container.scrollTop = newScrollTop;
+			// }
+
 			// console.log('old scroll top', this.container.scrollTop);
 			// console.log('new scroll top', newScrollTop);
-			this.container.scrollTop = newScrollTop;
 			// console.log('scroll top after it has been set', this.container.scrollTop);
 		}
 
