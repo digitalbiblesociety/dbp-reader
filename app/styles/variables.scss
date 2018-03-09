@@ -24,6 +24,12 @@ $login-twitter-color: rgb(42,163,239);
   $header-footer-background-color: light rgb(180, 145, 130) normal rgb(158, 30, 53) dark rgb(44, 48, 54)
   $
 */
+:root {
+  --application-font-family: "Noto Sans", Helvetica, sans serif;
+  --sans-font-family-option: "Noto Sans", Helvetica, sans serif;
+  --serif-font-family-option: "Alegreya", "Palatino Linotype", Palatino, serif;
+  --slab-font-family-option: "Roboto Slab", Rockwell, Courier, monospace;
+}
 $css4: true;
 $compatibility: true;
 //it is nessesary to define the variables in sass map instead of :root, for compatibility reasons.
@@ -52,7 +58,6 @@ $variables: (
         --dark-theme-primary: #1b1f24,
         --red-theme-primary: #9e1e35,
         --paper-theme-primary: #FDF8F3,
-        --application-font-family: "'Noto Sans', Helvetica, sans serif",
         --text-super-color: rgb(33, 33, 33),
         --menu-inactive-svg-color: rgb(61,65,68),
         --dark-caret-color: #000,
@@ -64,10 +69,7 @@ $variables: (
         --context-menu-background-color: rgba(44, 48, 54, 0.80),
         --loading-spinner-color: #aeaeae,
         --application-base-font-size: 0.98em,
-        --application-menu-font-size: 0.98em,
-        --sans-font-family-option: "'Noto Sans', Helvetica, sans serif",
-        --serif-font-family-option: "'Alegreya', 'Palatino Linotype', Palatino, serif",
-        --slab-font-family-option: "'Roboto Slab', Rockwell, Courier, monospace"
+        --application-menu-font-size: 0.98em
 //--application-base-font-size:
 );
 

@@ -139,7 +139,7 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 						<SvgWrapper width="30px" height="30px" fill={'#fff'} svgid={'search'} />
 						<input className="text-selection-input" onChange={this.handleChange} placeholder="SEARCH VERSIONS" value={this.state.filterText} />
 					</span>
-					<div className="language-name-list">
+					<div className="version-name-list">
 						{
 							loadingVersions && !versionsError ? (
 								<LoadingSpinner />

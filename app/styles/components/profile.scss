@@ -24,6 +24,8 @@
 .profile .facebook {display:flex;align-items:center;cursor:pointer;height:50px;width:100%;background:$login-facebook-color;@include css4{color:var(--menu-title-text-color);};}
 .profile .svg      {margin-right:20px;margin-left:20px;}
 
+.profile .google:active {background-color:#C53829;}
+.profile .facebook:active {opacity:0.75;}
 // Links
 .profile .link               {@include css4{color:var(--menu-active-color);};font-weight:200;cursor:pointer;}
 .profile .link:hover         {opacity:.75;}

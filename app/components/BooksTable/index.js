@@ -3,6 +3,11 @@
 * BooksTable
 *
 */
+// let $;
+// if ((window.chrome || (window.Intl && Intl.v8BreakIterator)) && 'CSS' in window) {
+// 	console.log('importing jq');
+// 	$ = require('jquery');
+// }
 
 import React from 'react';
 import { compose } from 'redux';
@@ -40,6 +45,7 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 		if (this.button && this.container) {
 			this.container.scrollTop = this.button.offsetTop - 54 - 10;
 		}
+		// console.log('component is remounting');
 	}
 
 	setSelectedBookName = (name) => this.setState({ selectedBookName: name })
@@ -51,6 +57,9 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 	// top of the active button, then if the clicked button is above the active button: move
 	// add the difference to the current scroll position. Otherwise subtract the difference
 	handleBookClick = (e, name) => {
+		// Browsers using the Blink engine will cause the scrollTop to be set twice
+		// I need to figure out a way to identify the engine used and then half the
+		// newScrollTop for those browsers that use blink
 		const book = e.target;
 		const activeButton = this.button || { clientHeight: 0 };
 		const clickedButton = book.parentElement;
@@ -69,10 +78,33 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 		const scrollTopBefore = this.container.scrollTop;
 
 		if (offsetTopBefore > offsetTopAfter) {
-			const newScrollTop = scrollTopBefore - (offsetTopBefore - offsetTopAfter);
+			// The glitch is appearing in Blink browsers so I am trying to make a work around for them
+			if ((window.chrome || (window.Intl && Intl.v8BreakIterator)) && 'CSS' in window) {
+				// console.log('inside blink browser');
+				// console.log('old container scroll top', this.container.scrollTop);
+				// const newScrollTop = scrollTopBefore - (offsetTopBefore - (offsetTopAfter / 2));
+				const newScrollTop = scrollTopBefore - (offsetTopBefore - offsetTopAfter);
+				this.container.scrollTop = newScrollTop;
+				// console.log('new container scroll top', this.container.scrollTop);
+			} else {
+				// console.log('inside non blink browser');
+				// console.log('old container scroll top', this.container.scrollTop);
+				const newScrollTop = scrollTopBefore - (offsetTopBefore - offsetTopAfter);
+				this.container.scrollTop = newScrollTop;
+				// console.log('new container scroll top', this.container.scrollTop);
+			}
+			// if ($) {
+			// 	console.log('setting scroll top for blink');
+			// 	$('.book-container').scrollTop(newScrollTop);
+			// 	// this.container.scrollTop(newScrollTop);
+			// } else {
+			// 	console.log('setting scroll for other browsers');
+			// 	this.container.scrollTop = newScrollTop;
+			// }
+
 			// console.log('old scroll top', this.container.scrollTop);
 			// console.log('new scroll top', newScrollTop);
-			this.container.scrollTop = newScrollTop;
+			// console.log('scroll top after it has been set', this.container.scrollTop);
 		}
 
 		// if (activeButton && activeButton.offsetTop < clickedButton.offsetTop) {
