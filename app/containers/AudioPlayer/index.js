@@ -46,47 +46,13 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 			// console.log('component mounted and auto play was true');
 			this.audioRef.addEventListener('canplay', this.autoPlayListener);
 		}
-		// canplaythrough might be a safer event to listen for
-		this.audioRef.addEventListener('durationchange', (e) => {
-			this.setState({
-				duration: e.target.duration,
-			});
-		});
-		this.audioRef.addEventListener('timeupdate', (e) => {
-			this.setState({
-				currentTime: e.target.currentTime,
-			});
-		});
-		this.audioRef.addEventListener('seeking', (e) => {
-			this.setState({
-				currentTime: e.target.currentTime,
-			});
-		});
-		this.audioRef.addEventListener('seeked', (e) => {
-			this.setState({
-				currentTime: e.target.currentTime,
-			});
-		});
-		this.audioRef.addEventListener('ended', () => {
-			// console.log('ended and autoplay was ', this.props.autoPlay);
-			if (this.props.autoPlay) {
-				this.skipForward();
-			}
-			this.pauseVideo();
-		});
-		this.audioRef.addEventListener('playing', (e) => {
-			// console.log('playing status', e.target.paused);
-			// console.log('playing ended', e.target.ended);
-			if (this.state.playing && e.target.paused) {
-				this.setState({
-					playing: false,
-				});
-			} else if (!this.state.playing && !e.target.paused) {
-				this.setState({
-					playing: true,
-				});
-			}
-		});
+		// Add all the event listeners I need for the audio player
+		this.audioRef.addEventListener('durationchange', this.durationChangeEventListener);
+		this.audioRef.addEventListener('timeupdate', this.timeUpdateEventListener);
+		this.audioRef.addEventListener('seeking', this.seekingEventListener);
+		this.audioRef.addEventListener('seeked', this.seekedEventListener);
+		this.audioRef.addEventListener('ended', this.endedEventListener);
+		this.audioRef.addEventListener('playing', this.playingEventListener);
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -118,6 +84,17 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 			return true;
 		}
 		return false;
+	}
+
+	componentWillUnmount() {
+		// Removing all the event listeners in the case that this component is unmounted
+		this.audioRef.removeEventListener('canplay', this.autoPlayListener);
+		this.audioRef.removeEventListener('durationchange', this.durationChangeEventListener);
+		this.audioRef.removeEventListener('timeupdate', this.timeUpdateEventListener);
+		this.audioRef.removeEventListener('seeking', this.seekingEventListener);
+		this.audioRef.removeEventListener('seeked', this.seekedEventListener);
+		this.audioRef.removeEventListener('ended', this.endedEventListener);
+		this.audioRef.removeEventListener('playing', this.playingEventListener);
 	}
 
 	setCurrentTime = (time) => {
@@ -163,6 +140,52 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 	autoPlayListener = () => { // can accept event as a parameter
 		// console.log('can play fired and was true');
 		this.playVideo();
+	}
+
+	durationChangeEventListener = (e) => {
+		this.setState({
+			duration: e.target.duration,
+		});
+	}
+
+	timeUpdateEventListener = (e) => {
+		this.setState({
+			currentTime: e.target.currentTime,
+		});
+	}
+
+	seekingEventListener = (e) => {
+		this.setState({
+			currentTime: e.target.currentTime,
+		});
+	}
+
+	seekedEventListener = (e) => {
+		this.setState({
+			currentTime: e.target.currentTime,
+		});
+	}
+
+	endedEventListener = () => {
+		// console.log('ended and autoplay was ', this.props.autoPlay);
+		if (this.props.autoPlay) {
+			this.skipForward();
+		}
+		this.pauseVideo();
+	}
+
+	playingEventListener = (e) => {
+		// console.log('playing status', e.target.paused);
+		// console.log('playing ended', e.target.ended);
+		if (this.state.playing && e.target.paused) {
+			this.setState({
+				playing: false,
+			});
+		} else if (!this.state.playing && !e.target.paused) {
+			this.setState({
+				playing: true,
+			});
+		}
 	}
 
 	pauseVideo = () => {
