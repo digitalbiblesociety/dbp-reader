@@ -110,7 +110,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		const target = e.target;
 		const parent = e.target.parentElement;
 		const primaryButton = e.button === 0;
-		console.log(window.getSelection());
+		// console.log(window.getSelection());
 
 		if (primaryButton && window.getSelection().toString() && this.main.contains(target) && target.attributes.verseid) {
 			// Needed to persist the React Synthetic event
@@ -310,7 +310,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			firstVerseObj.verse_text.indexOf(this.state.selectedText.split(' ')[0], searchStartIndex));
 		// const highlightStart = firstVerseObj && firstVerseObj.verse_text.split && firstVerseObj.verse_text.split(' ').indexOf(this.state.selectedText.split(' ')[0]);
 		// console.log('highlight letter start', firstVerseObj.verse_text.indexOf(this.state.selectedText));
-		console.log('highlight word start', highlightStart);
+		// console.log('highlight word start', highlightStart);
 
 		this.props.addHighlight({
 			book: this.props.activeBookId,

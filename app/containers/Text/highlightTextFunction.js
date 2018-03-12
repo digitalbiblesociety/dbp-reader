@@ -6,6 +6,9 @@ const createHighlights = ({ readersMode, plainText, verseStart, highlightStart: 
 		// console.log(formattedText);
 		// console.log(stringing);
 		// console.log('verse start, highlight start, words', verseStart, originalHighlightStart, highlightedWords);
+		// Take the tuples of highlights
+			// somehow mark if a section of a verse has already been highlighted
+		// slice the text
 		try {
 			const parser = new DOMParser();
 			const xmlDoc = parser.parseFromString(formattedText, 'text/xml');
@@ -57,7 +60,7 @@ const createHighlights = ({ readersMode, plainText, verseStart, highlightStart: 
 						return `${char}</em>`;
 					}
 					if (charIndex === lastIndex) {
-						console.log('last index changing char');
+						// console.log('last index changing char');
 						return `${char}</em>`;
 					}
 					return char;
