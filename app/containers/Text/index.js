@@ -197,6 +197,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		// based on whether the highlights object has any data decide whether to run this function or not
 		let text = [];
 		if (highlights.length && (initialText.length || formattedSource.main)) {
+			// console.log('updating highlights');
 			text = highlights.reduce((highlightedText, highlight) => {
 				if (highlight.chapter === activeChapter) {
 					const { verse_start, highlight_start, highlighted_words } = highlight;
@@ -211,7 +212,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 					});
 				}
 				return highlightedText;
-			}, formattedSource.main || initialText);
+			}, readersMode ? initialText : (formattedSource.main || initialText));
 			// console.log('text got set to', text);
 			// if (!text.main && !text.length) {
 			// 	text = [];
@@ -235,6 +236,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				textComponents = [<h5 key={'no_text'}>This resource does not currently have any text.</h5>];
 			}
 		} else if (readersMode) {
+			// console.log('text', text);
 			textComponents = text.map((verse) => (
 				<span verseid={verse.verse_start} key={verse.verse_start}>{verse.verse_text}&nbsp;&nbsp;</span>
 			));

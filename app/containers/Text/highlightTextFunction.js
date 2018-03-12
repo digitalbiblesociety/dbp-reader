@@ -1,6 +1,7 @@
 import React from 'react';
 
 const createHighlights = ({ readersMode, plainText, verseStart, highlightStart: originalHighlightStart, highlightedWords, formattedText }) => {
+	// console.log('readers mode is now', readersMode);
 	if (formattedText && !readersMode) {
 		// Parse the formatted text
 		// console.log(formattedText);
@@ -82,6 +83,7 @@ const createHighlights = ({ readersMode, plainText, verseStart, highlightStart: 
 			if (process.env.NODE_ENV === 'development') {
 				console.warn('Failed applying highlight to formatted text', error); // eslint-disable-line no-console
 			}
+			// console.log('returning formattedText');
 			return formattedText;
 		}
 	} else {
@@ -105,6 +107,7 @@ const createHighlights = ({ readersMode, plainText, verseStart, highlightStart: 
 			// End the function
 			// Is the highlightStart before highlightedTextStart
 			// If it is
+			// console.log('returning mapped plain text');
 			return plainText.map((v) => {
 				const newVerse = [];
 				// let highlightedTextEnd = v.highlightedTextEnd || null;
@@ -180,13 +183,13 @@ const createHighlights = ({ readersMode, plainText, verseStart, highlightStart: 
 						newVerse.push(plainPortion.join(''));
 					}
 				}
-
 				return { ...v, verse_text: newVerse.length ? newVerse : v.verse_text };
 			});
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
 				console.warn('Error in parsing highlights', error); // eslint-disable-line no-console
 			}
+			// console.log('returning plain text', plainText);
 			// If there was an error just return the text without highlights
 			return plainText;
 		}
