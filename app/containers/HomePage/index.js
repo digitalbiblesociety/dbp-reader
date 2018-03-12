@@ -49,6 +49,7 @@ import {
 	getHighlights,
 	// toggleMenuBar,
 	toggleProfile,
+	toggleAutoPlay,
 	toggleNotesModal,
 	toggleSearchModal,
 	toggleSettingsModal,
@@ -420,6 +421,8 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 
 	toggleNotesModal = () => this.props.dispatch(toggleNotesModal())
 
+	toggleAutoPlay = () => this.props.dispatch(toggleAutoPlay())
+
 	toggleSettingsModal = () => this.props.dispatch(toggleSettingsModal())
 
 	toggleSearchModal = () => this.props.dispatch(toggleSearchModal())
@@ -453,6 +456,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			defaultLanguageIso,
 			defaultLanguageName,
 			invalidBibleId,
+			autoPlayEnabled,
 		} = this.props.homepage;
 
 		const {
@@ -488,7 +492,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					toggleVersionSelection={this.toggleVersionSelection}
 					toggleSearchModal={this.toggleSearchModal}
 				/>
-				<AudioPlayer audioSource={audioSource} skipBackward={this.getPrevChapter} skipForward={this.getNextChapter} />
+				<AudioPlayer autoPlay={autoPlayEnabled} toggleAutoPlay={this.toggleAutoPlay} audioSource={audioSource} skipBackward={this.getPrevChapter} skipForward={this.getNextChapter} />
 				<TransitionGroup>
 					{
 						isChapterSelectionActive ? (

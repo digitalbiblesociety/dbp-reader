@@ -41,6 +41,11 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 	}
 
 	componentDidMount() {
+		// If auto play is enabled I need to start the player
+		if (this.props.autoPlay) {
+			// console.log('component mounted and auto play was true');
+			this.audioRef.addEventListener('canplay', this.autoPlayListener);
+		}
 		// canplaythrough might be a safer event to listen for
 		this.audioRef.addEventListener('durationchange', (e) => {
 			this.setState({
@@ -62,6 +67,26 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 				currentTime: e.target.currentTime,
 			});
 		});
+		this.audioRef.addEventListener('ended', () => {
+			// console.log('ended and autoplay was ', this.props.autoPlay);
+			if (this.props.autoPlay) {
+				this.skipForward();
+			}
+			this.pauseVideo();
+		});
+		this.audioRef.addEventListener('playing', (e) => {
+			// console.log('playing status', e.target.paused);
+			// console.log('playing ended', e.target.ended);
+			if (this.state.playing && e.target.paused) {
+				this.setState({
+					playing: false,
+				});
+			} else if (!this.state.playing && !e.target.paused) {
+				this.setState({
+					playing: true,
+				});
+			}
+		});
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -71,7 +96,18 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 			} else if (this.state.playerState) {
 				this.setState({ playerState: false, playing: false });
 			}
+			if (nextProps.autoPlay) {
+				// console.log('source changed and auto play is true');
+				this.audioRef.addEventListener('canplay', this.autoPlayListener);
+			}
 		}
+		if (!nextProps.autoPlay) {
+			// console.log('auto play is now false');
+			this.audioRef.removeEventListener('canplay', this.autoPlayListener);
+		}
+		// if (nextProps.autoPlay) {
+			// console.log('auto play is now true');
+		// }
 	}
 
 	shouldComponentUpdate(nextProps, nextState) {
@@ -122,6 +158,11 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 		this.setState({
 			volume,
 		});
+	}
+
+	autoPlayListener = () => { // can accept event as a parameter
+		// console.log('can play fired and was true');
+		this.playVideo();
 	}
 
 	pauseVideo = () => {
@@ -192,6 +233,8 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 		const {
 			audioSource: source,
 			hasAudio,
+			toggleAutoPlay,
+			autoPlay,
 		} = this.props;
 
 		return (
@@ -231,14 +274,14 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 									<div title={'Audio Settings'} role="button" tabIndex="0" className={this.state.elipsisState ? 'item active' : 'item'} onClick={() => { this.state.elipsisState ? this.setElipsisState(false) : this.setElipsisState(true); this.setVolumeSliderState(false); this.setSpeedControlState(false); }}><SvgWrapper className={'icon'} fill="#fff" svgid="more_menu" /></div>
 									{
 										this.state.elipsisState ? (
-											<this.playerMenu />
+											<this.playerMenu autoPlay={autoPlay} toggleAutoPlay={toggleAutoPlay} />
 										) : null
 									}
 								</div>
 							</div>
 						) : null
 					}
-					<audio ref={this.handleRef} className="audio-player" src={source}></audio>
+					<audio preload={'auto'} ref={this.handleRef} className="audio-player" src={source}></audio>
 					<SvgWrapper onClick={(e) => { e.stopPropagation(); this.toggleAudioPlayer(); }} width="50px" height="5px" className={this.state.playerState ? 'audio-gripper' : 'audio-gripper closed'} style={{ cursor: source ? 'pointer' : 'inherit' }} svgid="gripper" />
 				</div>
 			</GenericErrorBoundary>
@@ -250,7 +293,9 @@ AudioPlayer.propTypes = {
 	audioSource: PropTypes.string,
 	skipBackward: PropTypes.func.isRequired,
 	skipForward: PropTypes.func.isRequired,
+	toggleAutoPlay: PropTypes.func,
 	hasAudio: PropTypes.bool,
+	autoPlay: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({

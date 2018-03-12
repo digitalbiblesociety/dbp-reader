@@ -33,7 +33,12 @@ import {
 	TOGGLE_SETTINGS_OPTION_AVAILABILITY,
 	UPDATE_SELECTED_TEXT,
 	TOGGLE_SETTINGS_OPTION,
+	TOGGLE_AUTOPLAY,
 } from './constants';
+
+export const toggleAutoPlay = () => ({
+	type: TOGGLE_AUTOPLAY,
+});
 
 export const addHighlight = (props) => ({
 	type: ADD_HIGHLIGHTS,
