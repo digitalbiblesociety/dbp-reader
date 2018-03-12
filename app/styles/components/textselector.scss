@@ -30,7 +30,7 @@
 // The relative input values are affecting this as well...
 .language-name-list        {@include css4{background-color:var(--menu-secondary-background-color);color:var(--menu-font-color);};font-size:.98em;height:calc(100% - 90px);max-height:calc(100% - 90px);padding:15px;margin-top:-35px;}
 .version-name-list         {@include css4{background-color:var(--menu-secondary-background-color);color:var(--menu-font-color);};font-size:.98em;height:calc(100% - 90px);max-height:calc(100% - 90px);overflow:scroll;padding:15px;margin-top:-35px;}
-.country-name-list         {@include css4{background-color:var(--menu-secondary-background-color);color:var(--menu-font-color);};font-size:.98em;height:calc(100% - 90px);max-height:calc(100% - 90px);overflow:scroll;padding:15px;margin-top:-35px;}
+.country-name-list         {@include css4{background-color:var(--menu-secondary-background-color);color:var(--menu-font-color);};font-size:.98em;height:calc(100% - 90px);max-height:calc(100% - 90px);padding:15px;margin-top:-35px;}
 
 // Chapter Selection Styles
 .chapter-selection-section {max-height:calc(100% - 108px);height:calc(100% - 108px);text-transform:uppercase;}

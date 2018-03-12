@@ -22,6 +22,7 @@ import makeSelectAudioPlayer, { selectHasAudio } from './selectors';
 import reducer from './reducer';
 /* eslint-disable jsx-a11y/media-has-caption */
 /* disabled the above eslint config options because you can't add tracks to audio elements */
+// Todo: Something in here is trying to update an unmounted component
 export class AudioPlayer extends React.Component { // eslint-disable-line react/prefer-stateless-function
 	constructor(props) {
 		super(props);
@@ -40,27 +41,18 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 	}
 
 	componentDidMount() {
-		// canplaythrough might be a safer event to listen for
-		this.audioRef.addEventListener('durationchange', (e) => {
-			this.setState({
-				duration: e.target.duration,
-			});
-		});
-		this.audioRef.addEventListener('timeupdate', (e) => {
-			this.setState({
-				currentTime: e.target.currentTime,
-			});
-		});
-		this.audioRef.addEventListener('seeking', (e) => {
-			this.setState({
-				currentTime: e.target.currentTime,
-			});
-		});
-		this.audioRef.addEventListener('seeked', (e) => {
-			this.setState({
-				currentTime: e.target.currentTime,
-			});
-		});
+		// If auto play is enabled I need to start the player
+		if (this.props.autoPlay) {
+			// console.log('component mounted and auto play was true');
+			this.audioRef.addEventListener('canplay', this.autoPlayListener);
+		}
+		// Add all the event listeners I need for the audio player
+		this.audioRef.addEventListener('durationchange', this.durationChangeEventListener);
+		this.audioRef.addEventListener('timeupdate', this.timeUpdateEventListener);
+		this.audioRef.addEventListener('seeking', this.seekingEventListener);
+		this.audioRef.addEventListener('seeked', this.seekedEventListener);
+		this.audioRef.addEventListener('ended', this.endedEventListener);
+		this.audioRef.addEventListener('playing', this.playingEventListener);
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -70,7 +62,18 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 			} else if (this.state.playerState) {
 				this.setState({ playerState: false, playing: false });
 			}
+			if (nextProps.autoPlay) {
+				// console.log('source changed and auto play is true');
+				this.audioRef.addEventListener('canplay', this.autoPlayListener);
+			}
 		}
+		if (!nextProps.autoPlay) {
+			// console.log('auto play is now false');
+			this.audioRef.removeEventListener('canplay', this.autoPlayListener);
+		}
+		// if (nextProps.autoPlay) {
+			// console.log('auto play is now true');
+		// }
 	}
 
 	shouldComponentUpdate(nextProps, nextState) {
@@ -81,6 +84,17 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 			return true;
 		}
 		return false;
+	}
+
+	componentWillUnmount() {
+		// Removing all the event listeners in the case that this component is unmounted
+		this.audioRef.removeEventListener('canplay', this.autoPlayListener);
+		this.audioRef.removeEventListener('durationchange', this.durationChangeEventListener);
+		this.audioRef.removeEventListener('timeupdate', this.timeUpdateEventListener);
+		this.audioRef.removeEventListener('seeking', this.seekingEventListener);
+		this.audioRef.removeEventListener('seeked', this.seekedEventListener);
+		this.audioRef.removeEventListener('ended', this.endedEventListener);
+		this.audioRef.removeEventListener('playing', this.playingEventListener);
 	}
 
 	setCurrentTime = (time) => {
@@ -121,6 +135,57 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 		this.setState({
 			volume,
 		});
+	}
+
+	autoPlayListener = () => { // can accept event as a parameter
+		// console.log('can play fired and was true');
+		this.playVideo();
+	}
+
+	durationChangeEventListener = (e) => {
+		this.setState({
+			duration: e.target.duration,
+		});
+	}
+
+	timeUpdateEventListener = (e) => {
+		this.setState({
+			currentTime: e.target.currentTime,
+		});
+	}
+
+	seekingEventListener = (e) => {
+		this.setState({
+			currentTime: e.target.currentTime,
+		});
+	}
+
+	seekedEventListener = (e) => {
+		this.setState({
+			currentTime: e.target.currentTime,
+		});
+	}
+
+	endedEventListener = () => {
+		// console.log('ended and autoplay was ', this.props.autoPlay);
+		if (this.props.autoPlay) {
+			this.skipForward();
+		}
+		this.pauseVideo();
+	}
+
+	playingEventListener = (e) => {
+		// console.log('playing status', e.target.paused);
+		// console.log('playing ended', e.target.ended);
+		if (this.state.playing && e.target.paused) {
+			this.setState({
+				playing: false,
+			});
+		} else if (!this.state.playing && !e.target.paused) {
+			this.setState({
+				playing: true,
+			});
+		}
 	}
 
 	pauseVideo = () => {
@@ -191,6 +256,8 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 		const {
 			audioSource: source,
 			hasAudio,
+			toggleAutoPlay,
+			autoPlay,
 		} = this.props;
 
 		return (
@@ -230,14 +297,14 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 									<div title={'Audio Settings'} role="button" tabIndex="0" className={this.state.elipsisState ? 'item active' : 'item'} onClick={() => { this.state.elipsisState ? this.setElipsisState(false) : this.setElipsisState(true); this.setVolumeSliderState(false); this.setSpeedControlState(false); }}><SvgWrapper className={'icon'} fill="#fff" svgid="more_menu" /></div>
 									{
 										this.state.elipsisState ? (
-											<this.playerMenu />
+											<this.playerMenu autoPlay={autoPlay} toggleAutoPlay={toggleAutoPlay} />
 										) : null
 									}
 								</div>
 							</div>
 						) : null
 					}
-					<audio ref={this.handleRef} className="audio-player" src={source}></audio>
+					<audio preload={'auto'} ref={this.handleRef} className="audio-player" src={source}></audio>
 					<SvgWrapper onClick={(e) => { e.stopPropagation(); this.toggleAudioPlayer(); }} width="50px" height="5px" className={this.state.playerState ? 'audio-gripper' : 'audio-gripper closed'} style={{ cursor: source ? 'pointer' : 'inherit' }} svgid="gripper" />
 				</div>
 			</GenericErrorBoundary>
@@ -249,7 +316,9 @@ AudioPlayer.propTypes = {
 	audioSource: PropTypes.string,
 	skipBackward: PropTypes.func.isRequired,
 	skipForward: PropTypes.func.isRequired,
+	toggleAutoPlay: PropTypes.func,
 	hasAudio: PropTypes.bool,
+	autoPlay: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({

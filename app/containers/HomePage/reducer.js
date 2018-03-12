@@ -35,6 +35,7 @@ import {
 	UPDATE_SELECTED_TEXT,
 	GET_BOOKS,
 	GET_CHAPTER_TEXT,
+	TOGGLE_AUTOPLAY,
 } from './constants';
 
 const initialState = fromJS({
@@ -102,6 +103,7 @@ const initialState = fromJS({
 			},
 		},
 	},
+	autoPlayEnabled: false,
 	loadingBooks: false,
 	selectedText: '',
 	selectedBookName: 'Genesis',
@@ -118,6 +120,8 @@ function homePageReducer(state = initialState, action) {
 	switch (action.type) {
 	case TOGGLE_FIRST_LOAD_TEXT_SELECTION:
 		return state.set('firstLoad', false);
+	case TOGGLE_AUTOPLAY:
+		return state.set('autoPlayEnabled', !state.get('autoPlayEnabled'));
 	case GET_CHAPTER_TEXT:
 		return state.set('loadingNewChapterText', true);
 	case GET_BOOKS:

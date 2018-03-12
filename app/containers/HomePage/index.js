@@ -49,6 +49,7 @@ import {
 	getHighlights,
 	// toggleMenuBar,
 	toggleProfile,
+	toggleAutoPlay,
 	toggleNotesModal,
 	toggleSearchModal,
 	toggleSettingsModal,
@@ -71,6 +72,7 @@ import makeSelectHomePage, {
 	selectFormattedSource,
 	selectAuthenticationStatus,
 	selectUserId,
+	selectHighlights,
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -174,6 +176,16 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			fjs.parentNode.insertBefore(js, fjs);
 		})(document, 'script', 'facebook-jssdk');
 	}
+	// Component updates when the state and props haven't changed 2 of 5 times
+	// If there is a significant slow down we may need to do some deep equality checks on the state
+	// componentDidUpdate(prevProps, prevState) {
+	// 	console.log('previous props', prevProps);
+	// 	console.log('current props', this.props);
+	// 	console.log('current props equal to previous props', isEqual(this.props, prevProps));
+	// 	console.log('previous state', prevState);
+	// 	console.log('current state', this.state);
+	// 	console.log('current state equal to previous state', isEqual(this.state, prevState));
+	// }
 	// TODO: Rewrite componentWillReceiveProps to only use the route parameters and auth state
 	// The current version of the below function is gross and prone to breaking
 	// This function needs to solve the issue of requesting the new data from the api when a new version is clicked
@@ -409,6 +421,8 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 
 	toggleNotesModal = () => this.props.dispatch(toggleNotesModal())
 
+	toggleAutoPlay = () => this.props.dispatch(toggleAutoPlay())
+
 	toggleSettingsModal = () => this.props.dispatch(toggleSettingsModal())
 
 	toggleSearchModal = () => this.props.dispatch(toggleSearchModal())
@@ -439,15 +453,16 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			activeNotesView,
 			loadingNewChapterText,
 			firstLoad,
-			highlights,
 			defaultLanguageIso,
 			defaultLanguageName,
 			invalidBibleId,
+			autoPlayEnabled,
 		} = this.props.homepage;
 
 		const {
 			userSettings,
 			formattedSource,
+			highlights,
 		} = this.props;
 
 		const verse = this.props.match.params.verse || '';
@@ -477,7 +492,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					toggleVersionSelection={this.toggleVersionSelection}
 					toggleSearchModal={this.toggleSearchModal}
 				/>
-				<AudioPlayer audioSource={audioSource} skipBackward={this.getPrevChapter} skipForward={this.getNextChapter} />
+				<AudioPlayer autoPlay={autoPlayEnabled} toggleAutoPlay={this.toggleAutoPlay} audioSource={audioSource} skipBackward={this.getPrevChapter} skipForward={this.getNextChapter} />
 				<TransitionGroup>
 					{
 						isChapterSelectionActive ? (
@@ -581,6 +596,7 @@ HomePage.propTypes = {
 	formattedSource: PropTypes.object,
 	history: PropTypes.object,
 	match: PropTypes.object,
+	highlights: PropTypes.object,
 	userAuthenticated: PropTypes.bool,
 	userId: PropTypes.string,
 };
@@ -594,6 +610,7 @@ const mapStateToProps = createStructuredSelector({
 	formattedSource: selectFormattedSource(),
 	userAuthenticated: selectAuthenticationStatus(),
 	userId: selectUserId(),
+	highlights: selectHighlights(),
 });
 
 function mapDispatchToProps(dispatch) {

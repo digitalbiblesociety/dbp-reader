@@ -6,6 +6,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { List, AutoSizer } from 'react-virtualized';
 import SvgWrapper from 'components/SvgWrapper';
 import LoadingSpinner from 'components/LoadingSpinner';
 import flags from 'images/flags.svg';
@@ -24,7 +25,7 @@ class CountryList extends React.PureComponent { // eslint-disable-line react/pre
 		}
 	}
 
-	get filteredCountries() {
+	getFilteredCountries(width, height) {
 		const {
 			countries,
 			setCountryName,
@@ -34,33 +35,85 @@ class CountryList extends React.PureComponent { // eslint-disable-line react/pre
 			toggleVersionList,
 		} = this.props;
 		const { filterText } = this.state;
-		const filteredCountries = filterText ? countries.filter((country) => this.filterFunction(country, filterText)) : countries;
+		const filteredCountryMap = filterText ? countries.filter((country) => this.filterFunction(country, filterText)) : countries;
+		const filteredCountries = filteredCountryMap.valueSeq();
 
-		const components = filteredCountries.valueSeq().map((country) => (
-			<div
-				className="country-name"
-				key={country.getIn(['codes', 'iso_a2']) || 'ANY'}
-				role="button"
-				tabIndex={0}
-				onClick={() => {
-					setCountryName({ name: country.get('name'), languages: country.get('languages') });
-					setCountryListState({ state: false });
-					toggleVersionList({ state: false });
-					toggleLanguageList({ state: true });
-				}}
-			>
-				<svg className="svg" height="25px" width="25px">
-					<use xmlnsXlink="http://www.w3.org/1999/xlink" xlinkHref={`${flags}#${country.getIn(['codes', 'iso_a2'])}`}></use>
-				</svg>
-				<h4 className={activeCountryName === country.get('name') ? 'active-language-name' : 'inactive-country'}>{country.get('name')}</h4>
-			</div>
-		));
+		// const components = filteredCountries.valueSeq().map((country) => (
+		// 	<div
+		// 		className="country-name"
+		// 		key={country.getIn(['codes', 'iso_a2']) || 'ANY'}
+		// 		role="button"
+		// 		tabIndex={0}
+		// 		onClick={() => {
+		// 			setCountryName({ name: country.get('name'), languages: country.get('languages') });
+		// 			setCountryListState({ state: false });
+		// 			toggleVersionList({ state: false });
+		// 			toggleLanguageList({ state: true });
+		// 		}}
+		// 	>
+		// 		<svg className="svg" height="25px" width="25px">
+		// 			<use xmlnsXlink="http://www.w3.org/1999/xlink" xlinkHref={`${flags}#${country.getIn(['codes', 'iso_a2'])}`}></use>
+		// 		</svg>
+		// 		<h4 className={activeCountryName === country.get('name') ? 'active-language-name' : 'inactive-country'}>{country.get('name')}</h4>
+		// 	</div>
+		// ));
 
 		if (countries.size === 0) {
 			return <span>There was an error fetching this resource, an Admin has been notified. We apologize for the inconvenience</span>;
 		}
 
-		return components.size ? components : <span>There are no matches for your search.</span>;
+		const renderARow = ({ index, style, key }) => {
+			const country = filteredCountries.get(index);
+			// key={language.get('iso_code')}
+			// if (isScrolling) {
+			// 	return <div key={key} style={style}>scrolling...</div>;
+			// }
+			return (
+				<div
+					className="country-name"
+					key={key}
+					style={style}
+					role="button"
+					tabIndex={0}
+					onClick={() => {
+						setCountryName({ name: country.get('name'), languages: country.get('languages') });
+						setCountryListState({ state: false });
+						toggleVersionList({ state: false });
+						toggleLanguageList({ state: true });
+					}}
+				>
+					<svg className="svg" height="25px" width="25px">
+						<use xmlnsXlink="http://www.w3.org/1999/xlink" xlinkHref={`${flags}#${country.getIn(['codes', 'iso_a2'])}`}></use>
+					</svg>
+					<h4 className={activeCountryName === country.get('name') ? 'active-language-name' : 'inactive-country'}>{country.get('name')}</h4>
+				</div>
+			);
+		};
+
+		const getActiveIndex = () => {
+			let activeIndex = 0;
+
+			filteredCountries.forEach((l, i) => {
+				if (l.get('name') === activeCountryName) {
+					activeIndex = i;
+				}
+			});
+
+			return activeIndex;
+		};
+
+		return filteredCountries.size ? (
+			<List
+				estimatedRowSize={28 * filteredCountries.size}
+				height={height}
+				rowRenderer={renderARow}
+				rowCount={filteredCountries.size}
+				overscanRowCount={10}
+				rowHeight={28}
+				scrollToIndex={getActiveIndex()}
+				width={width}
+			/>
+		) : <span>There are no matches for your search.</span>;
 	}
 
 	filterFunction = (country, filterText) => {
@@ -102,7 +155,11 @@ class CountryList extends React.PureComponent { // eslint-disable-line react/pre
 						{
 							loadingCountries ? (
 								<LoadingSpinner />
-							) : this.filteredCountries
+							) : (
+								<AutoSizer>
+									{({ width, height }) => this.getFilteredCountries(width, height)}
+								</AutoSizer>
+							)
 						}
 					</div>
 				</div>
