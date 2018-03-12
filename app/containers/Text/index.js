@@ -87,28 +87,91 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 
 	getFirstVerse = (e) => {
 		const target = e.target;
-
-		if (e.button === 0 && this.main.contains(target) && target.attributes.verseid) {
-			this.setState({ firstVerse: target.attributes.verseid.value });
-		} else if (e.button === 0 && this.main.contains(target) && target.attributes['data-id']) {
-			this.setState({ firstVerse: target.attributes['data-id'].value.split('_')[1] });
+		// console.log('e.target', e.target);
+		// console.log('e.target.parent', e.target.parentElement);
+		try {
+			if (e.button === 0 && this.main.contains(target) && target.attributes.verseid) {
+				this.setState({ firstVerse: target.attributes.verseid.value });
+			} else if (e.button === 0 && this.main.contains(target) && target.attributes['data-id']) {
+				this.setState({ firstVerse: target.attributes['data-id'].value.split('_')[1] });
+			} else if (target.parentElement && target.parentElement.attributes.verseid) {
+				this.setState({ firstVerse: target.parentElement.attributes.verseid.value });
+			} else if (target.parentElement && target.parentElement.attributes['data-id']) {
+				this.setState({ firstVerse: target.parentElement.attributes['data-id'].value.split('_')[1] });
+			}
+		} catch (err) {
+			if (process.env.NODE_ENV === 'development') {
+				console.warn('Error with getting last verse and opening menu', err); // eslint-disable-line no-console
+			}
 		}
 	}
 
 	getLastVerse = (e) => {
-		if (e.button === 0 && window.getSelection().toString() && this.main.contains(e.target) && e.target.attributes.verseid) {
+		const target = e.target;
+		const parent = e.target.parentElement;
+		const primaryButton = e.button === 0;
+		console.log(window.getSelection());
+
+		if (primaryButton && window.getSelection().toString() && this.main.contains(target) && target.attributes.verseid) {
 			// Needed to persist the React Synthetic event
 			e.persist();
 			const selectedText = window.getSelection().toString();
 
-			this.setState({ lastVerse: e.target.attributes.verseid.value, selectedText }, () => {
+			this.setState({
+				lastVerse: target.attributes.verseid.value,
+				anchorOffset: window.getSelection().anchorOffset,
+				anchorText: window.getSelection().anchorNode.data,
+				selectedText,
+			}, () => {
 				this.openContextMenu(e);
 			});
-		} else if (e.button === 0 && window.getSelection().toString() && this.main.contains(e.target) && e.target.attributes['data-id']) {
+		} else if (primaryButton && window.getSelection().toString() && this.main.contains(target) && target.attributes['data-id']) {
 			e.persist();
 			const selectedText = window.getSelection().toString();
 
-			this.setState({ lastVerse: e.target.attributes['data-id'].value.split('_')[1], selectedText }, () => {
+			this.setState({
+				lastVerse: target.attributes['data-id'].value.split('_')[1],
+				anchorOffset: window.getSelection().anchorOffset,
+				anchorText: window.getSelection().anchorNode.data,
+				selectedText,
+			}, () => {
+				this.openContextMenu(e);
+			});
+			// Below checks for the parent elements since sometimes a word is wrapped in a tag for styling
+		} else if (
+				primaryButton &&
+				window.getSelection().toString() &&
+				parent &&
+				this.main.contains(parent) &&
+				parent.attributes.verseid
+		) {
+			e.persist();
+			const selectedText = window.getSelection().toString();
+
+			this.setState({
+				lastVerse: parent.attributes.verseid.value,
+				anchorOffset: window.getSelection().anchorOffset,
+				anchorText: window.getSelection().anchorNode.data,
+				selectedText,
+			}, () => {
+				this.openContextMenu(e);
+			});
+		} else if (
+				primaryButton &&
+				window.getSelection().toString() &&
+				parent &&
+				this.main.contains(parent) &&
+				parent.attributes['data-id']
+			) {
+			e.persist();
+			const selectedText = window.getSelection().toString();
+
+			this.setState({
+				lastVerse: parent.attributes['data-id'].value.split('_')[1],
+				anchorOffset: window.getSelection().anchorOffset,
+				anchorText: window.getSelection().anchorNode.data,
+				selectedText,
+			}, () => {
 				this.openContextMenu(e);
 			});
 		} else {
@@ -224,13 +287,30 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		// { bible, book, chapter, userId, verseStart, highlightStart, highlightedWords }
 		const firstVerse = parseInt(this.state.firstVerse, 10);
 		const firstVerseObj = this.props.text.filter((v) => v.verse_start === firstVerse)[0];
+		const anchorOffset = this.state.anchorOffset;
+		let anchorText = this.state.anchorText;
+		let anchorTextIndex = firstVerseObj.verse_text.indexOf(anchorText);
+
+		while (anchorTextIndex === -1 && anchorText.length) {
+			anchorText = anchorText.slice(0, -2);
+			anchorTextIndex = firstVerseObj.verse_text.indexOf(anchorText);
+		}
+
+		const searchStartIndex = anchorTextIndex + anchorOffset;
+		// console.log('anchor text index in verse', anchorTextIndex);
+		// console.log('verse text', firstVerseObj.verse_text);
+		// console.log('selected text', this.state.selectedText);
+		// console.log('anchor text', anchorText);
+		// console.log('anchor offset', anchorOffset);
+		// console.log('search start', searchStartIndex);
 		// Need to figure out a way to get the index of the first letter
-		const highlightStart = firstVerseObj && firstVerseObj.verse_text.indexOf(this.state.selectedText);
+		const highlightStart = firstVerseObj && (
+			firstVerseObj.verse_text.indexOf(this.state.selectedText, searchStartIndex) !== -1 ?
+			firstVerseObj.verse_text.indexOf(this.state.selectedText, searchStartIndex) :
+			firstVerseObj.verse_text.indexOf(this.state.selectedText.split(' ')[0], searchStartIndex));
 		// const highlightStart = firstVerseObj && firstVerseObj.verse_text.split && firstVerseObj.verse_text.split(' ').indexOf(this.state.selectedText.split(' ')[0]);
 		// console.log('highlight letter start', firstVerseObj.verse_text.indexOf(this.state.selectedText));
-		// console.log('highlight word start', highlightStart);
-		// console.log('selected text', this.state.selectedText);
-		// console.log('verse text', firstVerseObj.verse_text);
+		console.log('highlight word start', highlightStart);
 
 		this.props.addHighlight({
 			book: this.props.activeBookId,

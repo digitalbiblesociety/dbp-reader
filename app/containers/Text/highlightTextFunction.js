@@ -5,6 +5,7 @@ const createHighlights = ({ readersMode, plainText, verseStart, highlightStart: 
 		// Parse the formatted text
 		// console.log(formattedText);
 		// console.log(stringing);
+		// console.log('verse start, highlight start, words', verseStart, originalHighlightStart, highlightedWords);
 		try {
 			const parser = new DOMParser();
 			const xmlDoc = parser.parseFromString(formattedText, 'text/xml');
@@ -34,31 +35,39 @@ const createHighlights = ({ readersMode, plainText, verseStart, highlightStart: 
 			// console.log('verse dom nodes', firstVerse);
 			// console.log('verse inner html', firstVerse.innerHTML);
 			// console.log('verse inner text', firstVerse.textContent);
-			const firstVerseText = firstVerse[0].textContent.split('');
-			// console.log('verse text', firstVerseText);
-			const lastIndex = firstVerseText.length;
-
-			const newText = firstVerseText.map((char, charIndex) => {
-				if (charIndex === highlightStart) {
-					if (charIndex === lastIndex) {
-						return `<em class="text-highlighted">${char}</em>`;
+			// Resetting this so I can use it like a counter again
+			numberOfCharsToHighlight = highlightedWords;
+			firstVerse.forEach((verse, verseIndex) => {
+				const firstVerseText = verse.textContent.split('');
+				// console.log('verse text', firstVerseText);
+				const lastIndex = firstVerseText.length;
+				const newText = firstVerseText.map((char, charIndex) => {
+					if ((charIndex === highlightStart && verseIndex === 0) || (charIndex === 0 && verseIndex !== 0)) {
+						if (charIndex === lastIndex) {
+							return `<em class="text-highlighted">${char}</em>`;
+						}
+						return `<em class="text-highlighted">${char}`;
 					}
-					return `<em class="text-highlighted">${char}`;
-				}
-				if (charIndex - highlightStart === highlightedWords) {
-					// this is the last char
-					// console.log('calc in last char', charIndex, highlightStart, highlightedWords);
-					// console.log('last char is highlighted');
-					return `${char}</em>`;
-				}
-				if (charIndex === lastIndex) {
-					return `${char}</em>`;
-				}
-				return char;
+					// if the start of the highlight - the current index = number to highlight
+					// or if the current index = the number left to highlight and this isn't the first verse
+					if (charIndex - highlightStart === highlightedWords || (charIndex === numberOfCharsToHighlight && verseIndex !== 0)) {
+						// this is the last char
+						// console.log('calc in last char', charIndex, highlightStart, highlightedWords);
+						// console.log('last char is highlighted');
+						return `${char}</em>`;
+					}
+					if (charIndex === lastIndex) {
+						console.log('last index changing char');
+						return `${char}</em>`;
+					}
+					return char;
+				});
+				numberOfCharsToHighlight -= lastIndex - highlightStart;
+				verse.innerHTML = newText.join(''); // eslint-disable-line no-param-reassign
+				// Need to handle every verse after the first one was highlighted
 			});
-			firstVerse[0].innerHTML = newText.join('');
 			// console.log('updated verse', firstVerse[0]);
-			// console.log('xml document', xmlDoc);
+			// console.log('xml document for', `v ${verseStart} h ${highlightStart}`, xmlDoc);
 			// console.log('new text with highlight', newText);
 			// console.log('the first verses text', firstVerseText);
 			// console.log('index of the first verse', firstVerseIndex);
