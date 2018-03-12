@@ -1,47 +1,64 @@
 import React from 'react';
 
 const createHighlights = ({ readersMode, plainText, verseStart, highlightStart: originalHighlightStart, highlightedWords, formattedText }) => {
-	if (formattedText.main && !readersMode) {
+	if (formattedText && !readersMode) {
 		// Parse the formatted text
 		// console.log(formattedText);
 		// console.log(stringing);
 		try {
 			const parser = new DOMParser();
-			const xmlDoc = parser.parseFromString(formattedText.main, 'text/xml');
+			const xmlDoc = parser.parseFromString(formattedText, 'text/xml');
 			const arrayOfVerses = [...xmlDoc.getElementsByClassName('v')];
 			const highlightStart = parseInt(originalHighlightStart, 10) - 1;
+			let numberOfCharsToHighlight = highlightedWords;
+			let firstVerseIndex;
 			// console.log(arrayOfVerses);
-			// Will need first verse index to allow multiline highlights
+			// Only handles 1 highlight
+			// Will need first verse index to allow multi-line highlights
 			// let firstVerseIndex = 0;
-			const firstVerse = arrayOfVerses.filter((verse) => {
+			const firstVerse = arrayOfVerses.filter((verse, verseIndex) => {
 				if (verse.attributes['data-id'].value.split('_')[1] === verseStart.toString()) {
-					// firstVerseIndex = verseIndex;
+					firstVerseIndex = verseIndex;
+					// Keep track of how many letters are in this node
+					// If the number of letters needing to be highlighted is greater than
+					// What is contained in this verse, get the next verse as well
+					numberOfCharsToHighlight -= verse.textContent.length;
+					return true;
+				}
+				if (firstVerseIndex && verseIndex > firstVerseIndex && numberOfCharsToHighlight > 0) {
+					numberOfCharsToHighlight -= verse.textContent.length;
 					return true;
 				}
 				return false;
-			})[0];
-			const firstVerseText = firstVerse.innerHTML.split(' ');
+			});
+			// console.log('verse dom nodes', firstVerse);
+			// console.log('verse inner html', firstVerse.innerHTML);
+			// console.log('verse inner text', firstVerse.textContent);
+			const firstVerseText = firstVerse[0].textContent.split('');
+			// console.log('verse text', firstVerseText);
 			const lastIndex = firstVerseText.length;
 
-			const newText = firstVerseText.map((word, wordIndex) => {
-				if (wordIndex === highlightStart) {
-					if (wordIndex === lastIndex) {
-						return `<em class="text-highlighted">${word}</em>`;
+			const newText = firstVerseText.map((char, charIndex) => {
+				if (charIndex === highlightStart) {
+					if (charIndex === lastIndex) {
+						return `<em class="text-highlighted">${char}</em>`;
 					}
-					return `<em class="text-highlighted">${word}`;
+					return `<em class="text-highlighted">${char}`;
 				}
-				if (wordIndex - highlightStart === highlightedWords) {
-					// this is the last word
-					// console.log('calc in last word', wordIndex, highlightStart, highlightedWords);
-					// console.log('last word is highlighted');
-					return `${word}</em>`;
+				if (charIndex - highlightStart === highlightedWords) {
+					// this is the last char
+					// console.log('calc in last char', charIndex, highlightStart, highlightedWords);
+					// console.log('last char is highlighted');
+					return `${char}</em>`;
 				}
-				if (wordIndex === lastIndex) {
-					return `${word}</em>`;
+				if (charIndex === lastIndex) {
+					return `${char}</em>`;
 				}
-				return word;
+				return char;
 			});
-			firstVerse.innerHTML = newText.join(' ');
+			firstVerse[0].innerHTML = newText.join('');
+			// console.log('updated verse', firstVerse[0]);
+			// console.log('xml document', xmlDoc);
 			// console.log('new text with highlight', newText);
 			// console.log('the first verses text', firstVerseText);
 			// console.log('index of the first verse', firstVerseIndex);
@@ -96,8 +113,9 @@ const createHighlights = ({ readersMode, plainText, verseStart, highlightStart: 
 				// }
 				// The conditional is to prevent the code trying to split a verse after it has become an array
 				// This is an issue because of a flaw in the program, I will need to stop iterating over each index
-				const verseTextLength = (v.verse_text.split && v.verse_text.split(' ').length);
-				const verseTextArray = (v.verse_text.split && v.verse_text.split(' '));
+				// Should try to use the <em /> method I used for formatted text
+				const verseTextLength = (v.verse_text.split && v.verse_text.split('').length);
+				const verseTextArray = (v.verse_text.split && v.verse_text.split(''));
 				// If the verse start of the current verse is the same as the starting verse of the highlight
 				if (v.verse_start === verseStart) {
 					const before = [];
@@ -121,14 +139,14 @@ const createHighlights = ({ readersMode, plainText, verseStart, highlightStart: 
 					});
 
 					wordsLeftToHighlight -= (verseTextLength - (highlightStart + 1));
-					newVerse.push(before.join(' '));
+					newVerse.push(before.join(''));
 					newVerse.push(' ');
 					// Join the highlighted words together inside a react element - might consider
 					// doing the react part later on and just leaving the array as is
 					// this would probably help with the issue of highlights overlapping
-					newVerse.push(<span key={v.verse_start} verseid={v.verse_start} className={'text-highlighted'}>{highlightedPortion.join(' ')}</span>);
+					newVerse.push(<span key={v.verse_start} verseid={v.verse_start} className={'text-highlighted'}>{highlightedPortion.join('')}</span>);
 					newVerse.push(' ');
-					newVerse.push(after.join(' '));
+					newVerse.push(after.join(''));
 					// if there are still more words left to highlight after the first verse was finished
 					// and this verse is past the highlights starting verse
 				} else if (wordsLeftToHighlight > 0 && v.verse_start > verseStart) {
@@ -145,9 +163,9 @@ const createHighlights = ({ readersMode, plainText, verseStart, highlightStart: 
 							}
 						});
 						wordsLeftToHighlight -= verseTextLength;
-						newVerse.push(<span key={v.verse_start} verseid={v.verse_start} className={'text-highlighted'}>{highlightedPortion.join(' ')}</span>);
+						newVerse.push(<span key={v.verse_start} verseid={v.verse_start} className={'text-highlighted'}>{highlightedPortion.join('')}</span>);
 						newVerse.push(' ');
-						newVerse.push(plainPortion.join(' '));
+						newVerse.push(plainPortion.join(''));
 					}
 				}
 

@@ -138,10 +138,17 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				if (highlight.chapter === activeChapter) {
 					const { verse_start, highlight_start, highlighted_words } = highlight;
 					// console.log('text passed to highlight', highlightedText);
-					return this.highlightPlainText({ readersMode, formattedText: formattedSource, plainText: highlightedText, verseStart: verse_start, highlightStart: highlight_start, highlightedWords: highlighted_words });
+					return this.highlightPlainText({
+						readersMode,
+						formattedText: highlightedText,
+						plainText: highlightedText,
+						verseStart: verse_start,
+						highlightStart: highlight_start,
+						highlightedWords: highlighted_words,
+					});
 				}
 				return highlightedText;
-			}, initialText);
+			}, formattedSource.main || initialText);
 			// console.log('text got set to', text);
 			// if (!text.main && !text.length) {
 			// 	text = [];
@@ -217,14 +224,20 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		// { bible, book, chapter, userId, verseStart, highlightStart, highlightedWords }
 		const firstVerse = parseInt(this.state.firstVerse, 10);
 		const firstVerseObj = this.props.text.filter((v) => v.verse_start === firstVerse)[0];
-		const highlightStart = firstVerseObj && firstVerseObj.verse_text.split && firstVerseObj.verse_text.split(' ').indexOf(this.state.selectedText.split(' ')[0]);
+		// Need to figure out a way to get the index of the first letter
+		const highlightStart = firstVerseObj && firstVerseObj.verse_text.indexOf(this.state.selectedText);
+		// const highlightStart = firstVerseObj && firstVerseObj.verse_text.split && firstVerseObj.verse_text.split(' ').indexOf(this.state.selectedText.split(' ')[0]);
+		// console.log('highlight letter start', firstVerseObj.verse_text.indexOf(this.state.selectedText));
+		// console.log('highlight word start', highlightStart);
+		// console.log('selected text', this.state.selectedText);
+		// console.log('verse text', firstVerseObj.verse_text);
 
 		this.props.addHighlight({
 			book: this.props.activeBookId,
 			chapter: this.props.activeChapter,
 			verseStart: this.state.firstVerse,
 			highlightStart,
-			highlightedWords: this.state.selectedText.split(' ').length,
+			highlightedWords: this.state.selectedText.split('').length,
 		});
 		// take first word in selected text
 		// find its index in the page of words
