@@ -5,6 +5,7 @@
 const path = require('path');
 const webpack = require('webpack');
 require('dotenv').config();
+const SitemapPlugin = require('sitemap-webpack-plugin').default;
 
 // Remove this line once the following warning goes away (it was meant for webpack loader authors not users):
 // 'DeprecationWarning: loaderUtils.parseQuery() received a non-string value which can be problematic,
@@ -103,6 +104,13 @@ module.exports = (options) => ({
 			},
 		}),
 		new webpack.NamedModulesPlugin(),
+		new SitemapPlugin('http://localhost:3000', [
+			'/:bibleId',
+			'/:bibleId/:bookId',
+			'/:bibleId/:bookId/:chapter',
+			'/:bibleId/:bookId/:chapter/:verseId',
+			'/',
+		], { fileName: 'sitemap.xml' }),
 	]),
 	resolve: {
 		modules: ['app', 'node_modules'],
