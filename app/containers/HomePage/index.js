@@ -35,6 +35,7 @@ import Footer from 'components/Footer';
 import SearchContainer from 'containers/SearchContainer';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
 import FadeTransition from 'components/FadeTransition';
+import logo from 'images/app-icons/favicon-96x96.png';
 import {
 	applyTheme,
 	applyFontFamily,
@@ -472,11 +473,12 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 				<Helmet
 					meta={[
 						{ name: 'description', content: 'Main page for the Bible.is web app' },
-						{ name: 'og:title', content: `${activeBookName} ${activeChapter}${verse ? `:${verse}` : ''}` },
-						{ name: 'og:url', content: window.location.href },
-						{ name: 'og:description', content: 'Main page for the Bible.is web app' },
-						{ name: 'og:type', content: 'website' },
-						{ name: 'og:site_name', content: 'Bible.is' },
+						{ property: 'og:title', content: `${activeBookName} ${activeChapter}${verse ? `:${verse}` : ''}` },
+						{ property: 'og:url', content: window.location.href },
+						{ property: 'og:description', content: 'Main page for the Bible.is web app' },
+						{ property: 'og:type', content: 'website' },
+						{ property: 'og:site_name', content: 'Bible.is' },
+						{ property: 'og:image', content: logo },
 					]}
 				>
 					<title>{`${activeBookName} ${activeChapter}${verse ? `:${verse}` : ''}`} | Bible.is</title>

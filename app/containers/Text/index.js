@@ -415,6 +415,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		if (loadingNewChapterText) {
 			return <LoadingSpinner />;
 		}
+
 		return (
 			<div className="text-container">
 				<SvgWrapper onClick={prevChapter} className="prev-arrow-svg" svgid="prev-arrow" />
