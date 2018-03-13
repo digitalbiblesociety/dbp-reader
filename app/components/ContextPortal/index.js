@@ -92,7 +92,7 @@ class ContextPortal extends React.PureComponent {
 				</Row>
 				<Row>
 					<Item onClick={closeContextMenu} className="facebook">
-						<FacebookShareButton className="facebook fb-share-button" url={window.location.href}>
+						<FacebookShareButton className="facebook fb-share-button" title={document.title} quote={`"${window.getSelection().toString()}"`} url={window.location.href}>
 							<SvgWrapper height="25px" width="25px" svgid="facebook" />
 						</FacebookShareButton>
 					</Item>
@@ -102,12 +102,12 @@ class ContextPortal extends React.PureComponent {
 						</GooglePlusShareButton>
 					</Item>
 					<Item onClick={closeContextMenu} className="twitter">
-						<TwitterShareButton url={window.location.href}>
+						<TwitterShareButton title={document.title} hashtags={[`${document.title.split('|')[0].replace(/\s/g, '')}`]} url={window.location.href}>
 							<SvgWrapper height="25px" width="25px" svgid="twitter" />
 						</TwitterShareButton>
 					</Item>
 					<Item onClick={closeContextMenu}>
-						<EmailShareButton subject={document.title} body={`${window.getSelection().toString()}\n\nTo listen to audio click here: ${window.location.href}`} url={window.location.href}>
+						<EmailShareButton subject={document.title} body={`"${window.getSelection().toString()}"\n\nTo listen to the audio click here: ${window.location.href}`} url={window.location.href}>
 							<SvgWrapper height="25px" width="25px" svgid="email" />
 						</EmailShareButton>
 					</Item>
