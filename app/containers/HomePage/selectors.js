@@ -23,7 +23,7 @@ const getHighlights = (state) => state.getIn(['homepage', 'highlights']);
 // It will need to be updated if/when we enable infinite scrolling
 const selectHighlights = () => createDeepEqualSelector(
 	getHighlights,
-	(highlights) => highlights // {
+	(highlights) => highlights.toJS() // {
 		// optimize later, naive solution first
 		// let objectOfVerses;
 		// let newHighlights;

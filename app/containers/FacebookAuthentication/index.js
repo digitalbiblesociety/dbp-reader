@@ -17,12 +17,12 @@ export class FacebookAuthentication extends React.PureComponent { // eslint-disa
 
 		if (activeDriver === 'facebook' && socialLoginLink) {
 			// console.log('active driver', activeDriver);
-			// console.log('social login link', socialLoginLink);
+			// console.log('social login link after user has already been authd', socialLoginLink);
 			// const socialWindow = window.open(socialLoginLink, '_blank');
 			//
 			// socialWindow.focus();
 		} else {
-			// console.log('sending social driver');
+			// console.log('sending social driver for facebook');
 			socialMediaLogin({ driver: 'facebook' });
 		}
 	}
