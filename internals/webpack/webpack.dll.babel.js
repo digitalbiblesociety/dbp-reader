@@ -20,21 +20,21 @@ const dllConfig = defaults(pkg.dllPlugin, dllPlugin.defaults);
 const outputPath = join(process.cwd(), dllConfig.path);
 
 module.exports = require('./webpack.base.babel')({
-  context: process.cwd(),
-  entry: dllConfig.dlls ? dllConfig.dlls : dllPlugin.entry(pkg),
-  devtool: 'eval',
-  output: {
-    filename: '[name].dll.js',
-    path: outputPath,
-    library: '[name]',
-  },
-  plugins: [
-    new webpack.DllPlugin({
-      name: '[name]',
-      path: join(outputPath, '[name].json'),
-    }),
-  ],
-  performance: {
-    hints: false,
-  },
+	context: process.cwd(),
+	entry: dllConfig.dlls ? dllConfig.dlls : dllPlugin.entry(pkg),
+	devtool: 'eval',
+	output: {
+		filename: '[name].dll.js',
+		path: outputPath,
+		library: '[name]',
+	},
+	plugins: [
+		new webpack.DllPlugin({
+			name: '[name]',
+			path: join(outputPath, '[name].json'),
+		}),
+	],
+	performance: {
+		hints: false,
+	},
 });
