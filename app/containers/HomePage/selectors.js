@@ -121,11 +121,23 @@ const selectFormattedSource = () => createDeepEqualSelector(
 			// end </span>
 		if (props.match.params.verse) {
 			const { verse, bookId, chapter } = props.match.params;
-			const start = source.indexOf(`<span class="verse${verse}`);
-			const getAfter = source.indexOf(`data-id="${bookId}${chapter}_${verse}"`, start);
-			const end = source.indexOf('</span>', getAfter);
+			const parser = new DOMParser();
+			const serializer = new XMLSerializer();
+			const xmlDoc = parser.parseFromString(source, 'text/xml');
+			const verseClassName = `${bookId.toUpperCase()}${chapter}_${verse}`;
+			// console.log('verseClassName', verseClassName);
+			// console.log('xmlDoc', xmlDoc);
+			const verseNumber = xmlDoc.getElementsByClassName(`verse${verse}`)[0];
+			// console.log(verseNumber);
+			const verseString = xmlDoc.getElementsByClassName(verseClassName)[0];
+			// console.log('verse string', verseString);
+			const newXML = xmlDoc.createElement('div');
+			if (verseNumber && verseString) {
+				newXML.appendChild(verseNumber);
+				newXML.appendChild(verseString);
+			}
 
-			return { main: source.slice(start, end), footnotes: {} };
+			return { main: newXML ? serializer.serializeToString(newXML) : 'This book does not have a verse matching the url', footnotes: {} };
 		}
 		const chapterStart = source.indexOf('<div class="chapter');
 		const chapterEnd = source.indexOf('<div class="footnotes">', chapterStart);
