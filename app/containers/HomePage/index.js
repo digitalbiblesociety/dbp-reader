@@ -596,7 +596,7 @@ HomePage.propTypes = {
 	formattedSource: PropTypes.object,
 	history: PropTypes.object,
 	match: PropTypes.object,
-	highlights: PropTypes.object,
+	highlights: PropTypes.array,
 	userAuthenticated: PropTypes.bool,
 	userId: PropTypes.string,
 };

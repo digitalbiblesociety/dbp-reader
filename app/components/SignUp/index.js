@@ -96,10 +96,10 @@ class SignUp extends React.PureComponent {
 			<form onSubmit={this.handleSignup}>
 				<span className={'input-wrapper'}>
 					<SvgWrapper className="svg" width="30px" height="30px" fill="#fff" svgid="email" />
-					<input onChange={this.handleEmailChange} className="email" placeholder="Enter E-mail" value={this.state.email} />
+					<input autoComplete={'email'} onChange={this.handleEmailChange} className="email" placeholder="Enter E-mail" value={this.state.email} />
 				</span>
-				<input onChange={this.handleFirstName} className="name-inputs" placeholder="Enter First Name" value={this.state.firstName} />
-				<input onChange={this.handleLastName} className="name-inputs" placeholder="Enter Last Name" value={this.state.lastName} />
+				<input autoComplete={'given-name'} onChange={this.handleFirstName} className="name-inputs" placeholder="Enter First Name" value={this.state.firstName} />
+				<input autoComplete={'family-name'} onChange={this.handleLastName} className="name-inputs" placeholder="Enter Last Name" value={this.state.lastName} />
 				<input autoComplete="new-password" type="password" onChange={this.handlePasswordChange} className="first-password" placeholder="Enter Password" value={this.state.password} />
 				<input autoComplete="new-password" type="password" onChange={this.handleConfirmPassword} className="second-password" placeholder="Confirm Password" value={this.state.confirmPassword} />
 				<div className="sign-up-button">

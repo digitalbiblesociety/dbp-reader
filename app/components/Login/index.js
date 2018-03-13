@@ -23,6 +23,7 @@ class Login extends React.PureComponent {
 
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.socialLoginLink && nextProps.socialLoginLink !== this.props.socialLoginLink) {
+			// console.log('social link', nextProps.socialLoginLink);
 			const socialWindow = window.open(nextProps.socialLoginLink, '_blank');
 
 			socialWindow.focus();
@@ -65,9 +66,9 @@ class Login extends React.PureComponent {
 				<form onSubmit={this.handleSendingLogin}>
 					<span className={'input-wrapper'}>
 						<SvgWrapper className="svg" width="30px" height="30px" fill="#fff" svgid="email" />
-						<input className="email" placeholder="Enter E-mail" onChange={this.handleEmailChange} value={this.state.email} />
+						<input autoComplete={'email'} className="email" placeholder="Enter E-mail" onChange={this.handleEmailChange} value={this.state.email} />
 					</span>
-					<input className="first-password" type="password" placeholder="Enter Password" onChange={this.handlePasswordChange} value={this.state.password} />
+					<input autoComplete={'current-password'} className="first-password" type="password" placeholder="Enter Password" onChange={this.handlePasswordChange} value={this.state.password} />
 					<div className="sign-in-button">
 						<input className="login-checkbox" id={'login-checkbox'} type="checkbox" onChange={this.handleStayLoggedInChange} />
 						<label htmlFor={'login-checkbox'} className="text">KEEP ME LOGGED IN</label>
