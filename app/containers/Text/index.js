@@ -10,6 +10,7 @@ import SvgWrapper from 'components/SvgWrapper';
 import ContextPortal from 'components/ContextPortal';
 import FootnotePortal from 'components/FootnotePortal';
 import LoadingSpinner from 'components/LoadingSpinner';
+// import isEqual from 'lodash/isEqual';
 import createHighlights from './highlightTextFunction';
 // import { addClickToNotes } from './htmlToReact';
 /* Disabling the jsx-a11y linting because we need to capture the selected text
@@ -87,6 +88,8 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 
 	getFirstVerse = (e) => {
 		const target = e.target;
+		// Causes the component to update for every click
+		// Thankfully React's diffing function is doing a good job and very little is actually re-rendered
 		// console.log('e.target', e.target);
 		// console.log('e.target.parent', e.target.parentElement);
 		try {
