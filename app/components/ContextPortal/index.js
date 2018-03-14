@@ -31,7 +31,7 @@ const Row = styled.div`
 	width:100%;
 `;
 
-const Item = styled.div`
+const Item = styled.span`
 	display:flex;
 	align-items:center;
 	justify-content:center;
@@ -85,28 +85,28 @@ class ContextPortal extends React.PureComponent {
 		const component = (
 			<StyledDiv className={'shadow'} x={coordinates.x} y={coordinates.y}>
 				<Row>
-					<Item onClick={this.handleNoteClick}><SvgWrapper height="25px" width="25px" svgid="note-list" /></Item>
-					<Item onClick={addHighlight}><SvgWrapper height="25px" width="25px" svgid="highlights" /></Item>
-					<Item onClick={this.handleBookmarkClick}><SvgWrapper height="25px" width="25px" svgid="bookmarks" /></Item>
-					<Item onClick={addFacebookLike} className="facebook"><SvgWrapper height="35px" width="35px" svgid="fb-thumb" /></Item>
+					<Item title={'Add a note'} onClick={this.handleNoteClick}><SvgWrapper height="25px" width="25px" svgid="note-list" /></Item>
+					<Item title={'Add a highlight'} onClick={addHighlight}><SvgWrapper height="25px" width="25px" svgid="highlights" /></Item>
+					<Item title={'Add a bookmark'} onClick={this.handleBookmarkClick}><SvgWrapper height="25px" width="25px" svgid="bookmarks" /></Item>
+					<Item title={'Copy selected text'} onClick={addFacebookLike} className="facebook"><SvgWrapper height="35px" width="35px" svgid="fb-thumb" /></Item>
 				</Row>
 				<Row>
-					<Item onClick={closeContextMenu} className="facebook">
-						<FacebookShareButton className="facebook fb-share-button" title={document.title} quote={`"${window.getSelection().toString()}"`} url={window.location.href}>
+					<Item title={'Share to Facebook'} onClick={closeContextMenu} className="facebook">
+						<FacebookShareButton className="facebook fb-share-button" quote={`"${window.getSelection().toString()}"`} url={window.location.href}>
 							<SvgWrapper height="25px" width="25px" svgid="facebook" />
 						</FacebookShareButton>
 					</Item>
-					<Item onClick={closeContextMenu} className="google">
+					<Item title={'Share to Google'} onClick={closeContextMenu} className="google">
 						<GooglePlusShareButton url={window.location.href}>
 							<SvgWrapper height="25px" width="25px" svgid="google_plus" />
 						</GooglePlusShareButton>
 					</Item>
-					<Item onClick={closeContextMenu} className="twitter">
+					<Item title={'Share to Twitter'} onClick={closeContextMenu} className="twitter">
 						<TwitterShareButton title={document.title} hashtags={[`${document.title.split('|')[0].replace(/\s/g, '')}`]} url={window.location.href}>
 							<SvgWrapper height="25px" width="25px" svgid="twitter" />
 						</TwitterShareButton>
 					</Item>
-					<Item onClick={closeContextMenu}>
+					<Item title={'Share with email'} onClick={closeContextMenu}>
 						<EmailShareButton subject={document.title} body={`"${window.getSelection().toString()}"\n\nTo listen to the audio click here: ${window.location.href}`} url={window.location.href}>
 							<SvgWrapper height="25px" width="25px" svgid="email" />
 						</EmailShareButton>
