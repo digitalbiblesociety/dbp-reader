@@ -15,6 +15,9 @@ main                   {overflow-x:hidden;overflow-y:scroll;max-height:100%;-web
 #app                   {@include css4{background-color:var(--application-background);};}
 #app > div             {height:100vh;}
 
+// Remove default styling on em tags since I use those for highlighting
+em {font-style: unset;}
+
 // images
 img                    {max-width:100%;height:auto}
 img[data-src]          {filter:blur(15px)}
