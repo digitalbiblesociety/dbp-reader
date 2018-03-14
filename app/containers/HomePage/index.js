@@ -73,7 +73,6 @@ import makeSelectHomePage, {
 	selectFormattedSource,
 	selectAuthenticationStatus,
 	selectUserId,
-	selectHighlights,
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -298,7 +297,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 	setNextVerse = (verse) => {
 		const { bibleId, bookId, chapter } = this.props.match.params;
 		const { chapterText } = this.props.homepage;
-		const nextVerse = parseInt(verse, 10) + 1;
+		const nextVerse = (parseInt(verse, 10) + 1) || 1;
 		const lastVerse = chapterText.length;
 		// Is it past the max verses for the chapter?
 		// if not increment it by 1
@@ -314,7 +313,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 	setPrevVerse = (verse) => {
 		const { bibleId, bookId, chapter } = this.props.match.params;
 		const { chapterText } = this.props.homepage;
-		const prevVerse = parseInt(verse, 10) - 1;
+		const prevVerse = (parseInt(verse, 10) - 1) || 1;
 		const lastVerse = chapterText.length;
 		// Is it past the max verses for the chapter?
 		// if not increment it by 1
@@ -457,13 +456,13 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			defaultLanguageIso,
 			defaultLanguageName,
 			invalidBibleId,
+			highlights,
 			autoPlayEnabled,
 		} = this.props.homepage;
 
 		const {
 			userSettings,
 			formattedSource,
-			highlights,
 		} = this.props;
 
 		const verse = this.props.match.params.verse || '';
@@ -598,7 +597,6 @@ HomePage.propTypes = {
 	formattedSource: PropTypes.object,
 	history: PropTypes.object,
 	match: PropTypes.object,
-	highlights: PropTypes.array,
 	userAuthenticated: PropTypes.bool,
 	userId: PropTypes.string,
 };
@@ -612,7 +610,6 @@ const mapStateToProps = createStructuredSelector({
 	formattedSource: selectFormattedSource(),
 	userAuthenticated: selectAuthenticationStatus(),
 	userId: selectUserId(),
-	highlights: selectHighlights(),
 });
 
 function mapDispatchToProps(dispatch) {

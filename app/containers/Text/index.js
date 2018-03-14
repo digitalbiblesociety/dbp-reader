@@ -196,20 +196,27 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		// Need to connect to the api and get the highlights object for this chapter
 		// based on whether the highlights object has any data decide whether to run this function or not
 		let text = [];
+		const appliedHighlights = [];
 		if (highlights.length && (initialText.length || formattedSource.main)) {
 			// console.log('updating highlights');
 			text = highlights.reduce((highlightedText, highlight) => {
 				if (highlight.chapter === activeChapter) {
 					const { verse_start, highlight_start, highlighted_words } = highlight;
+					// console.log(highlightedText);
 					// console.log('text passed to highlight', highlightedText);
-					return this.highlightPlainText({
+					const newHighlightedText = this.highlightPlainText({
 						readersMode,
-						formattedText: highlightedText,
+						formattedText: formattedSource.main ? highlightedText : '',
 						plainText: highlightedText,
 						verseStart: verse_start,
 						highlightStart: highlight_start,
 						highlightedWords: highlighted_words,
+						appliedHighlights,
 					});
+
+					appliedHighlights.push(highlight);
+
+					return newHighlightedText;
 				}
 				return highlightedText;
 			}, readersMode ? initialText : (formattedSource.main || initialText));
@@ -253,6 +260,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				<span verseid={verse.verse_start} key={verse.verse_start}><br />&nbsp;<sup verseid={verse.verse_start}>{verse.verse_start_alt || verse.verse_start}</sup>&nbsp;<br />{verse.verse_text}</span>
 			));
 		} else if (justifiedText) {
+			console.log(text);
 			textComponents = text.map((verse) => (
 				<span verseid={verse.verse_start} key={verse.verse_start}>&nbsp;<sup verseid={verse.verse_start}>{verse.verse_start_alt || verse.verse_start}</sup>&nbsp;{verse.verse_text}</span>
 			));
@@ -267,7 +275,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		}
 		// console.log('text components that are about to be mounted', textComponents);
 		if (verseNumber && Array.isArray(textComponents)) {
-			return textComponents.filter((c) => c.key === verseNumber);
+			return textComponents.filter((c) => c.key === (parseInt(verseNumber, 10) ? verseNumber : '1'));
 		}
 
 		return textComponents;
