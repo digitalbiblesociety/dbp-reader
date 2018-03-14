@@ -10,7 +10,8 @@ import SvgWrapper from 'components/SvgWrapper';
 import ContextPortal from 'components/ContextPortal';
 import FootnotePortal from 'components/FootnotePortal';
 import LoadingSpinner from 'components/LoadingSpinner';
-import createHighlights from './highlightTextFunction';
+import createHighlights from './highlightPlainText';
+import createFormattedHighlights from './highlightFormattedText';
 // import { addClickToNotes } from './htmlToReact';
 /* Disabling the jsx-a11y linting because we need to capture the selected text
 	 and the most straight forward way of doing so is with the onMouseUp event */
@@ -192,38 +193,21 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		const readersMode = userSettings.getIn(['toggleOptions', 'readersMode', 'active']);
 		const oneVersePerLine = userSettings.getIn(['toggleOptions', 'oneVersePerLine', 'active']);
 		const justifiedText = userSettings.getIn(['toggleOptions', 'justifiedText', 'active']);
-		// console.log(initialText);
+		// console.log(initialText);fasdfas
+		// todo figure out a way to memoize or cache the highlighted version of the text to improve performance
 		// Need to connect to the api and get the highlights object for this chapter
 		// based on whether the highlights object has any data decide whether to run this function or not
 		let text = [];
-		const appliedHighlights = [];
-		if (highlights.length && (initialText.length || formattedSource.main)) {
-			// console.log('updating highlights');
-			text = highlights.reduce((highlightedText, highlight) => {
-				if (highlight.chapter === activeChapter) {
-					const { verse_start, highlight_start, highlighted_words } = highlight;
-					// console.log(highlightedText);
-					// console.log('text passed to highlight', highlightedText);
-					const newHighlightedText = this.highlightPlainText({
-						readersMode,
-						formattedText: formattedSource.main ? highlightedText : '',
-						plainText: highlightedText,
-						verseStart: verse_start,
-						highlightStart: highlight_start,
-						highlightedWords: highlighted_words,
-						appliedHighlights,
-					});
-
-					appliedHighlights.push(highlight);
-
-					return newHighlightedText;
-				}
-				return highlightedText;
-			}, readersMode ? initialText : (formattedSource.main || initialText));
-			// console.log('text got set to', text);
-			// if (!text.main && !text.length) {
-			// 	text = [];
-			// }
+		if (highlights.length && (!readersMode && formattedSource.main)) {
+			// Temporary fix for the fact that highlight_start is a string... ... ...
+			const highlightsToPass = highlights.map((h) => ({ ...h, highlight_start: parseInt(h.highlight_start, 10) }));
+			// Use function for highlighting the formatted text
+			text = createFormattedHighlights(highlightsToPass, formattedSource.main);
+		} else if (highlights.length && initialText.length) {
+			// Temporary fix for the fact that highlight_start is a string... ... ...
+			const highlightsToPass = highlights.map((h) => ({ ...h, highlight_start: parseInt(h.highlight_start, 10) }));
+			// Use function for highlighting the plain text
+			text = createHighlights(highlightsToPass, initialText);
 		} else {
 			text = initialText || [];
 		}
