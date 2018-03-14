@@ -73,7 +73,6 @@ import makeSelectHomePage, {
 	selectFormattedSource,
 	selectAuthenticationStatus,
 	selectUserId,
-	selectHighlights,
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -457,13 +456,13 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			defaultLanguageIso,
 			defaultLanguageName,
 			invalidBibleId,
+			highlights,
 			autoPlayEnabled,
 		} = this.props.homepage;
 
 		const {
 			userSettings,
 			formattedSource,
-			highlights,
 		} = this.props;
 
 		const verse = this.props.match.params.verse || '';
@@ -598,7 +597,6 @@ HomePage.propTypes = {
 	formattedSource: PropTypes.object,
 	history: PropTypes.object,
 	match: PropTypes.object,
-	highlights: PropTypes.array,
 	userAuthenticated: PropTypes.bool,
 	userId: PropTypes.string,
 };
@@ -612,7 +610,6 @@ const mapStateToProps = createStructuredSelector({
 	formattedSource: selectFormattedSource(),
 	userAuthenticated: selectAuthenticationStatus(),
 	userId: selectUserId(),
-	highlights: selectHighlights(),
 });
 
 function mapDispatchToProps(dispatch) {

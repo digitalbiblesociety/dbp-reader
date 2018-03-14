@@ -1,8 +1,17 @@
 import React from 'react';
 
-const createHighlights = ({ readersMode, plainText, verseStart, highlightStart: originalHighlightStart, highlightedWords, formattedText }) => {
+const createHighlights = ({
+	readersMode,
+	plainText,
+	verseStart,
+	highlightStart: originalHighlightStart,
+	highlightedWords,
+	formattedText,
+	// appliedHighlights: finishedHighlights,
+}) => {
 	// console.log('readers mode is now', readersMode);
 	if (formattedText && !readersMode) {
+		// console.log('finished highlights', finishedHighlights);
 		// Parse the formatted text
 		// console.log(formattedText);
 		// console.log(stringing);
@@ -15,7 +24,14 @@ const createHighlights = ({ readersMode, plainText, verseStart, highlightStart: 
 			const xmlDoc = parser.parseFromString(formattedText, 'text/xml');
 			const arrayOfVerses = [...xmlDoc.getElementsByClassName('v')];
 			const highlightStart = parseInt(originalHighlightStart, 10) - 1;
-			let numberOfCharsToHighlight = highlightedWords;
+			// Check if this only gets the first one - may need filter
+			// const highlightsInSameVerse = finishedHighlights.find((highlight) => highlight.verse_start === verseStart) || [];
+			// console.log('highlights in same verse', highlightsInSameVerse);
+			// const highlightsOverlap = highlightsInSameVerse.find((highlight) => highlight.highlight_start >= originalHighlightStart && highlight.highlight_start <= originalHighlightStart) || [];
+			// console.log('highlights overlap', highlightsOverlap);
+			const numberOfOverlappingChars = 0;
+
+			let numberOfCharsToHighlight = highlightedWords - numberOfOverlappingChars;
 			let firstVerseIndex;
 			// console.log(arrayOfVerses);
 			// Only handles 1 highlight
@@ -155,12 +171,10 @@ const createHighlights = ({ readersMode, plainText, verseStart, highlightStart: 
 
 					wordsLeftToHighlight -= (verseTextLength - (highlightStart + 1));
 					newVerse.push(before.join(''));
-					newVerse.push(' ');
 					// Join the highlighted words together inside a react element - might consider
 					// doing the react part later on and just leaving the array as is
 					// this would probably help with the issue of highlights overlapping
 					newVerse.push(<span key={v.verse_start} verseid={v.verse_start} className={'text-highlighted'}>{highlightedPortion.join('')}</span>);
-					newVerse.push(' ');
 					newVerse.push(after.join(''));
 					// if there are still more words left to highlight after the first verse was finished
 					// and this verse is past the highlights starting verse
@@ -179,7 +193,6 @@ const createHighlights = ({ readersMode, plainText, verseStart, highlightStart: 
 						});
 						wordsLeftToHighlight -= verseTextLength;
 						newVerse.push(<span key={v.verse_start} verseid={v.verse_start} className={'text-highlighted'}>{highlightedPortion.join('')}</span>);
-						newVerse.push(' ');
 						newVerse.push(plainPortion.join(''));
 					}
 				}

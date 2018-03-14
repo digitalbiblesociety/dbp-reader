@@ -67,6 +67,10 @@ export function* addHighlight({ bible, book, chapter, userId, verseStart, highli
 		// Need to get the highlights here because they are not being returned
 		if (response.success) {
 			yield call(getHighlights, { bible, book, chapter, userId });
+		} else if (response.error) {
+			if (process.env.NODE_ENV === 'development') {
+				console.error('Error creating highlight', response.error); // eslint-disable-line no-console
+			}
 		}
 		// yield put({ type: LOAD_HIGHLIGHTS, highlights });
 	} catch (error) {

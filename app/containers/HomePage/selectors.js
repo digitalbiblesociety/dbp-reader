@@ -18,84 +18,6 @@ const selectHomePageDomain = (state) => state.get('homepage');
 const selectProfilePageDomain = (state) => state.get('profile');
 const selectFormattedTextSource = (state, props) => ({ source: state.getIn(['homepage', 'formattedSource']), props });
 const selectCrossReferenceState = (state) => state.getIn(['homepage', 'userSettings', 'toggleOptions', 'crossReferences', 'active']);
-const getHighlights = (state) => state.getIn(['homepage', 'highlights']);
-// This function assumes that I am getting the verses per chapter
-// It will need to be updated if/when we enable infinite scrolling
-const selectHighlights = () => createDeepEqualSelector(
-	getHighlights,
-	(highlights) => highlights.toJS() // {
-		// optimize later, naive solution first
-		// let objectOfVerses;
-		// let newHighlights;
-
-		// try {
-		// 	// Not keeping the ids of the highlights separate, may want to do this so that I can update the database and combine all of the highlights
-		// 	objectOfVerses = highlights.reduce((a, c) => {
-		// 		const currentVerseStart = c.verse_start;
-		// 		if (a[currentVerseStart]) { // If the accumulated object already has this verse then do the following steps
-		// 			return {
-		// 				...a, // Keeps all the previous objects
-		// 				[currentVerseStart]: { // Adds to the verse object for the current verse
-		// 					...a[currentVerseStart], // Keeps all properties of the old verse
-		// 					verse_start: [
-		// 						...a[currentVerseStart].verse_start, // Spreads the previous version of the verse start array
-		// 						currentVerseStart, // Adds the next verse start value to the array
-		// 					],
-		// 					highlight_start: [
-		// 						...a[currentVerseStart].highlight_start,
-		// 						c.highlight_start,
-		// 					],
-		// 					highlighted_words: [
-		// 						...a[currentVerseStart].highlighted_words,
-		// 						c.highlighted_words,
-		// 					],
-		// 				},
-		// 			};
-		// 		}
-		// 		return {
-		// 			...a,
-		// 			[currentVerseStart]: {
-		// 				...c,
-		// 				verse_start: [
-		// 					currentVerseStart,
-		// 				],
-		// 				highlight_start: [
-		// 					c.highlight_start,
-		// 				],
-		// 				highlighted_words: [
-		// 					c.highlighted_words,
-		// 				],
-		// 			},
-		// 		};
-		// 	}, {});
-		// 	// console.log('reduced highlights', objectOfVerses);
-		// } catch (err) {
-		// 	if (process.env.NODE_ENV === 'development') {
-		// 		console.warn('select highlights failed', err); // eslint-disable-line no-console
-		// 	}
-		// }
-
-		// try {
-		// 	console.log('New highlights', newHighlights);
-		// 	// if there are any collisions between the start array and the
-		// } catch (err) {
-		// 	if (process.env.NODE_ENV === 'development') {
-		// 		console.warn('select highlights failed', err); // eslint-disable-line no-console
-		// 	}
-		// }
-		// const listReduced = highlights.reduce((highlightsMap, highlight) => {
-		// 	// if the current highlight has the same start verse as another highlight
-		// 	// do stuff
-		// 	// otherwise just add the highlight to the map
-		// 	console.log(highlightsMap.find((high) => high.verse_start === highlight.verse_start));
-		//
-		// 	if (highlightsMap.find((high) => high.verse_start === highlight.verse_start)) {
-		// 		return highlightsMap.setIn([highlight.verse_start, ''])
-		// 	}
-		// }, fromJS({}));
-		// return highlights;
-	// }
-);
 
 const selectUserId = () => createDeepEqualSelector(
 	selectProfilePageDomain,
@@ -225,5 +147,4 @@ export {
 	selectFormattedSource,
 	selectAuthenticationStatus,
 	selectUserId,
-	selectHighlights,
 };
