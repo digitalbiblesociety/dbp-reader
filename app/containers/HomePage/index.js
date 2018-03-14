@@ -298,7 +298,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 	setNextVerse = (verse) => {
 		const { bibleId, bookId, chapter } = this.props.match.params;
 		const { chapterText } = this.props.homepage;
-		const nextVerse = parseInt(verse, 10) + 1;
+		const nextVerse = (parseInt(verse, 10) + 1) || 1;
 		const lastVerse = chapterText.length;
 		// Is it past the max verses for the chapter?
 		// if not increment it by 1
@@ -314,7 +314,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 	setPrevVerse = (verse) => {
 		const { bibleId, bookId, chapter } = this.props.match.params;
 		const { chapterText } = this.props.homepage;
-		const prevVerse = parseInt(verse, 10) - 1;
+		const prevVerse = (parseInt(verse, 10) - 1) || 1;
 		const lastVerse = chapterText.length;
 		// Is it past the max verses for the chapter?
 		// if not increment it by 1

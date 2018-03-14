@@ -114,7 +114,7 @@ export function* getBibleFromUrl({ bibleId: oldBibleId, bookId: oldBookId, chapt
 			// console.log('books in new bible', books);
 			const activeBook = books.find((b) => b.book_id === bookId);
 			// console.log('active book', activeBook);
-			const activeChapter = activeBook ? parseInt(chapter, 10) : 1;
+			const activeChapter = activeBook ? (parseInt(chapter, 10) || 1) : 1;
 			const activeBookId = activeBook ? activeBook.book_id : get(books, [0, 'book_id'], '');
 			const activeBookName = activeBook ? activeBook.name_short : get(books, [0, 'name_short'], '');
 			// calling a generator that will handle the api requests for getting text

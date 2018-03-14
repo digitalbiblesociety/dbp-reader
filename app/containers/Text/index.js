@@ -267,7 +267,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		}
 		// console.log('text components that are about to be mounted', textComponents);
 		if (verseNumber && Array.isArray(textComponents)) {
-			return textComponents.filter((c) => c.key === verseNumber);
+			return textComponents.filter((c) => c.key === (parseInt(verseNumber, 10) ? verseNumber : '1'));
 		}
 
 		return textComponents;
