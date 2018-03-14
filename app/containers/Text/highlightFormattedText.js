@@ -4,12 +4,22 @@ const createFormattedHighlights = (highlights, formattedTextString) => {
 		// Apply all highlights for that verse
 			// If the highlight goes past the end of the verse
 			// Create a new highlight that has the update range and a start verse of the next verse in line
-
+	const sortedHighlights = highlights.sort((a, b) => {
+		if (a.verse_start < b.verse_start) return -1;
+		if (a.verse_start > b.verse_start) return 1;
+		if (a.verse_start === b.verse_start) {
+			if (a.highlight_start < b.highlight_start) return -1;
+			if (a.highlight_start > b.highlight_start) return 1;
+		}
+		return 0;
+	});
+	console.log('sorted highlights', sortedHighlights);
 	try {
 		const parser = new DOMParser();
 		const serializer = new XMLSerializer();
 		const xmlDoc = parser.parseFromString(formattedTextString, 'text/xml');
 		const arrayOfVerses = [...xmlDoc.getElementsByClassName('v')];
+		let charsLeft = sortedHighlights[0].highlighted_words; // the number of characters for the highlight
 
 		arrayOfVerses.forEach((verse, verseElementIndex) => {
 			if (verseElementIndex < 4) {
@@ -17,58 +27,44 @@ const createFormattedHighlights = (highlights, formattedTextString) => {
 				// Parse the verse data-id to get the verse number
 				const verseNumber = parseInt(verse.attributes['data-id'].value.split('_')[1], 10);
 				// Get all of the highlights that start in this verse
-				const highlightsStartingInVerse = highlights.filter((highlight) => highlight.verse_start === verseNumber);
+				const highlightsStartingInVerse = sortedHighlights.filter((highlight) => highlight.verse_start === verseNumber);
+				const verseText = verse.textContent;
+				console.log('verse text', verseText);
 				console.log('all the highlights starting in verse: ', verseNumber);
 				console.log(highlightsStartingInVerse);
 				// Reduce the highlights into an array of non-overlapping highlight objects
-				const combinedHighlights = highlightsStartingInVerse.reduce((acc, highlight, index) => {
+
+				highlightsStartingInVerse.forEach((h, i) => {
+					// Next highlight
+					const nh = highlightsStartingInVerse[i + 1];
+					console.log('each highlight in verse', h);
+					// Highlights are sorted by highlight_start so the first index has the very first highlight
+					if (i === 0) {
+						verseText[h.highlight_start] = `<em class="highlighted">${verseText[h.highlight_start]}`;
+					}
+					// if the next highlight start is less than the end of this highlight
+					if (nh.highlight_start <= (h.highlight_start + h.highlighted_words)) {
+						// check if the furthest highlighted character for this highlight is greater than the furthest character for the next highlight
+						if (h.highlighted_words + h.highlight_start > nh.highlight_start + nh.highlighted_words) {
+							// in this case the next highlight will be contained within this highlight and doesn't need to be accounted for
+							charsLeft = h.highlighted_words;
+						} else {
+							// in this case the next highlight will continue to extend past where this one ends
+							charsLeft = nh.highlighted_words + (nh.highlight_start - h.highlight_start);
+						}
+					} else {
+						// The next highlight is not overlapped by this one
+						verseText[h.highlighted_words - h.highlight_start] = `${verseText[h.highlighted_words - h.highlight_start]}</em>`;
+					}
 					// Face I made when I found out highlight_start is a string while everything else is an integer... ( ‾ ʖ̫ ‾)
 					// If the current highlight overlaps another highlight before it. example v5 - v19, v3 - v6 = v3 - v19
-					const overlapBefore = acc.find((h) => highlight.highlight_start <= (h.highlighted_words + h.highlight_start) && highlight.highlight_start >= h.highlight_start);
 					// If the current highlight overlaps another highlight after it. example v1 - v6, v5 - v9 = v1 - v9
-					const overlapAfter = acc.find((h) => highlight.highlight_start <= (h.highlighted_words + h.highlight_start) && highlight.highlight_start >= h.highlight_start);
-					// New highlight
-					const newHighlight = highlight;
-					// New acc so I don't introduce side effects - mostly so eslint leaves me alone ( ͡~ ͜ʖ ͡°)
-					const newAcc = acc;
-
-					if (overlapBefore) {
-						// Take highlight start of the overlapped highlight and the highlight end of this highlight to create a new highlight
-						console.log('overlap before', overlapBefore);
-						newHighlight.highlight_start = overlapBefore.highlight_start;
-						newAcc.splice(overlapBefore.index, 1);
-					}
-
-					if (overlapAfter) {
-						// Take start of this highlight and end of the overlapped highlight to create a new highlight
-						console.log('overlap after', overlapAfter);
-						newHighlight.highlighted_words = overlapAfter.highlighted_words;
-						newAcc.splice(overlapAfter.index, 1);
-					}
-					// Check for these here so that the start and end of the current highlight will already have been expanded
 					// If the current highlight encompasses another highlight. example v1 - v12, v4 - v6 = v1 - v12
-					const encompasses = acc.find((h) => highlight.highlight_start <= h.highlight_start && highlight.highlighted_words >= h.highlighted_words);
 					// If the current highlight is encompassed by another highlight. example v4 - v6, v1 - v12 = v1 - v12
-					const encompassed = acc.find((h) => highlight.highlight_start >= h.highlight_start && highlight.highlighted_words <= h.highlighted_words);
-
-					if (encompasses) {
-						// Replace the encompasses highlight with this one
-						console.log('encompasses', encompasses);
-						newAcc.splice(encompasses.index, 1);
-					}
-
-					if (encompassed) {
-						// If another highlight already encompasses this one then I don't need to add it
-						console.log('encompassed by something else', encompassed);
-						return newAcc;
-					}
-
-					newHighlight.index = index;
-					console.log('the value that I am returning', [...newAcc, newHighlight]);
-					return [...newAcc, newHighlight];
-				}, []);
-				console.log('combined highlights for verse: ', verseNumber);
-				console.log(combinedHighlights);
+					// New acc so I don't introduce side effects - mostly so eslint leaves me alone ( ͡~ ͜ʖ ͡°)
+				});
+				console.log('verse text after highlights', verseText);
+				// Use charsLeft to highlight as much of this verse as possible, then carry its value over into the next verse
 			}
 		});
 
