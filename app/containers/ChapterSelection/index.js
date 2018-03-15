@@ -19,6 +19,7 @@ import SvgWrapper from 'components/SvgWrapper';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
+import CloseMenuFunctions from 'utils/closeMenuFunctions';
 import {
 	selectActiveBookName,
 	selectActiveChapter,
@@ -29,11 +30,12 @@ import saga from './saga';
 
 export class ChapterSelection extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	componentDidMount() {
-		document.addEventListener('click', this.handleClickOutside);
+		this.closeMenuController = new CloseMenuFunctions(this.aside, this.toggleChapterSelection);
+		this.closeMenuController.onMenuMount();
 	}
 
 	componentWillUnmount() {
-		document.removeEventListener('click', this.handleClickOutside);
+		this.closeMenuController.onMenuUnmount();
 	}
 
 	setAsideRef = (el) => {
@@ -46,16 +48,16 @@ export class ChapterSelection extends React.PureComponent { // eslint-disable-li
 
 	toggleChapterSelection = (props) => this.props.dispatch(toggleChapterSelection(props))
 
-	handleClickOutside = (event) => {
-		const bounds = this.aside.getBoundingClientRect();
-		const insideWidth = event.x >= bounds.x && event.x <= bounds.x + bounds.width;
-		const insideHeight = event.y >= bounds.y && event.y <= bounds.y + bounds.height;
-
-		if (this.aside && !(insideWidth && insideHeight)) {
-			this.toggleChapterSelection();
-			document.removeEventListener('click', this.handleClickOutside);
-		}
-	}
+	// handleClickOutside = (event) => {
+	// 	const bounds = this.aside.getBoundingClientRect();
+	// 	const insideWidth = event.x >= bounds.x && event.x <= bounds.x + bounds.width;
+	// 	const insideHeight = event.y >= bounds.y && event.y <= bounds.y + bounds.height;
+	//
+	// 	if (this.aside && !(insideWidth && insideHeight)) {
+	// 		this.toggleChapterSelection();
+	// 		document.removeEventListener('click', this.handleClickOutside);
+	// 	}
+	// }
 
 	handleChapterToggle = () => {
 		document.removeEventListener('click', this.handleClickOutside);

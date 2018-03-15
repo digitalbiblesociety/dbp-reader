@@ -89,6 +89,11 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 
 	getFirstVerse = (e) => {
 		const target = e.target;
+		// const parent = e.target.parentElement;
+		// console.log('Get first verse target', target);
+		// console.log('Get first verse parent', parent);
+		// console.log('Get first verse event', e);
+		// console.log('Selection in first verse event', JSON.stringify(window.getSelection()));
 		// Causes the component to update for every click
 		// Thankfully React's diffing function is doing a good job and very little is actually re-rendered
 		// console.log('e.target', e.target);
@@ -113,6 +118,10 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 	getLastVerse = (e) => {
 		const target = e.target;
 		const parent = e.target.parentElement;
+		// console.log('Get last verse target', target);
+		// console.log('Get last verse parent', parent);
+		// console.log('Get last verse event', e);
+		// console.log('Selection in last verse event', window.getSelection());
 		const primaryButton = e.button === 0;
 		// console.log(window.getSelection());
 
@@ -357,14 +366,24 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		// const highlightStart = firstVerseObj && firstVerseObj.verse_text.split && firstVerseObj.verse_text.split(' ').indexOf(this.state.selectedText.split(' ')[0]);
 		// console.log('highlight letter start', firstVerseObj.verse_text.indexOf(this.state.selectedText));
 		// console.log('highlight word start', highlightStart);
-
-		this.props.addHighlight({
-			book: this.props.activeBookId,
-			chapter: this.props.activeChapter,
-			verseStart: this.state.firstVerse,
-			highlightStart,
-			highlightedWords: this.state.selectedText.split('').length,
-		});
+		// console.log('this is the highlight I am going to send', {
+		// 	book: this.props.activeBookId,
+		// 	chapter: this.props.activeChapter,
+		// 	verseStart: parseInt(this.state.firstVerse, 10),
+		// 	highlightStart,
+		// 	highlightedWords: this.state.selectedText.split('').length,
+		// });
+		if (this.props.userId && this.props.userAuthenticated) {
+			this.props.addHighlight({
+				book: this.props.activeBookId,
+				chapter: this.props.activeChapter,
+				verseStart: this.state.firstVerse,
+				highlightStart,
+				highlightedWords: this.state.selectedText.split('').length,
+			});
+		} else {
+			// alert('Please create an account!!! 乁(✿ ͡° ͜ʖ ͡°)و');
+		}
 		// take first word in selected text
 		// find its index in the page of words
 		// take verse id of the start and find the index of the first word within that verse
@@ -513,6 +532,8 @@ Text.propTypes = {
 	verseNumber: PropTypes.string,
 	activeBookId: PropTypes.string,
 	activeBookName: PropTypes.string,
+	userAuthenticated: PropTypes.bool,
+	userId: PropTypes.string,
 };
 
 export default Text;

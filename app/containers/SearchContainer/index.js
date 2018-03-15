@@ -12,6 +12,7 @@ import { compose } from 'redux';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
+import CloseMenuFunctions from 'utils/closeMenuFunctions';
 import menu from 'images/menu.svg';
 import makeSelectSearchContainer from './selectors';
 import reducer from './reducer';
@@ -19,26 +20,16 @@ import saga from './saga';
 
 export class SearchContainer extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	componentDidMount() {
-		document.addEventListener('click', this.handleClickOutside);
+		this.closeMenuController = new CloseMenuFunctions(this.ref, this.props.toggleSearchModal);
+		this.closeMenuController.onMenuMount();
 	}
 
 	componentWillUnmount() {
-		document.removeEventListener('click', this.handleClickOutside);
+		this.closeMenuController.onMenuUnmount();
 	}
 
 	setRef = (node) => {
 		this.ref = node;
-	}
-
-	handleClickOutside = (event) => {
-		const bounds = this.ref.getBoundingClientRect();
-		const insideWidth = event.x >= bounds.x && event.x <= bounds.x + bounds.width;
-		const insideHeight = event.y >= bounds.y && event.y <= bounds.y + bounds.height;
-
-		if (this.ref && !(insideWidth && insideHeight)) {
-			this.props.toggleSearchModal();
-			document.removeEventListener('click', this.handleClickOutside);
-		}
 	}
 
 	handleSearchModalToggle = () => {

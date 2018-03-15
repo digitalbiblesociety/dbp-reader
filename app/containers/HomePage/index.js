@@ -463,6 +463,8 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		const {
 			userSettings,
 			formattedSource,
+			userId,
+			userAuthenticated,
 		} = this.props;
 
 		const verse = this.props.match.params.verse || '';
@@ -560,6 +562,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					text={chapterText}
 					verseNumber={verse}
 					highlights={highlights}
+					userId={userId}
 					userSettings={userSettings}
 					activeBookId={activeBookId}
 					invalidBibleId={invalidBibleId}
@@ -567,6 +570,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					activeBookName={activeBookName}
 					notesActive={isNotesModalActive}
 					formattedSource={formattedSource}
+					userAuthenticated={userAuthenticated}
 					loadingNewChapterText={loadingNewChapterText}
 					addHighlight={this.addHighlight}
 					goToFullChapter={this.goToFullChapter}
@@ -581,6 +585,8 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					isInformationModalActive={isInformationModalActive}
 					toggleInformationModal={this.toggleInformationModal}
 					toggleSettingsModal={this.toggleSettingsModal}
+					toggleProfile={this.toggleProfile}
+					toggleSearch={this.toggleSearchModal}
 				/>
 			</GenericErrorBoundary>
 		);
