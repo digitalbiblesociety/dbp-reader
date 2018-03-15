@@ -19,8 +19,8 @@ const createHighlights = (highlights, arrayOfVerseObjects) => {
 		const arrayOfVerses = [...arrayOfVerseObjects];
 		let charsLeftAfterVerseEnd = 0; // the number of characters for the highlight
 
-		arrayOfVerses.forEach((verse, verseElementIndex) => {
-			console.log('element index', verseElementIndex);
+		arrayOfVerses.forEach((verse) => {
+			// console.log('element index', verseElementIndex);
 			// Parse the verse data-id to get the verse number
 			const verseNumber = verse.verse_start;
 			// Get all of the highlights that start in this verse
@@ -102,7 +102,11 @@ const createHighlights = (highlights, arrayOfVerseObjects) => {
 			// console.log('verse text after highlights', verseText.join(''));
 			// eslint-disable-line no-param-reassign
 			// Use charsLeft to highlight as much of this verse as possible, then carry its value over into the next verse
-			newArrayOfVerses.push({ ...verse, verse_text: verseText.join('') });
+			if (verseText.join('') !== verse.verse_text) {
+				newArrayOfVerses.push({ ...verse, verse_text: ` ${verseText.join('')} `, hasHighlight: true });
+			} else {
+				newArrayOfVerses.push({ ...verse });
+			}
 		});
 		// console.log('new verses', newArrayOfVerses);
 		return newArrayOfVerses;

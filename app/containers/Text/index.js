@@ -221,6 +221,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		// the function would apply each of the HOCs in order
 
 		// TODO: Handle exception thrown when there isn't plain text but readers mode is selected
+		/* eslint-disable react/no-danger */
 		if (text.length === 0 && !formattedSource.main) {
 			if (invalidBibleId) {
 				textComponents = [<h5 key={'no_text'}>You have entered an invalid bible id, please select a bible from the list or type a different id into the url.</h5>];
@@ -229,12 +230,13 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			}
 		} else if (readersMode) {
 			// console.log('text', text);
-			textComponents = text.map((verse) => (
-				<span verseid={verse.verse_start} key={verse.verse_start}>{verse.verse_text}&nbsp;&nbsp;</span>
-			));
+			textComponents = text.map((verse) =>
+				verse.hasHighlight ?
+					<span verseid={verse.verse_start} key={verse.verse_start} dangerouslySetInnerHTML={{ __html: verse.verse_text }} /> :
+					<span verseid={verse.verse_start} key={verse.verse_start}>{verse.verse_text}&nbsp;&nbsp;</span>
+			);
 		} else if (formattedSource.main) {
 			// Need to run a function to highlight the formatted text if this option is selected
-			/* eslint-disable react/no-danger */
 			if (!Array.isArray(text)) {
 				textComponents = (<div ref={this.setFormattedRef} className={'chapter'} dangerouslySetInnerHTML={{ __html: text }} />);
 			} else {
@@ -242,16 +244,63 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			}
 		} else if (oneVersePerLine) {
 			textComponents = text.map((verse) => (
-				<span verseid={verse.verse_start} key={verse.verse_start}><br />&nbsp;<sup verseid={verse.verse_start}>{verse.verse_start_alt || verse.verse_start}</sup>&nbsp;<br />{verse.verse_text}</span>
+				verse.hasHighlight ?
+					(
+						<span verseid={verse.verse_start} key={verse.verse_start}>
+							<br />&nbsp;<sup verseid={verse.verse_start}>
+								{verse.verse_start_alt || verse.verse_start}
+							</sup>&nbsp;<br />
+							<span verseid={verse.verse_start} dangerouslySetInnerHTML={{ __html: verse.verse_text }} />
+						</span>
+					) :
+					(
+						<span verseid={verse.verse_start} key={verse.verse_start}>
+							<br />&nbsp;<sup verseid={verse.verse_start}>
+								{verse.verse_start_alt || verse.verse_start}
+							</sup>&nbsp;<br />
+							{verse.verse_text}
+						</span>
+					)
 			));
 		} else if (justifiedText) {
-			console.log(text);
 			textComponents = text.map((verse) => (
-				<span verseid={verse.verse_start} key={verse.verse_start}>&nbsp;<sup verseid={verse.verse_start}>{verse.verse_start_alt || verse.verse_start}</sup>&nbsp;{verse.verse_text}</span>
+				verse.hasHighlight ?
+					(
+						<span verseid={verse.verse_start} key={verse.verse_start}>
+							&nbsp;<sup verseid={verse.verse_start}>
+								{verse.verse_start_alt || verse.verse_start}
+							</sup>&nbsp;
+							<span verseid={verse.verse_start} dangerouslySetInnerHTML={{ __html: verse.verse_text }} />
+						</span>
+					) :
+					(
+						<span verseid={verse.verse_start} key={verse.verse_start}>
+							&nbsp;<sup verseid={verse.verse_start}>
+								{verse.verse_start_alt || verse.verse_start}
+							</sup>&nbsp;
+							{verse.verse_text}
+						</span>
+					)
 			));
 		} else {
 			textComponents = text.map((verse) => (
-				<span className={'align-left'} verseid={verse.verse_start} key={verse.verse_start}>&nbsp;<sup verseid={verse.verse_start}>{verse.verse_start_alt || verse.verse_start}</sup>&nbsp;{verse.verse_text}</span>
+				verse.hasHighlight ?
+					(
+						<span className={'align-left'} verseid={verse.verse_start} key={verse.verse_start}>
+							&nbsp;<sup verseid={verse.verse_start}>
+								{verse.verse_start_alt || verse.verse_start}
+							</sup>&nbsp;
+							<span verseid={verse.verse_start} dangerouslySetInnerHTML={{ __html: verse.verse_text }} />
+						</span>
+					) :
+					(
+						<span className={'align-left'} verseid={verse.verse_start} key={verse.verse_start}>
+							&nbsp;<sup verseid={verse.verse_start}>
+								{verse.verse_start_alt || verse.verse_start}
+							</sup>&nbsp;
+							{verse.verse_text}
+						</span>
+					)
 			));
 		}
 
