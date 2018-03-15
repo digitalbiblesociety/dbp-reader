@@ -16,6 +16,7 @@ import LanguageList from 'components/LanguageList';
 import VersionList from 'components/VersionList';
 import SvgWrapper from 'components/SvgWrapper';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
+import CloseMenuFunctions from 'utils/closeMenuFunctions';
 import {
 	setVersionListState,
 	setLanguageListState,
@@ -43,7 +44,8 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 		this.props.dispatch(setActiveIsoCode({ iso: this.props.initialIsoCode, name: this.props.initialLanguageName }));
 		// TODO: use a conditional to ensure the actions below only happen on the first mount
 		// move these calls to CDM of homepage to ensure they are loaded by the time the user is here
-		document.addEventListener('click', this.handleClickOutside);
+		this.closeMenuController = new CloseMenuFunctions(this.ref, this.props.toggleVersionSelection);
+		this.closeMenuController.onMenuMount();
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -55,7 +57,7 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 	}
 
 	componentWillUnmount() {
-		document.removeEventListener('click', this.handleClickOutside);
+		this.closeMenuController.onMenuUnmount();
 	}
 
 	setRef = (node) => {
@@ -71,17 +73,6 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 	toggleLanguageList = ({ state }) => this.props.dispatch(setLanguageListState({ state }));
 
 	toggleVersionList = ({ state }) => this.props.dispatch(setVersionListState({ state }));
-
-	handleClickOutside = (event) => {
-		const bounds = this.ref.getBoundingClientRect();
-		const insideWidth = event.x >= bounds.x && event.x <= bounds.x + bounds.width;
-		const insideHeight = event.y >= bounds.y && event.y <= bounds.y + bounds.height;
-
-		if (this.ref && !(insideWidth && insideHeight)) {
-			this.props.toggleVersionSelection();
-			document.removeEventListener('click', this.handleClickOutside);
-		}
-	}
 
 	handleVersionSelectionToggle = () => {
 		document.removeEventListener('click', this.handleClickOutside);

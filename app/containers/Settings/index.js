@@ -14,6 +14,7 @@ import injectReducer from 'utils/injectReducer';
 import SettingsToggle from 'components/SettingsToggle/index';
 import menu from 'images/menu.svg';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
+import CloseMenuFunctions from 'utils/closeMenuFunctions';
 import Slider from 'rc-slider/lib/Slider';
 import { toggleSettingsOption } from 'containers/HomePage/actions';
 import { applyTheme, applyFontFamily, applyFontSize, toggleWordsOfJesus } from './themes';
@@ -36,7 +37,8 @@ import {
 // add icon for settings close button
 export class Settings extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	componentDidMount() {
-		document.addEventListener('click', this.handleClickOutside);
+		this.closeMenuController = new CloseMenuFunctions(this.ref, this.props.toggleSettingsModal);
+		this.closeMenuController.onMenuMount();
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -63,7 +65,7 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 	}
 
 	componentWillUnmount() {
-		document.removeEventListener('click', this.handleClickOutside);
+		this.closeMenuController.onMenuUnmount();
 	}
 
 	setRef = (node) => {
@@ -71,17 +73,6 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 	}
 
 	handleSliderChange = (position) => this.updateFontSize({ size: position });
-
-	handleClickOutside = (event) => {
-		const bounds = this.ref.getBoundingClientRect();
-		const insideWidth = event.x >= bounds.x && event.x <= bounds.x + bounds.width;
-		const insideHeight = event.y >= bounds.y && event.y <= bounds.y + bounds.height;
-
-		if (this.ref && !(insideWidth && insideHeight)) {
-			this.props.toggleSettingsModal();
-			document.removeEventListener('click', this.handleClickOutside);
-		}
-	}
 
 	handleSettingsModalToggle = () => {
 		document.removeEventListener('click', this.handleClickOutside);

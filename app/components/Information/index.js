@@ -7,32 +7,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import menu from 'images/menu.svg';
+import CloseMenuFunctions from 'utils/closeMenuFunctions';
 // import styled from 'styled-components';
 
 class Information extends React.PureComponent {// eslint-disable-line react/prefer-stateless-function
 	componentDidMount() {
-		document.addEventListener('click', this.handleClickOutside);
+		this.closeMenuController = new CloseMenuFunctions(this.ref, this.props.toggleInformationModal);
+		this.closeMenuController.onMenuMount();
 	}
 
 	componentWillUnmount() {
-		if (document.onclick) {
-			document.removeEventListener('click', this.handleClickOutside);
-		}
+		this.closeMenuController.onMenuUnmount();
 	}
 
 	setRef = (node) => {
 		this.ref = node;
-	}
-
-	handleClickOutside = (event) => {
-		const bounds = this.ref.getBoundingClientRect();
-		const insideWidth = event.x >= bounds.x && event.x <= bounds.x + bounds.width;
-		const insideHeight = event.y >= bounds.y && event.y <= bounds.y + bounds.height;
-
-		if (this.ref && !(insideWidth && insideHeight)) {
-			this.props.toggleInformationModal();
-			document.removeEventListener('click', this.handleClickOutside);
-		}
 	}
 
 	render() {

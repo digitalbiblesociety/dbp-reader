@@ -17,6 +17,7 @@ import Login from 'components/Login';
 import PasswordReset from 'components/PasswordReset';
 import AccountSettings from 'components/AccountSettings';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
+import CloseMenuFunctions from 'utils/closeMenuFunctions';
 import {
 	selectAccountOption,
 	sendLoginForm,
@@ -37,11 +38,12 @@ import saga from './saga';
 
 export class Profile extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	componentDidMount() {
-		document.addEventListener('click', this.handleClickOutside);
+		this.closeMenuController = new CloseMenuFunctions(this.ref, this.props.toggleProfile);
+		this.closeMenuController.onMenuMount();
 	}
 
 	componentWillUnmount() {
-		document.removeEventListener('click', this.handleClickOutside);
+		this.closeMenuController.onMenuUnmount();
 	}
 
 	setRef = (node) => {
@@ -49,17 +51,6 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 	}
 
 	getUserData = (userId) => this.props.dispatch(getUserData(userId))
-
-	handleClickOutside = (event) => {
-		const bounds = this.ref.getBoundingClientRect();
-		const insideWidth = event.x >= bounds.x && event.x <= bounds.x + bounds.width;
-		const insideHeight = event.y >= bounds.y && event.y <= bounds.y + bounds.height;
-
-		if (this.ref && !(insideWidth && insideHeight) && !this.ref.contains(event.target)) {
-			this.props.toggleProfile();
-			document.removeEventListener('click', this.handleClickOutside);
-		}
-	}
 
 	sendSignUpForm = (props) => this.props.dispatch(sendSignUpForm(props))
 	socialMediaLogin = (props) => this.props.dispatch(socialMediaLogin(props))
