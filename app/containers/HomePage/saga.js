@@ -33,7 +33,6 @@ export function* getHighlights({ bible, book, chapter, userId }) {
 	try {
 		const response = yield call(request, requestUrl);
 		// console.log('highlight get response', response);
-		console.log('response data', response.data);
 		if (response.data) {
 			highlights = response.data;
 		}
