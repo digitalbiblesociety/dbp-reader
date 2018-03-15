@@ -16,6 +16,7 @@ import createFormattedHighlights from './highlightFormattedText';
 /* Disabling the jsx-a11y linting because we need to capture the selected text
 	 and the most straight forward way of doing so is with the onMouseUp event */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+// todo handle cases where user starts on the chapter number or the section headers
 class Text extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	state = {
 		contextMenuState: false,

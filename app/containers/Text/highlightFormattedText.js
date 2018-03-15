@@ -19,10 +19,10 @@ const createFormattedHighlights = (highlights, formattedTextString) => {
 		const serializer = new XMLSerializer();
 		const xmlDoc = parser.parseFromString(formattedTextString, 'text/xml');
 		const arrayOfVerses = [...xmlDoc.getElementsByClassName('v')];
-		const charsLeftAfterVerseEnd = 0; // the number of characters for the highlight
+		let charsLeftAfterVerseEnd = 0; // the number of characters for the highlight
 
 		arrayOfVerses.forEach((verse, verseElementIndex) => {
-			if (verseElementIndex < 2) {
+			if (verseElementIndex < 3) {
 				// console.log('element index', verseElementIndex);
 				// Parse the verse data-id to get the verse number
 				const verseNumber = parseInt(verse.attributes['data-id'].value.split('_')[1], 10);
@@ -30,8 +30,20 @@ const createFormattedHighlights = (highlights, formattedTextString) => {
 				const highlightsStartingInVerse = sortedHighlights.filter((highlight) => highlight.verse_start === verseNumber);
 				const verseText = verse.textContent.split('');
 				let charsLeft = charsLeftAfterVerseEnd;
-				// let hStart = 0;
-				// console.log('verse text', verseText);
+				let hStart = 0;
+
+				if (charsLeftAfterVerseEnd && highlightsStartingInVerse.length === 0) {
+					// console.log('this verse has a highlight that did not start in it');
+					verseText.splice(0, 1, `<em class="text-highlighted">${verseText[0]}`);
+					if (charsLeftAfterVerseEnd > verseText.length) {
+						// multi verse highlight
+						verseText.splice(verseText.length - 1, 1, `${verseText[verseText.length]}</em>`);
+						charsLeftAfterVerseEnd -= verseText.length;
+					} else {
+						verseText.splice(charsLeftAfterVerseEnd, 1, `${verseText[charsLeftAfterVerseEnd]}</em>`);
+					}
+				}
+				// console.log('verse text', verseText.length);
 				// console.log('all the highlights starting in verse: ', verseNumber);
 				// console.log(highlightsStartingInVerse);
 				// Reduce the highlights into an array of non-overlapping highlight objects
@@ -42,8 +54,8 @@ const createFormattedHighlights = (highlights, formattedTextString) => {
 					// console.log('each highlight in verse', h);
 					// Highlights are sorted by highlight_start so the first index has the very first highlight
 					if (i === 0 || charsLeft === 0) {
-						verseText.splice(h.highlight_start, 1, `<em class="highlighted">${verseText[h.highlight_start]}`);
-						// hStart = h.highlight_start;
+						verseText.splice(h.highlight_start, 1, `<em class="text-highlighted">${verseText[h.highlight_start]}`);
+						hStart = h.highlight_start;
 					}
 					// if the next highlight start is less than the end of this highlight
 					if (nh && nh.highlight_start <= (h.highlight_start + h.highlighted_words)) {
@@ -56,11 +68,28 @@ const createFormattedHighlights = (highlights, formattedTextString) => {
 							charsLeft = nh.highlighted_words + (nh.highlight_start);
 						}
 						// console.log('chars left for overlap', charsLeft);
-					} else if (charsLeft <= verseText.length && charsLeft) {
+					} else if ((charsLeft + hStart) <= verseText.length && (h.highlighted_words + h.highlight_start) < verseText.length) {
 						// The next highlight is not overlapped by this one
-						verseText.splice(charsLeft, 1, `${verseText[charsLeft]}</em>`);
-						charsLeft -= h.highlighted_words;
+						// This highlight doesn't go past the end of the verse
+						if (charsLeft === 0) {
+							verseText.splice(h.highlighted_words + h.highlight_start, 1, `${verseText[h.highlighted_words + h.highlight_start]}</em>`);
+						} else {
+							verseText.splice(charsLeft, 1, `${verseText[charsLeft]}</em>`);
+							charsLeft = 0;
+						}
 						// console.log('chars left at splice', charsLeft);
+					} else if ((charsLeft + hStart) > verseText.length || (h.highlighted_words + h.highlight_start) > verseText.length) {
+						// diff between highlight start and verse end
+						const diff = verseText.length - hStart;
+						// console.log('diff', diff);
+						verseText.splice(verseText.length - 1, 1, `${verseText[verseText.length - 1]}</em>`);
+						if (charsLeft === 0) {
+							charsLeft = h.highlighted_words - diff;
+						} else {
+							charsLeft -= diff;
+						}
+						// console.log('chars left after verse end', charsLeft);
+						charsLeftAfterVerseEnd = charsLeft;
 					}
 					// Face I made when I found out highlight_start is a string while everything else is an integer... ( ‾ ʖ̫ ‾)
 					// If the current highlight overlaps another highlight before it. example v5 - v19, v3 - v6 = v3 - v19
@@ -70,7 +99,7 @@ const createFormattedHighlights = (highlights, formattedTextString) => {
 					// New acc so I don't introduce side effects - mostly so eslint leaves me alone ( ͡~ ͜ʖ ͡°)
 				});
 				// console.log('verse text after highlights', verseText.join(''));
-				verse.textContent = verseText.join(''); // eslint-disable-line no-param-reassign
+				verse.innerHTML = verseText.join(''); // eslint-disable-line no-param-reassign
 				// Use charsLeft to highlight as much of this verse as possible, then carry its value over into the next verse
 			}
 		});

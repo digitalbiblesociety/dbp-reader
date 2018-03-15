@@ -20,12 +20,20 @@ import { ADD_HIGHLIGHTS, LOAD_HIGHLIGHTS, GET_HIGHLIGHTS } from './constants';
 * */
 
 export function* getHighlights({ bible, book, chapter, userId }) {
-	const requestUrl = `https://api.bible.build/users/${userId || 'no_user_id'}/highlights?key=${process.env.DBP_API_KEY}&v=4&bible_id=${bible}&book_id=${book}&chapter=${chapter}`;
+	const requestUrl = `https://api.bible.build/users/${userId || 'no_user_id'}/highlights?key=${process.env.DBP_API_KEY}&v=4&project_id=${process.env.NOTES_PROJECT_ID}&bible_id=${bible}&book_id=${book}&chapter=${chapter}`;
 	let highlights = [];
 
+	// const options = {
+	// 	method: 'GET',
+	// 	headers: {
+	// 		project_id: process.env.NOTES_PROJECT_ID,
+	// 	},
+	// };
+	// console.log('fetch options', options);
 	try {
 		const response = yield call(request, requestUrl);
 		// console.log('highlight get response', response);
+		console.log('response data', response.data);
 		if (response.data) {
 			highlights = response.data;
 		}
@@ -55,6 +63,7 @@ export function* addHighlight({ bible, book, chapter, userId, verseStart, highli
 	formData.append('verse_start', verseStart);
 	formData.append('highlight_start', highlightStart + 1);
 	formData.append('highlighted_words', highlightedWords);
+	formData.append('project_id', process.env.NOTES_PROJECT_ID);
 
 	const options = {
 		method: 'POST',
@@ -97,6 +106,7 @@ export function* getBibleFromUrl({ bibleId: oldBibleId, bookId: oldBookId, chapt
 	const bibleId = oldBibleId.toUpperCase();
 	const bookId = oldBookId.toUpperCase();
 	const requestUrl = `https://api.bible.build/bibles/${bibleId}?key=${process.env.DBP_API_KEY}&v=4`;
+
 	// Probably need to do stuff here to get the audio and text for this new bible
 	try {
 		const response = yield call(request, requestUrl);
