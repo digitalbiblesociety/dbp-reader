@@ -10,11 +10,13 @@ import SvgWrapper from 'components/SvgWrapper';
 import ContextPortal from 'components/ContextPortal';
 import FootnotePortal from 'components/FootnotePortal';
 import LoadingSpinner from 'components/LoadingSpinner';
-import createHighlights from './highlightTextFunction';
+import createHighlights from './highlightPlainText';
+import createFormattedHighlights from './highlightFormattedText';
 // import { addClickToNotes } from './htmlToReact';
 /* Disabling the jsx-a11y linting because we need to capture the selected text
 	 and the most straight forward way of doing so is with the onMouseUp event */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+// todo handle cases where user starts on the chapter number or the section headers
 class Text extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	state = {
 		contextMenuState: false,
@@ -87,6 +89,8 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 
 	getFirstVerse = (e) => {
 		const target = e.target;
+		// Causes the component to update for every click
+		// Thankfully React's diffing function is doing a good job and very little is actually re-rendered
 		// console.log('e.target', e.target);
 		// console.log('e.target.parent', e.target.parentElement);
 		try {
@@ -192,38 +196,21 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		const readersMode = userSettings.getIn(['toggleOptions', 'readersMode', 'active']);
 		const oneVersePerLine = userSettings.getIn(['toggleOptions', 'oneVersePerLine', 'active']);
 		const justifiedText = userSettings.getIn(['toggleOptions', 'justifiedText', 'active']);
-		// console.log(initialText);
+		// console.log(initialText);fasdfas
+		// todo figure out a way to memoize or cache the highlighted version of the text to improve performance
 		// Need to connect to the api and get the highlights object for this chapter
 		// based on whether the highlights object has any data decide whether to run this function or not
 		let text = [];
-		const appliedHighlights = [];
-		if (highlights.length && (initialText.length || formattedSource.main)) {
-			// console.log('updating highlights');
-			text = highlights.reduce((highlightedText, highlight) => {
-				if (highlight.chapter === activeChapter) {
-					const { verse_start, highlight_start, highlighted_words } = highlight;
-					// console.log(highlightedText);
-					// console.log('text passed to highlight', highlightedText);
-					const newHighlightedText = this.highlightPlainText({
-						readersMode,
-						formattedText: formattedSource.main ? highlightedText : '',
-						plainText: highlightedText,
-						verseStart: verse_start,
-						highlightStart: highlight_start,
-						highlightedWords: highlighted_words,
-						appliedHighlights,
-					});
-
-					appliedHighlights.push(highlight);
-
-					return newHighlightedText;
-				}
-				return highlightedText;
-			}, readersMode ? initialText : (formattedSource.main || initialText));
-			// console.log('text got set to', text);
-			// if (!text.main && !text.length) {
-			// 	text = [];
-			// }
+		if (highlights.length && (!readersMode && formattedSource.main)) {
+			// Temporary fix for the fact that highlight_start is a string... ... ...
+			const highlightsToPass = highlights.map((h) => ({ ...h, highlight_start: parseInt(h.highlight_start, 10) }));
+			// Use function for highlighting the formatted text
+			text = createFormattedHighlights(highlightsToPass, formattedSource.main);
+		} else if (highlights.length && initialText.length) {
+			// Temporary fix for the fact that highlight_start is a string... ... ...
+			const highlightsToPass = highlights.map((h) => ({ ...h, highlight_start: parseInt(h.highlight_start, 10) }));
+			// Use function for highlighting the plain text
+			text = createHighlights(highlightsToPass, initialText);
 		} else {
 			text = initialText || [];
 		}
@@ -236,6 +223,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		// the function would apply each of the HOCs in order
 
 		// TODO: Handle exception thrown when there isn't plain text but readers mode is selected
+		/* eslint-disable react/no-danger */
 		if (text.length === 0 && !formattedSource.main) {
 			if (invalidBibleId) {
 				textComponents = [<h5 key={'no_text'}>You have entered an invalid bible id, please select a bible from the list or type a different id into the url.</h5>];
@@ -244,12 +232,13 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			}
 		} else if (readersMode) {
 			// console.log('text', text);
-			textComponents = text.map((verse) => (
-				<span verseid={verse.verse_start} key={verse.verse_start}>{verse.verse_text}&nbsp;&nbsp;</span>
-			));
+			textComponents = text.map((verse) =>
+				verse.hasHighlight ?
+					<span verseid={verse.verse_start} key={verse.verse_start} dangerouslySetInnerHTML={{ __html: verse.verse_text }} /> :
+					<span verseid={verse.verse_start} key={verse.verse_start}>{verse.verse_text}&nbsp;&nbsp;</span>
+			);
 		} else if (formattedSource.main) {
 			// Need to run a function to highlight the formatted text if this option is selected
-			/* eslint-disable react/no-danger */
 			if (!Array.isArray(text)) {
 				textComponents = (<div ref={this.setFormattedRef} className={'chapter'} dangerouslySetInnerHTML={{ __html: text }} />);
 			} else {
@@ -257,16 +246,63 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			}
 		} else if (oneVersePerLine) {
 			textComponents = text.map((verse) => (
-				<span verseid={verse.verse_start} key={verse.verse_start}><br />&nbsp;<sup verseid={verse.verse_start}>{verse.verse_start_alt || verse.verse_start}</sup>&nbsp;<br />{verse.verse_text}</span>
+				verse.hasHighlight ?
+					(
+						<span verseid={verse.verse_start} key={verse.verse_start}>
+							<br />&nbsp;<sup verseid={verse.verse_start}>
+								{verse.verse_start_alt || verse.verse_start}
+							</sup>&nbsp;<br />
+							<span verseid={verse.verse_start} dangerouslySetInnerHTML={{ __html: verse.verse_text }} />
+						</span>
+					) :
+					(
+						<span verseid={verse.verse_start} key={verse.verse_start}>
+							<br />&nbsp;<sup verseid={verse.verse_start}>
+								{verse.verse_start_alt || verse.verse_start}
+							</sup>&nbsp;<br />
+							{verse.verse_text}
+						</span>
+					)
 			));
 		} else if (justifiedText) {
-			console.log(text);
 			textComponents = text.map((verse) => (
-				<span verseid={verse.verse_start} key={verse.verse_start}>&nbsp;<sup verseid={verse.verse_start}>{verse.verse_start_alt || verse.verse_start}</sup>&nbsp;{verse.verse_text}</span>
+				verse.hasHighlight ?
+					(
+						<span verseid={verse.verse_start} key={verse.verse_start}>
+							&nbsp;<sup verseid={verse.verse_start}>
+								{verse.verse_start_alt || verse.verse_start}
+							</sup>&nbsp;
+							<span verseid={verse.verse_start} dangerouslySetInnerHTML={{ __html: verse.verse_text }} />
+						</span>
+					) :
+					(
+						<span verseid={verse.verse_start} key={verse.verse_start}>
+							&nbsp;<sup verseid={verse.verse_start}>
+								{verse.verse_start_alt || verse.verse_start}
+							</sup>&nbsp;
+							{verse.verse_text}
+						</span>
+					)
 			));
 		} else {
 			textComponents = text.map((verse) => (
-				<span className={'align-left'} verseid={verse.verse_start} key={verse.verse_start}>&nbsp;<sup verseid={verse.verse_start}>{verse.verse_start_alt || verse.verse_start}</sup>&nbsp;{verse.verse_text}</span>
+				verse.hasHighlight ?
+					(
+						<span className={'align-left'} verseid={verse.verse_start} key={verse.verse_start}>
+							&nbsp;<sup verseid={verse.verse_start}>
+								{verse.verse_start_alt || verse.verse_start}
+							</sup>&nbsp;
+							<span verseid={verse.verse_start} dangerouslySetInnerHTML={{ __html: verse.verse_text }} />
+						</span>
+					) :
+					(
+						<span className={'align-left'} verseid={verse.verse_start} key={verse.verse_start}>
+							&nbsp;<sup verseid={verse.verse_start}>
+								{verse.verse_start_alt || verse.verse_start}
+							</sup>&nbsp;
+							{verse.verse_text}
+						</span>
+					)
 			));
 		}
 
