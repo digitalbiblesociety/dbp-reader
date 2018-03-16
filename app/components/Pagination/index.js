@@ -83,7 +83,13 @@ class Pagination extends React.PureComponent {
 		const pageObject = this.state.pageObject;
 
 		if (!pageObject.pages || pageObject.pages.length <= 1) {
-			return null;
+			return (
+				<div className={'item-list'}>
+					<div className={'item active'}>
+						<span role="button" tabIndex={0} onClick={() => this.setActivePage(1, this.props.pageSize)}>1</span>
+					</div>
+				</div>
+			);
 		}
 
 		return (

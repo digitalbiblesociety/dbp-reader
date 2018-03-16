@@ -1,47 +1,47 @@
-.notes                          {z-index:1;position:fixed;top:0;height:100%;width:320px;@include css4{background-color:var(--menu-secondary-background-color);color:var(--menu-font-color)}}
-.notes header                   {position:relative;@include css4{background-color:var(--menu-header-background);color:var(--menu-title-text-color)}text-align:center;height:54px;line-height:54px;font-size:1.05em;}
-.notes header .close-icon       {position:absolute;top:7px;left:10px}
-.notes header .close-icon:hover {cursor:pointer;opacity:0.8;}
+.notes                                           {z-index:1;position:fixed;top:0;height:100%;width:320px;@include css4{background-color:var(--menu-secondary-background-color);color:var(--menu-font-color)}}
+.notes header                                    {position:relative;@include css4{background-color:var(--menu-header-background);color:var(--menu-title-text-color)}text-align:center;height:54px;line-height:54px;font-size:1.05em;}
+.notes header .close-icon                        {position:absolute;top:7px;left:10px}
+.notes header .close-icon:hover                  {cursor:pointer;opacity:0.8;}
 
-.notes textarea 			    {resize:none;background-color:inherit;border:none;font-size:0.98em;}
-.notes textarea:focus           {outline:none;}
+.notes textarea 			                     {resize:none;background-color:inherit;border:none;font-size:0.98em;}
+.notes textarea:focus                            {outline:none;}
 .notes textarea:focus::-webkit-input-placeholder {color:transparent;}
 .notes textarea:focus::-moz-placeholder          {color:transparent;}
 .notes textarea:focus:-ms-input-placeholder      {color:transparent;}
-.notes input                {background-color:inherit;font-size:0.98em;border:none;}
+.notes input                                     {background-color:inherit;font-size:0.98em;border:none;}
 // Svg Buttons
-.notes .top-bar             {display:flex;@include css4{background-color:var(--menu-secondary-header-background);};height:50px;width:100%;align-items:center;}
-.notes .top-bar *:focus     {outline:none;}
-.notes .top-bar .svg.active {@include css4{fill:var(--menu-active-color)};opacity:1;}
-.notes .top-bar .svg        {opacity:1;cursor:pointer;@include css4{fill:var(--menu-font-color)};margin-left:15px;}
-.notes .top-bar .text       {@include css4{color:var(--menu-font-color)};margin-left:15px;}
+.notes .top-bar                        {display:flex;@include css4{background-color:var(--menu-secondary-header-background);};height:50px;width:100%;align-items:center;}
+.notes .top-bar *:focus                {outline:none;}
+.notes .top-bar .svg.active            {@include css4{fill:var(--menu-active-color)};opacity:1;}
+.notes .top-bar .svg                   {opacity:1;cursor:pointer;@include css4{fill:var(--menu-font-color)};margin-left:15px;}
+.notes .top-bar .text                  {@include css4{color:var(--menu-font-color)};margin-left:15px;}
 
 // Edit Notes Section
-.edit-notes .date-title     {display:flex;align-items:center;height:50px;width:100%;padding:15px;}
-.date-title .date           {@include css4{color:var(--menu-active-color);};}
-.date-title .title          {@include css4{color:var(--menu-font-color);};margin-left:15px;font-style:italic;width:100%;font-weight:200;}
+.edit-notes .date-title                {display:flex;align-items:center;height:50px;width:100%;padding:15px;}
+.date-title .date                      {@include css4{color:var(--menu-active-color);};}
+.date-title .title                     {@include css4{color:var(--menu-font-color);};margin-left:15px;font-style:italic;width:100%;font-weight:200;}
 
-.edit-notes .verse-dropdown       {display:flex;align-items:center;justify-content:space-around;width:100%;height:40px;padding:15px;}
-.verse-dropdown .version-dropdown {@include css4{color:var(--menu-active-color)};}
-.verse-dropdown .svg              {fill:currentColor;}
-.verse-dropdown.open .svg         {transform:rotate(0.25turn);}
-.verse-dropdown .svg:hover        {opacity:0.65;cursor:pointer;}
-.verse-dropdown .text             {@include css4{color:var(--menu-font-color)};margin-left:15px;flex-grow:2;}
-.edit-notes .save-button          {float:right;cursor:pointer;font-size:1.05em;padding:15px;}
-.edit-notes .save-button:hover    {@include css4{color:var(--menu-active-color)};}
+.edit-notes .verse-dropdown            {display:flex;align-items:center;justify-content:space-around;width:100%;height:40px;padding:15px;}
+.verse-dropdown .version-dropdown      {@include css4{color:var(--menu-active-color)};}
+.verse-dropdown .svg                   {fill:currentColor;}
+.verse-dropdown.open .svg              {transform:rotate(0.25turn);}
+.verse-dropdown .svg:hover             {opacity:0.65;cursor:pointer;}
+.verse-dropdown .text                  {@include css4{color:var(--menu-font-color)};margin-left:15px;flex-grow:2;}
+.edit-notes .save-button               {float:right;cursor:pointer;font-size:1.05em;padding:15px;}
+.edit-notes .save-button:hover         {@include css4{color:var(--menu-active-color)};}
 
-.edit-notes .add-verse {height:30px;display:flex;width:100%;align-items:center;padding:15px;}
-.add-verse .plus       {fill:currentColor;}
-.add-verse .plus:hover {opacity:0.65;cursor:pointer}
-.add-verse .text       {@include css4{color:var(--menu-font-color)};margin-left:15px;font-style:italic;}
-.edit-notes .note-text {padding:15px;@include css4{color:var(--menu-font-color);caret-color:var(--light-caret-color);};height:100px;overflow-y:scroll;overflow-x:hidden;width:100%;font-style:italic;margin-top:15px;font-weight:200;}
+.edit-notes .add-verse                 {height:30px;display:flex;width:100%;align-items:center;padding:15px;}
+.add-verse .plus                       {fill:currentColor;}
+.add-verse .plus:hover                 {opacity:0.65;cursor:pointer}
+.add-verse .text                       {@include css4{color:var(--menu-font-color)};margin-left:15px;font-style:italic;}
+.edit-notes .note-text                 {padding:15px;@include css4{color:var(--menu-font-color);caret-color:var(--light-caret-color);};height:100px;overflow-y:scroll;overflow-x:hidden;width:100%;font-style:italic;margin-top:15px;font-weight:200;}
 
 .add-verse-expanded                    {padding:15px;height:100px;width:320px;display:flex;@include css4 {background-color:var(--menu-background-color);border:1px solid var(--menu-active-color);};}
 .add-verse-expanded .book-table        {width:280px;}
 .add-verse-expanded .plus-expanded     {@include css4{background-color:var(--menu-active-color);height:100%;width:40px;};}
 .add-verse-expanded .plus-expanded svg {width:20px;height:20px;margin-left:10px;margin-top:5px;cursor:pointer;}
 
-.edit-notes .verse-text {padding:10px 15px 10px 30px;@include css4{background-color:var(--menu-background-color);color:var(--menu-font-color)};max-height:100px;overflow-y:scroll;overflow-x:hidden;}
+.edit-notes .verse-text                {padding:10px 15px 10px 30px;@include css4{background-color:var(--menu-background-color);color:var(--menu-font-color)};max-height:100px;overflow-y:scroll;overflow-x:hidden;}
 
 // List Sections
 .list-sections                         {height:calc(100% - 160px);max-height:calc(100% - 160px);}
@@ -52,29 +52,67 @@
 .searchbar :-ms-input-placeholder      {@include css4{color:var(--application-placeholder-color);}padding-left:45px;}
 .search                                {width:calc(100% - 50px);background:url("../images/input_search_icon.svg") no-repeat 5px 10px;border:none;height:50px;@include css4{background-color:var(--application-input-background);color:var(--menu-font-color);caret-color:var(--dark-caret-color);};font-size:.9em;font-weight:200;padding-left:10px;}
 
-.note-list                    {height:calc(100% - 100px);max-height:calc(100% - 100px);overflow-y:scroll;overflow-x:hidden;background-color:rgb(26,29,33);padding:15px;}
-.note-list .list-item         {display:flex;}
-.note-list .list-item:hover   {cursor:pointer;opacity:0.85;}
-.list-item .date              {@include css4{color:var(--menu-active-color)};}
-.list-item .title-text        {margin-left:15px;}
-.list-item .title-text .title {@include css4{color:var(--menu-active-color)};}
-.list-item .title-text .text  {@include css4{color:var(--menu-font-color)};}
+.note-list                             {height:calc(100% - 100px);max-height:calc(100% - 100px);overflow-y:scroll;overflow-x:hidden;background-color:rgb(26,29,33);padding:15px;}
+.note-list .list-item                  {display:flex;}
+.note-list .list-item:hover            {cursor:pointer;opacity:0.85;}
+.list-item .date                       {@include css4{color:var(--menu-active-color)};}
+.list-item .title-text                 {margin-left:15px;}
+.list-item .title-text .title          {@include css4{color:var(--menu-active-color)};}
+.list-item .title-text .text           {@include css4{color:var(--menu-font-color)};}
 
-.list-sections .pagination          {display:flex;align-items:center;height:50px;@include css4{background-color:var(--menu-background-color);}}
-.pagination .item-list              {cursor:pointer;display:flex;align-items:center;justify-content:space-between;height:50px;width:calc(100% - 120px);margin:0 15px;}
-.pagination .item-list .item:hover  {@include css4{color:var(--menu-active-color)};}
-.pagination .item-list .item.active {@include css4{color:var(--menu-active-color)};}
+.list-sections .pagination             {display:flex;align-items:center;height:50px;@include css4{background-color:var(--menu-background-color);}}
+.pagination .item-list                 {cursor:pointer;display:flex;align-items:center;justify-content:space-between;height:50px;width:calc(100% - 120px);margin:0 15px;}
+.pagination .item-list .item:hover     {@include css4{color:var(--menu-active-color)};}
+.pagination .item-list .item.active    {@include css4{color:var(--menu-active-color)};}
 
-.page-size-selector                 {display:flex;align-items:center;height:50px;width:120px;color:white;font-size:.98em;font-weight:200;}
-.page-size-selector .open           {display:flex;@include css4 {border:1px solid var(--menu-active-color);background-color:var(--application-input-background);};flex-direction:column;align-items:center;justify-content:space-between;position:absolute;height:150px;width:120px;bottom:55px;right:0;:first-child{margin-top:10px;}:last-child{margin-bottom:10px;}}
-.page-size-selector .open div       {cursor:pointer;}
-.page-size-selector .open div:hover {opacity:0.65;}
-.page-size-selector .closed         {background-color:inherit;}
-.page-size-selector .closed:hover   {opacity:0.65;cursor:pointer;}
+.page-size-selector                    {display:flex;align-items:center;height:50px;width:120px;color:white;font-size:.98em;font-weight:200;}
+.page-size-selector .open {
+  display:flex;
+  @include css4 {
+    border:1px solid var(--menu-active-color);
+    background-color:var(--application-input-color);
+  };
+  flex-direction:column;
+  align-items:center;
+  justify-content:space-between;
+  position:absolute;
+  height:150px;
+  width:120px;
+  bottom:55px;
+  right:0;
+  font-size: 14px;
+  :first-child {
+    margin-top:5px;
+  };
+  :last-child {
+    margin-bottom:10px;
+  };
+}
+.page-size-selector .open div {
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content: flex-end;
+  :last-child {
+    margin: 5px 6px 0 6px;
+  };
+  width:100%;
+}
+.page-size-selector .open div span.text {
+  text-align:right;
+}
+.page-size-selector .open div span.svg-placeholder {
+  width:7px;
+  height:13px;
+}
+.page-size-selector .open div:hover    {opacity:0.65;@include css4{color:var(--menu-active-color);};}
+.page-size-selector .open div.active   { @include css4{fill:var(--menu-active-color);color:var(--menu-active-color);};}
+.page-size-selector .closed            {background-color:inherit;}
+.page-size-selector .closed:hover      {opacity:0.65;cursor:pointer;}
 
-.notes .need-to-login                   {@include css4{color:var(--menu-font-color)};padding:15px;font-size:1.1em;}
-.notes .need-to-login .login-text       {@include css4{color:var(--menu-active-color)};cursor:pointer;}
-.notes .need-to-login .login-text:hover {opacity:0.65;}
+.notes .need-to-login                  {@include css4{color:var(--menu-font-color)};padding:15px;font-size:1.1em;}
+.notes .need-to-login .login-text      {@include css4{color:var(--menu-active-color)};cursor:pointer;}
+.notes .need-to-login .login-text:hover{opacity:0.65;}
 
 // Keyframe animations
 @keyframes rotate90deg {

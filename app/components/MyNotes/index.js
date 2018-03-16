@@ -55,6 +55,9 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 		// 	highlights,
 		// 	notes: listData,
 		// 	bookmarks: [],
+		// console.log('highlights in my notes', highlights);
+		// console.log('active page data', activePageData);
+		// console.log('list data', listData);
 		// }
 		// const dataToMap = dataTypes[sectionType];
 
@@ -70,21 +73,31 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 				</div>
 				<section className="note-list">
 					{
-						highlights.length ? activePageData.map((listItem) => (
-							<div role="button" tabIndex={0} onClick={() => this.handleClick(listItem)} key={listItem.id} className="list-item">
-								<div className="date">{this.getFormattedNoteDate(listItem.created_at)}</div>
+						sectionType === 'notes' ? (
+							activePageData.map((listItem) => (
+								<div role="button" tabIndex={0} onClick={() => this.handleClick(listItem)} key={listItem.id} className="list-item">
+									<div className="date">{this.getFormattedNoteDate(listItem.created_at)}</div>
+									<div className="title-text">
+										<h4 className="title">{this.getNoteReference(listItem)}</h4>
+										<p className="text">{listItem.notes}</p>
+									</div>
+								</div>
+							))
+						) : null
+					}
+					{
+						sectionType === 'highlights' ? highlights.map((highlight) => (
+							<div key={highlight.id} className="list-item">
 								<div className="title-text">
-									<h4 className="title">{this.getNoteReference(listItem)}</h4>
-									<p className="text">{listItem.notes}</p>
+									<h4 className="title">{`${highlight.bible_id} - ${highlight.book_id} - ${highlight.chapter}:${highlight.verse_start}`}</h4>
 								</div>
 							</div>
-						)) : highlights.map((highlight) => (
-							<div className="list-item">
-								<div className="title-text">
-									<h4 className="title">{`${highlight.get('bible_id')} - ${highlight.get('book_id')} - ${highlight.get('chapter')}:${highlight.get('verse_start')}`}</h4>
-								</div>
-							</div>
-						))
+						)) : null
+					}
+					{
+						sectionType === 'bookmarks' ? (
+							<div>Bookmarks will go here one day I hope....</div>
+						) : null
 					}
 				</section>
 				<div className="pagination">
@@ -114,7 +127,7 @@ MyNotes.propTypes = {
 	sectionType: PropTypes.string.isRequired,
 	pageSize: PropTypes.number.isRequired,
 	vernacularNamesObject: PropTypes.object,
-	highlights: PropTypes.object,
+	highlights: PropTypes.array,
 };
 
 export default MyNotes;

@@ -195,18 +195,18 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 
 Notes.propTypes = {
 	dispatch: PropTypes.func.isRequired,
-	notes: PropTypes.object.isRequired,
-	toggleNotesModal: PropTypes.func.isRequired,
-	openView: PropTypes.string.isRequired,
-	selectedText: PropTypes.string,
-	authenticationStatus: PropTypes.bool,
 	toggleProfile: PropTypes.func,
+	toggleNotesModal: PropTypes.func,
+	authenticationStatus: PropTypes.bool,
 	note: PropTypes.object,
-	highlights: PropTypes.object,
+	notes: PropTypes.object,
 	vernacularNamesObject: PropTypes.object,
-	activeTextId: PropTypes.string,
+	highlights: PropTypes.array,
 	userId: PropTypes.string,
+	openView: PropTypes.string,
 	notePassage: PropTypes.string,
+	selectedText: PropTypes.string,
+	activeTextId: PropTypes.string,
 };
 
 const mapStateToProps = createStructuredSelector({
