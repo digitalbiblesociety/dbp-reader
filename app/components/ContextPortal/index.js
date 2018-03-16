@@ -15,6 +15,7 @@ import {
 	EmailShareButton,
 } from 'react-share';
 import SvgWrapper from 'components/SvgWrapper';
+import CloseMenuFunctions from 'utils/closeMenuFunctions';
 
 const StyledDiv = styled.div`
 	width:160px;
@@ -51,6 +52,19 @@ const Item = styled.span`
 // change to pure component and handle outside clicks instead of click handler
 // on each item
 class ContextPortal extends React.PureComponent {
+	componentDidMount() {
+		this.closeMenuController = new CloseMenuFunctions(this.componentRef, this.props.closeContextMenu);
+		this.closeMenuController.onMenuMount();
+	}
+
+	componentWillUnmount() {
+		this.closeMenuController.onMenuUnmount();
+	}
+
+	setComponentRef = (el) => {
+		this.componentRef = el;
+	}
+
 	handleNoteClick = () => {
 		if (!this.props.notesActive) {
 			this.props.setActiveNotesView('edit');
@@ -83,7 +97,7 @@ class ContextPortal extends React.PureComponent {
 		} = this.props;
 
 		const component = (
-			<StyledDiv className={'shadow'} x={coordinates.x} y={coordinates.y}>
+			<StyledDiv innerRef={this.setComponentRef} className={'shadow'} x={coordinates.x} y={coordinates.y}>
 				<Row>
 					<Item title={'Add a note'} onClick={this.handleNoteClick}><SvgWrapper height="25px" width="25px" svgid="note-list" /></Item>
 					<Item title={'Add a highlight'} onClick={addHighlight}><SvgWrapper height="25px" width="25px" svgid="highlights" /></Item>

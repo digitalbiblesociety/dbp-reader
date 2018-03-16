@@ -7,7 +7,6 @@
 	}
 	main {
 		padding: 15px;
-		max-width: 800px;
 		margin: 0 auto;
 	}
 }
@@ -35,7 +34,7 @@
 .read-chapter:active 	{box-shadow: 0 0 0 0 #B1A77A;}
 .read-chapter:focus 	{border: 1px solid #B1A77A;outline: none;}
 
-// TODO: Figure out how to use the variable instead of rgba in keyframes
+// TODO: Use the variable instead of rgba in keyframes
 //@keyframes thicken {
 //	0%   { transform: scale(1.00); fill:rgba(158, 30, 53, 0.253); }
 //	25%  { transform: scale(1.10); fill:rgba(158, 30, 53, 0.453); }

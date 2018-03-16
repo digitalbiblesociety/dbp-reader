@@ -31,6 +31,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 	componentDidMount() {
 		if (this.format) {
 			this.setEventHandlersForFootnotes();
+			this.setEventHandlersForFormattedVerses();
 		}
 	}
 
@@ -43,7 +44,28 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 	componentDidUpdate(prevProps) {
 		if (this.props.formattedSource.main && prevProps.formattedSource.main !== this.props.formattedSource.main && this.format) {
 			this.setEventHandlersForFootnotes();
+			this.setEventHandlersForFormattedVerses();
 		}
+	}
+
+	setEventHandlersForFormattedVerses = () => {
+		const verses = [...this.format.getElementsByClassName('v')];
+
+		verses.forEach((verse) => {
+		// console.log('setting events on this verse', verse);
+			/* eslint-disable no-param-reassign, no-unused-expressions, jsx-a11y/no-static-element-interactions */
+			verse.onmousedown = (e) => {
+				e.stopPropagation();
+				// console.log('mousedown event');
+				this.getFirstVerse(e);
+			};
+			verse.onmouseup = (e) => {
+				e.stopPropagation();
+				// console.log('mouseup event');
+
+				this.handleMouseUp(e);
+			};
+		});
 	}
 
 	setEventHandlersForFootnotes = () => {
@@ -88,6 +110,8 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 	}
 
 	getFirstVerse = (e) => {
+		e.stopPropagation();
+		// console.log('getting first verse');
 		const target = e.target;
 		// const parent = e.target.parentElement;
 		// console.log('Get first verse target', target);
@@ -127,7 +151,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 
 		if (primaryButton && window.getSelection().toString() && this.main.contains(target) && target.attributes.verseid) {
 			// Needed to persist the React Synthetic event
-			e.persist();
+			typeof e.persist === 'function' && e.persist();
 			const selectedText = window.getSelection().toString();
 
 			this.setState({
@@ -139,7 +163,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				this.openContextMenu(e);
 			});
 		} else if (primaryButton && window.getSelection().toString() && this.main.contains(target) && target.attributes['data-id']) {
-			e.persist();
+			typeof e.persist === 'function' && e.persist();
 			const selectedText = window.getSelection().toString();
 
 			this.setState({
@@ -158,7 +182,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				this.main.contains(parent) &&
 				parent.attributes.verseid
 		) {
-			e.persist();
+			typeof e.persist === 'function' && e.persist();
 			const selectedText = window.getSelection().toString();
 
 			this.setState({
@@ -176,7 +200,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				this.main.contains(parent) &&
 				parent.attributes['data-id']
 			) {
-			e.persist();
+			typeof e.persist === 'function' && e.persist();
 			const selectedText = window.getSelection().toString();
 
 			this.setState({
@@ -243,8 +267,8 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			// console.log('text', text);
 			textComponents = text.map((verse) =>
 				verse.hasHighlight ?
-					<span verseid={verse.verse_start} key={verse.verse_start} dangerouslySetInnerHTML={{ __html: verse.verse_text }} /> :
-					<span verseid={verse.verse_start} key={verse.verse_start}>{verse.verse_text}&nbsp;&nbsp;</span>
+					<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} verseid={verse.verse_start} key={verse.verse_start} dangerouslySetInnerHTML={{ __html: verse.verse_text }} /> :
+					<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} verseid={verse.verse_start} key={verse.verse_start}>{verse.verse_text}&nbsp;&nbsp;</span>
 			);
 		} else if (formattedSource.main) {
 			// Need to run a function to highlight the formatted text if this option is selected
@@ -257,7 +281,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			textComponents = text.map((verse) => (
 				verse.hasHighlight ?
 					(
-						<span verseid={verse.verse_start} key={verse.verse_start}>
+						<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} verseid={verse.verse_start} key={verse.verse_start}>
 							<br />&nbsp;<sup verseid={verse.verse_start}>
 								{verse.verse_start_alt || verse.verse_start}
 							</sup>&nbsp;<br />
@@ -265,7 +289,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 						</span>
 					) :
 					(
-						<span verseid={verse.verse_start} key={verse.verse_start}>
+						<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} verseid={verse.verse_start} key={verse.verse_start}>
 							<br />&nbsp;<sup verseid={verse.verse_start}>
 								{verse.verse_start_alt || verse.verse_start}
 							</sup>&nbsp;<br />
@@ -277,7 +301,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			textComponents = text.map((verse) => (
 				verse.hasHighlight ?
 					(
-						<span verseid={verse.verse_start} key={verse.verse_start}>
+						<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} verseid={verse.verse_start} key={verse.verse_start}>
 							&nbsp;<sup verseid={verse.verse_start}>
 								{verse.verse_start_alt || verse.verse_start}
 							</sup>&nbsp;
@@ -285,7 +309,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 						</span>
 					) :
 					(
-						<span verseid={verse.verse_start} key={verse.verse_start}>
+						<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} verseid={verse.verse_start} key={verse.verse_start}>
 							&nbsp;<sup verseid={verse.verse_start}>
 								{verse.verse_start_alt || verse.verse_start}
 							</sup>&nbsp;
@@ -327,6 +351,8 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 	}
 
 	handleMouseUp = (e) => {
+		e.stopPropagation();
+		// console.log('handling mouseup');
 		this.getLastVerse(e);
 		if (e.button === 0 && this.state.footnoteState && e.target.className !== 'key') {
 			this.closeFootnote();
@@ -342,15 +368,10 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		// { bible, book, chapter, userId, verseStart, highlightStart, highlightedWords }
 		const firstVerse = parseInt(this.state.firstVerse, 10);
 		const firstVerseObj = this.props.text.filter((v) => v.verse_start === firstVerse)[0];
+		// console.log('first verse object', firstVerseObj);
 		const anchorOffset = this.state.anchorOffset;
 		let anchorText = this.state.anchorText;
 		let anchorTextIndex = firstVerseObj.verse_text.indexOf(anchorText);
-
-		while (anchorTextIndex === -1 && anchorText.length) {
-			anchorText = anchorText.slice(0, -2);
-			anchorTextIndex = firstVerseObj.verse_text.indexOf(anchorText);
-		}
-
 		const searchStartIndex = anchorTextIndex + anchorOffset;
 		// console.log('anchor text index in verse', anchorTextIndex);
 		// console.log('verse text', firstVerseObj.verse_text);
@@ -363,6 +384,13 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			firstVerseObj.verse_text.indexOf(this.state.selectedText, searchStartIndex) !== -1 ?
 			firstVerseObj.verse_text.indexOf(this.state.selectedText, searchStartIndex) :
 			firstVerseObj.verse_text.indexOf(this.state.selectedText.split(' ')[0], searchStartIndex));
+
+		while (anchorTextIndex === -1 && anchorText.length && highlightStart === -1) {
+			// console.log('anchor text in while loop', anchorText);
+			anchorText = anchorText.slice(0, -2);
+			anchorTextIndex = firstVerseObj.verse_text.indexOf(anchorText);
+		}
+
 		// const highlightStart = firstVerseObj && firstVerseObj.verse_text.split && firstVerseObj.verse_text.split(' ').indexOf(this.state.selectedText.split(' ')[0]);
 		// console.log('highlight letter start', firstVerseObj.verse_text.indexOf(this.state.selectedText));
 		// console.log('highlight word start', highlightStart);
@@ -482,7 +510,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		return (
 			<div className="text-container">
 				<SvgWrapper onClick={prevChapter} className="prev-arrow-svg" svgid="prev-arrow" />
-				<main ref={this.setMainRef} onMouseDown={this.getFirstVerse} onMouseUp={this.handleMouseUp} className={formattedSource.main && !readersMode ? '' : 'chapter'}>
+				<main ref={this.setMainRef} className={formattedSource.main && !readersMode ? '' : 'chapter'}>
 					{
 						(formattedSource.main || text.length === 0 || !readersMode) ? null : (
 							<h1 className="active-chapter-title">{activeChapter}</h1>

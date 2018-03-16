@@ -1,6 +1,6 @@
 class CloseMenuFunctions {
 	constructor(componentRef, closeFunction) {
-		this.ref = componentRef;
+		this.ref = componentRef || { getBoundingClientRect() { return { x: 0, y: 0, width: 0, height: 0 }; } };
 		this.closeFunction = closeFunction;
 	}
 
