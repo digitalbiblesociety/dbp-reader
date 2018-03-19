@@ -10,6 +10,7 @@ import SvgWrapper from 'components/SvgWrapper';
 import ContextPortal from 'components/ContextPortal';
 import FootnotePortal from 'components/FootnotePortal';
 import LoadingSpinner from 'components/LoadingSpinner';
+import differenceObject from 'utils/deepDifferenceObject';
 import createHighlights from './highlightPlainText';
 import createFormattedHighlights from './highlightFormattedText';
 // import { addClickToNotes } from './htmlToReact';
@@ -41,11 +42,12 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		}
 	}
 
-	componentDidUpdate(prevProps) {
+	componentDidUpdate(prevProps, prevState) {
 		if (this.props.formattedSource.main && prevProps.formattedSource.main !== this.props.formattedSource.main && this.format) {
 			this.setEventHandlersForFootnotes();
 			this.setEventHandlersForFormattedVerses();
 		}
+		console.log('Difference between old state and new state', differenceObject(this.state, prevState));
 	}
 
 	setEventHandlersForFormattedVerses = () => {
@@ -412,9 +414,6 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		} else {
 			// alert('Please create an account!!! 乁(✿ ͡° ͜ʖ ͡°)و');
 		}
-		// take first word in selected text
-		// find its index in the page of words
-		// take verse id of the start and find the index of the first word within that verse
 		this.closeContextMenu();
 	}
 

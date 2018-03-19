@@ -12,10 +12,11 @@ import {
 } from './constants';
 // TODO: Figure out a way to get new notes after a user has added/deleted/updated to their notebook
 export function* updateNote({ userId, data }) {
-	const requestUrl = `https://api.bible.build/users/${userId}/notes?key=${process.env.DBP_API_KEY}&v=4&pretty`;
+	const requestUrl = `https://api.bible.build/users/${userId}/notes?key=${process.env.DBP_API_KEY}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}`;
 	const formData = new FormData();
 
 	Object.entries(data).forEach((item) => formData.set(item[0], item[1]));
+	formData.append('project_id', process.env.NOTES_PROJECT_ID);
 
 	const options = {
 		body: formData,
@@ -42,7 +43,7 @@ export function* updateNote({ userId, data }) {
 }
 
 export function* deleteNote({ userId, noteId }) {
-	const requestUrl = `https://api.bible.build/users/${userId}/notes?key=${process.env.DBP_API_KEY}&v=4&pretty&note_id=${noteId}`;
+	const requestUrl = `https://api.bible.build/users/${userId}/notes?key=${process.env.DBP_API_KEY}&v=4&pretty&note_id=${noteId}&project_id=${process.env.NOTES_PROJECT_ID}`;
 	const options = {
 		method: 'DELETE',
 	};
@@ -67,7 +68,7 @@ export function* deleteNote({ userId, noteId }) {
 }
 
 export function* getNotes({ userId, params = {} }) {
-	const requestUrl = `https://api.bible.build/users/${userId}/notes?key=${process.env.DBP_API_KEY}&v=4&pretty`;
+	const requestUrl = `https://api.bible.build/users/${userId}/notes?key=${process.env.DBP_API_KEY}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}`;
 	Object.entries(params).forEach((param) => requestUrl.concat(`&${param[0]}=${param[1]}`));
 
 	try {
@@ -94,15 +95,20 @@ export function* getNotes({ userId, params = {} }) {
 }
 
 export function* addBookmark({ userId, data }) {
-	const requestUrl = `https://api.bible.build/users/${userId}/notes?key=${process.env.DBP_API_KEY}&v=4&pretty`;
+	const requestUrl = `https://api.bible.build/users/${userId}/notes?key=${process.env.DBP_API_KEY}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}`;
+	const formData = new FormData();
+
+	Object.entries(data).forEach((item) => formData.set(item[0], item[1]));
+	formData.append('project_id', process.env.NOTES_PROJECT_ID);
+
 	const options = {
-		body: data,
+		body: formData,
 		method: 'POST',
 	};
 
 	try {
 		const response = yield call(request, requestUrl, options);
-		console.log('user note response', response);  // eslint-disable-line no-console
+		console.log('user bookmark response', response);  // eslint-disable-line no-console
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error(err); // eslint-disable-line no-console
@@ -117,10 +123,11 @@ export function* addBookmark({ userId, data }) {
 }
 
 export function* addNote({ userId, data }) {
-	const requestUrl = `https://api.bible.build/users/${userId}/notes?key=${process.env.DBP_API_KEY}&v=4&pretty`;
+	const requestUrl = `https://api.bible.build/users/${userId}/notes?key=${process.env.DBP_API_KEY}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}`;
 	const formData = new FormData();
 
 	Object.entries(data).forEach((item) => formData.set(item[0], item[1]));
+	formData.append('project_id', process.env.NOTES_PROJECT_ID);
 
 	const options = {
 		body: formData,

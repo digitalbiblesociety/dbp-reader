@@ -9,9 +9,9 @@
   }
 }
 /* Prevent font scaling beyond this breakpoint */
-@media (min-width: 120rem) {
+@media (min-width: 115rem) {
   .chapter {
-    font-size: 1.8rem;
+    font-size: 1.7rem;
   }
 }
 
@@ -35,9 +35,6 @@
     @include css4 {
       color:var(--text-super-color);
     }
-  }
-  span {
-    height: 38px;
   }
   .align-left {
     text-align: left;
