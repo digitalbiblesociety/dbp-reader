@@ -160,6 +160,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				lastVerse: target.attributes.verseid.value,
 				anchorOffset: window.getSelection().anchorOffset,
 				anchorText: window.getSelection().anchorNode.data,
+				anchorNode: window.getSelection().anchorNode,
 				selectedText,
 			}, () => {
 				this.openContextMenu(e);
@@ -172,6 +173,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				lastVerse: target.attributes['data-id'].value.split('_')[1],
 				anchorOffset: window.getSelection().anchorOffset,
 				anchorText: window.getSelection().anchorNode.data,
+				anchorNode: window.getSelection().anchorNode,
 				selectedText,
 			}, () => {
 				this.openContextMenu(e);
@@ -191,6 +193,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				lastVerse: parent.attributes.verseid.value,
 				anchorOffset: window.getSelection().anchorOffset,
 				anchorText: window.getSelection().anchorNode.data,
+				anchorNode: window.getSelection().anchorNode,
 				selectedText,
 			}, () => {
 				this.openContextMenu(e);
@@ -209,6 +212,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				lastVerse: parent.attributes['data-id'].value.split('_')[1],
 				anchorOffset: window.getSelection().anchorOffset,
 				anchorText: window.getSelection().anchorNode.data,
+				anchorNode: window.getSelection().anchorNode,
 				selectedText,
 			}, () => {
 				this.openContextMenu(e);
@@ -270,7 +274,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			textComponents = text.map((verse) =>
 				verse.hasHighlight ?
 					<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} verseid={verse.verse_start} key={verse.verse_start} dangerouslySetInnerHTML={{ __html: verse.verse_text }} /> :
-					<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} verseid={verse.verse_start} key={verse.verse_start}>{verse.verse_text}&nbsp;&nbsp;</span>
+					<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} verseid={verse.verse_start} key={verse.verse_start}>{verse.verse_text}</span>
 			);
 		} else if (formattedSource.main) {
 			// Need to run a function to highlight the formatted text if this option is selected
@@ -284,17 +288,17 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				verse.hasHighlight ?
 					(
 						<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} verseid={verse.verse_start} key={verse.verse_start}>
-							<br />&nbsp;<sup verseid={verse.verse_start}>
+							<br /><sup verseid={verse.verse_start}>
 								{verse.verse_start_alt || verse.verse_start}
-							</sup>&nbsp;<br />
+							</sup><br />
 							<span verseid={verse.verse_start} dangerouslySetInnerHTML={{ __html: verse.verse_text }} />
 						</span>
 					) :
 					(
 						<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} verseid={verse.verse_start} key={verse.verse_start}>
-							<br />&nbsp;<sup verseid={verse.verse_start}>
+							<br /><sup verseid={verse.verse_start}>
 								{verse.verse_start_alt || verse.verse_start}
-							</sup>&nbsp;<br />
+							</sup><br />
 							{verse.verse_text}
 						</span>
 					)
@@ -304,17 +308,17 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				verse.hasHighlight ?
 					(
 						<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} verseid={verse.verse_start} key={verse.verse_start}>
-							&nbsp;<sup verseid={verse.verse_start}>
+							<sup verseid={verse.verse_start}>
 								{verse.verse_start_alt || verse.verse_start}
-							</sup>&nbsp;
+							</sup>
 							<span verseid={verse.verse_start} dangerouslySetInnerHTML={{ __html: verse.verse_text }} />
 						</span>
 					) :
 					(
 						<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} verseid={verse.verse_start} key={verse.verse_start}>
-							&nbsp;<sup verseid={verse.verse_start}>
+							<sup verseid={verse.verse_start}>
 								{verse.verse_start_alt || verse.verse_start}
-							</sup>&nbsp;
+							</sup>
 							{verse.verse_text}
 						</span>
 					)
@@ -324,17 +328,17 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				verse.hasHighlight ?
 					(
 						<span className={'align-left'} verseid={verse.verse_start} key={verse.verse_start}>
-							&nbsp;<sup verseid={verse.verse_start}>
+							<sup verseid={verse.verse_start}>
 								{verse.verse_start_alt || verse.verse_start}
-							</sup>&nbsp;
+							</sup>
 							<span verseid={verse.verse_start} dangerouslySetInnerHTML={{ __html: verse.verse_text }} />
 						</span>
 					) :
 					(
 						<span className={'align-left'} verseid={verse.verse_start} key={verse.verse_start}>
-							&nbsp;<sup verseid={verse.verse_start}>
+							<sup verseid={verse.verse_start}>
 								{verse.verse_start_alt || verse.verse_start}
-							</sup>&nbsp;
+							</sup>
 							{verse.verse_text}
 						</span>
 					)
@@ -368,52 +372,86 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		// needs to send an api request to the server that adds a highlight for this passage
 		// Adds userId and bible in homepage container where action is dispatched
 		// { bible, book, chapter, userId, verseStart, highlightStart, highlightedWords }
-		const firstVerse = parseInt(this.state.firstVerse, 10);
-		const firstVerseObj = this.props.text.filter((v) => v.verse_start === firstVerse)[0];
-		// console.log('first verse object', firstVerseObj);
-		const anchorOffset = this.state.anchorOffset;
-		let anchorText = this.state.anchorText;
-		let anchorTextIndex = firstVerseObj.verse_text.indexOf(anchorText);
-		const searchStartIndex = anchorTextIndex + anchorOffset;
-		// console.log('anchor text index in verse', anchorTextIndex);
-		// console.log('verse text', firstVerseObj.verse_text);
-		// console.log('selected text', this.state.selectedText);
-		// console.log('anchor text', anchorText);
-		// console.log('anchor offset', anchorOffset);
-		// console.log('search start', searchStartIndex);
-		// Need to figure out a way to get the index of the first letter
-		const highlightStart = firstVerseObj && (
-			firstVerseObj.verse_text.indexOf(this.state.selectedText, searchStartIndex) !== -1 ?
-			firstVerseObj.verse_text.indexOf(this.state.selectedText, searchStartIndex) :
-			firstVerseObj.verse_text.indexOf(this.state.selectedText.split(' ')[0], searchStartIndex));
 
-		while (anchorTextIndex === -1 && anchorText.length && highlightStart === -1) {
-			// console.log('anchor text in while loop', anchorText);
-			anchorText = anchorText.slice(0, -2);
-			anchorTextIndex = firstVerseObj.verse_text.indexOf(anchorText);
+		// Available data
+			// text and node where highlight started,
+			// text and node where highlight ended
+			// verse number of highlight start
+			// verse number of highlight end
+			// text selected
+
+		// formatted solution
+			// get the dom node for the selection start
+				// mark the index for selection start inside that dom node
+			// go up the dom until I get the entire verse
+			// This should accurately get the verse node no matter what node started on
+		// split all the text nodes and join them into an array
+		// find the index of the marked character
+		// use that index as the highlight start
+		try {
+			// Globals*
+			const firstVerse = parseInt(this.state.firstVerse, 10);
+			const anchorOffset = this.state.anchorOffset;
+			const anchorText = this.state.anchorText;
+			console.log('a text', anchorText);
+			console.log('a offset', anchorOffset);
+			// Solve's for formatted text
+			let node = this.state.anchorNode;
+			let highlightStart = 0;
+			// The parent with the id should never be more than 10 levels up
+			// I use this counter to prevent the edge case where an infinite loop
+			// Could be caused, this keeps the browser from crashing on accident
+			let counter = 0;
+
+			if (this.props.formattedSource.main && !this.props.userSettings.getIn(['toggleOptions', 'readersMode', 'active'])) {
+				while (!(node.attributes && node.attributes['data-id'] && node.attributes['data-id'].value.split('_')[1] !== firstVerse)) {
+					node = node.parentNode;
+					if (counter >= 10) break;
+					counter += 1;
+					// console.log('condition to be checked', !(node.attributes && node.attributes['data-id'] && node.attributes['data-id'].value.split('_')[1] !== firstVerse));
+				}
+				highlightStart = node.textContent.indexOf(anchorText) + anchorOffset;
+			} else {
+				while (!(node.attributes && node.attributes.verseid && node.attributes.verseid.value !== firstVerse)) {
+					// console.log('node', node);
+					node = node.parentNode;
+					if (counter >= 10) break;
+					counter += 1;
+				}
+				// Need to subtract by one for the plain text
+				highlightStart = (node.textContent.indexOf(anchorText) + anchorOffset) - 1;
+			}
+			console.log('whole verse node text content', node.textContent);
+			console.log('calc', node.textContent.indexOf(anchorText) + anchorOffset);
+			// plain text
+			// I think this can stay the same as formatted, it could be made shorter potentially
+
+			if (this.props.userId && this.props.userAuthenticated) {
+				console.log('highlight being added', {
+					book: this.props.activeBookId,
+					chapter: this.props.activeChapter,
+					verseStart: this.state.firstVerse,
+					highlightStart,
+					highlightedWords: this.state.selectedText.split('').length,
+				});
+				this.props.addHighlight({
+					book: this.props.activeBookId,
+					chapter: this.props.activeChapter,
+					verseStart: this.state.firstVerse,
+					highlightStart,
+					highlightedWords: this.state.selectedText.split('').length,
+				});
+			} else {
+				// alert('Please create an account!!! 乁(✿ ͡° ͜ʖ ͡°)و');
+			}
+		} catch (err) {
+			if (process.env.NODE_ENV === 'development') {
+				console.warn('Error adding highlight', err); // eslint-disable-line no-console
+			}
+			// dispatch action to log error and also show an error message
+			this.closeContextMenu();
 		}
 
-		// const highlightStart = firstVerseObj && firstVerseObj.verse_text.split && firstVerseObj.verse_text.split(' ').indexOf(this.state.selectedText.split(' ')[0]);
-		// console.log('highlight letter start', firstVerseObj.verse_text.indexOf(this.state.selectedText));
-		// console.log('highlight word start', highlightStart);
-		// console.log('this is the highlight I am going to send', {
-		// 	book: this.props.activeBookId,
-		// 	chapter: this.props.activeChapter,
-		// 	verseStart: parseInt(this.state.firstVerse, 10),
-		// 	highlightStart,
-		// 	highlightedWords: this.state.selectedText.split('').length,
-		// });
-		if (this.props.userId && this.props.userAuthenticated) {
-			this.props.addHighlight({
-				book: this.props.activeBookId,
-				chapter: this.props.activeChapter,
-				verseStart: this.state.firstVerse,
-				highlightStart,
-				highlightedWords: this.state.selectedText.split('').length,
-			});
-		} else {
-			// alert('Please create an account!!! 乁(✿ ͡° ͜ʖ ͡°)و');
-		}
 		this.closeContextMenu();
 	}
 
@@ -431,6 +469,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		fb.api(`${process.env.FB_APP_ID}?metadata=1`, {
 			access_token: process.env.FB_ACCESS,
 		}, (res) => res); // console.log('bible is object res', res));
+		this.closeContextMenu();
 	}
 
 	openFootnote = ({ id, coords }) => {

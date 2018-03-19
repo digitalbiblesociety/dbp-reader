@@ -71,7 +71,7 @@ export function* addHighlight({ bible, book, chapter, userId, verseStart, highli
 	// console.log('add highlight data', { bible, book, chapter, userId, verseStart, highlightStart, highlightedWords });
 	try {
 		const response = yield call(request, requestUrl, options);
-		// console.log('add highlight response', response);
+		console.log('add highlight response', response);
 		// Need to get the highlights here because they are not being returned
 		if (response.success) {
 			yield call(getHighlights, { bible, book, chapter, userId });

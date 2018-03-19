@@ -73,6 +73,7 @@ import makeSelectHomePage, {
 	selectFormattedSource,
 	selectAuthenticationStatus,
 	selectUserId,
+	selectChapterText,
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -438,7 +439,6 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			activeTextName,
 			activeBookId,
 			activeTextId,
-			chapterText,
 			isSettingsModalActive,
 			isNotesModalActive,
 			isVersionSelectionActive,
@@ -465,6 +465,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			formattedSource,
 			userId,
 			userAuthenticated,
+			updatedText,
 		} = this.props;
 
 		const verse = this.props.match.params.verse || '';
@@ -559,7 +560,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					}
 				</TransitionGroup>
 				<Text
-					text={chapterText}
+					text={updatedText}
 					verseNumber={verse}
 					highlights={highlights}
 					userId={userId}
@@ -605,6 +606,7 @@ HomePage.propTypes = {
 	match: PropTypes.object,
 	userAuthenticated: PropTypes.bool,
 	userId: PropTypes.string,
+	updatedText: PropTypes.array,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -616,6 +618,7 @@ const mapStateToProps = createStructuredSelector({
 	formattedSource: selectFormattedSource(),
 	userAuthenticated: selectAuthenticationStatus(),
 	userId: selectUserId(),
+	updatedText: selectChapterText(),
 });
 
 function mapDispatchToProps(dispatch) {

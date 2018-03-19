@@ -15,6 +15,7 @@ const createDeepEqualSelector = createSelectorCreator(
 );
 
 const selectHomePageDomain = (state) => state.get('homepage');
+const selectHomepageText = (state) => state.getIn(['homepage', 'chapterText']);
 const selectProfilePageDomain = (state) => state.get('profile');
 const selectFormattedTextSource = (state, props) => ({ source: state.getIn(['homepage', 'formattedSource']), props });
 const selectCrossReferenceState = (state) => state.getIn(['homepage', 'userSettings', 'toggleOptions', 'crossReferences', 'active']);
@@ -127,6 +128,11 @@ const selectSettings = () => createDeepEqualSelector(
 		return substate.get('userSettings').set('toggleOptions', filteredToggleOptions);
 	}
 );
+// TODO: May need to remove toJS if the application is showing signs of slowness
+const selectChapterText = () => createDeepEqualSelector(
+	selectHomepageText,
+	(text) => text.map((verse) => verse.set('verse_text', ` ${verse.get('verse_text')} `)).toJS()
+);
 
 /**
  * Default selector used by HomePage
@@ -147,4 +153,5 @@ export {
 	selectFormattedSource,
 	selectAuthenticationStatus,
 	selectUserId,
+	selectChapterText,
 };
