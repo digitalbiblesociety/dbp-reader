@@ -6,7 +6,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import Logo from 'components/Logo';
+// import Logo from 'components/Logo';
 // import LocaleToggle from 'containers/LocaleToggle';
 import SvgWrapper from 'components/SvgWrapper';
 // import styled from 'styled-components';
@@ -16,42 +16,38 @@ import SvgWrapper from 'components/SvgWrapper';
 class NavigationBar extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	render() {
 		const {
+			activeTextId,
 			activeBookName,
 			activeTextName,
       toggleChapterSelection,
 			toggleVersionSelection,
-			toggleSearchModal,
-			// toggleMenuBar,
-			toggleProfile,
 			activeChapter,
     } = this.props;
 
 		return (
 			<div className="nav-container">
-				<div className="small-2 left-buttons">
-					<a className="small-hide medium-6 logo button" href={'http://www.bible.is'} title={'http://www.bible.is'}><Logo /></a>
-				</div>
-				<div className="small-8 chapter-selector">
-					<span role="button" tabIndex={0} onClick={toggleChapterSelection} className="text" title={activeBookName ? `${activeBookName} ${activeChapter}` : 'No Book Selected'}>{ activeBookName ? `${activeBookName} ${activeChapter}` : 'No Book Selected' }<SvgWrapper className="svg" height="15px" width="15px" fill="#fff" svgid="go-down" opacity=".5" /></span>
-					<span role="button" tabIndex={0} onClick={toggleVersionSelection} className="text version" title={activeTextName}><span className={'version-text'}>{activeTextName}</span><SvgWrapper className="svg" height="15px" width="15px" fill="#fff" svgid="go-down" opacity=".5" /></span>
-				</div>
-				<div className="small-2 right-buttons">
-					<span className="small-6 button" role="button" tabIndex={0} onClick={toggleSearchModal} title={'Search'}><SvgWrapper height="30px" width="30px" fill="#fff" svgid="search" /></span>
-					<span className="small-hide medium-6 button" role="button" tabIndex={0} onClick={toggleProfile} title={'Profile'}><SvgWrapper height="30px" width="30px" fill="#fff" svgid="profile_circle" /></span>
-				</div>
+				<a className="logo" href={'http://www.bible.is'} title={'http://www.bible.is'}>
+					<SvgWrapper fill={'#fff'} className="svg" svgid={'bible.is_logo'} />
+				</a>
+				<span role="button" tabIndex={0} onClick={toggleVersionSelection} className="version" title={activeTextName}>
+					<SvgWrapper className="svg icon" fill="#fff" svgid="arrow_down" opacity=".5" />
+					<span className={'version-text'}>{`${activeTextId.slice(0, 3) === 'ENG' ? activeTextId.slice(3) : activeTextId} - ${activeTextName}`}</span>
+				</span>
+				<span role="button" tabIndex={0} onClick={toggleChapterSelection} className="book-chapter" title={activeBookName ? `${activeBookName} ${activeChapter}` : 'No Book Selected'}>
+					<SvgWrapper className="svg icon" fill="#fff" svgid="arrow_down" opacity=".5" />
+					<span className={'book-chapter-text'}>{ activeBookName ? `${activeBookName} ${activeChapter}` : 'No Book Selected' }</span>
+				</span>
 			</div>
 		);
 	}
 }
 
 NavigationBar.propTypes = {
+	activeTextId: PropTypes.string,
 	activeBookName: PropTypes.string,
 	activeTextName: PropTypes.string,
 	toggleChapterSelection: PropTypes.func,
 	toggleVersionSelection: PropTypes.func,
-	toggleSearchModal: PropTypes.func,
-	// toggleMenuBar: PropTypes.func,
-	toggleProfile: PropTypes.func,
 	activeChapter: PropTypes.number,
 };
 

@@ -9,7 +9,6 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const Timeline = styled.div`
-	width: ${(props) => props.percent > 0 ? `${props.percent}%` : '0px'};
 	background-color: rgb(98,177,130);
 	height: 3px;
 	position:relative;
@@ -19,7 +18,8 @@ const Tracker = styled.div`
 	width: 15px;
   height: 15px;
   border-radius: 50%;
-  background: rgb(98,177,130);
+  border: 2px solid rgb(98,177,130);
+  background: rgb(0,0,0);
   position:absolute;
   top:-5px;
   right:0;
@@ -122,9 +122,10 @@ class AudioProgressBar extends React.PureComponent {
 	}
 
 	render() {
+		const percent = (100 * (this.props.currentTime / this.props.duration)) || 0;
 		return (
 			<div role="button" tabIndex={0} className="progress-bar" ref={this.handleOuterDivRef} onClick={this.handleTimeClick}>
-				<Timeline innerRef={this.handleTimelineRef} percent={(100 * (this.props.currentTime / this.props.duration)) || 0}><Tracker innerRef={this.handleTrackerRef} onMouseDown={this.mouseDown} /></Timeline>
+				<Timeline style={{ width: `${percent > 0 ? `${percent}%` : '0px'}` }} innerRef={this.handleTimelineRef}><Tracker innerRef={this.handleTrackerRef} onMouseDown={this.mouseDown} /></Timeline>
 			</div>
 		);
 	}

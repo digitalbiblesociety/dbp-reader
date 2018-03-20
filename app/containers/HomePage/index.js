@@ -73,6 +73,7 @@ import makeSelectHomePage, {
 	selectFormattedSource,
 	selectAuthenticationStatus,
 	selectUserId,
+	selectChapterText,
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -438,7 +439,6 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			activeTextName,
 			activeBookId,
 			activeTextId,
-			chapterText,
 			isSettingsModalActive,
 			isNotesModalActive,
 			isVersionSelectionActive,
@@ -465,6 +465,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			formattedSource,
 			userId,
 			userAuthenticated,
+			updatedText,
 		} = this.props;
 
 		const verse = this.props.match.params.verse || '';
@@ -490,10 +491,8 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					activeTextId={activeTextId}
 					activeBookName={activeBookName}
 					activeChapter={activeChapter}
-					toggleProfile={this.toggleProfile}
 					toggleChapterSelection={this.toggleChapterSelection}
 					toggleVersionSelection={this.toggleVersionSelection}
-					toggleSearchModal={this.toggleSearchModal}
 				/>
 				<AudioPlayer autoPlay={autoPlayEnabled} toggleAutoPlay={this.toggleAutoPlay} audioSource={audioSource} skipBackward={this.getPrevChapter} skipForward={this.getNextChapter} />
 				<TransitionGroup>
@@ -559,7 +558,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					}
 				</TransitionGroup>
 				<Text
-					text={chapterText}
+					text={updatedText}
 					verseNumber={verse}
 					highlights={highlights}
 					userId={userId}
@@ -582,8 +581,10 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 				/>
 				<Footer
 					settingsActive={isSettingsModalActive}
-					isInformationModalActive={isInformationModalActive}
-					toggleInformationModal={this.toggleInformationModal}
+					profileActive={isProfileActive}
+					searchActive={isSearchModalActive}
+					notebookActive={isNotesModalActive}
+					toggleNotebook={this.toggleNotesModal}
 					toggleSettingsModal={this.toggleSettingsModal}
 					toggleProfile={this.toggleProfile}
 					toggleSearch={this.toggleSearchModal}
@@ -605,6 +606,7 @@ HomePage.propTypes = {
 	match: PropTypes.object,
 	userAuthenticated: PropTypes.bool,
 	userId: PropTypes.string,
+	updatedText: PropTypes.array,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -616,6 +618,7 @@ const mapStateToProps = createStructuredSelector({
 	formattedSource: selectFormattedSource(),
 	userAuthenticated: selectAuthenticationStatus(),
 	userId: selectUserId(),
+	updatedText: selectChapterText(),
 });
 
 function mapDispatchToProps(dispatch) {

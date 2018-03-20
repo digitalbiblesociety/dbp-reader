@@ -9,27 +9,47 @@ import PropTypes from 'prop-types';
 import SvgWrapper from 'components/SvgWrapper';
 // import styled from 'styled-components';
 
-function Footer({ isInformationModalActive, toggleProfile, settingsActive, toggleSettingsModal, toggleInformationModal }) {
-	return (
-		<div className="footer">
-			<div className="left-buttons">
-				<span title={'Information'} className="item" role="button" tabIndex={0} onClick={() => !isInformationModalActive && toggleInformationModal()}><SvgWrapper className="navbar-button" height="30px" width="30px" fill="#fff" svgid="info" /></span>
-				<span title={'Settings'} className="item" role="button" tabIndex={0} onClick={() => !settingsActive && toggleSettingsModal()}><SvgWrapper className="navbar-button" height="30px" width="30px" fill="#fff" svgid="settings" /></span>
-			</div>
-			<div className="right-buttons">
-				<span title={'Share'} className="item"><SvgWrapper className="navbar-button" height="30px" width="30px" fill="#fff" svgid="upload" /></span>
-				<span title={'Profile'} className="medium-hide large-hide button" role="button" tabIndex={0} onClick={toggleProfile}><SvgWrapper height="30px" width="30px" fill="#fff" svgid="profile_circle" /></span>
-			</div>
+const Footer = ({
+	settingsActive,
+	profileActive,
+	searchActive,
+	notebookActive,
+	toggleNotebook,
+	toggleSettingsModal,
+	toggleProfile,
+	toggleSearch,
+}) => (
+	<div className={'footer-background'}>
+		<div className="footer-content">
+			<span title={'Profile'} className="item" role="button" tabIndex={0} onClick={() => !profileActive && toggleProfile()}>
+				<SvgWrapper className={'icon'} fill="#fff" svgid="profile" />
+				<span className={'title-text'}>Profile</span>
+			</span>
+			<span title={'Search'} className="item" role="button" tabIndex={0} onClick={() => !searchActive && toggleSearch()}>
+				<SvgWrapper className={'icon'} fill="#fff" svgid="search" />
+				<span className={'title-text'}>Search</span>
+			</span>
+			<span title={'Notebook'} className="item" role="button" tabIndex={0} onClick={() => !notebookActive && toggleNotebook()}>
+				<SvgWrapper className={'icon'} fill="#fff" svgid="notebook" />
+				<span className={'title-text'}>Notebook</span>
+			</span>
+			<span title={'Settings'} className="item" role="button" tabIndex={0} onClick={() => !settingsActive && toggleSettingsModal()}>
+				<SvgWrapper className={'icon'} fill="#fff" svgid="text_options" />
+				<span className={'title-text'}>Options</span>
+			</span>
 		</div>
-	);
-}
+	</div>
+);
 
 Footer.propTypes = {
-	toggleProfile: PropTypes.func,
-	toggleSettingsModal: PropTypes.func,
-	toggleInformationModal: PropTypes.func,
-	isInformationModalActive: PropTypes.bool,
 	settingsActive: PropTypes.bool,
+	profileActive: PropTypes.bool,
+	searchActive: PropTypes.bool,
+	notebookActive: PropTypes.bool,
+	toggleNotebook: PropTypes.func,
+	toggleSettingsModal: PropTypes.func,
+	toggleProfile: PropTypes.func,
+	toggleSearch: PropTypes.func,
 };
 
 export default Footer;

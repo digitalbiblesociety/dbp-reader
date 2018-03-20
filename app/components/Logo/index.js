@@ -14,7 +14,7 @@ import { makeSelectLocale } from '../../containers/LanguageProvider/selectors';
 import logo from '../../images/logos.svg';
 
 const logoSize = {
-	height: '60px',
+	height: '54px',
 	width: '120px',
 };
 
