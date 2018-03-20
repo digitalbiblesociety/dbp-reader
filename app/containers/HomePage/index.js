@@ -583,8 +583,10 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 				/>
 				<Footer
 					settingsActive={isSettingsModalActive}
-					isInformationModalActive={isInformationModalActive}
-					toggleInformationModal={this.toggleInformationModal}
+					profileActive={isProfileActive}
+					searchActive={isSearchModalActive}
+					notebookActive={isNotesModalActive}
+					toggleNotebook={this.toggleNotesModal}
 					toggleSettingsModal={this.toggleSettingsModal}
 					toggleProfile={this.toggleProfile}
 					toggleSearch={this.toggleSearchModal}
