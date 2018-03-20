@@ -22,6 +22,26 @@
 // Gripper Styles
 .audio-gripper      {display:block;fill:currentColor;position:relative;left:calc(50% - 25px);bottom:-50%;cursor:pointer;}
 
+// Move the checkbox to be above the label
+.audio-player-container {
+  #autoplay-wrap {
+    margin-top:23px;
+    [type='checkbox']:not(:checked) + label:before,
+    [type='checkbox']:checked + label:before {
+      content:'';
+      position:absolute;
+      left:38px;
+      top:-20px;
+    };
+    [type="checkbox"]:not(:checked) + label:after,
+    [type="checkbox"]:checked + label:after {
+      position:absolute;
+      top:calc(-20px + 0.35em);
+      left:calc(38px + 0.45em);
+    };
+  }
+}
+
 // aligning text and icons
 .audio-player-container .icon-wrap {display:flex;flex-direction:column;}
 #volume-wrap .item      {display:flex;flex-direction:column;}

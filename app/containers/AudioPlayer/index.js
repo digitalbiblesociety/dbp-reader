@@ -39,6 +39,7 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 			currentTime: 0,
 			playerState: this.props.hasAudio,
 			currentSpeed: 1,
+			autoPlayChecked: this.props.autoPlay,
 		};
 	}
 
@@ -233,6 +234,11 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 			});
 		}
 	}
+
+	handleAutoPlayChange = (e) => {
+		this.setState({ autoPlayChecked: e.target.checked });
+		this.props.toggleAutoPlay();
+	}
 	// Simpler to close all modals than to try and figure out which one to close
 	closeModals = () => {
 		this.setState({
@@ -258,9 +264,10 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 		const {
 			audioSource: source,
 			hasAudio,
-			toggleAutoPlay,
-			autoPlay,
 		} = this.props;
+		const {
+			autoPlayChecked,
+		} = this.state;
 
 		return (
 			<GenericErrorBoundary affectedArea="AudioPlayer">
@@ -293,6 +300,18 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 									<FormattedMessage {...messages.next} />
 								</span>
 								<AudioProgressBar setCurrentTime={this.setCurrentTime} duration={this.state.duration} currentTime={this.state.currentTime} />
+								<span id={'autoplay-wrap'} className={'icon-wrap'} title={'Autoplay'}>
+									<input
+										id={'autoplay'}
+										className={'custom-checkbox'}
+										type="checkbox"
+										onChange={this.handleAutoPlayChange}
+										defaultChecked={autoPlayChecked}
+									/>
+									<label htmlFor={'autoplay'}>
+										<FormattedMessage {...messages.autoplay} />
+									</label>
+								</span>
 								<div id="volume-wrap">
 									<div title={'Volume Control'} role="button" tabIndex="0" className={this.state.volumeSliderState ? 'item active' : 'item'} onClick={() => { this.state.volumeSliderState ? this.setVolumeSliderState(false) : this.setVolumeSliderState(true); this.setSpeedControlState(false); this.setElipsisState(false); }}>
 										<SvgWrapper className={'icon'} fill="#fff" svgid="volume_max" />
@@ -310,16 +329,6 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 									{
 										this.state.speedControlState ? (
 											<this.speedControl currentSpeed={this.state.currentSpeed} options={[0.5, 1, 1.25, 1.5, 2]} setSpeed={this.updatePlayerSpeed} />
-										) : null
-									}
-								</div>
-								<div id="volume-wrap">
-									<div title={'Audio Settings'} role="button" tabIndex="0" className={this.state.elipsisState ? 'item active' : 'item'} onClick={() => { this.state.elipsisState ? this.setElipsisState(false) : this.setElipsisState(true); this.setVolumeSliderState(false); this.setSpeedControlState(false); }}>
-										<SvgWrapper className={'icon'} fill="#fff" svgid="additional_settings" />
-									</div>
-									{
-										this.state.elipsisState ? (
-											<this.playerMenu autoPlay={autoPlay} toggleAutoPlay={toggleAutoPlay} />
 										) : null
 									}
 								</div>
