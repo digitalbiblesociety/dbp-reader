@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
+import { FormattedMessage } from 'react-intl';
 import isEqual from 'lodash/isEqual';
 import injectReducer from 'utils/injectReducer';
 import closeEventHoc from 'components/CloseEventHoc';
@@ -20,6 +21,7 @@ import AudioPlayerMenu from 'components/AudioPlayerMenu';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
 import makeSelectAudioPlayer, { selectHasAudio } from './selectors';
 import reducer from './reducer';
+import messages from './messages';
 /* eslint-disable jsx-a11y/media-has-caption */
 /* disabled the above eslint config options because you can't add tracks to audio elements */
 // Todo: Something in here is trying to update an unmounted component
@@ -266,27 +268,45 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 					{
 						(this.state.playerState && hasAudio) ? (
 							<div className="audio-player-container">
-								<span title={'Skip Back'}><SvgWrapper onClick={this.skipBackward} className="svgitem icon" fill="#fff" svgid="previous" /></span>
+								<span className={'icon-wrap'} title={'Skip Back'}>
+									<SvgWrapper onClick={this.skipBackward} className="svgitem icon" fill="#fff" svgid="previous" />
+									<FormattedMessage {...messages.prev} />
+								</span>
 								{
 									!this.state.playing ? (
-										<span title={'Play'}><SvgWrapper onClick={this.playVideo} className="svgitem icon" fill="#fff" svgid="play" /></span>
+										<span className={'icon-wrap'} title={'Play'}>
+											<SvgWrapper onClick={this.playVideo} className="svgitem icon" fill="#fff" svgid="play" />
+											<FormattedMessage {...messages.play} />
+										</span>
 									) : null
 								}
 								{
 									this.state.playing ? (
-										<span title={'Pause'}><SvgWrapper onClick={this.pauseVideo} className="svgitem icon" fill="#fff" svgid="pause" /></span>
+										<span className={'icon-wrap'} title={'Pause'}>
+											<SvgWrapper onClick={this.pauseVideo} className="svgitem icon" fill="#fff" svgid="pause" />
+											<FormattedMessage {...messages.pause} />
+										</span>
 									) : null
 								}
-								<span title={'Skip Forward'}><SvgWrapper onClick={this.skipForward} className="svgitem icon" fill="#fff" svgid="next" /></span>
+								<span className={'icon-wrap'} title={'Skip Forward'}>
+									<SvgWrapper onClick={this.skipForward} className="svgitem icon" fill="#fff" svgid="next" />
+									<FormattedMessage {...messages.next} />
+								</span>
 								<AudioProgressBar setCurrentTime={this.setCurrentTime} duration={this.state.duration} currentTime={this.state.currentTime} />
 								<div id="volume-wrap">
-									<div title={'Volume Control'} role="button" tabIndex="0" className={this.state.volumeSliderState ? 'item active' : 'item'} onClick={() => { this.state.volumeSliderState ? this.setVolumeSliderState(false) : this.setVolumeSliderState(true); this.setSpeedControlState(false); this.setElipsisState(false); }}><SvgWrapper className={'icon'} fill="#fff" svgid="volume_max" /></div>
+									<div title={'Volume Control'} role="button" tabIndex="0" className={this.state.volumeSliderState ? 'item active' : 'item'} onClick={() => { this.state.volumeSliderState ? this.setVolumeSliderState(false) : this.setVolumeSliderState(true); this.setSpeedControlState(false); this.setElipsisState(false); }}>
+										<SvgWrapper className={'icon'} fill="#fff" svgid="volume_max" />
+										<FormattedMessage {...messages.volume} />
+									</div>
 									{
 										this.state.volumeSliderState && <this.volumeControl active={this.state.volumeSliderState} updateVolume={this.updateVolume} volume={this.state.volume} />
 									}
 								</div>
 								<div id="volume-wrap">
-									<div title={'Speed Control'} role="button" tabIndex="0" className={this.state.speedControlState ? 'item active' : 'item'} onClick={() => { this.state.speedControlState ? this.setSpeedControlState(false) : this.setSpeedControlState(true); this.setElipsisState(false); this.setVolumeSliderState(false); }}><SvgWrapper className={'icon'} fill="#fff" svgid="playback_1x" /></div>
+									<div title={'Speed Control'} role="button" tabIndex="0" className={this.state.speedControlState ? 'item active' : 'item'} onClick={() => { this.state.speedControlState ? this.setSpeedControlState(false) : this.setSpeedControlState(true); this.setElipsisState(false); this.setVolumeSliderState(false); }}>
+										<SvgWrapper className={'icon'} fill="#fff" svgid="playback_1x" />
+										<FormattedMessage {...messages.speed} />
+									</div>
 									{
 										this.state.speedControlState ? (
 											<this.speedControl currentSpeed={this.state.currentSpeed} options={[0.5, 1, 1.25, 1.5, 2]} setSpeed={this.updatePlayerSpeed} />
@@ -294,7 +314,9 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 									}
 								</div>
 								<div id="volume-wrap">
-									<div title={'Audio Settings'} role="button" tabIndex="0" className={this.state.elipsisState ? 'item active' : 'item'} onClick={() => { this.state.elipsisState ? this.setElipsisState(false) : this.setElipsisState(true); this.setVolumeSliderState(false); this.setSpeedControlState(false); }}><SvgWrapper className={'icon'} fill="#fff" svgid="additional_settings" /></div>
+									<div title={'Audio Settings'} role="button" tabIndex="0" className={this.state.elipsisState ? 'item active' : 'item'} onClick={() => { this.state.elipsisState ? this.setElipsisState(false) : this.setElipsisState(true); this.setVolumeSliderState(false); this.setSpeedControlState(false); }}>
+										<SvgWrapper className={'icon'} fill="#fff" svgid="additional_settings" />
+									</div>
 									{
 										this.state.elipsisState ? (
 											<this.playerMenu autoPlay={autoPlay} toggleAutoPlay={toggleAutoPlay} />
