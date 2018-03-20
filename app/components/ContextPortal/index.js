@@ -38,7 +38,6 @@ const Item = styled.span`
 	justify-content:center;
 	background-color:rgb(204,178,165);
 	background-color:var(--context-menu-background-color);
-	fill:#fff;
 	width:40px;
 	height:40px;
 	cursor:pointer;
@@ -99,32 +98,32 @@ class ContextPortal extends React.PureComponent {
 		const component = (
 			<StyledDiv innerRef={this.setComponentRef} className={'shadow'} x={coordinates.x} y={coordinates.y}>
 				<Row>
-					<Item title={'Add a note'} onClick={this.handleNoteClick}><SvgWrapper height="25px" width="25px" svgid="note-list" /></Item>
-					<Item title={'Add a highlight'} onClick={addHighlight}><SvgWrapper height="25px" width="25px" svgid="highlights" /></Item>
-					<Item title={'Add a bookmark'} onClick={this.handleBookmarkClick}><SvgWrapper height="25px" width="25px" svgid="bookmarks" /></Item>
-					<Item title={'Copy selected text'} onClick={addFacebookLike} className="facebook"><SvgWrapper height="35px" width="35px" svgid="fb-thumb" /></Item>
+					<Item title={'Add a note'} onClick={this.handleNoteClick}><SvgWrapper width={'25px'} height={'25px'} svgid="dark_notes" /></Item>
+					<Item title={'Add a highlight'} onClick={addHighlight}><SvgWrapper width={'25px'} height={'25px'} svgid="dark_highlight" /></Item>
+					<Item title={'Add a bookmark'} onClick={this.handleBookmarkClick}><SvgWrapper width={'25px'} height={'25px'} svgid="dark_bookmark" /></Item>
+					<Item title={'Share with email'} onClick={closeContextMenu}>
+						<EmailShareButton subject={document.title} body={`"${window.getSelection().toString()}"\n\nTo listen to the audio click here: ${window.location.href}`} url={window.location.href}>
+							<SvgWrapper width={'25px'} height={'25px'} svgid="dark_e-mail" />
+						</EmailShareButton>
+					</Item>
 				</Row>
 				<Row>
 					<Item title={'Share to Facebook'} onClick={closeContextMenu} className="facebook">
 						<FacebookShareButton className="facebook fb-share-button" quote={`"${window.getSelection().toString()}"`} url={window.location.href}>
-							<SvgWrapper height="25px" width="25px" svgid="facebook" />
+							<SvgWrapper width={'25px'} height={'25px'} svgid="dark_facebook" />
 						</FacebookShareButton>
 					</Item>
 					<Item title={'Share to Google'} onClick={closeContextMenu} className="google">
 						<GooglePlusShareButton url={window.location.href}>
-							<SvgWrapper height="25px" width="25px" svgid="google_plus" />
+							<SvgWrapper width={'25px'} height={'25px'} svgid="light_google" />
 						</GooglePlusShareButton>
 					</Item>
 					<Item title={'Share to Twitter'} onClick={closeContextMenu} className="twitter">
 						<TwitterShareButton title={document.title} hashtags={[`${document.title.split('|')[0].replace(/\s/g, '')}`]} url={window.location.href}>
-							<SvgWrapper height="25px" width="25px" svgid="twitter" />
+							<SvgWrapper width={'25px'} height={'25px'} svgid="dark_twitter" />
 						</TwitterShareButton>
 					</Item>
-					<Item title={'Share with email'} onClick={closeContextMenu}>
-						<EmailShareButton subject={document.title} body={`"${window.getSelection().toString()}"\n\nTo listen to the audio click here: ${window.location.href}`} url={window.location.href}>
-							<SvgWrapper height="25px" width="25px" svgid="email" />
-						</EmailShareButton>
-					</Item>
+					<Item title={'Copy selected text'} onClick={addFacebookLike} className="facebook"><SvgWrapper width={'25px'} height={'25px'} svgid="dark_like_one-color" /></Item>
 				</Row>
 			</StyledDiv>
 		);
