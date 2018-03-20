@@ -29,7 +29,7 @@ export class GoogleAuthentication extends React.PureComponent { // eslint-disabl
 	render() {
 		return (
 			<div role={'button'} tabIndex={0} onClick={this.handleSocialLogin} className="google">
-				<SvgWrapper className="svg" height="30px" width="30px" fill="#fff" svgid="google_plus" />
+				<SvgWrapper style={{ backgroundColor: 'white' }} className="svg" height="26px" width="26px" svgid="google" />
 				Sign in with Google
 			</div>
 		);

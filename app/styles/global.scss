@@ -16,7 +16,7 @@ main                   {overflow-x:hidden;overflow-y:scroll;max-height:100%;-web
 #app > div             {height:100vh;}
 
 // Remove default styling on em tags since I use those for highlighting
-em {font-style: unset;}
+em                     {font-style: unset;}
 
 // images
 img                    {max-width:100%;height:auto}
@@ -25,6 +25,7 @@ img.loaded             {transition:all .5s linear;filter:blur(0)}
 
 // Icons Style Applied to All SVG Sprites
 .icon                  {width:26px;height:26px;vertical-align:-0.15em;fill:currentColor;overflow:hidden;cursor:pointer;} // Took out fill:currentColor;
+.icon:hover            {opacity: 0.65;}
 li                     {list-style:none}
 .shadow                {box-shadow:0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24)!important}
 

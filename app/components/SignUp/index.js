@@ -95,7 +95,7 @@ class SignUp extends React.PureComponent {
 		return (
 			<form onSubmit={this.handleSignup}>
 				<span className={'input-wrapper'}>
-					<SvgWrapper className="svg" width="30px" height="30px" fill="#fff" svgid="email" />
+					<SvgWrapper className="svg" width="30px" height="30px" fill="#fff" svgid="e-mail" />
 					<input autoComplete={'email'} onChange={this.handleEmailChange} className="email" placeholder="Enter E-mail" value={this.state.email} />
 				</span>
 				<input autoComplete={'given-name'} onChange={this.handleFirstName} className="name-inputs" placeholder="Enter First Name" value={this.state.firstName} />

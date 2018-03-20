@@ -124,7 +124,7 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 				<aside ref={this.setRef} className="notes">
 					<header>
 						<span role="button" tabIndex={0} className="close-icon" onClick={() => { setActiveChild('notes'); toggleNotesModal(); }}>
-							<SvgWrapper height="25px" width="25px" fill="#fff" opacity="0.5" svgid="go-left" />
+							<SvgWrapper className={'icon'} fill="#fff" svgid="arrow_right" />
 						</span>
 						<h2 className="section-title">NOTEBOOK</h2>
 					</header>

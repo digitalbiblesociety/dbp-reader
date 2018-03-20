@@ -12,8 +12,8 @@ import { compose } from 'redux';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
+import SvgWrapper from 'components/SvgWrapper';
 import CloseMenuFunctions from 'utils/closeMenuFunctions';
-import menu from 'images/menu.svg';
 import makeSelectSearchContainer from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -43,10 +43,8 @@ export class SearchContainer extends React.PureComponent { // eslint-disable-lin
 			<GenericErrorBoundary affectedArea="Search">
 				<aside ref={this.setRef} className="settings">
 					<header>
+						<SvgWrapper onClick={this.handleSearchModalToggle} className={'close-icon icon'} svgid={'arrow_right'} />
 						<h2 className="section-title">Search</h2>
-						<span role="button" tabIndex={0} className="close-icon" onClick={this.handleSearchModalToggle}>
-							<svg className="icon"><use xmlnsXlink="http://www.w3.org/1999/xlink" xlinkHref={`${menu}#close`}></use></svg>
-						</span>
 					</header>
 				</aside>
 			</GenericErrorBoundary>

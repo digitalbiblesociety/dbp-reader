@@ -12,7 +12,7 @@ import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import injectReducer from 'utils/injectReducer';
 import SettingsToggle from 'components/SettingsToggle/index';
-import menu from 'images/menu.svg';
+import SvgWrapper from 'components/SvgWrapper';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
 import CloseMenuFunctions from 'utils/closeMenuFunctions';
 import Slider from 'rc-slider/lib/Slider';
@@ -113,7 +113,7 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 					<header>
 						<h2 className="section-title">Settings</h2>
 						<span role="button" tabIndex={0} className="close-icon" onClick={this.handleSettingsModalToggle}>
-							<svg className="icon"><use xmlnsXlink="http://www.w3.org/1999/xlink" xlinkHref={`${menu}#close`}></use></svg>
+							<SvgWrapper className={'icon'} svgid={'arrow_left'} />
 						</span>
 					</header>
 					<section className="color-schemes">
