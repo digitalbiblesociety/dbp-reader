@@ -18,7 +18,8 @@ const Tracker = styled.div`
 	width: 15px;
   height: 15px;
   border-radius: 50%;
-  background: rgb(98,177,130);
+  border: 2px solid rgb(98,177,130);
+  background: rgb(0,0,0);
   position:absolute;
   top:-5px;
   right:0;

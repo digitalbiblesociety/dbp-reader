@@ -547,7 +547,9 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 
 		return (
 			<div className="text-container">
-				<SvgWrapper onClick={prevChapter} className="prev-arrow-svg" svgid="prev-arrow" />
+				<div onClick={prevChapter} className={'arrow-wrapper'}>
+					<SvgWrapper className="prev-arrow-svg" svgid="arrow_left" />
+				</div>
 				<main ref={this.setMainRef} className={formattedSource.main && !readersMode ? '' : 'chapter'}>
 					{
 						(formattedSource.main || text.length === 0 || !readersMode) ? null : (
@@ -563,7 +565,9 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 						) : null
 					}
 				</main>
-				<SvgWrapper onClick={nextChapter} className="next-arrow-svg" svgid="next-arrow" />
+				<div onClick={nextChapter} className={'arrow-wrapper'}>
+					<SvgWrapper className="next-arrow-svg" svgid="arrow_right" />
+				</div>
 				{
 					contextMenuState ? (
 						<ContextPortal addHighlight={this.addHighlight} addFacebookLike={this.addFacebookLike} shareHighlightToFacebook={this.shareHighlightToFacebook} setActiveNote={this.setActiveNote} setActiveNotesView={setActiveNotesView} closeContextMenu={this.closeContextMenu} toggleNotesModal={toggleNotesModal} notesActive={notesActive} parentNode={this.main} coordinates={coords} />

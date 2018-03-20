@@ -23,6 +23,22 @@ $login-twitter-color: rgb(42,163,239);
 //$prev-next-button-color: rgba(158, 30, 53, 0.253);
 //$default-highlight-color: rgb(166, 63, 77);
 
+// Mixin for fade out text - Thought it would work, may revisit
+//@mixin fade-in-ellipsis($box-width, $right-width, $bg-color) {
+//  position: relative;
+//  max-width: calc(100% - #{$right-width});
+//  &:before {
+//    content: "";
+//    position: absolute;
+//    top: 0;
+//    left: calc(#{$box-width} - #{$right-width} - 30px);
+//    height: 100%;
+//    width: 30px;
+//    background-image : -webkit-linear-gradient(left, rgba($bg-color, 0), $bg-color);
+//    background-image : linear-gradient(left, rgba($bg-color, 0), $bg-color);
+//  }
+//}
+//@include fade-in-ellipsis($box-width, $header-right-width, $box-color);
 /*
   $header-footer-color:#FFFFFF; dark might be slightly opaque
   $navbar-dropdown-fill: light #F4F6F9 normal #7E0E2A dark #F4F6F9 50% opacity;
@@ -43,7 +59,7 @@ $variables: (
         --audio-player-background: rgb(78, 70, 75),
         --text-selection-color: rgb(216, 182, 185),
         --text-contextmenu-background: rgb(71, 64, 70),
-        --text-arrow-color: rgb(229, 195, 195),
+        --text-arrow-color: rgb(0, 0, 0),
         --settings-font-color: rgb(99, 105, 116),
         --settings-option-active-secondary-color: rgba(111,188,143,.5),
         --menu-font-color: rgb(255, 255, 255),

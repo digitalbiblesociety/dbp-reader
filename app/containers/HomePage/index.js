@@ -491,10 +491,8 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					activeTextId={activeTextId}
 					activeBookName={activeBookName}
 					activeChapter={activeChapter}
-					toggleProfile={this.toggleProfile}
 					toggleChapterSelection={this.toggleChapterSelection}
 					toggleVersionSelection={this.toggleVersionSelection}
-					toggleSearchModal={this.toggleSearchModal}
 				/>
 				<AudioPlayer autoPlay={autoPlayEnabled} toggleAutoPlay={this.toggleAutoPlay} audioSource={audioSource} skipBackward={this.getPrevChapter} skipForward={this.getNextChapter} />
 				<TransitionGroup>

@@ -12,6 +12,7 @@
   .logo {
     height:54px;
     width: calc(10% + 15px);
+    min-width: 111px;
     display:flex;
     align-items: center;
     padding-left:15px;
@@ -35,6 +36,7 @@
       margin-left:15px;
       margin-top:-3px;
       margin-right:2px;
+      flex-shrink: 0;
       //margin-top:5px;
     }
   }
@@ -93,7 +95,51 @@
    }
 }
 
-@media only screen and (max-width:600px) {
-  .chapter-selector .version .version-text {margin-top:4px;display:inline-block;width:100px;max-width:100px;overflow:hidden;white-space:nowrap;text-overflow: ellipsis;}
-  .chapter-selector .version svg {margin-bottom:4px;}
+@media only screen and (max-width:$large-bp) {
+  .nav-container .version {
+    .version-text {
+      display:inline-block;
+      position:relative;
+      overflow:hidden;
+      white-space:nowrap;
+    }
+    .version-text:after {
+      content: "";
+      width:100%;
+      height:54px;
+      position: absolute;
+      top:0;
+      left:0;
+      @include css4 {
+        background: linear-gradient(to right, transparent 80%, var(--header-footer-background));
+      };
+    }
+    svg {
+      margin-left:0;
+    }
+  }
+
+  .nav-container .book-chapter {
+    svg {
+      margin-left: 10px;
+    }
+  }
+}
+
+@media only screen and (max-width:$medium-bp) {
+  .nav-container {
+    .logo {
+      display: none;
+    }
+    .version {
+      padding-left:10px;
+      width: 50%;
+    }
+    .version:before {
+      all: unset;
+    }
+    .book-chapter {
+      width: 50%;
+    }
+  }
 }

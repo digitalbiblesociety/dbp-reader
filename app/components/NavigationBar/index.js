@@ -16,11 +16,11 @@ import SvgWrapper from 'components/SvgWrapper';
 class NavigationBar extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	render() {
 		const {
+			activeTextId,
 			activeBookName,
 			activeTextName,
       toggleChapterSelection,
 			toggleVersionSelection,
-			// toggleMenuBar,
 			activeChapter,
     } = this.props;
 
@@ -31,7 +31,7 @@ class NavigationBar extends React.PureComponent { // eslint-disable-line react/p
 				</a>
 				<span role="button" tabIndex={0} onClick={toggleVersionSelection} className="version" title={activeTextName}>
 					<SvgWrapper className="svg icon" fill="#fff" svgid="arrow_down" opacity=".5" />
-					<span className={'version-text'}>{activeTextName}</span>
+					<span className={'version-text'}>{`${activeTextId.slice(0, 3) === 'ENG' ? activeTextId.slice(3) : activeTextId} - ${activeTextName}`}</span>
 				</span>
 				<span role="button" tabIndex={0} onClick={toggleChapterSelection} className="book-chapter" title={activeBookName ? `${activeBookName} ${activeChapter}` : 'No Book Selected'}>
 					<SvgWrapper className="svg icon" fill="#fff" svgid="arrow_down" opacity=".5" />
@@ -43,11 +43,11 @@ class NavigationBar extends React.PureComponent { // eslint-disable-line react/p
 }
 
 NavigationBar.propTypes = {
+	activeTextId: PropTypes.string,
 	activeBookName: PropTypes.string,
 	activeTextName: PropTypes.string,
 	toggleChapterSelection: PropTypes.func,
 	toggleVersionSelection: PropTypes.func,
-	// toggleMenuBar: PropTypes.func,
 	activeChapter: PropTypes.number,
 };
 
