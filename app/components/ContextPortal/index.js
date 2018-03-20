@@ -81,10 +81,14 @@ class ContextPortal extends React.PureComponent {
 		}
 	};
 
+	handleHighlightClick = () => {
+		// toggle the colors sub menu
+		this.props.addHighlight();
+	}
+
 	render() {
 		const {
 			// shareHighlightToFacebook,
-			addHighlight,
 			addFacebookLike,
 			// setActiveNote,
 			coordinates,
@@ -98,32 +102,32 @@ class ContextPortal extends React.PureComponent {
 		const component = (
 			<StyledDiv innerRef={this.setComponentRef} className={'shadow'} x={coordinates.x} y={coordinates.y}>
 				<Row>
-					<Item title={'Add a note'} onClick={this.handleNoteClick}><SvgWrapper width={'25px'} height={'25px'} svgid="dark_notes" /></Item>
-					<Item title={'Add a highlight'} onClick={addHighlight}><SvgWrapper width={'25px'} height={'25px'} svgid="dark_highlight" /></Item>
-					<Item title={'Add a bookmark'} onClick={this.handleBookmarkClick}><SvgWrapper width={'25px'} height={'25px'} svgid="dark_bookmark" /></Item>
+					<Item title={'Add a note'} onClick={this.handleNoteClick}><SvgWrapper style={{ width: '100%', height: '100%' }} svgid="notes" /></Item>
+					<Item title={'Add a highlight'} onClick={this.handleHighlightClick}><SvgWrapper style={{ width: '100%', height: '100%' }} svgid="highlight" /></Item>
+					<Item title={'Add a bookmark'} onClick={this.handleBookmarkClick}><SvgWrapper style={{ width: '100%', height: '100%' }} svgid="bookmark" /></Item>
 					<Item title={'Share with email'} onClick={closeContextMenu}>
-						<EmailShareButton subject={document.title} body={`"${window.getSelection().toString()}"\n\nTo listen to the audio click here: ${window.location.href}`} url={window.location.href}>
-							<SvgWrapper width={'25px'} height={'25px'} svgid="dark_e-mail" />
+						<EmailShareButton style={{ width: '100%', height: '100%' }} subject={document.title} body={`"${window.getSelection().toString()}"\n\nTo listen to the audio click here: ${window.location.href}`} url={window.location.href}>
+							<SvgWrapper style={{ width: '100%', height: '100%' }} svgid="e-mail" />
 						</EmailShareButton>
 					</Item>
 				</Row>
 				<Row>
 					<Item title={'Share to Facebook'} onClick={closeContextMenu} className="facebook">
-						<FacebookShareButton className="facebook fb-share-button" quote={`"${window.getSelection().toString()}"`} url={window.location.href}>
-							<SvgWrapper width={'25px'} height={'25px'} svgid="dark_facebook" />
+						<FacebookShareButton style={{ width: '100%', height: '100%' }} className="facebook fb-share-button" quote={`"${window.getSelection().toString()}"`} url={window.location.href}>
+							<SvgWrapper style={{ width: '100%', height: '100%' }} svgid="facebook" />
 						</FacebookShareButton>
 					</Item>
 					<Item title={'Share to Google'} onClick={closeContextMenu} className="google">
-						<GooglePlusShareButton url={window.location.href}>
-							<SvgWrapper width={'25px'} height={'25px'} svgid="light_google" />
+						<GooglePlusShareButton style={{ width: '100%', height: '100%' }} url={window.location.href}>
+							<SvgWrapper style={{ width: '100%', height: '100%' }} svgid="google" />
 						</GooglePlusShareButton>
 					</Item>
 					<Item title={'Share to Twitter'} onClick={closeContextMenu} className="twitter">
-						<TwitterShareButton title={document.title} hashtags={[`${document.title.split('|')[0].replace(/\s/g, '')}`]} url={window.location.href}>
-							<SvgWrapper width={'25px'} height={'25px'} svgid="dark_twitter" />
+						<TwitterShareButton style={{ width: '100%', height: '100%' }} title={document.title} hashtags={[`${document.title.split('|')[0].replace(/\s/g, '')}`]} url={window.location.href}>
+							<SvgWrapper style={{ width: '100%', height: '100%' }} svgid="twitter" />
 						</TwitterShareButton>
 					</Item>
-					<Item title={'Copy selected text'} onClick={addFacebookLike} className="facebook"><SvgWrapper width={'25px'} height={'25px'} svgid="dark_like_one-color" /></Item>
+					<Item title={'Copy selected text'} onClick={addFacebookLike} className="facebook"><SvgWrapper style={{ width: '100%', height: '100%' }} svgid="like_one-color" /></Item>
 				</Row>
 			</StyledDiv>
 		);
