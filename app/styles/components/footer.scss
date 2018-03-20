@@ -1,20 +1,26 @@
-.footer                            {
+.footer-background {display:flex;justify-content:center;align-items:center;z-index:2;position:fixed;bottom:0;left:0;width:100%;@include css4 {background:var(--header-footer-background);};}
+.footer-content {
   @include css4 {
-    background:var(--header-footer-background);
+    color:var(--menu-font-color);
   };
-  display:flex;position:fixed;bottom:0;left:0;height:56px;width:100%;z-index:2;}
-.footer div                        {display:flex;}
-.footer .left-buttons              {width:50%;justify-content:flex-start;align-items:center;}
-.footer .right-buttons             {width:50%;justify-content:flex-end;align-items:center;}
-.footer .left-buttons .item        {margin-left:15px;cursor:pointer;}
-.footer .right-buttons .item       {margin-right:15px;cursor:pointer;}
-.footer .left-buttons .item:hover  {opacity:0.65;}
-.footer .right-buttons .item:hover {opacity:0.65;}
+  display:flex;height:56px;justify-content:space-between;align-items:center;
+}
+.footer-content .item             {margin-top:5px;cursor:pointer;height:55px;width:55px;display:flex;flex-direction: column;align-items: center;}
+.footer-content .item:hover       {opacity:0.65;}
+.footer-content .item .title-text {text-align:center;}
 
-@media only screen and (max-width:600px) {
-  .footer div                  {justify-content:space-between;}
-  .footer .left-buttons        {width:50%;justify-content:space-around;align-items:center;}
-  .footer .right-buttons       {width:50%;justify-content:space-around;align-items:center;}
-  .footer .left-buttons .item  {margin-left:0;}
-  .footer .right-buttons .item {margin-right:0;}
+@media only screen and (min-width:$small-bp) {
+  // Shrink padding to 5px
+  .footer-content {width:291px;min-width:291px;max-width:404px;}
+  .footer-content .item .title-text {font-size:12px;}
+}
+
+@media only screen and (min-width:$medium-bp) {
+  // padding left and right are 15px
+  .footer-content {min-width:405px;width:405px;max-width:405px;}
+  .footer-content .item .title-text {font-size:inherit;}
+}
+
+@media only screen and (min-width:$large-bp) {
+
 }

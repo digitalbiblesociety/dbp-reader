@@ -39,7 +39,7 @@ $css4: true;
 $compatibility: true;
 //it is nessesary to define the variables in sass map instead of :root, for compatibility reasons.
 $variables: (
-        --header-footer-background: rgb(148, 27, 47),
+        --header-footer-background: rgba(158, 30, 53, 1),
         --audio-player-background: rgb(78, 70, 75),
         --text-selection-color: rgb(216, 182, 185),
         --text-contextmenu-background: rgb(71, 64, 70),
