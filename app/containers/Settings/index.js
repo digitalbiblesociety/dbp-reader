@@ -150,7 +150,7 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 						onChange={this.handleSliderChange}
 						defaultValue={activeFontSize}
 						value={activeFontSize}
-						handleStyle={{ border: 'none', backgroundColor: 'rgb(98,177,130)' }}
+						handleStyle={{ borderColor: 'rgb(98,177,130)', backgroundColor: activeTheme === 'paper' ? 'rgba(98, 177, 130, .5)' : 'rgb(26,29,33)' }}
 						railStyle={{ backgroundColor: activeTheme === 'paper' ? 'rgb(255, 255, 255)' : 'rgb(26,29,33)' }}
 						trackStyle={{ backgroundColor: 'rgb(98,177,130)' }}
 						step={null}

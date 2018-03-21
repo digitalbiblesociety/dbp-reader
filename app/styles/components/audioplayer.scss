@@ -1,26 +1,129 @@
-.audio-player-background               {@include css4{background-color:var(--audio-player-background);color:var(--menu-title-text-color);};min-height:10px;padding:2.5px;}
+.audio-player-background               {
+  @include css4{
+    background-color:var(--audio-player-background);
+    color:var(--menu-title-text-color);
+  };
+  position:fixed;
+  width:100%;
+  bottom:56px;
+}
 // General Audio Player Styles
-.audio-player-container .svgitem       {cursor:pointer;margin-right:18px;}
-.audio-player-container                {@include css4{background-color:var(--audio-player-background);};display:flex;justify-content:center;align-items:center;width:100%;height:50px;max-width:800px;margin:auto;:nth-child(3) {margin-right:18px;}font-size:12px;}
+.audio-player-container .svgitem       {
+  cursor:pointer;
+  margin-right:18px;
+}
+.audio-player-container                {
+  @include css4{
+    background-color:var(--audio-player-background);
+  };
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  width:100%;
+  height:50px;
+  max-width:1000px;
+  margin:auto;
+  :nth-child(3) {
+    margin-right:18px;
+  };
+  font-size:12px;
+}
 .audio-player-container .item          {border:1px solid transparent;cursor:pointer;height:50px;display:flex;align-items:center;justify-content:center;}
 .audio-player-container .item:hover    {opacity:.65;}
 .audio-player-container .svgitem:hover {opacity:.65;}
-.audio-player-container .item.active   {@include css4{border-bottom:1px solid var(--transparent-grey);border-top:1px solid var(--menu-active-color);;border-left:1px solid var(--menu-active-color);;border-right:1px solid var(--menu-active-color);background-color:var(--transparent-grey);};z-index:4;}
-.audio-player                          {display:none;}
+.audio-player-container .item.active   {
+  @include css4{
+    border-bottom:1px solid var(--transparent-grey);
+    border-top:1px solid var(--menu-active-color);
+    border-left:1px solid var(--menu-active-color);
+    border-right:1px solid var(--menu-active-color);
+    background-color:var(--transparent-grey);
+  };
+  z-index:4;
+}
+.audio-player {display:none;}
 
 // Speed Control Styles
-.speed-control-container          {display:block;bottom:0;right:150px;position:absolute;z-index:3;}
-.speed-control                    {position:absolute;display:flex;align-items:center;justify-content:space-around;@include css4{border:1px solid var(--menu-active-color);background-color:var(--transparent-grey);};height:30px;width:150px;}
-.speed-control .speed-item        {@include css4{color:var(--menu-font-color);};cursor:pointer;}
-.speed-control .speed-item:hover  {@include css4{color:var(--menu-active-color);};}
-.speed-control .speed-item.active {@include css4{color:var(--menu-active-color);};}
+.speed-control-container {
+  display:block;
+  right:150px;
+  position:absolute;
+  z-index:3;
+  top:-24px;
+  bottom:auto;
+}
+.speed-control {position:absolute;
+  display:flex;
+  align-items:center;
+  justify-content:space-around;
+
+  @include css4{border:1px solid var(--menu-active-color);
+    background-color:var(--transparent-grey);
+  };
+  height:30px;
+  width:150px;
+}
+.speed-control .speed-item {
+    @include css4{
+      color:var(--menu-font-color);
+  };
+  cursor:pointer;
+}
+.speed-control .speed-item:hover {
+  @include css4{
+    color:var(--menu-active-color);
+  };
+}
+.speed-control .speed-item.active {
+  @include css4{
+    color:var(--menu-active-color);
+  };
+}
 
 // Progress Bar Styles
-.progress-bar       {width:50%;@include css4{background-color:var(--audio-player-progress-background);};height:3px;cursor:pointer;}
+.progress-bar {
+  width:50%;
+  @include css4{
+    background-color:var(--audio-player-progress-background);
+  };
+  height:3px;
+  cursor:pointer;
+}
 .progress-bar:focus {outline: none;}
 
 // Gripper Styles
-.audio-gripper      {display:block;fill:currentColor;position:relative;left:calc(50% - 25px);bottom:-50%;cursor:pointer;}
+.audioplayer-handle {
+  position: fixed;
+  bottom: 106px;
+  height:25px;
+  width:100%;
+  background: rgba(0,0,0,0.9);
+  @include css4 {
+    color:var(--menu-title-text-color);
+    //background-color:var(--audioplayer-handle-background-color);
+    //filter: blur(2px);
+    //background: -webkit-linear-gradient(to bottom, transparent 2px, var(--audioplayer-handle-background-color));
+    //background: -moz-linear-gradient(to bottom, transparent 2px, var(--audioplayer-handle-background-color));
+    //background: linear-gradient(to bottom, transparent 2px, var(--audioplayer-handle-background-color));
+  }
+
+  &.closed {
+    bottom:56px;
+  }
+    //background: rgba(0,0,0,0.5);
+}
+.audio-gripper      {
+  display:block;
+  fill:currentColor;
+  position:relative;
+  left:calc(50% - 25px);
+  bottom:0;
+  cursor:pointer;
+
+  &.closed {
+    transform: rotate(180deg);
+  }
+}
 
 // Move the checkbox to be above the label
 .audio-player-container {
@@ -43,31 +146,93 @@
 }
 
 // aligning text and icons
-.audio-player-container .icon-wrap {display:flex;flex-direction:column;}
-#volume-wrap .item      {display:flex;flex-direction:column;}
+.audio-player-container .icon-wrap {
+  display:flex;
+  flex-direction:column;
+}
+#volume-wrap .item      {
+  display:flex;
+  flex-direction:column;
+}
 // Volume Slider
-#volume-wrap             {position: relative;margin-left:18px;}
-.volume-slider-container {display:block;bottom:1px;left:0;position:absolute;}
-.volume-slider           {@include css4{border:1px solid var(--menu-active-color);background-color:var(--transparent-grey);};height:25px;position:absolute;display:flex;align-items:center;justify-content:center;width:175px;margin-left:-75px;}
-.volume-slider .tracker  {@include css4{background-color:var(--menu-active-color);};border-radius:50%;width:15px;height:15px;margin-top:-6px;}
-.volume-slider .fill     {height:3px;@include css4{background-color:var(--menu-active-color);};width:100px;border-radius:5px;}
-.volume-slider .slider   {width:80%;}
+#volume-wrap             {
+  position: relative;
+  margin-left:18px;
+}
+.volume-slider-container {
+  display:block;
+  left:0;
+  position:absolute;
+  top:-24px;
+  bottom:auto;
+}
+.volume-slider           {
+  @include css4{
+    border:1px solid var(--menu-active-color);
+    background-color:var(--transparent-grey);
+  };
+
+  height:25px;
+  position:absolute;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:175px;
+  margin-left:-75px;
+}
+.volume-slider .tracker  {
+  @include css4{
+    background-color:var(--menu-active-color);
+  };
+  border-radius:50%;
+  width:15px;
+  height:15px;
+  margin-top:-6px;
+}
+.volume-slider .fill     {
+  height:3px;
+  @include css4{
+  background-color:var(--menu-active-color);
+  };
+  width:100px;
+  border-radius:5px;
+}
+.volume-slider .slider   {
+  width:80%;
+}
 
 // Elipsis TODO: update styles to make the element match the wireframe
-.elipsis                  {display:block;position:absolute;right:320px;bottom:0;z-index:3;}
-.elipsis .container       {position:absolute;padding:15px;display:flex;justify-content:space-between;flex-direction:column;width:320px;height:115px;@include css4{color:var(--menu-font-color);border:1px solid var(--menu-active-color);background-color:var(--transparent-grey);};}
-.container div            {display:flex;align-items:center;}
-.container span           {margin-left:15px;}
+.elipsis                  {
+  display:block;
+  position:absolute;
+  right:320px;
+  top:-114px;
+  bottom:auto;
+  z-index:3;
+}
+.elipsis .container       {
+  position:absolute;
+  padding:15px;
+  display:flex;
+  justify-content:space-between;
+  flex-direction:column;
+  width:320px;
+  height:115px;
 
-// Media Queries
-//@media only screen and (max-width:600px) {
-//  .volume-slider-container {top:-24px;bottom:auto;}
-//  .speed-control-container-container {top:-24px;bottom:auto;}
-//  .elipsis {top:-114px;bottom:auto;}
-//  .audio-player-background {position:fixed;width:100%;bottom:56px;}
-//  .audio-gripper {bottom:50px;}
-//  .audio-gripper.closed {bottom:0;}
-//}
+  @include css4{
+    color:var(--menu-font-color);
+    border:1px solid var(--menu-active-color);
+    background-color:var(--transparent-grey);
+  };
+}
+.container div {
+  display:flex;
+  align-items:center;
+}
+.container span           {
+  margin-left:15px;
+}
+
 
 @media only screen and (max-width: 600px) {
   .audio-player-container {

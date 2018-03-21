@@ -80,16 +80,64 @@
 .font-sizes-slider                  {width:80%;margin-left:25px;}
 
 // CHECKBOX SETTINGS
-.checkbox-settings label            {height:40px;display:block;}
+// Will need a .inactive class for disabling the options
+.checkbox-settings label            {height:40px;display:block;@include css4{color:var(--menu-active-text-color);};}
 .checkbox-settings label.active     {@include css4{color:var(--menu-active-text-color);};}
 .checkbox-settings label span       {@include css4{font-size:var(--application-menu-font-size)};float: left;cursor:pointer;}
 .checkbox-settings label span:hover {@include css4{color:var(--menu-active-text-color);};}
 
 // SWITCH
 // make these variables in case they need to change
-.switch                                {position:relative;display:inline-block;width:37px;height:34px;float:right}
-.switch input                          {display:none;}
-.switch .slider                        {position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;@include css4 {background-color:var(--settings-option-inactive-secondary-color);};transition:.4s;height:14px;border-radius:34px;}
-.switch .slider:before                 {position:absolute;content:"";height:20px;width:20px;left:0;bottom:-3px;@include css4{background-color:var(--settings-option-inactive-color);};transition:.4s;border-radius:50%;opacity:1;}
-.switch input:checked + .slider        {@include css4{background-color:var(--settings-option-active-secondary-color);};}
-.switch input:checked + .slider:before {@include css4{background-color:var(--menu-active-color);};transform:translateX(17px);}
+.switch {
+  position:relative;
+  display:inline-block;
+  width:35px;
+  height:18px;
+  float:right}
+.switch input {
+  display:none;
+}
+.switch .slider {
+  position:absolute;
+  cursor:pointer;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  @include css4 {
+  background-color:var(--settings-option-inactive-secondary-color);
+  border:1px solid var(--menu-active-text-color);
+  };
+  transition:.4s;
+  height:18px;
+  border-radius:35px;
+}
+.switch .slider:before {
+  position:absolute;
+  content:"";
+  height:20px;
+  width:20px;
+  left:-1px;
+  bottom:-1.5px;
+  @include css4{
+  //background-color:var(--settings-option-inactive-color);
+    border:2px solid var(--menu-active-text-color);
+  };
+  transition:.4s;
+  border-radius:50%;
+  opacity:1;
+}
+.switch input:checked + .slider {
+  @include css4{
+    //background-color:var(--settings-option-active-secondary-color);
+    border:1px solid var(--menu-active-color);
+  };
+}
+.switch input:checked + .slider:before {
+  @include css4{
+    background-color:var(--settings-option-active-secondary-color);
+    border:2px solid var(--menu-active-color);
+  };
+  transform:translateX(15.5px);
+  bottom:-2px;
+}

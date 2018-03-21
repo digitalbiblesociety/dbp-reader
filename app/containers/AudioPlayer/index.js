@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { FormattedMessage } from 'react-intl';
-import isEqual from 'lodash/isEqual';
+// import isEqual from 'lodash/isEqual';
 import injectReducer from 'utils/injectReducer';
 import closeEventHoc from 'components/CloseEventHoc';
 import SvgWrapper from 'components/SvgWrapper';
@@ -79,15 +79,15 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 		// }
 	}
 
-	shouldComponentUpdate(nextProps, nextState) {
-		if (nextState.volume !== this.state.volume) {
-			return false;
-		}
-		if (!isEqual(nextProps, this.props) || !isEqual(nextState, this.state)) {
-			return true;
-		}
-		return false;
-	}
+	// shouldComponentUpdate(nextProps, nextState) {
+	// 	if (nextState.volume !== this.state.volume) {
+	// 		return false;
+	// 	}
+	// 	if (!isEqual(nextProps, this.props) || !isEqual(nextState, this.state)) {
+	// 		return true;
+	// 	}
+	// 	return false;
+	// }
 
 	componentWillUnmount() {
 		// Removing all the event listeners in the case that this component is unmounted
@@ -122,6 +122,17 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 	setElipsisState = (state) => this.setState({
 		elipsisState: state,
 	})
+
+	getVolumeSvg(volume) {
+		if (volume <= 0.25) {
+			return <SvgWrapper className={'icon'} fill="#fff" svgid="volume_low" />;
+		} else if (volume <= 0.50) {
+			return <SvgWrapper className={'icon'} fill="#fff" svgid="volume_1" />;
+		} else if (volume <= 0.75) {
+			return <SvgWrapper className={'icon'} fill="#fff" svgid="volume_2" />;
+		}
+		return <SvgWrapper className={'icon'} fill="#fff" svgid="volume_max" />;
+	}
 
 	handleRef = (el) => {
 		this.audioRef = el;
@@ -248,6 +259,21 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 		});
 	}
 
+	get currentSpeedSvg() {
+		const { currentSpeed } = this.state;
+
+		if (currentSpeed === 0.75) {
+			return <SvgWrapper className={'icon'} fill="#fff" svgid="playback_0.75x" />;
+		} else if (currentSpeed === 1) {
+			return <SvgWrapper className={'icon'} fill="#fff" svgid="playback_1x" />;
+		} else if (currentSpeed === 1.25) {
+			return <SvgWrapper className={'icon'} fill="#fff" svgid="playback_1.25x" />;
+		} else if (currentSpeed === 1.5) {
+			return <SvgWrapper className={'icon'} fill="#fff" svgid="playback_1.5x" />;
+		}
+		return <SvgWrapper className={'icon'} fill="#fff" svgid="playback_2x" />;
+	}
+
 	get volumeControl() {
 		return closeEventHoc(VolumeSlider, this.closeModals);
 	}
@@ -271,6 +297,16 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 
 		return (
 			<GenericErrorBoundary affectedArea="AudioPlayer">
+				<div className={(this.state.playerState && hasAudio) ? 'audioplayer-handle' : 'audioplayer-handle closed'}>
+					<SvgWrapper
+						onClick={(e) => { e.stopPropagation(); this.toggleAudioPlayer(); }}
+						width="26px"
+						height="26px"
+						className={this.state.playerState ? 'audio-gripper' : 'audio-gripper closed'}
+						style={{ cursor: source ? 'pointer' : 'inherit' }}
+						svgid="arrow_down"
+					/>
+				</div>
 				<div role="button" tabIndex={0} className="audio-player-background" ref={this.setAudioPlayerRef} onClick={this.handleBackgroundClick}>
 					{
 						(this.state.playerState && hasAudio) ? (
@@ -314,7 +350,7 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 								</span>
 								<div id="volume-wrap">
 									<div title={'Volume Control'} role="button" tabIndex="0" className={this.state.volumeSliderState ? 'item active' : 'item'} onClick={() => { this.state.volumeSliderState ? this.setVolumeSliderState(false) : this.setVolumeSliderState(true); this.setSpeedControlState(false); this.setElipsisState(false); }}>
-										<SvgWrapper className={'icon'} fill="#fff" svgid="volume_max" />
+										{this.getVolumeSvg(this.state.volume)}
 										<FormattedMessage {...messages.volume} />
 									</div>
 									{
@@ -323,12 +359,12 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 								</div>
 								<div id="volume-wrap">
 									<div title={'Speed Control'} role="button" tabIndex="0" className={this.state.speedControlState ? 'item active' : 'item'} onClick={() => { this.state.speedControlState ? this.setSpeedControlState(false) : this.setSpeedControlState(true); this.setElipsisState(false); this.setVolumeSliderState(false); }}>
-										<SvgWrapper className={'icon'} fill="#fff" svgid="playback_1x" />
+										{this.currentSpeedSvg}
 										<FormattedMessage {...messages.speed} />
 									</div>
 									{
 										this.state.speedControlState ? (
-											<this.speedControl currentSpeed={this.state.currentSpeed} options={[0.5, 1, 1.25, 1.5, 2]} setSpeed={this.updatePlayerSpeed} />
+											<this.speedControl currentSpeed={this.state.currentSpeed} options={[0.75, 1, 1.25, 1.5, 2]} setSpeed={this.updatePlayerSpeed} />
 										) : null
 									}
 								</div>
@@ -336,7 +372,6 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 						) : null
 					}
 					<audio preload={'auto'} ref={this.handleRef} className="audio-player" src={source}></audio>
-					<SvgWrapper onClick={(e) => { e.stopPropagation(); this.toggleAudioPlayer(); }} width="50px" height="5px" className={this.state.playerState ? 'audio-gripper' : 'audio-gripper closed'} style={{ cursor: source ? 'pointer' : 'inherit' }} svgid="gripper" />
 				</div>
 			</GenericErrorBoundary>
 		);
