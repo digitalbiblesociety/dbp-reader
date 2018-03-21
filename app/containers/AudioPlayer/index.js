@@ -259,6 +259,21 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 		});
 	}
 
+	get currentSpeedSvg() {
+		const { currentSpeed } = this.state;
+
+		if (currentSpeed === 0.75) {
+			return <SvgWrapper className={'icon'} fill="#fff" svgid="playback_0.75x" />;
+		} else if (currentSpeed === 1) {
+			return <SvgWrapper className={'icon'} fill="#fff" svgid="playback_1x" />;
+		} else if (currentSpeed === 1.25) {
+			return <SvgWrapper className={'icon'} fill="#fff" svgid="playback_1.25x" />;
+		} else if (currentSpeed === 1.5) {
+			return <SvgWrapper className={'icon'} fill="#fff" svgid="playback_1.5x" />;
+		}
+		return <SvgWrapper className={'icon'} fill="#fff" svgid="playback_2x" />;
+	}
+
 	get volumeControl() {
 		return closeEventHoc(VolumeSlider, this.closeModals);
 	}
@@ -344,12 +359,12 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 								</div>
 								<div id="volume-wrap">
 									<div title={'Speed Control'} role="button" tabIndex="0" className={this.state.speedControlState ? 'item active' : 'item'} onClick={() => { this.state.speedControlState ? this.setSpeedControlState(false) : this.setSpeedControlState(true); this.setElipsisState(false); this.setVolumeSliderState(false); }}>
-										<SvgWrapper className={'icon'} fill="#fff" svgid="playback_1x" />
+										{this.currentSpeedSvg}
 										<FormattedMessage {...messages.speed} />
 									</div>
 									{
 										this.state.speedControlState ? (
-											<this.speedControl currentSpeed={this.state.currentSpeed} options={[0.5, 1, 1.25, 1.5, 2]} setSpeed={this.updatePlayerSpeed} />
+											<this.speedControl currentSpeed={this.state.currentSpeed} options={[0.75, 1, 1.25, 1.5, 2]} setSpeed={this.updatePlayerSpeed} />
 										) : null
 									}
 								</div>

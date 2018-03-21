@@ -98,10 +98,11 @@
   bottom: 111px;
   height:25px;
   width:100%;
-  background: #8c8c8c;
+  background: rgba(0,0,0,0.9);
   @include css4 {
     color:var(--menu-title-text-color);
     //background-color:var(--audioplayer-handle-background-color);
+    //filter: blur(2px);
     //background: -webkit-linear-gradient(to bottom, transparent 2px, var(--audioplayer-handle-background-color));
     //background: -moz-linear-gradient(to bottom, transparent 2px, var(--audioplayer-handle-background-color));
     //background: linear-gradient(to bottom, transparent 2px, var(--audioplayer-handle-background-color));
@@ -110,7 +111,7 @@
   &.closed {
     bottom:56px;
   }
-  //background: rgba(0,0,0,0.5);
+    //background: rgba(0,0,0,0.5);
 }
 .audio-gripper      {
   display:block;
