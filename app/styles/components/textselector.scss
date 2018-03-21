@@ -1,5 +1,5 @@
 // Chapter and Version Shared Styles
-.chapter-text-dropdown                              {display:flex;flex-direction:column;position:fixed;top:0;left:calc(50% - 116px);height:100%;width:320px;@include css4{background-color:var(--menu-secondary-background-color);color:var(--menu-font-color);};z-index:1;}
+.chapter-text-dropdown                              {display:flex;flex-direction:column;position:fixed;top:0;left:calc(50% - 116px);height:calc(100% - 56px);width:320px;@include css4{background-color:var(--menu-secondary-background-color);color:var(--menu-font-color);};z-index:1;}
 .chapter-text-dropdown header                       {display:flex;align-items:center;justify-content:center;@include css4{background:var(--menu-header-background);color:var(--menu-title-text-color);};text-align:center;height:54px;line-height:54px;white-space:nowrap;}
 .chapter-text-dropdown header .close-icon           {margin-left:20px;}
 .text-selection-section .active-header-name         {@include css4{color:var(--menu-active-color);};margin-left:5px;}
@@ -33,7 +33,7 @@
 .country-name-list         {@include css4{background-color:var(--menu-secondary-background-color);color:var(--menu-font-color);};font-size:.98em;height:calc(100% - 90px);max-height:calc(100% - 90px);padding:15px;margin-top:-35px;}
 
 // Chapter Selection Styles
-.chapter-selection-section {max-height:calc(100% - 108px);height:calc(100% - 108px);text-transform:uppercase;}
+.chapter-selection-section {max-height:calc(100% - 52px);height:calc(100% - 52px);text-transform:uppercase;}
 .chapter-box               {width:60px;height:30px;margin-bottom:5px;text-align:center;}
 .chapter-container         {display:grid;margin:auto;padding-top:10px;grid-template-columns:repeat(5,60px);grid-template-rows:auto;}
 .active-book               {@include css4{color:var(--menu-active-color);};}

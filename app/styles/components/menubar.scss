@@ -1,3 +1,5 @@
+// I think these aren't used and will delete them eventually
+
 .menu-sidebar                         {left:0;z-index:1;}
 .menu-link-list                       {display:flex;flex-direction:column;padding-left:10px;padding-top:5px;@include css4 {color:var(--menu-font-color);}}
 .menu-link-list .item                 {margin-top:15px;@include css4 {color:var(--menu-font-color);}}

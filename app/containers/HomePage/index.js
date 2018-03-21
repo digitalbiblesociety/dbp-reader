@@ -512,14 +512,14 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 				<TransitionGroup>
 					{
 						isChapterSelectionActive ? (
-							<FadeTransition in={isSettingsModalActive}>
+							<FadeTransition in={isChapterSelectionActive}>
 								<ChapterSelection />
 							</FadeTransition>
 						) : null
 					}
 					{
 						isVersionSelectionActive ? (
-							<FadeTransition in={isSettingsModalActive}>
+							<FadeTransition in={isVersionSelectionActive}>
 								<TextSelection
 									firstLoad={firstLoad}
 									activeBookName={activeBookName}

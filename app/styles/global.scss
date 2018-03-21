@@ -10,7 +10,7 @@ body 				   {
 }
 div:focus              {outline:none;}
 a                      {text-decoration:none;color:inherit;}
-aside                  {position:absolute;top:0;right:0;height:100%;width:320px;z-index:1;}
+aside                  {position:absolute;top:0;right:0;}
 main                   {overflow-x:hidden;overflow-y:scroll;max-height:100%;-webkit-overflow-scrolling: touch;}
 #app                   {@include css4{background-color:var(--application-background);};}
 #app > div             {height:100vh;}
