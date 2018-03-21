@@ -117,12 +117,15 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 						</span>
 					</header>
 					<section className="color-schemes">
-						<span role="button" tabIndex={0} onClick={() => this.updateTheme({ theme: 'paper' })} className={`option paper${activeTheme === 'paper' ? ' active' : ''}`}>
-						</span>
-						<span role="button" tabIndex={0} onClick={() => this.updateTheme({ theme: 'red' })} className={`option red${activeTheme === 'red' ? ' active' : ''}`}>
-						</span>
-						<span role="button" tabIndex={0} onClick={() => this.updateTheme({ theme: 'dark' })} className={`option dark${activeTheme === 'dark' ? ' active' : ''}`}>
-						</span>
+						{
+							activeTheme === 'paper' ? <SvgWrapper style={{ width: '55px', height: '55px' }} svgid={'light'} /> : <span role="button" tabIndex={0} onClick={() => this.updateTheme({ theme: 'paper' })} className={'option paper'} />
+						}
+						{
+							activeTheme === 'dark' ? <SvgWrapper style={{ width: '55px', height: '55px' }} svgid={'dark'} /> : <span role="button" tabIndex={0} onClick={() => this.updateTheme({ theme: 'dark' })} className={'option dark'} />
+						}
+						{
+							activeTheme === 'red' ? <SvgWrapper style={{ width: '55px', height: '55px' }} svgid={'red'} /> : <span role="button" tabIndex={0} onClick={() => this.updateTheme({ theme: 'red' })} className={'option red'} />
+						}
 					</section>
 					<section className="font-settings">
 						<span role="button" tabIndex={0} onClick={() => this.updateFontType({ font: 'sans' })} className={`option sans${activeFontType === 'sans' ? ' active' : ''}`}>
