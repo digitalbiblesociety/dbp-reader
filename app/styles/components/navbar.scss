@@ -127,9 +127,6 @@
         background: linear-gradient(to right, transparent 80%, var(--header-footer-background));
       };
     }
-    svg {
-      margin-left:0;
-    }
   }
 
   .nav-container .book-chapter {
@@ -147,6 +144,9 @@
     .version {
       padding-left:10px;
       width: 50%;
+      svg {
+        margin-left: 0;
+      }
     }
     .version:before {
       all: unset;

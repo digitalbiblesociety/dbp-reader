@@ -1,14 +1,14 @@
 .text-container {
 	display: flex;
     max-width: 1000px;
-	height:calc(100vh - 165px);
+	height:calc(100vh - 160px);
     margin:0 auto;
 	@include css4 {
 		color: var(--application-base-color);
 		font-size: var(--application-base-font-size);
 	}
 	main {
-		padding: 15px 15px 30px 15px;
+		padding: 15px 15px 20px 15px;
 		margin: 0 auto;
 	}
 }

@@ -3,7 +3,6 @@
     background-color:var(--audio-player-background);
     color:var(--menu-title-text-color);
   };
-  padding:2.5px;
   position:fixed;
   width:100%;
   bottom:56px;
@@ -95,7 +94,7 @@
 // Gripper Styles
 .audioplayer-handle {
   position: fixed;
-  bottom: 111px;
+  bottom: 106px;
   height:25px;
   width:100%;
   background: rgba(0,0,0,0.9);
