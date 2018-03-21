@@ -14,11 +14,42 @@
 //.color-schemes .option.paper           {background-color:$paper-sidebar;border-color:$paper-secondary}
 //.color-schemes .title                  {text-transform:uppercase;font-size:14px;font-weight:bold;text-align:center}
 .color-schemes                         {display:flex;align-items:center;justify-content:space-around;margin-top:10px;}
-.color-schemes .option                 {@include css4{background-color:var(--dark-theme-primary);};border-radius:50%;width:50px;height:50px;}
-.color-schemes .option.red             {@include css4{background-color:var(--red-theme-primary);border-color:var(--menu-secondary-background-color)};}
-.color-schemes .option.paper           {@include css4{background-color:var(--paper-theme-primary);border-color:var(--menu-secondary-background-color)};}
-.color-schemes .option.active          {@include css4{border:4px solid var(--menu-secondary-background-color)};}
-.color-schemes .option.active:after    {content:"";margin:-4px -4px -4px -4px;border-radius:50%;width:50px;height:50px;@include css4{border:2px solid var(--menu-active-color);};display:block;}
+.color-schemes .option {
+  @include css4{
+    background-color:var(--dark-theme-primary);
+    // I use this border to keep the elements an even width apart since I am using an svg for the active option
+    border:7.5px solid var(--menu-secondary-background-color);
+  };
+  border-radius:50%;
+  width:55px;
+  height:55px;
+}
+.color-schemes .option.red {
+  @include css4{
+    background-color:var(--red-theme-primary);
+    border-color:var(--menu-secondary-background-color)};
+}
+.color-schemes .option.paper {
+  @include css4{
+    background-color:var(--paper-theme-primary);
+    border-color:var(--menu-secondary-background-color)};
+}
+// Started using an svg for this since they wanted several colors in the circle
+//.color-schemes .option.active {
+//  @include css4{
+//    border:4px solid var(--menu-secondary-background-color);
+//  };
+//}
+//.color-schemes .option.active:after {
+//  content:"";
+//  margin:-6px -6.5px;
+//  border-radius:50%;
+//  width:55px;
+//  height:55px;
+//  @include css4{border:2px solid var(--menu-active-color);
+//  };
+//  display:block;
+//}
 
 // FONT SETTINGS
 .font-settings .option               {display:inline-block;text-align:center;font-size:36px;width:33%}

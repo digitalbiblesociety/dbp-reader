@@ -65,10 +65,13 @@ class Login extends React.PureComponent {
 			<React.Fragment>
 				<form onSubmit={this.handleSendingLogin}>
 					<span className={'input-wrapper'}>
-						<SvgWrapper className="svg" width="30px" height="30px" fill="#fff" svgid="email" />
+						<SvgWrapper className="svg" width="30px" height="30px" fill="#fff" svgid="e-mail" />
 						<input autoComplete={'email'} className="email" placeholder="Enter E-mail" onChange={this.handleEmailChange} value={this.state.email} />
 					</span>
-					<input autoComplete={'current-password'} className="first-password" type="password" placeholder="Enter Password" onChange={this.handlePasswordChange} value={this.state.password} />
+					<span className={'input-wrapper'}>
+						<SvgWrapper className="svg" width="26px" height="26px" fill="#fff" svgid="lock" />
+						<input autoComplete={'current-password'} className="first-password" type="password" placeholder="Enter Password" onChange={this.handlePasswordChange} value={this.state.password} />
+					</span>
 					<div className="sign-in-button">
 						<input className="login-checkbox" id={'login-checkbox'} type="checkbox" onChange={this.handleStayLoggedInChange} />
 						<label htmlFor={'login-checkbox'} className="text">KEEP ME LOGGED IN</label>
@@ -96,7 +99,7 @@ class Login extends React.PureComponent {
 				{
 					this.state.signInActive ? this.signInComponent : (
 						<div role="button" tabIndex={0} onClick={() => this.toggleSignInForm(true)} className="sign-in">
-							<SvgWrapper className="svg" width="30px" height="30px" fill="#fff" svgid="email" />
+							<SvgWrapper className="svg" width="30px" height="30px" fill="#fff" svgid="e-mail" />
 							<span className="text">Sign in with E-mail</span>
 						</div>
 					)

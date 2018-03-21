@@ -115,7 +115,7 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 				<aside ref={this.setRef} className="chapter-text-dropdown">
 					<header>
 						<h2 className="text-selection">{`${sectionTitle} SELECTION`}</h2>
-						<SvgWrapper role="button" tabIndex={0} className="close-icon icon" onClick={this.handleVersionSelectionToggle} svgid="arrow-up" />
+						<SvgWrapper role="button" tabIndex={0} className="close-icon icon" onClick={this.handleVersionSelectionToggle} svgid="arrow_up" />
 					</header>
 					<VersionList
 						active={versionListActive}

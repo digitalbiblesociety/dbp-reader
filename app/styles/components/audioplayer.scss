@@ -1,7 +1,7 @@
 .audio-player-background               {@include css4{background-color:var(--audio-player-background);color:var(--menu-title-text-color);};min-height:10px;padding:2.5px;}
 // General Audio Player Styles
 .audio-player-container .svgitem       {cursor:pointer;margin-right:18px;}
-.audio-player-container                {@include css4{background-color:var(--audio-player-background);};display:flex;justify-content:center;align-items:center;width:100%;height:50px;max-width:800px;margin:auto;:nth-child(3) {margin-right:18px;}}
+.audio-player-container                {@include css4{background-color:var(--audio-player-background);};display:flex;justify-content:center;align-items:center;width:100%;height:50px;max-width:800px;margin:auto;:nth-child(3) {margin-right:18px;}font-size:12px;}
 .audio-player-container .item          {border:1px solid transparent;cursor:pointer;height:50px;display:flex;align-items:center;justify-content:center;}
 .audio-player-container .item:hover    {opacity:.65;}
 .audio-player-container .svgitem:hover {opacity:.65;}
@@ -22,6 +22,29 @@
 // Gripper Styles
 .audio-gripper      {display:block;fill:currentColor;position:relative;left:calc(50% - 25px);bottom:-50%;cursor:pointer;}
 
+// Move the checkbox to be above the label
+.audio-player-container {
+  #autoplay-wrap {
+    margin-top:23px;
+    [type='checkbox']:not(:checked) + label:before,
+    [type='checkbox']:checked + label:before {
+      content:'';
+      position:absolute;
+      left:38px;
+      top:-20px;
+    };
+    [type="checkbox"]:not(:checked) + label:after,
+    [type="checkbox"]:checked + label:after {
+      position:absolute;
+      top:calc(-20px + 0.35em);
+      left:calc(38px + 0.45em);
+    };
+  }
+}
+
+// aligning text and icons
+.audio-player-container .icon-wrap {display:flex;flex-direction:column;}
+#volume-wrap .item      {display:flex;flex-direction:column;}
 // Volume Slider
 #volume-wrap             {position: relative;margin-left:18px;}
 .volume-slider-container {display:block;bottom:1px;left:0;position:absolute;}

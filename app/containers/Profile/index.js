@@ -11,12 +11,12 @@ import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
-import menu from 'images/menu.svg';
 import SignUp from 'components/SignUp';
 import Login from 'components/Login';
 import PasswordReset from 'components/PasswordReset';
 import AccountSettings from 'components/AccountSettings';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
+import SvgWrapper from 'components/SvgWrapper';
 import CloseMenuFunctions from 'utils/closeMenuFunctions';
 import {
 	selectAccountOption,
@@ -79,10 +79,8 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 			<GenericErrorBoundary affectedArea="Profile">
 				<aside ref={this.setRef} className="profile">
 					<header>
+						<SvgWrapper className={'close-icon icon'} svgid={'arrow_right'} onClick={toggleProfile} />
 						<h2>ACCOUNT</h2>
-						<span role="button" tabIndex={0} className="close-icon" onClick={toggleProfile}>
-							<svg className="icon"><use xmlnsXlink="http://www.w3.org/1999/xlink" xlinkHref={`${menu}#close`}></use></svg>
-						</span>
 					</header>
 					<div className="profile-content">
 						{

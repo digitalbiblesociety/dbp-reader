@@ -62,7 +62,7 @@ const red = {
 	'--menu-inactive-svg-color': 'rgb(61,65,68)',
 	'--menu-active-text-color': 'rgb(255, 255, 255)',
 	'--menu-background-color': 'rgb(44, 48, 54)',
-	'--menu-secondary-background-color': 'rgb(39, 42, 47)',
+	'--menu-secondary-background-color': 'rgb(44, 48, 54)',
 	'--menu-hover-color': 'rgb(98, 177, 130)',
 	'--menu-active-color': 'rgb(98, 177, 130)',
 	'--menu-title-text-color': 'rgb(255, 255, 255)',
