@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import Slider from 'rc-slider/lib/Slider';
 // import styled from 'styled-components';
 // rc-slider Slider component doesn't accept classes for styles other than classname
-// TODO: Figure out why slider isn't sliding
+// TODO: Figure out why slider isn't sliding - the problem is that the parent component is updating and sending down the new volume value which causes this component to re-render
 class VolumeSlider extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	state = {
 		stateVolume: 0,
