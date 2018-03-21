@@ -9,8 +9,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import injectSaga from 'utils/injectSaga';
-import injectReducer from 'utils/injectReducer';
+// import injectSaga from 'utils/injectSaga';
+// import injectReducer from 'utils/injectReducer';
 import CountryList from 'components/CountryList';
 import LanguageList from 'components/LanguageList';
 import VersionList from 'components/VersionList';
@@ -22,14 +22,12 @@ import {
 	setLanguageListState,
 	setActiveIsoCode,
 	setCountryListState,
-	getLanguages,
 	getTexts,
 	setCountryName,
-	getCountries,
 } from './actions';
 import makeSelectTextSelection, { selectLanguages, selectTexts, selectCountries } from './selectors';
-import reducer from './reducer';
-import saga from './saga';
+// import reducer from './reducer';
+// import saga from './saga';
 // import { FormattedMessage } from 'react-intl';
 // import messages from './messages';
 
@@ -37,12 +35,12 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 	componentDidMount() {
 		// TODO: use a conditional to ensure the actions below only happen on the first mount
 		// move these calls to CDM of homepage to ensure they are loaded by the time the user is here
-		if (this.props.firstLoad) {
-			this.props.dispatch(getCountries());
-			this.props.dispatch(getLanguages());
-			this.props.dispatch(getTexts({ languageISO: this.props.initialIsoCode }));
-			this.props.toggleFirstLoadForTextSelection();
-		}
+		// if (this.props.firstLoad) {
+		// 	this.props.dispatch(getCountries());
+		// 	this.props.dispatch(getLanguages());
+		// 	this.props.dispatch(getTexts({ languageISO: this.props.initialIsoCode }));
+		// 	this.props.toggleFirstLoadForTextSelection();
+		// }
 		this.props.dispatch(setActiveIsoCode({ iso: this.props.initialIsoCode, name: this.props.initialLanguageName }));
 		this.closeMenuController = new CloseMenuFunctions(this.ref, this.props.toggleVersionSelection);
 		this.closeMenuController.onMenuMount();
@@ -167,11 +165,9 @@ TextSelection.propTypes = {
 	activeTextName: PropTypes.string,
 	initialIsoCode: PropTypes.string,
 	initialLanguageName: PropTypes.string,
-	firstLoad: PropTypes.bool,
 	getAudio: PropTypes.func,
 	setActiveText: PropTypes.func,
 	toggleVersionSelection: PropTypes.func,
-	toggleFirstLoadForTextSelection: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -189,11 +185,11 @@ function mapDispatchToProps(dispatch) {
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
-const withReducer = injectReducer({ key: 'textSelection', reducer });
-const withSaga = injectSaga({ key: 'textSelection', saga });
+// const withReducer = injectReducer({ key: 'textSelection', reducer });
+// const withSaga = injectSaga({ key: 'textSelection', saga });
 
 export default compose(
-	withReducer,
-	withSaga,
+	// withReducer,
+	// withSaga,
 	withConnect,
 )(TextSelection);

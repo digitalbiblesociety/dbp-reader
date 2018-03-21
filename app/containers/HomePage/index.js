@@ -43,6 +43,13 @@ import {
 	toggleWordsOfJesus,
 } from 'containers/Settings/themes';
 import {
+	getCountries,
+	getLanguages,
+	getTexts,
+} from 'containers/TextSelection/actions';
+import textReducer from 'containers/TextSelection/reducer';
+import textSaga from 'containers/TextSelection/saga';
+import {
 	addHighlight,
 	getAudio,
 	getBooks,
@@ -156,6 +163,13 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 
 		if (activeFontSize !== this.props.userSettings.get('activeFontSize')) {
 			applyFontSize(activeFontSize);
+		}
+
+		if (this.props.homepage.firstLoad) {
+			this.props.dispatch(getCountries());
+			this.props.dispatch(getLanguages());
+			this.props.dispatch(getTexts({ languageISO: this.props.homepage.defaultLanguageIso }));
+			this.toggleFirstLoadForTextSelection();
 		}
 
 		// Init the Facebook api here
@@ -631,9 +645,13 @@ const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
 const withReducer = injectReducer({ key: 'homepage', reducer });
 const withSaga = injectSaga({ key: 'homepage', saga });
+const withTextReducer = injectReducer({ key: 'textSelection', reducer: textReducer });
+const withTextSaga = injectSaga({ key: 'textSelection', saga: textSaga });
 
 export default compose(
 	withReducer,
+	withTextReducer,
 	withSaga,
+	withTextSaga,
 	withConnect,
 )(HomePage);
