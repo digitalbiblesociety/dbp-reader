@@ -1,16 +1,17 @@
 .text-container {
-	display: flex;
-    max-width: 1000px;
-	height:calc(100vh - 160px);
-    margin:0 auto;
-	@include css4 {
-		color: var(--application-base-color);
-		font-size: var(--application-base-font-size);
-	}
-	main {
-		padding: 15px 15px 20px 15px;
-		margin: 0 auto;
-	}
+  display: flex;
+  max-width: 1000px;
+  height:calc(100vh - 135px);
+  margin:0 auto;
+  align-items: center;
+  @include css4 {
+      color: var(--application-base-color);
+      font-size: var(--application-base-font-size);
+  }
+  main {
+      padding: 15px 15px 45px 15px;
+      margin: 0 auto;
+  }
 }
 
 .verse-number {
@@ -18,17 +19,18 @@
 }
 
 .verse-text {
-	margin-top: auto;
-	margin-bottom: auto;
-	padding-left: 5px;
+  margin-top: auto;
+  margin-bottom: auto;
+  padding-left: 5px;
 }
 
 .arrow-wrapper {
-  height: calc(100vh - 170px);
+  height: 80%;
   width:26px;
   display:flex;
   align-items: center;
   justify-content: center;
+  //margin-top:auto;
   cursor: pointer;
   &:hover {
     background: rgba(0, 0, 0, 0.2);
@@ -36,81 +38,81 @@
 }
 //.text-container span {white-space:nowrap;display:inline-block;}
 .prev-arrow-svg {
-	cursor:pointer;
-	@include css4{
-		fill:var(--text-arrow-color);
-	};
+  cursor:pointer;
+  @include css4{
+    fill:var(--text-arrow-color);
+  };
   width:26px;
   height:26px;
-	//margin-left:10px;
-	//width:25px;
-	//min-width:25px;
-	//min-height:52px;
-	//height:52px;
-	//margin-top:calc(50vh - 104px);
+  //margin-left:10px;
+  //width:25px;
+  //min-width:25px;
+  //min-height:52px;
+  //height:52px;
+  //margin-top:calc(50vh - 104px);
 }
 .next-arrow-svg {
-	cursor:pointer;
-	@include css4{
-		fill:var(--text-arrow-color);
-	};
-    width:26px;
+  cursor:pointer;
+  @include css4{
+    fill:var(--text-arrow-color);
+  };
+  width:26px;
   height:26px;
-	//margin-right:5px;
-	//width:25px;
-	//min-width:25px;
-	//min-height:52px;
-	//height:52px;
-	//margin-top:calc(50vh - 104px);
+  //margin-right:5px;
+  //width:25px;
+  //min-width:25px;
+  //min-height:52px;
+  //height:52px;
+  //margin-top:calc(50vh - 104px);
 }
 .prev-arrow-svg:hover {
-	animation:thicken 0.3s forwards;
+  animation:thicken 0.3s forwards;
 }
 .next-arrow-svg:hover {
-	animation:thicken 0.3s forwards;
+  animation:thicken 0.3s forwards;
 }
 .text-highlighted 	  {
-	@include css4{
-		background-color:var(--text-selection-color);
-		color:var(--application-base-color);
-	};
+  @include css4{
+    background-color:var(--text-selection-color);
+    color:var(--application-base-color);
+  };
 }
 
 .active-chapter-title {
-	margin:auto;
-	text-align:center;
-	font-size:130%;
+  margin:auto;
+  text-align:center;
+  font-size:130%;
 }
 
 .drop-caps 			  {
-	font-size:2em;
-	line-height:1;
-	margin: 0 .25em .5em 0;
+  font-size:2em;
+  line-height:1;
+  margin: 0 .25em .5em 0;
 }
 
 .read-chapter-container {
-	display:flex;
-	justify-content: center;
+  display:flex;
+  justify-content: center;
 }
 
 .read-chapter 			{
-	height: 35px;
-	border-radius: 6px;
-	width:130px;
-	text-align:center;
-	background-color: #FFFFF5;
-	box-shadow: 1px 1px 1px 1px #B1A77A;
-	cursor: pointer;
-	padding: 5px;
+  height: 35px;
+  border-radius: 6px;
+  width:130px;
+  text-align:center;
+  background-color: #FFFFF5;
+  box-shadow: 1px 1px 1px 1px #B1A77A;
+  cursor: pointer;
+  padding: 5px;
 }
 
 .read-chapter:active {
-	box-shadow: 0 0 0 0 #B1A77A;
+  box-shadow: 0 0 0 0 #B1A77A;
 }
 
 .read-chapter:focus {
-	border: 1px solid #B1A77A;
-	outline: none;
+  border: 1px solid #B1A77A;
+  outline: none;
 }
 
 // Style that I like but that isn't in the comps

@@ -10,7 +10,7 @@ import SvgWrapper from 'components/SvgWrapper';
 import ContextPortal from 'components/ContextPortal';
 import FootnotePortal from 'components/FootnotePortal';
 import LoadingSpinner from 'components/LoadingSpinner';
-import differenceObject from 'utils/deepDifferenceObject';
+// import differenceObject from 'utils/deepDifferenceObject';
 import createHighlights from './highlightPlainText';
 import createFormattedHighlights from './highlightFormattedText';
 // import { addClickToNotes } from './htmlToReact';
@@ -42,12 +42,12 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		}
 	}
 
-	componentDidUpdate(prevProps, prevState) {
+	componentDidUpdate(prevProps) {
 		if (this.props.formattedSource.main && prevProps.formattedSource.main !== this.props.formattedSource.main && this.format) {
 			this.setEventHandlersForFootnotes();
 			this.setEventHandlersForFormattedVerses();
 		}
-		console.log('Difference between old state and new state', differenceObject(this.state, prevState));
+		// console.log('Difference between old state and new state', differenceObject(this.state, prevState));
 	}
 
 	setEventHandlersForFormattedVerses = () => {
