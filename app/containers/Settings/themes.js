@@ -22,6 +22,7 @@ const paper = {
 	'--audio-player-progress-background': 'rgb(255, 255, 255)',
 	'--settings-option-inactive-color': 'rgb(112, 63, 51)',
 	'--context-menu-background-color': 'rgb(204,178,165)',
+	'--audioplayer-handle-background-color': 'rgba(255, 255, 255, 0.5)',
 };
 
 const dark = {
@@ -48,6 +49,7 @@ const dark = {
 	'--audio-player-progress-background': 'rgb(32,34,39)',
 	'--settings-option-inactive-color': 'rgb(98, 177, 130)',
 	'--context-menu-background-color': 'rgba(44, 48, 54, 0.75)',
+	'--audioplayer-handle-background-color': 'rgba(0, 0, 0, 0.5)',
 };
 
 const red = {
@@ -74,6 +76,7 @@ const red = {
 	'--audio-player-progress-background': 'rgb(32,34,39)',
 	'--settings-option-inactive-color': 'rgb(98, 177, 130)',
 	'--context-menu-background-color': 'rgba(44, 48, 54, 0.80)',
+	'--audioplayer-handle-background-color': 'rgba(0, 0, 0, 0.5)',
 };
 
 const themes = {

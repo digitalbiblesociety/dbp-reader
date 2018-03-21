@@ -96,6 +96,8 @@
 }
 
 @media only screen and (max-width:$large-bp) {
+  // Using a linear-gradient seems to break for safari
+  // This style could potentially be applied regardless of the screen size
   .nav-container .version {
     .version-text {
       display:inline-block;
