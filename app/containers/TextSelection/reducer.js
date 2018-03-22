@@ -47,11 +47,20 @@ function textSelectionReducer(state = initialState, action) {
 	case GET_DPB_TEXTS:
 		return state.set('loadingVersions', true);
 	case SET_LANGUAGE_LIST_STATE:
-		return state.set('languageListActive', action.state);
+		return state
+			.set('countryListActive', false)
+			.set('versionListActive', false)
+			.set('languageListActive', !state.get('languageListActive'));
 	case SET_VERSION_LIST_STATE:
-		return state.set('versionListActive', action.state);
+		return state
+			.set('countryListActive', false)
+			.set('languageListActive', false)
+			.set('versionListActive', !state.get('versionListActive'));
 	case SET_COUNTRY_LIST_STATE:
-		return state.set('countryListActive', action.state);
+		return state
+			.set('versionListActive', false)
+			.set('languageListActive', false)
+			.set('countryListActive', !state.get('countryListActive'));
 	case LOAD_TEXTS:
 		return state
 			.set('loadingVersions', false)

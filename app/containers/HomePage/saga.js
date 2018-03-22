@@ -201,10 +201,14 @@ export function* getChapterFromUrl({ filesets, bibleId: oldBibleId, bookId: oldB
 			try {
 				// Gets the last fileset id for a formatted text
 				const filesetId = reduce(filesets, (a, c, i) => c.set_type_code === 'text_formatt' ? i : a, '');
+				// console.log(filesetId);
 				const reqUrl = `https://api.bible.build/bibles/filesets/${filesetId}?key=${process.env.DBP_API_KEY}&v=4&book_id=${bookId}&chapter_id=${chapter}`;
+				// console.log(reqUrl);
 				const formattedChapterObject = yield call(request, reqUrl);
+				const path = get(formattedChapterObject.data, [0, 'path']);
 				// console.log('response for formatted text', formattedChapterObject);
-				formattedText = yield fetch(get(formattedChapterObject.data, [0, 'path'], '')).then((res) => res.text());
+				formattedText = yield path ? fetch(path).then((res) => res.text()) : '';
+				// console.log(formattedText);
 			} catch (error) {
 				if (process.env.NODE_ENV === 'development') {
 					console.error('Caught in get formatted text block', error); // eslint-disable-line no-console
@@ -313,6 +317,9 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 		}
 	});
 
+	const otLength = otAudio.length;
+	const ntLength = ntAudio.length;
+
 	if (completeAudio.length) {
 		// console.log('Bible has complete audio', completeAudio);
 		try {
@@ -333,7 +340,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 				// fetch('https://api.bible.build/error_logging', options);
 			}
 		}
-	} else if (ntAudio.length) {
+	} else if (ntLength && !otLength) {
 		try {
 			const reqUrl = `https://api.bible.build/bibles/filesets/${get(ntAudio, [0, 'id'])}?key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}`;
 			const response = yield call(request, reqUrl);
@@ -352,13 +359,14 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 				// fetch('https://api.bible.build/error_logging', options);
 			}
 		}
-	} else if (otAudio.length) {
+	} else if (otLength && !ntLength) {
 		try {
 			const reqUrl = `https://api.bible.build/bibles/filesets/${get(otAudio, [0, 'id'])}?key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}`;
 			const response = yield call(request, reqUrl);
 			// console.log('ot audio response object', response);
 			const audioPath = get(response, ['data', 0, 'path']);
 			// console.log('ot audio path', audioPath);
+			// otPath = audioPath;
 			yield put({ type: 'loadaudio', audioPath });
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
@@ -371,6 +379,50 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 				// fetch('https://api.bible.build/error_logging', options);
 			}
 		}
+	} else if (ntLength && otLength) {
+		let ntPath = '';
+		let otPath = '';
+
+		try {
+			const reqUrl = `https://api.bible.build/bibles/filesets/${get(ntAudio, [0, 'id'])}?key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}`;
+			const response = yield call(request, reqUrl);
+			// console.log('nt audio response object', response);
+			const audioPath = get(response, ['data', 0, 'path']);
+			// console.log('nt audio path', audioPath);
+			ntPath = audioPath;
+			// yield put({ type: 'loadaudio', audioPath });
+		} catch (error) {
+			if (process.env.NODE_ENV === 'development') {
+				console.error('Caught in getChapterAudio nt audio', error); // eslint-disable-line no-console
+			} else if (process.env.NODE_ENV === 'production') {
+				// const options = {
+				// 	header: 'POST',
+				// 	body: formData,
+				// };
+				// fetch('https://api.bible.build/error_logging', options);
+			}
+		}
+		try {
+			const reqUrl = `https://api.bible.build/bibles/filesets/${get(otAudio, [0, 'id'])}?key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}`;
+			const response = yield call(request, reqUrl);
+			// console.log('ot audio response object', response);
+			const audioPath = get(response, ['data', 0, 'path']);
+			// console.log('ot audio path', audioPath);
+			otPath = audioPath;
+			// yield put({ type: 'loadaudio', audioPath });
+		} catch (error) {
+			if (process.env.NODE_ENV === 'development') {
+				console.error('Caught in getChapterAudio ot audio', error); // eslint-disable-line no-console
+			} else if (process.env.NODE_ENV === 'production') {
+				// const options = {
+				// 	header: 'POST',
+				// 	body: formData,
+				// };
+				// fetch('https://api.bible.build/error_logging', options);
+			}
+		}
+
+		yield put({ type: 'loadaudio', audioPath: ntPath || otPath });
 	} else if (partialAudio.length) {
 		try {
 			// Need to iterate over each object here to see if I can find the right chapter

@@ -41,9 +41,8 @@ export const getCountries = () => ({
 	type: GET_COUNTRIES,
 });
 
-export const setCountryListState = ({ state }) => ({
+export const setCountryListState = () => ({
 	type: SET_COUNTRY_LIST_STATE,
-	state,
 });
 
 export const setCountryName = ({ name, languages }) => ({
@@ -52,14 +51,12 @@ export const setCountryName = ({ name, languages }) => ({
 	languages,
 });
 
-export const setLanguageListState = ({ state }) => ({
+export const setLanguageListState = () => ({
 	type: SET_LANGUAGE_LIST_STATE,
-	state,
 });
 
-export const setVersionListState = ({ state }) => ({
+export const setVersionListState = () => ({
 	type: SET_VERSION_LIST_STATE,
-	state,
 });
 
 export const setActiveIsoCode = ({ iso, name }) => ({

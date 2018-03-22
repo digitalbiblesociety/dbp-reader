@@ -6,8 +6,16 @@
 import { defineMessages } from 'react-intl';
 
 export default defineMessages({
-	header: {
-		id: 'app.components.TableOfContents.header',
-		defaultMessage: 'This is the TableOfContents component !',
+	audioAndText: {
+		id: 'app.containers.TextSelection.audioAndText',
+		defaultMessage: 'Audio & Text',
+	},
+	audioOnly: {
+		id: 'app.containers.TextSelection.audioOnly',
+		defaultMessage: 'Audio Only',
+	},
+	textOnly: {
+		id: 'app.containers.TextSelection.textOnly',
+		defaultMessage: 'Text Only',
 	},
 });
