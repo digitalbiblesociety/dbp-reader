@@ -1,7 +1,4 @@
 // Chapter and Version Shared Styles
-.chapter-text-dropdown                              {display:flex;flex-direction:column;position:fixed;top:0;left:calc(50% - 116px);height:calc(100% - 56px);width:320px;@include css4{background-color:var(--menu-secondary-background-color);color:var(--menu-font-color);};z-index:1;}
-.chapter-text-dropdown header                       {display:flex;align-items:center;justify-content:center;@include css4{background:var(--menu-header-background);color:var(--menu-title-text-color);};text-align:center;height:54px;line-height:54px;white-space:nowrap;}
-.chapter-text-dropdown header .close-icon           {margin-left:20px;}
 .text-selection-section .active-header-name         {@include css4{color:var(--menu-active-color);};margin-left:5px;}
 .text-selection-section                             {max-height:calc(100% - 216px);height:calc(100% - 216px);text-transform:uppercase;}
 .text-selection-section ::-webkit-input-placeholder {@include css4{color:var(--application-placeholder-color);};}
@@ -31,15 +28,6 @@
 .language-name-list        {@include css4{background-color:var(--menu-secondary-background-color);color:var(--menu-font-color);};font-size:.98em;height:calc(100% - 90px);max-height:calc(100% - 90px);padding:15px;margin-top:-35px;}
 .version-name-list         {@include css4{background-color:var(--menu-secondary-background-color);color:var(--menu-font-color);};font-size:.98em;height:calc(100% - 90px);max-height:calc(100% - 90px);overflow:scroll;padding:15px;margin-top:-35px;}
 .country-name-list         {@include css4{background-color:var(--menu-secondary-background-color);color:var(--menu-font-color);};font-size:.98em;height:calc(100% - 90px);max-height:calc(100% - 90px);padding:15px;margin-top:-35px;}
-
-// Chapter Selection Styles
-.chapter-selection-section {max-height:calc(100% - 52px);height:calc(100% - 52px);text-transform:uppercase;}
-.chapter-box               {width:60px;height:30px;margin-bottom:5px;text-align:center;}
-.chapter-container         {display:grid;margin:auto;padding-top:10px;grid-template-columns:repeat(5,60px);grid-template-rows:auto;}
-.active-book               {@include css4{color:var(--menu-active-color);};}
-.book-container            {max-height:100%;overflow-y:scroll;overflow-x:hidden;padding:15px;}
-.book-button               {cursor:pointer;}
-.active-chapter            {@include css4{color:var(--menu-active-color);};}
 
 // Version Selection Styles
 .version-item-button               {display:flex;align-items:flex-start;margin:10px 0;cursor:pointer;:nth-child(2){margin:0 10px;}}

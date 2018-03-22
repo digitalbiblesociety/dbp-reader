@@ -15,7 +15,7 @@ import {
 	toggleChapterSelection,
 } from 'containers/HomePage/actions';
 import BooksTable from 'components/BooksTable';
-import SvgWrapper from 'components/SvgWrapper';
+// import SvgWrapper from 'components/SvgWrapper';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
@@ -67,17 +67,12 @@ export class ChapterSelection extends React.PureComponent { // eslint-disable-li
 
 	render() {
 		const {
-			activeChapter,
 			activeBookName,
 		} = this.props;
 
 		return (
 			<GenericErrorBoundary affectedArea="ChapterSelection">
 				<aside ref={this.setAsideRef} className="chapter-text-dropdown">
-					<header>
-						<h2 className="text-selection">{activeBookName ? `${activeBookName} ${activeChapter}` : 'Error retrieving resource'}</h2>
-						<SvgWrapper role="button" tabIndex={0} className="close-icon icon" onClick={this.handleChapterToggle} svgid="arrow_up" />
-					</header>
 					{
 						activeBookName ? (
 							<BooksTable
@@ -96,7 +91,6 @@ export class ChapterSelection extends React.PureComponent { // eslint-disable-li
 
 ChapterSelection.propTypes = {
 	dispatch: PropTypes.func.isRequired,
-	activeChapter: PropTypes.number.isRequired,
 	activeBookName: PropTypes.string.isRequired,
 };
 

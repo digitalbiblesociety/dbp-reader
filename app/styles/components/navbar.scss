@@ -83,11 +83,6 @@
     background:rgba(0, 0, 0, .2);
   }
 
-  .book-chapter:hover {
-    opacity:.65;
-    background:rgba(0, 0, 0, .2);
-  }
-
   .book-chapter {
     //max-width: 420px;
     //min-width:calc(45% - 7.5px);
@@ -103,6 +98,13 @@
       position:relative;
       overflow:hidden;
       white-space:nowrap;
+    }
+
+    &:hover {
+      & .svg, & .book-chapter-text {
+        opacity:.65;
+      }
+      background:rgba(0, 0, 0, .2);
     }
 
     &:after {
