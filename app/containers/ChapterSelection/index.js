@@ -27,6 +27,7 @@ import {
 import reducer from './reducer';
 import saga from './saga';
 // import messages from './messages';
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 
 export class ChapterSelection extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	componentDidMount() {
@@ -45,6 +46,10 @@ export class ChapterSelection extends React.PureComponent { // eslint-disable-li
 	setActiveChapter = (props) => this.props.dispatch(setActiveChapter(props))
 
 	setActiveBookName = (props) => this.props.dispatch(setActiveBookName(props))
+
+	stopClickProp = (e) => e.stopPropagation()
+
+	stopTouchProp = (e) => e.stopPropagation()
 
 	toggleChapterSelection = (props) => this.props.dispatch(toggleChapterSelection(props))
 
@@ -72,7 +77,7 @@ export class ChapterSelection extends React.PureComponent { // eslint-disable-li
 
 		return (
 			<GenericErrorBoundary affectedArea="ChapterSelection">
-				<aside ref={this.setAsideRef} className="chapter-text-dropdown">
+				<aside ref={this.setAsideRef} onTouchEnd={this.stopTouchProp} onClick={this.stopClickProp} className="chapter-text-dropdown">
 					{
 						activeBookName ? (
 							<BooksTable

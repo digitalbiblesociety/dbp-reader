@@ -51,6 +51,13 @@
       white-space:nowrap;
     }
 
+    &:hover {
+      & .svg, & .version-text {
+        opacity:.65;
+      }
+      background:rgba(0, 0, 0, .2);
+    }
+
     &:after {
       content: "";
       width: 100%;
@@ -74,11 +81,6 @@
   }
 
   a:hover {
-    opacity:.65;
-    background:rgba(0, 0, 0, .2);
-  }
-
-  .version:hover {
     opacity:.65;
     background:rgba(0, 0, 0, .2);
   }

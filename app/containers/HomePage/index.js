@@ -24,7 +24,7 @@ import get from 'lodash/get';
 // import { fromJS, is } from 'immutable';
 import Settings from 'containers/Settings';
 import AudioPlayer from 'containers/AudioPlayer';
-import TextSelection from 'containers/TextSelection';
+// import TextSelection from 'containers/TextSelection';
 // import ChapterSelection from 'containers/ChapterSelection';
 import Profile from 'containers/Profile';
 import Notes from 'containers/Notes';
@@ -51,7 +51,6 @@ import textReducer from 'containers/TextSelection/reducer';
 import textSaga from 'containers/TextSelection/saga';
 import {
 	addHighlight,
-	getAudio,
 	getBooks,
 	getChapterText,
 	getHighlights,
@@ -408,8 +407,6 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 
 	getBooks = (props) => this.props.dispatch(getBooks(props))
 
-	getAudio = ({ list }) => this.props.dispatch(getAudio({ list }))
-
 	getChapters = (props) => this.props.dispatch(getChapterText(props))
 
 	setActiveBookName = ({ book, id }) => this.props.dispatch(setActiveBookName({ book, id }))
@@ -466,9 +463,6 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			audioSource,
 			activeNotesView,
 			loadingNewChapterText,
-			firstLoad,
-			defaultLanguageIso,
-			defaultLanguageName,
 			invalidBibleId,
 			highlights,
 			autoPlayEnabled,
@@ -506,29 +500,12 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					activeBookName={activeBookName}
 					activeChapter={activeChapter}
 					isChapterSelectionActive={isChapterSelectionActive}
+					isVersionSelectionActive={isVersionSelectionActive}
 					toggleChapterSelection={this.toggleChapterSelection}
 					toggleVersionSelection={this.toggleVersionSelection}
 				/>
 				<AudioPlayer autoPlay={autoPlayEnabled} toggleAutoPlay={this.toggleAutoPlay} audioSource={audioSource} skipBackward={this.getPrevChapter} skipForward={this.getNextChapter} />
 				<TransitionGroup>
-					{
-						isVersionSelectionActive ? (
-							<FadeTransition in={isVersionSelectionActive}>
-								<TextSelection
-									firstLoad={firstLoad}
-									activeBookName={activeBookName}
-									activeTextId={activeTextId}
-									initialIsoCode={defaultLanguageIso}
-									initialLanguageName={defaultLanguageName}
-									getAudio={this.getAudio}
-									setActiveText={this.setActiveTextId}
-									setActiveChapter={this.setActiveChapter}
-									toggleVersionSelection={this.toggleVersionSelection}
-									toggleFirstLoadForTextSelection={this.toggleFirstLoadForTextSelection}
-								/>
-							</FadeTransition>
-						) : null
-					}
 					{
 						isSettingsModalActive ? (
 							<FadeTransition classNames="slide-from-left" in={isSettingsModalActive}>

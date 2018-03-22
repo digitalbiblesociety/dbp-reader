@@ -11,7 +11,6 @@ class CloseMenuFunctions {
 			const bounds = this.ref.getBoundingClientRect();
 			const insideWidth = singleTouch.clientX >= bounds.x && singleTouch.clientX <= bounds.x + bounds.width;
 			const outsideWidth = singleTouch.clientY >= bounds.y && singleTouch.clientY <= bounds.y + bounds.height;
-
 			if (this.ref && !(insideWidth && outsideWidth) && !this.ref.contains(event.target)) {
 				this.closeFunction();
 				document.removeEventListener('touchend', this.handleTouchend);

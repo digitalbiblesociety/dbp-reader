@@ -1,13 +1,24 @@
 import { createSelector } from 'reselect';
+// import { selectHomePageDomain } from 'containers/HomePage/selectors';
 
 /**
  * Direct selector to the textSelection state domain
  */
 const selectTextSelectionDomain = (state) => state.get('textSelection');
-
+const selectHomepageDomain = (state) => state.get('homepage');
 /**
  * Other specific selectors
  */
+const selectHomepageData = () => createSelector(
+	selectHomepageDomain,
+	(homepage) => ({
+		activeBookName: homepage.get('activeBookName'),
+		activeTextId: homepage.get('activeTextId'),
+		initialIsoCode: homepage.get('defaultLanguageIso'),
+		initialLanguageName: homepage.get('defaultLanguageName'),
+	})
+);
+
 const selectCountries = () => createSelector(
 	selectTextSelectionDomain,
 	(substate) => {
@@ -52,4 +63,5 @@ export {
 	selectTexts,
 	selectLanguages,
 	selectCountries,
+	selectHomepageData,
 };
