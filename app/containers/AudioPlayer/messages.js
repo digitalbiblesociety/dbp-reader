@@ -33,4 +33,36 @@ export default defineMessages({
 		id: 'app.containers.audioplayer.more',
 		defaultMessage: 'More',
 	},
+	prevTitle: {
+		id: 'app.containers.audioplayer.prevTitle',
+		defaultMessage: 'Previous Chapter',
+	},
+	nextTitle: {
+		id: 'app.containers.audioplayer.nextTitle',
+		defaultMessage: 'Next Chapter',
+	},
+	playTitle: {
+		id: 'app.containers.audioplayer.playTitle',
+		defaultMessage: 'Play',
+	},
+	pauseTitle: {
+		id: 'app.containers.audioplayer.pauseTitle',
+		defaultMessage: 'Pause',
+	},
+	autoplayTitle: {
+		id: 'app.containers.audioplayer.autoplayTitle',
+		defaultMessage: 'Autoplay Toggle',
+	},
+	volumeTitle: {
+		id: 'app.containers.audioplayer.volumeTitle',
+		defaultMessage: 'Volume Control',
+	},
+	speedTitle: {
+		id: 'app.containers.audioplayer.speedTitle',
+		defaultMessage: 'Speed Control',
+	},
+	moreTitle: {
+		id: 'app.containers.audioplayer.moreTitle',
+		defaultMessage: 'More Options Menu',
+	},
 });

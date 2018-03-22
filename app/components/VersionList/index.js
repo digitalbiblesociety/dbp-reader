@@ -97,12 +97,10 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 			toggleVersionList,
 			toggleTextSelection,
 			setActiveText,
-			getAudio,
 			active,
 		} = this.props;
 
 		if (bible) {
-			getAudio({ list: bible.get('filesets') });
 			setActiveText({ textId: bible.get('abbr'), textName: bible.get('name'), filesets: bible.get('filesets') });
 			toggleTextSelection();
 		} else if (active) {
@@ -168,7 +166,6 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 
 BiblesTable.propTypes = {
 	bibles: PropTypes.object,
-	getAudio: PropTypes.func,
 	setActiveText: PropTypes.func,
 	toggleVersionList: PropTypes.func,
 	toggleLanguageList: PropTypes.func,

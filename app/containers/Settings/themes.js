@@ -1,5 +1,6 @@
 const paper = {
-	'--header-footer-background': 'rgb(170, 134, 120)',
+	'--header-footer-background': 'rgba(170, 134, 120, 1)',
+	'--header-footer-background-transparent': 'rgba(170, 134, 120, 0)',
 	'--audio-player-background': 'rgba(231, 208, 193, 1)',
 	'--text-selection-color': 'rgb(172, 216, 231)',
 	'--text-contextmenu-background': 'rgb(198, 169, 155)',
@@ -26,7 +27,8 @@ const paper = {
 };
 
 const dark = {
-	'--header-footer-background': 'rgb(39, 42, 47)',
+	'--header-footer-background': 'rgba(39, 42, 47, 1)',
+	'--header-footer-background-transparent': 'rgba(39, 42, 47, 0)',
 	'--audio-player-background': 'rgba(46, 49, 54, 1)',
 	'--text-selection-color': 'rgb(111, 188, 143)',
 	'--text-contextmenu-background': 'rgb(46, 49, 54)',
@@ -53,7 +55,8 @@ const dark = {
 };
 
 const red = {
-	'--header-footer-background': 'rgb(148, 27, 47)',
+	'--header-footer-background': 'rgba(158, 30, 53, 1)',
+	'--header-footer-background-transparent': 'rgba(158, 30, 53, 0)',
 	'--audio-player-background': 'rgba(78, 70, 75, 1)',
 	'--text-selection-color': 'rgb(216, 182, 185)',
 	'--text-contextmenu-background': 'rgb(71, 64, 70)',

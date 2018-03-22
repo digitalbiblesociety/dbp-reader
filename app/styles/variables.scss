@@ -15,7 +15,7 @@ $checkbox-color: #6FBC8F;
 //$paper-background: #FDF9F3;
 $login-email-color: #6E747F;
 $login-facebook-color: #4267B2;
-$login-google-color: #DC4E41;
+$login-google-color: #FFFFFF;
 $login-twitter-color: rgb(42,163,239);
 //$menu-active-color: rgb(98,177,130);
 //$header-footer: rgb(158,30,53);
@@ -43,7 +43,6 @@ $login-twitter-color: rgb(42,163,239);
   $header-footer-color:#FFFFFF; dark might be slightly opaque
   $navbar-dropdown-fill: light #F4F6F9 normal #7E0E2A dark #F4F6F9 50% opacity;
   $header-footer-background-color: light rgb(180, 145, 130) normal rgb(158, 30, 53) dark rgb(44, 48, 54)
-  $
 */
 :root {
   --application-font-family: "Noto Sans", Helvetica, sans serif;
@@ -56,6 +55,7 @@ $compatibility: true;
 //it is nessesary to define the variables in sass map instead of :root, for compatibility reasons.
 $variables: (
         --header-footer-background: rgba(158, 30, 53, 1),
+        --header-footer-background-transparent: rgba(158, 30, 53, 0),
         --audio-player-background: rgb(78, 70, 75),
         --audioplayer-handle-background-color: rgba(0, 0, 0, 0.5),
         --text-selection-color: rgb(216, 182, 185),

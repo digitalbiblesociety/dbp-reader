@@ -15,7 +15,7 @@ import {
 	toggleChapterSelection,
 } from 'containers/HomePage/actions';
 import BooksTable from 'components/BooksTable';
-import SvgWrapper from 'components/SvgWrapper';
+// import SvgWrapper from 'components/SvgWrapper';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
@@ -27,6 +27,7 @@ import {
 import reducer from './reducer';
 import saga from './saga';
 // import messages from './messages';
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 
 export class ChapterSelection extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	componentDidMount() {
@@ -45,6 +46,10 @@ export class ChapterSelection extends React.PureComponent { // eslint-disable-li
 	setActiveChapter = (props) => this.props.dispatch(setActiveChapter(props))
 
 	setActiveBookName = (props) => this.props.dispatch(setActiveBookName(props))
+
+	stopClickProp = (e) => e.stopPropagation()
+
+	stopTouchProp = (e) => e.stopPropagation()
 
 	toggleChapterSelection = (props) => this.props.dispatch(toggleChapterSelection(props))
 
@@ -67,17 +72,12 @@ export class ChapterSelection extends React.PureComponent { // eslint-disable-li
 
 	render() {
 		const {
-			activeChapter,
 			activeBookName,
 		} = this.props;
 
 		return (
 			<GenericErrorBoundary affectedArea="ChapterSelection">
-				<aside ref={this.setAsideRef} className="chapter-text-dropdown">
-					<header>
-						<h2 className="text-selection">{activeBookName ? `${activeBookName} ${activeChapter}` : 'Error retrieving resource'}</h2>
-						<SvgWrapper role="button" tabIndex={0} className="close-icon icon" onClick={this.handleChapterToggle} svgid="arrow_up" />
-					</header>
+				<aside ref={this.setAsideRef} onTouchEnd={this.stopTouchProp} onClick={this.stopClickProp} className="chapter-text-dropdown">
 					{
 						activeBookName ? (
 							<BooksTable
@@ -96,7 +96,6 @@ export class ChapterSelection extends React.PureComponent { // eslint-disable-li
 
 ChapterSelection.propTypes = {
 	dispatch: PropTypes.func.isRequired,
-	activeChapter: PropTypes.number.isRequired,
 	activeBookName: PropTypes.string.isRequired,
 };
 

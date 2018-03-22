@@ -239,7 +239,7 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 	}
 
 	toggleAudioPlayer = () => {
-		if (this.props.audioSource) {
+		if (this.props.audioSource && this.props.hasAudio) {
 			this.setState({
 				playerState: !this.state.playerState,
 			});
@@ -311,13 +311,13 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 					{
 						(this.state.playerState && hasAudio) ? (
 							<div className="audio-player-container">
-								<span className={'icon-wrap'} title={'Skip Back'}>
+								<span className={'icon-wrap'} title={messages.prevTitle.defaultMessage}>
 									<SvgWrapper onClick={this.skipBackward} className="svgitem icon" fill="#fff" svgid="previous" />
 									<FormattedMessage {...messages.prev} />
 								</span>
 								{
 									!this.state.playing ? (
-										<span className={'icon-wrap'} title={'Play'}>
+										<span className={'icon-wrap'} title={messages.playTitle.defaultMessage}>
 											<SvgWrapper onClick={this.playVideo} className="svgitem icon" fill="#fff" svgid="play" />
 											<FormattedMessage {...messages.play} />
 										</span>
@@ -325,18 +325,18 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 								}
 								{
 									this.state.playing ? (
-										<span className={'icon-wrap'} title={'Pause'}>
+										<span className={'icon-wrap'} title={messages.pauseTitle.defaultMessage}>
 											<SvgWrapper onClick={this.pauseVideo} className="svgitem icon" fill="#fff" svgid="pause" />
 											<FormattedMessage {...messages.pause} />
 										</span>
 									) : null
 								}
-								<span className={'icon-wrap'} title={'Skip Forward'}>
+								<span className={'icon-wrap'} title={messages.nextTitle.defaultMessage}>
 									<SvgWrapper onClick={this.skipForward} className="svgitem icon" fill="#fff" svgid="next" />
 									<FormattedMessage {...messages.next} />
 								</span>
 								<AudioProgressBar setCurrentTime={this.setCurrentTime} duration={this.state.duration} currentTime={this.state.currentTime} />
-								<span id={'autoplay-wrap'} className={'icon-wrap'} title={'Autoplay'}>
+								<span id={'autoplay-wrap'} className={'icon-wrap'} title={messages.autoplayTitle.defaultMessage}>
 									<input
 										id={'autoplay'}
 										className={'custom-checkbox'}
@@ -349,7 +349,7 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 									</label>
 								</span>
 								<div id="volume-wrap">
-									<div title={'Volume Control'} role="button" tabIndex="0" className={this.state.volumeSliderState ? 'item active' : 'item'} onClick={() => { this.state.volumeSliderState ? this.setVolumeSliderState(false) : this.setVolumeSliderState(true); this.setSpeedControlState(false); this.setElipsisState(false); }}>
+									<div title={messages.volumeTitle.defaultMessage} role="button" tabIndex="0" className={this.state.volumeSliderState ? 'item active' : 'item'} onClick={() => { this.state.volumeSliderState ? this.setVolumeSliderState(false) : this.setVolumeSliderState(true); this.setSpeedControlState(false); this.setElipsisState(false); }}>
 										{this.getVolumeSvg(this.state.volume)}
 										<FormattedMessage {...messages.volume} />
 									</div>
@@ -358,7 +358,7 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 									}
 								</div>
 								<div id="volume-wrap">
-									<div title={'Speed Control'} role="button" tabIndex="0" className={this.state.speedControlState ? 'item active' : 'item'} onClick={() => { this.state.speedControlState ? this.setSpeedControlState(false) : this.setSpeedControlState(true); this.setElipsisState(false); this.setVolumeSliderState(false); }}>
+									<div title={messages.speedTitle.defaultMessage} role="button" tabIndex="0" className={this.state.speedControlState ? 'item active' : 'item'} onClick={() => { this.state.speedControlState ? this.setSpeedControlState(false) : this.setSpeedControlState(true); this.setElipsisState(false); this.setVolumeSliderState(false); }}>
 										{this.currentSpeedSvg}
 										<FormattedMessage {...messages.speed} />
 									</div>

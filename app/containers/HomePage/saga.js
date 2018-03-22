@@ -4,6 +4,7 @@ import request from 'utils/request';
 import some from 'lodash/some';
 import reduce from 'lodash/reduce';
 import get from 'lodash/get';
+// import filter from 'lodash/filter';
 import { ADD_HIGHLIGHTS, LOAD_HIGHLIGHTS, GET_HIGHLIGHTS } from './constants';
 // import { fromJS } from 'immutable';
 // import unionWith from 'lodash/unionWith';
@@ -71,7 +72,7 @@ export function* addHighlight({ bible, book, chapter, userId, verseStart, highli
 	// console.log('add highlight data', { bible, book, chapter, userId, verseStart, highlightStart, highlightedWords });
 	try {
 		const response = yield call(request, requestUrl, options);
-		console.log('add highlight response', response);
+		// console.log('add highlight response', response);
 		// Need to get the highlights here because they are not being returned
 		if (response.success) {
 			yield call(getHighlights, { bible, book, chapter, userId });
@@ -181,7 +182,7 @@ export function* getChapterFromUrl({ filesets, bibleId: oldBibleId, bookId: oldB
 	try {
 		let formattedText = '';
 		let plainText = [];
-		let hasPlainText = true;
+		let hasPlainText = some(filesets, (f) => f.set_type_code === 'text_plain');
 
 		if (authenticated) {
 			yield fork(getHighlights, { bible: bibleId, book: bookId, chapter, userId });
@@ -284,12 +285,23 @@ export function* getChapterFromUrl({ filesets, bibleId: oldBibleId, bookId: oldB
 export function* getChapterAudio({ filesets, bookId, chapter }) {
 	// console.log('getting audio', filesets, bookId, chapter);
 	// Parse filesets
+	const filteredFilesets = reduce(filesets, (a, file, i) => {
+		const newFile = { ...a };
+
+		if (file.set_type_code === 'audio' || file.set_type_code === 'audio_drama') {
+			newFile[i] = file;
+		}
+
+		return newFile;
+	}, {});
+	// console.log('filtered', filteredFilesets);
+	// console.log('normal', filesets);
 	const completeAudio = [];
 	const ntAudio = [];
 	const otAudio = [];
 	const partialAudio = [];
 
-	Object.entries(filesets).forEach((fileset) => {
+	Object.entries(filteredFilesets).forEach((fileset) => {
 		if (fileset[1].set_size_code === 'C') {
 			completeAudio.push({ id: fileset[0], data: fileset[1] });
 		} else if (fileset[1].set_size_code === 'NT') {

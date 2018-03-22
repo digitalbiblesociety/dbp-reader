@@ -18,6 +18,10 @@ import SvgWrapper from 'components/SvgWrapper';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
 import CloseMenuFunctions from 'utils/closeMenuFunctions';
 import {
+	setActiveTextId,
+	toggleVersionSelection,
+} from 'containers/HomePage/actions';
+import {
 	setVersionListState,
 	setLanguageListState,
 	setActiveIsoCode,
@@ -25,12 +29,17 @@ import {
 	getTexts,
 	setCountryName,
 } from './actions';
-import makeSelectTextSelection, { selectLanguages, selectTexts, selectCountries } from './selectors';
+import makeSelectTextSelection, {
+	selectLanguages,
+	selectTexts,
+	selectCountries,
+	selectHomepageData,
+} from './selectors';
 // import reducer from './reducer';
 // import saga from './saga';
 // import { FormattedMessage } from 'react-intl';
 // import messages from './messages';
-
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 export class TextSelection extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	componentDidMount() {
 		// TODO: use a conditional to ensure the actions below only happen on the first mount
@@ -41,16 +50,16 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 		// 	this.props.dispatch(getTexts({ languageISO: this.props.initialIsoCode }));
 		// 	this.props.toggleFirstLoadForTextSelection();
 		// }
-		this.props.dispatch(setActiveIsoCode({ iso: this.props.initialIsoCode, name: this.props.initialLanguageName }));
-		this.closeMenuController = new CloseMenuFunctions(this.ref, this.props.toggleVersionSelection);
+		this.props.dispatch(setActiveIsoCode({ iso: this.props.homepageData.initialIsoCode, name: this.props.homepageData.initialLanguageName }));
+		this.closeMenuController = new CloseMenuFunctions(this.ref, this.toggleVersionSelection);
 		this.closeMenuController.onMenuMount();
 	}
 
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.textselection.activeIsoCode !== this.props.textselection.activeIsoCode) {
 			this.props.dispatch(getTexts({ languageISO: nextProps.textselection.activeIsoCode }));
-		} else if (nextProps.initialIsoCode !== this.props.initialIsoCode) {
-			this.props.dispatch(getTexts({ languageISO: nextProps.initialIsoCode }));
+		} else if (nextProps.homepageData.initialIsoCode !== this.homepageData.props.initialIsoCode) {
+			this.props.dispatch(getTexts({ languageISO: nextProps.homepageData.initialIsoCode }));
 		}
 	}
 
@@ -66,7 +75,15 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 
 	setActiveIsoCode = ({ iso, name }) => this.props.dispatch(setActiveIsoCode({ iso, name }));
 
+	setActiveTextId = (props) => this.props.dispatch(setActiveTextId(props))
+
 	setCountryName = ({ name, languages }) => this.props.dispatch(setCountryName({ name, languages }));
+
+	stopClickProp = (e) => e.stopPropagation()
+
+	stopTouchProp = (e) => e.stopPropagation()
+
+	toggleVersionSelection = () => this.props.dispatch(toggleVersionSelection())
 
 	toggleLanguageList = ({ state }) => this.props.dispatch(setLanguageListState({ state }));
 
@@ -75,7 +92,7 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 	handleVersionSelectionToggle = () => {
 		document.removeEventListener('click', this.handleClickOutside);
 
-		this.props.toggleVersionSelection();
+		this.toggleVersionSelection();
 	}
 
 	render() {
@@ -92,13 +109,12 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 			loadingVersions,
 		} = this.props.textselection;
 		const {
+			activeTextName,
+		} = this.props.homepageData;
+		const {
 			bibles,
 			languages,
 			countries,
-			setActiveText,
-			activeTextName,
-			toggleVersionSelection,
-			getAudio,
 		} = this.props;
 		let sectionTitle = 'LANGUAGE';
 
@@ -110,23 +126,22 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 
 		return (
 			<GenericErrorBoundary affectedArea="TextSelection">
-				<aside ref={this.setRef} className="chapter-text-dropdown">
+				<aside ref={this.setRef} onTouchEnd={this.stopTouchProp} onClick={this.stopClickProp} className="chapter-text-dropdown">
 					<header>
 						<h2 className="text-selection">{`${sectionTitle} SELECTION`}</h2>
 						<SvgWrapper role="button" tabIndex={0} className="close-icon icon" onClick={this.handleVersionSelectionToggle} svgid="arrow_up" />
 					</header>
 					<VersionList
-						active={versionListActive}
-						setCountryListState={this.setCountryListState}
-						activeTextName={activeTextName}
-						toggleVersionList={this.toggleVersionList}
-						activeIsoCode={activeIsoCode}
-						setActiveText={setActiveText}
 						bibles={bibles}
-						getAudio={getAudio}
-						toggleLanguageList={this.toggleLanguageList}
-						toggleTextSelection={toggleVersionSelection}
+						active={versionListActive}
+						activeIsoCode={activeIsoCode}
+						activeTextName={activeTextName}
 						loadingVersions={loadingVersions}
+						setActiveText={this.setActiveTextId}
+						toggleVersionList={this.toggleVersionList}
+						toggleLanguageList={this.toggleLanguageList}
+						setCountryListState={this.setCountryListState}
+						toggleTextSelection={this.toggleVersionSelection}
 					/>
 					<CountryList
 						active={countryListActive}
@@ -162,12 +177,10 @@ TextSelection.propTypes = {
 	languages: PropTypes.object,
 	countries: PropTypes.object,
 	textselection: PropTypes.object,
-	activeTextName: PropTypes.string,
-	initialIsoCode: PropTypes.string,
-	initialLanguageName: PropTypes.string,
-	getAudio: PropTypes.func,
-	setActiveText: PropTypes.func,
-	toggleVersionSelection: PropTypes.func,
+	homepageData: PropTypes.object,
+	// getAudio: PropTypes.func,
+	// setActiveText: PropTypes.func,
+	// toggleVersionSelection: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -175,6 +188,7 @@ const mapStateToProps = createStructuredSelector({
 	languages: selectLanguages(),
 	bibles: selectTexts(),
 	countries: selectCountries(),
+	homepageData: selectHomepageData(),
 });
 
 function mapDispatchToProps(dispatch) {
