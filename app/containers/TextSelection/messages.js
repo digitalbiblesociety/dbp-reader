@@ -6,8 +6,20 @@
 import { defineMessages } from 'react-intl';
 
 export default defineMessages({
-	header: {
-		id: 'app.containers.TextSelection.header',
-		defaultMessage: 'This is TextSelection container !',
+	country: {
+		id: 'app.containers.TextSelection.country',
+		defaultMessage: 'Country',
+	},
+	language: {
+		id: 'app.containers.TextSelection.language',
+		defaultMessage: 'Language',
+	},
+	version: {
+		id: 'app.containers.TextSelection.version',
+		defaultMessage: 'Version',
+	},
+	search: {
+		id: 'app.containers.TextSelection.search',
+		defaultMessage: 'Search',
 	},
 });

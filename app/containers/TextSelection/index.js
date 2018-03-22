@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
+import { FormattedMessage } from 'react-intl';
 // import injectSaga from 'utils/injectSaga';
 // import injectReducer from 'utils/injectReducer';
 import CountryList from 'components/CountryList';
@@ -37,19 +38,10 @@ import makeSelectTextSelection, {
 } from './selectors';
 // import reducer from './reducer';
 // import saga from './saga';
-// import { FormattedMessage } from 'react-intl';
-// import messages from './messages';
+import messages from './messages';
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 export class TextSelection extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	componentDidMount() {
-		// TODO: use a conditional to ensure the actions below only happen on the first mount
-		// move these calls to CDM of homepage to ensure they are loaded by the time the user is here
-		// if (this.props.firstLoad) {
-		// 	this.props.dispatch(getCountries());
-		// 	this.props.dispatch(getLanguages());
-		// 	this.props.dispatch(getTexts({ languageISO: this.props.initialIsoCode }));
-		// 	this.props.toggleFirstLoadForTextSelection();
-		// }
 		this.props.dispatch(setActiveIsoCode({ iso: this.props.homepageData.initialIsoCode, name: this.props.homepageData.initialLanguageName }));
 		this.closeMenuController = new CloseMenuFunctions(this.ref, this.toggleVersionSelection);
 		this.closeMenuController.onMenuMount();
@@ -58,7 +50,7 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.textselection.activeIsoCode !== this.props.textselection.activeIsoCode) {
 			this.props.dispatch(getTexts({ languageISO: nextProps.textselection.activeIsoCode }));
-		} else if (nextProps.homepageData.initialIsoCode !== this.homepageData.props.initialIsoCode) {
+		} else if (nextProps.homepageData.initialIsoCode !== this.props.homepageData.initialIsoCode) {
 			this.props.dispatch(getTexts({ languageISO: nextProps.homepageData.initialIsoCode }));
 		}
 	}
@@ -95,7 +87,7 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 		this.toggleVersionSelection();
 	}
 
-	render() {
+	get activeTab() {
 		const {
 			activeIsoCode,
 			languageListActive,
@@ -116,55 +108,72 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 			languages,
 			countries,
 		} = this.props;
-		let sectionTitle = 'LANGUAGE';
 
-		if (versionListActive) {
-			sectionTitle = 'VERSION';
+		if (languageListActive) {
+			return (
+				<LanguageList
+					active={languageListActive}
+					countryListActive={countryListActive}
+					countryLanguages={countryLanguages}
+					setCountryListState={this.setCountryListState}
+					toggleVersionList={this.toggleVersionList}
+					activeLanguageName={activeLanguageName}
+					toggleLanguageList={this.toggleLanguageList}
+					languages={languages}
+					setActiveIsoCode={this.setActiveIsoCode}
+					loadingLanguages={loadingLanguages}
+				/>
+			);
 		} else if (countryListActive) {
-			sectionTitle = 'COUNTRY';
+			return (
+				<CountryList
+					active={countryListActive}
+					setCountryListState={this.setCountryListState}
+					toggleVersionList={this.toggleVersionList}
+					activeCountryName={activeCountryName}
+					toggleLanguageList={this.toggleLanguageList}
+					countries={countries}
+					setCountryName={this.setCountryName}
+					loadingCountries={loadingCountries}
+				/>
+			);
 		}
+		return (
+			<VersionList
+				bibles={bibles}
+				active={versionListActive}
+				activeIsoCode={activeIsoCode}
+				activeTextName={activeTextName}
+				loadingVersions={loadingVersions}
+				setActiveText={this.setActiveTextId}
+				toggleVersionList={this.toggleVersionList}
+				toggleLanguageList={this.toggleLanguageList}
+				setCountryListState={this.setCountryListState}
+				toggleTextSelection={this.toggleVersionSelection}
+			/>
+		);
+	}
+
+	render() {
+		const {
+			countryListActive,
+			languageListActive,
+			versionListActive,
+		} = this.props.textselection;
 
 		return (
 			<GenericErrorBoundary affectedArea="TextSelection">
-				<aside ref={this.setRef} onTouchEnd={this.stopTouchProp} onClick={this.stopClickProp} className="chapter-text-dropdown">
-					<header>
-						<h2 className="text-selection">{`${sectionTitle} SELECTION`}</h2>
-						<SvgWrapper role="button" tabIndex={0} className="close-icon icon" onClick={this.handleVersionSelectionToggle} svgid="arrow_up" />
-					</header>
-					<VersionList
-						bibles={bibles}
-						active={versionListActive}
-						activeIsoCode={activeIsoCode}
-						activeTextName={activeTextName}
-						loadingVersions={loadingVersions}
-						setActiveText={this.setActiveTextId}
-						toggleVersionList={this.toggleVersionList}
-						toggleLanguageList={this.toggleLanguageList}
-						setCountryListState={this.setCountryListState}
-						toggleTextSelection={this.toggleVersionSelection}
-					/>
-					<CountryList
-						active={countryListActive}
-						setCountryListState={this.setCountryListState}
-						toggleVersionList={this.toggleVersionList}
-						activeCountryName={activeCountryName}
-						toggleLanguageList={this.toggleLanguageList}
-						countries={countries}
-						setCountryName={this.setCountryName}
-						loadingCountries={loadingCountries}
-					/>
-					<LanguageList
-						active={languageListActive}
-						countryListActive={countryListActive}
-						countryLanguages={countryLanguages}
-						setCountryListState={this.setCountryListState}
-						toggleVersionList={this.toggleVersionList}
-						activeLanguageName={activeLanguageName}
-						toggleLanguageList={this.toggleLanguageList}
-						languages={languages}
-						setActiveIsoCode={this.setActiveIsoCode}
-						loadingLanguages={loadingLanguages}
-					/>
+				<aside ref={this.setRef} onTouchEnd={this.stopTouchProp} onClick={this.stopClickProp} className="text-selection-dropdown">
+					<div className={'search-input-bar'}>
+						<SvgWrapper className={'icon'} svgid={'search'} />
+						<input placeholder={messages.search.defaultMessage} />
+					</div>
+					<div className={'tab-options'}>
+						<span className={countryListActive ? 'tab-option active' : 'tab-option'}><FormattedMessage {...messages.country} /></span>
+						<span className={languageListActive ? 'tab-option active' : 'tab-option'}><FormattedMessage {...messages.language} /></span>
+						<span className={versionListActive ? 'tab-option active' : 'tab-option'}><FormattedMessage {...messages.version} /></span>
+					</div>
+					{this.activeTab}
 				</aside>
 			</GenericErrorBoundary>
 		);

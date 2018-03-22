@@ -1,4 +1,19 @@
 // Chapter and Version Shared Styles
+.text-selection-dropdown {
+  display:flex;
+  flex-direction:column;
+  position:absolute;
+  top:54px;
+  left:0;
+  min-width:291px;
+  //left:calc(50% - 116px);
+  height:calc(100vh - 110px);
+  @include css4{
+    background-color:var(--menu-secondary-background-color);
+    color:var(--menu-font-color);
+  };
+  z-index:1;
+}
 .text-selection-section .active-header-name         {@include css4{color:var(--menu-active-color);};margin-left:5px;}
 .text-selection-section                             {max-height:calc(100% - 216px);height:calc(100% - 216px);text-transform:uppercase;}
 .text-selection-section ::-webkit-input-placeholder {@include css4{color:var(--application-placeholder-color);};}
@@ -13,6 +28,53 @@
 // This should probably be handled differently
 .text-selection-section .input-wrapper     {position:relative;bottom:30px;}
 .text-selection-section .input-wrapper svg {position:relative;top:45px;margin:0 10px;}
+
+// Tab list styles
+.text-selection-dropdown {
+  .tab-options {
+    margin: 10px;
+    display:flex;
+    align-items: center;
+
+    .tab-option {
+      display:flex;
+      align-items: center;
+      justify-content: center;
+      font-weight:200;
+      font-size: 14px;
+      height: 27px;
+      width:33%;
+      @include css4 {
+        border:1px solid var(--menu-title-text-color);
+      }
+
+      &.active {
+        @include css4 {
+          background-color: var(--tab-option-active-background);
+          color: var(--tab-option-active-color);
+        }
+      }
+    }
+
+    .tab-option:first-child {
+      @include css4 {
+        border-top:1px solid var(--menu-title-text-color);
+        border-bottom:1px solid var(--menu-title-text-color);
+        border-left:1px solid var(--menu-title-text-color);
+        border-radius: 6px 0 0 6px;
+      }
+    }
+
+    .tab-option:last-child {
+      @include css4 {
+        border-top:1px solid var(--menu-title-text-color);
+        border-bottom:1px solid var(--menu-title-text-color);
+        border-right:1px solid var(--menu-title-text-color);
+        border-radius:0 6px 6px 0;
+      }
+    }
+  }
+}
 
 // Country Selection Styles
 .country-name       {display:flex;align-items:center;cursor:pointer;}
