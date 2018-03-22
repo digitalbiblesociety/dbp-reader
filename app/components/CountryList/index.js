@@ -7,7 +7,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { List, AutoSizer } from 'react-virtualized';
-import SvgWrapper from 'components/SvgWrapper';
 import LoadingSpinner from 'components/LoadingSpinner';
 import flags from 'images/flags.svg';
 
@@ -132,25 +131,12 @@ class CountryList extends React.PureComponent { // eslint-disable-line react/pre
 	render() {
 		const {
 			active,
-			toggleLanguageList,
-			activeCountryName,
-			setCountryListState,
-			toggleVersionList,
 			loadingCountries,
 		} = this.props;
 
 		if (active) {
 			return (
 				<div className="text-selection-section">
-					<div role={'button'} tabIndex={0} onClick={() => { setCountryListState({ state: false }); toggleLanguageList({ state: true }); }} className="text-selection-title">
-						<SvgWrapper height="25px" width="25px" fill="#fff" svgid="globe" />
-						<span className="text">COUNTRY:</span>
-						{/* <span className="active-header-name">{activeCountryName || 'ANY'}</span> */}
-					</div>
-					<span className={'input-wrapper'}>
-						<SvgWrapper width="30px" height="30px" fill={'#fff'} svgid={'search'} />
-						<input className="text-selection-input" onChange={this.handleChange} placeholder="SEARCH COUNTRIES" value={this.state.filterText} />
-					</span>
 					<div className="country-name-list">
 						{
 							loadingCountries ? (
@@ -165,15 +151,7 @@ class CountryList extends React.PureComponent { // eslint-disable-line react/pre
 				</div>
 			);
 		}
-		return (
-			<div className="text-selection-section closed" role="button" tabIndex={0} onClick={() => { setCountryListState({ state: true }); toggleVersionList({ state: false }); toggleLanguageList({ state: false }); }}>
-				<div className="text-selection-title">
-					<SvgWrapper height="25px" width="25px" fill="#fff" svgid="globe" />
-					<span className="text">COUNTRY:</span>
-					<span className="active-header-name">{activeCountryName || 'ANY'}</span>
-				</div>
-			</div>
-		);
+		return null;
 	}
 }
 

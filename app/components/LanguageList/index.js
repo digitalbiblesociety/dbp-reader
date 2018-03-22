@@ -6,9 +6,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-// import LazyLoad, { forceCheck } from 'react-lazyload';
 import { List, AutoSizer } from 'react-virtualized';
-import SvgWrapper from 'components/SvgWrapper';
 import LoadingSpinner from 'components/LoadingSpinner';
 
 class LanguageList extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
@@ -122,23 +120,12 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 	render() {
 		const {
 			active,
-			activeLanguageName,
-			countryListActive,
 			loadingLanguages,
 		} = this.props;
 
 		if (active) {
 			return (
 				<div className="text-selection-section">
-					<div role={'button'} tabIndex={0} onClick={() => this.handleLanguageClick()} className="text-selection-title">
-						<SvgWrapper height="25px" width="25px" fill="#fff" svgid="world" />
-						<span className="text">LANGUAGE:</span>
-						{/* <span className="active-header-name">{activeLanguageName}</span> */}
-					</div>
-					<span className={'input-wrapper'}>
-						<SvgWrapper width="30px" height="30px" fill={'#fff'} svgid={'search'} />
-						<input className="text-selection-input" onChange={this.handleChange} placeholder="SEARCH LANGUAGES" value={this.state.filterText} />
-					</span>
 					<div className="language-name-list">
 						{
 							!loadingLanguages ? (
@@ -151,15 +138,7 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 				</div>
 			);
 		}
-		return (
-			<div className="text-selection-section closed" role="button" tabIndex={0} onClick={() => this.handleLanguageClick()}>
-				<div className="text-selection-title">
-					<SvgWrapper height="25px" width="25px" fill="#fff" svgid="world" />
-					<span className="text">LANGUAGE:</span>
-					<span className="active-header-name">{countryListActive ? '' : activeLanguageName}</span>
-				</div>
-			</div>
-		);
+		return null;
 	}
 }
 
@@ -171,7 +150,6 @@ LanguageList.propTypes = {
 	toggleVersionList: PropTypes.func,
 	active: PropTypes.bool,
 	loadingLanguages: PropTypes.bool,
-	countryListActive: PropTypes.bool,
 	activeLanguageName: PropTypes.string,
 };
 

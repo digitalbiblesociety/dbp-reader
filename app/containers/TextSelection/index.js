@@ -63,7 +63,7 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 		this.ref = node;
 	}
 
-	setCountryListState = ({ state }) => this.props.dispatch(setCountryListState({ state }));
+	setCountryListState = () => this.props.dispatch(setCountryListState());
 
 	setActiveIsoCode = ({ iso, name }) => this.props.dispatch(setActiveIsoCode({ iso, name }));
 
@@ -77,9 +77,9 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 
 	toggleVersionSelection = () => this.props.dispatch(toggleVersionSelection())
 
-	toggleLanguageList = ({ state }) => this.props.dispatch(setLanguageListState({ state }));
+	toggleLanguageList = () => this.props.dispatch(setLanguageListState());
 
-	toggleVersionList = ({ state }) => this.props.dispatch(setVersionListState({ state }));
+	toggleVersionList = () => this.props.dispatch(setVersionListState());
 
 	handleVersionSelectionToggle = () => {
 		document.removeEventListener('click', this.handleClickOutside);
@@ -166,12 +166,12 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 				<aside ref={this.setRef} onTouchEnd={this.stopTouchProp} onClick={this.stopClickProp} className="text-selection-dropdown">
 					<div className={'search-input-bar'}>
 						<SvgWrapper className={'icon'} svgid={'search'} />
-						<input placeholder={messages.search.defaultMessage} />
+						<input className={'input-class'} placeholder={messages.search.defaultMessage} />
 					</div>
 					<div className={'tab-options'}>
-						<span className={countryListActive ? 'tab-option active' : 'tab-option'}><FormattedMessage {...messages.country} /></span>
-						<span className={languageListActive ? 'tab-option active' : 'tab-option'}><FormattedMessage {...messages.language} /></span>
-						<span className={versionListActive ? 'tab-option active' : 'tab-option'}><FormattedMessage {...messages.version} /></span>
+						<span onClick={this.setCountryListState} className={countryListActive ? 'tab-option active' : 'tab-option'}><FormattedMessage {...messages.country} /></span>
+						<span onClick={this.toggleLanguageList} className={languageListActive ? 'tab-option active' : 'tab-option'}><FormattedMessage {...messages.language} /></span>
+						<span onClick={this.toggleVersionList} className={versionListActive ? 'tab-option active' : 'tab-option'}><FormattedMessage {...messages.version} /></span>
 					</div>
 					{this.activeTab}
 				</aside>

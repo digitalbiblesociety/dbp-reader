@@ -128,15 +128,6 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 		if (active) {
 			return (
 				<div className="text-selection-section">
-					<div role={'button'} tabIndex={0} onClick={() => this.handleVersionListClick()} className="text-selection-title">
-						<SvgWrapper height="25px" width="25px" fill="#fff" svgid="resources" />
-						<span className="text">VERSION:</span>
-						{/* <span className="active-header-name">{activeTextName}</span> */}
-					</div>
-					<span className={'input-wrapper'}>
-						<SvgWrapper width="30px" height="30px" fill={'#fff'} svgid={'search'} />
-						<input className="text-selection-input" onChange={this.handleChange} placeholder="SEARCH VERSIONS" value={this.state.filterText} />
-					</span>
 					<div className="version-name-list">
 						{
 							loadingVersions && !versionsError ? (
@@ -147,20 +138,7 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 				</div>
 			);
 		}
-		return (
-			<div
-				className="text-selection-section closed"
-				tabIndex="0"
-				role="button"
-				onClick={() => this.handleVersionListClick()}
-			>
-				<div className="text-selection-title">
-					<SvgWrapper height="25px" width="25px" fill="#fff" svgid="resources" />
-					<span className="text">VERSION:</span>
-					{/* <span className="active-header-name">{activeTextName}</span> */}
-				</div>
-			</div>
-		);
+		return null;
 	}
 }
 

@@ -1,4 +1,19 @@
 // Chapter and Version Shared Styles
+.text-selection-section .active-header-name {
+  @include css4{color:var(--menu-active-color);};margin-left:5px;}
+.text-selection-section {
+  max-height:calc(100% - 100px);
+  height:calc(100% - 100px);
+  text-transform:uppercase;
+}
+.text-selection-title          {
+  display:flex;align-items:center;
+  justify-content:flex-start;margin:10px 0 5px 10px;
+  cursor:pointer;}
+.text-selection-title:hover    {opacity:0.65;}
+.text-selection-title .text    {margin-left:10px;}
+// Change from using background url to using an absolutely positioned element
+
 .text-selection-dropdown {
   display:flex;
   flex-direction:column;
@@ -13,24 +28,8 @@
     color:var(--menu-font-color);
   };
   z-index:1;
-}
-.text-selection-section .active-header-name         {@include css4{color:var(--menu-active-color);};margin-left:5px;}
-.text-selection-section                             {max-height:calc(100% - 216px);height:calc(100% - 216px);text-transform:uppercase;}
-.text-selection-section ::-webkit-input-placeholder {@include css4{color:var(--application-placeholder-color);};}
-.text-selection-section ::-moz-placeholder          {@include css4{color:var(--application-placeholder-color);};}
-.text-selection-section :-ms-input-placeholder      {@include css4{color:var(--application-placeholder-color);};}
-.text-selection-section.closed                      {cursor:pointer;height:54px;}
-.text-selection-title                               {display:flex;align-items:center;justify-content:flex-start;margin:10px 0 5px 10px;cursor:pointer;}
-.text-selection-title:hover                         {opacity:0.65;}
-.text-selection-title .text                         {margin-left:10px;}
-// Change from using background url to using an absolutely positioned element
-.text-selection-input                      {border:none;width:100%;height:50px;@include css4{background-color:var(--application-input-color);caret-color:var(--dark-caret-color);};font-size:.9em;font-weight:200;padding-left:45px;}
-// This should probably be handled differently
-.text-selection-section .input-wrapper     {position:relative;bottom:30px;}
-.text-selection-section .input-wrapper svg {position:relative;top:45px;margin:0 10px;}
 
-// Tab list styles
-.text-selection-dropdown {
+  // Tab list styles
   .tab-options {
     margin: 10px;
     display:flex;
@@ -44,8 +43,17 @@
       font-size: 14px;
       height: 27px;
       width:33%;
+      cursor:pointer;
+
       @include css4 {
         border:1px solid var(--menu-title-text-color);
+      }
+
+      &:hover {
+        @include css4 {
+          background-color: var(--tab-option-active-background);
+          color: var(--tab-option-active-color);
+        }
       }
 
       &.active {
@@ -74,6 +82,20 @@
       }
     }
   }
+
+  .search-input-bar {
+    display:flex;
+    align-items: center;
+    height: 54px;
+
+    .icon {
+      flex-shrink: 0;
+    }
+
+    .input-class {
+      margin-left: 25px;
+    }
+  }
 }
 
 // Country Selection Styles
@@ -87,17 +109,65 @@
 .language-name:hover       {@include css4{color:var(--menu-active-color);};}
 .active-language-name      {@include css4{color:var(--menu-active-color);};max-height:50px;}
 // The relative input values are affecting this as well...
-.language-name-list        {@include css4{background-color:var(--menu-secondary-background-color);color:var(--menu-font-color);};font-size:.98em;height:calc(100% - 90px);max-height:calc(100% - 90px);padding:15px;margin-top:-35px;}
-.version-name-list         {@include css4{background-color:var(--menu-secondary-background-color);color:var(--menu-font-color);};font-size:.98em;height:calc(100% - 90px);max-height:calc(100% - 90px);overflow:scroll;padding:15px;margin-top:-35px;}
-.country-name-list         {@include css4{background-color:var(--menu-secondary-background-color);color:var(--menu-font-color);};font-size:.98em;height:calc(100% - 90px);max-height:calc(100% - 90px);padding:15px;margin-top:-35px;}
+.language-name-list        {
+  @include css4{
+    background-color:var(--menu-secondary-background-color);
+    color:var(--menu-font-color);
+  };
+  font-size:.98em;
+  height:calc(100%);
+  max-height:calc(100%);
+  padding:15px;
+}
+.version-name-list         {
+  @include css4{
+    background-color:var(--menu-secondary-background-color);
+    color:var(--menu-font-color);
+  };
+  font-size:.98em;
+  height:calc(100%);
+  max-height:calc(100%);
+  overflow:scroll;
+  padding:15px;
+}
+.country-name-list         {
+  @include css4{
+    background-color:var(--menu-secondary-background-color);
+    color:var(--menu-font-color);
+  };
+  font-size:.98em;
+  height:calc(100%);
+  max-height:calc(100%);
+  padding:15px;
+}
 
 // Version Selection Styles
-.version-item-button               {display:flex;align-items:flex-start;margin:10px 0;cursor:pointer;:nth-child(2){margin:0 10px;}}
-.version-item-button:hover         {@include css4{color:var(--menu-active-color);fill:var(--menu-active-color);};}
-.version-item-button .svg          {min-height: 20px;min-width:20px;}
-.version-item-button .svg.active   {@include css4{fill:var(--menu-font-color);};}
-.version-item-button .svg.inactive {@include css4{fill:var(--menu-inactive-svg-color);};}
-.active-version                    {@include css4{color:var(--menu-active-color);};}
+.version-item-button               {
+  display:flex;
+  align-items:flex-start;
+  margin:10px 0;
+  cursor:pointer;
+  :nth-child(2){margin:0 10px;}
+}
+.version-item-button:hover         {
+  @include css4{
+    color:var(--menu-active-color);
+    fill:var(--menu-active-color);
+  };
+}
+.version-item-button .svg          {
+  min-height: 20px;
+  min-width:20px;
+}
+.version-item-button .svg.active   {
+  @include css4{fill:var(--menu-font-color);};
+}
+.version-item-button .svg.inactive {
+  @include css4{fill:var(--menu-inactive-svg-color);};
+}
+.active-version                    {
+  @include css4{color:var(--menu-active-color);};
+}
 // capture location of the client relative to the scroll container
 // once the previously active book is closed reset scroll height
 // if the new book is above the previous book do nothing

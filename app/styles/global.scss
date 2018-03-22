@@ -50,11 +50,44 @@ body .twitter  {background-color:$login-twitter-color;font-family:"Helvetica Neu
 }
 
 // Input Box Styles
-input:focus                            {background-image:none;outline:none;}
-input:focus::-webkit-input-placeholder {color:transparent;}
-input:focus::-moz-placeholder          {color:transparent;}
-input:focus:-ms-input-placeholder      {color:transparent;}
-.input-icon                            {@include css4{background-color:var(--application-input-color);};width:30px;height:30px;}
+input {
+  width:100%;
+  max-width: 320px;
+  min-height: 30px;
+  margin:10px auto;
+  position:relative;
+  border: none;
+  font-size: 16px;
+
+  @include css4 {
+    border-bottom: 1px solid var(--menu-title-text-color);
+    background-color: var(--menu-background-color);
+    caret-color: var(--menu-title-text-color);
+
+    &::-webkit-input-placeholder {
+      color:var(--application-input-color);
+      font-size: 16px;
+    }
+    &::-moz-placeholder          {
+      color:var(--application-input-color);
+      font-size: 16px;
+    }
+    &:-ms-input-placeholder      {
+      color:var(--application-input-color);
+      font-size: 16px;
+    }
+  }
+
+  &:focus {
+    background-image:none;
+    outline:none;
+    &::-webkit-input-placeholder {color:transparent;}
+    &::-moz-placeholder          {color:transparent;}
+    &:-ms-input-placeholder      {color:transparent;}
+  }
+}
+
+.input-icon {@include css4{background-color:var(--application-input-color);};width:30px;height:30px;}
 
 // Custom Checkboxes
 // Removes the normal checkbox
