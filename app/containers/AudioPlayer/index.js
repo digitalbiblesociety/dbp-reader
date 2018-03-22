@@ -239,7 +239,7 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 	}
 
 	toggleAudioPlayer = () => {
-		if (this.props.audioSource) {
+		if (this.props.audioSource && this.props.hasAudio) {
 			this.setState({
 				playerState: !this.state.playerState,
 			});
