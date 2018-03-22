@@ -40,15 +40,36 @@
     width:calc(45% - 7.5px);
     //max-width: 450px;
     display:flex;
+    position: relative;
     align-items: center;
     cursor:pointer;
+
+    .version-text {
+      display:inline-block;
+      position:relative;
+      overflow:hidden;
+      white-space:nowrap;
+    }
+
+    &:after {
+      content: "";
+      width: 100%;
+      height: 54px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      @include css4 {
+        background: -webkit-linear-gradient(to right, var(--header-footer-background-transparent) 80%, var(--header-footer-background));
+        background: -moz-linear-gradient(to right, var(--header-footer-background-transparent) 80%, var(--header-footer-background));
+        background: linear-gradient(to right, var(--header-footer-background-transparent) 80%, var(--header-footer-background));
+      };
+    };
 
     svg {
       margin-left:15px;
       margin-top:-3px;
       margin-right:2px;
       flex-shrink: 0;
-      //margin-top:5px;
     }
   }
 
@@ -73,16 +94,36 @@
     width:calc(45% - 7.5px);
     height: 54px;
     display:flex;
+    position:relative;
     align-items: center;
     cursor:pointer;
-    :hover {
-      opacity:.65;
+
+    .book-chapter-text {
+      display:inline-block;
+      position:relative;
+      overflow:hidden;
+      white-space:nowrap;
     }
+
+    &:after {
+      content: "";
+      width: 100%;
+      height: 54px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      @include css4 {
+        background: -webkit-linear-gradient(to right, var(--header-footer-background-transparent) 80%, var(--header-footer-background));
+        background: -moz-linear-gradient(to right, var(--header-footer-background-transparent) 80%, var(--header-footer-background));
+        background: linear-gradient(to right, var(--header-footer-background-transparent) 80%, var(--header-footer-background));
+      };
+    };
 
     svg {
       margin-left:15px;
       margin-top:-3px;
       margin-right:2px;
+      flex-shrink: 0;
       //margin-top:5px;
     }
   }
@@ -106,35 +147,19 @@
    }
 }
 
-@media only screen and (max-width:$large-bp) {
-  // Using a linear-gradient seems to break for safari
-  // This style could potentially be applied regardless of the screen size
-  .nav-container .version {
-    .version-text {
-      display:inline-block;
-      position:relative;
-      overflow:hidden;
-      white-space:nowrap;
-    }
-    .version-text:after {
-      content: "";
-      width:100%;
-      height:54px;
-      position: absolute;
-      top:0;
-      left:0;
-      @include css4 {
-        background: linear-gradient(to right, transparent 80%, var(--header-footer-background));
-      };
-    }
-  }
-
-  .nav-container .book-chapter {
-    svg {
-      margin-left: 10px;
-    }
-  }
-}
+//@media only screen and (max-width:$large-bp) {
+//  // Using a linear-gradient seems to break for safari
+//  // This style could potentially be applied regardless of the screen size
+//  .nav-container .version {
+//
+//  }
+//
+//  .nav-container .book-chapter {
+//    svg {
+//      margin-left: 10px;
+//    }
+//  }
+//}
 
 @media only screen and (max-width:$medium-bp) {
   .nav-container {
