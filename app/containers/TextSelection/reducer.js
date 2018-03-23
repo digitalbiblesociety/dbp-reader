@@ -25,8 +25,8 @@ const initialState = fromJS({
 	countries: {},
 	countryLanguages: [],
 	languageListActive: false,
-	versionListActive: true,
-	countryListActive: false,
+	versionListActive: false,
+	countryListActive: true,
 	// use window.navigator.language to get the code, use code to find name and iso
 	// activeLanguageName: window.navigator.userLanguage || window.navigator.language || '',
 	activeLanguageName: '',

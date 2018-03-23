@@ -1,6 +1,6 @@
 /**
 *
-* BiblesTable
+* VersionList
 *
 */
 
@@ -18,7 +18,7 @@ import {
 	selectActiveBookId,
 } from './selectors';
 
-class BiblesTable extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+class VersionList extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -50,16 +50,16 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 			>
 				{
 					bible.get('filesets').filter((fileset) => fileset.get('set_type_code') === 'text_formatt').size || bible.get('filesets').filter((fileset) => fileset.get('set_type_code') === 'text_plain').size ? (
-						<SvgWrapper className="svg active" height="20px" width="20px" svgid="text" />
+						<SvgWrapper className="active" height="20px" width="20px" svgid="text" />
 					) : (
-						<SvgWrapper className="svg inactive" height="20px" width="20px" svgid="text" />
+						<SvgWrapper className="inactive" height="20px" width="20px" svgid="text" />
 					)
 				}
 				{
 					bible.get('filesets').filter((fileset) => fileset.get('set_type_code') === 'audio_drama').size || bible.get('filesets').filter((fileset) => fileset.get('set_type_code') === 'audio').size ? (
-						<SvgWrapper className="svg active" height="20px" width="20px" svgid="volume" />
+						<SvgWrapper className="active" height="20px" width="20px" svgid="volume" />
 					) : (
-						<SvgWrapper className="svg inactive" height="20px" width="20px" svgid="volume" />
+						<SvgWrapper className="inactive" height="20px" width="20px" svgid="volume" />
 					)
 				}
 				<h4 className={bible.get('abbr') === activeTextId ? 'active-version' : ''}>{bible.get('name')}</h4>
@@ -142,7 +142,7 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 	}
 }
 
-BiblesTable.propTypes = {
+VersionList.propTypes = {
 	bibles: PropTypes.object,
 	setActiveText: PropTypes.func,
 	toggleVersionList: PropTypes.func,
@@ -172,4 +172,4 @@ function mapDispatchToProps(dispatch) {
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
-export default compose(withConnect)(BiblesTable);
+export default compose(withConnect)(VersionList);
