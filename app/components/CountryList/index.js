@@ -37,7 +37,7 @@ class CountryList extends React.PureComponent { // eslint-disable-line react/pre
 		// const { filterText } = this.state;
 		const filteredCountryMap = filterText ? countries.filter((country) => this.filterFunction(country, filterText)) : countries;
 		const filteredCountries = filteredCountryMap.valueSeq();
-
+		console.log('filtered countries', filteredCountries);
 		// const components = filteredCountries.valueSeq().map((country) => (
 		// 	<div
 		// 		className="country-name"

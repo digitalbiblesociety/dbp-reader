@@ -6,12 +6,16 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+// import some from 'lodash/some';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import { createStructuredSelector } from 'reselect';
-import SvgWrapper from 'components/SvgWrapper';
+import { FormattedMessage } from 'react-intl';
+// import SvgWrapper from 'components/SvgWrapper';
 import LoadingSpinner from 'components/LoadingSpinner';
+import VersionListSection from 'components/VersionListSection';
+import messages from './messages';
 import {
 	getVersionsError,
 	selectActiveChapter,
@@ -39,39 +43,79 @@ class VersionList extends React.PureComponent { // eslint-disable-line react/pre
 		// const { filterText } = this.state;
 		const filteredBibles = filterText ? bibles.filter((bible) => this.filterFunction(bible, filterText, activeIsoCode)) : bibles.filter((bible) => activeIsoCode === 'ANY' ? true : bible.get('iso') === activeIsoCode);
 		// Change the way I figure out if a resource has text or audio
+		// path, key, types, className, text, clickHandler
+		// console.log('filtered bibles', filteredBibles.get(0).get('filesets').valueSeq());
+		const scrubbedBibles = filteredBibles.reduce((acc, bible) => ([...acc, {
+			path: `/${bible.get('abbr').toLowerCase()}/${activeBookId.toLowerCase()}/${activeChapter}`,
+			key: `${bible.get('abbr')}${bible.get('date')}`,
+			clickHandler: () => this.handleVersionListClick(bible),
+			className: bible.get('abbr') === activeTextId ? 'active-version' : '',
+			text: bible.get('name'),
+			types: bible.get('filesets').reduce((a, c) => ({ ...a, [c.get('set_type_code')]: true }), {}),
+		}]), []);
+		// console.log('scrubbed bibles', scrubbedBibles);
+		// const scrubbedBibles = filteredBibles.map((bible) => {
+		// 	const newBible = {};
+		// 	newBible.path = ;
+		// 	newBible.key = ;
+		// 	newBible.clickHandler = ;
+		// 	newBible.className =;
+		// 	newBible.text =;
+		// 	console.log(bible);
+		// }).toJS();
 		// When I first get the response from the server with filesets
+		const audioAndText = []; // filteredBibles.reduce();
+		const audioOnly = []; // filteredBibles.reduce();
+		const textOnly = []; // filteredBibles.reduce();
+
+		scrubbedBibles.forEach((b) => {
+			// console.log(b);
+			if ((b.types.audio_drama || b.types.audio) && (b.types.text_plain || b.types.text_formatt)) {
+				audioAndText.push(b);
+			} else if (b.types.audio_drama || b.types.audio) {
+				audioOnly.push(b);
+			} else {
+				textOnly.push(b);
+			}
+		});
+
+		const components = [
+			<div><FormattedMessage style={{ backgroundColor: 'black' }} {...messages.audioAndText} /><VersionListSection items={audioAndText} /></div>,
+			<div><FormattedMessage style={{ backgroundColor: 'black' }} {...messages.audioOnly} /><VersionListSection items={audioOnly} /></div>,
+			<div><FormattedMessage style={{ backgroundColor: 'black' }} {...messages.textOnly} /><VersionListSection items={textOnly} /></div>,
+		];
 		// Create three options, hasPlainText, hasAudio and hasFormatted
 		// Then pass these three options into redux and use them here
-		const components = filteredBibles.map((bible) => (
-			<Link
-				to={`/${bible.get('abbr').toLowerCase()}/${activeBookId.toLowerCase()}/${activeChapter}`}
-				className="version-item-button"
-				key={`${bible.get('abbr')}${bible.get('date')}`}
-				onClick={() => this.handleVersionListClick(bible)}
-			>
-				{
-					bible.get('filesets').filter((fileset) => fileset.get('set_type_code') === 'text_formatt').size || bible.get('filesets').filter((fileset) => fileset.get('set_type_code') === 'text_plain').size ? (
-						<SvgWrapper className="active" height="20px" width="20px" svgid="text" />
-					) : (
-						<SvgWrapper className="inactive" height="20px" width="20px" svgid="text" />
-					)
-				}
-				{
-					bible.get('filesets').filter((fileset) => fileset.get('set_type_code') === 'audio_drama').size || bible.get('filesets').filter((fileset) => fileset.get('set_type_code') === 'audio').size ? (
-						<SvgWrapper className="active" height="20px" width="20px" svgid="volume" />
-					) : (
-						<SvgWrapper className="inactive" height="20px" width="20px" svgid="volume" />
-					)
-				}
-				<h4 className={bible.get('abbr') === activeTextId ? 'active-version' : ''}>{bible.get('name')}</h4>
-			</Link>
-		));
+		// const components = filteredBibles.map((bible) => (
+		// 	<Link
+		// 		to={`/${bible.get('abbr').toLowerCase()}/${activeBookId.toLowerCase()}/${activeChapter}`}
+		// 		className="version-item-button"
+		// 		key={`${bible.get('abbr')}${bible.get('date')}`}
+		// 		onClick={() => this.handleVersionListClick(bible)}
+		// 	>
+		// 		{
+		// 			bible.get('filesets').filter((fileset) => fileset.get('set_type_code') === 'text_formatt').size || bible.get('filesets').filter((fileset) => fileset.get('set_type_code') === 'text_plain').size ? (
+		// 				<SvgWrapper className="active" height="20px" width="20px" svgid="text" />
+		// 			) : (
+		// 				<SvgWrapper className="inactive" height="20px" width="20px" svgid="text" />
+		// 			)
+		// 		}
+		// 		{
+		// 			bible.get('filesets').filter((fileset) => fileset.get('set_type_code') === 'audio_drama').size || bible.get('filesets').filter((fileset) => fileset.get('set_type_code') === 'audio').size ? (
+		// 				<SvgWrapper className="active" height="20px" width="20px" svgid="volume" />
+		// 			) : (
+		// 				<SvgWrapper className="inactive" height="20px" width="20px" svgid="volume" />
+		// 			)
+		// 		}
+		// 		<h4 className={bible.get('abbr') === activeTextId ? 'active-version' : ''}>{bible.get('name')}</h4>
+		// 	</Link>
+		// ));
 
 		if (bibles.size === 0 || versionsError) {
-			return <span>There was an error fetching this resource, an Admin has been notified. We apologize for the inconvenience.</span>;
+			return <span className="version-item-button">There was an error fetching this resource, an Admin has been notified. We apologize for the inconvenience.</span>;
 		}
 
-		return components.size ? components : <span>There are no matches for your search.</span>;
+		return scrubbedBibles.length ? components : <span className="version-item-button">There are no matches for your search.</span>;
 	}
 
 	filterFunction = (bible, filterText, iso) => {
