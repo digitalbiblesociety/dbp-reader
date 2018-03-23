@@ -11,18 +11,18 @@ import LoadingSpinner from 'components/LoadingSpinner';
 import flags from 'images/flags.svg';
 
 class CountryList extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
-	constructor(props) {
-		super(props);
-		this.state = {
-			filterText: '',
-		};
-	}
-
-	componentWillReceiveProps(nextProps) {
-		if (!nextProps.active && nextProps.active !== this.props.active) {
-			this.setState({ filterText: '' });
-		}
-	}
+	// constructor(props) {
+	// 	super(props);
+	// 	this.state = {
+	// 		filterText: '',
+	// 	};
+	// }
+	//
+	// componentWillReceiveProps(nextProps) {
+	// 	if (!nextProps.active && nextProps.active !== this.props.active) {
+	// 		this.setState({ filterText: '' });
+	// 	}
+	// }
 
 	getFilteredCountries(width, height) {
 		const {
@@ -31,9 +31,10 @@ class CountryList extends React.PureComponent { // eslint-disable-line react/pre
 			toggleLanguageList,
 			activeCountryName,
 			setCountryListState,
-			toggleVersionList,
+			// toggleVersionList,
+			filterText,
 		} = this.props;
-		const { filterText } = this.state;
+		// const { filterText } = this.state;
 		const filteredCountryMap = filterText ? countries.filter((country) => this.filterFunction(country, filterText)) : countries;
 		const filteredCountries = filteredCountryMap.valueSeq();
 
@@ -76,9 +77,8 @@ class CountryList extends React.PureComponent { // eslint-disable-line react/pre
 					tabIndex={0}
 					onClick={() => {
 						setCountryName({ name: country.get('name'), languages: country.get('languages') });
-						setCountryListState({ state: false });
-						toggleVersionList({ state: false });
-						toggleLanguageList({ state: true });
+						setCountryListState();
+						toggleLanguageList();
 					}}
 				>
 					<svg className="svg" height="25px" width="25px">
@@ -126,7 +126,7 @@ class CountryList extends React.PureComponent { // eslint-disable-line react/pre
 		return false;
 	}
 
-	handleChange = (e) => this.setState({ filterText: e.target.value });
+	// handleChange = (e) => this.setState({ filterText: e.target.value });
 
 	render() {
 		const {
@@ -160,7 +160,8 @@ CountryList.propTypes = {
 	setCountryName: PropTypes.func,
 	toggleLanguageList: PropTypes.func,
 	setCountryListState: PropTypes.func,
-	toggleVersionList: PropTypes.func,
+	// toggleVersionList: PropTypes.func,
+	filterText: PropTypes.string,
 	active: PropTypes.bool,
 	loadingCountries: PropTypes.bool,
 	activeCountryName: PropTypes.string,

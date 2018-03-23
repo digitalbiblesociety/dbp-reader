@@ -19,12 +19,12 @@ import {
 } from './selectors';
 
 class VersionList extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
-	constructor(props) {
-		super(props);
-		this.state = {
-			filterText: '',
-		};
-	}
+	// constructor(props) {
+	// 	super(props);
+	// 	this.state = {
+	// 		filterText: '',
+	// 	};
+	// }
 
 	get filteredVersionList() {
 		const {
@@ -34,8 +34,9 @@ class VersionList extends React.PureComponent { // eslint-disable-line react/pre
 			activeBookId,
 			activeChapter,
 			versionsError,
+			filterText,
 		} = this.props;
-		const { filterText } = this.state;
+		// const { filterText } = this.state;
 		const filteredBibles = filterText ? bibles.filter((bible) => this.filterFunction(bible, filterText, activeIsoCode)) : bibles.filter((bible) => activeIsoCode === 'ANY' ? true : bible.get('iso') === activeIsoCode);
 		// Change the way I figure out if a resource has text or audio
 		// When I first get the response from the server with filesets
@@ -92,30 +93,21 @@ class VersionList extends React.PureComponent { // eslint-disable-line react/pre
 
 	handleVersionListClick = (bible) => {
 		const {
-			setCountryListState,
-			toggleLanguageList,
-			toggleVersionList,
+			// setCountryListState,
+			// toggleLanguageList,
+			// toggleVersionList,
 			toggleTextSelection,
 			setActiveText,
-			active,
+			// active,
 		} = this.props;
 
 		if (bible) {
 			setActiveText({ textId: bible.get('abbr'), textName: bible.get('name'), filesets: bible.get('filesets') });
 			toggleTextSelection();
-		} else if (active) {
-			toggleLanguageList({ state: true });
-			toggleVersionList({ state: false });
-			this.setState({ filterText: '' });
-		} else {
-			setCountryListState({ state: false });
-			toggleLanguageList({ state: false });
-			toggleVersionList({ state: true });
-			this.setState({ filterText: '' });
 		}
 	}
 
-	handleChange = (e) => this.setState({ filterText: e.target.value });
+	// handleChange = (e) => this.setState({ filterText: e.target.value });
 
 	render() {
 		const {
@@ -145,13 +137,14 @@ class VersionList extends React.PureComponent { // eslint-disable-line react/pre
 VersionList.propTypes = {
 	bibles: PropTypes.object,
 	setActiveText: PropTypes.func,
-	toggleVersionList: PropTypes.func,
-	toggleLanguageList: PropTypes.func,
+	// toggleVersionList: PropTypes.func,
+	// toggleLanguageList: PropTypes.func,
 	toggleTextSelection: PropTypes.func,
-	setCountryListState: PropTypes.func,
+	// setCountryListState: PropTypes.func,
 	activeBookId: PropTypes.string,
 	activeIsoCode: PropTypes.string,
 	activeTextId: PropTypes.string,
+	filterText: PropTypes.string,
 	activeChapter: PropTypes.number,
 	active: PropTypes.bool,
 	versionsError: PropTypes.bool,

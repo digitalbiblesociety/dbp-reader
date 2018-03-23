@@ -10,20 +10,21 @@ import { List, AutoSizer } from 'react-virtualized';
 import LoadingSpinner from 'components/LoadingSpinner';
 
 class LanguageList extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
-	constructor(props) {
-		super(props);
-		this.state = {
-			filterText: '',
-
-		};
-	}
+	// constructor(props) {
+	// 	super(props);
+	// 	this.state = {
+	// 		filterText: '',
+	//
+	// 	};
+	// }
 	// Try to reduce the number of times language list is iterated over
 	getFilteredLanguages(width, height) {
 		const {
 			languages,
 			activeLanguageName,
+			filterText,
 		} = this.props;
-		const { filterText } = this.state;
+		// const { filterText } = this.state;
 		const filteredLanguages = filterText ? languages.filter((language) => this.filterFunction(language, filterText)) : languages;
 
 		// const components = () => filteredLanguages.map((language) => (
@@ -93,29 +94,19 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 			setActiveIsoCode,
 			toggleLanguageList,
 			toggleVersionList,
-			setCountryListState,
-			active,
+			// setCountryListState,
+			// active,
 		} = this.props;
 
 		if (language) {
 			setActiveIsoCode({ iso: language.get('iso_code'), name: language.get('name') });
-			toggleLanguageList({ state: false });
-			this.setState({ filterText: '' });
-			toggleVersionList({ state: true });
-		} else if (active) {
-			toggleLanguageList({ state: false });
-			this.setState({ filterText: '' });
-			toggleVersionList({ state: true });
-			setCountryListState({ state: false });
-		} else {
-			toggleLanguageList({ state: true });
-			toggleVersionList({ state: false });
-			setCountryListState({ state: false });
-			this.setState({ filterText: '' });
+			toggleLanguageList();
+			// this.setState({ filterText: '' });
+			toggleVersionList();
 		}
 	}
 
-	handleChange = (e) => this.setState({ filterText: e.target.value });
+	// handleChange = (e) => this.setState({ filterText: e.target.value });
 
 	render() {
 		const {
@@ -146,8 +137,9 @@ LanguageList.propTypes = {
 	languages: PropTypes.object,
 	setActiveIsoCode: PropTypes.func,
 	toggleLanguageList: PropTypes.func,
-	setCountryListState: PropTypes.func,
+	// setCountryListState: PropTypes.func,
 	toggleVersionList: PropTypes.func,
+	filterText: PropTypes.string,
 	active: PropTypes.bool,
 	loadingLanguages: PropTypes.bool,
 	activeLanguageName: PropTypes.string,
