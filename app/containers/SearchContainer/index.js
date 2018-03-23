@@ -41,9 +41,9 @@ export class SearchContainer extends React.PureComponent { // eslint-disable-lin
 	render() {
 		return (
 			<GenericErrorBoundary affectedArea="Search">
-				<aside ref={this.setRef} className="settings">
+				<aside ref={this.setRef} className="search">
 					<header>
-						<SvgWrapper onClick={this.handleSearchModalToggle} className={'close-icon icon'} svgid={'arrow_right'} />
+						<SvgWrapper onClick={this.handleSearchModalToggle} className={'close-icon icon'} svgid={'arrow_left'} />
 						<h2 className="section-title">Search</h2>
 					</header>
 				</aside>

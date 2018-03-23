@@ -508,14 +508,14 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 				<TransitionGroup>
 					{
 						isSettingsModalActive ? (
-							<FadeTransition classNames="slide-from-left" in={isSettingsModalActive}>
+							<FadeTransition classNames="slide-from-right" in={isSettingsModalActive}>
 								<Settings userSettings={userSettings} toggleSettingsModal={this.toggleSettingsModal} />
 							</FadeTransition>
 						) : null
 					}
 					{
 						isProfileActive ? (
-							<FadeTransition classNames="slide-from-right" in={isProfileActive}>
+							<FadeTransition classNames="slide-from-left" in={isProfileActive}>
 								<Profile toggleProfile={this.toggleProfile} />
 							</FadeTransition>
 						) : null
@@ -536,7 +536,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					}
 					{
 						isSearchModalActive ? (
-							<FadeTransition classNames="slide-from-right" in={isSearchModalActive}>
+							<FadeTransition classNames="slide-from-left" in={isSearchModalActive}>
 								<SearchContainer toggleSearchModal={this.toggleSearchModal} />
 							</FadeTransition>
 						) : null
