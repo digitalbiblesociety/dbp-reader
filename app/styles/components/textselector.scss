@@ -101,7 +101,7 @@
 
 // Country Selection Styles
 .country-name       {display:flex;align-items:center;cursor:pointer;}
-.country-name .svg  {margin-right:20px;margin-left:5px;}
+.country-name svg.icon  {margin-right:20px;margin-left:5px;}
 .country-name:hover {@include css4{color:var(--menu-active-color);};}
 
 // Language Selection Styles
@@ -154,6 +154,12 @@
       padding-top: 15px;
       //padding-left: 15px;
       cursor: pointer;
+
+      & .accordion__title[aria-selected="true"] {
+        @include css4 {
+          color: var(--menu-active-color);
+        }
+      }
 
       h4 {
         padding-left:15px;

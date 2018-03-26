@@ -97,7 +97,7 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 			// setCountryListState,
 			// active,
 		} = this.props;
-		console.log('new language', language);
+		// console.log('new language', language);
 		if (language) {
 			setActiveIsoCode({ iso: language.get('iso_code'), name: language.get('name') });
 			toggleLanguageList();
