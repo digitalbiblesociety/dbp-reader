@@ -306,6 +306,20 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		// 		userId,
 		// 	}));
 		// }
+		// Below code is for when the same version is selected but the audio type is changed
+		if (!isEqual(nextProps.homepage.activeFilesets, this.props.homepage.activeFilesets)) {
+			// do something
+			// console.log('filesets changed', nextProps.homepage.activeFilesets);
+			this.props.dispatch({
+				type: 'getchapter',
+				filesets: nextProps.homepage.activeFilesets,
+				bibleId: nextParams.bibleId,
+				bookId: nextParams.bookId,
+				chapter: nextParams.chapter,
+				authenticated: userAuthenticated,
+				userId,
+			});
+		}
 	}
 
 	setNextVerse = (verse) => {

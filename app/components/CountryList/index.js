@@ -37,7 +37,7 @@ class CountryList extends React.PureComponent { // eslint-disable-line react/pre
 		// const { filterText } = this.state;
 		const filteredCountryMap = filterText ? countries.filter((country) => this.filterFunction(country, filterText)) : countries;
 		const filteredCountries = filteredCountryMap.valueSeq();
-		console.log('filtered countries', filteredCountries);
+		// console.log('filtered countries', filteredCountries);
 		// const components = filteredCountries.valueSeq().map((country) => (
 		// 	<div
 		// 		className="country-name"
@@ -81,7 +81,7 @@ class CountryList extends React.PureComponent { // eslint-disable-line react/pre
 						toggleLanguageList();
 					}}
 				>
-					<svg className="svg" height="25px" width="25px">
+					<svg className="icon" height="25px" width="25px">
 						<use xmlnsXlink="http://www.w3.org/1999/xlink" xlinkHref={`${flags}#${country.getIn(['codes', 'iso_a2'])}`}></use>
 					</svg>
 					<h4 className={activeCountryName === country.get('name') ? 'active-language-name' : 'inactive-country'}>{country.get('name')}</h4>

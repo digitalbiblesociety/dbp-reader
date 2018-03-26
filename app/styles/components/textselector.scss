@@ -101,7 +101,7 @@
 
 // Country Selection Styles
 .country-name       {display:flex;align-items:center;cursor:pointer;}
-.country-name .svg  {margin-right:20px;margin-left:5px;}
+.country-name svg.icon  {margin-right:20px;margin-left:5px;}
 .country-name:hover {@include css4{color:var(--menu-active-color);};}
 
 // Language Selection Styles
@@ -145,14 +145,25 @@
     }
     //padding:15px;
 
-    .accordion {
-      padding: 15px;
-    }
-
+    //.accordion {
+    //  padding: 15px;
+    //}
     .accordion-title-style {
-      &:first-child {padding:0;}
+      //&aria-selected["true"]
+      &:last-child {padding-bottom:15px;}
       padding-top: 15px;
+      //padding-left: 15px;
       cursor: pointer;
+
+      & .accordion__title[aria-selected="true"] {
+        @include css4 {
+          color: var(--menu-active-color);
+        }
+      }
+
+      h4 {
+        padding-left:15px;
+      }
     }
 
     .accordion-body-style {
@@ -163,14 +174,14 @@
     .version-item-button {
       filter: none;
       width:100%;
-      padding-left:15px;
+      padding-left:30px;
       min-height:50px;
       margin: auto;
       //@include css4{
       //  background-color:var(--menu-secondary-background-color);
       //};
       display:flex;
-      align-items:flex-start;
+      align-items:center;
     }
   }
 }

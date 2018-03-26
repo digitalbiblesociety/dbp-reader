@@ -79,10 +79,32 @@ class VersionList extends React.PureComponent { // eslint-disable-line react/pre
 			}
 		});
 
+		const audioAndTextComponent = audioAndText.length ? (
+			<div className={'version-list-section'}>
+				<div className={'version-list-section-title'}>
+					<FormattedMessage {...messages.audioAndText} />
+				</div>
+				<VersionListSection items={audioAndText} />
+			</div>) : null;
+		const audioOnlyComponent = audioOnly.length ? (
+			<div className={'version-list-section'}>
+				<div className={'version-list-section-title'}>
+					<FormattedMessage {...messages.audioOnly} />
+				</div>
+				<VersionListSection items={audioOnly} />
+			</div>) : null;
+		const textOnlyComponent = textOnly.length ? (
+			<div className={'version-list-section'}>
+				<div className={'version-list-section-title'}>
+					<FormattedMessage {...messages.textOnly} />
+				</div>
+				<VersionListSection items={textOnly} />
+			</div>) : null;
+
 		const components = [
-			<div className={'version-list-section'}><div className={'version-list-section-title'}><FormattedMessage {...messages.audioAndText} /></div><VersionListSection items={audioAndText} /></div>,
-			<div className={'version-list-section'}><div className={'version-list-section-title'}><FormattedMessage {...messages.audioOnly} /></div><VersionListSection items={audioOnly} /></div>,
-			<div className={'version-list-section'}><div className={'version-list-section-title'}><FormattedMessage {...messages.textOnly} /></div><VersionListSection items={textOnly} /></div>,
+			audioAndTextComponent,
+			audioOnlyComponent,
+			textOnlyComponent,
 		];
 		// Create three options, hasPlainText, hasAudio and hasFormatted
 		// Then pass these three options into redux and use them here
@@ -147,8 +169,7 @@ class VersionList extends React.PureComponent { // eslint-disable-line react/pre
 
 		if (bible) {
 			if (audioType) {
-				console.log('filtered filesets', bible.get('filesets').filter((fileset, key) => (key === audioType || key === 'text_plain' || key === 'text_formatt')));
-				setActiveText({ textId: bible.get('abbr'), textName: bible.get('name'), filesets: bible.get('filesets').filter((fileset, key) => (key === audioType || key === 'text_plain' || key === 'text_formatt')) });
+				setActiveText({ textId: bible.get('abbr'), textName: bible.get('name'), filesets: bible.get('filesets').filter((fileset) => (fileset.get('set_type_code') === audioType || fileset.get('set_type_code') === 'text_plain' || fileset.get('set_type_code') === 'text_formatt')) });
 				toggleTextSelection();
 			} else {
 				setActiveText({ textId: bible.get('abbr'), textName: bible.get('name'), filesets: bible.get('filesets') });
