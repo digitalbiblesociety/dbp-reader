@@ -234,11 +234,11 @@
 }
 
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 550px) {
   .audio-player-container {
     flex-wrap: wrap;
     height: 83px;
-    :nth-child(4) {order:1;width:55%;margin:0 25px 17px 25px;}
+    :nth-child(4) {order:1;width:80%;margin:0 25px 17px 25px;}
     :nth-child(3) {margin-right:0;}
   }
 }
