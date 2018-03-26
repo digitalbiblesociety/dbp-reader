@@ -79,10 +79,32 @@ class VersionList extends React.PureComponent { // eslint-disable-line react/pre
 			}
 		});
 
+		const audioAndTextComponent = audioAndText.length ? (
+			<div className={'version-list-section'}>
+				<div className={'version-list-section-title'}>
+					<FormattedMessage {...messages.audioAndText} />
+				</div>
+				<VersionListSection items={audioAndText} />
+			</div>) : null;
+		const audioOnlyComponent = audioOnly.length ? (
+			<div className={'version-list-section'}>
+				<div className={'version-list-section-title'}>
+					<FormattedMessage {...messages.audioOnly} />
+				</div>
+				<VersionListSection items={audioOnly} />
+			</div>) : null;
+		const textOnlyComponent = textOnly.length ? (
+			<div className={'version-list-section'}>
+				<div className={'version-list-section-title'}>
+					<FormattedMessage {...messages.textOnly} />
+				</div>
+				<VersionListSection items={textOnly} />
+			</div>) : null;
+
 		const components = [
-			<div className={'version-list-section'}><div className={'version-list-section-title'}><FormattedMessage {...messages.audioAndText} /></div><VersionListSection items={audioAndText} /></div>,
-			<div className={'version-list-section'}><div className={'version-list-section-title'}><FormattedMessage {...messages.audioOnly} /></div><VersionListSection items={audioOnly} /></div>,
-			<div className={'version-list-section'}><div className={'version-list-section-title'}><FormattedMessage {...messages.textOnly} /></div><VersionListSection items={textOnly} /></div>,
+			audioAndTextComponent,
+			audioOnlyComponent,
+			textOnlyComponent,
 		];
 		// Create three options, hasPlainText, hasAudio and hasFormatted
 		// Then pass these three options into redux and use them here

@@ -145,14 +145,19 @@
     }
     //padding:15px;
 
-    .accordion {
-      padding: 15px;
-    }
-
+    //.accordion {
+    //  padding: 15px;
+    //}
     .accordion-title-style {
-      &:first-child {padding:0;}
+      //&aria-selected["true"]
+      &:last-child {padding-bottom:15px;}
       padding-top: 15px;
+      //padding-left: 15px;
       cursor: pointer;
+
+      h4 {
+        padding-left:15px;
+      }
     }
 
     .accordion-body-style {
@@ -163,14 +168,14 @@
     .version-item-button {
       filter: none;
       width:100%;
-      padding-left:15px;
+      padding-left:30px;
       min-height:50px;
       margin: auto;
       //@include css4{
       //  background-color:var(--menu-secondary-background-color);
       //};
       display:flex;
-      align-items:flex-start;
+      align-items:center;
     }
   }
 }
