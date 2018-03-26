@@ -15,6 +15,7 @@ import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 import createHistory from 'history/createBrowserHistory';
 import 'rc-slider/assets/index.css';
+import 'react-accessible-accordion/dist/minimal-example.css';
 // import 'sanitize.css/sanitize.css';
 
 // Import root app

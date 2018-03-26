@@ -41,6 +41,10 @@ import makeSelectTextSelection, {
 import messages from './messages';
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 export class TextSelection extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+	state = {
+		filterText: '',
+	}
+
 	componentDidMount() {
 		this.props.dispatch(setActiveIsoCode({ iso: this.props.homepageData.initialIsoCode, name: this.props.homepageData.initialLanguageName }));
 		this.closeMenuController = new CloseMenuFunctions(this.ref, this.toggleVersionSelection);
@@ -52,6 +56,14 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 			this.props.dispatch(getTexts({ languageISO: nextProps.textselection.activeIsoCode }));
 		} else if (nextProps.homepageData.initialIsoCode !== this.props.homepageData.initialIsoCode) {
 			this.props.dispatch(getTexts({ languageISO: nextProps.homepageData.initialIsoCode }));
+		}
+
+		if (
+			nextProps.textselection.versionListActive !== this.props.textselection.versionListActive ||
+			nextProps.textselection.countryListActive !== this.props.textselection.countryListActive ||
+			nextProps.textselection.languageListActive !== this.props.textselection.languageListActive
+		) {
+			this.setState({ filterText: '' });
 		}
 	}
 
@@ -71,23 +83,7 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 
 	setCountryName = ({ name, languages }) => this.props.dispatch(setCountryName({ name, languages }));
 
-	stopClickProp = (e) => e.stopPropagation()
-
-	stopTouchProp = (e) => e.stopPropagation()
-
-	toggleVersionSelection = () => this.props.dispatch(toggleVersionSelection())
-
-	toggleLanguageList = () => this.props.dispatch(setLanguageListState());
-
-	toggleVersionList = () => this.props.dispatch(setVersionListState());
-
-	handleVersionSelectionToggle = () => {
-		document.removeEventListener('click', this.handleClickOutside);
-
-		this.toggleVersionSelection();
-	}
-
-	get activeTab() {
+	getActiveTab() {
 		const {
 			activeIsoCode,
 			languageListActive,
@@ -108,39 +104,45 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 			languages,
 			countries,
 		} = this.props;
+		const {
+			filterText,
+		} = this.state;
 
 		if (languageListActive) {
 			return (
 				<LanguageList
-					active={languageListActive}
-					countryListActive={countryListActive}
-					countryLanguages={countryLanguages}
-					setCountryListState={this.setCountryListState}
-					toggleVersionList={this.toggleVersionList}
-					activeLanguageName={activeLanguageName}
-					toggleLanguageList={this.toggleLanguageList}
 					languages={languages}
-					setActiveIsoCode={this.setActiveIsoCode}
+					filterText={filterText}
+					active={languageListActive}
+					countryLanguages={countryLanguages}
 					loadingLanguages={loadingLanguages}
+					countryListActive={countryListActive}
+					activeLanguageName={activeLanguageName}
+					setActiveIsoCode={this.setActiveIsoCode}
+					toggleVersionList={this.toggleVersionList}
+					toggleLanguageList={this.toggleLanguageList}
+					setCountryListState={this.setCountryListState}
 				/>
 			);
 		} else if (countryListActive) {
 			return (
 				<CountryList
-					active={countryListActive}
-					setCountryListState={this.setCountryListState}
-					toggleVersionList={this.toggleVersionList}
-					activeCountryName={activeCountryName}
-					toggleLanguageList={this.toggleLanguageList}
 					countries={countries}
-					setCountryName={this.setCountryName}
+					filterText={filterText}
+					active={countryListActive}
 					loadingCountries={loadingCountries}
+					activeCountryName={activeCountryName}
+					setCountryName={this.setCountryName}
+					toggleVersionList={this.toggleVersionList}
+					toggleLanguageList={this.toggleLanguageList}
+					setCountryListState={this.setCountryListState}
 				/>
 			);
 		}
 		return (
 			<VersionList
 				bibles={bibles}
+				filterText={filterText}
 				active={versionListActive}
 				activeIsoCode={activeIsoCode}
 				activeTextName={activeTextName}
@@ -154,26 +156,45 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 		);
 	}
 
+	stopClickProp = (e) => e.stopPropagation()
+
+	stopTouchProp = (e) => e.stopPropagation()
+
+	toggleVersionSelection = () => this.props.dispatch(toggleVersionSelection())
+
+	toggleLanguageList = () => this.props.dispatch(setLanguageListState());
+
+	toggleVersionList = () => this.props.dispatch(setVersionListState());
+
+	// handleVersionSelectionToggle = () => {
+	// 	document.removeEventListener('click', this.handleClickOutside);
+	//
+	// 	this.toggleVersionSelection();
+	// }
+
+	handleSearchInputChange = (e) => this.setState({ filterText: e.target.value })
+
 	render() {
 		const {
 			countryListActive,
 			languageListActive,
 			versionListActive,
 		} = this.props.textselection;
+		const { filterText } = this.state;
 
 		return (
 			<GenericErrorBoundary affectedArea="TextSelection">
 				<aside ref={this.setRef} onTouchEnd={this.stopTouchProp} onClick={this.stopClickProp} className="text-selection-dropdown">
 					<div className={'search-input-bar'}>
 						<SvgWrapper className={'icon'} svgid={'search'} />
-						<input className={'input-class'} placeholder={messages.search.defaultMessage} />
+						<input onChange={this.handleSearchInputChange} value={filterText} className={'input-class'} placeholder={messages.search.defaultMessage} />
 					</div>
 					<div className={'tab-options'}>
 						<span onClick={this.setCountryListState} className={countryListActive ? 'tab-option active' : 'tab-option'}><FormattedMessage {...messages.country} /></span>
 						<span onClick={this.toggleLanguageList} className={languageListActive ? 'tab-option active' : 'tab-option'}><FormattedMessage {...messages.language} /></span>
 						<span onClick={this.toggleVersionList} className={versionListActive ? 'tab-option active' : 'tab-option'}><FormattedMessage {...messages.version} /></span>
 					</div>
-					{this.activeTab}
+					{this.getActiveTab(filterText)}
 				</aside>
 			</GenericErrorBoundary>
 		);

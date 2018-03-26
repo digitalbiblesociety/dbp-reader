@@ -1,6 +1,17 @@
 // GLOBAL SETTINGS
-.settings                              {position:fixed;z-index:1;top:0;height:calc(100% - 56px);width:320px;@include css4{background-color:var(--menu-secondary-background-color);color:var(--settings-font-color);};}
-.settings header                       {position:relative;text-align:center;height:54px;line-height:54px;@include css4{background-color:var(--menu-header-background);color:var(--menu-title-text-color);};}
+.settings                              {
+  position:fixed;z-index:1;top:0;right:0;
+  height:calc(100% - 56px);width:320px;
+  @include css4{
+    background-color:var(--menu-secondary-background-color);
+    color:var(--settings-font-color);
+  };
+}
+.settings header                       {
+  position:relative;text-align:center;
+  height:54px;line-height:54px;@include css4{
+  background-color:var(--menu-header-background);
+  color:var(--menu-title-text-color);};}
 .settings header .close-icon           {position:absolute;top:0px;right:10px}
 .settings section                      {padding:15px}
 .settings .option:hover                {@include css4{color:var(--menu-active-text-color)};cursor:pointer}

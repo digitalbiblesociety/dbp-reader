@@ -79,7 +79,7 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 			<GenericErrorBoundary affectedArea="Profile">
 				<aside ref={this.setRef} className="profile">
 					<header>
-						<SvgWrapper className={'close-icon icon'} svgid={'arrow_right'} onClick={toggleProfile} />
+						<SvgWrapper className={'close-icon icon'} svgid={'arrow_left'} onClick={toggleProfile} />
 						<h2>ACCOUNT</h2>
 					</header>
 					<div className="profile-content">

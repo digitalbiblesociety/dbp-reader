@@ -109,11 +109,11 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 
 		return (
 			<GenericErrorBoundary affectedArea="Settings">
-				<aside ref={this.setRef} className="menu-sidebar settings">
+				<aside ref={this.setRef} className="settings">
 					<header>
 						<h2 className="section-title">Settings</h2>
 						<span role="button" tabIndex={0} className="close-icon" onClick={this.handleSettingsModalToggle}>
-							<SvgWrapper className={'icon'} svgid={'arrow_left'} />
+							<SvgWrapper className={'icon'} svgid={'arrow_right'} />
 						</span>
 					</header>
 					<section className="color-schemes">

@@ -1,30 +1,34 @@
 /**
 *
-* BiblesTable
+* VersionList
 *
 */
 
 import React from 'react';
 import PropTypes from 'prop-types';
+// import some from 'lodash/some';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import { createStructuredSelector } from 'reselect';
-import SvgWrapper from 'components/SvgWrapper';
+import { FormattedMessage } from 'react-intl';
+// import SvgWrapper from 'components/SvgWrapper';
 import LoadingSpinner from 'components/LoadingSpinner';
+import VersionListSection from 'components/VersionListSection';
+import messages from './messages';
 import {
 	getVersionsError,
 	selectActiveChapter,
 	selectActiveBookId,
 } from './selectors';
 
-class BiblesTable extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
-	constructor(props) {
-		super(props);
-		this.state = {
-			filterText: '',
-		};
-	}
+class VersionList extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+	// constructor(props) {
+	// 	super(props);
+	// 	this.state = {
+	// 		filterText: '',
+	// 	};
+	// }
 
 	get filteredVersionList() {
 		const {
@@ -34,43 +38,84 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 			activeBookId,
 			activeChapter,
 			versionsError,
+			filterText,
 		} = this.props;
-		const { filterText } = this.state;
+		// const { filterText } = this.state;
 		const filteredBibles = filterText ? bibles.filter((bible) => this.filterFunction(bible, filterText, activeIsoCode)) : bibles.filter((bible) => activeIsoCode === 'ANY' ? true : bible.get('iso') === activeIsoCode);
 		// Change the way I figure out if a resource has text or audio
+		// path, key, types, className, text, clickHandler
+		// console.log('filtered bibles', filteredBibles.get(0).get('filesets').valueSeq());
+		const scrubbedBibles = filteredBibles.reduce((acc, bible) => ([...acc, {
+			path: `/${bible.get('abbr').toLowerCase()}/${activeBookId.toLowerCase()}/${activeChapter}`,
+			key: `${bible.get('abbr')}${bible.get('date')}`,
+			clickHandler: (audioType) => this.handleVersionListClick(bible, audioType),
+			className: bible.get('abbr') === activeTextId ? 'active-version' : '',
+			text: bible.get('name'),
+			types: bible.get('filesets').reduce((a, c) => ({ ...a, [c.get('set_type_code')]: true }), {}),
+		}]), []);
+		// console.log('scrubbed bibles', scrubbedBibles);
+		// const scrubbedBibles = filteredBibles.map((bible) => {
+		// 	const newBible = {};
+		// 	newBible.path = ;
+		// 	newBible.key = ;
+		// 	newBible.clickHandler = ;
+		// 	newBible.className =;
+		// 	newBible.text =;
+		// 	console.log(bible);
+		// }).toJS();
 		// When I first get the response from the server with filesets
+		const audioAndText = []; // filteredBibles.reduce();
+		const audioOnly = []; // filteredBibles.reduce();
+		const textOnly = []; // filteredBibles.reduce();
+
+		scrubbedBibles.forEach((b) => {
+			// console.log(b);
+			if ((b.types.audio_drama || b.types.audio) && (b.types.text_plain || b.types.text_formatt)) {
+				audioAndText.push(b);
+			} else if (b.types.audio_drama || b.types.audio) {
+				audioOnly.push(b);
+			} else {
+				textOnly.push(b);
+			}
+		});
+
+		const components = [
+			<div className={'version-list-section'}><div className={'version-list-section-title'}><FormattedMessage {...messages.audioAndText} /></div><VersionListSection items={audioAndText} /></div>,
+			<div className={'version-list-section'}><div className={'version-list-section-title'}><FormattedMessage {...messages.audioOnly} /></div><VersionListSection items={audioOnly} /></div>,
+			<div className={'version-list-section'}><div className={'version-list-section-title'}><FormattedMessage {...messages.textOnly} /></div><VersionListSection items={textOnly} /></div>,
+		];
 		// Create three options, hasPlainText, hasAudio and hasFormatted
 		// Then pass these three options into redux and use them here
-		const components = filteredBibles.map((bible) => (
-			<Link
-				to={`/${bible.get('abbr').toLowerCase()}/${activeBookId.toLowerCase()}/${activeChapter}`}
-				className="version-item-button"
-				key={`${bible.get('abbr')}${bible.get('date')}`}
-				onClick={() => this.handleVersionListClick(bible)}
-			>
-				{
-					bible.get('filesets').filter((fileset) => fileset.get('set_type_code') === 'text_formatt').size || bible.get('filesets').filter((fileset) => fileset.get('set_type_code') === 'text_plain').size ? (
-						<SvgWrapper className="svg active" height="20px" width="20px" svgid="text" />
-					) : (
-						<SvgWrapper className="svg inactive" height="20px" width="20px" svgid="text" />
-					)
-				}
-				{
-					bible.get('filesets').filter((fileset) => fileset.get('set_type_code') === 'audio_drama').size || bible.get('filesets').filter((fileset) => fileset.get('set_type_code') === 'audio').size ? (
-						<SvgWrapper className="svg active" height="20px" width="20px" svgid="volume" />
-					) : (
-						<SvgWrapper className="svg inactive" height="20px" width="20px" svgid="volume" />
-					)
-				}
-				<h4 className={bible.get('abbr') === activeTextId ? 'active-version' : ''}>{bible.get('name')}</h4>
-			</Link>
-		));
+		// const components = filteredBibles.map((bible) => (
+		// 	<Link
+		// 		to={`/${bible.get('abbr').toLowerCase()}/${activeBookId.toLowerCase()}/${activeChapter}`}
+		// 		className="version-item-button"
+		// 		key={`${bible.get('abbr')}${bible.get('date')}`}
+		// 		onClick={() => this.handleVersionListClick(bible)}
+		// 	>
+		// 		{
+		// 			bible.get('filesets').filter((fileset) => fileset.get('set_type_code') === 'text_formatt').size || bible.get('filesets').filter((fileset) => fileset.get('set_type_code') === 'text_plain').size ? (
+		// 				<SvgWrapper className="active" height="20px" width="20px" svgid="text" />
+		// 			) : (
+		// 				<SvgWrapper className="inactive" height="20px" width="20px" svgid="text" />
+		// 			)
+		// 		}
+		// 		{
+		// 			bible.get('filesets').filter((fileset) => fileset.get('set_type_code') === 'audio_drama').size || bible.get('filesets').filter((fileset) => fileset.get('set_type_code') === 'audio').size ? (
+		// 				<SvgWrapper className="active" height="20px" width="20px" svgid="volume" />
+		// 			) : (
+		// 				<SvgWrapper className="inactive" height="20px" width="20px" svgid="volume" />
+		// 			)
+		// 		}
+		// 		<h4 className={bible.get('abbr') === activeTextId ? 'active-version' : ''}>{bible.get('name')}</h4>
+		// 	</Link>
+		// ));
 
 		if (bibles.size === 0 || versionsError) {
-			return <span>There was an error fetching this resource, an Admin has been notified. We apologize for the inconvenience.</span>;
+			return <span className="version-item-button">There was an error fetching this resource, an Admin has been notified. We apologize for the inconvenience.</span>;
 		}
 
-		return components.size ? components : <span>There are no matches for your search.</span>;
+		return scrubbedBibles.length ? components : <span className="version-item-button">There are no matches for your search.</span>;
 	}
 
 	filterFunction = (bible, filterText, iso) => {
@@ -90,32 +135,29 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 		return false;
 	}
 
-	handleVersionListClick = (bible) => {
+	handleVersionListClick = (bible, audioType) => {
 		const {
-			setCountryListState,
-			toggleLanguageList,
-			toggleVersionList,
+			// setCountryListState,
+			// toggleLanguageList,
+			// toggleVersionList,
 			toggleTextSelection,
 			setActiveText,
-			active,
+			// active,
 		} = this.props;
 
 		if (bible) {
-			setActiveText({ textId: bible.get('abbr'), textName: bible.get('name'), filesets: bible.get('filesets') });
-			toggleTextSelection();
-		} else if (active) {
-			toggleLanguageList({ state: true });
-			toggleVersionList({ state: false });
-			this.setState({ filterText: '' });
-		} else {
-			setCountryListState({ state: false });
-			toggleLanguageList({ state: false });
-			toggleVersionList({ state: true });
-			this.setState({ filterText: '' });
+			if (audioType) {
+				console.log('filtered filesets', bible.get('filesets').filter((fileset, key) => (key === audioType || key === 'text_plain' || key === 'text_formatt')));
+				setActiveText({ textId: bible.get('abbr'), textName: bible.get('name'), filesets: bible.get('filesets').filter((fileset, key) => (key === audioType || key === 'text_plain' || key === 'text_formatt')) });
+				toggleTextSelection();
+			} else {
+				setActiveText({ textId: bible.get('abbr'), textName: bible.get('name'), filesets: bible.get('filesets') });
+				toggleTextSelection();
+			}
 		}
 	}
 
-	handleChange = (e) => this.setState({ filterText: e.target.value });
+	// handleChange = (e) => this.setState({ filterText: e.target.value });
 
 	render() {
 		const {
@@ -142,16 +184,17 @@ class BiblesTable extends React.PureComponent { // eslint-disable-line react/pre
 	}
 }
 
-BiblesTable.propTypes = {
+VersionList.propTypes = {
 	bibles: PropTypes.object,
 	setActiveText: PropTypes.func,
-	toggleVersionList: PropTypes.func,
-	toggleLanguageList: PropTypes.func,
+	// toggleVersionList: PropTypes.func,
+	// toggleLanguageList: PropTypes.func,
 	toggleTextSelection: PropTypes.func,
-	setCountryListState: PropTypes.func,
+	// setCountryListState: PropTypes.func,
 	activeBookId: PropTypes.string,
 	activeIsoCode: PropTypes.string,
 	activeTextId: PropTypes.string,
+	filterText: PropTypes.string,
 	activeChapter: PropTypes.number,
 	active: PropTypes.bool,
 	versionsError: PropTypes.bool,
@@ -172,4 +215,4 @@ function mapDispatchToProps(dispatch) {
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
-export default compose(withConnect)(BiblesTable);
+export default compose(withConnect)(VersionList);

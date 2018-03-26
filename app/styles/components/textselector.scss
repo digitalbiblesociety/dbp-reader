@@ -20,6 +20,7 @@
   position:absolute;
   top:54px;
   left:0;
+  right:0;
   min-width:291px;
   //left:calc(50% - 116px);
   height:calc(100vh - 110px);
@@ -128,7 +129,50 @@
   height:calc(100%);
   max-height:calc(100%);
   overflow:scroll;
-  padding:15px;
+  //padding:15px;
+  /* Navigation/Dark Text Fill Copy 6: */
+  .version-list-section {
+    width:100%;
+    min-height:50px;
+
+    .version-list-section-title {
+      padding: 15px;
+      min-height:50px;
+      height:50px;
+      width:100%;
+      background-color:#222; // put in variable
+      filter:invert(1);
+    }
+    //padding:15px;
+
+    .accordion {
+      padding: 15px;
+    }
+
+    .accordion-title-style {
+      &:first-child {padding:0;}
+      padding-top: 15px;
+      cursor: pointer;
+    }
+
+    .accordion-body-style {
+      //padding:15px 0 15px 0;
+      background-color:#777;
+    }
+
+    .version-item-button {
+      filter: none;
+      width:100%;
+      padding-left:15px;
+      min-height:50px;
+      margin: auto;
+      //@include css4{
+      //  background-color:var(--menu-secondary-background-color);
+      //};
+      display:flex;
+      align-items:flex-start;
+    }
+  }
 }
 .country-name-list         {
   @include css4{
@@ -142,13 +186,13 @@
 }
 
 // Version Selection Styles
-.version-item-button               {
-  display:flex;
-  align-items:flex-start;
-  margin:10px 0;
-  cursor:pointer;
-  :nth-child(2){margin:0 10px;}
-}
+//.version-item-button               {
+//  display:flex;
+//  align-items:flex-start;
+//  margin:10px 0;
+//  cursor:pointer;
+//  :nth-child(2){margin:0 10px;}
+//}
 .version-item-button:hover         {
   @include css4{
     color:var(--menu-active-color);
