@@ -143,6 +143,10 @@
       @include css4 {
         background-color: var(--text-selection-accordion-title-background);
       }
+
+      &:hover {
+        cursor: default;
+      }
       filter:invert(1);
     }
     //padding:15px;
