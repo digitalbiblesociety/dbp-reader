@@ -358,17 +358,22 @@ div.is1 {
   text-align: center;
 }
 
+
 .q {
   padding-left: 3em!important;
   text-indent: -1.5em!important;
   position: relative;
 }
 
+[dir=rtl] .q {padding-right: 3em!important;}
+
 .q2 {
   padding-left: 4em!important;
   text-indent: -1.5em!important;
   position: relative;
 }
+
+[dir=rtl] .q2 {padding-right: 3em!important;}
 
 .q .verse-num,
 .q .v-num {
@@ -378,6 +383,11 @@ div.is1 {
   text-align: right;
   top: 0;
   left: 0;
+}
+
+[dir=rtl] .q .verse-num, [dir=rtl] .q .v-num {
+  right:0;
+  text-align:left;
 }
 
 .qs {

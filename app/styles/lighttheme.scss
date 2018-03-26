@@ -1,0 +1,35 @@
+.light-theme {
+  $header-footer-background: rgba(170, 134, 120, 1);
+  $header-footer-background-transparent: rgba(170, 134, 120, 0);
+  $audio-player-background: rgba(231, 208, 193, 1);
+  $text-selection-color: rgb(172, 216, 231);
+  $text-contextmenu-background: rgb(198, 169, 155);
+  $text-arrow-color: rgb(0, 0, 0);
+  $text-super-color: rgb(110, 67, 57);
+  $settings-font-color: rgb(198, 172, 161);
+  $menu-header-background: rgb(101, 55, 45);
+  $menu-secondary-header-background: rgb(170, 134, 119);
+  $menu-background-color: rgb(101, 55, 45);
+  $menu-secondary-background-color: rgb(248, 228, 211);
+  $menu-title-text-color: rgb(255, 255, 255);
+  $menu-active-text-color: rgb(112, 63, 51);
+  $menu-active-color: rgb(98, 177, 130);
+  $menu-hover-color: rgb(98, 177, 130);
+  $menu-font-color: rgb(134, 97, 87);
+  $menu-inactive-svg-color: rgb(61,65,68);
+  $application-background: rgb(253, 248, 241);
+  $application-base-color: rgb(110, 67, 57);
+  $settings-option-inactive-secondary-color: rgb(255, 255, 255);
+  $audio-player-progress-background: rgb(255, 255, 255);
+  $settings-option-inactive-color: rgb(112, 63, 51);
+  $context-menu-background-color: rgb(204,178,165);
+  $audioplayer-handle-background-color: rgba(255, 255, 255, 0.5);
+  $text-selection-background: #fff;
+  $text-selection-section-header-background: #fff;
+  $text-selection-section-type-label: #fff;
+  $text-selection-search-text-color: #fff;
+  $text-selection-search-input-background: #fff;
+  $text-selection-accordion-title-background: #fff;
+  $text-selection-accordion-body-background: #fff;
+  $text-selection-active-item-color: #fff;
+}

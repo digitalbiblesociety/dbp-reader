@@ -22,7 +22,7 @@ function VersionListSection({ items }) {
 				items.map((item) => {
 					if (item.types.audio && item.types.audio_drama) {
 						return (
-							<AccordionItem className={'accordion-title-style'}>
+							<AccordionItem className={'accordion-title-style'} key={item.key}>
 								<AccordionItemTitle>
 									<h4 className={item.className}>{item.text}</h4>
 								</AccordionItemTitle>
@@ -48,7 +48,7 @@ function VersionListSection({ items }) {
 						);
 					}
 					return (
-						<AccordionItem className={'accordion-title-style'}>
+						<AccordionItem className={'accordion-title-style'} key={item.key}>
 							<AccordionItemTitle>
 								<Link
 									to={item.path}
