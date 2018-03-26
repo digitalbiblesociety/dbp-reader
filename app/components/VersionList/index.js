@@ -48,7 +48,7 @@ class VersionList extends React.PureComponent { // eslint-disable-line react/pre
 		const scrubbedBibles = filteredBibles.reduce((acc, bible) => ([...acc, {
 			path: `/${bible.get('abbr').toLowerCase()}/${activeBookId.toLowerCase()}/${activeChapter}`,
 			key: `${bible.get('abbr')}${bible.get('date')}`,
-			clickHandler: () => this.handleVersionListClick(bible),
+			clickHandler: (audioType) => this.handleVersionListClick(bible, audioType),
 			className: bible.get('abbr') === activeTextId ? 'active-version' : '',
 			text: bible.get('name'),
 			types: bible.get('filesets').reduce((a, c) => ({ ...a, [c.get('set_type_code')]: true }), {}),
@@ -80,9 +80,9 @@ class VersionList extends React.PureComponent { // eslint-disable-line react/pre
 		});
 
 		const components = [
-			<div><FormattedMessage style={{ backgroundColor: 'black' }} {...messages.audioAndText} /><VersionListSection items={audioAndText} /></div>,
-			<div><FormattedMessage style={{ backgroundColor: 'black' }} {...messages.audioOnly} /><VersionListSection items={audioOnly} /></div>,
-			<div><FormattedMessage style={{ backgroundColor: 'black' }} {...messages.textOnly} /><VersionListSection items={textOnly} /></div>,
+			<div className={'version-list-section'}><div className={'version-list-section-title'}><FormattedMessage {...messages.audioAndText} /></div><VersionListSection items={audioAndText} /></div>,
+			<div className={'version-list-section'}><div className={'version-list-section-title'}><FormattedMessage {...messages.audioOnly} /></div><VersionListSection items={audioOnly} /></div>,
+			<div className={'version-list-section'}><div className={'version-list-section-title'}><FormattedMessage {...messages.textOnly} /></div><VersionListSection items={textOnly} /></div>,
 		];
 		// Create three options, hasPlainText, hasAudio and hasFormatted
 		// Then pass these three options into redux and use them here
@@ -135,7 +135,7 @@ class VersionList extends React.PureComponent { // eslint-disable-line react/pre
 		return false;
 	}
 
-	handleVersionListClick = (bible) => {
+	handleVersionListClick = (bible, audioType) => {
 		const {
 			// setCountryListState,
 			// toggleLanguageList,
@@ -146,8 +146,14 @@ class VersionList extends React.PureComponent { // eslint-disable-line react/pre
 		} = this.props;
 
 		if (bible) {
-			setActiveText({ textId: bible.get('abbr'), textName: bible.get('name'), filesets: bible.get('filesets') });
-			toggleTextSelection();
+			if (audioType) {
+				console.log('filtered filesets', bible.get('filesets').filter((fileset, key) => (key === audioType || key === 'text_plain' || key === 'text_formatt')));
+				setActiveText({ textId: bible.get('abbr'), textName: bible.get('name'), filesets: bible.get('filesets').filter((fileset, key) => (key === audioType || key === 'text_plain' || key === 'text_formatt')) });
+				toggleTextSelection();
+			} else {
+				setActiveText({ textId: bible.get('abbr'), textName: bible.get('name'), filesets: bible.get('filesets') });
+				toggleTextSelection();
+			}
 		}
 	}
 
