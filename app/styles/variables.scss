@@ -92,8 +92,17 @@ $variables: (
         --loading-spinner-color: #aeaeae,
         --application-base-font-size: 0.98em,
         --application-menu-font-size: 0.98em,
-        --tab-option-active-background: rgb(255, 255, 255),
-        --tab-option-active-color: rgb(0,0,0)
+        --text-selection-tab-option-active-background: rgb(255, 255, 255),
+        --text-selection-tab-option-active-color: rgb(0,0,0),
+        --text-selection-background: #2C3036,
+        --text-selection-text-color: #fff,
+        --text-selection-section-header-background: #2C3036,
+        --text-selection-section-type-label: #fff,
+        --text-selection-search-text-color: #fff,
+        --text-selection-search-input-background: #2C3036,
+        --text-selection-accordion-title-background: #1B1F24,
+        --text-selection-accordion-body-background: #2C3036,
+        --text-selection-active-item-color: #6FBC8F
 //--application-base-font-size:
 );
 

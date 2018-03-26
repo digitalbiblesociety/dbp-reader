@@ -80,21 +80,21 @@ class VersionList extends React.PureComponent { // eslint-disable-line react/pre
 		});
 
 		const audioAndTextComponent = audioAndText.length ? (
-			<div className={'version-list-section'}>
+			<div className={'version-list-section'} key={'audio-and-text'}>
 				<div className={'version-list-section-title'}>
 					<FormattedMessage {...messages.audioAndText} />
 				</div>
 				<VersionListSection items={audioAndText} />
 			</div>) : null;
 		const audioOnlyComponent = audioOnly.length ? (
-			<div className={'version-list-section'}>
+			<div className={'version-list-section'} key={'audio-only'}>
 				<div className={'version-list-section-title'}>
 					<FormattedMessage {...messages.audioOnly} />
 				</div>
 				<VersionListSection items={audioOnly} />
 			</div>) : null;
 		const textOnlyComponent = textOnly.length ? (
-			<div className={'version-list-section'}>
+			<div className={'version-list-section'} key={'text-only'}>
 				<div className={'version-list-section-title'}>
 					<FormattedMessage {...messages.textOnly} />
 				</div>

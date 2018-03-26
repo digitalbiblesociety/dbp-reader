@@ -1,6 +1,6 @@
 // Chapter and Version Shared Styles
 .text-selection-section .active-header-name {
-  @include css4{color:var(--menu-active-color);};margin-left:5px;}
+  @include css4{color:var(--text-selection-active-item-color);};margin-left:5px;}
 .text-selection-section {
   max-height:calc(100% - 100px);
   height:calc(100% - 100px);
@@ -25,8 +25,8 @@
   //left:calc(50% - 116px);
   height:calc(100vh - 110px);
   @include css4{
-    background-color:var(--menu-secondary-background-color);
-    color:var(--menu-font-color);
+    background-color:var(--text-selection-background);
+    color:var(--text-selection-text-color);
   };
   z-index:1;
 
@@ -47,38 +47,38 @@
       cursor:pointer;
 
       @include css4 {
-        border:1px solid var(--menu-title-text-color);
+        border:1px solid var(--text-selection-text-color);
       }
 
       &:hover {
         @include css4 {
-          background-color: var(--tab-option-active-background);
-          color: var(--tab-option-active-color);
+          background-color: var(--text-selection-tab-option-active-background);
+          color: var(--text-selection-tab-option-active-color);
         }
       }
 
       &.active {
         @include css4 {
-          background-color: var(--tab-option-active-background);
-          color: var(--tab-option-active-color);
+          background-color: var(--text-selection-tab-option-active-background);
+          color: var(--text-selection-tab-option-active-color);
         }
       }
     }
 
     .tab-option:first-child {
       @include css4 {
-        border-top:1px solid var(--menu-title-text-color);
-        border-bottom:1px solid var(--menu-title-text-color);
-        border-left:1px solid var(--menu-title-text-color);
+        border-top:1px solid var(--text-selection-text-color);
+        border-bottom:1px solid var(--text-selection-text-color);
+        border-left:1px solid var(--text-selection-text-color);
         border-radius: 6px 0 0 6px;
       }
     }
 
     .tab-option:last-child {
       @include css4 {
-        border-top:1px solid var(--menu-title-text-color);
-        border-bottom:1px solid var(--menu-title-text-color);
-        border-right:1px solid var(--menu-title-text-color);
+        border-top:1px solid var(--text-selection-text-color);
+        border-bottom:1px solid var(--text-selection-text-color);
+        border-right:1px solid var(--text-selection-text-color);
         border-radius:0 6px 6px 0;
       }
     }
@@ -102,18 +102,18 @@
 // Country Selection Styles
 .country-name       {display:flex;align-items:center;cursor:pointer;}
 .country-name svg.icon  {margin-right:20px;margin-left:5px;}
-.country-name:hover {@include css4{color:var(--menu-active-color);};}
+.country-name:hover {@include css4{color:var(--text-selection-active-item-color);};}
 
 // Language Selection Styles
-.active-language-name      {@include css4{color:var(--menu-active-color);};}
+.active-language-name      {@include css4{color:var(--text-selection-active-item-color);};}
 .language-name             {cursor:pointer;margin-top:5px;margin-bottom:5px;}
-.language-name:hover       {@include css4{color:var(--menu-active-color);};}
-.active-language-name      {@include css4{color:var(--menu-active-color);};max-height:50px;}
+.language-name:hover       {@include css4{color:var(--text-selection-active-item-color);};}
+.active-language-name      {@include css4{color:var(--text-selection-active-item-color);};max-height:50px;}
 // The relative input values are affecting this as well...
 .language-name-list        {
   @include css4{
-    background-color:var(--menu-secondary-background-color);
-    color:var(--menu-font-color);
+    background-color:var(--text-selection-background);
+    color:var(--text-selection-text-color);
   };
   font-size:.98em;
   height:calc(100%);
@@ -122,8 +122,8 @@
 }
 .version-name-list         {
   @include css4{
-    background-color:var(--menu-secondary-background-color);
-    color:var(--menu-font-color);
+    background-color:var(--text-selection-background);
+    color:var(--text-selection-text-color);
   };
   font-size:.98em;
   height:calc(100%);
@@ -140,7 +140,9 @@
       min-height:50px;
       height:50px;
       width:100%;
-      background-color:#222; // put in variable
+      @include css4 {
+        background-color: var(--text-selection-accordion-title-background);
+      }
       filter:invert(1);
     }
     //padding:15px;
@@ -150,14 +152,24 @@
     //}
     .accordion-title-style {
       //&aria-selected["true"]
+      @include css4 {
+        background-color: var(--text-selection-accordion-title-background);
+      }
       &:last-child {padding-bottom:15px;}
       padding-top: 15px;
       //padding-left: 15px;
       cursor: pointer;
 
       & .accordion__title[aria-selected="true"] {
+        padding-bottom: 15px;
         @include css4 {
-          color: var(--menu-active-color);
+          color: var(--text-selection-active-item-color);
+        }
+      }
+
+      &:hover {
+        @include css4 {
+          color: var(--text-selection-active-item-color);
         }
       }
 
@@ -168,7 +180,10 @@
 
     .accordion-body-style {
       //padding:15px 0 15px 0;
-      background-color:#777;
+      @include css4 {
+        color:var(--text-selection-text-color);
+        background-color: var(--text-selection-accordion-body-background);
+      }
     }
 
     .version-item-button {
@@ -178,7 +193,7 @@
       min-height:50px;
       margin: auto;
       //@include css4{
-      //  background-color:var(--menu-secondary-background-color);
+      //  background-color:var(--text-selection-background);
       //};
       display:flex;
       align-items:center;
@@ -187,8 +202,8 @@
 }
 .country-name-list         {
   @include css4{
-    background-color:var(--menu-secondary-background-color);
-    color:var(--menu-font-color);
+    background-color:var(--text-selection-background);
+    color:var(--text-selection-text-color);
   };
   font-size:.98em;
   height:calc(100%);
@@ -197,7 +212,7 @@
 }
 
 // Version Selection Styles
-//.version-item-button               {
+//.version-item-button             {
 //  display:flex;
 //  align-items:flex-start;
 //  margin:10px 0;
@@ -206,8 +221,8 @@
 //}
 .version-item-button:hover         {
   @include css4{
-    color:var(--menu-active-color);
-    fill:var(--menu-active-color);
+    color:var(--text-selection-active-item-color);
+    fill:var(--text-selection-active-item-color);
   };
 }
 .version-item-button .svg          {
@@ -215,13 +230,13 @@
   min-width:20px;
 }
 .version-item-button .svg.active   {
-  @include css4{fill:var(--menu-font-color);};
+  @include css4{fill:var(--text-selection-text-color);};
 }
 .version-item-button .svg.inactive {
   @include css4{fill:var(--menu-inactive-svg-color);};
 }
 .active-version                    {
-  @include css4{color:var(--menu-active-color);};
+  @include css4{color:var(--text-selection-active-item-color);};
 }
 // capture location of the client relative to the scroll container
 // once the previously active book is closed reset scroll height
