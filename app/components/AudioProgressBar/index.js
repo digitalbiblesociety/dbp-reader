@@ -13,6 +13,7 @@ const Timeline = styled.div`
 	height: 3px;
 	position:relative;
 `;
+// width: ${(props) => props.percent > 0 ? `${props.percent}%` : '0px'};
 
 const Tracker = styled.div`
 	width: 15px;
@@ -66,6 +67,9 @@ class AudioProgressBar extends React.PureComponent {
 	clickPercent = (e) => (e.clientX - this.state.position) / (this.state.timelineOffset - this.state.trackerOffset || 0);
 
 	moveTracker = (e, fromProps) => {
+		// console.log('move tracker e', e);
+		// console.log('move tracker fromProps', fromProps);
+
 		let newMargLeft;
 		if (fromProps) {
 			newMargLeft = this.timeline.offsetWidth;
@@ -90,6 +94,7 @@ class AudioProgressBar extends React.PureComponent {
 
 	handleTimeClick = (e) => {
 		this.moveTracker({ e });
+		console.log('setting new time');
 		this.props.setCurrentTime(this.props.duration * this.clickPercent(e));
 	};
 

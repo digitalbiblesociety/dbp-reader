@@ -15,9 +15,18 @@ class VolumeSlider extends React.PureComponent { // eslint-disable-line react/pr
 		stateVolume: 0,
 	}
 
+	componentDidMount() {
+		console.log('re-mounting');
+	}
+
+	handleMouseUp = () => {
+		console.log('handling mouse up');
+		this.props.updateVolume(this.state.stateVolume);
+	}
+
 	handleChange = (value) => {
+		console.log('handling change and new volume value', value / 100 || 0);
 		this.setState({ stateVolume: value / 100 || 0 });
-		this.props.updateVolume(value / 100 || 0);
 	}
 
 	render() {
@@ -28,20 +37,17 @@ class VolumeSlider extends React.PureComponent { // eslint-disable-line react/pr
 		const {
 			stateVolume,
 		} = this.state;
-
+		console.log('rendering');
 		return (
 			<div className="volume-slider-container">
-				<div ref={innerRef} className="volume-slider">
+				<div onMouseUp={this.handleMouseUp} ref={innerRef} className="volume-slider">
 					<Slider
 						className="slider"
-						dots
 						onChange={this.handleChange}
 						handleStyle={{ border: 'none', backgroundColor: 'rgb(98,177,130)' }}
 						railStyle={{ backgroundColor: '#111' }}
 						trackStyle={{ backgroundColor: 'rgb(98,177,130)' }}
 						defaultValue={stateVolume ? stateVolume * 100 : volume * 100}
-						dotStyle={{ backgroundColor: '#8a8a8a' }}
-						step={25}
 						min={0}
 						max={100}
 					/>

@@ -169,12 +169,14 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 	}
 
 	seekingEventListener = (e) => {
+		console.log('player is seeking', e);
 		this.setState({
 			currentTime: e.target.currentTime,
 		});
 	}
 
 	seekedEventListener = (e) => {
+		console.log('player is done seeking', e);
 		this.setState({
 			currentTime: e.target.currentTime,
 		});
