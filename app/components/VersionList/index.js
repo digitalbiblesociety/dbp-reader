@@ -54,15 +54,6 @@ class VersionList extends React.PureComponent { // eslint-disable-line react/pre
 			types: bible.get('filesets').reduce((a, c) => ({ ...a, [c.get('set_type_code')]: true }), {}),
 		}]), []);
 		// console.log('scrubbed bibles', scrubbedBibles);
-		// const scrubbedBibles = filteredBibles.map((bible) => {
-		// 	const newBible = {};
-		// 	newBible.path = ;
-		// 	newBible.key = ;
-		// 	newBible.clickHandler = ;
-		// 	newBible.className =;
-		// 	newBible.text =;
-		// 	console.log(bible);
-		// }).toJS();
 		// When I first get the response from the server with filesets
 		const audioAndText = []; // filteredBibles.reduce();
 		const audioOnly = []; // filteredBibles.reduce();
@@ -106,32 +97,6 @@ class VersionList extends React.PureComponent { // eslint-disable-line react/pre
 			audioOnlyComponent,
 			textOnlyComponent,
 		];
-		// Create three options, hasPlainText, hasAudio and hasFormatted
-		// Then pass these three options into redux and use them here
-		// const components = filteredBibles.map((bible) => (
-		// 	<Link
-		// 		to={`/${bible.get('abbr').toLowerCase()}/${activeBookId.toLowerCase()}/${activeChapter}`}
-		// 		className="version-item-button"
-		// 		key={`${bible.get('abbr')}${bible.get('date')}`}
-		// 		onClick={() => this.handleVersionListClick(bible)}
-		// 	>
-		// 		{
-		// 			bible.get('filesets').filter((fileset) => fileset.get('set_type_code') === 'text_formatt').size || bible.get('filesets').filter((fileset) => fileset.get('set_type_code') === 'text_plain').size ? (
-		// 				<SvgWrapper className="active" height="20px" width="20px" svgid="text" />
-		// 			) : (
-		// 				<SvgWrapper className="inactive" height="20px" width="20px" svgid="text" />
-		// 			)
-		// 		}
-		// 		{
-		// 			bible.get('filesets').filter((fileset) => fileset.get('set_type_code') === 'audio_drama').size || bible.get('filesets').filter((fileset) => fileset.get('set_type_code') === 'audio').size ? (
-		// 				<SvgWrapper className="active" height="20px" width="20px" svgid="volume" />
-		// 			) : (
-		// 				<SvgWrapper className="inactive" height="20px" width="20px" svgid="volume" />
-		// 			)
-		// 		}
-		// 		<h4 className={bible.get('abbr') === activeTextId ? 'active-version' : ''}>{bible.get('name')}</h4>
-		// 	</Link>
-		// ));
 
 		if (bibles.size === 0 || versionsError) {
 			return <span className="version-item-button">There was an error fetching this resource, an Admin has been notified. We apologize for the inconvenience.</span>;
