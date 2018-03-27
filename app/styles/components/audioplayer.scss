@@ -6,6 +6,7 @@
   position:fixed;
   width:100%;
   bottom:56px;
+  z-index: 1;
 }
 // General Audio Player Styles
 .audio-player-container .svgitem       {
@@ -98,6 +99,8 @@
   height:25px;
   width:100%;
   background: rgba(0,0,0,0.9);
+  z-index: 1;
+
   @include css4 {
     color:var(--menu-title-text-color);
     //background-color:var(--audioplayer-handle-background-color);
@@ -210,6 +213,7 @@
   bottom:auto;
   z-index:3;
 }
+
 .elipsis .container       {
   position:absolute;
   padding:15px;
@@ -225,20 +229,24 @@
     background-color:var(--transparent-grey);
   };
 }
+
 .container div {
   display:flex;
   align-items:center;
 }
+
 .container span           {
   margin-left:15px;
 }
 
-
-@media only screen and (max-width: 550px) {
+@media only screen and (max-width: $audio-player-bp) {
   .audio-player-container {
     flex-wrap: wrap;
     height: 83px;
-    :nth-child(4) {order:1;width:80%;margin:0 25px 17px 25px;}
+    :nth-child(4) {order:1;width:55%;min-width:291px;margin:0 25px 17px 25px;}
     :nth-child(3) {margin-right:0;}
+  }
+  .audioplayer-handle {
+    bottom: 136px;
   }
 }
