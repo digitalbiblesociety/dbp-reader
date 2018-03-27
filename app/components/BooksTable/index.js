@@ -182,17 +182,33 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 				<div ref={(el) => this.handleRef(el, 'container')} className="book-container">
 					{
 						books.map((book) => (
-							<div className={'book-button'} ref={(book.name || book.name_short) === selectedBookName ? (el) => this.handleRef(el, 'button') : null} tabIndex="0" role="button" key={(book.name || book.name_short).concat(book.book_id)} onClick={(e) => this.handleBookClick(e, book.name || book.name_short)}>
+							<div
+								className={'book-button'}
+								ref={(book.name || book.name_short) === selectedBookName ? (el) => this.handleRef(el, 'button') : null}
+								tabIndex="0"
+								role="button"
+								key={(book.name || book.name_short).concat(book.book_id)}
+								onClick={(e) => this.handleBookClick(e, book.name || book.name_short)}
+							>
 								<h4 className={(book.name || book.name_short) === selectedBookName ? 'active-book' : ''}>{book.name || book.name_short}</h4>
-								<div className="chapter-container">
-									{
-										(book.name || book.name_short) && (book.name || book.name_short) === selectedBookName ? book.chapters.map((chapter) => (
-											<Link to={`/${activeTextId.toLowerCase()}/${book.book_id.toLowerCase()}/${chapter}`} key={chapter} className="chapter-box" onClick={() => this.handleChapterClick(book, chapter)}>
-												<span className={(activeChapter === chapter && (book.name || book.name_short) === activeBookName) ? 'active-chapter' : ''}>{chapter}</span>
-											</Link>
-										)) : null
-									}
-								</div>
+								{
+									(book.name || book.name_short) && (book.name || book.name_short) === selectedBookName ? (
+										<div className="chapter-container">
+											{
+												book.chapters.map((chapter) => (
+													<Link
+														to={`/${activeTextId.toLowerCase()}/${book.book_id.toLowerCase()}/${chapter}`}
+														key={chapter}
+														className="chapter-box"
+														onClick={() => this.handleChapterClick(book, chapter)}
+													>
+														<span className={(activeChapter === chapter && (book.name || book.name_short) === activeBookName) ? 'active-chapter' : ''}>{chapter}</span>
+													</Link>
+												))
+											}
+										</div>
+									) : null
+								}
 							</div>
 						))
 					}

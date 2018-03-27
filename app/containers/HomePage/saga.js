@@ -200,7 +200,7 @@ export function* getChapterFromUrl({ filesets, bibleId: oldBibleId, bookId: oldB
 		if (hasFormattedText) {
 			try {
 				// Gets the last fileset id for a formatted text
-				const filesetId = reduce(filesets, (a, c, i) => c.set_type_code === 'text_formatt' ? i : a, '');
+				const filesetId = reduce(filesets, (a, c) => c.set_type_code === 'text_formatt' ? c.id : a, '');
 				// console.log(filesetId);
 				const reqUrl = `https://api.bible.build/bibles/filesets/${filesetId}?key=${process.env.DBP_API_KEY}&v=4&book_id=${bookId}&chapter_id=${chapter}`;
 				// console.log(reqUrl);
@@ -289,11 +289,11 @@ export function* getChapterFromUrl({ filesets, bibleId: oldBibleId, bookId: oldB
 export function* getChapterAudio({ filesets, bookId, chapter }) {
 	// console.log('getting audio', filesets, bookId, chapter);
 	// Parse filesets
-	const filteredFilesets = reduce(filesets, (a, file, i) => {
+	const filteredFilesets = reduce(filesets, (a, file) => {
 		const newFile = { ...a };
 
 		if (file.set_type_code === 'audio' || file.set_type_code === 'audio_drama') {
-			newFile[i] = file;
+			newFile[file.id] = file;
 		}
 
 		return newFile;

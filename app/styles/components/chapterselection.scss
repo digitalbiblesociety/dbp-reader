@@ -12,7 +12,7 @@
     background-color:var(--menu-secondary-background-color);
     color:var(--menu-font-color);
   };
-  z-index:1;
+  z-index:3;
 
   header {
     display:flex;
@@ -40,18 +40,20 @@
   }
 
   .chapter-box {
-    width:60px;
+    width:55px;
     height:30px;
-    margin-bottom:5px;
+    float: left;
     text-align:center;
   }
 
   .chapter-container {
-    display:grid;
-    margin:auto;
-    padding-top:10px;
-    grid-template-columns:repeat(5,60px);
-    grid-template-rows:auto;
+  //  display:grid;
+  //  margin:auto;
+  //  padding-top:10px;
+  //  grid-template-columns:repeat(5,60px);
+  //  grid-template-rows:auto;
+    display:inline-block;
+    padding-top:5px;
   }
 
   .active-book {
@@ -68,11 +70,30 @@
 
   .book-button {
     cursor:pointer;
+    margin-bottom:10px;
   }
 
   .active-chapter {
     @include css4{
       color:var(--menu-active-color);
     };
+  }
+}
+
+@media only screen and (max-width: $chapter-dropdown-bp) {
+  .chapter-text-dropdown {
+    width:291px;
+    position:fixed;
+    right:0;
+    left:unset;
+  }
+}
+
+@media only screen and (max-width: 720px) {
+  .chapter-text-dropdown .chapter-box {
+    width:52px;
+    height:30px;
+    float: left;
+    text-align:center;
   }
 }
