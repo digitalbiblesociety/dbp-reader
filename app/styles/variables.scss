@@ -80,6 +80,12 @@ $login-twitter-color: rgb(42,163,239);
   $navbar-dropdown-fill: light #F4F6F9 normal #7E0E2A dark #F4F6F9 50% opacity;
   $header-footer-background-color: light rgb(180, 145, 130) normal rgb(158, 30, 53) dark rgb(44, 48, 54)
 */
+
+$default-font-family: "Noto Sans", Helvetica, sans serif;
+$sans-font-family-option: "Noto Sans", Helvetica, sans serif;
+$serif-font-family-option: "Alegreya", "Palatino Linotype", Palatino, serif;
+$slab-font-family-option: "Roboto Slab", Rockwell, Courier, monospace;
+
 :root {
   --application-font-family: "Noto Sans", Helvetica, sans serif;
   --sans-font-family-option: "Noto Sans", Helvetica, sans serif;
