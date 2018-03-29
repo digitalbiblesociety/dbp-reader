@@ -186,7 +186,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			const fjs = d.getElementsByTagName(s)[0];
 			if (d.getElementById(id)) return;
 			js = d.createElement(s); js.id = id;
-			js.src = 'https://connect.facebook.net/en_US/sdk.js';
+			js.src = `https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.12&appId=${process.env.FB_APP_ID}&autoLogAppEvents=1`;
 			fjs.parentNode.insertBefore(js, fjs);
 		})(document, 'script', 'facebook-jssdk');
 	}
