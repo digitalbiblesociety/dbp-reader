@@ -327,7 +327,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 	if (completeAudio.length) {
 		// console.log('Bible has complete audio', completeAudio);
 		try {
-			const reqUrl = `https://api.bible.build/bibles/filesets/${get(completeAudio, [0, 'id'])}?key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter=${chapter}&type=${get(completeAudio, [0, 'data', 'set_type_code'])}`;
+			const reqUrl = `https://api.bible.build/bibles/filesets/${get(completeAudio, [0, 'id'])}?key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(completeAudio, [0, 'data', 'set_type_code'])}`;
 			const response = yield call(request, reqUrl);
 			// console.log('complete audio response object', response);
 			const audioPath = get(response, ['data', 0, 'path']);
@@ -346,7 +346,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 		}
 	} else if (ntLength && !otLength) {
 		try {
-			const reqUrl = `https://api.bible.build/bibles/filesets/${get(ntAudio, [0, 'id'])}?key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter=${chapter}&type=${get(ntAudio, [0, 'data', 'set_type_code'])}`;
+			const reqUrl = `https://api.bible.build/bibles/filesets/${get(ntAudio, [0, 'id'])}?key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(ntAudio, [0, 'data', 'set_type_code'])}`;
 			const response = yield call(request, reqUrl);
 			// console.log('nt audio response object', response);
 			const audioPath = get(response, ['data', 0, 'path']);
@@ -365,7 +365,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 		}
 	} else if (otLength && !ntLength) {
 		try {
-			const reqUrl = `https://api.bible.build/bibles/filesets/${get(otAudio, [0, 'id'])}?key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter=${chapter}&type=${get(otAudio, [0, 'data', 'set_type_code'])}`;
+			const reqUrl = `https://api.bible.build/bibles/filesets/${get(otAudio, [0, 'id'])}?key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(otAudio, [0, 'data', 'set_type_code'])}`;
 			const response = yield call(request, reqUrl);
 			// console.log('ot audio response object', response);
 			const audioPath = get(response, ['data', 0, 'path']);
@@ -389,7 +389,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 		// console.log('trying nt & ot', ntLength && !otLength, '\n', ntAudio, '\n', otAudio);
 
 		try {
-			const reqUrl = `https://api.bible.build/bibles/filesets/${get(ntAudio, [0, 'id'])}?key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter=${chapter}&type=${get(ntAudio, [0, 'data', 'set_type_code'])}`;
+			const reqUrl = `https://api.bible.build/bibles/filesets/${get(ntAudio, [0, 'id'])}?key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(ntAudio, [0, 'data', 'set_type_code'])}`;
 			const response = yield call(request, reqUrl);
 			// console.log('nt audio response object', response);
 			const audioPath = get(response, ['data', 0, 'path']);
@@ -408,7 +408,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 			}
 		}
 		try {
-			const reqUrl = `https://api.bible.build/bibles/filesets/${get(otAudio, [0, 'id'])}?key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter=${chapter}&type=${get(otAudio, [0, 'data', 'set_type_code'])}`;
+			const reqUrl = `https://api.bible.build/bibles/filesets/${get(otAudio, [0, 'id'])}?key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(otAudio, [0, 'data', 'set_type_code'])}`;
 			const response = yield call(request, reqUrl);
 			// console.log('ot audio response object', response);
 			const audioPath = get(response, ['data', 0, 'path']);
@@ -431,7 +431,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 	} else if (partialAudio.length) {
 		try {
 			// Need to iterate over each object here to see if I can find the right chapter
-			const reqUrl = `https://api.bible.build/bibles/filesets/${get(partialAudio, [0, 'id'])}?key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter=${chapter}&type=${get(partialAudio, [0, 'data', 'set_type_code'])}`;
+			const reqUrl = `https://api.bible.build/bibles/filesets/${get(partialAudio, [0, 'id'])}?key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(partialAudio, [0, 'data', 'set_type_code'])}`;
 			const response = yield call(request, reqUrl);
 			// console.log('partial audio response object', response);
 			const audioPath = get(response, ['data', 0, 'path']);
