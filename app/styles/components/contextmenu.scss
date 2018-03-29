@@ -1,0 +1,94 @@
+.context-menu {
+  width:250px;
+  height:162px;
+  position:absolute;
+  background-color:#fff;
+  @include css4 {
+    border: 2px solid var(--menu-active-color);
+  }
+  border-radius: 6px;
+
+  .menu-item {
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    //background-color:rgb(204,178,165);
+    //background-color:var(--context-menu-background-color);
+    width:62px;
+    height:54px;
+    cursor:pointer;
+
+    &.social svg {
+      fill: #fff;
+    }
+
+    &:hover {
+      opacity: 0.6;
+      fill:rgba(0,0,0,0.65);
+    }
+  }
+
+  .menu-row {
+    display:flex;
+    height:54px;
+    width:100%;
+
+    #link-to-copy {
+      background-color: unset;
+      color: black;
+    }
+
+    .copy-link {
+      width:80%;
+      color: gray;
+      font-size: 14px;
+      padding-top: 15px;
+      padding-left: 5px;
+      padding-right: 5px;
+      text-decoration: underline;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      cursor: pointer;
+
+      &:hover {
+        color: #1DA1F2;
+      }
+    }
+
+    .copy-button {
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      padding-left: 5px;
+      padding-right: 5px;
+      width: 54px;
+      height: 54px;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .like-button {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      .share-count {
+        background-color: #fff;
+        display:flex;
+        height: 26px;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .like-thumb {
+        height: 26px;
+        width: 100%;
+        display:flex;
+        align-items: center;
+        font-size: 12px;
+        background-color: $login-facebook-color;
+      }
+    }
+  }
+}
