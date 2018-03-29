@@ -142,7 +142,7 @@ class AudioProgressBar extends React.PureComponent {
 			<Slider
 				className="progress-slider"
 				onChange={this.handleChange}
-				handleStyle={{ border: 'none', backgroundColor: 'rgb(98,177,130)' }}
+				handleStyle={{ border: '2px solid rgb(98,177,130)', backgroundColor: 'rgb(0,0,0)' }}
 				railStyle={{ backgroundColor: '#111' }}
 				trackStyle={{ backgroundColor: 'rgb(98,177,130)' }}
 				value={percent}
