@@ -163,11 +163,14 @@
   margin-left:18px;
 }
 .volume-slider-container {
-  display:block;
+  display:none;
   left:0;
   position:absolute;
   top:-24px;
   bottom:auto;
+  &.active {
+    display:block;
+  }
 }
 .volume-slider           {
   @include css4{

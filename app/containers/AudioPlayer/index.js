@@ -49,6 +49,7 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 			// console.log('component mounted and auto play was true');
 			this.audioRef.addEventListener('canplay', this.autoPlayListener);
 		}
+		this.audioRef.playbackRate = this.state.currentSpeed;
 		// Add all the event listeners I need for the audio player
 		this.audioRef.addEventListener('durationchange', this.durationChangeEventListener);
 		this.audioRef.addEventListener('timeupdate', this.timeUpdateEventListener);
@@ -60,6 +61,7 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.audioSource !== this.props.audioSource) {
+			// this.pauseVideo();
 			if (nextProps.audioSource) {
 				this.setState({ playerState: true, playing: false });
 			} else if (this.state.playerState) {
@@ -79,11 +81,19 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 		// }
 	}
 
+	componentDidUpdate() {
+		if (this.audioRef) {
+			this.audioRef.playbackRate = this.state.currentSpeed;
+		}
+	}
+
 	// shouldComponentUpdate(nextProps, nextState) {
-	// 	if (nextState.volume !== this.state.volume) {
+	// 	if (nextState.volume !== this.state.volume || nextState.currentTime !== this.state.currentTime) {
+	// 		console.log('audio player should not update');
 	// 		return false;
 	// 	}
 	// 	if (!isEqual(nextProps, this.props) || !isEqual(nextState, this.state)) {
+	// 		console.log('audio player should update');
 	// 		return true;
 	// 	}
 	// 	return false;
@@ -169,12 +179,14 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 	}
 
 	seekingEventListener = (e) => {
+		// console.log('player is seeking', e);
 		this.setState({
 			currentTime: e.target.currentTime,
 		});
 	}
 
 	seekedEventListener = (e) => {
+		// console.log('player is done seeking', e);
 		this.setState({
 			currentTime: e.target.currentTime,
 		});
@@ -224,6 +236,7 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 
 	skipBackward = () => {
 		this.setCurrentTime(0);
+		this.pauseVideo();
 		this.props.skipBackward();
 		this.setState({
 			playing: false,
@@ -232,6 +245,7 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 
 	skipForward = () => {
 		this.setCurrentTime(0);
+		this.pauseVideo();
 		this.props.skipForward();
 		this.setState({
 			playing: false,
@@ -353,9 +367,8 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 										{this.getVolumeSvg(this.state.volume)}
 										<FormattedMessage {...messages.volume} />
 									</div>
-									{
-										this.state.volumeSliderState && <this.volumeControl active={this.state.volumeSliderState} updateVolume={this.updateVolume} volume={this.state.volume} />
-									}
+									{/* <this.volumeControl updateVolume={this.updateVolume} volume={this.state.volume} /> */}
+									<VolumeSlider active={this.state.volumeSliderState} onCloseFunction={this.closeModals} updateVolume={this.updateVolume} volume={this.state.volume} />
 								</div>
 								<div id="volume-wrap">
 									<div title={messages.speedTitle.defaultMessage} role="button" tabIndex="0" className={this.state.speedControlState ? 'item active' : 'item'} onClick={() => { this.state.speedControlState ? this.setSpeedControlState(false) : this.setSpeedControlState(true); this.setElipsisState(false); this.setVolumeSliderState(false); }}>

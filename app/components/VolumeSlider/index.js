@@ -11,37 +11,59 @@ import Slider from 'rc-slider/lib/Slider';
 // rc-slider Slider component doesn't accept classes for styles other than classname
 // TODO: Figure out why slider isn't sliding - the problem is that the parent component is updating and sending down the new volume value which causes this component to re-render
 class VolumeSlider extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
-	state = {
-		stateVolume: 0,
+	// state = {
+	// 	stateVolume: 0,
+	// }
+	componentDidMount() {
+		// document.addEventListener('click', this.handleClickOutside);
+		// console.log('volume slider is re-mounting');
 	}
 
+	// componentWillUnmount() {
+	// 	document.removeEventListener('click', this.handleClickOutside);
+	// }
+	//
+	// setInnerRef = (el) => {
+	// 	this.wrappedComponent = el;
+	// }
+	//
+	// handleClickOutside = (event) => {
+	// 	console.log('clicked outside');
+	// 	const bounds = this.wrappedComponent ? this.wrappedComponent.getBoundingClientRect() : { x: 0, y: 0, width: 0, height: 0 };
+	// 	const insideWidth = event.x >= bounds.x && event.x <= bounds.x + bounds.width;
+	// 	const insideHeight = event.y >= bounds.y && event.y <= bounds.y + bounds.height;
+	//
+	// 	if (this.wrappedComponent && !(insideWidth && insideHeight)) {
+	// 		this.props.onCloseFunction();
+	// 		// document.removeEventListener('click', this.handleClickOutside);
+	// 	}
+	// }
+
 	handleChange = (value) => {
-		this.setState({ stateVolume: value / 100 || 0 });
+		// console.log('handling change and new volume value', value / 100 || 0);
+		// this.setState({ stateVolume: value / 100 || 0 });
 		this.props.updateVolume(value / 100 || 0);
 	}
 
 	render() {
 		const {
-			innerRef,
 			volume,
+			active,
 		} = this.props;
-		const {
-			stateVolume,
-		} = this.state;
-
+		// const {
+		// 	stateVolume,
+		// } = this.state;
+		// console.log('rendering volume slider');
 		return (
-			<div className="volume-slider-container">
-				<div ref={innerRef} className="volume-slider">
+			<div className={active ? 'volume-slider-container active' : 'volume-slider-container'}>
+				<div ref={this.setInnerRef} className="volume-slider">
 					<Slider
 						className="slider"
-						dots
 						onChange={this.handleChange}
 						handleStyle={{ border: 'none', backgroundColor: 'rgb(98,177,130)' }}
 						railStyle={{ backgroundColor: '#111' }}
 						trackStyle={{ backgroundColor: 'rgb(98,177,130)' }}
-						defaultValue={stateVolume ? stateVolume * 100 : volume * 100}
-						dotStyle={{ backgroundColor: '#8a8a8a' }}
-						step={25}
+						defaultValue={volume * 100}
 						min={0}
 						max={100}
 					/>
@@ -52,9 +74,10 @@ class VolumeSlider extends React.PureComponent { // eslint-disable-line react/pr
 }
 
 VolumeSlider.propTypes = {
-	innerRef: PropTypes.func,
 	updateVolume: PropTypes.func.isRequired,
 	volume: PropTypes.number.isRequired,
+	// onCloseFunction: PropTypes.func,
+	active: PropTypes.bool,
 };
 
 export default VolumeSlider;

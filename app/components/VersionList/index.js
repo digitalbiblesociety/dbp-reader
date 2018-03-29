@@ -133,11 +133,14 @@ class VersionList extends React.PureComponent { // eslint-disable-line react/pre
 		} = this.props;
 
 		if (bible) {
+			const filesets = bible.get('filesets').filter((f) => f.get('bucket_id') === 'dbp-dev' && f.get('set_type_code') !== 'app');
+			// console.log('version list', filesets);
+
 			if (audioType) {
-				setActiveText({ textId: bible.get('abbr'), textName: bible.get('name'), filesets: bible.get('filesets').filter((fileset) => (fileset.get('set_type_code') === audioType || fileset.get('set_type_code') === 'text_plain' || fileset.get('set_type_code') === 'text_formatt')) });
+				setActiveText({ textId: bible.get('abbr'), textName: bible.get('name'), filesets: filesets.filter((fileset) => (fileset.get('set_type_code') === audioType || fileset.get('set_type_code') === 'text_plain' || fileset.get('set_type_code') === 'text_formatt')) });
 				toggleTextSelection();
 			} else {
-				setActiveText({ textId: bible.get('abbr'), textName: bible.get('name'), filesets: bible.get('filesets') });
+				setActiveText({ textId: bible.get('abbr'), textName: bible.get('name'), filesets });
 				toggleTextSelection();
 			}
 		}

@@ -24,6 +24,14 @@ const paper = {
 	'--settings-option-inactive-color': 'rgb(112, 63, 51)',
 	'--context-menu-background-color': 'rgb(204,178,165)',
 	'--audioplayer-handle-background-color': 'rgba(255, 255, 255, 0.5)',
+	'--text-selection-background': '#FDF9F3',
+	'--text-selection-section-header-background': '#FDF9F3',
+	'--text-selection-section-type-label': '#000000',
+	'--text-selection-search-text-color': '#000000',
+	'--text-selection-search-input-background': '#FDF9F3',
+	'--text-selection-accordion-title-background': '#F8E4D3',
+	'--text-selection-accordion-body-background': '#FDF9F3',
+	'--text-selection-active-item-color': '#6FBC8F',
 };
 
 const dark = {

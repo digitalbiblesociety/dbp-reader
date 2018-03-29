@@ -1,35 +1,33 @@
 .dark-theme {
-  $header-footer-background: rgba(39, 42, 47, 1);
-  $header-footer-background-transparent: rgba(39, 42, 47, 0);
-  $audio-player-background: rgba(46, 49, 54, 1);
-  $text-selection-color: rgb(111, 188, 143);
-  $text-contextmenu-background: rgb(46, 49, 54);
-  $text-arrow-color: rgb(255, 255, 255);
-  $text-super-color: rgb(255, 255, 255);
-  $settings-font-color: rgb(99, 105, 106);
-  $menu-font-color: rgb(255, 255, 255);
-  $menu-inactive-svg-color: rgb(61,65,68);
-  $menu-background-color: rgb(44, 48, 54);
-  $menu-active-text-color: rgb(255, 255, 255);
-  $menu-secondary-background-color: rgb(39, 42, 47);
-  $menu-hover-color: rgb(98, 177, 130);
-  $menu-active-color: rgb(98, 177, 130);
-  $menu-title-text-color: rgb(255, 255, 255);
-  $menu-secondary-header-background: rgb(39, 42, 47);
-  $menu-header-background: rgb(26, 29, 33);
-  $application-background: rgb(26, 29, 33);
-  $application-base-color: rgb(255, 255, 255);
-  $settings-option-inactive-secondary-color: rgb(27, 31, 46);
-  $audio-player-progress-background: rgb(32,34,39);
-  $settings-option-inactive-color: rgb(98, 177, 130);
-  $context-menu-background-color: rgba(44, 48, 54, 0.75);
-  $audioplayer-handle-background-color: rgba(0, 0, 0, 0.5);
+  // Text / Selection Dropdown Styles
   $text-selection-background: #2C3036;
-  $text-selection-section-header-background: #2C3036;
-  $text-selection-section-type-label: #fff;
-  $text-selection-search-text-color: #fff;
-  $text-selection-search-input-background: #2C3036;
   $text-selection-accordion-title-background: #1B1F24;
   $text-selection-accordion-body-background: #2C3036;
-  $text-selection-active-item-color: #6FBC8F;
+  // Book / Chapter Dropdown Styles
+  $book-dropdown-background-color: #F8E4D3;
+  $book-dropdown-chapter-background-color: #FFFFFF;
+  $book-dropdown-text-color: #000000;
+  // Main Text Area Styles
+  $svg-fill-color:#000000;
+  // Active Colors
+  $active-color-primary: #4EB07B;
+  $active-color-secondary: #6FBC8F;
+  // Highlight Colors
+  $highlight-blue:#1DA1F2;
+  $highlight-pink:#D069A9;
+  $highlight-yellow:#FCE600;
+  $highlight-green:#2E924D;
+  $highlight-purple:#8967AC;
+  // Settings Menu Styles
+  $disabled-input-option:#B2BBC6;
+  $inactive-font-option:#868686;
+  // Basic Menu Styles
+  $body-background-color:#F8E4D3;
+  $header-background-color:#F8E4D3;
+  // Application Wide Styles
+  $default-background-color:#F4F6F9;
+  $default-text-color:#000000;
+  $before-after-border-color:#999999;
+  $default-svg-fill-color:#000000;
+  $default-input-placeholder-color:#000000;
 }

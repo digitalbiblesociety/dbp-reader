@@ -36,9 +36,9 @@ function VersionListSection({ items }) {
 										Dramatized Version
 									</Link>
 									<Link
-										to={`${item.path}_plain`}
+										to={item.path}
 										className="version-item-button"
-										key={item.key}
+										key={`${item.key}_plain`}
 										onClick={() => item.clickHandler('audio')}
 									>
 										Non-Dramatized Version
