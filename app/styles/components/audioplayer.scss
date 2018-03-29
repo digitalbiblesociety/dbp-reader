@@ -207,6 +207,10 @@
   width:80%;
 }
 
+.progress-slider {
+  width: 50%;
+}
+
 // Elipsis TODO: update styles to make the element match the wireframe
 .elipsis                  {
   display:block;
@@ -246,7 +250,10 @@
   .audio-player-container {
     flex-wrap: wrap;
     height: 83px;
-    :nth-child(4) {order:1;width:55%;min-width:291px;margin:0 25px 17px 25px;}
+    .progress-slider {
+      order:1;width:55%;min-width:291px;margin:0 25px 17px 25px;
+    }
+    //:nth-child(4) {order:1;width:55%;min-width:291px;margin:0 25px 17px 25px;}
     :nth-child(3) {margin-right:0;}
   }
   .audioplayer-handle {
