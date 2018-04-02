@@ -36,6 +36,7 @@ import {
 	GET_BOOKS,
 	GET_CHAPTER_TEXT,
 	TOGGLE_AUTOPLAY,
+	languageToNameTable,
 } from './constants';
 
 const initialState = fromJS({
@@ -64,7 +65,7 @@ const initialState = fromJS({
 	activeNotesView: 'notes',
 	activeTextId: 'ENGESV',
 	defaultLanguageIso: 'eng',
-	defaultLanguageName: 'English',
+	defaultLanguageName: window.navigator.language ? languageToNameTable[window.navigator.language] : 'English',
 	activeBookId: 'GEN',
 	userSettings: {
 		activeTheme: sessionStorage.getItem('bible_is_theme') || 'red',
