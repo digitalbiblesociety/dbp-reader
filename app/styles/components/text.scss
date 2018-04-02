@@ -5,17 +5,22 @@
   margin:0 auto;
   align-items: center;
   @include css4 {
-      color: var(--application-base-color);
-      font-size: var(--application-base-font-size);
+    color: var(--application-base-color);
+    font-size: var(--application-base-font-size);
   }
   main {
-      padding: 15px 15px 45px 15px;
-      margin: 0 auto;
+    padding: 15px 15px 45px 15px;
+    margin: 0 auto;
+  }
+
+  .info-button {
+    position: absolute;
+    bottom: 136px;
   }
 }
 
 .verse-number {
-	top: 0;
+  top: 0;
 }
 
 .verse-text {
@@ -117,9 +122,15 @@
 }
 
 @media only screen and (max-width: $audio-player-bp) {
-  .text-container main {
-    padding-bottom: 75px;
-    z-index: 0;
+  .text-container {
+    main {
+      padding-bottom: 75px;
+      z-index: 0;
+    }
+
+    .info-button {
+      bottom: 166px;
+    }
   }
 }
 

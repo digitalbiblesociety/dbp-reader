@@ -534,6 +534,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			userSettings,
 			verseNumber,
 			goToFullChapter,
+			toggleInformationModal,
 		} = this.props;
 		const {
 			coords,
@@ -549,6 +550,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 
 		return (
 			<div className="text-container">
+				<SvgWrapper className={'icon info-button'} svgid={'info'} onClick={toggleInformationModal} />
 				<div onClick={prevChapter} className={'arrow-wrapper'}>
 					<SvgWrapper className="prev-arrow-svg" svgid="arrow_left" />
 				</div>
@@ -595,6 +597,7 @@ Text.propTypes = {
 	goToFullChapter: PropTypes.func,
 	toggleNotesModal: PropTypes.func,
 	setActiveNotesView: PropTypes.func,
+	toggleInformationModal: PropTypes.func,
 	activeChapter: PropTypes.number,
 	notesActive: PropTypes.bool,
 	invalidBibleId: PropTypes.bool,
