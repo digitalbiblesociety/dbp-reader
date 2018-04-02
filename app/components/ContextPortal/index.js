@@ -16,6 +16,7 @@ import {
 	FacebookShareCount,
 } from 'react-share';
 import SvgWrapper from 'components/SvgWrapper';
+import HighlightColors from 'components/HighlightColors';
 import CloseMenuFunctions from 'utils/closeMenuFunctions';
 
 // const StyledDiv = styled.div`
@@ -54,6 +55,10 @@ import CloseMenuFunctions from 'utils/closeMenuFunctions';
 // change to pure component and handle outside clicks instead of click handler
 // on each item
 class ContextPortal extends React.PureComponent {
+	state = {
+		highlightOpen: false,
+	}
+
 	componentDidMount() {
 		this.closeMenuController = new CloseMenuFunctions(this.componentRef, this.props.closeContextMenu);
 		this.closeMenuController.onMenuMount();
@@ -84,9 +89,9 @@ class ContextPortal extends React.PureComponent {
 		}
 	};
 
-	handleHighlightClick = () => {
+	handleHighlightClick = ({ color }) => {
 		// toggle the colors sub menu
-		this.props.addHighlight();
+		this.props.addHighlight(color);
 	}
 
 	handleCopy = (e) => {
@@ -144,6 +149,11 @@ class ContextPortal extends React.PureComponent {
 		document.removeEventListener('copy', this.handleCopy);
 	}
 
+	toggleHighlightColors = (e) => {
+		e.preventDefault();
+		this.setState({ highlightOpen: !this.state.highlightOpen });
+	}
+
 	render() {
 		const {
 			// shareHighlightToFacebook,
@@ -160,13 +170,26 @@ class ContextPortal extends React.PureComponent {
 		const component = (
 			<div style={{ left: `${coordinates.x}px`, top: `${coordinates.y}px` }} ref={this.setComponentRef} className={'context-menu shadow'}>
 				<div className={'menu-row'}>
-					<span role={'button'} tabIndex={0} className={'menu-item'} title={'Add a note'} onClick={this.handleNoteClick}><SvgWrapper className={'icon'} svgid="notes" /></span>
-					<span role={'button'} tabIndex={0} className={'menu-item'} title={'Add a highlight'} onClick={this.handleHighlightClick}><SvgWrapper className={'icon'} svgid="highlight" /></span>
-					<span role={'button'} tabIndex={0} className={'menu-item'} title={'Add a bookmark'} onClick={this.handleBookmarkClick}><SvgWrapper className={'icon'} svgid="bookmark" /></span>
+					<span role={'button'} tabIndex={0} className={'menu-item'} title={'Add a note'} onClick={this.handleNoteClick}>
+						<SvgWrapper className={'icon'} svgid="notes" />
+						<span className={'item-text'}>Notes</span>
+					</span>
+					<span role={'button'} tabIndex={0} className={this.state.highlightOpen ? 'menu-item active' : 'menu-item'} title={'Add a highlight'} onClick={this.toggleHighlightColors}>
+						<SvgWrapper className={'icon'} svgid="highlight" />
+						<span className={'item-text'}>Highlight</span>
+						<div className={this.state.highlightOpen ? 'highlight-colors active' : 'highlight-colors'}>
+							<HighlightColors addHighlight={this.handleHighlightClick} />
+						</div>
+					</span>
+					<span role={'button'} tabIndex={0} className={'menu-item'} title={'Add a bookmark'} onClick={this.handleBookmarkClick}>
+						<SvgWrapper className={'icon'} svgid="bookmark" />
+						<span className={'item-text'}>Bookmark</span>
+					</span>
 					<span role={'button'} tabIndex={0} className={'menu-item'} title={'Share with email'} onClick={closeContextMenu}>
 						<EmailShareButton subject={document.title} body={`"${window.getSelection().toString()}"\n\nTo listen to the audio click here: ${window.location.href}`} url={window.location.href}>
 							<SvgWrapper className={'icon'} svgid="e-mail" />
 						</EmailShareButton>
+						<span className={'item-text'}>E-mail</span>
 					</span>
 				</div>
 				<div className={'menu-row'}>
@@ -175,7 +198,7 @@ class ContextPortal extends React.PureComponent {
 							<SvgWrapper className={'icon'} svgid="facebook" />
 						</FacebookShareButton>
 					</span>
-					<span role={'button'} tabIndex={0} className={'menu-item google'} title={'Share to Google'} onClick={closeContextMenu}>
+					<span role={'button'} tabIndex={0} className={'menu-item social google'} title={'Share to Google'} onClick={closeContextMenu}>
 						<GooglePlusShareButton url={window.location.href}>
 							<SvgWrapper className={'icon'} svgid="google" />
 						</GooglePlusShareButton>
@@ -190,7 +213,7 @@ class ContextPortal extends React.PureComponent {
 						<span className={'like-thumb'}><SvgWrapper height={'26px'} width={'26px'} svgid="like_one-color" /> Like</span>
 					</div>
 				</div>
-				<div id={'copy-container'} role={'button'} tabIndex={0} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} onClick={this.copyLinkToClipboard} className={'menu-row'} title={'Copy selected text'}>
+				<div id={'copy-container'} role={'button'} tabIndex={0} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} onClick={this.copyLinkToClipboard} className={'menu-row'} title={'Copy link to page'}>
 					<input readOnly id={'link-to-copy'} className={'copy-link'} value={window.location.href} />
 					<span id={'copy-button'} className={'copy-button'}>Copy</span>
 				</div>

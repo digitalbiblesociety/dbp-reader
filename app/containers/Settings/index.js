@@ -111,10 +111,9 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 			<GenericErrorBoundary affectedArea="Settings">
 				<aside ref={this.setRef} className="settings">
 					<header>
-						<h2 className="section-title">Settings</h2>
-						<span role="button" tabIndex={0} className="close-icon" onClick={this.handleSettingsModalToggle}>
-							<SvgWrapper className={'icon'} svgid={'arrow_right'} />
-						</span>
+						<SvgWrapper className={'icon'} svgid={'arrow_right'} onClick={this.handleSettingsModalToggle} />
+						<SvgWrapper className={'icon'} svgid={'text_options'} />
+						<h1 className="section-title">Settings</h1>
 					</header>
 					<section className="color-schemes">
 						{

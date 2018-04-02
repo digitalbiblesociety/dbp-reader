@@ -1,4 +1,5 @@
 const createHighlights = (highlights, arrayOfVerseObjects) => {
+	// todo: plain text use highlighted_color on highlight to add the background color inline
 	// Iterate over each verse
 	// Find all the highlights for a single verse
 	// Apply all highlights for that verse
@@ -55,7 +56,7 @@ const createHighlights = (highlights, arrayOfVerseObjects) => {
 				// console.log('each highlight in verse', h);
 				// Highlights are sorted by highlight_start so the first index has the very first highlight
 				if (i === 0 || charsLeft === 0) {
-					verseText.splice(h.highlight_start, 1, `<em class="text-highlighted">${verseText[h.highlight_start]}`);
+					verseText.splice(h.highlight_start, 1, `<em class="text-highlighted" style="background:${h.highlighted_color ? h.highlighted_color : 'inherit'}">${verseText[h.highlight_start]}`);
 					hStart = h.highlight_start;
 				}
 				// if the next highlight start is less than the end of this highlight

@@ -546,8 +546,8 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					}
 					{
 						isInformationModalActive ? (
-							<FadeTransition classNames="slide-from-left" in={isInformationModalActive}>
-								<Information copywrite={copywrite} toggleInformationModal={this.toggleInformationModal} />
+							<FadeTransition classNames="slide-from-right" in={isInformationModalActive}>
+								<Information active={isInformationModalActive} copywrite={copywrite} toggleInformationModal={this.toggleInformationModal} />
 							</FadeTransition>
 						) : null
 					}
@@ -579,6 +579,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					prevChapter={this.getPrevChapter}
 					setActiveNote={this.setActiveNote}
 					toggleNotesModal={this.toggleNotesModal}
+					toggleInformationModal={this.toggleInformationModal}
 					setActiveNotesView={this.setActiveNotesView}
 				/>
 				<Footer

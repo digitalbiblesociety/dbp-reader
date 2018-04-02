@@ -31,7 +31,6 @@ $sketch-document-color-purple:#8967AC;
 $sketch-document-color-gold:#F2AC22;
 $sketch-document-color-yellow:#F6D32D;
 $sketch-document-color-bright-yellow:#FCE600;
-
 // Breakpoints
 $small-bp: 291px;
 $medium-bp: 405px;
@@ -144,7 +143,8 @@ $variables: (
         --text-selection-search-input-background: #2C3036,
         --text-selection-accordion-title-background: #1B1F24,
         --text-selection-accordion-body-background: #2C3036,
-        --text-selection-active-item-color: #6FBC8F
+        --text-selection-active-item-color: #6FBC8F,
+        --context-menu-highlight-color: #dadada
 //--application-base-font-size:
 );
 

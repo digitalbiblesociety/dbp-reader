@@ -6,7 +6,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import menu from 'images/menu.svg';
+import SvgWrapper from 'components/SvgWrapper';
 import CloseMenuFunctions from 'utils/closeMenuFunctions';
 // import styled from 'styled-components';
 
@@ -24,17 +24,22 @@ class Information extends React.PureComponent {// eslint-disable-line react/pref
 		this.ref = node;
 	}
 
+	toggleInformation = () => {
+		if (!this.props.active) {
+			this.props.toggleInformationModal();
+		}
+	}
+
 	render() {
 		const {
 			copywrite,
 		} = this.props;
 		return (
-			<aside ref={this.setRef} className="menu-sidebar settings">
+			<aside ref={this.setRef} className="settings">
 				<header>
-					<h2 className="section-title">Information</h2>
-					<span role="button" tabIndex={0} className="close-icon" onClick={this.props.toggleInformationModal}>
-						<svg className="icon"><use xmlnsXlink="http://www.w3.org/1999/xlink" xlinkHref={`${menu}#close`}></use></svg>
-					</span>
+					<SvgWrapper className={'icon'} svgid={'arrow_right'} />
+					<SvgWrapper className={'icon'} onClick={this.toggleInformation} svgid={'info'} />
+					<h1 className="section-title">Information</h1>
 				</header>
 				<section className="copywrite">
 					<h1 className="text">{copywrite.name}</h1>
@@ -49,6 +54,7 @@ class Information extends React.PureComponent {// eslint-disable-line react/pref
 
 Information.propTypes = {
 	toggleInformationModal: PropTypes.func,
+	active: PropTypes.bool,
 	copywrite: PropTypes.object,
 };
 

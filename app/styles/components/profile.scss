@@ -11,7 +11,24 @@
     color:var(--menu-font-color);
   }
 }
-.profile header             {position:relative;@include css4{background:var(--menu-header-background);color:var(--menu-title-text-color);};text-align:center;height:54px;line-height:54px}
+.profile header             {
+  position:relative;
+  @include css4{
+    background:var(--menu-header-background);
+    color:var(--menu-title-text-color);
+  }
+  text-align:center;
+  padding: 15px;
+  height:54px;
+  line-height:54px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  svg {
+    margin-left: 15px;
+  }
+}
 .profile header .close-icon {position:absolute;top:0;right:10px}
 .profile section            {padding:15px}
 .profile .profile-content   {max-height:calc(100% - 54px);overflow-y:scroll;overflow-x:hidden;}
