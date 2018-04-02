@@ -9,9 +9,19 @@
 }
 .settings header                       {
   position:relative;text-align:center;
-  height:54px;line-height:54px;@include css4{
-  background-color:var(--menu-header-background);
-  color:var(--menu-title-text-color);};}
+  height:54px;line-height:54px;@include css4 {
+    background-color:var(--menu-header-background);
+    color:var(--menu-title-text-color);
+  };
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 15px;
+
+  svg {
+    margin-right: 15px;
+  }
+}
 .settings header .close-icon           {position:absolute;top:0;right:10px}
 .settings section                      {padding:15px}
 .settings .option:hover                {@include css4{color:var(--menu-active-text-color)};cursor:pointer}

@@ -123,10 +123,9 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 			<GenericErrorBoundary affectedArea="Notes">
 				<aside ref={this.setRef} className="notes">
 					<header>
-						<span role="button" tabIndex={0} className="close-icon" onClick={() => { setActiveChild('notes'); toggleNotesModal(); }}>
-							<SvgWrapper className={'icon'} fill="#fff" svgid="arrow_right" />
-						</span>
-						<h2 className="section-title">NOTEBOOK</h2>
+						<SvgWrapper className={'icon'} fill="#fff" svgid="arrow_right" onClick={() => { setActiveChild('notes'); toggleNotesModal(); }} />
+						<SvgWrapper className={'icon'} svgid={'notebook'} />
+						<h1 className="section-title">Notebook</h1>
 					</header>
 					{
 						authenticationStatus ? (

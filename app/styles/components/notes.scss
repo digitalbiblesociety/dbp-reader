@@ -1,6 +1,25 @@
 .notes                                           {z-index:1;position:fixed;top:0;right:0;height:calc(100% - 56px);width:320px;@include css4{background-color:var(--menu-secondary-background-color);color:var(--menu-font-color)}}
-.notes header                                    {position:relative;@include css4{background-color:var(--menu-header-background);color:var(--menu-title-text-color)}text-align:center;height:54px;line-height:54px;font-size:1.05em;}
-.notes header .close-icon                        {position:absolute;top:7px;left:10px}
+.notes header                                    {
+  position:relative;
+  @include css4{
+    background-color:var(--menu-header-background);
+    color:var(--menu-title-text-color);
+  }
+  text-align:center;
+  height:54px;
+  line-height:54px;
+  font-size:1.05em;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 15px;
+
+  svg {
+    margin-right: 15px;
+  }
+}
+.notes header .close-icon                        {position:absolute;
+  top:7px;left:10px}
 .notes header .close-icon:hover                  {cursor:pointer;opacity:0.8;}
 
 .notes textarea 			                     {resize:none;background-color:inherit;border:none;font-size:0.98em;}

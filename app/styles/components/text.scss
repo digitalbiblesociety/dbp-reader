@@ -76,6 +76,7 @@
     background-color:var(--text-selection-color);
     color:var(--application-base-color);
   };
+  filter: sepia(40%);
 }
 
 .active-chapter-title {
