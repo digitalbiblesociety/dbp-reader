@@ -19,14 +19,19 @@
     width:62px;
     height:54px;
     cursor:pointer;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 
     &:after {
-      height: 48px;
-      width: 2px;
-      background-color: #9a9a9a;
+      height: 46px;
+      width: 1px;
+      background-color: #bbb;
       position:absolute;
       top: 2px;
-      right: -1px;
+      right: 0;
       content: "";
     }
 
@@ -177,6 +182,10 @@
           //width: 26px;
           //height: 26px;
           //border-radius: 50%;
+
+          &:hover {
+            border: 1px solid #000;
+          }
         }
 
         .pink {
@@ -184,6 +193,10 @@
           //width: 26px;
           //height: 26px;
           //border-radius: 50%;
+
+          &:hover {
+            border: 1px solid #000;
+          }
         }
 
         .purple {
@@ -191,6 +204,10 @@
           //width: 26px;
           //height: 26px;
           //border-radius: 50%;
+
+          &:hover {
+            border: 1px solid #000;
+          }
         }
 
         .blue {
@@ -198,6 +215,10 @@
           //width: 26px;
           //height: 26px;
           //border-radius: 50%;
+
+          &:hover {
+            border: 1px solid #000;
+          }
         }
 
         .yellow {
@@ -205,21 +226,33 @@
           //width: 26px;
           //height: 26px;
           //border-radius: 50%;
+
+          &:hover {
+            border: 1px solid #000;
+          }
         }
 
         .none {
           border: 1px solid #000;
+          position: relative;
           //width: 26px;
           //height: 26px;
           //border-radius: 50%;
+
+          &:hover {
+            border: 1px solid #116699;
+          }
         }
 
         .none:after {
           content: "";
           width: 1px;
-          height: 26px;
+          height: 25px;
+          position: absolute;
+          top: 0;
+          right: 11.5px;
           background-color: #000;
-          transform: rotate(90deg);
+          transform: rotate(45deg);
         }
 
         .color-text {

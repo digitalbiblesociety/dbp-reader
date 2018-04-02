@@ -368,7 +368,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 	// This is likely going to be really slow...
 	highlightPlainText = (props) => createHighlights(props)
 
-	addHighlight = () => {
+	addHighlight = (color) => {
 		// needs to send an api request to the server that adds a highlight for this passage
 		// Adds userId and bible in homepage container where action is dispatched
 		// { bible, book, chapter, userId, verseStart, highlightStart, highlightedWords }
@@ -393,8 +393,8 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			const firstVerse = parseInt(this.state.firstVerse, 10);
 			const anchorOffset = this.state.anchorOffset;
 			const anchorText = this.state.anchorText;
-			console.log('a text', anchorText);
-			console.log('a offset', anchorOffset);
+			// console.log('a text', anchorText);
+			// console.log('a offset', anchorOffset);
 			// Solve's for formatted text
 			let node = this.state.anchorNode;
 			let highlightStart = 0;
@@ -421,23 +421,25 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				// Need to subtract by one for the plain text
 				highlightStart = (node.textContent.indexOf(anchorText) + anchorOffset) - 1;
 			}
-			console.log('whole verse node text content', node.textContent);
-			console.log('calc', node.textContent.indexOf(anchorText) + anchorOffset);
+			// console.log('whole verse node text content', node.textContent);
+			// console.log('calc', node.textContent.indexOf(anchorText) + anchorOffset);
 			// plain text
 			// I think this can stay the same as formatted, it could be made shorter potentially
 
 			if (this.props.userId && this.props.userAuthenticated) {
-				console.log('highlight being added', {
-					book: this.props.activeBookId,
-					chapter: this.props.activeChapter,
-					verseStart: this.state.firstVerse,
-					highlightStart,
-					highlightedWords: this.state.selectedText.split('').length,
-				});
+				// console.log('highlight being added', {
+				// 	book: this.props.activeBookId,
+				// 	chapter: this.props.activeChapter,
+				// 	verseStart: this.state.firstVerse,
+				// 	color,
+				// 	highlightStart,
+				// 	highlightedWords: this.state.selectedText.split('').length,
+				// });
 				this.props.addHighlight({
 					book: this.props.activeBookId,
 					chapter: this.props.activeChapter,
 					verseStart: this.state.firstVerse,
+					color,
 					highlightStart,
 					highlightedWords: this.state.selectedText.split('').length,
 				});

@@ -89,9 +89,9 @@ class ContextPortal extends React.PureComponent {
 		}
 	};
 
-	handleHighlightClick = () => {
+	handleHighlightClick = ({ color }) => {
 		// toggle the colors sub menu
-		this.props.addHighlight();
+		this.props.addHighlight(color);
 	}
 
 	handleCopy = (e) => {
@@ -149,7 +149,10 @@ class ContextPortal extends React.PureComponent {
 		document.removeEventListener('copy', this.handleCopy);
 	}
 
-	toggleHighlightColors = () => this.setState({ highlightOpen: !this.state.highlightOpen })
+	toggleHighlightColors = (e) => {
+		e.preventDefault();
+		this.setState({ highlightOpen: !this.state.highlightOpen });
+	}
 
 	render() {
 		const {
@@ -175,7 +178,7 @@ class ContextPortal extends React.PureComponent {
 						<SvgWrapper className={'icon'} svgid="highlight" />
 						<span className={'item-text'}>Highlight</span>
 						<div className={this.state.highlightOpen ? 'highlight-colors active' : 'highlight-colors'}>
-							<HighlightColors />
+							<HighlightColors addHighlight={this.handleHighlightClick} />
 						</div>
 					</span>
 					<span role={'button'} tabIndex={0} className={'menu-item'} title={'Add a bookmark'} onClick={this.handleBookmarkClick}>
@@ -210,7 +213,7 @@ class ContextPortal extends React.PureComponent {
 						<span className={'like-thumb'}><SvgWrapper height={'26px'} width={'26px'} svgid="like_one-color" /> Like</span>
 					</div>
 				</div>
-				<div id={'copy-container'} role={'button'} tabIndex={0} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} onClick={this.copyLinkToClipboard} className={'menu-row'} title={'Copy selected text'}>
+				<div id={'copy-container'} role={'button'} tabIndex={0} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} onClick={this.copyLinkToClipboard} className={'menu-row'} title={'Copy link to page'}>
 					<input readOnly id={'link-to-copy'} className={'copy-link'} value={window.location.href} />
 					<span id={'copy-button'} className={'copy-button'}>Copy</span>
 				</div>
