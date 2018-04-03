@@ -29,105 +29,6 @@ import Slider from 'rc-slider/lib/Slider';
 // `;
 
 class AudioProgressBar extends React.PureComponent {
-	// constructor(props) {
-	// 	super(props);
-	// 	this.state = {
-	// 		marginLeft: 0,
-	// 		ontracker: false,
-	// 	};
-	// }
-
-	// componentDidMount() {
-	// 	// window.addEventListener('mouseup', this.mouseUp, false);
-	// 	// console.log('audio progress bar is remounting');
-	// }
-	//
-	// componentWillReceiveProps(nextProps) {
-	// 	if (nextProps.currentTime === 0) {
-	// 		this.setState({ marginLeft: 0 });
-	// 	} else if (nextProps.currentTime !== this.props.currentTime) {
-	// 		this.moveTracker({}, true);
-	// 	}
-	// }
-	//
-	// componentWillUnmount() {
-	// 	window.removeEventListener('mouseup', this.mouseUp);
-	// 	window.removeEventListener('mousemove', this.moveTracker);
-	// }
-	//
-	// mouseUp = (e) => {
-	// 	if (this.state.ontracker) {
-	// 		this.moveTracker(e);
-	// 		window.removeEventListener('mousemove', this.moveTracker, true);
-	// 		this.props.setCurrentTime(this.props.duration * this.clickPercent(e));
-	// 	}
-	// 	this.setState({
-	// 		ontracker: false,
-	// 	});
-	// }
-	//
-	// clickPercent = (e) => (e.clientX - this.state.position) / (this.state.timelineOffset - this.state.trackerOffset || 0);
-	//
-	// moveTracker = (e, fromProps) => {
-	// 	// console.log('move tracker e', e);
-	// 	// console.log('move tracker fromProps', fromProps);
-	//
-	// 	let newMargLeft;
-	// 	if (fromProps) {
-	// 		newMargLeft = this.timeline.offsetWidth;
-	// 	} else {
-	// 		newMargLeft = (e.clientX || this.tracker.getBoundingClientRect().left) - this.state.position;
-	// 	}
-	//
-	// 	if (newMargLeft >= 0 && newMargLeft <= (this.state.timelineOffset - this.state.trackerOffset || 0)) {
-	// 		this.setState({
-	// 			marginLeft: newMargLeft,
-	// 		});
-	// 	} else if (newMargLeft < 0) {
-	// 		this.setState({
-	// 			marginLeft: 0,
-	// 		});
-	// 	} else if (newMargLeft > (this.state.timelineOffset - this.state.trackerOffset || 0)) {
-	// 		this.setState({
-	// 			marginLeft: (this.state.timelineOffset - this.state.trackerOffset || 0),
-	// 		});
-	// 	}
-	// };
-	//
-	// handleTimeClick = (e) => {
-	// 	this.moveTracker({ e });
-	// 	// console.log('setting new time');
-	// 	this.props.setCurrentTime(this.props.duration * this.clickPercent(e));
-	// };
-	//
-	// mouseDown = () => {
-	// 	this.state.ontracker = true;
-	// 	// window.addEventListener('mousemove', this.moveTracker, true);
-	// }
-	//
-	// handleTimelineRef = (el) => {
-	// 	this.timeline = el;
-	// }
-	//
-	// handleOuterDivRef = (el) => {
-	// 	this.outerDiv = el;
-	// 	if (el) {
-	// 		this.setState({
-	// 			position: el.getBoundingClientRect().left,
-	// 			timelineOffset: el.offsetWidth,
-	// 		});
-	// 	}
-	// }
-	//
-	// handleTrackerRef = (el) => {
-	// 	this.tracker = el;
-	// 	if (el) {
-	// 		this.setState({
-	// 			trackerOffset: el.offsetWidth,
-	// 		});
-	// 	}
-	// }
-
 	handleChange = (v) => {
 		// console.log('value', v);
 		// console.log('duration', this.props.duration);
@@ -135,10 +36,40 @@ class AudioProgressBar extends React.PureComponent {
 		this.props.setCurrentTime((this.props.duration * (v / 100)) || 0);
 	}
 
+	get timeLeft() {
+		const dur = this.props.duration;
+		const durSecs = Math.floor(dur % 60);
+		const durMins = Math.floor(dur / 60);
+		const durSecsString = durSecs.toFixed(0).length === 1 ? `0${durSecs.toFixed(0)}` : durSecs.toFixed(0);
+		const durMinsString = durMins.toFixed(0);
+
+		if (durMinsString.length === 1) {
+			return `0${durMins}:${durSecsString}`;
+		} else if (durMinsString.length > 1) {
+			return `${durMins}:${durSecsString}`;
+		}
+		return `00:${durSecsString}`;
+	}
+
+	get timePassed() {
+		const cur = this.props.currentTime;
+		const curSecs = Math.floor(cur % 60);
+		const curMins = Math.floor(cur / 60);
+		const curSecsString = curSecs.toFixed(0).length === 1 ? `0${curSecs.toFixed(0)}` : curSecs.toFixed(0);
+		const curMinsString = curMins.toFixed(0);
+
+		if (curMinsString.length === 1) {
+			return `0${curMins}:${curSecsString}`;
+		} else if (curMinsString.length > 1) {
+			return `${curMins}:${curSecsString}`;
+		}
+		return `00:${curSecsString}`;
+	}
+
 	render() {
 		const percent = (100 * (this.props.currentTime / this.props.duration)) || 0;
 		// console.log('rendering progress bar', percent);
-		return (
+		return [
 			<Slider
 				className="progress-slider"
 				onChange={this.handleChange}
@@ -148,8 +79,13 @@ class AudioProgressBar extends React.PureComponent {
 				value={percent}
 				min={0}
 				max={100}
-			/>
-		);
+			/>,
+			<span
+				data-value-dur={this.timeLeft}
+				data-value-cur={this.timePassed}
+				className={'progress-numbers'}
+			/>,
+		];
 		// return (
 		// 	<div role="button" tabIndex={0} className="progress-bar" ref={this.handleOuterDivRef} onClick={this.handleTimeClick}>
 		// 		<Timeline style={{ width: `${percent > 0 ? `${percent}%` : '0px'}` }} innerRef={this.handleTimelineRef}><Tracker innerRef={this.handleTrackerRef} onMouseDown={this.mouseDown} /></Timeline>

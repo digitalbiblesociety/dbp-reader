@@ -108,7 +108,7 @@ export function* getBibleFromUrl({ bibleId: oldBibleId, bookId: oldBookId, chapt
 	// todo Use other methods combined with the ones below to validate the url before try to use it in saga
 	const bibleId = oldBibleId.toUpperCase();
 	const bookId = oldBookId.toUpperCase();
-	const requestUrl = `https://api.bible.build/bibles/${bibleId}?key=${process.env.DBP_API_KEY}&v=4`;
+	const requestUrl = `https://api.bible.build/bibles/${bibleId}?bucket=${process.env.DBP_BUCKET_ID}&key=${process.env.DBP_API_KEY}&v=4`;
 
 	// Probably need to do stuff here to get the audio and text for this new bible
 	try {
@@ -116,7 +116,7 @@ export function* getBibleFromUrl({ bibleId: oldBibleId, bookId: oldBookId, chapt
 		// let filesets;
 		// // todo This can be removed once the filesets have been added to the default route
 		// if (!response.data.filesets) {
-		// 	const bibleUrl = `https://api.bible.build/bibles?key=${process.env.DBP_API_KEY}&v=4&language_code=${response.data.iso}`;
+		// 	const bibleUrl = `https://api.bible.build/bibles?bucket=${process.env.DBP_BUCKET_ID}&key=${process.env.DBP_API_KEY}&v=4&language_code=${response.data.iso}`;
 		// 	const allBibles = yield call(request, bibleUrl);
 		// 	// console.log('all bibles in language', allBibles);
 		// 	const activeBible = allBibles.data.find((bible) => bible.abbr === bibleId) || {};
@@ -200,14 +200,14 @@ export function* getChapterFromUrl({ filesets, bibleId: oldBibleId, bookId: oldB
 			// And I don't want it blocking the text from loading
 			yield fork(getChapterAudio, { filesets, bookId, chapter });
 		}
-
+		// console.log('has formatted text', hasFormattedText);
 		// Try to get the formatted text if it is available
 		if (hasFormattedText) {
 			try {
 				// Gets the last fileset id for a formatted text
 				const filesetId = reduce(filesets, (a, c) => c.set_type_code === 'text_formatt' ? c.id : a, '');
 				// console.log(filesetId);
-				const reqUrl = `https://api.bible.build/bibles/filesets/${filesetId}?key=${process.env.DBP_API_KEY}&v=4&book_id=${bookId}&chapter_id=${chapter}&type=text_formatt`; // hard coded since this only ever needs to get formatted text
+				const reqUrl = `https://api.bible.build/bibles/filesets/${filesetId}?bucket=${process.env.DBP_BUCKET_ID}&key=${process.env.DBP_API_KEY}&v=4&book_id=${bookId}&chapter_id=${chapter}&type=text_formatt`; // hard coded since this only ever needs to get formatted text
 				// console.log(reqUrl);
 				const formattedChapterObject = yield call(request, reqUrl);
 				const path = get(formattedChapterObject.data, [0, 'path']);
@@ -230,7 +230,7 @@ export function* getChapterFromUrl({ filesets, bibleId: oldBibleId, bookId: oldB
 		// Try to get the plain text every time
 		// When this fails it should fail gracefully and not cause anything to break
 		try {
-			const reqUrl = `https://api.bible.build/bibles/${bibleId}/${bookId}/${chapter}?key=${process.env.DBP_API_KEY}&v=4&book_id=${bookId}&chapter_id=${chapter}`;
+			const reqUrl = `https://api.bible.build/bibles/${bibleId}/${bookId}/${chapter}?bucket=${process.env.DBP_BUCKET_ID}&key=${process.env.DBP_API_KEY}&v=4&book_id=${bookId}&chapter_id=${chapter}`;
 			const res = yield call(request, reqUrl);
 			// console.log('response for plain text', res);
 			plainText = res.data;
@@ -330,7 +330,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 	if (completeAudio.length) {
 		// console.log('Bible has complete audio', completeAudio);
 		try {
-			const reqUrl = `https://api.bible.build/bibles/filesets/${get(completeAudio, [0, 'id'])}?key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(completeAudio, [0, 'data', 'set_type_code'])}`;
+			const reqUrl = `https://api.bible.build/bibles/filesets/${get(completeAudio, [0, 'id'])}?bucket=${process.env.DBP_BUCKET_ID}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(completeAudio, [0, 'data', 'set_type_code'])}`;
 			const response = yield call(request, reqUrl);
 			// console.log('complete audio response object', response);
 			const audioPath = get(response, ['data', 0, 'path']);
@@ -349,7 +349,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 		}
 	} else if (ntLength && !otLength) {
 		try {
-			const reqUrl = `https://api.bible.build/bibles/filesets/${get(ntAudio, [0, 'id'])}?key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(ntAudio, [0, 'data', 'set_type_code'])}`;
+			const reqUrl = `https://api.bible.build/bibles/filesets/${get(ntAudio, [0, 'id'])}?bucket=${process.env.DBP_BUCKET_ID}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(ntAudio, [0, 'data', 'set_type_code'])}`;
 			const response = yield call(request, reqUrl);
 			// console.log('nt audio response object', response);
 			const audioPath = get(response, ['data', 0, 'path']);
@@ -368,7 +368,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 		}
 	} else if (otLength && !ntLength) {
 		try {
-			const reqUrl = `https://api.bible.build/bibles/filesets/${get(otAudio, [0, 'id'])}?key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(otAudio, [0, 'data', 'set_type_code'])}`;
+			const reqUrl = `https://api.bible.build/bibles/filesets/${get(otAudio, [0, 'id'])}?bucket=${process.env.DBP_BUCKET_ID}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(otAudio, [0, 'data', 'set_type_code'])}`;
 			const response = yield call(request, reqUrl);
 			// console.log('ot audio response object', response);
 			const audioPath = get(response, ['data', 0, 'path']);
@@ -392,7 +392,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 		// console.log('trying nt & ot', ntLength && !otLength, '\n', ntAudio, '\n', otAudio);
 
 		try {
-			const reqUrl = `https://api.bible.build/bibles/filesets/${get(ntAudio, [0, 'id'])}?key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(ntAudio, [0, 'data', 'set_type_code'])}`;
+			const reqUrl = `https://api.bible.build/bibles/filesets/${get(ntAudio, [0, 'id'])}?bucket=${process.env.DBP_BUCKET_ID}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(ntAudio, [0, 'data', 'set_type_code'])}`;
 			const response = yield call(request, reqUrl);
 			// console.log('nt audio response object', response);
 			const audioPath = get(response, ['data', 0, 'path']);
@@ -411,7 +411,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 			}
 		}
 		try {
-			const reqUrl = `https://api.bible.build/bibles/filesets/${get(otAudio, [0, 'id'])}?key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(otAudio, [0, 'data', 'set_type_code'])}`;
+			const reqUrl = `https://api.bible.build/bibles/filesets/${get(otAudio, [0, 'id'])}?bucket=${process.env.DBP_BUCKET_ID}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(otAudio, [0, 'data', 'set_type_code'])}`;
 			const response = yield call(request, reqUrl);
 			// console.log('ot audio response object', response);
 			const audioPath = get(response, ['data', 0, 'path']);
@@ -434,7 +434,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 	} else if (partialAudio.length) {
 		try {
 			// Need to iterate over each object here to see if I can find the right chapter
-			const reqUrl = `https://api.bible.build/bibles/filesets/${get(partialAudio, [0, 'id'])}?key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(partialAudio, [0, 'data', 'set_type_code'])}`;
+			const reqUrl = `https://api.bible.build/bibles/filesets/${get(partialAudio, [0, 'id'])}?bucket=${process.env.DBP_BUCKET_ID}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(partialAudio, [0, 'data', 'set_type_code'])}`;
 			const response = yield call(request, reqUrl);
 			// console.log('partial audio response object', response);
 			const audioPath = get(response, ['data', 0, 'path']);
