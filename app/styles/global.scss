@@ -61,7 +61,7 @@ input {
 
   @include css4 {
     border-bottom: 1px solid var(--menu-title-text-color);
-    background-color: var(--menu-background-color);
+    //background-color: var(--menu-background-color);
     caret-color: var(--menu-title-text-color);
 
     &::-webkit-input-placeholder {
@@ -99,7 +99,7 @@ input {
 [type='checkbox']:not(:checked) + label,
 [type='checkbox']:checked + label {
   position:relative;
-  padding-left:1.9em;
+  //padding-left:1.9em;
   cursor:pointer;
 }
 // The checkbox
