@@ -33,7 +33,7 @@ export class SearchContainer extends React.PureComponent { // eslint-disable-lin
 	}
 
 	handleSearchModalToggle = () => {
-		document.removeEventListener('click', this.handleClickOutside);
+		// document.removeEventListener('click', this.handleClickOutside);
 
 		this.props.toggleSearchModal();
 	}

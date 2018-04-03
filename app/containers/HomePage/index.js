@@ -572,6 +572,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					notesActive={isNotesModalActive}
 					formattedSource={formattedSource}
 					userAuthenticated={userAuthenticated}
+					informationActive={isInformationModalActive}
 					loadingNewChapterText={loadingNewChapterText}
 					addHighlight={this.addHighlight}
 					goToFullChapter={this.goToFullChapter}

@@ -114,6 +114,7 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 					languages={languages}
 					filterText={filterText}
 					active={languageListActive}
+					activeIsoCode={activeIsoCode}
 					countryLanguages={countryLanguages}
 					loadingLanguages={loadingLanguages}
 					countryListActive={countryListActive}

@@ -32,7 +32,7 @@ const initialState = fromJS({
 	activeLanguageName: '',
 	activeCountryName: 'ANY',
 	initialBookId: 'GEN',
-	activeIsoCode: '',
+	activeIsoCode: window.navigator.language || 'eng',
 	loadingCountries: false,
 	loadingLanguages: false,
 	loadingVersions: false,

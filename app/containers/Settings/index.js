@@ -75,7 +75,7 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 	handleSliderChange = (position) => this.updateFontSize({ size: position });
 
 	handleSettingsModalToggle = () => {
-		document.removeEventListener('click', this.handleClickOutside);
+		// document.removeEventListener('click', this.handleClickOutside);
 
 		this.props.toggleSettingsModal();
 	}

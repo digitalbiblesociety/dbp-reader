@@ -24,21 +24,17 @@ class Information extends React.PureComponent {// eslint-disable-line react/pref
 		this.ref = node;
 	}
 
-	toggleInformation = () => {
-		if (!this.props.active) {
-			this.props.toggleInformationModal();
-		}
-	}
-
 	render() {
 		const {
 			copywrite,
+			toggleInformationModal,
+			active,
 		} = this.props;
 		return (
 			<aside ref={this.setRef} className="settings">
 				<header>
 					<SvgWrapper className={'icon'} svgid={'arrow_right'} />
-					<SvgWrapper className={'icon'} onClick={this.toggleInformation} svgid={'info'} />
+					<SvgWrapper className={'icon'} onClick={() => !active && toggleInformationModal()} svgid={'info'} />
 					<h1 className="section-title">Information</h1>
 				</header>
 				<section className="copywrite">

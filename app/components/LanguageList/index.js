@@ -21,7 +21,8 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 	getFilteredLanguages(width, height) {
 		const {
 			languages,
-			activeLanguageName,
+			// activeLanguageName,
+			activeIsoCode,
 			filterText,
 		} = this.props;
 		// const { filterText } = this.state;
@@ -45,7 +46,7 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 			// }
 			return (
 				<div style={style} key={key} className="language-name" role="button" tabIndex={0} onClick={() => this.handleLanguageClick(language)}>
-					<h4 className={language.get('name') === activeLanguageName ? 'active-language-name' : ''}>{language.get('name')}</h4>
+					<h4 className={language.get('iso_code') === activeIsoCode ? 'active-language-name' : ''}>{language.get('name')}</h4>
 				</div>
 			);
 		};
@@ -54,7 +55,7 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 			let activeIndex = 0;
 
 			filteredLanguages.forEach((l, i) => {
-				if (l.get('name') === activeLanguageName) {
+				if (l.get('iso_code') === activeIsoCode) {
 					activeIndex = i;
 				}
 			});
@@ -142,7 +143,8 @@ LanguageList.propTypes = {
 	filterText: PropTypes.string,
 	active: PropTypes.bool,
 	loadingLanguages: PropTypes.bool,
-	activeLanguageName: PropTypes.string,
+	// activeLanguageName: PropTypes.string,
+	activeIsoCode: PropTypes.string,
 };
 
 export default LanguageList;
