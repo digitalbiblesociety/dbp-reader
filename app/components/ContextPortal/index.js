@@ -102,6 +102,7 @@ class ContextPortal extends React.PureComponent {
 	}
 
 	handleMouseEnter = (e) => {
+		this.clonedRange = window.getSelection().getRangeAt(0).cloneRange();
 		// console.log('mouse entered', e.target.id);
 		if (e.target.id === 'copy-button') {
 			// handle the button being the target
@@ -140,6 +141,10 @@ class ContextPortal extends React.PureComponent {
 			textBox.setSelectionRange(0, 0);
 			// console.log('input when mouse entered copy', textBox);
 		}
+		// console.log(this.clonedRange);
+		// Doing this so that if the user accidentally hovers over the copy link they won't have to reselect the text
+		window.getSelection().removeAllRanges();
+		window.getSelection().addRange(this.clonedRange);
 	}
 
 	copyLinkToClipboard = () => {
