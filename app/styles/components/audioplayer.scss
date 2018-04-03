@@ -30,8 +30,8 @@
   font-size:12px;
 }
 .audio-player-container .item          {border:1px solid transparent;cursor:pointer;height:50px;display:flex;align-items:center;justify-content:center;}
-.audio-player-container .item:hover    {opacity:.65;}
-.audio-player-container .svgitem:hover {opacity:.65;}
+//.audio-player-container .item:hover    {opacity:.65;}
+//.audio-player-container .svgitem:hover {opacity:.65;}
 .audio-player-container .item.active   {
   @include css4{
     border-bottom:1px solid var(--transparent-grey);
@@ -221,18 +221,14 @@
 .progress-slider {
   width: 50%;
   position:relative;
-}
-
-.progress-numbers {
-  position: relative;
 
   &:before {
     content: attr(data-value-cur);
     position: absolute;
     width: 25px;
     height: 25px;
-    left: -475px;
-    top: 8px;
+    left: 0;
+    top: 13px;
     color: #fff;
     z-index: 50;
   }
@@ -242,8 +238,8 @@
     position: absolute;
     width: 25px;
     height: 25px;
-    left: -15px;
-    top: 8px;
+    right: 4px;
+    top: 13px;
     color: #fff;
     z-index: 50;
   }
