@@ -220,6 +220,33 @@
 
 .progress-slider {
   width: 50%;
+  position:relative;
+}
+
+.progress-numbers {
+  position: relative;
+
+  &:before {
+    content: attr(data-value-cur);
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    left: -475px;
+    top: 8px;
+    color: #fff;
+    z-index: 50;
+  }
+
+  &:after {
+    content: attr(data-value-dur);
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    left: -15px;
+    top: 8px;
+    color: #fff;
+    z-index: 50;
+  }
 }
 
 // Elipsis TODO: update styles to make the element match the wireframe
