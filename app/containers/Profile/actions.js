@@ -17,7 +17,13 @@ import {
 	RESET_PASSWORD,
 	DELETE_USER,
 	LOG_OUT,
+	ERROR_MESSAGE_VIEWED,
 } from './constants';
+
+export const viewErrorMessage = (props) => ({
+	type: ERROR_MESSAGE_VIEWED,
+	...props,
+});
 
 export const socialMediaLogin = (props) => ({
 	type: SOCIAL_MEDIA_LOGIN,

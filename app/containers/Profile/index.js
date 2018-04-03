@@ -30,6 +30,7 @@ import {
 	updateUserInformation,
 	deleteUser,
 	logout,
+	viewErrorMessage,
 } from './actions';
 import makeSelectProfile from './selectors';
 import reducer from './reducer';
@@ -53,6 +54,7 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 	getUserData = (userId) => this.props.dispatch(getUserData(userId))
 
 	sendSignUpForm = (props) => this.props.dispatch(sendSignUpForm(props))
+	viewErrorMessage = (props) => this.props.dispatch(viewErrorMessage(props))
 	socialMediaLogin = (props) => this.props.dispatch(socialMediaLogin(props))
 	resetPassword = (props) => this.props.dispatch(resetPassword(props))
 	deleteUser = (props) => this.props.dispatch(deleteUser(props))
@@ -72,6 +74,7 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 			userId,
 			socialLoginLink,
 			activeDriver,
+			errorMessageViewed,
 		} = this.props.profile;
 		const { toggleProfile } = this.props;
 
@@ -107,9 +110,11 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 												sendLoginForm={this.sendLoginForm}
 												selectAccountOption={this.selectAccountOption}
 												socialMediaLogin={this.socialMediaLogin}
+												viewErrorMessage={this.viewErrorMessage}
 												socialLoginLink={socialLoginLink}
 												errorMessage={loginErrorMessage}
 												activeDriver={activeDriver}
+												errorMessageViewed={errorMessageViewed}
 											/>
 										) : null
 									}
@@ -118,9 +123,11 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 											<SignUp
 												sendSignupForm={this.sendSignUpForm}
 												socialMediaLogin={this.socialMediaLogin}
+												viewErrorMessage={this.viewErrorMessage}
 												errorMessage={signupErrorMessage}
 												socialLoginLink={socialLoginLink}
 												activeDriver={activeDriver}
+												errorMessageViewed={errorMessageViewed}
 											/>
 										) : null
 									}
