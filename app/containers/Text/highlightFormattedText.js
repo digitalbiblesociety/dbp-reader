@@ -3,7 +3,8 @@ const createFormattedHighlights = (highlights, formattedTextString) => {
 	// todo: formatted text use highlighted_color on highlight to add the background color inline
 	/* NOTES
 	* 1. Need to subtract 1 from any addition of highlight_start + highlighted_words, this is because the result is the length not the index
-	*
+	* todo make sure the charsLeftAfterVerse is being properly subtracted from when I am going past more than 1 verse
+	* todo save color and use it with charsLeftAfterVerse
 	* */
 	// Iterate over each verse
 		// Find all the highlights for a single verse
@@ -45,8 +46,12 @@ const createFormattedHighlights = (highlights, formattedTextString) => {
 				if (charsLeftAfterVerseEnd > verseText.length) {
 					// multi verse highlight
 					// console.log('whole verse is highlighted', charsLeftAfterVerseEnd, verseText.length);
-					verseText.splice(verseText.length - 1, 1, `${verseText[verseText.length]}</em>`);
+					verseText.splice(verseText.length - 1, 1, `${verseText[verseText.length - 1]}</em>`);
 					charsLeftAfterVerseEnd -= verseText.length;
+				} else if (charsLeftAfterVerseEnd === verseText.length) {
+					// console.log('the whole verse is not highlighted', charsLeftAfterVerseEnd, verseText.length);
+					verseText.splice(charsLeftAfterVerseEnd - 1, 1, `${verseText[charsLeftAfterVerseEnd - 1]}</em>`);
+					charsLeftAfterVerseEnd = 0;
 				} else {
 					// console.log('the whole verse is not highlighted', charsLeftAfterVerseEnd, verseText.length);
 					verseText.splice(charsLeftAfterVerseEnd, 1, `${verseText[charsLeftAfterVerseEnd]}</em>`);

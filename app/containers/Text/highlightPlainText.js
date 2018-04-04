@@ -34,7 +34,7 @@ const createHighlights = (highlights, arrayOfVerseObjects) => {
 			const verseText = verse.verse_text.split('');
 			let charsLeft = charsLeftAfterVerseEnd;
 			let hStart = 0;
-
+			// Need to save the color of the active highlight that is still being applied
 			if (charsLeftAfterVerseEnd && highlightsStartingInVerse.length === 0) {
 				// console.log('this verse has a highlight that did not start in it');
 				verseText.splice(0, 1, `<em class="text-highlighted">${verseText[0]}`);
