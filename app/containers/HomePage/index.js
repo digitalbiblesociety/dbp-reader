@@ -79,7 +79,7 @@ import makeSelectHomePage, {
 	selectFormattedSource,
 	selectAuthenticationStatus,
 	selectUserId,
-	selectChapterText,
+	// selectChapterText,
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -483,6 +483,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			invalidBibleId,
 			highlights,
 			autoPlayEnabled,
+			chapterText: updatedText,
 		} = this.props.homepage;
 
 		const {
@@ -490,7 +491,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			formattedSource,
 			userId,
 			userAuthenticated,
-			updatedText,
+			// updatedText,
 		} = this.props;
 
 		const verse = this.props.match.params.verse || '';
@@ -610,7 +611,7 @@ HomePage.propTypes = {
 	match: PropTypes.object,
 	userAuthenticated: PropTypes.bool,
 	userId: PropTypes.string,
-	updatedText: PropTypes.array,
+	// updatedText: PropTypes.array,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -622,7 +623,7 @@ const mapStateToProps = createStructuredSelector({
 	formattedSource: selectFormattedSource(),
 	userAuthenticated: selectAuthenticationStatus(),
 	userId: selectUserId(),
-	updatedText: selectChapterText(),
+	// updatedText: selectChapterText(),
 });
 
 function mapDispatchToProps(dispatch) {

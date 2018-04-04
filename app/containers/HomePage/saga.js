@@ -174,13 +174,12 @@ export function* getBibleFromUrl({ bibleId: oldBibleId, bookId: oldBookId, chapt
 		yield put({ type: 'loadbibleerror' });
 	}
 }
-
 export function* getChapterFromUrl({ filesets, bibleId: oldBibleId, bookId: oldBookId, chapter, authenticated, userId }) {
 	// console.log('bible, book, chapter', bibleId, bookId, chapter);
 	// console.log('filesets chapter text', filesets);
 	const bibleId = oldBibleId.toUpperCase();
 	const bookId = oldBookId.toUpperCase();
-	const hasFormattedText = some(filesets, (f) => f.set_type_code === 'text_formatt');
+	const hasFormattedText = some(filesets, (f) => f.set_type_code === 'text_format');
 	// checking for audio but not fetching it as a part of this saga
 	const hasAudio = some(filesets, (f) => f.set_type_code === 'audio' || f.set_type_code === 'audio_drama');
 
@@ -205,9 +204,9 @@ export function* getChapterFromUrl({ filesets, bibleId: oldBibleId, bookId: oldB
 		if (hasFormattedText) {
 			try {
 				// Gets the last fileset id for a formatted text
-				const filesetId = reduce(filesets, (a, c) => c.set_type_code === 'text_formatt' ? c.id : a, '');
+				const filesetId = reduce(filesets, (a, c) => c.set_type_code === 'text_format' ? c.id : a, '');
 				// console.log(filesetId);
-				const reqUrl = `https://api.bible.build/bibles/filesets/${filesetId}?bucket=${process.env.DBP_BUCKET_ID}&key=${process.env.DBP_API_KEY}&v=4&book_id=${bookId}&chapter_id=${chapter}&type=text_formatt`; // hard coded since this only ever needs to get formatted text
+				const reqUrl = `https://api.bible.build/bibles/filesets/${filesetId}?bucket=${process.env.DBP_BUCKET_ID}&key=${process.env.DBP_API_KEY}&v=4&book_id=${bookId}&chapter_id=${chapter}&type=text_format`; // hard coded since this only ever needs to get formatted text
 				// console.log(reqUrl);
 				const formattedChapterObject = yield call(request, reqUrl);
 				const path = get(formattedChapterObject.data, [0, 'path']);

@@ -129,9 +129,10 @@ const selectSettings = () => createDeepEqualSelector(
 	}
 );
 // TODO: May need to remove toJS if the application is showing signs of slowness
+// I dont remember why I was doing this.......... ... .. ... ... -_-
 const selectChapterText = () => createDeepEqualSelector(
 	selectHomepageText,
-	(text) => text.map((verse) => verse.set('verse_text', ` ${verse.get('verse_text')} `)).toJS()
+	(text) => text.map((verse) => verse.set('verse_text', `${verse.get('verse_text')}`)).toJS()
 );
 
 /**

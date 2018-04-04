@@ -11,6 +11,7 @@ import ContextPortal from 'components/ContextPortal';
 import FootnotePortal from 'components/FootnotePortal';
 import LoadingSpinner from 'components/LoadingSpinner';
 // import differenceObject from 'utils/deepDifferenceObject';
+import isEqual from 'lodash/isEqual';
 import createHighlights from './highlightPlainText';
 import createFormattedHighlights from './highlightFormattedText';
 // import { addClickToNotes } from './htmlToReact';
@@ -31,8 +32,13 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 
 	componentDidMount() {
 		if (this.format) {
-			this.setEventHandlersForFootnotes();
-			this.setEventHandlersForFormattedVerses();
+			// console.log('setting event listeners on format');
+			this.setEventHandlersForFootnotes(this.format);
+			this.setEventHandlersForFormattedVerses(this.format);
+		} else if (this.formatHighlight) {
+			// console.log('setting event listeners on formatHighlight')
+			this.setEventHandlersForFootnotes(this.formatHighlight);
+			this.setEventHandlersForFormattedVerses(this.formatHighlight);
 		}
 	}
 
@@ -43,18 +49,28 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 	}
 
 	componentDidUpdate(prevProps) {
+		// console.log('component did update');
 		if (this.props.formattedSource.main && prevProps.formattedSource.main !== this.props.formattedSource.main && this.format) {
-			this.setEventHandlersForFootnotes();
-			this.setEventHandlersForFormattedVerses();
+			// console.log('setting event listeners on format');
+			this.setEventHandlersForFootnotes(this.format);
+			this.setEventHandlersForFormattedVerses(this.format);
+		} else if (this.props.formattedSource.main && prevProps.formattedSource.main !== this.props.formattedSource.main && this.formatHighlight) {
+			// console.log('setting event listeners on formatHighlight')
+			this.setEventHandlersForFootnotes(this.formatHighlight);
+			this.setEventHandlersForFormattedVerses(this.formatHighlight);
+		} else if (!isEqual(this.props.highlights, prevProps.highlights) && this.formatHighlight) {
+			// console.log('setting event listeners on formatHighlight because highlights changed');
+			this.setEventHandlersForFootnotes(this.formatHighlight);
+			this.setEventHandlersForFormattedVerses(this.formatHighlight);
 		}
 		// console.log('Difference between old state and new state', differenceObject(this.state, prevState));
 	}
 
-	setEventHandlersForFormattedVerses = () => {
-		const verses = [...this.format.getElementsByClassName('v')];
+	setEventHandlersForFormattedVerses = (ref) => {
+		const verses = [...ref.getElementsByClassName('v')];
 
 		verses.forEach((verse) => {
-		// console.log('setting events on this verse', verse);
+			// console.log('setting events on this verse', verse);
 			/* eslint-disable no-param-reassign, no-unused-expressions, jsx-a11y/no-static-element-interactions */
 			verse.onmousedown = (e) => {
 				e.stopPropagation();
@@ -70,8 +86,8 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		});
 	}
 
-	setEventHandlersForFootnotes = () => {
-		const notes = [...this.format.getElementsByClassName('note')];
+	setEventHandlersForFootnotes = (ref) => {
+		const notes = [...ref.getElementsByClassName('note')];
 
 		notes.forEach((note, index) => {
 			/* eslint-disable no-param-reassign */
@@ -88,6 +104,10 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				this.openFootnote({ id: `footnote-${index}`, coords: { x, y: e.clientY } });
 			};
 		});
+	}
+
+	setFormattedRefHighlight = (el) => {
+		this.formatHighlight = el;
 	}
 
 	setFormattedRef = (el) => {
@@ -279,7 +299,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		} else if (formattedSource.main) {
 			// Need to run a function to highlight the formatted text if this option is selected
 			if (!Array.isArray(text)) {
-				textComponents = (<div ref={this.setFormattedRef} className={'chapter'} dangerouslySetInnerHTML={{ __html: text }} />);
+				textComponents = (<div ref={this.setFormattedRefHighlight} className={'chapter'} dangerouslySetInnerHTML={{ __html: text }} />);
 			} else {
 				textComponents = (<div ref={this.setFormattedRef} className={'chapter'} dangerouslySetInnerHTML={{ __html: formattedSource.main }} />);
 			}
@@ -327,7 +347,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			textComponents = text.map((verse) => (
 				verse.hasHighlight ?
 					(
-						<span className={'align-left'} verseid={verse.verse_start} key={verse.verse_start}>
+						<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} className={'align-left'} verseid={verse.verse_start} key={verse.verse_start}>
 							<sup verseid={verse.verse_start}>
 								{verse.verse_start_alt || verse.verse_start}
 							</sup>
@@ -335,7 +355,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 						</span>
 					) :
 					(
-						<span className={'align-left'} verseid={verse.verse_start} key={verse.verse_start}>
+						<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} className={'align-left'} verseid={verse.verse_start} key={verse.verse_start}>
 							<sup verseid={verse.verse_start}>
 								{verse.verse_start_alt || verse.verse_start}
 							</sup>
@@ -391,10 +411,12 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		try {
 			// Globals*
 			const firstVerse = parseInt(this.state.firstVerse, 10);
+			const lastVerse = parseInt(this.state.lastVerse, 10);
 			const anchorOffset = this.state.anchorOffset;
 			const anchorText = this.state.anchorText;
 			// console.log('a text', anchorText);
 			// console.log('a offset', anchorOffset);
+			// console.log('first verse', firstVerse, 'last verse', lastVerse);
 			// Solve's for formatted text
 			let node = this.state.anchorNode;
 			let highlightStart = 0;
@@ -410,7 +432,8 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 					counter += 1;
 					// console.log('condition to be checked', !(node.attributes && node.attributes['data-id'] && node.attributes['data-id'].value.split('_')[1] !== firstVerse));
 				}
-				highlightStart = node.textContent.indexOf(anchorText) + anchorOffset;
+				// Need to subtract by 1 since the anchor offset isn't 0 based
+				highlightStart = (node.textContent.indexOf(anchorText) + anchorOffset) - 1;
 			} else {
 				while (!(node.attributes && node.attributes.verseid && node.attributes.verseid.value !== firstVerse)) {
 					// console.log('node', node);
@@ -425,7 +448,10 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			// console.log('calc', node.textContent.indexOf(anchorText) + anchorOffset);
 			// plain text
 			// I think this can stay the same as formatted, it could be made shorter potentially
-
+			const dist = this.calcDist(lastVerse, firstVerse);
+			// console.log('dist', dist);
+			const highlightedWords = this.state.selectedText.split('').length - dist;
+			// console.log('calc highlighted words', highlightedWords);
 			if (this.props.userId && this.props.userAuthenticated) {
 				// console.log('highlight being added', {
 				// 	book: this.props.activeBookId,
@@ -433,7 +459,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				// 	verseStart: this.state.firstVerse,
 				// 	color,
 				// 	highlightStart,
-				// 	highlightedWords: this.state.selectedText.split('').length,
+				// 	highlightedWords,
 				// });
 				this.props.addHighlight({
 					book: this.props.activeBookId,
@@ -441,7 +467,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 					verseStart: this.state.firstVerse,
 					color,
 					highlightStart,
-					highlightedWords: this.state.selectedText.split('').length,
+					highlightedWords,
 				});
 			} else {
 				// alert('Please create an account!!! 乁(✿ ͡° ͜ʖ ͡°)و');
@@ -455,6 +481,18 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		}
 
 		this.closeContextMenu();
+	}
+
+	calcDist = (l, f) => {
+		if (l === f) return 0;
+		let stringDiff = '';
+
+		for (let i = f + 1; i <= l; i += 1) {
+			stringDiff += i.toFixed(0);
+			// console.log(i);
+		}
+		// console.log('string diff', stringDiff);
+		return stringDiff.length + (l - f);
 	}
 
 	addFacebookLike = () => {

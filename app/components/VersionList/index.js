@@ -61,7 +61,7 @@ class VersionList extends React.PureComponent { // eslint-disable-line react/pre
 
 		scrubbedBibles.forEach((b) => {
 			// console.log(b);
-			if ((b.types.audio_drama || b.types.audio) && (b.types.text_plain || b.types.text_formatt)) {
+			if ((b.types.audio_drama || b.types.audio) && (b.types.text_plain || b.types.text_format)) {
 				audioAndText.push(b);
 			} else if (b.types.audio_drama || b.types.audio) {
 				audioOnly.push(b);
@@ -137,7 +137,7 @@ class VersionList extends React.PureComponent { // eslint-disable-line react/pre
 			// console.log('version list', filesets);
 
 			if (audioType) {
-				setActiveText({ textId: bible.get('abbr'), textName: bible.get('name'), filesets: filesets.filter((fileset) => (fileset.get('set_type_code') === audioType || fileset.get('set_type_code') === 'text_plain' || fileset.get('set_type_code') === 'text_formatt')) });
+				setActiveText({ textId: bible.get('abbr'), textName: bible.get('name'), filesets: filesets.filter((fileset) => (fileset.get('set_type_code') === audioType || fileset.get('set_type_code') === 'text_plain' || fileset.get('set_type_code') === 'text_format')) });
 				toggleTextSelection();
 			} else {
 				setActiveText({ textId: bible.get('abbr'), textName: bible.get('name'), filesets });
