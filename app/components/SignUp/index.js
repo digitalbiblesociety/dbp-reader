@@ -216,8 +216,8 @@ class SignUp extends React.PureComponent {
 						<div className="signup-error-message">This email is already registered with an account. Please try a different email or sign in.</div>
 					) : null
 				}
-				<GoogleAuthentication activeDriver={activeDriver} socialMediaLogin={socialMediaLogin} socialLoginLink={socialLoginLink} />
 				<FacebookAuthentication activeDriver={activeDriver} socialMediaLogin={socialMediaLogin} socialLoginLink={socialLoginLink} />
+				<GoogleAuthentication activeDriver={activeDriver} socialMediaLogin={socialMediaLogin} socialLoginLink={socialLoginLink} />
 				<section className="disclaimer">
 					By creating an account, you agree to the Bible.is
 					<a className="link" target={'_blank'} href="http://www.bible.is/privacy"> Privacy Policy </a> &

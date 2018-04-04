@@ -18,7 +18,13 @@ import {
 	DELETE_USER,
 	LOG_OUT,
 	ERROR_MESSAGE_VIEWED,
+	CLEAR_ERROR_MESSAGE,
 } from './constants';
+
+export const clearErrorMessage = (props) => ({
+	type: CLEAR_ERROR_MESSAGE,
+	...props,
+});
 
 export const viewErrorMessage = (props) => ({
 	type: ERROR_MESSAGE_VIEWED,

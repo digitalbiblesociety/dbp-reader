@@ -21,3 +21,4 @@ export const UPDATE_EMAIL = 'app/Notes/UPDATE_EMAIL';
 export const SOCIAL_MEDIA_LOGIN = 'app/Profile/SOCIAL_MEDIA_LOGIN';
 export const SOCIAL_MEDIA_LOGIN_SUCCESS = 'app/Profile/SOCIAL_MEDIA_LOGIN_SUCCESS';
 export const ERROR_MESSAGE_VIEWED = 'app/Profile/ERROR_MESSAGE_VIEWED';
+export const CLEAR_ERROR_MESSAGE = 'app/Profile/CLEAR_ERROR_MESSAGE';

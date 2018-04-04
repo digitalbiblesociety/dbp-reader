@@ -31,6 +31,7 @@ import {
 	deleteUser,
 	logout,
 	viewErrorMessage,
+	clearErrorMessage,
 } from './actions';
 import makeSelectProfile from './selectors';
 import reducer from './reducer';
@@ -45,6 +46,7 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 
 	componentWillUnmount() {
 		this.closeMenuController.onMenuUnmount();
+		this.props.dispatch(clearErrorMessage());
 	}
 
 	setRef = (node) => {
