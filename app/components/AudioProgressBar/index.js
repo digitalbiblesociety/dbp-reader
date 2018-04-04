@@ -69,23 +69,19 @@ class AudioProgressBar extends React.PureComponent {
 	render() {
 		const percent = (100 * (this.props.currentTime / this.props.duration)) || 0;
 		// console.log('rendering progress bar', percent);
-		return [
-			<Slider
-				className="progress-slider"
-				onChange={this.handleChange}
-				handleStyle={{ border: '2px solid rgb(98,177,130)', backgroundColor: 'rgb(0,0,0)' }}
-				railStyle={{ backgroundColor: '#111' }}
-				trackStyle={{ backgroundColor: 'rgb(98,177,130)' }}
-				value={percent}
-				min={0}
-				max={100}
-			/>,
-			<span
-				data-value-dur={this.timeLeft}
-				data-value-cur={this.timePassed}
-				className={'progress-numbers'}
-			/>,
-		];
+		return (
+			<div className={'progress-slider'} data-value-dur={this.timeLeft} data-value-cur={this.timePassed}>
+				<Slider
+					onChange={this.handleChange}
+					handleStyle={{ border: '2px solid rgb(98,177,130)', backgroundColor: 'rgb(0,0,0)' }}
+					railStyle={{ backgroundColor: '#111' }}
+					trackStyle={{ backgroundColor: 'rgb(98,177,130)' }}
+					value={percent}
+					min={0}
+					max={100}
+				/>
+			</div>
+		);
 		// return (
 		// 	<div role="button" tabIndex={0} className="progress-bar" ref={this.handleOuterDivRef} onClick={this.handleTimeClick}>
 		// 		<Timeline style={{ width: `${percent > 0 ? `${percent}%` : '0px'}` }} innerRef={this.handleTimelineRef}><Tracker innerRef={this.handleTrackerRef} onMouseDown={this.mouseDown} /></Timeline>

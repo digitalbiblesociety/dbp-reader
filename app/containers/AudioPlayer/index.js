@@ -24,7 +24,7 @@ import reducer from './reducer';
 import messages from './messages';
 /* eslint-disable jsx-a11y/media-has-caption */
 /* disabled the above eslint config options because you can't add tracks to audio elements */
-// Todo: Something in here is trying to update an unmounted component
+// Todo: Something in here is/was trying to update an unmounted component
 export class AudioPlayer extends React.Component { // eslint-disable-line react/prefer-stateless-function
 	constructor(props) {
 		super(props);

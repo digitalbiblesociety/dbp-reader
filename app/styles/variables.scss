@@ -3,7 +3,7 @@ $sketch-document-color-dark-red:#7E0E2A;
 $sketch-document-color-red:#9E1E35;
 $sketch-document-color-orange-red:#DA2015;
 $sketch-document-color-orange:#DF4C10;
-$sketch-document-color-:#DC4E41;
+$sketch-document-color-error:rgba(220, 78, 65, 0.60);
 $sketch-document-color-black:#000000;
 $sketch-document-color-dark-gray:#1B1F24;
 $sketch-document-color-medium-gray:#2C3036;
@@ -114,7 +114,7 @@ $variables: (
         --menu-secondary-header-background: rgb(39, 42, 47),
         --menu-header-background: rgb(115, 16, 37),
         --application-input-color: rgb(110, 116, 127),
-        --application-placeholder-color: rgb(255, 255, 255),
+        --application-placeholder-color: rgb(134, 134, 134),
         --application-background: rgb(253, 248, 241),
         --application-base-color: rgb(50, 53, 58),
         --application-words-of-jesus: #A00,

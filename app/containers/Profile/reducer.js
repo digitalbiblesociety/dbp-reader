@@ -13,6 +13,7 @@ import {
 	LOGIN_ERROR,
 	SOCIAL_MEDIA_LOGIN_SUCCESS,
 	SOCIAL_MEDIA_LOGIN,
+	ERROR_MESSAGE_VIEWED,
 	// LOAD_USER_DATA,
 	// GET_USER_DATA,
 	// SEND_LOGIN_FORM,
@@ -41,6 +42,7 @@ const initialState = fromJS({
 		state: '',
 		zip: '',
 	},
+	errorMessageViewed: false,
 });
 
 function profileReducer(state = initialState, action) {
@@ -61,11 +63,17 @@ function profileReducer(state = initialState, action) {
 			.set('userId', '')
 			.set('userAuthenticated', false);
 	case SIGNUP_ERROR:
-		return state.set('signupErrorMessage', action.message);
+		return state
+			.set('errorMessageViewed', false)
+			.set('signupErrorMessage', action.message);
 	case LOGIN_ERROR:
-		return state.set('loginErrorMessage', action.message);
+		return state
+			.set('errorMessageViewed', false)
+			.set('loginErrorMessage', action.message);
 	case SOCIAL_MEDIA_LOGIN_SUCCESS:
 		return state.set('socialLoginLink', action.url);
+	case ERROR_MESSAGE_VIEWED:
+		return state.set('errorMessageViewed', true);
 	default:
 		return state;
 	}

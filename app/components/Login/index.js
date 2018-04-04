@@ -32,10 +32,12 @@ class Login extends React.PureComponent {
 
 	handlePasswordChange = (e) => {
 		this.setState({ password: e.target.value });
+		this.props.viewErrorMessage();
 	}
 
 	handleEmailChange = (e) => {
 		this.setState({ email: e.target.value });
+		this.props.viewErrorMessage();
 	}
 
 	handleSendingLogin = (e) => {
@@ -56,63 +58,58 @@ class Login extends React.PureComponent {
 
 	toggleSignInForm = (state) => {
 		this.setState({ signInActive: state });
+		this.props.viewErrorMessage();
 	}
 
 	get signInComponent() {
-		const { errorMessage } = this.props;
+		const {
+			errorMessageViewed,
+			selectAccountOption,
+		} = this.props;
 
 		return (
 			<React.Fragment>
 				<form onSubmit={this.handleSendingLogin}>
-					<span className={'input-wrapper'}>
-						<SvgWrapper className="svg" width="30px" height="30px" fill="#fff" svgid="e-mail" />
-						<input autoComplete={'email'} className="email" placeholder="Enter E-mail" onChange={this.handleEmailChange} value={this.state.email} />
+					<span className={'sign-in-input'}>
+						<SvgWrapper className="icon" width="30px" height="30px" fill="#fff" svgid="e-mail" />
+						<input autoComplete={'email'} className={errorMessageViewed ? '' : 'error'} placeholder="E-mail" onChange={this.handleEmailChange} value={this.state.email} />
 					</span>
-					<span className={'input-wrapper'}>
-						<SvgWrapper className="svg" width="26px" height="26px" fill="#fff" svgid="lock" />
-						<input autoComplete={'current-password'} className="first-password" type="password" placeholder="Enter Password" onChange={this.handlePasswordChange} value={this.state.password} />
+					<span className={'sign-in-input'}>
+						<SvgWrapper className="icon" width="26px" height="26px" fill="#fff" svgid="lock" />
+						<input autoComplete={'current-password'} className={errorMessageViewed ? '' : 'error'} type="password" placeholder="Password" onChange={this.handlePasswordChange} value={this.state.password} />
 					</span>
 					<div className="sign-in-button">
 						<input className="login-checkbox" id={'login-checkbox'} type="checkbox" onChange={this.handleStayLoggedInChange} />
-						<label htmlFor={'login-checkbox'} className="text">KEEP ME LOGGED IN</label>
-						<button type="submit" className="login-button">LOGIN</button>
+						<label htmlFor={'login-checkbox'} className="text">Remember Me</label>
+						<button type="submit" className="login-button">Sign In</button>
 					</div>
+					{
+						!errorMessageViewed ? (
+							<div className="login-error-message">
+								<SvgWrapper className={'icon'} svgid={'warning'} />
+								<span className={'error-text'}>Username or Password is incorrect. Please try again.</span>
+							</div>
+						) : null
+					}
+					<section className="forgot-password">
+						<span role="button" tabIndex={0} className="link" onClick={() => { selectAccountOption('password_reset'); this.toggleSignInForm(false); }}>Forgot your password?</span>
+					</section>
 				</form>
-				{
-					errorMessage ? (
-						<div className="login-error-message">{errorMessage}</div>
-					) : null
-				}
 			</React.Fragment>
 		);
 	}
 
 	render() {
 		const {
-			selectAccountOption,
 			socialLoginLink,
 			socialMediaLogin,
 			activeDriver,
 		} = this.props;
 		return (
 			<React.Fragment>
-				{
-					this.state.signInActive ? this.signInComponent : (
-						<div role="button" tabIndex={0} onClick={() => this.toggleSignInForm(true)} className="sign-in">
-							<SvgWrapper className="svg" width="30px" height="30px" fill="#fff" svgid="e-mail" />
-							<span className="text">Sign in with E-mail</span>
-						</div>
-					)
-				}
+				{this.signInComponent}
 				<FacebookAuthentication activeDriver={activeDriver} socialMediaLogin={socialMediaLogin} socialLoginLink={socialLoginLink} />
 				<GoogleAuthentication activeDriver={activeDriver} socialMediaLogin={socialMediaLogin} socialLoginLink={socialLoginLink} />
-				<section className="sign-up-free">
-					Don&#39;t have an account yet?
-					<span role="button" tabIndex={0} className="link" onClick={() => { selectAccountOption('signup'); this.toggleSignInForm(false); }}> Sign up for free!</span>
-				</section>
-				<section className="forgot-password">
-					<span role="button" tabIndex={0} className="link" onClick={() => { selectAccountOption('password_reset'); this.toggleSignInForm(false); }}>Forgot your password?</span>
-				</section>
 			</React.Fragment>
 		);
 	}
@@ -121,10 +118,12 @@ class Login extends React.PureComponent {
 Login.propTypes = {
 	sendLoginForm: PropTypes.func,
 	socialMediaLogin: PropTypes.func,
+	viewErrorMessage: PropTypes.func,
 	selectAccountOption: PropTypes.func,
 	socialLoginLink: PropTypes.string,
-	errorMessage: PropTypes.string,
+	// errorMessage: PropTypes.string,
 	activeDriver: PropTypes.string,
+	errorMessageViewed: PropTypes.bool,
 };
 
 export default Login;
