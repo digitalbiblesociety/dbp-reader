@@ -80,25 +80,6 @@
 .profile .link:hover         {opacity:.75;}
 .profile .sign-up-free .link {font-style: italic;}
 
-// Sign up
-.profile .sign-up-button             {
-  padding:5px 10px;text-align:right;
-  height:30px;
-  width:100%;
-  @include css4{
-    background:var(--application-input-color);
-    color:var(--menu-title-text-color);
-  };
-}
-.profile .sign-up-button .text       {
-  cursor:pointer;
-  background-color:inherit;
-  border:none;
-  font-size:0.98em;
-  @include css4{
-    color:var(--menu-title-text-color);
-  };
-}
 .profile .sign-up-button .text:hover {
   @include css4{color:var(--menu-active-text-color);};}
   // Login or Sign up options
@@ -132,17 +113,45 @@
       flex-shrink: 0;
       margin-left: 15px;
     }
+  }
+  // Sign up
+  .sign-up-button {
+    padding:5px 10px;
+    text-align:right;
+    height:40px;
+    width:100%;
 
-    input {
-      background-color: inherit;
-      margin-left: 25px;
-      margin-right:25px;
-      color: #fff;
+    .text       {
+      cursor:pointer;
+      background-color:inherit;
+      border:none;
+      font-size:0.98em;
+      @include css4{
+        color:var(--application-input-color);
+      };
+    }
+  }
 
-      &.error {
-        background-color: $sketch-document-color-error;
-        //filter: opacity(60%);
-      }
+  .sign-up-wrapper {
+    display: flex;
+    align-items: center;
+    height: 54px;
+    //padding:0 10px;
+
+    .icon {
+      flex-shrink: 0;
+      margin-left: 15px;
+    }
+  }
+  input {
+    background-color: inherit;
+    margin-left: 25px;
+    margin-right: 25px;
+    width: calc(320px - 50px);
+    color: #fff;
+
+    &.error {
+      background-color: $sketch-document-color-error;
     }
   }
 }
@@ -157,7 +166,7 @@
     color:var(--menu-title-text-color);
   };
 }
-.profile .sign-up-free         {
+.profile .sign-up-free {
   @include css4{
     color:var(--menu-font-color);
   };
@@ -167,12 +176,12 @@
   padding-left:15px;
   padding-bottom:15px;
 }
-.profile .sign-in-button       {
+.profile .sign-in-button {
   display:flex;
   align-items:center;
   justify-content:flex-start;
   width:100%;
-  @include css4{
+  @include css4 {
     color:var(--menu-title-text-color);
   };
 
@@ -201,7 +210,7 @@
   }
 }
 
-.profile .login-error-message  {
+.profile .login-error-message {
   display:flex;
   align-items: center;
   justify-content: flex-start;
