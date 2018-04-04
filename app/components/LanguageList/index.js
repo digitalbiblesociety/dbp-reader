@@ -29,7 +29,7 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 		const filteredLanguages = filterText ? languages.filter((language) => this.filterFunction(language, filterText)) : languages;
 
 		// const components = () => filteredLanguages.map((language) => (
-		// 	<div className="language-name" key={language.get('iso_code')} role="button" tabIndex={0} onClick={() => this.handleLanguageClick(language)}>
+		// 	<div className="language-name" key={language.get('iso')} role="button" tabIndex={0} onClick={() => this.handleLanguageClick(language)}>
 		// 		<h4 className={language.get('name') === activeLanguageName ? 'active-language-name' : ''}>{language.get('name')}</h4>
 		// 	</div>
 		// ));
@@ -40,13 +40,13 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 
 		const renderARow = ({ index, style, key }) => {
 			const language = filteredLanguages.get(index);
-			// key={language.get('iso_code')}
+			// key={language.get('iso')}
 			// if (isScrolling) {
 			// 	return <div key={key} style={style}>scrolling...</div>;
 			// }
 			return (
 				<div style={style} key={key} className="language-name" role="button" tabIndex={0} onClick={() => this.handleLanguageClick(language)}>
-					<h4 className={language.get('iso_code') === activeIsoCode ? 'active-language-name' : ''}>{language.get('name')}</h4>
+					<h4 className={language.get('iso') === activeIsoCode ? 'active-language-name' : ''}>{language.get('name')}</h4>
 				</div>
 			);
 		};
@@ -55,7 +55,7 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 			let activeIndex = 0;
 
 			filteredLanguages.forEach((l, i) => {
-				if (l.get('iso_code') === activeIsoCode) {
+				if (l.get('iso') === activeIsoCode) {
 					activeIndex = i;
 				}
 			});
@@ -82,7 +82,7 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 	filterFunction = (language, filterText) => {
 		const lowerCaseText = filterText.toLowerCase();
 
-		if (language.get('iso_code').toLowerCase().includes(lowerCaseText)) {
+		if (language.get('iso').toLowerCase().includes(lowerCaseText)) {
 			return true;
 		} else if (language.get('name').toLowerCase().includes(lowerCaseText)) {
 			return true;
@@ -100,7 +100,7 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 		} = this.props;
 		// console.log('new language', language);
 		if (language) {
-			setActiveIsoCode({ iso: language.get('iso_code'), name: language.get('name') });
+			setActiveIsoCode({ iso: language.get('iso'), name: language.get('name') });
 			toggleLanguageList();
 			// this.setState({ filterText: '' });
 			toggleVersionList();
