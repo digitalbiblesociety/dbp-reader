@@ -1,0 +1,102 @@
+[
+  {
+    "id": 16,
+    "bible_id": "ENGESV",
+    "book_id": "GEN",
+    "chapter": 1,
+    "verse_start": 1,
+    "highlight_start": 1,
+    "highlighted_words": 9,
+    "highlighted_color": "#EE0"
+  },
+  {
+    "id": 17,
+    "bible_id": "ENGESV",
+    "book_id": "GEN",
+    "chapter": 1,
+    "verse_start": 1,
+    "highlight_start": 1,
+    "highlighted_words": 10,
+    "highlighted_color": "#EE0"
+  },
+  {
+    "id": 18,
+    "bible_id": "ENGESV",
+    "book_id": "GEN",
+    "chapter": 1,
+    "verse_start": 2,
+    "highlight_start": 1,
+    "highlighted_words": 8,
+    "highlighted_color": "#EE0"
+  },
+  {
+    "id": 19,
+    "bible_id": "ENGESV",
+    "book_id": "GEN",
+    "chapter": 1,
+    "verse_start": 3,
+    "highlight_start": 1,
+    "highlighted_words": 7,
+    "highlighted_color": "#EE0"
+  },
+  {
+    "id": 20,
+    "bible_id": "ENGESV",
+    "book_id": "GEN",
+    "chapter": 1,
+    "verse_start": 4,
+    "highlight_start": 1,
+    "highlighted_words": 5,
+    "highlighted_color": "#EE0"
+  },
+  {
+    "id": 21,
+    "bible_id": "ENGESV",
+    "book_id": "GEN",
+    "chapter": 1,
+    "verse_start": 6,
+    "highlight_start": 1,
+    "highlighted_words": 8,
+    "highlighted_color": "#EE0"
+  },
+  {
+    "id": 22,
+    "bible_id": "ENGESV",
+    "book_id": "GEN",
+    "chapter": 1,
+    "verse_start": 5,
+    "highlight_start": 2,
+    "highlighted_words": 5,
+    "highlighted_color": "#EE0"
+  },
+  {
+    "id": 23,
+    "bible_id": "ENGESV",
+    "book_id": "GEN",
+    "chapter": 1,
+    "verse_start": 5,
+    "highlight_start": 11,
+    "highlighted_words": 6,
+    "highlighted_color": "#EE0"
+  },
+  {
+    "id": 24,
+    "bible_id": "ENGESV",
+    "book_id": "GEN",
+    "chapter": 1,
+    "verse_start": 7,
+    "highlight_start": 9,
+    "highlighted_words": 5,
+    "highlighted_color": "#EE0"
+  },
+  {
+    "id": 57,
+    "bible_id": "ENGESV",
+    "book_id": "GEN",
+    "chapter": 1,
+    "verse_start": 1,
+    "highlight_start": 1,
+    "highlighted_words": 17,
+    "highlighted_color": "#EE0"
+  }
+]
