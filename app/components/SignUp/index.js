@@ -151,32 +151,32 @@ class SignUp extends React.PureComponent {
 
 		if (passwordErrorType) {
 			if (passwordErrorType === 'confirm') {
-				return <span className={'signup-error-message'}>Your passwords do not match.</span>;
+				return <p className={'signup-error-message'}>Your passwords do not match.</p>;
 			} else if (passwordErrorType === 'length') {
-				return <span className={'signup-error-message'}>Your password must be longer than 8 characters.</span>;
+				return <p className={'signup-error-message'}>Your password must be longer than 8 characters.</p>;
 			} else if (passwordErrorType === 'password') {
-				return <span className={'signup-error-message'}>You cannot use, &quot;password&quot; as your password...</span>;
+				return <p className={'signup-error-message'}>You cannot use, &quot;password&quot; as your password...</p>;
 			} else if (passwordErrorType === 'upperNumSym') {
-				return <span className={'signup-error-message'}>You must have at least one of the following: number, uppercase character, symbol.</span>;
+				return <p className={'signup-error-message'}>You must have at least one of the following: number, uppercase character, symbol.</p>;
 			}
 		}
 
 		if (!validEmail) {
-			return <span className={'signup-error-message'}>You have entered an invalid email.</span>;
+			return <p className={'signup-error-message'}>You have entered an invalid email.</p>;
 		}
 
-		return <span className={'signup-error-message'}>There was an unknown error, please try again.</span>;
+		return <p className={'signup-error-message'}>There was an unknown error, please try again.</p>;
 	}
 
 	get signupForm() {
 		const { validEmail, validPassword } = this.state;
 		return (
 			<form onSubmit={this.handleSignup}>
-				<input autoComplete={'email'} onChange={this.handleEmailChange} className={validEmail ? 'email' : 'email error'} placeholder="E-mail" value={this.state.email} />
-				<input autoComplete={'given-name'} onChange={this.handleFirstName} className={'name-inputs'} placeholder="Given Name" value={this.state.firstName} />
-				<input autoComplete={'family-name'} onChange={this.handleLastName} className={'name-inputs'} placeholder="Family Name" value={this.state.lastName} />
-				<input autoComplete="new-password" type="password" onChange={this.handlePasswordChange} className={validPassword ? 'first-password' : 'first-password error'} placeholder="Password" value={this.state.password} />
-				<input autoComplete="new-password" type="password" onChange={this.handleConfirmPassword} className={validPassword ? 'second-password' : 'second-password error'} placeholder="Confirm Password" value={this.state.confirmPassword} />
+				<input required autoComplete={'email'} onChange={this.handleEmailChange} className={validEmail ? 'email' : 'email error'} placeholder="E-mail" value={this.state.email} />
+				<input required autoComplete={'given-name'} onChange={this.handleFirstName} className={'name-inputs'} placeholder="Given Name" value={this.state.firstName} />
+				<input required autoComplete={'family-name'} onChange={this.handleLastName} className={'name-inputs'} placeholder="Family Name" value={this.state.lastName} />
+				<input required autoComplete="new-password" type="password" onChange={this.handlePasswordChange} className={validPassword ? 'first-password' : 'first-password error'} placeholder="Password" value={this.state.password} />
+				<input required autoComplete="new-password" type="password" onChange={this.handleConfirmPassword} className={validPassword ? 'second-password' : 'second-password error'} placeholder="Confirm Password" value={this.state.confirmPassword} />
 				<div className="sign-up-button">
 					<button type="submit" className="text">SIGN UP</button>
 				</div>
@@ -219,9 +219,7 @@ class SignUp extends React.PureComponent {
 				<FacebookAuthentication activeDriver={activeDriver} socialMediaLogin={socialMediaLogin} socialLoginLink={socialLoginLink} />
 				<GoogleAuthentication activeDriver={activeDriver} socialMediaLogin={socialMediaLogin} socialLoginLink={socialLoginLink} />
 				<section className="disclaimer">
-					By creating an account, you agree to the Bible.is
-					<a className="link" target={'_blank'} href="http://www.bible.is/privacy"> Privacy Policy </a> &
-					<a className="link" target={'_blank'} href="http://www.bible.is/terms"> Terms of Use</a>.
+					<span>By creating an account, you agree to the Bible.is</span>&nbsp;<a className="link" target={'_blank'} href="http://www.bible.is/privacy">Privacy Policy</a>&nbsp;&&nbsp;<a className="link" target={'_blank'} href="http://www.bible.is/terms">Terms of Use</a>.
 				</section>
 			</React.Fragment>
 		);
