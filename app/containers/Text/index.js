@@ -410,7 +410,8 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 					counter += 1;
 					// console.log('condition to be checked', !(node.attributes && node.attributes['data-id'] && node.attributes['data-id'].value.split('_')[1] !== firstVerse));
 				}
-				highlightStart = node.textContent.indexOf(anchorText) + anchorOffset;
+				// Need to subtract by 1 since the anchor offset isn't 0 based
+				highlightStart = (node.textContent.indexOf(anchorText) + anchorOffset) - 1;
 			} else {
 				while (!(node.attributes && node.attributes.verseid && node.attributes.verseid.value !== firstVerse)) {
 					// console.log('node', node);

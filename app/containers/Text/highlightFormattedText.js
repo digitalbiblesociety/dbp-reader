@@ -1,5 +1,10 @@
 const createFormattedHighlights = (highlights, formattedTextString) => {
+	/* eslint-disable */
 	// todo: formatted text use highlighted_color on highlight to add the background color inline
+	/* NOTES
+	* 1. Need to subtract 1 from any addition of highlight_start + highlighted_words, this is because the result is the length not the index
+	*
+	* */
 	// Iterate over each verse
 		// Find all the highlights for a single verse
 		// Apply all highlights for that verse
@@ -14,11 +19,13 @@ const createFormattedHighlights = (highlights, formattedTextString) => {
 		}
 		return 0;
 	});
+	// console.log('string', formattedTextString);
 	// console.log('sorted highlights', sortedHighlights);
 	try {
 		const parser = new DOMParser();
 		const serializer = new XMLSerializer();
 		const xmlDoc = parser.parseFromString(formattedTextString, 'text/xml');
+		// console.log('doc before stuff', serializer.serializeToString(xmlDoc));
 		const arrayOfVerses = [...xmlDoc.getElementsByClassName('v')];
 		let charsLeftAfterVerseEnd = 0; // the number of characters for the highlight
 
@@ -58,31 +65,33 @@ const createFormattedHighlights = (highlights, formattedTextString) => {
 				// console.log('each highlight in verse', h);
 				// Highlights are sorted by highlight_start so the first index has the very first highlight
 				if (i === 0 || charsLeft === 0) {
+					// console.log('h.highlight_start', h.highlight_start);
+					// console.log('h.highlighted_words', h.highlighted_words);
 					verseText.splice(h.highlight_start, 1, `<em class="text-highlighted" style="background:${h.highlighted_color ? h.highlighted_color : 'inherit'}">${verseText[h.highlight_start]}`);
 					hStart = h.highlight_start;
 				}
 				// if the next highlight start is less than the end of this highlight
-				if (nh && nh.highlight_start <= (h.highlight_start + h.highlighted_words)) {
+				if (nh && nh.highlight_start <= ((h.highlighted_words + h.highlight_start) - 1)) {
 					// check if the furthest highlighted character for this highlight is greater than the furthest character for the next highlight
-					if ((h.highlighted_words + h.highlight_start) > (nh.highlight_start + nh.highlighted_words)) {
+					if (((h.highlighted_words + h.highlight_start) - 1) > ((nh.highlight_start + nh.highlighted_words) - 1)) {
 						// in this case the next highlight will be contained within this highlight and doesn't need to be accounted for
 						charsLeft = h.highlighted_words;
 					} else {
 						// in this case the next highlight will continue to extend past where this one ends
-						charsLeft = nh.highlighted_words + (nh.highlight_start);
+						charsLeft = (nh.highlighted_words + nh.highlight_start) - 1;
 					}
 					// console.log('chars left for overlap', charsLeft);
-				} else if ((charsLeft + hStart) <= verseText.length && (h.highlighted_words + h.highlight_start) < verseText.length) {
+				} else if ((charsLeft + hStart) <= verseText.length && ((h.highlighted_words + h.highlight_start) - 1) < verseText.length) {
 					// The next highlight is not overlapped by this one
 					// This highlight doesn't go past the end of the verse
 					if (charsLeft === 0) {
-						verseText.splice(h.highlighted_words + h.highlight_start, 1, `${verseText[h.highlighted_words + h.highlight_start]}</em>`);
+						verseText.splice((h.highlighted_words + h.highlight_start) - 1, 1, `${verseText[(h.highlighted_words + h.highlight_start) - 1]}</em>`);
 					} else {
 						verseText.splice(charsLeft, 1, `${verseText[charsLeft]}</em>`);
 						charsLeft = 0;
 					}
 					// console.log('chars left at splice', charsLeft);
-				} else if ((charsLeft + hStart) > verseText.length || (h.highlighted_words + h.highlight_start) > verseText.length) {
+				} else if ((charsLeft + hStart) > verseText.length || ((h.highlighted_words + h.highlight_start) - 1) > verseText.length) {
 					// diff between highlight start and verse end
 					const diff = verseText.length - hStart;
 					// console.log('diff', diff);
@@ -106,12 +115,15 @@ const createFormattedHighlights = (highlights, formattedTextString) => {
 			verse.innerHTML = verseText.join(''); // eslint-disable-line no-param-reassign
 			// Use charsLeft to highlight as much of this verse as possible, then carry its value over into the next verse
 		});
-
+		// console.log('xml doc', xmlDoc);
 		return serializer.serializeToString(xmlDoc);
 	} catch (error) {
 		if (process.env.NODE_ENV === 'development') {
 			console.warn('Failed applying highlight to formatted text', error); // eslint-disable-line no-console
 		}
+		// if (process.env.NODE_ENV === 'test') {
+		// 	console.log('Failed applying highlight to formatted text', error);
+		// }
 		// If there was an error just return the text with no highlights
 		return formattedTextString;
 	}
