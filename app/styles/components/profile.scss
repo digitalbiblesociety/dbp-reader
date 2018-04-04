@@ -71,11 +71,18 @@
 .profile .google:active {opacity:0.75;}
 .profile .facebook:active {opacity:0.75;}
 // Links
-.profile .link               {
-  color:$sketch-document-color-light-blue;
-  font-weight:200;
-  margin-left: 15px;
-  cursor:pointer;
+.profile {
+  .link {
+    color:$sketch-document-color-light-blue;
+    font-weight:200;
+    margin-left: 15px;
+    cursor:pointer;
+  }
+  .disclaimer {
+    .link {
+      margin: 0;
+    }
+  }
 }
 .profile .link:hover         {opacity:.75;}
 .profile .sign-up-free .link {font-style: italic;}
@@ -172,9 +179,10 @@
   };
 }
 .profile .signup-error-message {
+  width: 320px;
   font-weight:200;
-  padding-left:15px;
-  padding-bottom:15px;
+  background-color: $sketch-document-color-dark-gray;
+  padding: 0 15px 15px 30px;
 }
 .profile .sign-in-button {
   display:flex;

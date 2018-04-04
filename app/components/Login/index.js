@@ -32,12 +32,12 @@ class Login extends React.PureComponent {
 
 	handlePasswordChange = (e) => {
 		this.setState({ password: e.target.value });
-		this.props.viewErrorMessage();
+		this.viewError();
 	}
 
 	handleEmailChange = (e) => {
 		this.setState({ email: e.target.value });
-		this.props.viewErrorMessage();
+		this.viewError();
 	}
 
 	handleSendingLogin = (e) => {
@@ -58,7 +58,7 @@ class Login extends React.PureComponent {
 
 	toggleSignInForm = (state) => {
 		this.setState({ signInActive: state });
-		this.props.viewErrorMessage();
+		this.viewError();
 	}
 
 	get signInComponent() {
@@ -97,6 +97,12 @@ class Login extends React.PureComponent {
 				</form>
 			</React.Fragment>
 		);
+	}
+
+	viewError = () => {
+		if (!this.props.errorMessageViewed) {
+			this.props.viewErrorMessage();
+		}
 	}
 
 	render() {
