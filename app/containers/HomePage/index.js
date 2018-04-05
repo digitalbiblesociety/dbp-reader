@@ -547,7 +547,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					}
 					{
 						isInformationModalActive ? (
-							<FadeTransition classNames="slide-from-right" in={isInformationModalActive}>
+							<FadeTransition classNames="slide-from-left" in={isInformationModalActive}>
 								<Information active={isInformationModalActive} copywrite={copywrite} toggleInformationModal={this.toggleInformationModal} />
 							</FadeTransition>
 						) : null

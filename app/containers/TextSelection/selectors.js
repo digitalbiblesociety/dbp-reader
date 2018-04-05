@@ -42,7 +42,7 @@ const selectLanguages = () => createSelector(
 		const activeCountryLanguages = countryMap.getIn([activeCountry, 'languages']);
 
 		if (activeCountryLanguages && activeCountry !== 'ANY') {
-			return languages.filter((language) => activeCountryLanguages.has(language.get('iso_code')));
+			return languages.filter((language) => activeCountryLanguages.has(language.get('iso')));
 		}
 		return languages;
 	}
