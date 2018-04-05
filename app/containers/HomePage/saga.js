@@ -64,7 +64,7 @@ export function* addHighlight({ bible, book, chapter, userId, verseStart, highli
 	if (color !== 'none') {
 		formData.append('highlighted_color', color);
 	}
-	formData.append('highlight_start', highlightStart + 1);
+	formData.append('highlight_start', highlightStart);
 	formData.append('highlighted_words', highlightedWords);
 	formData.append('project_id', process.env.NOTES_PROJECT_ID);
 

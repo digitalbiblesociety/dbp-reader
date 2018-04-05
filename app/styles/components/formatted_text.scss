@@ -182,6 +182,10 @@ margin: 1.2em 0;
   vertical-align: top;
   color: #333;
   font-family: avenir, helvetica;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 [lang=heb],.section[lang=he] .p,.section[lang=heb] .p,.chapter[lang=he] .p

@@ -293,8 +293,8 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			// console.log('text', text);
 			textComponents = text.map((verse) =>
 				verse.hasHighlight ?
-					<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} verseid={verse.verse_start} key={verse.verse_start} dangerouslySetInnerHTML={{ __html: verse.verse_text }} /> :
-					<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} verseid={verse.verse_start} key={verse.verse_start}>{verse.verse_text}</span>
+					[<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} verseid={verse.verse_start} key={verse.verse_start} dangerouslySetInnerHTML={{ __html: verse.verse_text }} />, <span key={`${verse.verse_end}spaces`} className={'readers-spaces'}>&nbsp;</span>] :
+					[<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} verseid={verse.verse_start} key={verse.verse_start}>{verse.verse_text}</span>, <span key={`${verse.verse_end}spaces`} className={'readers-spaces'}>&nbsp;</span>]
 			);
 		} else if (formattedSource.main) {
 			// Need to run a function to highlight the formatted text if this option is selected
@@ -329,7 +329,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 					(
 						<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} verseid={verse.verse_start} key={verse.verse_start}>
 							<sup verseid={verse.verse_start}>
-								{verse.verse_start_alt || verse.verse_start}
+								&nbsp;{verse.verse_start_alt || verse.verse_start}&nbsp;
 							</sup>
 							<span verseid={verse.verse_start} dangerouslySetInnerHTML={{ __html: verse.verse_text }} />
 						</span>
@@ -337,7 +337,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 					(
 						<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} verseid={verse.verse_start} key={verse.verse_start}>
 							<sup verseid={verse.verse_start}>
-								{verse.verse_start_alt || verse.verse_start}
+								&nbsp;{verse.verse_start_alt || verse.verse_start}&nbsp;
 							</sup>
 							{verse.verse_text}
 						</span>
@@ -349,7 +349,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 					(
 						<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} className={'align-left'} verseid={verse.verse_start} key={verse.verse_start}>
 							<sup verseid={verse.verse_start}>
-								{verse.verse_start_alt || verse.verse_start}
+								&nbsp;{verse.verse_start_alt || verse.verse_start}&nbsp;
 							</sup>
 							<span verseid={verse.verse_start} dangerouslySetInnerHTML={{ __html: verse.verse_text }} />
 						</span>
@@ -357,7 +357,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 					(
 						<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} className={'align-left'} verseid={verse.verse_start} key={verse.verse_start}>
 							<sup verseid={verse.verse_start}>
-								{verse.verse_start_alt || verse.verse_start}
+								&nbsp;{verse.verse_start_alt || verse.verse_start}&nbsp;
 							</sup>
 							{verse.verse_text}
 						</span>
@@ -433,7 +433,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 					// console.log('condition to be checked', !(node.attributes && node.attributes['data-id'] && node.attributes['data-id'].value.split('_')[1] !== firstVerse));
 				}
 				// Need to subtract by 1 since the anchor offset isn't 0 based
-				highlightStart = (node.textContent.indexOf(anchorText) + anchorOffset) - 1;
+				highlightStart = (node.textContent.indexOf(anchorText) + anchorOffset);
 			} else {
 				while (!(node.attributes && node.attributes.verseid && node.attributes.verseid.value !== firstVerse)) {
 					// console.log('node', node);
@@ -442,7 +442,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 					counter += 1;
 				}
 				// Need to subtract by one for the plain text
-				highlightStart = (node.textContent.indexOf(anchorText) + anchorOffset) - 1;
+				highlightStart = (node.textContent.indexOf(anchorText) + anchorOffset);
 			}
 			// console.log('whole verse node text content', node.textContent);
 			// console.log('calc', node.textContent.indexOf(anchorText) + anchorOffset);
@@ -452,6 +452,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			// console.log('dist', dist);
 			const highlightedWords = this.state.selectedText.split('').length - dist;
 			// console.log('calc highlighted words', highlightedWords);
+			// console.log('window selection length', this.state.selectedText.split('').length);
 			if (this.props.userId && this.props.userAuthenticated) {
 				// console.log('highlight being added', {
 				// 	book: this.props.activeBookId,
@@ -489,10 +490,12 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 
 		for (let i = f + 1; i <= l; i += 1) {
 			stringDiff += i.toFixed(0);
+			stringDiff += '11';
 			// console.log(i);
 		}
 		// console.log('string diff', stringDiff);
-		return stringDiff.length + (l - f);
+		return stringDiff.length;
+		// return l - f;
 	}
 
 	addFacebookLike = () => {
@@ -595,7 +598,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				</div>
 				<main ref={this.setMainRef} className={formattedSource.main && !readersMode ? '' : 'chapter'}>
 					{
-						(formattedSource.main || text.length === 0 || !readersMode) ? null : (
+						((formattedSource.main && !readersMode) || text.length === 0 || !readersMode) ? null : (
 							<h1 className="active-chapter-title">{activeChapter}</h1>
 						)
 					}
