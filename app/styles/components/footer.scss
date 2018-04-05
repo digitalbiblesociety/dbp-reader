@@ -1,7 +1,7 @@
-.footer-background {display:flex;justify-content:center;align-items:center;z-index:2;position:fixed;bottom:0;left:0;width:100%;@include css4 {background:var(--header-footer-background);};}
+.footer-background {display:flex;justify-content:center;align-items:center;z-index:2;position:fixed;bottom:0;left:0;width:100%;@include css4 {background:var(--default-header-background-color);};}
 .footer-content {
   @include css4 {
-    color:var(--menu-font-color);
+    color:var(--default-text-color);
   };
   display:flex;height:56px;justify-content:space-between;align-items:center;
 }

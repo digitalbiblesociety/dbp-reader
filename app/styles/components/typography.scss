@@ -33,7 +33,7 @@
     -ms-user-select: none;
     user-select: none;
     @include css4 {
-      color:var(--text-super-color);
+      color:var(--default-text-color);
     }
   }
   .align-left {

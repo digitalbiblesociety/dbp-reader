@@ -256,7 +256,7 @@
   @include css4{fill:var(--text-selection-text-color);};
 }
 .version-item-button .svg.inactive {
-  @include css4{fill:var(--menu-inactive-svg-color);};
+  @include css4{fill:var(--inactive-font-option);};
 }
 .active-version                    {
   @include css4{color:var(--text-selection-active-item-color);};

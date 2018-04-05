@@ -7,15 +7,15 @@
   height:calc(100% - 56px);
   width:320px;
   @include css4{
-    background:var(--menu-secondary-background-color);
-    color:var(--menu-font-color);
+    background:var(--menu-body-background-color);
+    color:var(--default-text-color);
   }
 }
 .profile header             {
   position:relative;
   @include css4{
-    background:var(--menu-header-background);
-    color:var(--menu-title-text-color);
+    background:var(--menu-header-background-color);
+    color:var(--default-text-color);
   }
   text-align:center;
   padding: 15px;
@@ -32,8 +32,8 @@
 .profile header .close-icon {position:absolute;top:0;right:10px}
 .profile section            {padding:15px}
 .profile .profile-content   {max-height:calc(100% - 54px);overflow-y:scroll;overflow-x:hidden;}
-.profile .option:hover      {@include css4{color:var(--menu-active-text-color);};cursor:pointer}
-.profile .active            {@include css4{color:var(--menu-active-text-color);};}
+.profile .option:hover      {@include css4{color:var(--active-color-primary);};cursor:pointer}
+.profile .active            {@include css4{color:var(--active-color-primary);};}
 
 // Input boxes
 //.profile input                                  {border:none;width:100%;height:50px;@include css4{/* border-bottom:1px solid var(--menu-font-color); */background:var(--application-input-color);color:var(--menu-font-color);caret-color:var(--dark-caret-color);};font-size:.9em;font-weight:200;padding-left:10px;}
@@ -43,9 +43,9 @@
 .profile input:focus::-webkit-input-placeholder {color:transparent;}
 .profile input:focus::-moz-placeholder          {color:transparent;}
 .profile input:focus:-ms-input-placeholder      {color:transparent;}
-.profile ::-webkit-input-placeholder            {@include css4{color:var(--application-placeholder-color);};}
-.profile ::-moz-placeholder                     {@include css4{color:var(--application-placeholder-color);};}
-.profile :-ms-input-placeholder                 {@include css4{color:var(--application-placeholder-color);};}
+.profile ::-webkit-input-placeholder            {@include css4{color:var(--application-input-placeholder-color);};}
+.profile ::-moz-placeholder                     {@include css4{color:var(--application-input-placeholder-color);};}
+.profile :-ms-input-placeholder                 {@include css4{color:var(--application-input-placeholder-color);};}
 
 // Social Buttons
 .profile .google   {display:flex;
@@ -88,21 +88,21 @@
 .profile .sign-up-free .link {font-style: italic;}
 
 .profile .sign-up-button .text:hover {
-  @include css4{color:var(--menu-active-text-color);};}
+  @include css4{color:var(--active-color-primary);};}
   // Login or Sign up options
 .profile .form-options               {display:flex;align-items:center;justify-content:space-between;}
-.profile .form-options .login        {margin:10px 0 10px 10px;@include css4{color:var(--settings-font-color);};cursor:pointer;}
-.profile .form-options .signup       {margin:10px 10px 10px 0;@include css4{color:var(--settings-font-color);};cursor:pointer;}
-.profile .form-options .active       {@include css4{color:var(--menu-active-text-color);};}
-.profile .form-options .active       {@include css4{color:var(--menu-active-text-color);};}
-.profile .form-options .login:hover  {@include css4{color:var(--menu-active-text-color);};}
-.profile .form-options .signup:hover {@include css4{color:var(--menu-active-text-color);};}
+.profile .form-options .login        {margin:10px 0 10px 10px;@include css4{color:var(--settings-text-color);};cursor:pointer;}
+.profile .form-options .signup       {margin:10px 10px 10px 0;@include css4{color:var(--settings-text-color);};cursor:pointer;}
+.profile .form-options .active       {@include css4{color:var(--active-color-primary);};}
+.profile .form-options .active       {@include css4{color:var(--active-color-primary);};}
+.profile .form-options .login:hover  {@include css4{color:var(--active-color-primary);};}
+.profile .form-options .signup:hover {@include css4{color:var(--active-color-primary);};}
 
   // Message
-.profile .message    {@include css4{color:var(--menu-font-color);};}
+.profile .message    {@include css4{color:var(--default-text-color);};}
 
 // Disclaimer
-.profile .disclaimer {@include css4{color:var(--menu-font-color);};}
+.profile .disclaimer {@include css4{color:var(--default-text-color);};}
 
 // Sign in
 .profile form {
@@ -134,7 +134,7 @@
       border:none;
       font-size:0.98em;
       @include css4{
-        color:var(--application-input-color);
+        color:var(--menu-body-background-color);
       };
     }
   }
@@ -170,12 +170,12 @@
   height:50px;
   background-color: #1B1F24;
   @include css4{
-    color:var(--menu-title-text-color);
+    color:var(--default-text-color);
   };
 }
 .profile .sign-up-free {
   @include css4{
-    color:var(--menu-font-color);
+    color:var(--default-text-color);
   };
 }
 .profile .signup-error-message {
@@ -190,7 +190,7 @@
   justify-content:flex-start;
   width:100%;
   @include css4 {
-    color:var(--menu-title-text-color);
+    color:var(--default-text-color);
   };
 
   .text {
@@ -207,12 +207,12 @@
     margin-left: 83px;
     border:none;
     @include css4{
-      color:var(--menu-title-text-color);
+      color:var(--default-text-color);
     };
 
     &:hover {
       @include css4{
-        color:var(--menu-active-text-color);
+        color:var(--active-color-primary);
       };
     }
   }

@@ -2,7 +2,7 @@
 body, html 	           {height:100%;width:100%;}
 body 				   {
   @include css4{
-    color:var(--application-base-color);
+    color:var(--default-background-color);
     font-family:var(--application-font-family);
     font-size:var(--application-menu-font-size);
   };
@@ -12,7 +12,7 @@ div:focus              {outline:none;}
 a                      {text-decoration:none;color:inherit;}
 //aside                  {position:absolute;top:0;right:0;}
 main                   {overflow-x:hidden;overflow-y:scroll;max-height:100%;-webkit-overflow-scrolling: touch;}
-#app                   {max-width:100vw;width:100%;@include css4{background-color:var(--application-background);};}
+#app                   {max-width:100vw;width:100%;@include css4{background-color:var(--default-background-color);};}
 #app > div             {height:100vh;width:100%;}
 
 // Remove default styling on em tags since I use those for highlighting
@@ -37,15 +37,15 @@ body .twitter  {background-color:$login-twitter-color;font-family:"Helvetica Neu
 // Change Highlighting Color
 ::selection {
   @include css4{
-    background-color: var(--text-selection-color);
-    color: var(--application-base-color);
+    background-color: var(--application-text-selection-color);
+    color: var(--default-background-color);
   }
 }
 
 ::-moz-selection {
   @include css4{
-    background-color: var(--text-selection-color);
-    color: var(--application-base-color);
+    background-color: var(--application-text-selection-color);
+    color: var(--default-background-color);
   }
 }
 
@@ -60,20 +60,20 @@ input {
   font-size: 16px;
 
   @include css4 {
-    border-bottom: 1px solid var(--menu-title-text-color);
-    background-color: var(--menu-background-color);
-    caret-color: var(--menu-title-text-color);
+    border-bottom: 1px solid var(--default-text-color);
+    background-color: var(--menu-body-background-color);
+    caret-color: var(--default-text-color);
 
     &::-webkit-input-placeholder {
-      color:var(--application-input-color);
+      color:var(--menu-body-background-color);
       font-size: 16px;
     }
     &::-moz-placeholder          {
-      color:var(--application-input-color);
+      color:var(--menu-body-background-color);
       font-size: 16px;
     }
     &:-ms-input-placeholder      {
-      color:var(--application-input-color);
+      color:var(--menu-body-background-color);
       font-size: 16px;
     }
   }
@@ -87,7 +87,7 @@ input {
   }
 }
 
-.input-icon {@include css4{background-color:var(--application-input-color);};width:30px;height:30px;}
+.input-icon {@include css4{background-color:var(--menu-body-background-color);};width:30px;height:30px;}
 
 // Custom Checkboxes
 // Removes the normal checkbox

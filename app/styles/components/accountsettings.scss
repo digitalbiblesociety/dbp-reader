@@ -1,24 +1,24 @@
 // Account Settings
 .account-settings {max-height:calc(100% - 110px);overflow-y:scroll;overflow-x:hidden;}
-.account-settings .logout-button {margin-top:20px;margin-left:20px;cursor:pointer;&:hover{@include css4{color:var(--menu-active-color);};}}
-.account-settings .button {@include css4{color:var(--menu-font-color);};font-weight:400;cursor:pointer;&:hover{@include css4{color:var(--menu-active-color);};}align-self:flex-end;margin:10px 20px 0 0;font-size:.9em;}
+.account-settings .logout-button {margin-top:20px;margin-left:20px;cursor:pointer;&:hover{@include css4{color:var(--active-color-primary);};}}
+.account-settings .button {@include css4{color:var(--default-text-color);};font-weight:400;cursor:pointer;&:hover{@include css4{color:var(--active-color-primary);};}align-self:flex-end;margin:10px 20px 0 0;font-size:.9em;}
 .account-settings .delete-account {margin-bottom:20px;color:inherit;align-self:flex-end;margin-top:20px;font-style:italic;font-weight:200;}
 //.account-settings .svg {fill:currentColor;}
-.account-settings .title {@include css4{color:var(--menu-active-color);};padding-left:20px;margin-bottom:5px;top:30px;position:relative;}
+.account-settings .title {@include css4{color:var(--active-color-primary);};padding-left:20px;margin-bottom:5px;top:30px;position:relative;}
 
 // Personal Information Styles
 .personal-info {display:flex;flex-direction:column;align-items:center;justify-content:center;}
 .personal-info .profile-picture {width:150px;height:150px;border-radius:50%;}
-.personal-info .change-picture {@include css4{color:var(--menu-font-color);};}
-.personal-info .name {@include css4{color:var(--menu-active-color);};font-style:italic;margin-top:5px;}
+.personal-info .change-picture {@include css4{color:var(--default-text-color);};}
+.personal-info .name {@include css4{color:var(--active-color-primary);};font-style:italic;margin-top:5px;}
 
 // Email Section Styles
-.email-section {@include css4{color:var(--menu-active-color);};display:flex;flex-direction:column;margin-top:15px;}
-.email-section .email {@include css4{background-color:var(--application-input-color);color:var(--menu-font-color);};width:100%;height:50px;display:flex;align-items:center;}
+.email-section {@include css4{color:var(--active-color-primary);};display:flex;flex-direction:column;margin-top:15px;}
+.email-section .email {@include css4{background-color:var(--menu-body-background-color);color:var(--default-text-color);};width:100%;height:50px;display:flex;align-items:center;}
 
 // Password Section Styles
-.password-section {display:flex;flex-direction:column;@include css4{color:var(--menu-active-color);};margin-top:15px;}
-.password-section .password {@include css4{background-color:var(--application-input-color);color:var(--menu-font-color);};width:100%;height:50px;display:flex;align-items:center;}
+.password-section {display:flex;flex-direction:column;@include css4{color:var(--active-color-primary);};margin-top:15px;}
+.password-section .password {@include css4{background-color:var(--menu-body-background-color);color:var(--default-text-color);};width:100%;height:50px;display:flex;align-items:center;}
 
 // Address Section Styles - May have something here in the future
 .address-section {margin-top:15px;display:flex;flex-direction:column;}

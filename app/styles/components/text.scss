@@ -5,7 +5,7 @@
   margin:0 auto;
   align-items: center;
   @include css4 {
-    color: var(--application-base-color);
+    color: var(--default-background-color);
     font-size: var(--application-base-font-size);
   }
   main {
@@ -86,7 +86,7 @@
 .text-highlighted 	  {
   @include css4{
     //background-color:var(--text-selection-color);
-    color:var(--application-base-color);
+    color:var(--default-background-color);
   };
   //filter: sepia(40%);
 }
