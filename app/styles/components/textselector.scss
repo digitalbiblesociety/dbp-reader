@@ -198,17 +198,22 @@
       }
     }
 
-    .version-item-button {
-      filter: none;
-      width:100%;
-      padding-left:30px;
-      min-height:50px;
-      margin: auto;
-      //@include css4{
-      //  background-color:var(--text-selection-background);
-      //};
-      display:flex;
-      align-items:center;
+  }
+  .version-item-button {
+    filter: none;
+    width:100%;
+    padding:15px;
+    min-height:50px;
+    margin: auto;
+    //@include css4{
+    //  background-color:var(--text-selection-background);
+    //};
+    display:flex;
+    align-items:center;
+
+    &:hover {
+      color: inherit;
+      cursor: default;
     }
   }
 }
@@ -221,6 +226,12 @@
   height:calc(100%);
   max-height:calc(100%);
   padding:15px;
+
+  .country-error-message {
+    text-transform: capitalize;
+    width: 320px;
+    padding: 15px;
+  }
 }
 
 // Version Selection Styles

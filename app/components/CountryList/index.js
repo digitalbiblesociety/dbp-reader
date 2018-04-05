@@ -59,7 +59,7 @@ class CountryList extends React.PureComponent { // eslint-disable-line react/pre
 		// ));
 
 		if (countries.size === 0) {
-			return <span>There was an error fetching this resource, an Admin has been notified. We apologize for the inconvenience</span>;
+			return <div className={'country-error-message'}>There was an error fetching this resource, an Admin has been notified. We apologize for the inconvenience</div>;
 		}
 
 		const renderARow = ({ index, style, key }) => {
@@ -112,7 +112,7 @@ class CountryList extends React.PureComponent { // eslint-disable-line react/pre
 				scrollToIndex={getActiveIndex()}
 				width={width}
 			/>
-		) : <span>There are no matches for your search.</span>;
+		) : <div className={'country-error-message'}>There are no matches for your search.</div>;
 	}
 
 	filterFunction = (country, filterText) => {
