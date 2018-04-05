@@ -38,7 +38,7 @@ const createHighlights = (highlights, arrayOfVerseObjects) => {
 			// Need to save the color of the active highlight that is still being applied
 			if (charsLeftAfterVerseEnd && highlightsStartingInVerse.length === 0) {
 				// console.log('this verse has a highlight that did not start in it');
-				verseText.splice(0, 1, `<em class="text-highlighted" style="background: ${continuingColor}">${verseText[0]}`);
+				verseText.splice(0, 1, `<em class="text-highlighted" style="background:${continuingColor}">${verseText[0]}`);
 				if (charsLeftAfterVerseEnd > verseText.length) {
 					// multi verse highlight
 					// console.log('whole verse is highlighted', charsLeftAfterVerseEnd, verseText.length);
@@ -50,7 +50,7 @@ const createHighlights = (highlights, arrayOfVerseObjects) => {
 					charsLeftAfterVerseEnd = 0;
 				} else {
 					// console.log('the whole verse is not highlighted', charsLeftAfterVerseEnd, verseText.length);
-					verseText.splice(charsLeftAfterVerseEnd, 1, `${verseText[charsLeftAfterVerseEnd]}</em>`);
+					verseText.splice(charsLeftAfterVerseEnd, 1, `</em>${verseText[charsLeftAfterVerseEnd]}`);
 					charsLeftAfterVerseEnd = 0;
 				}
 			}
@@ -116,7 +116,7 @@ const createHighlights = (highlights, arrayOfVerseObjects) => {
 			// eslint-disable-line no-param-reassign
 			// Use charsLeft to highlight as much of this verse as possible, then carry its value over into the next verse
 			if (verseText.join('') !== verse.verse_text) {
-				newArrayOfVerses.push({ ...verse, verse_text: ` ${verseText.join('')} `, hasHighlight: true });
+				newArrayOfVerses.push({ ...verse, verse_text: `${verseText.join('')}`, hasHighlight: true });
 			} else {
 				newArrayOfVerses.push({ ...verse });
 			}

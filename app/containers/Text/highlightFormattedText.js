@@ -3,8 +3,7 @@ const createFormattedHighlights = (highlights, formattedTextString) => {
 	// todo: formatted text use highlighted_color on highlight to add the background color inline
 	/* NOTES
 	* 1. Need to subtract 1 from any addition of highlight_start + highlighted_words, this is because the result is the length not the index
-	* todo make sure the charsLeftAfterVerse is being properly subtracted from when I am going past more than 1 verse
-	* todo save color and use it with charsLeftAfterVerse
+	* todo check and see if this function fully supports overlapping highlights
 	* */
 	// Iterate over each verse
 		// Find all the highlights for a single verse
