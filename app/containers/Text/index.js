@@ -424,7 +424,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			// I use this counter to prevent the edge case where an infinite loop
 			// Could be caused, this keeps the browser from crashing on accident
 			let counter = 0;
-
+			// Also need to check for class="v" to ensure that this was the first verse
 			if (this.props.formattedSource.main && !this.props.userSettings.getIn(['toggleOptions', 'readersMode', 'active'])) {
 				while (!(node.attributes && node.attributes['data-id'] && node.attributes['data-id'].value.split('_')[1] !== firstVerse)) {
 					node = node.parentNode;
@@ -457,7 +457,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			// console.log('calc highlighted words', highlightedWords);
 			// console.log('window selection length', this.state.selectedText.split('').length);
 			if (this.props.userId && this.props.userAuthenticated) {
-				// console.log('highlight being added', {
+				// console.log('highlight being added - not sending to db atm', {
 				// 	book: this.props.activeBookId,
 				// 	chapter: this.props.activeChapter,
 				// 	verseStart: this.state.firstVerse,
@@ -474,6 +474,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 					highlightedWords,
 				});
 			} else {
+				// TODO Add a message bubble for the user so they know they need to log in
 				// alert('Please create an account!!! 乁(✿ ͡° ͜ʖ ͡°)و');
 			}
 		} catch (err) {
@@ -486,13 +487,15 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 
 		this.closeContextMenu();
 	}
-
+	// Because the systems captures the verse numbers this needs to be used
 	calcDist = (l, f) => {
 		if (l === f) return 0;
 		let stringDiff = '';
 
 		for (let i = f + 1; i <= l; i += 1) {
+			// Adds the length of each verse number
 			stringDiff += i.toFixed(0);
+			// Adds an additional character for the extra space
 			stringDiff += '1';
 			// console.log(i);
 		}
