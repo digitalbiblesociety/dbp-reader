@@ -29,6 +29,7 @@ const createFormattedHighlights = (highlights, formattedTextString) => {
 		// console.log('doc before stuff', serializer.serializeToString(xmlDoc));
 		const arrayOfVerses = [...xmlDoc.getElementsByClassName('v')];
 		let charsLeftAfterVerseEnd = 0; // the number of characters for the highlight
+		let continuingColor = '';
 
 		arrayOfVerses.forEach((verse) => {
 			// console.log('element index', verseElementIndex);
@@ -42,7 +43,7 @@ const createFormattedHighlights = (highlights, formattedTextString) => {
 
 			if (charsLeftAfterVerseEnd && highlightsStartingInVerse.length === 0) {
 				// console.log('this verse has a highlight that did not start in it');
-				verseText.splice(0, 1, `<em class="text-highlighted">${verseText[0]}`);
+				verseText.splice(0, 1, `<em class="text-highlighted" style="background: ${continuingColor}">${verseText[0]}`);
 				if (charsLeftAfterVerseEnd > verseText.length) {
 					// multi verse highlight
 					// console.log('whole verse is highlighted', charsLeftAfterVerseEnd, verseText.length);
@@ -108,6 +109,7 @@ const createFormattedHighlights = (highlights, formattedTextString) => {
 					}
 					// console.log('chars left after verse end', charsLeft);
 					charsLeftAfterVerseEnd = charsLeft;
+					continuingColor = h.highlighted_color;
 				}
 				// Face I made when I found out highlight_start is a string while everything else is an integer... ( ‾ ʖ̫ ‾)
 				// If the current highlight overlaps another highlight before it. example v5 - v19, v3 - v6 = v3 - v19

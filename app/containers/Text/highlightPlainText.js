@@ -24,6 +24,7 @@ const createHighlights = (highlights, arrayOfVerseObjects) => {
 		const newArrayOfVerses = [];
 		const arrayOfVerses = [...arrayOfVerseObjects];
 		let charsLeftAfterVerseEnd = 0; // the number of characters for the highlight
+		let continuingColor = '';
 
 		arrayOfVerses.forEach((verse) => {
 			// console.log('element index', verseElementIndex);
@@ -37,12 +38,16 @@ const createHighlights = (highlights, arrayOfVerseObjects) => {
 			// Need to save the color of the active highlight that is still being applied
 			if (charsLeftAfterVerseEnd && highlightsStartingInVerse.length === 0) {
 				// console.log('this verse has a highlight that did not start in it');
-				verseText.splice(0, 1, `<em class="text-highlighted">${verseText[0]}`);
+				verseText.splice(0, 1, `<em class="text-highlighted" style="background: ${continuingColor}">${verseText[0]}`);
 				if (charsLeftAfterVerseEnd > verseText.length) {
 					// multi verse highlight
 					// console.log('whole verse is highlighted', charsLeftAfterVerseEnd, verseText.length);
-					verseText.splice(verseText.length - 1, 1, `${verseText[verseText.length]}</em>`);
+					verseText.splice(verseText.length - 1, 1, `${verseText[verseText.length - 1]}</em>`);
 					charsLeftAfterVerseEnd -= verseText.length;
+				} else if (charsLeftAfterVerseEnd === verseText.length) {
+					// console.log('the whole verse is not highlighted', charsLeftAfterVerseEnd, verseText.length);
+					verseText.splice(charsLeftAfterVerseEnd - 1, 1, `${verseText[charsLeftAfterVerseEnd - 1]}</em>`);
+					charsLeftAfterVerseEnd = 0;
 				} else {
 					// console.log('the whole verse is not highlighted', charsLeftAfterVerseEnd, verseText.length);
 					verseText.splice(charsLeftAfterVerseEnd, 1, `${verseText[charsLeftAfterVerseEnd]}</em>`);
@@ -98,6 +103,7 @@ const createHighlights = (highlights, arrayOfVerseObjects) => {
 					}
 					// console.log('chars left after verse end', charsLeft);
 					charsLeftAfterVerseEnd = charsLeft;
+					continuingColor = h.highlighted_color;
 				}
 				// Face I made when I found out highlight_start is a string while everything else is an integer... ( ‾ ʖ̫ ‾)
 				// If the current highlight overlaps another highlight before it. example v5 - v19, v3 - v6 = v3 - v19

@@ -11,6 +11,13 @@
   main {
     padding: 15px 15px 45px 15px;
     margin: 0 auto;
+
+    .readers-spaces {
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
   }
 
   .info-button {
@@ -78,10 +85,10 @@
 }
 .text-highlighted 	  {
   @include css4{
-    background-color:var(--text-selection-color);
+    //background-color:var(--text-selection-color);
     color:var(--application-base-color);
   };
-  filter: sepia(40%);
+  //filter: sepia(40%);
 }
 
 .active-chapter-title {
