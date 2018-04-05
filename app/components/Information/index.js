@@ -28,14 +28,14 @@ class Information extends React.PureComponent {// eslint-disable-line react/pref
 		const {
 			copywrite,
 			toggleInformationModal,
-			active,
+			// active,
 		} = this.props;
 		return (
-			<aside ref={this.setRef} className="settings">
+			<aside ref={this.setRef} className="profile">
 				<header>
-					<SvgWrapper className={'icon'} svgid={'arrow_right'} />
-					<SvgWrapper className={'icon'} onClick={() => !active && toggleInformationModal()} svgid={'info'} />
 					<h1 className="section-title">Information</h1>
+					<SvgWrapper className={'icon'} svgid={'info'} />
+					<SvgWrapper className={'icon'} svgid={'arrow_left'} onClick={() => toggleInformationModal()} />
 				</header>
 				<section className="copywrite">
 					<h1 className="text">{copywrite.name}</h1>
@@ -50,7 +50,7 @@ class Information extends React.PureComponent {// eslint-disable-line react/pref
 
 Information.propTypes = {
 	toggleInformationModal: PropTypes.func,
-	active: PropTypes.bool,
+	// active: PropTypes.bool,
 	copywrite: PropTypes.object,
 };
 
