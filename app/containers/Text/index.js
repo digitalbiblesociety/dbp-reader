@@ -450,7 +450,10 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			// I think this can stay the same as formatted, it could be made shorter potentially
 			const dist = this.calcDist(lastVerse, firstVerse);
 			// console.log('dist', dist);
-			const highlightedWords = this.state.selectedText.split('').length - dist;
+			const highlightedWords = this.state.selectedText.replace(/\n/g, '').length - dist;
+			// console.log('length of text without n', this.state.selectedText.replace(/\n/g, '').length);
+			// console.log('length of text with n and no split', this.state.selectedText.length);
+			// console.log('length of text with n and a split', this.state.selectedText.split('').length);
 			// console.log('calc highlighted words', highlightedWords);
 			// console.log('window selection length', this.state.selectedText.split('').length);
 			if (this.props.userId && this.props.userAuthenticated) {
@@ -490,7 +493,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 
 		for (let i = f + 1; i <= l; i += 1) {
 			stringDiff += i.toFixed(0);
-			stringDiff += '11';
+			stringDiff += '1';
 			// console.log(i);
 		}
 		// console.log('string diff', stringDiff);
