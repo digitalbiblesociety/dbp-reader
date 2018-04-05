@@ -121,6 +121,12 @@
   height:calc(100%);
   max-height:calc(100%);
   padding:15px;
+
+  .language-error-message {
+    width: 320px;
+    padding: 15px;
+    text-transform: capitalize;
+  }
 }
 .version-name-list         {
   @include css4{

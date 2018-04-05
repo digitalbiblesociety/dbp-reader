@@ -35,7 +35,7 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 		// ));
 
 		if (languages.size === 0) {
-			return <span>There was an error fetching this resource, an Admin has been notified. We apologize for the inconvenience</span>;
+			return null;
 		}
 
 		const renderARow = ({ index, style, key }) => {
@@ -113,6 +113,7 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 		const {
 			active,
 			loadingLanguages,
+			languages,
 		} = this.props;
 
 		if (active) {
@@ -125,6 +126,9 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 									{({ width, height }) => this.getFilteredLanguages(width, height)}
 								</AutoSizer>
 							) : <LoadingSpinner />
+						}
+						{
+							languages.size === 0 ? <span className={'language-error-message'}>There was an error fetching this resource, an Admin has been notified. We apologize for the inconvenience</span> : null
 						}
 					</div>
 				</div>
