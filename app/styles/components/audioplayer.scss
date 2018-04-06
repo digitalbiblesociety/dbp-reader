@@ -222,6 +222,20 @@
   width: 50%;
   position:relative;
 
+  div {
+    &.rc-slider-rail {
+      @include css4 {
+        background-color: var(--audio-player-progress-bar-background) !important;
+      }
+    }
+    &.rc-slider-handle {
+      @include css4 {
+        border: 2px solid var(--active-color-primary) !important;
+        background-color: var(--audio-player-handle-background) !important;
+      }
+    }
+  }
+
   &:before {
     content: attr(data-value-cur);
     position: absolute;

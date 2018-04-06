@@ -2,7 +2,7 @@
 body, html 	           {height:100%;width:100%;}
 body 				   {
   @include css4{
-    color:var(--default-background-color);
+    color:var(--default-text-color);
     font-family:var(--application-font-family);
     font-size:var(--application-menu-font-size);
   };
@@ -38,14 +38,14 @@ body .twitter  {background-color:$login-twitter-color;font-family:"Helvetica Neu
 ::selection {
   @include css4{
     background-color: var(--application-text-selection-color);
-    color: var(--default-background-color);
+    color: var(--default-text-color);
   }
 }
 
 ::-moz-selection {
   @include css4{
     background-color: var(--application-text-selection-color);
-    color: var(--default-background-color);
+    color: var(--default-text-color);
   }
 }
 
@@ -62,18 +62,18 @@ input {
   @include css4 {
     border-bottom: 1px solid var(--default-text-color);
     background-color: var(--menu-body-background-color);
-    caret-color: var(--default-text-color);
+    caret-color: var(--application-input-caret-color);
 
     &::-webkit-input-placeholder {
-      color:var(--menu-body-background-color);
+      color:var(--default-text-color);
       font-size: 16px;
     }
     &::-moz-placeholder          {
-      color:var(--menu-body-background-color);
+      color:var(--default-text-color);
       font-size: 16px;
     }
     &:-ms-input-placeholder      {
-      color:var(--menu-body-background-color);
+      color:var(--default-text-color);
       font-size: 16px;
     }
   }
@@ -111,9 +111,11 @@ input {
   top:0;
   width:18px;
   height:18px;
-  border:2px solid #fff;
   background:transparent;
   border-radius:3px;
+  @include css4 {
+    border:2px solid var(--default-text-color);
+  }
 }
 [type='checkbox']:checked + label:before {
   background-color:#6FBC8F;
