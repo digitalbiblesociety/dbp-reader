@@ -98,9 +98,6 @@
 .profile .form-options .login:hover  {@include css4{color:var(--active-color-primary);};}
 .profile .form-options .signup:hover {@include css4{color:var(--active-color-primary);};}
 
-  // Message
-.profile .message    {@include css4{color:var(--default-text-color);};}
-
 // Disclaimer
 .profile .disclaimer {@include css4{color:var(--default-text-color);};}
 
@@ -134,7 +131,7 @@
       border:none;
       font-size:0.98em;
       @include css4{
-        color:var(--menu-body-background-color);
+        color:var(--default-text-color);
       };
     }
   }
@@ -235,3 +232,41 @@
   }
 }
 
+.profile {
+  .forgot-password {
+    padding: 15px;
+    .wrapper {
+      display: flex;
+      align-items: flex-start;
+      flex-direction: column;
+      height: 54px;
+
+      .text {
+        margin-top: 10px;
+        align-self: flex-end;
+        cursor: pointer;
+
+        &:hover {
+          @include css4 {
+            color: var(--active-color-primary);
+          }
+        }
+      }
+
+      input {
+        background-color: inherit;
+        width: 270px;
+        color: #fff;
+        margin: 10px 0 0 0;
+
+        &.error {
+          background-color: $sketch-document-color-error;
+        }
+      }
+    }
+
+    .disclaimer {
+      margin-top: 25px;
+    }
+  }
+}

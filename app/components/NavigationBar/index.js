@@ -29,7 +29,6 @@ class NavigationBar extends React.PureComponent { // eslint-disable-line react/p
 			theme,
     } = this.props;
 		// may need to wrap each of these in a container div to fix the hover issues
-		console.log(theme);
 		return (
 			<div className={'nav-background'}>
 				<div className="nav-container">
