@@ -9,8 +9,8 @@
   //left:calc(50% - 116px);
   height:calc(100vh - 110px);
   @include css4{
-    background-color:var(--menu-secondary-background-color);
-    color:var(--menu-font-color);
+    background-color:var(--menu-body-background-color);
+    color:var(--default-text-color);
   };
   z-index:3;
 
@@ -19,8 +19,8 @@
     align-items:center;
     justify-content:center;
     @include css4 {
-      background:var(--menu-header-background);
-      color:var(--menu-title-text-color);
+      background:var(--menu-header-background-color);
+      color:var(--default-text-color);
     };
     text-align:center;
     height:54px;
@@ -58,7 +58,7 @@
 
   .active-book {
     @include css4{
-      color:var(--menu-active-color);
+      color:var(--active-color-primary);
     };
   }
 
@@ -75,7 +75,7 @@
 
   .active-chapter {
     @include css4{
-      color:var(--menu-active-color);
+      color:var(--active-color-primary);
     };
   }
 }

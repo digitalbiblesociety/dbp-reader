@@ -74,7 +74,7 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 				scrollToIndex={getActiveIndex()}
 				width={width}
 			/>
-		) : <span>There are no matches for your search.</span>;
+		) : <div className={'language-error-message'}>There are no matches for your search.</div>;
 
 		// return components.size ? components : <span>There are no matches for your search.</span>;
 	}

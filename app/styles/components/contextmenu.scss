@@ -4,9 +4,11 @@
   position:absolute;
   background-color:#fff;
   @include css4 {
-    border: 2px solid var(--menu-active-color);
+    border: 2px solid var(--active-color-primary);
   }
   border-radius: 6px;
+  svg {fill: #000;}
+  color: #000;
 
   .menu-item {
     display:flex;
@@ -45,7 +47,7 @@
     }
 
     &:nth-child(2).active {
-      @include css4 { background-color: var(--context-menu-highlight-color); }
+      @include css4 { background-color: var(--context-menu-highlight-active-background-color); }
     }
 
     .item-text {
@@ -153,9 +155,9 @@
     position: absolute;
     top: 50px;
     left: -62px;
-    @include css4 { background-color: var(--context-menu-highlight-color); }
+    @include css4 { background-color: var(--context-menu-highlight-active-background-color); }
     z-index: 4;
-    border-top: 1px solid #aaa;
+    border-top: 1px solid #ccc;
     border-bottom-right-radius: 3px;
     border-bottom-left-radius: 3px;
 

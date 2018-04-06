@@ -86,66 +86,141 @@ $serif-font-family-option: "Alegreya", "Palatino Linotype", Palatino, serif;
 $slab-font-family-option: "Roboto Slab", Rockwell, Courier, monospace;
 
 :root {
+  --application-base-font-size: 0.98em;
+  --application-menu-font-size: 0.98em;
   --application-font-family: "Noto Sans", Helvetica, sans serif;
   --sans-font-family-option: "Noto Sans", Helvetica, sans serif;
   --serif-font-family-option: "Alegreya", "Palatino Linotype", Palatino, serif;
   --slab-font-family-option: "Roboto Slab", Rockwell, Courier, monospace;
+  --text-selection-background: #1B1F24;
+  --text-selection-accordion-title-background: #2C3036;
+  --text-selection-accordion-body-background: #1B1F24;
+  --text-selection-tab-option-active-background:#FDF9F3;
+  --text-selection-tab-option-active-color:#000000;
+  --text-selection-tab-option-color: #FFFFFF;
+  --text-selection-tab-option-active-border-color: #FFFFFF;
+  --book-dropdown-background-color: #F8E4D3;
+  --book-dropdown-chapter-background-color: #FFFFFF;
+  --book-dropdown-text-color: #000000;
+  --book-dropdown-section-background-color:#6E747F;
+  --main-textarea-svg-color: #000000;
+  --main-textarea-svg-fill-color:#000000;
+  --main-textarea-read-chapter-background:#FFFFF5;
+  --main-textarea-read-chapter-shadow:#B1A77A;
+  --main-textarea-read-chapter-active:#B1A77A;
+  --active-color-primary: #6FBC8F;
+  --active-color-secondary: #71bc90;
+  --highlight-blue:#387DBF;
+  --highlight-pink:#D069A9;
+  --highlight-yellow:#FCE600;
+  --highlight-green:#2E924D;
+  --highlight-purple:#8967AC;
+  --disabled-input-option:#B2BBC6;
+  --inactive-font-option:#868686;
+  --dark-theme-primary:#000000;
+  --light-theme-primary:#FDF9F3;
+  --default-theme-primary:#7E0E2A;
+  --settings-text-color:#FFFFFF;
+  --notebook-footer-background-color:#1B1F24;
+  --notebook-title-date-color:#6EC3E2;
+  --profile-forgot-password-color:#6EC3E2;
+  --profile-login-signup-background-color:#1B1F24;
+  --profile-invalid-input-background-color:#9E1E35;
+  --context-menu-background-color:#FFFFFF;
+  --context-menu-svg-fill-color:#000000;
+  --context-menu-text-color:#000000;
+  --context-menu-highlight-active-background-color:#868686;
+  --audio-player-progress-bar-background: #1B1F24;
+  --audio-player-background: #2C3036;
+  --audio-player-handle-background: #000000;
+  --audio-player-gripper-background-color: rgba(25,25,25,0.9);
+  --audio-player-gripper-before-color: rgba(255, 255, 255, 0.8);
+  --menu-body-background-color:#2C3036;
+  --menu-header-background-color:#7E0E2A;
+  --menu-border-color: transparent;
+  --default-background-color:#FDF9F3;
+  --default-header-background-color:#9E1E35;
+  --default-footer-background-color:#9E1E35;
+  --default-header-background-transparent: rgba(#9E1E35, 0);
+  --default-text-color:#FFFFFF;
+  --before-after-border-color:#999999;
+  --default-svg-fill-color:#FFFFFF;
+  --default-input-placeholder-color:#FFFFFF;
+  --application-text-container-color:#000000;
+  --application-loading-spinner-color:#aeaeae;
+  --default-header-background-color-transparent:#F8E4D300;
+  --application-input-caret-color: #000;
+  --application-text-caret-color: #fff;
+  --application-transparent-gray: rgba(0,0,0,.8);
+  --application-words-of-jesus: #DA2015;
+  --application-text-selection-color: rgb(216, 182, 185);
+  --audioplayer-handle-background-color: rgba(0, 0, 0, 0.5);
+  --text-arrow-color: #1B1F24;
 }
+
 $css4: true;
 $compatibility: true;
 //it is nessesary to define the variables in sass map instead of :root, for compatibility reasons.
 $variables: (
-        --header-footer-background: rgba(158, 30, 53, 1),
-        --header-footer-background-transparent: rgba(158, 30, 53, 0),
-        --audio-player-background: rgb(78, 70, 75),
-        --audioplayer-handle-background-color: rgba(0, 0, 0, 0.5),
-        --text-selection-color: rgb(216, 182, 185),
-        --text-contextmenu-background: rgb(71, 64, 70),
-        --text-arrow-color: rgb(0, 0, 0),
-        --settings-font-color: rgb(99, 105, 116),
-        --settings-option-active-secondary-color: rgba(111,188,143,.5),
-        --menu-font-color: rgb(255, 255, 255),
-        --menu-background-color: rgb(44, 48, 54),
-        --menu-secondary-background-color: rgb(44, 48, 54),
-        --menu-hover-color: rgb(98, 177, 130),
-        --menu-active-color: rgb(98, 177, 130),
-        --menu-active-text-color: rgb(255, 255, 255),
-        --menu-title-text-color: rgb(255, 255, 255),
-        --menu-secondary-header-background: rgb(39, 42, 47),
-        --menu-header-background: rgb(115, 16, 37),
-        --application-input-color: rgb(110, 116, 127),
-        --application-placeholder-color: rgb(134, 134, 134),
-        --application-background: rgb(253, 248, 241),
-        --application-base-color: rgb(50, 53, 58),
-        --application-words-of-jesus: #A00,
-        --dark-theme-primary: #1b1f24,
-        --red-theme-primary: #9e1e35,
-        --paper-theme-primary: #FDF8F3,
-        --text-super-color: rgb(33, 33, 33),
-        --menu-inactive-svg-color: rgb(61,65,68),
-        --dark-caret-color: #000,
-        --light-caret-color: #fff,
-        --transparent-grey: rgba(0,0,0,.8),
-        --settings-option-inactive-secondary-color: rgb(27, 31, 46),
-        --audio-player-progress-background: rgb(32,34,39),
-        --settings-option-inactive-color: rgb(98, 177, 130),
-        --context-menu-background-color: rgba(44, 48, 54, 0.80),
-        --loading-spinner-color: #aeaeae,
-        --application-base-font-size: 0.98em,
-        --application-menu-font-size: 0.98em,
-        --text-selection-tab-option-active-background: rgb(255, 255, 255),
-        --text-selection-tab-option-active-color: rgb(0,0,0),
-        --text-selection-background: #2C3036,
-        --text-selection-text-color: #fff,
-        --text-selection-section-header-background: #2C3036,
-        --text-selection-section-type-label: #fff,
-        --text-selection-search-text-color: #fff,
-        --text-selection-search-input-background: #2C3036,
-        --text-selection-accordion-title-background: #1B1F24,
-        --text-selection-accordion-body-background: #2C3036,
-        --text-selection-active-item-color: #6FBC8F,
-        --context-menu-highlight-color: #dadada
-//--application-base-font-size:
+    --text-selection-background: #1B1F24,
+    --text-selection-accordion-title-background: #2C3036,
+    --text-selection-accordion-body-background: #1B1F24,
+    --text-selection-tab-option-active-background:#FDF9F3,
+    --text-selection-tab-option-active-color:#000000,
+    --text-selection-tab-option-active-border-color: #FFFFFF,
+    --book-dropdown-background-color: #F8E4D3,
+    --book-dropdown-chapter-background-color: #FFFFFF,
+    --book-dropdown-text-color: #000000,
+    --book-dropdown-section-background-color:#6E747F,
+    --main-textarea-svg-color: #000000,
+    --main-textarea-svg-fill-color:#000000,
+    --main-textarea-read-chapter-background:#FFFFF5,
+    --main-textarea-read-chapter-shadow:#B1A77A,
+    --main-textarea-read-chapter-active:#B1A77A,
+    --active-color-primary: #6FBC8F,
+    --active-color-secondary: #71bc90,
+    --highlight-blue:#387DBF,
+    --highlight-pink:#D069A9,
+    --highlight-yellow:#FCE600,
+    --highlight-green:#2E924D,
+    --highlight-purple:#8967AC,
+    --disabled-input-option:#B2BBC6,
+    --inactive-font-option:#868686,
+    --dark-theme-primary:#000000,
+    --light-theme-primary:#FDF9F3,
+    --default-theme-primary:#7E0E2A,
+    --settings-text-color:#FFFFFF,
+    --notebook-footer-background-color:#1B1F24,
+    --notebook-title-date-color:#6EC3E2,
+    --profile-forgot-password-color:#6EC3E2,
+    --profile-login-signup-background-color:#1B1F24,
+    --profile-invalid-input-background-color:#9E1E35,
+    --context-menu-background-color:#FFFFFF,
+    --context-menu-svg-fill-color:#000000,
+    --context-menu-text-color:#000000,
+    --context-menu-highlight-active-background-color:#868686,
+    --audio-player-progress-bar-background: #1B1F24,
+    --audio-player-background: #2C3036,
+    --menu-body-background-color:#2C3036,
+    --menu-header-background-color:#7E0E2A,
+    --default-background-color:#FDF9F3,
+    --default-header-background-color:#9E1E35,
+    --default-footer-background-color:#9E1E35,
+    --default-header-background-transparent: rgba(#9E1E35, 0),
+    --default-text-color:#FFFFFF,
+    --before-after-border-color:#999999,
+    --default-svg-fill-color:#FFFFFF,
+    --default-input-placeholder-color:#FFFFFF,
+    --application-text-super-color:#000000,
+    --application-loading-spinner-color:#aeaeae,
+    --default-header-background-color-transparent:#F8E4D300,
+    --application-input-caret-color: #000,
+    --application-text-caret-color: #fff,
+    --application-transparent-gray: rgba(0,0,0,.8),
+    --application-words-of-jesus: #DA2015,
+    --application-text-selection-color: rgb(216, 182, 185),
+    --audioplayer-handle-background-color: rgba(0, 0, 0, 0.5),
+    --text-arrow-color: #1B1F24
 );
 
 //Here we transfer the variables from the map to the :root element

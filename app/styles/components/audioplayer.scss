@@ -1,7 +1,9 @@
 .audio-player-background               {
   @include css4{
     background-color:var(--audio-player-background);
-    color:var(--menu-title-text-color);
+    color:var(--default-text-color);
+    border-bottom: 1px solid var(--menu-border-color);
+    border-top: 1px solid var(--menu-border-color);
   };
   position:fixed;
   width:100%;
@@ -29,16 +31,16 @@
   };
   font-size:12px;
 }
-.audio-player-container .item          {border:1px solid transparent;cursor:pointer;height:50px;display:flex;align-items:center;justify-content:center;}
+.audio-player-container .item {border:1px solid transparent;cursor:pointer;height:50px;display:flex;align-items:center;justify-content:center;}
 //.audio-player-container .item:hover    {opacity:.65;}
 //.audio-player-container .svgitem:hover {opacity:.65;}
 .audio-player-container .item.active   {
   @include css4{
-    border-bottom:1px solid var(--transparent-grey);
-    border-top:1px solid var(--menu-active-color);
-    border-left:1px solid var(--menu-active-color);
-    border-right:1px solid var(--menu-active-color);
-    background-color:var(--transparent-grey);
+    border-bottom:1px solid var(--application-transparent-gray);
+    border-top:1px solid var(--active-color-primary);
+    border-left:1px solid var(--active-color-primary);
+    border-right:1px solid var(--active-color-primary);
+    background-color:var(--application-transparent-gray);
   };
   z-index:4;
 }
@@ -58,26 +60,26 @@
   align-items:center;
   justify-content:space-around;
 
-  @include css4{border:1px solid var(--menu-active-color);
-    background-color:var(--transparent-grey);
+  @include css4{border:1px solid var(--active-color-primary);
+    background-color:var(--application-transparent-gray);
   };
   height:30px;
   width:150px;
 }
 .speed-control .speed-item {
     @include css4{
-      color:var(--menu-font-color);
+      color:var(--default-text-color);
   };
   cursor:pointer;
 }
 .speed-control .speed-item:hover {
   @include css4{
-    color:var(--menu-active-color);
+    color:var(--active-color-primary);
   };
 }
 .speed-control .speed-item.active {
   @include css4{
-    color:var(--menu-active-color);
+    color:var(--active-color-primary);
   };
 }
 
@@ -85,7 +87,7 @@
 .progress-bar {
   width:50%;
   @include css4{
-    background-color:var(--audio-player-progress-background);
+    background-color:var(--audio-player-progress-bar-background);
   };
   height:3px;
   cursor:pointer;
@@ -98,8 +100,11 @@
   bottom: 106px;
   height:25px;
   width:100%;
-  background: rgba(25,25,25,0.9);
   z-index: 1;
+  @include css4 {
+    background:var(--audio-player-gripper-background-color);
+    outline: 1px solid var(--menu-border-color);
+  }
 
   &:before {
     content: "";
@@ -107,13 +112,15 @@
     position: absolute;
     width:100%;
     height:25px;
-    background:rgba(255,255,255,0.8);
     top:0;
     left:0;
+    @include css4 {
+      background:var(--audio-player-gripper-before-color);
+    }
   }
 
   @include css4 {
-    color:var(--menu-title-text-color);
+    color:var(--default-text-color);
     //background-color:var(--audioplayer-handle-background-color);
     //filter: blur(2px);
     //background: -webkit-linear-gradient(to bottom, transparent 2px, var(--audioplayer-handle-background-color));
@@ -185,8 +192,8 @@
 }
 .volume-slider           {
   @include css4{
-    border:1px solid var(--menu-active-color);
-    background-color:var(--transparent-grey);
+    border:1px solid var(--active-color-primary);
+    background-color:var(--application-transparent-gray);
   };
 
   height:25px;
@@ -199,7 +206,7 @@
 }
 .volume-slider .tracker  {
   @include css4{
-    background-color:var(--menu-active-color);
+    background-color:var(--active-color-primary);
   };
   border-radius:50%;
   width:15px;
@@ -209,7 +216,7 @@
 .volume-slider .fill     {
   height:3px;
   @include css4{
-  background-color:var(--menu-active-color);
+  background-color:var(--active-color-primary);
   };
   width:100px;
   border-radius:5px;
@@ -221,6 +228,20 @@
 .progress-slider {
   width: 50%;
   position:relative;
+
+  div {
+    &.rc-slider-rail {
+      @include css4 {
+        background-color: var(--audio-player-progress-bar-background) !important;
+      }
+    }
+    &.rc-slider-handle {
+      @include css4 {
+        border: 2px solid var(--active-color-primary) !important;
+        background-color: var(--audio-player-handle-background) !important;
+      }
+    }
+  }
 
   &:before {
     content: attr(data-value-cur);
@@ -265,9 +286,9 @@
   height:115px;
 
   @include css4{
-    color:var(--menu-font-color);
-    border:1px solid var(--menu-active-color);
-    background-color:var(--transparent-grey);
+    color:var(--default-text-color);
+    border:1px solid var(--active-color-primary);
+    background-color:var(--application-transparent-gray);
   };
 }
 

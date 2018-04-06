@@ -13,15 +13,17 @@ import { Link } from 'react-router-dom';
 function PasswordReset() {
 	return (
 		<React.Fragment>
-			<section className="message">
+			<section className="forgot-password">
 				<p>In order to reset your password, please enter the email address you used to register for Bible.is.</p>
-			</section>
-			<input className="email" placeholder="Enter E-mail" />
-			<div className="sign-up-button"><span className="text">RESET PASSWORD</span></div>
-			<section className="disclaimer">
-				If you are unable to reset your password, please
-				<Link className="link" to="/contact-form"> contact us </Link>
-				for support.
+				<div className={'wrapper'}>
+					<input placeholder="E-mail" />
+					<span className="text">Reset Password</span>
+				</div>
+				<div className="disclaimer">
+					If you are unable to reset your password, please
+					<Link className="link" to="/contact-form"> contact us </Link>
+					for support.
+				</div>
 			</section>
 		</React.Fragment>
 	);
