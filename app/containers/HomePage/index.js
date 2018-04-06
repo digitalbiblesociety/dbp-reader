@@ -513,6 +513,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					<meta name="description" content="Main page for the Bible.is web app" />
 				</Helmet>
 				<NavigationBar
+					theme={userSettings.get('activeTheme')}
 					activeTextName={activeTextName}
 					activeTextId={activeTextId}
 					activeBookName={activeBookName}

@@ -5,7 +5,7 @@
   margin:0 auto;
   align-items: center;
   @include css4 {
-    color: var(--default-text-color);
+    color: var(--application-text-container-color);
     font-size: var(--application-base-font-size);
   }
   main {

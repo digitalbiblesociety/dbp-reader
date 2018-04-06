@@ -42,6 +42,8 @@ const paper = {
 	'--audio-player-progress-bar-background': '#C7C7CC',
 	'--audio-player-background': '#FDF9F3',
 	'--audio-player-handle-background': 'rgba(111, 188, 143, 0.7)',
+	'--audio-player-gripper-background-color': 'rgba(253,249,243,0.9)',
+	'--audio-player-gripper-before-color': 'rgba(253,249,243, 0.7)',
 	'--menu-body-background-color': '#FDF9F3',
 	'--menu-header-background-color': '#FDF9F3',
 	'--menu-border-color': '#999999',
@@ -60,6 +62,7 @@ const paper = {
 	'--application-transparent-gray': 'rgba(0,0,0,.8)',
 	'--application-words-of-jesus': '#DA2015',
 	'--application-text-selection-color': '#6EC3E2',
+	'--application-text-container-color': '#000000',
 };
 
 const dark = {
@@ -104,6 +107,8 @@ const dark = {
 	'--audio-player-progress-bar-background': '#1B1F24',
 	'--audio-player-background': '#2C3036',
 	'--audio-player-handle-background': '#000000',
+	'--audio-player-gripper-background-color': 'rgba(25,25,25,0.9)',
+	'--audio-player-gripper-before-color': 'rgba(255, 255, 255, 0.8)',
 	'--menu-body-background-color': '#2C3036',
 	'--menu-header-background-color': '#7E0E2A',
 	'--menu-border-color': 'transparent',
@@ -122,6 +127,7 @@ const dark = {
 	'--application-transparent-gray': 'rgba(0,0,0,.8)',
 	'--application-words-of-jesus': '#DA2015',
 	'--application-text-selection-color': 'rgb(216, 182, 185)',
+	'--application-text-container-color': '#FFFFFF',
 };
 
 const red = {
@@ -167,6 +173,8 @@ const red = {
 	'--audio-player-progress-bar-background': '#1B1F24',
 	'--audio-player-handle-background': '#000000',
 	'--audio-player-background': '#2C3036',
+	'--audio-player-gripper-background-color': 'rgba(25,25,25,0.9)',
+	'--audio-player-gripper-before-color': 'rgba(255, 255, 255, 0.8)',
 	'--menu-body-background-color': '#2C3036',
 	'--menu-header-background-color': '#7E0E2A',
 	'--menu-border-color': 'transparent',
@@ -185,6 +193,7 @@ const red = {
 	'--application-transparent-gray': 'rgba(0,0,0,.8)',
 	'--application-words-of-jesus': '#DA2015',
 	'--application-text-selection-color': 'rgb(216, 182, 185)',
+	'--application-text-container-color': '#000000',
 };
 
 const themes = {
