@@ -12,6 +12,7 @@
   @include css4 {
     background-color:var(--default-header-background-color);
     color:var(--default-text-color);
+    outline: 1px solid var(--menu-border-color);
   };
   display:flex;
   justify-content:flex-start;

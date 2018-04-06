@@ -60,9 +60,9 @@ class VolumeSlider extends React.PureComponent { // eslint-disable-line react/pr
 					<Slider
 						className="slider"
 						onChange={this.handleChange}
-						handleStyle={{ border: 'none', backgroundColor: 'rgb(98,177,130)' }}
-						railStyle={{ backgroundColor: '#111' }}
-						trackStyle={{ backgroundColor: 'rgb(98,177,130)' }}
+						handleStyle={{ border: 'none', backgroundColor: 'rgb(98,177,130)', top: '4px' }}
+						railStyle={{ backgroundColor: '#111', height: '2px' }}
+						trackStyle={{ backgroundColor: 'rgb(98,177,130)', height: '2px' }}
 						defaultValue={volume * 100}
 						min={0}
 						max={100}

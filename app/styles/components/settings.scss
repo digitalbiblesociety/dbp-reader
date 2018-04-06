@@ -25,7 +25,7 @@
 .settings header .close-icon           {position:absolute;top:0;right:10px}
 .settings section                      {padding:15px}
 .settings .option:hover                {@include css4{color:var(--active-color-primary)};cursor:pointer}
-.settings .active                      {@include css4{color:var(--active-color-primary)};}
+//.settings .active                      {@include css4{color:var(--active-color-primary)};}
 
 // COlOR SCHEMES
 // Styles for v1 scheme options
@@ -34,7 +34,7 @@
 //.color-schemes .option.red             {background-color:$color-primary;border-color:$color-secondary}
 //.color-schemes .option.paper           {background-color:$paper-sidebar;border-color:$paper-secondary}
 //.color-schemes .title                  {text-transform:uppercase;font-size:14px;font-weight:bold;text-align:center}
-.color-schemes                         {display:flex;align-items:center;justify-content:space-around;margin-top:10px;}
+.color-schemes {display:flex;align-items:center;justify-content:space-around;margin-top:10px;}
 .color-schemes .option {
   @include css4{
     background-color:var(--dark-theme-primary);
@@ -73,9 +73,9 @@
 //}
 
 // FONT SETTINGS
-.font-settings .option               {display:inline-block;text-align:center;font-size:36px;width:33%}
+.font-settings .option               {@include css4 {color:var(--inactive-font-option)};display:inline-block;text-align:center;font-size:36px;width:33%}
 .font-settings .option small         {display:block;text-transform:uppercase;font-size:14px}
-.font-settings .option.active        {@include css4{color:var(--active-color-primary);};}
+.font-settings .option.active        {@include css4{color:var(--default-text-color);};}
 .font-settings .option.sans.active:before {
   margin:-1px 0 0 -7px;
   position:absolute;
@@ -122,23 +122,23 @@
 
   // FONT SIZES
 .font-sizes                         {height:60px;align-items:flex-end;display:flex;justify-content:space-between;line-height:.75;}
-.font-sizes .option                 {text-align:center;font-size:36px;float:left}
+.font-sizes .option                 {@include css4 {color:var(--inactive-font-option)};text-align:center;font-size:36px;float:left}
 .font-sizes .option.smallest        {font-size:1rem}
 .font-sizes .option.small           {font-size:1.5rem}
 .font-sizes .option.medium          {font-size:2rem}
 .font-sizes .option.large           {font-size:2.5rem}
 .font-sizes .option.largest         {font-size:3rem}
-.font-sizes .option.active          {@include css4{color:var(--active-color-primary);};}
+.font-sizes .option.active          {@include css4{color:var(--default-text-color);};}
 
 // FONT SIZES SLIDER
 .font-sizes-slider                  {width:80%;margin-left:25px;}
 
 // CHECKBOX SETTINGS
 // Will need a .inactive class for disabling the options
-.checkbox-settings label            {height:40px;display:block;@include css4{color:var(--active-color-primary);};}
-.checkbox-settings label.active     {@include css4{color:var(--active-color-primary);};}
+.checkbox-settings label            {height:40px;display:block;@include css4{color:var(--default-text-color);};}
+//.checkbox-settings label.active     {@include css4{color:var(--active-color-primary);};}
 .checkbox-settings label span       {@include css4{font-size:var(--application-menu-font-size)};float: left;cursor:pointer;}
-.checkbox-settings label span:hover {@include css4{color:var(--active-color-primary);};}
+//.checkbox-settings label span:hover {@include css4{color:var(--active-color-primary);};}
 
 // SWITCH
 // make these variables in case they need to change
@@ -158,9 +158,9 @@
   left:0;
   right:0;
   bottom:0;
+  background-color:inherit;
   @include css4 {
-  background-color:var(--inactive-font-option);
-  border:1px solid var(--active-color-primary);
+  border:1px solid var(--default-text-color);
   };
   transition:.4s;
   height:18px;
@@ -175,7 +175,7 @@
   bottom:-1.5px;
   @include css4{
   //background-color:var(--settings-option-inactive-color);
-    border:2px solid var(--active-color-primary);
+    border:2px solid var(--default-text-color);
   };
   transition:.4s;
   border-radius:50%;
@@ -189,7 +189,7 @@
 }
 .switch input:checked + .slider:before {
   @include css4{
-    background-color:var(--settings-text-color);
+    background-color:var(--active-color-secondary);
     border:2px solid var(--active-color-primary);
   };
   transform:translateX(15.5px);

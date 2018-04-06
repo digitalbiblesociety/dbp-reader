@@ -113,7 +113,7 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 					<header>
 						<SvgWrapper className={'icon'} svgid={'arrow_right'} onClick={this.handleSettingsModalToggle} />
 						<SvgWrapper className={'icon'} svgid={'text_options'} />
-						<h1 className="section-title">Settings</h1>
+						<h1 className="section-title">Text Options</h1>
 					</header>
 					<section className="color-schemes">
 						{
@@ -149,9 +149,9 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 						onChange={this.handleSliderChange}
 						defaultValue={activeFontSize}
 						value={activeFontSize}
-						handleStyle={{ borderColor: 'rgb(98,177,130)', backgroundColor: activeTheme === 'paper' ? 'rgba(98, 177, 130, .5)' : 'rgb(26,29,33)' }}
-						railStyle={{ backgroundColor: activeTheme === 'paper' ? 'rgb(255, 255, 255)' : 'rgb(26,29,33)' }}
-						trackStyle={{ backgroundColor: 'rgb(98,177,130)' }}
+						handleStyle={{ borderColor: 'rgb(98,177,130)', backgroundColor: activeTheme === 'paper' ? 'rgba(98, 177, 130, .5)' : 'rgb(26,29,33)', top: '4px' }}
+						railStyle={{ backgroundColor: activeTheme === 'paper' ? 'rgb(199, 199, 204)' : 'rgb(26,29,33)', height: '2px' }}
+						trackStyle={{ backgroundColor: 'rgb(98,177,130)', height: '2px' }}
 						step={null}
 						marks={{
 							0: '',
