@@ -1,0 +1,17 @@
+.custom-popup {
+  position: absolute;
+  //min-height: 25px;
+  //min-width: 125px;
+  height: 50px;
+  width: 175px;
+  max-height: 50px;
+  max-width: 175px;
+  padding: 10px;
+  overflow: auto;
+  background-color: rgba(#1B1F24, 0.8);
+  border: 1px solid green;
+  border-radius: 6px;
+  font-size: 12px;
+  color: #fff;
+  z-index: 5;
+}

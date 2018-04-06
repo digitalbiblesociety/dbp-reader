@@ -39,6 +39,10 @@ import saga from './saga';
 // import messages from './messages';
 
 export class Profile extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+	state = {
+		popupOpen: false,
+	}
+
 	componentDidMount() {
 		this.closeMenuController = new CloseMenuFunctions(this.ref, this.props.toggleProfile);
 		this.closeMenuController.onMenuMount();
@@ -58,7 +62,11 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 	sendSignUpForm = (props) => this.props.dispatch(sendSignUpForm(props))
 	viewErrorMessage = (props) => this.props.dispatch(viewErrorMessage(props))
 	socialMediaLogin = (props) => this.props.dispatch(socialMediaLogin(props))
-	resetPassword = (props) => this.props.dispatch(resetPassword(props))
+	resetPassword = (e, props) => {
+		const coords = { x: e.clientX, y: e.clientY };
+		this.openPopup(coords);
+		this.props.dispatch(resetPassword(props));
+	}
 	deleteUser = (props) => this.props.dispatch(deleteUser(props))
 	sendLoginForm = (props) => this.props.dispatch(sendLoginForm(props))
 	selectAccountOption = (option) => this.props.dispatch(selectAccountOption(option))
@@ -66,6 +74,36 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 	updateEmail = (props) => this.props.dispatch(updateEmail(props))
 	updateUserInformation = (props) => this.props.dispatch(updateUserInformation(props))
 	logout = () => this.props.dispatch(logout())
+
+	openPopup = (coords) => {
+		// console.log('opening popup');
+		this.setState({ popupOpen: true, popupCoords: coords });
+		setTimeout(() => this.setState({ popupOpen: false }), 2500);
+	}
+
+	// onCloseModal = () => {
+	// 	// closes the modal if it is active on a click of the button
+	// 	if (this.timer) {
+	// 		clearTimeout(this.timer);
+	// 	}
+	// 	this.props.dispatch(pleaseLogin({ status: false }));
+	// }
+	//
+	// onPleaseLogin = () => {
+	// 	// handles the modal popup that tells a user they need to login before
+	// 	// they can download videoss
+	// 	if (!this.props.pleaseLoginStatus) {
+	// 		this.props.dispatch(pleaseLogin({ status: true }));
+	// 	}
+	// 	if (this.timer) {
+	// 		clearTimeout(this.timer);
+	// 	}
+	// 	this.timer = setTimeout(() => {
+	// 		if (this.props.pleaseLoginStatus) {
+	// 			this.props.dispatch(pleaseLogin({ status: false }));
+	// 		}
+	// 	}, 4000);
+	// }
 
 	render() {
 		const {
@@ -77,8 +115,10 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 			socialLoginLink,
 			activeDriver,
 			errorMessageViewed,
+			passwordResetMessage = 'You should receive an email shortly.',
 		} = this.props.profile;
 		const { toggleProfile } = this.props;
+		const { popupOpen, popupCoords } = this.state;
 
 		return (
 			<GenericErrorBoundary affectedArea="Profile">
@@ -135,7 +175,7 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 									}
 									{
 										activeOption === 'password_reset' ? (
-											<PasswordReset resetPassword={this.resetPassword} />
+											<PasswordReset popupCoords={popupCoords} popupOpen={popupOpen} message={passwordResetMessage} resetPassword={this.resetPassword} />
 										) : null
 									}
 								</React.Fragment>
