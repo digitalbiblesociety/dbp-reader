@@ -9,6 +9,10 @@
   width:100%;
   bottom:56px;
   z-index: 1;
+
+  &.closed {
+    border: none;
+  }
 }
 // General Audio Player Styles
 .audio-player-container .svgitem       {
@@ -250,8 +254,11 @@
     height: 25px;
     left: 0;
     top: 13px;
-    color: #fff;
     z-index: 50;
+
+    @include css4 {
+      color: var(--default-text-color);
+    }
   }
 
   &:after {
@@ -261,8 +268,11 @@
     height: 25px;
     right: 4px;
     top: 13px;
-    color: #fff;
     z-index: 50;
+
+    @include css4 {
+      color: var(--default-text-color);
+    }
   }
 }
 

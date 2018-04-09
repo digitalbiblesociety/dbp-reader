@@ -321,7 +321,7 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 						svgid="arrow_down"
 					/>
 				</div>
-				<div role="button" tabIndex={0} className="audio-player-background" ref={this.setAudioPlayerRef} onClick={this.handleBackgroundClick}>
+				<div role="button" tabIndex={0} className={this.state.playerState && hasAudio ? 'audio-player-background' : 'audio-player-background closed'} ref={this.setAudioPlayerRef} onClick={this.handleBackgroundClick}>
 					{
 						(this.state.playerState && hasAudio) ? (
 							<div className="audio-player-container">

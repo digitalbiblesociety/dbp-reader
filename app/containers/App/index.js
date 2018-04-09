@@ -9,9 +9,7 @@
  * component (SFC), hot reloading does not currently support SFCs. If hot
  * reloading is not a necessity for you then you can refactor it and remove
  * the linting exception.
- * TODO: It is possible that we will want to change how react-router reconciles
- * the urls so that the component will not be re-mounted when the bookid or
- * bibleid are changed
+ *
  */
 
 import React from 'react';
@@ -28,10 +26,10 @@ export default function App() {
 		<div>
 			<Switch>
 				<Route exact path="/" component={HomePage} />
-				<Route path="/:bibleId?/:bookId?/:chapter?/:verse?" component={HomePage} />
 				<Route exact path="/about" component={AboutPage} />
 				<Route exact path="/privacy-policy" component={PrivacyPolicy} />
 				<Route exact path="/terms-of-use" component={TermsAndConditions} />
+				<Route exact path="/:bibleId?/:bookId?/:chapter?/:verse?" component={HomePage} />
 				<Route component={NotFoundPage} />
 			</Switch>
 		</div>

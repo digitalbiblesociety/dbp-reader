@@ -70,7 +70,7 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 						) : null
 					}
 					<span className={'input-wrapper'}>
-						<SvgWrapper width="26px" height="26px" fill={'#fff'} svgid={'search'} />
+						<SvgWrapper className={'icon'} svgid={'search'} />
 						<input placeholder={`SEARCH ${sectionType.toUpperCase()}`} />
 					</span>
 				</div>
