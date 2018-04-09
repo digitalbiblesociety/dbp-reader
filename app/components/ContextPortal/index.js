@@ -215,7 +215,7 @@ class ContextPortal extends React.PureComponent {
 					</span>
 					<div role={'button'} tabIndex={0} className={'menu-item social like-button facebook'} title={'Like on Facebook'} onClick={addFacebookLike}>
 						<span className={'share-count'}><FacebookShareCount url={window.location.href} /></span>
-						<span className={'like-thumb'}><SvgWrapper height={'26px'} width={'26px'} svgid="like_one-color" /> Like</span>
+						<span className={'like-thumb'}><SvgWrapper height={'24px'} width={'24px'} svgid="like_one-color" /> Like</span>
 					</div>
 				</div>
 				<div id={'copy-container'} role={'button'} tabIndex={0} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} onClick={this.copyLinkToClipboard} className={'menu-row'} title={'Copy link to page'}>

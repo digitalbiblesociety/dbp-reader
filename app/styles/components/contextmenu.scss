@@ -9,6 +9,10 @@
   border-radius: 6px;
   svg {fill: #000;}
   color: #000;
+  &.shadow {
+    box-shadow:0 2px 4px rgba(0, 0, 0, 0.12), 2px 3px 3px rgba(0, 0, 0, 0.24)!important;
+  }
+
 
   .menu-item {
     display:flex;
@@ -44,6 +48,7 @@
     // Overrides default react-share style
     div.SocialMediaShareButton--email {
       height: 26px;
+      font-size: 10px;
     }
 
     &:nth-child(2).active {
@@ -51,12 +56,12 @@
     }
 
     .item-text {
-      font-size: 12px;
+      font-size: 10px;
     }
 
     &.social {
-      width: 54px;
-      height: 54px;
+      width: 46px;
+      height: 46px;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.52);
       border-radius: 6px;
     }
@@ -83,8 +88,10 @@
   .menu-row {
     display:flex;
     justify-content: space-around;
-    height:54px;
+    align-items: center;
+    height:48px;
     width:100%;
+    margin-bottom: 5px;
 
     #link-to-copy {
       background-color: unset;
@@ -94,10 +101,8 @@
     .copy-link {
       width:80%;
       color: gray;
-      font-size: 14px;
-      padding-top: 15px;
-      padding-left: 5px;
-      padding-right: 5px;
+      font-size: 12px;
+      padding: 8px 5px 5px 5px;
       text-decoration: underline;
       text-overflow: ellipsis;
       overflow: hidden;
@@ -109,7 +114,7 @@
     }
 
     .copy-button {
-      font-size: 14px;
+      font-size: 15px;
       display: flex;
       align-items: center;
       padding-left: 5px;
@@ -132,15 +137,16 @@
         width: 100%;
         align-items: center;
         justify-content: center;
+        font-size: 14px;
       }
 
       .like-thumb {
-        height: 27px;
+        height: 24px;
         width: 100%;
         display:flex;
         align-items: center;
         color: #fff;
-        font-size: 12px;
+        font-size: 10px;
         background-color: $login-facebook-color;
         border-bottom-right-radius: 6px;
         border-bottom-left-radius: 6px;

@@ -97,6 +97,9 @@
     .input-class {
       margin-left: 25px;
       margin-right:25px;
+      @include css4 {
+        color: var(--default-text-color);
+      }
     }
   }
 }
@@ -108,7 +111,14 @@
 
 // Language Selection Styles
 .active-language-name      {@include css4{color:var(--text-selection-active-item-color);};}
-.language-name             {cursor:pointer;margin-top:5px;margin-bottom:5px;}
+.language-name             {
+  cursor:pointer;margin-top:5px;margin-bottom:5px;
+
+  //&:nth-child(odd) {
+  //  background-color: #ddd;
+  //  //opacity: .8;
+  //}
+}
 .language-name:hover       {@include css4{color:var(--text-selection-active-item-color);};}
 .active-language-name      {@include css4{color:var(--text-selection-active-item-color);};max-height:50px;}
 // The relative input values are affecting this as well...

@@ -64,7 +64,7 @@ input {
   @include css4 {
     border-bottom: 1px solid var(--default-text-color);
     background-color: var(--menu-body-background-color);
-    caret-color: var(--application-input-caret-color);
+    caret-color: var(--application-text-caret-color);
 
     &::-webkit-input-placeholder {
       color:var(--default-text-color);

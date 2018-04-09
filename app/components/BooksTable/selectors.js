@@ -5,7 +5,28 @@ const selectHomepageDomain = (state) => state.get('homepage');
 // TODO: Refactor from using toJS() to using immutable maps
 const selectBooks = () => createSelector(
 	selectHomepageDomain,
-	(substate) => substate.get('books').toJS()
+	(substate) => {
+		const splitBooks = {};
+		const books = substate.get('books');
+		const testamentMap = substate.get('testaments');
+
+		books.forEach((book) => {
+			if (splitBooks[testamentMap[book.get('book_id')]]) {
+				splitBooks[testamentMap[book.get('book_id')]].push(book);
+			} else {
+				splitBooks[testamentMap[book.get('book_id')]] = [book];
+			}
+		});
+
+		console.log('books', books);
+		console.log('testamentMap', testamentMap);
+		console.log('splitBooks', splitBooks);
+
+		// if (Object.keys(splitBooks).length) {
+		// 	return splitBooks;
+		// }
+		return books.toJS();
+	}
 );
 
 const selectActiveTextId = () => createSelector(

@@ -11,7 +11,9 @@
 /* Prevent font scaling beyond this breakpoint */
 @media (min-width: 1000px) {
   .chapter {
-    font-size: 1.4rem;
+    @include css4 {
+      font-size: calc(var(--application-base-font-size) + ((0.6rem) * 1.1111));
+    }
   }
 }
 

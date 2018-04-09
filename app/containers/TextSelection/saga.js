@@ -1,4 +1,5 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
+import territoryCodes from 'utils/territoryCodes.json';
 // import languageList from 'utils/languagesWithResources.json';
 import request from 'utils/request';
 import { fromJS } from 'immutable';
@@ -22,7 +23,7 @@ export function* getCountries() {
 			const tempObj = acc;
 			if (typeof country.name !== 'string') {
 				tempObj[country.name.name] = { ...country, name: country.name.name };
-			} else if (country.name === '') {
+			} else if (country.name === '' || territoryCodes[country.codes.iso_a2]) {
 				return acc;
 			} else {
 				tempObj[country.name] = country;
