@@ -98,16 +98,16 @@ class AccountSettings extends React.PureComponent {
 				</section>
 				<div className="email-section">
 					<span className="title">E-MAIL</span>
-					<span className="input-wrapper">
-						<SvgWrapper className="svg" height="26px" width="26px" fill="#fff" svgid="e-mail" />
+					<span className="wrapper">
+						<SvgWrapper className="icon" height="26px" width="26px" svgid="e-mail" />
 						<input onChange={this.handleEmailChange} placeholder="emailaddress@mail.com" value={email} />
 					</span>
 					<span role="button" tabIndex={0} className="button" onClick={this.sendUpdateEmail}>CHANGE E-MAIL</span>
 				</div>
 				<div className="password-section">
 					<span className="title">PASSWORD</span>
-					<span className="input-wrapper">
-						<SvgWrapper className="svg" height="26px" width="26px" fill="#fff" svgid="lock" />
+					<span className="wrapper">
+						<SvgWrapper className="icon" height="26px" width="26px" svgid="lock" />
 						<input onChange={this.handlePasswordChange} type={'password'} placeholder="**********" value={password} />
 					</span>
 					<span role="button" tabIndex={0} className="button" onClick={this.sendUpdatePassword}>CHANGE PASSWORD</span>
