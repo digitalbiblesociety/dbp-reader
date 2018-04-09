@@ -163,7 +163,7 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 		}
 		this[name] = el;
 	}
-
+	// TODO Split books into 2 arrays, NT and OT
 	render() {
 		const {
 			books,

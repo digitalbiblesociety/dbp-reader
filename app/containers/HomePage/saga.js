@@ -431,6 +431,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 
 		yield put({ type: 'loadaudio', audioPath: ntPath || otPath });
 	} else if (partialAudio.length) {
+		// TODO For this return a list of all of the s3 file paths since a chapter could have v1-v5 and v20-v25
 		try {
 			// Need to iterate over each object here to see if I can find the right chapter
 			const reqUrl = `https://api.bible.build/bibles/filesets/${get(partialAudio, [0, 'id'])}?bucket=${process.env.DBP_BUCKET_ID}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(partialAudio, [0, 'data', 'set_type_code'])}`;
