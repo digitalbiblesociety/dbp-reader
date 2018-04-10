@@ -22,11 +22,21 @@
     font-family:var(--application-font-family);
   };
   //line-height:1.75;
-  text-align:justify;
+  //text-align:justify;
   max-width:1000px;
   margin:0 auto;
   overflow-wrap: normal;
   line-break: auto;
+  &.justify {
+    text-align: justify;
+    -webkit-text-align-last: start;
+    -o-text-align-last: start;
+    text-align-last: start;
+    -webkit-hyphens: auto;
+    -ms-hyphens: auto;
+    -o-hyphens: auto;
+    hyphens: auto;
+  }
 
   sup {
     font-size:smaller;
