@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+import { fromJS } from 'immutable';
 
 const selectHomepageDomain = (state) => state.get('homepage');
 
@@ -18,13 +19,15 @@ const selectBooks = () => createSelector(
 			}
 		});
 
-		console.log('books', books);
-		console.log('testamentMap', testamentMap);
-		console.log('splitBooks', splitBooks);
+		// console.log('books', books);
+		// console.log('testamentMap', testamentMap);
+		// console.log('splitBooks', fromJS(splitBooks));
+		// console.log('ot', fromJS(splitBooks).get('OT'));
 
-		// if (Object.keys(splitBooks).length) {
-		// 	return splitBooks;
-		// }
+		if (Object.keys(splitBooks).length) {
+			return fromJS(splitBooks);
+		}
+		// Fallback to try and prevent app from breaking
 		return books.toJS();
 	}
 );

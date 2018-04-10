@@ -143,7 +143,7 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 		} = this.props;
 
 		setActiveChapter(chapter);
-		setActiveBookName({ book: book.name || book.name_short, id: book.book_id });
+		setActiveBookName({ book: book.get('name') || book.get('name_short'), id: book.get('book_id') });
 		closeBookTable();
 	}
 
@@ -180,30 +180,32 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 		return (
 			<div className="chapter-selection-section">
 				<div ref={(el) => this.handleRef(el, 'container')} className="book-container">
+					<div className={'testament-title'}>Old Testament</div>
 					{
-						books.map((book) => (
+						books.get('OT').map((book) => (
 							<div
 								className={'book-button'}
-								ref={(book.name || book.name_short) === selectedBookName ? (el) => this.handleRef(el, 'button') : null}
+								ref={(book.get('name') || book.get('name_short')) === selectedBookName ? (el) => this.handleRef(el, 'button') : null}
 								tabIndex="0"
 								role="button"
-								key={(book.name || book.name_short).concat(book.book_id)}
-								onClick={(e) => this.handleBookClick(e, book.name || book.name_short)}
+								key={(book.get('name') || book.get('name_short')).concat(book.get('book_id'))}
+								onClick={(e) => this.handleBookClick(e, book.get('name') || book.get('name_short'))}
 							>
-								<h4 className={(book.name || book.name_short) === selectedBookName ? 'active-book' : ''}>{book.name || book.name_short}</h4>
+								<h4 className={(book.get('name') || book.get('name_short')) === selectedBookName ? 'active-book' : ''}>{book.get('name') || book.get('name_short')}</h4>
 								{
-									(book.name || book.name_short) && (book.name || book.name_short) === selectedBookName ? (
+									(book.get('name') || book.get('name_short')) && (book.get('name') || book.get('name_short')) === selectedBookName ? (
 										<div className="chapter-container">
 											{
-												book.chapters.map((chapter) => (
-													<Link
-														to={`/${activeTextId.toLowerCase()}/${book.book_id.toLowerCase()}/${chapter}`}
-														key={chapter}
-														className="chapter-box"
-														onClick={() => this.handleChapterClick(book, chapter)}
-													>
-														<span className={(activeChapter === chapter && (book.name || book.name_short) === activeBookName) ? 'active-chapter' : ''}>{chapter}</span>
-													</Link>
+												book.get('chapters').map((chapter) => (
+													<span className={'chapter-box'}>
+														<Link
+															to={`/${activeTextId.toLowerCase()}/${book.get('book_id').toLowerCase()}/${chapter}`}
+															key={chapter}
+															onClick={() => this.handleChapterClick(book, chapter)}
+														>
+															<span className={(activeChapter === chapter && (book.get('name') || book.get('name_short')) === activeBookName) ? 'active-chapter' : ''}>{chapter}</span>
+														</Link>
+													</span>
 												))
 											}
 										</div>
@@ -211,6 +213,76 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 								}
 							</div>
 						))
+					}
+					<div className={'testament-title'}>New Testament</div>
+					{
+						books.get('NT').map((book) => (
+							<div
+								className={'book-button'}
+								ref={(book.get('name') || book.get('name_short')) === selectedBookName ? (el) => this.handleRef(el, 'button') : null}
+								tabIndex="0"
+								role="button"
+								key={(book.get('name') || book.get('name_short')).concat(book.get('book_id'))}
+								onClick={(e) => this.handleBookClick(e, book.get('name') || book.get('name_short'))}
+							>
+								<h4 className={(book.get('name') || book.get('name_short')) === selectedBookName ? 'active-book' : ''}>{book.get('name') || book.get('name_short')}</h4>
+								{
+									(book.get('name') || book.get('name_short')) && (book.get('name') || book.get('name_short')) === selectedBookName ? (
+										<div className="chapter-container">
+											{
+												book.get('chapters').map((chapter) => (
+													<span className={'chapter-box'}>
+														<Link
+															to={`/${activeTextId.toLowerCase()}/${book.get('book_id').toLowerCase()}/${chapter}`}
+															key={chapter}
+															onClick={() => this.handleChapterClick(book, chapter)}
+														>
+															<span className={(activeChapter === chapter && (book.get('name') || book.get('name_short')) === activeBookName) ? 'active-chapter' : ''}>{chapter}</span>
+														</Link>
+													</span>
+												))
+											}
+										</div>
+									) : null
+								}
+							</div>
+						))
+					}
+					{
+						books.get('AP') ? [
+							<div className={'testament-title'}>Apocrypha</div>,
+							books.get('AP').map((book) => (
+								<div
+									className={'book-button'}
+									ref={(book.get('name') || book.get('name_short')) === selectedBookName ? (el) => this.handleRef(el, 'button') : null}
+									tabIndex="0"
+									role="button"
+									key={(book.get('name') || book.get('name_short')).concat(book.get('book_id'))}
+									onClick={(e) => this.handleBookClick(e, book.get('name') || book.get('name_short'))}
+								>
+									<h4 className={(book.get('name') || book.get('name_short')) === selectedBookName ? 'active-book' : ''}>{book.get('name') || book.get('name_short')}</h4>
+									{
+										(book.get('name') || book.get('name_short')) && (book.get('name') || book.get('name_short')) === selectedBookName ? (
+											<div className="chapter-container">
+												{
+													book.get('chapters').map((chapter) => (
+														<span className={'chapter-box'}>
+															<Link
+																to={`/${activeTextId.toLowerCase()}/${book.get('book_id').toLowerCase()}/${chapter}`}
+																key={chapter}
+																onClick={() => this.handleChapterClick(book, chapter)}
+															>
+																<span className={(activeChapter === chapter && (book.get('name') || book.get('name_short')) === activeBookName) ? 'active-chapter' : ''}>{chapter}</span>
+															</Link>
+														</span>
+													))
+												}
+											</div>
+										) : null
+									}
+								</div>
+							)),
+						] : null
 					}
 				</div>
 			</div>

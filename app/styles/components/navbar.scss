@@ -53,7 +53,7 @@
     }
 
     &:hover {
-      & .svg, & .version {
+      &.svg, & .version-text {
         opacity:.65;
       }
       background:rgba(0, 0, 0, .2);
