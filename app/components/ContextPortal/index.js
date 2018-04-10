@@ -72,12 +72,12 @@ class ContextPortal extends React.PureComponent {
 		this.componentRef = el;
 	}
 
-	handleNoteClick = () => {
+	handleNoteClick = (e) => {
 		if (!this.props.notesActive) {
 			this.props.setActiveNotesView('edit');
 			this.props.toggleNotesModal();
 			this.props.closeContextMenu();
-			this.props.setActiveNote();
+			this.props.setActiveNote({ coords: { x: e.clientX, y: e.clientY } });
 		}
 	};
 
@@ -86,12 +86,13 @@ class ContextPortal extends React.PureComponent {
 			this.props.setActiveNotesView('edit');
 			this.props.toggleNotesModal();
 			this.props.closeContextMenu();
+			// put this { coords: { x: e.clientX, y: e.clientY } } in the action for saving bookmark
 		}
 	};
 
-	handleHighlightClick = ({ color }) => {
+	handleHighlightClick = ({ color, popupCoords }) => {
 		// toggle the colors sub menu
-		this.props.addHighlight(color);
+		this.props.addHighlight({ color, popupCoords });
 	}
 
 	handleCopy = (e) => {

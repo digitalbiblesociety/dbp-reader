@@ -6,15 +6,23 @@
 
 import { fromJS } from 'immutable';
 import {
-	DEFAULT_ACTION,
+	GET_SEARCH_RESULTS,
+	LOAD_SEARCH_RESULTS,
 } from './constants';
 
-const initialState = fromJS({});
+const initialState = fromJS({
+	searchResults: [],
+	loadingResults: false,
+});
 
 function searchContainerReducer(state = initialState, action) {
 	switch (action.type) {
-	case DEFAULT_ACTION:
-		return state;
+	case GET_SEARCH_RESULTS:
+		return state.set('loadingResults', true);
+	case LOAD_SEARCH_RESULTS:
+		return state
+			.set('loadingResults', false)
+			.set('searchResults', action.searchResults);
 	default:
 		return state;
 	}

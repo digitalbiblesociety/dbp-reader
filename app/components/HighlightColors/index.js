@@ -15,27 +15,27 @@ function HighlightColors({ addHighlight }) {
 	return (
 		<React.Fragment>
 			<span className={'color-group'}>
-				<span role={'button'} tabIndex={0} className={'none'} onClick={() => addHighlight({ color: 'none' })} />
+				<span role={'button'} tabIndex={0} className={'none'} onClick={(e) => addHighlight({ popupCoords: { x: e.clientX, y: e.clientY }, color: 'none' })} />
 				<span className={'color-text'}><FormattedMessage {...messages.none} /></span>
 			</span>
 			<span className={'color-group'}>
-				<span role={'button'} tabIndex={-1} className={'yellow'} onClick={() => addHighlight({ color: 'FD2' })} />
+				<span role={'button'} tabIndex={-1} className={'yellow'} onClick={(e) => addHighlight({ popupCoords: { x: e.clientX, y: e.clientY }, color: 'FD2' })} />
 				<span className={'color-text'}><FormattedMessage {...messages.yellow} /></span>
 			</span>
 			<span className={'color-group'}>
-				<span role={'button'} tabIndex={-2} className={'green'} onClick={() => addHighlight({ color: '5B4' })} />
+				<span role={'button'} tabIndex={-2} className={'green'} onClick={(e) => addHighlight({ popupCoords: { x: e.clientX, y: e.clientY }, color: '5B4' })} />
 				<span className={'color-text'}><FormattedMessage {...messages.green} /></span>
 			</span>
 			<span className={'color-group'}>
-				<span role={'button'} tabIndex={-3} className={'pink'} onClick={() => addHighlight({ color: 'D6A' })} />
+				<span role={'button'} tabIndex={-3} className={'pink'} onClick={(e) => addHighlight({ popupCoords: { x: e.clientX, y: e.clientY }, color: 'D6A' })} />
 				<span className={'color-text'}><FormattedMessage {...messages.pink} /></span>
 			</span>
 			<span className={'color-group'}>
-				<span role={'button'} tabIndex={-4} className={'purple'} onClick={() => addHighlight({ color: '86A' })} />
+				<span role={'button'} tabIndex={-4} className={'purple'} onClick={(e) => addHighlight({ popupCoords: { x: e.clientX, y: e.clientY }, color: '86A' })} />
 				<span className={'color-text'}><FormattedMessage {...messages.purple} /></span>
 			</span>
 			<span className={'color-group'}>
-				<span role={'button'} tabIndex={-5} className={'blue'} onClick={() => addHighlight({ color: '1AF' })} />
+				<span role={'button'} tabIndex={-5} className={'blue'} onClick={(e) => addHighlight({ popupCoords: { x: e.clientX, y: e.clientY }, color: '1AF' })} />
 				<span className={'color-text'}><FormattedMessage {...messages.blue} /></span>
 			</span>
 		</React.Fragment>

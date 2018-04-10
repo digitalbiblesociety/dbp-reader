@@ -5,11 +5,10 @@
  */
 
 import {
-	DEFAULT_ACTION,
+	GET_SEARCH_RESULTS,
 } from './constants';
 
-export function defaultAction() {
-	return {
-		type: DEFAULT_ACTION,
-	};
-}
+export const getSearchResults = (props) => ({
+	type: GET_SEARCH_RESULTS,
+	...props,
+});
