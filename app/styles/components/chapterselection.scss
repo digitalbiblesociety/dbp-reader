@@ -58,7 +58,8 @@
     flex-shrink: 0;
     min-height: 30px;
     height: auto;
-    padding-top:5px;
+    //padding-top:5px;
+    padding: 5px 15px 0 15px;
     clear: both;
     //overflow:auto;
     @include css4 {
@@ -105,9 +106,14 @@
     min-height: 36px;
     //height: 36px;
     width: 100%;
-    padding: 0 15px 5px 15px;
+    //padding: 0 15px 5px 15px;
+    padding-bottom: 5px;
     clear: both;
     overflow:hidden;
+
+    h4 {
+      padding: 0 15px;
+    }
 
     &:hover {
       cursor:pointer;

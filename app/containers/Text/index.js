@@ -14,6 +14,7 @@ import LoadingSpinner from 'components/LoadingSpinner';
 import isEqual from 'lodash/isEqual';
 import createHighlights from './highlightPlainText';
 import createFormattedHighlights from './highlightFormattedText';
+import PopupMessage from '../../components/PopupMessage';
 // import { addClickToNotes } from './htmlToReact';
 /* Disabling the jsx-a11y linting because we need to capture the selected text
 	 and the most straight forward way of doing so is with the onMouseUp event */
@@ -118,7 +119,11 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		this.main = el;
 	}
 	// Use selected text only when marking highlights
-	setActiveNote = () => {
+	setActiveNote = ({ coords }) => {
+		if (!this.props.userAuthenticated || !this.props.userId) {
+			this.openPopup({ x: coords.x, y: coords.y });
+			return;
+		}
 		const { firstVerse, lastVerse } = this.state;
 		const { activeBookId, activeChapter } = this.props;
 		const note = {
@@ -384,11 +389,22 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			this.closeFootnote();
 		}
 	}
+
+	openPopup = (coords) => {
+		// console.log('opening popup');
+		this.setState({ popupOpen: true, popupCoords: coords });
+		setTimeout(() => this.setState({ popupOpen: false }), 2500);
+	}
 	// has an issue with highlights in the same verse
 	// This is likely going to be really slow...
 	highlightPlainText = (props) => createHighlights(props)
 
-	addHighlight = (color) => {
+	addHighlight = ({ color, popupCoords }) => {
+		if (!this.props.userAuthenticated || !this.props.userId) {
+			// console.log('should open popup with coords', popupCoords);
+			this.openPopup({ x: popupCoords.x, y: popupCoords.y });
+			return;
+		}
 		// needs to send an api request to the server that adds a highlight for this passage
 		// Adds userId and bible in homepage container where action is dispatched
 		// { bible, book, chapter, userId, verseStart, highlightStart, highlightedWords }
@@ -629,6 +645,9 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 					footnoteState ? (
 						<FootnotePortal {...footnotePortal} />
 					) : null
+				}
+				{
+					this.state.popupOpen ? <PopupMessage message={'You must be signed in to use this feature'} x={this.state.popupCoords.x} y={this.state.popupCoords.y} /> : null
 				}
 			</div>
 		);
