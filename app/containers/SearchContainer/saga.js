@@ -1,6 +1,35 @@
-// import { take, call, put, select } from 'redux-saga/effects';
+import { takeLatest, call, put } from 'redux-saga/effects';
+import request from 'utils/request';
+import { GET_SEARCH_RESULTS, LOAD_SEARCH_RESULTS } from './constants';
 
+export function* getSearchResults({ bibleId, searchText }) {
+	const searchString = searchText.replace(' ', '+');
+	// https://api.bible.build/search?key=e582134c-8773-4e8a-b3b4-3f2493fc5127&v=4&query=god+loved+world&dam_id=ENGKJV&pretty
+	const reqUrl = `https://api.bible.build/search?dam_id=${bibleId}&key=${process.env.DBP_API_KEY}&v=4&query=${searchString}`;
+
+	// console.log(searchString, 'searchString');
+	// console.log(reqUrl, 'reqUrl');
+	try {
+		const response = yield call(request, reqUrl);
+		const searchResults = response.data;
+
+		// console.log(searchResults, 'searchResults');
+		// console.log('res', res);
+		yield put({ type: LOAD_SEARCH_RESULTS, searchResults });
+	} catch (error) {
+		if (process.env.NODE_ENV === 'development') {
+			console.error('Caught in get search results request', error); // eslint-disable-line no-console
+		} else if (process.env.NODE_ENV === 'production') {
+			// const options = {
+			// 	header: 'POST',
+			// 	body: formData,
+			// };
+			// fetch('https://api.bible.build/error_logging', options);
+		}
+	}
+}
 // Individual exports for testing
 export default function* defaultSaga() {
 	// See example in containers/HomePage/saga.js
+	yield takeLatest(GET_SEARCH_RESULTS, getSearchResults);
 }

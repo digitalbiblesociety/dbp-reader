@@ -556,7 +556,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					{
 						isSearchModalActive ? (
 							<FadeTransition classNames="slide-from-left" in={isSearchModalActive}>
-								<SearchContainer toggleSearchModal={this.toggleSearchModal} />
+								<SearchContainer bibleId={activeTextId} toggleSearchModal={this.toggleSearchModal} />
 							</FadeTransition>
 						) : null
 					}
