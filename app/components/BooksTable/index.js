@@ -182,7 +182,7 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 				<div ref={(el) => this.handleRef(el, 'container')} className="book-container">
 					<div className={'testament-title'}>Old Testament</div>
 					{
-						books.get('OT').map((book) => (
+						books.get('OT') && books.get('OT').map((book) => (
 							<div
 								className={'book-button'}
 								ref={(book.get('name') || book.get('name_short')) === selectedBookName ? (el) => this.handleRef(el, 'button') : null}
@@ -216,7 +216,7 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 					}
 					<div className={'testament-title'}>New Testament</div>
 					{
-						books.get('NT').map((book) => (
+						books.get('NT') && books.get('NT').map((book) => (
 							<div
 								className={'book-button'}
 								ref={(book.get('name') || book.get('name_short')) === selectedBookName ? (el) => this.handleRef(el, 'button') : null}
