@@ -69,7 +69,7 @@ const initialState = fromJS({
 	userSettings: {
 		activeTheme: sessionStorage.getItem('bible_is_theme') || 'red',
 		activeFontType: sessionStorage.getItem('bible_is_font_family') || 'sans',
-		activeFontSize: sessionStorage.getItem('bible_is_font_size') || 42,
+		activeFontSize: parseInt(sessionStorage.getItem('bible_is_font_size'), 10) || 42,
 		toggleOptions: {
 			readersMode: {
 				name: 'READER\'S MODE',
