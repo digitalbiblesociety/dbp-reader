@@ -114,10 +114,13 @@ const initialState = fromJS({
 	hasTextInDatabase: true,
 	filesetTypes: {},
 	firstLoad: true,
+	testaments: {},
 });
 
 function homePageReducer(state = initialState, action) {
 	switch (action.type) {
+	case 'book_metadata':
+		return state.set('testaments', action.testaments);
 	case TOGGLE_FIRST_LOAD_TEXT_SELECTION:
 		return state.set('firstLoad', false);
 	case TOGGLE_AUTOPLAY:

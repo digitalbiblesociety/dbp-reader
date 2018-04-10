@@ -33,16 +33,17 @@
   }
 
   .chapter-selection-section {
-    max-height:calc(100%);
-    height:calc(100%);
-    text-transform:uppercase;
-    padding: 15px;
+    max-height:100%;
+    height:100%;
+    //text-transform:uppercase;
+    //padding: 15px;
   }
 
   .chapter-box {
+    //display:block;
     width:55px;
     height:30px;
-    float: left;
+    //float: left;
     text-align:center;
   }
 
@@ -52,8 +53,18 @@
   //  padding-top:10px;
   //  grid-template-columns:repeat(5,60px);
   //  grid-template-rows:auto;
-    display:inline-block;
+    display: flex;
+    flex-wrap: wrap;
+    flex-shrink: 0;
+    min-height: 30px;
+    height: auto;
     padding-top:5px;
+    clear: both;
+    //overflow:auto;
+    @include css4 {
+      background-color: var(--book-dropdown-chapter-background-color);
+      color: var(--book-dropdown-text-color);
+    }
   }
 
   .active-book {
@@ -64,13 +75,46 @@
 
   .book-container {
     max-height:100%;
+    height: 100%;
     overflow-y:scroll;
     overflow-x:hidden;
+    display:flex;
+    flex-direction: column;
+  }
+
+  .testament-title {
+    display:block;
+    width: 100%;
+    cursor: default;
+    margin-bottom: 15px;
+    padding-top: 1px;
+    height: 40px;
+    font-size: 1.2em;
+    text-align: center;
+    @include css4 {
+      background-color: var(--book-dropdown-section-background-color);
+    }
   }
 
   .book-button {
-    cursor:pointer;
+    //display: inline-block;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
     margin-bottom:10px;
+    min-height: 36px;
+    //height: 36px;
+    width: 100%;
+    padding: 0 15px 5px 15px;
+    clear: both;
+    overflow:hidden;
+
+    &:hover {
+      cursor:pointer;
+      @include css4 {
+        color: var(--active-color-secondary);
+      }
+    }
   }
 
   .active-chapter {

@@ -85,6 +85,8 @@ $sans-font-family-option: "Noto Sans", Helvetica, sans serif;
 $serif-font-family-option: "Alegreya", "Palatino Linotype", Palatino, serif;
 $slab-font-family-option: "Roboto Slab", Rockwell, Courier, monospace;
 
+// NOTE: Declaring the variables here so that I can use PHP Storm's "refactor"
+// functionality and code completion, I will remove them before production
 :root {
   --application-base-font-size: 0.98em;
   --application-menu-font-size: 0.98em;
@@ -99,8 +101,8 @@ $slab-font-family-option: "Roboto Slab", Rockwell, Courier, monospace;
   --text-selection-tab-option-active-color:#000000;
   --text-selection-tab-option-color: #FFFFFF;
   --text-selection-tab-option-active-border-color: #FFFFFF;
-  --book-dropdown-background-color: #F8E4D3;
-  --book-dropdown-chapter-background-color: #FFFFFF;
+  --book-dropdown-background-color: #2C3036;
+  --book-dropdown-chapter-background-color: #6E747F;
   --book-dropdown-text-color: #000000;
   --book-dropdown-section-background-color:#6E747F;
   --main-textarea-svg-color: #000000;
@@ -169,8 +171,8 @@ $variables: (
     --text-selection-tab-option-active-background:#FDF9F3,
     --text-selection-tab-option-active-color:#000000,
     --text-selection-tab-option-active-border-color: #FFFFFF,
-    --book-dropdown-background-color: #F8E4D3,
-    --book-dropdown-chapter-background-color: #FFFFFF,
+    --book-dropdown-background-color: #2C3036,
+    --book-dropdown-chapter-background-color: #6E747F,
     --book-dropdown-text-color: #000000,
     --book-dropdown-section-background-color:#6E747F,
     --main-textarea-svg-color: #000000,

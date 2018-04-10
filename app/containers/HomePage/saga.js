@@ -20,6 +20,27 @@ import { ADD_HIGHLIGHTS, LOAD_HIGHLIGHTS, GET_HIGHLIGHTS } from './constants';
 *
 * */
 
+export function* getBookMetadata({ bibleId }) {
+	const reqUrl = `https://api.bible.build/bibles/${bibleId}/book?key=${process.env.DBP_API_KEY}&bucket=${process.env.DBP_BUCKET_ID}&v=4`;
+	try {
+		const response = yield call(request, reqUrl);
+		const testaments = response.data.reduce((a, c) => ({ ...a, [c.id]: c.book_testament }), {});
+
+		// console.log('res', res);
+		yield put({ type: 'book_metadata', testaments });
+	} catch (error) {
+		if (process.env.NODE_ENV === 'development') {
+			console.error('Caught in get book metadata request', error); // eslint-disable-line no-console
+		} else if (process.env.NODE_ENV === 'production') {
+			// const options = {
+			// 	header: 'POST',
+			// 	body: formData,
+			// };
+			// fetch('https://api.bible.build/error_logging', options);
+		}
+	}
+}
+
 export function* getHighlights({ bible, book, chapter, userId }) {
 	const requestUrl = `https://api.bible.build/users/${userId || 'no_user_id'}/highlights?key=${process.env.DBP_API_KEY}&v=4&project_id=${process.env.NOTES_PROJECT_ID}&bible_id=${bible}&book_id=${book}&chapter=${chapter}`;
 	let highlights = [];
@@ -199,6 +220,7 @@ export function* getChapterFromUrl({ filesets, bibleId: oldBibleId, bookId: oldB
 			// And I don't want it blocking the text from loading
 			yield fork(getChapterAudio, { filesets, bookId, chapter });
 		}
+		yield fork(getBookMetadata, { bibleId });
 		// console.log('has formatted text', hasFormattedText);
 		// Try to get the formatted text if it is available
 		if (hasFormattedText) {
@@ -293,6 +315,7 @@ export function* getChapterFromUrl({ filesets, bibleId: oldBibleId, bookId: oldB
 export function* getChapterAudio({ filesets, bookId, chapter }) {
 	// console.log('getting audio', filesets, bookId, chapter);
 	// Parse filesets
+	// TODO Need to handle when there are multiple filesets for the same audio type
 	// console.log('filesets', filesets);
 	const filteredFilesets = reduce(filesets, (a, file) => {
 		const newFile = { ...a };
