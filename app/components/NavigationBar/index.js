@@ -42,7 +42,7 @@ class NavigationBar extends React.PureComponent { // eslint-disable-line react/p
 					</a>
 					<span role="button" tabIndex={0} onClick={toggleVersionSelection} className="version">
 						<SvgWrapper className="svg icon" fill="#fff" svgid="arrow_down" opacity=".5" />
-						<span title={activeTextName} className={'version-text'}>{`${activeTextId.slice(0, 3) === 'ENG' && activeTextId.slice(3)} - ${activeTextName}`}</span>
+						<span title={activeTextName} className={'version-text'}>{`${activeTextId.slice(0, 3) === 'ENG' ? `${activeTextId.slice(3)} - ` : ''}${activeTextName}`}</span>
 						{
 							isVersionSelectionActive ? <TextSelection /> : null
 						}
