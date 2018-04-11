@@ -6,12 +6,14 @@ class CloseMenuFunctions {
 
 	handleTouchend = (event) => {
 		if (event.changedTouches.length === 1) {
+			// console.log('target', event.target);
 			// If a touch was outside the menu and there was only one touch close it
 			const singleTouch = event.changedTouches[0];
 			const bounds = this.ref.getBoundingClientRect();
 			const insideWidth = singleTouch.clientX >= bounds.x && singleTouch.clientX <= bounds.x + bounds.width;
 			const outsideWidth = singleTouch.clientY >= bounds.y && singleTouch.clientY <= bounds.y + bounds.height;
-			if (this.ref && !(insideWidth && outsideWidth) && !this.ref.contains(event.target)) {
+			// console.log('touch location', insideWidth, outsideWidth, bounds);
+			if (this.ref && !(insideWidth || outsideWidth) && !this.ref.contains(event.target)) {
 				this.closeFunction();
 				document.removeEventListener('touchend', this.handleTouchend);
 			}
@@ -29,6 +31,7 @@ class CloseMenuFunctions {
 		const bounds = this.ref.getBoundingClientRect();
 		const insideWidth = event.x >= bounds.x && event.x <= bounds.x + bounds.width;
 		const insideHeight = event.y >= bounds.y && event.y <= bounds.y + bounds.height;
+		// console.log('click location', insideWidth, insideHeight, bounds);
 
 		if (this.ref && !(insideWidth && insideHeight) && !this.ref.contains(event.target)) {
 			this.closeFunction();
