@@ -1,6 +1,6 @@
 .context-menu {
   width:250px;
-  height:162px;
+  height:166px;
   position:absolute;
   background-color:#fff;
   @include css4 {
@@ -41,6 +41,14 @@
       content: "";
     }
 
+    &:nth-child(1) {
+      border-top-left-radius: 6px;
+    }
+
+    &:nth-child(4) {
+      border-top-right-radius: 6px;
+    }
+
     &:nth-child(4):after {
       all: unset;
     }
@@ -59,11 +67,26 @@
       font-size: 10px;
     }
 
+    &.normal:hover {
+      //opacity: 0.6;
+      fill:rgba(0,0,0,0.65);
+      cursor: pointer;
+
+      @include css4 {
+        background-color: var(--context-menu-hover-color);
+      }
+    }
+
     &.social {
       width: 46px;
       height: 46px;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.52);
       border-radius: 6px;
+
+      &:hover {
+        //background-color: $login-facebook-color;
+        box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.72);
+      }
     }
 
     &.social svg {
@@ -72,11 +95,6 @@
 
     &.google svg {
       fill: initial;
-    }
-
-    &:hover {
-      //opacity: 0.6;
-      fill:rgba(0,0,0,0.65);
     }
 
     // Two selectors below remove the gray borders
@@ -89,9 +107,9 @@
     display:flex;
     justify-content: space-around;
     align-items: center;
-    height:48px;
+    height:54px;
     width:100%;
-    margin-bottom: 5px;
+    //margin-bottom: 5px;
 
     #link-to-copy {
       background-color: unset;
@@ -123,6 +141,12 @@
       height: 54px;
       text-align: center;
       cursor: pointer;
+
+      &:hover {
+        @include css4 {
+          background-color: var(--context-menu-hover-color);
+        }
+      }
     }
 
     .like-button {

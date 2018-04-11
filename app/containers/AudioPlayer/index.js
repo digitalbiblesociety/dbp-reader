@@ -362,7 +362,7 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 										<FormattedMessage {...messages.autoplay} />
 									</label>
 								</span>
-								<div id="volume-wrap">
+								<div id="volume-wrap" className={'icon-wrap'}>
 									<div title={messages.volumeTitle.defaultMessage} role="button" tabIndex="0" className={this.state.volumeSliderState ? 'item active' : 'item'} onClick={() => { this.state.volumeSliderState ? this.setVolumeSliderState(false) : this.setVolumeSliderState(true); this.setSpeedControlState(false); this.setElipsisState(false); }}>
 										{this.getVolumeSvg(this.state.volume)}
 										<FormattedMessage {...messages.volume} />
@@ -370,7 +370,7 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 									{/* <this.volumeControl updateVolume={this.updateVolume} volume={this.state.volume} /> */}
 									<VolumeSlider active={this.state.volumeSliderState} onCloseFunction={this.closeModals} updateVolume={this.updateVolume} volume={this.state.volume} />
 								</div>
-								<div id="volume-wrap">
+								<div id="volume-wrap" className={'icon-wrap'}>
 									<div title={messages.speedTitle.defaultMessage} role="button" tabIndex="0" className={this.state.speedControlState ? 'item active' : 'item'} onClick={() => { this.state.speedControlState ? this.setSpeedControlState(false) : this.setSpeedControlState(true); this.setElipsisState(false); this.setVolumeSliderState(false); }}>
 										{this.currentSpeedSvg}
 										<FormattedMessage {...messages.speed} />

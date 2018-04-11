@@ -131,6 +131,7 @@ $slab-font-family-option: "Roboto Slab", Rockwell, Courier, monospace;
   --context-menu-background-color:#FFFFFF;
   --context-menu-svg-fill-color:#000000;
   --context-menu-text-color:#000000;
+  --context-menu-hover-color: #ccc;
   --context-menu-highlight-active-background-color:#868686;
   --audio-player-progress-bar-background: #1B1F24;
   --audio-player-background: #2C3036;
@@ -201,13 +202,14 @@ $variables: (
     --context-menu-background-color:#FFFFFF,
     --context-menu-svg-fill-color:#000000,
     --context-menu-text-color:#000000,
+    --context-menu-hover-color: #ccc,
     --context-menu-highlight-active-background-color:#868686,
     --audio-player-progress-bar-background: #1B1F24,
     --audio-player-background: #2C3036,
     --menu-body-background-color:#2C3036,
     --menu-header-background-color:#7E0E2A,
     --menu-hover-state-background-color: rgba(0, 0, 0, 0.1),
--    -default-background-color:#FDF9F3,
+    --default-background-color:#FDF9F3,
     --default-header-background-color:#9E1E35,
     --default-footer-background-color:#9E1E35,
     --default-header-background-transparent: rgba(#9E1E35, 0),
