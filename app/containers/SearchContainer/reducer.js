@@ -8,21 +8,49 @@ import { fromJS } from 'immutable';
 import {
 	GET_SEARCH_RESULTS,
 	LOAD_SEARCH_RESULTS,
+	SEARCH_ERROR,
+	STOP_LOADING,
+	VIEW_ERROR,
 } from './constants';
 
 const initialState = fromJS({
 	searchResults: [],
+	lastFiveSearches: [],
 	loadingResults: false,
+	showError: false,
 });
 
 function searchContainerReducer(state = initialState, action) {
 	switch (action.type) {
 	case GET_SEARCH_RESULTS:
-		return state.set('loadingResults', true);
+		if (state.get('lastFiveSearches').includes(action.searchText.toLowerCase())) {
+			return state
+				.set('lastFiveSearches', state.get('lastFiveSearches'))
+				.set('loadingResults', true);
+		}
+		return state
+			.set('lastFiveSearches', state.get('lastFiveSearches').size > 4 ? state.get('lastFiveSearches').push(action.searchText.toLowerCase()).shift() : state.get('lastFiveSearches').push(action.searchText.toLowerCase()))
+			.set('loadingResults', true);
+		// const last = state.get('lastFiveSearches');
+		// const newLast = state.get('lastFiveSearches').includes(action.searchText) ?  : state.get('lastFiveSearches').push(action.searchText);
+		//
+		// return state
+		// 	.set('lastFiveSearches', newLast.size > 5 ? newLast.shift() : newLast)
+		// 	.set('loadingResults', true);
 	case LOAD_SEARCH_RESULTS:
 		return state
 			.set('loadingResults', false)
 			.set('searchResults', action.searchResults);
+	case SEARCH_ERROR:
+		return state
+			.set('showError', true)
+			.set('loadingResults', false);
+	case VIEW_ERROR:
+		return state
+			.set('showError', false);
+	case STOP_LOADING:
+		return state
+			.set('loadingResults', false);
 	default:
 		return state;
 	}
