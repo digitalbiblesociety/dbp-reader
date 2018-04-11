@@ -61,9 +61,9 @@ export function* getCountries() {
 export function* getTexts({ languageISO }) {
 	let requestUrl = '';
 	if (languageISO === 'ANY') {
-		requestUrl = `https://api.bible.build/bibles?key=${process.env.DBP_API_KEY}&v=4`;
+		requestUrl = `https://api.bible.build/bibles?&bucket=${process.env.DBP_BUCKET_ID}&key=${process.env.DBP_API_KEY}&v=4`;
 	} else {
-		requestUrl = `https://api.bible.build/bibles?key=${process.env.DBP_API_KEY}&language_code=${languageISO}&v=4`;
+		requestUrl = `https://api.bible.build/bibles?&bucket=${process.env.DBP_BUCKET_ID}&key=${process.env.DBP_API_KEY}&language_code=${languageISO}&v=4`;
 	}
 
 	try {

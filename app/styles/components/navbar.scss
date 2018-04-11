@@ -136,7 +136,7 @@
   // pseudo elements
   .book-chapter:before {
     content: "";
-    width:2px;
+    width:1px;
     height:50px;
     background-color:rgba(0, 0, 0, 0.20);
     position: absolute;
@@ -144,7 +144,7 @@
   }
   .version:before {
      content: "";
-     width:2px;
+     width:1px;
      height:50px;
      background-color:rgba(0, 0, 0, 0.20);
      position: absolute;

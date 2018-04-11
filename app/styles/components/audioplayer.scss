@@ -17,7 +17,8 @@
 // General Audio Player Styles
 .audio-player-container .svgitem       {
   cursor:pointer;
-  margin-right:18px;
+  margin:0 auto;
+  //margin-right:18px;
 }
 .audio-player-container                {
   @include css4{
@@ -30,9 +31,9 @@
   height:50px;
   max-width:1000px;
   margin:auto;
-  :nth-child(3) {
-    margin-right:18px;
-  };
+  //:nth-child(3) {
+  //  margin-right:18px;
+  //};
   font-size:12px;
 }
 .audio-player-container .item {border:1px solid transparent;cursor:pointer;height:50px;display:flex;align-items:center;justify-content:center;}
@@ -88,15 +89,16 @@
 }
 
 // Progress Bar Styles
-.progress-bar {
-  width:50%;
-  @include css4{
-    background-color:var(--audio-player-progress-bar-background);
-  };
-  height:3px;
-  cursor:pointer;
-}
-.progress-bar:focus {outline: none;}
+//.progress-bar {
+//  width:50%;
+//  @include css4{
+//    background-color:var(--audio-player-progress-bar-background);
+//  };
+//  height:3px;
+//  cursor:pointer;
+//  margin-top: -5px;
+//}
+//.progress-bar:focus {outline: none;}
 
 // Gripper Styles
 .audioplayer-handle {
@@ -153,12 +155,11 @@
 // Move the checkbox to be above the label
 .audio-player-container {
   #autoplay-wrap {
-    margin-top:23px;
     [type='checkbox']:not(:checked) + label:before,
     [type='checkbox']:checked + label:before {
       content:'';
       position:absolute;
-      left:38px;
+      left:16px;
       top:-20px;
     };
     [type="checkbox"]:not(:checked) + label:after,
@@ -167,6 +168,11 @@
       top:calc(-20px + 0.35em);
       left:calc(38px + 0.45em);
     };
+    [type="checkbox"]:not(:checked) + label,
+    [type="checkbox"]:checked + label {
+      padding-left: 0;
+      top: 12px;
+    }
   }
 }
 
@@ -174,6 +180,12 @@
 .audio-player-container .icon-wrap {
   display:flex;
   flex-direction:column;
+  align-items: center;
+  justify-content: center;
+  width: 65px;
+  height: 52px;
+  margin:0 auto;
+  text-align: center;
 }
 #volume-wrap .item      {
   display:flex;
@@ -182,7 +194,7 @@
 // Volume Slider
 #volume-wrap             {
   position: relative;
-  margin-left:18px;
+  //margin-left:18px;
 }
 .volume-slider-container {
   display:none;
@@ -231,6 +243,8 @@
 
 .progress-slider {
   width: 50%;
+  height: 3px;
+  margin-top: -20px;
   position:relative;
 
   div {
@@ -315,8 +329,14 @@
   .audio-player-container {
     flex-wrap: wrap;
     height: 83px;
+
+    .icon-wrap {
+      min-width: 40px;
+      width: auto;
+    }
+
     .progress-slider {
-      order:1;width:55%;min-width:291px;margin:0 25px 17px 25px;
+      order:1;width:55%;min-width:291px;margin:0 25px 24px 25px;
     }
     //:nth-child(4) {order:1;width:55%;min-width:291px;margin:0 25px 17px 25px;}
     :nth-child(3) {margin-right:0;}

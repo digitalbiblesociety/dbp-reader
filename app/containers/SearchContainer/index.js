@@ -7,6 +7,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import injectSaga from 'utils/injectSaga';
@@ -15,7 +16,7 @@ import GenericErrorBoundary from 'components/GenericErrorBoundary';
 import SvgWrapper from 'components/SvgWrapper';
 import LoadingSpinner from 'components/LoadingSpinner';
 import CloseMenuFunctions from 'utils/closeMenuFunctions';
-import { getSearchResults } from './actions';
+import { getSearchResults, viewError, stopLoading } from './actions';
 import makeSelectSearchContainer from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -32,6 +33,8 @@ export class SearchContainer extends React.PureComponent { // eslint-disable-lin
 
 	componentWillUnmount() {
 		this.closeMenuController.onMenuUnmount();
+		this.props.dispatch(viewError());
+		this.props.dispatch(stopLoading());
 	}
 
 	setRef = (node) => {
@@ -64,10 +67,26 @@ export class SearchContainer extends React.PureComponent { // eslint-disable-lin
 		}, 1000);
 	}
 
+	get formattedResults() {
+		const { searchResults, bibleId } = this.props.searchcontainer;
+		const { filterText } = this.state;
+		// Dont know of a better way to differentiate between words because two of the
+		// same word could be in the text, this way at least their index in the array is different
+		/* eslint-disable react/no-array-index-key */
+		return searchResults.map((r) => (
+			<div key={`${r.book_id}${r.chapter}${r.verse_start}`} className={'single-result'}>
+				<h4><Link to={`/${bibleId}/${r.book_id}/${r.chapter}/${r.verse_start}`}>{`${r.book_name_alt} ${r.chapter_alt}:${r.verse_start_alt}`}</Link></h4>
+				<p>{r.verse_text.split(' ').map((w, i) => w.toLowerCase().includes(filterText.toLowerCase()) ? <em key={`${w}_${i}`} className={'search-highlight'}>{w} </em> : `${w} `)}</p>
+			</div>
+		));
+	}
+
 	render() {
 		const { filterText } = this.state;
-		const { searchResults, loadingResults } = this.props.searchcontainer;
-
+		const { searchResults, loadingResults, showError } = this.props.searchcontainer;
+		// console.log('last five', this.props.searchcontainer.lastFiveSearches);
+		// Need a good method of telling whether there are no results because a user hasn't searched
+		// or if it was because this was the first visit to the tab
 		return (
 			<GenericErrorBoundary affectedArea="Search">
 				<aside ref={this.setRef} className="search">
@@ -90,12 +109,7 @@ export class SearchContainer extends React.PureComponent { // eslint-disable-lin
 							<div className={'search-results'}>
 								<h2>Search Results</h2>
 								{
-									searchResults.length ? searchResults.map((result) => (
-										<div key={`${result.book_id}${result.chapter}${result.verse_start}`} className={'single-result'}>
-											<h4>{`${result.book_name_alt} ${result.chapter_alt}:${result.verse_start_alt}`}</h4>
-											<p>{result.verse_text}</p>
-										</div>
-									)) : <div>There were no matches for your search</div>
+									(searchResults.length && !showError) ? this.formattedResults : <div>There were no matches for your search</div>
 								}
 							</div>
 						)

@@ -18,6 +18,7 @@ import {
 import SvgWrapper from 'components/SvgWrapper';
 import HighlightColors from 'components/HighlightColors';
 import CloseMenuFunctions from 'utils/closeMenuFunctions';
+import PopupMessage from '../PopupMessage';
 
 // const StyledDiv = styled.div`
 // 	width:250px;
@@ -57,6 +58,8 @@ import CloseMenuFunctions from 'utils/closeMenuFunctions';
 class ContextPortal extends React.PureComponent {
 	state = {
 		highlightOpen: false,
+		openPopup: false,
+		popupCoords: { x: 0, y: 0 },
 	}
 
 	componentDidMount() {
@@ -148,7 +151,10 @@ class ContextPortal extends React.PureComponent {
 		window.getSelection().addRange(this.clonedRange);
 	}
 
-	copyLinkToClipboard = () => {
+	copyLinkToClipboard = (e) => {
+		const coords = { x: e.clientX, y: e.clientY };
+		this.setState({ openPopup: true, coords });
+		setTimeout(() => this.setState({ openPopup: false }), 1000);
 		// console.log('clicked the copy button');
 		document.addEventListener('copy', this.handleCopy);
 		document.execCommand('copy');
@@ -176,44 +182,36 @@ class ContextPortal extends React.PureComponent {
 		const component = (
 			<div style={{ left: `${coordinates.x}px`, top: `${coordinates.y}px` }} ref={this.setComponentRef} className={'context-menu shadow'}>
 				<div className={'menu-row'}>
-					<span role={'button'} tabIndex={0} className={'menu-item'} title={'Add a note'} onClick={this.handleNoteClick}>
+					<span role={'button'} tabIndex={0} className={'menu-item normal'} title={'Add a note'} onClick={this.handleNoteClick}>
 						<SvgWrapper className={'icon'} svgid="notes" />
 						<span className={'item-text'}>Notes</span>
 					</span>
-					<span role={'button'} tabIndex={0} className={this.state.highlightOpen ? 'menu-item active' : 'menu-item'} title={'Add a highlight'} onClick={this.toggleHighlightColors}>
+					<span role={'button'} tabIndex={0} className={this.state.highlightOpen ? 'menu-item active' : 'menu-item normal'} title={'Add a highlight'} onClick={this.toggleHighlightColors}>
 						<SvgWrapper className={'icon'} svgid="highlight" />
 						<span className={'item-text'}>Highlight</span>
 						<div className={this.state.highlightOpen ? 'highlight-colors active' : 'highlight-colors'}>
 							<HighlightColors addHighlight={this.handleHighlightClick} />
 						</div>
 					</span>
-					<span role={'button'} tabIndex={0} className={'menu-item'} title={'Add a bookmark'} onClick={this.handleBookmarkClick}>
+					<span role={'button'} tabIndex={0} className={'menu-item normal'} title={'Add a bookmark'} onClick={this.handleBookmarkClick}>
 						<SvgWrapper className={'icon'} svgid="bookmark" />
 						<span className={'item-text'}>Bookmark</span>
 					</span>
-					<span role={'button'} tabIndex={0} className={'menu-item'} title={'Share with email'} onClick={closeContextMenu}>
-						<EmailShareButton subject={document.title} body={`"${window.getSelection().toString()}"\n\nTo listen to the audio click here: ${window.location.href}`} url={window.location.href}>
-							<SvgWrapper className={'icon'} svgid="e-mail" />
-						</EmailShareButton>
+					<EmailShareButton className={'menu-item normal'} onShareWindowClose={closeContextMenu} subject={document.title} body={`"${window.getSelection().toString()}"\n\nTo listen to the audio click here: ${window.location.href}`} url={window.location.href}>
+						<SvgWrapper className={'icon'} svgid="e-mail" />
 						<span className={'item-text'}>E-mail</span>
-					</span>
+					</EmailShareButton>
 				</div>
 				<div className={'menu-row'}>
-					<span role={'button'} tabIndex={0} className={'menu-item social facebook'} title={'Share to Facebook'} onClick={closeContextMenu}>
-						<FacebookShareButton className="facebook fb-share-button" quote={`"${window.getSelection().toString()}"`} url={window.location.href}>
-							<SvgWrapper className={'icon'} svgid="facebook" />
-						</FacebookShareButton>
-					</span>
-					<span role={'button'} tabIndex={0} className={'menu-item social google'} title={'Share to Google'} onClick={closeContextMenu}>
-						<GooglePlusShareButton url={window.location.href}>
-							<SvgWrapper className={'icon'} svgid="google" />
-						</GooglePlusShareButton>
-					</span>
-					<span role={'button'} tabIndex={0} className={'menu-item social twitter'} title={'Share to Twitter'} onClick={closeContextMenu}>
-						<TwitterShareButton title={document.title} hashtags={[`${document.title.split('|')[0].replace(/\s/g, '')}`]} url={window.location.href}>
-							<SvgWrapper className={'icon'} svgid="twitter" />
-						</TwitterShareButton>
-					</span>
+					<FacebookShareButton onShareWindowClose={closeContextMenu} className="menu-item social facebook fb-share-button" quote={`"${window.getSelection().toString()}"`} url={window.location.href}>
+						<SvgWrapper className={'icon'} svgid="facebook" />
+					</FacebookShareButton>
+					<GooglePlusShareButton onShareWindowClose={closeContextMenu} className={'menu-item social google'} url={window.location.href}>
+						<SvgWrapper className={'icon'} svgid="google" />
+					</GooglePlusShareButton>
+					<TwitterShareButton onShareWindowClose={closeContextMenu} className={'menu-item social twitter'} title={document.title} hashtags={[`${document.title.split('|')[0].replace(/\s/g, '')}`]} url={window.location.href}>
+						<SvgWrapper className={'icon'} svgid="twitter" />
+					</TwitterShareButton>
 					<div role={'button'} tabIndex={0} className={'menu-item social like-button facebook'} title={'Like on Facebook'} onClick={addFacebookLike}>
 						<span className={'share-count'}><FacebookShareCount url={window.location.href} /></span>
 						<span className={'like-thumb'}><SvgWrapper height={'24px'} width={'24px'} svgid="like_one-color" /> Like</span>
@@ -223,6 +221,9 @@ class ContextPortal extends React.PureComponent {
 					<input readOnly id={'link-to-copy'} className={'copy-link'} value={window.location.href} />
 					<span id={'copy-button'} className={'copy-button'}>Copy</span>
 				</div>
+				{
+					this.state.openPopup ? <PopupMessage message={'Link Copied!'} x={this.state.coords.x} y={this.state.coords.y} /> : null
+				}
 			</div>
 		);
 

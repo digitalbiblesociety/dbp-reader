@@ -124,6 +124,13 @@
           all: unset;
         }
       }
+
+      .search-highlight {
+        @include css4 {
+          background-color: var(--application-text-selection-color);
+          color: #000;
+        }
+      }
     }
   }
 }

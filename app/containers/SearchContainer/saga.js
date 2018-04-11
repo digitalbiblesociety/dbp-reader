@@ -1,6 +1,6 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
 import request from 'utils/request';
-import { GET_SEARCH_RESULTS, LOAD_SEARCH_RESULTS } from './constants';
+import { GET_SEARCH_RESULTS, LOAD_SEARCH_RESULTS, SEARCH_ERROR } from './constants';
 
 export function* getSearchResults({ bibleId, searchText }) {
 	const searchString = searchText.replace(' ', '+');
@@ -26,6 +26,7 @@ export function* getSearchResults({ bibleId, searchText }) {
 			// };
 			// fetch('https://api.bible.build/error_logging', options);
 		}
+		yield put({ type: SEARCH_ERROR });
 	}
 }
 // Individual exports for testing
