@@ -325,32 +325,32 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 					{
 						(this.state.playerState && hasAudio) ? (
 							<div className="audio-player-container">
-								<span className={'icon-wrap'} title={messages.prevTitle.defaultMessage}>
+								<div className={'icon-wrap'} title={messages.prevTitle.defaultMessage}>
 									<SvgWrapper onClick={this.skipBackward} className="svgitem icon" fill="#fff" svgid="previous" />
 									<FormattedMessage {...messages.prev} />
-								</span>
+								</div>
 								{
 									!this.state.playing ? (
-										<span className={'icon-wrap'} title={messages.playTitle.defaultMessage}>
+										<div className={'icon-wrap'} title={messages.playTitle.defaultMessage}>
 											<SvgWrapper onClick={this.playVideo} className="svgitem icon" fill="#fff" svgid="play" />
 											<FormattedMessage {...messages.play} />
-										</span>
+										</div>
 									) : null
 								}
 								{
 									this.state.playing ? (
-										<span className={'icon-wrap'} title={messages.pauseTitle.defaultMessage}>
+										<div className={'icon-wrap'} title={messages.pauseTitle.defaultMessage}>
 											<SvgWrapper onClick={this.pauseVideo} className="svgitem icon" fill="#fff" svgid="pause" />
 											<FormattedMessage {...messages.pause} />
-										</span>
+										</div>
 									) : null
 								}
-								<span className={'icon-wrap'} title={messages.nextTitle.defaultMessage}>
+								<div className={'icon-wrap'} title={messages.nextTitle.defaultMessage}>
 									<SvgWrapper onClick={this.skipForward} className="svgitem icon" fill="#fff" svgid="next" />
 									<FormattedMessage {...messages.next} />
-								</span>
+								</div>
 								<AudioProgressBar setCurrentTime={this.setCurrentTime} duration={this.state.duration} currentTime={this.state.currentTime} />
-								<span id={'autoplay-wrap'} className={'icon-wrap'} title={messages.autoplayTitle.defaultMessage}>
+								<div id={'autoplay-wrap'} className={'icon-wrap'} title={messages.autoplayTitle.defaultMessage}>
 									<input
 										id={'autoplay'}
 										className={'custom-checkbox'}
@@ -361,7 +361,7 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 									<label htmlFor={'autoplay'}>
 										<FormattedMessage {...messages.autoplay} />
 									</label>
-								</span>
+								</div>
 								<div id="volume-wrap" className={'icon-wrap'}>
 									<div title={messages.volumeTitle.defaultMessage} role="button" tabIndex="0" className={this.state.volumeSliderState ? 'item active' : 'item'} onClick={() => { this.state.volumeSliderState ? this.setVolumeSliderState(false) : this.setVolumeSliderState(true); this.setSpeedControlState(false); this.setElipsisState(false); }}>
 										{this.getVolumeSvg(this.state.volume)}

@@ -174,7 +174,7 @@ const red = {
 	'--context-menu-text-color': '#000000',
 	'--context-menu-highlight-active-background-color': '#868686',
 	'--context-menu-hover-color': '#ccc',
-	'--audio-player-progress-bar-background': '#1B1F24',
+	'--audio-player-progress-bar-background': '#5B5F64',
 	'--audio-player-handle-background': '#000000',
 	'--audio-player-background': '#2C3036',
 	'--audio-player-gripper-background-color': 'rgba(25,25,25,0.9)',
