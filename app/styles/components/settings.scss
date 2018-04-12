@@ -75,9 +75,9 @@
 //}
 
 // FONT SETTINGS
-.font-settings .option               {@include css4 {color:var(--inactive-font-option)};display:inline-block;text-align:center;font-size:36px;width:33%}
-.font-settings .option small         {display:block;text-transform:uppercase;font-size:14px}
-.font-settings .option.active        {@include css4{color:var(--default-text-color);};}
+.font-settings .option        {@include css4 {color:var(--inactive-font-option)};display:inline-block;text-align:center;font-size:36px;width:33%}
+.font-settings .option small  {display:block;text-transform:uppercase;font-size:14px}
+.font-settings .option.active {@include css4{color:var(--default-text-color);};}
 .font-settings .option.sans.active:before {
   margin:-1px 0 0 -7px;
   position:absolute;

@@ -62,7 +62,6 @@ const paper = {
 	'--application-input-caret-color': '#000',
 	'--application-text-caret-color': '#000',
 	'--application-transparent-gray': 'rgba(0,0,0,.8)',
-	'--application-words-of-jesus': '#DA2015',
 	'--application-text-selection-color': '#6EC3E2',
 	'--application-text-container-color': '#000000',
 };
@@ -128,7 +127,6 @@ const dark = {
 	'--application-input-caret-color': '#fff',
 	'--application-text-caret-color': '#fff',
 	'--application-transparent-gray': 'rgba(0,0,0,0.8)',
-	'--application-words-of-jesus': '#DA2015',
 	'--application-text-selection-color': 'rgb(216, 182, 185)',
 	'--application-text-container-color': '#FFFFFF',
 };
@@ -197,7 +195,6 @@ const red = {
 	'--application-input-caret-color': '#000',
 	'--application-text-caret-color': '#fff',
 	'--application-transparent-gray': 'rgba(0,0,0,.8)',
-	'--application-words-of-jesus': '#DA2015',
 	'--application-text-selection-color': 'rgb(216, 182, 185)',
 	'--application-text-container-color': '#000000',
 };
@@ -223,7 +220,11 @@ const sizes = {
 };
 
 export const toggleWordsOfJesus = (state) => {
+	// console.log('toggle words', state);
 	document.documentElement.style.setProperty('--application-words-of-jesus', state ? '#A00' : 'inherit');
+	// document.documentElement.style.setProperty('--application-words-of-jesus', '#000');
+	// console.log(document.documentElement.style.getPropertyValue('--application-words-of-jesus'));
+	// console.log('after toggle');
 	sessionStorage.setItem('bible_is_words_of_jesus', state);
 };
 
