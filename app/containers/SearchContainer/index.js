@@ -92,11 +92,11 @@ export class SearchContainer extends React.PureComponent { // eslint-disable-lin
 	get formattedResults() {
 		const {
 			searchResults,
-			bibleId,
 			showError,
 			trySearchOptions,
 			lastFiveSearches,
 		} = this.props.searchcontainer;
+		const { bibleId } = this.props;
 		const { filterText, firstSearch } = this.state;
 
 		if (firstSearch) {

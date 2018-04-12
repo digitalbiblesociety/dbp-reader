@@ -115,6 +115,13 @@
 
       h4 {
         font-size: 1.2em;
+        a {
+          &:hover {
+            @include css4 {
+              color: var(--active-color-primary);
+            }
+          }
+        }
       }
 
       p {
