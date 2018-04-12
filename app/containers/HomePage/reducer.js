@@ -187,7 +187,7 @@ function homePageReducer(state = initialState, action) {
 			.set('highlights', fromJS(action.highlights))
 			.set('chapterText', fromJS(action.text));
 	case LOAD_HIGHLIGHTS:
-		return state.set('highlights', action.highlights);
+		return state.set('highlights', fromJS(action.highlights));
 	case SET_ACTIVE_NOTES_VIEW:
 		return state.set('activeNotesView', action.view);
 	case UPDATE_THEME:
