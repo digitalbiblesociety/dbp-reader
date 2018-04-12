@@ -136,6 +136,10 @@
 
   &.closed {
     bottom:56px;
+
+    @include css4 {
+      border-bottom: 1px solid var(--menu-border-color);
+    }
   }
     //background: rgba(0,0,0,0.5);
 }
@@ -143,7 +147,7 @@
   display:block;
   fill:currentColor;
   position:relative;
-  left:calc(50% - 25px);
+  left:calc(50% - 14px);
   bottom:0;
   cursor:pointer;
 
