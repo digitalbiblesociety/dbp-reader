@@ -73,12 +73,12 @@ const initialState = fromJS({
 		toggleOptions: {
 			readersMode: {
 				name: 'READER\'S MODE',
-				active: false,
+				active: JSON.parse(localStorage.getItem('userSettings_toggleOptions_readersMode_active')),
 				available: true,
 			},
 			crossReferences: {
 				name: 'CROSS REFERENCE',
-				active: false,
+				active: JSON.parse(localStorage.getItem('userSettings_toggleOptions_crossReferences_active')),
 				available: true,
 			},
 			redLetter: {
@@ -88,12 +88,12 @@ const initialState = fromJS({
 			},
 			justifiedText: {
 				name: 'JUSTIFIED TEXT',
-				active: true,
+				active: JSON.parse(localStorage.getItem('userSettings_toggleOptions_justifiedText_active')),
 				available: true,
 			},
 			oneVersePerLine: {
 				name: 'ONE VERSE PER LINE',
-				active: false,
+				active: JSON.parse(localStorage.getItem('userSettings_toggleOptions_oneVersePerLine_active')),
 				available: true,
 			},
 			verticalScrolling: {
@@ -198,10 +198,13 @@ function homePageReducer(state = initialState, action) {
 		return state.setIn(['userSettings', 'activeFontSize'], action.size);
 	case TOGGLE_SETTINGS_OPTION:
 		if (action.exclusivePath) {
+			localStorage.setItem(action.exclusivePath.join('_'), false);
+			localStorage.setItem(action.path.join('_'), !state.getIn(action.path));
 			return state
 				.setIn(action.exclusivePath, false)
 				.setIn(action.path, !state.getIn(action.path));
 		}
+		localStorage.setItem(action.path.join('_'), !state.getIn(action.path));
 
 		return state.setIn(action.path, !state.getIn(action.path));
 	case TOGGLE_SETTINGS_OPTION_AVAILABILITY:
