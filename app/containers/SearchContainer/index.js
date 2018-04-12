@@ -7,7 +7,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import injectSaga from 'utils/injectSaga';
@@ -16,6 +16,8 @@ import GenericErrorBoundary from 'components/GenericErrorBoundary';
 import SvgWrapper from 'components/SvgWrapper';
 import LoadingSpinner from 'components/LoadingSpinner';
 import CloseMenuFunctions from 'utils/closeMenuFunctions';
+import SearchResult from 'components/SearchResult';
+import RecentSearches from 'components/RecentSearches';
 import { getSearchResults, viewError, stopLoading } from './actions';
 import makeSelectSearchContainer from './selectors';
 import reducer from './reducer';
@@ -24,6 +26,7 @@ import saga from './saga';
 export class SearchContainer extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	state = {
 		filterText: '',
+		firstSearch: true,
 	}
 
 	componentDidMount() {
@@ -53,7 +56,7 @@ export class SearchContainer extends React.PureComponent { // eslint-disable-lin
 		const val = e.target.value;
 		const { bibleId } = this.props;
 
-		this.setState({ filterText: val });
+		this.setState({ filterText: val, firstSearch: !val });
 		// Clears the timeout so that at most there will only be one request per second
 		if (this.timer) {
 			clearTimeout(this.timer);
@@ -64,26 +67,67 @@ export class SearchContainer extends React.PureComponent { // eslint-disable-lin
 				return;
 			}
 			this.getSearchResults({ bibleId, searchText: val });
+			this.setState({ firstSearch: false });
+		}, 1000);
+	}
+
+	handleSearchOptionClick = (filterText) => {
+		const bibleId = this.props.bibleId;
+
+		this.setState({ filterText });
+
+		if (this.timer) {
+			clearTimeout(this.timer);
+		}
+
+		this.timer = setTimeout(() => {
+			if (!filterText) {
+				return;
+			}
+			this.getSearchResults({ bibleId, searchText: filterText });
+			this.setState({ firstSearch: false });
 		}, 1000);
 	}
 
 	get formattedResults() {
-		const { searchResults, bibleId } = this.props.searchcontainer;
-		const { filterText } = this.state;
-		// Dont know of a better way to differentiate between words because two of the
-		// same word could be in the text, this way at least their index in the array is different
-		/* eslint-disable react/no-array-index-key */
-		return searchResults.map((r) => (
-			<div key={`${r.book_id}${r.chapter}${r.verse_start}`} className={'single-result'}>
-				<h4><Link to={`/${bibleId}/${r.book_id}/${r.chapter}/${r.verse_start}`}>{`${r.book_name_alt} ${r.chapter_alt}:${r.verse_start_alt}`}</Link></h4>
-				<p>{r.verse_text.split(' ').map((w, i) => w.toLowerCase().includes(filterText.toLowerCase()) ? <em key={`${w}_${i}`} className={'search-highlight'}>{w} </em> : `${w} `)}</p>
+		const {
+			searchResults,
+			bibleId,
+			showError,
+			trySearchOptions,
+			lastFiveSearches,
+		} = this.props.searchcontainer;
+		const { filterText, firstSearch } = this.state;
+
+		if (firstSearch) {
+			return (
+				<div className={'search-results'}>
+					<h2>Need a place to start?<br />Try Searching:</h2>
+					{
+						trySearchOptions.map((o) => [<button key={o.id} className={'search-history-item'} onClick={() => this.handleSearchOptionClick(o.searchText)}>{o.searchText}</button>, <br />])
+					}
+					<br />
+					<h2>Search History:</h2>
+					<RecentSearches searches={lastFiveSearches} clickHandler={this.handleSearchOptionClick} />
+				</div>
+			);
+		}
+
+		return (
+			<div className={'search-results'}>
+				<h2>Search Results</h2>
+				{
+					(searchResults.length && !showError) ?
+						searchResults.map((r) => <SearchResult filterText={filterText} bibleId={bibleId} key={`${r.book_id}${r.chapter}${r.verse_start}`} result={r} />) :
+						<div>There were no matches for your search</div>
+				}
 			</div>
-		));
+		);
 	}
 
 	render() {
 		const { filterText } = this.state;
-		const { searchResults, loadingResults, showError } = this.props.searchcontainer;
+		const { loadingResults } = this.props.searchcontainer;
 		// console.log('last five', this.props.searchcontainer.lastFiveSearches);
 		// Need a good method of telling whether there are no results because a user hasn't searched
 		// or if it was because this was the first visit to the tab
@@ -105,14 +149,7 @@ export class SearchContainer extends React.PureComponent { // eslint-disable-lin
 						/>
 					</div>
 					{
-						loadingResults ? <LoadingSpinner /> : (
-							<div className={'search-results'}>
-								<h2>Search Results</h2>
-								{
-									(searchResults.length && !showError) ? this.formattedResults : <div>There were no matches for your search</div>
-								}
-							</div>
-						)
+						loadingResults ? <LoadingSpinner /> : this.formattedResults
 					}
 				</aside>
 			</GenericErrorBoundary>
