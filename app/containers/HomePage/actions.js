@@ -50,9 +50,9 @@ export const toggleSettingsOptionAvailability = ({ path }) => ({
 	path,
 });
 
-export const toggleSettingsOption = ({ path }) => ({
+export const toggleSettingsOption = (props) => ({
 	type: TOGGLE_SETTINGS_OPTION,
-	path,
+	...props,
 });
 
 export const initApplication = (props) => ({

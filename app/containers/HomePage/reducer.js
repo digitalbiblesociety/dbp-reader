@@ -99,7 +99,7 @@ const initialState = fromJS({
 			verticalScrolling: {
 				name: 'VERTICAL SCROLLING',
 				active: false,
-				available: true,
+				available: false,
 			},
 		},
 	},
@@ -197,6 +197,12 @@ function homePageReducer(state = initialState, action) {
 	case UPDATE_FONT_SIZE:
 		return state.setIn(['userSettings', 'activeFontSize'], action.size);
 	case TOGGLE_SETTINGS_OPTION:
+		if (action.exclusivePath) {
+			return state
+				.setIn(action.exclusivePath, false)
+				.setIn(action.path, !state.getIn(action.path));
+		}
+
 		return state.setIn(action.path, !state.getIn(action.path));
 	case TOGGLE_SETTINGS_OPTION_AVAILABILITY:
 		return state.setIn(action.path, !state.getIn(action.path));
