@@ -15,7 +15,7 @@ import {
 
 const initialState = fromJS({
 	searchResults: [],
-	lastFiveSearches: JSON.parse(sessionStorage.getItem('bible_is_last_searches')) || [],
+	lastFiveSearches: JSON.parse(localStorage.getItem('bible_is_last_searches')) || [],
 	trySearchOptions: [
 		{ id: 1, searchText: 'Jesus' },
 		{ id: 2, searchText: 'Romans 10:17' },
@@ -33,7 +33,7 @@ function searchContainerReducer(state = initialState, action) {
 				// .set('lastFiveSearches', state.get('lastFiveSearches'))
 				.set('loadingResults', true);
 		}
-		sessionStorage.setItem('bible_is_last_searches', state.get('lastFiveSearches').size > 4 ? JSON.stringify(state.get('lastFiveSearches').push(action.searchText.toLowerCase()).shift()) : JSON.stringify(state.get('lastFiveSearches').push(action.searchText.toLowerCase())));
+		localStorage.setItem('bible_is_last_searches', state.get('lastFiveSearches').size > 4 ? JSON.stringify(state.get('lastFiveSearches').push(action.searchText.toLowerCase()).shift()) : JSON.stringify(state.get('lastFiveSearches').push(action.searchText.toLowerCase())));
 		return state
 			.set('lastFiveSearches', state.get('lastFiveSearches').size > 4 ? state.get('lastFiveSearches').push(action.searchText.toLowerCase()).shift() : state.get('lastFiveSearches').push(action.searchText.toLowerCase()))
 			.set('loadingResults', true);
