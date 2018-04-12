@@ -118,7 +118,7 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 			highlights,
 			vernacularNamesObject,
 		} = this.props;
-		console.log('notebook props', this.props);
+		// console.log('notebook props', this.props);
 
 		return (
 			<GenericErrorBoundary affectedArea="Notes">

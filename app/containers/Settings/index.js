@@ -85,7 +85,11 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 	}
 	updateFontType = ({ font }) => this.props.dispatch(updateFontType({ font }));
 	updateFontSize = ({ size }) => this.props.dispatch(updateFontSize({ size }));
-	toggleSettingsOption = (props) => this.props.dispatch(toggleSettingsOption({ ...props, path: this.toggle[props.name] }));
+	toggleSettingsOption = (props) => {
+		const opposite = props.name === 'ONE VERSE PER LINE' ? 'READER\'S MODE' : 'ONE VERSE PER LINE';
+		const exclusivePath = props.name === 'ONE VERSE PER LINE' || props.name === 'READER\'S MODE' ? this.toggle[opposite] : '';
+		this.props.dispatch(toggleSettingsOption({ ...props, path: this.toggle[props.name], exclusivePath }));
+	}
 	// toggleReadersMode = () => this.props.dispatch(toggleReadersMode());
 	// toggleCrossReferences = () => this.props.dispatch(toggleCrossReferences());
 	// toggleRedLetter = () => this.props.dispatch(toggleRedLetter());
