@@ -166,7 +166,7 @@
     [type="checkbox"]:checked + label:after {
       position:absolute;
       top:calc(-20px + 0.35em);
-      left:calc(38px + 0.45em);
+      left:calc(16px + 0.45em);
     };
     [type="checkbox"]:not(:checked) + label,
     [type="checkbox"]:checked + label {

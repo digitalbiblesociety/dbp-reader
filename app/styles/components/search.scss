@@ -5,6 +5,8 @@
   left:0;
   height:calc(100% - 56px);
   width:320px;
+  overflow-x: hidden;
+  overflow-y: scroll;
 
   @include css4{
     background-color:var(--menu-body-background-color);
@@ -113,6 +115,13 @@
 
       h4 {
         font-size: 1.2em;
+        a {
+          &:hover {
+            @include css4 {
+              color: var(--active-color-primary);
+            }
+          }
+        }
       }
 
       p {
@@ -129,6 +138,24 @@
         @include css4 {
           background-color: var(--application-text-selection-color);
           color: #000;
+        }
+      }
+    }
+
+    button {
+      all: unset;
+    }
+
+    .search-history-item {
+      margin-top: 10px;
+      font-weight: 100;
+      font-style: italic;
+
+      &:hover {
+        cursor: pointer;
+
+        @include css4 {
+          color: var(--active-color-primary);
         }
       }
     }

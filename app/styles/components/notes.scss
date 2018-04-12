@@ -52,6 +52,9 @@
   }
 
   textarea 			                        {resize:none;background-color:inherit;border:none;font-size:0.98em;}
+  textarea::-webkit-input-placeholder {@include css4 {color:var(--default-text-color);}}
+  textarea::-moz-placeholder {@include css4 {color:var(--default-text-color);}}
+  textarea:-ms-input-placeholder {@include css4 {color:var(--default-text-color);}}
   textarea:focus                            {outline:none;}
   textarea:focus::-webkit-input-placeholder {color:transparent;}
   textarea:focus::-moz-placeholder          {color:transparent;}
@@ -65,24 +68,106 @@
 .notes .top-bar .text                  {@include css4{color:var(--default-text-color)};margin-left:15px;}
 
 // Edit Notes Section
-.edit-notes .date-title                {display:flex;align-items:center;height:50px;width:100%;padding:15px;}
-.date-title .date                      {@include css4{color:var(--active-color-primary);};}
-.date-title .title                     {@include css4{color:var(--default-text-color);};margin-left:15px;font-style:italic;width:100%;font-weight:200;}
+.edit-notes {
+  height: calc(100% - 104px);
+  overflow-x: hidden;
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-content: stretch;
 
-.edit-notes .verse-dropdown            {display:flex;align-items:center;justify-content:space-around;width:100%;height:40px;padding:15px;}
-.verse-dropdown .version-dropdown      {@include css4{color:var(--active-color-primary)};}
-.verse-dropdown .svg                   {fill:currentColor;}
-.verse-dropdown.open .svg              {transform:rotate(0.25turn);}
-.verse-dropdown .svg:hover             {opacity:0.65;cursor:pointer;}
-.verse-dropdown .text                  {@include css4{color:var(--default-text-color)};margin-left:15px;flex-grow:2;}
-.edit-notes .save-button               {float:right;cursor:pointer;font-size:1.05em;padding:15px;}
-.edit-notes .save-button:hover         {@include css4{color:var(--active-color-primary)};}
+  .date-title {
+    display:flex;
+    align-items:center;
+    flex-direction: column;
+    height:50px;
+    width:100%;
+    margin-top: 10px;
+    //padding:15px;
+    padding: 0 25px;
 
-.edit-notes .add-verse                 {height:30px;display:flex;width:100%;align-items:center;padding:15px;}
-.add-verse .plus                       {fill:currentColor;}
-.add-verse .plus:hover                 {opacity:0.65;cursor:pointer}
-.add-verse .text                       {@include css4{color:var(--default-text-color)};margin-left:15px;font-style:italic;}
-.edit-notes .note-text                 {padding:15px;@include css4{color:var(--default-text-color);caret-color:var(--application-input-caret-color);};height:100px;overflow-y:scroll;overflow-x:hidden;width:100%;font-style:italic;margin-top:15px;font-weight:200;}
+    input {
+      margin: unset;
+    }
+
+    .date  {
+      font-size: 10px;
+      align-self: flex-start;
+      @include css4{
+        color:var(--profile-forgot-password-color);
+      };
+    }
+
+    .title {
+      @include css4{
+        color:var(--default-text-color);
+      };
+      //margin-left:15px;
+      width:100%;
+      font-weight:200;
+    }
+  }
+
+  .delete-note-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 50px;
+    width: 100%;
+    padding: 0 10px 0 20px;
+
+    .icon {
+      &:hover {
+        @include css4 {
+          color: var(--active-color-primary);
+        }
+      }
+    }
+    //align-self: center;
+
+    @include css4 {
+      background-color: var(--notebook-footer-background-color);
+    }
+  }
+}
+
+.edit-notes .verse-dropdown       {
+  display:flex;
+  align-items:center;
+  justify-content:space-around;
+  width:100%;
+  height:40px;padding:15px;
+
+}
+.verse-dropdown .version-dropdown {@include css4{color:var(--active-color-primary)};}
+.verse-dropdown .svg              {fill:currentColor;}
+.verse-dropdown.open .svg         {transform:rotate(0.25turn);}
+.verse-dropdown .svg:hover        {opacity:0.65;cursor:pointer;}
+.verse-dropdown .text             {@include css4{color:var(--default-text-color)};margin-left:15px;flex-grow:2;}
+.edit-notes .save-button          {float:right;cursor:pointer;font-size:1.05em;padding:15px;}
+.edit-notes .save-button:hover    {@include css4{color:var(--active-color-primary)};}
+
+.edit-notes .add-verse   {height:30px;display:flex;width:100%;align-items:center;padding:15px;}
+.add-verse .plus         {fill:currentColor;}
+.add-verse .plus:hover   {opacity:0.65;cursor:pointer}
+.add-verse .text         {@include css4{color:var(--default-text-color)};margin-left:15px;font-style:italic;}
+.edit-notes .note-text   {
+  padding:15px;
+  height:100px;
+  overflow-y:scroll;
+  overflow-x:hidden;
+  width:100%;
+  font-style:italic;
+  margin-top:15px;
+  font-weight:200;
+  flex-grow: 2;
+
+  @include css4{
+    color:var(--default-text-color);
+    caret-color:var(--application-text-caret-color);
+  };
+}
 
 .add-verse-expanded                    {padding:15px;height:100px;width:320px;display:flex;@include css4 {background-color:var(--menu-body-background-color);border:1px solid var(--active-color-primary);};}
 .add-verse-expanded .book-table        {width:280px;}

@@ -6,10 +6,10 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import BooksTable from 'components/BooksTable';
+// import BooksTable from 'components/BooksTable';
 import SvgWrapper from 'components/SvgWrapper';
 // import styled from 'styled-components';
-// TODO: Add in ability to select verses both here and in book table
+
 class EditNote extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	state = {
 		textarea: this.props.note.get('notes') || '',
@@ -119,26 +119,26 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 	render() {
 		const {
 			toggleVerseText,
-			toggleAddVerseMenu,
+			// toggleAddVerseMenu,
 			note,
-			isAddVerseExpanded,
+			// isAddVerseExpanded,
 			isVerseTextVisible,
 			activeTextId,
 			notePassage,
 		} = this.props;
-		const {
-			selectedBookName,
-			selectedChapter,
-		} = this.state;
+		// const {
+		// 	selectedBookName,
+		// 	selectedChapter,
+		// } = this.state;
 
 		return (
 			<section className="edit-notes">
 				<div className="date-title">
-					<span className="date">{note.get('date') || this.getCurrentDate()}</span>
 					<input onChange={this.handleNoteTitleChange} placeholder="CLICK TO ADD TITLE" className="title" value={this.state.titleText} />
+					<span className="date">{note.get('date') || this.getCurrentDate()}</span>
 				</div>
 				<div className={`verse-dropdown${isVerseTextVisible ? ' open' : ''}`}>
-					<SvgWrapper onClick={toggleVerseText} className="svg" height="20px" width="20px" svgid="go-right" />
+					<SvgWrapper onClick={toggleVerseText} className={'icon'} svgid="arrow_down" />
 					<span className="text">{this.verseReference}</span>
 					<span className="version-dropdown">{activeTextId}</span>
 				</div>
@@ -149,44 +149,24 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 						</div>
 					) : null
 				}
-				{
-					isAddVerseExpanded ? (
-						<div className="add-verse-expanded">
-							<div className="plus-expanded">
-								<SvgWrapper onClick={toggleAddVerseMenu} width="20px" height="20px" svgid="plus" />
-							</div>
-							<div className="book-table">
-								<BooksTable
-									setActiveChapter={this.setSelectedChapter}
-									setActiveBookName={this.setSelectedBookName}
-									initialBookName={selectedBookName}
-									activeChapter={selectedChapter}
-									closeBookTable={toggleAddVerseMenu}
-								/>
-							</div>
-						</div>
-					) : (
-						<div className="add-verse">
-							<SvgWrapper className="plus" width="20px" height="20px" svgid="plus" />
-							<span className="text">ADD VERSE</span>
-						</div>
-					)
-				}
 				<textarea onChange={this.handleTextareaChange} placeholder="CLICK TO ADD NOTE" value={this.state.textarea} className="note-text" />
-				<span className="save-button" role="button" tabIndex={0} onClick={() => this.handleSave()}>SAVE</span>
+				<div className={'delete-note-section'}>
+					<SvgWrapper className={'icon'} svgid={'delete'} />
+					<span className="save-button" role="button" tabIndex={0} onClick={() => this.handleSave()}>Delete Note</span>
+				</div>
 			</section>
 		);
 	}
 }
-// TODO: Add toggleAddVerseMenu as click handler for 170 svg
+
 EditNote.propTypes = {
 	addNote: PropTypes.func,
 	updateNote: PropTypes.func,
 	toggleVerseText: PropTypes.func,
-	toggleAddVerseMenu: PropTypes.func,
+	// toggleAddVerseMenu: PropTypes.func,
 	note: PropTypes.object,
 	vernacularNamesObject: PropTypes.object,
-	isAddVerseExpanded: PropTypes.bool,
+	// isAddVerseExpanded: PropTypes.bool,
 	isVerseTextVisible: PropTypes.bool,
 	notePassage: PropTypes.string,
 	activeTextId: PropTypes.string,
