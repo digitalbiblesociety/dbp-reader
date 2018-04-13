@@ -22,10 +22,10 @@ export function* updateNote({ userId, data }) {
 		body: formData,
 		method: 'PUT',
 	};
-
+	// console.log('updating note with', data, '\nfor this id', userId);
 	try {
 		const response = yield call(request, requestUrl, options);
-		console.log('user note response', response); // eslint-disable-line no-console
+		// console.log('update user note response', response); // eslint-disable-line no-console
 		if (response.success) {
 			yield put({ type: ADD_NOTE_SUCCESS, response });
 		}
@@ -47,12 +47,12 @@ export function* deleteNote({ userId, noteId }) {
 	const options = {
 		method: 'DELETE',
 	};
-
+	// console.log('deleting note for userid and noteid', userId, noteId);
 	try {
 		const response = yield call(request, requestUrl, options);
 
 		if (response.success) {
-			console.log('successfully deleted note!', response); // eslint-disable-line no-console
+			// console.log('successfully deleted note!', response); // eslint-disable-line no-console
 		}
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
@@ -70,7 +70,7 @@ export function* deleteNote({ userId, noteId }) {
 export function* getNotes({ userId, params = {} }) {
 	const requestUrl = `https://api.bible.build/users/${userId}/notes?key=${process.env.DBP_API_KEY}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}`;
 	Object.entries(params).forEach((param) => requestUrl.concat(`&${param[0]}=${param[1]}`));
-
+	// console.log('getting notes for userid', userId);
 	try {
 		const response = yield call(request, requestUrl);
 		const noteData = {
@@ -105,10 +105,13 @@ export function* addBookmark({ userId, data }) {
 		body: formData,
 		method: 'POST',
 	};
-
+	// console.log('adding bookmark', addBookmark);
 	try {
 		const response = yield call(request, requestUrl, options);
-		console.log('user bookmark response', response);  // eslint-disable-line no-console
+		// console.log('user bookmark response', response);  // eslint-disable-line no-console
+		if (response.success) {
+			// do stuff
+		}
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error(err); // eslint-disable-line no-console
@@ -127,16 +130,16 @@ export function* addNote({ userId, data }) {
 	const formData = new FormData();
 
 	Object.entries(data).forEach((item) => formData.set(item[0], item[1]));
-	formData.append('project_id', process.env.NOTES_PROJECT_ID);
+	// formData.append('project_id', process.env.NOTES_PROJECT_ID);
 
 	const options = {
 		body: formData,
 		method: 'POST',
 	};
-
+	// console.log('Adding note for userid', userId, '\nwith data', data);
 	try {
 		const response = yield call(request, requestUrl, options);
-		console.log('user note response', response); // eslint-disable-line no-console
+		// console.log('add user note response', response); // eslint-disable-line no-console
 		if (response.success) {
 			yield put({ type: ADD_NOTE_SUCCESS, response });
 		}
