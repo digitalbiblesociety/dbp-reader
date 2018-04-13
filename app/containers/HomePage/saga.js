@@ -213,13 +213,13 @@ export function* getChapterFromUrl({ filesets, bibleId: oldBibleId, bookId: oldB
 			yield fork(getHighlights, { bible: bibleId, book: bookId, chapter, userId });
 		}
 		// calling this function to start it asynchronously to this one.
-		if (hasAudio) {
+		// if (hasAudio) {
 			// console.log('calling get chapter audio');
 			// Not yielding this as it doesn't matter when the audio comes back
 			// This function will sometimes have to make multiple api requests
 			// And I don't want it blocking the text from loading
-			yield fork(getChapterAudio, { filesets, bookId, chapter });
-		}
+		yield fork(getChapterAudio, { filesets, bookId, chapter });
+		// }
 		yield fork(getBookMetadata, { bibleId });
 		// console.log('has formatted text', hasFormattedText);
 		// Try to get the formatted text if it is available
@@ -313,6 +313,8 @@ export function* getChapterFromUrl({ filesets, bibleId: oldBibleId, bookId: oldB
 // The getChapterFromUrl function. This may need to be adjusted when
 // RTMP streaming is implemented
 export function* getChapterAudio({ filesets, bookId, chapter }) {
+	// Send a loadaudio action for each fail in production so that there isn't a link loaded
+	// This handles the case where a user already has a link but getting the next one fails
 	// console.log('getting audio', filesets, bookId, chapter);
 	// Parse filesets
 	// TODO Need to handle when there are multiple filesets for the same audio type
@@ -326,6 +328,12 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 
 		return newFile;
 	}, {});
+	// If there isn't any audio then I want to just load an empty string and stop the function
+	// console.log(filteredFilesets)
+	if (!Object.keys(filteredFilesets).length) {
+		yield put({ type: 'loadaudio', audioPath: '' });
+		return;
+	}
 	// console.log('filtered filesets', filteredFilesets);
 	// console.log('filtered', filteredFilesets);
 	// console.log('normal', filesets);
@@ -367,6 +375,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 				// 	body: formData,
 				// };
 				// fetch('https://api.bible.build/error_logging', options);
+				yield put({ type: 'loadaudio', audioPath: '' });
 			}
 		}
 	} else if (ntLength && !otLength) {
@@ -386,6 +395,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 				// 	body: formData,
 				// };
 				// fetch('https://api.bible.build/error_logging', options);
+				yield put({ type: 'loadaudio', audioPath: '' });
 			}
 		}
 	} else if (otLength && !ntLength) {
@@ -406,6 +416,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 				// 	body: formData,
 				// };
 				// fetch('https://api.bible.build/error_logging', options);
+				yield put({ type: 'loadaudio', audioPath: '' });
 			}
 		}
 	} else if (ntLength && otLength) {
@@ -430,6 +441,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 				// 	body: formData,
 				// };
 				// fetch('https://api.bible.build/error_logging', options);
+				yield put({ type: 'loadaudio', audioPath: '' });
 			}
 		}
 		try {
@@ -449,6 +461,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 				// 	body: formData,
 				// };
 				// fetch('https://api.bible.build/error_logging', options);
+				yield put({ type: 'loadaudio', audioPath: '' });
 			}
 		}
 
@@ -472,6 +485,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 				// 	body: formData,
 				// };
 				// fetch('https://api.bible.build/error_logging', options);
+				yield put({ type: 'loadaudio', audioPath: '' });
 			}
 		}
 	}
