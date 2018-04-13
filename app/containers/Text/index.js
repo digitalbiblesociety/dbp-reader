@@ -255,8 +255,13 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			highlights,
 			activeChapter,
 			verseNumber,
+			userNotes,
 			invalidBibleId,
 		} = this.props;
+		if (userNotes) {
+			// do something to display a svg
+		}
+		// console.log(userNotes);
 		const readersMode = userSettings.getIn(['toggleOptions', 'readersMode', 'active']);
 		const oneVersePerLine = userSettings.getIn(['toggleOptions', 'oneVersePerLine', 'active']);
 		const justifiedText = userSettings.getIn(['toggleOptions', 'justifiedText', 'active']);
@@ -637,6 +642,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 
 Text.propTypes = {
 	text: PropTypes.array,
+	userNotes: PropTypes.array,
 	highlights: PropTypes.array,
 	userSettings: PropTypes.object,
 	nextChapter: PropTypes.func,

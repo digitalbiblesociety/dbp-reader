@@ -100,7 +100,7 @@ export function* getNotes({ userId, params = {} }) {
 			pageSize: response.per_page,
 			pages: response.total,
 		};
-		// console.log('note response', response);
+		console.log('get note response', response);
 
 		yield put({ type: LOAD_USER_NOTES, noteData });
 	} catch (err) {
@@ -179,7 +179,7 @@ export function* addNote({ userId, data }) {
 }
 
 // Individual exports for testing
-export default function* defaultSaga() {
+export default function* notesSaga() {
 	const addNoteSaga = yield takeLatest(ADD_NOTE, addNote);
 	const addBookmarkSaga = yield takeLatest(ADD_BOOKMARK, addBookmark);
 	const getNotesSaga = yield takeLatest(GET_USER_NOTES, getNotes);

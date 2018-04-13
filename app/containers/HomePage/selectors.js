@@ -19,6 +19,19 @@ const selectHomepageText = (state) => state.getIn(['homepage', 'chapterText']);
 const selectProfilePageDomain = (state) => state.get('profile');
 const selectFormattedTextSource = (state, props) => ({ source: state.getIn(['homepage', 'formattedSource']), props });
 const selectCrossReferenceState = (state) => state.getIn(['homepage', 'userSettings', 'toggleOptions', 'crossReferences', 'active']);
+const selectNotes = (state) => state.get('notes');
+
+const selectUserNotes = () => createDeepEqualSelector(
+	[selectNotes, selectHomePageDomain],
+	(notes, home) => {
+		const bibleId = home.get('activeTextId');
+		const bookId = home.get('activeBookId');
+		const chapter = home.get('activeChapter');
+		// console.log(bibleId, bookId, chapter);
+		// console.log(notes.get('listData'));
+		return notes.get('listData').filter((n) => n.bible_id === bibleId && n.book_id === bookId && n.chapter === chapter);
+	}
+);
 
 const selectUserId = () => createDeepEqualSelector(
 	selectProfilePageDomain,
@@ -155,4 +168,5 @@ export {
 	selectAuthenticationStatus,
 	selectUserId,
 	selectChapterText,
+	selectUserNotes,
 };
