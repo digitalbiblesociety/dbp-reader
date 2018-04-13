@@ -594,6 +594,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					toggleSettingsModal={this.toggleSettingsModal}
 					toggleProfile={this.toggleProfile}
 					toggleSearch={this.toggleSearchModal}
+					setActiveNotesView={this.setActiveNotesView}
 				/>
 			</GenericErrorBoundary>
 		);

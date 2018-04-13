@@ -27,6 +27,7 @@ import {
 	setActivePageData,
 	addNote,
 	getNotes,
+	getChapterForNote,
 	addBookmark,
 	addHighlight,
 	updateNote,
@@ -52,7 +53,6 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 		super(props);
 		this.props.dispatch(setActiveChild(props.openView));
 	}
-
 	componentDidMount() {
 		document.addEventListener('click', this.handleClickOutside);
 	}
@@ -67,7 +67,10 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 
 	setActiveChild = (child) => this.props.dispatch(setActiveChild(child))
 	setActivePageData = (page) => this.props.dispatch(setActivePageData(page))
-	setActiveNote = ({ note }) => this.props.dispatch(setActiveNote({ note }))
+	setActiveNote = ({ note }) => {
+		this.props.dispatch(getChapterForNote({ note }));
+		this.props.dispatch(setActiveNote({ note }));
+	}
 	setPageSize = (size) => this.props.dispatch(setPageSize(size))
 	getNotes = () => this.props.dispatch(getNotes({ userId: this.props.userId }))
 	toggleVerseText = () => this.props.dispatch(toggleVerseText())
@@ -80,10 +83,10 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 	deleteNote = (noteId) => this.props.dispatch(deleteNote({ userId: this.props.userId, noteId }))
 
 	titleOptions = {
-		edit: 'EDIT NOTE',
-		notes: 'MY NOTES',
-		bookmarks: 'MY BOOKMARKS',
-		highlights: 'MY HIGHLIGHTS',
+		edit: 'Edit Note',
+		notes: 'My Notes',
+		bookmarks: 'My Bookmarks',
+		highlights: 'My Highlights',
 	}
 
 	handleClickOutside = (event) => {

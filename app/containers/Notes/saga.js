@@ -9,14 +9,35 @@ import {
 	DELETE_NOTE,
 	LOAD_USER_NOTES,
 	GET_USER_NOTES,
+	GET_CHAPTER_FOR_NOTE,
+	LOAD_CHAPTER_FOR_NOTE,
 } from './constants';
+
+export function* getChapterForNote({ note }) {
+	// console.log(note);
+	const chapter = note.chapter;
+	const bibleId = note.bible_id;
+	const bookId = note.book_id;
+	const reqUrl = `https://api.bible.build/bibles/${bibleId}/${bookId}/${chapter}?bucket=${process.env.DBP_BUCKET_ID}&key=${process.env.DBP_API_KEY}&v=4&book_id=${bookId}&chapter_id=${chapter}`;
+
+	try {
+		const response = yield call(request, reqUrl);
+		// console.log(response);
+
+		yield put({ type: LOAD_CHAPTER_FOR_NOTE, text: response.data.filter((v) => v.verse_start <= note.verse_end && v.verse_start >= note.verse_start) });
+	} catch (err) {
+		if (process.env.NODE_ENV === 'development') {
+			console.error('error getting chapter for note', err); // eslint-disable-line no-console
+		}
+	}
+}
 // TODO: Figure out a way to get new notes after a user has added/deleted/updated to their notebook
 export function* updateNote({ userId, data }) {
 	const requestUrl = `https://api.bible.build/users/${userId}/notes?key=${process.env.DBP_API_KEY}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}`;
 	const formData = new FormData();
 
 	Object.entries(data).forEach((item) => formData.set(item[0], item[1]));
-	formData.append('project_id', process.env.NOTES_PROJECT_ID);
+	// formData.append('project_id', process.env.NOTES_PROJECT_ID);
 
 	const options = {
 		body: formData,
@@ -59,8 +80,8 @@ export function* deleteNote({ userId, noteId }) {
 			console.error(err); // eslint-disable-line no-console
 		} else if (process.env.NODE_ENV === 'production') {
 			// const options = {
-			// 	header: 'POST',
-			// 	body: formData,
+			// 	 header: 'POST',
+			// 	 body: formData,
 			// };
 			// fetch('https://api.bible.build/error_logging', options);
 		}
@@ -79,6 +100,7 @@ export function* getNotes({ userId, params = {} }) {
 			pageSize: response.per_page,
 			pages: response.total,
 		};
+		// console.log('note response', response);
 
 		yield put({ type: LOAD_USER_NOTES, noteData });
 	} catch (err) {
@@ -99,7 +121,7 @@ export function* addBookmark({ userId, data }) {
 	const formData = new FormData();
 
 	Object.entries(data).forEach((item) => formData.set(item[0], item[1]));
-	formData.append('project_id', process.env.NOTES_PROJECT_ID);
+	// formData.append('project_id', process.env.NOTES_PROJECT_ID);
 
 	const options = {
 		body: formData,
@@ -163,11 +185,13 @@ export default function* defaultSaga() {
 	const getNotesSaga = yield takeLatest(GET_USER_NOTES, getNotes);
 	const updateNoteSaga = yield takeLatest(UPDATE_NOTE, updateNote);
 	const deleteNoteSaga = yield takeLatest(DELETE_NOTE, deleteNote);
+	const getChapterSaga = yield takeLatest(GET_CHAPTER_FOR_NOTE, getChapterForNote);
 
 	yield take(LOCATION_CHANGE);
 	yield cancel(addNoteSaga);
 	yield cancel(addBookmarkSaga);
 	yield cancel(getNotesSaga);
+	yield cancel(getChapterSaga);
 	yield cancel(updateNoteSaga);
 	yield cancel(deleteNoteSaga);
 }

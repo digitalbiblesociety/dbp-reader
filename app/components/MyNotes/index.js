@@ -64,11 +64,6 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 		return (
 			<div className="list-sections">
 				<div className="searchbar">
-					{
-						sectionType === 'notes' ? (
-							<div role="button" tabIndex={0} className="add-note" onClick={() => this.handleClick({})}><SvgWrapper height="26px" width="26px" svgid="plus"></SvgWrapper></div>
-						) : null
-					}
 					<span className={'input-wrapper'}>
 						<SvgWrapper className={'icon'} svgid={'search'} />
 						<input placeholder={`SEARCH ${sectionType.toUpperCase()}`} />

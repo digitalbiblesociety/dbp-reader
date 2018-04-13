@@ -142,7 +142,7 @@
 }
 .verse-dropdown .version-dropdown {@include css4{color:var(--active-color-primary)};}
 .verse-dropdown .svg              {fill:currentColor;}
-.verse-dropdown.open .svg         {transform:rotate(0.25turn);}
+.verse-dropdown.open .icon         {transform:rotate(0.25turn);}
 .verse-dropdown .svg:hover        {opacity:0.65;cursor:pointer;}
 .verse-dropdown .text             {@include css4{color:var(--default-text-color)};margin-left:15px;flex-grow:2;}
 .edit-notes .save-button          {float:right;cursor:pointer;font-size:1.05em;padding:15px;}
@@ -174,10 +174,21 @@
 .add-verse-expanded .plus-expanded     {@include css4{background-color:var(--active-color-primary);height:100%;width:40px;};}
 .add-verse-expanded .plus-expanded svg {width:20px;height:20px;margin-left:10px;margin-top:5px;cursor:pointer;}
 
-.edit-notes .verse-text                {padding:10px 15px 10px 30px;@include css4{background-color:var(--menu-body-background-color);color:var(--default-text-color)};max-height:100px;overflow-y:scroll;overflow-x:hidden;}
+.edit-notes .verse-text                {
+  padding:10px 15px;
+  @include css4{
+    background-color:var(--notebook-footer-background-color);
+    color:var(--default-text-color);
+  };
+  max-height:100px;
+  overflow-y:scroll;
+  overflow-x:hidden;
+
+}
 
 // List Sections
-.list-sections                         {height:calc(100% - 104px);max-height:calc(100% - 104px);}
+.list-sections                         {height:calc(100% - 104px);
+  max-height:calc(100% - 104px);}
 .list-sections .searchbar              {display:flex;width:100%;height:50px;}
 .searchbar .add-note                   {display:flex;align-items:center;justify-content:center;@include css4{background-color:var(--active-color-primary)};width:50px;height:50px;cursor:pointer;}
 .searchbar ::-webkit-input-placeholder {

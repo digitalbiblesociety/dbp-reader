@@ -97,7 +97,7 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 				title: titleText,
 				notes: textarea,
 				book_id: bookId,
-				bookmark: false,
+				bookmark: 0,
 				verse_start: verseStart,
 				verse_end: verseEnd,
 				chapter,
@@ -108,7 +108,7 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 				title: titleText,
 				notes: textarea,
 				book_id: bookId,
-				bookmark: false,
+				bookmark: 0,
 				verse_start: verseStart,
 				verse_end: verseEnd,
 				chapter,
@@ -158,7 +158,7 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 					<span className="date">{note.get('date') || this.getCurrentDate()}</span>
 				</div>
 				<div className={`verse-dropdown${isVerseTextVisible ? ' open' : ''}`}>
-					<SvgWrapper onClick={toggleVerseText} className={'icon'} svgid="arrow_down" />
+					<SvgWrapper onClick={toggleVerseText} className={'icon'} svgid="arrow_right" />
 					<span className="text">{this.verseReference}</span>
 					<span className="version-dropdown">{activeTextId}</span>
 				</div>

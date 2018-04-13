@@ -5,15 +5,16 @@
  */
 
 import {
-	SET_ACTIVE_CHILD,
 	TOGGLE_VERSE_TEXT,
 	TOGGLE_ADD_VERSE_MENU,
-	SET_ACTIVE_PAGE_DATA,
 	SET_PAGE_SIZE,
+	SET_ACTIVE_CHILD,
+	SET_ACTIVE_PAGE_DATA,
 	TOGGLE_PAGE_SELECTOR,
 	ADD_NOTE,
 	ADD_HIGHLIGHT,
 	GET_USER_NOTES,
+	GET_CHAPTER_FOR_NOTE,
 	ADD_BOOKMARK,
 	UPDATE_NOTE,
 	DELETE_NOTE,
@@ -21,6 +22,11 @@ import {
 
 export const getNotes = (props) => ({
 	type: GET_USER_NOTES,
+	...props,
+});
+
+export const getChapterForNote = (props) => ({
+	type: GET_CHAPTER_FOR_NOTE,
 	...props,
 });
 

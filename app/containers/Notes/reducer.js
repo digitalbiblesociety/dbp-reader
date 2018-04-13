@@ -13,6 +13,7 @@ import {
 	SET_PAGE_SIZE,
 	LOAD_USER_NOTES,
 	TOGGLE_PAGE_SELECTOR,
+	LOAD_CHAPTER_FOR_NOTE,
 	// initialNotesListForTesting,
 } from './constants';
 
@@ -22,14 +23,17 @@ const initialState = fromJS({
 	// activePageData: initialNotesListForTesting.slice(0, 10),
 	listData: [],
 	// listData: initialNotesListForTesting,
-	isAddVerseExpanded: false,
+	isAddVerseExpanded: true,
 	isVerseTextVisible: false,
 	pageSelectorState: false,
 	paginationPageSize: 10,
+	chapterForNote: [],
 });
 
 function notesReducer(state = initialState, action) {
 	switch (action.type) {
+	case LOAD_CHAPTER_FOR_NOTE:
+		return state.set('chapterForNote', action.text);
 	case SET_ACTIVE_CHILD:
 		return state.set('activeChild', action.child);
 	case TOGGLE_VERSE_TEXT:
