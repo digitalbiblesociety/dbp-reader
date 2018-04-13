@@ -136,7 +136,7 @@ export class SearchContainer extends React.PureComponent { // eslint-disable-lin
 				<aside ref={this.setRef} className="search">
 					<header>
 						<h1 className="section-title">Search</h1>
-						<SvgWrapper className={'icon'} svgid={'search'} />
+						<SvgWrapper onClick={this.handleSearchModalToggle} className={'icon'} svgid={'search'} />
 						<SvgWrapper onClick={this.handleSearchModalToggle} className={'icon'} svgid={'arrow_left'} />
 					</header>
 					<div className={'search-input-bar'}>

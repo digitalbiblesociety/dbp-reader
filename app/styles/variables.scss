@@ -158,6 +158,7 @@ $slab-font-family-option: "Roboto Slab", Rockwell, Courier, monospace;
   --application-transparent-gray: rgba(0,0,0,.8);
   --application-words-of-jesus: #A00;
   --application-text-selection-color: rgb(216, 182, 185);
+  --application-light-color-option: #FFFFFF;
   --audioplayer-handle-background-color: rgba(0, 0, 0, 0.5);
   --text-arrow-color: #1B1F24;
 }
@@ -226,6 +227,7 @@ $variables: (
     --application-words-of-jesus: #A00,
     --application-text-selection-color: rgb(216, 182, 185),
     --audioplayer-handle-background-color: rgba(0, 0, 0, 0.5),
+    --application-light-color-option: #ffffff,
     --text-arrow-color: #1B1F24
 );
 

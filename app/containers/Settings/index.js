@@ -117,7 +117,7 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 				<aside ref={this.setRef} className="settings">
 					<header>
 						<SvgWrapper className={'icon'} svgid={'arrow_right'} onClick={this.handleSettingsModalToggle} />
-						<SvgWrapper className={'icon'} svgid={'text_options'} />
+						<SvgWrapper className={'icon'} svgid={'text_options'} onClick={this.handleSettingsModalToggle} />
 						<h1 className="section-title">Text Options</h1>
 					</header>
 					<section className="color-schemes">

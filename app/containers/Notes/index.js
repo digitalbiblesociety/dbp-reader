@@ -125,7 +125,7 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 				<aside ref={this.setRef} className="notes">
 					<header>
 						<SvgWrapper className={'icon'} fill="#fff" svgid="arrow_right" onClick={() => { setActiveChild('notes'); toggleNotesModal(); }} />
-						<SvgWrapper className={'icon'} svgid={'notebook'} />
+						<SvgWrapper className={'icon'} svgid={'notebook'} onClick={() => { setActiveChild('notes'); toggleNotesModal(); }} />
 						<h1 className="section-title">Notebook</h1>
 					</header>
 					{
