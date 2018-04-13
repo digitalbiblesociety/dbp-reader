@@ -55,20 +55,15 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 		// 	highlights,
 		// 	notes: listData,
 		// 	bookmarks: [],
+		// };
+		// const dataToMap = dataTypes[sectionType];
 		// console.log('highlights in my notes', highlights);
 		// console.log('active page data', activePageData);
 		// console.log('list data', listData);
-		// }
-		// const dataToMap = dataTypes[sectionType];
 
 		return (
 			<div className="list-sections">
 				<div className="searchbar">
-					{
-						sectionType === 'notes' ? (
-							<div role="button" tabIndex={0} className="add-note" onClick={() => this.handleClick({})}><SvgWrapper height="26px" width="26px" svgid="plus"></SvgWrapper></div>
-						) : null
-					}
 					<span className={'input-wrapper'}>
 						<SvgWrapper className={'icon'} svgid={'search'} />
 						<input placeholder={`SEARCH ${sectionType.toUpperCase()}`} />
@@ -130,7 +125,7 @@ MyNotes.propTypes = {
 	sectionType: PropTypes.string.isRequired,
 	pageSize: PropTypes.number.isRequired,
 	vernacularNamesObject: PropTypes.object,
-	highlights: PropTypes.array,
+	highlights: PropTypes.object,
 };
 
 export default MyNotes;

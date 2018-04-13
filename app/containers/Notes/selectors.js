@@ -46,10 +46,14 @@ const selectActiveNote = () => createSelector(
 );
 
 const selectNotePassage = () => createSelector(
-	selectHomepageDomain,
-	(substate) => {
-		const text = substate.get('chapterText');
-		const note = substate.get('note');
+	[selectHomepageDomain, selectNotesDomain],
+	(home, notes) => {
+		if (notes.get('chapterForNote').size) {
+			// console.log('verse text', notes.get('chapterForNote').reduce((passageText, verse) => passageText.concat(verse.get('verse_text')), ''));
+			return notes.get('chapterForNote').reduce((passageText, verse) => passageText.concat(verse.get('verse_text')), '');
+		}
+		const text = home.get('chapterText');
+		const note = home.get('note');
 		const chapterNumber = note.get('chapter');
 		const verseStart = note.get('verse_start');
 		const verseEnd = note.get('verse_end');
@@ -60,8 +64,14 @@ const selectNotePassage = () => createSelector(
 		}
 
 		const verses = text.filter((verse) => chapterNumber === verse.get('chapter') && (verseStart <= verse.get('verse_start') && verseEnd >= verse.get('verse_end')));
+		const passage = verses.reduce((passageText, verse) => passageText.concat(verse.get('verse_text')), '');
 
-		return verses.reduce((passageText, verse) => passageText.concat(verse.get('verse_text')), '');
+		if (!passage) {
+			// console.log('verse text', notes.get('chapterForNote').reduce((passageText, verse) => passageText.concat(verse.verse_text), ''));
+			return notes.get('chapterForNote').reduce((passageText, verse) => passageText.concat(verse.verse_text), '');
+		}
+
+		return passage;
 	}
 );
 

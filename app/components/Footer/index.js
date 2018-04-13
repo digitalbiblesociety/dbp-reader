@@ -18,6 +18,7 @@ const Footer = ({
 	toggleSettingsModal,
 	toggleProfile,
 	toggleSearch,
+	setActiveNotesView,
 }) => (
 	<div className={'footer-background'}>
 		<div className="footer-content">
@@ -29,7 +30,7 @@ const Footer = ({
 				<SvgWrapper className={'icon'} fill="#fff" svgid="search" />
 				<span className={'title-text'}>Search</span>
 			</span>
-			<span title={'Notebook'} className={notebookActive ? 'item active' : 'item'} role="button" tabIndex={0} onClick={() => !notebookActive && toggleNotebook()}>
+			<span title={'Notebook'} className={notebookActive ? 'item active' : 'item'} role="button" tabIndex={0} onClick={() => { if (!notebookActive) { toggleNotebook(); setActiveNotesView('notes'); } }}>
 				<SvgWrapper className={'icon'} fill="#fff" svgid="notebook" />
 				<span className={'title-text'}>Notebook</span>
 			</span>
@@ -50,6 +51,7 @@ Footer.propTypes = {
 	toggleSettingsModal: PropTypes.func,
 	toggleProfile: PropTypes.func,
 	toggleSearch: PropTypes.func,
+	setActiveNotesView: PropTypes.func,
 };
 
 export default Footer;

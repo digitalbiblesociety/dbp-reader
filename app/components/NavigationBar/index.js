@@ -32,7 +32,7 @@ class NavigationBar extends React.PureComponent { // eslint-disable-line react/p
 		return (
 			<div className={'nav-background'}>
 				<div className="nav-container">
-					<a className="logo" href={'http://www.bible.is'} title={'http://www.bible.is'}>
+					<a className="logo" href={'http://www.bible.is'} title={'http://www.bible.is'} target={'_blank'}>
 						{
 							theme === 'paper' ? <SvgWrapper className="svg" svgid={'bible.is_logo_light'} /> : null
 						}

@@ -182,7 +182,7 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 				<div ref={(el) => this.handleRef(el, 'container')} className="book-container">
 					{
 						books.get('OT') ? [
-							<div className={'testament-title'}>Old Testament</div>,
+							<div key={'ot_title_key'} className={'testament-title'}>Old Testament</div>,
 							books.get('OT') && books.get('OT').map((book) => (
 								<div
 									className={'book-button'}
@@ -198,15 +198,14 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 											<div className="chapter-container">
 												{
 													book.get('chapters').map((chapter) => (
-														<span className={'chapter-box'}>
-															<Link
-																to={`/${activeTextId.toLowerCase()}/${book.get('book_id').toLowerCase()}/${chapter}`}
-																key={chapter}
-																onClick={() => this.handleChapterClick(book, chapter)}
-															>
-																<span className={(activeChapter === chapter && (book.get('name') || book.get('name_short')) === activeBookName) ? 'active-chapter' : ''}>{chapter}</span>
-															</Link>
-														</span>
+														<Link
+															to={`/${activeTextId.toLowerCase()}/${book.get('book_id').toLowerCase()}/${chapter}`}
+															key={chapter}
+															onClick={() => this.handleChapterClick(book, chapter)}
+															className={'chapter-box'}
+														>
+															<span className={(activeChapter === chapter && (book.get('name') || book.get('name_short')) === activeBookName) ? 'active-chapter' : ''}>{chapter}</span>
+														</Link>
 													))
 												}
 											</div>
@@ -218,7 +217,7 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 					}
 					{
 						books.get('NT') ? [
-							<div className={'testament-title'}>New Testament</div>,
+							<div key={'nt_title_key'} className={'testament-title'}>New Testament</div>,
 							books.get('NT').map((book) => (
 								<div
 									className={'book-button'}
@@ -234,15 +233,14 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 											<div className="chapter-container">
 												{
 													book.get('chapters').map((chapter) => (
-														<span className={'chapter-box'}>
-															<Link
-																to={`/${activeTextId.toLowerCase()}/${book.get('book_id').toLowerCase()}/${chapter}`}
-																key={chapter}
-																onClick={() => this.handleChapterClick(book, chapter)}
-															>
-																<span className={(activeChapter === chapter && (book.get('name') || book.get('name_short')) === activeBookName) ? 'active-chapter' : ''}>{chapter}</span>
-															</Link>
-														</span>
+														<Link
+															to={`/${activeTextId.toLowerCase()}/${book.get('book_id').toLowerCase()}/${chapter}`}
+															key={chapter}
+															onClick={() => this.handleChapterClick(book, chapter)}
+															className={'chapter-box'}
+														>
+															<span className={(activeChapter === chapter && (book.get('name') || book.get('name_short')) === activeBookName) ? 'active-chapter' : ''}>{chapter}</span>
+														</Link>
 													))
 												}
 											</div>
@@ -254,7 +252,7 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 					}
 					{
 						books.get('AP') ? [
-							<div className={'testament-title'}>Apocrypha</div>,
+							<div key={'ap_title_key'} className={'testament-title'}>Apocrypha</div>,
 							books.get('AP').map((book) => (
 								<div
 									className={'book-button'}
@@ -270,15 +268,14 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 											<div className="chapter-container">
 												{
 													book.get('chapters').map((chapter) => (
-														<span className={'chapter-box'}>
-															<Link
-																to={`/${activeTextId.toLowerCase()}/${book.get('book_id').toLowerCase()}/${chapter}`}
-																key={chapter}
-																onClick={() => this.handleChapterClick(book, chapter)}
-															>
-																<span className={(activeChapter === chapter && (book.get('name') || book.get('name_short')) === activeBookName) ? 'active-chapter' : ''}>{chapter}</span>
-															</Link>
-														</span>
+														<Link
+															to={`/${activeTextId.toLowerCase()}/${book.get('book_id').toLowerCase()}/${chapter}`}
+															key={chapter}
+															onClick={() => this.handleChapterClick(book, chapter)}
+															className={'chapter-box'}
+														>
+															<span className={(activeChapter === chapter && (book.get('name') || book.get('name_short')) === activeBookName) ? 'active-chapter' : ''}>{chapter}</span>
+														</Link>
 													))
 												}
 											</div>
@@ -299,7 +296,7 @@ BooksTable.propTypes = {
 	closeBookTable: PropTypes.func, // closes the window open
 	setActiveChapter: PropTypes.func, // Set chapter in parent component
 	setActiveBookName: PropTypes.func, // Set book in parent component
-	books: PropTypes.array,
+	books: PropTypes.object,
 	audioObjects: PropTypes.array,
 	userId: PropTypes.string,
 	activeTextId: PropTypes.string, // parent components active text id

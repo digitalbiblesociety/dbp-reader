@@ -10,6 +10,11 @@
  * TODO: Refactor to have everything use immutablejs and not plain js
  */
 
+// import { fromJS, is } from 'immutable';
+// import TextSelection from 'containers/TextSelection';
+// import ChapterSelection from 'containers/ChapterSelection';
+// import MenuBar from 'components/MenuBar';
+// import messages from './messages';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -21,11 +26,8 @@ import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import isEqual from 'lodash/isEqual';
 import get from 'lodash/get';
-// import { fromJS, is } from 'immutable';
 import Settings from 'containers/Settings';
 import AudioPlayer from 'containers/AudioPlayer';
-// import TextSelection from 'containers/TextSelection';
-// import ChapterSelection from 'containers/ChapterSelection';
 import Profile from 'containers/Profile';
 import Notes from 'containers/Notes';
 import Text from 'containers/Text';
@@ -47,8 +49,11 @@ import {
 	getLanguages,
 	getTexts,
 } from 'containers/TextSelection/actions';
+import notesReducer from 'containers/Notes/reducer';
 import textReducer from 'containers/TextSelection/reducer';
+import notesSaga from 'containers/Notes/saga';
 import textSaga from 'containers/TextSelection/saga';
+import { getNotes } from 'containers/Notes/actions';
 import {
 	addHighlight,
 	getBooks,
@@ -79,12 +84,11 @@ import makeSelectHomePage, {
 	selectFormattedSource,
 	selectAuthenticationStatus,
 	selectUserId,
+	selectUserNotes,
 	// selectChapterText,
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
-// import MenuBar from 'components/MenuBar';
-// import messages from './messages';
 
 class HomePage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	componentDidMount() {
@@ -294,6 +298,10 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 				userAuthenticated,
 				userId,
 			}));
+			if (userId) {
+				// console.log('getting the notes', userId);
+				this.props.dispatch(getNotes({ userId }));
+			}
 		}
 		// I am not sure what I thought this was for... I think I don't need it
 		// } else if (!isEqual(highlights, this.props.homepage.highlights)) {
@@ -490,6 +498,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			userSettings,
 			formattedSource,
 			userId,
+			userNotes,
 			userAuthenticated,
 			// updatedText,
 		} = this.props;
@@ -566,6 +575,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					verseNumber={verse}
 					highlights={highlights}
 					userId={userId}
+					userNotes={userNotes}
 					userSettings={userSettings}
 					activeBookId={activeBookId}
 					invalidBibleId={invalidBibleId}
@@ -594,6 +604,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					toggleSettingsModal={this.toggleSettingsModal}
 					toggleProfile={this.toggleProfile}
 					toggleSearch={this.toggleSearchModal}
+					setActiveNotesView={this.setActiveNotesView}
 				/>
 			</GenericErrorBoundary>
 		);
@@ -610,6 +621,7 @@ HomePage.propTypes = {
 	formattedSource: PropTypes.object,
 	history: PropTypes.object,
 	match: PropTypes.object,
+	userNotes: PropTypes.object,
 	userAuthenticated: PropTypes.bool,
 	userId: PropTypes.string,
 	// updatedText: PropTypes.array,
@@ -624,6 +636,7 @@ const mapStateToProps = createStructuredSelector({
 	formattedSource: selectFormattedSource(),
 	userAuthenticated: selectAuthenticationStatus(),
 	userId: selectUserId(),
+	userNotes: selectUserNotes(),
 	// updatedText: selectChapterText(),
 });
 
@@ -639,11 +652,15 @@ const withReducer = injectReducer({ key: 'homepage', reducer });
 const withSaga = injectSaga({ key: 'homepage', saga });
 const withTextReducer = injectReducer({ key: 'textSelection', reducer: textReducer });
 const withTextSaga = injectSaga({ key: 'textSelection', saga: textSaga });
+const withNotesReducer = injectReducer({ key: 'notes', reducer: notesReducer });
+const withNotesSaga = injectSaga({ key: 'notes', saga: notesSaga });
 
 export default compose(
 	withReducer,
 	withTextReducer,
+	withNotesReducer,
 	withSaga,
 	withTextSaga,
+	withNotesSaga,
 	withConnect,
 )(HomePage);

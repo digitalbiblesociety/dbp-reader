@@ -22,6 +22,7 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 
 	componentWillUnmount() {
 		// Dispatch api call to save the user note and hope nothing hiccups
+		// This will not fire if the user closes the tab or the browser
 		if (this.state.textarea) {
 			this.handleSave();
 		}
@@ -44,12 +45,42 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 		this.setState({ selectedBookName: book, selectedBookId: id });
 	}
 
+	// I think This could easily cause performance issues...
+	// But I don't know how to save the note another way if there
+	// Isn't a "save" button... ...
 	handleTextareaChange = (e) => {
-		this.setState({ textarea: e.target.value });
+		const val = e.target.value;
+		this.setState({ textarea: val });
+		// Clears the timeout so that at most there will only be one request per 2.5 seconds
+		if (this.timer) {
+			clearTimeout(this.timer);
+		}
+		// Don't have to bind 'this' bc of the arrow function
+		this.timer = setTimeout(() => {
+			// Don't save if there isn't a value
+			if (!val) {
+				return;
+			}
+			this.handleSave();
+		}, 2500);
 	}
 
 	handleNoteTitleChange = (e) => {
+		const val = e.target.value;
+		const textArea = this.state.textarea;
 		this.setState({ titleText: e.target.value });
+		// Clears the timeout so that at most there will only be one request per 2.5 seconds
+		if (this.timer) {
+			clearTimeout(this.timer);
+		}
+		// Don't have to bind 'this' bc of the arrow function
+		this.timer = setTimeout(() => {
+			// Don't save if there isn't a value
+			if (!val || !textArea) {
+				return;
+			}
+			this.handleSave();
+		}, 2500);
 	}
 
 	handleSave = () => {
@@ -66,23 +97,10 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 				title: titleText,
 				notes: textarea,
 				book_id: bookId,
-				highlights: '',
+				bookmark: 0,
 				verse_start: verseStart,
 				verse_end: verseEnd,
 				chapter,
-			});
-		} else if (this.state.selectedBookId) {
-			const { selectedBookId, selectedChapter } = this.state;
-
-			this.props.addNote({
-				bible_id: activeTextId,
-				title: titleText,
-				notes: textarea,
-				book_id: selectedBookId,
-				highlights: '',
-				verse_start: verseStart,
-				verse_end: verseEnd,
-				chapter: selectedChapter,
 			});
 		} else {
 			this.props.addNote({
@@ -90,7 +108,7 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 				title: titleText,
 				notes: textarea,
 				book_id: bookId,
-				highlights: '',
+				bookmark: 0,
 				verse_start: verseStart,
 				verse_end: verseEnd,
 				chapter,
@@ -99,6 +117,8 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 
 		this.setState({ savedNote: true });
 	}
+
+	deleteNote = () => this.setState({ deleteNote: true }); // console.log('send api call to delete the note')
 
 	get verseReference() {
 		const { vernacularNamesObject, note } = this.props;
@@ -138,7 +158,7 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 					<span className="date">{note.get('date') || this.getCurrentDate()}</span>
 				</div>
 				<div className={`verse-dropdown${isVerseTextVisible ? ' open' : ''}`}>
-					<SvgWrapper onClick={toggleVerseText} className={'icon'} svgid="arrow_down" />
+					<SvgWrapper onClick={toggleVerseText} className={'icon'} svgid="arrow_right" />
 					<span className="text">{this.verseReference}</span>
 					<span className="version-dropdown">{activeTextId}</span>
 				</div>
@@ -152,7 +172,7 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 				<textarea onChange={this.handleTextareaChange} placeholder="CLICK TO ADD NOTE" value={this.state.textarea} className="note-text" />
 				<div className={'delete-note-section'}>
 					<SvgWrapper className={'icon'} svgid={'delete'} />
-					<span className="save-button" role="button" tabIndex={0} onClick={() => this.handleSave()}>Delete Note</span>
+					<span className="save-button" role="button" tabIndex={0} onClick={() => this.deleteNote()}>Delete Note</span>
 				</div>
 			</section>
 		);

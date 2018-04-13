@@ -5,54 +5,54 @@
  */
 
 import {
-	SET_ACTIVE_CHILD,
 	TOGGLE_VERSE_TEXT,
 	TOGGLE_ADD_VERSE_MENU,
-	SET_ACTIVE_PAGE_DATA,
 	SET_PAGE_SIZE,
+	SET_ACTIVE_CHILD,
+	SET_ACTIVE_PAGE_DATA,
 	TOGGLE_PAGE_SELECTOR,
 	ADD_NOTE,
 	ADD_HIGHLIGHT,
 	GET_USER_NOTES,
+	GET_CHAPTER_FOR_NOTE,
 	ADD_BOOKMARK,
 	UPDATE_NOTE,
 	DELETE_NOTE,
 } from './constants';
 
-export const getNotes = ({ userId, params }) => ({
+export const getNotes = (props) => ({
 	type: GET_USER_NOTES,
-	userId,
-	params,
+	...props,
 });
 
-export const deleteNote = ({ userId, noteId }) => ({
+export const getChapterForNote = (props) => ({
+	type: GET_CHAPTER_FOR_NOTE,
+	...props,
+});
+
+export const deleteNote = (props) => ({
 	type: DELETE_NOTE,
-	userId,
-	noteId,
+	...props,
 });
 
-export const updateNote = ({ userId, data }) => ({
+export const updateNote = (props) => ({
 	type: UPDATE_NOTE,
-	userId,
-	data,
+	...props,
 });
 
-export const addNote = ({ data, userId }) => ({
+export const addNote = (props) => ({
 	type: ADD_NOTE,
-	data,
-	userId,
+	...props,
 });
 
-export const addBookmark = ({ data, userId }) => ({
+export const addBookmark = (props) => ({
 	type: ADD_BOOKMARK,
-	data,
-	userId,
+	...props,
 });
 
-export const addHighlight = ({ data, userId }) => ({
+export const addHighlight = (props) => ({
 	type: ADD_HIGHLIGHT,
-	data,
-	userId,
+	...props,
 });
 
 export const setActiveChild = (child) => ({
