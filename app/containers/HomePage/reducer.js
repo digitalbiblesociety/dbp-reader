@@ -73,12 +73,12 @@ const initialState = fromJS({
 		toggleOptions: {
 			readersMode: {
 				name: 'READER\'S MODE',
-				active: false,
+				active: JSON.parse(localStorage.getItem('userSettings_toggleOptions_readersMode_active')),
 				available: true,
 			},
 			crossReferences: {
 				name: 'CROSS REFERENCE',
-				active: false,
+				active: JSON.parse(localStorage.getItem('userSettings_toggleOptions_crossReferences_active')),
 				available: true,
 			},
 			redLetter: {
@@ -88,12 +88,12 @@ const initialState = fromJS({
 			},
 			justifiedText: {
 				name: 'JUSTIFIED TEXT',
-				active: true,
+				active: JSON.parse(localStorage.getItem('userSettings_toggleOptions_justifiedText_active')),
 				available: true,
 			},
 			oneVersePerLine: {
 				name: 'ONE VERSE PER LINE',
-				active: false,
+				active: JSON.parse(localStorage.getItem('userSettings_toggleOptions_oneVersePerLine_active')),
 				available: true,
 			},
 			verticalScrolling: {
@@ -178,6 +178,9 @@ function homePageReducer(state = initialState, action) {
 				.set('formattedSource', action.formattedSource)
 				.set('highlights', fromJS(action.highlights))
 				.setIn(['userSettings', 'toggleOptions', 'crossReferences', 'active'], true)
+				.setIn(['userSettings', 'toggleOptions', 'redLetters', 'active'], true)
+				.setIn(['userSettings', 'toggleOptions', 'crossReferences', 'available'], true)
+				.setIn(['userSettings', 'toggleOptions', 'redLetters', 'available'], true)
 				.set('chapterText', fromJS(action.text));
 		}
 		return state
@@ -185,6 +188,10 @@ function homePageReducer(state = initialState, action) {
 			.set('audioSource', action.audioSource)
 			.set('formattedSource', action.formattedSource)
 			.set('highlights', fromJS(action.highlights))
+			.setIn(['userSettings', 'toggleOptions', 'crossReferences', 'active'], false)
+			.setIn(['userSettings', 'toggleOptions', 'redLetters', 'active'], false)
+			.setIn(['userSettings', 'toggleOptions', 'crossReferences', 'available'], false)
+			.setIn(['userSettings', 'toggleOptions', 'redLetters', 'available'], false)
 			.set('chapterText', fromJS(action.text));
 	case LOAD_HIGHLIGHTS:
 		return state.set('highlights', fromJS(action.highlights));
@@ -198,10 +205,13 @@ function homePageReducer(state = initialState, action) {
 		return state.setIn(['userSettings', 'activeFontSize'], action.size);
 	case TOGGLE_SETTINGS_OPTION:
 		if (action.exclusivePath) {
+			localStorage.setItem(action.exclusivePath.join('_'), false);
+			localStorage.setItem(action.path.join('_'), !state.getIn(action.path));
 			return state
 				.setIn(action.exclusivePath, false)
 				.setIn(action.path, !state.getIn(action.path));
 		}
+		localStorage.setItem(action.path.join('_'), !state.getIn(action.path));
 
 		return state.setIn(action.path, !state.getIn(action.path));
 	case TOGGLE_SETTINGS_OPTION_AVAILABILITY:
@@ -229,13 +239,30 @@ function homePageReducer(state = initialState, action) {
 			// .set('formattedSource', fromJS(action.chapterData.formattedText))
 			.set('activeFilesets', fromJS(action.filesets));
 	case 'loadnewchapter':
-		// console.log('loading chapter with', action);
+		if (action.hasFormattedText) {
+			return state
+				.set('hasFormattedText', fromJS(action.hasFormattedText))
+				.set('hasTextInDatabase', fromJS(action.hasPlainText))
+				.set('hasAudio', fromJS(action.hasAudio))
+				.set('chapterText', fromJS(action.plainText))
+				.set('loadingNewChapterText', false)
+				.setIn(['userSettings', 'toggleOptions', 'crossReferences', 'active'], true)
+				.setIn(['userSettings', 'toggleOptions', 'redLetter', 'active'], true)
+				.setIn(['userSettings', 'toggleOptions', 'crossReferences', 'available'], true)
+				.setIn(['userSettings', 'toggleOptions', 'redLetter', 'available'], true)
+				.set('formattedSource', fromJS(action.formattedText));
+		}
+
 		return state
 			.set('hasFormattedText', fromJS(action.hasFormattedText))
 			.set('hasTextInDatabase', fromJS(action.hasPlainText))
 			.set('hasAudio', fromJS(action.hasAudio))
 			.set('chapterText', fromJS(action.plainText))
 			.set('loadingNewChapterText', false)
+			.setIn(['userSettings', 'toggleOptions', 'crossReferences', 'active'], false)
+			.setIn(['userSettings', 'toggleOptions', 'redLetter', 'active'], false)
+			.setIn(['userSettings', 'toggleOptions', 'crossReferences', 'available'], false)
+			.setIn(['userSettings', 'toggleOptions', 'redLetter', 'available'], false)
 			.set('formattedSource', fromJS(action.formattedText));
 	case 'loadaudio':
 		// console.log('loading audio with', action);

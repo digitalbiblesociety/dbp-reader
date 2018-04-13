@@ -156,8 +156,9 @@ $slab-font-family-option: "Roboto Slab", Rockwell, Courier, monospace;
   --application-input-caret-color: #000;
   --application-text-caret-color: #fff;
   --application-transparent-gray: rgba(0,0,0,.8);
-  --application-words-of-jesus: #DA2015;
+  --application-words-of-jesus: #A00;
   --application-text-selection-color: rgb(216, 182, 185);
+  --application-light-color-option: #FFFFFF;
   --audioplayer-handle-background-color: rgba(0, 0, 0, 0.5);
   --text-arrow-color: #1B1F24;
 }
@@ -223,9 +224,10 @@ $variables: (
     --application-input-caret-color: #000,
     --application-text-caret-color: #fff,
     --application-transparent-gray: rgba(0,0,0,.8),
-    --application-words-of-jesus: #DA2015,
+    --application-words-of-jesus: #A00,
     --application-text-selection-color: rgb(216, 182, 185),
     --audioplayer-handle-background-color: rgba(0, 0, 0, 0.5),
+    --application-light-color-option: #ffffff,
     --text-arrow-color: #1B1F24
 );
 

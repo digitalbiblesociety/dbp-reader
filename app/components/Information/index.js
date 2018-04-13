@@ -34,7 +34,7 @@ class Information extends React.PureComponent {// eslint-disable-line react/pref
 			<aside ref={this.setRef} className="profile">
 				<header>
 					<h1 className="section-title">Information</h1>
-					<SvgWrapper className={'icon'} svgid={'info'} />
+					<SvgWrapper className={'icon'} svgid={'info'} onClick={() => toggleInformationModal()} />
 					<SvgWrapper className={'icon'} svgid={'arrow_left'} onClick={() => toggleInformationModal()} />
 				</header>
 				<section className="copywrite">

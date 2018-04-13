@@ -104,7 +104,7 @@ export class SearchContainer extends React.PureComponent { // eslint-disable-lin
 				<div className={'search-results'}>
 					<h2>Need a place to start?<br />Try Searching:</h2>
 					{
-						trySearchOptions.map((o) => [<button key={o.id} className={'search-history-item'} onClick={() => this.handleSearchOptionClick(o.searchText)}>{o.searchText}</button>, <br />])
+						trySearchOptions.map((o) => [<button key={o.id} className={'search-history-item'} onClick={() => this.handleSearchOptionClick(o.searchText)}>{o.searchText}</button>, <br key={`br${o.searchText}`} />])
 					}
 					<br />
 					<h2>Search History:</h2>
@@ -136,7 +136,7 @@ export class SearchContainer extends React.PureComponent { // eslint-disable-lin
 				<aside ref={this.setRef} className="search">
 					<header>
 						<h1 className="section-title">Search</h1>
-						<SvgWrapper className={'icon'} svgid={'search'} />
+						<SvgWrapper onClick={this.handleSearchModalToggle} className={'icon'} svgid={'search'} />
 						<SvgWrapper onClick={this.handleSearchModalToggle} className={'icon'} svgid={'arrow_left'} />
 					</header>
 					<div className={'search-input-bar'}>

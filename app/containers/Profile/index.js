@@ -125,7 +125,7 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 				<aside ref={this.setRef} className="profile">
 					<header>
 						<h1>Profile</h1>
-						<SvgWrapper className={'icon'} svgid={'profile'} />
+						<SvgWrapper className={'icon'} svgid={'profile'} onClick={toggleProfile} />
 						<SvgWrapper className={'icon'} svgid={'arrow_left'} onClick={toggleProfile} />
 					</header>
 					<div className="profile-content">
