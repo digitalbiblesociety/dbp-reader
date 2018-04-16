@@ -10,6 +10,7 @@ import SvgWrapper from 'components/SvgWrapper';
 import ContextPortal from 'components/ContextPortal';
 import FootnotePortal from 'components/FootnotePortal';
 import LoadingSpinner from 'components/LoadingSpinner';
+import IconsInText from 'components/IconsInText';
 // import differenceObject from 'utils/deepDifferenceObject';
 import isEqual from 'lodash/isEqual';
 import createHighlights from './highlightPlainText';
@@ -302,7 +303,6 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				textComponents = [<h5 key={'no_text'}>This resource does not currently have any text.</h5>];
 			}
 		} else if (readersMode) {
-			// console.log('text', text);
 			textComponents = text.map((verse) =>
 				verse.hasHighlight ?
 					[<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} verseid={verse.verse_start} key={verse.verse_start} dangerouslySetInnerHTML={{ __html: verse.verse_text }} />, <span key={`${verse.verse_end}spaces`} className={'readers-spaces'}>&nbsp;</span>] :
@@ -320,7 +320,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				verse.hasHighlight ?
 					(
 						<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} verseid={verse.verse_start} key={verse.verse_start}>
-							<br />{verse.hasNote ? <SvgWrapper onClick={() => this.handleNoteClick(verse.noteIndex)} className={'icon note-in-verse'} svgid={'note_in_verse'} /> : null}<sup verseid={verse.verse_start}>
+							<br /><IconsInText clickHandler={this.handleNoteClick} bookmarkData={{ hasBookmark: verse.hasBookmark, index: verse.bookmarkIndex }} noteData={{ hasNote: verse.hasNote, index: verse.noteIndex }} /><sup verseid={verse.verse_start}>
 								{verse.verse_start_alt || verse.verse_start}
 							</sup>
 							<span verseid={verse.verse_start} dangerouslySetInnerHTML={{ __html: verse.verse_text }} />
@@ -328,7 +328,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 					) :
 					(
 						<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} verseid={verse.verse_start} key={verse.verse_start}>
-							<br />{verse.hasNote ? <SvgWrapper onClick={() => this.handleNoteClick(verse.noteIndex)} className={'icon note-in-verse'} svgid={'note_in_verse'} /> : null}<sup verseid={verse.verse_start}>
+							<br /><IconsInText clickHandler={this.handleNoteClick} bookmarkData={{ hasBookmark: verse.hasBookmark, index: verse.bookmarkIndex }} noteData={{ hasNote: verse.hasNote, index: verse.noteIndex }} /><sup verseid={verse.verse_start}>
 								{verse.verse_start_alt || verse.verse_start}
 							</sup>
 							{verse.verse_text}
@@ -341,7 +341,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				verse.hasHighlight ?
 					(
 						<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} className={'align-left'} verseid={verse.verse_start} key={verse.verse_start}>
-							{verse.hasNote ? <SvgWrapper onClick={() => this.handleNoteClick(verse.noteIndex)} className={'icon note-in-verse'} svgid={'note_in_verse'} /> : null}<sup verseid={verse.verse_start}>
+							<IconsInText clickHandler={this.handleNoteClick} bookmarkData={{ hasBookmark: verse.hasBookmark, index: verse.bookmarkIndex }} noteData={{ hasNote: verse.hasNote, index: verse.noteIndex }} /><sup verseid={verse.verse_start}>
 								&nbsp;{verse.verse_start_alt || verse.verse_start}&nbsp;
 							</sup>
 							<span verseid={verse.verse_start} dangerouslySetInnerHTML={{ __html: verse.verse_text }} />
@@ -349,7 +349,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 					) :
 					(
 						<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} className={'align-left'} verseid={verse.verse_start} key={verse.verse_start}>
-							{verse.hasNote ? <SvgWrapper onClick={() => this.handleNoteClick(verse.noteIndex)} className={'icon note-in-verse'} svgid={'note_in_verse'} /> : null}<sup verseid={verse.verse_start}>
+							<IconsInText clickHandler={this.handleNoteClick} bookmarkData={{ hasBookmark: verse.hasBookmark, index: verse.bookmarkIndex }} noteData={{ hasNote: verse.hasNote, index: verse.noteIndex }} /><sup verseid={verse.verse_start}>
 								&nbsp;{verse.verse_start_alt || verse.verse_start}&nbsp;
 							</sup>
 							{verse.verse_text}
@@ -378,17 +378,26 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		}
 	}
 
-	handleNoteClick = (noteIndex) => {
+	handleNoteClick = (noteIndex, clickedBookmark) => {
 		const userNotes = this.props.userNotes;
+		const existingNote = userNotes[noteIndex];
 
 		if (!this.props.notesActive) {
-			this.setActiveNote({ existingNote: userNotes[noteIndex] });
-			this.props.setActiveNotesView('edit');
+			this.setActiveNote({ existingNote });
+			if (clickedBookmark) {
+				this.props.setActiveNotesView('bookmark');
+			} else {
+				this.props.setActiveNotesView('edit');
+			}
 			this.closeContextMenu();
 			this.props.toggleNotesModal();
 		} else {
-			this.setActiveNote({ existingNote: userNotes[noteIndex] });
-			this.props.setActiveNotesView('edit');
+			this.setActiveNote({ existingNote });
+			if (clickedBookmark) {
+				this.props.setActiveNotesView('bookmark');
+			} else {
+				this.props.setActiveNotesView('edit');
+			}
 			this.closeContextMenu();
 		}
 	}

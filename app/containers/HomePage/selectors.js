@@ -41,8 +41,15 @@ const selectUserNotes = () => createDeepEqualSelector(
 			// console.log(verse);
 			// console.log(iToSet);
 			if (verse) {
-				newText = newText.size ? newText.setIn([iToSet, 'hasNote'], true) : text.setIn([iToSet, 'hasNote'], true);
-				newText = newText.size ? newText.setIn([iToSet, 'noteIndex'], ni) : text.setIn([iToSet, 'noteIndex'], ni);
+				if (n.bookmark) {
+					newText = newText.size ? newText.setIn([iToSet, 'hasBookmark'], true) : text.setIn([iToSet, 'hasBookmark'], true);
+					newText = newText.size ? newText.setIn([iToSet, 'bookmarkIndex'], ni) : text.setIn([iToSet, 'bookmarkIndex'], ni);
+				}
+
+				if (n.notes) {
+					newText = newText.size ? newText.setIn([iToSet, 'hasNote'], true) : text.setIn([iToSet, 'hasNote'], true);
+					newText = newText.size ? newText.setIn([iToSet, 'noteIndex'], ni) : text.setIn([iToSet, 'noteIndex'], ni);
+				}
 			}
 		});
 		// console.log(filteredNotes);
