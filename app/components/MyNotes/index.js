@@ -19,7 +19,7 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 	}
 
 	getNoteReference(listItem) {
-		const verseRef = listItem.verse_end ? `${listItem.verse_start}-${listItem.verse_end}` : listItem.verse_start;
+		const verseRef = listItem.verse_end && !(listItem.verse_end === listItem.verse_start) ? `${listItem.verse_start}-${listItem.verse_end}` : listItem.verse_start;
 		const { vernacularNamesObject } = this.props;
 
 		return `${vernacularNamesObject[listItem.book_id]} ${listItem.chapter}:${verseRef}`;
@@ -30,6 +30,8 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 
 		return `${date[1]}.${date[2]}.${date[0].slice(2)}`;
 	}
+
+	getHighlightReference = (h) => `${h.get('bible_id')} - ${h.get('book_id')} - ${h.get('chapter')}:${h.get('verse_start') === h.get('verse_end') || !h.get('verse_end') ? h.get('verse_start') : `${h.get('verse_start')}-${h.get('verse_end')}`}`
 
 	handlePageClick = (page) => this.props.setActivePageData(page);
 	handleClick = (listItem) => {
@@ -87,7 +89,7 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 						sectionType === 'highlights' ? highlights.map((highlight) => (
 							<div key={highlight.id} className="list-item">
 								<div className="title-text">
-									<h4 className="title">{`${highlight.bible_id} - ${highlight.book_id} - ${highlight.chapter}:${highlight.verse_start}`}</h4>
+									<h4 className="title">{this.getHighlightReference(highlight)}</h4>
 								</div>
 							</div>
 						)) : null
