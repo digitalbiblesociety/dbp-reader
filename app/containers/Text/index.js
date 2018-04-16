@@ -120,7 +120,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		this.main = el;
 	}
 	// Use selected text only when marking highlights
-	setActiveNote = ({ coords, existingNote }) => {
+	setActiveNote = ({ coords, existingNote, bookmark }) => {
 		if (!this.props.userAuthenticated || !this.props.userId) {
 			this.openPopup({ x: coords.x, y: coords.y });
 			return;
@@ -132,6 +132,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			verse_end: lastVerse,
 			book_id: activeBookId,
 			chapter: activeChapter,
+			bookmark: bookmark ? 1 : 0,
 		};
 
 		this.props.setActiveNote({ note: existingNote || note });
@@ -385,7 +386,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		if (!this.props.notesActive) {
 			this.setActiveNote({ existingNote });
 			if (clickedBookmark) {
-				this.props.setActiveNotesView('bookmark');
+				this.props.setActiveNotesView('bookmarks');
 			} else {
 				this.props.setActiveNotesView('edit');
 			}
@@ -394,7 +395,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		} else {
 			this.setActiveNote({ existingNote });
 			if (clickedBookmark) {
-				this.props.setActiveNotesView('bookmark');
+				this.props.setActiveNotesView('bookmarks');
 			} else {
 				this.props.setActiveNotesView('edit');
 			}
@@ -667,7 +668,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 
 Text.propTypes = {
 	text: PropTypes.array,
-	userNotes: PropTypes.object,
+	userNotes: PropTypes.array,
 	highlights: PropTypes.array,
 	userSettings: PropTypes.object,
 	nextChapter: PropTypes.func,

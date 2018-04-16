@@ -46,7 +46,7 @@ const selectUserNotes = () => createDeepEqualSelector(
 					newText = newText.size ? newText.setIn([iToSet, 'bookmarkIndex'], ni) : text.setIn([iToSet, 'bookmarkIndex'], ni);
 				}
 
-				if (n.notes) {
+				if (n.notes && n.notes !== '""' && n.notes !== '\'\'') {
 					newText = newText.size ? newText.setIn([iToSet, 'hasNote'], true) : text.setIn([iToSet, 'hasNote'], true);
 					newText = newText.size ? newText.setIn([iToSet, 'noteIndex'], ni) : text.setIn([iToSet, 'noteIndex'], ni);
 				}

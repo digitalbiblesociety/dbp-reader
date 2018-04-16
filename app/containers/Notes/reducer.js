@@ -48,7 +48,7 @@ function notesReducer(state = initialState, action) {
 		return state.set('pageSelectorState', !state.get('pageSelectorState'));
 	case LOAD_USER_NOTES:
 		return state
-			.set('activePageData', action.noteData.notes.slice(0, state.get('paginationPageSize')))
+			// .set('activePageData', action.noteData.notes.slice(0, state.get('paginationPageSize')))
 			.set('listData', action.noteData.notes);
 	default:
 		return state;
