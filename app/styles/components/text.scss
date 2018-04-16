@@ -24,6 +24,14 @@
     position: absolute;
     bottom: 136px;
   }
+
+  .note-in-verse {
+    z-index: 4;
+
+    @include css4 {
+      fill: var(--application-text-container-color)
+    }
+  }
 }
 
 .verse-number {

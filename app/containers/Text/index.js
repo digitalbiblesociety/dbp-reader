@@ -119,7 +119,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		this.main = el;
 	}
 	// Use selected text only when marking highlights
-	setActiveNote = ({ coords }) => {
+	setActiveNote = ({ coords, existingNote }) => {
 		if (!this.props.userAuthenticated || !this.props.userId) {
 			this.openPopup({ x: coords.x, y: coords.y });
 			return;
@@ -133,7 +133,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			chapter: activeChapter,
 		};
 
-		this.props.setActiveNote({ note });
+		this.props.setActiveNote({ note: existingNote || note });
 	}
 
 	getFirstVerse = (e) => {
@@ -255,12 +255,14 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			highlights,
 			activeChapter,
 			verseNumber,
-			userNotes,
+			// userNotes,
 			invalidBibleId,
 		} = this.props;
-		if (userNotes) {
-			// do something to display a svg
-		}
+		// if (userNotes) {
+		// 	// console.log('notes', userNotes);
+		// 	// console.log('text', initialText);
+		// 	// do something to display a svg
+		// }
 		// console.log(userNotes);
 		const readersMode = userSettings.getIn(['toggleOptions', 'readersMode', 'active']);
 		const oneVersePerLine = userSettings.getIn(['toggleOptions', 'oneVersePerLine', 'active']);
@@ -291,7 +293,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		// Each of the HOC could be wrapped in a formatTextBasedOnOptions function
 		// the function would apply each of the HOCs in order
 
-		// TODO: Handle exception thrown when there isn't plain text but readers mode is selected
+		// Handle exception thrown when there isn't plain text but readers mode is selected
 		/* eslint-disable react/no-danger */
 		if (text.length === 0 && !formattedSource.main) {
 			if (invalidBibleId) {
@@ -318,27 +320,28 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				verse.hasHighlight ?
 					(
 						<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} verseid={verse.verse_start} key={verse.verse_start}>
-							<br /><sup verseid={verse.verse_start}>
+							<br />{verse.hasNote ? <SvgWrapper onClick={() => this.handleNoteClick(verse.noteIndex)} className={'icon note-in-verse'} svgid={'note_in_verse'} /> : null}<sup verseid={verse.verse_start}>
 								{verse.verse_start_alt || verse.verse_start}
-							</sup><br />
+							</sup>
 							<span verseid={verse.verse_start} dangerouslySetInnerHTML={{ __html: verse.verse_text }} />
 						</span>
 					) :
 					(
 						<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} verseid={verse.verse_start} key={verse.verse_start}>
-							<br /><sup verseid={verse.verse_start}>
+							<br />{verse.hasNote ? <SvgWrapper onClick={() => this.handleNoteClick(verse.noteIndex)} className={'icon note-in-verse'} svgid={'note_in_verse'} /> : null}<sup verseid={verse.verse_start}>
 								{verse.verse_start_alt || verse.verse_start}
-							</sup><br />
+							</sup>
 							{verse.verse_text}
 						</span>
 					)
 			));
 		} else {
+			// console.log(text);
 			textComponents = text.map((verse) => (
 				verse.hasHighlight ?
 					(
 						<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} className={'align-left'} verseid={verse.verse_start} key={verse.verse_start}>
-							<sup verseid={verse.verse_start}>
+							{verse.hasNote ? <SvgWrapper onClick={() => this.handleNoteClick(verse.noteIndex)} className={'icon note-in-verse'} svgid={'note_in_verse'} /> : null}<sup verseid={verse.verse_start}>
 								&nbsp;{verse.verse_start_alt || verse.verse_start}&nbsp;
 							</sup>
 							<span verseid={verse.verse_start} dangerouslySetInnerHTML={{ __html: verse.verse_text }} />
@@ -346,7 +349,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 					) :
 					(
 						<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} className={'align-left'} verseid={verse.verse_start} key={verse.verse_start}>
-							<sup verseid={verse.verse_start}>
+							{verse.hasNote ? <SvgWrapper onClick={() => this.handleNoteClick(verse.noteIndex)} className={'icon note-in-verse'} svgid={'note_in_verse'} /> : null}<sup verseid={verse.verse_start}>
 								&nbsp;{verse.verse_start_alt || verse.verse_start}&nbsp;
 							</sup>
 							{verse.verse_text}
@@ -375,8 +378,22 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		}
 	}
 
+	handleNoteClick = (noteIndex) => {
+		const userNotes = this.props.userNotes;
+
+		if (!this.props.notesActive) {
+			this.setActiveNote({ existingNote: userNotes[noteIndex] });
+			this.props.setActiveNotesView('edit');
+			this.closeContextMenu();
+			this.props.toggleNotesModal();
+		} else {
+			this.setActiveNote({ existingNote: userNotes[noteIndex] });
+			this.props.setActiveNotesView('edit');
+			this.closeContextMenu();
+		}
+	}
+
 	openPopup = (coords) => {
-		// console.log('opening popup');
 		this.setState({ popupOpen: true, popupCoords: coords });
 		setTimeout(() => this.setState({ popupOpen: false }), 1500);
 	}
@@ -386,7 +403,6 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 
 	addHighlight = ({ color, popupCoords }) => {
 		if (!this.props.userAuthenticated || !this.props.userId) {
-			// console.log('should open popup with coords', popupCoords);
 			this.openPopup({ x: popupCoords.x, y: popupCoords.y });
 			return;
 		}
@@ -642,7 +658,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 
 Text.propTypes = {
 	text: PropTypes.array,
-	userNotes: PropTypes.array,
+	userNotes: PropTypes.object,
 	highlights: PropTypes.array,
 	userSettings: PropTypes.object,
 	nextChapter: PropTypes.func,

@@ -491,17 +491,23 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			invalidBibleId,
 			highlights,
 			autoPlayEnabled,
-			chapterText: updatedText,
+			// chapterText: updatedText,
 		} = this.props.homepage;
 
 		const {
 			userSettings,
 			formattedSource,
 			userId,
-			userNotes,
 			userAuthenticated,
 			// updatedText,
 		} = this.props;
+
+		const {
+			userNotes,
+			text: updatedText,
+		} = this.props.textData;
+		// console.log('text', updatedText);
+		// console.log('userNotes', userNotes);
 
 		const verse = this.props.match.params.verse || '';
 
@@ -621,9 +627,11 @@ HomePage.propTypes = {
 	formattedSource: PropTypes.object,
 	history: PropTypes.object,
 	match: PropTypes.object,
-	userNotes: PropTypes.object,
+	// userNotes: PropTypes.object,
 	userAuthenticated: PropTypes.bool,
 	userId: PropTypes.string,
+	// text: PropTypes.object,
+	textData: PropTypes.object,
 	// updatedText: PropTypes.array,
 };
 
@@ -636,7 +644,9 @@ const mapStateToProps = createStructuredSelector({
 	formattedSource: selectFormattedSource(),
 	userAuthenticated: selectAuthenticationStatus(),
 	userId: selectUserId(),
-	userNotes: selectUserNotes(),
+	textData: selectUserNotes(),
+	// userNotes: selectUserNotes(),
+	// text: selectUserNotes(),
 	// updatedText: selectChapterText(),
 });
 
