@@ -84,12 +84,16 @@ class ContextPortal extends React.PureComponent {
 		}
 	};
 
-	handleBookmarkClick = () => {
+	handleBookmarkClick = (e) => {
 		if (!this.props.notesActive) {
-			this.props.setActiveNotesView('edit');
+			this.props.setActiveNotesView('bookmarks');
 			this.props.toggleNotesModal();
+			this.props.setActiveNote({ bookmark: true, coords: { x: e.clientX, y: e.clientY } });
 			this.props.closeContextMenu();
-			// put this { coords: { x: e.clientX, y: e.clientY } } in the action for saving bookmark
+		} else {
+			this.props.setActiveNotesView('bookmarks');
+			this.props.setActiveNote({ bookmark: true, coords: { x: e.clientX, y: e.clientY } });
+			this.props.closeContextMenu();
 		}
 	};
 

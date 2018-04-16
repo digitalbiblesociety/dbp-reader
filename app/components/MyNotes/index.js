@@ -6,6 +6,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import SvgWrapper from 'components/SvgWrapper';
 import Pagination from 'components/Pagination';
 import PageSizeSelector from 'components/PageSizeSelector';
@@ -19,10 +20,10 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 	}
 
 	getNoteReference(listItem) {
-		const verseRef = listItem.verse_end ? `${listItem.verse_start}-${listItem.verse_end}` : listItem.verse_start;
+		const verseRef = listItem.verse_end && !(listItem.verse_end === listItem.verse_start) ? `${listItem.verse_start}-${listItem.verse_end}` : listItem.verse_start;
 		const { vernacularNamesObject } = this.props;
 
-		return `${vernacularNamesObject[listItem.book_id]} ${listItem.chapter}:${verseRef}`;
+		return `${vernacularNamesObject[listItem.book_id]} ${listItem.chapter}:${verseRef} - (${listItem.bible_id})`;
 	}
 
 	getFormattedNoteDate(timestamp) {
@@ -30,6 +31,8 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 
 		return `${date[1]}.${date[2]}.${date[0].slice(2)}`;
 	}
+
+	getHighlightReference = (h) => `${h.get('bible_id')} - ${h.get('book_id')} - ${h.get('chapter')}:${h.get('verse_start') === h.get('verse_end') || !h.get('verse_end') ? h.get('verse_start') : `${h.get('verse_start')}-${h.get('verse_end')}`} - (${h.get('bible_id')})`
 
 	handlePageClick = (page) => this.props.setActivePageData(page);
 	handleClick = (listItem) => {
@@ -87,15 +90,21 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 						sectionType === 'highlights' ? highlights.map((highlight) => (
 							<div key={highlight.id} className="list-item">
 								<div className="title-text">
-									<h4 className="title">{`${highlight.bible_id} - ${highlight.book_id} - ${highlight.chapter}:${highlight.verse_start}`}</h4>
+									<h4 className="title">{this.getHighlightReference(highlight)}</h4>
 								</div>
 							</div>
 						)) : null
 					}
 					{
 						sectionType === 'bookmarks' ? (
-							<div>Bookmarks will go here one day I hope....</div>
-						) : null
+							activePageData.filter((n) => n.bookmark)).map((listItem) => (
+								<Link to={`/${listItem.bible_id}/${listItem.book_id}/${listItem.chapter}/${listItem.verse_start}`} role="button" tabIndex={0} key={listItem.id} className="list-item">
+									<div className="date">{this.getFormattedNoteDate(listItem.created_at)}</div>
+									<div className="title-text">
+										<h4 className="title">{this.getNoteReference(listItem)}</h4>
+									</div>
+								</Link>
+						)) : null
 					}
 				</section>
 				<div className="pagination">

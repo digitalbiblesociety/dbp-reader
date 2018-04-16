@@ -10,6 +10,7 @@ import SvgWrapper from 'components/SvgWrapper';
 import ContextPortal from 'components/ContextPortal';
 import FootnotePortal from 'components/FootnotePortal';
 import LoadingSpinner from 'components/LoadingSpinner';
+import IconsInText from 'components/IconsInText';
 // import differenceObject from 'utils/deepDifferenceObject';
 import isEqual from 'lodash/isEqual';
 import createHighlights from './highlightPlainText';
@@ -119,7 +120,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		this.main = el;
 	}
 	// Use selected text only when marking highlights
-	setActiveNote = ({ coords }) => {
+	setActiveNote = ({ coords, existingNote, bookmark }) => {
 		if (!this.props.userAuthenticated || !this.props.userId) {
 			this.openPopup({ x: coords.x, y: coords.y });
 			return;
@@ -131,9 +132,10 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			verse_end: lastVerse,
 			book_id: activeBookId,
 			chapter: activeChapter,
+			bookmark: bookmark ? 1 : 0,
 		};
 
-		this.props.setActiveNote({ note });
+		this.props.setActiveNote({ note: existingNote || note });
 	}
 
 	getFirstVerse = (e) => {
@@ -255,12 +257,14 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			highlights,
 			activeChapter,
 			verseNumber,
-			userNotes,
+			// userNotes,
 			invalidBibleId,
 		} = this.props;
-		if (userNotes) {
-			// do something to display a svg
-		}
+		// if (userNotes) {
+		// 	// console.log('notes', userNotes);
+		// 	// console.log('text', initialText);
+		// 	// do something to display a svg
+		// }
 		// console.log(userNotes);
 		const readersMode = userSettings.getIn(['toggleOptions', 'readersMode', 'active']);
 		const oneVersePerLine = userSettings.getIn(['toggleOptions', 'oneVersePerLine', 'active']);
@@ -291,7 +295,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		// Each of the HOC could be wrapped in a formatTextBasedOnOptions function
 		// the function would apply each of the HOCs in order
 
-		// TODO: Handle exception thrown when there isn't plain text but readers mode is selected
+		// Handle exception thrown when there isn't plain text but readers mode is selected
 		/* eslint-disable react/no-danger */
 		if (text.length === 0 && !formattedSource.main) {
 			if (invalidBibleId) {
@@ -300,7 +304,6 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				textComponents = [<h5 key={'no_text'}>This resource does not currently have any text.</h5>];
 			}
 		} else if (readersMode) {
-			// console.log('text', text);
 			textComponents = text.map((verse) =>
 				verse.hasHighlight ?
 					[<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} verseid={verse.verse_start} key={verse.verse_start} dangerouslySetInnerHTML={{ __html: verse.verse_text }} />, <span key={`${verse.verse_end}spaces`} className={'readers-spaces'}>&nbsp;</span>] :
@@ -318,27 +321,28 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				verse.hasHighlight ?
 					(
 						<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} verseid={verse.verse_start} key={verse.verse_start}>
-							<br /><sup verseid={verse.verse_start}>
+							<br /><IconsInText clickHandler={this.handleNoteClick} bookmarkData={{ hasBookmark: verse.hasBookmark, index: verse.bookmarkIndex }} noteData={{ hasNote: verse.hasNote, index: verse.noteIndex }} /><sup verseid={verse.verse_start}>
 								{verse.verse_start_alt || verse.verse_start}
-							</sup><br />
+							</sup>
 							<span verseid={verse.verse_start} dangerouslySetInnerHTML={{ __html: verse.verse_text }} />
 						</span>
 					) :
 					(
 						<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} verseid={verse.verse_start} key={verse.verse_start}>
-							<br /><sup verseid={verse.verse_start}>
+							<br /><IconsInText clickHandler={this.handleNoteClick} bookmarkData={{ hasBookmark: verse.hasBookmark, index: verse.bookmarkIndex }} noteData={{ hasNote: verse.hasNote, index: verse.noteIndex }} /><sup verseid={verse.verse_start}>
 								{verse.verse_start_alt || verse.verse_start}
-							</sup><br />
+							</sup>
 							{verse.verse_text}
 						</span>
 					)
 			));
 		} else {
+			// console.log(text);
 			textComponents = text.map((verse) => (
 				verse.hasHighlight ?
 					(
 						<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} className={'align-left'} verseid={verse.verse_start} key={verse.verse_start}>
-							<sup verseid={verse.verse_start}>
+							<IconsInText clickHandler={this.handleNoteClick} bookmarkData={{ hasBookmark: verse.hasBookmark, index: verse.bookmarkIndex }} noteData={{ hasNote: verse.hasNote, index: verse.noteIndex }} /><sup verseid={verse.verse_start}>
 								&nbsp;{verse.verse_start_alt || verse.verse_start}&nbsp;
 							</sup>
 							<span verseid={verse.verse_start} dangerouslySetInnerHTML={{ __html: verse.verse_text }} />
@@ -346,7 +350,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 					) :
 					(
 						<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} className={'align-left'} verseid={verse.verse_start} key={verse.verse_start}>
-							<sup verseid={verse.verse_start}>
+							<IconsInText clickHandler={this.handleNoteClick} bookmarkData={{ hasBookmark: verse.hasBookmark, index: verse.bookmarkIndex }} noteData={{ hasNote: verse.hasNote, index: verse.noteIndex }} /><sup verseid={verse.verse_start}>
 								&nbsp;{verse.verse_start_alt || verse.verse_start}&nbsp;
 							</sup>
 							{verse.verse_text}
@@ -375,8 +379,31 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		}
 	}
 
+	handleNoteClick = (noteIndex, clickedBookmark) => {
+		const userNotes = this.props.userNotes;
+		const existingNote = userNotes[noteIndex];
+
+		if (!this.props.notesActive) {
+			this.setActiveNote({ existingNote });
+			if (clickedBookmark) {
+				this.props.setActiveNotesView('bookmarks');
+			} else {
+				this.props.setActiveNotesView('edit');
+			}
+			this.closeContextMenu();
+			this.props.toggleNotesModal();
+		} else {
+			this.setActiveNote({ existingNote });
+			if (clickedBookmark) {
+				this.props.setActiveNotesView('bookmarks');
+			} else {
+				this.props.setActiveNotesView('edit');
+			}
+			this.closeContextMenu();
+		}
+	}
+
 	openPopup = (coords) => {
-		// console.log('opening popup');
 		this.setState({ popupOpen: true, popupCoords: coords });
 		setTimeout(() => this.setState({ popupOpen: false }), 1500);
 	}
@@ -386,7 +413,6 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 
 	addHighlight = ({ color, popupCoords }) => {
 		if (!this.props.userAuthenticated || !this.props.userId) {
-			// console.log('should open popup with coords', popupCoords);
 			this.openPopup({ x: popupCoords.x, y: popupCoords.y });
 			return;
 		}

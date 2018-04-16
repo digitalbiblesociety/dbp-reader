@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
+import isEqual from 'lodash/isEqual';
 import SvgWrapper from 'components/SvgWrapper';
 import EditNote from 'components/EditNote';
 import MyNotes from 'components/MyNotes';
@@ -42,6 +43,7 @@ import makeSelectNotes, {
 	selectActiveTextId,
 	vernacularBookNameObject,
 	selectHighlights,
+	selectListData,
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -55,6 +57,12 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 	}
 	componentDidMount() {
 		document.addEventListener('click', this.handleClickOutside);
+	}
+
+	componentWillReceiveProps(nextProps) {
+		if (!isEqual(nextProps.selectedListData, this.props.selectedListData)) {
+			this.setActivePageData(nextProps.selectedListData.slice(0, nextProps.notes.paginationPageSize));
+		}
 	}
 
 	componentWillUnmount() {
@@ -120,8 +128,10 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 			activeTextId,
 			highlights,
 			vernacularNamesObject,
+			selectedListData,
 		} = this.props;
 		// console.log('notebook props', this.props);
+		// console.log('data in notes', selectedListData);
 
 		return (
 			<GenericErrorBoundary affectedArea="Notes">
@@ -174,7 +184,7 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 											setActivePageData={this.setActivePageData}
 											togglePageSelector={this.togglePageSelector}
 											highlights={highlights}
-											listData={listData}
+											listData={selectedListData || listData}
 											pageSize={pageSize}
 											sectionType={activeChild}
 											activePageData={activePageData}
@@ -210,6 +220,7 @@ Notes.propTypes = {
 	notePassage: PropTypes.string,
 	selectedText: PropTypes.string,
 	activeTextId: PropTypes.string,
+	selectedListData: PropTypes.array,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -222,6 +233,7 @@ const mapStateToProps = createStructuredSelector({
 	activeTextId: selectActiveTextId(),
 	vernacularNamesObject: vernacularBookNameObject(),
 	highlights: selectHighlights(),
+	selectedListData: selectListData(),
 });
 
 function mapDispatchToProps(dispatch) {

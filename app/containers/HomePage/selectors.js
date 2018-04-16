@@ -2,10 +2,6 @@ import { createSelectorCreator, defaultMemoize } from 'reselect';
 import { fromJS, is } from 'immutable';
 // import * as pages from 'utils/ENGKJV/list';
 // import bookNames from 'utils/listOfBooksInBible';
-/**
- * Direct selector to the homepage state domain
- * TODO: Fix selectors so that they don't receive objects because that negates the benefit of using memoized functions
- */
 
 // TODO: If there seems to be some state missing check to make sure the equality check isn't failing
 // create a "selector creator" that uses lodash.isEqual instead of ===
@@ -24,12 +20,41 @@ const selectNotes = (state) => state.get('notes');
 const selectUserNotes = () => createDeepEqualSelector(
 	[selectNotes, selectHomePageDomain],
 	(notes, home) => {
+		// console.log('list data', notes.get('listData'));
 		const bibleId = home.get('activeTextId');
 		const bookId = home.get('activeBookId');
 		const chapter = home.get('activeChapter');
-		// console.log(bibleId, bookId, chapter);
-		// console.log(notes.get('listData'));
-		return notes.get('listData').filter((n) => n.bible_id === bibleId && n.book_id === bookId && n.chapter === chapter);
+		const text = home.get('chapterText');
+		const filteredNotes = notes.get('listData').filter((n) => n.bible_id === bibleId && n.book_id === bookId && n.chapter === chapter);
+		let newText = [];
+
+		filteredNotes.forEach((n, ni) => {
+			let iToSet = 0;
+			const verse = text.find((t, i) => {
+				// console.log('t',t);
+				// console.log('n',n);
+				if (parseInt(t.get('verse_start'), 10) === n.verse_start) {
+					iToSet = i;
+				}
+				return parseInt(t.get('verse_start'), 10) === n.verse_start;
+			});
+			// console.log(verse);
+			// console.log(iToSet);
+			if (verse) {
+				if (n.bookmark) {
+					newText = newText.size ? newText.setIn([iToSet, 'hasBookmark'], true) : text.setIn([iToSet, 'hasBookmark'], true);
+					newText = newText.size ? newText.setIn([iToSet, 'bookmarkIndex'], ni) : text.setIn([iToSet, 'bookmarkIndex'], ni);
+				}
+
+				if (n.notes && n.notes !== '""' && n.notes !== '\'\'') {
+					newText = newText.size ? newText.setIn([iToSet, 'hasNote'], true) : text.setIn([iToSet, 'hasNote'], true);
+					newText = newText.size ? newText.setIn([iToSet, 'noteIndex'], ni) : text.setIn([iToSet, 'noteIndex'], ni);
+				}
+			}
+		});
+		// console.log(filteredNotes);
+		// console.log(newText);
+		return { text: newText.size ? newText.toJS() : text.toJS(), userNotes: filteredNotes.toJS ? filteredNotes.toJS() : filteredNotes };
 	}
 );
 
@@ -43,6 +68,7 @@ const selectAuthenticationStatus = () => createDeepEqualSelector(
 	(profile) => profile.get('userAuthenticated')
 );
 
+// I will likely want to put all manipulations to the formatted text into this selector
 const selectFormattedSource = () => createDeepEqualSelector(
 	[selectFormattedTextSource, selectCrossReferenceState],
 	({ source, props }, hasCrossReferences) => {

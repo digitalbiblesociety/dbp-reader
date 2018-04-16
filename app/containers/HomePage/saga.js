@@ -4,6 +4,7 @@ import request from 'utils/request';
 import some from 'lodash/some';
 import reduce from 'lodash/reduce';
 import get from 'lodash/get';
+import { getNotes } from 'containers/Notes/saga';
 // import filter from 'lodash/filter';
 import { ADD_HIGHLIGHTS, LOAD_HIGHLIGHTS, GET_HIGHLIGHTS } from './constants';
 // import { fromJS } from 'immutable';
@@ -200,17 +201,18 @@ export function* getChapterFromUrl({ filesets, bibleId: oldBibleId, bookId: oldB
 	// console.log('filesets chapter text', filesets);
 	const bibleId = oldBibleId.toUpperCase();
 	const bookId = oldBookId.toUpperCase();
-	const hasFormattedText = some(filesets, (f) => f.set_type_code === 'text_format');
+	const hasFormattedText = some(filesets, (f) => (f.set_type_code === 'text_format' && f.bucket_id === 'dbp-dev'));
 	// checking for audio but not fetching it as a part of this saga
-	const hasAudio = some(filesets, (f) => f.set_type_code === 'audio' || f.set_type_code === 'audio_drama');
+	const hasAudio = some(filesets, (f) => (f.set_type_code === 'audio' && f.bucket_id === 'dbp-dev') || (f.set_type_code === 'audio_drama' && f.bucket_id === 'dbp-dev'));
 
 	try {
 		let formattedText = '';
 		let plainText = [];
-		let hasPlainText = some(filesets, (f) => f.set_type_code === 'text_plain');
+		let hasPlainText = some(filesets, (f) => (f.set_type_code === 'text_plain' && f.bucket_id === 'dbp-dev'));
 
 		if (authenticated) {
 			yield fork(getHighlights, { bible: bibleId, book: bookId, chapter, userId });
+			yield fork(getNotes, { userId, params: { bibleId, book_id: bookId, chapter } });
 		}
 		// calling this function to start it asynchronously to this one.
 		// if (hasAudio) {
@@ -226,7 +228,7 @@ export function* getChapterFromUrl({ filesets, bibleId: oldBibleId, bookId: oldB
 		if (hasFormattedText) {
 			try {
 				// Gets the last fileset id for a formatted text
-				const filesetId = reduce(filesets, (a, c) => c.set_type_code === 'text_format' ? c.id : a, '');
+				const filesetId = reduce(filesets, (a, c) => (c.set_type_code === 'text_format' && c.bucket_id === 'dbp-dev') ? c.id : a, '');
 				// console.log(filesetId);
 				const reqUrl = `https://api.bible.build/bibles/filesets/${filesetId}?bucket=${process.env.DBP_BUCKET_ID}&key=${process.env.DBP_API_KEY}&v=4&book_id=${bookId}&chapter_id=${chapter}&type=text_format`; // hard coded since this only ever needs to get formatted text
 				// console.log(reqUrl);
