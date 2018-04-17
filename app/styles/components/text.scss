@@ -120,10 +120,13 @@
   height: 35px;
   border-radius: 6px;
   width:130px;
+  max-width: 150px;
   text-align:center;
   background-color: #FFFFF5;
   box-shadow: 1px 1px 1px 1px #B1A77A;
   cursor: pointer;
+  font-size: 11px;
+  white-space: nowrap;
   padding: 5px;
 }
 
