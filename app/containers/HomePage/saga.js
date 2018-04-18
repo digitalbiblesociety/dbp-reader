@@ -366,9 +366,9 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 			const reqUrl = `https://api.bible.build/bibles/filesets/${get(completeAudio, [0, 'id'])}?bucket=${process.env.DBP_BUCKET_ID}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(completeAudio, [0, 'data', 'set_type_code'])}`;
 			const response = yield call(request, reqUrl);
 			// console.log('complete audio response object', response);
-			const audioPath = get(response, ['data', 0, 'path']);
-			// console.log('complete audio path', audioPath);
-			yield put({ type: 'loadaudio', audioPath });
+			const audioPaths = [get(response, ['data', 0, 'path'])];
+			// console.log('complete audio path', audioPaths);
+			yield put({ type: 'loadaudio', audioPaths });
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Caught in getChapterAudio complete audio', error); // eslint-disable-line no-console
@@ -378,7 +378,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 				// 	body: formData,
 				// };
 				// fetch('https://api.bible.build/error_logging', options);
-				yield put({ type: 'loadaudio', audioPath: '' });
+				yield put({ type: 'loadaudio', audioPaths: [''] });
 			}
 		}
 	} else if (ntLength && !otLength) {
@@ -386,9 +386,9 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 			const reqUrl = `https://api.bible.build/bibles/filesets/${get(ntAudio, [0, 'id'])}?bucket=${process.env.DBP_BUCKET_ID}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(ntAudio, [0, 'data', 'set_type_code'])}`;
 			const response = yield call(request, reqUrl);
 			// console.log('nt audio response object', response);
-			const audioPath = get(response, ['data', 0, 'path']);
-			// console.log('nt audio path', audioPath);
-			yield put({ type: 'loadaudio', audioPath });
+			const audioPaths = [get(response, ['data', 0, 'path'])];
+			// console.log('nt audio path', audioPaths);
+			yield put({ type: 'loadaudio', audioPaths });
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Caught in getChapterAudio nt audio', error); // eslint-disable-line no-console
@@ -398,7 +398,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 				// 	body: formData,
 				// };
 				// fetch('https://api.bible.build/error_logging', options);
-				yield put({ type: 'loadaudio', audioPath: '' });
+				yield put({ type: 'loadaudio', audioPaths: [''] });
 			}
 		}
 	} else if (otLength && !ntLength) {
@@ -406,10 +406,10 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 			const reqUrl = `https://api.bible.build/bibles/filesets/${get(otAudio, [0, 'id'])}?bucket=${process.env.DBP_BUCKET_ID}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(otAudio, [0, 'data', 'set_type_code'])}`;
 			const response = yield call(request, reqUrl);
 			// console.log('ot audio response object', response);
-			const audioPath = get(response, ['data', 0, 'path']);
-			// console.log('ot audio path', audioPath);
-			// otPath = audioPath;
-			yield put({ type: 'loadaudio', audioPath });
+			const audioPaths = [get(response, ['data', 0, 'path'])];
+			// console.log('ot audio path', audioPaths);
+			// otPath = audioPaths;
+			yield put({ type: 'loadaudio', audioPaths });
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Caught in getChapterAudio ot audio', error); // eslint-disable-line no-console
@@ -419,7 +419,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 				// 	body: formData,
 				// };
 				// fetch('https://api.bible.build/error_logging', options);
-				yield put({ type: 'loadaudio', audioPath: '' });
+				yield put({ type: 'loadaudio', audioPaths: [''] });
 			}
 		}
 	} else if (ntLength && otLength) {
@@ -431,10 +431,10 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 			const reqUrl = `https://api.bible.build/bibles/filesets/${get(ntAudio, [0, 'id'])}?bucket=${process.env.DBP_BUCKET_ID}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(ntAudio, [0, 'data', 'set_type_code'])}`;
 			const response = yield call(request, reqUrl);
 			// console.log('nt audio response object', response);
-			const audioPath = get(response, ['data', 0, 'path']);
-			// console.log('nt audio path', audioPath);
-			ntPath = audioPath;
-			// yield put({ type: 'loadaudio', audioPath });
+			const audioPaths = [get(response, ['data', 0, 'path'])];
+			// console.log('nt audio path', audioPaths);
+			ntPath = audioPaths;
+			// yield put({ type: 'loadaudio', audioPaths });
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Caught in getChapterAudio nt audio', error); // eslint-disable-line no-console
@@ -444,17 +444,17 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 				// 	body: formData,
 				// };
 				// fetch('https://api.bible.build/error_logging', options);
-				yield put({ type: 'loadaudio', audioPath: '' });
+				yield put({ type: 'loadaudio', audioPaths: [''] });
 			}
 		}
 		try {
 			const reqUrl = `https://api.bible.build/bibles/filesets/${get(otAudio, [0, 'id'])}?bucket=${process.env.DBP_BUCKET_ID}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(otAudio, [0, 'data', 'set_type_code'])}`;
 			const response = yield call(request, reqUrl);
 			// console.log('ot audio response object', response);
-			const audioPath = get(response, ['data', 0, 'path']);
-			// console.log('ot audio path', audioPath);
-			otPath = audioPath;
-			// yield put({ type: 'loadaudio', audioPath });
+			const audioPaths = [get(response, ['data', 0, 'path'])];
+			// console.log('ot audio path', audioPaths);
+			otPath = audioPaths;
+			// yield put({ type: 'loadaudio', audioPaths });
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Caught in getChapterAudio ot audio', error); // eslint-disable-line no-console
@@ -464,21 +464,27 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 				// 	body: formData,
 				// };
 				// fetch('https://api.bible.build/error_logging', options);
-				yield put({ type: 'loadaudio', audioPath: '' });
+				yield put({ type: 'loadaudio', audioPaths: [''] });
 			}
 		}
 
 		yield put({ type: 'loadaudio', audioPath: ntPath || otPath });
 	} else if (partialAudio.length) {
 		// TODO For this return a list of all of the s3 file paths since a chapter could have v1-v5 and v20-v25
+		// console.log('files that contain partial audio', partialAudio);
 		try {
 			// Need to iterate over each object here to see if I can find the right chapter
 			const reqUrl = `https://api.bible.build/bibles/filesets/${get(partialAudio, [0, 'id'])}?bucket=${process.env.DBP_BUCKET_ID}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(partialAudio, [0, 'data', 'set_type_code'])}`;
 			const response = yield call(request, reqUrl);
 			// console.log('partial audio response object', response);
-			const audioPath = get(response, ['data', 0, 'path']);
-			// console.log('partial audio path', audioPath);
-			yield put({ type: 'loadaudio', audioPath });
+			const audioPaths = [];
+			if (response.data.length > 1) {
+				response.data.forEach((file) => audioPaths.push(file.path));
+			} else {
+				audioPaths.push(get(response, ['data', 0, 'path']));
+			}
+			// console.log('partial audio path', audioPaths);
+			yield put({ type: 'loadaudio', audioPaths });
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Caught in getChapterAudio partial audio', error); // eslint-disable-line no-console

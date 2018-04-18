@@ -115,6 +115,7 @@ const initialState = fromJS({
 	filesetTypes: {},
 	firstLoad: true,
 	testaments: {},
+	audioPaths: [],
 });
 
 function homePageReducer(state = initialState, action) {
@@ -266,7 +267,9 @@ function homePageReducer(state = initialState, action) {
 			.set('formattedSource', fromJS(action.formattedText));
 	case 'loadaudio':
 		// console.log('loading audio with', action);
-		return state.set('audioSource', action.audioPath);
+		return state
+			.set('audioPaths', action.audioPaths.slice(1))
+			.set('audioSource', action.audioPaths[0]);
 	case 'getchapter':
 		return state.set('loadingNewChapterText', true);
 	case 'getbible':

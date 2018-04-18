@@ -512,6 +512,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			invalidBibleId,
 			highlights,
 			autoPlayEnabled,
+			audioPaths,
 			// chapterText: updatedText,
 		} = this.props.homepage;
 
@@ -559,7 +560,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					toggleChapterSelection={this.toggleChapterSelection}
 					toggleVersionSelection={this.toggleVersionSelection}
 				/>
-				<AudioPlayer autoPlay={autoPlayEnabled} toggleAutoPlay={this.toggleAutoPlay} audioSource={audioSource} skipBackward={this.getPrevChapter} skipForward={this.getNextChapter} />
+				<AudioPlayer audioPaths={audioPaths} autoPlay={autoPlayEnabled} toggleAutoPlay={this.toggleAutoPlay} audioSource={audioSource} skipBackward={this.getPrevChapter} skipForward={this.getNextChapter} />
 				<TransitionGroup>
 					{
 						isSettingsModalActive ? (
