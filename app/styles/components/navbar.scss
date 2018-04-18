@@ -72,9 +72,9 @@
       top: 0;
       left: 0;
       @include css4 {
-        background: -webkit-linear-gradient(to right, var(--default-header-background-transparent) 80%, var(--default-header-background-color));
-        background: -moz-linear-gradient(to right, var(--default-header-background-transparent) 80%, var(--default-header-background-color));
-        background: linear-gradient(to right, var(--default-header-background-transparent) 80%, var(--default-header-background-color));
+        background: -webkit-linear-gradient(to right, var(--default-header-background-color-transparent) 80%, var(--default-header-background-color));
+        background: -moz-linear-gradient(to right, var(--default-header-background-color-transparent) 80%, var(--default-header-background-color));
+        background: linear-gradient(to right, var(--default-header-background-color-transparent) 80%, var(--default-header-background-color));
       };
     };
 
@@ -118,9 +118,9 @@
       top: 0;
       left: 0;
       @include css4 {
-        background: -webkit-linear-gradient(to right, var(--default-header-background-transparent) 80%, var(--default-header-background-color));
-        background: -moz-linear-gradient(to right, var(--default-header-background-transparent) 80%, var(--default-header-background-color));
-        background: linear-gradient(to right, var(--default-header-background-transparent) 80%, var(--default-header-background-color));
+        background: -webkit-linear-gradient(to right, var(--default-header-background-color-transparent) 80%, var(--default-header-background-color));
+        background: -moz-linear-gradient(to right, var(--default-header-background-color-transparent) 80%, var(--default-header-background-color));
+        background: linear-gradient(to right, var(--default-header-background-color-transparent) 80%, var(--default-header-background-color));
       };
     };
 

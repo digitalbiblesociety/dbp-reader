@@ -38,6 +38,10 @@ import SearchContainer from 'containers/SearchContainer';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
 import FadeTransition from 'components/FadeTransition';
 import logo from 'images/app-icons/favicon-96x96.png';
+// import {
+// 	statusChangeCallback,
+// 	checkLoginState,
+// } from 'utils/facebookFunctions';
 import {
 	applyTheme,
 	applyFontFamily,
@@ -180,9 +184,15 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			FB.init({ // eslint-disable-line no-undef
 				appId: process.env.FB_APP_ID,
 				autoLogAppEvents: true,
+				cookie: true,
 				xfbml: true,
 				version: 'v2.12',
 			});
+
+			// FB.getLoginStatus((response) => {
+			// 	console.log('fb login status', response);
+			// 	statusChangeCallback(response);
+			// });
 		};
 
 		((d, s, id) => {
@@ -204,11 +214,20 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 	// 	console.log('current state', this.state);
 	// 	console.log('current state equal to previous state', isEqual(this.state, prevState));
 	// }
-	// TODO: Rewrite componentWillReceiveProps to only use the route parameters and auth state
 	// The current version of the below function is gross and prone to breaking
 	// This function needs to solve the issue of requesting the new data from the api when a new version is clicked
 	// Need to fix how many times this gets called. The main issue is all the state that is managed by this one thing
+	// c = 0
 	componentWillReceiveProps(nextProps) {
+		// console.log('FB at receive props', FB);
+		// let FB = undefined;
+		// if (typeof FB === 'function' && this.c === 0) {
+		// 	this.c++
+		// 	FB.getLoginStatus((response) => {
+		// 		// console.log('fb login status', response);
+		// 		statusChangeCallback(response);
+		// 	});
+		// }
 		// Deals with updating page based on the url params
 		// previous props
 		const { params } = this.props.match;
