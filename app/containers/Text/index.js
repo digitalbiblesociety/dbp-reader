@@ -449,8 +449,15 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		// use that index as the highlight start
 		try {
 			// Globals*
-			const firstVerse = parseInt(this.state.firstVerse, 10);
-			const lastVerse = parseInt(this.state.lastVerse, 10);
+			const first = parseInt(this.state.firstVerse, 10);
+			const last = parseInt(this.state.lastVerse, 10);
+			// Since a user can highlight "backwards" this makes sure the first verse is correct
+			const firstVerse = (first < last ? first : last);
+			const lastVerse = (last > first ? last : first);
+			// console.log('first verse state', first);
+			// console.log('last verse state', last);
+			// console.log('first verse', firstVerse);
+			// console.log('last verse', lastVerse);
 			// Getting each offset to determine which is closest to the start of the passage
 			const offset = this.state.anchorOffset;
 			const extentOffset = this.state.extentOffset;
@@ -499,15 +506,15 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 					if (counter >= 10) break;
 					counter += 1;
 				}
-				// console.log('plain text logs', node.textContent);
-				// console.log('plain text logs', anchorOffset);
-				// console.log('plain text logs', anchorText);
-				// console.log('plain text logs', node.textContent.indexOf(anchorText));
-				// console.log('first verse', this.state.firstVerse);
-				// console.log('plain text logs', node.textContent.slice(this.state.firstVerse.length + 2));
-
 				// taking off the first 2 spaces and the verse number from the string
-				const newText = node.textContent.slice(this.state.firstVerse.length + 2);
+				const newText = node.textContent.slice(firstVerse.toFixed(0).length + 2);
+
+				// console.log('plain text node.textContent', node.textContent);
+				// console.log('plain text anchorOffset', anchorOffset);
+				// console.log('plain text anchorText', anchorText);
+				// console.log('plain text node.textContent.indexOf(anchorText)', node.textContent.indexOf(anchorText));
+				// console.log('plain text newText.indexOf(anchorText)', newText.indexOf(anchorText));
+				// console.log('plain text node.textContent.slice(firstVerse.toFixed(0).length + 2)', node.textContent.slice(firstVerse.toFixed(0).length + 2));
 
 				if (this.props.userSettings.getIn(['toggleOptions', 'readersMode', 'active'])) {
 					highlightStart = (node.textContent.indexOf(anchorText) + anchorOffset);
@@ -530,7 +537,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				// console.log('highlight being added - not sending to db atm', {
 				// 	book: this.props.activeBookId,
 				// 	chapter: this.props.activeChapter,
-				// 	verseStart: this.state.firstVerse,
+				// 	verseStart: firstVerse,
 				// 	color,
 				// 	highlightStart,
 				// 	highlightedWords,
@@ -538,7 +545,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				this.props.addHighlight({
 					book: this.props.activeBookId,
 					chapter: this.props.activeChapter,
-					verseStart: this.state.firstVerse,
+					verseStart: firstVerse,
 					color,
 					highlightStart,
 					highlightedWords,
