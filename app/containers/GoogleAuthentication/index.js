@@ -7,10 +7,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import SvgWrapper from 'components/SvgWrapper';
 import { compose } from 'redux';
+import SvgWrapper from 'components/SvgWrapper';
+import PopupMessage from 'components/PopupMessage';
 
 export class GoogleAuthentication extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+	state = { popupOpen: false, popupCoords: { x: 0, y: 0 } }
 	handleSocialLogin = () => {
 		// console.log('social login google clicked');
 		const { activeDriver, socialLoginLink, socialMediaLogin } = this.props;
@@ -26,11 +28,19 @@ export class GoogleAuthentication extends React.PureComponent { // eslint-disabl
 			socialMediaLogin({ driver: 'google' });
 		}
 	}
+	openPopup = (e) => {
+		const coords = { x: e.clientX, y: e.clientY };
+		this.setState({ popupOpen: true, popupCoords: coords });
+		setTimeout(() => this.setState({ popupOpen: false }), 1250);
+	}
 	render() {
 		return (
-			<div role={'button'} tabIndex={0} onClick={this.handleSocialLogin} className="google">
+			<div role={'button'} tabIndex={0} onClick={this.openPopup} className="google">
 				<SvgWrapper style={{ backgroundColor: 'white' }} className="svg" height="26px" width="26px" svgid="google" />
 				Sign in with Google
+				{
+					this.state.popupOpen ? <PopupMessage y={this.state.popupCoords.y} x={this.state.popupCoords.x} message={'This functionality is currently unavailable.'} /> : null
+				}
 			</div>
 		);
 	}
