@@ -92,9 +92,7 @@ export const sendLoginForm = (props) => ({
 	...props,
 });
 
-export const sendSignUpForm = ({ password, username, email }) => ({
+export const sendSignUpForm = (props) => ({
 	type: SEND_SIGNUP_FORM,
-	password,
-	username,
-	email,
+	...props,
 });
