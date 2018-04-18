@@ -87,13 +87,13 @@ $slab-font-family-option: "Roboto Slab", Rockwell, Courier, monospace;
 
 // NOTE: Declaring the variables here so that I can use PHP Storm's "refactor"
 // functionality and code completion, I will remove them before production
-//:root {
-//  --application-base-font-size: 0.98em;
-//  --application-menu-font-size: 0.98em;
-//  --application-font-family: "Noto Sans", Helvetica, sans serif;
-//  --sans-font-family-option: "Noto Sans", Helvetica, sans serif;
-//  --serif-font-family-option: "Alegreya", "Palatino Linotype", Palatino, serif;
-//  --slab-font-family-option: "Roboto Slab", Rockwell, Courier, monospace;
+:root {
+  --application-base-font-size: 0.98em;
+  --application-menu-font-size: 0.98em;
+  --application-font-family: "Noto Sans", Helvetica, sans serif;
+  --sans-font-family-option: "Noto Sans", Helvetica, sans serif;
+  --serif-font-family-option: "Alegreya", "Palatino Linotype", Palatino, serif;
+  --slab-font-family-option: "Roboto Slab", Rockwell, Courier, monospace;
 //  --text-selection-background: #1B1F24;
 //  --text-selection-accordion-title-background: #2C3036;
 //  --text-selection-accordion-body-background: #1B1F24;
@@ -161,7 +161,7 @@ $slab-font-family-option: "Roboto Slab", Rockwell, Courier, monospace;
 //  --application-light-color-option: #FFFFFF;
 //  --audioplayer-handle-background-color: rgba(0, 0, 0, 0.5);
 //  --text-arrow-color: #1B1F24;
-//}
+}
 
 $css4: true;
 $compatibility: true;

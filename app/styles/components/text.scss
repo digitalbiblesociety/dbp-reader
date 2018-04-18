@@ -131,11 +131,13 @@
 }
 
 .read-chapter:active {
-  box-shadow: 0 0 0 0 #B1A77A;
+  box-shadow: none;
+  color: #000;
 }
 
 .read-chapter:focus {
   border: 1px solid #B1A77A;
+  color: #000;
   outline: none;
 }
 
