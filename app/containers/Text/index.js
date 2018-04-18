@@ -188,6 +188,9 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				anchorOffset: window.getSelection().anchorOffset,
 				anchorText: window.getSelection().anchorNode.data,
 				anchorNode: window.getSelection().anchorNode,
+				extentOffset: window.getSelection().extentOffset,
+				extentText: window.getSelection().extentNode.data,
+				extentNode: window.getSelection().extentNode,
 				selectedText,
 			}, () => {
 				this.openContextMenu(e);
@@ -201,6 +204,9 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				anchorOffset: window.getSelection().anchorOffset,
 				anchorText: window.getSelection().anchorNode.data,
 				anchorNode: window.getSelection().anchorNode,
+				extentOffset: window.getSelection().extentOffset,
+				extentText: window.getSelection().extentNode.data,
+				extentNode: window.getSelection().extentNode,
 				selectedText,
 			}, () => {
 				this.openContextMenu(e);
@@ -221,6 +227,9 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				anchorOffset: window.getSelection().anchorOffset,
 				anchorText: window.getSelection().anchorNode.data,
 				anchorNode: window.getSelection().anchorNode,
+				extentOffset: window.getSelection().extentOffset,
+				extentText: window.getSelection().extentNode.data,
+				extentNode: window.getSelection().extentNode,
 				selectedText,
 			}, () => {
 				this.openContextMenu(e);
@@ -240,6 +249,9 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				anchorOffset: window.getSelection().anchorOffset,
 				anchorText: window.getSelection().anchorNode.data,
 				anchorNode: window.getSelection().anchorNode,
+				extentOffset: window.getSelection().extentOffset,
+				extentText: window.getSelection().extentNode.data,
+				extentNode: window.getSelection().extentNode,
 				selectedText,
 			}, () => {
 				this.openContextMenu(e);
@@ -322,7 +334,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 					(
 						<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} verseid={verse.verse_start} key={verse.verse_start}>
 							<br /><IconsInText clickHandler={this.handleNoteClick} bookmarkData={{ hasBookmark: verse.hasBookmark, index: verse.bookmarkIndex }} noteData={{ hasNote: verse.hasNote, index: verse.noteIndex }} /><sup verseid={verse.verse_start}>
-								{verse.verse_start_alt || verse.verse_start}
+								&nbsp;{verse.verse_start_alt || verse.verse_start}&nbsp;
 							</sup>
 							<span verseid={verse.verse_start} dangerouslySetInnerHTML={{ __html: verse.verse_text }} />
 						</span>
@@ -330,7 +342,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 					(
 						<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} verseid={verse.verse_start} key={verse.verse_start}>
 							<br /><IconsInText clickHandler={this.handleNoteClick} bookmarkData={{ hasBookmark: verse.hasBookmark, index: verse.bookmarkIndex }} noteData={{ hasNote: verse.hasNote, index: verse.noteIndex }} /><sup verseid={verse.verse_start}>
-								{verse.verse_start_alt || verse.verse_start}
+								&nbsp;{verse.verse_start_alt || verse.verse_start}&nbsp;
 							</sup>
 							{verse.verse_text}
 						</span>
@@ -439,18 +451,30 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			// Globals*
 			const firstVerse = parseInt(this.state.firstVerse, 10);
 			const lastVerse = parseInt(this.state.lastVerse, 10);
-			const anchorOffset = this.state.anchorOffset;
-			const anchorText = this.state.anchorText;
+			// Getting each offset to determine which is closest to the start of the passage
+			const offset = this.state.anchorOffset;
+			const extentOffset = this.state.extentOffset;
+			const extentText = this.state.extentText;
+			const aText = this.state.anchorText;
+			// console.log(offset);
+			// console.log(extentOffset)
+			// console.log(extentText)
+			// console.log(aText)
+			// Setting my anchors with the data that is closest to the start of the passage
+			const anchorOffset = offset < extentOffset ? offset : extentOffset;
+			const anchorText = offset < extentOffset ? aText : extentText;
 			// console.log('a text', anchorText);
 			// console.log('a offset', anchorOffset);
 			// console.log('first verse', firstVerse, 'last verse', lastVerse);
 			// Solve's for formatted text
-			let node = this.state.anchorNode;
+			let node = offset < extentOffset ? this.state.anchorNode : this.state.extentNode;
 			let highlightStart = 0;
-			// The parent with the id should never be more than 10 levels up
+			// The parent with the id should never be more than 10 levels up MAX
 			// I use this counter to prevent the edge case where an infinite loop
 			// Could be caused, this keeps the browser from crashing on accident
 			let counter = 0;
+			let highlightedWords = 0;
+			const dist = this.calcDist(lastVerse, firstVerse, !!this.props.formattedSource.main);
 			// Also need to check for class="v" to ensure that this was the first verse
 			if (this.props.formattedSource.main && !this.props.userSettings.getIn(['toggleOptions', 'readersMode', 'active'])) {
 				while (!(node.attributes && node.attributes['data-id'] && node.attributes['data-id'].value.split('_')[1] !== firstVerse)) {
@@ -459,8 +483,15 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 					counter += 1;
 					// console.log('condition to be checked', !(node.attributes && node.attributes['data-id'] && node.attributes['data-id'].value.split('_')[1] !== firstVerse));
 				}
+				// console.log(node.textContent);
+				// console.log(anchorOffset);
+				// console.log(anchorText);
+				// console.log(node.textContent.indexOf(anchorText));
 				// Need to subtract by 1 since the anchor offset isn't 0 based
 				highlightStart = (node.textContent.indexOf(anchorText) + anchorOffset);
+
+				// I think this can stay the same as formatted, it could be made shorter potentially
+				highlightedWords = this.state.selectedText.replace(/\n/g, '').length - dist;
 			} else {
 				while (!(node.attributes && node.attributes.verseid && node.attributes.verseid.value !== firstVerse)) {
 					// console.log('node', node);
@@ -468,16 +499,28 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 					if (counter >= 10) break;
 					counter += 1;
 				}
-				// Need to subtract by one for the plain text
-				highlightStart = (node.textContent.indexOf(anchorText) + anchorOffset);
+				// console.log('plain text logs', node.textContent);
+				// console.log('plain text logs', anchorOffset);
+				// console.log('plain text logs', anchorText);
+				// console.log('plain text logs', node.textContent.indexOf(anchorText));
+				// console.log('first verse', this.state.firstVerse);
+				// console.log('plain text logs', node.textContent.slice(this.state.firstVerse.length + 2));
+
+				// taking off the first 2 spaces and the verse number from the string
+				const newText = node.textContent.slice(this.state.firstVerse.length + 2);
+
+				if (this.props.userSettings.getIn(['toggleOptions', 'readersMode', 'active'])) {
+					highlightStart = (node.textContent.indexOf(anchorText) + anchorOffset);
+					highlightedWords = this.state.selectedText.replace(/\n/g, '').length;
+				} else {
+					highlightStart = (newText.indexOf(anchorText) + anchorOffset);
+					highlightedWords = this.state.selectedText.replace(/\n/g, '').length - dist;
+				}
 			}
 			// console.log('whole verse node text content', node.textContent);
 			// console.log('calc', node.textContent.indexOf(anchorText) + anchorOffset);
 			// plain text
-			// I think this can stay the same as formatted, it could be made shorter potentially
-			const dist = this.calcDist(lastVerse, firstVerse);
 			// console.log('dist', dist);
-			const highlightedWords = this.state.selectedText.replace(/\n/g, '').length - dist;
 			// console.log('length of text without n', this.state.selectedText.replace(/\n/g, '').length);
 			// console.log('length of text with n and no split', this.state.selectedText.length);
 			// console.log('length of text with n and a split', this.state.selectedText.split('').length);
@@ -514,16 +557,16 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 
 		this.closeContextMenu();
 	}
-	// Because the systems captures the verse numbers this needs to be used
-	calcDist = (l, f) => {
+	// Because the system captures the verse numbers this needs to be used
+	calcDist = (l, f, p) => {
 		if (l === f) return 0;
 		let stringDiff = '';
 
 		for (let i = f + 1; i <= l; i += 1) {
 			// Adds the length of each verse number
 			stringDiff += i.toFixed(0);
-			// Adds an additional character for the extra space
-			stringDiff += '1';
+			// Adds 1 character for formatted and 2 for plain text to account for spaces in verse numbers
+			stringDiff += p ? '1' : '11';
 			// console.log(i);
 		}
 		// console.log('string diff', stringDiff);
