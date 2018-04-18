@@ -324,7 +324,8 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 	const filteredFilesets = reduce(filesets, (a, file) => {
 		const newFile = { ...a };
 
-		if (file.set_type_code === 'audio' || file.set_type_code === 'audio_drama') {
+		if ((file.set_type_code === 'audio' || file.set_type_code === 'audio_drama') && file.id.slice(-4) !== 'DA16') {
+			// console.log('is 16 bit', file.id.slice(-4) === 'DA16')
 			newFile[file.id] = file;
 		}
 
