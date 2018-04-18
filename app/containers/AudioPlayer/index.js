@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { FormattedMessage } from 'react-intl';
-// import isEqual from 'lodash/isEqual';
+import isEqual from 'lodash/isEqual';
 import injectReducer from 'utils/injectReducer';
 import closeEventHoc from 'components/CloseEventHoc';
 import SvgWrapper from 'components/SvgWrapper';
@@ -40,10 +40,16 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 			playerState: this.props.hasAudio,
 			currentSpeed: 1,
 			autoPlayChecked: this.props.autoPlay,
+			nextTrack: { index: 0, path: this.props.audioPaths[0], last: this.props.audioPaths.length === 0 },
 		};
 	}
 
 	componentDidMount() {
+		// console.log('audio paths', this.props.audioPaths);
+		// console.log('first track', this.state.nextTrack);
+		if (this.props.audioPaths.length) {
+			this.props.audioPaths.forEach((path) => this.preLoadPath(path));
+		}
 		// If auto play is enabled I need to start the player
 		if (this.props.autoPlay) {
 			// console.log('component mounted and auto play was true');
@@ -72,9 +78,23 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 				this.audioRef.addEventListener('canplay', this.autoPlayListener);
 			}
 		}
+
 		if (!nextProps.autoPlay) {
 			// console.log('auto play is now false');
 			this.audioRef.removeEventListener('canplay', this.autoPlayListener);
+		}
+
+		if (!isEqual(nextProps.audioPaths, this.props.audioPaths) && nextProps.audioPaths.length) {
+			nextProps.audioPaths.forEach((path) => this.preLoadPath(path));
+			// console.log('prev audio paths', this.props.audioPaths);
+			// console.log('next audio paths', nextProps.audioPaths);
+			this.setState({
+				nextTrack: {
+					index: 0,
+					path: nextProps.audioPaths[0],
+					last: nextProps.audioPaths.length === 0,
+				},
+			});
 		}
 		// if (nextProps.autoPlay) {
 			// console.log('auto play is now true');
@@ -194,10 +214,34 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 
 	endedEventListener = () => {
 		// console.log('ended and autoplay was ', this.props.autoPlay);
-		if (this.props.autoPlay) {
-			this.skipForward();
+		if (!this.state.nextTrack.last && this.props.audioPaths.length) {
+			// console.log('tracks in state', this.state.nextTrack);
+			// console.log('src before', this.audioRef.src);
+			this.audioRef.src = this.state.nextTrack.path;
+			// console.log('src after', this.audioRef.src);
+			this.setState((prevState) => ({
+				nextTrack: {
+					path: this.props.audioPaths[prevState.nextTrack.index + 1],
+					index: prevState.nextTrack.index + 1,
+					last: this.props.audioPaths.length === prevState.nextTrack.index + 1,
+				},
+				// May need to trigger a play event after the next track loaded in
+			}), () => this.playVideo());
+		} else {
+			// console.log('in else for ended event listener');
+			if (this.props.autoPlay) {
+				this.skipForward();
+			}
+			this.pauseVideo();
 		}
-		this.pauseVideo();
+	}
+
+	preLoadPath = (path) => {
+		// console.log('loading path', path);
+		const audio = new Audio();
+
+		// audio.addEventListener('canplaythrough', () => console.log('can play through'), false);
+		audio.src = path;
 	}
 
 	playingEventListener = (e) => {
@@ -393,6 +437,7 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 
 AudioPlayer.propTypes = {
 	audioSource: PropTypes.string,
+	audioPaths: PropTypes.array,
 	skipBackward: PropTypes.func.isRequired,
 	skipForward: PropTypes.func.isRequired,
 	toggleAutoPlay: PropTypes.func,
