@@ -87,81 +87,81 @@ $slab-font-family-option: "Roboto Slab", Rockwell, Courier, monospace;
 
 // NOTE: Declaring the variables here so that I can use PHP Storm's "refactor"
 // functionality and code completion, I will remove them before production
-:root {
-  --application-base-font-size: 0.98em;
-  --application-menu-font-size: 0.98em;
-  --application-font-family: "Noto Sans", Helvetica, sans serif;
-  --sans-font-family-option: "Noto Sans", Helvetica, sans serif;
-  --serif-font-family-option: "Alegreya", "Palatino Linotype", Palatino, serif;
-  --slab-font-family-option: "Roboto Slab", Rockwell, Courier, monospace;
-  --text-selection-background: #1B1F24;
-  --text-selection-accordion-title-background: #2C3036;
-  --text-selection-accordion-body-background: #1B1F24;
-  --text-selection-tab-option-active-background:#FDF9F3;
-  --text-selection-tab-option-active-color:#000000;
-  --text-selection-tab-option-color: #FFFFFF;
-  --text-selection-tab-option-active-border-color: #FFFFFF;
-  --book-dropdown-background-color: #2C3036;
-  --book-dropdown-chapter-background-color: #6E747F;
-  --book-dropdown-text-color: #000000;
-  --book-dropdown-section-background-color:#6E747F;
-  --main-textarea-svg-color: #000000;
-  --main-textarea-svg-fill-color:#000000;
-  --main-textarea-read-chapter-background:#FFFFF5;
-  --main-textarea-read-chapter-shadow:#B1A77A;
-  --main-textarea-read-chapter-active:#B1A77A;
-  --active-color-primary: #6FBC8F;
-  --active-color-secondary: #71bc90;
-  --highlight-blue:#387DBF;
-  --highlight-pink:#D069A9;
-  --highlight-yellow:#FCE600;
-  --highlight-green:#2E924D;
-  --highlight-purple:#8967AC;
-  --disabled-input-option:#B2BBC6;
-  --inactive-font-option:#868686;
-  --dark-theme-primary:#000000;
-  --light-theme-primary:#FDF9F3;
-  --default-theme-primary:#7E0E2A;
-  --settings-text-color:#FFFFFF;
-  --notebook-footer-background-color:#1B1F24;
-  --notebook-title-date-color:#6EC3E2;
-  --profile-forgot-password-color:#6EC3E2;
-  --profile-login-signup-background-color:#1B1F24;
-  --profile-invalid-input-background-color:#9E1E35;
-  --context-menu-background-color:#FFFFFF;
-  --context-menu-svg-fill-color:#000000;
-  --context-menu-text-color:#000000;
-  --context-menu-hover-color: #ccc;
-  --context-menu-highlight-active-background-color:#868686;
-  --audio-player-progress-bar-background: #5B5F64;
-  --audio-player-background: #2C3036;
-  --audio-player-handle-background: #000000;
-  --audio-player-gripper-background-color: rgba(25,25,25,0.9);
-  --audio-player-gripper-before-color: rgba(255, 255, 255, 0.8);
-  --menu-body-background-color:#2C3036;
-  --menu-header-background-color:#7E0E2A;
-  --menu-border-color: transparent;
-  --menu-hover-state-background-color: rgba(0, 0, 0, 0.1);
-  --default-background-color:#FDF9F3;
-  --default-header-background-color:#9E1E35;
-  --default-footer-background-color:#9E1E35;
-  --default-header-background-transparent: rgba(#9E1E35, 0);
-  --default-text-color:#FFFFFF;
-  --before-after-border-color:#999999;
-  --default-svg-fill-color:#FFFFFF;
-  --default-input-placeholder-color:#FFFFFF;
-  --application-text-container-color:#000000;
-  --application-loading-spinner-color:#aeaeae;
-  --default-header-background-color-transparent:#F8E4D300;
-  --application-input-caret-color: #000;
-  --application-text-caret-color: #fff;
-  --application-transparent-gray: rgba(0,0,0,.8);
-  --application-words-of-jesus: #A00;
-  --application-text-selection-color: rgb(216, 182, 185);
-  --application-light-color-option: #FFFFFF;
-  --audioplayer-handle-background-color: rgba(0, 0, 0, 0.5);
-  --text-arrow-color: #1B1F24;
-}
+//:root {
+//  --application-base-font-size: 0.98em;
+//  --application-menu-font-size: 0.98em;
+//  --application-font-family: "Noto Sans", Helvetica, sans serif;
+//  --sans-font-family-option: "Noto Sans", Helvetica, sans serif;
+//  --serif-font-family-option: "Alegreya", "Palatino Linotype", Palatino, serif;
+//  --slab-font-family-option: "Roboto Slab", Rockwell, Courier, monospace;
+//  --text-selection-background: #1B1F24;
+//  --text-selection-accordion-title-background: #2C3036;
+//  --text-selection-accordion-body-background: #1B1F24;
+//  --text-selection-tab-option-active-background:#FDF9F3;
+//  --text-selection-tab-option-active-color:#000000;
+//  --text-selection-tab-option-color: #FFFFFF;
+//  --text-selection-tab-option-active-border-color: #FFFFFF;
+//  --book-dropdown-background-color: #2C3036;
+//  --book-dropdown-chapter-background-color: #6E747F;
+//  --book-dropdown-text-color: #000000;
+//  --book-dropdown-section-background-color:#6E747F;
+//  --main-textarea-svg-color: #000000;
+//  --main-textarea-svg-fill-color:#000000;
+//  --main-textarea-read-chapter-background:#FFFFF5;
+//  --main-textarea-read-chapter-shadow:#B1A77A;
+//  --main-textarea-read-chapter-active:#B1A77A;
+//  --active-color-primary: #6FBC8F;
+//  --active-color-secondary: #71bc90;
+//  --highlight-blue:#387DBF;
+//  --highlight-pink:#D069A9;
+//  --highlight-yellow:#FCE600;
+//  --highlight-green:#2E924D;
+//  --highlight-purple:#8967AC;
+//  --disabled-input-option:#B2BBC6;
+//  --inactive-font-option:#868686;
+//  --dark-theme-primary:#000000;
+//  --light-theme-primary:#FDF9F3;
+//  --default-theme-primary:#7E0E2A;
+//  --settings-text-color:#FFFFFF;
+//  --notebook-footer-background-color:#1B1F24;
+//  --notebook-title-date-color:#6EC3E2;
+//  --profile-forgot-password-color:#6EC3E2;
+//  --profile-login-signup-background-color:#1B1F24;
+//  --profile-invalid-input-background-color:#9E1E35;
+//  --context-menu-background-color:#FFFFFF;
+//  --context-menu-svg-fill-color:#000000;
+//  --context-menu-text-color:#000000;
+//  --context-menu-hover-color: #ccc;
+//  --context-menu-highlight-active-background-color:#868686;
+//  --audio-player-progress-bar-background: #5B5F64;
+//  --audio-player-background: #2C3036;
+//  --audio-player-handle-background: #000000;
+//  --audio-player-gripper-background-color: rgba(25,25,25,0.9);
+//  --audio-player-gripper-before-color: rgba(255, 255, 255, 0.8);
+//  --menu-body-background-color:#2C3036;
+//  --menu-header-background-color:#7E0E2A;
+//  --menu-border-color: transparent;
+//  --menu-hover-state-background-color: rgba(0, 0, 0, 0.1);
+//  --default-background-color:#FDF9F3;
+//  --default-header-background-color:#9E1E35;
+//  --default-footer-background-color:#9E1E35;
+//  --default-header-background-transparent: rgba(#9E1E35, 0);
+//  --default-text-color:#FFFFFF;
+//  --before-after-border-color:#999999;
+//  --default-svg-fill-color:#FFFFFF;
+//  --default-input-placeholder-color:#FFFFFF;
+//  --application-text-container-color:#000000;
+//  --application-loading-spinner-color:#aeaeae;
+//  //--default-header-background-color-transparent:#F8E4D300;
+//  --application-input-caret-color: #000;
+//  --application-text-caret-color: #fff;
+//  --application-transparent-gray: rgba(0,0,0,.8);
+//  --application-words-of-jesus: #A00;
+//  --application-text-selection-color: rgb(216, 182, 185);
+//  --application-light-color-option: #FFFFFF;
+//  --audioplayer-handle-background-color: rgba(0, 0, 0, 0.5);
+//  --text-arrow-color: #1B1F24;
+//}
 
 $css4: true;
 $compatibility: true;
@@ -220,7 +220,7 @@ $variables: (
     --default-input-placeholder-color:#FFFFFF,
     --application-text-super-color:#000000,
     --application-loading-spinner-color:#aeaeae,
-    --default-header-background-color-transparent:#F8E4D300,
+    --default-header-background-color-transparent:rgba(153,30,53, 0),
     --application-input-caret-color: #000,
     --application-text-caret-color: #fff,
     --application-transparent-gray: rgba(0,0,0,.8),
