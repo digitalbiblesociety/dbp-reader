@@ -1,5 +1,6 @@
 {
   "name": "Bible.is",
+  "short_name": "Bible.is",
   "theme_color": "#941B2F",
   "background_color": "#fafafa",
   "display": "standalone",

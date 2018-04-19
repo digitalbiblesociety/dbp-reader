@@ -192,6 +192,15 @@
   margin:0 auto;
   text-align: center;
 }
+#speed-wrap .item      {
+  display:flex;
+  flex-direction:column;
+}
+// Speed Changer
+#speed-wrap             {
+  position: relative;
+  //margin-left:18px;
+}
 #volume-wrap .item      {
   display:flex;
   flex-direction:column;
