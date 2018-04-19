@@ -48,7 +48,7 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 		const redLetter = nextProps.userSettings.getIn(['toggleOptions', 'redLetter', 'active']);
 
 		if (redLetter !== this.props.userSettings.getIn(['toggleOptions', 'redLetter', 'active'])) {
-			console.log('red', redLetter);
+			// console.log('red', redLetter);
 			toggleWordsOfJesus(redLetter);
 		}
 
@@ -170,7 +170,7 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 					/>
 					<section className="option-toggles">
 						{
-							toggleOptions.valueSeq().map((option) => (<SettingsToggle key={option.get('name')} checked={option.get('active')} name={option.get('name')} action={this.toggleSettingsOption} />))
+							toggleOptions.valueSeq().map((option) => (<SettingsToggle key={option.get('name')} available={option.get('available')} checked={option.get('active')} name={option.get('name')} action={this.toggleSettingsOption} />))
 						}
 					</section>
 				</aside>

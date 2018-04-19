@@ -138,7 +138,23 @@
 // CHECKBOX SETTINGS
 // Will need a .inactive class for disabling the options
 .checkbox-settings label            {height:40px;display:block;@include css4{color:var(--default-text-color);};}
-//.checkbox-settings label.active     {@include css4{color:var(--active-color-primary);};}
+.checkbox-settings.disabled {
+  .switch {
+    .slider {
+      cursor: default;
+    }
+  }
+  label span {
+    cursor: default;
+  }
+
+  @include css4{
+    color:var(--disabled-input-option);
+    svg {
+      fill: var(--disabled-input-option);
+    }
+  }
+}
 .checkbox-settings label span       {@include css4{font-size:var(--application-menu-font-size)};float: left;cursor:pointer;}
 //.checkbox-settings label span:hover {@include css4{color:var(--active-color-primary);};}
 

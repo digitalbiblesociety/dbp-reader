@@ -160,12 +160,13 @@ const selectPrevBook = () => createDeepEqualSelector(
 
 const selectSettings = () => createDeepEqualSelector(
 	selectHomePageDomain,
-	(substate) => {
-		const toggleOptions = substate.getIn(['userSettings', 'toggleOptions']);
-		const filteredToggleOptions = toggleOptions.filter((option) => option.get('available'));
-
-		return substate.get('userSettings').set('toggleOptions', filteredToggleOptions);
-	}
+	(substate) => substate.get('userSettings')
+	// {
+	// 	const toggleOptions = substate.getIn(['userSettings', 'toggleOptions']);
+	// 	const filteredToggleOptions = toggleOptions.filter((option) => option.get('available'));
+	//
+	// 	return substate.get('userSettings').set('toggleOptions', filteredToggleOptions);
+	// }
 );
 // TODO: May need to remove toJS if the application is showing signs of slowness
 // I dont remember why I was doing this.......... ... .. ... ... -_-

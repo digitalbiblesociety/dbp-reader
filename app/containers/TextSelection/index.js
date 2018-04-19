@@ -191,9 +191,9 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 						<input onChange={this.handleSearchInputChange} value={filterText} className={'input-class'} placeholder={messages.search.defaultMessage} />
 					</div>
 					<div className={'tab-options'}>
-						<span onClick={this.setCountryListState} className={countryListActive ? 'tab-option active' : 'tab-option'}><FormattedMessage {...messages.country} /></span>
-						<span onClick={this.toggleLanguageList} className={languageListActive ? 'tab-option active' : 'tab-option'}><FormattedMessage {...messages.language} /></span>
-						<span onClick={this.toggleVersionList} className={versionListActive ? 'tab-option active' : 'tab-option'}><FormattedMessage {...messages.version} /></span>
+						<span onClick={countryListActive ? () => {} : this.setCountryListState} className={countryListActive ? 'tab-option active' : 'tab-option'}><FormattedMessage {...messages.country} /></span>
+						<span onClick={languageListActive ? () => {} : this.toggleLanguageList} className={languageListActive ? 'tab-option active' : 'tab-option'}><FormattedMessage {...messages.language} /></span>
+						<span onClick={versionListActive ? () => {} : this.toggleVersionList} className={versionListActive ? 'tab-option active' : 'tab-option'}><FormattedMessage {...messages.version} /></span>
 					</div>
 					{this.getActiveTab(filterText)}
 				</aside>

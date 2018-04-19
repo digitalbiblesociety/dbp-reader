@@ -2,7 +2,7 @@
 @media (min-width: 30rem) {
   .chapter {
     @include css4 {
-      font-size: calc(var(--application-base-font-size) + ((1vw - 0.3rem) * 1.1111));
+      font-size: calc(var(--application-base-font-size) + ((1vw - 0.25rem) * 1.1111));
     };
     //font-size: calc(1rem + ((1vw - 0.3rem) * 1.1111));
     /* Where: * 1.1111 = 100 * font_Size_Difference / viewport_Width_Difference */
