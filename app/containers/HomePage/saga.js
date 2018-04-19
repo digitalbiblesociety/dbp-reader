@@ -494,7 +494,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 				// 	body: formData,
 				// };
 				// fetch('https://api.bible.build/error_logging', options);
-				yield put({ type: 'loadaudio', audioPath: '' });
+				yield put({ type: 'loadaudio', audioPaths: [''] });
 			}
 		}
 	}
