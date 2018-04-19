@@ -52,18 +52,33 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 
 	componentDidUpdate(prevProps) {
 		// console.log('component did update');
-		if (this.props.formattedSource.main && prevProps.formattedSource.main !== this.props.formattedSource.main && this.format) {
+		// Logic below ensures that the proper event handlers are set on each footnote
+		if (this.props.formattedSource.main && prevProps.formattedSource.main !== this.props.formattedSource.main && (this.format || this.formatHighlight)) {
 			// console.log('setting event listeners on format');
-			this.setEventHandlersForFootnotes(this.format);
-			this.setEventHandlersForFormattedVerses(this.format);
-		} else if (this.props.formattedSource.main && prevProps.formattedSource.main !== this.props.formattedSource.main && this.formatHighlight) {
-			// console.log('setting event listeners on formatHighlight')
-			this.setEventHandlersForFootnotes(this.formatHighlight);
-			this.setEventHandlersForFormattedVerses(this.formatHighlight);
+			if (this.format) {
+				this.setEventHandlersForFootnotes(this.format);
+				this.setEventHandlersForFormattedVerses(this.format);
+			} else if (this.formatHighlight) {
+				this.setEventHandlersForFootnotes(this.formatHighlight);
+				this.setEventHandlersForFormattedVerses(this.formatHighlight);
+			}
 		} else if (!isEqual(this.props.highlights, prevProps.highlights) && this.formatHighlight) {
 			// console.log('setting event listeners on formatHighlight because highlights changed');
 			this.setEventHandlersForFootnotes(this.formatHighlight);
 			this.setEventHandlersForFormattedVerses(this.formatHighlight);
+		} else if (
+			prevProps.userSettings.getIn(['toggleOptions', 'readersMode', 'active']) !== this.props.userSettings.getIn(['toggleOptions', 'readersMode', 'active']) &&
+			!this.props.userSettings.getIn(['toggleOptions', 'readersMode', 'active']) &&
+			(this.formatHighlight || this.format)
+		) {
+			// Need to set event handlers again here because they are removed once the plain text is rendered
+			if (this.format) {
+				this.setEventHandlersForFootnotes(this.format);
+				this.setEventHandlersForFormattedVerses(this.format);
+			} else if (this.formatHighlight) {
+				this.setEventHandlersForFootnotes(this.formatHighlight);
+				this.setEventHandlersForFormattedVerses(this.formatHighlight);
+			}
 		}
 		// console.log('Difference between old state and new state', differenceObject(this.state, prevState));
 	}
