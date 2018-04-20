@@ -19,10 +19,12 @@ const StyledDiv = styled.div`
 		inset 0 0 30px #eee;
 	max-height: 150px;
 	width: 300px;
+	max-width: 300px;
 	padding: 15px;
-	background-color: #9a9a9a;
+	background-color: #FFF;
 	overflow-y: scroll;
 	overflow-x: hidden;
+	color: #000
 `;
 
 const StyledX = styled.span`
@@ -46,14 +48,14 @@ const P = styled.p`
 // import { FormattedMessage } from 'react-intl';
 // import messages from './messages';
 
-function FootnotePortal({ parentNode, message, coords, closeFootnote }) {
+function FootnotePortal({ message, coords, closeFootnote }) {
 	const component = (
 		<StyledDiv x={coords.x} y={coords.y}>
 			<StyledX onClick={closeFootnote}>X</StyledX>
 			<P>{message}</P>
 		</StyledDiv>
 	);
-	return ReactDOM.createPortal(component, parentNode);
+	return ReactDOM.createPortal(component, document.getElementById('app'));
 }
 
 FootnotePortal.propTypes = {

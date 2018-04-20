@@ -470,7 +470,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 
 		yield put({ type: 'loadaudio', audioPaths: ntPath || otPath });
 	} else if (partialAudio.length) {
-		// TODO For this return a list of all of the s3 file paths since a chapter could have v1-v5 and v20-v25
+		// return a list of all of the s3 file paths since a chapter could have v1-v5 and v20-v25
 		// console.log('files that contain partial audio', partialAudio);
 		try {
 			// Need to iterate over each object here to see if I can find the right chapter
