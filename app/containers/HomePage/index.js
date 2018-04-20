@@ -188,10 +188,11 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 				xfbml: true,
 				version: 'v2.12',
 			});
-
+			// todo: look into using the login status to see if they gave access
+			// to our app and set their status as authenticated at that point
 			// FB.getLoginStatus((response) => {
 			// 	console.log('fb login status', response);
-			// 	statusChangeCallback(response);
+			// 	// statusChangeCallback(response);
 			// });
 		};
 
@@ -245,6 +246,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			// console.log('new bible', newBible);
 			// console.log('new book', newBook);
 			// console.log('new chapter', newChapter);
+			// todo need to update the url if the parameters given weren't valid
 			if (newBible) {
 				// console.log('new bible');
 				// Need to get the bible object with /bibles/[bibleId]
@@ -259,7 +261,6 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					authenticated: userAuthenticated,
 					userId,
 				});
-				// todo need to update the url if the parameters given weren't valid
 			} else if (newBook) {
 				// console.log('new book');
 				// This needs to be here for the case when a user goes from Genesis 7 to Mark 7 via the dropdown menu
@@ -394,7 +395,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		} = this.props.homepage;
 		const { activeBook, nextBook } = this.props;
 		const verseNumber = this.props.match.params.verse || '';
-		const maxChapter = activeBook.get('chapters').size;
+		const maxChapter = activeBook.getIn(['chapters', -1]);
 
 		if (verseNumber) {
 			this.setNextVerse(verseNumber);
@@ -408,12 +409,13 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		if (activeChapter === maxChapter) {
 			this.setActiveBookName({ book: nextBook.get('name'), id: nextBook.get('book_id') });
 			// this.getChapters({ userAuthenticated, userId, bible: activeTextId, book: nextBook.get('book_id'), chapter: 1, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
-			this.setActiveChapter(1);
-			this.props.history.push(`/${activeTextId.toLowerCase()}/${nextBook.get('book_id').toLowerCase()}/1`);
+			this.setActiveChapter(nextBook.getIn(['chapters', 0]));
+			this.props.history.push(`/${activeTextId.toLowerCase()}/${nextBook.get('book_id').toLowerCase()}/${nextBook.getIn(['chapters', 0])}`);
 		} else {
+			const activeChapterIndex = activeBook.get('chapters').findIndex((c) => c === activeChapter);
 			// this.getChapters({ userAuthenticated, userId, bible: activeTextId, book: activeBookId, chapter: activeChapter + 1, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
-			this.setActiveChapter(activeChapter + 1);
-			this.props.history.push(`/${activeTextId.toLowerCase()}/${activeBookId.toLowerCase()}/${activeChapter + 1}`);
+			this.setActiveChapter(activeBook.getIn(['chapters', activeChapterIndex + 1]));
+			this.props.history.push(`/${activeTextId.toLowerCase()}/${activeBookId.toLowerCase()}/${activeBook.getIn(['chapters', activeChapterIndex + 1])}`);
 		}
 	}
 
@@ -424,7 +426,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			activeBookId,
 			books,
 		} = this.props.homepage;
-		const { previousBook } = this.props;
+		const { previousBook, activeBook } = this.props;
 		const verseNumber = this.props.match.params.verse || '';
 
 		if (verseNumber) {
@@ -437,7 +439,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		}
 		// Goes to the previous book in the bible in canonical order from the current book
 		if (activeChapter - 1 === 0) {
-			const lastChapter = previousBook.get('chapters').size;
+			const lastChapter = previousBook.getIn(['chapters', -1]);
 
 			this.setActiveBookName({ book: previousBook.get('name'), id: previousBook.get('book_id') });
 			// this.getChapters({ userAuthenticated, userId, bible: activeTextId, book: previousBook.get('book_id'), chapter: lastChapter, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
@@ -445,9 +447,10 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			this.props.history.push(`/${activeTextId.toLowerCase()}/${previousBook.get('book_id').toLowerCase()}/${lastChapter}`);
 			// Goes to the previous Chapter
 		} else {
+			const activeChapterIndex = activeBook.get('chapters').findIndex((c) => c === activeChapter);
 			// this.getChapters({ userAuthenticated, userId, bible: activeTextId, book: activeBookId, chapter: activeChapter - 1, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
-			this.setActiveChapter(activeChapter - 1);
-			this.props.history.push(`/${activeTextId.toLowerCase()}/${activeBookId.toLowerCase()}/${activeChapter - 1}`);
+			this.setActiveChapter(activeBook.getIn(['chapters', activeChapterIndex - 1]));
+			this.props.history.push(`/${activeTextId.toLowerCase()}/${activeBookId.toLowerCase()}/${activeBook.getIn(['chapters', activeChapterIndex - 1])}`);
 		}
 	}
 

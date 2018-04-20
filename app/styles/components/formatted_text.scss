@@ -125,6 +125,10 @@
   font-size: .6em;
   display: block;
   text-align: right;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .footnotes .footnote .backref {
@@ -226,6 +230,10 @@ margin: 1.5em 0 0.5em 0;
   color: #7491CE;
   cursor: pointer;
   display: inline;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .chapter .note .key:hover,

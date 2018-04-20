@@ -148,15 +148,15 @@ const selectNextBook = () => createDeepEqualSelector(
 );
 
 const selectPrevBook = () => createDeepEqualSelector(
-		selectHomePageDomain,
-		(substate) => {
-			const books = substate.get('books');
-			const activeBookId = substate.get('activeBookId');
-			const activeBookIndex = books.findIndex((book) => book.get('book_id') === activeBookId);
+	selectHomePageDomain,
+	(substate) => {
+		const books = substate.get('books');
+		const activeBookId = substate.get('activeBookId');
+		const activeBookIndex = books.findIndex((book) => book.get('book_id') === activeBookId);
 
-			return books.get(activeBookIndex - 1) || fromJS({});
-		},
-	);
+		return books.get(activeBookIndex - 1) || fromJS({});
+	},
+);
 
 const selectSettings = () => createDeepEqualSelector(
 	selectHomePageDomain,

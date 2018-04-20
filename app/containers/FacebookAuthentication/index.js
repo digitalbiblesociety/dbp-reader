@@ -35,7 +35,7 @@ export class FacebookAuthentication extends React.PureComponent { // eslint-disa
 	}
 	render() {
 		return (
-			<div role={'button'} tabIndex={0} onClick={this.openPopup} className="facebook">
+			<div role={'button'} tabIndex={0} onClick={this.handleSocialLogin} className="facebook">
 				<SvgWrapper className="svg" height="30px" width="30px" fill="#fff" svgid="facebook" />
 				Sign in with Facebook
 				{
