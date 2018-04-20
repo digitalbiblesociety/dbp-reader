@@ -38,25 +38,6 @@ class CountryList extends React.PureComponent { // eslint-disable-line react/pre
 		const filteredCountryMap = filterText ? countries.filter((country) => this.filterFunction(country, filterText)) : countries;
 		const filteredCountries = filteredCountryMap.valueSeq();
 		// console.log('filtered countries', filteredCountries);
-		// const components = filteredCountries.valueSeq().map((country) => (
-		// 	<div
-		// 		className="country-name"
-		// 		key={country.getIn(['codes', 'iso_a2']) || 'ANY'}
-		// 		role="button"
-		// 		tabIndex={0}
-		// 		onClick={() => {
-		// 			setCountryName({ name: country.get('name'), languages: country.get('languages') });
-		// 			setCountryListState({ state: false });
-		// 			toggleVersionList({ state: false });
-		// 			toggleLanguageList({ state: true });
-		// 		}}
-		// 	>
-		// 		<svg className="svg" height="25px" width="25px">
-		// 			<use xmlnsXlink="http://www.w3.org/1999/xlink" xlinkHref={`${flags}#${country.getIn(['codes', 'iso_a2'])}`}></use>
-		// 		</svg>
-		// 		<h4 className={activeCountryName === country.get('name') ? 'active-language-name' : 'inactive-country'}>{country.get('name')}</h4>
-		// 	</div>
-		// ));
 
 		if (countries.size === 0) {
 			return <div className={'country-error-message'}>There was an error fetching this resource, an Admin has been notified. We apologize for the inconvenience</div>;

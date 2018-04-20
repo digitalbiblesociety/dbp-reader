@@ -205,7 +205,7 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 TextSelection.propTypes = {
 	dispatch: PropTypes.func.isRequired,
 	bibles: PropTypes.object,
-	languages: PropTypes.object,
+	languages: PropTypes.array,
 	countries: PropTypes.object,
 	textselection: PropTypes.object,
 	homepageData: PropTypes.object,

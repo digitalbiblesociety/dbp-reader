@@ -81,7 +81,7 @@ const getFormattedElementVerseId = (node) => {
 	}
 	// return null so I can do a check on the values existence
 	return null;
-}
+};
 
 export {
 	getFormattedParentVerseNumber,
