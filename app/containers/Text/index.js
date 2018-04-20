@@ -52,20 +52,39 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 
 	componentDidUpdate(prevProps) {
 		// console.log('component did update');
-		if (this.props.formattedSource.main && prevProps.formattedSource.main !== this.props.formattedSource.main && this.format) {
-			// console.log('setting event listeners on format');
-			this.setEventHandlersForFootnotes(this.format);
-			this.setEventHandlersForFormattedVerses(this.format);
-		} else if (this.props.formattedSource.main && prevProps.formattedSource.main !== this.props.formattedSource.main && this.formatHighlight) {
-			// console.log('setting event listeners on formatHighlight')
-			this.setEventHandlersForFootnotes(this.formatHighlight);
-			this.setEventHandlersForFormattedVerses(this.formatHighlight);
+		// Logic below ensures that the proper event handlers are set on each footnote
+		if (this.props.formattedSource.main && prevProps.formattedSource.main !== this.props.formattedSource.main && (this.format || this.formatHighlight)) {
+			if (this.format) {
+				// console.log('setting event listeners on format');
+				this.setEventHandlersForFootnotes(this.format);
+				this.setEventHandlersForFormattedVerses(this.format);
+			} else if (this.formatHighlight) {
+				// console.log('setting event listeners on formatHighlight');
+				this.setEventHandlersForFootnotes(this.formatHighlight);
+				this.setEventHandlersForFormattedVerses(this.formatHighlight);
+			}
 		} else if (!isEqual(this.props.highlights, prevProps.highlights) && this.formatHighlight) {
 			// console.log('setting event listeners on formatHighlight because highlights changed');
 			this.setEventHandlersForFootnotes(this.formatHighlight);
 			this.setEventHandlersForFormattedVerses(this.formatHighlight);
+		} else if (
+			prevProps.userSettings.getIn(['toggleOptions', 'readersMode', 'active']) !== this.props.userSettings.getIn(['toggleOptions', 'readersMode', 'active']) &&
+			!this.props.userSettings.getIn(['toggleOptions', 'readersMode', 'active']) &&
+			(this.formatHighlight || this.format)
+		) {
+			// Need to set event handlers again here because they are removed once the plain text is rendered
+			if (this.format) {
+				// console.log('setting event listeners on format');
+				this.setEventHandlersForFootnotes(this.format);
+				this.setEventHandlersForFormattedVerses(this.format);
+			} else if (this.formatHighlight) {
+				// console.log('setting event listeners on formatHighlight');
+				this.setEventHandlersForFootnotes(this.formatHighlight);
+				this.setEventHandlersForFormattedVerses(this.formatHighlight);
+			}
 		}
 		// console.log('Difference between old state and new state', differenceObject(this.state, prevState));
+		// console.log('Difference between old props and new props', differenceObject(this.props, prevProps));
 	}
 
 	setEventHandlersForFormattedVerses = (ref) => {
@@ -92,14 +111,16 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		const notes = [...ref.getElementsByClassName('note')];
 
 		notes.forEach((note, index) => {
+			// console.log('setting a click handler for: ', note);
 			/* eslint-disable no-param-reassign */
 			// May need to change this and change the regex if we do infinite scrolling
-			if (note.childNodes && note.childNodes[0]) {
+			if (note.childNodes && note.childNodes[0] && typeof note.childNodes[0].removeAttribute === 'function') {
 				note.childNodes[0].removeAttribute('href');
 			}
 
 			note.onclick = (e) => {
 				e.stopPropagation();
+				// console.log('clicked note');
 				const rightEdge = window.innerWidth - 300;
 				const x = rightEdge < e.clientX ? rightEdge : e.clientX;
 
@@ -424,6 +445,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 	highlightPlainText = (props) => createHighlights(props)
 
 	addHighlight = ({ color, popupCoords }) => {
+		// TODO: For formatted text make sure to not count the footnote * in the highlighted_words
 		if (!this.props.userAuthenticated || !this.props.userId) {
 			this.openPopup({ x: popupCoords.x, y: popupCoords.y });
 			return;
@@ -602,7 +624,6 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		this.setState({
 			footnoteState: true,
 			footnotePortal: {
-				parentNode: this.format,
 				message: this.props.formattedSource.footnotes[id],
 				closeFootnote: this.closeFootnote,
 				coords,

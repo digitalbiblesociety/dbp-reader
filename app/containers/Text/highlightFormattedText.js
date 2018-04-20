@@ -1,15 +1,18 @@
 const createFormattedHighlights = (highlights, formattedTextString) => {
-	/* eslint-disable */
 	// TODO: Major! If the starting index in a verse is past the end of the verse then start the highlight on the next line
 	/* NOTES
 	* 1. Need to subtract 1 from any addition of highlight_start + highlighted_words, this is because the result is the length not the index
 	* todo check and see if this function fully supports overlapping highlights
 	* */
-	// Iterate over each verse
-		// Find all the highlights for a single verse
-		// Apply all highlights for that verse
-			// If the highlight goes past the end of the verse
-			// Create a new highlight that has the update range and a start verse of the next verse in line
+	/* Notes on Logic for function
+	* Iterate over each verse
+	* Find all the highlights for a single verse
+	* Apply all highlights for that verse
+	* If the highlight goes past the end of the verse
+	* Create a new highlight that has the update range and a start verse of the next verse in line
+	* */
+
+	// Sort the highlights
 	const sortedHighlights = highlights.sort((a, b) => {
 		if (a.verse_start < b.verse_start) return -1;
 		if (a.verse_start > b.verse_start) return 1;
@@ -19,78 +22,127 @@ const createFormattedHighlights = (highlights, formattedTextString) => {
 		}
 		return 0;
 	});
-	// console.log('string', formattedTextString);
-	// console.log('sorted highlights', sortedHighlights);
+
 	try {
 		const parser = new DOMParser();
 		const serializer = new XMLSerializer();
 		const xmlDoc = parser.parseFromString(formattedTextString, 'text/xml');
-		// console.log('doc before stuff', serializer.serializeToString(xmlDoc));
-		const arrayOfVerses = [...xmlDoc.getElementsByClassName('v')];
+
+		// const arrayOfVerses = [...xmlDoc.getElementsByClassName('v')];
 		let charsLeftAfterVerseEnd = 0; // the number of characters for the highlight
 		let continuingColor = '';
 		let lastVerseNumber = 0;
 
-		const ad = [...xmlDoc.querySelectorAll('[data-id]')].slice(1);
-		// console.log('all data-id', ad);
+		const ad = [...xmlDoc.querySelectorAll('[data-id]')].slice(1); // Get all verse elements
 
-		ad.forEach((verse) => {
-			// console.log('element index', verseElementIndex);
+		// console.log('------------------------------------------------------------------------');
+
+		ad.forEach((verseElement) => {
+			const children = verseElement.childNodes.length ? [...verseElement.childNodes] : [verseElement];
 			// Parse the verse data-id to get the verse number
-			const verseNumber = parseInt(verse.attributes['data-id'].value.split('_')[1], 10);
-			// Verse already started -> need to treat it like a new verse
-			const sameVerse = verseNumber === lastVerseNumber;
-			// console.log('same verse', sameVerse, ' ', verseNumber);
-			// console.log('verseNumber', verseNumber);
-			// console.log('lastVerseNumber', lastVerseNumber);
-			// Get all of the highlights that start in this verse
-			const highlightsStartingInVerse = sortedHighlights.filter((highlight) => highlight.verse_start === verseNumber);
-			let verseText = verse.textContent.split('');
+			const verseNumber = parseInt(verseElement.attributes['data-id'].value.split('_')[1], 10);
+			// console.log('children for verseElement', children);
+			// Test theory only on the fifteenth element
+			// if (i === 15) {
+			// 	verseElement.childNodes.forEach((node) => {
+			// 		// get text for node
+			// 		console.log('test theory on children textContent', node.textContent, '\n\nand innerHTML', node.innerHTML);
+			// 	});
+			// }
+			const newChildren = [];
 
-			if (sameVerse) {
-				try {
-					const newData = handleSameVerse({
-						charsLeftAfterVerseEnd,
-						continuingColor,
-						verseText,
-					});
+			children.forEach((originalVerse) => {
+				const verse = originalVerse.cloneNode(true);
+				// console.log(!!verse.attributes);
+				// if (verse.attributes) {
+				// 	console.log(verse.attributes.class.value);
+				// }
+				const isNote = (!!verse.attributes && verse.attributes.class.value === 'note');
+				// console.log('is a note', isNote);
+				verseElement.removeChild(originalVerse);
+				// Verse already started -> need to treat it like a new verse
+				const sameVerse = verseNumber === lastVerseNumber;
 
-					verseText = newData.verseText;
-					charsLeftAfterVerseEnd = newData.charsLeftAfterVerseEnd;
-					continuingColor = newData.continuingColor;
-				} catch (e) {
-					if (process.env.NODE_ENV === 'development') {
-						console.warn('Error in handleNewVerse', e); // eslint-disable-line no-console
+				// Get all of the highlights that start in this verse
+				const highlightsStartingInVerse = sortedHighlights.filter((highlight) => highlight.verse_start === verseNumber);
+
+				// Get the text for a verse
+				let verseText = verse.textContent.split('');
+				// console.log('child node', verse);
+				// console.log('same verse', sameVerse);
+				// console.log(verseNumber, lastVerseNumber);
+				// todo: If the highlight start is greater than this sections length
+				// todo: update the start to be highlight_start - verseText.length
+				// todo: use the new highlight start in the next section of the verse
+				if (!isNote) {
+				// If the node is a footnote then skip over it
+					if (sameVerse) {
+						// If the verse has the same index as the last one
+						// console.log('same verse text', verseText);
+						try {
+							const newData = handleSameVerse({
+								charsLeftAfterVerseEnd,
+								continuingColor,
+								verseText,
+							});
+
+							verseText = newData.verseText;
+							charsLeftAfterVerseEnd = newData.charsLeftAfterVerseEnd;
+							continuingColor = newData.continuingColor;
+						} catch (e) {
+							if (process.env.NODE_ENV === 'development') {
+								console.warn('Error in handleNewVerse', e); // eslint-disable-line no-console
+							}
+						}
+					} else {
+						// This verse is different from the last one
+						try {
+							const newData = handleNewVerse({
+								highlightsStartingInVerse,
+								charsLeftAfterVerseEnd,
+								continuingColor,
+								verseText,
+							});
+
+							verseText = newData.verseText;
+							charsLeftAfterVerseEnd = newData.charsLeftAfterVerseEnd;
+							continuingColor = newData.continuingColor;
+						} catch (e) {
+							if (process.env.NODE_ENV === 'development') {
+								console.warn('Error in handleNewVerse', e); // eslint-disable-line no-console
+							}
+						}
 					}
 				}
-			} else {
-				try {
-					const newData = handleNewVerse({
-						highlightsStartingInVerse,
-						charsLeftAfterVerseEnd,
-						continuingColor,
-						verseText,
-					});
-
-					verseText = newData.verseText;
-					charsLeftAfterVerseEnd = newData.charsLeftAfterVerseEnd;
-					continuingColor = newData.continuingColor;
-				} catch (e) {
-					if (process.env.NODE_ENV === 'development') {
-						console.warn('Error in handleNewVerse', e); // eslint-disable-line no-console
-					}
+				const newNonTextNode = xmlDoc.createElement('span');
+				if (verse.nodeType === 3) {
+					// this is a text node and cannot have inner html
+					newNonTextNode.innerHTML = verseText.join('');
+					// console.log('newly created element', newNonTextNode);
+				} else if (!isNote) {
+					// console.log('verse before setting the inner html', verse);
+					// Set the inner html for this verse - this overrides any other styling that had been inside that verse
+					verse.innerHTML = verseText.join(''); // eslint-disable-line no-param-reassign
+					// verse.textContent = verseText.join('');
+					// console.log('new verse element', verse, 'and verse text', verseText);
 				}
-			}
-			// console.log('v text', verseText);
-			// console.log('v charsLeftAfterVerseEnd', charsLeftAfterVerseEnd);
-			// console.log('v continuingColor', continuingColor);
+				newChildren.push(verse.nodeType === 3 ? newNonTextNode : verse);
+				// console.log('new inner html', verse.innerHTML);
+				// Use charsLeft to highlight as much of this verse as possible, then carry its value over into the next verse
+				// Save this verse number as the new 'previous verse number'
+				lastVerseNumber = verseNumber;
+			});
 
-			lastVerseNumber = verseNumber;
-			// console.log('verse text after highlights', verseText.join(''));
-			verse.innerHTML = verseText.join(''); // eslint-disable-line no-param-reassign
-			// Use charsLeft to highlight as much of this verse as possible, then carry its value over into the next verse
+			newChildren.forEach((child) => {
+				// console.log('new child', child);
+				verseElement.appendChild(child);
+			});
+
+			// console.log('verse element', verseElement);
+			// console.log('xml right after updating inner html', xmlDoc);
 		});
-		// console.log('xml doc', xmlDoc);
+		// console.log('xml outside loop', xmlDoc);
+
 		return serializer.serializeToString(xmlDoc);
 	} catch (error) {
 		if (process.env.NODE_ENV === 'development') {
@@ -104,11 +156,11 @@ const createFormattedHighlights = (highlights, formattedTextString) => {
 	}
 };
 
-function handleSameVerse({ verseText, verse, charsLeftAfterVerseEnd: passedCharsLeft, continuingColor: passedColor }) {
+function handleSameVerse({ verseText, charsLeftAfterVerseEnd: passedCharsLeft, continuingColor: passedColor }) {
 	let charsLeftAfterVerseEnd = passedCharsLeft;
-	let continuingColor = passedColor;
-	let charsLeft = charsLeftAfterVerseEnd;
-	let hStart = 0;
+	const continuingColor = passedColor;
+	// let charsLeft = charsLeftAfterVerseEnd;
+	// let hStart = 0;
 
 	if (charsLeftAfterVerseEnd) {
 		// console.log('this verse has a highlight that did not start in it');
@@ -133,10 +185,10 @@ function handleSameVerse({ verseText, verse, charsLeftAfterVerseEnd: passedChars
 		verseText,
 		charsLeftAfterVerseEnd,
 		continuingColor,
-	}
+	};
 }
 
-function handleNewVerse({ highlightsStartingInVerse, verseText, verse, charsLeftAfterVerseEnd: passedCharsLeft, continuingColor: passedColor }) {
+function handleNewVerse({ highlightsStartingInVerse, verseText, charsLeftAfterVerseEnd: passedCharsLeft, continuingColor: passedColor }) {
 	let charsLeftAfterVerseEnd = passedCharsLeft;
 	let continuingColor = passedColor;
 	let charsLeft = charsLeftAfterVerseEnd;
