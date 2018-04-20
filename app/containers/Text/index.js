@@ -13,6 +13,7 @@ import LoadingSpinner from 'components/LoadingSpinner';
 import IconsInText from 'components/IconsInText';
 // import differenceObject from 'utils/deepDifferenceObject';
 import isEqual from 'lodash/isEqual';
+// import some from 'lodash/some';
 import createHighlights from './highlightPlainText';
 import createFormattedHighlights from './highlightFormattedText';
 import PopupMessage from '../../components/PopupMessage';
@@ -20,7 +21,7 @@ import PopupMessage from '../../components/PopupMessage';
 /* Disabling the jsx-a11y linting because we need to capture the selected text
 	 and the most straight forward way of doing so is with the onMouseUp event */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-// todo handle cases where user starts on the chapter number or the section headers
+
 class Text extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	state = {
 		contextMenuState: false,
@@ -485,16 +486,29 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			const extentOffset = this.state.extentOffset;
 			const extentText = this.state.extentText;
 			const aText = this.state.anchorText;
-			// console.log(offset);
+			// console.log(offset)
 			// console.log(extentOffset)
 			// console.log(extentText)
 			// console.log(aText)
+			const selectedText = this.state.selectedText;
 			// Setting my anchors with the data that is closest to the start of the passage
 			const anchorOffset = offset < extentOffset ? offset : extentOffset;
 			const anchorText = offset < extentOffset ? aText : extentText;
 			// console.log('a text', anchorText);
 			// console.log('a offset', anchorOffset);
 			// console.log('first verse', firstVerse, 'last verse', lastVerse);
+			// if (aText === extentText) {
+			// 	// console.log('atext', aText);
+			// 	// console.log('extentText', extentText);
+			// 	anchorOffset = offset < extentOffset ? offset : extentOffset;
+			// 	anchorText = offset < extentOffset ? aText : extentText;
+			// } else {
+			// 	// console.log('this.state.selectedText', this.state.selectedText);
+			// 	// console.log('index of atext in else', selectedText.indexOf(aText));
+			// 	// console.log('index of extentText in else', selectedText.indexOf(extentText));
+			// 	anchorOffset = selectedText.indexOf(aText) < selectedText.indexOf(extentText) ? offset : extentOffset;
+			// 	anchorText = selectedText.indexOf(aText) < selectedText.indexOf(extentText) ? aText : extentText;
+			// }
 			// Solve's for formatted text
 			let node = offset < extentOffset ? this.state.anchorNode : this.state.extentNode;
 			let highlightStart = 0;
@@ -512,6 +526,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 					counter += 1;
 					// console.log('condition to be checked', !(node.attributes && node.attributes['data-id'] && node.attributes['data-id'].value.split('_')[1] !== firstVerse));
 				}
+				// At this point "node" is the first verse
 				// console.log(node.textContent);
 				// console.log(anchorOffset);
 				// console.log(anchorText);
@@ -520,7 +535,8 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				highlightStart = (node.textContent.indexOf(anchorText) + anchorOffset);
 
 				// I think this can stay the same as formatted, it could be made shorter potentially
-				highlightedWords = this.state.selectedText.replace(/\n/g, '').length - dist;
+				// need to remove all line breaks and note characters
+				highlightedWords = selectedText.replace(/[\n*✝]/g, '').length - dist;
 			} else {
 				while (!(node.attributes && node.attributes.verseid && node.attributes.verseid.value !== firstVerse)) {
 					// console.log('node', node);
@@ -540,10 +556,10 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 
 				if (this.props.userSettings.getIn(['toggleOptions', 'readersMode', 'active'])) {
 					highlightStart = (node.textContent.indexOf(anchorText) + anchorOffset);
-					highlightedWords = this.state.selectedText.replace(/\n/g, '').length;
+					highlightedWords = selectedText.replace(/\n/g, '').length;
 				} else {
 					highlightStart = (newText.indexOf(anchorText) + anchorOffset);
-					highlightedWords = this.state.selectedText.replace(/\n/g, '').length - dist;
+					highlightedWords = selectedText.replace(/\n/g, '').length - dist;
 				}
 			}
 			// console.log('whole verse node text content', node.textContent);

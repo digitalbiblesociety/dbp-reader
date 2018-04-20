@@ -188,10 +188,11 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 				xfbml: true,
 				version: 'v2.12',
 			});
-
+			// todo: look into using the login status to see if they gave access
+			// to our app and set their status as authenticated at that point
 			// FB.getLoginStatus((response) => {
 			// 	console.log('fb login status', response);
-			// 	statusChangeCallback(response);
+			// 	// statusChangeCallback(response);
 			// });
 		};
 
