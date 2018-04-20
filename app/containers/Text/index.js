@@ -17,6 +17,7 @@ import {
 	getPlainParentVerse,
 	getFormattedParentVerse,
 	getFormattedChildIndex,
+	getFormattedElementVerseId,
 	// differenceObject,
 } from 'utils/highlightingUtils';
 import isEqual from 'lodash/isEqual';
@@ -541,6 +542,18 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				} else {
 					// take the offset that matches the first(lowest) verse between the two
 					// console.log('parent verse is not the same for both elements');
+					const aVerseNumber = getFormattedElementVerseId(aParent);
+					const eVerseNumber = getFormattedElementVerseId(eParent);
+
+					// Use the text and offset of the first verse
+					if (aVerseNumber < eVerseNumber) {
+						// console.log('aVerseNumber is less than eVerseNumber');
+						anchorText = aText;
+						anchorOffset = offset;
+					} else {
+						anchorText = extentText;
+						anchorOffset = extentOffset;
+					}
 				}
 				// console.log('atext', aText);
 				// console.log('extentText', extentText);

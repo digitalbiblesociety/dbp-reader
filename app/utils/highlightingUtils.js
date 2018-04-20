@@ -8,7 +8,7 @@ const getFormattedParentVerseNumber = (node, verseNumber) => {
 	let counter = 0;
 	let newNode = node;
 
-	while (!(newNode.attributes && newNode.attributes['data-id'] && newNode.attributes['data-id'].value.split('_')[1] !== verseNumber)) {
+	while (!(getFormattedElementVerseId(newNode) !== verseNumber)) {
 		newNode = newNode.parentNode;
 		if (counter >= 10) break;
 		counter += 1;
@@ -74,9 +74,19 @@ const getPlainParentVerse = (node, verseNumber) => {
 	return newNode;
 };
 
+const getFormattedElementVerseId = (node) => {
+	// check for the data-id attribute since that is what the verse number is stored in
+	if (node.attributes && node.attributes['data-id']) {
+		return parseInt(node.attributes['data-id'].value.split('_')[1], 10);
+	}
+	// return null so I can do a check on the values existence
+	return null;
+}
+
 export {
 	getFormattedParentVerseNumber,
 	getFormattedParentVerse,
 	getPlainParentVerse,
 	getFormattedChildIndex,
+	getFormattedElementVerseId,
 };
