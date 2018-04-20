@@ -11,12 +11,19 @@ import ContextPortal from 'components/ContextPortal';
 import FootnotePortal from 'components/FootnotePortal';
 import LoadingSpinner from 'components/LoadingSpinner';
 import IconsInText from 'components/IconsInText';
-// import differenceObject from 'utils/deepDifferenceObject';
+import PopupMessage from 'components/PopupMessage';
+import {
+	getFormattedParentVerseNumber,
+	getPlainParentVerse,
+	getFormattedParentVerse,
+	getFormattedChildIndex,
+	getFormattedElementVerseId,
+	// differenceObject,
+} from 'utils/highlightingUtils';
 import isEqual from 'lodash/isEqual';
 // import some from 'lodash/some';
 import createHighlights from './highlightPlainText';
 import createFormattedHighlights from './highlightFormattedText';
-import PopupMessage from '../../components/PopupMessage';
 // import { addClickToNotes } from './htmlToReact';
 /* Disabling the jsx-a11y linting because we need to capture the selected text
 	 and the most straight forward way of doing so is with the onMouseUp event */
@@ -446,7 +453,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 	highlightPlainText = (props) => createHighlights(props)
 
 	addHighlight = ({ color, popupCoords }) => {
-		// TODO: For formatted text make sure to not count the footnote * in the highlighted_words
+		// User must be signed in for the highlight to be added
 		if (!this.props.userAuthenticated || !this.props.userId) {
 			this.openPopup({ x: popupCoords.x, y: popupCoords.y });
 			return;
@@ -470,6 +477,8 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		// split all the text nodes and join them into an array
 		// find the index of the marked character
 		// use that index as the highlight start
+		// todo if the selected text starts at the end of the anchor node
+		// else if the selected text starts at the end of the extent node
 		try {
 			// Globals*
 			const first = parseInt(this.state.firstVerse, 10);
@@ -486,46 +495,91 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			const extentOffset = this.state.extentOffset;
 			const extentText = this.state.extentText;
 			const aText = this.state.anchorText;
+			const aNode = this.state.anchorNode;
+			const eNode = this.state.extentNode;
 			// console.log(offset)
 			// console.log(extentOffset)
 			// console.log(extentText)
 			// console.log(aText)
 			const selectedText = this.state.selectedText;
 			// Setting my anchors with the data that is closest to the start of the passage
-			const anchorOffset = offset < extentOffset ? offset : extentOffset;
-			const anchorText = offset < extentOffset ? aText : extentText;
+			let anchorOffset = offset < extentOffset ? offset : extentOffset;
+			let anchorText = offset < extentOffset ? aText : extentText;
 			// console.log('a text', anchorText);
 			// console.log('a offset', anchorOffset);
 			// console.log('first verse', firstVerse, 'last verse', lastVerse);
-			// if (aText === extentText) {
-			// 	// console.log('atext', aText);
-			// 	// console.log('extentText', extentText);
-			// 	anchorOffset = offset < extentOffset ? offset : extentOffset;
-			// 	anchorText = offset < extentOffset ? aText : extentText;
-			// } else {
-			// 	// console.log('this.state.selectedText', this.state.selectedText);
-			// 	// console.log('index of atext in else', selectedText.indexOf(aText));
-			// 	// console.log('index of extentText in else', selectedText.indexOf(extentText));
-			// 	anchorOffset = selectedText.indexOf(aText) < selectedText.indexOf(extentText) ? offset : extentOffset;
-			// 	anchorText = selectedText.indexOf(aText) < selectedText.indexOf(extentText) ? aText : extentText;
-			// }
+
+			if (aText !== extentText) {
+				// if nodes are different
+					// I have access to the parent node
+				// if texts match
+					// reverse order of anchor and extent
+				// if texts dont match
+					// find the parent of each that has a verse id
+				const aParent = getFormattedParentVerse(aNode);
+				const eParent = getFormattedParentVerse(eNode);
+						// if the parents are different verses
+				if (aParent.isSameNode(eParent)) {
+					// It doesn't matter from this point which parent is used since they both reference the same object
+					// take the offset that occurs first as a child of the verse
+					// console.log('parent verse is the same for both elements');
+					// console.log('child nodes for parent', aParent.childNodes);
+					// console.log(aParent.childNodes[0].isSameNode(aNode));
+					const aIndex = getFormattedChildIndex(aParent, aNode);
+					const eIndex = getFormattedChildIndex(aParent, eNode);
+					// console.log('a index', aIndex, 'e index', eIndex);
+
+					// Use the text and offset of the node that was closest to the start of the verse
+					if (aIndex < eIndex) {
+						// console.log('aIndex is less than eIndex');
+						anchorText = aText;
+						anchorOffset = offset;
+					} else {
+						anchorText = extentText;
+						anchorOffset = extentOffset;
+					}
+					// (could potentially use next/prev sibling for this)
+				} else {
+					// take the offset that matches the first(lowest) verse between the two
+					// console.log('parent verse is not the same for both elements');
+					const aVerseNumber = getFormattedElementVerseId(aParent);
+					const eVerseNumber = getFormattedElementVerseId(eParent);
+
+					// Use the text and offset of the first verse
+					if (aVerseNumber < eVerseNumber) {
+						// console.log('aVerseNumber is less than eVerseNumber');
+						anchorText = aText;
+						anchorOffset = offset;
+					} else {
+						anchorText = extentText;
+						anchorOffset = extentOffset;
+					}
+				}
+				// console.log('atext', aText);
+				// console.log('extentText', extentText);
+				// console.log('this.state.selectedText', this.state.selectedText);
+				// console.log('index of atext in else', selectedText.indexOf(aText));
+				// console.log('index of extentText in else', selectedText.indexOf(extentText));
+				// if () {
+				// 	anchorOffset = offset;
+				// 	anchorText = aText;
+				// } else {
+				// 	anchorOffset = extentOffset;
+				// 	anchorText = extentText;
+				// }
+			}
 			// Solve's for formatted text
-			let node = offset < extentOffset ? this.state.anchorNode : this.state.extentNode;
+			let node = offset < extentOffset ? aNode : eNode;
 			let highlightStart = 0;
 			// The parent with the id should never be more than 10 levels up MAX
 			// I use this counter to prevent the edge case where an infinite loop
 			// Could be caused, this keeps the browser from crashing on accident
-			let counter = 0;
+
 			let highlightedWords = 0;
 			const dist = this.calcDist(lastVerse, firstVerse, !!this.props.formattedSource.main);
 			// Also need to check for class="v" to ensure that this was the first verse
 			if (this.props.formattedSource.main && !this.props.userSettings.getIn(['toggleOptions', 'readersMode', 'active'])) {
-				while (!(node.attributes && node.attributes['data-id'] && node.attributes['data-id'].value.split('_')[1] !== firstVerse)) {
-					node = node.parentNode;
-					if (counter >= 10) break;
-					counter += 1;
-					// console.log('condition to be checked', !(node.attributes && node.attributes['data-id'] && node.attributes['data-id'].value.split('_')[1] !== firstVerse));
-				}
+				node = getFormattedParentVerseNumber(node, firstVerse);
 				// At this point "node" is the first verse
 				// console.log(node.textContent);
 				// console.log(anchorOffset);
@@ -538,12 +592,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				// need to remove all line breaks and note characters
 				highlightedWords = selectedText.replace(/[\n*✝]/g, '').length - dist;
 			} else {
-				while (!(node.attributes && node.attributes.verseid && node.attributes.verseid.value !== firstVerse)) {
-					// console.log('node', node);
-					node = node.parentNode;
-					if (counter >= 10) break;
-					counter += 1;
-				}
+				node = getPlainParentVerse(node, firstVerse);
 				// taking off the first 2 spaces and the verse number from the string
 				const newText = node.textContent.slice(firstVerse.toFixed(0).length + 2);
 
@@ -564,7 +613,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			}
 			// console.log('whole verse node text content', node.textContent);
 			// console.log('calc', node.textContent.indexOf(anchorText) + anchorOffset);
-			// plain text
+			// plain text 乁(✿ ͡° ͜ʖ ͡°)و
 			// console.log('dist', dist);
 			// console.log('length of text without n', this.state.selectedText.replace(/\n/g, '').length);
 			// console.log('length of text with n and no split', this.state.selectedText.length);
@@ -588,9 +637,6 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 					highlightStart,
 					highlightedWords,
 				});
-			} else {
-				// TODO Add a message bubble for the user so they know they need to log in
-				// alert('Please create an account!!! 乁(✿ ͡° ͜ʖ ͡°)و');
 			}
 		} catch (err) {
 			if (process.env.NODE_ENV === 'development') {

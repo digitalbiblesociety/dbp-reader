@@ -7,6 +7,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { List, AutoSizer } from 'react-virtualized';
+import matchSorter from 'match-sorter';
 import LoadingSpinner from 'components/LoadingSpinner';
 
 class LanguageList extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
@@ -26,7 +27,9 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 			filterText,
 		} = this.props;
 		// const { filterText } = this.state;
-		const filteredLanguages = filterText ? languages.filter((language) => this.filterFunction(language, filterText)) : languages;
+		// console.log('languages', languages);
+		// console.log('match-sorter languages', matchSorter(languages, filterText, { keys: ['name', 'iso'] }));
+		const filteredLanguages = filterText ? matchSorter(languages, filterText, { keys: ['name', 'iso'] }) : languages;
 
 		// const components = () => filteredLanguages.map((language) => (
 		// 	<div className="language-name" key={language.get('iso')} role="button" tabIndex={0} onClick={() => this.handleLanguageClick(language)}>
@@ -34,19 +37,25 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 		// 	</div>
 		// ));
 
-		if (languages.size === 0) {
+		if (languages.length === 0) {
 			return null;
 		}
 
 		const renderARow = ({ index, style, key }) => {
-			const language = filteredLanguages.get(index);
+			const language = filteredLanguages[index];
+			// const language = filteredLanguages.get(index);
 			// key={language.get('iso')}
 			// if (isScrolling) {
 			// 	return <div key={key} style={style}>scrolling...</div>;
 			// }
+			// return (
+			// 	<div style={style} key={key} className="language-name" role="button" tabIndex={0} onClick={() => this.handleLanguageClick(language)}>
+			// 		<h4 className={language.get('iso') === activeIsoCode ? 'active-language-name' : ''}>{language.get('name')}</h4>
+			// 	</div>
+			// );
 			return (
 				<div style={style} key={key} className="language-name" role="button" tabIndex={0} onClick={() => this.handleLanguageClick(language)}>
-					<h4 className={language.get('iso') === activeIsoCode ? 'active-language-name' : ''}>{language.get('name')}</h4>
+					<h4 className={language.iso === activeIsoCode ? 'active-language-name' : ''}>{language.name}</h4>
 				</div>
 			);
 		};
@@ -55,7 +64,7 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 			let activeIndex = 0;
 
 			filteredLanguages.forEach((l, i) => {
-				if (l.get('iso') === activeIsoCode) {
+				if (l.iso === activeIsoCode) {
 					activeIndex = i;
 				}
 			});
@@ -63,12 +72,12 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 			return activeIndex;
 		};
 
-		return filteredLanguages.size ? (
+		return filteredLanguages.length ? (
 			<List
-				estimatedRowSize={28 * filteredLanguages.size}
+				estimatedRowSize={28 * filteredLanguages.length}
 				height={height}
 				rowRenderer={renderARow}
-				rowCount={filteredLanguages.size}
+				rowCount={filteredLanguages.length}
 				overscanRowCount={10}
 				rowHeight={28}
 				scrollToIndex={getActiveIndex()}
@@ -76,15 +85,15 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 			/>
 		) : <div className={'language-error-message'}>There are no matches for your search.</div>;
 
-		// return components.size ? components : <span>There are no matches for your search.</span>;
+		// return components.length ? components : <span>There are no matches for your search.</span>;
 	}
 
 	filterFunction = (language, filterText) => {
 		const lowerCaseText = filterText.toLowerCase();
 
-		if (language.get('iso').toLowerCase().includes(lowerCaseText)) {
+		if (language.iso.toLowerCase().includes(lowerCaseText)) {
 			return true;
-		} else if (language.get('name').toLowerCase().includes(lowerCaseText)) {
+		} else if (language.name.toLowerCase().includes(lowerCaseText)) {
 			return true;
 		}
 		return false;
@@ -100,7 +109,7 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 		} = this.props;
 		// console.log('new language', language);
 		if (language) {
-			setActiveIsoCode({ iso: language.get('iso'), name: language.get('name') });
+			setActiveIsoCode({ iso: language.iso, name: language.name });
 			toggleLanguageList();
 			// this.setState({ filterText: '' });
 			toggleVersionList();
@@ -128,7 +137,7 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 							) : <LoadingSpinner />
 						}
 						{
-							languages.size === 0 ? <span className={'language-error-message'}>There was an error fetching this resource, an Admin has been notified. We apologize for the inconvenience</span> : null
+							languages.length === 0 ? <span className={'language-error-message'}>There was an error fetching this resource, an Admin has been notified. We apologize for the inconvenience</span> : null
 						}
 					</div>
 				</div>
@@ -139,7 +148,7 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 }
 
 LanguageList.propTypes = {
-	languages: PropTypes.object,
+	languages: PropTypes.array,
 	setActiveIsoCode: PropTypes.func,
 	toggleLanguageList: PropTypes.func,
 	// setCountryListState: PropTypes.func,

@@ -243,6 +243,7 @@
     "invariant": "2.2.2",
     "ip": "1.1.5",
     "lodash": "4.17.4",
+    "match-sorter": "^2.2.1",
     "minimist": "1.2.0",
     "prop-types": "15.5.10",
     "rc-slider": "^8.5.0",
