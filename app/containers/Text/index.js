@@ -350,13 +350,6 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 					[<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} verseid={verse.verse_start} key={verse.verse_start} dangerouslySetInnerHTML={{ __html: verse.verse_text }} />, <span key={`${verse.verse_end}spaces`} className={'readers-spaces'}>&nbsp;</span>] :
 					[<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} verseid={verse.verse_start} key={verse.verse_start}>{verse.verse_text}</span>, <span key={`${verse.verse_end}spaces`} className={'readers-spaces'}>&nbsp;</span>]
 			);
-		} else if (formattedSource.main) {
-			// Need to run a function to highlight the formatted text if this option is selected
-			if (!Array.isArray(text)) {
-				textComponents = (<div ref={this.setFormattedRefHighlight} className={justifiedText ? 'chapter justify' : 'chatper'} dangerouslySetInnerHTML={{ __html: text }} />);
-			} else {
-				textComponents = (<div ref={this.setFormattedRef} className={justifiedText ? 'chapter justify' : 'chapter'} dangerouslySetInnerHTML={{ __html: formattedSource.main }} />);
-			}
 		} else if (oneVersePerLine) {
 			textComponents = text.map((verse) => (
 				verse.hasHighlight ?
@@ -377,6 +370,13 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 						</span>
 					)
 			));
+		} else if (formattedSource.main) {
+			// Need to run a function to highlight the formatted text if this option is selected
+			if (!Array.isArray(text)) {
+				textComponents = (<div ref={this.setFormattedRefHighlight} className={justifiedText ? 'chapter justify' : 'chatper'} dangerouslySetInnerHTML={{ __html: text }} />);
+			} else {
+				textComponents = (<div ref={this.setFormattedRef} className={justifiedText ? 'chapter justify' : 'chapter'} dangerouslySetInnerHTML={{ __html: formattedSource.main }} />);
+			}
 		} else {
 			// console.log(text);
 			textComponents = text.map((verse) => (
@@ -751,6 +751,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			footnotePortal,
 		} = this.state;
 		const readersMode = userSettings.getIn(['toggleOptions', 'readersMode', 'active']);
+		const oneVersePerLine = userSettings.getIn(['toggleOptions', 'oneVersePerLine', 'active']);
 		const justifiedClass = userSettings.getIn(['toggleOptions', 'justifiedText', 'active']) ? 'justify' : '';
 
 		if (loadingNewChapterText) {
@@ -763,9 +764,9 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				<div onClick={prevChapter} className={'arrow-wrapper'}>
 					<SvgWrapper className="prev-arrow-svg" svgid="arrow_left" />
 				</div>
-				<main ref={this.setMainRef} className={formattedSource.main && !readersMode ? '' : `chapter ${justifiedClass}`}>
+				<main ref={this.setMainRef} className={formattedSource.main && !readersMode && !oneVersePerLine ? '' : `chapter ${justifiedClass}`}>
 					{
-						((formattedSource.main && !readersMode) || text.length === 0 || !readersMode) ? null : (
+						((formattedSource.main && !readersMode && !oneVersePerLine) || text.length === 0 || (!readersMode && !oneVersePerLine)) ? null : (
 							<h1 className="active-chapter-title">{activeChapter}</h1>
 						)
 					}
