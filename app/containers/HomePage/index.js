@@ -57,7 +57,7 @@ import notesReducer from 'containers/Notes/reducer';
 import textReducer from 'containers/TextSelection/reducer';
 import notesSaga from 'containers/Notes/saga';
 import textSaga from 'containers/TextSelection/saga';
-import { getNotes } from 'containers/Notes/actions';
+import { getNotes, addBookmark } from 'containers/Notes/actions';
 import {
 	addHighlight,
 	getBooks,
@@ -474,6 +474,8 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		this.props.history.push(`/${bibleId}/${bookId}/${chapter}`);
 	}
 
+	addBookmark = (data) => this.props.dispatch(addBookmark({ ...data }))
+
 	addHighlight = (props) => this.props.dispatch(addHighlight({ ...props, bible: this.props.homepage.activeTextId, userId: this.props.userId }))
 
 	toggleFirstLoadForTextSelection = () => this.props.homepage.firstLoad && this.props.dispatch(toggleFirstLoadForTextSelection())
@@ -602,40 +604,42 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					}
 				</TransitionGroup>
 				<Text
+					userId={userId}
 					text={updatedText}
 					verseNumber={verse}
-					highlights={highlights}
-					userId={userId}
 					userNotes={userNotes}
-					userSettings={userSettings}
+					bibleId={activeTextId}
+					highlights={highlights}
 					activeBookId={activeBookId}
-					invalidBibleId={invalidBibleId}
+					userSettings={userSettings}
 					activeChapter={activeChapter}
+					invalidBibleId={invalidBibleId}
 					activeBookName={activeBookName}
 					notesActive={isNotesModalActive}
 					formattedSource={formattedSource}
 					userAuthenticated={userAuthenticated}
 					informationActive={isInformationModalActive}
 					loadingNewChapterText={loadingNewChapterText}
+					addBookmark={this.addBookmark}
 					addHighlight={this.addHighlight}
-					goToFullChapter={this.goToFullChapter}
 					nextChapter={this.getNextChapter}
 					prevChapter={this.getPrevChapter}
 					setActiveNote={this.setActiveNote}
+					goToFullChapter={this.goToFullChapter}
 					toggleNotesModal={this.toggleNotesModal}
-					toggleInformationModal={this.toggleInformationModal}
 					setActiveNotesView={this.setActiveNotesView}
+					toggleInformationModal={this.toggleInformationModal}
 				/>
 				<Footer
-					settingsActive={isSettingsModalActive}
 					profileActive={isProfileActive}
 					searchActive={isSearchModalActive}
 					notebookActive={isNotesModalActive}
-					toggleNotebook={this.toggleNotesModal}
-					toggleSettingsModal={this.toggleSettingsModal}
+					settingsActive={isSettingsModalActive}
 					toggleProfile={this.toggleProfile}
 					toggleSearch={this.toggleSearchModal}
+					toggleNotebook={this.toggleNotesModal}
 					setActiveNotesView={this.setActiveNotesView}
+					toggleSettingsModal={this.toggleSettingsModal}
 				/>
 			</GenericErrorBoundary>
 		);

@@ -310,48 +310,47 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		const readersMode = userSettings.getIn(['toggleOptions', 'readersMode', 'active']);
 		const oneVersePerLine = userSettings.getIn(['toggleOptions', 'oneVersePerLine', 'active']);
 		const justifiedText = userSettings.getIn(['toggleOptions', 'justifiedText', 'active']);
-		// console.log(initialText);fasdfas
+		// console.log(initialText);
 		// todo figure out a way to memoize or cache the highlighted version of the text to improve performance
 		// Need to connect to the api and get the highlights object for this chapter
 		// based on whether the highlights object has any data decide whether to run this function or not
-		let text = [];
-		if (highlights.length && (!readersMode && formattedSource.main)) {
+		let plainText = [];
+		let formattedText = [];
+
+		if (highlights.length && (!oneVersePerLine && !readersMode && formattedSource.main)) {
 			// Temporary fix for the fact that highlight_start is a string... ... ...
 			const highlightsToPass = highlights.map((h) => ({ ...h, highlight_start: parseInt(h.highlight_start, 10) }));
-			// Use function for highlighting the formatted text
-			text = createFormattedHighlights(highlightsToPass, formattedSource.main);
+			// Use function for highlighting the formatted formattedText
+			formattedText = createFormattedHighlights(highlightsToPass, formattedSource.main);
 		} else if (highlights.length && initialText.length) {
 			// Temporary fix for the fact that highlight_start is a string... ... ...
 			const highlightsToPass = highlights.map((h) => ({ ...h, highlight_start: parseInt(h.highlight_start, 10) }));
-			// Use function for highlighting the plain text
-			text = createHighlights(highlightsToPass, initialText);
+			// Use function for highlighting the plain plainText
+			plainText = createHighlights(highlightsToPass, initialText);
 		} else {
-			text = initialText || [];
+			plainText = initialText || [];
 		}
 
 		let textComponents;
 
-		// TODO: Should move each of these settings into their own HOC
-		// Each HOC would take the source and update it based on if it was toggled
-		// Each of the HOC could be wrapped in a formatTextBasedOnOptions function
-		// the function would apply each of the HOCs in order
+		// Todo: Should handle each mode for formatted text and plain text in a separate component
 
 		// Handle exception thrown when there isn't plain text but readers mode is selected
 		/* eslint-disable react/no-danger */
-		if (text.length === 0 && !formattedSource.main) {
+		if (plainText.length === 0 && !formattedSource.main) {
 			if (invalidBibleId) {
 				textComponents = [<h5 key={'no_text'}>You have entered an invalid bible id, please select a bible from the list or type a different id into the url.</h5>];
 			} else {
 				textComponents = [<h5 key={'no_text'}>This resource does not currently have any text.</h5>];
 			}
 		} else if (readersMode) {
-			textComponents = text.map((verse) =>
+			textComponents = plainText.map((verse) =>
 				verse.hasHighlight ?
 					[<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} verseid={verse.verse_start} key={verse.verse_start} dangerouslySetInnerHTML={{ __html: verse.verse_text }} />, <span key={`${verse.verse_end}spaces`} className={'readers-spaces'}>&nbsp;</span>] :
 					[<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} verseid={verse.verse_start} key={verse.verse_start}>{verse.verse_text}</span>, <span key={`${verse.verse_end}spaces`} className={'readers-spaces'}>&nbsp;</span>]
 			);
 		} else if (oneVersePerLine) {
-			textComponents = text.map((verse) => (
+			textComponents = plainText.map((verse) => (
 				verse.hasHighlight ?
 					(
 						<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} verseid={verse.verse_start} key={verse.verse_start}>
@@ -372,14 +371,14 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			));
 		} else if (formattedSource.main) {
 			// Need to run a function to highlight the formatted text if this option is selected
-			if (!Array.isArray(text)) {
-				textComponents = (<div ref={this.setFormattedRefHighlight} className={justifiedText ? 'chapter justify' : 'chatper'} dangerouslySetInnerHTML={{ __html: text }} />);
+			if (!Array.isArray(formattedText)) {
+				textComponents = (<div ref={this.setFormattedRefHighlight} className={justifiedText ? 'chapter justify' : 'chapter'} dangerouslySetInnerHTML={{ __html: formattedText }} />);
 			} else {
 				textComponents = (<div ref={this.setFormattedRef} className={justifiedText ? 'chapter justify' : 'chapter'} dangerouslySetInnerHTML={{ __html: formattedSource.main }} />);
 			}
 		} else {
 			// console.log(text);
-			textComponents = text.map((verse) => (
+			textComponents = plainText.map((verse) => (
 				verse.hasHighlight ?
 					(
 						<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} className={'align-left'} verseid={verse.verse_start} key={verse.verse_start}>
@@ -441,6 +440,53 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				this.props.setActiveNotesView('edit');
 			}
 			this.closeContextMenu();
+		}
+	}
+	handleAddBookmark = () => {
+		// console.log('Props available in bookmarks', this.props);
+		// console.log('State available in bookmarks', this.state);
+		const {
+			activeBookId,
+			userId,
+			userAuthenticated,
+			activeChapter,
+			bibleId,
+		} = this.props;
+		const {
+			firstVerse,
+			lastVerse,
+		} = this.state;
+		// Need to make first verse and last verse integers for the < comparison
+		const fv = parseInt(firstVerse, 10);
+		const lv = parseInt(lastVerse, 10);
+		// This takes into account RTL and LTR selections
+		const verseStart = fv < lv ? fv : lv;
+		const verseEnd = fv < lv ? lv : fv;
+
+		// Only add the bookmark if there is a userId to add it too
+		if (userAuthenticated && userId) {
+			// console.log('Adding bookmark with: ', {
+			// 	book_id: activeBookId,
+			// 	chapter: activeChapter,
+			// 	userId,
+			// 	bible_id: bibleId,
+			// 	notes: '',
+			// 	title: '',
+			// 	bookmark: 1,
+			// 	verse_start: verseStart,
+			// 	verse_end: verseEnd,
+			// });
+			this.props.addBookmark({
+				book_id: activeBookId,
+				chapter: activeChapter,
+				user_id: userId,
+				bible_id: bibleId,
+				notes: '',
+				title: '',
+				bookmark: 1,
+				verse_start: verseStart,
+				verse_end: verseEnd,
+			});
 		}
 	}
 
@@ -784,7 +830,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				</div>
 				{
 					contextMenuState ? (
-						<ContextPortal addHighlight={this.addHighlight} addFacebookLike={this.addFacebookLike} shareHighlightToFacebook={this.shareHighlightToFacebook} setActiveNote={this.setActiveNote} setActiveNotesView={setActiveNotesView} closeContextMenu={this.closeContextMenu} toggleNotesModal={toggleNotesModal} notesActive={notesActive} parentNode={this.main} coordinates={coords} />
+						<ContextPortal handleAddBookmark={this.handleAddBookmark} addHighlight={this.addHighlight} addFacebookLike={this.addFacebookLike} shareHighlightToFacebook={this.shareHighlightToFacebook} setActiveNote={this.setActiveNote} setActiveNotesView={setActiveNotesView} closeContextMenu={this.closeContextMenu} toggleNotesModal={toggleNotesModal} notesActive={notesActive} parentNode={this.main} coordinates={coords} />
 					) : null
 				}
 				{
@@ -807,6 +853,7 @@ Text.propTypes = {
 	userSettings: PropTypes.object,
 	nextChapter: PropTypes.func,
 	prevChapter: PropTypes.func,
+	addBookmark: PropTypes.func,
 	addHighlight: PropTypes.func,
 	goToFullChapter: PropTypes.func,
 	toggleNotesModal: PropTypes.func,
@@ -821,6 +868,7 @@ Text.propTypes = {
 	formattedSource: PropTypes.object,
 	setActiveNote: PropTypes.func,
 	userId: PropTypes.string,
+	bibleId: PropTypes.string,
 	verseNumber: PropTypes.string,
 	activeBookId: PropTypes.string,
 	activeBookName: PropTypes.string,

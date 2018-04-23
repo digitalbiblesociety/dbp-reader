@@ -3,7 +3,6 @@ import request from 'utils/request';
 import { LOCATION_CHANGE } from 'react-router-redux';
 import {
 	ADD_NOTE,
-	ADD_BOOKMARK,
 	ADD_NOTE_SUCCESS,
 	UPDATE_NOTE,
 	DELETE_NOTE,
@@ -116,37 +115,6 @@ export function* getNotes({ userId, params = {} }) {
 	}
 }
 
-export function* addBookmark({ userId, data }) {
-	const requestUrl = `https://api.bible.build/users/${userId}/notes?key=${process.env.DBP_API_KEY}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}`;
-	const formData = new FormData();
-
-	Object.entries(data).forEach((item) => formData.set(item[0], item[1]));
-	// formData.append('project_id', process.env.NOTES_PROJECT_ID);
-
-	const options = {
-		body: formData,
-		method: 'POST',
-	};
-	// console.log('adding bookmark', addBookmark);
-	try {
-		const response = yield call(request, requestUrl, options);
-		// console.log('user bookmark response', response);  // eslint-disable-line no-console
-		if (response.success) {
-			// do stuff
-		}
-	} catch (err) {
-		if (process.env.NODE_ENV === 'development') {
-			console.error(err); // eslint-disable-line no-console
-		} else if (process.env.NODE_ENV === 'production') {
-			// const options = {
-			// 	header: 'POST',
-			// 	body: formData,
-			// };
-			// fetch('https://api.bible.build/error_logging', options);
-		}
-	}
-}
-
 export function* addNote({ userId, data }) {
 	const requestUrl = `https://api.bible.build/users/${userId}/notes?key=${process.env.DBP_API_KEY}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}`;
 	const formData = new FormData();
@@ -181,15 +149,13 @@ export function* addNote({ userId, data }) {
 // Individual exports for testing
 export default function* notesSaga() {
 	const addNoteSaga = yield takeLatest(ADD_NOTE, addNote);
-	const addBookmarkSaga = yield takeLatest(ADD_BOOKMARK, addBookmark);
 	const getNotesSaga = yield takeLatest(GET_USER_NOTES, getNotes);
 	const updateNoteSaga = yield takeLatest(UPDATE_NOTE, updateNote);
 	const deleteNoteSaga = yield takeLatest(DELETE_NOTE, deleteNote);
 	const getChapterSaga = yield takeLatest(GET_CHAPTER_FOR_NOTE, getChapterForNote);
-
+	// console.log('Loaded notes saga');
 	yield take(LOCATION_CHANGE);
 	yield cancel(addNoteSaga);
-	yield cancel(addBookmarkSaga);
 	yield cancel(getNotesSaga);
 	yield cancel(getChapterSaga);
 	yield cancel(updateNoteSaga);

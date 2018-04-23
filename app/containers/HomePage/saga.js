@@ -5,6 +5,7 @@ import some from 'lodash/some';
 import reduce from 'lodash/reduce';
 import get from 'lodash/get';
 import { getNotes } from 'containers/Notes/saga';
+import { ADD_BOOKMARK } from 'containers/Notes/constants';
 // import filter from 'lodash/filter';
 import { ADD_HIGHLIGHTS, LOAD_HIGHLIGHTS, GET_HIGHLIGHTS } from './constants';
 // import { fromJS } from 'immutable';
@@ -20,6 +21,41 @@ import { ADD_HIGHLIGHTS, LOAD_HIGHLIGHTS, GET_HIGHLIGHTS } from './constants';
 * Overlaps another highlight
 *
 * */
+
+export function* addBookmark(props) {
+	// console.log('adding bookmark with props: ', props);
+	const requestUrl = `https://api.bible.build/users/${props.data.user_id}/notes?key=${process.env.DBP_API_KEY}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}`;
+	const formData = new FormData();
+
+	Object.entries(props.data).forEach((item) => formData.set(item[0], item[1]));
+	// formData.append('project_id', process.env.NOTES_PROJECT_ID);
+
+	const options = {
+		body: formData,
+		method: 'POST',
+	};
+	// console.log('adding bookmark', addBookmark);
+	try {
+		const response = yield call(request, requestUrl, options);
+		// console.log('user bookmark response', response);  // eslint-disable-line no-console
+		if (response.success) {
+			// do stuff
+			// console.log('Success message: ', response.success);
+		} else {
+			// console.log('Other message that wasn\'t a success: ', response);
+		}
+	} catch (err) {
+		if (process.env.NODE_ENV === 'development') {
+			console.error(err); // eslint-disable-line no-console
+		} else if (process.env.NODE_ENV === 'production') {
+			// const options = {
+			// 	header: 'POST',
+			// 	body: formData,
+			// };
+			// fetch('https://api.bible.build/error_logging', options);
+		}
+	}
+}
 
 export function* getBookMetadata({ bibleId }) {
 	const reqUrl = `https://api.bible.build/bibles/${bibleId}/book?key=${process.env.DBP_API_KEY}&bucket=${process.env.DBP_BUCKET_ID}&v=4`;
@@ -511,4 +547,5 @@ export default function* defaultSaga() {
 	yield takeLatest(ADD_HIGHLIGHTS, addHighlight);
 	yield takeLatest('getbible', getBibleFromUrl);
 	yield takeLatest('getaudio', getChapterAudio);
+	yield takeLatest(ADD_BOOKMARK, addBookmark);
 }
