@@ -413,7 +413,6 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		let textComponents;
 
 		// Todo: Should handle each mode for formatted text and plain text in a separate component
-
 		// Handle exception thrown when there isn't plain text but readers mode is selected
 		/* eslint-disable react/no-danger */
 		if (plainText.length === 0 && !formattedSource.main) {
@@ -605,7 +604,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		// split all the text nodes and join them into an array
 		// find the index of the marked character
 		// use that index as the highlight start
-		// todo if the selected text starts at the end of the anchor node
+		// if the selected text starts at the end of the anchor node
 		// else if the selected text starts at the end of the extent node
 		try {
 			// Globals*
@@ -636,7 +635,6 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			// console.log('a text', anchorText);
 			// console.log('a offset', anchorOffset);
 			// console.log('first verse', firstVerse, 'last verse', lastVerse);
-
 			// Todo: May need to also implement this for plain text...
 			if (this.props.formattedSource.main) {
 				if (aText !== extentText) {
@@ -725,6 +723,11 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			} else {
 				node = getPlainParentVerse(node, firstVerse);
 				// taking off the first 2 spaces and the verse number from the string
+				// This should only be the case for the first highlight within that verse
+				// todo First highlight is fine
+					// Second if before the first is off by 1
+					// Second if after the first is off by verse number + 2
+					// Third if between is off by verse number + 2
 				const newText = node.textContent.slice(firstVerse.toFixed(0).length + 2);
 
 				// console.log('plain text node.textContent', node.textContent);

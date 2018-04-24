@@ -1,5 +1,6 @@
 const createHighlights = (highlights, arrayOfVerseObjects) => {
 	// todo: plain text use highlighted_color on highlight to add the background color inline
+	// Todo: Huge issue if highlights overlap, breaks a lot of things
 	/* NOTES
 	* 1. Need to subtract 1 from any addition of highlight_start + highlighted_words, this is because the result is the length not the index
 	*

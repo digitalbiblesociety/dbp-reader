@@ -12,7 +12,6 @@ import SvgWrapper from 'components/SvgWrapper';
 import Pagination from 'components/Pagination';
 import PageSizeSelector from 'components/PageSizeSelector';
 // import styled from 'styled-components';
-// TODO: Provide way of differentiating between notes, bookmarks and highlights
 class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	state = {
 		// Need to reset this once user goes from notes to bookmarks
