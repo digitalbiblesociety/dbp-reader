@@ -260,6 +260,7 @@
   height: 3px;
   margin-top: -20px;
   position:relative;
+  padding: 0 5px;
 
   div {
     &.rc-slider-rail {
@@ -280,7 +281,7 @@
     position: absolute;
     width: 25px;
     height: 25px;
-    left: 0;
+    left: 5px;
     top: 13px;
     z-index: 50;
 
@@ -294,7 +295,7 @@
     position: absolute;
     width: 25px;
     height: 25px;
-    right: 4px;
+    right: 9px;
     top: 13px;
     z-index: 50;
 
