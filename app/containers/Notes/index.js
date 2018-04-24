@@ -29,7 +29,6 @@ import {
 	addNote,
 	getNotes,
 	getChapterForNote,
-	addBookmark,
 	addHighlight,
 	updateNote,
 	deleteNote,
@@ -56,6 +55,7 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 		this.props.dispatch(setActiveChild(props.openView));
 	}
 	componentDidMount() {
+		// console.log('Notes mounted');
 		document.addEventListener('click', this.handleClickOutside);
 	}
 
@@ -84,7 +84,6 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 	toggleVerseText = () => this.props.dispatch(toggleVerseText())
 	toggleAddVerseMenu = () => this.props.dispatch(toggleAddVerseMenu())
 	togglePageSelector = () => this.props.dispatch(togglePageSelector())
-	addBookmark = (data) => this.props.dispatch(addBookmark({ userId: this.props.userId, data }))
 	addHighlight = (data) => this.props.dispatch(addHighlight({ userId: this.props.userId, data }))
 	addNote = (data) => this.props.dispatch(addNote({ userId: this.props.userId, data: { ...data, user_id: this.props.userId } }))
 	updateNote = (data) => this.props.dispatch(updateNote({ userId: this.props.userId, data: { ...data, user_id: this.props.userId } }))
@@ -214,7 +213,7 @@ Notes.propTypes = {
 	note: PropTypes.object,
 	notes: PropTypes.object,
 	vernacularNamesObject: PropTypes.object,
-	highlights: PropTypes.object,
+	highlights: PropTypes.array,
 	userId: PropTypes.string,
 	openView: PropTypes.string,
 	notePassage: PropTypes.string,

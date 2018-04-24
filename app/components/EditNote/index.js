@@ -91,7 +91,10 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 		const verseEnd = note.get('verse_end');
 		const bookId = note.get('book_id');
 
-		if (this.state.savedNote) {
+		if (note.get('notes') === textarea) {
+			// If the original text equals the current text then I don't have to do anything
+			return;
+		} else if (this.state.savedNote) {
 			this.props.updateNote({
 				bible_id: activeTextId,
 				title: titleText,

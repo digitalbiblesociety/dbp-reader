@@ -26,6 +26,8 @@ const selectUserNotes = () => createDeepEqualSelector(
 		const chapter = home.get('activeChapter');
 		const text = home.get('chapterText');
 		const filteredNotes = notes.get('listData').filter((n) => n.bible_id === bibleId && n.book_id === bookId && n.chapter === chapter);
+		const bookmarks = filteredNotes.toJS ? filteredNotes.filter((n) => n.bookmark === 1).toJS() : filteredNotes.filter((n) => n.bookmark === 1);
+		const userNotes = filteredNotes.toJS ? filteredNotes.filter((n) => n.bookmark === 0).toJS() : filteredNotes.filter((n) => n.bookmark === 0);
 		let newText = [];
 
 		filteredNotes.forEach((n, ni) => {
@@ -46,6 +48,8 @@ const selectUserNotes = () => createDeepEqualSelector(
 					newText = newText.size ? newText.setIn([iToSet, 'bookmarkIndex'], ni) : text.setIn([iToSet, 'bookmarkIndex'], ni);
 				}
 
+				// Need to change this since the notes will be allowed to be null
+				// Eventually there will be two separate calls so I can have two piece of state
 				if (n.notes && n.notes !== '""' && n.notes !== '\'\'') {
 					newText = newText.size ? newText.setIn([iToSet, 'hasNote'], true) : text.setIn([iToSet, 'hasNote'], true);
 					newText = newText.size ? newText.setIn([iToSet, 'noteIndex'], ni) : text.setIn([iToSet, 'noteIndex'], ni);
@@ -54,7 +58,11 @@ const selectUserNotes = () => createDeepEqualSelector(
 		});
 		// console.log(filteredNotes);
 		// console.log(newText);
-		return { text: newText.size ? newText.toJS() : text.toJS(), userNotes: filteredNotes.toJS ? filteredNotes.toJS() : filteredNotes };
+		return {
+			text: newText.size ? newText.toJS() : text.toJS(),
+			userNotes,
+			bookmarks,
+		};
 	}
 );
 
@@ -67,22 +75,35 @@ const selectAuthenticationStatus = () => createDeepEqualSelector(
 	selectProfilePageDomain,
 	(profile) => profile.get('userAuthenticated')
 );
-
+// TODO: Reduce the number of times the below function is called
 // I will likely want to put all manipulations to the formatted text into this selector
 const selectFormattedSource = () => createDeepEqualSelector(
 	[selectFormattedTextSource, selectCrossReferenceState],
 	({ source, props }, hasCrossReferences) => {
+		// Todo: Get rid of all dom manipulation in this selector because it is really gross
 		// Pushing update with the formatted text working but not the footnotes
 		// const source = substate.get('formattedSource');
 		if (!source) {
 			return { main: '', footnotes: {} };
 		}
+		const { verse, bookId, chapter } = props.match.params;
+
 		// Getting the verse for when user selected 1 verse
 			// start <span class="verse${verseNumber}
 			// get span after data-id="${bookId}${chapter}_${verseNumber}"
 			// end </span>
+		// Check for user being auth'd
+		// const userNotes = notes.get('listData');
+		// console.log('get user notes', userNotes);
+		// const userNotes = getUserNotes();
+		// const withNotes = '';
+		// console.log(userNotes);
+
+		// If there were notes they then use withNotes otherwise use the original string
+		// const updatedSource = withNotes || source;
+		// console.log('Updated source: ', updatedSource);
+
 		if (props.match.params.verse) {
-			const { verse, bookId, chapter } = props.match.params;
 			const parser = new DOMParser();
 			const serializer = new XMLSerializer();
 			const xmlDoc = parser.parseFromString(source, 'text/xml');

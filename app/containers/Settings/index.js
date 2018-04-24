@@ -122,13 +122,19 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 					</header>
 					<section className="color-schemes">
 						{
-							activeTheme === 'paper' ? <SvgWrapper style={{ width: '55px', height: '55px' }} svgid={'light'} /> : <span role="button" tabIndex={0} onClick={() => this.updateTheme({ theme: 'paper' })} className={'option paper'} />
+							activeTheme === 'paper' ?
+								<SvgWrapper style={{ width: '55px', height: '55px' }} svgid={'light'} /> :
+								<span role="button" tabIndex={0} onClick={() => this.updateTheme({ theme: 'paper' })} className={'option paper'} />
 						}
 						{
-							activeTheme === 'dark' ? <SvgWrapper style={{ width: '55px', height: '55px' }} svgid={'dark'} /> : <span role="button" tabIndex={0} onClick={() => this.updateTheme({ theme: 'dark' })} className={'option dark'} />
+							activeTheme === 'dark' ?
+								<SvgWrapper style={{ width: '55px', height: '55px' }} svgid={'dark'} /> :
+								<span role="button" tabIndex={0} onClick={() => this.updateTheme({ theme: 'dark' })} className={'option dark'} />
 						}
 						{
-							activeTheme === 'red' ? <SvgWrapper style={{ width: '55px', height: '55px' }} svgid={'red'} /> : <span role="button" tabIndex={0} onClick={() => this.updateTheme({ theme: 'red' })} className={'option red'} />
+							activeTheme === 'red' ?
+								<SvgWrapper style={{ width: '55px', height: '55px' }} svgid={'red'} /> :
+								<span role="button" tabIndex={0} onClick={() => this.updateTheme({ theme: 'red' })} className={'option red'} />
 						}
 					</section>
 					<section className="font-settings">
@@ -170,7 +176,15 @@ export class Settings extends React.PureComponent { // eslint-disable-line react
 					/>
 					<section className="option-toggles">
 						{
-							toggleOptions.valueSeq().map((option) => (<SettingsToggle key={option.get('name')} available={option.get('available')} checked={option.get('active')} name={option.get('name')} action={this.toggleSettingsOption} />))
+							toggleOptions.valueSeq().map((option) => (
+								<SettingsToggle
+									key={option.get('name')}
+									available={option.get('available')}
+									checked={option.get('active')}
+									name={option.get('name')}
+									action={this.toggleSettingsOption}
+								/>
+							))
 						}
 					</section>
 				</aside>

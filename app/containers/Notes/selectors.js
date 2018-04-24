@@ -12,7 +12,7 @@ const selectHomepageDomain = (state) => state.get('homepage');
  */
 const selectHighlights = () => createSelector(
 	selectHomepageDomain,
-	(homepage) => homepage.get('highlights')
+	(homepage) => homepage.get('highlights').toJS()
 );
 
 const selectUserId = () => createSelector(

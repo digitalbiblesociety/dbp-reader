@@ -20,37 +20,6 @@ import HighlightColors from 'components/HighlightColors';
 import CloseMenuFunctions from 'utils/closeMenuFunctions';
 import PopupMessage from '../PopupMessage';
 
-// const StyledDiv = styled.div`
-// 	width:250px;
-// 	height:162px;
-// 	position:absolute;
-// 	left:${(props) => props.x}px;
-// 	top:${(props) => props.y}px;
-// 	background-color:#fff;
-// 	border: 2px solid green;
-// 	border-radius: 6px;
-// `;
-//
-// const Row = styled.div`
-// 	display:flex;
-// 	height:40px;
-// 	width:100%;
-// `;
-//
-// const Item = styled.span`
-// 	display:flex;
-// 	align-items:center;
-// 	justify-content:center;
-// 	background-color:rgb(204,178,165);
-// 	background-color:var(--context-menu-background-color);
-// 	width:62px;
-// 	height:54px;
-// 	cursor:pointer;
-// 	&:hover {
-// 		opacity: 0.6;
-// 		fill:rgba(0,0,0,0.65);
-// 	}
-// `;
 // TODO: Clean up this component
 // Remove use of styled components
 // change to pure component and handle outside clicks instead of click handler
@@ -86,9 +55,11 @@ class ContextPortal extends React.PureComponent {
 
 	handleBookmarkClick = (e) => {
 		if (!this.props.notesActive) {
+			// Todo: Function chains like this should be promisified so they will return in the expected order
 			this.props.setActiveNotesView('bookmarks');
 			this.props.toggleNotesModal();
 			this.props.setActiveNote({ bookmark: true, coords: { x: e.clientX, y: e.clientY } });
+			this.props.handleAddBookmark();
 			this.props.closeContextMenu();
 		} else {
 			this.props.setActiveNotesView('bookmarks');
@@ -260,13 +231,14 @@ ContextPortal.propTypes = {
 	parentNode: PropTypes.object,
 	coordinates: PropTypes.object,
 	notesActive: PropTypes.bool,
+	addHighlight: PropTypes.func,
+	// shareHighlightToFacebook: PropTypes.func,
+	setActiveNote: PropTypes.func,
+	addFacebookLike: PropTypes.func,
 	toggleNotesModal: PropTypes.func,
 	closeContextMenu: PropTypes.func,
+	handleAddBookmark: PropTypes.func,
 	setActiveNotesView: PropTypes.func,
-	setActiveNote: PropTypes.func,
-	// shareHighlightToFacebook: PropTypes.func,
-	addFacebookLike: PropTypes.func,
-	addHighlight: PropTypes.func,
 };
 
 export default ContextPortal;

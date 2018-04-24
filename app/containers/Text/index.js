@@ -18,17 +18,21 @@ import {
 	getFormattedParentVerse,
 	getFormattedChildIndex,
 	getFormattedElementVerseId,
-	// differenceObject,
 } from 'utils/highlightingUtils';
+// import differenceObject from 'utils/deepDifferenceObject';
 import isEqual from 'lodash/isEqual';
 // import some from 'lodash/some';
 import createHighlights from './highlightPlainText';
 import createFormattedHighlights from './highlightFormattedText';
+import {
+	applyNotes,
+	applyBookmarks,
+} from './formattedTextUtils';
 // import { addClickToNotes } from './htmlToReact';
 /* Disabling the jsx-a11y linting because we need to capture the selected text
 	 and the most straight forward way of doing so is with the onMouseUp event */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-
+// Todo: Fix issue with this component being rendered so many times...
 class Text extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	state = {
 		contextMenuState: false,
@@ -38,9 +42,11 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		firstVerse: 0,
 		lastVerse: 0,
 		highlightActive: this.props.highlights || false,
+		handlersAreSet: false,
 	};
 
 	componentDidMount() {
+		// console.log('Component did mount with: ', this.format, ' and ', this.formatHighlight);
 		if (this.format) {
 			// console.log('setting event listeners on format');
 			this.setEventHandlersForFootnotes(this.format);
@@ -59,20 +65,26 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 	}
 
 	componentDidUpdate(prevProps) {
-		// console.log('component did update');
+		// Todo: I think the issue with the page refresh is due to the initial values in redux
+		// Todo: There is an issue with the event listeners being removed once a new note is added
+		// console.log(this.format, this.formatHighlight);
+		// if (Object.keys(differenceObject(this.state, prevState)).length || Object.keys(differenceObject(this.props, prevProps)).length) {
+		// 	console.log('component did update props difference: \n', differenceObject(prevProps, this.props));
+		// 	console.log('component did update state difference: \n', differenceObject(this.state, prevState));
+		// }
 		// Logic below ensures that the proper event handlers are set on each footnote
 		if (this.props.formattedSource.main && prevProps.formattedSource.main !== this.props.formattedSource.main && (this.format || this.formatHighlight)) {
 			if (this.format) {
-				// console.log('setting event listeners on format');
+				// console.log('setting event listeners on format first');
 				this.setEventHandlersForFootnotes(this.format);
 				this.setEventHandlersForFormattedVerses(this.format);
 			} else if (this.formatHighlight) {
-				// console.log('setting event listeners on formatHighlight');
+				// console.log('setting event listeners on formatHighlight first');
 				this.setEventHandlersForFootnotes(this.formatHighlight);
 				this.setEventHandlersForFormattedVerses(this.formatHighlight);
 			}
 		} else if (!isEqual(this.props.highlights, prevProps.highlights) && this.formatHighlight) {
-			// console.log('setting event listeners on formatHighlight because highlights changed');
+			// console.log('setting event listeners on formatHighlight because highlights changed second');
 			this.setEventHandlersForFootnotes(this.formatHighlight);
 			this.setEventHandlersForFormattedVerses(this.formatHighlight);
 		} else if (
@@ -82,37 +94,92 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		) {
 			// Need to set event handlers again here because they are removed once the plain text is rendered
 			if (this.format) {
-				// console.log('setting event listeners on format');
+				// console.log('setting event listeners on format third');
 				this.setEventHandlersForFootnotes(this.format);
 				this.setEventHandlersForFormattedVerses(this.format);
 			} else if (this.formatHighlight) {
-				// console.log('setting event listeners on formatHighlight');
+				// console.log('setting event listeners on formatHighlight third');
 				this.setEventHandlersForFootnotes(this.formatHighlight);
 				this.setEventHandlersForFormattedVerses(this.formatHighlight);
 			}
 		}
-		// console.log('Difference between old state and new state', differenceObject(this.state, prevState));
-		// console.log('Difference between old props and new props', differenceObject(this.props, prevProps));
+
+		// This handles setting the events on a page refresh or navigation via url
+		if (this.format && !this.state.handlersAreSet && !this.props.loadingNewChapterText) {
+			// console.log('setting event listeners on format fourth');
+			this.setEventHandlersForFootnotes(this.format);
+			this.setEventHandlersForFormattedVerses(this.format);
+			this.callSetStateNotInUpdate();
+		} else if (this.formatHighlight && !this.state.handlersAreSet && !this.props.loadingNewChapterText) {
+			// console.log('setting event listeners on formatHighlight fourth ');
+			this.setEventHandlersForFootnotes(this.formatHighlight);
+			this.setEventHandlersForFormattedVerses(this.formatHighlight);
+			this.callSetStateNotInUpdate();
+		}
 	}
 
 	setEventHandlersForFormattedVerses = (ref) => {
-		const verses = [...ref.getElementsByClassName('v')];
+		try {
+			const verses = [...ref.getElementsByClassName('v')];
 
-		verses.forEach((verse) => {
-			// console.log('setting events on this verse', verse);
-			/* eslint-disable no-param-reassign, no-unused-expressions, jsx-a11y/no-static-element-interactions */
-			verse.onmousedown = (e) => {
-				e.stopPropagation();
-				// console.log('mousedown event');
-				this.getFirstVerse(e);
-			};
-			verse.onmouseup = (e) => {
-				e.stopPropagation();
-				// console.log('mouseup event');
+			verses.forEach((verse) => {
+				// console.log('setting events on this verse', verse);
+				/* eslint-disable no-param-reassign, no-unused-expressions, jsx-a11y/no-static-element-interactions */
+				verse.onmousedown = (e) => {
+					e.stopPropagation();
+					// console.log('mousedown event');
+					this.getFirstVerse(e);
+				};
+				verse.onmouseup = (e) => {
+					e.stopPropagation();
+					// console.log('mouseup event');
 
-				this.handleMouseUp(e);
-			};
-		});
+					this.handleMouseUp(e);
+				};
+			});
+		} catch (err) {
+			if (process.env.NODE_ENV === 'development') {
+				console.error('Error adding event handlers to formatted verses: ', err); // eslint-disable-line no-console
+			}
+			// if Production then log error to service
+		}
+
+		try {
+			const elements = [...ref.getElementsByClassName('bookmark-in-verse')];
+			// It might not work 100% of the time to use i here, but I think it
+			// will work most of the time
+			elements.forEach((el, i) => {
+				el.onclick = (e) => {
+					e.stopPropagation();
+
+					this.handleNoteClick(i, true);
+				};
+			});
+		} catch (err) {
+			if (process.env.NODE_ENV === 'development') {
+				console.error('Error adding event handlers to formatted verses: ', err); // eslint-disable-line no-console
+			}
+			// if Production then log error to service
+		}
+
+		try {
+			const elements = [...ref.getElementsByClassName('note-in-verse')];
+
+			// It might not work 100% of the time to use i here, but I think it
+			// will work most of the time
+			elements.forEach((el, i) => {
+				el.onclick = (e) => {
+					e.stopPropagation();
+
+					this.handleNoteClick(i, true);
+				};
+			});
+		} catch (err) {
+			if (process.env.NODE_ENV === 'development') {
+				console.error('Error adding event handlers to formatted verses: ', err); // eslint-disable-line no-console
+			}
+			// if Production then log error to service
+		}
 	}
 
 	setEventHandlersForFootnotes = (ref) => {
@@ -294,13 +361,24 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		const {
 			text: initialText,
 			userSettings,
-			formattedSource,
+			formattedSource: initialFormattedSource,
 			highlights,
 			activeChapter,
 			verseNumber,
-			// userNotes,
+			userNotes,
+			bookmarks,
 			invalidBibleId,
 		} = this.props;
+		// Doing it like this may impact performance, but it is probably cleaner
+		// than most other ways of doing it...
+		const formattedSource = initialFormattedSource.main ? {
+			...initialFormattedSource,
+			main: [initialFormattedSource.main]
+				.map((s) => applyNotes(s, userNotes, this.handleNoteClick))
+				.map((s) => applyBookmarks(s, bookmarks, this.handleNoteClick))[0],
+		} : initialFormattedSource;
+		// console.log('new src', formattedSource);
+		// console.log('diff', differenceObject(formattedSource, initialFormattedSource));
 		// if (userNotes) {
 		// 	// console.log('notes', userNotes);
 		// 	// console.log('text', initialText);
@@ -310,55 +388,48 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		const readersMode = userSettings.getIn(['toggleOptions', 'readersMode', 'active']);
 		const oneVersePerLine = userSettings.getIn(['toggleOptions', 'oneVersePerLine', 'active']);
 		const justifiedText = userSettings.getIn(['toggleOptions', 'justifiedText', 'active']);
-		// console.log(initialText);fasdfas
+		// console.log(initialText);
 		// todo figure out a way to memoize or cache the highlighted version of the text to improve performance
 		// Need to connect to the api and get the highlights object for this chapter
-		// based on whether the highlights object has any data decide whether to run this function or not
-		let text = [];
-		if (highlights.length && (!readersMode && formattedSource.main)) {
+		// based on whether the highlights object has any data decide whether to
+		// run this function or not
+		let plainText = [];
+		let formattedText = [];
+
+		if (highlights.length && (!oneVersePerLine && !readersMode && formattedSource.main)) {
 			// Temporary fix for the fact that highlight_start is a string... ... ...
 			const highlightsToPass = highlights.map((h) => ({ ...h, highlight_start: parseInt(h.highlight_start, 10) }));
-			// Use function for highlighting the formatted text
-			text = createFormattedHighlights(highlightsToPass, formattedSource.main);
+			// Use function for highlighting the formatted formattedText
+			formattedText = createFormattedHighlights(highlightsToPass, formattedSource.main);
 		} else if (highlights.length && initialText.length) {
 			// Temporary fix for the fact that highlight_start is a string... ... ...
 			const highlightsToPass = highlights.map((h) => ({ ...h, highlight_start: parseInt(h.highlight_start, 10) }));
-			// Use function for highlighting the plain text
-			text = createHighlights(highlightsToPass, initialText);
+			// Use function for highlighting the plain plainText
+			plainText = createHighlights(highlightsToPass, initialText);
 		} else {
-			text = initialText || [];
+			plainText = initialText || [];
 		}
 
 		let textComponents;
 
-		// TODO: Should move each of these settings into their own HOC
-		// Each HOC would take the source and update it based on if it was toggled
-		// Each of the HOC could be wrapped in a formatTextBasedOnOptions function
-		// the function would apply each of the HOCs in order
+		// Todo: Should handle each mode for formatted text and plain text in a separate component
 
 		// Handle exception thrown when there isn't plain text but readers mode is selected
 		/* eslint-disable react/no-danger */
-		if (text.length === 0 && !formattedSource.main) {
+		if (plainText.length === 0 && !formattedSource.main) {
 			if (invalidBibleId) {
 				textComponents = [<h5 key={'no_text'}>You have entered an invalid bible id, please select a bible from the list or type a different id into the url.</h5>];
 			} else {
 				textComponents = [<h5 key={'no_text'}>This resource does not currently have any text.</h5>];
 			}
 		} else if (readersMode) {
-			textComponents = text.map((verse) =>
+			textComponents = plainText.map((verse) =>
 				verse.hasHighlight ?
 					[<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} verseid={verse.verse_start} key={verse.verse_start} dangerouslySetInnerHTML={{ __html: verse.verse_text }} />, <span key={`${verse.verse_end}spaces`} className={'readers-spaces'}>&nbsp;</span>] :
 					[<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} verseid={verse.verse_start} key={verse.verse_start}>{verse.verse_text}</span>, <span key={`${verse.verse_end}spaces`} className={'readers-spaces'}>&nbsp;</span>]
 			);
-		} else if (formattedSource.main) {
-			// Need to run a function to highlight the formatted text if this option is selected
-			if (!Array.isArray(text)) {
-				textComponents = (<div ref={this.setFormattedRefHighlight} className={justifiedText ? 'chapter justify' : 'chatper'} dangerouslySetInnerHTML={{ __html: text }} />);
-			} else {
-				textComponents = (<div ref={this.setFormattedRef} className={justifiedText ? 'chapter justify' : 'chapter'} dangerouslySetInnerHTML={{ __html: formattedSource.main }} />);
-			}
 		} else if (oneVersePerLine) {
-			textComponents = text.map((verse) => (
+			textComponents = plainText.map((verse) => (
 				verse.hasHighlight ?
 					(
 						<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} verseid={verse.verse_start} key={verse.verse_start}>
@@ -377,9 +448,16 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 						</span>
 					)
 			));
+		} else if (formattedSource.main) {
+			// Need to run a function to highlight the formatted text if this option is selected
+			if (!Array.isArray(formattedText)) {
+				textComponents = (<div ref={this.setFormattedRefHighlight} className={justifiedText ? 'chapter justify' : 'chapter'} dangerouslySetInnerHTML={{ __html: formattedText }} />);
+			} else {
+				textComponents = (<div ref={this.setFormattedRef} className={justifiedText ? 'chapter justify' : 'chapter'} dangerouslySetInnerHTML={{ __html: formattedSource.main }} />);
+			}
 		} else {
 			// console.log(text);
-			textComponents = text.map((verse) => (
+			textComponents = plainText.map((verse) => (
 				verse.hasHighlight ?
 					(
 						<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} className={'align-left'} verseid={verse.verse_start} key={verse.verse_start}>
@@ -423,6 +501,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 	handleNoteClick = (noteIndex, clickedBookmark) => {
 		const userNotes = this.props.userNotes;
 		const existingNote = userNotes[noteIndex];
+		// console.log('handling note click', noteIndex, clickedBookmark);
 
 		if (!this.props.notesActive) {
 			this.setActiveNote({ existingNote });
@@ -443,6 +522,55 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			this.closeContextMenu();
 		}
 	}
+	handleAddBookmark = () => {
+		// console.log('Props available in bookmarks', this.props);
+		// console.log('State available in bookmarks', this.state);
+		const {
+			activeBookId,
+			userId,
+			userAuthenticated,
+			activeChapter,
+			bibleId,
+		} = this.props;
+		const {
+			firstVerse,
+			lastVerse,
+		} = this.state;
+		// Need to make first verse and last verse integers for the < comparison
+		const fv = parseInt(firstVerse, 10);
+		const lv = parseInt(lastVerse, 10);
+		// This takes into account RTL and LTR selections
+		const verseStart = fv < lv ? fv : lv;
+		const verseEnd = fv < lv ? lv : fv;
+
+		// Only add the bookmark if there is a userId to add it too
+		if (userAuthenticated && userId) {
+			// console.log('Adding bookmark with: ', {
+			// 	book_id: activeBookId,
+			// 	chapter: activeChapter,
+			// 	userId,
+			// 	bible_id: bibleId,
+			// 	notes: '',
+			// 	title: '',
+			// 	bookmark: 1,
+			// 	verse_start: verseStart,
+			// 	verse_end: verseEnd,
+			// });
+			this.props.addBookmark({
+				book_id: activeBookId,
+				chapter: activeChapter,
+				user_id: userId,
+				bible_id: bibleId,
+				notes: '',
+				title: '',
+				bookmark: 1,
+				verse_start: verseStart,
+				verse_end: verseEnd,
+			});
+		}
+	}
+
+	callSetStateNotInUpdate = () => this.setState({ handlersAreSet: true })
 
 	openPopup = (coords) => {
 		this.setState({ popupOpen: true, popupCoords: coords });
@@ -509,50 +637,53 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			// console.log('a offset', anchorOffset);
 			// console.log('first verse', firstVerse, 'last verse', lastVerse);
 
-			if (aText !== extentText) {
-				// if nodes are different
-					// I have access to the parent node
-				// if texts match
-					// reverse order of anchor and extent
-				// if texts dont match
-					// find the parent of each that has a verse id
-				const aParent = getFormattedParentVerse(aNode);
-				const eParent = getFormattedParentVerse(eNode);
-						// if the parents are different verses
-				if (aParent.isSameNode(eParent)) {
-					// It doesn't matter from this point which parent is used since they both reference the same object
-					// take the offset that occurs first as a child of the verse
-					// console.log('parent verse is the same for both elements');
-					// console.log('child nodes for parent', aParent.childNodes);
-					// console.log(aParent.childNodes[0].isSameNode(aNode));
-					const aIndex = getFormattedChildIndex(aParent, aNode);
-					const eIndex = getFormattedChildIndex(aParent, eNode);
-					// console.log('a index', aIndex, 'e index', eIndex);
+			// Todo: May need to also implement this for plain text...
+			if (this.props.formattedSource.main) {
+				if (aText !== extentText) {
+					// if nodes are different
+						// I have access to the parent node
+					// if texts match
+						// reverse order of anchor and extent
+					// if texts dont match
+						// find the parent of each that has a verse id
+					const aParent = getFormattedParentVerse(aNode);
+					const eParent = getFormattedParentVerse(eNode);
+							// if the parents are different verses
+					if (aParent.isSameNode(eParent)) {
+						// It doesn't matter from this point which parent is used since they both reference the same object
+						// take the offset that occurs first as a child of the verse
+						// console.log('parent verse is the same for both elements');
+						// console.log('child nodes for parent', aParent.childNodes);
+						// console.log(aParent.childNodes[0].isSameNode(aNode));
+						const aIndex = getFormattedChildIndex(aParent, aNode);
+						const eIndex = getFormattedChildIndex(aParent, eNode);
+						// console.log('a index', aIndex, 'e index', eIndex);
 
-					// Use the text and offset of the node that was closest to the start of the verse
-					if (aIndex < eIndex) {
-						// console.log('aIndex is less than eIndex');
-						anchorText = aText;
-						anchorOffset = offset;
+						// Use the text and offset of the node that was closest to the start of the verse
+						if (aIndex < eIndex) {
+							// console.log('aIndex is less than eIndex');
+							anchorText = aText;
+							anchorOffset = offset;
+						} else {
+							anchorText = extentText;
+							anchorOffset = extentOffset;
+						}
+						// (could potentially use next/prev sibling for this)
 					} else {
-						anchorText = extentText;
-						anchorOffset = extentOffset;
-					}
-					// (could potentially use next/prev sibling for this)
-				} else {
-					// take the offset that matches the first(lowest) verse between the two
-					// console.log('parent verse is not the same for both elements');
-					const aVerseNumber = getFormattedElementVerseId(aParent);
-					const eVerseNumber = getFormattedElementVerseId(eParent);
+						// take the offset that matches the first(lowest) verse between the two
+						// console.log('parent verse is not the same for both elements');
+						const aVerseNumber = getFormattedElementVerseId(aParent);
+						const eVerseNumber = getFormattedElementVerseId(eParent);
 
-					// Use the text and offset of the first verse
-					if (aVerseNumber < eVerseNumber) {
-						// console.log('aVerseNumber is less than eVerseNumber');
-						anchorText = aText;
-						anchorOffset = offset;
-					} else {
-						anchorText = extentText;
-						anchorOffset = extentOffset;
+						// Use the text and offset of the first verse
+						if (aVerseNumber < eVerseNumber) {
+							// console.log('aVerseNumber is less than eVerseNumber');
+							anchorText = aText;
+							anchorOffset = offset;
+						} else {
+							anchorText = extentText;
+							anchorOffset = extentOffset;
+						}
 					}
 				}
 				// console.log('atext', aText);
@@ -751,6 +882,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			footnotePortal,
 		} = this.state;
 		const readersMode = userSettings.getIn(['toggleOptions', 'readersMode', 'active']);
+		const oneVersePerLine = userSettings.getIn(['toggleOptions', 'oneVersePerLine', 'active']);
 		const justifiedClass = userSettings.getIn(['toggleOptions', 'justifiedText', 'active']) ? 'justify' : '';
 
 		if (loadingNewChapterText) {
@@ -763,9 +895,9 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				<div onClick={prevChapter} className={'arrow-wrapper'}>
 					<SvgWrapper className="prev-arrow-svg" svgid="arrow_left" />
 				</div>
-				<main ref={this.setMainRef} className={formattedSource.main && !readersMode ? '' : `chapter ${justifiedClass}`}>
+				<main ref={this.setMainRef} className={formattedSource.main && !readersMode && !oneVersePerLine ? '' : `chapter ${justifiedClass}`}>
 					{
-						((formattedSource.main && !readersMode) || text.length === 0 || !readersMode) ? null : (
+						((formattedSource.main && !readersMode && !oneVersePerLine) || text.length === 0 || (!readersMode && !oneVersePerLine)) ? null : (
 							<h1 className="active-chapter-title">{activeChapter}</h1>
 						)
 					}
@@ -783,7 +915,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				</div>
 				{
 					contextMenuState ? (
-						<ContextPortal addHighlight={this.addHighlight} addFacebookLike={this.addFacebookLike} shareHighlightToFacebook={this.shareHighlightToFacebook} setActiveNote={this.setActiveNote} setActiveNotesView={setActiveNotesView} closeContextMenu={this.closeContextMenu} toggleNotesModal={toggleNotesModal} notesActive={notesActive} parentNode={this.main} coordinates={coords} />
+						<ContextPortal handleAddBookmark={this.handleAddBookmark} addHighlight={this.addHighlight} addFacebookLike={this.addFacebookLike} shareHighlightToFacebook={this.shareHighlightToFacebook} setActiveNote={this.setActiveNote} setActiveNotesView={setActiveNotesView} closeContextMenu={this.closeContextMenu} toggleNotesModal={toggleNotesModal} notesActive={notesActive} parentNode={this.main} coordinates={coords} />
 					) : null
 				}
 				{
@@ -802,10 +934,12 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 Text.propTypes = {
 	text: PropTypes.array,
 	userNotes: PropTypes.array,
+	bookmarks: PropTypes.array,
 	highlights: PropTypes.array,
 	userSettings: PropTypes.object,
 	nextChapter: PropTypes.func,
 	prevChapter: PropTypes.func,
+	addBookmark: PropTypes.func,
 	addHighlight: PropTypes.func,
 	goToFullChapter: PropTypes.func,
 	toggleNotesModal: PropTypes.func,
@@ -820,6 +954,7 @@ Text.propTypes = {
 	formattedSource: PropTypes.object,
 	setActiveNote: PropTypes.func,
 	userId: PropTypes.string,
+	bibleId: PropTypes.string,
 	verseNumber: PropTypes.string,
 	activeBookId: PropTypes.string,
 	activeBookName: PropTypes.string,

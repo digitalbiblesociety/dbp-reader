@@ -45,9 +45,9 @@ export const addNote = (props) => ({
 	...props,
 });
 
-export const addBookmark = (props) => ({
+export const addBookmark = (data) => ({
 	type: ADD_BOOKMARK,
-	...props,
+	data,
 });
 
 export const addHighlight = (props) => ({
