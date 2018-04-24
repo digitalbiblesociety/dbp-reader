@@ -531,6 +531,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 
 		const {
 			userNotes,
+			bookmarks,
 			text: updatedText,
 		} = this.props.textData;
 		// console.log('text', updatedText);
@@ -608,6 +609,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					text={updatedText}
 					verseNumber={verse}
 					userNotes={userNotes}
+					bookmarks={bookmarks}
 					bibleId={activeTextId}
 					highlights={highlights}
 					activeBookId={activeBookId}

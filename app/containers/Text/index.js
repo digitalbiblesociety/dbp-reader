@@ -18,12 +18,16 @@ import {
 	getFormattedParentVerse,
 	getFormattedChildIndex,
 	getFormattedElementVerseId,
-	// differenceObject,
 } from 'utils/highlightingUtils';
+// import differenceObject from 'utils/deepDifferenceObject';
 import isEqual from 'lodash/isEqual';
 // import some from 'lodash/some';
 import createHighlights from './highlightPlainText';
 import createFormattedHighlights from './highlightFormattedText';
+import {
+	applyNotes,
+	applyBookmarks,
+} from './formattedTextUtils';
 // import { addClickToNotes } from './htmlToReact';
 /* Disabling the jsx-a11y linting because we need to capture the selected text
 	 and the most straight forward way of doing so is with the onMouseUp event */
@@ -294,13 +298,23 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		const {
 			text: initialText,
 			userSettings,
-			formattedSource,
+			formattedSource: initialFormattedSource,
 			highlights,
 			activeChapter,
 			verseNumber,
-			// userNotes,
+			userNotes,
+			bookmarks,
 			invalidBibleId,
 		} = this.props;
+		// Doing it like this may impact performance, but it is probably cleaner than most other ways of doing it...
+		const formattedSource = initialFormattedSource.main ? {
+			...initialFormattedSource,
+			main: [initialFormattedSource.main]
+				.map((s) => applyNotes(s, userNotes, this.handleNoteClick))
+				.map((s) => applyBookmarks(s, bookmarks, this.handleNoteClick))[0],
+		} : initialFormattedSource;
+		// console.log('new src', formattedSource);
+		// console.log('diff', differenceObject(formattedSource, initialFormattedSource));
 		// if (userNotes) {
 		// 	// console.log('notes', userNotes);
 		// 	// console.log('text', initialText);
@@ -422,6 +436,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 	handleNoteClick = (noteIndex, clickedBookmark) => {
 		const userNotes = this.props.userNotes;
 		const existingNote = userNotes[noteIndex];
+		// console.log('handling note click', noteIndex, clickedBookmark);
 
 		if (!this.props.notesActive) {
 			this.setActiveNote({ existingNote });
@@ -849,6 +864,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 Text.propTypes = {
 	text: PropTypes.array,
 	userNotes: PropTypes.array,
+	bookmarks: PropTypes.array,
 	highlights: PropTypes.array,
 	userSettings: PropTypes.object,
 	nextChapter: PropTypes.func,

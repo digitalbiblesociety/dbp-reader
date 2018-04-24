@@ -355,7 +355,8 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 	// This handles the case where a user already has a link but getting the next one fails
 	// console.log('getting audio', filesets, bookId, chapter);
 	// Parse filesets
-	// TODO Need to handle when there are multiple filesets for the same audio type
+	// TODO: Need to handle when there are multiple filesets for the same audio type
+	// TODO: Handle when there is more than one set size i.e. NT and OTP
 	// console.log('filesets', filesets);
 	const filteredFilesets = reduce(filesets, (a, file) => {
 		const newFile = { ...a };
