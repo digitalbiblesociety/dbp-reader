@@ -21,36 +21,45 @@ const createHighlights = (highlights, arrayOfVerseObjects) => {
 	});
 	// console.log(arrayOfVerseObjects);
 	// console.log('sorted highlights', sortedHighlights);
+	/* eslint-disable no-console */
 	try {
 		const newArrayOfVerses = [];
 		const arrayOfVerses = [...arrayOfVerseObjects];
 		let charsLeftAfterVerseEnd = 0; // the number of characters for the highlight
-		let continuingColor = '';
-
+		let continuingColor = ''; // Need to save the color of the active highlight that is still being applied
+		console.log('New Highlight Iteration\n\n----------------------------------------------------------------------------------');
 		arrayOfVerses.forEach((verse) => {
 			// console.log('element index', verseElementIndex);
 			// Parse the verse data-id to get the verse number
 			const verseNumber = verse.verse_start;
 			// Get all of the highlights that start in this verse
 			const highlightsStartingInVerse = sortedHighlights.filter((highlight) => highlight.verse_start === verseNumber);
+			if (highlightsStartingInVerse.length > 1) {
+				console.log('All the highlights starting in this verse', highlightsStartingInVerse);
+			}
+			// Make the text an array
 			const verseText = verse.verse_text.split('');
+			// Set the local charsLeft variable to equal the remaining charsLeftAfterVerseEnd global variable
 			let charsLeft = charsLeftAfterVerseEnd;
+			// Set the start of the highlight to 0 since this is a "new" verse
 			let hStart = 0;
-			// Need to save the color of the active highlight that is still being applied
 			if (charsLeftAfterVerseEnd && highlightsStartingInVerse.length === 0) {
-				// console.log('this verse has a highlight that did not start in it');
+				// if there were characters left and there were not any highlights in this verse
+				console.log('this verse has a highlight that did not start in it', charsLeftAfterVerseEnd);
 				verseText.splice(0, 1, `<em class="text-highlighted" style="background:${continuingColor}">${verseText[0]}`);
 				if (charsLeftAfterVerseEnd > verseText.length) {
-					// multi verse highlight
-					// console.log('whole verse is highlighted', charsLeftAfterVerseEnd, verseText.length);
+					// The characters left is greater than the length of this verse
+					console.log('The characters left is greater than the length of this verse', charsLeftAfterVerseEnd, verseText.length);
 					verseText.splice(verseText.length - 1, 1, `${verseText[verseText.length - 1]}</em>`);
 					charsLeftAfterVerseEnd -= verseText.length;
 				} else if (charsLeftAfterVerseEnd === verseText.length) {
-					// console.log('the whole verse is not highlighted', charsLeftAfterVerseEnd, verseText.length);
+					// The characters left is exactly equal to the length of this verse
+					console.log('The number of characters left is exactly equal to the length of this verse', charsLeftAfterVerseEnd, verseText.length);
 					verseText.splice(charsLeftAfterVerseEnd - 1, 1, `${verseText[charsLeftAfterVerseEnd - 1]}</em>`);
 					charsLeftAfterVerseEnd = 0;
 				} else {
-					// console.log('the whole verse is not highlighted', charsLeftAfterVerseEnd, verseText.length);
+					// The number of characters left is less than the entirety of this verse and before the beginning of the next highlight
+					console.log('The number of characters left is less than the entirety of this verse and before the beginning of the next highlight', charsLeftAfterVerseEnd, verseText.length);
 					verseText.splice(charsLeftAfterVerseEnd, 1, `</em>${verseText[charsLeftAfterVerseEnd]}`);
 					charsLeftAfterVerseEnd = 0;
 				}
@@ -59,7 +68,7 @@ const createHighlights = (highlights, arrayOfVerseObjects) => {
 			// console.log('verse txt', verseText.join(''));
 			// console.log('all the highlights starting in verse: ', verseNumber);
 			// console.log(highlightsStartingInVerse);
-			// Reduce the highlights into an array of non-overlapping highlight objects
+			// Reduce the highlights into an array of non-overlapping highlight objects - I dont do this anymore
 
 			highlightsStartingInVerse.forEach((h, i) => {
 				// Next highlight
