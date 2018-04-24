@@ -7,7 +7,7 @@ import get from 'lodash/get';
 import { getNotes } from 'containers/Notes/saga';
 import { ADD_BOOKMARK } from 'containers/Notes/constants';
 // import filter from 'lodash/filter';
-import { ADD_HIGHLIGHTS, LOAD_HIGHLIGHTS, GET_HIGHLIGHTS } from './constants';
+import { ADD_HIGHLIGHTS, LOAD_HIGHLIGHTS, GET_HIGHLIGHTS, GET_NOTES_HOMEPAGE } from './constants';
 // import { fromJS } from 'immutable';
 // import unionWith from 'lodash/unionWith';
 // import { ADD_HIGHLIGHTS, LOAD_HIGHLIGHTS, GET_CHAPTER_TEXT, GET_HIGHLIGHTS, GET_BOOKS, GET_AUDIO, INIT_APPLICATION } from './constants';
@@ -549,4 +549,5 @@ export default function* defaultSaga() {
 	yield takeLatest('getbible', getBibleFromUrl);
 	yield takeLatest('getaudio', getChapterAudio);
 	yield takeLatest(ADD_BOOKMARK, addBookmark);
+	yield takeLatest(GET_NOTES_HOMEPAGE, getNotes);
 }

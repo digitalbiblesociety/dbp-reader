@@ -25,6 +25,7 @@ export const LOAD_BOOKS = 'app/TextSelection/LOAD_BOOKS';
 export const LOAD_AUDIO = 'app/TextSelection/LOAD_AUDIO';
 export const GET_BOOKS = 'app/TextSelection/GET_BIBLES_BOOKS';
 export const GET_AUDIO = 'app/TextSelection/GET_AUDIO';
+export const GET_NOTES_HOMEPAGE = 'app/HomePage/GET_NOTES_HOMEPAGE';
 export const SET_SELECTED_BOOK_NAME = 'app/TextSelection/SET_SELECTED_BOOK_NAME';
 export const SET_ACTIVE_NOTE = 'app/Notes/SET_ACTIVE_NOTE';
 export const UPDATE_THEME = 'app/Settings/UPDATE_THEME';

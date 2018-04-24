@@ -16,6 +16,8 @@ const applyNotes = (source, notes) => {
 	const xmlDoc = parser.parseFromString(source, 'text/xml');
 	const verses = [...xmlDoc.getElementsByClassName('v-num')];
 	const lastV = verses.length - 1;
+	// Todo: If the verse is the 1st verse then there will not be an element for it
+	// Create the element and add it into the front of the array of children
 	// If there aren't any verses or notes return the source to keep the app from breaking
 	if (!getVerseNum(verses[0])) {
 		return source;

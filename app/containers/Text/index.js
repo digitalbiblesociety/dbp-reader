@@ -66,6 +66,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 
 	componentDidUpdate(prevProps) {
 		// Todo: I think the issue with the page refresh is due to the initial values in redux
+		// Todo: There is an issue with the event listeners being removed once a new note is added
 		// console.log(this.format, this.formatHighlight);
 		// if (Object.keys(differenceObject(this.state, prevState)).length || Object.keys(differenceObject(this.props, prevProps)).length) {
 		// 	console.log('component did update props difference: \n', differenceObject(prevProps, this.props));

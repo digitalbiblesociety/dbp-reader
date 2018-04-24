@@ -13,6 +13,7 @@ import {
 	GET_CHAPTER_TEXT,
 	GET_HIGHLIGHTS,
 	SET_ACTIVE_NOTE,
+	GET_NOTES_HOMEPAGE,
 	INIT_APPLICATION,
 	LOAD_BOOKS,
 	LOAD_AUDIO,
@@ -35,6 +36,11 @@ import {
 	TOGGLE_SETTINGS_OPTION,
 	TOGGLE_AUTOPLAY,
 } from './constants';
+
+export const getNotes = (props) => ({
+	type: GET_NOTES_HOMEPAGE,
+	...props,
+});
 
 export const toggleAutoPlay = () => ({
 	type: TOGGLE_AUTOPLAY,

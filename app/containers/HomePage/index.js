@@ -55,12 +55,13 @@ import {
 } from 'containers/TextSelection/actions';
 import notesReducer from 'containers/Notes/reducer';
 import textReducer from 'containers/TextSelection/reducer';
-import notesSaga from 'containers/Notes/saga';
+// import notesSaga from 'containers/Notes/saga';
 import textSaga from 'containers/TextSelection/saga';
-import { getNotes, addBookmark } from 'containers/Notes/actions';
+import { addBookmark } from 'containers/Notes/actions';
 import {
 	addHighlight,
 	getBooks,
+	getNotes,
 	getChapterText,
 	getHighlights,
 	// toggleMenuBar,
@@ -694,7 +695,7 @@ const withSaga = injectSaga({ key: 'homepage', saga });
 const withTextReducer = injectReducer({ key: 'textSelection', reducer: textReducer });
 const withTextSaga = injectSaga({ key: 'textSelection', saga: textSaga });
 const withNotesReducer = injectReducer({ key: 'notes', reducer: notesReducer });
-const withNotesSaga = injectSaga({ key: 'notes', saga: notesSaga });
+// const withNotesSaga = injectSaga({ key: 'notes', saga: notesSaga });
 
 export default compose(
 	withReducer,
@@ -702,6 +703,6 @@ export default compose(
 	withNotesReducer,
 	withSaga,
 	withTextSaga,
-	withNotesSaga,
+	// withNotesSaga,
 	withConnect,
 )(HomePage);
