@@ -213,7 +213,7 @@ Notes.propTypes = {
 	note: PropTypes.object,
 	notes: PropTypes.object,
 	vernacularNamesObject: PropTypes.object,
-	highlights: PropTypes.object,
+	highlights: PropTypes.array,
 	userId: PropTypes.string,
 	openView: PropTypes.string,
 	notePassage: PropTypes.string,

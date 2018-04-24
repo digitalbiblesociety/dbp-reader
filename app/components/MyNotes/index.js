@@ -6,6 +6,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import matchSorter from 'match-sorter';
 import { Link } from 'react-router-dom';
 import SvgWrapper from 'components/SvgWrapper';
 import Pagination from 'components/Pagination';
@@ -13,6 +14,11 @@ import PageSizeSelector from 'components/PageSizeSelector';
 // import styled from 'styled-components';
 // TODO: Provide way of differentiating between notes, bookmarks and highlights
 class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+	state = {
+		// Need to reset this once user goes from notes to bookmarks
+		filterText: '',
+	}
+
 	componentDidMount() {
 		if (this.props.sectionType === 'notes') {
 			this.props.getNotes();
@@ -32,9 +38,24 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 		return `${date[1]}.${date[2]}.${date[0].slice(2)}`;
 	}
 
-	getHighlightReference = (h) => `${h.get('bible_id')} - ${h.get('book_id')} - ${h.get('chapter')}:${h.get('verse_start') === h.get('verse_end') || !h.get('verse_end') ? h.get('verse_start') : `${h.get('verse_start')}-${h.get('verse_end')}`} - (${h.get('bible_id')})`
+	getFilteredPageList = (pageData) => {
+		const filterText = this.state.filterText;
+
+		return matchSorter(pageData, filterText, { keys: ['notes', 'bible_id', 'book_id', 'verse_start', 'updated_at'] });
+	}
+
+	getFilteredHighlights = (highlights) => {
+		const filterText = this.state.filterText;
+
+		return matchSorter(highlights, filterText, { keys: ['book_id', 'chapter', 'verse_start'] });
+	}
+
+	getHighlightReference = (h) => `${h.bible_id} - ${h.book_id} - ${h.chapter}:${h.verse_start === h.verse_end || !h.verse_end ? h.verse_start : `${h.verse_start}-${h.verse_end}`} - (${h.bible_id})`
+
+	handleSearchChange = (e) => this.setState({ filterText: e.target.value })
 
 	handlePageClick = (page) => this.props.setActivePageData(page);
+
 	handleClick = (listItem) => {
 		if (this.props.sectionType === 'notes') {
 			this.props.setActiveNote({ note: listItem });
@@ -53,6 +74,10 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 			pageSelectorState,
 			togglePageSelector,
 		} = this.props;
+		const filteredPageData = sectionType === 'highlights' ? this.getFilteredHighlights(highlights) : this.getFilteredPageList(activePageData);
+		// console.log(this.getFilteredPageList(activePageData));
+		// console.log(highlights);
+		// console.log(this.props);
 		// Use concept like this to enhance modularity
 		// const dataTypes = {
 		// 	highlights,
@@ -69,13 +94,13 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 				<div className="searchbar">
 					<span className={'input-wrapper'}>
 						<SvgWrapper className={'icon'} svgid={'search'} />
-						<input placeholder={`SEARCH ${sectionType.toUpperCase()}`} />
+						<input onChange={this.handleSearchChange} value={this.state.filterText} placeholder={`SEARCH ${sectionType.toUpperCase()}`} />
 					</span>
 				</div>
 				<section className="note-list">
 					{
 						sectionType === 'notes' ? (
-							activePageData.map((listItem) => (
+							filteredPageData.map((listItem) => (
 								<div role="button" tabIndex={0} onClick={() => this.handleClick(listItem)} key={listItem.id} className="list-item">
 									<div className="date">{this.getFormattedNoteDate(listItem.created_at)}</div>
 									<div className="title-text">
@@ -87,17 +112,17 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 						) : null
 					}
 					{
-						sectionType === 'highlights' ? highlights.map((highlight) => (
-							<div key={highlight.id} className="list-item">
+						sectionType === 'highlights' ? filteredPageData.map((highlight) => (
+							<Link to={`/${highlight.bible_id}/${highlight.book_id}/${highlight.chapter}/${highlight.verse_start}`} role="button" tabIndex={0} key={highlight.id} className="list-item">
 								<div className="title-text">
 									<h4 className="title">{this.getHighlightReference(highlight)}</h4>
 								</div>
-							</div>
+							</Link>
 						)) : null
 					}
 					{
 						sectionType === 'bookmarks' ? (
-							activePageData.filter((n) => n.bookmark)).map((listItem) => (
+							filteredPageData.filter((n) => n.bookmark)).map((listItem) => (
 								<Link to={`/${listItem.bible_id}/${listItem.book_id}/${listItem.chapter}/${listItem.verse_start}`} role="button" tabIndex={0} key={listItem.id} className="list-item">
 									<div className="date">{this.getFormattedNoteDate(listItem.created_at)}</div>
 									<div className="title-text">
@@ -134,7 +159,7 @@ MyNotes.propTypes = {
 	sectionType: PropTypes.string.isRequired,
 	pageSize: PropTypes.number.isRequired,
 	vernacularNamesObject: PropTypes.object,
-	highlights: PropTypes.object,
+	highlights: PropTypes.array,
 };
 
 export default MyNotes;

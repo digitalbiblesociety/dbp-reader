@@ -637,50 +637,53 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			// console.log('a offset', anchorOffset);
 			// console.log('first verse', firstVerse, 'last verse', lastVerse);
 
-			if (aText !== extentText) {
-				// if nodes are different
-					// I have access to the parent node
-				// if texts match
-					// reverse order of anchor and extent
-				// if texts dont match
-					// find the parent of each that has a verse id
-				const aParent = getFormattedParentVerse(aNode);
-				const eParent = getFormattedParentVerse(eNode);
-						// if the parents are different verses
-				if (aParent.isSameNode(eParent)) {
-					// It doesn't matter from this point which parent is used since they both reference the same object
-					// take the offset that occurs first as a child of the verse
-					// console.log('parent verse is the same for both elements');
-					// console.log('child nodes for parent', aParent.childNodes);
-					// console.log(aParent.childNodes[0].isSameNode(aNode));
-					const aIndex = getFormattedChildIndex(aParent, aNode);
-					const eIndex = getFormattedChildIndex(aParent, eNode);
-					// console.log('a index', aIndex, 'e index', eIndex);
+			// Todo: May need to also implement this for plain text...
+			if (this.props.formattedSource.main) {
+				if (aText !== extentText) {
+					// if nodes are different
+						// I have access to the parent node
+					// if texts match
+						// reverse order of anchor and extent
+					// if texts dont match
+						// find the parent of each that has a verse id
+					const aParent = getFormattedParentVerse(aNode);
+					const eParent = getFormattedParentVerse(eNode);
+							// if the parents are different verses
+					if (aParent.isSameNode(eParent)) {
+						// It doesn't matter from this point which parent is used since they both reference the same object
+						// take the offset that occurs first as a child of the verse
+						// console.log('parent verse is the same for both elements');
+						// console.log('child nodes for parent', aParent.childNodes);
+						// console.log(aParent.childNodes[0].isSameNode(aNode));
+						const aIndex = getFormattedChildIndex(aParent, aNode);
+						const eIndex = getFormattedChildIndex(aParent, eNode);
+						// console.log('a index', aIndex, 'e index', eIndex);
 
-					// Use the text and offset of the node that was closest to the start of the verse
-					if (aIndex < eIndex) {
-						// console.log('aIndex is less than eIndex');
-						anchorText = aText;
-						anchorOffset = offset;
+						// Use the text and offset of the node that was closest to the start of the verse
+						if (aIndex < eIndex) {
+							// console.log('aIndex is less than eIndex');
+							anchorText = aText;
+							anchorOffset = offset;
+						} else {
+							anchorText = extentText;
+							anchorOffset = extentOffset;
+						}
+						// (could potentially use next/prev sibling for this)
 					} else {
-						anchorText = extentText;
-						anchorOffset = extentOffset;
-					}
-					// (could potentially use next/prev sibling for this)
-				} else {
-					// take the offset that matches the first(lowest) verse between the two
-					// console.log('parent verse is not the same for both elements');
-					const aVerseNumber = getFormattedElementVerseId(aParent);
-					const eVerseNumber = getFormattedElementVerseId(eParent);
+						// take the offset that matches the first(lowest) verse between the two
+						// console.log('parent verse is not the same for both elements');
+						const aVerseNumber = getFormattedElementVerseId(aParent);
+						const eVerseNumber = getFormattedElementVerseId(eParent);
 
-					// Use the text and offset of the first verse
-					if (aVerseNumber < eVerseNumber) {
-						// console.log('aVerseNumber is less than eVerseNumber');
-						anchorText = aText;
-						anchorOffset = offset;
-					} else {
-						anchorText = extentText;
-						anchorOffset = extentOffset;
+						// Use the text and offset of the first verse
+						if (aVerseNumber < eVerseNumber) {
+							// console.log('aVerseNumber is less than eVerseNumber');
+							anchorText = aText;
+							anchorOffset = offset;
+						} else {
+							anchorText = extentText;
+							anchorOffset = extentOffset;
+						}
 					}
 				}
 				// console.log('atext', aText);
