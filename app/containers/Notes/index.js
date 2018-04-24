@@ -13,7 +13,7 @@ import isEqual from 'lodash/isEqual';
 import SvgWrapper from 'components/SvgWrapper';
 import EditNote from 'components/EditNote';
 import MyNotes from 'components/MyNotes';
-import injectSaga from 'utils/injectSaga';
+// import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
 import {
@@ -45,7 +45,7 @@ import makeSelectNotes, {
 	selectListData,
 } from './selectors';
 import reducer from './reducer';
-import saga from './saga';
+// import saga from './saga';
 // import { FormattedMessage } from 'react-intl';
 // import messages from './messages';
 
@@ -55,7 +55,7 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 		this.props.dispatch(setActiveChild(props.openView));
 	}
 	componentDidMount() {
-		console.log('Notes mounted');
+		// console.log('Notes mounted');
 		document.addEventListener('click', this.handleClickOutside);
 	}
 
@@ -244,10 +244,10 @@ function mapDispatchToProps(dispatch) {
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
 const withReducer = injectReducer({ key: 'notes', reducer });
-const withSaga = injectSaga({ key: 'notes', saga });
+// const withSaga = injectSaga({ key: 'notes', saga });
 
 export default compose(
 	withReducer,
-	withSaga,
+	// withSaga,
 	withConnect,
 )(Notes);
