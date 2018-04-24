@@ -55,6 +55,7 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 		this.props.dispatch(setActiveChild(props.openView));
 	}
 	componentDidMount() {
+		console.log('Notes mounted');
 		document.addEventListener('click', this.handleClickOutside);
 	}
 

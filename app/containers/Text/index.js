@@ -32,7 +32,7 @@ import {
 /* Disabling the jsx-a11y linting because we need to capture the selected text
 	 and the most straight forward way of doing so is with the onMouseUp event */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-
+// Todo: Fix issue with this component being rendered so many times...
 class Text extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	state = {
 		contextMenuState: false,
@@ -42,9 +42,11 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		firstVerse: 0,
 		lastVerse: 0,
 		highlightActive: this.props.highlights || false,
+		handlersAreSet: false,
 	};
 
 	componentDidMount() {
+		// console.log('Component did mount with: ', this.format, ' and ', this.formatHighlight);
 		if (this.format) {
 			// console.log('setting event listeners on format');
 			this.setEventHandlersForFootnotes(this.format);
@@ -63,20 +65,25 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 	}
 
 	componentDidUpdate(prevProps) {
-		// console.log('component did update');
+		// Todo: I think the issue with the page refresh is due to the initial values in redux
+		// console.log(this.format, this.formatHighlight);
+		// if (Object.keys(differenceObject(this.state, prevState)).length || Object.keys(differenceObject(this.props, prevProps)).length) {
+		// 	console.log('component did update props difference: \n', differenceObject(prevProps, this.props));
+		// 	console.log('component did update state difference: \n', differenceObject(this.state, prevState));
+		// }
 		// Logic below ensures that the proper event handlers are set on each footnote
 		if (this.props.formattedSource.main && prevProps.formattedSource.main !== this.props.formattedSource.main && (this.format || this.formatHighlight)) {
 			if (this.format) {
-				// console.log('setting event listeners on format');
+				// console.log('setting event listeners on format first');
 				this.setEventHandlersForFootnotes(this.format);
 				this.setEventHandlersForFormattedVerses(this.format);
 			} else if (this.formatHighlight) {
-				// console.log('setting event listeners on formatHighlight');
+				// console.log('setting event listeners on formatHighlight first');
 				this.setEventHandlersForFootnotes(this.formatHighlight);
 				this.setEventHandlersForFormattedVerses(this.formatHighlight);
 			}
 		} else if (!isEqual(this.props.highlights, prevProps.highlights) && this.formatHighlight) {
-			// console.log('setting event listeners on formatHighlight because highlights changed');
+			// console.log('setting event listeners on formatHighlight because highlights changed second');
 			this.setEventHandlersForFootnotes(this.formatHighlight);
 			this.setEventHandlersForFormattedVerses(this.formatHighlight);
 		} else if (
@@ -86,37 +93,92 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		) {
 			// Need to set event handlers again here because they are removed once the plain text is rendered
 			if (this.format) {
-				// console.log('setting event listeners on format');
+				// console.log('setting event listeners on format third');
 				this.setEventHandlersForFootnotes(this.format);
 				this.setEventHandlersForFormattedVerses(this.format);
 			} else if (this.formatHighlight) {
-				// console.log('setting event listeners on formatHighlight');
+				// console.log('setting event listeners on formatHighlight third');
 				this.setEventHandlersForFootnotes(this.formatHighlight);
 				this.setEventHandlersForFormattedVerses(this.formatHighlight);
 			}
 		}
-		// console.log('Difference between old state and new state', differenceObject(this.state, prevState));
-		// console.log('Difference between old props and new props', differenceObject(this.props, prevProps));
+
+		// This handles setting the events on a page refresh or navigation via url
+		if (this.format && !this.state.handlersAreSet && !this.props.loadingNewChapterText) {
+			// console.log('setting event listeners on format fourth');
+			this.setEventHandlersForFootnotes(this.format);
+			this.setEventHandlersForFormattedVerses(this.format);
+			this.callSetStateNotInUpdate();
+		} else if (this.formatHighlight && !this.state.handlersAreSet && !this.props.loadingNewChapterText) {
+			// console.log('setting event listeners on formatHighlight fourth ');
+			this.setEventHandlersForFootnotes(this.formatHighlight);
+			this.setEventHandlersForFormattedVerses(this.formatHighlight);
+			this.callSetStateNotInUpdate();
+		}
 	}
 
 	setEventHandlersForFormattedVerses = (ref) => {
-		const verses = [...ref.getElementsByClassName('v')];
+		try {
+			const verses = [...ref.getElementsByClassName('v')];
 
-		verses.forEach((verse) => {
-			// console.log('setting events on this verse', verse);
-			/* eslint-disable no-param-reassign, no-unused-expressions, jsx-a11y/no-static-element-interactions */
-			verse.onmousedown = (e) => {
-				e.stopPropagation();
-				// console.log('mousedown event');
-				this.getFirstVerse(e);
-			};
-			verse.onmouseup = (e) => {
-				e.stopPropagation();
-				// console.log('mouseup event');
+			verses.forEach((verse) => {
+				// console.log('setting events on this verse', verse);
+				/* eslint-disable no-param-reassign, no-unused-expressions, jsx-a11y/no-static-element-interactions */
+				verse.onmousedown = (e) => {
+					e.stopPropagation();
+					// console.log('mousedown event');
+					this.getFirstVerse(e);
+				};
+				verse.onmouseup = (e) => {
+					e.stopPropagation();
+					// console.log('mouseup event');
 
-				this.handleMouseUp(e);
-			};
-		});
+					this.handleMouseUp(e);
+				};
+			});
+		} catch (err) {
+			if (process.env.NODE_ENV === 'development') {
+				console.error('Error adding event handlers to formatted verses: ', err); // eslint-disable-line no-console
+			}
+			// if Production then log error to service
+		}
+
+		try {
+			const elements = [...ref.getElementsByClassName('bookmark-in-verse')];
+			// It might not work 100% of the time to use i here, but I think it
+			// will work most of the time
+			elements.forEach((el, i) => {
+				el.onclick = (e) => {
+					e.stopPropagation();
+
+					this.handleNoteClick(i, true);
+				};
+			});
+		} catch (err) {
+			if (process.env.NODE_ENV === 'development') {
+				console.error('Error adding event handlers to formatted verses: ', err); // eslint-disable-line no-console
+			}
+			// if Production then log error to service
+		}
+
+		try {
+			const elements = [...ref.getElementsByClassName('note-in-verse')];
+
+			// It might not work 100% of the time to use i here, but I think it
+			// will work most of the time
+			elements.forEach((el, i) => {
+				el.onclick = (e) => {
+					e.stopPropagation();
+
+					this.handleNoteClick(i, true);
+				};
+			});
+		} catch (err) {
+			if (process.env.NODE_ENV === 'development') {
+				console.error('Error adding event handlers to formatted verses: ', err); // eslint-disable-line no-console
+			}
+			// if Production then log error to service
+		}
 	}
 
 	setEventHandlersForFootnotes = (ref) => {
@@ -306,7 +368,8 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			bookmarks,
 			invalidBibleId,
 		} = this.props;
-		// Doing it like this may impact performance, but it is probably cleaner than most other ways of doing it...
+		// Doing it like this may impact performance, but it is probably cleaner
+		// than most other ways of doing it...
 		const formattedSource = initialFormattedSource.main ? {
 			...initialFormattedSource,
 			main: [initialFormattedSource.main]
@@ -327,7 +390,8 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		// console.log(initialText);
 		// todo figure out a way to memoize or cache the highlighted version of the text to improve performance
 		// Need to connect to the api and get the highlights object for this chapter
-		// based on whether the highlights object has any data decide whether to run this function or not
+		// based on whether the highlights object has any data decide whether to
+		// run this function or not
 		let plainText = [];
 		let formattedText = [];
 
@@ -504,6 +568,8 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			});
 		}
 	}
+
+	callSetStateNotInUpdate = () => this.setState({ handlersAreSet: true })
 
 	openPopup = (coords) => {
 		this.setState({ popupOpen: true, popupCoords: coords });
