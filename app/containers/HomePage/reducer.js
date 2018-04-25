@@ -12,7 +12,6 @@ import {
 	ACTIVE_TEXT_ID,
 	LOAD_AUDIO,
 	LOAD_BOOKS,
-	LOAD_CHAPTER_TEXT,
 	LOAD_HIGHLIGHTS,
 	SET_ACTIVE_CHAPTER,
 	SET_ACTIVE_BOOK_NAME,
@@ -83,7 +82,7 @@ const initialState = fromJS({
 			},
 			redLetter: {
 				name: 'RED LETTER',
-				active: !!sessionStorage.getItem('bible_is_words_of_jesus'),
+				active: JSON.parse(sessionStorage.getItem('bible_is_words_of_jesus')),
 				available: true,
 			},
 			justifiedText: {
@@ -171,29 +170,6 @@ function homePageReducer(state = initialState, action) {
 			.set('activeFilesets', fromJS(action.filesets))
 			.set('activeTextName', action.textName)
 			.set('activeTextId', action.textId);
-	case LOAD_CHAPTER_TEXT:
-		if (action.formattedSource) {
-			return state
-				.set('loadingNewChapterText', false)
-				.set('audioSource', action.audioSource)
-				.set('formattedSource', action.formattedSource)
-				.set('highlights', fromJS(action.highlights))
-				.setIn(['userSettings', 'toggleOptions', 'crossReferences', 'active'], true)
-				.setIn(['userSettings', 'toggleOptions', 'redLetters', 'active'], true)
-				.setIn(['userSettings', 'toggleOptions', 'crossReferences', 'available'], true)
-				.setIn(['userSettings', 'toggleOptions', 'redLetters', 'available'], true)
-				.set('chapterText', fromJS(action.text));
-		}
-		return state
-			.set('loadingNewChapterText', false)
-			.set('audioSource', action.audioSource)
-			.set('formattedSource', action.formattedSource)
-			.set('highlights', fromJS(action.highlights))
-			.setIn(['userSettings', 'toggleOptions', 'crossReferences', 'active'], false)
-			.setIn(['userSettings', 'toggleOptions', 'redLetters', 'active'], false)
-			.setIn(['userSettings', 'toggleOptions', 'crossReferences', 'available'], false)
-			.setIn(['userSettings', 'toggleOptions', 'redLetters', 'available'], false)
-			.set('chapterText', fromJS(action.text));
 	case LOAD_HIGHLIGHTS:
 		return state.set('highlights', fromJS(action.highlights));
 	case SET_ACTIVE_NOTES_VIEW:
@@ -240,30 +216,16 @@ function homePageReducer(state = initialState, action) {
 			// .set('formattedSource', fromJS(action.chapterData.formattedText))
 			.set('activeFilesets', fromJS(action.filesets));
 	case 'loadnewchapter':
-		if (action.hasFormattedText) {
-			return state
-				.set('hasFormattedText', fromJS(action.hasFormattedText))
-				.set('hasTextInDatabase', fromJS(action.hasPlainText))
-				.set('hasAudio', fromJS(action.hasAudio))
-				.set('chapterText', fromJS(action.plainText))
-				.set('loadingNewChapterText', false)
-				.setIn(['userSettings', 'toggleOptions', 'crossReferences', 'active'], true)
-				.setIn(['userSettings', 'toggleOptions', 'redLetter', 'active'], true)
-				.setIn(['userSettings', 'toggleOptions', 'crossReferences', 'available'], true)
-				.setIn(['userSettings', 'toggleOptions', 'redLetter', 'available'], true)
-				.set('formattedSource', fromJS(action.formattedText));
-		}
-
 		return state
 			.set('hasFormattedText', fromJS(action.hasFormattedText))
 			.set('hasTextInDatabase', fromJS(action.hasPlainText))
 			.set('hasAudio', fromJS(action.hasAudio))
 			.set('chapterText', fromJS(action.plainText))
 			.set('loadingNewChapterText', false)
-			.setIn(['userSettings', 'toggleOptions', 'crossReferences', 'active'], false)
-			.setIn(['userSettings', 'toggleOptions', 'redLetter', 'active'], false)
-			.setIn(['userSettings', 'toggleOptions', 'crossReferences', 'available'], false)
-			.setIn(['userSettings', 'toggleOptions', 'redLetter', 'available'], false)
+			.setIn(['userSettings', 'toggleOptions', 'crossReferences', 'available'], action.hasFormattedText)
+			.setIn(['userSettings', 'toggleOptions', 'redLetter', 'available'], action.hasFormattedText)
+			.setIn(['userSettings', 'toggleOptions', 'readersMode', 'available'], action.hasPlainText)
+			.setIn(['userSettings', 'toggleOptions', 'oneVersePerLine', 'available'], action.hasPlainText)
 			.set('formattedSource', fromJS(action.formattedText));
 	case 'loadaudio':
 		// console.log('loading audio with', action);
