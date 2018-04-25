@@ -210,6 +210,7 @@ export function* getBibleFromUrl({ bibleId: oldBibleId, bookId: oldBookId, chapt
 				}
 			}
 			// console.log('activeChapter', activeChapter);
+			// console.log('activeBook.chapters[0]', activeBook.chapters[0]);
 			// const activeChapter = activeBook ? (parseInt(chapter, 10) || 1) : 1;
 			const activeBookId = activeBook ? activeBook.book_id : get(books, [0, 'book_id'], '');
 			const activeBookName = activeBook ? activeBook.name_short : get(books, [0, 'name_short'], '');
