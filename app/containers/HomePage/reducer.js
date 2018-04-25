@@ -82,7 +82,7 @@ const initialState = fromJS({
 			},
 			redLetter: {
 				name: 'RED LETTER',
-				active: JSON.parse(sessionStorage.getItem('bible_is_words_of_jesus')),
+				active: JSON.parse(localStorage.getItem('bible_is_words_of_jesus')),
 				available: true,
 			},
 			justifiedText: {
@@ -222,8 +222,14 @@ function homePageReducer(state = initialState, action) {
 			.set('hasAudio', fromJS(action.hasAudio))
 			.set('chapterText', fromJS(action.plainText))
 			.set('loadingNewChapterText', false)
-			.setIn(['userSettings', 'toggleOptions', 'crossReferences', 'available'], action.hasFormattedText)
-			.setIn(['userSettings', 'toggleOptions', 'redLetter', 'available'], action.hasFormattedText)
+			.setIn(
+				['userSettings', 'toggleOptions', 'crossReferences', 'available'],
+				action.hasFormattedText && (action.formattedText.includes('class="ft"') || action.formattedText.includes('class="xt"'))
+			)
+			.setIn(
+				['userSettings', 'toggleOptions', 'redLetter', 'available'],
+				action.hasFormattedText && (action.formattedText.includes('class="wj"') || action.formattedText.includes('class=\'wj\''))
+			)
 			.setIn(['userSettings', 'toggleOptions', 'readersMode', 'available'], action.hasPlainText)
 			.setIn(['userSettings', 'toggleOptions', 'oneVersePerLine', 'available'], action.hasPlainText)
 			.set('formattedSource', fromJS(action.formattedText));
