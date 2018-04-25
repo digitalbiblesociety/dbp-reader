@@ -220,7 +220,7 @@ const sizes = {
 };
 
 export const toggleWordsOfJesus = (state) => {
-	console.log('toggle words', state);
+	// console.log('toggle words', state);
 	document.documentElement.style.setProperty('--application-words-of-jesus', state ? '#A00' : 'inherit');
 	// document.documentElement.style.setProperty('--application-words-of-jesus', '#000');
 	// console.log(document.documentElement.style.getPropertyValue('--application-words-of-jesus'));
