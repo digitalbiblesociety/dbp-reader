@@ -78,10 +78,11 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 				height={height}
 				rowRenderer={renderARow}
 				rowCount={filteredLanguages.length}
-				overscanRowCount={10}
+				overscanRowCount={2}
 				rowHeight={28}
 				scrollToIndex={getActiveIndex()}
 				width={width}
+				scrollToAlignment={'start'}
 			/>
 		) : <div className={'language-error-message'}>There are no matches for your search.</div>;
 

@@ -93,6 +93,26 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 				this.container.scrollTop = newScrollTop;
 				// console.log('new container scroll top', this.container.scrollTop);
 			}
+			/* Todo: Try using something like the below functions
+				onScroll = (event: Event) => {
+					// In certain edge-cases React dispatches an onScroll event with an invalid target.scrollLeft / target.scrollTop.
+					// This invalid event can be detected by comparing event.target to this component's scrollable DOM element.
+					// See issue #404 for more information.
+					if (event.target === this._scrollingContainer) {
+						this.handleScrollEvent((event.target: any));
+					}
+				};
+				handleScrollEvent({
+					scrollLeft: scrollLeftParam = 0,
+					scrollTop: scrollTopParam = 0,
+				}: ScrollPosition) {
+				// On iOS, we can arrive at negative offsets by swiping past the start.
+				// To prevent flicker here, we make playing in the negative offset zone cause nothing to happen.
+				if (scrollTopParam < 0) {
+					return;
+				}
+			 }
+		*/
 			// if ($) {
 			// 	console.log('setting scroll top for blink');
 			// 	$('.book-container').scrollTop(newScrollTop);

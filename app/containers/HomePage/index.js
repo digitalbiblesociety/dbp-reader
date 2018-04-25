@@ -304,6 +304,17 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		} else if (this.props.homepage.activeChapter !== nextProps.homepage.activeChapter && nextProps.homepage.activeChapter !== nextParams.chapter) {
 			this.props.history.replace(`/${nextProps.homepage.activeTextId.toLowerCase()}/${nextProps.homepage.activeBookId.toLowerCase()}/${nextProps.homepage.activeChapter}`);
 		}
+		/* Partial work towards replacing the url if it does not match the active text
+		* else if (isEqual(params, nextParams) && this.props.homepage.activeBookId === nextProps.homepage.activeBookId && this.props.homepage.activeChapter === nextProps.homepage.activeChapter && this.props.homepage.activeTextId === nextProps.homepage.activeTextId) {
+			console.log('url parameters did not change and neither did the text information');
+			const propUrl = `/${nextProps.homepage.activeTextId.toLowerCase()}/${nextProps.homepage.activeBookId.toLowerCase()}/${nextProps.homepage.activeChapter}`;
+			const paramUrl = `/${nextParams.bibleId}/${nextParams.bookId}/${nextParams.chapter}`;
+			if (propUrl !== paramUrl) {
+				console.log('Params do not match props');
+				this.props.history.replace(`/${nextProps.homepage.activeTextId.toLowerCase()}/${nextProps.homepage.activeBookId.toLowerCase()}/${nextProps.homepage.activeChapter}${nextParams.verse ? `/${nextParams.verse}` : ''}`);
+			}
+		}
+		* */
 
 		// Deals with updating the interface if a user is authenticated or added highlights
 		const {

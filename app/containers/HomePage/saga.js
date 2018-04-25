@@ -192,14 +192,14 @@ export function* getBibleFromUrl({ bibleId: oldBibleId, bookId: oldBookId, chapt
 			let activeChapter = activeBook ? (parseInt(chapter, 10) || 1) : 1;
 			// console.log('active book', activeBook);
 			if (activeBook) {
-				const lastChapter = activeBook.chapters.length - 1;
+				const lastChapterIndex = activeBook.chapters.length - 1;
 				// console.log(!isNaN(parseInt(chapter, 10)));
 				if (!isNaN(parseInt(chapter, 10))) {
 					const parsedC = parseInt(chapter, 10);
 
-					// console.log('38 is greater than 6', lastChapter < parsedC, lastChapter, parsedC);
-					if (lastChapter < parsedC) {
-						activeChapter = lastChapter;
+					// console.log('38 is greater than 6', lastChapterIndex < parsedC, lastChapterIndex, parsedC);
+					if (activeBook.chapters[lastChapterIndex] < parsedC) {
+						activeChapter = activeBook.chapters[lastChapterIndex];
 					} else if (activeBook.chapters[0] > parsedC) {
 						activeChapter = activeBook.chapters[0];
 					} else {
