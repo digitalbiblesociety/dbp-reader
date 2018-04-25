@@ -144,6 +144,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		} else {
 			// If the user doesn't provide a url then redirect
 			// them to the default bible
+
 			// I think I may need a different saga for this
 			// I will use the browser language and the first
 			// version available in that language as the default
@@ -296,13 +297,26 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			}
 		} else if (this.props.homepage.activeBookId !== nextProps.homepage.activeBookId) {
 		// Deals with when the new text doesn't have the same books
-		// 	console.log('the current id doesnt match');
+		// 	console.log('the current id does not match');
 		// 	console.log(this.props);
 		// 	console.log('redirecting from activeBookId willReceiveProps');
 			this.props.history.replace(`/${nextProps.homepage.activeTextId.toLowerCase()}/${nextProps.homepage.activeBookId.toLowerCase()}/${nextProps.homepage.activeChapter}${nextParams.verse ? `/${nextParams.verse}` : ''}`);
 			// console.log('route that I pushed', `/${nextProps.homepage.activeTextId}/${nextProps.homepage.activeBookId}/${nextProps.homepage.activeChapter}`);
 		} else if (this.props.homepage.activeChapter !== nextProps.homepage.activeChapter && nextProps.homepage.activeChapter !== nextParams.chapter) {
 			this.props.history.replace(`/${nextProps.homepage.activeTextId.toLowerCase()}/${nextProps.homepage.activeBookId.toLowerCase()}/${nextProps.homepage.activeChapter}`);
+		} else if (isEqual(params, nextParams) && this.props.homepage.activeBookId === nextProps.homepage.activeBookId && this.props.homepage.activeChapter === nextProps.homepage.activeChapter && this.props.homepage.activeTextId === nextProps.homepage.activeTextId) {
+			// console.log('url parameters did not change and neither did the text information');
+			const propUrl = `/${nextProps.homepage.activeTextId.toLowerCase()}/${nextProps.homepage.activeBookId.toLowerCase()}/${nextProps.homepage.activeChapter}`;
+			const paramUrl = `/${nextParams.bibleId}/${nextParams.bookId}/${nextParams.chapter}`;
+			const propsExist = nextProps.homepage.activeChapter &&
+				nextProps.homepage.activeBookId &&
+				nextProps.homepage.activeTextId;
+
+			if (propsExist && propUrl !== paramUrl) {
+				// console.log('Params do not match props');
+
+				this.props.history.replace(`/${nextProps.homepage.activeTextId.toLowerCase()}/${nextProps.homepage.activeBookId.toLowerCase()}/${nextProps.homepage.activeChapter}${nextParams.verse ? `/${nextParams.verse}` : ''}`);
+			}
 		}
 		/* Partial work towards replacing the url if it does not match the active text
 		* else if (isEqual(params, nextParams) && this.props.homepage.activeBookId === nextProps.homepage.activeBookId && this.props.homepage.activeChapter === nextProps.homepage.activeChapter && this.props.homepage.activeTextId === nextProps.homepage.activeTextId) {
