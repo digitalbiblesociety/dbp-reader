@@ -104,7 +104,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		// console.log('authenticated in home did mount', authenticated);
 		// console.log('userId in home did mount', userId);
 
-		if (bibleId && bookId && chapter) {
+		if (bibleId && bookId && chapter >= 0) {
 			this.props.dispatch({
 				type: 'getbible',
 				bibleId,
@@ -413,10 +413,12 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			this.setActiveChapter(nextBook.getIn(['chapters', 0]));
 			this.props.history.push(`/${activeTextId.toLowerCase()}/${nextBook.get('book_id').toLowerCase()}/${nextBook.getIn(['chapters', 0])}`);
 		} else {
-			const activeChapterIndex = activeBook.get('chapters').findIndex((c) => c === activeChapter);
+			const activeChapterIndex = activeBook.get('chapters').findIndex((c) => c === activeChapter || c > activeChapter);
+			const nextChapterIndex = activeBook.getIn(['chapters', activeChapterIndex]) === activeChapter ? activeChapterIndex + 1 : activeChapterIndex;
+
 			// this.getChapters({ userAuthenticated, userId, bible: activeTextId, book: activeBookId, chapter: activeChapter + 1, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
-			this.setActiveChapter(activeBook.getIn(['chapters', activeChapterIndex + 1]));
-			this.props.history.push(`/${activeTextId.toLowerCase()}/${activeBookId.toLowerCase()}/${activeBook.getIn(['chapters', activeChapterIndex + 1])}`);
+			this.setActiveChapter(activeBook.getIn(['chapters', nextChapterIndex]));
+			this.props.history.push(`/${activeTextId.toLowerCase()}/${activeBookId.toLowerCase()}/${activeBook.getIn(['chapters', nextChapterIndex])}`);
 		}
 	}
 
@@ -448,7 +450,8 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			this.props.history.push(`/${activeTextId.toLowerCase()}/${previousBook.get('book_id').toLowerCase()}/${lastChapter}`);
 			// Goes to the previous Chapter
 		} else {
-			const activeChapterIndex = activeBook.get('chapters').findIndex((c) => c === activeChapter);
+			// If the chapter number is greater than the active chapter then weve gone too far and need to get the previous chapter
+			const activeChapterIndex = activeBook.get('chapters').findIndex((c) => c === activeChapter || c > activeChapter);
 			// this.getChapters({ userAuthenticated, userId, bible: activeTextId, book: activeBookId, chapter: activeChapter - 1, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
 			this.setActiveChapter(activeBook.getIn(['chapters', activeChapterIndex - 1]));
 			this.props.history.push(`/${activeTextId.toLowerCase()}/${activeBookId.toLowerCase()}/${activeBook.getIn(['chapters', activeChapterIndex - 1])}`);
