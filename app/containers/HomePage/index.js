@@ -53,6 +53,7 @@ import {
 	getLanguages,
 	getTexts,
 } from 'containers/TextSelection/actions';
+// import differenceObject from 'utils/deepDifferenceObject';
 import notesReducer from 'containers/Notes/reducer';
 import textReducer from 'containers/TextSelection/reducer';
 // import notesSaga from 'containers/Notes/saga';
@@ -239,7 +240,8 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		const { userAuthenticated, userId } = nextProps;
 
 		if (!isEqual(params, nextParams)) {
-			// console.log('received props and params are different');
+			// console.log('received params are different', nextParams);
+			// console.log('diff between params and next params', differenceObject(params, nextParams));
 			// if the route isn't the same as before find which parts changed
 			const newChapter = params.chapter !== nextParams.chapter;
 			const newBook = params.bookId !== nextParams.bookId;

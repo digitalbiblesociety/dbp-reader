@@ -188,8 +188,29 @@ export function* getBibleFromUrl({ bibleId: oldBibleId, bookId: oldBookId, chapt
 			const books = bible.books; // Need to ensure that I have the books here
 			// console.log('books in new bible', books);
 			const activeBook = books.find((b) => b.book_id === bookId);
+			// Not exactly sure why I am checking for an active book here
+			let activeChapter = activeBook ? (parseInt(chapter, 10) || 1) : 1;
 			// console.log('active book', activeBook);
-			const activeChapter = activeBook ? (parseInt(chapter, 10) || 1) : 1;
+			if (activeBook) {
+				const lastChapter = activeBook.chapters.length - 1;
+				// console.log(!isNaN(parseInt(chapter, 10)));
+				if (!isNaN(parseInt(chapter, 10))) {
+					const parsedC = parseInt(chapter, 10);
+
+					// console.log('38 is greater than 6', lastChapter < parsedC, lastChapter, parsedC);
+					if (lastChapter < parsedC) {
+						activeChapter = lastChapter;
+					} else if (activeBook.chapters[0] > parsedC) {
+						activeChapter = activeBook.chapters[0];
+					} else {
+						activeChapter = parsedC;
+					}
+				} else {
+					activeChapter = activeBook.chapters[0];
+				}
+			}
+			// console.log('activeChapter', activeChapter);
+			// const activeChapter = activeBook ? (parseInt(chapter, 10) || 1) : 1;
 			const activeBookId = activeBook ? activeBook.book_id : get(books, [0, 'book_id'], '');
 			const activeBookName = activeBook ? activeBook.name_short : get(books, [0, 'name_short'], '');
 			const filesets = response.data.filesets.filter((f) => f.bucket_id === 'dbp-dev' && f.set_type_code !== 'app');
