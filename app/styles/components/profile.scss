@@ -238,18 +238,24 @@
 
 .profile {
   .forgot-password {
-    padding: 15px;
+    p {
+      padding: 15px;
+    }
     .wrapper {
       display: flex;
       align-items: flex-start;
       flex-direction: column;
-      height: 54px;
+      margin-top: 10px;
+      width: 100%;
+      padding: 15px;
+      //height: 54px;
       @include css4 {
         background-color: var(--text-selection-background);
       }
 
       .text {
-        margin-top: 10px;
+        all: unset;
+        margin-top: 20px;
         align-self: flex-end;
         cursor: pointer;
 
@@ -263,7 +269,7 @@
       input {
         background-color: inherit;
         width: 270px;
-        margin: 10px 0 0 0;
+        margin: 0 0 0 0;
         @include css4 {
           color: var(--default-text-color);
         }
@@ -275,7 +281,9 @@
     }
 
     .disclaimer {
-      margin-top: 25px;
+      margin-top: 5px;
+      padding: 15px;
+
     }
   }
 }
