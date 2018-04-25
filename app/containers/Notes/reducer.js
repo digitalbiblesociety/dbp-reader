@@ -24,7 +24,7 @@ const initialState = fromJS({
 	listData: [],
 	// listData: initialNotesListForTesting,
 	isAddVerseExpanded: true,
-	isVerseTextVisible: false,
+	isVerseTextVisible: true,
 	pageSelectorState: false,
 	paginationPageSize: 10,
 	chapterForNote: [],
