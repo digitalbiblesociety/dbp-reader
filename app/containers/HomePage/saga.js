@@ -378,7 +378,6 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 	// console.log('getting audio', filesets, bookId, chapter);
 	// Parse filesets
 	// TODO: Need to handle when there are multiple filesets for the same audio type
-	// TODO: Handle when there is more than one set size i.e. NT and OTP
 	// console.log('filesets', filesets);
 	const filteredFilesets = reduce(filesets, (a, file) => {
 		const newFile = { ...a };
@@ -402,7 +401,9 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 	const completeAudio = [];
 	const ntAudio = [];
 	const otAudio = [];
-	const partialAudio = [];
+	const partialOtAudio = [];
+	const partialNtAudio = [];
+	const partialNtOtAudio = [];
 
 	Object.entries(filteredFilesets).forEach((fileset) => {
 		if (fileset[1].set_size_code === 'C') {
@@ -411,13 +412,20 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 			ntAudio.push({ id: fileset[0], data: fileset[1] });
 		} else if (fileset[1].set_size_code === 'OT') {
 			otAudio.push({ id: fileset[0], data: fileset[1] });
-		} else {
-			partialAudio.push({ id: fileset[0], data: fileset[1] });
+		} else if (fileset[1].set_size_code === 'OTP') {
+			partialOtAudio.push({ id: fileset[0], data: fileset[1] });
+		} else if (fileset[1].set_size_code === 'NTP') {
+			partialNtAudio.push({ id: fileset[0], data: fileset[1] });
+		} else if (fileset[1].set_size_code === 'NTPOTP') {
+			partialNtOtAudio.push({ id: fileset[0], data: fileset[1] });
 		}
 	});
 	// console.log('audio arrays', '\n', completeAudio, '\n', ntAudio, '\n', otAudio, '\n', partialAudio);
 	const otLength = otAudio.length;
 	const ntLength = ntAudio.length;
+
+	let otHasUrl = false;
+	let ntHasUrl = false;
 
 	if (completeAudio.length) {
 		// console.log('Bible has complete audio', completeAudio);
@@ -440,6 +448,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 				yield put({ type: 'loadaudio', audioPaths: [''] });
 			}
 		}
+		return;
 	} else if (ntLength && !otLength) {
 		try {
 			const reqUrl = `https://api.bible.build/bibles/filesets/${get(ntAudio, [0, 'id'])}?bucket=${process.env.DBP_BUCKET_ID}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(ntAudio, [0, 'data', 'set_type_code'])}`;
@@ -447,6 +456,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 			// console.log('nt audio response object', response);
 			const audioPaths = [get(response, ['data', 0, 'path'])];
 			// console.log('nt audio path', audioPaths);
+			ntHasUrl = !!audioPaths[0];
 			yield put({ type: 'loadaudio', audioPaths });
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
@@ -468,6 +478,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 			const audioPaths = [get(response, ['data', 0, 'path'])];
 			// console.log('ot audio path', audioPaths);
 			// otPath = audioPaths;
+			otHasUrl = !!audioPaths[0];
 			yield put({ type: 'loadaudio', audioPaths });
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
@@ -526,14 +537,77 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 				yield put({ type: 'loadaudio', audioPaths: [''] });
 			}
 		}
-
+		ntHasUrl = !!ntPath;
+		otHasUrl = !!otPath;
 		yield put({ type: 'loadaudio', audioPaths: ntPath || otPath });
-	} else if (partialAudio.length) {
+	}
+
+	if (partialOtAudio.length && !otLength && (!otHasUrl && !ntHasUrl)) {
 		// return a list of all of the s3 file paths since a chapter could have v1-v5 and v20-v25
 		// console.log('files that contain partial audio', partialAudio);
 		try {
 			// Need to iterate over each object here to see if I can find the right chapter
-			const reqUrl = `https://api.bible.build/bibles/filesets/${get(partialAudio, [0, 'id'])}?bucket=${process.env.DBP_BUCKET_ID}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(partialAudio, [0, 'data', 'set_type_code'])}`;
+			const reqUrl = `https://api.bible.build/bibles/filesets/${get(partialOtAudio, [0, 'id'])}?bucket=${process.env.DBP_BUCKET_ID}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(partialOtAudio, [0, 'data', 'set_type_code'])}`;
+			const response = yield call(request, reqUrl);
+			// console.log('partial audio response object', response);
+			const audioPaths = [];
+			if (response.data.length > 1) {
+				response.data.forEach((file) => audioPaths.push(file.path));
+			} else {
+				audioPaths.push(get(response, ['data', 0, 'path']));
+			}
+			// console.log('partial audio path', audioPaths);
+			yield put({ type: 'loadaudio', audioPaths });
+		} catch (error) {
+			if (process.env.NODE_ENV === 'development') {
+				console.error('Caught in getChapterAudio partial audio', error); // eslint-disable-line no-console
+			} else if (process.env.NODE_ENV === 'production') {
+				// const options = {
+				// 	header: 'POST',
+				// 	body: formData,
+				// };
+				// fetch('https://api.bible.build/error_logging', options);
+				yield put({ type: 'loadaudio', audioPaths: [''] });
+			}
+		}
+	}
+
+	if (partialNtAudio.length && !ntLength && (!otHasUrl && !ntHasUrl)) {
+		// return a list of all of the s3 file paths since a chapter could have v1-v5 and v20-v25
+		// console.log('files that contain partial audio', partialAudio);
+		try {
+			// Need to iterate over each object here to see if I can find the right chapter
+			const reqUrl = `https://api.bible.build/bibles/filesets/${get(partialNtAudio, [0, 'id'])}?bucket=${process.env.DBP_BUCKET_ID}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(partialNtAudio, [0, 'data', 'set_type_code'])}`;
+			const response = yield call(request, reqUrl);
+			// console.log('partial audio response object', response);
+			const audioPaths = [];
+			if (response.data.length > 1) {
+				response.data.forEach((file) => audioPaths.push(file.path));
+			} else {
+				audioPaths.push(get(response, ['data', 0, 'path']));
+			}
+			// console.log('partial audio path', audioPaths);
+			yield put({ type: 'loadaudio', audioPaths });
+		} catch (error) {
+			if (process.env.NODE_ENV === 'development') {
+				console.error('Caught in getChapterAudio partial audio', error); // eslint-disable-line no-console
+			} else if (process.env.NODE_ENV === 'production') {
+				// const options = {
+				// 	header: 'POST',
+				// 	body: formData,
+				// };
+				// fetch('https://api.bible.build/error_logging', options);
+				yield put({ type: 'loadaudio', audioPaths: [''] });
+			}
+		}
+	}
+
+	if (partialNtOtAudio.length && (!otLength && !ntLength) && (!otHasUrl && !ntHasUrl)) {
+		// return a list of all of the s3 file paths since a chapter could have v1-v5 and v20-v25
+		// console.log('files that contain partial audio', partialAudio);
+		try {
+			// Need to iterate over each object here to see if I can find the right chapter
+			const reqUrl = `https://api.bible.build/bibles/filesets/${get(partialNtOtAudio, [0, 'id'])}?bucket=${process.env.DBP_BUCKET_ID}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(partialNtOtAudio, [0, 'data', 'set_type_code'])}`;
 			const response = yield call(request, reqUrl);
 			// console.log('partial audio response object', response);
 			const audioPaths = [];
