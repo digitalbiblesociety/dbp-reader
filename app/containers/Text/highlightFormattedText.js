@@ -1,4 +1,5 @@
-const createFormattedHighlights = (highlights, formattedTextString) => {
+// Optional third arg for testing purposes
+const createFormattedHighlights = (highlights, formattedTextString, DomCreator) => {
 	// TODO: Major! If the starting index in a verse is past the end of the verse then start the highlight on the next line
 	/* NOTES
 	* 1. Need to subtract 1 from any addition of highlight_start + highlighted_words, this is because the result is the length not the index
@@ -22,18 +23,29 @@ const createFormattedHighlights = (highlights, formattedTextString) => {
 		}
 		return 0;
 	});
-
+	// console.log('sortedHighlights', sortedHighlights);
 	try {
-		const parser = new DOMParser();
-		const serializer = new XMLSerializer();
-		const xmlDoc = parser.parseFromString(formattedTextString, 'text/xml');
+		const env = process.env.NODE_ENV;
+		const parser = env === 'test' ? () => {} : new DOMParser();
+		// console.log('XMLSerializer', typeof XMLSerializer);
+		const serializer = env === 'test' ? () => {} : new XMLSerializer();
+		// const serializer = () => {};
+		const jsDOM = env === 'test' ? new DomCreator(formattedTextString) : undefined;
+		const xmlDoc = env === 'test' ? jsDOM.window.document : parser.parseFromString(formattedTextString, 'text/xml');
+		// const xmlDoc = parser.parseFromString(formattedTextString, 'text/xml');
+		// xmlDoc.innerHTML = jsDOM.serialize();
+		// console.log(jsDOM.serialize());
+		// console.log([...jsDOM.window.document.querySelectorAll('[data-id]')].slice(0));
+		// console.log('parser', parser);
+		// console.log('serializer', serializer);
+		// console.log('xmlDoc', xmlDoc);
 
 		// const arrayOfVerses = [...xmlDoc.getElementsByClassName('v')];
 		let charsLeftAfterVerseEnd = 0; // the number of characters for the highlight
 		let continuingColor = '';
 		let lastVerseNumber = 0;
 
-		const ad = [...xmlDoc.querySelectorAll('[data-id]')].slice(1); // Get all verse elements
+		const ad = [...xmlDoc.querySelectorAll('[data-id]')].slice(1); // Get all verse elements the first element with data-id is a div
 
 		// console.log('------------------------------------------------------------------------');
 
@@ -142,15 +154,17 @@ const createFormattedHighlights = (highlights, formattedTextString) => {
 			// console.log('xml right after updating inner html', xmlDoc);
 		});
 		// console.log('xml outside loop', xmlDoc);
+		const returnValue = env === 'test' ? xmlDoc.querySelectorAll('body')[0].innerHTML : serializer.serializeToString(xmlDoc);
+		// console.log(returnValue);
 
-		return serializer.serializeToString(xmlDoc);
+		return returnValue;
 	} catch (error) {
 		if (process.env.NODE_ENV === 'development') {
 			console.warn('Failed applying highlight to formatted text', error); // eslint-disable-line no-console
 		}
-		// if (process.env.NODE_ENV === 'test') {
-		// 	console.log('Failed applying highlight to formatted text', error);
-		// }
+		if (process.env.NODE_ENV === 'test') {
+			console.log('Failed applying highlight to formatted text', error); // eslint-disable-line no-console
+		}
 		// If there was an error just return the text with no highlights
 		return formattedTextString;
 	}
@@ -161,6 +175,7 @@ function handleSameVerse({ verseText, charsLeftAfterVerseEnd: passedCharsLeft, c
 	const continuingColor = passedColor;
 	// let charsLeft = charsLeftAfterVerseEnd;
 	// let hStart = 0;
+	// console.log('handling same verse');
 
 	if (charsLeftAfterVerseEnd) {
 		// console.log('this verse has a highlight that did not start in it');
@@ -176,7 +191,7 @@ function handleSameVerse({ verseText, charsLeftAfterVerseEnd: passedCharsLeft, c
 			charsLeftAfterVerseEnd = 0;
 		} else {
 			// console.log('the whole verse is not highlighted', charsLeftAfterVerseEnd, verseText.length);
-			verseText.splice(charsLeftAfterVerseEnd, 1, `${verseText[charsLeftAfterVerseEnd]}</em>`);
+			verseText.splice(charsLeftAfterVerseEnd - 1, 1, `${verseText[charsLeftAfterVerseEnd - 1]}</em>`);
 			charsLeftAfterVerseEnd = 0;
 		}
 	}
@@ -193,7 +208,7 @@ function handleNewVerse({ highlightsStartingInVerse, verseText, charsLeftAfterVe
 	let continuingColor = passedColor;
 	let charsLeft = charsLeftAfterVerseEnd;
 	let hStart = 0;
-
+	// console.log('handling new verse');
 	if (charsLeftAfterVerseEnd && highlightsStartingInVerse.length === 0) {
 		// console.log('this verse has a highlight that did not start in it');
 		verseText.splice(0, 1, `<em class="text-highlighted" style="background:${continuingColor}">${verseText[0]}`);
@@ -244,6 +259,9 @@ function handleNewVerse({ highlightsStartingInVerse, verseText, charsLeftAfterVe
 			// The next highlight is not overlapped by this one
 			// This highlight doesn't go past the end of the verse
 			if (charsLeft === 0) {
+				// console.log('verseText', verseText);
+				// console.log('h.highlighted_words', h.highlighted_words);
+				// console.log('h.highlight_start', h.highlight_start);
 				verseText.splice((h.highlighted_words + h.highlight_start) - 1, 1, `${verseText[(h.highlighted_words + h.highlight_start) - 1]}</em>`);
 			} else {
 				verseText.splice(charsLeft, 1, `${verseText[charsLeft]}</em>`);
@@ -253,7 +271,7 @@ function handleNewVerse({ highlightsStartingInVerse, verseText, charsLeftAfterVe
 		} else if ((charsLeft + hStart) > verseText.length || ((h.highlighted_words + h.highlight_start) - 1) > verseText.length) {
 			// diff between highlight start and verse end
 			const diff = verseText.length - hStart;
-			// console.log('diff', diff);
+			// console.log('diff there were chars left', diff);
 			verseText.splice(verseText.length - 1, 1, `${verseText[verseText.length - 1]}</em>`);
 			if (charsLeft === 0) {
 				charsLeft = h.highlighted_words - diff;
