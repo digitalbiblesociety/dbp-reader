@@ -305,6 +305,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		} else if (this.props.homepage.activeChapter !== nextProps.homepage.activeChapter && nextProps.homepage.activeChapter !== nextParams.chapter) {
 			this.props.history.replace(`/${nextProps.homepage.activeTextId.toLowerCase()}/${nextProps.homepage.activeBookId.toLowerCase()}/${nextProps.homepage.activeChapter}`);
 		} else if (isEqual(params, nextParams) && this.props.homepage.activeBookId === nextProps.homepage.activeBookId && this.props.homepage.activeChapter === nextProps.homepage.activeChapter && this.props.homepage.activeTextId === nextProps.homepage.activeTextId) {
+			// This section may not work with SSR because the state might be persisted through a refresh
 			// console.log('url parameters did not change and neither did the text information');
 			const propUrl = `/${nextProps.homepage.activeTextId.toLowerCase()}/${nextProps.homepage.activeBookId.toLowerCase()}/${nextProps.homepage.activeChapter}`;
 			const paramUrl = `/${nextParams.bibleId}/${nextParams.bookId}/${nextParams.chapter}`;

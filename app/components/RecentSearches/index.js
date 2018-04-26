@@ -12,7 +12,7 @@ import PropTypes from 'prop-types';
 // import messages from './messages';
 
 function RecentSearches({ searches, clickHandler }) {
-	return searches.map((s) => [<button className={'search-history-item'} key={s} onClick={() => clickHandler(s)}>{s}</button>, <br key={`br${s}`} />]);
+	return searches.map((s) => [<br key={`br${s}`} />, <button className={'search-history-item'} key={s} onClick={() => clickHandler(s)}>{s}</button>]);
 }
 
 RecentSearches.propTypes = {

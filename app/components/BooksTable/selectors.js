@@ -28,7 +28,7 @@ const selectBooks = () => createSelector(
 			return fromJS(splitBooks);
 		}
 		// Fallback to try and prevent app from breaking
-		return books.toJS();
+		return books;
 	}
 );
 

@@ -42,7 +42,7 @@
 .audio-player-container .item.active   {
   @include css4{
     border:1px solid var(--active-color-primary);
-    border-bottom:1px solid var(--application-transparent-gray);
+    border-top:1px solid var(--application-transparent-gray);
     background-color:var(--application-transparent-gray);
     //filter: invert(1);
     color: var(--application-light-color-option);
@@ -57,7 +57,7 @@
   right:150px;
   position:absolute;
   z-index:3;
-  top:-28px;
+  top:-29px;
   bottom:auto;
 }
 .speed-control {
@@ -66,7 +66,9 @@
   align-items:center;
   justify-content:space-around;
 
-  @include css4{border:1px solid var(--active-color-primary);
+  @include css4{
+    //border:1px solid var(--active-color-primary);
+    outline: 1px solid var(--active-color-primary);
     background-color:var(--application-transparent-gray);
   };
   height:30px;
@@ -222,7 +224,8 @@
 }
 .volume-slider           {
   @include css4{
-    border:1px solid var(--active-color-primary);
+    //border:1px solid var(--active-color-primary);
+    outline: 1px solid var(--active-color-primary);
     background-color:var(--application-transparent-gray);
   };
 
