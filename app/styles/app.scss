@@ -1,10 +1,10 @@
 @import url('https://fonts.googleapis.com/css?family=Noto+Sans|Alegreya|Roboto+Slab|Roboto:400,500');
 @import "./variables";
+@import "./global";
 @import "./darktheme";
 @import "./lighttheme";
 @import "./defaulttheme";
 @import "./components/formatted_text";
-@import "./global";
 @import "./components/search";
 @import "./components/chapterselection";
 @import "./components/settings";

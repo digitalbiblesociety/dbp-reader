@@ -42,14 +42,14 @@ class NavigationBar extends React.PureComponent { // eslint-disable-line react/p
 					</a>
 					<span role="button" tabIndex={0} onClick={toggleVersionSelection} className="version">
 						<SvgWrapper className="svg icon" fill="#fff" svgid="arrow_down" opacity=".5" />
-						<span title={activeTextName || 'No Version Selected'} className={'version-text'}>{activeTextName ? `${activeTextId.slice(0, 3) === 'ENG' ? `${activeTextId.slice(3)} - ` : ''}${activeTextName}` : 'No Version Selected'}</span>
+						<h1 title={activeTextName || 'No Version Selected'} className={'version-text'}>{activeTextName ? `${activeTextId.slice(0, 3) === 'ENG' ? `${activeTextId.slice(3)} - ` : ''}${activeTextName}` : 'No Version Selected'}</h1>
 						{
 							isVersionSelectionActive ? <TextSelection /> : null
 						}
 					</span>
 					<span role="button" tabIndex={0} onClick={toggleChapterSelection} className="book-chapter">
 						<SvgWrapper className="svg icon" fill="#fff" svgid="arrow_down" opacity=".5" />
-						<span title={activeBookName ? `${activeBookName} ${activeChapter}` : 'No Book Selected'} className={'book-chapter-text'}>{ activeBookName ? `${activeBookName} ${activeChapter}` : 'No Book Selected' }</span>
+						<h1 title={activeBookName ? `${activeBookName} ${activeChapter}` : 'No Book Selected'} className={'book-chapter-text'}>{ activeBookName ? `${activeBookName} ${activeChapter}` : 'No Book Selected' }</h1>
 						{
 							isChapterSelectionActive ? <ChapterSelection /> : null
 						}

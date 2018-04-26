@@ -14,7 +14,7 @@ function PopupMessage({ message, x, y }) {
 	// console.log(x, y)
 	const component = (
 		<div style={{ top: y - 50, left: x - 87.5 }} className={'custom-popup'}>
-			{message}
+			<p>{message}</p>
 		</div>
 	);
 	// console.log(parentComponent);

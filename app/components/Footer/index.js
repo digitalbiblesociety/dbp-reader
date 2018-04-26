@@ -24,19 +24,19 @@ const Footer = ({
 		<div className="footer-content">
 			<span title={'Profile'} className={profileActive ? 'item active' : 'item'} role="button" tabIndex={0} onClick={() => !profileActive && toggleProfile()}>
 				<SvgWrapper className={'icon'} fill="#fff" svgid="profile" />
-				<span className={'title-text'}>Profile</span>
+				<h4 className={'title-text'}>Profile</h4>
 			</span>
 			<span title={'Search'} className={searchActive ? 'item active' : 'item'} role="button" tabIndex={0} onClick={() => !searchActive && toggleSearch()}>
 				<SvgWrapper className={'icon'} fill="#fff" svgid="search" />
-				<span className={'title-text'}>Search</span>
+				<h4 className={'title-text'}>Search</h4>
 			</span>
 			<span title={'Notebook'} className={notebookActive ? 'item active' : 'item'} role="button" tabIndex={0} onClick={() => { if (!notebookActive) { toggleNotebook(); setActiveNotesView('notes'); } }}>
 				<SvgWrapper className={'icon'} fill="#fff" svgid="notebook" />
-				<span className={'title-text'}>Notebook</span>
+				<h4 className={'title-text'}>Notebook</h4>
 			</span>
 			<span title={'Settings'} className={settingsActive ? 'item active' : 'item'} role="button" tabIndex={0} onClick={() => !settingsActive && toggleSettingsModal()}>
 				<SvgWrapper className={'icon'} fill="#fff" svgid="text_options" />
-				<span className={'title-text'}>Options</span>
+				<h4 className={'title-text'}>Options</h4>
 			</span>
 		</div>
 	</div>
