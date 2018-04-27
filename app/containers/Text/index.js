@@ -901,7 +901,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				<main ref={this.setMainRef} className={formattedSource.main && !readersMode && !oneVersePerLine ? '' : `chapter ${justifiedClass}`}>
 					{
 						((formattedSource.main && !readersMode && !oneVersePerLine) || text.length === 0 || (!readersMode && !oneVersePerLine)) ? null : (
-							<h1 className="active-chapter-title">{activeChapter}</h1>
+							<div className="active-chapter-title"><h1 className="active-chapter-title">{activeChapter}</h1></div>
 						)
 					}
 					{this.getTextComponents}

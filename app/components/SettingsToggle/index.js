@@ -16,7 +16,17 @@ function SettingsToggle({ action, name, checked, available }) {
 			<label className={checked ? 'active' : ''}>
 				<FormattedMessage {...messages[name]} />
 				<div className="switch">
-					<input type="checkbox" checked={checked} onChange={() => available && action({ name })} />
+					<input
+						type="checkbox"
+						checked={checked}
+						onChange={(e) => {
+							if (!available) {
+								e.preventDefault();
+							} else if (available) {
+								action({ name });
+							}
+						}}
+					/>
 					<span className="slider"></span>
 				</div>
 			</label>
