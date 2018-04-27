@@ -360,7 +360,7 @@ function handleNewVerse({ highlightsStartingInVerse, verseText, charsLeftAfterVe
 
 	// Handle the cases where there were characters left over from the previous highlight
 	if (charsLeftAfterVerseEnd && highlightsStartingInVerse.length === 0) {
-		// console.log('this verse has a highlight that did not start in it');
+		// console.log('this verse has a highlight that did not start in it', charsLeftAfterVerseEnd);
 		verseText.splice(0, 1, `<em class="text-highlighted" style="background:${continuingColor}">${verseText[0]}`);
 		if (charsLeftAfterVerseEnd > verseText.length) {
 			// multi verse highlight
@@ -452,34 +452,42 @@ function handleNewVerse({ highlightsStartingInVerse, verseText, charsLeftAfterVe
 		} else if ((charsLeft + hStart) > verseText.length || ((h.highlighted_words + h.highlight_start) - 1) > verseText.length) {
 			// If the characters left to highlight plus where the highlight started is greater than the verse length or the highlight is longer than the verse
 
+			// console.log('charsLeft + hStart', charsLeft + hStart);
+			// console.log('(h.highlighted_words + h.highlight_start) - 1', (h.highlighted_words + h.highlight_start) - 1);
 			// diff between highlight start and verse end
-			const diff = verseText.length - hStart;
+			if (!(verseText.length < h.highlight_start)) {
+				const diff = verseText.length - hStart;
 
-			// Close the em tag at the end of the verse since this highlight goes on into the next verse
-			verseText.splice(verseText.length - 1, 1, `${verseText[verseText.length - 1]}</em>`);
+				// Close the em tag at the end of the verse since this highlight goes on into the next verse
+				verseText.splice(verseText.length - 1, 1, `${verseText[verseText.length - 1]}</em>`);
 
-			// If the remaining characters in this highlight is greater than the characters leftover
-			// Set the characters left as this highlights remaining
-			// else leave the characters leftover
+				// If the remaining characters in this highlight is greater than the characters leftover
+				// Set the characters left as this highlights remaining
+				// else leave the characters leftover
 
-			if (charsLeft === 0 || (h.highlighted_words - diff) > charsLeft) {
-				// If the previous highlight was completed set the characters left to equal the space remaining un-highlighted in the verse
-				charsLeft = h.highlighted_words - diff;
-				// console.log('Chars left is correct for first highlight', h.highlighted_words === 174 && charsLeft === 70);
+				if (charsLeft === 0 || (h.highlighted_words - diff) > charsLeft) {
+					// If the previous highlight was completed set the characters left to equal the space remaining un-highlighted in the verse
+					charsLeft = h.highlighted_words - diff;
+					// console.log('Chars left is correct for first highlight', h.highlighted_words === 174 && charsLeft === 70);
+				} else {
+					// Subtract the number of characters applied from the number left
+					charsLeft -= diff;
+				}
+				// Set the variables needed for the next verse to continue this highlight
+				charsLeftAfterVerseEnd = charsLeft;
+				continuingColor = h.highlighted_color;
 			} else {
-				// Subtract the number of characters applied from the number left
-				charsLeft -= diff;
+				// May not want everything else to trigger this
+				charsLeftAfterVerseEnd = h.highlighted_words;
+				continuingColor = h.highlighted_color;
 			}
-			// Set the variables needed for the next verse to continue this highlight
-			charsLeftAfterVerseEnd = charsLeft;
-			continuingColor = h.highlighted_color;
+			// Face I made when I found out highlight_start is a string while everything else is an integer... ( ‾ ʖ̫ ‾)
+			// If the current highlight overlaps another highlight before it. example v5 - v19, v3 - v6 = v3 - v19
+			// If the current highlight overlaps another highlight after it. example v1 - v6, v5 - v9 = v1 - v9
+			// If the current highlight encompasses another highlight. example v1 - v12, v4 - v6 = v1 - v12
+			// If the current highlight is encompassed by another highlight. example v4 - v6, v1 - v12 = v1 - v12
+			// New acc so I don't introduce side effects - mostly so eslint leaves me alone ( ͡~ ͜ʖ ͡°)
 		}
-		// Face I made when I found out highlight_start is a string while everything else is an integer... ( ‾ ʖ̫ ‾)
-		// If the current highlight overlaps another highlight before it. example v5 - v19, v3 - v6 = v3 - v19
-		// If the current highlight overlaps another highlight after it. example v1 - v6, v5 - v9 = v1 - v9
-		// If the current highlight encompasses another highlight. example v1 - v12, v4 - v6 = v1 - v12
-		// If the current highlight is encompassed by another highlight. example v4 - v6, v1 - v12 = v1 - v12
-		// New acc so I don't introduce side effects - mostly so eslint leaves me alone ( ͡~ ͜ʖ ͡°)
 	});
 
 	return {

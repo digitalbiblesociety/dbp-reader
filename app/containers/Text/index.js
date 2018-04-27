@@ -52,7 +52,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			this.setEventHandlersForFootnotes(this.format);
 			this.setEventHandlersForFormattedVerses(this.format);
 		} else if (this.formatHighlight) {
-			// console.log('setting event listeners on formatHighlight')
+			// console.log('setting event listeners on formatHighlight');
 			this.setEventHandlersForFootnotes(this.formatHighlight);
 			this.setEventHandlersForFormattedVerses(this.formatHighlight);
 		}
