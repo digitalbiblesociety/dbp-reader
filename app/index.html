@@ -25,8 +25,7 @@
     <meta property="og:image" content="images/app-icons/favicon-96x96.png">
     <meta property="fb:app_id" content="173528326559718">
     <script>
-      console.log("Script in head ran");
-      (document.body.onload = function() {
+      (window.onload = function() {
         var browserObject = {
           agent: "",
           majorVersion: "",
@@ -43,7 +42,7 @@
         }
 
         if (browserObject.agent === "msie") {
-          var bannerDiv = document.createElement('div');
+          var bannerDiv = document.createElement("div");
           bannerDiv.id = "old-browser-banner";
           bannerDiv.textContent = "You are using an old browser so some things may not function as expected. Please consider using a modern browser.";
           document.getElementsByTagName('body')[0].appendChild(bannerDiv);
@@ -52,8 +51,7 @@
             document.getElementById("old-browser-banner").removeChild();
           }, 2000);
         }
-        console.log("Dom loaded and the console log ran");
-      });
+      })();
     </script>
   </head>
   <body>
