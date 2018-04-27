@@ -25,52 +25,50 @@ const createFormattedHighlights = (highlights, formattedTextString, DomCreator) 
 	});
 	// console.log('sortedHighlights', sortedHighlights);
 	try {
+		// Set the env for testing purposes
 		const env = process.env.NODE_ENV;
+		// Instantiate the string -> html parser
 		const parser = env === 'test' ? () => {} : new DOMParser();
 		// console.log('XMLSerializer', typeof XMLSerializer);
+		// Instantiate the html -> serializer
 		const serializer = env === 'test' ? () => {} : new XMLSerializer();
 		// const serializer = () => {};
+		// Instantiate jsDOM for creating a mock dom (needed for testing)
 		const jsDOM = env === 'test' ? new DomCreator(formattedTextString) : undefined;
+		// Set the xml document based on whether this is live or a test
 		const xmlDoc = env === 'test' ? jsDOM.window.document : parser.parseFromString(formattedTextString, 'text/xml');
-		// const xmlDoc = parser.parseFromString(formattedTextString, 'text/xml');
-		// xmlDoc.innerHTML = jsDOM.serialize();
-		// console.log(jsDOM.serialize());
-		// console.log([...jsDOM.window.document.querySelectorAll('[data-id]')].slice(0));
-		// console.log('parser', parser);
-		// console.log('serializer', serializer);
-		// console.log('xmlDoc', xmlDoc);
 
+		// Used this before getting all the data ids
 		// const arrayOfVerses = [...xmlDoc.getElementsByClassName('v')];
-		let charsLeftAfterVerseEnd = 0; // the number of characters for the highlight
-		let continuingColor = '';
-		let lastVerseNumber = 0;
+		let charsLeftAfterVerseEnd = 0; // the number of characters that were not used in the previous highlight
+		let continuingColor = ''; // the color of the last highlight
+		let lastVerseNumber = 0; // the verse number of the last verse to have highlights applied
 
-		const ad = [...xmlDoc.querySelectorAll('[data-id]')].slice(1); // Get all verse elements the first element with data-id is a div
+		const ad = [...xmlDoc.querySelectorAll('[data-id]')].slice(1); // Get all verse elements (the first element with data-id is a div which is why I slice at 1)
 
 		// console.log('------------------------------------------------------------------------');
 
+		// Iterate over all the verses
 		ad.forEach((verseElement) => {
+			// Get all the children
+			/*
+				Note node: <span class='note'><a class='footnote'>*</a></span>
+				Text node: Adam and Eve had a son
+				Emphasis node: <add>was</add>
+				Highlight node: <em class="text-highlighted" style="...">and they called him Able</em>
+			*/
 			const children = verseElement.childNodes.length ? [...verseElement.childNodes] : [verseElement];
 			// Parse the verse data-id to get the verse number
 			const verseNumber = parseInt(verseElement.attributes['data-id'].value.split('_')[1], 10);
-			// console.log('children for verseElement', children);
-			// Test theory only on the fifteenth element
-			// if (i === 15) {
-			// 	verseElement.childNodes.forEach((node) => {
-			// 		// get text for node
-			// 		console.log('test theory on children textContent', node.textContent, '\n\nand innerHTML', node.innerHTML);
-			// 	});
-			// }
 			const newChildren = [];
 
 			children.forEach((originalVerse) => {
+				// If this is the first child and the highlight_start is greater than its length set newHighlightStart
+				// Clone each node because it has to be removed and then added again to preserve the original html and add the highlight
 				const verse = originalVerse.cloneNode(true);
-				// console.log(!!verse.attributes);
-				// if (verse.attributes) {
-				// 	console.log(verse.attributes.class.value);
-				// }
+				// Check if this child node is a note
 				const isNote = (!!verse.attributes && verse.attributes.class.value === 'note');
-				// console.log('is a note', isNote);
+				// Remove the child since I already cloned it
 				verseElement.removeChild(originalVerse);
 				// Verse already started -> need to treat it like a new verse
 				const sameVerse = verseNumber === lastVerseNumber;
@@ -78,14 +76,11 @@ const createFormattedHighlights = (highlights, formattedTextString, DomCreator) 
 				// Get all of the highlights that start in this verse
 				const highlightsStartingInVerse = sortedHighlights.filter((highlight) => highlight.verse_start === verseNumber);
 
-				// Get the text for a verse
+				// Get the text for a verse (really just a section of a verse)
 				let verseText = verse.textContent.split('');
-				// console.log('child node', verse);
-				// console.log('same verse', sameVerse);
-				// console.log(verseNumber, lastVerseNumber);
-				// todo: If the highlight start is greater than this sections length
-				// todo: update the start to be highlight_start - verseText.length
-				// todo: use the new highlight start in the next section of the verse
+				// If the highlight start is greater than this sections length
+				// update the start to be highlight_start - verseText.length
+				// use the new highlight start in the next section of the verse
 				if (!isNote) {
 				// If the node is a footnote then skip over it
 					if (sameVerse) {
@@ -107,7 +102,7 @@ const createFormattedHighlights = (highlights, formattedTextString, DomCreator) 
 							}
 						}
 					} else {
-						// This verse is different from the last one
+						// If the node is not in the same verse as the previous one
 						try {
 							const newData = handleNewVerse({
 								highlightsStartingInVerse,
@@ -126,17 +121,14 @@ const createFormattedHighlights = (highlights, formattedTextString, DomCreator) 
 						}
 					}
 				}
+				// Create a blank node to use in the case that the current node is a text node
 				const newNonTextNode = xmlDoc.createElement('span');
 				if (verse.nodeType === 3) {
-					// this is a text node and cannot have inner html
+					// this is a text node and cannot have inner html so I need a new element to be able to add the highlight
 					newNonTextNode.innerHTML = verseText.join('');
-					// console.log('newly created element', newNonTextNode);
 				} else if (!isNote) {
-					// console.log('verse before setting the inner html', verse);
 					// Set the inner html for this verse - this overrides any other styling that had been inside that verse
 					verse.innerHTML = verseText.join(''); // eslint-disable-line no-param-reassign
-					// verse.textContent = verseText.join('');
-					// console.log('new verse element', verse, 'and verse text', verseText);
 				}
 				newChildren.push(verse.nodeType === 3 ? newNonTextNode : verse);
 				// console.log('new inner html', verse.innerHTML);
@@ -145,19 +137,13 @@ const createFormattedHighlights = (highlights, formattedTextString, DomCreator) 
 				lastVerseNumber = verseNumber;
 			});
 
+			// Append all of the updated child nodes to the original verse node
 			newChildren.forEach((child) => {
-				// console.log('new child', child);
 				verseElement.appendChild(child);
 			});
-
-			// console.log('verse element', verseElement);
-			// console.log('xml right after updating inner html', xmlDoc);
 		});
-		// console.log('xml outside loop', xmlDoc);
-		const returnValue = env === 'test' ? xmlDoc.querySelectorAll('body')[0].innerHTML : serializer.serializeToString(xmlDoc);
-		// console.log(returnValue);
 
-		return returnValue;
+		return env === 'test' ? xmlDoc.querySelectorAll('body')[0].innerHTML : serializer.serializeToString(xmlDoc);
 	} catch (error) {
 		if (process.env.NODE_ENV === 'development') {
 			console.warn('Failed applying highlight to formatted text', error); // eslint-disable-line no-console
@@ -203,12 +189,17 @@ function handleSameVerse({ verseText, charsLeftAfterVerseEnd: passedCharsLeft, c
 	};
 }
 
+// function handleVerseWithSections({ highlightsStartingInVerse, verseText, charsLeftAfterVerseEnd: passedCharsLeft, continuingColor: passedColor }) {
+//
+// }
+
 function handleNewVerse({ highlightsStartingInVerse, verseText, charsLeftAfterVerseEnd: passedCharsLeft, continuingColor: passedColor }) {
 	let charsLeftAfterVerseEnd = passedCharsLeft;
 	let continuingColor = passedColor;
-	let charsLeft = charsLeftAfterVerseEnd;
+	let charsLeft = charsLeftAfterVerseEnd; // Need this separate from charsLeftAfterEnd because I may end up updating that value and still need this one
 	let hStart = 0;
-	// console.log('handling new verse');
+
+	// Handle the cases where there were characters left over from the previous highlight
 	if (charsLeftAfterVerseEnd && highlightsStartingInVerse.length === 0) {
 		// console.log('this verse has a highlight that did not start in it');
 		verseText.splice(0, 1, `<em class="text-highlighted" style="background:${continuingColor}">${verseText[0]}`);
@@ -227,58 +218,100 @@ function handleNewVerse({ highlightsStartingInVerse, verseText, charsLeftAfterVe
 			charsLeftAfterVerseEnd = 0;
 		}
 	}
-	// console.log('verse text', verseText.length);
-	// console.log('verse txt', verseText.join(''));
-	// console.log('all the highlights starting in verse: ', verseNumber);
-	// console.log(highlightsStartingInVerse);
-	// Reduce the highlights into an array of non-overlapping highlight objects
+	// Todo: Implement code below
+	// else if (charsLeftAfterVerseEnd) {
+	// 	// Apply previous highlight up until the first highlight in this verse starts
+	// 	const firstHighlightStart = highlightsStartingInVerse[0].highlight_start;
+	// 	// console.log('firstHighlightStart', firstHighlightStart);
+	// 	// console.log('firstHighlightStart > charsLeftAfterVerseEnd', firstHighlightStart > charsLeftAfterVerseEnd);
+	// 	// console.log('!(firstHighlightStart === 0)', !(firstHighlightStart === 0));
+	// 	// End of previous highlight is before the first highlight in this verse
+	// 	if (charsLeftAfterVerseEnd < firstHighlightStart) {
+	// 		verseText.splice(0, 1, `<em class="text-highlighted" style="background:${continuingColor}">${verseText[0]}`);
+	//
+	// 		verseText.splice(charsLeftAfterVerseEnd, 1, `</em>${verseText[charsLeftAfterVerseEnd]}`);
+	//
+	// 		charsLeftAfterVerseEnd = 0;
+	// 	} else if (!(firstHighlightStart === 0)) {
+	// 		// console.log('firstHighlightStart is not equal to zero and is less than charsLeftAfterVerseEnd');
+	// 		verseText.splice(0, 1, `<em class="text-highlighted" style="background:${continuingColor}">${verseText[0]}`);
+	//
+	// 		// May not need to subtract 1 here - highlight start might be an index instead of a length
+	// 		verseText.splice(firstHighlightStart - 1, 1, `${verseText[firstHighlightStart - 1]}</em>`);
+	// 		charsLeftAfterVerseEnd -= (firstHighlightStart - 1);
+	// 		// console.log('charsLeftAfterVerseEnd', charsLeftAfterVerseEnd);
+	// 	}
+	// }
 
 	highlightsStartingInVerse.forEach((h, i) => {
 		// Next highlight
 		const nh = highlightsStartingInVerse[i + 1];
-		// console.log('each highlight in verse', h);
+		// Sets the actual index for the verse since this could be the 2nd or 3rd node inside the verse
 		// Highlights are sorted by highlight_start so the first index has the very first highlight
-		if (i === 0 || charsLeft === 0) {
-			// console.log('h.highlight_start', h.highlight_start);
-			// console.log('h.highlighted_words', h.highlighted_words);
+		// Also need to check and see if the highlight can fit in this child node of the verse
+		// console.log('The highlight starts in this section', (verseText.length + prevSectionsLength) >= h.highlight_start && !(prevSectionsLength >= h.highlight_start));
+		// console.log('The true index inside verse', trueVerseIndex);
+		if ((i === 0 || charsLeft === 0) && (verseText.length) >= h.highlight_start) {
+			// If the length of the previous sections plus the length of this one is greater than the start of the highlight
+			// And the length of the previous sections is not greater than the start of the highlight
 			verseText.splice(h.highlight_start, 1, `<em class="text-highlighted" style="background:${h.highlighted_color ? h.highlighted_color : 'inherit'}">${verseText[h.highlight_start]}`);
 			hStart = h.highlight_start;
 		}
-		// if the next highlight start is less than the end of this highlight
+		/* ESSENTIALLY GATHERS ALL OVERLAPPING HIGHLIGHTS */
+		// if the next highlight start is less than the end of this highlight and there is a next highlight
 		if (nh && nh.highlight_start <= ((h.highlighted_words + h.highlight_start) - 1)) {
 			// check if the furthest highlighted character for this highlight is greater than the furthest character for the next highlight
-			if (((h.highlighted_words + h.highlight_start) - 1) > ((nh.highlight_start + nh.highlighted_words) - 1)) {
-				// in this case the next highlight will be contained within this highlight and doesn't need to be accounted for
+			// console.log('Next highlight start is lower than the end of this one');
+			// Todo: The function breaks here if there is one highlight overlapping multiple other highlights
+			if (((h.highlighted_words + h.highlight_start) - 1) >= ((nh.highlight_start + nh.highlighted_words) - 1)) {
+				// If the end of this highlight is greater than the end of the next highlight
+				// the next highlight will be contained within this highlight and doesn't need to be accounted for
+				// console.log('current test should apply highlight here', h);
 				charsLeft = h.highlighted_words;
 			} else {
+				// If the end of this highlight was not greater than the end of the next one, then it must not contain the next highlight
 				// in this case the next highlight will continue to extend past where this one ends
 				charsLeft = (nh.highlighted_words + nh.highlight_start) - 1;
 			}
-			// console.log('chars left for overlap', charsLeft);
-		} else if ((charsLeft + hStart) <= verseText.length && ((h.highlighted_words + h.highlight_start) - 1) < verseText.length) {
-			// The next highlight is not overlapped by this one
+
+			/* IS SINGLE VERSE NON-OVERLAPPING */
+			// I think both of the conditions below are exactly the same...
+		} else if ((charsLeft + h.highlight_start) <= (verseText.length) && ((h.highlighted_words + h.highlight_start) - 1) < (verseText.length)) {
+			// If the characters left plus the start of the highlight are less than the verse length and this highlight is less than the verse length
 			// This highlight doesn't go past the end of the verse
 			if (charsLeft === 0) {
-				// console.log('verseText', verseText);
-				// console.log('h.highlighted_words', h.highlighted_words);
-				// console.log('h.highlight_start', h.highlight_start);
+				// This highlight was not overlapped by another and the highlight was not started in a child node before this one
+				// If there are not any characters left to highlight then close the em tag at the index where the highlight ends
 				verseText.splice((h.highlighted_words + h.highlight_start) - 1, 1, `${verseText[(h.highlighted_words + h.highlight_start) - 1]}</em>`);
 			} else {
-				verseText.splice(charsLeft, 1, `${verseText[charsLeft]}</em>`);
+				// Since there are characters left to highlight close the em tag at the index that will expend those characters
+				verseText.splice((charsLeft + h.highlight_start) - 1, 1, `${verseText[(charsLeft + h.highlight_start) - 1]}</em>`);
 				charsLeft = 0;
 			}
-			// console.log('chars left at splice', charsLeft);
+
+			/* IS MULTI-VERSE */
 		} else if ((charsLeft + hStart) > verseText.length || ((h.highlighted_words + h.highlight_start) - 1) > verseText.length) {
+			// If the characters left to highlight plus where the highlight started is greater than the verse length or the highlight is longer than the verse
+
 			// diff between highlight start and verse end
 			const diff = verseText.length - hStart;
-			// console.log('diff there were chars left', diff);
+
+			// Close the em tag at the end of the verse since this highlight goes on into the next verse
 			verseText.splice(verseText.length - 1, 1, `${verseText[verseText.length - 1]}</em>`);
-			if (charsLeft === 0) {
+
+			// If the remaining characters in this highlight is greater than the characters leftover
+			// Set the characters left as this highlights remaining
+			// else leave the characters leftover
+
+			if (charsLeft === 0 || (h.highlighted_words - diff) > charsLeft) {
+				// If the previous highlight was completed set the characters left to equal the space remaining un-highlighted in the verse
 				charsLeft = h.highlighted_words - diff;
+				// console.log('Chars left is correct for first highlight', h.highlighted_words === 174 && charsLeft === 70);
 			} else {
+				// Subtract the number of characters applied from the number left
 				charsLeft -= diff;
 			}
-			// console.log('chars left after verse end', charsLeft);
+			// Set the variables needed for the next verse to continue this highlight
 			charsLeftAfterVerseEnd = charsLeft;
 			continuingColor = h.highlighted_color;
 		}
