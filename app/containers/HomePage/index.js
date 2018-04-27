@@ -305,31 +305,24 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		} else if (this.props.homepage.activeChapter !== nextProps.homepage.activeChapter && nextProps.homepage.activeChapter !== nextParams.chapter) {
 			this.props.history.replace(`/${nextProps.homepage.activeTextId.toLowerCase()}/${nextProps.homepage.activeBookId.toLowerCase()}/${nextProps.homepage.activeChapter}`);
 		} else if (isEqual(params, nextParams) && this.props.homepage.activeBookId === nextProps.homepage.activeBookId && this.props.homepage.activeChapter === nextProps.homepage.activeChapter && this.props.homepage.activeTextId === nextProps.homepage.activeTextId) {
+			// If url did not change && bibleId, bookId and chapter in props did not change
 			// This section may not work with SSR because the state might be persisted through a refresh
 			// console.log('url parameters did not change and neither did the text information');
-			const propUrl = `/${nextProps.homepage.activeTextId.toLowerCase()}/${nextProps.homepage.activeBookId.toLowerCase()}/${nextProps.homepage.activeChapter}`;
-			const paramUrl = `/${nextParams.bibleId}/${nextParams.bookId}/${nextParams.chapter}`;
+			const nextPropUrl = `/${nextProps.homepage.activeTextId.toLowerCase()}/${nextProps.homepage.activeBookId.toLowerCase()}/${nextProps.homepage.activeChapter}`;
+			const nextParamUrl = `/${nextParams.bibleId}/${nextParams.bookId}/${nextParams.chapter}`;
+			const curPropUrl = `/${this.props.homepage.activeTextId.toLowerCase()}/${this.props.homepage.activeBookId.toLowerCase()}/${this.props.homepage.activeChapter}`;
+			const curParamUrl = `/${params.bibleId}/${params.bookId}/${params.chapter}`;
+
 			const propsExist = nextProps.homepage.activeChapter &&
 				nextProps.homepage.activeBookId &&
 				nextProps.homepage.activeTextId;
 
-			if (propsExist && propUrl !== paramUrl) {
+			if (propsExist && nextPropUrl !== nextParamUrl && !(curParamUrl === curPropUrl)) {
 				// console.log('Params do not match props');
 
 				this.props.history.replace(`/${nextProps.homepage.activeTextId.toLowerCase()}/${nextProps.homepage.activeBookId.toLowerCase()}/${nextProps.homepage.activeChapter}${nextParams.verse ? `/${nextParams.verse}` : ''}`);
 			}
 		}
-		/* Partial work towards replacing the url if it does not match the active text
-		* else if (isEqual(params, nextParams) && this.props.homepage.activeBookId === nextProps.homepage.activeBookId && this.props.homepage.activeChapter === nextProps.homepage.activeChapter && this.props.homepage.activeTextId === nextProps.homepage.activeTextId) {
-			console.log('url parameters did not change and neither did the text information');
-			const propUrl = `/${nextProps.homepage.activeTextId.toLowerCase()}/${nextProps.homepage.activeBookId.toLowerCase()}/${nextProps.homepage.activeChapter}`;
-			const paramUrl = `/${nextParams.bibleId}/${nextParams.bookId}/${nextParams.chapter}`;
-			if (propUrl !== paramUrl) {
-				console.log('Params do not match props');
-				this.props.history.replace(`/${nextProps.homepage.activeTextId.toLowerCase()}/${nextProps.homepage.activeBookId.toLowerCase()}/${nextProps.homepage.activeChapter}${nextParams.verse ? `/${nextParams.verse}` : ''}`);
-			}
-		}
-		* */
 
 		// Deals with updating the interface if a user is authenticated or added highlights
 		const {
