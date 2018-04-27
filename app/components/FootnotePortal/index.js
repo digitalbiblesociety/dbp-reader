@@ -20,7 +20,7 @@ const StyledDiv = styled.div`
 	max-height: 150px;
 	width: 300px;
 	max-width: 300px;
-	padding: 15px;
+	padding: 5px;
 	background-color: #FFF;
 	overflow-y: scroll;
 	overflow-x: hidden;
@@ -41,7 +41,7 @@ const StyledX = styled.span`
 `;
 
 const P = styled.p`
-	padding: 5px;
+	padding: 15px;
 	margin-right: 5px;
 	margin-top: 5px;
 `;

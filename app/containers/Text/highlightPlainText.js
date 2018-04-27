@@ -114,7 +114,7 @@ const createHighlights = (highlights, arrayOfVerseObjects) => {
 						// console.log('current test should apply highlight here', h);
 						charsLeft = h.highlighted_words;
 					} else {
-						// If the end of this highlight was not greater than the end of the next one, then it must not container the next highlight
+						// If the end of this highlight was not greater than the end of the next one, then it must not contain the next highlight
 						// in this case the next highlight will continue to extend past where this one ends
 						charsLeft = (nh.highlighted_words + nh.highlight_start) - 1;
 					}
