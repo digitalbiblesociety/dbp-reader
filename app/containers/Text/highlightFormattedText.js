@@ -114,7 +114,7 @@ const createFormattedHighlights = (highlights, formattedTextString, DomCreator) 
 						combinedSectionLength += newData.sectionLength;
 					} else if (sameVerse) {
 						// If the verse has the same index as the last one
-						// console.log('same verse text', verseText);
+						// console.log('same verse text', sameVerse);
 						try {
 							const newData = handleSameVerse({
 								charsLeftAfterVerseEnd,
@@ -132,6 +132,7 @@ const createFormattedHighlights = (highlights, formattedTextString, DomCreator) 
 						}
 					} else {
 						// If the node is not in the same verse as the previous one
+						// console.log('new verse', verseNumber);
 						try {
 							const newData = handleNewVerse({
 								highlightsStartingInVerse,
@@ -190,7 +191,7 @@ function handleSameVerse({ verseText, charsLeftAfterVerseEnd: passedCharsLeft, c
 	const continuingColor = passedColor;
 	// let charsLeft = charsLeftAfterVerseEnd;
 	// let hStart = 0;
-	// console.log('handling same verse');
+	// console.log('handling same verse', charsLeftAfterVerseEnd);
 
 	if (charsLeftAfterVerseEnd) {
 		// console.log('this verse has a highlight that did not start in it');
