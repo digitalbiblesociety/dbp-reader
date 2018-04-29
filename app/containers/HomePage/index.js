@@ -307,7 +307,25 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		} else if (isEqual(params, nextParams) && this.props.homepage.activeBookId === nextProps.homepage.activeBookId && this.props.homepage.activeChapter === nextProps.homepage.activeChapter && this.props.homepage.activeTextId === nextProps.homepage.activeTextId) {
 			// If url did not change && bibleId, bookId and chapter in props did not change
 			// This section may not work with SSR because the state might be persisted through a refresh
-			// console.log('url parameters did not change and neither did the text information');
+
+			// Handles the cases where the url needs to be updated and there is a verse - Checking this first to reduce the amount of redirects
+			const nextPropUrlVerse = `/${nextProps.homepage.activeTextId.toLowerCase()}/${nextProps.homepage.activeBookId.toLowerCase()}/${nextProps.homepage.activeChapter}`;
+			const nextParamUrlVerse = `/${nextParams.bibleId}/${nextParams.bookId}/${nextParams.chapter}`;
+			const curPropUrlVerse = `/${this.props.homepage.activeTextId.toLowerCase()}/${this.props.homepage.activeBookId.toLowerCase()}/${this.props.homepage.activeChapter}`;
+			const curParamUrlVerse = `/${params.bibleId}/${params.bookId}/${params.chapter}`;
+
+			const propsExistVerse = nextProps.homepage.activeChapter &&
+				nextProps.homepage.activeBookId &&
+				nextProps.homepage.activeTextId;
+
+			if (propsExistVerse && nextPropUrlVerse !== nextParamUrlVerse && !(curParamUrlVerse === curPropUrlVerse)) {
+				// console.log('Params do not match props');
+
+				this.props.history.replace(`/${nextProps.homepage.activeTextId.toLowerCase()}/${nextProps.homepage.activeBookId.toLowerCase()}/${nextProps.homepage.activeChapter}${nextParams.verse ? `/${nextParams.verse}` : ''}`);
+				return;
+			}
+
+			// Handles the cases where the url needs to be updated without a verse
 			const nextPropUrl = `/${nextProps.homepage.activeTextId.toLowerCase()}/${nextProps.homepage.activeBookId.toLowerCase()}/${nextProps.homepage.activeChapter}`;
 			const nextParamUrl = `/${nextParams.bibleId}/${nextParams.bookId}/${nextParams.chapter}`;
 			const curPropUrl = `/${this.props.homepage.activeTextId.toLowerCase()}/${this.props.homepage.activeBookId.toLowerCase()}/${this.props.homepage.activeChapter}`;
