@@ -41,12 +41,154 @@ describe('<Text />', () => {
 
 		beforeEach(() => {
 			wrapper = shallow(<Text {...textProps} />);
+			wrapper.instance().state = {
+				contextMenuState: false,
+				footnoteState: false,
+				coords: {},
+				selectedText: '',
+				firstVerse: 0,
+				lastVerse: 0,
+				highlightActive: textProps.highlights || false,
+				handlersAreSet: false,
+			};
 		});
 		it('Should be defined', () => {
 			expect(wrapper.instance().addHighlight).toBeDefined();
 		});
 		it('Should be a function', () => {
 			expect(typeof wrapper.instance().addHighlight === 'function').toEqual(true);
+		});
+		it('Should create a highlight object for plain text left to right in same verse', () => {
+			expect(true).toEqual(false);
+		});
+		it('Should create a highlight object for plain text left to right spanning two verses', () => {
+			expect(true).toEqual(false);
+		});
+		it('Should create a highlight object for plain text left to right in same verse that overlaps another highlight', () => {
+			expect(true).toEqual(false);
+		});
+		it('Should create a highlight object for plain text left to right in same verse where start is not on a verse', () => {
+			expect(true).toEqual(false);
+		});
+		it('Should create a highlight object for plain text left to right spanning two verses and that overlaps another highlight', () => {
+			expect(true).toEqual(false);
+		});
+		it('Should create a highlight object for formatted text left to right in same verse', () => {
+			expect(true).toEqual(false);
+		});
+		it('Should create a highlight object for formatted text left to right spanning two verses', () => {
+			expect(true).toEqual(false);
+		});
+		it('Should create a highlight object for formatted text left to right in same verse that overlaps another highlight', () => {
+			expect(true).toEqual(false);
+		});
+		it('Should create a highlight object for formatted text left to right in same verse that overlaps a footnote', () => {
+			expect(true).toEqual(false);
+		});
+		it('Should create a highlight object for formatted text left to right in same verse that overlaps a note', () => {
+			expect(true).toEqual(false);
+		});
+		it('Should create a highlight object for formatted text left to right in same verse that overlaps a bookmark', () => {
+			expect(true).toEqual(false);
+		});
+		it('Should create a highlight object for formatted text left to right in same verse that overlaps words of Jesus', () => {
+			expect(true).toEqual(false);
+		});
+		it('Should create a highlight object for formatted text left to right in same verse that overlaps another element', () => {
+			expect(true).toEqual(false);
+		});
+		it('Should create a highlight object for formatted text left to right in same verse where start is not on a verse', () => {
+			expect(true).toEqual(false);
+		});
+		it('Should create a highlight object for formatted text left to right spanning two verses and overlaps another highlight', () => {
+			expect(true).toEqual(false);
+		});
+		it('Should create a highlight object for formatted text left to right spanning two verses and overlaps a footnote', () => {
+			expect(true).toEqual(false);
+		});
+		it('Should create a highlight object for formatted text left to right spanning two verses and overlaps a note', () => {
+			expect(true).toEqual(false);
+		});
+		it('Should create a highlight object for formatted text left to right spanning two verses and overlaps a bookmark', () => {
+			expect(true).toEqual(false);
+		});
+		it('Should create a highlight object for formatted text left to right spanning two verses and overlaps words of Jesus', () => {
+			expect(true).toEqual(false);
+		});
+		it('Should create a highlight object for formatted text left to right spanning two verses and overlaps another element', () => {
+			expect(true).toEqual(false);
+		});
+		it('Should create a highlight object for formatted text left to right spanning two verses where both verses are split into quotes', () => {
+			expect(true).toEqual(false);
+		});
+		it('Should create a highlight object for formatted text left to right in the same verse where the verse is split into quotes', () => {
+			expect(true).toEqual(false);
+		});
+		it('Should create a highlight object for plain text right to left in same verse', () => {
+			expect(true).toEqual(false);
+		});
+		it('Should create a highlight object for plain text right to left spanning two verses', () => {
+			expect(true).toEqual(false);
+		});
+		it('Should create a highlight object for plain text right to left in same verse that overlaps another highlight', () => {
+			expect(true).toEqual(false);
+		});
+		it('Should create a highlight object for plain text right to left in same verse where start is not on a verse', () => {
+			expect(true).toEqual(false);
+		});
+		it('Should create a highlight object for plain text right to left spanning two verses and that overlaps another highlight', () => {
+			expect(true).toEqual(false);
+		});
+		it('Should create a highlight object for formatted text right to left in same verse', () => {
+			expect(true).toEqual(false);
+		});
+		it('Should create a highlight object for formatted text right to left spanning two verses', () => {
+			expect(true).toEqual(false);
+		});
+		it('Should create a highlight object for formatted text right to left in same verse that overlaps another highlight', () => {
+			expect(true).toEqual(false);
+		});
+		it('Should create a highlight object for formatted text right to left in same verse that overlaps a footnote', () => {
+			expect(true).toEqual(false);
+		});
+		it('Should create a highlight object for formatted text right to left in same verse that overlaps a note', () => {
+			expect(true).toEqual(false);
+		});
+		it('Should create a highlight object for formatted text right to left in same verse that overlaps a bookmark', () => {
+			expect(true).toEqual(false);
+		});
+		it('Should create a highlight object for formatted text right to left in same verse that overlaps words of Jesus', () => {
+			expect(true).toEqual(false);
+		});
+		it('Should create a highlight object for formatted text right to left in same verse that overlaps another element', () => {
+			expect(true).toEqual(false);
+		});
+		it('Should create a highlight object for formatted text right to left in same verse where start is not on a verse', () => {
+			expect(true).toEqual(false);
+		});
+		it('Should create a highlight object for formatted text right to left spanning two verses and overlaps another highlight', () => {
+			expect(true).toEqual(false);
+		});
+		it('Should create a highlight object for formatted text right to left spanning two verses and overlaps a footnote', () => {
+			expect(true).toEqual(false);
+		});
+		it('Should create a highlight object for formatted text right to left spanning two verses and overlaps a note', () => {
+			expect(true).toEqual(false);
+		});
+		it('Should create a highlight object for formatted text right to left spanning two verses and overlaps a bookmark', () => {
+			expect(true).toEqual(false);
+		});
+		it('Should create a highlight object for formatted text right to left spanning two verses and overlaps words of Jesus', () => {
+			expect(true).toEqual(false);
+		});
+		it('Should create a highlight object for formatted text right to left spanning two verses and overlaps another element', () => {
+			expect(true).toEqual(false);
+		});
+		it('Should create a highlight object for formatted text right to left spanning two verses where both verses are split into quotes', () => {
+			expect(true).toEqual(false);
+		});
+		it('Should create a highlight object for formatted text right to left in the same verse where the verse is split into quotes', () => {
+			expect(true).toEqual(false);
 		});
 	});
 });
