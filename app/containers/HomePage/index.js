@@ -309,21 +309,21 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			// This section may not work with SSR because the state might be persisted through a refresh
 
 			// Handles the cases where the url needs to be updated and there is a verse - Checking this first to reduce the amount of redirects
-			const nextPropUrlVerse = `/${nextProps.homepage.activeTextId.toLowerCase()}/${nextProps.homepage.activeBookId.toLowerCase()}/${nextProps.homepage.activeChapter}`;
-			const nextParamUrlVerse = `/${nextParams.bibleId}/${nextParams.bookId}/${nextParams.chapter}`;
-			const curPropUrlVerse = `/${this.props.homepage.activeTextId.toLowerCase()}/${this.props.homepage.activeBookId.toLowerCase()}/${this.props.homepage.activeChapter}`;
-			const curParamUrlVerse = `/${params.bibleId}/${params.bookId}/${params.chapter}`;
-
-			const propsExistVerse = nextProps.homepage.activeChapter &&
-				nextProps.homepage.activeBookId &&
-				nextProps.homepage.activeTextId;
-
-			if (propsExistVerse && nextPropUrlVerse !== nextParamUrlVerse && !(curParamUrlVerse === curPropUrlVerse)) {
-				// console.log('Params do not match props');
-
-				this.props.history.replace(`/${nextProps.homepage.activeTextId.toLowerCase()}/${nextProps.homepage.activeBookId.toLowerCase()}/${nextProps.homepage.activeChapter}${nextParams.verse ? `/${nextParams.verse}` : ''}`);
-				return;
-			}
+			// const nextPropUrlVerse = `/${nextProps.homepage.activeTextId.toLowerCase()}/${nextProps.homepage.activeBookId.toLowerCase()}/${nextProps.homepage.activeChapter}`;
+			// const nextParamUrlVerse = `/${nextParams.bibleId}/${nextParams.bookId}/${nextParams.chapter}`;
+			// const curPropUrlVerse = `/${this.props.homepage.activeTextId.toLowerCase()}/${this.props.homepage.activeBookId.toLowerCase()}/${this.props.homepage.activeChapter}`;
+			// const curParamUrlVerse = `/${params.bibleId}/${params.bookId}/${params.chapter}`;
+			//
+			// const propsExistVerse = nextProps.homepage.activeChapter &&
+			// 	nextProps.homepage.activeBookId &&
+			// 	nextProps.homepage.activeTextId;
+			//
+			// if (propsExistVerse && nextPropUrlVerse !== nextParamUrlVerse && !(curParamUrlVerse === curPropUrlVerse)) {
+			// 	// console.log('Params do not match props');
+			//
+			// 	this.props.history.replace(`/${nextParams.bibleId.toLowerCase()}/${nextParams.bookId.toLowerCase()}/${nextParams.chapter}${nextParams.verse ? `/${nextParams.verse}` : ''}`);
+			// 	return;
+			// }
 
 			// Handles the cases where the url needs to be updated without a verse
 			const nextPropUrl = `/${nextProps.homepage.activeTextId.toLowerCase()}/${nextProps.homepage.activeBookId.toLowerCase()}/${nextProps.homepage.activeChapter}`;
@@ -334,10 +334,13 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			const propsExist = nextProps.homepage.activeChapter &&
 				nextProps.homepage.activeBookId &&
 				nextProps.homepage.activeTextId;
+			// if there are props in the next state of the application
+			// and the next props do not match the next url
+			// and the current url does not match the current props
+			if (propsExist && nextPropUrl !== nextParamUrl && curParamUrl !== curPropUrl && nextParamUrl !== curParamUrl) {
+				// console.log('Params do not match props', nextPropUrl !== nextParamUrl, !(curParamUrl === curPropUrl));
 
-			if (propsExist && nextPropUrl !== nextParamUrl && !(curParamUrl === curPropUrl)) {
-				// console.log('Params do not match props');
-
+				// Redirect to the appropriate url
 				this.props.history.replace(`/${nextProps.homepage.activeTextId.toLowerCase()}/${nextProps.homepage.activeBookId.toLowerCase()}/${nextProps.homepage.activeChapter}${nextParams.verse ? `/${nextParams.verse}` : ''}`);
 			}
 		}
