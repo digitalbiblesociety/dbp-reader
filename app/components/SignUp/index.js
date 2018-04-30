@@ -178,7 +178,7 @@ class SignUp extends React.PureComponent {
 				<input required autoComplete="new-password" type="password" onChange={this.handlePasswordChange} className={validPassword ? 'first-password' : 'first-password error'} placeholder="Password" value={this.state.password} />
 				<input required autoComplete="new-password" type="password" onChange={this.handleConfirmPassword} className={validPassword ? 'second-password' : 'second-password error'} placeholder="Confirm Password" value={this.state.confirmPassword} />
 				<div className="sign-up-button">
-					<button type="submit" className="text">SIGN UP</button>
+					<button type="submit" className="text">Submit</button>
 				</div>
 			</form>
 		);

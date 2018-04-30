@@ -34,14 +34,13 @@ const initialState = fromJS({
 	signupErrorMessage: '',
 	activeDriver: '',
 	userProfile: {
-		password: '',
 		email: '',
-		country: '',
-		address1: '',
-		address2: '',
+		nickname: '',
+		name: '',
+		avatar: '',
 		city: '',
-		state: '',
-		zip: '',
+		verified: false,
+		accounts: [],
 	},
 	errorMessageViewed: true,
 });
@@ -55,6 +54,7 @@ function profileReducer(state = initialState, action) {
 	case USER_LOGGED_IN:
 		return state
 			.set('userId', action.userId)
+			.set('userProfile', action.userProfile)
 			.set('userAuthenticated', true);
 	case LOG_OUT:
 		// Need to remove the user's id from storage when they log out

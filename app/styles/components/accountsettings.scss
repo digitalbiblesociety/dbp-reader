@@ -1,8 +1,11 @@
 // Account Settings
 .account-settings {
-  max-height:calc(100% - 110px);
+  max-height:calc(100%);
+  height:calc(100%);
   overflow-y:scroll;
   overflow-x:hidden;
+  display: flex;
+  flex-direction: column;
 
   .wrapper {
     display: flex;
@@ -56,9 +59,9 @@
 }
 .account-settings .delete-account {
   margin-bottom:20px;
+  margin-top: auto;
   color:inherit;
   align-self:flex-end;
-  margin-top:20px;
   font-style:italic;
   font-weight:200;
 }
@@ -87,9 +90,20 @@
   border-radius:50%;
 }
 .personal-info .change-picture {
+  all:unset;
+  margin-top: 10px;
+
   @include css4{
     color:var(--default-text-color);
   };
+
+  &:hover {
+    cursor: pointer;
+
+    @include css4{
+      color:var(--active-color-primary);
+    };
+  }
 }
 .personal-info .name {
   @include css4{

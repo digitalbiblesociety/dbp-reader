@@ -12,7 +12,7 @@
 @media (min-width: 1000px) {
   .chapter {
     @include css4 {
-      font-size: calc(var(--application-base-font-size) + ((0.6rem) * 1.1111));
+      font-size: calc(var(--application-base-font-size) + ((0.45rem) * 1.1111));
     }
   }
 }

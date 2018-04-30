@@ -11,13 +11,24 @@ import SvgWrapper from 'components/SvgWrapper';
 // import styled from 'styled-components';
 
 class EditNote extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
-	state = {
-		textarea: this.props.note.get('notes') || '',
-		titleText: this.props.note.get('title') || '',
-		savedNote: !!this.props.note.get('id'),
-		selectedChapter: '',
-		selectedBookName: '',
-		selectedBookId: '',
+	constructor(props) {
+		super(props);
+		// Todo: Can get rid of the const statements below once the tags field is an object
+		const hasTitle = (
+			this.props.note.get('tags') &&
+			typeof this.props.note.get('tags').find === 'function' &&
+			this.props.note.get('tags').find((t) => t.get('type') === 'title')
+		);
+		const titleText = (hasTitle && this.props.note.get('tags').find((t) => t.get('type') === 'title').get('value')) || '';
+
+		this.state = {
+			textarea: this.props.note.get('notes') || '',
+			savedNote: !!this.props.note.get('id'),
+			selectedChapter: '',
+			selectedBookName: '',
+			selectedBookId: '',
+			titleText,
+		};
 	}
 
 	componentWillUnmount() {
@@ -97,24 +108,24 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 		} else if (this.state.savedNote) {
 			this.props.updateNote({
 				bible_id: activeTextId,
-				title: titleText,
 				notes: textarea,
 				book_id: bookId,
 				bookmark: 0,
 				verse_start: verseStart,
 				verse_end: verseEnd,
 				chapter,
+				tags: `title: ${titleText}`,
 			});
 		} else {
 			this.props.addNote({
 				bible_id: activeTextId,
-				title: titleText,
 				notes: textarea,
 				book_id: bookId,
 				bookmark: 0,
 				verse_start: verseStart,
 				verse_end: verseEnd,
 				chapter,
+				tags: `title: ${titleText}`,
 			});
 		}
 

@@ -112,6 +112,7 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 			loginErrorMessage,
 			signupErrorMessage,
 			userId,
+			userProfile,
 			socialLoginLink,
 			activeDriver,
 			errorMessageViewed,
@@ -135,7 +136,7 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 									logout={this.logout}
 									deleteUser={this.deleteUser}
 									updatePassword={this.updatePassword}
-									profile={{ password: 'testing', email: 'jessehill108@gmail.com' }}
+									profile={userProfile}
 									userId={userId}
 									updateEmail={this.updateEmail}
 									updateUserInformation={this.updateUserInformation}
