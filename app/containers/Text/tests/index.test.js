@@ -96,9 +96,14 @@ describe('<Text />', () => {
 				book_id: 'MAT',
 			};
 			mountWrap.setState({ ...jsonState.verseHasHighlight });
-
-			expect(mountWrap.instance().addHighlight({ color: '#000', popupCoords: { x: 0, y: 0 } })).toEqual(expectedObject);
-
+			// mountWrap.update();
+			// console.log(mountWrap.find('main').children('.v.MAT6_6'));
+			// Gets the rendered element
+			// console.log(mountWrap.find('main').children().forEach((c) => console.log('child exists', c.render())));
+			// console.log(mountWrap.find('.wj'));
+			// console.log(mountWrap.find('arrow-wrapper'));
+			// expect(mountWrap.instance().addHighlight({ color: '#000', popupCoords: { x: 0, y: 0 } })).toEqual(expectedObject);
+			expect(true).toBe(expectedObject);
 			mountWrap.unmount();
 		});
 		xit('Should create a highlight object for formatted text left to right in same verse that overlaps a footnote', () => {
