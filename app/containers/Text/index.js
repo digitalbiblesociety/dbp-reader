@@ -477,11 +477,15 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			));
 		}
 
-		if (!formattedSource.main && !readersMode && Array.isArray(textComponents) && textComponents[0].key !== 'no_text') {
+		if (!formattedSource.main && !readersMode && !oneVersePerLine && Array.isArray(textComponents) && textComponents[0].key !== 'no_text') {
 			textComponents.unshift(<span key={'chapterNumber'} className={'drop-caps'}>{activeChapter}</span>);
 		}
 		// console.log('text components that are about to be mounted', textComponents);
+		// Using parseInt to determine whether or not the verseNumber is a real number or if it is a series of characters
 		if (verseNumber && Array.isArray(textComponents)) {
+			if (readersMode) {
+				return textComponents.filter((c) => c[0].key === (parseInt(verseNumber, 10) ? verseNumber : '1'));
+			}
 			return textComponents.filter((c) => c.key === (parseInt(verseNumber, 10) ? verseNumber : '1'));
 		}
 
