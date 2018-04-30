@@ -99,7 +99,7 @@ export function* getNotes({ userId, params = {} }) {
 			pageSize: response.per_page,
 			pages: response.total,
 		};
-		// console.log('get note response', response);
+		console.log('get note response', response);
 
 		yield put({ type: LOAD_USER_NOTES, noteData });
 	} catch (err) {

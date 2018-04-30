@@ -4,9 +4,6 @@
 *
 */
 
-// TODO: Get svg for password lock icon
-// Add element for saving the address information
-// Commented out all of the Address information code in case FCBH changes their mind and still wants it
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
