@@ -252,4 +252,32 @@ describe('highlightFormattedText', () => {
 
 		expect(highlightFormattedText(highlights, sampleText, JSDOM)).toEqual(expectedResult);
 	});
+	it('Should apply an array of highlights that are in two different verses where the first highlight spans 2 verses and second is in the second verse', () => {
+		const highlights = [
+			{
+				id: 99,
+				bible_id: 'ENGWEB',
+				book_id: 'GEN',
+				chapter: 4,
+				verse_start: 1,
+				highlight_start: 91,
+				highlighted_words: 46,
+				highlighted_color: '#FD2',
+			},
+			{
+				id: 99,
+				bible_id: 'ENGWEB',
+				book_id: 'GEN',
+				chapter: 4,
+				verse_start: 2,
+				highlight_start: 46,
+				highlighted_words: 26,
+				highlighted_color: '#5B4',
+			},
+		];
+		const sampleText = '<div class="chapter section ENGWEB_2_GEN_4 ENGWEB eng GEN latin" dir="ltr" data-id="ENGWEB_2_GEN_4" data-nextid="GEN5" data-previd="GEN3" lang="eng"> <div class="c">4</div><p><span class="verse1 v-num v-1">1&nbsp;</span><span class="v GEN4_1" data-id="GEN4_1">The man knew<span class="note" id="note-6"><a href="#footnote-6" class="key">*</a></span> Eve his wife. She conceived,<span class="note" id="note-7"><a href="#footnote-7" class="key">*</a></span> and gave birth to Cain, and said, “I have gotten a man with Yahweh’s help.”</span><span class="verse2 v-num v-2">2&nbsp;</span><span class="v GEN4_2" data-id="GEN4_2">Again she gave birth, to Cain’s brother Abel. Abel was a keeper of sheep, but Cain was a tiller of the ground.</span><span class="verse3 v-num v-3">3&nbsp;</span><span class="v GEN4_3" data-id="GEN4_3">God saw the light, and saw that it was good. God divided the light from the darkness.</span></p></div>';
+		const expectedResult = `<div class="chapter section ENGWEB_2_GEN_4 ENGWEB eng GEN latin" dir="ltr" data-id="ENGWEB_2_GEN_4" data-nextid="GEN5" data-previd="GEN3" lang="eng"> <div class="c">4</div><p><span class="verse1 v-num v-1">1&nbsp;</span><span class="v GEN4_1" data-id="GEN4_1"><span>The man knew</span><span class="note" id="note-6"><a href="#footnote-6" class="key">*</a></span><span> Eve his wife. She conceived,</span><span class="note" id="note-7"><a href="#footnote-7" class="key">*</a></span><span> and gave birth to Cain, and said, “I have gotten <em class="text-highlighted" style="background:${highlights[0].highlighted_color}">a man with Yahweh’s help.”</em></span></span><span class="verse2 v-num v-2">2&nbsp;</span><span class="v GEN4_2" data-id="GEN4_2"><span><em class="text-highlighted" style="background:${highlights[0].highlighted_color}">Again she gave birth</em>, to Cain’s brother Abel. <em class="text-highlighted" style="background:${highlights[1].highlighted_color}">Abel was a keeper of sheep</em>, but Cain was a tiller of the ground.</span></span><span class="verse3 v-num v-3">3&nbsp;</span><span class="v GEN4_3" data-id="GEN4_3"><span>God saw the light, and saw that it was good. God divided the light from the darkness.</span></span></p></div>`;
+
+		expect(highlightFormattedText(highlights, sampleText, JSDOM)).toEqual(expectedResult);
+	});
 });

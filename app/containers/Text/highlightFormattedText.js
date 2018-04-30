@@ -376,31 +376,30 @@ function handleNewVerse({ highlightsStartingInVerse, verseText, charsLeftAfterVe
 			verseText.splice(charsLeftAfterVerseEnd, 1, `${verseText[charsLeftAfterVerseEnd]}</em>`);
 			charsLeftAfterVerseEnd = 0;
 		}
+	} else if (charsLeftAfterVerseEnd) {
+		// Apply previous highlight up until the first highlight in this verse starts
+		const firstHighlightStart = highlightsStartingInVerse[0].highlight_start;
+		// console.log('firstHighlightStart', firstHighlightStart);
+		// console.log('firstHighlightStart > charsLeftAfterVerseEnd', firstHighlightStart > charsLeftAfterVerseEnd);
+		// console.log('!(firstHighlightStart === 0)', !(firstHighlightStart === 0));
+		// End of previous highlight is before the first highlight in this verse
+		if (charsLeftAfterVerseEnd < firstHighlightStart) {
+			verseText.splice(0, 1, `<em class="text-highlighted" style="background:${continuingColor}">${verseText[0]}`);
+
+			verseText.splice(charsLeftAfterVerseEnd, 1, `</em>${verseText[charsLeftAfterVerseEnd]}`);
+
+			charsLeftAfterVerseEnd = 0;
+			charsLeft = 0;
+		} else if (!(firstHighlightStart === 0)) {
+			// console.log('firstHighlightStart is not equal to zero and is less than charsLeftAfterVerseEnd');
+			verseText.splice(0, 1, `<em class="text-highlighted" style="background:${continuingColor}">${verseText[0]}`);
+
+			// May not need to subtract 1 here - highlight start might be an index instead of a length
+			verseText.splice(firstHighlightStart - 1, 1, `${verseText[firstHighlightStart - 1]}</em>`);
+			charsLeftAfterVerseEnd -= (firstHighlightStart - 1);
+			// console.log('charsLeftAfterVerseEnd', charsLeftAfterVerseEnd);
+		}
 	}
-	// Todo: Implement code below
-	// else if (charsLeftAfterVerseEnd) {
-	// 	// Apply previous highlight up until the first highlight in this verse starts
-	// 	const firstHighlightStart = highlightsStartingInVerse[0].highlight_start;
-	// 	// console.log('firstHighlightStart', firstHighlightStart);
-	// 	// console.log('firstHighlightStart > charsLeftAfterVerseEnd', firstHighlightStart > charsLeftAfterVerseEnd);
-	// 	// console.log('!(firstHighlightStart === 0)', !(firstHighlightStart === 0));
-	// 	// End of previous highlight is before the first highlight in this verse
-	// 	if (charsLeftAfterVerseEnd < firstHighlightStart) {
-	// 		verseText.splice(0, 1, `<em class="text-highlighted" style="background:${continuingColor}">${verseText[0]}`);
-	//
-	// 		verseText.splice(charsLeftAfterVerseEnd, 1, `</em>${verseText[charsLeftAfterVerseEnd]}`);
-	//
-	// 		charsLeftAfterVerseEnd = 0;
-	// 	} else if (!(firstHighlightStart === 0)) {
-	// 		// console.log('firstHighlightStart is not equal to zero and is less than charsLeftAfterVerseEnd');
-	// 		verseText.splice(0, 1, `<em class="text-highlighted" style="background:${continuingColor}">${verseText[0]}`);
-	//
-	// 		// May not need to subtract 1 here - highlight start might be an index instead of a length
-	// 		verseText.splice(firstHighlightStart - 1, 1, `${verseText[firstHighlightStart - 1]}</em>`);
-	// 		charsLeftAfterVerseEnd -= (firstHighlightStart - 1);
-	// 		// console.log('charsLeftAfterVerseEnd', charsLeftAfterVerseEnd);
-	// 	}
-	// }
 
 	highlightsStartingInVerse.forEach((h, i) => {
 		// Next highlight
@@ -441,9 +440,11 @@ function handleNewVerse({ highlightsStartingInVerse, verseText, charsLeftAfterVe
 			if (charsLeft === 0) {
 				// This highlight was not overlapped by another and the highlight was not started in a child node before this one
 				// If there are not any characters left to highlight then close the em tag at the index where the highlight ends
+				// console.log('splicing text chars left 0');
 				verseText.splice((h.highlighted_words + h.highlight_start) - 1, 1, `${verseText[(h.highlighted_words + h.highlight_start) - 1]}</em>`);
 			} else {
 				// Since there are characters left to highlight close the em tag at the index that will expend those characters
+				// console.log('splicing text chars left: ', charsLeft);
 				verseText.splice((charsLeft + h.highlight_start) - 1, 1, `${verseText[(charsLeft + h.highlight_start) - 1]}</em>`);
 				charsLeft = 0;
 			}

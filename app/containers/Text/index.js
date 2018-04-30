@@ -573,6 +573,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		}
 	}
 
+	// Probably need to stop doing this here
 	callSetStateNotInUpdate = () => this.setState({ handlersAreSet: true })
 
 	openPopup = (coords) => {
@@ -584,15 +585,22 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 	highlightPlainText = (props) => createHighlights(props)
 
 	addHighlight = ({ color, popupCoords }) => {
+		const highlightObject = {};
+
+		// Getting the data for the tests
+		// console.log(JSON.stringify(this.props));
+		// console.log(JSON.stringify(this.state));
+		console.log('this.props that are important', !this.props.userSettings.getIn(['toggleOptions', 'readersMode', 'active']), !!this.props.formattedSource.main);
+		console.log('this.state', this.state);
 		// User must be signed in for the highlight to be added
 		if (!this.props.userAuthenticated || !this.props.userId) {
 			this.openPopup({ x: popupCoords.x, y: popupCoords.y });
-			return;
+			// Returning the highlightObject for testing purposes
+			return highlightObject;
 		}
 		// needs to send an api request to the server that adds a highlight for this passage
 		// Adds userId and bible in homepage container where action is dispatched
 		// { bible, book, chapter, userId, verseStart, highlightStart, highlightedWords }
-
 		// Available data
 			// text and node where highlight started,
 			// text and node where highlight ended
@@ -712,7 +720,9 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			const dist = this.calcDist(lastVerse, firstVerse, !!this.props.formattedSource.main);
 			// Also need to check for class="v" to ensure that this was the first verse
 			if (this.props.formattedSource.main && !this.props.userSettings.getIn(['toggleOptions', 'readersMode', 'active'])) {
+				// Issue with getting the correct parent node
 				node = getFormattedParentVerseNumber(node, firstVerse);
+				console.log('verse node text', node.textContent);
 				// At this point "node" is the first verse
 				// console.log(node.textContent);
 				// console.log(anchorOffset);
@@ -720,6 +730,8 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				// console.log(node.textContent.indexOf(anchorText));
 				// Need to subtract by 1 since the anchor offset isn't 0 based
 				highlightStart = (node.textContent.indexOf(anchorText) + anchorOffset);
+				console.log('anchor text', anchorText);
+				console.log(node.textContent.indexOf(anchorText));
 
 				// I think this can stay the same as formatted, it could be made shorter potentially
 				// need to remove all line breaks and note characters
@@ -759,6 +771,14 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			// console.log('calc highlighted words', highlightedWords);
 			// console.log('window selection length', this.state.selectedText.split('').length);
 			if (this.props.userId && this.props.userAuthenticated) {
+				console.log('highlight being added', {
+					book: this.props.activeBookId,
+					chapter: this.props.activeChapter,
+					verseStart: firstVerse,
+					color,
+					highlightStart,
+					highlightedWords,
+				});
 				// console.log('highlight being added - not sending to db atm', {
 				// 	book: this.props.activeBookId,
 				// 	chapter: this.props.activeChapter,
@@ -767,6 +787,13 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				// 	highlightStart,
 				// 	highlightedWords,
 				// });
+				highlightObject.book = this.props.activeBookId;
+				highlightObject.chapter = this.props.activeChapter;
+				highlightObject.verseStart = firstVerse;
+				highlightObject.color = color;
+				highlightObject.highlightStart = highlightStart;
+				highlightObject.highlightedWords = highlightedWords;
+
 				this.props.addHighlight({
 					book: this.props.activeBookId,
 					chapter: this.props.activeChapter,
@@ -779,12 +806,17 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		} catch (err) {
 			if (process.env.NODE_ENV === 'development') {
 				console.warn('Error adding highlight', err); // eslint-disable-line no-console
+			} else if (process.env.NODE_ENV === 'test') {
+				console.log('Error adding highlight', err); // eslint-disable-line no-console
 			}
 			// dispatch action to log error and also show an error message
 			this.closeContextMenu();
 		}
 
 		this.closeContextMenu();
+
+		// Returning the highlight for testing purposes
+		return highlightObject;
 	}
 	// Because the system captures the verse numbers this needs to be used
 	calcDist = (l, f, p) => {
