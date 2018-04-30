@@ -33,16 +33,18 @@ export function* getCountries() {
 
 		countriesObject.ANY = { name: 'ANY', languages: { ANY: 'ANY' }, codes: { iso_a2: 'ANY' } };
 
-		const countries = fromJS(countriesObject).sort((a, b) => {
-			if (a.get('name') === 'ANY') {
-				return -1;
-			} else if (a.get('name') > b.get('name')) {
-				return 1;
-			} else if (a.get('name') < b.get('name')) {
-				return -1;
-			}
-			return 0;
-		});
+		const countries = fromJS(countriesObject)
+			.filter((c) => c.get('languages').size > 0 && c.get('name'))
+			.sort((a, b) => {
+				if (a.get('name') === 'ANY') {
+					return -1;
+				} else if (a.get('name') > b.get('name')) {
+					return 1;
+				} else if (a.get('name') < b.get('name')) {
+					return -1;
+				}
+				return 0;
+			});
 
 		yield put(loadCountries({ countries }));
 	} catch (err) {
@@ -70,7 +72,7 @@ export function* getTexts({ languageISO }) {
 		const response = yield call(request, requestUrl);
 		// Some texts may have plain text in the database but no filesets
 		// This filters out all texts that don't have a fileset
-		const texts = response.data.filter((text) => (text.name && text.language && text.iso && text.abbr) && (Array.isArray(text.filesets) && text.filesets.length));
+		const texts = response.data.filter((text) => (text.name && text.language && text.iso && text.abbr) && (Array.isArray(text.filesets) && text.filesets.length && text.filesets.find((f) => (f.set_type_code === 'audio' || f.set_type_code === 'audio_drama' || f.set_type_code === 'text_plain' || f.set_type_code === 'text_format'))));
 
 		yield put({ type: CLEAR_ERROR_GETTING_VERSIONS });
 		yield put(loadTexts({ texts }));
