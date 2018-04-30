@@ -17,21 +17,13 @@ import messages from './messages';
 class AccountSettings extends React.PureComponent {
 	state = {
 		email: this.props.profile.email,
-		password: this.props.profile.password,
-		// country: this.props.profile.country,
-		// address1: this.props.profile.address1,
-		// address2: this.props.profile.address2,
-		// city: this.props.profile.city,
-		// state: this.props.profile.state,
-		// zip: this.props.profile.zip,
+		nickname: this.props.profile.nickname,
+		name: this.props.profile.name,
+		avatar: this.props.profile.avatar,
 	}
 
 	handleEmailChange = (e) => {
 		this.setState({ email: e.target.value });
-	}
-
-	handlePasswordChange = (e) => {
-		this.setState({ password: e.target.value });
 	}
 
 	handleAccountDeletion = () => {
@@ -54,15 +46,6 @@ class AccountSettings extends React.PureComponent {
 		}
 	}
 
-	sendUpdatePassword = () => {
-		const currentPassword = this.props.profile.password;
-		const newPassword = this.state.password;
-
-		if (newPassword !== currentPassword && newPassword) {
-			this.props.updatePassword({ password: newPassword, userId: this.props.userId });
-		}
-	}
-
 	// sendUpdateUserInformation = () => {
 	// 	const { country, address1, address2, city, state, zip } = this.state;
 	// 	const { userId } = this.props;
@@ -70,6 +53,10 @@ class AccountSettings extends React.PureComponent {
 	//
 	// 	this.props.updateUserInformation({ profile, userId });
 	// }
+	changePicture = () => {
+		// Need to implement some sort of image upload thing here
+		// Or need to have a short dialogue indicating to the user that they need to use a link
+	}
 
 	render() {
 		const {
@@ -78,7 +65,6 @@ class AccountSettings extends React.PureComponent {
 		} = this.props;
 		const {
 			email,
-			password,
 			// country,
 			// address1,
 			// address2,
@@ -91,49 +77,20 @@ class AccountSettings extends React.PureComponent {
 			<div className="account-settings">
 				<div role="button" tabIndex={0} onClick={logout} className="logout-button"><FormattedMessage {...messages.logout} /></div>
 				<section className="personal-info">
-					<ImageComponent classes="profile-picture" alt="Profile Picture" src={profile.picture || 'http://res.cloudinary.com/dw9eqwl1i/image/upload/v1500256772/IMG_1418_eoopkg.jpg'} />
-					<span role="button" tabIndex={0} className="change-picture">CHANGE PICTURE</span>
-					<h3 className="name">{profile.firstName || 'First Name'}</h3>
-					<span className="name">{profile.lastName || 'Last Name'}</span>
+					<ImageComponent classes="profile-picture" alt="Profile Picture" src={profile.avatar || 'http://res.cloudinary.com/dw9eqwl1i/image/upload/v1500256772/IMG_1418_eoopkg.jpg'} />
+					<button onClick={this.changePicture} className="change-picture">Change Picture</button>
+					<h3 className="name">{profile.nickname || 'First Name'}</h3>
+					<span className="name">{profile.name || 'Last Name'}</span>
 				</section>
 				<div className="email-section">
-					<span className="title">E-MAIL</span>
+					<span className="title">e-mail</span>
 					<span className="wrapper">
 						<SvgWrapper className="icon" height="26px" width="26px" svgid="e-mail" />
 						<input onChange={this.handleEmailChange} placeholder="emailaddress@mail.com" value={email} />
 					</span>
-					<span role="button" tabIndex={0} className="button" onClick={this.sendUpdateEmail}>CHANGE E-MAIL</span>
+					<span role="button" tabIndex={0} className="button" onClick={this.sendUpdateEmail}>Change e-mail</span>
 				</div>
-				<div className="password-section">
-					<span className="title">PASSWORD</span>
-					<span className="wrapper">
-						<SvgWrapper className="icon" height="26px" width="26px" svgid="lock" />
-						<input onChange={this.handlePasswordChange} type={'password'} placeholder="**********" value={password} />
-					</span>
-					<span role="button" tabIndex={0} className="button" onClick={this.sendUpdatePassword}>CHANGE PASSWORD</span>
-				</div>
-				<div className="address-section">
-					{/* <span className="title">ADDRESS</span> */}
-					{/* <div className="country"> */}
-					{/* <input onChange={(e) => this.handleAddressFieldChange(e, 'country')} placeholder="Country" value={country} /> */}
-					{/* </div> */}
-					{/* <div className="address-1"> */}
-					{/* <input onChange={(e) => this.handleAddressFieldChange(e, 'address1')} placeholder="Address Line 1" value={address1} /> */}
-					{/* </div> */}
-					{/* <div className="address-2"> */}
-					{/* <input onChange={(e) => this.handleAddressFieldChange(e, 'address2')} placeholder="Address Line 2" value={address2} /> */}
-					{/* </div> */}
-					{/* <div className="city"> */}
-					{/* <input onChange={(e) => this.handleAddressFieldChange(e, 'city')} placeholder="City" value={city} /> */}
-					{/* </div> */}
-					{/* <div className="state"> */}
-					{/* <input onChange={(e) => this.handleAddressFieldChange(e, 'state')} placeholder="State/Province" value={state} /> */}
-					{/* </div> */}
-					{/* <div className="postal-code"> */}
-					{/* <input onChange={(e) => this.handleAddressFieldChange(e, 'zip')} placeholder="Postal Code" value={zip} /> */}
-					{/* </div> */}
-					<div className="button delete-account" role="button" tabIndex={0} onClick={this.handleAccountDeletion}>DELETE ACCOUNT</div>
-				</div>
+				<div className="button delete-account" role="button" tabIndex={0} onClick={this.handleAccountDeletion}>Delete Account</div>
 			</div>
 		);
 	}
@@ -143,7 +100,6 @@ AccountSettings.propTypes = {
 	logout: PropTypes.func,
 	deleteUser: PropTypes.func,
 	updateEmail: PropTypes.func,
-	updatePassword: PropTypes.func,
 	// updateUserInformation: PropTypes.func,
 	profile: PropTypes.object,
 	userId: PropTypes.string,

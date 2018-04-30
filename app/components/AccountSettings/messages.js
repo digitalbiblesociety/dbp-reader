@@ -8,6 +8,6 @@ import { defineMessages } from 'react-intl';
 export default defineMessages({
 	logout: {
 		id: 'app.components.AccountSettings.logout',
-		defaultMessage: 'LOGOUT',
+		defaultMessage: 'Logout',
 	},
 });

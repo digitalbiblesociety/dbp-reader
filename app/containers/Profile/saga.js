@@ -13,33 +13,9 @@ import {
 	DELETE_USER,
 	// RESET_PASSWORD,
 	UPDATE_EMAIL,
-	UPDATE_PASSWORD,
+	// UPDATE_PASSWORD,
 	UPDATE_USER_INFORMATION,
 } from './constants';
-
-// export function* getUserData({ userId }) {
-// 	const highlightsRequestUrl = `https://api.bible.build/users/${userId}/notes?key=${process.env.DBP_API_KEY}&v=4&pretty`;
-// 	const notesRequestUrl = `https://api.bible.build/users/${userId}/highlights?key=${process.env.DBP_API_KEY}&v=4&pretty`;
-//
-// 	try {
-// 		const highlightsResponse = yield call(request, highlightsRequestUrl);
-// 		const notesResponse = yield call(request, notesRequestUrl);
-// 		console.log(notesResponse);
-// 		console.log(highlightsResponse);
-// 		const data = {};
-// 		if (highlightsResponse.error) {
-// 			console.log('error getting highlights', highlightsResponse.error); // eslint-disable-line no-console
-// 		} else {
-// 			data.highlights = highlightsResponse;
-// 		}
-// 		yield put({ type: LOAD_USER_DATA, data });
-// 		//
-// 	} catch (err) {
-// 		if (process.env.NODE_ENV === 'development') {
-// 			console.error(err); // eslint-disable-line no-console
-// 		}
-// 	}
-// }
 
 export function* sendSignUpForm({ password, email, firstName, lastName }) {
 	const requestUrl = `https://api.bible.build/users?key=${process.env.DBP_API_KEY}&v=4&pretty`;
@@ -47,7 +23,9 @@ export function* sendSignUpForm({ password, email, firstName, lastName }) {
 
 	data.append('email', email);
 	data.append('password', password);
-	data.append('name', `${firstName} ${lastName}`);
+	data.append('name', lastName);
+	data.append('nickname', firstName);
+	data.append('avatar', '');
 
 	const options = {
 		method: 'POST',
@@ -58,8 +36,11 @@ export function* sendSignUpForm({ password, email, firstName, lastName }) {
 		const response = yield call(request, requestUrl, options);
 
 		if (response.success) {
-			yield put({ type: USER_LOGGED_IN, userId: response.user_id });
+			// console.log('res', response);
+
+			yield put({ type: USER_LOGGED_IN, userId: response.id, userProfile: response });
 		} else if (response.error) {
+			// console.log('res error', response);
 			const message = Object.values(response.error.message).reduce((acc, cur) => acc.concat(cur), '');
 			yield put({ type: SIGNUP_ERROR, message });
 			// yield put('user-login-failed', response.error.message);
@@ -95,12 +76,12 @@ export function* sendLoginForm({ password, email, stay }) {
 		if (response.error) {
 			yield put({ type: LOGIN_ERROR, message: response.error.message });
 		} else {
-			yield put({ type: USER_LOGGED_IN, userId: response.user_id });
+			yield put({ type: USER_LOGGED_IN, userId: response.id, userProfile: response });
 			// May add an else that will save the id to the session so it is persisted through a page refresh
 			if (stay) {
-				localStorage.setItem('bible_is_user_id', response.user_id);
+				localStorage.setItem('bible_is_user_id', response.id);
 			} else {
-				sessionStorage.setItem('bible_is_user_id', response.user_id);
+				sessionStorage.setItem('bible_is_user_id', response.id);
 			}
 		}
 	} catch (err) {
@@ -173,34 +154,34 @@ export function* updateUserInformation({ userId, profile }) {
 	}
 }
 
-export function* updatePassword({ userId, password }) {
-	// console.log('in update password with ', userId, password);
-	const requestUrl = `https://api.bible.build/users/${userId}?key=${process.env.DBP_API_KEY}&v=4&pretty`;
-	const formData = new FormData();
-
-	formData.append('password', password);
-
-	const options = {
-		method: 'PUT',
-		body: formData,
-	};
-
-	try {
-		const response = yield call(request, requestUrl, options);
-		// console.log('update password response', response);
-		yield put({ type: 'UPDATE_EMAIL_SUCCESS', response });
-	} catch (err) {
-		if (process.env.NODE_ENV === 'development') {
-			console.error(err); // eslint-disable-line no-console
-		} else if (process.env.NODE_ENV === 'production') {
-			// const options = {
-			// 	header: 'POST',
-			// 	body: formData,
-			// };
-			// fetch('https://api.bible.build/error_logging', options);
-		}
-	}
-}
+// export function* updatePassword({ userId, password }) {
+// 	// console.log('in update password with ', userId, password);
+// 	const requestUrl = `https://api.bible.build/users/${userId}?key=${process.env.DBP_API_KEY}&v=4&pretty`;
+// 	const formData = new FormData();
+//
+// 	formData.append('password', password);
+//
+// 	const options = {
+// 		method: 'PUT',
+// 		body: formData,
+// 	};
+//
+// 	try {
+// 		const response = yield call(request, requestUrl, options);
+// 		// console.log('update password response', response);
+// 		yield put({ type: 'UPDATE_EMAIL_SUCCESS', response });
+// 	} catch (err) {
+// 		if (process.env.NODE_ENV === 'development') {
+// 			console.error(err); // eslint-disable-line no-console
+// 		} else if (process.env.NODE_ENV === 'production') {
+// 			// const options = {
+// 			// 	header: 'POST',
+// 			// 	body: formData,
+// 			// };
+// 			// fetch('https://api.bible.build/error_logging', options);
+// 		}
+// 	}
+// }
 
 // export function* resetPassword() {
 // 	const requestUrl = `https://api.bible.build/?key=${process.env.DBP_API_KEY}&v=4&pretty`;
@@ -275,7 +256,7 @@ export default function* defaultSaga() {
 	// yield takeLatest(GET_USER_DATA, getUserData);
 	yield takeLatest(SEND_SIGNUP_FORM, sendSignUpForm);
 	yield takeLatest(SEND_LOGIN_FORM, sendLoginForm);
-	yield takeLatest(UPDATE_PASSWORD, updatePassword);
+	// yield takeLatest(UPDATE_PASSWORD, updatePassword);
 	// yield takeLatest(RESET_PASSWORD, resetPassword);
 	yield takeLatest(DELETE_USER, deleteUser);
 	yield takeLatest(UPDATE_USER_INFORMATION, updateUserInformation);
