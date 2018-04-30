@@ -573,6 +573,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		}
 	}
 
+	// Probably need to stop doing this here
 	callSetStateNotInUpdate = () => this.setState({ handlersAreSet: true })
 
 	openPopup = (coords) => {
@@ -584,15 +585,20 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 	highlightPlainText = (props) => createHighlights(props)
 
 	addHighlight = ({ color, popupCoords }) => {
+		const highlightObject = {};
+
+		// Getting the data for the tests
+		// console.log(JSON.stringify(this.props));
+		// console.log(JSON.stringify(this.state));
 		// User must be signed in for the highlight to be added
 		if (!this.props.userAuthenticated || !this.props.userId) {
 			this.openPopup({ x: popupCoords.x, y: popupCoords.y });
-			return;
+			// Returning the highlightObject for testing purposes
+			return highlightObject;
 		}
 		// needs to send an api request to the server that adds a highlight for this passage
 		// Adds userId and bible in homepage container where action is dispatched
 		// { bible, book, chapter, userId, verseStart, highlightStart, highlightedWords }
-
 		// Available data
 			// text and node where highlight started,
 			// text and node where highlight ended
@@ -767,6 +773,13 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				// 	highlightStart,
 				// 	highlightedWords,
 				// });
+				highlightObject.book = this.props.activeBookId;
+				highlightObject.chapter = this.props.activeChapter;
+				highlightObject.verseStart = firstVerse;
+				highlightObject.color = color;
+				highlightObject.highlightStart = highlightStart;
+				highlightObject.highlightedWords = highlightedWords;
+
 				this.props.addHighlight({
 					book: this.props.activeBookId,
 					chapter: this.props.activeChapter,
@@ -779,12 +792,17 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		} catch (err) {
 			if (process.env.NODE_ENV === 'development') {
 				console.warn('Error adding highlight', err); // eslint-disable-line no-console
+			} else if (process.env.NODE_ENV === 'test') {
+				console.log('Error adding highlight', err); // eslint-disable-line no-console
 			}
 			// dispatch action to log error and also show an error message
 			this.closeContextMenu();
 		}
 
 		this.closeContextMenu();
+
+		// Returning the highlight for testing purposes
+		return highlightObject;
 	}
 	// Because the system captures the verse numbers this needs to be used
 	calcDist = (l, f, p) => {

@@ -45,7 +45,7 @@ export function* updateNote({ userId, data }) {
 	// console.log('updating note with', data, '\nfor this id', userId);
 	try {
 		const response = yield call(request, requestUrl, options);
-		// console.log('update user note response', response); // eslint-disable-line no-console
+		// console.log('update user note response', response);
 		if (response.success) {
 			yield put({ type: ADD_NOTE_SUCCESS, response });
 		}
@@ -72,7 +72,7 @@ export function* deleteNote({ userId, noteId }) {
 		const response = yield call(request, requestUrl, options);
 
 		if (response.success) {
-			// console.log('successfully deleted note!', response); // eslint-disable-line no-console
+			// console.log('successfully deleted note!', response);
 		}
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
@@ -99,7 +99,7 @@ export function* getNotes({ userId, params = {} }) {
 			pageSize: response.per_page,
 			pages: response.total,
 		};
-		console.log('get note response', response);
+		// console.log('get note response', response);
 
 		yield put({ type: LOAD_USER_NOTES, noteData });
 	} catch (err) {
@@ -129,7 +129,7 @@ export function* addNote({ userId, data }) {
 	// console.log('Adding note for userid', userId, '\nwith data', data);
 	try {
 		const response = yield call(request, requestUrl, options);
-		// console.log('add user note response', response); // eslint-disable-line no-console
+		// console.log('add user note response', response);
 		if (response.success) {
 			yield put({ type: ADD_NOTE_SUCCESS, response });
 		}
