@@ -78,6 +78,25 @@ const getPlainParentVerse = (node, verseNumber) => {
 	return newNode;
 };
 
+const getPlainParentVerseWithoutNumber = (node) => {
+	// Require parameter
+	if (!node) {
+		return null;
+	}
+	// set counter to prevent any possibility of an infinite loop
+	let counter = 0;
+	let newNode = node;
+
+	while (!(newNode.attributes && newNode.attributes.verseid && newNode.attributes.verseid.value)) {
+		// console.log('newNode', newNode);
+		newNode = newNode.parentNode;
+		if (counter >= 10) break;
+		counter += 1;
+	}
+
+	return newNode;
+};
+
 const getFormattedElementVerseId = (node) => {
 	// check for the data-id attribute since that is what the verse number is stored in
 	if (node.attributes && node.attributes['data-id']) {
@@ -93,4 +112,5 @@ export {
 	getPlainParentVerse,
 	getFormattedChildIndex,
 	getFormattedElementVerseId,
+	getPlainParentVerseWithoutNumber,
 };

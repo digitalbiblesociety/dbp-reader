@@ -18,6 +18,7 @@ import {
 	getFormattedParentVerse,
 	getFormattedChildIndex,
 	getFormattedElementVerseId,
+	getPlainParentVerseWithoutNumber,
 } from 'utils/highlightingUtils';
 // import differenceObject from 'utils/deepDifferenceObject';
 import isEqual from 'lodash/isEqual';
@@ -119,6 +120,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 	}
 
 	setEventHandlersForFormattedVerses = (ref) => {
+		// Set mousedown and mouseup events on verse elements
 		try {
 			const verses = [...ref.getElementsByClassName('v')];
 
@@ -144,6 +146,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			// if Production then log error to service
 		}
 
+		// Set click events on bookmark icons
 		try {
 			const elements = [...ref.getElementsByClassName('bookmark-in-verse')];
 			// It might not work 100% of the time to use i here, but I think it
@@ -162,6 +165,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			// if Production then log error to service
 		}
 
+		// Set click events on note icons
 		try {
 			const elements = [...ref.getElementsByClassName('note-in-verse')];
 
@@ -267,94 +271,147 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 	getLastVerse = (e) => {
 		const target = e.target;
 		const parent = e.target.parentElement;
-		// console.log('Get last verse target', target);
-		// console.log('Get last verse parent', parent);
+		const isFormatted = !!this.props.formattedSource.main &&
+			(!this.props.userSettings.getIn(['toggleOptions', 'readersMode', 'active']) || !this.props.userSettings.getIn(['toggleOptions', 'readersMode', 'available'])) &&
+			(!this.props.userSettings.getIn(['toggleOptions', 'oneVersePerLine', 'active']) || !this.props.userSettings.getIn(['toggleOptions', 'oneVersePerLine', 'available']));
+		// console.log('is formatted', isFormatted);
+		// May need to get the parent using the same functions as for highlighting
+		console.log('Get last verse target', target);
+		console.log('Get last verse parent', parent);
 		// console.log('Get last verse event', e);
 		// console.log('Selection in last verse event', window.getSelection());
 		const primaryButton = e.button === 0;
 		// console.log(window.getSelection());
+		// if formatted iterate up the dom looking for data-id
+		if (isFormatted) {
+			const verseNode = getFormattedParentVerse(target);
+			const lastVerse = verseNode ? verseNode.attributes['data-id'].value.split('_')[1] : '';
+			console.log('last formatted verse', lastVerse);
+			// third check may not be required, if micro optimization is needed then look into removing contains
+			if (primaryButton && window.getSelection().toString() && this.main.contains(target) && lastVerse) {
+				typeof e.persist === 'function' && e.persist();
+				const selectedText = window.getSelection().toString();
 
-		if (primaryButton && window.getSelection().toString() && this.main.contains(target) && target.attributes.verseid) {
-			// Needed to persist the React Synthetic event
-			typeof e.persist === 'function' && e.persist();
-			const selectedText = window.getSelection().toString();
+				this.setState({
+					lastVerse,
+					anchorOffset: window.getSelection().anchorOffset,
+					anchorText: window.getSelection().anchorNode.data,
+					anchorNode: window.getSelection().anchorNode,
+					extentOffset: window.getSelection().extentOffset,
+					extentText: window.getSelection().extentNode.data,
+					extentNode: window.getSelection().extentNode,
+					selectedText,
+				}, () => {
+					this.openContextMenu(e);
+				});
+			}
+		} else if (!isFormatted) {
+			const verseNode = getPlainParentVerseWithoutNumber(target);
+			const lastVerse = verseNode ? verseNode.attributes.verseid.value : '';
+			console.log('last plain verse', lastVerse);
+			// third check may not be required, if micro optimization is needed then look into removing contains
+			if (primaryButton && window.getSelection().toString() && this.main.contains(target) && lastVerse) {
+				typeof e.persist === 'function' && e.persist();
+				const selectedText = window.getSelection().toString();
 
-			this.setState({
-				lastVerse: target.attributes.verseid.value,
-				anchorOffset: window.getSelection().anchorOffset,
-				anchorText: window.getSelection().anchorNode.data,
-				anchorNode: window.getSelection().anchorNode,
-				extentOffset: window.getSelection().extentOffset,
-				extentText: window.getSelection().extentNode.data,
-				extentNode: window.getSelection().extentNode,
-				selectedText,
-			}, () => {
-				this.openContextMenu(e);
-			});
-		} else if (primaryButton && window.getSelection().toString() && this.main.contains(target) && target.attributes['data-id']) {
-			typeof e.persist === 'function' && e.persist();
-			const selectedText = window.getSelection().toString();
-
-			this.setState({
-				lastVerse: target.attributes['data-id'].value.split('_')[1],
-				anchorOffset: window.getSelection().anchorOffset,
-				anchorText: window.getSelection().anchorNode.data,
-				anchorNode: window.getSelection().anchorNode,
-				extentOffset: window.getSelection().extentOffset,
-				extentText: window.getSelection().extentNode.data,
-				extentNode: window.getSelection().extentNode,
-				selectedText,
-			}, () => {
-				this.openContextMenu(e);
-			});
-			// Below checks for the parent elements since sometimes a word is wrapped in a tag for styling
-		} else if (
-				primaryButton &&
-				window.getSelection().toString() &&
-				parent &&
-				this.main.contains(parent) &&
-				parent.attributes.verseid
-		) {
-			typeof e.persist === 'function' && e.persist();
-			const selectedText = window.getSelection().toString();
-
-			this.setState({
-				lastVerse: parent.attributes.verseid.value,
-				anchorOffset: window.getSelection().anchorOffset,
-				anchorText: window.getSelection().anchorNode.data,
-				anchorNode: window.getSelection().anchorNode,
-				extentOffset: window.getSelection().extentOffset,
-				extentText: window.getSelection().extentNode.data,
-				extentNode: window.getSelection().extentNode,
-				selectedText,
-			}, () => {
-				this.openContextMenu(e);
-			});
-		} else if (
-				primaryButton &&
-				window.getSelection().toString() &&
-				parent &&
-				this.main.contains(parent) &&
-				parent.attributes['data-id']
-			) {
-			typeof e.persist === 'function' && e.persist();
-			const selectedText = window.getSelection().toString();
-
-			this.setState({
-				lastVerse: parent.attributes['data-id'].value.split('_')[1],
-				anchorOffset: window.getSelection().anchorOffset,
-				anchorText: window.getSelection().anchorNode.data,
-				anchorNode: window.getSelection().anchorNode,
-				extentOffset: window.getSelection().extentOffset,
-				extentText: window.getSelection().extentNode.data,
-				extentNode: window.getSelection().extentNode,
-				selectedText,
-			}, () => {
-				this.openContextMenu(e);
-			});
+				this.setState({
+					lastVerse,
+					anchorOffset: window.getSelection().anchorOffset,
+					anchorText: window.getSelection().anchorNode.data,
+					anchorNode: window.getSelection().anchorNode,
+					extentOffset: window.getSelection().extentOffset,
+					extentText: window.getSelection().extentNode.data,
+					extentNode: window.getSelection().extentNode,
+					selectedText,
+				}, () => {
+					this.openContextMenu(e);
+				});
+			}
 		} else {
-			this.closeContextMenu();
+			this.openContextMenu(e);
 		}
+		// // else if plain text iterate up the dom looking for verseid
+		// if (primaryButton && window.getSelection().toString() && this.main.contains(target) && target.attributes.verseid) {
+		// 	// Needed to persist the React Synthetic event
+		// 	typeof e.persist === 'function' && e.persist();
+		// 	const selectedText = window.getSelection().toString();
+		//
+		// 	this.setState({
+		// 		lastVerse: target.attributes.verseid.value,
+		// 		anchorOffset: window.getSelection().anchorOffset,
+		// 		anchorText: window.getSelection().anchorNode.data,
+		// 		anchorNode: window.getSelection().anchorNode,
+		// 		extentOffset: window.getSelection().extentOffset,
+		// 		extentText: window.getSelection().extentNode.data,
+		// 		extentNode: window.getSelection().extentNode,
+		// 		selectedText,
+		// 	}, () => {
+		// 		this.openContextMenu(e);
+		// 	});
+		// } else if (primaryButton && window.getSelection().toString() && this.main.contains(target) && target.attributes['data-id']) {
+		// 	typeof e.persist === 'function' && e.persist();
+		// 	const selectedText = window.getSelection().toString();
+		//
+		// 	this.setState({
+		// 		lastVerse: target.attributes['data-id'].value.split('_')[1],
+		// 		anchorOffset: window.getSelection().anchorOffset,
+		// 		anchorText: window.getSelection().anchorNode.data,
+		// 		anchorNode: window.getSelection().anchorNode,
+		// 		extentOffset: window.getSelection().extentOffset,
+		// 		extentText: window.getSelection().extentNode.data,
+		// 		extentNode: window.getSelection().extentNode,
+		// 		selectedText,
+		// 	}, () => {
+		// 		this.openContextMenu(e);
+		// 	});
+		// 	// Below checks for the parent elements since sometimes a word is wrapped in a tag for styling
+		// } else if (
+		// 		primaryButton &&
+		// 		window.getSelection().toString() &&
+		// 		parent &&
+		// 		this.main.contains(parent) &&
+		// 		parent.attributes.verseid
+		// ) {
+		// 	typeof e.persist === 'function' && e.persist();
+		// 	const selectedText = window.getSelection().toString();
+		//
+		// 	this.setState({
+		// 		lastVerse: parent.attributes.verseid.value,
+		// 		anchorOffset: window.getSelection().anchorOffset,
+		// 		anchorText: window.getSelection().anchorNode.data,
+		// 		anchorNode: window.getSelection().anchorNode,
+		// 		extentOffset: window.getSelection().extentOffset,
+		// 		extentText: window.getSelection().extentNode.data,
+		// 		extentNode: window.getSelection().extentNode,
+		// 		selectedText,
+		// 	}, () => {
+		// 		this.openContextMenu(e);
+		// 	});
+		// } else if (
+		// 		primaryButton &&
+		// 		window.getSelection().toString() &&
+		// 		parent &&
+		// 		this.main.contains(parent) &&
+		// 		parent.attributes['data-id']
+		// 	) {
+		// 	typeof e.persist === 'function' && e.persist();
+		// 	const selectedText = window.getSelection().toString();
+		//
+		// 	this.setState({
+		// 		lastVerse: parent.attributes['data-id'].value.split('_')[1],
+		// 		anchorOffset: window.getSelection().anchorOffset,
+		// 		anchorText: window.getSelection().anchorNode.data,
+		// 		anchorNode: window.getSelection().anchorNode,
+		// 		extentOffset: window.getSelection().extentOffset,
+		// 		extentText: window.getSelection().extentNode.data,
+		// 		extentNode: window.getSelection().extentNode,
+		// 		selectedText,
+		// 	}, () => {
+		// 		this.openContextMenu(e);
+		// 	});
+		// } else {
+		// 	this.closeContextMenu();
+		// }
 	}
 
 	get getTextComponents() {
