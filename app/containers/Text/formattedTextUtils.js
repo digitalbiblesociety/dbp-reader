@@ -28,7 +28,9 @@ const applyNotes = (source, notes) => {
 	// Check if the note is in the range of verses
 	// Then find the verse element
 	// Append the note icon as a svg with the appropriate event handlers
+	// console.log('verses in note func', verses[6]);
 	notes.forEach((note) => {
+	// console.log('if results', note.verse_start >= getVerseNum(verses[0]) && note.verse_end <= getVerseNum(verses[lastV]));
 		if (note.verse_start >= getVerseNum(verses[0]) && note.verse_end <= getVerseNum(verses[lastV])) {
 			const verseElement = verses.filter((v) => getVerseNum(v) === note.verse_start)[0];
 			const svg = xmlDoc.createElement('svg');
@@ -72,7 +74,7 @@ const applyBookmarks = (source, bookmarks) => {
 	// Then find the verse element
 	// Append the note icon as a svg with the appropriate event handlers
 	// console.log(verses);
-	// console.log(verses[0]);
+	// console.log(verses[6]);
 	// console.log(verses[lastV]);
 	bookmarks.forEach((bookmark) => {
 		if (bookmark.verse_start >= getVerseNum(verses[0]) && bookmark.verse_end <= getVerseNum(verses[lastV])) {
@@ -85,9 +87,10 @@ const applyBookmarks = (source, bookmarks) => {
 			svg.setAttribute('class', 'icon bookmark-in-verse');
 			svg.appendChild(use);
 			// If there are errors in Edge or IE check that the pollyfill for prepend
-			// is being loaded, I also default to append as a safe fallback
+			// is being loaded, I also default to appendChild as a safe fallback
+			// console.log('verseElement before', verseElement);
 			verseElement.prepend ? verseElement.prepend(svg) : verseElement.appendChild(svg);
-			// console.log('verseElement', verseElement);
+			// console.log('verseElement after', verseElement);
 			// console.log('svg', svg);
 			// console.log('svg', svg.onclick);
 			// console.log('icon', icon);
