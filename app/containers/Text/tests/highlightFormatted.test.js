@@ -280,4 +280,7 @@ describe('highlightFormattedText', () => {
 
 		expect(highlightFormattedText(highlights, sampleText, JSDOM)).toEqual(expectedResult);
 	});
+	it('Should apply an array of highlights that overlap in the same verse', () => {
+		expect(true).toBe(false);
+	});
 });

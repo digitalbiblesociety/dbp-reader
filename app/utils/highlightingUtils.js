@@ -1,6 +1,6 @@
 const getFormattedParentVerseNumber = (node, verseNumber) => {
-	// Require both parameters
-	if (!node || !verseNumber) {
+	// Require both parameters -_- type coercion...
+	if (!node || (!verseNumber && verseNumber !== 0)) {
 		return null;
 	}
 
@@ -49,8 +49,14 @@ const getFormattedChildIndex = (parent, child) => {
 	}
 	// default to -1 to simulate default indexOf
 	let childIndex = -1;
+	let newParent = parent;
 
-	[...parent.childNodes].forEach((node, i) => {
+	// While there is only one childNode continue iterating
+	while (newParent.childNodes.length === 1 && !(child.isSameNode(newParent))) {
+		newParent = parent.childNodes[0];
+	}
+
+	[...newParent.childNodes].forEach((node, i) => {
 		if (node.isSameNode(child) || node.contains(child)) {
 			childIndex = i;
 		}
@@ -78,6 +84,25 @@ const getPlainParentVerse = (node, verseNumber) => {
 	return newNode;
 };
 
+const getPlainParentVerseWithoutNumber = (node) => {
+	// Require parameter
+	if (!node) {
+		return null;
+	}
+	// set counter to prevent any possibility of an infinite loop
+	let counter = 0;
+	let newNode = node;
+
+	while (!(newNode.attributes && newNode.attributes.verseid && newNode.attributes.verseid.value)) {
+		// console.log('newNode', newNode);
+		newNode = newNode.parentNode;
+		if (counter >= 10) break;
+		counter += 1;
+	}
+
+	return newNode;
+};
+
 const getFormattedElementVerseId = (node) => {
 	// check for the data-id attribute since that is what the verse number is stored in
 	if (node.attributes && node.attributes['data-id']) {
@@ -93,4 +118,5 @@ export {
 	getPlainParentVerse,
 	getFormattedChildIndex,
 	getFormattedElementVerseId,
+	getPlainParentVerseWithoutNumber,
 };

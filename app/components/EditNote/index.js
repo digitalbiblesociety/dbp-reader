@@ -76,6 +76,7 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 		}, 2500);
 	}
 
+	// Todo: Also need to listen on a change to the title input
 	handleNoteTitleChange = (e) => {
 		const val = e.target.value;
 		const textArea = this.state.textarea;
@@ -104,6 +105,7 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 
 		if (note.get('notes') === textarea) {
 			// If the original text equals the current text then I don't have to do anything
+			// Because the user has not updated their note
 			return;
 		} else if (this.state.savedNote) {
 			this.props.updateNote({
@@ -114,7 +116,7 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 				verse_start: verseStart,
 				verse_end: verseEnd,
 				chapter,
-				tags: `title: ${titleText}`,
+				tags: `title&#58; ${titleText}`,
 			});
 		} else {
 			this.props.addNote({
@@ -125,7 +127,7 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 				verse_start: verseStart,
 				verse_end: verseEnd,
 				chapter,
-				tags: `title: ${titleText}`,
+				tags: `title&#58; ${titleText}`,
 			});
 		}
 

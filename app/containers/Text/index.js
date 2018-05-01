@@ -18,6 +18,7 @@ import {
 	getFormattedParentVerse,
 	getFormattedChildIndex,
 	getFormattedElementVerseId,
+	getPlainParentVerseWithoutNumber,
 } from 'utils/highlightingUtils';
 // import differenceObject from 'utils/deepDifferenceObject';
 import isEqual from 'lodash/isEqual';
@@ -119,6 +120,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 	}
 
 	setEventHandlersForFormattedVerses = (ref) => {
+		// Set mousedown and mouseup events on verse elements
 		try {
 			const verses = [...ref.getElementsByClassName('v')];
 
@@ -144,6 +146,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			// if Production then log error to service
 		}
 
+		// Set click events on bookmark icons
 		try {
 			const elements = [...ref.getElementsByClassName('bookmark-in-verse')];
 			// It might not work 100% of the time to use i here, but I think it
@@ -162,6 +165,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			// if Production then log error to service
 		}
 
+		// Set click events on note icons
 		try {
 			const elements = [...ref.getElementsByClassName('note-in-verse')];
 
@@ -238,24 +242,33 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		e.stopPropagation();
 		// console.log('getting first verse');
 		const target = e.target;
-		// const parent = e.target.parentElement;
-		// console.log('Get first verse target', target);
-		// console.log('Get first verse parent', parent);
-		// console.log('Get first verse event', e);
-		// console.log('Selection in first verse event', JSON.stringify(window.getSelection()));
-		// Causes the component to update for every click
-		// Thankfully React's diffing function is doing a good job and very little is actually re-rendered
-		// console.log('e.target', e.target);
-		// console.log('e.target.parent', e.target.parentElement);
+		const isFormatted = !!this.props.formattedSource.main &&
+			(!this.props.userSettings.getIn(['toggleOptions', 'readersMode', 'active']) || !this.props.userSettings.getIn(['toggleOptions', 'readersMode', 'available'])) &&
+			(!this.props.userSettings.getIn(['toggleOptions', 'oneVersePerLine', 'active']) || !this.props.userSettings.getIn(['toggleOptions', 'oneVersePerLine', 'available']));
+		const primaryButton = e.button === 0;
+
 		try {
-			if (e.button === 0 && this.main.contains(target) && target.attributes.verseid) {
-				this.setState({ firstVerse: target.attributes.verseid.value });
-			} else if (e.button === 0 && this.main.contains(target) && target.attributes['data-id']) {
-				this.setState({ firstVerse: target.attributes['data-id'].value.split('_')[1] });
-			} else if (target.parentElement && target.parentElement.attributes.verseid) {
-				this.setState({ firstVerse: target.parentElement.attributes.verseid.value });
-			} else if (target.parentElement && target.parentElement.attributes['data-id']) {
-				this.setState({ firstVerse: target.parentElement.attributes['data-id'].value.split('_')[1] });
+			// if formatted iterate up the dom looking for data-id
+			if (isFormatted) {
+				const verseNode = getFormattedParentVerse(target);
+				const firstVerse = verseNode ? verseNode.attributes['data-id'].value.split('_')[1] : '';
+				console.log('first formatted verse', firstVerse);
+				// third check may not be required, if micro optimization is needed then look into removing contains
+				if (primaryButton && this.main.contains(target) && firstVerse) {
+					this.setState({
+						firstVerse,
+					});
+				}
+			} else if (!isFormatted) {
+				const verseNode = getPlainParentVerseWithoutNumber(target);
+				const firstVerse = verseNode ? verseNode.attributes.verseid.value : '';
+				console.log('first plain verse', firstVerse);
+				// third check may not be required, if micro optimization is needed then look into removing contains
+				if (primaryButton && this.main.contains(target) && firstVerse) {
+					this.setState({
+						firstVerse,
+					});
+				}
 			}
 		} catch (err) {
 			if (process.env.NODE_ENV === 'development') {
@@ -266,95 +279,148 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 
 	getLastVerse = (e) => {
 		const target = e.target;
-		const parent = e.target.parentElement;
+		// const parent = e.target.parentElement;
+		const isFormatted = !!this.props.formattedSource.main &&
+			(!this.props.userSettings.getIn(['toggleOptions', 'readersMode', 'active']) || !this.props.userSettings.getIn(['toggleOptions', 'readersMode', 'available'])) &&
+			(!this.props.userSettings.getIn(['toggleOptions', 'oneVersePerLine', 'active']) || !this.props.userSettings.getIn(['toggleOptions', 'oneVersePerLine', 'available']));
+		// console.log('is formatted', isFormatted);
+		// May need to get the parent using the same functions as for highlighting
 		// console.log('Get last verse target', target);
 		// console.log('Get last verse parent', parent);
 		// console.log('Get last verse event', e);
 		// console.log('Selection in last verse event', window.getSelection());
 		const primaryButton = e.button === 0;
 		// console.log(window.getSelection());
+		// if formatted iterate up the dom looking for data-id
+		if (isFormatted) {
+			const verseNode = getFormattedParentVerse(target);
+			const lastVerse = verseNode ? verseNode.attributes['data-id'].value.split('_')[1] : '';
+			// console.log('last formatted verse', lastVerse);
+			// third check may not be required, if micro optimization is needed then look into removing contains
+			if (primaryButton && window.getSelection().toString() && this.main.contains(target) && lastVerse) {
+				typeof e.persist === 'function' && e.persist();
+				const selectedText = window.getSelection().toString();
 
-		if (primaryButton && window.getSelection().toString() && this.main.contains(target) && target.attributes.verseid) {
-			// Needed to persist the React Synthetic event
-			typeof e.persist === 'function' && e.persist();
-			const selectedText = window.getSelection().toString();
+				this.setState({
+					lastVerse,
+					anchorOffset: window.getSelection().anchorOffset,
+					anchorText: window.getSelection().anchorNode.data,
+					anchorNode: window.getSelection().anchorNode,
+					extentOffset: window.getSelection().extentOffset,
+					extentText: window.getSelection().extentNode.data,
+					extentNode: window.getSelection().extentNode,
+					selectedText,
+				}, () => {
+					this.openContextMenu(e);
+				});
+			}
+		} else if (!isFormatted) {
+			const verseNode = getPlainParentVerseWithoutNumber(target);
+			const lastVerse = verseNode ? verseNode.attributes.verseid.value : '';
+			// console.log('last plain verse', lastVerse);
+			// third check may not be required, if micro optimization is needed then look into removing contains
+			if (primaryButton && window.getSelection().toString() && this.main.contains(target) && lastVerse) {
+				typeof e.persist === 'function' && e.persist();
+				const selectedText = window.getSelection().toString();
 
-			this.setState({
-				lastVerse: target.attributes.verseid.value,
-				anchorOffset: window.getSelection().anchorOffset,
-				anchorText: window.getSelection().anchorNode.data,
-				anchorNode: window.getSelection().anchorNode,
-				extentOffset: window.getSelection().extentOffset,
-				extentText: window.getSelection().extentNode.data,
-				extentNode: window.getSelection().extentNode,
-				selectedText,
-			}, () => {
-				this.openContextMenu(e);
-			});
-		} else if (primaryButton && window.getSelection().toString() && this.main.contains(target) && target.attributes['data-id']) {
-			typeof e.persist === 'function' && e.persist();
-			const selectedText = window.getSelection().toString();
-
-			this.setState({
-				lastVerse: target.attributes['data-id'].value.split('_')[1],
-				anchorOffset: window.getSelection().anchorOffset,
-				anchorText: window.getSelection().anchorNode.data,
-				anchorNode: window.getSelection().anchorNode,
-				extentOffset: window.getSelection().extentOffset,
-				extentText: window.getSelection().extentNode.data,
-				extentNode: window.getSelection().extentNode,
-				selectedText,
-			}, () => {
-				this.openContextMenu(e);
-			});
-			// Below checks for the parent elements since sometimes a word is wrapped in a tag for styling
-		} else if (
-				primaryButton &&
-				window.getSelection().toString() &&
-				parent &&
-				this.main.contains(parent) &&
-				parent.attributes.verseid
-		) {
-			typeof e.persist === 'function' && e.persist();
-			const selectedText = window.getSelection().toString();
-
-			this.setState({
-				lastVerse: parent.attributes.verseid.value,
-				anchorOffset: window.getSelection().anchorOffset,
-				anchorText: window.getSelection().anchorNode.data,
-				anchorNode: window.getSelection().anchorNode,
-				extentOffset: window.getSelection().extentOffset,
-				extentText: window.getSelection().extentNode.data,
-				extentNode: window.getSelection().extentNode,
-				selectedText,
-			}, () => {
-				this.openContextMenu(e);
-			});
-		} else if (
-				primaryButton &&
-				window.getSelection().toString() &&
-				parent &&
-				this.main.contains(parent) &&
-				parent.attributes['data-id']
-			) {
-			typeof e.persist === 'function' && e.persist();
-			const selectedText = window.getSelection().toString();
-
-			this.setState({
-				lastVerse: parent.attributes['data-id'].value.split('_')[1],
-				anchorOffset: window.getSelection().anchorOffset,
-				anchorText: window.getSelection().anchorNode.data,
-				anchorNode: window.getSelection().anchorNode,
-				extentOffset: window.getSelection().extentOffset,
-				extentText: window.getSelection().extentNode.data,
-				extentNode: window.getSelection().extentNode,
-				selectedText,
-			}, () => {
-				this.openContextMenu(e);
-			});
+				this.setState({
+					lastVerse,
+					anchorOffset: window.getSelection().anchorOffset,
+					anchorText: window.getSelection().anchorNode.data,
+					anchorNode: window.getSelection().anchorNode,
+					extentOffset: window.getSelection().extentOffset,
+					extentText: window.getSelection().extentNode.data,
+					extentNode: window.getSelection().extentNode,
+					selectedText,
+				}, () => {
+					this.openContextMenu(e);
+				});
+			}
 		} else {
-			this.closeContextMenu();
+			this.openContextMenu(e);
 		}
+		// // else if plain text iterate up the dom looking for verseid
+		// if (primaryButton && window.getSelection().toString() && this.main.contains(target) && target.attributes.verseid) {
+		// 	// Needed to persist the React Synthetic event
+		// 	typeof e.persist === 'function' && e.persist();
+		// 	const selectedText = window.getSelection().toString();
+		//
+		// 	this.setState({
+		// 		lastVerse: target.attributes.verseid.value,
+		// 		anchorOffset: window.getSelection().anchorOffset,
+		// 		anchorText: window.getSelection().anchorNode.data,
+		// 		anchorNode: window.getSelection().anchorNode,
+		// 		extentOffset: window.getSelection().extentOffset,
+		// 		extentText: window.getSelection().extentNode.data,
+		// 		extentNode: window.getSelection().extentNode,
+		// 		selectedText,
+		// 	}, () => {
+		// 		this.openContextMenu(e);
+		// 	});
+		// } else if (primaryButton && window.getSelection().toString() && this.main.contains(target) && target.attributes['data-id']) {
+		// 	typeof e.persist === 'function' && e.persist();
+		// 	const selectedText = window.getSelection().toString();
+		//
+		// 	this.setState({
+		// 		lastVerse: target.attributes['data-id'].value.split('_')[1],
+		// 		anchorOffset: window.getSelection().anchorOffset,
+		// 		anchorText: window.getSelection().anchorNode.data,
+		// 		anchorNode: window.getSelection().anchorNode,
+		// 		extentOffset: window.getSelection().extentOffset,
+		// 		extentText: window.getSelection().extentNode.data,
+		// 		extentNode: window.getSelection().extentNode,
+		// 		selectedText,
+		// 	}, () => {
+		// 		this.openContextMenu(e);
+		// 	});
+		// 	// Below checks for the parent elements since sometimes a word is wrapped in a tag for styling
+		// } else if (
+		// 		primaryButton &&
+		// 		window.getSelection().toString() &&
+		// 		parent &&
+		// 		this.main.contains(parent) &&
+		// 		parent.attributes.verseid
+		// ) {
+		// 	typeof e.persist === 'function' && e.persist();
+		// 	const selectedText = window.getSelection().toString();
+		//
+		// 	this.setState({
+		// 		lastVerse: parent.attributes.verseid.value,
+		// 		anchorOffset: window.getSelection().anchorOffset,
+		// 		anchorText: window.getSelection().anchorNode.data,
+		// 		anchorNode: window.getSelection().anchorNode,
+		// 		extentOffset: window.getSelection().extentOffset,
+		// 		extentText: window.getSelection().extentNode.data,
+		// 		extentNode: window.getSelection().extentNode,
+		// 		selectedText,
+		// 	}, () => {
+		// 		this.openContextMenu(e);
+		// 	});
+		// } else if (
+		// 		primaryButton &&
+		// 		window.getSelection().toString() &&
+		// 		parent &&
+		// 		this.main.contains(parent) &&
+		// 		parent.attributes['data-id']
+		// 	) {
+		// 	typeof e.persist === 'function' && e.persist();
+		// 	const selectedText = window.getSelection().toString();
+		//
+		// 	this.setState({
+		// 		lastVerse: parent.attributes['data-id'].value.split('_')[1],
+		// 		anchorOffset: window.getSelection().anchorOffset,
+		// 		anchorText: window.getSelection().anchorNode.data,
+		// 		anchorNode: window.getSelection().anchorNode,
+		// 		extentOffset: window.getSelection().extentOffset,
+		// 		extentText: window.getSelection().extentNode.data,
+		// 		extentNode: window.getSelection().extentNode,
+		// 		selectedText,
+		// 	}, () => {
+		// 		this.openContextMenu(e);
+		// 	});
+		// } else {
+		// 	this.closeContextMenu();
+		// }
 	}
 
 	get getTextComponents() {
@@ -658,6 +724,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 						// find the parent of each that has a verse id
 					const aParent = getFormattedParentVerse(aNode);
 					const eParent = getFormattedParentVerse(eNode);
+					// console.log('a parent and e parent', aParent, '\n', eParent);
 							// if the parents are different verses
 					if (aParent.isSameNode(eParent)) {
 						// It doesn't matter from this point which parent is used since they both reference the same object
@@ -668,6 +735,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 						const aIndex = getFormattedChildIndex(aParent, aNode);
 						const eIndex = getFormattedChildIndex(aParent, eNode);
 						// console.log('a index', aIndex, 'e index', eIndex);
+						// console.log('a parent childNodes', aParent.childNodes);
 
 						// Use the text and offset of the node that was closest to the start of the verse
 						if (aIndex < eIndex) {
@@ -684,6 +752,8 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 						// console.log('parent verse is not the same for both elements');
 						const aVerseNumber = getFormattedElementVerseId(aParent);
 						const eVerseNumber = getFormattedElementVerseId(eParent);
+						// console.log('aVerseNumber', aVerseNumber);
+						// console.log('eVerseNumber', eVerseNumber);
 
 						// Use the text and offset of the first verse
 						if (aVerseNumber < eVerseNumber) {
@@ -709,8 +779,9 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				// 	anchorText = extentText;
 				// }
 			}
+			// console.log('anchorOffset < extentOffset', anchorOffset < extentOffset);
 			// Solve's for formatted text
-			let node = offset < extentOffset ? aNode : eNode;
+			let node = anchorOffset < extentOffset ? aNode : eNode;
 			let highlightStart = 0;
 			// The parent with the id should never be more than 10 levels up MAX
 			// I use this counter to prevent the edge case where an infinite loop
@@ -721,8 +792,10 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			// Also need to check for class="v" to ensure that this was the first verse
 			if (this.props.formattedSource.main && !this.props.userSettings.getIn(['toggleOptions', 'readersMode', 'active'])) {
 				// Issue with getting the correct parent node
+				// console.log('starting node', node);
+				// console.log('first verse', firstVerse);
 				node = getFormattedParentVerseNumber(node, firstVerse);
-				// console.log('verse node text', node.textContent);
+				// console.log('verse node', node.attributes);
 				// At this point "node" is the first verse
 				// console.log(node.textContent);
 				// console.log(anchorOffset);

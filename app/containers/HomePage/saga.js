@@ -311,7 +311,7 @@ export function* getChapterFromUrl({ filesets, bibleId: oldBibleId, bookId: oldB
 		// Try to get the plain text every time
 		// When this fails it should fail gracefully and not cause anything to break
 		try {
-			const reqUrl = `https://api.bible.build/bibles/${bibleId}/${bookId}/${chapter}?bucket=${process.env.DBP_BUCKET_ID}&key=${process.env.DBP_API_KEY}&v=4&book_id=${bookId}&chapter_id=${chapter}`;
+			const reqUrl = `https://api.bible.build/bibles/${bibleId}/${bookId}/${chapter}?key=${process.env.DBP_API_KEY}&v=4&book_id=${bookId}&chapter_id=${chapter}`;
 			const res = yield call(request, reqUrl);
 			// console.log('response for plain text', res);
 			plainText = res.data;
@@ -376,7 +376,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 	// Send a loadaudio action for each fail in production so that there isn't a link loaded
 	// This handles the case where a user already has a link but getting the next one fails
 	// console.log('getting audio', filesets, bookId, chapter);
-	// Parse filesets
+	// Parse filesets |▰╭╮▰|
 	// TODO: Need to handle when there are multiple filesets for the same audio type
 	// console.log('filesets', filesets);
 	const filteredFilesets = reduce(filesets, (a, file) => {

@@ -15,7 +15,7 @@ import {
 import { loadTexts, loadCountries, setLanguages } from './actions';
 
 export function* getCountries() {
-	const requestUrl = `https://api.bible.build/countries?key=${process.env.DBP_API_KEY}&v=4`;
+	const requestUrl = `https://api.bible.build/countries?key=${process.env.DBP_API_KEY}&v=4&bucket_id=${process.env.DBP_BUCKET_ID}&has_filesets=true`;
 
 	try {
 		const response = yield call(request, requestUrl);
@@ -92,7 +92,7 @@ export function* getTexts({ languageISO }) {
 }
 
 export function* getLanguages() {
-	const requestUrl = `https://api.bible.build/languages?key=${process.env.DBP_API_KEY}&v=4`;
+	const requestUrl = `https://api.bible.build/languages?key=${process.env.DBP_API_KEY}&v=4&bucket_id=${process.env.DBP_BUCKET_ID}&has_filesets=true`;
 
 	try {
 		const response = yield call(request, requestUrl);

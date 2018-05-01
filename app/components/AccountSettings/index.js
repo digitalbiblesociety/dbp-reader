@@ -76,7 +76,7 @@ class AccountSettings extends React.PureComponent {
 				<section className="personal-info">
 					{
 						profile.avatar ? <ImageComponent classes="profile-picture" alt="Profile Picture" src={profile.avatar} /> :
-						<SvgWrapper className={'avatar-placeholder'} svgid={'profile_avatar'} />
+						<SvgWrapper className={'avatar-placeholder'} svgid={'avatar_placeholder'} />
 					}
 					<button onClick={this.changePicture} className="change-picture">Change Picture</button>
 					<h3 className="name">{profile.nickname || 'First Name'}</h3>
