@@ -242,24 +242,33 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		e.stopPropagation();
 		// console.log('getting first verse');
 		const target = e.target;
-		// const parent = e.target.parentElement;
-		// console.log('Get first verse target', target);
-		// console.log('Get first verse parent', parent);
-		// console.log('Get first verse event', e);
-		// console.log('Selection in first verse event', JSON.stringify(window.getSelection()));
-		// Causes the component to update for every click
-		// Thankfully React's diffing function is doing a good job and very little is actually re-rendered
-		// console.log('e.target', e.target);
-		// console.log('e.target.parent', e.target.parentElement);
+		const isFormatted = !!this.props.formattedSource.main &&
+			(!this.props.userSettings.getIn(['toggleOptions', 'readersMode', 'active']) || !this.props.userSettings.getIn(['toggleOptions', 'readersMode', 'available'])) &&
+			(!this.props.userSettings.getIn(['toggleOptions', 'oneVersePerLine', 'active']) || !this.props.userSettings.getIn(['toggleOptions', 'oneVersePerLine', 'available']));
+		const primaryButton = e.button === 0;
+
 		try {
-			if (e.button === 0 && this.main.contains(target) && target.attributes.verseid) {
-				this.setState({ firstVerse: target.attributes.verseid.value });
-			} else if (e.button === 0 && this.main.contains(target) && target.attributes['data-id']) {
-				this.setState({ firstVerse: target.attributes['data-id'].value.split('_')[1] });
-			} else if (target.parentElement && target.parentElement.attributes.verseid) {
-				this.setState({ firstVerse: target.parentElement.attributes.verseid.value });
-			} else if (target.parentElement && target.parentElement.attributes['data-id']) {
-				this.setState({ firstVerse: target.parentElement.attributes['data-id'].value.split('_')[1] });
+			// if formatted iterate up the dom looking for data-id
+			if (isFormatted) {
+				const verseNode = getFormattedParentVerse(target);
+				const firstVerse = verseNode ? verseNode.attributes['data-id'].value.split('_')[1] : '';
+				// console.log('first formatted verse', firstVerse);
+				// third check may not be required, if micro optimization is needed then look into removing contains
+				if (primaryButton && window.getSelection().toString() && this.main.contains(target) && firstVerse) {
+					this.setState({
+						firstVerse,
+					});
+				}
+			} else if (!isFormatted) {
+				const verseNode = getPlainParentVerseWithoutNumber(target);
+				const firstVerse = verseNode ? verseNode.attributes.verseid.value : '';
+				// console.log('first plain verse', firstVerse);
+				// third check may not be required, if micro optimization is needed then look into removing contains
+				if (primaryButton && window.getSelection().toString() && this.main.contains(target) && firstVerse) {
+					this.setState({
+						firstVerse,
+					});
+				}
 			}
 		} catch (err) {
 			if (process.env.NODE_ENV === 'development') {
@@ -270,14 +279,14 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 
 	getLastVerse = (e) => {
 		const target = e.target;
-		const parent = e.target.parentElement;
+		// const parent = e.target.parentElement;
 		const isFormatted = !!this.props.formattedSource.main &&
 			(!this.props.userSettings.getIn(['toggleOptions', 'readersMode', 'active']) || !this.props.userSettings.getIn(['toggleOptions', 'readersMode', 'available'])) &&
 			(!this.props.userSettings.getIn(['toggleOptions', 'oneVersePerLine', 'active']) || !this.props.userSettings.getIn(['toggleOptions', 'oneVersePerLine', 'available']));
 		// console.log('is formatted', isFormatted);
 		// May need to get the parent using the same functions as for highlighting
-		console.log('Get last verse target', target);
-		console.log('Get last verse parent', parent);
+		// console.log('Get last verse target', target);
+		// console.log('Get last verse parent', parent);
 		// console.log('Get last verse event', e);
 		// console.log('Selection in last verse event', window.getSelection());
 		const primaryButton = e.button === 0;
@@ -286,7 +295,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		if (isFormatted) {
 			const verseNode = getFormattedParentVerse(target);
 			const lastVerse = verseNode ? verseNode.attributes['data-id'].value.split('_')[1] : '';
-			console.log('last formatted verse', lastVerse);
+			// console.log('last formatted verse', lastVerse);
 			// third check may not be required, if micro optimization is needed then look into removing contains
 			if (primaryButton && window.getSelection().toString() && this.main.contains(target) && lastVerse) {
 				typeof e.persist === 'function' && e.persist();
@@ -308,7 +317,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		} else if (!isFormatted) {
 			const verseNode = getPlainParentVerseWithoutNumber(target);
 			const lastVerse = verseNode ? verseNode.attributes.verseid.value : '';
-			console.log('last plain verse', lastVerse);
+			// console.log('last plain verse', lastVerse);
 			// third check may not be required, if micro optimization is needed then look into removing contains
 			if (primaryButton && window.getSelection().toString() && this.main.contains(target) && lastVerse) {
 				typeof e.persist === 'function' && e.persist();
