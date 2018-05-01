@@ -32,6 +32,20 @@
       }
     }
   }
+
+  .avatar-placeholder {
+    width:150px;
+    height:150px;
+
+    svg {
+      min-height: 150px;
+      min-width: 150px;
+    }
+
+    @include css4 {
+      fill:var(--default-text-color);
+    }
+  }
 }
 .account-settings .logout-button {
   margin-top:20px;

@@ -74,7 +74,10 @@ class AccountSettings extends React.PureComponent {
 			<div className="account-settings">
 				<div role="button" tabIndex={0} onClick={logout} className="logout-button"><FormattedMessage {...messages.logout} /></div>
 				<section className="personal-info">
-					<ImageComponent classes="profile-picture" alt="Profile Picture" src={profile.avatar || 'http://res.cloudinary.com/dw9eqwl1i/image/upload/v1500256772/IMG_1418_eoopkg.jpg'} />
+					{
+						profile.avatar ? <ImageComponent classes="profile-picture" alt="Profile Picture" src={profile.avatar} /> :
+						<SvgWrapper className={'avatar-placeholder'} svgid={'profile_avatar'} />
+					}
 					<button onClick={this.changePicture} className="change-picture">Change Picture</button>
 					<h3 className="name">{profile.nickname || 'First Name'}</h3>
 					<span className="name">{profile.name || 'Last Name'}</span>
