@@ -206,7 +206,7 @@ describe('highlightFormattedText', () => {
 
 		expect(highlightFormattedText(highlights, sampleText, JSDOM)).toEqual(expectedResult);
 	});
-	it('Should apply an array of highlights where first highlight is overlapped by the second', () => {
+	it('Should apply an array of highlights where first highlight is overlapped by the second and they have different verse elements', () => {
 		const highlights = [
 			{
 				id: 199,
@@ -280,7 +280,71 @@ describe('highlightFormattedText', () => {
 
 		expect(highlightFormattedText(highlights, sampleText, JSDOM)).toEqual(expectedResult);
 	});
-	it('Should apply an array of highlights that overlap in the same verse', () => {
-		expect(true).toBe(false);
+	xit('Should apply an array of highlights that overlap in the same verse where the second one is multi-verse', () => {
+		const highlights = [
+			{
+				id: 304,
+				bible_id: 'ENGWEB',
+				book_id: 'LUK',
+				chapter: 17,
+				verse_start: 5,
+				highlight_start: 0,
+				highlighted_words: 12,
+				highlighted_color: '#1AF',
+			},
+			{
+				id: 305,
+				bible_id: 'ENGWEB',
+				book_id: 'LUK',
+				chapter: 17,
+				verse_start: 6,
+				highlight_start: 4,
+				highlighted_words: 28,
+				highlighted_color: '#5B4',
+			},
+			{
+				id: 306,
+				bible_id: 'ENGWEB',
+				book_id: 'LUK',
+				chapter: 17,
+				verse_start: 6,
+				highlight_start: 56,
+				highlighted_words: 29,
+				highlighted_color: '#86A',
+			},
+		];
+		const sampleText = '<div class="chapter section ENGWEB_72_LUK_17 ENGWEB eng LUK latin" dir="ltr" data-id="ENGWEB_72_LUK_17" data-nextid="LUK18" data-previd="LUK16" lang="eng">\n<div class="c">17</div><p><span class="verse5 v-num v-5">5&nbsp;</span><span class="v LUK17_5" data-id="LUK17_5">The apostles said to the Lord, “Increase our faith.”</span>\n</p><p><span class="verse6 v-num v-6">6&nbsp;</span><span class="v LUK17_6" data-id="LUK17_6">The Lord said, <span class=\'wj\'>“If you had faith like a grain of mustard seed, you would tell this sycamore tree, ‘Be uprooted, and be planted in the sea,’ and it would obey you. </span></span></p></div>';
+		const expectedResult = `<div class="chapter section ENGWEB_72_LUK_17 ENGWEB eng LUK latin" dir="ltr" data-id="ENGWEB_72_LUK_17" data-nextid="LUK18" data-previd="LUK16" lang="eng">\n<div class="c">17</div><p><span class="verse5 v-num v-5">5&nbsp;</span><span class="v LUK17_5" data-id="LUK17_5"><span><em class="text-highlighted" style="background:${highlights[0].highlighted_color}">The apostles</em> said to the Lord, “Increase our faith.”</span></span>\n</p><p><span class="verse6 v-num v-6">6&nbsp;</span><span class="v LUK17_6" data-id="LUK17_6"><span>The <em class="text-highlighted" style="background:${highlights[1].highlighted_color}">Lord said, </em></span><span class='wj'><span><em class="text-highlighted" style="background:${highlights[1].highlighted_color}">“If you had faith</em> like a grain of mustard seed, you would tell this sycamore tree, ‘Be uprooted, and be planted in the sea,’ and it would obey you. </span></span></span></p></div>`;
+
+		expect(highlightFormattedText(highlights, sampleText, JSDOM)).toEqual(expectedResult);
 	});
+	it('Should apply an array of highlights that overlap in the same verse and the verse only has a single text node', () => {
+		const highlights = [
+			{
+				id: 320,
+				bible_id: 'ENGWEB',
+				book_id: 'JER',
+				chapter: 1,
+				verse_start: 3,
+				highlight_start: 42,
+				highlighted_words: 13,
+				highlighted_color: '#86A',
+			},
+			{
+				id: 321,
+				bible_id: 'ENGWEB',
+				book_id: 'JER',
+				chapter: 1,
+				verse_start: 3,
+				highlight_start: 49,
+				highlighted_words: 12,
+				highlighted_color: '#5B4',
+			},
+		];
+		const sampleText = '<div class="chapter section ENGWEB_25_JER_1 ENGWEB eng JER latin" dir="ltr" data-id="ENGWEB_25_JER_1" data-nextid="JER2" data-previd="ISA66" lang="eng"><div class="c">1</div><p><span class="verse3 v-num v-3">3&nbsp;</span><span class="v JER1_3" data-id="JER1_3">It came also in the days of Jehoiakim the son of Josiah, king of Judah, to the end of the eleventh year of Zedekiah, the son of Josiah, king of Judah, to the carrying away of Jerusalem captive in the fifth month.</span></p></div>';
+		const expectedResult = `<div class="chapter section ENGWEB_25_JER_1 ENGWEB eng JER latin" dir="ltr" data-id="ENGWEB_25_JER_1" data-nextid="JER2" data-previd="ISA66" lang="eng"><div class="c">1</div><p><span class="verse3 v-num v-3">3&nbsp;</span><span class="v JER1_3" data-id="JER1_3"><span>It came also in the days of Jehoiakim the <em class="text-highlighted" style="background:${highlights[0].highlighted_color}">son of </em><em class="text-highlighted" style="background:${highlights[1].highlighted_color}">Josiah, king</em> of Judah, to the end of the eleventh year of Zedekiah, the son of Josiah, king of Judah, to the carrying away of Jerusalem captive in the fifth month.</span></span></p></div>`;
+
+		expect(highlightFormattedText(highlights, sampleText, JSDOM)).toEqual(expectedResult);
+	});
+	xit('When two highlights start at the same index the highlight with the greater id should be the color that is kept', () => expect(true).toEqual(false));
 });

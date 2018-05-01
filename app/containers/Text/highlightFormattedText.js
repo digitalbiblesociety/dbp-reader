@@ -408,7 +408,12 @@ function handleNewVerse({ highlightsStartingInVerse, verseText, charsLeftAfterVe
 		// Highlights are sorted by highlight_start so the first index has the very first highlight
 		// Also need to check and see if the highlight can fit in this child node of the verse
 		// console.log('The highlight starts in this section', (verseText.length + prevSectionsLength) >= h.highlight_start && !(prevSectionsLength >= h.highlight_start));
-		// console.log('The true index inside verse', trueVerseIndex);
+		if (continuingColor && continuingColor !== h.highlighted_color && charsLeft && charsLeft < (h.highlight_start + h.highlighted_words) - 1) {
+			// console.log('Colors are different', charsLeft);
+			verseText.splice(nh.highlight_start, 1, `</em>${verseText[nh.highlight_start]}`);
+			charsLeft = 0;
+			// console.log('new verse text', verseText);
+		}
 		if ((i === 0 || charsLeft === 0) && (verseText.length) >= h.highlight_start) {
 			// If the length of the previous sections plus the length of this one is greater than the start of the highlight
 			// And the length of the previous sections is not greater than the start of the highlight
@@ -426,13 +431,27 @@ function handleNewVerse({ highlightsStartingInVerse, verseText, charsLeftAfterVe
 				// the next highlight will be contained within this highlight and doesn't need to be accounted for
 				// console.log('current test should apply highlight here', h);
 				charsLeft = h.highlighted_words;
+				continuingColor = h.highlighted_color;
+				// Todo: Need to check for if the colors of these highlights are different and if the overlapped highlight was created more recently
 			} else {
 				// If the end of this highlight was not greater than the end of the next one, then it must not contain the next highlight
-				// in this case the next highlight will continue to extend past where this one ends
-				charsLeft = (nh.highlighted_words + nh.highlight_start) - 1;
+				// in this case the next highlight will begin at the place this one ends
+				charsLeft = (nh.highlighted_words);
+				continuingColor = h.highlighted_color;
 			}
+			// Todo: Need to check for if the colors of these highlights are different and if the overlapped highlight was created more recently
+			// } else if (nh.highlighted_color !== h.highlighted_color) {
+			// 	// If the end of this highlight was not greater than the end of the next one and they are not the same color, then it must not contain the next highlight
+			// 	// in this case the next highlight will begin at the place this one ends
+			//
+			// 	verseText.splice(nh.highlight_start, 1, `</em>${verseText[nh.highlight_start]}`);
+			// 	charsLeft = 0;
+			// } else {
+			// 	// If the highlights are the same color then just let them overlap
+			// 	charsLeft = (nh.highlighted_words + nh.highlight_start) - 1;
+			// }
 
-			/* IS SINGLE VERSE NON-OVERLAPPING */
+			/* IS SINGLE VERSE NOT COMPLETELY OVERLAPPING */
 			// I think both of the conditions below are exactly the same...
 		} else if ((charsLeft + h.highlight_start) <= (verseText.length) && ((h.highlighted_words + h.highlight_start) - 1) < (verseText.length)) {
 			// If the characters left plus the start of the highlight are less than the verse length and this highlight is less than the verse length
