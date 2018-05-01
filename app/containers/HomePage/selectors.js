@@ -20,14 +20,25 @@ const selectNotes = (state) => state.get('notes');
 const selectUserNotes = () => createDeepEqualSelector(
 	[selectNotes, selectHomePageDomain],
 	(notes, home) => {
-		// console.log('list data', notes.get('listData'));
 		const bibleId = home.get('activeTextId');
 		const bookId = home.get('activeBookId');
 		const chapter = home.get('activeChapter');
 		const text = home.get('chapterText');
+		const authd = home.get('userAuthenticated');
+		const userId = home.get('userId');
 		const filteredNotes = notes.get('listData').filter((n) => n.bible_id === bibleId && n.book_id === bookId && n.chapter === chapter);
 		const bookmarks = filteredNotes.toJS ? filteredNotes.filter((n) => n.bookmark === 1).toJS() : filteredNotes.filter((n) => n.bookmark === 1);
 		const userNotes = filteredNotes.toJS ? filteredNotes.filter((n) => n.bookmark === 0).toJS() : filteredNotes.filter((n) => n.bookmark === 0);
+
+		// If the user isn't authorized then there will not be any notes or bookmarks and I can just end the function here
+		if (!authd && !userId) {
+			return {
+				text: text.toJS(),
+				userNotes,
+				bookmarks,
+			};
+		}
+		// console.log('list data', notes.get('listData'));
 		let newText = [];
 
 		filteredNotes.forEach((n, ni) => {
@@ -57,7 +68,8 @@ const selectUserNotes = () => createDeepEqualSelector(
 			}
 		});
 		// console.log(filteredNotes);
-		// console.log(newText);
+		// console.log(newText.size);
+		// console.log(text)
 		return {
 			text: newText.size ? newText.toJS() : text.toJS(),
 			userNotes,
