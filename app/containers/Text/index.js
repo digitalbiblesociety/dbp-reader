@@ -252,9 +252,9 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			if (isFormatted) {
 				const verseNode = getFormattedParentVerse(target);
 				const firstVerse = verseNode ? verseNode.attributes['data-id'].value.split('_')[1] : '';
-				// console.log('first formatted verse', firstVerse);
+				console.log('first formatted verse', firstVerse);
 				// third check may not be required, if micro optimization is needed then look into removing contains
-				if (primaryButton && window.getSelection().toString() && this.main.contains(target) && firstVerse) {
+				if (primaryButton && this.main.contains(target) && firstVerse) {
 					this.setState({
 						firstVerse,
 					});
@@ -262,9 +262,9 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			} else if (!isFormatted) {
 				const verseNode = getPlainParentVerseWithoutNumber(target);
 				const firstVerse = verseNode ? verseNode.attributes.verseid.value : '';
-				// console.log('first plain verse', firstVerse);
+				console.log('first plain verse', firstVerse);
 				// third check may not be required, if micro optimization is needed then look into removing contains
-				if (primaryButton && window.getSelection().toString() && this.main.contains(target) && firstVerse) {
+				if (primaryButton && this.main.contains(target) && firstVerse) {
 					this.setState({
 						firstVerse,
 					});
@@ -724,6 +724,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 						// find the parent of each that has a verse id
 					const aParent = getFormattedParentVerse(aNode);
 					const eParent = getFormattedParentVerse(eNode);
+					// console.log('a parent and e parent', aParent, '\n', eParent);
 							// if the parents are different verses
 					if (aParent.isSameNode(eParent)) {
 						// It doesn't matter from this point which parent is used since they both reference the same object
@@ -734,6 +735,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 						const aIndex = getFormattedChildIndex(aParent, aNode);
 						const eIndex = getFormattedChildIndex(aParent, eNode);
 						// console.log('a index', aIndex, 'e index', eIndex);
+						// console.log('a parent childNodes', aParent.childNodes);
 
 						// Use the text and offset of the node that was closest to the start of the verse
 						if (aIndex < eIndex) {
@@ -750,6 +752,8 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 						// console.log('parent verse is not the same for both elements');
 						const aVerseNumber = getFormattedElementVerseId(aParent);
 						const eVerseNumber = getFormattedElementVerseId(eParent);
+						// console.log('aVerseNumber', aVerseNumber);
+						// console.log('eVerseNumber', eVerseNumber);
 
 						// Use the text and offset of the first verse
 						if (aVerseNumber < eVerseNumber) {
@@ -775,8 +779,9 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				// 	anchorText = extentText;
 				// }
 			}
+			// console.log('anchorOffset < extentOffset', anchorOffset < extentOffset);
 			// Solve's for formatted text
-			let node = offset < extentOffset ? aNode : eNode;
+			let node = anchorOffset < extentOffset ? aNode : eNode;
 			let highlightStart = 0;
 			// The parent with the id should never be more than 10 levels up MAX
 			// I use this counter to prevent the edge case where an infinite loop
@@ -787,8 +792,10 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			// Also need to check for class="v" to ensure that this was the first verse
 			if (this.props.formattedSource.main && !this.props.userSettings.getIn(['toggleOptions', 'readersMode', 'active'])) {
 				// Issue with getting the correct parent node
+				// console.log('starting node', node);
+				// console.log('first verse', firstVerse);
 				node = getFormattedParentVerseNumber(node, firstVerse);
-				// console.log('verse node text', node.textContent);
+				// console.log('verse node', node.attributes);
 				// At this point "node" is the first verse
 				// console.log(node.textContent);
 				// console.log(anchorOffset);
