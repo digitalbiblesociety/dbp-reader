@@ -88,6 +88,7 @@ export function* deleteNote({ userId, noteId }) {
 }
 
 export function* getNotes({ userId, params = {} }) {
+	// Need to adjust how I paginate the notes here and in other places as well
 	const requestUrl = `https://api.bible.build/users/${userId}/notes?key=${process.env.DBP_API_KEY}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}`;
 	Object.entries(params).forEach((param) => requestUrl.concat(`&${param[0]}=${param[1]}`));
 	// console.log('getting notes for userid', userId);

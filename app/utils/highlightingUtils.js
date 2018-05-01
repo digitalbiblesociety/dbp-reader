@@ -10,8 +10,8 @@ const getFormattedParentVerseNumber = (node, verseNumber) => {
 
 	while ((getFormattedElementVerseId(newNode) !== verseNumber)) {
 		newNode = newNode.parentNode;
-		console.log('new node', newNode);
-		console.log('new node attributes', newNode.attributes);
+		// console.log('new node', newNode);
+		// console.log('new node attributes', newNode.attributes);
 		if (counter >= 10) break;
 		counter += 1;
 		// console.log('condition to be checked', !(node.attributes && node.attributes['data-id'] && node.attributes['data-id'].value.split('_')[1] !== firstVerse));
@@ -32,8 +32,8 @@ const getFormattedParentVerse = (node) => {
 	// Finds the first parent that has a data-id and a class of .v
 	// Both of these things exist only on a verse element
 	while (!(newNode.attributes && newNode.attributes['data-id'] && newNode.classList && newNode.classList[0] === 'v')) {
-		console.log('new node', newNode);
-		console.log('new node attributes', newNode.attributes);
+		// console.log('new node', newNode);
+		// console.log('new node attributes', newNode.attributes);
 		newNode = newNode.parentNode;
 		if (counter >= 10) break;
 		counter += 1;
