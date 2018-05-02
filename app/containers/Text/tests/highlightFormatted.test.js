@@ -346,8 +346,67 @@ describe('highlightFormattedText', () => {
 
 		expect(highlightFormattedText(highlights, sampleText, JSDOM)).toEqual(expectedResult);
 	});
-	xit('Case: 15 When two highlights start at the same index the highlight with the greater id should be the color that is kept', () => expect(true).toEqual(false));
-	it('Case: 16 Should apply three highlights that overlap in the space of one same verse and the verse only has a single text node', () => {
+	it('Case: 15 When two highlights start and end at the same index the highlight with the greater id should be the color that is kept', () => {
+		const highlights = [
+			{
+				id: 329,
+				bible_id: 'ENGWEB',
+				book_id: 'JER',
+				chapter: 1,
+				verse_start: 9,
+				highlight_start: 5,
+				highlighted_words: 29,
+				highlighted_color: '#5B4',
+			},
+			{
+				id: 330,
+				bible_id: 'ENGWEB',
+				book_id: 'JER',
+				chapter: 1,
+				verse_start: 9,
+				highlight_start: 5,
+				highlighted_words: 29,
+				highlighted_color: '#1AF',
+			},
+		];
+		const sampleText = '<div class="chapter section ENGWEB_25_JER_1 ENGWEB eng JER latin" dir="ltr" data-id="ENGWEB_25_JER_1" data-nextid="JER2" data-previd="ISA66" lang="eng"><div class="c">1</div><p><span class="v JER1_9" data-id="JER1_9">Then Yahweh stretched out his hand, and touched my mouth. Then Yahweh said to me, “Behold, I have put my words in your mouth.</span></p></div>';
+		const expectedResult = `<div class="chapter section ENGWEB_25_JER_1 ENGWEB eng JER latin" dir="ltr" data-id="ENGWEB_25_JER_1" data-nextid="JER2" data-previd="ISA66" lang="eng"><div class="c">1</div><p><span class="v JER1_9" data-id="JER1_9"><span>Then <em class="text-highlighted" style="background:${highlights[0].highlighted_color}"><em class="text-highlighted" style="background:${highlights[1].highlighted_color}">Yahweh stretched out his hand</em></em>, and touched my mouth. Then Yahweh said to me, “Behold, I have put my words in your mouth.</span></span></p></div>`;
+		// Below is how I would prefer the result to look, but the above has the same affect on the display so I am fine with it for now
+		// const expectedResult = `<div class="chapter section ENGWEB_25_JER_1 ENGWEB eng JER latin" dir="ltr" data-id="ENGWEB_25_JER_1" data-nextid="JER2" data-previd="ISA66" lang="eng"><div class="c">1</div><p><span class="v JER1_9" data-id="JER1_9"><span>Then <em class="text-highlighted" style="background:${highlights[1].highlighted_color}">Yahweh stretched out his hand</em>, and touched my mouth. Then Yahweh said to me, “Behold, I have put my words in your mouth.</span></span></p></div>`;
+
+		expect(highlightFormattedText(highlights, sampleText, JSDOM)).toEqual(expectedResult);
+	});
+	it('Case: 16 When two highlights start and end at the same index and the older highlight is longer than the new highlight', () => {
+		const highlights = [
+			{
+				id: 331,
+				bible_id: 'ENGWEB',
+				book_id: 'JER',
+				chapter: 1,
+				verse_start: 11,
+				highlight_start: 0,
+				highlighted_words: 17,
+				highlighted_color: '#86A',
+			},
+			{
+				id: 332,
+				bible_id: 'ENGWEB',
+				book_id: 'JER',
+				chapter: 1,
+				verse_start: 11,
+				highlight_start: 0,
+				highlighted_words: 8,
+				highlighted_color: '#D6A',
+			},
+		];
+		const sampleText = '<div class="chapter section ENGWEB_25_JER_1 ENGWEB eng JER latin" dir="ltr" data-id="ENGWEB_25_JER_1" data-nextid="JER2" data-previd="ISA66" lang="eng"><div class="c">1</div><p><span class="v JER1_11" data-id="JER1_11">Moreover Yahweh’s word came to me, saying, “Jeremiah, what do you see?”</span></p></div>';
+		const expectedResult = `<div class="chapter section ENGWEB_25_JER_1 ENGWEB eng JER latin" dir="ltr" data-id="ENGWEB_25_JER_1" data-nextid="JER2" data-previd="ISA66" lang="eng"><div class="c">1</div><p><span class="v JER1_11" data-id="JER1_11"><span><em class="text-highlighted" style="background:${highlights[0].highlighted_color}"><em class="text-highlighted" style="background:${highlights[1].highlighted_color}">Moreover</em> Yahweh’s</em> word came to me, saying, “Jeremiah, what do you see?”</span></span></p></div>`;
+		// Below is how I would prefer the result to look, but the above has the same affect on the display so I am fine with it for now
+		// const expectedResult = `<div class="chapter section ENGWEB_25_JER_1 ENGWEB eng JER latin" dir="ltr" data-id="ENGWEB_25_JER_1" data-nextid="JER2" data-previd="ISA66" lang="eng"><div class="c">1</div><p><span class="v JER1_11" data-id="JER1_11"><span><em class="text-highlighted" style="background:${highlights[1].highlighted_color}">Moreover</em><em className="text-highlighted" style="background:${highlights[0].highlighted_color}"> Yahweh’s</em> word came to me, saying, “Jeremiah, what do you see?”</span></span></p></div>`;
+
+		expect(highlightFormattedText(highlights, sampleText, JSDOM)).toEqual(expectedResult);
+	});
+	it('Case: 17 Should apply three highlights that overlap in the space of one same verse and the verse only has a single text node', () => {
 		const highlights = [
 			{
 				id: 320,
@@ -384,5 +443,33 @@ describe('highlightFormattedText', () => {
 		const expectedResult = `<div class="chapter section ENGWEB_25_JER_1 ENGWEB eng JER latin" dir="ltr" data-id="ENGWEB_25_JER_1" data-nextid="JER2" data-previd="ISA66" lang="eng"><div class="c">1</div><p><span class="verse3 v-num v-3">3&nbsp;</span><span class="v JER1_3" data-id="JER1_3"><span>It came also in the days of Jehoiakim the <em class="text-highlighted" style="background:${highlights[0].highlighted_color}">son of </em><em class="text-highlighted" style="background:${highlights[1].highlighted_color}">Josiah, </em><em class="text-highlighted" style="background:${highlights[2].highlighted_color}">king</em> of Judah, to the end of the eleventh year of Zedekiah, the son of Josiah, king of Judah, to the carrying away of Jerusalem captive in the fifth month.</span></span></p></div>`;
 
 		expect(highlightFormattedText(highlights, sampleText, JSDOM)).toEqual(expectedResult);
+	});
+	it('Case: 18 Should apply newer highlight that is contained within an older highlight', () => {
+		const highlights = [
+			{
+				id: 333,
+				bible_id: 'ENGWEB',
+				book_id: 'JER',
+				chapter: 1,
+				verse_start: 12,
+				highlight_start: 5,
+				highlighted_words: 17,
+				highlighted_color: '#1AF',
+			},
+			{
+				id: 334,
+				bible_id: 'ENGWEB',
+				book_id: 'JER',
+				chapter: 1,
+				verse_start: 12,
+				highlight_start: 12,
+				highlighted_words: 4,
+				highlighted_color: '#5B4',
+			},
+		];
+		const sampleText = '<div class="chapter section ENGWEB_25_JER_1 ENGWEB eng JER latin" dir="ltr" data-id="ENGWEB_25_JER_1" data-nextid="JER2" data-previd="ISA66" lang="eng"><div class="c">1</div><p><span class="v JER1_12" data-id="JER1_12">Then Yahweh said to me, “You have seen well; for I watch over my word to perform it.”</span></p></div>';
+		const expectedText = `<div class="chapter section ENGWEB_25_JER_1 ENGWEB eng JER latin" dir="ltr" data-id="ENGWEB_25_JER_1" data-nextid="JER2" data-previd="ISA66" lang="eng"><div class="c">1</div><p><span class="v JER1_12" data-id="JER1_12"><span>Then <em class="text-highlighted" style="background:${highlights[0].highlighted_color}">Yahweh <em class="text-highlighted" style="background:${highlights[1].highlighted_color}">said</em> to me</em>, “You have seen well; for I watch over my word to perform it.”</span></span></p></div>`;
+
+		expect(highlightFormattedText(highlights, sampleText, JSDOM)).toEqual(expectedText);
 	});
 });
