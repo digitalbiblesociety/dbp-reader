@@ -62,6 +62,7 @@ const createFormattedHighlights = (highlights, formattedTextString, DomCreator) 
 			const verseNumber = parseInt(verseElement.attributes['data-id'].value.split('_')[1], 10);
 			const newChildren = [];
 			let combinedSectionLength = 0;
+			let previousHighlightId;
 
 			children.forEach((originalVerse) => {
 				// If this is the first child and the highlight_start is greater than its length set newHighlightStart
@@ -85,33 +86,39 @@ const createFormattedHighlights = (highlights, formattedTextString, DomCreator) 
 				if (!isNote) {
 				// If the node is a footnote then skip over it
 					if (sameVerse && children.length > 1) {
-						// console.log('Children in the same verse but more than 1 child');
+						// console.log('Children in the same verse but more than 1 child', verseNumber);
+						// console.log('previous highlight id is: ', previousHighlightId);
 						const newData = handleVerseSection({
 							combinedSectionLength,
 							highlightsStartingInVerse,
 							charsLeftAfterVerseEnd,
 							continuingColor,
 							verseText,
+							previousHighlightId,
 						});
 
 						verseText = newData.verseText;
 						charsLeftAfterVerseEnd = newData.charsLeftAfterVerseEnd;
 						continuingColor = newData.continuingColor;
 						combinedSectionLength += newData.sectionLength;
+						previousHighlightId = newData.previousHighlightId;
 					} else if (!sameVerse && children.length > 1) {
-						// console.log('Children not in the same verse but more than 1 child');
+						// console.log('Children not in the same verse but more than 1 child', verseNumber);
+						// console.log('previous highlight id is: ', previousHighlightId);
 						const newData = handleVerseSection({
 							combinedSectionLength,
 							highlightsStartingInVerse,
 							charsLeftAfterVerseEnd,
 							continuingColor,
 							verseText,
+							previousHighlightId,
 						});
 
 						verseText = newData.verseText;
 						charsLeftAfterVerseEnd = newData.charsLeftAfterVerseEnd;
 						continuingColor = newData.continuingColor;
 						combinedSectionLength += newData.sectionLength;
+						previousHighlightId = newData.previousHighlightId;
 					} else if (sameVerse) {
 						// If the verse has the same index as the last one
 						// console.log('same verse text', sameVerse);
@@ -153,12 +160,20 @@ const createFormattedHighlights = (highlights, formattedTextString, DomCreator) 
 				}
 				// Create a blank node to use in the case that the current node is a text node
 				const newNonTextNode = xmlDoc.createElement('span');
+				let verseTextHtml = '';
+
+				if (env === 'test') {
+					verseTextHtml = verseText.join('');
+				} else {
+					verseTextHtml = parser.parseFromString(verseText.join(''), 'text/html').getElementsByTagName('body')[0].innerHTML;
+				}
+
 				if (verse.nodeType === 3) {
 					// this is a text node and cannot have inner html so I need a new element to be able to add the highlight
-					newNonTextNode.innerHTML = verseText.join('');
+					newNonTextNode.innerHTML = verseTextHtml;
 				} else if (!isNote) {
 					// Set the inner html for this verse - this overrides any other styling that had been inside that verse
-					verse.innerHTML = verseText.join(''); // eslint-disable-line no-param-reassign
+					verse.innerHTML = verseTextHtml; // eslint-disable-line no-param-reassign
 				}
 				newChildren.push(verse.nodeType === 3 ? newNonTextNode : verse);
 				// console.log('new inner html', verse.innerHTML);
@@ -220,12 +235,13 @@ function handleSameVerse({ verseText, charsLeftAfterVerseEnd: passedCharsLeft, c
 }
 
 /* @children: children of current verse @charsLeftAfterVerseEnd: characters left from last verse @continuingColor: color from last verse */
-function handleVerseSection({ combinedSectionLength, highlightsStartingInVerse, verseText, charsLeftAfterVerseEnd: passedCharsLeft, continuingColor: passedColor }) {
+function handleVerseSection({ previousHighlightId, combinedSectionLength, highlightsStartingInVerse, verseText, charsLeftAfterVerseEnd: passedCharsLeft, continuingColor: passedColor }) {
 	// Case 1: Handle a highlight that is continuing from the previous section
 	let charsLeftAfterVerseEnd = passedCharsLeft;
 	let continuingColor = passedColor;
 	let charsLeft = charsLeftAfterVerseEnd; // Need this separate from charsLeftAfterEnd because I may end up updating that value and still need this one
 	let hStart = 0;
+	let currentHighlightId;
 	const sectionLength = verseText.length; // May not be the case
 	// Adds the length of the previous sections together to get the length relative to the highlight start
 	// const trueSectionLength = sectionLength + combinedSectionLength;
@@ -233,8 +249,42 @@ function handleVerseSection({ combinedSectionLength, highlightsStartingInVerse, 
 	// console.log('combined section length', combinedSectionLength);
 
 	// Handle the cases where there were characters left over from the previous highlight - Still needs some work
-	if (charsLeftAfterVerseEnd) {
-		// console.log('this section has a highlight that did not start in it', charsLeftAfterVerseEnd);
+	if (charsLeftAfterVerseEnd && highlightsStartingInVerse.length > 1) {
+		// Remove the first highlight since it was carried over from the previous verse
+		// if the first highlight in the array has the same id as the last highlight
+		let tempFirstHighlight;
+		// Todo: Consider slicing from the index of the highlight that is after the matching id
+		if (highlightsStartingInVerse[0].id === previousHighlightId) {
+			tempFirstHighlight = highlightsStartingInVerse.slice(0, 1)[0];
+			highlightsStartingInVerse.shift();
+			// console.log('Temp highlight', tempFirstHighlight);
+			// console.log('Rest of highlights', highlightsStartingInVerse);
+		}
+		// Apply previous highlight up until the first highlight in this verse starts
+		const firstHighlightStart = highlightsStartingInVerse[0].highlight_start;
+		// console.log('firstHighlightStart', firstHighlightStart);
+		// console.log('firstHighlightStart > charsLeftAfterVerseEnd', firstHighlightStart > charsLeftAfterVerseEnd);
+		// console.log('!(firstHighlightStart === 0)', !(firstHighlightStart === 0));
+		// console.log('continuing color is: ', continuingColor);
+		// End of previous highlight is before the first highlight in this verse
+		if (charsLeftAfterVerseEnd < firstHighlightStart) {
+			verseText.splice(0, 1, `<em class="text-highlighted" style="background:${tempFirstHighlight ? tempFirstHighlight.highlighted_color : continuingColor}">${verseText[0]}`);
+
+			verseText.splice(charsLeftAfterVerseEnd - 1, 1, `</em>${verseText[charsLeftAfterVerseEnd - 1]}`);
+
+			charsLeftAfterVerseEnd = 0;
+			charsLeft = 0;
+		} else if (!(firstHighlightStart === 0)) {
+			// console.log('firstHighlightStart is not equal to zero and is less than charsLeftAfterVerseEnd');
+			verseText.splice(0, 1, `<em class="text-highlighted" style="background:${continuingColor}">${verseText[0]}`);
+
+			// May not need to subtract 1 here - highlight start might be an index instead of a length
+			verseText.splice(firstHighlightStart - 1, 1, `${verseText[firstHighlightStart - 1]}</em>`);
+			charsLeftAfterVerseEnd -= (firstHighlightStart - 1);
+			// console.log('charsLeftAfterVerseEnd', charsLeftAfterVerseEnd);
+		}
+	} else if (charsLeftAfterVerseEnd && highlightsStartingInVerse.length <= 1) {
+		// console.log('this section has a highlight that did not start in it and only one highlight', charsLeftAfterVerseEnd);
 		verseText.splice(0, 1, `<em class="text-highlighted" style="background:${continuingColor}">${verseText[0]}`);
 		if (charsLeftAfterVerseEnd > verseText.length) {
 			// multi verse highlight
@@ -256,8 +306,10 @@ function handleVerseSection({ combinedSectionLength, highlightsStartingInVerse, 
 			charsLeftAfterVerseEnd,
 			continuingColor,
 			sectionLength,
+			previousHighlightId: currentHighlightId,
 		};
 	}
+	// Need another case for when the highlights wrapped but there were more than one in the verse
 
 	// Case 2: Handle a highlight that is beginning in this verse
 	highlightsStartingInVerse.forEach((h, i) => {
@@ -274,9 +326,10 @@ function handleVerseSection({ combinedSectionLength, highlightsStartingInVerse, 
 		if ((i === 0 || charsLeft === 0) && (sectionLength) > trueHighlightStart) {
 			// If the length of the previous sections plus the length of this one is greater than the start of the highlight
 			// And the length of the previous sections is not greater than the start of the highlight
-			// console.log('Found highlight start');
+			// console.log('Found highlight start with color', h.highlighted_color, h.id);
 			verseText.splice(trueHighlightStart, 1, `<em class="text-highlighted" style="background:${h.highlighted_color ? h.highlighted_color : 'inherit'}">${verseText[trueHighlightStart]}`);
 			hStart = trueHighlightStart;
+			currentHighlightId = h.id;
 		}
 		/* ESSENTIALLY GATHERS ALL OVERLAPPING HIGHLIGHTS */
 		// if the next highlight start is less than the end of this highlight and there is a next highlight
@@ -289,10 +342,12 @@ function handleVerseSection({ combinedSectionLength, highlightsStartingInVerse, 
 				// the next highlight will be contained within this highlight and doesn't need to be accounted for
 				// console.log('current test should apply highlight here', h);
 				charsLeft = h.highlighted_words;
+				continuingColor = h.highlighted_color;
 			} else {
 				// If the end of this highlight was not greater than the end of the next one, then it must not contain the next highlight
 				// in this case the next highlight will continue to extend past where this one ends
 				charsLeft = (nh.highlighted_words + nh.highlight_start) - 1;
+				continuingColor = h.highlighted_color;
 			}
 
 			/* IS SINGLE VERSE NON-OVERLAPPING */
@@ -304,10 +359,12 @@ function handleVerseSection({ combinedSectionLength, highlightsStartingInVerse, 
 				// This highlight was not overlapped by another and the highlight was not started in a child node before this one
 				// If there are not any characters left to highlight then close the em tag at the index where the highlight ends
 				verseText.splice((h.highlighted_words + trueHighlightStart) - 1, 1, `${verseText[(h.highlighted_words + trueHighlightStart) - 1]}</em>`);
+				continuingColor = h.highlighted_color;
 			} else {
 				// Since there are characters left to highlight close the em tag at the index that will expend those characters
 				verseText.splice((charsLeft + trueHighlightStart) - 1, 1, `${verseText[(charsLeft + trueHighlightStart) - 1]}</em>`);
 				charsLeft = 0;
+				continuingColor = h.highlighted_color;
 			}
 
 			/* IS MULTI-VERSE */
@@ -349,6 +406,7 @@ function handleVerseSection({ combinedSectionLength, highlightsStartingInVerse, 
 		charsLeftAfterVerseEnd,
 		continuingColor,
 		sectionLength,
+		previousHighlightId: currentHighlightId,
 	};
 }
 
@@ -408,31 +466,48 @@ function handleNewVerse({ highlightsStartingInVerse, verseText, charsLeftAfterVe
 		// Highlights are sorted by highlight_start so the first index has the very first highlight
 		// Also need to check and see if the highlight can fit in this child node of the verse
 		// console.log('The highlight starts in this section', (verseText.length + prevSectionsLength) >= h.highlight_start && !(prevSectionsLength >= h.highlight_start));
-		// console.log('The true index inside verse', trueVerseIndex);
 		if ((i === 0 || charsLeft === 0) && (verseText.length) >= h.highlight_start) {
 			// If the length of the previous sections plus the length of this one is greater than the start of the highlight
 			// And the length of the previous sections is not greater than the start of the highlight
 			verseText.splice(h.highlight_start, 1, `<em class="text-highlighted" style="background:${h.highlighted_color ? h.highlighted_color : 'inherit'}">${verseText[h.highlight_start]}`);
 			hStart = h.highlight_start;
 		}
-		/* ESSENTIALLY GATHERS ALL OVERLAPPING HIGHLIGHTS */
+		/* HIGHLIGHTS OVERLAP AND ARE THE SAME COLOR */
 		// if the next highlight start is less than the end of this highlight and there is a next highlight
-		if (nh && nh.highlight_start <= ((h.highlighted_words + h.highlight_start) - 1)) {
+		if (nh && nh.highlight_start <= ((h.highlighted_words + h.highlight_start) - 1) && !(h.highlighted_color !== nh.highlighted_color)) {
 			// check if the furthest highlighted character for this highlight is greater than the furthest character for the next highlight
-			// console.log('Next highlight start is lower than the end of this one');
+			// console.log('Next highlight start is lower than the end of this one is the same color');
 			// Todo: The function breaks here if there is one highlight overlapping multiple other highlights
 			if (((h.highlighted_words + h.highlight_start) - 1) >= ((nh.highlight_start + nh.highlighted_words) - 1)) {
 				// If the end of this highlight is greater than the end of the next highlight
 				// the next highlight will be contained within this highlight and doesn't need to be accounted for
-				// console.log('current test should apply highlight here', h);
+				// console.log('end is greater than end of next highlight and colors match');
+				continuingColor = h.highlighted_color;
 				charsLeft = h.highlighted_words;
 			} else {
 				// If the end of this highlight was not greater than the end of the next one, then it must not contain the next highlight
-				// in this case the next highlight will continue to extend past where this one ends
-				charsLeft = (nh.highlighted_words + nh.highlight_start) - 1;
+				// in this case the next highlight will begin at the place this one ends
+				// console.log('end is less than end of next highlight');
+				charsLeft = (nh.highlighted_words);
+				continuingColor = h.highlighted_color;
 			}
 
-			/* IS SINGLE VERSE NON-OVERLAPPING */
+			/* HIGHLIGHTS OVERLAP AND ARE DIFFERENT COLORS */
+		} else if (nh && nh.highlight_start <= ((h.highlighted_words + h.highlight_start) - 1) && h.highlighted_color !== nh.highlighted_color) {
+			// console.log('Next highlight is a different color and is overlapped by this one');
+			// If the next highlight is in this verse segment - may need to use <= instead of <
+			// And this highlight has an id less than the next highlight
+			// And it ends at or before the next highlight
+			if (h.id < nh.id && h.highlight_start + h.highlighted_words <= nh.highlight_start + nh.highlighted_words && nh.highlight_start < verseText.length) {
+				// End this highlight where the next one starts
+				// Adding closing tag to the end of the character before the start of the next highlight
+				verseText.splice(nh.highlight_start - 1, 1, `${verseText[nh.highlight_start - 1]}</em>`);
+				// This highlight ended so there is not a continuing color or any chars left
+				charsLeft = 0;
+				continuingColor = '';
+			}
+			// Todo: Handle case where this highlight has a larger id than the next highlight
+			/* IS SINGLE VERSE NOT COMPLETELY OVERLAPPING */
 			// I think both of the conditions below are exactly the same...
 		} else if ((charsLeft + h.highlight_start) <= (verseText.length) && ((h.highlighted_words + h.highlight_start) - 1) < (verseText.length)) {
 			// If the characters left plus the start of the highlight are less than the verse length and this highlight is less than the verse length
@@ -442,6 +517,22 @@ function handleNewVerse({ highlightsStartingInVerse, verseText, charsLeftAfterVe
 				// If there are not any characters left to highlight then close the em tag at the index where the highlight ends
 				// console.log('splicing text chars left 0');
 				verseText.splice((h.highlighted_words + h.highlight_start) - 1, 1, `${verseText[(h.highlighted_words + h.highlight_start) - 1]}</em>`);
+			} else if (continuingColor !== h.highlighted_color) {
+				// console.log('ending previous highlight and starting new one')
+				// Ends the previous highlight
+				verseText.splice(h.highlight_start - 1, 1, `${verseText[h.highlight_start - 1]}</em>`);
+				// Starts a new highlight where this one should start
+				verseText.splice(h.highlight_start, 1, `<em class="text-highlighted" style="background:${h.highlighted_color ? h.highlighted_color : 'inherit'}">${verseText[h.highlight_start]}`);
+				if (!nh) {
+					// This is the last highlight in this verse and it does not go past the end of the verse
+					// console.log('No next highlight');
+					verseText.splice((h.highlighted_words + h.highlight_start) - 1, 1, `${verseText[(h.highlighted_words + h.highlight_start) - 1]}</em>`);
+					// charsLeftAfterVerseEnd = 0;
+				} else {
+					// console.log('setting the new charsLeft and continuing color');
+					charsLeft = h.highlighted_words;
+					continuingColor = h.highlighted_color;
+				}
 			} else {
 				// Since there are characters left to highlight close the em tag at the index that will expend those characters
 				// console.log('splicing text chars left: ', charsLeft);

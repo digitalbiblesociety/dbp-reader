@@ -16,7 +16,7 @@ describe('highlightFormattedText', () => {
 
 		expect(typeof highlightFormattedText(sampleHighlights, text, JSDOM)).toBe('string');
 	});
-	it('Should apply a highlight that contains a footnote without removing the footnote', () => {
+	it('Case: 1 Should apply a highlight that contains a footnote without removing the footnote', () => {
 		const sampleHighlights = [
 			{
 				id: 1,
@@ -34,7 +34,7 @@ describe('highlightFormattedText', () => {
 
 		expect(highlightFormattedText(sampleHighlights, sampleText, JSDOM)).toEqual(result);
 	});
-	it('Should apply a highlight that has a highlight start after several elements within the text', () => {
+	it('Case: 2 Should apply a highlight that has a highlight start after several elements within the text', () => {
 		const highlights = [{
 			id: 99,
 			bible_id: 'ENGWEB',
@@ -50,7 +50,7 @@ describe('highlightFormattedText', () => {
 
 		expect(highlightFormattedText(highlights, sampleText, JSDOM)).toEqual(expectedResult);
 	});
-	it('Should apply an array of highlights that are in two different verses that contain additional markup', () => {
+	it('Case: 3 Should apply an array of highlights that are in two different verses that contain additional markup', () => {
 		const highlights = [
 			{
 				id: 99,
@@ -78,7 +78,7 @@ describe('highlightFormattedText', () => {
 
 		expect(highlightFormattedText(highlights, sampleText, JSDOM)).toEqual(expectedResult);
 	});
-	it('Should apply a highlight to a verse that does not contain any other markup', () => {
+	it('Case: 4 Should apply a highlight to a verse that does not contain any other markup', () => {
 		const highlights = [
 			{
 				id: 99,
@@ -96,7 +96,7 @@ describe('highlightFormattedText', () => {
 
 		expect(highlightFormattedText(highlights, sampleText, JSDOM)).toEqual(expectedResult);
 	});
-	it('Should apply an array of highlights to verses that do not contain any other markup', () => {
+	it('Case: 5 Should apply an array of highlights to verses that do not contain any other markup', () => {
 		const highlights = [
 			{
 				id: 99,
@@ -124,7 +124,7 @@ describe('highlightFormattedText', () => {
 
 		expect(highlightFormattedText(highlights, sampleText, JSDOM)).toEqual(expectedResult);
 	});
-	it('Should highlight a verse that has multiple parent elements', () => {
+	it('Case: 6 Should highlight a verse that has multiple parent elements', () => {
 		const highlights = [
 			{
 				id: 199,
@@ -142,7 +142,7 @@ describe('highlightFormattedText', () => {
 
 		expect(highlightFormattedText(highlights, sampleText, JSDOM)).toEqual(expectedResult);
 	});
-	it('Should apply highlight that spans multiple elements with the same data-id', () => {
+	it('Case: 7 Should apply highlight that spans multiple elements with the same data-id', () => {
 		const highlights = [
 			{
 				id: 199,
@@ -160,7 +160,7 @@ describe('highlightFormattedText', () => {
 
 		expect(highlightFormattedText(highlights, sampleText, JSDOM)).toEqual(expectedResult);
 	});
-	it('Should apply an array of highlights that span multiple elements with the same data-id', () => {
+	it('Case: 8 Should apply an array of highlights that span multiple elements with the same data-id', () => {
 		const highlights = [
 			{
 				id: 199,
@@ -188,7 +188,7 @@ describe('highlightFormattedText', () => {
 
 		expect(highlightFormattedText(highlights, sampleText, JSDOM)).toEqual(expectedResult);
 	});
-	it('Should apply highlight that spans multiple elements with the same data-id and starts in the second one', () => {
+	it('Case: 9 Should apply highlight that spans multiple elements with the same data-id and starts in the second one', () => {
 		const highlights = [
 			{
 				id: 199,
@@ -206,7 +206,7 @@ describe('highlightFormattedText', () => {
 
 		expect(highlightFormattedText(highlights, sampleText, JSDOM)).toEqual(expectedResult);
 	});
-	it('Should apply an array of highlights where first highlight is overlapped by the second', () => {
+	it('Case: 10 Should apply an array of highlights where first highlight is overlapped by the second and they have different verse elements', () => {
 		const highlights = [
 			{
 				id: 199,
@@ -234,7 +234,7 @@ describe('highlightFormattedText', () => {
 
 		expect(highlightFormattedText(highlights, sampleText, JSDOM)).toEqual(expectedResult);
 	});
-	it('Should apply a highlight that spans multiple verses', () => {
+	it('Case: 11 Should apply a highlight that spans multiple verses', () => {
 		const highlights = [
 			{
 				id: 199,
@@ -252,7 +252,7 @@ describe('highlightFormattedText', () => {
 
 		expect(highlightFormattedText(highlights, sampleText, JSDOM)).toEqual(expectedResult);
 	});
-	it('Should apply an array of highlights that are in two different verses where the first highlight spans 2 verses and second is in the second verse', () => {
+	it('Case: 12 Should apply an array of highlights that are in two different verses where the first highlight spans 2 verses and second is in the second verse', () => {
 		const highlights = [
 			{
 				id: 99,
@@ -280,7 +280,109 @@ describe('highlightFormattedText', () => {
 
 		expect(highlightFormattedText(highlights, sampleText, JSDOM)).toEqual(expectedResult);
 	});
-	it('Should apply an array of highlights that overlap in the same verse', () => {
-		expect(true).toBe(false);
+	it('Case: 13 Should apply an array of highlights that do not overlap across multiple segments', () => {
+		const highlights = [
+			{
+				id: 304,
+				bible_id: 'ENGWEB',
+				book_id: 'LUK',
+				chapter: 17,
+				verse_start: 5,
+				highlight_start: 0,
+				highlighted_words: 12,
+				highlighted_color: '#1AF',
+			},
+			{
+				id: 305,
+				bible_id: 'ENGWEB',
+				book_id: 'LUK',
+				chapter: 17,
+				verse_start: 6,
+				highlight_start: 4,
+				highlighted_words: 28,
+				highlighted_color: '#5B4',
+			},
+			{
+				id: 306,
+				bible_id: 'ENGWEB',
+				book_id: 'LUK',
+				chapter: 17,
+				verse_start: 6,
+				highlight_start: 56,
+				highlighted_words: 29,
+				highlighted_color: '#86A',
+			},
+		];
+		const sampleText = '<div class="chapter section ENGWEB_72_LUK_17 ENGWEB eng LUK latin" dir="ltr" data-id="ENGWEB_72_LUK_17" data-nextid="LUK18" data-previd="LUK16" lang="eng">\n<div class="c">17</div><p><span class="verse5 v-num v-5">5&nbsp;</span><span class="v LUK17_5" data-id="LUK17_5">The apostles said to the Lord, “Increase our faith.”</span>\n</p><p><span class="verse6 v-num v-6">6&nbsp;</span><span class="v LUK17_6" data-id="LUK17_6">The Lord said, <span class=\'wj\'>“If you had faith like a grain of mustard seed, you would tell this sycamore tree, ‘Be uprooted, and be planted in the sea,’ and it would obey you. </span></span></p></div>';
+		const expectedResult = `<div class="chapter section ENGWEB_72_LUK_17 ENGWEB eng LUK latin" dir="ltr" data-id="ENGWEB_72_LUK_17" data-nextid="LUK18" data-previd="LUK16" lang="eng">\n<div class="c">17</div><p><span class="verse5 v-num v-5">5&nbsp;</span><span class="v LUK17_5" data-id="LUK17_5"><span><em class="text-highlighted" style="background:${highlights[0].highlighted_color}">The apostles</em> said to the Lord, “Increase our faith.”</span></span>\n</p><p><span class="verse6 v-num v-6">6&nbsp;</span><span class="v LUK17_6" data-id="LUK17_6"><span>The <em class="text-highlighted" style="background:${highlights[1].highlighted_color}">Lord said, </em></span><span class="wj"><em class="text-highlighted" style="background:${highlights[1].highlighted_color}">“If you had faith</em> like a grain of mustard<em class="text-highlighted" style="background:${highlights[2].highlighted_color}"> seed, you would tell this sy</em>camore tree, ‘Be uprooted, and be planted in the sea,’ and it would obey you. </span></span></p></div>`;
+
+		expect(highlightFormattedText(highlights, sampleText, JSDOM)).toEqual(expectedResult);
+	});
+	it('Case: 14 Should apply two highlights that overlap in the same verse and the verse only has a single text node', () => {
+		const highlights = [
+			{
+				id: 320,
+				bible_id: 'ENGWEB',
+				book_id: 'JER',
+				chapter: 1,
+				verse_start: 3,
+				highlight_start: 42,
+				highlighted_words: 13,
+				highlighted_color: '#86A',
+			},
+			{
+				id: 321,
+				bible_id: 'ENGWEB',
+				book_id: 'JER',
+				chapter: 1,
+				verse_start: 3,
+				highlight_start: 49,
+				highlighted_words: 12,
+				highlighted_color: '#5B4',
+			},
+		];
+		const sampleText = '<div class="chapter section ENGWEB_25_JER_1 ENGWEB eng JER latin" dir="ltr" data-id="ENGWEB_25_JER_1" data-nextid="JER2" data-previd="ISA66" lang="eng"><div class="c">1</div><p><span class="verse3 v-num v-3">3&nbsp;</span><span class="v JER1_3" data-id="JER1_3">It came also in the days of Jehoiakim the son of Josiah, king of Judah, to the end of the eleventh year of Zedekiah, the son of Josiah, king of Judah, to the carrying away of Jerusalem captive in the fifth month.</span></p></div>';
+		const expectedResult = `<div class="chapter section ENGWEB_25_JER_1 ENGWEB eng JER latin" dir="ltr" data-id="ENGWEB_25_JER_1" data-nextid="JER2" data-previd="ISA66" lang="eng"><div class="c">1</div><p><span class="verse3 v-num v-3">3&nbsp;</span><span class="v JER1_3" data-id="JER1_3"><span>It came also in the days of Jehoiakim the <em class="text-highlighted" style="background:${highlights[0].highlighted_color}">son of </em><em class="text-highlighted" style="background:${highlights[1].highlighted_color}">Josiah, king</em> of Judah, to the end of the eleventh year of Zedekiah, the son of Josiah, king of Judah, to the carrying away of Jerusalem captive in the fifth month.</span></span></p></div>`;
+
+		expect(highlightFormattedText(highlights, sampleText, JSDOM)).toEqual(expectedResult);
+	});
+	xit('Case: 15 When two highlights start at the same index the highlight with the greater id should be the color that is kept', () => expect(true).toEqual(false));
+	it('Case: 16 Should apply three highlights that overlap in the space of one same verse and the verse only has a single text node', () => {
+		const highlights = [
+			{
+				id: 320,
+				bible_id: 'ENGWEB',
+				book_id: 'JER',
+				chapter: 1,
+				verse_start: 3,
+				highlight_start: 42,
+				highlighted_words: 13,
+				highlighted_color: '#86A',
+			},
+			{
+				id: 321,
+				bible_id: 'ENGWEB',
+				book_id: 'JER',
+				chapter: 1,
+				verse_start: 3,
+				highlight_start: 49,
+				highlighted_words: 12,
+				highlighted_color: '#5B4',
+			},
+			{
+				id: 322,
+				bible_id: 'ENGWEB',
+				book_id: 'JER',
+				chapter: 1,
+				verse_start: 3,
+				highlight_start: 57,
+				highlighted_words: 4,
+				highlighted_color: '#1AF',
+			},
+		];
+		const sampleText = '<div class="chapter section ENGWEB_25_JER_1 ENGWEB eng JER latin" dir="ltr" data-id="ENGWEB_25_JER_1" data-nextid="JER2" data-previd="ISA66" lang="eng"><div class="c">1</div><p><span class="verse3 v-num v-3">3&nbsp;</span><span class="v JER1_3" data-id="JER1_3">It came also in the days of Jehoiakim the son of Josiah, king of Judah, to the end of the eleventh year of Zedekiah, the son of Josiah, king of Judah, to the carrying away of Jerusalem captive in the fifth month.</span></p></div>';
+		const expectedResult = `<div class="chapter section ENGWEB_25_JER_1 ENGWEB eng JER latin" dir="ltr" data-id="ENGWEB_25_JER_1" data-nextid="JER2" data-previd="ISA66" lang="eng"><div class="c">1</div><p><span class="verse3 v-num v-3">3&nbsp;</span><span class="v JER1_3" data-id="JER1_3"><span>It came also in the days of Jehoiakim the <em class="text-highlighted" style="background:${highlights[0].highlighted_color}">son of </em><em class="text-highlighted" style="background:${highlights[1].highlighted_color}">Josiah, </em><em class="text-highlighted" style="background:${highlights[2].highlighted_color}">king</em> of Judah, to the end of the eleventh year of Zedekiah, the son of Josiah, king of Judah, to the carrying away of Jerusalem captive in the fifth month.</span></span></p></div>`;
+
+		expect(highlightFormattedText(highlights, sampleText, JSDOM)).toEqual(expectedResult);
 	});
 });

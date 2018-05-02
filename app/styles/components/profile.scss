@@ -187,8 +187,11 @@
 .profile .signup-error-message {
   width: 320px;
   font-weight:200;
-  background-color: $sketch-document-color-dark-gray;
   padding: 0 15px 15px 30px;
+
+  @include css4 {
+    background-color: var(--text-selection-background);
+  }
 }
 .profile .sign-in-button {
   display:flex;

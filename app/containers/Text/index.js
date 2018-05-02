@@ -252,7 +252,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			if (isFormatted) {
 				const verseNode = getFormattedParentVerse(target);
 				const firstVerse = verseNode ? verseNode.attributes['data-id'].value.split('_')[1] : '';
-				console.log('first formatted verse', firstVerse);
+				// console.log('first formatted verse', firstVerse);
 				// third check may not be required, if micro optimization is needed then look into removing contains
 				if (primaryButton && this.main.contains(target) && firstVerse) {
 					this.setState({
@@ -262,7 +262,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			} else if (!isFormatted) {
 				const verseNode = getPlainParentVerseWithoutNumber(target);
 				const firstVerse = verseNode ? verseNode.attributes.verseid.value : '';
-				console.log('first plain verse', firstVerse);
+				// console.log('first plain verse', firstVerse);
 				// third check may not be required, if micro optimization is needed then look into removing contains
 				if (primaryButton && this.main.contains(target) && firstVerse) {
 					this.setState({
