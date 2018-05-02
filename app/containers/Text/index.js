@@ -652,6 +652,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 
 	addHighlight = ({ color, popupCoords }) => {
 		const highlightObject = {};
+		// Todo: If color === 'none' then send a request to remove the any highlight that contains or is contained by the new highlight object or something...
 
 		// Getting the data for the tests
 		// console.log(JSON.stringify(this.props));
