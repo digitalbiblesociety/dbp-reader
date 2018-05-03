@@ -379,6 +379,7 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 		} = this.props;
 		const {
 			autoPlayChecked,
+			currentSpeed,
 		} = this.state;
 
 		return (
@@ -424,11 +425,7 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 								{this.currentSpeedSvg}
 								<FormattedMessage {...messages.speed} />
 							</div>
-							{
-								this.state.speedControlState ? (
-									<this.speedControl currentSpeed={this.state.currentSpeed} options={[0.75, 1, 1.25, 1.5, 2]} setSpeed={this.updatePlayerSpeed} />
-								) : null
-							}
+							<SpeedControl active={this.state.speedControlState} options={[0.75, 1, 1.25, 1.5, 2]} setSpeed={this.updatePlayerSpeed} currentSpeed={currentSpeed} />
 						</div>
 					</div>
 					<audio preload={'auto'} ref={this.handleRef} className="audio-player" src={source}></audio>
