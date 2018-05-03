@@ -35,6 +35,10 @@
   //  margin-right:18px;
   //};
   font-size:12px;
+
+  &.closed {
+    display: none;
+  }
 }
 .audio-player-container .item {border:1px solid transparent;cursor:pointer;width:100%;height:50px;display:flex;align-items:center;justify-content:center;}
 //.audio-player-container .item:hover    {opacity:.65;}
