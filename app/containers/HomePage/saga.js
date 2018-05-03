@@ -446,7 +446,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 			// console.log('complete audio response object', response);
 			const audioPaths = [get(response, ['data', 0, 'path'])];
 			// console.log('complete audio path', audioPaths);
-			yield put({ type: 'loadaudio', audioPaths });
+			yield put({ type: 'loadaudio', audioPaths, audioFilesetId: get(completeAudio, [0, 'id']) });
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Caught in getChapterAudio complete audio', error); // eslint-disable-line no-console
@@ -468,7 +468,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 			const audioPaths = [get(response, ['data', 0, 'path'])];
 			// console.log('nt audio path', audioPaths);
 			ntHasUrl = !!audioPaths[0];
-			yield put({ type: 'loadaudio', audioPaths });
+			yield put({ type: 'loadaudio', audioPaths, audioFilesetId: get(ntAudio, [0, 'id']) });
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Caught in getChapterAudio nt audio', error); // eslint-disable-line no-console
@@ -490,7 +490,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 			// console.log('ot audio path', audioPaths);
 			// otPath = audioPaths;
 			otHasUrl = !!audioPaths[0];
-			yield put({ type: 'loadaudio', audioPaths });
+			yield put({ type: 'loadaudio', audioPaths, audioFilesetId: get(otAudio, [0, 'id']) });
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Caught in getChapterAudio ot audio', error); // eslint-disable-line no-console
@@ -550,7 +550,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 		}
 		ntHasUrl = !!ntPath;
 		otHasUrl = !!otPath;
-		yield put({ type: 'loadaudio', audioPaths: ntPath || otPath });
+		yield put({ type: 'loadaudio', audioPaths: ntPath || otPath, audioFilesetId: ntPath ? get(ntAudio, [0, 'id']) : get(otAudio, [0, 'id']) });
 	}
 
 	if (partialOtAudio.length && !otLength && (!otHasUrl && !ntHasUrl)) {
@@ -568,7 +568,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 				audioPaths.push(get(response, ['data', 0, 'path']));
 			}
 			// console.log('partial audio path', audioPaths);
-			yield put({ type: 'loadaudio', audioPaths });
+			yield put({ type: 'loadaudio', audioPaths, audioFilesetId: get(partialOtAudio, [0, 'id']) });
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Caught in getChapterAudio partial audio', error); // eslint-disable-line no-console
@@ -598,7 +598,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 				audioPaths.push(get(response, ['data', 0, 'path']));
 			}
 			// console.log('partial audio path', audioPaths);
-			yield put({ type: 'loadaudio', audioPaths });
+			yield put({ type: 'loadaudio', audioPaths, audioFilesetId: get(partialNtAudio, [0, 'id']) });
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Caught in getChapterAudio partial audio', error); // eslint-disable-line no-console
@@ -628,7 +628,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 				audioPaths.push(get(response, ['data', 0, 'path']));
 			}
 			// console.log('partial audio path', audioPaths);
-			yield put({ type: 'loadaudio', audioPaths });
+			yield put({ type: 'loadaudio', audioPaths, audioFilesetId: get(partialNtOtAudio, [0, 'id']) });
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Caught in getChapterAudio partial audio', error); // eslint-disable-line no-console
