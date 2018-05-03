@@ -3,7 +3,11 @@ import request from 'utils/request';
 import { GET_SEARCH_RESULTS, LOAD_SEARCH_RESULTS, SEARCH_ERROR } from './constants';
 
 export function* getSearchResults({ bibleId, searchText }) {
-	const searchString = searchText.replace(' ', '+');
+	const searchString = searchText.trim().replace(' ', '+');
+	// console.log('Search string', searchString);
+	// console.log('encoded Search string', encodeURI(searchString));
+	// console.log('decoded Search string', decodeURI(encodeURI(searchString)));
+
 	// https://api.bible.build/search?key=e582134c-8773-4e8a-b3b4-3f2493fc5127&v=4&query=god+loved+world&dam_id=ENGKJV&pretty
 	const reqUrl = `https://api.bible.build/search?dam_id=${bibleId}&key=${process.env.DBP_API_KEY}&v=4&query=${searchString}`;
 
