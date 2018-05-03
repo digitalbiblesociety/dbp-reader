@@ -24,7 +24,7 @@ import reducer from './reducer';
 import messages from './messages';
 /* eslint-disable jsx-a11y/media-has-caption */
 /* disabled the above eslint config options because you can't add tracks to audio elements */
-// Todo: Something in here is/was trying to update an unmounted component
+
 export class AudioPlayer extends React.Component { // eslint-disable-line react/prefer-stateless-function
 	constructor(props) {
 		super(props);
@@ -68,18 +68,18 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.audioSource !== this.props.audioSource) {
 			// this.pauseVideo();
-			if (nextProps.audioSource) {
+			if (nextProps.audioSource && !this.state.playerState) {
 				this.setState({ playerState: true, playing: false });
 			} else if (this.state.playerState) {
 				this.setState({ playerState: false, playing: false });
 			}
-			if (nextProps.autoPlay) {
+			if (nextProps.autoPlay && !this.props.autoPlay) {
 				// console.log('source changed and auto play is true');
 				this.audioRef.addEventListener('canplay', this.autoPlayListener);
 			}
 		}
 
-		if (!nextProps.autoPlay) {
+		if (!nextProps.autoPlay && this.props.autoPlay) {
 			// console.log('auto play is now false');
 			this.audioRef.removeEventListener('canplay', this.autoPlayListener);
 		}
