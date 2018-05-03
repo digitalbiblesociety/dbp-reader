@@ -223,6 +223,9 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 	// Need to fix how many times this gets called. The main issue is all the state that is managed by this one thing
 	// c = 0
 	componentWillReceiveProps(nextProps) {
+		// console.log('Diff props', differenceObject(nextProps, this.props));
+		// console.log('Diff state', differenceObject(nextState, this.state));
+
 		// console.log('FB at receive props', FB);
 		// let FB = undefined;
 		// if (typeof FB === 'function' && this.c === 0) {
@@ -566,7 +569,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			text: updatedText,
 		} = this.props.textData;
 		// console.log('text', updatedText);
-		// console.log('userNotes', userNotes);
+		// console.log('Homepage re-rendered bc reasons');
 
 		const verse = this.props.match.params.verse || '';
 
@@ -720,6 +723,7 @@ function mapDispatchToProps(dispatch) {
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
+// Defeats the purpose of code splitting - need to figure out a different method to reduce bundle size
 const withReducer = injectReducer({ key: 'homepage', reducer });
 const withSaga = injectSaga({ key: 'homepage', saga });
 const withTextReducer = injectReducer({ key: 'textSelection', reducer: textReducer });

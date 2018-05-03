@@ -10,22 +10,20 @@ import Slider from 'rc-slider/lib/Slider';
 // import CloseMenuFunctions from 'utils/closeMenuFunctions';
 // import styled from 'styled-components';
 // rc-slider Slider component doesn't accept classes for styles other than classname
-// TODO: Figure out why slider isn't sliding - the problem is that the parent component is updating and sending down the new volume value which causes this component to re-render
 class VolumeSlider extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	// state = {
 	// 	stateVolume: 0,
 	// }
-	componentDidMount() {
-		// document.addEventListener('click', this.handleClickOutside);
-		// console.log('volume slider is re-mounting');
-	}
-
-	// componentWillUnmount() {
-	// 	document.removeEventListener('click', this.handleClickOutside);
+	// componentDidMount() {
+	// 	this.closeMenuController = new CloseMenuFunctions(this.ref, this.props.onCloseFunction);
+	// 	this.closeMenuController.onMenuMount();
 	// }
 	//
-	// setInnerRef = (el) => {
-	// 	this.wrappedComponent = el;
+	// componentWillUnmount() {
+	// 	this.closeMenuController.onMenuUnmount();
+	// }
+	// setRef = (el) => {
+	// 	this.ref = el;
 	// }
 	//
 	// handleClickOutside = (event) => {
@@ -56,8 +54,8 @@ class VolumeSlider extends React.PureComponent { // eslint-disable-line react/pr
 		// } = this.state;
 		// console.log('rendering volume slider');
 		return (
-			<div className={active ? 'volume-slider-container active' : 'volume-slider-container'}>
-				<div ref={this.setInnerRef} className="volume-slider">
+			<div ref={this.setRef} className={active ? 'volume-slider-container active' : 'volume-slider-container'}>
+				<div className="volume-slider">
 					<Slider
 						className="slider"
 						onChange={this.handleChange}

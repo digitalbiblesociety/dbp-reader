@@ -9,9 +9,6 @@ import PropTypes from 'prop-types';
 // import styled from 'styled-components';
 
 class SpeedControl extends React.PureComponent {
-	// componentDidMount() {
-	// 	console.log('speed control mounted');
-	// }
 	render() {
 		const { active, options, setSpeed, currentSpeed } = this.props;
 
@@ -42,6 +39,7 @@ SpeedControl.propTypes = {
 	setSpeed: PropTypes.func,
 	active: PropTypes.bool,
 	currentSpeed: PropTypes.number,
+	// onCloseFunction: PropTypes.func,
 };
 
 export default SpeedControl;
