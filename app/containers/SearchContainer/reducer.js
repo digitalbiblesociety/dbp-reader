@@ -19,7 +19,7 @@ const initialState = fromJS({
 	lastFiveSearches: JSON.parse(localStorage.getItem('bible_is_last_searches')) || [],
 	trySearchOptions: [
 		{ id: 1, searchText: 'Jesus' },
-		{ id: 2, searchText: 'Romans 10:17' },
+		{ id: 2, searchText: 'prayer' },
 		{ id: 3, searchText: 'self control' },
 	],
 	loadingResults: false,

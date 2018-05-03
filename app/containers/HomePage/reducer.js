@@ -43,13 +43,11 @@ const initialState = fromJS({
 	chapterText: [],
 	audioObjects: [],
 	activeFilesets: {},
+	audioFilesetId: '',
+	plainTextFilesetId: '',
+	formattedTextFilesetId: '',
 	highlights: [],
-	copywrite: {
-		mark: '',
-		name: '',
-		date: '',
-		country: '',
-	},
+	copyrights: [],
 	activeChapter: 1,
 	isChapterSelectionActive: false,
 	isProfileActive: false,
@@ -232,11 +230,14 @@ function homePageReducer(state = initialState, action) {
 			)
 			.setIn(['userSettings', 'toggleOptions', 'readersMode', 'available'], action.hasPlainText)
 			.setIn(['userSettings', 'toggleOptions', 'oneVersePerLine', 'available'], action.hasPlainText)
+			.set('formattedTextFilesetId', action.formattedTextFilesetId)
+			.set('plainTextFilesetId', action.plainTextFilesetId)
 			.set('formattedSource', fromJS(action.formattedText));
 	case 'loadaudio':
 		// console.log('loading audio with', action);
 		return state
 			.set('audioPaths', action.audioPaths.slice(1))
+			.set('audioFilesetId', action.audioFilesetId)
 			.set('audioSource', action.audioPaths[0]);
 	case 'getchapter':
 		return state.set('loadingNewChapterText', true);
@@ -246,6 +247,8 @@ function homePageReducer(state = initialState, action) {
 		return state
 			.set('invalidBibleId', true)
 			.set('loadingNewChapterText', false);
+	case 'loadcopyright':
+		return state.set('copyrights', action.copyrights);
 	default:
 		return state;
 	}

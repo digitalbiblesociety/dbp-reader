@@ -6,6 +6,7 @@
 
 export const GET_CHAPTER_TEXT = 'app/HomePage/GET_CHAPTER_TEXT';
 export const GET_HIGHLIGHTS = 'app/HomePage/GET_HIGHLIGHTS';
+export const GET_COPYRIGHTS = 'app/HomePage/GET_COPYRIGHTS';
 export const LOAD_CHAPTER_TEXT = 'app/HomePage/LOAD_CHAPTER_TEXT';
 export const LOAD_HIGHLIGHTS = 'app/HomePage/LOAD_HIGHLIGHTS';
 export const SET_ACTIVE_BOOK_NAME = 'app/HomePage/SET_ACTIVE_BOOK_NAME';

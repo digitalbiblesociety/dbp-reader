@@ -1,13 +1,14 @@
 import 'whatwg-fetch';
-import { takeLatest, call, put, fork } from 'redux-saga/effects';
+import { takeLatest, call, all, put, fork } from 'redux-saga/effects';
 import request from 'utils/request';
 import some from 'lodash/some';
 import reduce from 'lodash/reduce';
 import get from 'lodash/get';
+import uniq from 'lodash/uniq';
 import { getNotes } from 'containers/Notes/saga';
 import { ADD_BOOKMARK } from 'containers/Notes/constants';
 // import filter from 'lodash/filter';
-import { ADD_HIGHLIGHTS, LOAD_HIGHLIGHTS, GET_HIGHLIGHTS, GET_NOTES_HOMEPAGE } from './constants';
+import { ADD_HIGHLIGHTS, LOAD_HIGHLIGHTS, GET_HIGHLIGHTS, GET_NOTES_HOMEPAGE, GET_COPYRIGHTS } from './constants';
 // import { fromJS } from 'immutable';
 // import unionWith from 'lodash/unionWith';
 // import { ADD_HIGHLIGHTS, LOAD_HIGHLIGHTS, GET_CHAPTER_TEXT, GET_HIGHLIGHTS, GET_BOOKS, GET_AUDIO, INIT_APPLICATION } from './constants';
@@ -265,6 +266,8 @@ export function* getChapterFromUrl({ filesets, bibleId: oldBibleId, bookId: oldB
 
 	try {
 		let formattedText = '';
+		let formattedTextFilesetId = '';
+		let plainTextFilesetId = '';
 		let plainText = [];
 		let hasPlainText = some(filesets, (f) => (f.set_type_code === 'text_plain' && f.bucket_id === 'dbp-dev'));
 
@@ -287,13 +290,17 @@ export function* getChapterFromUrl({ filesets, bibleId: oldBibleId, bookId: oldB
 			try {
 				// Gets the last fileset id for a formatted text
 				const filesetId = reduce(filesets, (a, c) => (c.set_type_code === 'text_format' && c.bucket_id === 'dbp-dev') ? c.id : a, '');
-				// console.log(filesetId);
+				// console.log('before fork');
+				// yield fork(getCopyrightSaga, { filesetId });
+				// console.log('after fork');
 				const reqUrl = `https://api.bible.build/bibles/filesets/${filesetId}?bucket=${process.env.DBP_BUCKET_ID}&key=${process.env.DBP_API_KEY}&v=4&book_id=${bookId}&chapter_id=${chapter}&type=text_format`; // hard coded since this only ever needs to get formatted text
 				// console.log(reqUrl);
 				const formattedChapterObject = yield call(request, reqUrl);
 				const path = get(formattedChapterObject.data, [0, 'path']);
 				// console.log('response for formatted text', formattedChapterObject);
 				formattedText = yield path ? fetch(path).then((res) => res.text()) : '';
+
+				formattedTextFilesetId = formattedText ? filesetId : '';
 				// console.log(formattedText);
 			} catch (error) {
 				if (process.env.NODE_ENV === 'development') {
@@ -315,6 +322,8 @@ export function* getChapterFromUrl({ filesets, bibleId: oldBibleId, bookId: oldB
 			const res = yield call(request, reqUrl);
 			// console.log('response for plain text', res);
 			plainText = res.data;
+
+			plainTextFilesetId = plainText ? bibleId : '';
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Caught in get plain text block', error); // eslint-disable-line no-console
@@ -334,7 +343,9 @@ export function* getChapterFromUrl({ filesets, bibleId: oldBibleId, bookId: oldB
 		yield put({
 			type: 'loadnewchapter',
 			plainText,
+			plainTextFilesetId,
 			formattedText,
+			formattedTextFilesetId,
 			hasPlainText,
 			hasFormattedText,
 			hasAudio,
@@ -435,7 +446,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 			// console.log('complete audio response object', response);
 			const audioPaths = [get(response, ['data', 0, 'path'])];
 			// console.log('complete audio path', audioPaths);
-			yield put({ type: 'loadaudio', audioPaths });
+			yield put({ type: 'loadaudio', audioPaths, audioFilesetId: get(completeAudio, [0, 'id']) });
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Caught in getChapterAudio complete audio', error); // eslint-disable-line no-console
@@ -457,7 +468,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 			const audioPaths = [get(response, ['data', 0, 'path'])];
 			// console.log('nt audio path', audioPaths);
 			ntHasUrl = !!audioPaths[0];
-			yield put({ type: 'loadaudio', audioPaths });
+			yield put({ type: 'loadaudio', audioPaths, audioFilesetId: get(ntAudio, [0, 'id']) });
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Caught in getChapterAudio nt audio', error); // eslint-disable-line no-console
@@ -479,7 +490,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 			// console.log('ot audio path', audioPaths);
 			// otPath = audioPaths;
 			otHasUrl = !!audioPaths[0];
-			yield put({ type: 'loadaudio', audioPaths });
+			yield put({ type: 'loadaudio', audioPaths, audioFilesetId: get(otAudio, [0, 'id']) });
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Caught in getChapterAudio ot audio', error); // eslint-disable-line no-console
@@ -539,7 +550,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 		}
 		ntHasUrl = !!ntPath;
 		otHasUrl = !!otPath;
-		yield put({ type: 'loadaudio', audioPaths: ntPath || otPath });
+		yield put({ type: 'loadaudio', audioPaths: ntPath || otPath, audioFilesetId: ntPath ? get(ntAudio, [0, 'id']) : get(otAudio, [0, 'id']) });
 	}
 
 	if (partialOtAudio.length && !otLength && (!otHasUrl && !ntHasUrl)) {
@@ -557,7 +568,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 				audioPaths.push(get(response, ['data', 0, 'path']));
 			}
 			// console.log('partial audio path', audioPaths);
-			yield put({ type: 'loadaudio', audioPaths });
+			yield put({ type: 'loadaudio', audioPaths, audioFilesetId: get(partialOtAudio, [0, 'id']) });
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Caught in getChapterAudio partial audio', error); // eslint-disable-line no-console
@@ -587,7 +598,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 				audioPaths.push(get(response, ['data', 0, 'path']));
 			}
 			// console.log('partial audio path', audioPaths);
-			yield put({ type: 'loadaudio', audioPaths });
+			yield put({ type: 'loadaudio', audioPaths, audioFilesetId: get(partialNtAudio, [0, 'id']) });
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Caught in getChapterAudio partial audio', error); // eslint-disable-line no-console
@@ -617,7 +628,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 				audioPaths.push(get(response, ['data', 0, 'path']));
 			}
 			// console.log('partial audio path', audioPaths);
-			yield put({ type: 'loadaudio', audioPaths });
+			yield put({ type: 'loadaudio', audioPaths, audioFilesetId: get(partialNtOtAudio, [0, 'id']) });
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Caught in getChapterAudio partial audio', error); // eslint-disable-line no-console
@@ -629,6 +640,26 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 				// fetch('https://api.bible.build/error_logging', options);
 				yield put({ type: 'loadaudio', audioPaths: [''] });
 			}
+		}
+	}
+}
+
+export function* getCopyrightSaga({ filesetIds }) {
+	// console.log('In the fork');
+	const reqUrls = [];
+	// console.log('ids', filesetIds);
+	uniq(filesetIds.filter((f) => !!f)).forEach((id) => reqUrls.push(`https://api.bible.build/bibles/filesets/${id}/copyright?key=${process.env.DBP_API_KEY}&v=4`));
+
+	try {
+		const response = yield all(reqUrls.map((url) => call(request, url)));
+		const copyrightArray = response.map((res) => res.copyright);
+		// console.log('copyright response', response);
+		const copyrights = copyrightArray.map((cp) => ({ message: cp.copyright, organizations: cp.organizations.map((org) => ({ name: org.slug, logo: org.logos[0], url: org.url_website })) }));
+		// console.log('copyrights', copyrights);
+		yield put({ type: 'loadcopyright', copyrights });
+	} catch (err) {
+		if (process.env.NODE_ENV === 'development') {
+			console.warn('Caught in get copyright', err); // eslint-disable-line no-console
 		}
 	}
 }
@@ -646,4 +677,5 @@ export default function* defaultSaga() {
 	yield takeLatest('getaudio', getChapterAudio);
 	yield takeLatest(ADD_BOOKMARK, addBookmark);
 	yield takeLatest(GET_NOTES_HOMEPAGE, getNotes);
+	yield takeLatest(GET_COPYRIGHTS, getCopyrightSaga);
 }

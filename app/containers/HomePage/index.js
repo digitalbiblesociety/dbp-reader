@@ -65,6 +65,7 @@ import {
 	getNotes,
 	getChapterText,
 	getHighlights,
+	getCopyrights,
 	// toggleMenuBar,
 	toggleProfile,
 	toggleAutoPlay,
@@ -223,6 +224,9 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 	// Need to fix how many times this gets called. The main issue is all the state that is managed by this one thing
 	// c = 0
 	componentWillReceiveProps(nextProps) {
+		// console.log('Diff props', differenceObject(nextProps, this.props));
+		// console.log('Diff state', differenceObject(nextState, this.state));
+
 		// console.log('FB at receive props', FB);
 		// let FB = undefined;
 		// if (typeof FB === 'function' && this.c === 0) {
@@ -489,6 +493,8 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 
 	getChapters = (props) => this.props.dispatch(getChapterText(props))
 
+	getCopyrights = (props) => this.props.dispatch(getCopyrights(props))
+
 	setActiveBookName = ({ book, id }) => this.props.dispatch(setActiveBookName({ book, id }))
 
 	setActiveChapter = (chapter) => this.props.dispatch(setActiveChapter(chapter))
@@ -541,7 +547,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			activeBookName,
 			activeChapter,
 			isProfileActive,
-			copywrite,
+			copyrights,
 			audioSource,
 			activeNotesView,
 			loadingNewChapterText,
@@ -549,6 +555,9 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			highlights,
 			autoPlayEnabled,
 			audioPaths,
+			audioFilesetId,
+			plainTextFilesetId,
+			formattedTextFilesetId,
 			// chapterText: updatedText,
 		} = this.props.homepage;
 
@@ -566,7 +575,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			text: updatedText,
 		} = this.props.textData;
 		// console.log('text', updatedText);
-		// console.log('userNotes', userNotes);
+		// console.log('Homepage re-rendered bc reasons');
 
 		const verse = this.props.match.params.verse || '';
 
@@ -623,7 +632,15 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					{
 						isInformationModalActive ? (
 							<FadeTransition classNames="slide-from-left" in={isInformationModalActive}>
-								<Information active={isInformationModalActive} copywrite={copywrite} toggleInformationModal={this.toggleInformationModal} />
+								<Information
+									active={isInformationModalActive}
+									copyrights={copyrights}
+									getCopyrights={this.getCopyrights}
+									toggleInformationModal={this.toggleInformationModal}
+									audioFilesetId={audioFilesetId}
+									formattedTextFilesetId={formattedTextFilesetId}
+									plainTextFilesetId={plainTextFilesetId}
+								/>
 							</FadeTransition>
 						) : null
 					}
@@ -720,6 +737,7 @@ function mapDispatchToProps(dispatch) {
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
+// Defeats the purpose of code splitting - need to figure out a different method to reduce bundle size
 const withReducer = injectReducer({ key: 'homepage', reducer });
 const withSaga = injectSaga({ key: 'homepage', saga });
 const withTextReducer = injectReducer({ key: 'textSelection', reducer: textReducer });

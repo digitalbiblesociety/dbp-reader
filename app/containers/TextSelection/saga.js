@@ -73,6 +73,7 @@ export function* getTexts({ languageISO }) {
 		// Some texts may have plain text in the database but no filesets
 		// This filters out all texts that don't have a fileset
 		const texts = response.data.filter((text) => (text.name && text.language && text.iso && text.abbr) && (Array.isArray(text.filesets) && text.filesets.length && text.filesets.find((f) => (f.set_type_code === 'audio' || f.set_type_code === 'audio_drama' || f.set_type_code === 'text_plain' || f.set_type_code === 'text_format'))));
+		// console.log(texts);
 
 		yield put({ type: CLEAR_ERROR_GETTING_VERSIONS });
 		yield put(loadTexts({ texts }));
@@ -97,10 +98,11 @@ export function* getLanguages() {
 	try {
 		const response = yield call(request, requestUrl);
 		// const languages = response.data.filter((language) => languageList[language.iso_code]);
+		// console.log(response.data.filter((l) => l.name === 'Ma\'di South' || l.iso === 'snm'));
 		// Temporary fix until the api returns the list pre-sorted
 		const languages = response.data.filter((language) => language.bibles > 0).sort((a, b) => a.name > b.name);
 		languages.unshift({ name: 'ANY', iso: 'ANY' });
-
+		// console.log('languages', languages);
 		yield put(setLanguages({ languages }));
 		yield put({ type: CLEAR_ERROR_GETTING_LANGUAGES });
 		// yield put(setLanguages({ languages: response.data }));

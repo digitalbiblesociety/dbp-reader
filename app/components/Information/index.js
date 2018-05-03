@@ -8,12 +8,22 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import SvgWrapper from 'components/SvgWrapper';
 import CloseMenuFunctions from 'utils/closeMenuFunctions';
-// import styled from 'styled-components';
 
 class Information extends React.PureComponent {// eslint-disable-line react/prefer-stateless-function
 	componentDidMount() {
 		this.closeMenuController = new CloseMenuFunctions(this.ref, this.props.toggleInformationModal);
 		this.closeMenuController.onMenuMount();
+		this.props.getCopyrights({
+			filesetIds: [
+				this.props.audioFilesetId,
+				this.props.plainTextFilesetId,
+				this.props.formattedTextFilesetId,
+			],
+			// filesetIds: [
+			// 	'ENGNIVC2DA',
+			// 	'ENGNIV',
+			// ],
+		});
 	}
 
 	componentWillUnmount() {
@@ -23,12 +33,18 @@ class Information extends React.PureComponent {// eslint-disable-line react/pref
 	setRef = (node) => {
 		this.ref = node;
 	}
-
+// {
+// 	copyrights.map((c) => c.organizations.map((o) => (
+// <div key={`${o.name}_${o.url}`}>
+// <h3>Provided to you by <a href={o.url}>{o.name}</a></h3>
+// <p>{c.message}</p>
+// </div>
+// )))
+// }
 	render() {
 		const {
-			copywrite,
+			copyrights,
 			toggleInformationModal,
-			// active,
 		} = this.props;
 		return (
 			<aside ref={this.setRef} className="profile">
@@ -37,11 +53,10 @@ class Information extends React.PureComponent {// eslint-disable-line react/pref
 					<SvgWrapper className={'icon'} svgid={'info'} onClick={() => toggleInformationModal()} />
 					<SvgWrapper className={'icon'} svgid={'arrow_left'} onClick={() => toggleInformationModal()} />
 				</header>
-				<section className="copywrite">
-					<h1 className="text">{copywrite.name}</h1>
-					<h1 className="text">{copywrite.mark}</h1>
-					<h1 className="text">{copywrite.date}</h1>
-					<h1 className="text">{copywrite.country}</h1>
+				<section className="copyrights-section">
+					{
+						copyrights.map((cp, i) => <p className={'text'} key={`${cp.message.slice(i)}_copyright`}>{cp.message}</p>)
+					}
 				</section>
 			</aside>
 		);
@@ -50,8 +65,11 @@ class Information extends React.PureComponent {// eslint-disable-line react/pref
 
 Information.propTypes = {
 	toggleInformationModal: PropTypes.func,
-	// active: PropTypes.bool,
-	copywrite: PropTypes.object,
+	getCopyrights: PropTypes.func,
+	copyrights: PropTypes.array,
+	audioFilesetId: PropTypes.string,
+	plainTextFilesetId: PropTypes.string,
+	formattedTextFilesetId: PropTypes.string,
 };
 
 export default Information;
