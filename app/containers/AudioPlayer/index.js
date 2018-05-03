@@ -24,7 +24,7 @@ import reducer from './reducer';
 import messages from './messages';
 /* eslint-disable jsx-a11y/media-has-caption */
 /* disabled the above eslint config options because you can't add tracks to audio elements */
-// Todo: Something in here is/was trying to update an unmounted component
+
 export class AudioPlayer extends React.Component { // eslint-disable-line react/prefer-stateless-function
 	constructor(props) {
 		super(props);
@@ -73,7 +73,7 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 			} else if (this.state.playerState) {
 				this.setState({ playerState: false, playing: false });
 			}
-			if (nextProps.autoPlay) {
+			if (nextProps.autoPlay && !this.props.autoPlay) {
 				// console.log('source changed and auto play is true');
 				this.audioRef.addEventListener('canplay', this.autoPlayListener);
 			}
@@ -344,6 +344,34 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 		return closeEventHoc(AudioPlayerMenu, this.closeModals);
 	}
 
+	nextIcon = (
+		<div className={'icon-wrap'} title={messages.nextTitle.defaultMessage}>
+			<SvgWrapper onClick={this.skipForward} className="svgitem icon" fill="#fff" svgid="next" />
+			<FormattedMessage {...messages.next} />
+		</div>
+	)
+
+	prevIcon = (
+		<div className={'icon-wrap'} title={messages.prevTitle.defaultMessage}>
+			<SvgWrapper onClick={this.skipBackward} className="svgitem icon" fill="#fff" svgid="previous" />
+			<FormattedMessage {...messages.prev} />
+		</div>
+	)
+
+	pauseIcon = (
+		<div className={'icon-wrap'} title={messages.pauseTitle.defaultMessage}>
+			<SvgWrapper onClick={this.pauseVideo} className="svgitem icon" fill="#fff" svgid="pause" />
+			<FormattedMessage {...messages.pause} />
+		</div>
+	)
+
+	playIcon = (
+		<div className={'icon-wrap'} title={messages.playTitle.defaultMessage}>
+			<SvgWrapper onClick={this.playVideo} className="svgitem icon" fill="#fff" svgid="play" />
+			<FormattedMessage {...messages.play} />
+		</div>
+	)
+
 	render() {
 		const {
 			audioSource: source,
@@ -351,6 +379,7 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 		} = this.props;
 		const {
 			autoPlayChecked,
+			currentSpeed,
 		} = this.state;
 
 		return (
@@ -366,68 +395,39 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 					/>
 				</div>
 				<div role="button" tabIndex={0} className={this.state.playerState && hasAudio ? 'audio-player-background' : 'audio-player-background closed'} ref={this.setAudioPlayerRef} onClick={this.handleBackgroundClick}>
-					{
-						(this.state.playerState && hasAudio) ? (
-							<div className="audio-player-container">
-								<div className={'icon-wrap'} title={messages.prevTitle.defaultMessage}>
-									<SvgWrapper onClick={this.skipBackward} className="svgitem icon" fill="#fff" svgid="previous" />
-									<FormattedMessage {...messages.prev} />
-								</div>
-								{
-									!this.state.playing ? (
-										<div className={'icon-wrap'} title={messages.playTitle.defaultMessage}>
-											<SvgWrapper onClick={this.playVideo} className="svgitem icon" fill="#fff" svgid="play" />
-											<FormattedMessage {...messages.play} />
-										</div>
-									) : null
-								}
-								{
-									this.state.playing ? (
-										<div className={'icon-wrap'} title={messages.pauseTitle.defaultMessage}>
-											<SvgWrapper onClick={this.pauseVideo} className="svgitem icon" fill="#fff" svgid="pause" />
-											<FormattedMessage {...messages.pause} />
-										</div>
-									) : null
-								}
-								<div className={'icon-wrap'} title={messages.nextTitle.defaultMessage}>
-									<SvgWrapper onClick={this.skipForward} className="svgitem icon" fill="#fff" svgid="next" />
-									<FormattedMessage {...messages.next} />
-								</div>
-								<AudioProgressBar setCurrentTime={this.setCurrentTime} duration={this.state.duration} currentTime={this.state.currentTime} />
-								<div id={'autoplay-wrap'} className={'icon-wrap'} title={messages.autoplayTitle.defaultMessage}>
-									<input
-										id={'autoplay'}
-										className={'custom-checkbox'}
-										type="checkbox"
-										onChange={this.handleAutoPlayChange}
-										defaultChecked={autoPlayChecked}
-									/>
-									<label htmlFor={'autoplay'}>
-										<FormattedMessage {...messages.autoplay} />
-									</label>
-								</div>
-								<div id="volume-wrap" className={'icon-wrap'}>
-									<div title={messages.volumeTitle.defaultMessage} role="button" tabIndex="0" className={this.state.volumeSliderState ? 'item active' : 'item'} onClick={() => { this.state.volumeSliderState ? this.setVolumeSliderState(false) : this.setVolumeSliderState(true); this.setSpeedControlState(false); this.setElipsisState(false); }}>
-										{this.getVolumeSvg(this.state.volume)}
-										<FormattedMessage {...messages.volume} />
-									</div>
-									{/* <this.volumeControl updateVolume={this.updateVolume} volume={this.state.volume} /> */}
-									<VolumeSlider active={this.state.volumeSliderState} onCloseFunction={this.closeModals} updateVolume={this.updateVolume} volume={this.state.volume} />
-								</div>
-								<div id="speed-wrap" className={'icon-wrap'}>
-									<div title={messages.speedTitle.defaultMessage} role="button" tabIndex="0" className={this.state.speedControlState ? 'item active' : 'item'} onClick={() => { this.state.speedControlState ? this.setSpeedControlState(false) : this.setSpeedControlState(true); this.setElipsisState(false); this.setVolumeSliderState(false); }}>
-										{this.currentSpeedSvg}
-										<FormattedMessage {...messages.speed} />
-									</div>
-									{
-										this.state.speedControlState ? (
-											<this.speedControl currentSpeed={this.state.currentSpeed} options={[0.75, 1, 1.25, 1.5, 2]} setSpeed={this.updatePlayerSpeed} />
-										) : null
-									}
-								</div>
+					<div className={this.state.playerState && hasAudio ? 'audio-player-container' : 'audio-player-container closed'}>
+						{this.prevIcon}
+						{this.state.playing ? this.pauseIcon : this.playIcon}
+						{this.nextIcon}
+						<AudioProgressBar setCurrentTime={this.setCurrentTime} duration={this.state.duration} currentTime={this.state.currentTime} />
+						<div id={'autoplay-wrap'} className={'icon-wrap'} title={messages.autoplayTitle.defaultMessage}>
+							<input
+								id={'autoplay'}
+								className={'custom-checkbox'}
+								type="checkbox"
+								onChange={this.handleAutoPlayChange}
+								defaultChecked={autoPlayChecked}
+							/>
+							<label htmlFor={'autoplay'}>
+								<FormattedMessage {...messages.autoplay} />
+							</label>
+						</div>
+						<div id="volume-wrap" className={'icon-wrap'}>
+							<div title={messages.volumeTitle.defaultMessage} role="button" tabIndex="0" className={this.state.volumeSliderState ? 'item active' : 'item'} onClick={() => { this.state.volumeSliderState ? this.setVolumeSliderState(false) : this.setVolumeSliderState(true); this.setSpeedControlState(false); this.setElipsisState(false); }}>
+								{this.getVolumeSvg(this.state.volume)}
+								<FormattedMessage {...messages.volume} />
 							</div>
-						) : null
-					}
+							{/* <this.volumeControl updateVolume={this.updateVolume} volume={this.state.volume} /> */}
+							<VolumeSlider active={this.state.volumeSliderState} onCloseFunction={this.closeModals} updateVolume={this.updateVolume} volume={this.state.volume} />
+						</div>
+						<div id="speed-wrap" className={'icon-wrap'}>
+							<div title={messages.speedTitle.defaultMessage} role="button" tabIndex="0" className={this.state.speedControlState ? 'item active' : 'item'} onClick={() => { this.state.speedControlState ? this.setSpeedControlState(false) : this.setSpeedControlState(true); this.setElipsisState(false); this.setVolumeSliderState(false); }}>
+								{this.currentSpeedSvg}
+								<FormattedMessage {...messages.speed} />
+							</div>
+							<SpeedControl active={this.state.speedControlState} options={[0.75, 1, 1.25, 1.5, 2]} setSpeed={this.updatePlayerSpeed} currentSpeed={currentSpeed} />
+						</div>
+					</div>
 					<audio preload={'auto'} ref={this.handleRef} className="audio-player" src={source}></audio>
 				</div>
 			</GenericErrorBoundary>

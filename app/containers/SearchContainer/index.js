@@ -18,7 +18,7 @@ import LoadingSpinner from 'components/LoadingSpinner';
 import CloseMenuFunctions from 'utils/closeMenuFunctions';
 import SearchResult from 'components/SearchResult';
 import RecentSearches from 'components/RecentSearches';
-import { getSearchResults, viewError, stopLoading } from './actions';
+import { getSearchResults, viewError, stopLoading, startLoading } from './actions';
 import makeSelectSearchContainer from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -54,9 +54,15 @@ export class SearchContainer extends React.PureComponent { // eslint-disable-lin
 
 	handleSearchInputChange = (e) => {
 		const val = e.target.value;
-		const { bibleId } = this.props;
+		const { bibleId, loadingResults } = this.props;
 
 		this.setState({ filterText: val, firstSearch: !val });
+		// May want to not control the loading state with redux and just use setState instead
+		if (!loadingResults && val) {
+			this.props.dispatch(startLoading());
+		} else if (!val) {
+			this.props.dispatch(stopLoading());
+		}
 		// Clears the timeout so that at most there will only be one request per second
 		if (this.timer) {
 			clearTimeout(this.timer);
@@ -95,6 +101,7 @@ export class SearchContainer extends React.PureComponent { // eslint-disable-lin
 			showError,
 			trySearchOptions,
 			lastFiveSearches,
+			loadingResults,
 		} = this.props.searchcontainer;
 		const { bibleId } = this.props;
 		const { filterText, firstSearch } = this.state;
@@ -111,6 +118,10 @@ export class SearchContainer extends React.PureComponent { // eslint-disable-lin
 					<RecentSearches searches={lastFiveSearches} clickHandler={this.handleSearchOptionClick} />
 				</div>
 			);
+		}
+
+		if (loadingResults) {
+			return <LoadingSpinner />;
 		}
 
 		return (

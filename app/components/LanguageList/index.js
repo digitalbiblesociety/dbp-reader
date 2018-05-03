@@ -71,7 +71,11 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 
 			return activeIndex;
 		};
-
+		// Once somebody complains about the text overlapping use the links below to fix
+		/*
+		* https://github.com/bvaughn/react-virtualized/blob/master/source/CellMeasurer/CellMeasurer.example.js
+		* https://stackoverflow.com/questions/43837279/dynamic-row-heights-with-react-virtualized-and-new-cellmeasurer
+		* */
 		return filteredLanguages.length ? (
 			<List
 				estimatedRowSize={28 * filteredLanguages.length}

@@ -11,6 +11,7 @@ import {
 	SEARCH_ERROR,
 	STOP_LOADING,
 	VIEW_ERROR,
+	START_LOADING,
 } from './constants';
 
 const initialState = fromJS({
@@ -57,6 +58,9 @@ function searchContainerReducer(state = initialState, action) {
 	case STOP_LOADING:
 		return state
 			.set('loadingResults', false);
+	case START_LOADING:
+		return state
+			.set('loadingResults', true);
 	default:
 		return state;
 	}

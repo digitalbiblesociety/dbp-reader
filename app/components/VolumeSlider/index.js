@@ -7,6 +7,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Slider from 'rc-slider/lib/Slider';
+// import CloseMenuFunctions from 'utils/closeMenuFunctions';
 // import styled from 'styled-components';
 // rc-slider Slider component doesn't accept classes for styles other than classname
 // TODO: Figure out why slider isn't sliding - the problem is that the parent component is updating and sending down the new volume value which causes this component to re-render
