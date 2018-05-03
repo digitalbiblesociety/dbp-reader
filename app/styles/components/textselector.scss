@@ -194,14 +194,14 @@
         }
       }
 
+      & .accordion__title {
+        padding:0 15px;
+      }
+
       &:hover {
         @include css4 {
           color: var(--active-color-primary);
         }
-      }
-
-      h4 {
-        padding-left:15px;
       }
     }
 
