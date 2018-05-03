@@ -8,6 +8,7 @@ import {
 	GET_SEARCH_RESULTS,
 	VIEW_ERROR,
 	STOP_LOADING,
+	START_LOADING,
 } from './constants';
 
 export const getSearchResults = (props) => ({
@@ -17,6 +18,11 @@ export const getSearchResults = (props) => ({
 
 export const stopLoading = (props) => ({
 	type: STOP_LOADING,
+	...props,
+});
+
+export const startLoading = (props) => ({
+	type: START_LOADING,
 	...props,
 });
 
