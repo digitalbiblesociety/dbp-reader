@@ -1,4 +1,17 @@
 // Leaving unused class here because the copywrite component
 // will need more styling once we have all the correct data
-.copywrite {}
-.copywrite .text {@include css4{color:var(--default-text-color);};margin-top:5px;}
+.copyrights-section {
+  padding: 15px;
+  margin-top:5px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  max-height: 90%;
+
+  @include css4 {
+    color: var(--default-text-color);
+  }
+
+  .text {
+    margin-top: 10px;
+  }
+}

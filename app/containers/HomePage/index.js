@@ -65,6 +65,7 @@ import {
 	getNotes,
 	getChapterText,
 	getHighlights,
+	getCopyrights,
 	// toggleMenuBar,
 	toggleProfile,
 	toggleAutoPlay,
@@ -492,6 +493,8 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 
 	getChapters = (props) => this.props.dispatch(getChapterText(props))
 
+	getCopyrights = (props) => this.props.dispatch(getCopyrights(props))
+
 	setActiveBookName = ({ book, id }) => this.props.dispatch(setActiveBookName({ book, id }))
 
 	setActiveChapter = (chapter) => this.props.dispatch(setActiveChapter(chapter))
@@ -544,7 +547,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			activeBookName,
 			activeChapter,
 			isProfileActive,
-			copywrite,
+			copyrights,
 			audioSource,
 			activeNotesView,
 			loadingNewChapterText,
@@ -552,6 +555,9 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			highlights,
 			autoPlayEnabled,
 			audioPaths,
+			audioFilesetId,
+			plainTextFilesetId,
+			formattedTextFilesetId,
 			// chapterText: updatedText,
 		} = this.props.homepage;
 
@@ -626,7 +632,15 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					{
 						isInformationModalActive ? (
 							<FadeTransition classNames="slide-from-left" in={isInformationModalActive}>
-								<Information active={isInformationModalActive} copywrite={copywrite} toggleInformationModal={this.toggleInformationModal} />
+								<Information
+									active={isInformationModalActive}
+									copyrights={copyrights}
+									getCopyrights={this.getCopyrights}
+									toggleInformationModal={this.toggleInformationModal}
+									audioFilesetId={audioFilesetId}
+									formattedTextFilesetId={formattedTextFilesetId}
+									plainTextFilesetId={plainTextFilesetId}
+								/>
 							</FadeTransition>
 						) : null
 					}

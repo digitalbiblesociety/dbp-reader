@@ -14,6 +14,7 @@ import {
 	GET_HIGHLIGHTS,
 	SET_ACTIVE_NOTE,
 	GET_NOTES_HOMEPAGE,
+	GET_COPYRIGHTS,
 	INIT_APPLICATION,
 	LOAD_BOOKS,
 	LOAD_AUDIO,
@@ -114,6 +115,11 @@ export const getChapterText = (props) => ({
 
 export const getHighlights = (props) => ({
 	type: GET_HIGHLIGHTS,
+	...props,
+});
+
+export const getCopyrights = (props) => ({
+	type: GET_COPYRIGHTS,
 	...props,
 });
 
