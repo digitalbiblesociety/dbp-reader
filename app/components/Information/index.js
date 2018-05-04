@@ -63,7 +63,7 @@ class Information extends React.PureComponent {// eslint-disable-line react/pref
 						<div className={'cp-section'}>
 							{
 								copyrights.oldTestament.audio.organizations.map((org) => (
-									<h3><FormattedMessage {...messages.providedByAudio} />&nbsp;<a href={org.url}>{org.name}</a>
+									<h3 key={org.name}><FormattedMessage {...messages.providedByAudio} />&nbsp;<a href={org.url}>{org.name}</a>
 										<br />
 										<img alt={'Copyright owners logo'} src={org.logo.url} height={'40px'} width={'40px'} />
 									</h3>
@@ -74,7 +74,7 @@ class Information extends React.PureComponent {// eslint-disable-line react/pref
 						<div className={'cp-section'}>
 							{
 								copyrights.oldTestament.text.organizations.map((org) => (
-									<h3><FormattedMessage {...messages.providedByText} />&nbsp;<a href={org.url}>{org.name}</a>
+									<h3 key={org.name}><FormattedMessage {...messages.providedByText} />&nbsp;<a href={org.url}>{org.name}</a>
 										<br />
 										<img alt={'Copyright owners logo'} src={org.logo.url} height={'40px'} width={'40px'} />
 									</h3>
@@ -88,7 +88,7 @@ class Information extends React.PureComponent {// eslint-disable-line react/pref
 						<div className={'cp-section'}>
 							{
 								copyrights.newTestament.audio.organizations.map((org) => (
-									<h3><FormattedMessage {...messages.providedByAudio} />&nbsp;<a href={org.url}>{org.name}</a>
+									<h3 key={org.name}><FormattedMessage {...messages.providedByAudio} />&nbsp;<a href={org.url}>{org.name}</a>
 										<br />
 										<img alt={'Copyright owners logo'} src={org.logo.url} height={'40px'} width={'40px'} />
 									</h3>
@@ -99,7 +99,7 @@ class Information extends React.PureComponent {// eslint-disable-line react/pref
 						<div className={'cp-section'}>
 							{
 								copyrights.newTestament.text.organizations.map((org) => (
-									<h3><FormattedMessage {...messages.providedByText} />&nbsp;<a href={org.url}>{org.name}</a>
+									<h3 key={org.name}><FormattedMessage {...messages.providedByText} />&nbsp;<a href={org.url}>{org.name}</a>
 										<br />
 										<img alt={'Copyright owners logo'} src={org.logo.url} height={'40px'} width={'40px'} />
 									</h3>

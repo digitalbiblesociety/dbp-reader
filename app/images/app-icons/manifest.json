@@ -1,5 +1,6 @@
 {
  "name": "Bible.is",
+ "short_name": "Bible.is",
  "icons": [
   {
    "src": "\/images\/app-icons\/android-icon-36x36.png",

@@ -48,8 +48,22 @@ const initialState = fromJS({
 	formattedTextFilesetId: '',
 	highlights: [],
 	copyrights: {
-		newTestament: [],
-		oldTestament: [],
+		newTestament: {
+			audio: {
+				organizations: [],
+			},
+			text: {
+				organizations: [],
+			},
+		},
+		oldTestament: {
+			audio: {
+				organizations: [],
+			},
+			text: {
+				organizations: [],
+			},
+		},
 	},
 	activeChapter: 1,
 	isChapterSelectionActive: false,
