@@ -183,7 +183,7 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 		}
 		this[name] = el;
 	}
-	// TODO Split books into 2 arrays, NT and OT
+	// Todo: Make book list accordions to try and fix scrollTop error
 	render() {
 		const {
 			books,
