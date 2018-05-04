@@ -177,6 +177,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		}
 
 		if (this.props.homepage.firstLoad) {
+			// Move these to single saga that runs them all in parallel
 			this.props.dispatch(getCountries());
 			this.props.dispatch(getLanguages());
 			this.props.dispatch(getTexts({ languageISO: this.props.homepage.defaultLanguageIso }));
@@ -558,6 +559,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			audioFilesetId,
 			plainTextFilesetId,
 			formattedTextFilesetId,
+			activeFilesets,
 			// chapterText: updatedText,
 		} = this.props.homepage;
 
@@ -640,6 +642,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 									audioFilesetId={audioFilesetId}
 									formattedTextFilesetId={formattedTextFilesetId}
 									plainTextFilesetId={plainTextFilesetId}
+									activeFilesets={activeFilesets}
 								/>
 							</FadeTransition>
 						) : null
