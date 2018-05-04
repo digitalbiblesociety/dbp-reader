@@ -4,11 +4,17 @@ import request from 'utils/request';
 import some from 'lodash/some';
 import reduce from 'lodash/reduce';
 import get from 'lodash/get';
-import uniq from 'lodash/uniq';
+// import uniqBy from 'lodash/uniqBy';
+import uniqWith from 'lodash/uniqWith';
 import { getNotes } from 'containers/Notes/saga';
 import { ADD_BOOKMARK } from 'containers/Notes/constants';
 // import filter from 'lodash/filter';
 import { ADD_HIGHLIGHTS, LOAD_HIGHLIGHTS, GET_HIGHLIGHTS, GET_NOTES_HOMEPAGE, GET_COPYRIGHTS } from './constants';
+import {
+	ntCodes,
+	otCodes,
+	codes,
+} from './sagaUtils';
 // import { fromJS } from 'immutable';
 // import unionWith from 'lodash/unionWith';
 // import { ADD_HIGHLIGHTS, LOAD_HIGHLIGHTS, GET_CHAPTER_TEXT, GET_HIGHLIGHTS, GET_BOOKS, GET_AUDIO, INIT_APPLICATION } from './constants';
@@ -645,18 +651,86 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 }
 
 export function* getCopyrightSaga({ filesetIds }) {
+	// Todo: Try to optimize at least a little bit
 	// console.log('In the fork');
+	// console.log('uniq codes', uniqWith(filesetIds.filter((f) => codes[f.set_type_code] && codes[f.set_size_code]), (a, b) => a.set_type_code === b.set_type_code || (a.set_type_code.includes('audio_drama') && b.set_type_code.includes('audio'))));
+	// const typesAlreadyPushed = {};
+	// const filteredFilesetIds = filesetIds.reduce((a, c) => {
+	// 	if (!typesAlreadyPushed[c.set_type_code]) {
+	// 		typesAlreadyPushed[c.set_type_code] = true;
+	// 		return a.concat({ id: c.id, size: c.set_size_code, type: c.set_type_code });
+	// 	}
+	// 	return a;
+	// }, []);
+	// console.log('filesetIds', filesetIds);
+	const filteredFilesetIds = uniqWith(filesetIds.filter((f) => codes[f.set_type_code] && codes[f.set_size_code]), (a, b) => a.set_type_code === b.set_type_code && a.set_size_code === b.set_size_code);
+	// console.log('filteredFilesetIds', filteredFilesetIds);
+	// if (filteredFilesetIds.includes((i) => i.type === 'audio') && filteredFilesetIds.includes((i) => i.type === 'audio_drama')) {
+	// 	// Remove one of the ids
+	// }
+	//
+	// if (filteredFilesetIds.includes((i) => i.type === 'text_plain') && filteredFilesetIds.includes((i) => i.type === 'text_format')) {
+	// 	// Remove one of the ids
+	// }
 	const reqUrls = [];
 	// console.log('ids', filesetIds);
-	uniq(filesetIds.filter((f) => !!f)).forEach((id) => reqUrls.push(`https://api.bible.build/bibles/filesets/${id}/copyright?key=${process.env.DBP_API_KEY}&v=4`));
+	filteredFilesetIds.forEach((set) => reqUrls.push(`https://api.bible.build/bibles/filesets/${set.id}/copyright?key=${process.env.DBP_API_KEY}&v=4`));
+	// uniq(fileteredFilesetIds.filter((f) => !!f)).forEach((id) => reqUrls.push(`https://api.bible.build/bibles/filesets/${id}/copyright?key=${process.env.DBP_API_KEY}&v=4`));
+	// console.log('reqUrls', reqUrls);
 
 	try {
 		const response = yield all(reqUrls.map((url) => call(request, url)));
-		const copyrightArray = response.map((res) => res.copyright);
-		// console.log('copyright response', response);
-		const copyrights = copyrightArray.map((cp) => ({ message: cp.copyright, organizations: cp.organizations.map((org) => ({ name: org.slug, logo: org.logos[0], url: org.url_website })) }));
-		// console.log('copyrights', copyrights);
-		yield put({ type: 'loadcopyright', copyrights });
+		// console.log(response);
+		// const copyrightArray = response
+		// 	.map((res) => ({ set_size_code: res.set_size_code, organizations: res.copyright.organizations, copyright: res.copyright.copyright }));
+		const copyrights = response.map((cp) => ({
+			message: cp.copyright.copyright,
+			testament: cp.set_size_code,
+			type: cp.set_type_code,
+			organizations: cp.copyright.organizations.map((org) => ({
+				name: org.translations[0].name,
+				logo: org.logos[1],
+				url: org.url_website,
+			})),
+		}));
+		// console.log('copyright response', copyrights);
+
+		const cText = copyrights.filter((c) => c.testament === 'C' && (c.type === 'text_plain' || c.type === 'text_format'))[0];
+		const ntText = !cText ? copyrights.filter((c) => ntCodes[c.testament] && (c.type === 'text_plain' || c.type === 'text_format')) : [];
+		const otText = !cText ? copyrights.filter((c) => otCodes[c.testament] && (c.type === 'text_plain' || c.type === 'text_format')) : [];
+
+		const cAudio = copyrights.filter((c) => c.testament === 'C' && (c.type === 'audio' || c.type === 'audio_drama'))[0];
+		const ntAudio = !cAudio ? copyrights.filter((c) => ntCodes[c.testament] && (c.type === 'audio' || c.type === 'audio_drama')) : [];
+		const otAudio = !cAudio ? copyrights.filter((c) => otCodes[c.testament] && (c.type === 'audio' || c.type === 'audio_drama')) : [];
+
+		// console.log('cText', cText);
+		// console.log('ntText', ntText);
+		// console.log('otText', otText);
+		//
+		// console.log('cAudio', cAudio);
+		// console.log('ntAudio', ntAudio);
+		// console.log('otAudio', otAudio);
+		// One audio || audio_drama for C
+		// One text_plain || text_format for C
+		// or
+			// One audio || audio_drama for OT &&
+			// One audio || audio_drama for NT
+			// One text_plain || text_format for OT &&
+			// One text_plain || text_format for NT
+		// copyrights.filter((c) => c.testament === 'C');
+
+		const copyrightObject = {
+			newTestament: {
+				audio: cAudio || ntAudio,
+				text: cText || ntText,
+			},
+			oldTestament: {
+				audio: cAudio || otAudio,
+				text: cText || otText,
+			},
+		};
+		// console.log('copyrights', copyrightObject);
+		yield put({ type: 'loadcopyright', copyrights: copyrightObject });
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
 			console.warn('Caught in get copyright', err); // eslint-disable-line no-console

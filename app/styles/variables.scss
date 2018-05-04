@@ -266,6 +266,13 @@ $variables: (
   }
 }
 
+@media (max-width: 30rem) {
+  :root {
+    --application-base-font-size:16px;
+    --application-menu-font-size:16px;
+  }
+}
+
 //the body does not use fallback, its styles will be visible only in compatible browsers
 //body {
 //  max-width: 500px;
