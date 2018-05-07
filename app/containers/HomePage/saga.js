@@ -689,7 +689,7 @@ export function* getCopyrightSaga({ filesetIds }) {
 			type: cp.set_type_code,
 			organizations: cp.copyright.organizations.map((org) => ({
 				name: org.translations[0].name,
-				logo: org.logos[1],
+				logo: org.logos[1] ? org.logos[1] : org.logos[0],
 				url: org.url_website,
 			})),
 		}));
