@@ -1,4 +1,5 @@
 class CloseMenuFunctions {
+	// Need to implement a parallel for IE because getBoundingClientRect does not work the same as with the other browsers
 	constructor(componentRef, closeFunction) {
 		this.ref = componentRef || { getBoundingClientRect() { return { x: 0, y: 0, width: 0, height: 0 }; }, contains() { return true; } };
 		this.closeFunction = closeFunction;
@@ -19,7 +20,7 @@ class CloseMenuFunctions {
 			}
 		}
 	};
-
+	// var counter = 0;var n = document.getElementsByTagName('aside')[0];while(n.textContent !== 'HAYA') {if (counter === 30) {break;} else if (n.childNodes) {n.childNodes.forEach(function(c) {n = c})} counter += 1}
 	handleKeydown = (event) => {
 		if (event.which === 27) {
 			this.closeFunction();
@@ -28,12 +29,18 @@ class CloseMenuFunctions {
 	};
 
 	handleClickOutside = (event) => {
+		// In IE this event happens after the language list has already been closed...
 		const bounds = this.ref.getBoundingClientRect();
 		const insideWidth = event.x >= bounds.x && event.x <= bounds.x + bounds.width;
 		const insideHeight = event.y >= bounds.y && event.y <= bounds.y + bounds.height;
 		// console.log('click location', insideWidth, insideHeight, bounds);
-
-		if (this.ref && !(insideWidth && insideHeight) && !this.ref.contains(event.target)) {
+		//
+		// console.log('this.ref', this.ref);
+		// console.log('event.target', event.target);
+		// console.log('this.ref.contains(event.target)', this.ref.contains(event.target));
+		// May need !this.ref.contains(event.target), testing the removal of it for IE...
+		if (this.ref && !(insideWidth && insideHeight)) {
+			// console.log('Closing menu bc of outside click');
 			this.closeFunction();
 			document.removeEventListener('click', this.handleClickOutside);
 		}

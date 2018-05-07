@@ -45,6 +45,7 @@
     -ms-user-select: none;
     user-select: none;
     @include css4 {
+      color: #000000; // fallback for IE
       color:var(--application-text-container-color);
     }
   }
