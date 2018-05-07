@@ -86,7 +86,7 @@ class Information extends React.PureComponent {// eslint-disable-line react/pref
 									null
 							}
 							{
-								get(copyrights.oldTestament.audio.message) ?
+								get(copyrights, ['oldTestament', 'audio', 'message']) ?
 									<p>{copyrights.oldTestament.audio.message}</p> : null
 							}
 						</div>
@@ -97,7 +97,7 @@ class Information extends React.PureComponent {// eslint-disable-line react/pref
 									null
 							}
 							{
-								get(copyrights.oldTestament.text.message) ?
+								get(copyrights, ['oldTestament', 'text', 'message']) ?
 									<p>{copyrights.oldTestament.text.message}</p> : null
 							}
 						</div>
@@ -111,7 +111,7 @@ class Information extends React.PureComponent {// eslint-disable-line react/pref
 									null
 							}
 							{
-								get(copyrights.newTestament.audio.message) ?
+								get(copyrights, ['newTestament', 'audio', 'message']) ?
 									<p>{copyrights.newTestament.audio.message}</p> : null
 							}
 						</div>
@@ -122,7 +122,7 @@ class Information extends React.PureComponent {// eslint-disable-line react/pref
 									null
 							}
 							{
-								get(copyrights.newTestament.text.message) ?
+								get(copyrights, ['newTestament', 'text', 'message']) ?
 									<p>{copyrights.newTestament.text.message}</p> : null
 							}
 						</div>
