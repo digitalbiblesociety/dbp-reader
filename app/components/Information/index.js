@@ -39,7 +39,7 @@ class Information extends React.PureComponent {// eslint-disable-line react/pref
 	}
 
 	getAudioCopyright = (organizations) => organizations.map((org) => (
-		<h3 key={org.name}><FormattedMessage {...messages.providedByAudio} />&nbsp;<a href={org.url}>{org.name}</a>
+		<h3 key={org.name}><FormattedMessage {...messages.providedByAudio} />&nbsp;<a target={'_blank'} href={org.url}>{org.name}</a>
 			<br />
 			{
 				org.logo ? <img alt={'Copyright owners logo'} src={org.logo.url} height={'40px'} width={'40px'} /> : null
@@ -47,7 +47,7 @@ class Information extends React.PureComponent {// eslint-disable-line react/pref
 		</h3>
 	));
 	getTextCopyright = (organizations) => organizations.map((org) => (
-		<h3 key={org.name}><FormattedMessage {...messages.providedByText} />&nbsp;<a href={org.url}>{org.name}</a>
+		<h3 key={org.name}><FormattedMessage {...messages.providedByText} />&nbsp;<a target={'_blank'} href={org.url}>{org.name}</a>
 			<br />
 			{
 				org.logo ? <img alt={'Copyright owners logo'} src={org.logo.url} height={'40px'} width={'40px'} /> : null
