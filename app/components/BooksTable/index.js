@@ -39,6 +39,7 @@ import {
 class BooksTable extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	state = {
 		selectedBookName: this.props.initialBookName || '',
+		updateScrollTop: false,
 	}
 
 	componentDidMount() {
@@ -48,99 +49,43 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 		// console.log('component is remounting');
 	}
 
-	setSelectedBookName = (name) => this.setState({ selectedBookName: name })
+	componentDidUpdate() {
+		// console.log('Stuff should change');
+	}
 	// setActiveBookName = ({ book, id }) => this.props.dispatch(setActiveBookName({ book, id }))
 	// setActiveChapter = (chapter) => this.props.dispatch(setActiveChapter(chapter))
 	getChapterText = ({ bible, book, chapter }) => this.props.dispatch(getChapterText({ bible, book, chapter, audioObjects: this.props.audioObjects, hasTextInDatabase: this.props.hasTextInDatabase, formattedText: this.props.filesetTypes.text_formatt, userId: this.props.userId, userAuthenticated: this.props.userAuthenticated }))
-	// Doesn't quite work, need to account for the overall height of the scroll container
-	// Consider calculating the difference between the top of the clicked button and the
-	// top of the active button, then if the clicked button is above the active button: move
-	// add the difference to the current scroll position. Otherwise subtract the difference
-	handleBookClick = (e, name) => {
-		// Browsers using the Blink engine will cause the scrollTop to be set twice
-		// I need to figure out a way to identify the engine used and then half the
-		// newScrollTop for those browsers that use blink
-		const book = e.target;
-		const activeButton = this.button || { clientHeight: 0 };
-		const clickedButton = book.parentElement;
-		// if the clicked book was below the active book
-		// console.log('clicked offset top', clickedButton.offsetTop);
-		// console.log('active offset top', activeButton.offsetTop);
-		// clicked offsetTop before activeButton is closed
-		// the scroll top before activeButton is closed
-		// clicked offsetTop after activeButton is closed
-		// scrollTopBefore - (offsetTopBefore - offsetTopAfter);
-		const offsetTopBefore = clickedButton.offsetTop;
-		const offsetTopAfter = clickedButton.offsetTop - (activeButton.clientHeight - 28);
-		// console.log('offset top before', offsetTopBefore);
-		// console.log('offset top after', offsetTopAfter);
-		// console.log('for this button', clickedButton);
-		const scrollTopBefore = this.container.scrollTop;
 
-		if (offsetTopBefore > offsetTopAfter) {
-			// The glitch is appearing in Blink browsers so I am trying to make a work around for them
-			if ((window.chrome || (window.Intl && Intl.v8BreakIterator)) && 'CSS' in window) {
-				// console.log('inside blink browser');
-				// console.log('old container scroll top', this.container.scrollTop);
-				// const newScrollTop = scrollTopBefore - (offsetTopBefore - (offsetTopAfter / 2));
-				const newScrollTop = scrollTopBefore - (offsetTopBefore - offsetTopAfter);
-				this.container.scrollTop = newScrollTop;
-				// console.log('new container scroll top', this.container.scrollTop);
-			} else {
-				// console.log('inside non blink browser');
-				// console.log('old container scroll top', this.container.scrollTop);
-				const newScrollTop = scrollTopBefore - (offsetTopBefore - offsetTopAfter);
-				this.container.scrollTop = newScrollTop;
-				// console.log('new container scroll top', this.container.scrollTop);
-			}
-			/* Todo: Try using something like the below functions
-				onScroll = (event: Event) => {
-					// In certain edge-cases React dispatches an onScroll event with an invalid target.scrollLeft / target.scrollTop.
-					// This invalid event can be detected by comparing event.target to this component's scrollable DOM element.
-					// See issue #404 for more information.
-					if (event.target === this._scrollingContainer) {
-						this.handleScrollEvent((event.target: any));
-					}
-				};
-				handleScrollEvent({
-					scrollLeft: scrollLeftParam = 0,
-					scrollTop: scrollTopParam = 0,
-				}: ScrollPosition) {
-				// On iOS, we can arrive at negative offsets by swiping past the start.
-				// To prevent flicker here, we make playing in the negative offset zone cause nothing to happen.
-				if (scrollTopParam < 0) {
-					return;
-				}
-			 }
-		*/
-			// if ($) {
-			// 	console.log('setting scroll top for blink');
-			// 	$('.book-container').scrollTop(newScrollTop);
-			// 	// this.container.scrollTop(newScrollTop);
-			// } else {
-			// 	console.log('setting scroll for other browsers');
-			// 	this.container.scrollTop = newScrollTop;
-			// }
+	setScrollTop = (book, positionBefore, scrollTopBefore) => {
+		const positionAfter = book.parentElement.offsetTop; // not sure about parentElement
 
-			// console.log('old scroll top', this.container.scrollTop);
-			// console.log('new scroll top', newScrollTop);
-			// console.log('scroll top after it has been set', this.container.scrollTop);
+		if (positionBefore > positionAfter) {
+			const newScrollTop = scrollTopBefore - (positionBefore - positionAfter);
+			// console.log('scrollTopBefore', scrollTopBefore);
+			// console.log('newScrollTop', newScrollTop);
+			this.container.scrollTop = newScrollTop;
 		}
+	}
 
-		// if (activeButton && activeButton.offsetTop < clickedButton.offsetTop) {
-		// 	// console.log('previously active book height', activeButton.clientHeight);
-		// 	// console.log('clicked button height', clickedButton.clientHeight);
-		// 	// console.log('container element scroll position', this.container.scrollTop);
-		// 	const newScrollTop = this.container.scrollTop - (activeButton.clientHeight - clickedButton.offsetTop);
-		// 	// console.log('new scroll top', newScrollTop);
-		// 	this.container.scrollTop = newScrollTop > 0 ? newScrollTop : 0;
-		// 	// clickedButton.scrollIntoView();
-		// }
+	handleBookClick = (e, name) => {
+		typeof e.persist === 'function' && e.persist(); // eslint-disable-line no-unused-expressions
+		// console.log('this.button before setstate', this.button);
+		const positionBefore = e.target.parentElement.offsetTop;
+		const scrollTopBefore = this.container.scrollTop;
+		// const previousButton = this.button;
 
 		if (this.state.selectedBookName === name) {
-			this.setSelectedBookName('');
+			this.setState(() => ({
+				selectedBookName: '',
+			}), () => {
+				this.setScrollTop(e.target);
+			});
 		} else {
-			this.setSelectedBookName(name);
+			this.setState(() => ({
+				selectedBookName: name,
+			}), () => {
+				this.setScrollTop(e.target, positionBefore, scrollTopBefore);
+			});
 		}
 	}
 
@@ -183,7 +128,7 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 		}
 		this[name] = el;
 	}
-	// Todo: Make book list accordions to try and fix scrollTop error
+
 	render() {
 		const {
 			books,
@@ -193,6 +138,7 @@ class BooksTable extends React.PureComponent { // eslint-disable-line react/pref
 			loadingBooks,
 		} = this.props;
 		const { selectedBookName } = this.state;
+		// console.log('Rendering again');
 
 		if (loadingBooks) {
 			return <LoadingSpinner />;
