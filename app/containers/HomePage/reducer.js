@@ -50,18 +50,42 @@ const initialState = fromJS({
 	copyrights: {
 		newTestament: {
 			audio: {
-				organizations: [],
+				organizations: [
+					{
+						logo: {
+							url: '',
+						},
+					},
+				],
 			},
 			text: {
-				organizations: [],
+				organizations: [
+					{
+						logo: {
+							url: '',
+						},
+					},
+				],
 			},
 		},
 		oldTestament: {
 			audio: {
-				organizations: [],
+				organizations: [
+					{
+						logo: {
+							url: '',
+						},
+					},
+				],
 			},
 			text: {
-				organizations: [],
+				organizations: [
+					{
+						logo: {
+							url: '',
+						},
+					},
+				],
 			},
 		},
 	},

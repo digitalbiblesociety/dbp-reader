@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 import SvgWrapper from 'components/SvgWrapper';
 import CloseMenuFunctions from 'utils/closeMenuFunctions';
 import { FormattedMessage } from 'react-intl';
+import get from 'lodash/get';
 import messages from './messages';
 
 class Information extends React.PureComponent {// eslint-disable-line react/prefer-stateless-function
@@ -36,6 +37,23 @@ class Information extends React.PureComponent {// eslint-disable-line react/pref
 	setRef = (node) => {
 		this.ref = node;
 	}
+
+	getAudioCopyright = (organizations) => organizations.map((org) => (
+		<h3 key={org.name}><FormattedMessage {...messages.providedByAudio} />&nbsp;<a href={org.url}>{org.name}</a>
+			<br />
+			{
+				org.logo ? <img alt={'Copyright owners logo'} src={org.logo.url} height={'40px'} width={'40px'} /> : null
+			}
+		</h3>
+	));
+	getTextCopyright = (organizations) => organizations.map((org) => (
+		<h3 key={org.name}><FormattedMessage {...messages.providedByText} />&nbsp;<a href={org.url}>{org.name}</a>
+			<br />
+			{
+				org.logo ? <img alt={'Copyright owners logo'} src={org.logo.url} height={'40px'} width={'40px'} /> : null
+			}
+		</h3>
+	));
 // {
 // 	copyrights.map((c) => c.organizations.map((o) => (
 // <div key={`${o.name}_${o.url}`}>
@@ -49,6 +67,7 @@ class Information extends React.PureComponent {// eslint-disable-line react/pref
 			copyrights,
 			toggleInformationModal,
 		} = this.props;
+
 		// console.log('copyrights information render', copyrights);
 		return (
 			<aside ref={this.setRef} className="profile">
@@ -62,50 +81,50 @@ class Information extends React.PureComponent {// eslint-disable-line react/pref
 						<h1>Old Testament</h1>
 						<div className={'cp-section'}>
 							{
-								copyrights.oldTestament.audio.organizations.map((org) => (
-									<h3 key={org.name}><FormattedMessage {...messages.providedByAudio} />&nbsp;<a href={org.url}>{org.name}</a>
-										<br />
-										<img alt={'Copyright owners logo'} src={org.logo.url} height={'40px'} width={'40px'} />
-									</h3>
-								))
+								get(copyrights, ['oldTestament', 'audio', 'organizations']) ?
+									this.getAudioCopyright(get(copyrights, ['oldTestament', 'audio', 'organizations'])) :
+									null
 							}
-							<p>{copyrights.oldTestament.audio.message}</p>
+							{
+								get(copyrights.oldTestament.audio.message) ?
+									<p>{copyrights.oldTestament.audio.message}</p> : null
+							}
 						</div>
 						<div className={'cp-section'}>
 							{
-								copyrights.oldTestament.text.organizations.map((org) => (
-									<h3 key={org.name}><FormattedMessage {...messages.providedByText} />&nbsp;<a href={org.url}>{org.name}</a>
-										<br />
-										<img alt={'Copyright owners logo'} src={org.logo.url} height={'40px'} width={'40px'} />
-									</h3>
-								))
+								get(copyrights, ['oldTestament', 'text', 'organizations']) ?
+									this.getTextCopyright(get(copyrights, ['oldTestament', 'text', 'organizations'])) :
+									null
 							}
-							<p>{copyrights.oldTestament.text.message}</p>
+							{
+								get(copyrights.oldTestament.text.message) ?
+									<p>{copyrights.oldTestament.text.message}</p> : null
+							}
 						</div>
 					</div>
 					<div className={'nt-copyright'}>
 						<h1>New Testament</h1>
 						<div className={'cp-section'}>
 							{
-								copyrights.newTestament.audio.organizations.map((org) => (
-									<h3 key={org.name}><FormattedMessage {...messages.providedByAudio} />&nbsp;<a href={org.url}>{org.name}</a>
-										<br />
-										<img alt={'Copyright owners logo'} src={org.logo.url} height={'40px'} width={'40px'} />
-									</h3>
-								))
+								get(copyrights, ['newTestament', 'audio', 'organizations']) ?
+									this.getAudioCopyright(get(copyrights, ['newTestament', 'audio', 'organizations'])) :
+									null
 							}
-							<p>{copyrights.newTestament.audio.message}</p>
+							{
+								get(copyrights.newTestament.audio.message) ?
+									<p>{copyrights.newTestament.audio.message}</p> : null
+							}
 						</div>
 						<div className={'cp-section'}>
 							{
-								copyrights.newTestament.text.organizations.map((org) => (
-									<h3 key={org.name}><FormattedMessage {...messages.providedByText} />&nbsp;<a href={org.url}>{org.name}</a>
-										<br />
-										<img alt={'Copyright owners logo'} src={org.logo.url} height={'40px'} width={'40px'} />
-									</h3>
-								))
+								get(copyrights, ['newTestament', 'text', 'organizations']) ?
+									this.getTextCopyright(get(copyrights, ['newTestament', 'text', 'organizations'])) :
+									null
 							}
-							<p>{copyrights.newTestament.text.message}</p>
+							{
+								get(copyrights.newTestament.text.message) ?
+									<p>{copyrights.newTestament.text.message}</p> : null
+							}
 						</div>
 					</div>
 				</section>
