@@ -23,6 +23,12 @@
 
     .cp-section {
       padding: 10px;
+
+      h3 a {
+        @include css4 {
+          color: var(--notebook-title-date-color);
+        }
+      }
     }
   }
 }

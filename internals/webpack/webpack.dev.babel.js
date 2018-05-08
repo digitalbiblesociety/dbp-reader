@@ -39,6 +39,10 @@ if (dllPlugin) {
 
 module.exports = require('./webpack.base.babel')({
   // Add hot reloading in development
+	// entry: {
+		// polyfills: path.join(process.cwd(), 'app/utils/polyfills.js'),
+		// path: path.join(process.cwd(), 'app/app.js'),
+	// },
 	entry: [
 		'eventsource-polyfill', // Necessary for hot reloading with IE
 		'webpack-hot-middleware/client?reload=true',

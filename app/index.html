@@ -24,6 +24,7 @@
     <meta property="og:site_name" content="Bible.is">
     <meta property="og:image" content="images/app-icons/favicon-96x96.png">
     <meta property="fb:app_id" content="173528326559718">
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
     <script>
       (window.onload = function() {
         var browserObject = {
@@ -42,14 +43,51 @@
         }
 
         if (browserObject.agent === "msie") {
+      	  console.log('This is ie 11');
+      	  // console.log(svg4everybody);
+          // (function(doc) {
+          //   if (doc.getElementById('svgdefs')){ //loop through inlined svg <defs>
+          //     Array.prototype.slice.call(doc.getElementsByTagName('use')).forEach(function(e){
+          //       var svg, symbol, viewBox, id = e.getAttribute('xlink:href').split("#")[1];
+          //       //get the viewbox from symbol node if we have a symbol id-to-fragment match
+          //       if (id && (viewBox = (symbol = doc.getElementById(id)) ? symbol.getAttribute('viewBox') : '')){
+          //         svg = e.parentNode;//svg container
+          //         svg.setAttribute('viewBox', viewBox);//inline viewBox to svg node
+          //         svg.removeChild(e);//remove <use> node, and replace with <symbol>'s svg content
+          //         Array.prototype.slice.call(symbol.childNodes).forEach(function(e){ svg.appendChild(e); });
+          //       }
+          //     });
+          //   }
+          // })(document);
           var bannerDiv = document.createElement("div");
           bannerDiv.id = "old-browser-banner";
           bannerDiv.textContent = "You are using an old browser so some things may not function as expected. Please consider using a modern browser.";
           document.getElementsByTagName('body')[0].appendChild(bannerDiv);
 
           setTimeout(function() {
-            document.getElementById("old-browser-banner").removeChild();
+          	var el = document.getElementById("old-browser-banner");
+          	var parent = el.parentElement;
+          	parent.removeChild(el);
           }, 2000);
+
+          // var svgScript = document.createElement('script');
+
+          // svgScript.async = false;
+          // svgScript.src = './utils/svgPolyfill.js';
+          // document.head.appendChild(svgScript);
+          //
+          // var stopPropScript = document.createElement('script');
+          //
+          // stopPropScript.async = false;
+          // stopPropScript.src = './utils/stopPropagationPolyfill.js';
+          // document.head.appendChild(stopPropScript);
+          //
+          // var runSvgScript = document.createElement('script');
+          //
+          // runSvgScript.async = false;
+          // innerHTML = 'console.log("appended inner html");svg4everybody();';
+          //
+          // document.head.appendChild(runSvgScript);
         }
       })();
     </script>

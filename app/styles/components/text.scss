@@ -5,6 +5,7 @@
   margin:0 auto;
   align-items: center;
   @include css4 {
+    color: #000000; // fallback for IE
     color: var(--application-text-container-color);
     font-size: var(--application-base-font-size);
   }

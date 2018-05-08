@@ -54,7 +54,7 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 			// 	</div>
 			// );
 			return (
-				<div style={style} key={key} className="language-name" role="button" tabIndex={0} onClick={() => this.handleLanguageClick(language)}>
+				<div style={style} key={key} className="language-name" role="button" tabIndex={0} onClick={(e) => this.handleLanguageClick(e, language)}>
 					<h4 className={language.iso === activeIsoCode ? 'active-language-name' : ''}>{language.name}</h4>
 				</div>
 			);
@@ -104,7 +104,14 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 		return false;
 	}
 
-	handleLanguageClick = (language) => {
+	handleLanguageClick = (e, language) => {
+		if ('stopPropagation' in e && typeof e.stopPropagation === 'function') {
+			// console.log('Stopping prop');
+			e.stopPropagation();
+		} else if ('cancelBubble' in e) {
+			// console.log('canceling bubble');
+			e.cancelBubble = true;
+		}
 		const {
 			setActiveIsoCode,
 			toggleLanguageList,
@@ -115,6 +122,7 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 		// console.log('new language', language);
 		if (language) {
 			setActiveIsoCode({ iso: language.iso, name: language.name });
+			// console.log('Toggling languageList');
 			toggleLanguageList();
 			// this.setState({ filterText: '' });
 			toggleVersionList();
