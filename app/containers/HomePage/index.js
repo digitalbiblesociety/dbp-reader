@@ -38,6 +38,7 @@ import SearchContainer from 'containers/SearchContainer';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
 import FadeTransition from 'components/FadeTransition';
 import logo from 'images/app-icons/favicon-96x96.png';
+import svg4everybody from 'utils/svgPolyfill';
 // import {
 // 	statusChangeCallback,
 // 	checkLoginState,
@@ -209,6 +210,52 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			js.src = `https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.12&appId=${process.env.FB_APP_ID}&autoLogAppEvents=1`;
 			fjs.parentNode.insertBefore(js, fjs);
 		})(document, 'script', 'facebook-jssdk');
+
+		const browserObject = {
+			agent: '',
+			majorVersion: '',
+			version: '',
+		};
+		if (/msie [0-9]{1}/i.test(navigator.userAgent)) {
+			browserObject.agent = 'msie';
+			browserObject.majorVersion = parseInt(/MSIE ([0-9]{1})/i.exec(navigator.userAgent)[1], 10);
+			browserObject.version = /MSIE ([0-9.]+)/i.exec(navigator.userAgent)[1];
+		} else if (/Trident\/[7]{1}/i.test(navigator.userAgent)) {
+			browserObject.agent = 'msie';
+			browserObject.majorVersion = 11;
+			browserObject.version = '11';
+		}
+		// console.log('join is defined now', join);
+		if (browserObject.agent === 'msie') {
+			// console.log('This is ie 11');
+			// console.log('svg for every', svg4everybody);
+			svg4everybody();
+			// console.log(svg4everybody);
+			// (function(doc) {
+			//   if (doc.getElementById('svgdefs')){ //loop through inlined svg <defs>
+			//     Array.prototype.slice.call(doc.getElementsByTagName('use')).forEach(function(e){
+			//       var svg, symbol, viewBox, id = e.getAttribute('xlink:href').split("#")[1];
+			//       //get the viewbox from symbol node if we have a symbol id-to-fragment match
+			//       if (id && (viewBox = (symbol = doc.getElementById(id)) ? symbol.getAttribute('viewBox') : '')){
+			//         svg = e.parentNode;//svg container
+			//         svg.setAttribute('viewBox', viewBox);//inline viewBox to svg node
+			//         svg.removeChild(e);//remove <use> node, and replace with <symbol>'s svg content
+			//         Array.prototype.slice.call(symbol.childNodes).forEach(function(e){ svg.appendChild(e); });
+			//       }
+			//     });
+			//   }
+			// })(document);
+			const bannerDiv = document.createElement('div');
+			bannerDiv.id = 'old-browser-banner';
+			bannerDiv.textContent = 'You are using an old browser so some things may not function as expected. Please consider using a modern browser.';
+			document.getElementsByTagName('body')[0].appendChild(bannerDiv);
+
+			setTimeout(() => {
+				const el = document.getElementById('old-browser-banner');
+				const parent = el.parentElement;
+				parent.removeChild(el);
+			}, 3000);
+		}
 	}
 	// Component updates when the state and props haven't changed 2 of 5 times
 	// If there is a significant slow down we may need to do some deep equality checks on the state
