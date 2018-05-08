@@ -324,14 +324,27 @@ export function* getChapterFromUrl({ filesets, bibleId: oldBibleId, bookId: oldB
 		// Try to get the plain text every time
 		// When this fails it should fail gracefully and not cause anything to break
 		try {
-			const filesetId = reduce(filesets, (a, c) => (c.set_type_code === 'text_plain' && c.bucket_id === 'dbp-dev') ? c.id : a, '');
+			let filesetId = '';
+			if (filesets.filter((set) => set.set_type_code === 'text_plain' && set.bucket_id === 'dbp-dev').length > 1) {
+				// console.log('has more than 1');
+				filesetId = reduce(filesets, (a, c) => (c.set_type_code === 'text_plain' && c.bucket_id === 'dbp-dev') ? a.concat(c.id) : a, []);
+			} else {
+				// console.log('only has one');
+				filesetId = reduce(filesets, (a, c) => (c.set_type_code === 'text_plain' && c.bucket_id === 'dbp-dev') ? c.id : a, '');
+			}
 
-			const reqUrl = `https://api.bible.build/bibles/filesets/${filesetId}/${bookId}/${chapter}?key=${process.env.DBP_API_KEY}&v=4&book_id=${bookId}&chapter_id=${chapter}`;
-			const res = yield call(request, reqUrl);
-			// console.log('response for plain text', res);
-			plainText = res.data;
+			if (Array.isArray(filesetId) && filesetId.length > 1) {
+				const results = yield call(tryNext, { urls: filesetId, index: 0, bookId, chapter });
+				plainText = results.plainText;
+				plainTextFilesetId = results.plainTextFilesetId;
+			} else {
+				const reqUrl = `https://api.bible.build/bibles/filesets/${filesetId}/${bookId}/${chapter}?key=${process.env.DBP_API_KEY}&v=4&book_id=${bookId}&chapter_id=${chapter}`;
+				const res = yield call(request, reqUrl);
+				// console.log('response for plain text', res);
+				plainText = res.data;
 
-			plainTextFilesetId = plainText ? bibleId : '';
+				plainTextFilesetId = plainText ? bibleId : '';
+			}
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Caught in get plain text block', error); // eslint-disable-line no-console
@@ -386,6 +399,43 @@ export function* getChapterFromUrl({ filesets, bibleId: oldBibleId, bookId: oldB
 		hasPlainText: false,
 		hasAudio: false,
 	};
+}
+
+// Utility function for getting the plain text
+function* tryNext({ urls, index, bookId, chapter }) {
+	// let results = {};
+	// console.log('in try next');
+	let plainText = [];
+	let plainTextFilesetId = '';
+	try {
+		const reqUrl = `https://api.bible.build/bibles/filesets/${urls[index]}/${bookId}/${chapter}?key=${process.env.DBP_API_KEY}&v=4&book_id=${bookId}&chapter_id=${chapter}`;
+		const res = yield call(request, reqUrl);
+		// console.log('response for plain text', res);
+		plainText = res.data;
+
+		plainTextFilesetId = urls[index];
+
+		// console.log('returning stuff');
+		return {
+			plainText,
+			plainTextFilesetId,
+		};
+	} catch (err) {
+		if (err) {
+			console.warn('Error in try next function', err); // eslint-disable-line no-console
+		}
+		return tryNext(urls, index + 1);
+	}
+	// if (results.plainText) {
+	// 	return {
+	// 		plainText: results.plainText,
+	// 		plainTextFilesetId: results.plainTextFilesetId,
+	// 	};
+	// }
+	// return {
+	// 	plainText,
+	// 	plainTextFilesetId,
+	// };
 }
 
 // I think it makes the most sense to start this running from within
