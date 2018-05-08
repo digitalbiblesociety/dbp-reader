@@ -73,7 +73,7 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 			} else if (this.state.playerState) {
 				this.setState({ playerState: false, playing: false });
 			}
-			if (nextProps.autoPlay && !this.props.autoPlay) {
+			if (nextProps.autoPlay) {
 				// console.log('source changed and auto play is true');
 				this.audioRef.addEventListener('canplay', this.autoPlayListener);
 			}
