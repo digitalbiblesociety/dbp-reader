@@ -324,7 +324,7 @@ export function* getChapterFromUrl({ filesets, bibleId: oldBibleId, bookId: oldB
 		// Try to get the plain text every time
 		// When this fails it should fail gracefully and not cause anything to break
 		try {
-			const reqUrl = `https://api.bible.build/bibles/${bibleId}/${bookId}/${chapter}?key=${process.env.DBP_API_KEY}&v=4&book_id=${bookId}&chapter_id=${chapter}`;
+			const reqUrl = `https://api.bible.build/bibles/filesets/${bibleId}/${bookId}/${chapter}?key=${process.env.DBP_API_KEY}&v=4&book_id=${bookId}&chapter_id=${chapter}`;
 			const res = yield call(request, reqUrl);
 			// console.log('response for plain text', res);
 			plainText = res.data;
