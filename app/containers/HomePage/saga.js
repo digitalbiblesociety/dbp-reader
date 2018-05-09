@@ -7,9 +7,21 @@ import get from 'lodash/get';
 // import uniqBy from 'lodash/uniqBy';
 import uniqWith from 'lodash/uniqWith';
 import { getNotes } from 'containers/Notes/saga';
+import {
+	getCountries,
+	getLanguages,
+	getTexts,
+} from 'containers/TextSelection/saga';
 import { ADD_BOOKMARK } from 'containers/Notes/constants';
 // import filter from 'lodash/filter';
-import { ADD_HIGHLIGHTS, LOAD_HIGHLIGHTS, GET_HIGHLIGHTS, GET_NOTES_HOMEPAGE, GET_COPYRIGHTS } from './constants';
+import {
+	ADD_HIGHLIGHTS,
+	LOAD_HIGHLIGHTS,
+	GET_HIGHLIGHTS,
+	GET_NOTES_HOMEPAGE,
+	GET_COPYRIGHTS,
+	INIT_APPLICATION,
+} from './constants';
 import {
 	ntCodes,
 	otCodes,
@@ -28,6 +40,14 @@ import {
 * Overlaps another highlight
 *
 * */
+
+export function* initApplication(props) {
+	const languageISO = props.languageISO;
+	// Forking each of these sagas here on the init of the application so that they all run in parallel
+	yield fork(getCountries);
+	yield fork(getLanguages);
+	yield fork(getTexts, { languageISO });
+}
 
 export function* addBookmark(props) {
 	// console.log('adding bookmark with props: ', props);
@@ -792,7 +812,7 @@ export function* getCopyrightSaga({ filesetIds }) {
 
 // Individual exports for testing
 export default function* defaultSaga() {
-	// yield takeLatest(INIT_APPLICATION, initApplication);
+	yield takeLatest(INIT_APPLICATION, initApplication);
 	// yield takeLatest(GET_AUDIO, getAudio);
 	// yield takeLatest(GET_BOOKS, getBooks);
 	// yield takeLatest(GET_CHAPTER_TEXT, getChapter);

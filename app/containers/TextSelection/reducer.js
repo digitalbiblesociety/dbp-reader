@@ -5,6 +5,7 @@
  */
 
 import { fromJS } from 'immutable';
+import { INIT_APPLICATION } from 'containers/HomePage/constants';
 import {
 	LOAD_TEXTS,
 	LOAD_COUNTRIES,
@@ -40,6 +41,11 @@ const initialState = fromJS({
 
 function textSelectionReducer(state = initialState, action) {
 	switch (action.type) {
+	case INIT_APPLICATION:
+		return state
+			.set('loadingCountries', true)
+			.set('loadingLanguages', true)
+			.set('loadingVersions', true);
 	case GET_COUNTRIES:
 		return state.set('loadingCountries', true);
 	case GET_LANGUAGES:
