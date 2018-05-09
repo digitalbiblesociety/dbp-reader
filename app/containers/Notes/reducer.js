@@ -39,9 +39,7 @@ function notesReducer(state = initialState, action) {
 		return state.set('chapterBookmarks', action.listData);
 	case LOAD_USER_BOOKMARK_DATA:
 		return state
-			.set('activePage', action.activePage)
 			.set('totalPages', action.totalPages)
-			.set('pageSize', action.pageSize)
 			.set('bookmarkList', action.listData);
 	case LOAD_CHAPTER_FOR_NOTE:
 		return state.set('chapterForNote', action.text);
@@ -51,11 +49,11 @@ function notesReducer(state = initialState, action) {
 	case TOGGLE_VERSE_TEXT:
 		return state.set('isVerseTextVisible', !state.get('isVerseTextVisible'));
 	case SET_ACTIVE_PAGE_DATA:
-		// console.log('Setting page data');
-		return state.set('activePage', action.page);
+		// console.log('Setting page data', action);
+		return state.set('activePage', action.params.page);
 	case SET_PAGE_SIZE:
-		// console.log('Setting page size');
-		return state.set('pageSize', action.size);
+		// console.log('Setting page size', action);
+		return state.set('pageSize', action.params.limit);
 		// Todo: Move this to local state
 	case TOGGLE_PAGE_SELECTOR:
 		return state.set('pageSelectorState', !state.get('pageSelectorState'));
@@ -65,9 +63,7 @@ function notesReducer(state = initialState, action) {
 	case LOAD_NOTEBOOK_DATA:
 		// console.log('Loading notebook data with active page: ', action.activePage);
 		return state
-			.set('activePage', action.activePage)
 			.set('totalPages', action.totalPages)
-			.set('pageSize', action.pageSize)
 			.set('listData', action.listData);
 	default:
 		return state;

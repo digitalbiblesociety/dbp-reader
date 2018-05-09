@@ -22,6 +22,8 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 		if (this.props.sectionType === 'notes') {
 			// console.log('Getting notebook data in did mount');
 			this.props.getNotes({ limit: this.props.pageSize, page: this.props.activePage });
+		} else if (this.props.sectionType === 'bookmarks') {
+			this.props.getBookmarks({ limit: this.props.pageSize, page: this.props.activePage });
 		}
 	}
 
@@ -29,12 +31,17 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 	// 	console.log('Component updated');
 	// }
 
-	// componentWillReceiveProps(nextProps) {
-	// 	if (this.props.pageSize !== nextProps.pageSize || this.props.activePage !== nextProps.activePage) {
-	// 		console.log('There were differences');
-	// 		this.props.getNotesForChapter({ limit: nextProps.pageSize, page: nextProps.activePage });
-	// 	}
-	// }
+	componentWillReceiveProps(nextProps) {
+		if (this.props.pageSize !== nextProps.pageSize || this.props.activePage !== nextProps.activePage) {
+			if (nextProps.sectionType === 'notes') {
+				// console.log('There were differences and getting notes');
+				this.props.getNotes({ limit: nextProps.pageSize, page: nextProps.activePage });
+			} else if (nextProps.sectionType === 'bookmarks') {
+				// console.log('There were differences and getting bookmarks');
+				this.props.getBookmarks({ limit: nextProps.pageSize, page: nextProps.activePage });
+			}
+		}
+	}
 
 	getNoteReference(listItem) {
 		const verseRef = listItem.verse_end && !(listItem.verse_end === listItem.verse_start) ? `${listItem.verse_start}-${listItem.verse_end}` : listItem.verse_start;
@@ -80,6 +87,7 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 		const {
 			sectionType,
 			listData,
+			bookmarkList,
 			highlights,
 			activePage,
 			pageSize,
@@ -87,7 +95,15 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 			pageSelectorState,
 			togglePageSelector,
 		} = this.props;
-		const filteredPageData = sectionType === 'highlights' ? this.getFilteredHighlights(highlights) : this.getFilteredPageList(listData);
+		let filteredPageData = [];
+
+		if (sectionType === 'highlights') {
+			filteredPageData = this.getFilteredHighlights(highlights);
+		} else if (sectionType === 'bookmarks') {
+			filteredPageData = this.getFilteredPageList(bookmarkList);
+		} else {
+			filteredPageData = this.getFilteredPageList(listData);
+		}
 		// console.log(this.getFilteredPageList(activePageData));
 		// console.log(highlights);
 		// console.log(this.props);
@@ -170,7 +186,9 @@ MyNotes.propTypes = {
 	togglePageSelector: PropTypes.func.isRequired,
 	setPageSize: PropTypes.func.isRequired,
 	getNotes: PropTypes.func.isRequired,
+	getBookmarks: PropTypes.func.isRequired,
 	listData: PropTypes.array.isRequired,
+	bookmarkList: PropTypes.array.isRequired,
 	highlights: PropTypes.array,
 	sectionType: PropTypes.string.isRequired,
 	vernacularNamesObject: PropTypes.object,

@@ -261,7 +261,7 @@ export function* getUserBookmarks({ userId, params = {} }) {
 	// console.log('params given to get note saga', params);
 	// // console.log('with params', urlWithParams);
 	// console.trace();
-	// console.log('Getting notes for notebook');
+	console.log('Getting bookmarks for notebook');
 
 	try {
 		const response = yield call(request, urlWithParams);
