@@ -98,6 +98,48 @@ export function* getNotes({ userId, params = {} }) {
 	const requestUrl = `https://api.bible.build/users/${userId}/notes?key=${process.env.DBP_API_KEY}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}`;
 	const urlWithParams = Object.entries(params).reduce((acc, param) => acc.concat(`&${param[0]}=${param[1]}`), requestUrl);
 	// console.log('params given to get note saga', params);
+	// console.log('with params', urlWithParams);
+	// console.trace();
+	try {
+		const response = yield call(request, urlWithParams);
+		// const noteData = {
+		// 	notes: response.data,
+		// 	page: response.current_page,
+		// 	pageSize: response.per_page,
+		// 	pages: response.total,
+		// };
+		// console.log('get note response current page, last page and per page', response.current_page, response.last_page, response.per_page);
+
+		// console.log('get note response', response);
+		yield put({
+			type: LOAD_USER_NOTES,
+			listData: response.data,
+			activePage: response.current_page,
+			totalPages: response.last_page,
+			pageSize: response.per_page,
+		});
+	} catch (err) {
+		if (process.env.NODE_ENV === 'development') {
+			console.error('Error getting the notes', err); // eslint-disable-line no-console
+		} else if (process.env.NODE_ENV === 'production') {
+			// const options = {
+			// 	header: 'POST',
+			// 	body: formData,
+			// };
+			// fetch('https://api.bible.build/error_logging', options);
+		}
+	}
+}
+
+export function* getNotesForNotebook({ userId, params = {} }) {
+	// Need to adjust how I paginate the notes here and in other places as well
+	// response.current_page = activePage
+	// response.per_page = perPage
+	// pages = totalPages
+	// notes = response.data
+	const requestUrl = `https://api.bible.build/users/${userId}/notes?key=${process.env.DBP_API_KEY}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}`;
+	const urlWithParams = Object.entries(params).reduce((acc, param) => acc.concat(`&${param[0]}=${param[1]}`), requestUrl);
+	// console.log('params given to get note saga', params);
 	// // console.log('with params', urlWithParams);
 	// console.trace();
 	try {

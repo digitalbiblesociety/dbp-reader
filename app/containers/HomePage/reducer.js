@@ -41,6 +41,8 @@ const initialState = fromJS({
 	books: [],
 	note: {},
 	chapterText: [],
+	userAuthenticated: !!localStorage.getItem('bible_is_user_id') || !!sessionStorage.getItem('bible_is_user_id') || false,
+	userId: localStorage.getItem('bible_is_user_id') || sessionStorage.getItem('bible_is_user_id') || '',
 	audioObjects: [],
 	activeFilesets: [],
 	audioFilesetId: '',

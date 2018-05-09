@@ -19,9 +19,9 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 	}
 	// Need this for when a user has edited a note and come back here
 	componentDidMount() {
-		if (this.props.sectionType === 'notes') {
-			this.props.getNotes({ limit: this.props.pageSize, page: this.props.activePage });
-		}
+		// if (this.props.sectionType === 'notes') {
+		// 	this.props.getNotes({ limit: this.props.pageSize, page: this.props.activePage });
+		// }
 	}
 
 	// componentDidUpdate() {
