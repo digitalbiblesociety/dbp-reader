@@ -10,6 +10,8 @@ import {
 	GET_USER_NOTES,
 	GET_CHAPTER_FOR_NOTE,
 	LOAD_CHAPTER_FOR_NOTE,
+	SET_ACTIVE_PAGE_DATA,
+	SET_PAGE_SIZE,
 } from './constants';
 
 export function* getChapterForNote({ note }) {
@@ -86,7 +88,7 @@ export function* deleteNote({ userId, noteId }) {
 		}
 	}
 }
-
+// Probably need a getBookmarks function
 export function* getNotes({ userId, params = {} }) {
 	// Need to adjust how I paginate the notes here and in other places as well
 	// response.current_page = activePage
@@ -94,19 +96,27 @@ export function* getNotes({ userId, params = {} }) {
 	// pages = totalPages
 	// notes = response.data
 	const requestUrl = `https://api.bible.build/users/${userId}/notes?key=${process.env.DBP_API_KEY}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}`;
-	Object.entries(params).forEach((param) => requestUrl.concat(`&${param[0]}=${param[1]}`));
-	// console.log('getting notes for userid', userId);
+	const urlWithParams = Object.entries(params).reduce((acc, param) => acc.concat(`&${param[0]}=${param[1]}`), requestUrl);
+	// console.log('params given to get note saga', params);
+	// // console.log('with params', urlWithParams);
+	// console.trace();
 	try {
-		const response = yield call(request, requestUrl);
-		const noteData = {
-			notes: response.data,
-			page: response.current_page,
-			pageSize: response.per_page,
-			pages: response.total,
-		};
-		// console.log('get note response', response);
+		const response = yield call(request, urlWithParams);
+		// const noteData = {
+		// 	notes: response.data,
+		// 	page: response.current_page,
+		// 	pageSize: response.per_page,
+		// 	pages: response.total,
+		// };
+		// console.log('get note response current page, last page and per page', response.current_page, response.last_page, response.per_page);
 
-		yield put({ type: LOAD_USER_NOTES, noteData });
+		yield put({
+			type: LOAD_USER_NOTES,
+			listData: response.data,
+			activePage: response.current_page,
+			totalPages: response.last_page,
+			pageSize: response.per_page,
+		});
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error(err); // eslint-disable-line no-console
@@ -159,6 +169,8 @@ export default function* notesSaga() {
 	const updateNoteSaga = yield takeLatest(UPDATE_NOTE, updateNote);
 	const deleteNoteSaga = yield takeLatest(DELETE_NOTE, deleteNote);
 	const getChapterSaga = yield takeLatest(GET_CHAPTER_FOR_NOTE, getChapterForNote);
+	const setPageSize = yield takeLatest(SET_PAGE_SIZE, getNotes);
+	const setActivePage = yield takeLatest(SET_ACTIVE_PAGE_DATA, getNotes);
 	// console.log('Loaded notes saga');
 	yield take(LOCATION_CHANGE);
 	yield cancel(addNoteSaga);
@@ -166,4 +178,6 @@ export default function* notesSaga() {
 	yield cancel(getChapterSaga);
 	yield cancel(updateNoteSaga);
 	yield cancel(deleteNoteSaga);
+	yield cancel(setPageSize);
+	yield cancel(setActivePage);
 }
