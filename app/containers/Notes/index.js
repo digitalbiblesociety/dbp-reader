@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import isEqual from 'lodash/isEqual';
+// import isEqual from 'lodash/isEqual';
 import SvgWrapper from 'components/SvgWrapper';
 import EditNote from 'components/EditNote';
 import MyNotes from 'components/MyNotes';
@@ -25,13 +25,14 @@ import {
 	toggleVerseText,
 	toggleAddVerseMenu,
 	togglePageSelector,
-	setActivePageData,
+	setActivePage,
 	addNote,
-	getNotes,
+	getNotesForNotebook,
 	getChapterForNote,
 	addHighlight,
 	updateNote,
 	deleteNote,
+	getUserBookmarkData,
 } from './actions';
 import makeSelectNotes, {
 	selectUserId,
@@ -59,12 +60,6 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 		document.addEventListener('click', this.handleClickOutside);
 	}
 
-	componentWillReceiveProps(nextProps) {
-		if (!isEqual(nextProps.selectedListData, this.props.selectedListData)) {
-			this.setActivePageData(nextProps.selectedListData.slice(0, nextProps.notes.paginationPageSize));
-		}
-	}
-
 	componentWillUnmount() {
 		document.removeEventListener('click', this.handleClickOutside);
 	}
@@ -74,13 +69,14 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 	}
 
 	setActiveChild = (child) => this.props.dispatch(setActiveChild(child))
-	setActivePageData = (page) => this.props.dispatch(setActivePageData(page))
+	setActivePage = (props) => this.props.dispatch(setActivePage({ userId: this.props.userId, params: { ...props } }))
 	setActiveNote = ({ note }) => {
 		this.props.dispatch(getChapterForNote({ note }));
 		this.props.dispatch(setActiveNote({ note }));
 	}
-	setPageSize = (size) => this.props.dispatch(setPageSize(size))
-	getNotes = () => this.props.dispatch(getNotes({ userId: this.props.userId }))
+	setPageSize = (props) => this.props.dispatch(setPageSize({ userId: this.props.userId, params: { ...props } }))
+	getNotes = (props) => this.props.dispatch(getNotesForNotebook({ userId: this.props.userId, params: { ...props } }))
+	getBookmarks = (props) => this.props.dispatch(getUserBookmarkData({ userId: this.props.userId, params: { ...props } }))
 	toggleVerseText = () => this.props.dispatch(toggleVerseText())
 	toggleAddVerseMenu = () => this.props.dispatch(toggleAddVerseMenu())
 	togglePageSelector = () => this.props.dispatch(togglePageSelector())
@@ -113,9 +109,11 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 			listData,
 			isAddVerseExpanded,
 			isVerseTextVisible,
-			activePageData,
-			paginationPageSize: pageSize,
+			pageSize,
+			totalPages,
+			activePage,
 			pageSelectorState,
+			bookmarkList,
 		} = this.props.notes;
 		const {
 			toggleNotesModal,
@@ -178,17 +176,20 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 										<MyNotes
 											getNotes={this.getNotes}
 											setPageSize={this.setPageSize}
+											getBookmarks={this.getBookmarks}
 											setActiveNote={this.setActiveNote}
 											setActiveChild={this.setActiveChild}
-											setActivePageData={this.setActivePageData}
+											setActivePage={this.setActivePage}
 											togglePageSelector={this.togglePageSelector}
-											highlights={highlights}
-											listData={selectedListData || listData}
-											pageSize={pageSize}
-											sectionType={activeChild}
-											activePageData={activePageData}
 											pageSelectorState={pageSelectorState}
 											vernacularNamesObject={vernacularNamesObject}
+											listData={selectedListData || listData}
+											highlights={highlights}
+											sectionType={activeChild}
+											pageSize={pageSize}
+											totalPages={totalPages}
+											bookmarkList={bookmarkList}
+											activePage={activePage}
 										/>
 									)
 								}

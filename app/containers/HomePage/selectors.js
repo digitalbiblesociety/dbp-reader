@@ -20,18 +20,23 @@ const selectNotes = (state) => state.get('notes');
 const selectUserNotes = () => createDeepEqualSelector(
 	[selectNotes, selectHomePageDomain],
 	(notes, home) => {
-		const bibleId = home.get('activeTextId');
-		const bookId = home.get('activeBookId');
-		const chapter = home.get('activeChapter');
+		// const bibleId = home.get('activeTextId');
+		// const bookId = home.get('activeBookId');
+		// const chapter = home.get('activeChapter');
 		const text = home.get('chapterText');
 		const authd = home.get('userAuthenticated');
 		const userId = home.get('userId');
-		const filteredNotes = notes.get('listData').filter((n) => n.bible_id === bibleId && n.book_id === bookId && n.chapter === chapter);
-		const bookmarks = filteredNotes.toJS ? filteredNotes.filter((n) => n.bookmark === 1).toJS() : filteredNotes.filter((n) => n.bookmark === 1);
-		const userNotes = filteredNotes.toJS ? filteredNotes.filter((n) => n.bookmark === 0).toJS() : filteredNotes.filter((n) => n.bookmark === 0);
+		// May not need to filter because I am requesting only the notes/bookmarks for this chapter
+		const filteredNotes = notes.get('userNotes');
+		const filteredBookmarks = notes.get('chapterBookmarks');
+		const bookmarks = filteredBookmarks.toJS ? filteredBookmarks.toJS() : filteredBookmarks;
+		const userNotes = filteredNotes.toJS ? filteredNotes.toJS() : filteredNotes;
+		// console.log('bookmarks', bookmarks);
+		// console.log('userNotes', userNotes);
 
 		// If the user isn't authorized then there will not be any notes or bookmarks and I can just end the function here
 		if (!authd && !userId) {
+			// console.log('no user');
 			return {
 				text: text.toJS(),
 				userNotes,
@@ -54,22 +59,36 @@ const selectUserNotes = () => createDeepEqualSelector(
 			// console.log(verse);
 			// console.log(iToSet);
 			if (verse) {
-				if (n.bookmark) {
-					newText = newText.size ? newText.setIn([iToSet, 'hasBookmark'], true) : text.setIn([iToSet, 'hasBookmark'], true);
-					newText = newText.size ? newText.setIn([iToSet, 'bookmarkIndex'], ni) : text.setIn([iToSet, 'bookmarkIndex'], ni);
-				}
-
 				// Need to change this since the notes will be allowed to be null
 				// Eventually there will be two separate calls so I can have two piece of state
-				if (n.notes && n.notes !== '""' && n.notes !== '\'\'') {
+				if (n.notes) {
 					newText = newText.size ? newText.setIn([iToSet, 'hasNote'], true) : text.setIn([iToSet, 'hasNote'], true);
 					newText = newText.size ? newText.setIn([iToSet, 'noteIndex'], ni) : text.setIn([iToSet, 'noteIndex'], ni);
 				}
 			}
 		});
+		filteredBookmarks.forEach((n, ni) => {
+			let iToSet = 0;
+			const verse = text.find((t, i) => {
+				// console.log('t',t);
+				// console.log('n',n);
+				if (parseInt(t.get('verse_start'), 10) === n.verse_start) {
+					iToSet = i;
+				}
+				return parseInt(t.get('verse_start'), 10) === n.verse_start;
+			});
+			// console.log('bookmark verse', verse);
+			// console.log(iToSet);
+			if (verse) {
+				if (n.bookmark) {
+					newText = newText.size ? newText.setIn([iToSet, 'hasBookmark'], true) : text.setIn([iToSet, 'hasBookmark'], true);
+					newText = newText.size ? newText.setIn([iToSet, 'bookmarkIndex'], ni) : text.setIn([iToSet, 'bookmarkIndex'], ni);
+				}
+			}
+		});
 		// console.log(filteredNotes);
-		// console.log(newText.size);
-		// console.log(text)
+		// console.log('newText', newText);
+		// console.log(text);
 		return {
 			text: newText.size ? newText.toJS() : text.toJS(),
 			userNotes,

@@ -59,7 +59,7 @@ import notesReducer from 'containers/Notes/reducer';
 import textReducer from 'containers/TextSelection/reducer';
 // import notesSaga from 'containers/Notes/saga';
 import textSaga from 'containers/TextSelection/saga';
-import { addBookmark } from 'containers/Notes/actions';
+import { getBookmarksForChapter, addBookmark } from 'containers/Notes/actions';
 import {
 	addHighlight,
 	getBooks,
@@ -246,16 +246,16 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			//     });
 			//   }
 			// })(document);
-			const bannerDiv = document.createElement('div');
-			bannerDiv.id = 'old-browser-banner';
-			bannerDiv.textContent = 'You are using an old browser so some things may not function as expected. Please consider using a modern browser.';
-			document.getElementsByTagName('body')[0].appendChild(bannerDiv);
-
-			setTimeout(() => {
-				const el = document.getElementById('old-browser-banner');
-				const parent = el.parentElement;
-				parent.removeChild(el);
-			}, 3000);
+			// const bannerDiv = document.createElement('div');
+			// bannerDiv.id = 'old-browser-banner';
+			// bannerDiv.textContent = 'You are using an old browser so some things may not function as expected. Please consider using a modern browser.';
+			// document.getElementsByTagName('body')[0].appendChild(bannerDiv);
+			//
+			// setTimeout(() => {
+			// 	const el = document.getElementById('old-browser-banner');
+			// 	const parent = el.parentElement;
+			// 	parent.removeChild(el);
+			// }, 3000);
 		}
 	}
 	// Component updates when the state and props haven't changed 2 of 5 times
@@ -401,9 +401,8 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			}));
 			if (userId) {
 				// console.log('getting the notes', userId);
-				this.props.dispatch(getNotes({ userId }));
-			} else if (!userId) {
-				this.props.dispatch(getNotes());
+				this.props.dispatch(getNotes({ userId, params: { bible_id: activeTextId, book_id: activeBookId, activeChapter, limit: 150, page: 1 } }));
+				this.props.dispatch(getBookmarksForChapter({ userId, params: { bible_id: activeTextId, book_id: activeBookId, activeChapter, limit: 150, page: 1 } }));
 			}
 		}
 		// I am not sure what I thought this was for... I think I don't need it

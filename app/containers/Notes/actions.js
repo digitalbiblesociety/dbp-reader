@@ -18,7 +18,25 @@ import {
 	ADD_BOOKMARK,
 	UPDATE_NOTE,
 	DELETE_NOTE,
+	GET_USER_NOTEBOOK_DATA,
+	GET_USER_BOOKMARK_DATA,
+	GET_BOOKMARKS_FOR_CHAPTER,
 } from './constants';
+
+export const getBookmarksForChapter = (props) => ({
+	type: GET_BOOKMARKS_FOR_CHAPTER,
+	...props,
+});
+
+export const getUserBookmarkData = (props) => ({
+	type: GET_USER_BOOKMARK_DATA,
+	...props,
+});
+
+export const getNotesForNotebook = (props) => ({
+	type: GET_USER_NOTEBOOK_DATA,
+	...props,
+});
 
 export const getNotes = (props) => ({
 	type: GET_USER_NOTES,
@@ -60,14 +78,14 @@ export const setActiveChild = (child) => ({
 	child,
 });
 
-export const setActivePageData = (page) => ({
+export const setActivePage = (props) => ({
 	type: SET_ACTIVE_PAGE_DATA,
-	page,
+	...props,
 });
 
-export const setPageSize = (size) => ({
+export const setPageSize = (props) => ({
 	type: SET_PAGE_SIZE,
-	size,
+	...props,
 });
 
 export const toggleVerseText = () => ({

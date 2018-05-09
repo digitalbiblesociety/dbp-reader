@@ -17,10 +17,29 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 		// Need to reset this once user goes from notes to bookmarks
 		filterText: '',
 	}
-
+	// Need this for when a user has edited a note and come back here
 	componentDidMount() {
 		if (this.props.sectionType === 'notes') {
-			this.props.getNotes();
+			// console.log('Getting notebook data in did mount');
+			this.props.getNotes({ limit: this.props.pageSize, page: this.props.activePage });
+		} else if (this.props.sectionType === 'bookmarks') {
+			this.props.getBookmarks({ limit: this.props.pageSize, page: this.props.activePage });
+		}
+	}
+
+	// componentDidUpdate() {
+	// 	console.log('Component updated');
+	// }
+
+	componentWillReceiveProps(nextProps) {
+		if (this.props.pageSize !== nextProps.pageSize || this.props.activePage !== nextProps.activePage) {
+			if (nextProps.sectionType === 'notes') {
+				// console.log('There were differences and getting notes');
+				this.props.getNotes({ limit: nextProps.pageSize, page: nextProps.activePage });
+			} else if (nextProps.sectionType === 'bookmarks') {
+				// console.log('There were differences and getting bookmarks');
+				this.props.getBookmarks({ limit: nextProps.pageSize, page: nextProps.activePage });
+			}
 		}
 	}
 
@@ -40,7 +59,7 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 	getFilteredPageList = (pageData) => {
 		const filterText = this.state.filterText;
 
-		return matchSorter(pageData, filterText, { keys: ['notes', 'bible_id', 'book_id', 'verse_start', 'updated_at'] });
+		return matchSorter(pageData, filterText, { keys: ['notes', 'bible_id', 'book_id', 'chapter', 'verse_start', 'updated_at'] });
 	}
 
 	getFilteredHighlights = (highlights) => {
@@ -53,7 +72,7 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 
 	handleSearchChange = (e) => this.setState({ filterText: e.target.value })
 
-	handlePageClick = (page) => this.props.setActivePageData(page);
+	handlePageClick = (page) => this.props.setActivePage({ limit: this.props.pageSize, page });
 
 	handleClick = (listItem) => {
 		if (this.props.sectionType === 'notes') {
@@ -62,18 +81,29 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 		}
 	}
 
+	handleSettingPageSize = (pageSize) => this.props.setPageSize({ limit: pageSize, page: 1 })
+
 	render() {
 		const {
 			sectionType,
-			setPageSize,
 			listData,
+			bookmarkList,
 			highlights,
-			activePageData,
+			activePage,
 			pageSize,
+			totalPages,
 			pageSelectorState,
 			togglePageSelector,
 		} = this.props;
-		const filteredPageData = sectionType === 'highlights' ? this.getFilteredHighlights(highlights) : this.getFilteredPageList(activePageData);
+		let filteredPageData = [];
+
+		if (sectionType === 'highlights') {
+			filteredPageData = this.getFilteredHighlights(highlights);
+		} else if (sectionType === 'bookmarks') {
+			filteredPageData = this.getFilteredPageList(bookmarkList);
+		} else {
+			filteredPageData = this.getFilteredPageList(listData);
+		}
 		// console.log(this.getFilteredPageList(activePageData));
 		// console.log(highlights);
 		// console.log(this.props);
@@ -133,12 +163,16 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 				</section>
 				<div className="pagination">
 					<Pagination
-						items={listData}
 						onChangePage={this.handlePageClick}
-						initialPage={1}
-						pageSize={pageSize}
+						activePage={activePage}
+						totalPages={totalPages}
 					/>
-					<PageSizeSelector togglePageSelector={togglePageSelector} pageSelectorState={pageSelectorState} pageSize={pageSize} setPageSize={setPageSize} />
+					<PageSizeSelector
+						togglePageSelector={togglePageSelector}
+						pageSelectorState={pageSelectorState}
+						pageSize={pageSize}
+						setPageSize={this.handleSettingPageSize}
+					/>
 				</div>
 			</div>
 		);
@@ -148,17 +182,20 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 MyNotes.propTypes = {
 	setActiveChild: PropTypes.func.isRequired,
 	setActiveNote: PropTypes.func.isRequired,
-	setActivePageData: PropTypes.func.isRequired,
+	setActivePage: PropTypes.func.isRequired,
 	togglePageSelector: PropTypes.func.isRequired,
 	setPageSize: PropTypes.func.isRequired,
 	getNotes: PropTypes.func.isRequired,
-	pageSelectorState: PropTypes.bool.isRequired,
-	activePageData: PropTypes.array.isRequired,
+	getBookmarks: PropTypes.func.isRequired,
 	listData: PropTypes.array.isRequired,
-	sectionType: PropTypes.string.isRequired,
-	pageSize: PropTypes.number.isRequired,
-	vernacularNamesObject: PropTypes.object,
+	bookmarkList: PropTypes.array.isRequired,
 	highlights: PropTypes.array,
+	sectionType: PropTypes.string.isRequired,
+	vernacularNamesObject: PropTypes.object,
+	pageSize: PropTypes.number.isRequired,
+	totalPages: PropTypes.number,
+	activePage: PropTypes.number,
+	pageSelectorState: PropTypes.bool.isRequired,
 };
 
 export default MyNotes;
