@@ -49,11 +49,11 @@ import {
 	applyFontSize,
 	toggleWordsOfJesus,
 } from 'containers/Settings/themes';
-import {
-	getCountries,
-	getLanguages,
-	getTexts,
-} from 'containers/TextSelection/actions';
+// import {
+// 	getCountries,
+// 	getLanguages,
+// 	getTexts,
+// } from 'containers/TextSelection/actions';
 // import differenceObject from 'utils/deepDifferenceObject';
 import notesReducer from 'containers/Notes/reducer';
 import textReducer from 'containers/TextSelection/reducer';
@@ -82,7 +82,7 @@ import {
 	setActiveChapter,
 	setActiveBookName,
 	setActiveNotesView,
-	// initApplication,
+	initApplication,
 } from './actions';
 import makeSelectHomePage, {
 	selectSettings,
@@ -179,9 +179,10 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 
 		if (this.props.homepage.firstLoad) {
 			// Move these to single saga that runs them all in parallel
-			this.props.dispatch(getCountries());
-			this.props.dispatch(getLanguages());
-			this.props.dispatch(getTexts({ languageISO: this.props.homepage.defaultLanguageIso }));
+			// this.props.dispatch(getCountries());
+			// this.props.dispatch(getLanguages());
+			// this.props.dispatch(getTexts({ languageISO: this.props.homepage.defaultLanguageIso }));
+			this.props.dispatch(initApplication({ languageISO: this.props.homepage.defaultLanguageIso }));
 			this.toggleFirstLoadForTextSelection();
 		}
 
