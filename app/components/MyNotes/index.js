@@ -17,10 +17,10 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 		// Need to reset this once user goes from notes to bookmarks
 		filterText: '',
 	}
-
+	// Need this for when a user has edited a note and come back here
 	componentDidMount() {
 		if (this.props.sectionType === 'notes') {
-			this.props.getNotes();
+			this.props.getNotes({ limit: this.props.limit, page: this.props.activePage });
 		}
 	}
 

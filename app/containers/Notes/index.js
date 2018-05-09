@@ -80,7 +80,7 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 		this.props.dispatch(setActiveNote({ note }));
 	}
 	setPageSize = (size) => this.props.dispatch(setPageSize(size))
-	getNotes = () => this.props.dispatch(getNotes({ userId: this.props.userId }))
+	getNotes = (props) => this.props.dispatch(getNotes({ userId: this.props.userId, params: { ...props } }))
 	toggleVerseText = () => this.props.dispatch(toggleVerseText())
 	toggleAddVerseMenu = () => this.props.dispatch(toggleAddVerseMenu())
 	togglePageSelector = () => this.props.dispatch(togglePageSelector())
