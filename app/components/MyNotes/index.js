@@ -19,9 +19,10 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 	}
 	// Need this for when a user has edited a note and come back here
 	componentDidMount() {
-		// if (this.props.sectionType === 'notes') {
-		// 	this.props.getNotes({ limit: this.props.pageSize, page: this.props.activePage });
-		// }
+		if (this.props.sectionType === 'notes') {
+			// console.log('Getting notebook data in did mount');
+			this.props.getNotes({ limit: this.props.pageSize, page: this.props.activePage });
+		}
 	}
 
 	// componentDidUpdate() {
@@ -31,7 +32,7 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 	// componentWillReceiveProps(nextProps) {
 	// 	if (this.props.pageSize !== nextProps.pageSize || this.props.activePage !== nextProps.activePage) {
 	// 		console.log('There were differences');
-	// 		this.props.getNotes({ limit: nextProps.pageSize, page: nextProps.activePage });
+	// 		this.props.getNotesForChapter({ limit: nextProps.pageSize, page: nextProps.activePage });
 	// 	}
 	// }
 
@@ -150,7 +151,12 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 						activePage={activePage}
 						totalPages={totalPages}
 					/>
-					<PageSizeSelector togglePageSelector={togglePageSelector} pageSelectorState={pageSelectorState} pageSize={pageSize} setPageSize={this.handleSettingPageSize} />
+					<PageSizeSelector
+						togglePageSelector={togglePageSelector}
+						pageSelectorState={pageSelectorState}
+						pageSize={pageSize}
+						setPageSize={this.handleSettingPageSize}
+					/>
 				</div>
 			</div>
 		);

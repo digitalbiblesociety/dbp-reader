@@ -26,7 +26,7 @@ const selectUserNotes = () => createDeepEqualSelector(
 		const text = home.get('chapterText');
 		const authd = home.get('userAuthenticated');
 		const userId = home.get('userId');
-		const filteredNotes = notes.get('listData').filter((n) => n.bible_id === bibleId && n.book_id === bookId && n.chapter === chapter);
+		const filteredNotes = notes.get('userNotes').filter((n) => n.bible_id === bibleId && n.book_id === bookId && n.chapter === chapter);
 		const bookmarks = filteredNotes.toJS ? filteredNotes.filter((n) => n.bookmark === 1).toJS() : filteredNotes.filter((n) => n.bookmark === 1);
 		const userNotes = filteredNotes.toJS ? filteredNotes.filter((n) => n.bookmark === 0).toJS() : filteredNotes.filter((n) => n.bookmark === 0);
 		// console.log('bookmarks', bookmarks);

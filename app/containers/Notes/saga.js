@@ -12,6 +12,8 @@ import {
 	LOAD_CHAPTER_FOR_NOTE,
 	SET_ACTIVE_PAGE_DATA,
 	SET_PAGE_SIZE,
+	LOAD_NOTEBOOK_DATA,
+	GET_USER_NOTEBOOK_DATA,
 } from './constants';
 
 export function* getChapterForNote({ note }) {
@@ -89,7 +91,7 @@ export function* deleteNote({ userId, noteId }) {
 	}
 }
 // Probably need a getBookmarks function
-export function* getNotes({ userId, params = {} }) {
+export function* getNotesForChapter({ userId, params = {} }) {
 	// Need to adjust how I paginate the notes here and in other places as well
 	// response.current_page = activePage
 	// response.per_page = perPage
@@ -99,6 +101,7 @@ export function* getNotes({ userId, params = {} }) {
 	const urlWithParams = Object.entries(params).reduce((acc, param) => acc.concat(`&${param[0]}=${param[1]}`), requestUrl);
 	// console.log('params given to get note saga', params);
 	// console.log('with params', urlWithParams);
+	// console.log('Getting notes for chapter');
 	// console.trace();
 	try {
 		const response = yield call(request, urlWithParams);
@@ -114,9 +117,6 @@ export function* getNotes({ userId, params = {} }) {
 		yield put({
 			type: LOAD_USER_NOTES,
 			listData: response.data,
-			activePage: response.current_page,
-			totalPages: response.last_page,
-			pageSize: response.per_page,
 		});
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
@@ -142,6 +142,8 @@ export function* getNotesForNotebook({ userId, params = {} }) {
 	// console.log('params given to get note saga', params);
 	// // console.log('with params', urlWithParams);
 	// console.trace();
+	// console.log('Getting notes for notebook');
+
 	try {
 		const response = yield call(request, urlWithParams);
 		// const noteData = {
@@ -153,11 +155,11 @@ export function* getNotesForNotebook({ userId, params = {} }) {
 		// console.log('get note response current page, last page and per page', response.current_page, response.last_page, response.per_page);
 
 		yield put({
-			type: LOAD_USER_NOTES,
+			type: LOAD_NOTEBOOK_DATA,
 			listData: response.data,
-			activePage: response.current_page,
-			totalPages: response.last_page,
-			pageSize: response.per_page,
+			activePage: parseInt(response.current_page, 10),
+			totalPages: parseInt(response.last_page, 10),
+			pageSize: parseInt(response.per_page, 10),
 		});
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
@@ -207,12 +209,13 @@ export function* addNote({ userId, data }) {
 // Individual exports for testing
 export default function* notesSaga() {
 	const addNoteSaga = yield takeLatest(ADD_NOTE, addNote);
-	const getNotesSaga = yield takeLatest(GET_USER_NOTES, getNotes);
+	const getNotesSaga = yield takeLatest(GET_USER_NOTES, getNotesForChapter);
 	const updateNoteSaga = yield takeLatest(UPDATE_NOTE, updateNote);
 	const deleteNoteSaga = yield takeLatest(DELETE_NOTE, deleteNote);
 	const getChapterSaga = yield takeLatest(GET_CHAPTER_FOR_NOTE, getChapterForNote);
-	const setPageSize = yield takeLatest(SET_PAGE_SIZE, getNotes);
-	const setActivePage = yield takeLatest(SET_ACTIVE_PAGE_DATA, getNotes);
+	const getNotebookSaga = yield takeLatest(GET_USER_NOTEBOOK_DATA, getNotesForNotebook);
+	const setPageSize = yield takeLatest(SET_PAGE_SIZE, getNotesForNotebook);
+	const setActivePage = yield takeLatest(SET_ACTIVE_PAGE_DATA, getNotesForNotebook);
 	// console.log('Loaded notes saga');
 	yield take(LOCATION_CHANGE);
 	yield cancel(addNoteSaga);
@@ -222,4 +225,5 @@ export default function* notesSaga() {
 	yield cancel(deleteNoteSaga);
 	yield cancel(setPageSize);
 	yield cancel(setActivePage);
+	yield cancel(getNotebookSaga);
 }

@@ -6,7 +6,7 @@ import reduce from 'lodash/reduce';
 import get from 'lodash/get';
 // import uniqBy from 'lodash/uniqBy';
 import uniqWith from 'lodash/uniqWith';
-import { getNotes } from 'containers/Notes/saga';
+import { getNotesForChapter } from 'containers/Notes/saga';
 import {
 	getCountries,
 	getLanguages,
@@ -299,7 +299,7 @@ export function* getChapterFromUrl({ filesets, bibleId: oldBibleId, bookId: oldB
 
 		if (authenticated) {
 			yield fork(getHighlights, { bible: bibleId, book: bookId, chapter, userId });
-			yield fork(getNotes, { userId, params: { bibleId, book_id: bookId, chapter } });
+			yield fork(getNotesForChapter, { userId, params: { bible_id: bibleId, book_id: bookId, chapter, limit: 150, page: 1 } });
 		}
 		// calling this function to start it asynchronously to this one.
 		// if (hasAudio) {
@@ -822,6 +822,6 @@ export default function* defaultSaga() {
 	yield takeLatest('getbible', getBibleFromUrl);
 	yield takeLatest('getaudio', getChapterAudio);
 	yield takeLatest(ADD_BOOKMARK, addBookmark);
-	yield takeLatest(GET_NOTES_HOMEPAGE, getNotes);
+	yield takeLatest(GET_NOTES_HOMEPAGE, getNotesForChapter);
 	yield takeLatest(GET_COPYRIGHTS, getCopyrightSaga);
 }

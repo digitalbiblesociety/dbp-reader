@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import isEqual from 'lodash/isEqual';
+// import isEqual from 'lodash/isEqual';
 import SvgWrapper from 'components/SvgWrapper';
 import EditNote from 'components/EditNote';
 import MyNotes from 'components/MyNotes';
@@ -27,7 +27,7 @@ import {
 	togglePageSelector,
 	setActivePage,
 	addNote,
-	getNotes,
+	getNotesForNotebook,
 	getChapterForNote,
 	addHighlight,
 	updateNote,
@@ -59,12 +59,6 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 		document.addEventListener('click', this.handleClickOutside);
 	}
 
-	componentWillReceiveProps(nextProps) {
-		if (!isEqual(nextProps.selectedListData, this.props.selectedListData)) {
-			this.setActivePage(nextProps.selectedListData.slice(0, nextProps.notes.paginationPageSize));
-		}
-	}
-
 	componentWillUnmount() {
 		document.removeEventListener('click', this.handleClickOutside);
 	}
@@ -80,7 +74,7 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 		this.props.dispatch(setActiveNote({ note }));
 	}
 	setPageSize = (props) => this.props.dispatch(setPageSize({ userId: this.props.userId, params: { ...props } }))
-	getNotes = (props) => this.props.dispatch(getNotes({ userId: this.props.userId, params: { ...props } }))
+	getNotes = (props) => this.props.dispatch(getNotesForNotebook({ userId: this.props.userId, params: { ...props } }))
 	toggleVerseText = () => this.props.dispatch(toggleVerseText())
 	toggleAddVerseMenu = () => this.props.dispatch(toggleAddVerseMenu())
 	togglePageSelector = () => this.props.dispatch(togglePageSelector())

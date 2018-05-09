@@ -401,7 +401,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			}));
 			if (userId) {
 				// console.log('getting the notes', userId);
-				this.props.dispatch(getNotes({ userId, params: { limit: 10, page: 1 } }));
+				this.props.dispatch(getNotes({ userId, params: { bible_id: activeTextId, book_id: activeBookId, activeChapter, limit: 150, page: 1 } }));
 			}
 		}
 		// I am not sure what I thought this was for... I think I don't need it
