@@ -62,6 +62,7 @@ export function* getCountries() {
 
 export function* getTexts({ languageISO }) {
 	let requestUrl = '';
+
 	if (languageISO === 'ANY') {
 		requestUrl = `https://api.bible.build/bibles?&bucket=${process.env.DBP_BUCKET_ID}&key=${process.env.DBP_API_KEY}&v=4`;
 	} else {
@@ -100,7 +101,8 @@ export function* getLanguages() {
 		// const languages = response.data.filter((language) => languageList[language.iso_code]);
 		// console.log(response.data.filter((l) => l.name === 'Ma\'di South' || l.iso === 'snm'));
 		// Temporary fix until the api returns the list pre-sorted
-		const languages = response.data.filter((language) => language.bibles > 0).sort((a, b) => a.name > b.name);
+		// const languages = response.data.filter((language) => language.bibles > 0).sort((a, b) => a.name > b.name);
+		const languages = response.data;
 		languages.unshift({ name: 'ANY', iso: 'ANY' });
 		// console.log('languages', languages);
 		yield put(setLanguages({ languages }));
