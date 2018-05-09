@@ -42,7 +42,7 @@ function PageSizeSelector({ pageSize, togglePageSelector, setPageSize, pageSelec
 								pageSize === 100 ? <SvgWrapper width={'7px'} height={'13px'} svgid={'pagination-arrows'} /> : <span className={'svg-placeholder'}> </span>
 							}
 						</div>
-						<div className={pageSize === 0 ? 'active' : 'inactive'} role="button" tabIndex={0} onClick={() => { setPageSize(0); togglePageSelector(); }}>
+						<div className={pageSize === 0 ? 'active' : 'inactive'} role="button" tabIndex={0} onClick={() => { setPageSize(1000); togglePageSelector(); }}>
 							<span className={'text'}>VIEW ALL</span>
 							{
 								pageSize === 0 ? <SvgWrapper width={'7px'} height={'13px'} svgid={'pagination-arrows'} /> : <span className={'svg-placeholder'}> </span>

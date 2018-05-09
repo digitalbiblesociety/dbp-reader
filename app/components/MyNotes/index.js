@@ -20,9 +20,20 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 	// Need this for when a user has edited a note and come back here
 	componentDidMount() {
 		if (this.props.sectionType === 'notes') {
-			this.props.getNotes({ limit: this.props.limit, page: this.props.activePage });
+			this.props.getNotes({ limit: this.props.pageSize, page: this.props.activePage });
 		}
 	}
+
+	// componentDidUpdate() {
+	// 	console.log('Component updated');
+	// }
+
+	// componentWillReceiveProps(nextProps) {
+	// 	if (this.props.pageSize !== nextProps.pageSize || this.props.activePage !== nextProps.activePage) {
+	// 		console.log('There were differences');
+	// 		this.props.getNotes({ limit: nextProps.pageSize, page: nextProps.activePage });
+	// 	}
+	// }
 
 	getNoteReference(listItem) {
 		const verseRef = listItem.verse_end && !(listItem.verse_end === listItem.verse_start) ? `${listItem.verse_start}-${listItem.verse_end}` : listItem.verse_start;
@@ -53,7 +64,7 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 
 	handleSearchChange = (e) => this.setState({ filterText: e.target.value })
 
-	handlePageClick = (page) => this.props.setActivePageData(page);
+	handlePageClick = (page) => this.props.setActivePage({ limit: this.props.pageSize, page });
 
 	handleClick = (listItem) => {
 		if (this.props.sectionType === 'notes') {
@@ -62,18 +73,20 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 		}
 	}
 
+	handleSettingPageSize = (pageSize) => this.props.setPageSize({ limit: pageSize, page: 1 })
+
 	render() {
 		const {
 			sectionType,
-			setPageSize,
 			listData,
 			highlights,
-			activePageData,
+			activePage,
 			pageSize,
+			totalPages,
 			pageSelectorState,
 			togglePageSelector,
 		} = this.props;
-		const filteredPageData = sectionType === 'highlights' ? this.getFilteredHighlights(highlights) : this.getFilteredPageList(activePageData);
+		const filteredPageData = sectionType === 'highlights' ? this.getFilteredHighlights(highlights) : this.getFilteredPageList(listData);
 		// console.log(this.getFilteredPageList(activePageData));
 		// console.log(highlights);
 		// console.log(this.props);
@@ -133,12 +146,11 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 				</section>
 				<div className="pagination">
 					<Pagination
-						items={listData}
 						onChangePage={this.handlePageClick}
-						initialPage={1}
-						pageSize={pageSize}
+						activePage={activePage}
+						totalPages={totalPages}
 					/>
-					<PageSizeSelector togglePageSelector={togglePageSelector} pageSelectorState={pageSelectorState} pageSize={pageSize} setPageSize={setPageSize} />
+					<PageSizeSelector togglePageSelector={togglePageSelector} pageSelectorState={pageSelectorState} pageSize={pageSize} setPageSize={this.handleSettingPageSize} />
 				</div>
 			</div>
 		);
@@ -148,17 +160,18 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 MyNotes.propTypes = {
 	setActiveChild: PropTypes.func.isRequired,
 	setActiveNote: PropTypes.func.isRequired,
-	setActivePageData: PropTypes.func.isRequired,
+	setActivePage: PropTypes.func.isRequired,
 	togglePageSelector: PropTypes.func.isRequired,
 	setPageSize: PropTypes.func.isRequired,
 	getNotes: PropTypes.func.isRequired,
-	pageSelectorState: PropTypes.bool.isRequired,
-	activePageData: PropTypes.array.isRequired,
 	listData: PropTypes.array.isRequired,
-	sectionType: PropTypes.string.isRequired,
-	pageSize: PropTypes.number.isRequired,
-	vernacularNamesObject: PropTypes.object,
 	highlights: PropTypes.array,
+	sectionType: PropTypes.string.isRequired,
+	vernacularNamesObject: PropTypes.object,
+	pageSize: PropTypes.number.isRequired,
+	totalPages: PropTypes.number,
+	activePage: PropTypes.number,
+	pageSelectorState: PropTypes.bool.isRequired,
 };
 
 export default MyNotes;

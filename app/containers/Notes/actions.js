@@ -60,14 +60,14 @@ export const setActiveChild = (child) => ({
 	child,
 });
 
-export const setActivePageData = (page) => ({
+export const setActivePage = (props) => ({
 	type: SET_ACTIVE_PAGE_DATA,
-	page,
+	...props,
 });
 
-export const setPageSize = (size) => ({
+export const setPageSize = (props) => ({
 	type: SET_PAGE_SIZE,
-	size,
+	...props,
 });
 
 export const toggleVerseText = () => ({

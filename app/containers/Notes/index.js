@@ -25,7 +25,7 @@ import {
 	toggleVerseText,
 	toggleAddVerseMenu,
 	togglePageSelector,
-	setActivePageData,
+	setActivePage,
 	addNote,
 	getNotes,
 	getChapterForNote,
@@ -61,7 +61,7 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 
 	componentWillReceiveProps(nextProps) {
 		if (!isEqual(nextProps.selectedListData, this.props.selectedListData)) {
-			this.setActivePageData(nextProps.selectedListData.slice(0, nextProps.notes.paginationPageSize));
+			this.setActivePage(nextProps.selectedListData.slice(0, nextProps.notes.paginationPageSize));
 		}
 	}
 
@@ -74,12 +74,12 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 	}
 
 	setActiveChild = (child) => this.props.dispatch(setActiveChild(child))
-	setActivePageData = (page) => this.props.dispatch(setActivePageData(page))
+	setActivePage = (props) => this.props.dispatch(setActivePage({ userId: this.props.userId, params: { ...props } }))
 	setActiveNote = ({ note }) => {
 		this.props.dispatch(getChapterForNote({ note }));
 		this.props.dispatch(setActiveNote({ note }));
 	}
-	setPageSize = (size) => this.props.dispatch(setPageSize(size))
+	setPageSize = (props) => this.props.dispatch(setPageSize({ userId: this.props.userId, params: { ...props } }))
 	getNotes = (props) => this.props.dispatch(getNotes({ userId: this.props.userId, params: { ...props } }))
 	toggleVerseText = () => this.props.dispatch(toggleVerseText())
 	toggleAddVerseMenu = () => this.props.dispatch(toggleAddVerseMenu())
@@ -113,8 +113,9 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 			listData,
 			isAddVerseExpanded,
 			isVerseTextVisible,
-			activePageData,
-			paginationPageSize: pageSize,
+			pageSize,
+			totalPages,
+			activePage,
 			pageSelectorState,
 		} = this.props.notes;
 		const {
@@ -180,15 +181,16 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 											setPageSize={this.setPageSize}
 											setActiveNote={this.setActiveNote}
 											setActiveChild={this.setActiveChild}
-											setActivePageData={this.setActivePageData}
+											setActivePage={this.setActivePage}
 											togglePageSelector={this.togglePageSelector}
-											highlights={highlights}
-											listData={selectedListData || listData}
-											pageSize={pageSize}
-											sectionType={activeChild}
-											activePageData={activePageData}
 											pageSelectorState={pageSelectorState}
 											vernacularNamesObject={vernacularNamesObject}
+											listData={selectedListData || listData}
+											highlights={highlights}
+											sectionType={activeChild}
+											pageSize={pageSize}
+											totalPages={totalPages}
+											activePage={activePage}
 										/>
 									)
 								}
