@@ -120,6 +120,7 @@ export function* getNotes({ userId, params = {} }) {
 	}
 }
 
+// Add bookmark is separate and is in the homepage saga file
 export function* addNote({ userId, data }) {
 	const requestUrl = `https://api.bible.build/users/${userId}/notes?key=${process.env.DBP_API_KEY}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}`;
 	const formData = new FormData();

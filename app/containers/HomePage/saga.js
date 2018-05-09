@@ -51,7 +51,7 @@ export function* initApplication(props) {
 
 export function* addBookmark(props) {
 	// console.log('adding bookmark with props: ', props);
-	const requestUrl = `https://api.bible.build/users/${props.data.user_id}/notes?key=${process.env.DBP_API_KEY}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}`;
+	const requestUrl = `https://api.bible.build/users/${props.data.user_id}/bookmarks?key=${process.env.DBP_API_KEY}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}`;
 	const formData = new FormData();
 
 	Object.entries(props.data).forEach((item) => formData.set(item[0], item[1]));
@@ -315,7 +315,7 @@ export function* getChapterFromUrl({ filesets, bibleId: oldBibleId, bookId: oldB
 		if (hasFormattedText) {
 			try {
 				// Gets the last fileset id for a formatted text
-				const filesetId = reduce(filesets, (a, c) => (c.set_type_code === 'text_format' && c.bucket_id === 'dbp-dev') ? c.id : a, '');
+				const filesetId = reduce(filesets, (a, c) => (c.set_type_code === 'text_format' && c.bucket_id === 'dbp-dev') ? c.id : a, '') || bibleId;
 				// console.log('before fork');
 				// yield fork(getCopyrightSaga, { filesetId });
 				// console.log('after fork');
