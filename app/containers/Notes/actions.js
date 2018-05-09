@@ -19,7 +19,19 @@ import {
 	UPDATE_NOTE,
 	DELETE_NOTE,
 	GET_USER_NOTEBOOK_DATA,
+	GET_USER_BOOKMARK_DATA,
+	GET_BOOKMARKS_FOR_CHAPTER,
 } from './constants';
+
+export const getBookmarksForChapter = (props) => ({
+	type: GET_BOOKMARKS_FOR_CHAPTER,
+	...props,
+});
+
+export const getUserBookmarkData = (props) => ({
+	type: GET_USER_BOOKMARK_DATA,
+	...props,
+});
 
 export const getNotesForNotebook = (props) => ({
 	type: GET_USER_NOTEBOOK_DATA,

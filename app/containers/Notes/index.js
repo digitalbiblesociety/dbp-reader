@@ -32,6 +32,7 @@ import {
 	addHighlight,
 	updateNote,
 	deleteNote,
+	getUserBookmarkData,
 } from './actions';
 import makeSelectNotes, {
 	selectUserId,
@@ -75,6 +76,7 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 	}
 	setPageSize = (props) => this.props.dispatch(setPageSize({ userId: this.props.userId, params: { ...props } }))
 	getNotes = (props) => this.props.dispatch(getNotesForNotebook({ userId: this.props.userId, params: { ...props } }))
+	getBookmarks = (props) => this.props.dispatch(getUserBookmarkData({ userId: this.props.userId, params: { ...props } }))
 	toggleVerseText = () => this.props.dispatch(toggleVerseText())
 	toggleAddVerseMenu = () => this.props.dispatch(toggleAddVerseMenu())
 	togglePageSelector = () => this.props.dispatch(togglePageSelector())

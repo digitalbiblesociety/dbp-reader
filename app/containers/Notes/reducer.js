@@ -14,6 +14,8 @@ import {
 	TOGGLE_PAGE_SELECTOR,
 	LOAD_CHAPTER_FOR_NOTE,
 	LOAD_NOTEBOOK_DATA,
+	LOAD_USER_BOOKMARK_DATA,
+	LOAD_BOOKMARKS_FOR_CHAPTER,
 } from './constants';
 
 const initialState = fromJS({
@@ -27,10 +29,20 @@ const initialState = fromJS({
 	listData: [],
 	totalPages: 1,
 	userNotes: [],
+	bookmarkList: [],
+	chapterBookmarks: [],
 });
 
 function notesReducer(state = initialState, action) {
 	switch (action.type) {
+	case LOAD_BOOKMARKS_FOR_CHAPTER:
+		return state.set('chapterBookmarks', action.listData);
+	case LOAD_USER_BOOKMARK_DATA:
+		return state
+			.set('activePage', action.activePage)
+			.set('totalPages', action.totalPages)
+			.set('pageSize', action.pageSize)
+			.set('bookmarkList', action.listData);
 	case LOAD_CHAPTER_FOR_NOTE:
 		return state.set('chapterForNote', action.text);
 	case SET_ACTIVE_CHILD:
