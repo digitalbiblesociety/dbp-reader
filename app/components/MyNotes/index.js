@@ -40,7 +40,7 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 	getFilteredPageList = (pageData) => {
 		const filterText = this.state.filterText;
 
-		return matchSorter(pageData, filterText, { keys: ['notes', 'bible_id', 'book_id', 'verse_start', 'updated_at'] });
+		return matchSorter(pageData, filterText, { keys: ['notes', 'bible_id', 'book_id', 'chapter', 'verse_start', 'updated_at'] });
 	}
 
 	getFilteredHighlights = (highlights) => {
