@@ -19,13 +19,13 @@ module.exports = require('./webpack.base.babel')({
 
 	plugins: [
 		new webpack.optimize.ModuleConcatenationPlugin(),
+		new webpack.HashedModuleIdsPlugin(),
 		new webpack.optimize.CommonsChunkPlugin({
 			name: 'vendor',
 			children: true,
 			minChunks: 2,
 			async: true,
 		}),
-
 		// Minify and optimize the index.html
 		new HtmlWebpackPlugin({
 			template: 'app/index.html',
@@ -67,6 +67,15 @@ module.exports = require('./webpack.base.babel')({
 			safeToUseOptionalCaches: true,
 
 			AppCache: false,
+			ServiceWorker: {
+				prefetchRequest: {
+					mode: 'cors',
+				},
+				minify: true,
+			},
+			externals: [
+				'https://fonts.googleapis.com/css?family=Noto+Sans|Alegreya|Roboto+Slab|Roboto:400,500',
+			],
 		}),
 	],
 

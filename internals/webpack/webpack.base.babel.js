@@ -66,6 +66,10 @@ module.exports = (options) => ({
 				],
 			},
 			{
+				test: /manifest\.json/,
+				use: 'file-loader',
+			},
+			{
 				test: /\.html$/,
 				use: 'html-loader',
 			},
