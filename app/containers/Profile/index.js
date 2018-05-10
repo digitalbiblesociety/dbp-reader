@@ -63,7 +63,8 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 	viewErrorMessage = (props) => this.props.dispatch(viewErrorMessage(props))
 	socialMediaLogin = (props) => this.props.dispatch(socialMediaLogin(props))
 	resetPassword = (e, props) => {
-		const coords = { x: e.clientX, y: e.clientY };
+		const client = e.target.childNodes[1].getBoundingClientRect() || { x: 0, y: 0 };
+		const coords = { x: client.x, y: client.y };
 		this.openPopup(coords);
 		this.props.dispatch(resetPassword(props));
 	}
@@ -77,8 +78,9 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 
 	openPopup = (coords) => {
 		// console.log('opening popup');
-		this.setState({ popupOpen: true, popupCoords: coords });
-		setTimeout(() => this.setState({ popupOpen: false }), 2500);
+		this.setState({ popupOpen: true, popupCoords: coords }, () => {
+			setTimeout(() => this.setState({ popupOpen: false }), 2500);
+		});
 	}
 
 	// onCloseModal = () => {
@@ -116,7 +118,7 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 			socialLoginLink,
 			activeDriver,
 			errorMessageViewed,
-			passwordResetMessage = 'You should receive an email shortly.',
+			passwordResetMessage = 'Thank you! An email with instructions has been sent to your account.',
 		} = this.props.profile;
 		const { toggleProfile } = this.props;
 		const { popupOpen, popupCoords } = this.state;
