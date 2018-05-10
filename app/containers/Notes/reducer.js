@@ -15,7 +15,9 @@ import {
 	LOAD_CHAPTER_FOR_NOTE,
 	LOAD_NOTEBOOK_DATA,
 	LOAD_USER_BOOKMARK_DATA,
+	ADD_NOTE_SUCCESS,
 	LOAD_BOOKMARKS_FOR_CHAPTER,
+	READ_SAVED_NOTE,
 } from './constants';
 // Should cache some of this in local storage for faster reloads
 const initialState = fromJS({
@@ -34,10 +36,15 @@ const initialState = fromJS({
 	userNotes: [],
 	bookmarkList: [],
 	chapterBookmarks: [],
+	savedTheNote: false,
 });
 
 function notesReducer(state = initialState, action) {
 	switch (action.type) {
+	case READ_SAVED_NOTE:
+		return state.set('savedTheNote', false);
+	case ADD_NOTE_SUCCESS:
+		return state.set('savedTheNote', true);
 	case LOAD_BOOKMARKS_FOR_CHAPTER:
 		return state.set('chapterBookmarks', action.listData);
 	case LOAD_USER_BOOKMARK_DATA:

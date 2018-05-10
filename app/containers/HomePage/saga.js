@@ -68,12 +68,13 @@ export function* addBookmark(props) {
 		if (response.success) {
 			// do stuff
 			// console.log('Success message: ', response.success);
+			yield fork(getBookmarksForChapter, { userId: props.data.user_id, params: { bible_id: props.data.bible_id, book_id: props.data.book_id, chapter: props.data.chapter, limit: 150, page: 1 } });
 		} else {
 			// console.log('Other message that wasn\'t a success: ', response);
 		}
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
-			console.error(err); // eslint-disable-line no-console
+			console.error('There was an error saving the bookmark', err); // eslint-disable-line no-console
 		} else if (process.env.NODE_ENV === 'production') {
 			// const options = {
 			// 	header: 'POST',

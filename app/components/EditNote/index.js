@@ -28,7 +28,14 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 			selectedBookName: '',
 			selectedBookId: '',
 			titleText,
+			savingNote: false,
 		};
+	}
+
+	componentWillReceiveProps(nextProps) {
+		if (this.state.savingNote && nextProps.savedTheNote) {
+			this.setState({ savingNote: false });
+		}
 	}
 
 	componentWillUnmount() {
@@ -56,43 +63,37 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 		this.setState({ selectedBookName: book, selectedBookId: id });
 	}
 
-	// I think This could easily cause performance issues...
-	// But I don't know how to save the note another way if there
-	// Isn't a "save" button... ...
+	// Use this to suggest to the user that they may want to save thier note
+	setTimer = () => {
+		// const titleText = this.state.titleText;
+		// const textArea = this.state.textarea;
+		// // Clears the timeout so that at most there will only be one request per 2.5 seconds
+		// if (this.timer) {
+		// 	clearTimeout(this.timer);
+		// }
+		// // Don't have to bind 'this' bc of the arrow function
+		// this.timer = setTimeout(() => {
+		// 	// Don't save if there isn't a value
+		// 	if (!textArea || !titleText) {
+		// 		return;
+		// 	}
+		// 	// Make a function to alert the user that their work is not saved
+		// 	this.handleSave();
+		// }, 5000);
+	}
+
 	handleTextareaChange = (e) => {
-		const val = e.target.value;
-		const titleText = this.state.titleText;
-		this.setState({ textarea: val });
-		// Clears the timeout so that at most there will only be one request per 2.5 seconds
-		if (this.timer) {
-			clearTimeout(this.timer);
-		}
-		// Don't have to bind 'this' bc of the arrow function
-		this.timer = setTimeout(() => {
-			// Don't save if there isn't a value
-			if (!val || !titleText) {
-				return;
-			}
-			this.handleSave();
-		}, 2500);
+		this.setState({ textarea: e.target.value }, () => {
+			this.props.readSavedMessage();
+			this.setTimer();
+		});
 	}
 
 	handleNoteTitleChange = (e) => {
-		const val = e.target.value;
-		const textArea = this.state.textarea;
-		this.setState({ titleText: e.target.value });
-		// Clears the timeout so that at most there will only be one request per 2.5 seconds
-		if (this.timer) {
-			clearTimeout(this.timer);
-		}
-		// Don't have to bind 'this' bc of the arrow function
-		this.timer = setTimeout(() => {
-			// Don't save if there isn't a value
-			if (!val || !textArea) {
-				return;
-			}
-			this.handleSave();
-		}, 2500);
+		this.setState({ titleText: e.target.value }, () => {
+			this.props.readSavedMessage();
+			this.setTimer();
+		});
 	}
 
 	handleSave = () => {
@@ -103,8 +104,14 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 		const verseEnd = note.get('verse_end');
 		const bookId = note.get('book_id');
 		const id = note.get('id');
+		const hasTitle = (
+			this.props.note.get('tags') &&
+			typeof this.props.note.get('tags').find === 'function' &&
+			this.props.note.get('tags').find((t) => t.get('type') === 'title')
+		);
+		const prevTitle = (hasTitle && this.props.note.get('tags').find((t) => t.get('type') === 'title').get('value')) || '';
 
-		if (note.get('notes') === textarea) {
+		if (note.get('notes') === textarea && prevTitle === titleText) {
 			// If the original text equals the current text then I don't have to do anything
 			// Because the user has not updated their note
 			return;
@@ -133,7 +140,7 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 			});
 		}
 
-		this.setState({ savedNote: true });
+		this.setState({ savingNote: true });
 	}
 
 	deleteNote = () => this.props.deleteNote({ noteId: this.props.note.get('id') }); // console.log('send api call to delete the note')
@@ -163,7 +170,11 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 			isVerseTextVisible,
 			activeTextId,
 			notePassage,
+			savedTheNote,
 		} = this.props;
+		const {
+			savingNote,
+		} = this.state;
 		// const {
 		// 	selectedBookName,
 		// 	selectedChapter,
@@ -190,7 +201,12 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 				<textarea onChange={this.handleTextareaChange} placeholder="CLICK TO ADD NOTE" value={this.state.textarea} className="note-text" />
 				<div className={'delete-note-section'}>
 					<SvgWrapper className={'icon'} svgid={'delete'} />
-					<span className="save-button" role="button" tabIndex={0} onClick={() => this.deleteNote()}>Delete Note</span>
+					<span className="delete-button" role="button" tabIndex={0} onClick={() => this.deleteNote()}>Delete Note</span>
+					{
+						savedTheNote ?
+							<span className="saved-note" role="button" tabIndex={0} onClick={() => this.handleSave()}>Saved</span> :
+							<span className="save-button" role="button" tabIndex={0} onClick={() => this.handleSave()}>{savingNote ? 'Updating...' : 'Save'}</span>
+					}
 				</div>
 			</section>
 		);
@@ -202,6 +218,7 @@ EditNote.propTypes = {
 	updateNote: PropTypes.func,
 	deleteNote: PropTypes.func,
 	toggleVerseText: PropTypes.func,
+	readSavedMessage: PropTypes.func,
 	// toggleAddVerseMenu: PropTypes.func,
 	note: PropTypes.object,
 	vernacularNamesObject: PropTypes.object,
@@ -209,6 +226,7 @@ EditNote.propTypes = {
 	isVerseTextVisible: PropTypes.bool,
 	notePassage: PropTypes.string,
 	activeTextId: PropTypes.string,
+	savedTheNote: PropTypes.bool,
 };
 
 export default EditNote;

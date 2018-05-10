@@ -117,6 +117,39 @@
     width: 100%;
     padding: 0 10px 0 20px;
 
+    .save-button {
+      cursor:pointer;
+      font-size:1.05em;
+      padding:15px;
+    }
+
+    .save-button:hover    {
+      @include css4 {
+        color:var(--active-color-primary);
+      }
+    }
+
+    .saved-note {
+      font-style: italic;
+
+      @include css4 {
+        color:var(--active-color-primary);
+      }
+    }
+
+    .delete-button        {
+      cursor:pointer;
+      font-size:1.05em;
+      flex-grow: 2;
+      padding-left: 10px;
+    }
+
+    .delete-button:hover  {
+      @include css4 {
+        color:var(--active-color-primary);
+      }
+    }
+
     .icon {
       &:hover {
         @include css4 {
@@ -132,7 +165,7 @@
   }
 }
 
-.edit-notes .verse-dropdown       {
+.edit-notes .verse-dropdown {
   display:flex;
   align-items:center;
   justify-content:space-around;
@@ -141,12 +174,10 @@
 
 }
 .verse-dropdown .version-dropdown {@include css4{color:var(--active-color-primary)};}
-.verse-dropdown .svg              {fill:currentColor;}
-.verse-dropdown.open .icon         {transform:rotate(0.25turn);}
-.verse-dropdown .svg:hover        {opacity:0.65;cursor:pointer;}
-.verse-dropdown .text             {@include css4{color:var(--default-text-color)};margin-left:15px;flex-grow:2;}
-.edit-notes .save-button          {float:right;cursor:pointer;font-size:1.05em;padding:15px;}
-.edit-notes .save-button:hover    {@include css4{color:var(--active-color-primary)};}
+.verse-dropdown .svg       {fill:currentColor;}
+.verse-dropdown.open .icon {transform:rotate(0.25turn);}
+.verse-dropdown .svg:hover {opacity:0.65;cursor:pointer;}
+.verse-dropdown .text      {@include css4{color:var(--default-text-color)};margin-left:15px;flex-grow:2;}
 
 .edit-notes .add-verse   {height:30px;display:flex;width:100%;align-items:center;padding:15px;}
 .add-verse .plus         {fill:currentColor;}
