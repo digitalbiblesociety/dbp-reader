@@ -82,8 +82,8 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 	togglePageSelector = () => this.props.dispatch(togglePageSelector())
 	addHighlight = (data) => this.props.dispatch(addHighlight({ userId: this.props.userId, data }))
 	addNote = (data) => this.props.dispatch(addNote({ userId: this.props.userId, data: { ...data, user_id: this.props.userId } }))
-	updateNote = (data) => this.props.dispatch(updateNote({ userId: this.props.userId, data: { ...data, user_id: this.props.userId } }))
-	deleteNote = (noteId) => this.props.dispatch(deleteNote({ userId: this.props.userId, noteId }))
+	updateNote = (data) => this.props.dispatch(updateNote({ userId: this.props.userId, noteId: data.id, data: { ...data, user_id: this.props.userId } }))
+	deleteNote = ({ noteId }) => this.props.dispatch(deleteNote({ userId: this.props.userId, noteId }))
 
 	titleOptions = {
 		edit: 'Edit Note',
@@ -114,6 +114,9 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 			activePage,
 			pageSelectorState,
 			bookmarkList,
+			pageSizeBookmark,
+			totalPagesBookmark,
+			activePageBookmark,
 		} = this.props.notes;
 		const {
 			toggleNotesModal,
@@ -190,6 +193,9 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 											totalPages={totalPages}
 											bookmarkList={bookmarkList}
 											activePage={activePage}
+											pageSizeBookmark={pageSizeBookmark}
+											totalPagesBookmark={totalPagesBookmark}
+											activePageBookmark={activePageBookmark}
 										/>
 									)
 								}

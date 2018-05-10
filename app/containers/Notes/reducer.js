@@ -17,17 +17,20 @@ import {
 	LOAD_USER_BOOKMARK_DATA,
 	LOAD_BOOKMARKS_FOR_CHAPTER,
 } from './constants';
-
+// Should cache some of this in local storage for faster reloads
 const initialState = fromJS({
 	activeChild: 'notes',
 	isVerseTextVisible: true,
 	pageSelectorState: false,
 	paginationPageSize: 10,
-	chapterForNote: [],
 	pageSize: 10,
 	activePage: 1,
-	listData: [],
 	totalPages: 1,
+	pageSizeBookmark: 10,
+	totalPagesBookmark: 1,
+	activePageBookmark: 1,
+	chapterForNote: [],
+	listData: [],
 	userNotes: [],
 	bookmarkList: [],
 	chapterBookmarks: [],
@@ -39,21 +42,27 @@ function notesReducer(state = initialState, action) {
 		return state.set('chapterBookmarks', action.listData);
 	case LOAD_USER_BOOKMARK_DATA:
 		return state
-			.set('totalPages', action.totalPages)
+			.set('totalPagesBookmark', action.totalPages)
 			.set('bookmarkList', action.listData);
 	case LOAD_CHAPTER_FOR_NOTE:
 		return state.set('chapterForNote', action.text);
 	case SET_ACTIVE_CHILD:
 		return state.set('activeChild', action.child);
+	case SET_ACTIVE_PAGE_DATA:
+		// console.log('Setting page data', action);
+		if (action.params.sectionType === 'notes') {
+			return state.set('activePage', action.params.page);
+		}
+		return state.set('activePageBookmark', action.params.page);
+	case SET_PAGE_SIZE:
+		// console.log('Setting page size', action);
+		if (action.params.sectionType === 'notes') {
+			return state.set('pageSize', action.params.limit);
+		}
+		return state.set('pageSizeBookmark', action.params.limit);
 		// Todo: Move this to local state
 	case TOGGLE_VERSE_TEXT:
 		return state.set('isVerseTextVisible', !state.get('isVerseTextVisible'));
-	case SET_ACTIVE_PAGE_DATA:
-		// console.log('Setting page data', action);
-		return state.set('activePage', action.params.page);
-	case SET_PAGE_SIZE:
-		// console.log('Setting page size', action);
-		return state.set('pageSize', action.params.limit);
 		// Todo: Move this to local state
 	case TOGGLE_PAGE_SELECTOR:
 		return state.set('pageSelectorState', !state.get('pageSelectorState'));
