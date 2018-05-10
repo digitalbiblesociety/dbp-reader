@@ -23,7 +23,6 @@ import {
 	// RESET_PASSWORD,
 	// DELETE_USER,
 } from './constants';
-// TODO: When authentication is set up grab the JWT from localStorage and use JWT to set userAuthenticated
 
 const initialState = fromJS({
 	activeOption: 'login',

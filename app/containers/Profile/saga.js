@@ -31,7 +31,7 @@ export function* sendSignUpForm({ password, email, firstName, lastName }) {
 		method: 'POST',
 		body: data,
 	};
-
+	// Todo: Make sure that the api is returning the appropriate data when this call is successful
 	try {
 		const response = yield call(request, requestUrl, options);
 

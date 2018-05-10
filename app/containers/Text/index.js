@@ -339,88 +339,6 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		} else {
 			this.openContextMenu(e);
 		}
-		// // else if plain text iterate up the dom looking for verseid
-		// if (primaryButton && window.getSelection().toString() && this.main.contains(target) && target.attributes.verseid) {
-		// 	// Needed to persist the React Synthetic event
-		// 	typeof e.persist === 'function' && e.persist();
-		// 	const selectedText = window.getSelection().toString();
-		//
-		// 	this.setState({
-		// 		lastVerse: target.attributes.verseid.value,
-		// 		anchorOffset: window.getSelection().anchorOffset,
-		// 		anchorText: window.getSelection().anchorNode.data,
-		// 		anchorNode: window.getSelection().anchorNode,
-		// 		extentOffset: window.getSelection().extentOffset,
-		// 		extentText: window.getSelection().extentNode.data,
-		// 		extentNode: window.getSelection().extentNode,
-		// 		selectedText,
-		// 	}, () => {
-		// 		this.openContextMenu(e);
-		// 	});
-		// } else if (primaryButton && window.getSelection().toString() && this.main.contains(target) && target.attributes['data-id']) {
-		// 	typeof e.persist === 'function' && e.persist();
-		// 	const selectedText = window.getSelection().toString();
-		//
-		// 	this.setState({
-		// 		lastVerse: target.attributes['data-id'].value.split('_')[1],
-		// 		anchorOffset: window.getSelection().anchorOffset,
-		// 		anchorText: window.getSelection().anchorNode.data,
-		// 		anchorNode: window.getSelection().anchorNode,
-		// 		extentOffset: window.getSelection().extentOffset,
-		// 		extentText: window.getSelection().extentNode.data,
-		// 		extentNode: window.getSelection().extentNode,
-		// 		selectedText,
-		// 	}, () => {
-		// 		this.openContextMenu(e);
-		// 	});
-		// 	// Below checks for the parent elements since sometimes a word is wrapped in a tag for styling
-		// } else if (
-		// 		primaryButton &&
-		// 		window.getSelection().toString() &&
-		// 		parent &&
-		// 		this.main.contains(parent) &&
-		// 		parent.attributes.verseid
-		// ) {
-		// 	typeof e.persist === 'function' && e.persist();
-		// 	const selectedText = window.getSelection().toString();
-		//
-		// 	this.setState({
-		// 		lastVerse: parent.attributes.verseid.value,
-		// 		anchorOffset: window.getSelection().anchorOffset,
-		// 		anchorText: window.getSelection().anchorNode.data,
-		// 		anchorNode: window.getSelection().anchorNode,
-		// 		extentOffset: window.getSelection().extentOffset,
-		// 		extentText: window.getSelection().extentNode.data,
-		// 		extentNode: window.getSelection().extentNode,
-		// 		selectedText,
-		// 	}, () => {
-		// 		this.openContextMenu(e);
-		// 	});
-		// } else if (
-		// 		primaryButton &&
-		// 		window.getSelection().toString() &&
-		// 		parent &&
-		// 		this.main.contains(parent) &&
-		// 		parent.attributes['data-id']
-		// 	) {
-		// 	typeof e.persist === 'function' && e.persist();
-		// 	const selectedText = window.getSelection().toString();
-		//
-		// 	this.setState({
-		// 		lastVerse: parent.attributes['data-id'].value.split('_')[1],
-		// 		anchorOffset: window.getSelection().anchorOffset,
-		// 		anchorText: window.getSelection().anchorNode.data,
-		// 		anchorNode: window.getSelection().anchorNode,
-		// 		extentOffset: window.getSelection().extentOffset,
-		// 		extentText: window.getSelection().extentNode.data,
-		// 		extentNode: window.getSelection().extentNode,
-		// 		selectedText,
-		// 	}, () => {
-		// 		this.openContextMenu(e);
-		// 	});
-		// } else {
-		// 	this.closeContextMenu();
-		// }
 	}
 
 	get getTextComponents() {
@@ -498,17 +416,19 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				verse.hasHighlight ?
 					(
 						<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} verseid={verse.verse_start} key={verse.verse_start}>
-							<br /><IconsInText clickHandler={this.handleNoteClick} bookmarkData={{ hasBookmark: verse.hasBookmark, index: verse.bookmarkIndex }} noteData={{ hasNote: verse.hasNote, index: verse.noteIndex }} /><sup verseid={verse.verse_start}>
+							<br /><sup verseid={verse.verse_start}>
 								&nbsp;{verse.verse_start_alt || verse.verse_start}&nbsp;
 							</sup>
+							<IconsInText clickHandler={this.handleNoteClick} bookmarkData={{ hasBookmark: verse.hasBookmark, index: verse.bookmarkIndex }} noteData={{ hasNote: verse.hasNote, index: verse.noteIndex }} />
 							<span verseid={verse.verse_start} dangerouslySetInnerHTML={{ __html: verse.verse_text }} />
 						</span>
 					) :
 					(
 						<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} verseid={verse.verse_start} key={verse.verse_start}>
-							<br /><IconsInText clickHandler={this.handleNoteClick} bookmarkData={{ hasBookmark: verse.hasBookmark, index: verse.bookmarkIndex }} noteData={{ hasNote: verse.hasNote, index: verse.noteIndex }} /><sup verseid={verse.verse_start}>
+							<br /><sup verseid={verse.verse_start}>
 								&nbsp;{verse.verse_start_alt || verse.verse_start}&nbsp;
 							</sup>
+							<IconsInText clickHandler={this.handleNoteClick} bookmarkData={{ hasBookmark: verse.hasBookmark, index: verse.bookmarkIndex }} noteData={{ hasNote: verse.hasNote, index: verse.noteIndex }} />
 							{verse.verse_text}
 						</span>
 					)
@@ -526,17 +446,19 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				verse.hasHighlight ?
 					(
 						<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} className={'align-left'} verseid={verse.verse_start} key={verse.verse_start}>
-							<IconsInText clickHandler={this.handleNoteClick} bookmarkData={{ hasBookmark: verse.hasBookmark, index: verse.bookmarkIndex }} noteData={{ hasNote: verse.hasNote, index: verse.noteIndex }} /><sup verseid={verse.verse_start}>
+							<sup verseid={verse.verse_start}>
 								&nbsp;{verse.verse_start_alt || verse.verse_start}&nbsp;
 							</sup>
+							<IconsInText clickHandler={this.handleNoteClick} bookmarkData={{ hasBookmark: verse.hasBookmark, index: verse.bookmarkIndex }} noteData={{ hasNote: verse.hasNote, index: verse.noteIndex }} />
 							<span verseid={verse.verse_start} dangerouslySetInnerHTML={{ __html: verse.verse_text }} />
 						</span>
 					) :
 					(
 						<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} className={'align-left'} verseid={verse.verse_start} key={verse.verse_start}>
-							<IconsInText clickHandler={this.handleNoteClick} bookmarkData={{ hasBookmark: verse.hasBookmark, index: verse.bookmarkIndex }} noteData={{ hasNote: verse.hasNote, index: verse.noteIndex }} /><sup verseid={verse.verse_start}>
+							<sup verseid={verse.verse_start}>
 								&nbsp;{verse.verse_start_alt || verse.verse_start}&nbsp;
 							</sup>
+							<IconsInText clickHandler={this.handleNoteClick} bookmarkData={{ hasBookmark: verse.hasBookmark, index: verse.bookmarkIndex }} noteData={{ hasNote: verse.hasNote, index: verse.noteIndex }} />
 							{verse.verse_text}
 						</span>
 					)
