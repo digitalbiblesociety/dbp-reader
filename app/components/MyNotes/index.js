@@ -32,14 +32,13 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 	// }
 
 	componentWillReceiveProps(nextProps) {
-		if (this.props.pageSize !== nextProps.pageSize || this.props.activePage !== nextProps.activePage) {
-			if (nextProps.sectionType === 'notes') {
-				// console.log('There were differences and getting notes');
-				this.props.getNotes({ limit: nextProps.pageSize, page: nextProps.activePage });
-			} else if (nextProps.sectionType === 'bookmarks') {
-				// console.log('There were differences and getting bookmarks');
-				this.props.getBookmarks({ limit: nextProps.pageSize, page: nextProps.activePage });
-			}
+		if (nextProps.sectionType === 'notes' && (this.props.pageSize !== nextProps.pageSize || this.props.activePage !== nextProps.activePage)) {
+			this.props.getNotes({ limit: nextProps.pageSize, page: nextProps.activePage });
+		} else if (nextProps.sectionType === 'bookmarks' && (this.props.pageSizeBookmark !== nextProps.pageSizeBookmark || this.props.activePageBookmark !== nextProps.activePageBookmark)) {
+			this.props.getBookmarks({ limit: nextProps.pageSizeBookmark, page: nextProps.activePageBookmark });
+		}
+		if (this.props.sectionType === 'notes' && nextProps.sectionType === 'bookmarks' && this.props.bookmarkList.length === 0) {
+			this.props.getBookmarks({ limit: nextProps.pageSizeBookmark, page: 1 });
 		}
 	}
 
@@ -72,7 +71,7 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 
 	handleSearchChange = (e) => this.setState({ filterText: e.target.value })
 
-	handlePageClick = (page) => this.props.setActivePage({ limit: this.props.pageSize, page });
+	handlePageClick = (page) => this.props.setActivePage({ sectionType: this.props.sectionType, limit: this.props.sectionType === 'notes' ? this.props.pageSize : this.props.pageSizeBookmark, page })
 
 	handleClick = (listItem) => {
 		if (this.props.sectionType === 'notes') {
@@ -81,7 +80,7 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 		}
 	}
 
-	handleSettingPageSize = (pageSize) => this.props.setPageSize({ limit: pageSize, page: 1 })
+	handleSettingPageSize = (pageSize) => this.props.setPageSize({ sectionType: this.props.sectionType, limit: pageSize, page: 1 })
 
 	render() {
 		const {
@@ -94,6 +93,9 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 			totalPages,
 			pageSelectorState,
 			togglePageSelector,
+			pageSizeBookmark,
+			totalPagesBookmark,
+			activePageBookmark,
 		} = this.props;
 		let filteredPageData = [];
 
@@ -164,13 +166,13 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 				<div className="pagination">
 					<Pagination
 						onChangePage={this.handlePageClick}
-						activePage={activePage}
-						totalPages={totalPages}
+						activePage={sectionType === 'notes' ? activePage : activePageBookmark}
+						totalPages={sectionType === 'notes' ? totalPages : totalPagesBookmark}
 					/>
 					<PageSizeSelector
 						togglePageSelector={togglePageSelector}
 						pageSelectorState={pageSelectorState}
-						pageSize={pageSize}
+						pageSize={sectionType === 'notes' ? pageSize : pageSizeBookmark}
 						setPageSize={this.handleSettingPageSize}
 					/>
 				</div>
@@ -195,6 +197,9 @@ MyNotes.propTypes = {
 	pageSize: PropTypes.number.isRequired,
 	totalPages: PropTypes.number,
 	activePage: PropTypes.number,
+	pageSizeBookmark: PropTypes.number.isRequired,
+	totalPagesBookmark: PropTypes.number,
+	activePageBookmark: PropTypes.number,
 	pageSelectorState: PropTypes.bool.isRequired,
 };
 

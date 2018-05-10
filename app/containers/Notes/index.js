@@ -114,6 +114,9 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 			activePage,
 			pageSelectorState,
 			bookmarkList,
+			pageSizeBookmark,
+			totalPagesBookmark,
+			activePageBookmark,
 		} = this.props.notes;
 		const {
 			toggleNotesModal,
@@ -190,6 +193,9 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 											totalPages={totalPages}
 											bookmarkList={bookmarkList}
 											activePage={activePage}
+											pageSizeBookmark={pageSizeBookmark}
+											totalPagesBookmark={totalPagesBookmark}
+											activePageBookmark={activePageBookmark}
 										/>
 									)
 								}
