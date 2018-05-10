@@ -306,9 +306,9 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 					anchorOffset: window.getSelection().anchorOffset,
 					anchorText: window.getSelection().anchorNode.data,
 					anchorNode: window.getSelection().anchorNode,
-					extentOffset: window.getSelection().extentOffset,
-					extentText: window.getSelection().extentNode.data,
-					extentNode: window.getSelection().extentNode,
+					focusOffset: window.getSelection().focusOffset,
+					focusText: window.getSelection().focusNode.data,
+					focusNode: window.getSelection().focusNode,
 					selectedText,
 				}, () => {
 					this.openContextMenu(e);
@@ -328,9 +328,9 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 					anchorOffset: window.getSelection().anchorOffset,
 					anchorText: window.getSelection().anchorNode.data,
 					anchorNode: window.getSelection().anchorNode,
-					extentOffset: window.getSelection().extentOffset,
-					extentText: window.getSelection().extentNode.data,
-					extentNode: window.getSelection().extentNode,
+					focusOffset: window.getSelection().focusOffset,
+					focusText: window.getSelection().focusNode.data,
+					focusNode: window.getSelection().focusNode,
 					selectedText,
 				}, () => {
 					this.openContextMenu(e);
@@ -606,7 +606,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		// find the index of the marked character
 		// use that index as the highlight start
 		// if the selected text starts at the end of the anchor node
-		// else if the selected text starts at the end of the extent node
+		// else if the selected text starts at the end of the focus node
 		try {
 			// Globals*
 			const first = parseInt(this.state.firstVerse, 10);
@@ -620,29 +620,29 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			// console.log('last verse', lastVerse);
 			// Getting each offset to determine which is closest to the start of the passage
 			const offset = this.state.anchorOffset;
-			const extentOffset = this.state.extentOffset;
-			const extentText = this.state.extentText;
+			const focusOffset = this.state.focusOffset;
+			const focusText = this.state.focusText;
 			const aText = this.state.anchorText;
 			const aNode = this.state.anchorNode;
-			const eNode = this.state.extentNode;
+			const eNode = this.state.focusNode;
 			// console.log(offset)
-			// console.log(extentOffset)
-			// console.log(extentText)
+			// console.log(focusOffset)
+			// console.log(focusText)
 			// console.log(aText)
 			const selectedText = this.state.selectedText;
 			// Setting my anchors with the data that is closest to the start of the passage
-			let anchorOffset = offset < extentOffset ? offset : extentOffset;
-			let anchorText = offset < extentOffset ? aText : extentText;
+			let anchorOffset = offset < focusOffset ? offset : focusOffset;
+			let anchorText = offset < focusOffset ? aText : focusText;
 			// console.log('a text', anchorText);
 			// console.log('a offset', anchorOffset);
 			// console.log('first verse', firstVerse, 'last verse', lastVerse);
 			// Todo: May need to also implement this for plain text...
 			if (this.props.formattedSource.main) {
-				if (aText !== extentText) {
+				if (aText !== focusText) {
 					// if nodes are different
 						// I have access to the parent node
 					// if texts match
-						// reverse order of anchor and extent
+						// reverse order of anchor and focus
 					// if texts dont match
 						// find the parent of each that has a verse id
 					const aParent = getFormattedParentVerse(aNode);
@@ -666,8 +666,8 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 							anchorText = aText;
 							anchorOffset = offset;
 						} else {
-							anchorText = extentText;
-							anchorOffset = extentOffset;
+							anchorText = focusText;
+							anchorOffset = focusOffset;
 						}
 						// (could potentially use next/prev sibling for this)
 					} else {
@@ -684,27 +684,27 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 							anchorText = aText;
 							anchorOffset = offset;
 						} else {
-							anchorText = extentText;
-							anchorOffset = extentOffset;
+							anchorText = focusText;
+							anchorOffset = focusOffset;
 						}
 					}
 				}
 				// console.log('atext', aText);
-				// console.log('extentText', extentText);
+				// console.log('focusText', focusText);
 				// console.log('this.state.selectedText', this.state.selectedText);
 				// console.log('index of atext in else', selectedText.indexOf(aText));
-				// console.log('index of extentText in else', selectedText.indexOf(extentText));
+				// console.log('index of focusText in else', selectedText.indexOf(focusText));
 				// if () {
 				// 	anchorOffset = offset;
 				// 	anchorText = aText;
 				// } else {
-				// 	anchorOffset = extentOffset;
-				// 	anchorText = extentText;
+				// 	anchorOffset = focusOffset;
+				// 	anchorText = focusText;
 				// }
 			}
-			// console.log('anchorOffset < extentOffset', anchorOffset < extentOffset);
+			// console.log('anchorOffset < focusOffset', anchorOffset < focusOffset);
 			// Solve's for formatted text
-			let node = anchorOffset < extentOffset ? aNode : eNode;
+			let node = anchorOffset < focusOffset ? aNode : eNode;
 			let highlightStart = 0;
 			// The parent with the id should never be more than 10 levels up MAX
 			// I use this counter to prevent the edge case where an infinite loop
