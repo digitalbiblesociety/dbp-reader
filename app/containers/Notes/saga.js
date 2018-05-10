@@ -22,6 +22,7 @@ import {
 
 export function* getChapterForNote({ note }) {
 	// console.log(note);
+	// Todo: Need to find a way to get this text if the bible does not have plain text or the plain_text filesetId is different than the bibleId
 	const chapter = note.chapter;
 	const bibleId = note.bible_id;
 	const bookId = note.book_id;

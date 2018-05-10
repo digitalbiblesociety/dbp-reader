@@ -77,7 +77,6 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 		}, 2500);
 	}
 
-	// Todo: Also need to listen on a change to the title input
 	handleNoteTitleChange = (e) => {
 		const val = e.target.value;
 		const textArea = this.state.textarea;
