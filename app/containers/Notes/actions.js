@@ -21,7 +21,13 @@ import {
 	GET_USER_NOTEBOOK_DATA,
 	GET_USER_BOOKMARK_DATA,
 	GET_BOOKMARKS_FOR_CHAPTER,
+	READ_SAVED_NOTE,
 } from './constants';
+
+export const readSavedMessage = (props) => ({
+	type: READ_SAVED_NOTE,
+	...props,
+});
 
 export const getBookmarksForChapter = (props) => ({
 	type: GET_BOOKMARKS_FOR_CHAPTER,

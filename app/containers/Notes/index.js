@@ -33,6 +33,7 @@ import {
 	updateNote,
 	deleteNote,
 	getUserBookmarkData,
+	readSavedMessage,
 } from './actions';
 import makeSelectNotes, {
 	selectUserId,
@@ -84,6 +85,7 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 	addNote = (data) => this.props.dispatch(addNote({ userId: this.props.userId, data: { ...data, user_id: this.props.userId } }))
 	updateNote = (data) => this.props.dispatch(updateNote({ userId: this.props.userId, noteId: data.id, data: { ...data, user_id: this.props.userId } }))
 	deleteNote = ({ noteId }) => this.props.dispatch(deleteNote({ userId: this.props.userId, noteId }))
+	readSavedMessage = (props) => this.props.dispatch(readSavedMessage(props))
 
 	titleOptions = {
 		edit: 'Edit Note',
@@ -117,6 +119,7 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 			pageSizeBookmark,
 			totalPagesBookmark,
 			activePageBookmark,
+			savedTheNote,
 		} = this.props.notes;
 		const {
 			toggleNotesModal,
@@ -166,6 +169,7 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 											deleteNote={this.deleteNote}
 											updateNote={this.updateNote}
 											toggleVerseText={this.toggleVerseText}
+											readSavedMessage={this.readSavedMessage}
 											toggleAddVerseMenu={this.toggleAddVerseMenu}
 											note={note}
 											notePassage={notePassage}
@@ -174,6 +178,7 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 											isVerseTextVisible={isVerseTextVisible}
 											isAddVerseExpanded={isAddVerseExpanded}
 											vernacularNamesObject={vernacularNamesObject}
+											savedTheNote={savedTheNote}
 										/>
 									) : (
 										<MyNotes
