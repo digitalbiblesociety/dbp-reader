@@ -349,13 +349,15 @@ export function* getChapterFromUrl({ filesets, bibleId: oldBibleId, bookId: oldB
 			let filesetId = '';
 			if (filesets.filter((set) => set.set_type_code === 'text_plain' && set.bucket_id === 'dbp-dev').length > 1) {
 				// console.log('has more than 1');
-				filesetId = reduce(filesets, (a, c) => (c.set_type_code === 'text_plain' && c.bucket_id === 'dbp-dev') ? a.concat(c.id) : a, []);
+				filesetId = reduce(filesets, (a, c) => (c.set_size_code === 'C' && c.set_type_code === 'text_plain' && c.bucket_id === 'dbp-dev') ? a.concat(c.id) : a, []);
 			} else {
 				// console.log('only has one');
 				filesetId = reduce(filesets, (a, c) => (c.set_type_code === 'text_plain' && c.bucket_id === 'dbp-dev') ? c.id : a, '');
 			}
 
 			if (Array.isArray(filesetId) && filesetId.length > 1) {
+				// Discuss the issues with having multiple filesets for text
+				// Will probably need to build out a list of checks like for the audio
 				const results = yield call(tryNext, { urls: filesetId, index: 0, bookId, chapter });
 				plainText = results.plainText;
 				plainTextFilesetId = results.plainTextFilesetId;
