@@ -25,6 +25,7 @@ export function* getChapterForNote({ note }) {
 	const chapter = note.chapter;
 	const bibleId = note.bible_id;
 	const bookId = note.book_id;
+	// Need to not use the bible id here
 	const reqUrl = `https://api.bible.build/bibles/${bibleId}/${bookId}/${chapter}?bucket=${process.env.DBP_BUCKET_ID}&key=${process.env.DBP_API_KEY}&v=4&book_id=${bookId}&chapter_id=${chapter}`;
 
 	try {
@@ -39,8 +40,8 @@ export function* getChapterForNote({ note }) {
 	}
 }
 // TODO: Figure out a way to get new notes after a user has added/deleted/updated to their notebook
-export function* updateNote({ userId, data }) {
-	const requestUrl = `https://api.bible.build/users/${userId}/notes?key=${process.env.DBP_API_KEY}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}`;
+export function* updateNote({ userId, data, noteId }) {
+	const requestUrl = `https://api.bible.build/users/${userId}/notes/${noteId}?key=${process.env.DBP_API_KEY}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}`;
 	const formData = new FormData();
 
 	Object.entries(data).forEach((item) => formData.set(item[0], item[1]));
@@ -71,7 +72,7 @@ export function* updateNote({ userId, data }) {
 }
 
 export function* deleteNote({ userId, noteId }) {
-	const requestUrl = `https://api.bible.build/users/${userId}/notes?key=${process.env.DBP_API_KEY}&v=4&pretty&note_id=${noteId}&project_id=${process.env.NOTES_PROJECT_ID}`;
+	const requestUrl = `https://api.bible.build/users/${userId}/notes/${noteId}?key=${process.env.DBP_API_KEY}&v=4&pretty&note_id=${noteId}&project_id=${process.env.NOTES_PROJECT_ID}`;
 	const options = {
 		method: 'DELETE',
 	};
@@ -261,7 +262,7 @@ export function* getUserBookmarks({ userId, params = {} }) {
 	// console.log('params given to get note saga', params);
 	// // console.log('with params', urlWithParams);
 	// console.trace();
-	console.log('Getting bookmarks for notebook');
+	// console.log('Getting bookmarks for notebook');
 
 	try {
 		const response = yield call(request, urlWithParams);

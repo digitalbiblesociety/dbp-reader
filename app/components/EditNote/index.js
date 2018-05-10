@@ -61,6 +61,7 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 	// Isn't a "save" button... ...
 	handleTextareaChange = (e) => {
 		const val = e.target.value;
+		const titleText = this.state.titleText;
 		this.setState({ textarea: val });
 		// Clears the timeout so that at most there will only be one request per 2.5 seconds
 		if (this.timer) {
@@ -69,7 +70,7 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 		// Don't have to bind 'this' bc of the arrow function
 		this.timer = setTimeout(() => {
 			// Don't save if there isn't a value
-			if (!val) {
+			if (!val || !titleText) {
 				return;
 			}
 			this.handleSave();
@@ -102,6 +103,7 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 		const verseStart = note.get('verse_start');
 		const verseEnd = note.get('verse_end');
 		const bookId = note.get('book_id');
+		const id = note.get('id');
 
 		if (note.get('notes') === textarea) {
 			// If the original text equals the current text then I don't have to do anything
@@ -117,6 +119,7 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 				verse_end: verseEnd,
 				chapter,
 				tags: `title&#58; ${titleText}`,
+				id,
 			});
 		} else {
 			this.props.addNote({
@@ -134,7 +137,7 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 		this.setState({ savedNote: true });
 	}
 
-	deleteNote = () => this.setState({ deleteNote: true }); // console.log('send api call to delete the note')
+	deleteNote = () => this.props.deleteNote({ noteId: this.props.note.get('id') }); // console.log('send api call to delete the note')
 
 	get verseReference() {
 		const { vernacularNamesObject, note } = this.props;
@@ -198,6 +201,7 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 EditNote.propTypes = {
 	addNote: PropTypes.func,
 	updateNote: PropTypes.func,
+	deleteNote: PropTypes.func,
 	toggleVerseText: PropTypes.func,
 	// toggleAddVerseMenu: PropTypes.func,
 	note: PropTypes.object,
