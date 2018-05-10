@@ -33,7 +33,13 @@ const selectUserNotes = () => createDeepEqualSelector(
 		const userNotes = filteredNotes.toJS ? filteredNotes.toJS() : filteredNotes;
 		// console.log('bookmarks', bookmarks);
 		// console.log('userNotes', userNotes);
-
+		if (!text) {
+			return {
+				text: [],
+				userNotes,
+				bookmarks,
+			};
+		}
 		// If the user isn't authorized then there will not be any notes or bookmarks and I can just end the function here
 		if (!authd && !userId) {
 			// console.log('no user');
