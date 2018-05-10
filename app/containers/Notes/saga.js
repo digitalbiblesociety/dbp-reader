@@ -1,4 +1,4 @@
-import { take, cancel, takeLatest, call, put } from 'redux-saga/effects';
+import { take, cancel, takeLatest, call, fork, put } from 'redux-saga/effects';
 import request from 'utils/request';
 import { LOCATION_CHANGE } from 'react-router-redux';
 import {
@@ -198,6 +198,7 @@ export function* addNote({ userId, data }) {
 		// console.log('add user note response', response);
 		if (response.success) {
 			yield put({ type: ADD_NOTE_SUCCESS, response });
+			yield fork(getNotesForChapter, { userId: data.user_id, params: { bible_id: data.bible_id, book_id: data.book_id, chapter: data.chapter, limit: 150, page: 1 } });
 		}
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {

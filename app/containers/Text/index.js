@@ -552,7 +552,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				chapter: activeChapter,
 				user_id: userId,
 				bible_id: bibleId,
-				notes: '',
+				notes: '\'\'',
 				title: '',
 				bookmark: 1,
 				verse_start: verseStart,
