@@ -109,14 +109,17 @@ export class SearchContainer extends React.PureComponent { // eslint-disable-lin
 
 		if (firstSearch) {
 			return (
-				<div className={'search-results'}>
-					<h2>Need a place to start?<br />Try Searching:</h2>
-					{
-						trySearchOptions.map((o) => [<br key={`br${o.searchText}`} />, <button key={o.id} className={'search-history-item'} onClick={() => this.handleSearchOptionClick(o.searchText)}>{o.searchText}</button>])
-					}
-					<br />
-					<h2>Search History:</h2>
-					<RecentSearches searches={lastFiveSearches} clickHandler={this.handleSearchOptionClick} />
+				<div className={'search-history'}>
+					<div className={'starting'}>
+						<h2>Need a place to start? Try Searching:</h2>
+						{
+							trySearchOptions.map((o) => <button key={o.id} className={'search-history-item'} onClick={() => this.handleSearchOptionClick(o.searchText)}>{o.searchText}</button>)
+						}
+					</div>
+					<div className={'history'}>
+						<div className={'header'}><h2>Search History:</h2></div>
+						<RecentSearches searches={lastFiveSearches} clickHandler={this.handleSearchOptionClick} />
+					</div>
 				</div>
 			);
 		}

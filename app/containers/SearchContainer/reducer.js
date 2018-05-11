@@ -19,8 +19,8 @@ const initialState = fromJS({
 	lastFiveSearches: JSON.parse(localStorage.getItem('bible_is_last_searches')) || [],
 	trySearchOptions: [
 		{ id: 1, searchText: 'Jesus' },
-		{ id: 2, searchText: 'prayer' },
-		{ id: 3, searchText: 'self control' },
+		{ id: 2, searchText: 'love' },
+		{ id: 3, searchText: 'prayer' },
 	],
 	loadingResults: false,
 	showError: false,
@@ -34,16 +34,10 @@ function searchContainerReducer(state = initialState, action) {
 				// .set('lastFiveSearches', state.get('lastFiveSearches'))
 				.set('loadingResults', true);
 		}
-		localStorage.setItem('bible_is_last_searches', state.get('lastFiveSearches').size > 4 ? JSON.stringify(state.get('lastFiveSearches').push(action.searchText.toLowerCase()).shift()) : JSON.stringify(state.get('lastFiveSearches').push(action.searchText.toLowerCase())));
+		localStorage.setItem('bible_is_last_searches', state.get('lastFiveSearches').size > 9 ? JSON.stringify(state.get('lastFiveSearches').push(action.searchText.toLowerCase()).shift()) : JSON.stringify(state.get('lastFiveSearches').push(action.searchText.toLowerCase())));
 		return state
-			.set('lastFiveSearches', state.get('lastFiveSearches').size > 4 ? state.get('lastFiveSearches').push(action.searchText.toLowerCase()).shift() : state.get('lastFiveSearches').push(action.searchText.toLowerCase()))
+			.set('lastFiveSearches', state.get('lastFiveSearches').size > 9 ? state.get('lastFiveSearches').push(action.searchText.toLowerCase()).shift() : state.get('lastFiveSearches').push(action.searchText.toLowerCase()))
 			.set('loadingResults', true);
-		// const last = state.get('lastFiveSearches');
-		// const newLast = state.get('lastFiveSearches').includes(action.searchText) ?  : state.get('lastFiveSearches').push(action.searchText);
-		//
-		// return state
-		// 	.set('lastFiveSearches', newLast.size > 5 ? newLast.shift() : newLast)
-		// 	.set('loadingResults', true);
 	case LOAD_SEARCH_RESULTS:
 		return state
 			.set('loadingResults', false)
