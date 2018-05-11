@@ -80,6 +80,7 @@ input {
     &::-webkit-input-placeholder {
       color:var(--default-text-color);
       font-size: 16px;
+      opacity: .3;
     }
     &::-moz-placeholder          {
       color:var(--default-text-color);
