@@ -80,32 +80,32 @@ const vernacularBookNameObject = () => createSelector(
 	(books) => books.reduce((names, book) => ({ ...names, [book.book_id]: [book.name] || [book.name_short] }), {})
 );
 
-const selectListData = () => createSelector(
-	selectNotesDomain,
-	(notes) => {
-		const child = notes.get('activeChild');
-		// console.log('active child', child);
-		// console.log('has notes', notes.get('listData').filter((n) => {
-		// 	console.log(n.bookmark === 1);
-		// 	return n.bookmark === 1;
-		// }));
-		// console.log('has bookmarks', notes.get('listData').filter((n) => n.bookmark));
-		// notes.get('listData').filter((n) => {
-		// 	if (n.bookmark === 1) {
-		// 		for (let i = 0; i < n.notes.length; i++) {
-		// 			console.log(n.notes[i]);
-		// 		}
-		// 	}
-		// 	// console.log(n.notes == '', n.notes == "", n.notes == false);
-		// 	return !!n.notes;
-		// });
-		if (child === 'bookmarks') {
-			return notes.get('listData').filter((n) => n.bookmark);
-		}
-		// Need to check for the strings because the api is returning string literal quotes
-		return notes.get('listData').filter((n) => n.notes && n.notes !== '""' && n.notes !== '\'\'');
-	}
-);
+// const selectListData = () => createSelector(
+// 	selectNotesDomain,
+// 	(notes) => {
+// 		const child = notes.get('activeChild');
+// 		// console.log('active child', child);
+// 		// console.log('has notes', notes.get('listData').filter((n) => {
+// 		// 	console.log(n.bookmark === 1);
+// 		// 	return n.bookmark === 1;
+// 		// }));
+// 		// console.log('has bookmarks', notes.get('listData').filter((n) => n.bookmark));
+// 		// notes.get('listData').filter((n) => {
+// 		// 	if (n.bookmark === 1) {
+// 		// 		for (let i = 0; i < n.notes.length; i++) {
+// 		// 			console.log(n.notes[i]);
+// 		// 		}
+// 		// 	}
+// 		// 	// console.log(n.notes == '', n.notes == "", n.notes == false);
+// 		// 	return !!n.notes;
+// 		// });
+// 		if (child === 'bookmarks') {
+// 			return notes.get('listData').filter((n) => n.bookmark);
+// 		}
+// 		// Need to check for the strings because the api is returning string literal quotes
+// 		return notes.get('listData').filter((n) => n.notes && n.notes !== '""' && n.notes !== '\'\'');
+// 	}
+// );
 
 /**
  * Default selector used by Notes
@@ -128,5 +128,5 @@ export {
 	selectUserAuthenticationStatus,
 	vernacularBookNameObject,
 	selectHighlights,
-	selectListData,
+	// selectListData,
 };

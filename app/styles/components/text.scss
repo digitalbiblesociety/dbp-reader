@@ -13,6 +13,32 @@
     padding: 15px 15px 45px 15px;
     margin: 0 auto;
 
+    .audio-only {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+
+      svg {
+        width: 115px;
+      }
+      p {
+        width: max-content;
+      }
+      span {
+        width: max-content;
+        color: #868686;
+        opacity: .3;
+        margin-top: 15px;
+      }
+      .divider {
+        width: 175px;
+        height: 1px;
+        background-color: #868686;
+        opacity: .3;
+      }
+    }
+
     .readers-spaces {
       -webkit-user-select: none;
       -moz-user-select: none;

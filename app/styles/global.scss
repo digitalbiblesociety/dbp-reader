@@ -175,8 +175,9 @@ h2 {@include css4{font-size:calc(var(--application-menu-font-size) * 1.4)};}
 // GRID
 section                 {position:relative}
 .row 					{margin:0 auto;max-width:1200px;width:100%}
-main:after,
-.row:before, .row:after {content:" ";display:table;clear:both}
+// not sure why the below was there, if things look weird I can fix it
+//main:after,
+//.row:before, .row:after {content:" ";display:table;clear:both}
 
 .row .row 		 		{margin:0 -1rem;max-width:none;width:auto}
 .row .row.collapse 		{margin:0}
