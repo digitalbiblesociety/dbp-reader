@@ -382,9 +382,8 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 
 		return (
 			<GenericErrorBoundary affectedArea="AudioPlayer">
-				<div className={(audioPlayerState && hasAudio) ? 'audioplayer-handle' : 'audioplayer-handle closed'}>
+				<div role={'button'} tabIndex={0} className={(audioPlayerState && hasAudio) ? 'audioplayer-handle' : 'audioplayer-handle closed'} onClick={(e) => { e.stopPropagation(); this.toggleAudioPlayer(); }}>
 					<SvgWrapper
-						onClick={(e) => { e.stopPropagation(); this.toggleAudioPlayer(); }}
 						width="26px"
 						height="26px"
 						className={audioPlayerState ? 'audio-gripper' : 'audio-gripper closed'}
