@@ -1,13 +1,18 @@
 // GLOBAL SETTINGS
 .settings                              {
   position:fixed;z-index:1;top:0;right:0;
-  overflow-x: hidden;
-  overflow-y: scroll;
   height:calc(100% - 56px);width:320px;
+
   @include css4{
     background-color:var(--menu-body-background-color);
     color:var(--settings-text-color);
   };
+
+  .settings-content {
+    height:calc(100% - 110px);
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
 }
 .settings header                       {
   position:relative;text-align:center;
@@ -24,9 +29,9 @@
     margin-right: 15px;
   }
 }
-.settings header .close-icon           {position:absolute;top:0;right:10px}
-.settings section                      {padding:15px}
-.settings .option:hover                {@include css4{color:var(--active-color-primary)};cursor:pointer}
+.settings header .close-icon {position:absolute;top:0;right:10px}
+.settings section {padding:15px}
+.settings .option:hover {@include css4{color:var(--active-color-primary)};cursor:pointer}
 //.settings .active                      {@include css4{color:var(--active-color-primary)};}
 
 // COlOR SCHEMES
