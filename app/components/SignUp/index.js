@@ -8,6 +8,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import FacebookAuthentication from 'containers/FacebookAuthentication';
 import GoogleAuthentication from 'containers/GoogleAuthentication';
+import Checkbox from 'components/Checkbox';
 // import SvgWrapper from 'components/SvgWrapper';
 // import styled from 'styled-components';
 // import { FormattedMessage } from 'react-intl';
@@ -25,6 +26,7 @@ class SignUp extends React.PureComponent {
 		validEmail: true,
 		wasSignupSent: false,
 		showSignupError: false,
+		wantsUpdates: false,
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -95,6 +97,7 @@ class SignUp extends React.PureComponent {
 				username: this.state.username,
 				firstName: this.state.firstName,
 				lastName: this.state.lastName,
+				wantsUpdates: this.state.wantsUpdates,
 			});
 			this.setState({ wasSignupSent: true });
 		} else if (!validPassword) {
@@ -106,9 +109,12 @@ class SignUp extends React.PureComponent {
 			this.setState({ showSignupError: true });
 			// console.log('email error');
 		}
-		this.setState({ validPassword });
-		this.setState({ validEmail });
+		this.setState({ validPassword, validEmail });
 		this.viewError();
+	}
+
+	handleEmailUpdatesChange = (e) => {
+		this.setState({ wantsUpdates: e.target.checked });
 	}
 
 	checkValidEmail = () => {
@@ -206,6 +212,7 @@ class SignUp extends React.PureComponent {
 			<React.Fragment>
 				<section className="message">
 					<p>Signing up lets you create Bookmarks, Highlights and Notes, and access them wherever you use Bible.is!</p>
+					<p className={'disclaimer'}><span>By creating an account, you agree to the Bible.is</span>&nbsp;<a className="link" target={'_blank'} href="http://www.bible.is/privacy">Privacy Policy</a>&nbsp;&&nbsp;<a className="link" target={'_blank'} href="http://www.bible.is/terms">Terms of Use</a>.</p>
 				</section>
 				{this.signupForm}
 				{
@@ -216,11 +223,9 @@ class SignUp extends React.PureComponent {
 						<div className="signup-error-message">This email is already registered with an account. Please try a different email or sign in.</div>
 					) : null
 				}
+				<Checkbox updater={this.handleEmailUpdatesChange} label={'I would like to receive email updates from Bible.is!'} />
 				<FacebookAuthentication activeDriver={activeDriver} socialMediaLogin={socialMediaLogin} socialLoginLink={socialLoginLink} />
 				<GoogleAuthentication activeDriver={activeDriver} socialMediaLogin={socialMediaLogin} socialLoginLink={socialLoginLink} />
-				<section className="disclaimer">
-					<span>By creating an account, you agree to the Bible.is</span>&nbsp;<a className="link" target={'_blank'} href="http://www.bible.is/privacy">Privacy Policy</a>&nbsp;&&nbsp;<a className="link" target={'_blank'} href="http://www.bible.is/terms">Terms of Use</a>.
-				</section>
 			</React.Fragment>
 		);
 	}
