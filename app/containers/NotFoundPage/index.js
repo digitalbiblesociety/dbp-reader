@@ -22,6 +22,19 @@ export default class NotFound extends React.PureComponent { // eslint-disable-li
 				<h1>
 					<FormattedMessage {...messages.header} />
 				</h1>
+				<FormattedMessage {...messages.cause} />
+				<ul>
+					<li><FormattedMessage {...messages.technical} /></li>
+					<li><FormattedMessage {...messages.moved} /></li>
+					<li><FormattedMessage {...messages.clickedOld} /></li>
+					<li><FormattedMessage {...messages.accident} /></li>
+				</ul>
+				<FormattedMessage {...messages.youDo} />
+				<ul>
+					<li><FormattedMessage {...messages.tryAgain} /></li>
+					<li><FormattedMessage {...messages.homePage} /><a href={'https://bible.is'}><FormattedMessage {...messages.homePageLink} /></a></li>
+				</ul>
+				<FormattedMessage {...messages.weKnow} />
 			</GenericErrorBoundary>
 		);
 	}
