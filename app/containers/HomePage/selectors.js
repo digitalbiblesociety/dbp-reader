@@ -18,14 +18,16 @@ const selectCrossReferenceState = (state) => state.getIn(['homepage', 'userSetti
 const selectNotes = (state) => state.get('notes');
 
 const selectUserNotes = () => createDeepEqualSelector(
-	[selectNotes, selectHomePageDomain],
-	(notes, home) => {
+	[selectNotes, selectHomePageDomain, selectProfilePageDomain],
+	(notes, home, profile) => {
 		// const bibleId = home.get('activeTextId');
 		// const bookId = home.get('activeBookId');
 		// const chapter = home.get('activeChapter');
 		const text = home.get('chapterText');
 		const authd = home.get('userAuthenticated');
 		const userId = home.get('userId');
+		const profAuth = profile.get('userAuthenticated');
+		const profUser = profile.get('userId');
 		// May not need to filter because I am requesting only the notes/bookmarks for this chapter
 		const filteredNotes = notes.get('userNotes');
 		const filteredBookmarks = notes.get('chapterBookmarks');
@@ -41,7 +43,7 @@ const selectUserNotes = () => createDeepEqualSelector(
 			};
 		}
 		// If the user isn't authorized then there will not be any notes or bookmarks and I can just end the function here
-		if (!authd && !userId) {
+		if (!authd && !userId && !profAuth && !profUser) {
 			// console.log('no user');
 			return {
 				text: text.toJS(),
