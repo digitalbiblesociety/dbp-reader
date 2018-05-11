@@ -82,6 +82,7 @@ import {
 	setActiveChapter,
 	setActiveBookName,
 	setActiveNotesView,
+	setAudioPlayerState,
 	initApplication,
 } from './actions';
 import makeSelectHomePage, {
@@ -553,6 +554,8 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 
 	setActiveNote = ({ note }) => this.props.dispatch(setActiveNote({ note }))
 
+	setAudioPlayerState = (state) => this.props.dispatch(setAudioPlayerState(state))
+
 	goToFullChapter = () => {
 		const { bibleId, bookId, chapter } = this.props.match.params;
 
@@ -607,6 +610,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			plainTextFilesetId,
 			formattedTextFilesetId,
 			activeFilesets,
+			audioPlayerState,
 			// chapterText: updatedText,
 		} = this.props.homepage;
 
@@ -655,7 +659,16 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					toggleChapterSelection={this.toggleChapterSelection}
 					toggleVersionSelection={this.toggleVersionSelection}
 				/>
-				<AudioPlayer audioPaths={audioPaths} autoPlay={autoPlayEnabled} toggleAutoPlay={this.toggleAutoPlay} audioSource={audioSource} skipBackward={this.getPrevChapter} skipForward={this.getNextChapter} />
+				<AudioPlayer
+					audioPaths={audioPaths}
+					autoPlay={autoPlayEnabled}
+					audioPlayerState={audioPlayerState}
+					audioSource={audioSource}
+					setAudioPlayerState={this.setAudioPlayerState}
+					toggleAutoPlay={this.toggleAutoPlay}
+					skipBackward={this.getPrevChapter}
+					skipForward={this.getNextChapter}
+				/>
 				<TransitionGroup>
 					{
 						isSettingsModalActive ? (
@@ -717,6 +730,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					activeBookName={activeBookName}
 					notesActive={isNotesModalActive}
 					formattedSource={formattedSource}
+					audioPlayerState={audioPlayerState}
 					userAuthenticated={userAuthenticated}
 					informationActive={isInformationModalActive}
 					loadingNewChapterText={loadingNewChapterText}

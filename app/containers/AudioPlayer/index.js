@@ -37,7 +37,6 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 			volume: 1,
 			duration: 100,
 			currentTime: 0,
-			playerState: this.props.hasAudio,
 			currentSpeed: 1,
 			autoPlayChecked: this.props.autoPlay,
 			nextTrack: { index: 0, path: this.props.audioPaths[0], last: this.props.audioPaths.length === 0 },
@@ -69,9 +68,9 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 		if (nextProps.audioSource !== this.props.audioSource) {
 			// this.pauseVideo();
 			if (nextProps.audioSource) {
-				this.setState({ playerState: true, playing: false });
-			} else if (this.state.playerState) {
-				this.setState({ playerState: false, playing: false });
+				this.setState({ playing: false });
+			} else if (this.props.audioPlayerState && !nextProps.audioSource) {
+				this.setState({ playing: false }, () => this.props.setAudioPlayerState(false));
 			}
 			if (nextProps.autoPlay) {
 				// console.log('source changed and auto play is true');
@@ -169,7 +168,7 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 	}
 
 	handleBackgroundClick = () => {
-		if (!this.state.playerState) {
+		if (!this.props.audioPlayerState) {
 			this.toggleAudioPlayer();
 		}
 	}
@@ -298,9 +297,7 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 
 	toggleAudioPlayer = () => {
 		if (this.props.audioSource && this.props.hasAudio) {
-			this.setState({
-				playerState: !this.state.playerState,
-			});
+			this.props.setAudioPlayerState(!this.props.audioPlayerState);
 		}
 	}
 
@@ -376,6 +373,7 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 		const {
 			audioSource: source,
 			hasAudio,
+			audioPlayerState,
 		} = this.props;
 		const {
 			autoPlayChecked,
@@ -384,18 +382,17 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 
 		return (
 			<GenericErrorBoundary affectedArea="AudioPlayer">
-				<div className={(this.state.playerState && hasAudio) ? 'audioplayer-handle' : 'audioplayer-handle closed'}>
+				<div role={'button'} tabIndex={0} className={(audioPlayerState && hasAudio) ? 'audioplayer-handle' : 'audioplayer-handle closed'} onClick={(e) => { e.stopPropagation(); this.toggleAudioPlayer(); }}>
 					<SvgWrapper
-						onClick={(e) => { e.stopPropagation(); this.toggleAudioPlayer(); }}
 						width="26px"
 						height="26px"
-						className={this.state.playerState ? 'audio-gripper' : 'audio-gripper closed'}
+						className={audioPlayerState ? 'audio-gripper' : 'audio-gripper closed'}
 						style={{ cursor: source ? 'pointer' : 'inherit' }}
 						svgid="arrow_down"
 					/>
 				</div>
-				<div role="button" tabIndex={0} className={this.state.playerState && hasAudio ? 'audio-player-background' : 'audio-player-background closed'} ref={this.setAudioPlayerRef} onClick={this.handleBackgroundClick}>
-					<div className={this.state.playerState && hasAudio ? 'audio-player-container' : 'audio-player-container closed'}>
+				<div role="button" tabIndex={0} className={audioPlayerState && hasAudio ? 'audio-player-background' : 'audio-player-background closed'} ref={this.setAudioPlayerRef} onClick={this.handleBackgroundClick}>
+					<div className={audioPlayerState && hasAudio ? 'audio-player-container' : 'audio-player-container closed'}>
 						{this.prevIcon}
 						{this.state.playing ? this.pauseIcon : this.playIcon}
 						{this.nextIcon}
@@ -440,9 +437,11 @@ AudioPlayer.propTypes = {
 	audioPaths: PropTypes.array,
 	skipBackward: PropTypes.func.isRequired,
 	skipForward: PropTypes.func.isRequired,
+	setAudioPlayerState: PropTypes.func.isRequired,
 	toggleAutoPlay: PropTypes.func,
 	hasAudio: PropTypes.bool,
 	autoPlay: PropTypes.bool,
+	audioPlayerState: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({

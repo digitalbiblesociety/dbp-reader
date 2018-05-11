@@ -17,7 +17,9 @@ import {
 	SET_ACTIVE_BOOK_NAME,
 	SET_ACTIVE_NOTES_VIEW,
 	SET_SELECTED_BOOK_NAME,
+	SET_AUDIO_PLAYER_STATE,
 	TOGGLE_PROFILE,
+	TOGGLE_AUTOPLAY,
 	TOGGLE_NOTES_MODAL,
 	TOGGLE_SEARCH_MODAL,
 	TOGGLE_SETTINGS_MODAL,
@@ -34,7 +36,6 @@ import {
 	UPDATE_SELECTED_TEXT,
 	GET_BOOKS,
 	GET_CHAPTER_TEXT,
-	TOGGLE_AUTOPLAY,
 } from './constants';
 
 const initialState = fromJS({
@@ -156,6 +157,7 @@ const initialState = fromJS({
 	firstLoad: true,
 	testaments: {},
 	audioPaths: [],
+	audioPlayerState: JSON.parse(sessionStorage.getItem('bible_is_audio_player_state')),
 });
 
 function homePageReducer(state = initialState, action) {
@@ -211,6 +213,9 @@ function homePageReducer(state = initialState, action) {
 			.set('activeFilesets', fromJS(action.filesets))
 			.set('activeTextName', action.textName)
 			.set('activeTextId', action.textId);
+	case SET_AUDIO_PLAYER_STATE:
+		sessionStorage.setItem('bible_is_audio_player_state', action.state);
+		return state.set('audioPlayerState', action.state);
 	case LOAD_HIGHLIGHTS:
 		return state.set('highlights', fromJS(action.highlights));
 	case SET_ACTIVE_NOTES_VIEW:
@@ -261,6 +266,7 @@ function homePageReducer(state = initialState, action) {
 			.set('hasFormattedText', fromJS(action.hasFormattedText))
 			.set('hasTextInDatabase', fromJS(action.hasPlainText))
 			.set('hasAudio', fromJS(action.hasAudio))
+			// .set('audioPlayerState', action.hasAudio)
 			.set('chapterText', fromJS(action.plainText))
 			.set('loadingNewChapterText', false)
 			.setIn(
