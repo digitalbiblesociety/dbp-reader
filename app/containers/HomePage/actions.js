@@ -23,6 +23,7 @@ import {
 	SET_ACTIVE_BOOK_NAME,
 	SET_ACTIVE_NOTES_VIEW,
 	SET_SELECTED_BOOK_NAME,
+	SET_AUDIO_PLAYER_STATE,
 	TOGGLE_PROFILE,
 	// TOGGLE_MENU_BAR,
 	TOGGLE_NOTES_MODAL,
@@ -37,6 +38,11 @@ import {
 	TOGGLE_SETTINGS_OPTION,
 	TOGGLE_AUTOPLAY,
 } from './constants';
+
+export const setAudioPlayerState = (state) => ({
+	type: SET_AUDIO_PLAYER_STATE,
+	state,
+});
 
 export const getNotes = (props) => ({
 	type: GET_NOTES_HOMEPAGE,
