@@ -67,8 +67,10 @@
     flex-shrink: 0;
     min-height: 30px;
     height: auto;
+    margin-top: 15px;
+    margin-bottom: 15px;
     //padding-top:5px;
-    padding: 5px 15px 5px 15px;
+    padding: 10px 15px 5px 15px;
     clear: both;
     //overflow:auto;
     @include css4 {
@@ -171,12 +173,12 @@
     display: flex;
     flex-direction: column;
     flex-shrink: 0;
-    margin-bottom:10px;
+    //margin-bottom:10px;
     min-height: 36px;
     //height: 36px;
     width: 100%;
     //padding: 0 15px 5px 15px;
-    padding-bottom: 5px;
+    //padding-bottom: 5px;
     clear: both;
     overflow:hidden;
 
