@@ -51,6 +51,10 @@
   .info-button {
     position: absolute;
     bottom: 136px;
+
+    &.closed {
+      bottom: 86px;
+    }
   }
 
   .note-in-verse {

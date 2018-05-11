@@ -730,6 +730,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					activeBookName={activeBookName}
 					notesActive={isNotesModalActive}
 					formattedSource={formattedSource}
+					audioPlayerState={audioPlayerState}
 					userAuthenticated={userAuthenticated}
 					informationActive={isInformationModalActive}
 					loadingNewChapterText={loadingNewChapterText}
