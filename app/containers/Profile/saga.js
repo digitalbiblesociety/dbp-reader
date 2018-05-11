@@ -25,7 +25,7 @@ export function* sendSignUpForm({ password, email, firstName, lastName, wantsUpd
 	data.append('password', password);
 	data.append('name', lastName);
 	data.append('nickname', firstName);
-	data.append('wantsUpdates', wantsUpdates);
+	data.append('wantsUpdates', wantsUpdates ? '1' : '0');
 	data.append('avatar', '');
 
 	const options = {
