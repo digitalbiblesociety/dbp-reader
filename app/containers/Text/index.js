@@ -291,7 +291,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		// console.log('Get last verse event', e);
 		// console.log('Selection in last verse event', window.getSelection());
 		const primaryButton = e.button === 0;
-		// console.log(window.getSelection());
+		// console.log(window.getSelection().toString());
 		// if formatted iterate up the dom looking for data-id
 		if (isFormatted) {
 			const verseNode = getFormattedParentVerse(target);
@@ -867,10 +867,22 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		const x = rightEdge < e.clientX ? rightEdge : e.clientX;
 		const y = bottomEdge < e.clientY ? bottomEdge : e.clientY;
 
-		this.setState({
-			coords: { x, y },
-			contextMenuState: true,
-		});
+		// Using setTimeout 0 so that the check for the selection happens in the next frame and not this one
+		// That allows the function that updates the selection to run before this one does
+		if (this.timer) {
+			clearTimeout(this.timer);
+		}
+		setTimeout(() => {
+			// console.log('Selection after 50ms', window.getSelection().toString());
+			if (!window.getSelection().toString()) {
+				this.closeContextMenu();
+			} else {
+				this.setState({
+					coords: { x, y },
+					contextMenuState: true,
+				});
+			}
+		}, 0);
 	}
 
 	closeFootnote = () => this.setState({ footnoteState: false })
