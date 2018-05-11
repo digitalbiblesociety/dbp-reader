@@ -12,6 +12,7 @@ import FootnotePortal from 'components/FootnotePortal';
 import LoadingSpinner from 'components/LoadingSpinner';
 import IconsInText from 'components/IconsInText';
 import PopupMessage from 'components/PopupMessage';
+import AudioOnlyMessage from 'components/AudioOnlyMessage';
 import {
 	getFormattedParentVerseNumber,
 	getPlainParentVerse,
@@ -348,6 +349,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			formattedSource: initialFormattedSource,
 			highlights,
 			activeChapter,
+			activeBookName,
 			verseNumber,
 			userNotes,
 			bookmarks,
@@ -403,7 +405,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			if (invalidBibleId) {
 				textComponents = [<h5 key={'no_text'}>You have entered an invalid bible id, please select a bible from the list or type a different id into the url.</h5>];
 			} else {
-				textComponents = [<h5 key={'no_text'}>This resource does not currently have any text.</h5>];
+				textComponents = [<AudioOnlyMessage key={'no_text'} book={activeBookName} chapter={activeChapter} />];
 			}
 		} else if (readersMode) {
 			textComponents = plainText.map((verse) =>
@@ -932,7 +934,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				</div>
 				<main ref={this.setMainRef} className={formattedSource.main && !readersMode && !oneVersePerLine ? '' : `chapter ${justifiedClass}`}>
 					{
-						((formattedSource.main && !readersMode && !oneVersePerLine) || text.length === 0 || (!readersMode && !oneVersePerLine)) ? null : (
+						((formattedSource.main && !readersMode && !oneVersePerLine) || (text.length === 0) || (!readersMode && !oneVersePerLine)) ? null : (
 							<div className="active-chapter-title"><h1 className="active-chapter-title">{activeChapter}</h1></div>
 						)
 					}
