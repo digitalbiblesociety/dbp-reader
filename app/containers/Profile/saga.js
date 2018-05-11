@@ -17,7 +17,7 @@ import {
 	UPDATE_USER_INFORMATION,
 } from './constants';
 
-export function* sendSignUpForm({ password, email, firstName, lastName }) {
+export function* sendSignUpForm({ password, email, firstName, lastName, wantsUpdates }) {
 	const requestUrl = `https://api.bible.build/users?key=${process.env.DBP_API_KEY}&v=4&pretty`;
 	const data = new FormData();
 
@@ -25,6 +25,7 @@ export function* sendSignUpForm({ password, email, firstName, lastName }) {
 	data.append('password', password);
 	data.append('name', lastName);
 	data.append('nickname', firstName);
+	data.append('wantsUpdates', wantsUpdates);
 	data.append('avatar', '');
 
 	const options = {

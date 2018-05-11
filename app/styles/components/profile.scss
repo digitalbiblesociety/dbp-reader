@@ -10,6 +10,12 @@
     background:var(--menu-body-background-color);
     color:var(--default-text-color);
   }
+
+  section {
+    .disclaimer {
+      margin-top: 5px;
+    }
+  }
 }
 .profile header             {
   position:relative;
@@ -33,6 +39,7 @@
 .profile section            {padding:15px}
 .profile .profile-content   {
   max-height:calc(100% - 54px);
+  width: 320px;
   height:calc(100% - 54px);
   overflow-y:scroll;
   overflow-x:hidden;
@@ -41,10 +48,10 @@
 .profile .active            {@include css4{color:var(--active-color-primary);};}
 
 // Input boxes
-//.profile input                                  {border:none;width:100%;height:50px;@include css4{/* border-bottom:1px solid var(--menu-font-color); */background:var(--application-input-color);color:var(--menu-font-color);caret-color:var(--dark-caret-color);};font-size:.9em;font-weight:200;padding-left:10px;}
-//.profile input.email                       {@include css4{background-color:var(--application-input-color);};padding-left:70px;}
+//.profile input {border:none;width:100%;height:50px;@include css4{/* border-bottom:1px solid var(--menu-font-color); */background:var(--application-input-color);color:var(--menu-font-color);caret-color:var(--dark-caret-color);};font-size:.9em;font-weight:200;padding-left:10px;}
+//.profile input.email {@include css4{background-color:var(--application-input-color);};padding-left:70px;}
 //.profile input {padding-left:70px;}
-//.profile form input.email:focus                 {background-image:none;padding-left:10px;}
+//.profile form input.email:focus {background-image:none;padding-left:10px;}
 .profile input:focus::-webkit-input-placeholder {color:transparent;}
 .profile input:focus::-moz-placeholder          {color:transparent;}
 .profile input:focus:-ms-input-placeholder      {color:transparent;}
