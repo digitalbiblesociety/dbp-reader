@@ -40,11 +40,11 @@ export function* getChapterForNote({ note }) {
 		}
 	}
 }
-// TODO: Figure out a way to get new notes after a user has added/deleted/updated to their notebook
+
 export function* updateNote({ userId, data, noteId }) {
 	const requestUrl = `https://api.bible.build/users/${userId}/notes/${noteId}?key=${process.env.DBP_API_KEY}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}`;
 	const formData = new FormData();
-
+	// Todo: Api does not seem to handle the updating of the note
 	Object.entries(data).forEach((item) => formData.set(item[0], item[1]));
 	// formData.append('project_id', process.env.NOTES_PROJECT_ID);
 
@@ -58,6 +58,9 @@ export function* updateNote({ userId, data, noteId }) {
 		// console.log('update user note response', response);
 		if (response.success) {
 			yield put({ type: ADD_NOTE_SUCCESS, response });
+			// console.log('Response', response);
+			// console.log(data);
+			// console.log(noteId);
 		}
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
