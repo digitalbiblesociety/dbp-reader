@@ -23,7 +23,7 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 			// console.log('Getting notebook data in did mount');
 			this.props.getNotes({ limit: this.props.pageSize, page: this.props.activePage });
 		} else if (this.props.sectionType === 'bookmarks') {
-			this.props.getBookmarks({ limit: this.props.pageSize, page: this.props.activePage });
+			this.props.getBookmarks({ limit: this.props.pageSizeBookmark, page: this.props.activePageBookmark });
 		}
 	}
 

@@ -141,6 +141,7 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 		}
 
 		this.setState({ savingNote: true });
+		this.props.setActiveChild('notes');
 	}
 
 	deleteNote = () => this.props.deleteNote({ noteId: this.props.note.get('id') }); // console.log('send api call to delete the note')
@@ -217,6 +218,7 @@ EditNote.propTypes = {
 	addNote: PropTypes.func,
 	updateNote: PropTypes.func,
 	deleteNote: PropTypes.func,
+	setActiveChild: PropTypes.func,
 	toggleVerseText: PropTypes.func,
 	readSavedMessage: PropTypes.func,
 	// toggleAddVerseMenu: PropTypes.func,

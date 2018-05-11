@@ -179,6 +179,7 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 											isAddVerseExpanded={isAddVerseExpanded}
 											vernacularNamesObject={vernacularNamesObject}
 											savedTheNote={savedTheNote}
+											setActiveChild={setActiveChild}
 										/>
 									) : (
 										<MyNotes
