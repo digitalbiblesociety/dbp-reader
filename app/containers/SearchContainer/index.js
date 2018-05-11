@@ -19,7 +19,7 @@ import CloseMenuFunctions from 'utils/closeMenuFunctions';
 import SearchResult from 'components/SearchResult';
 import RecentSearches from 'components/RecentSearches';
 import { getSearchResults, viewError, stopLoading, startLoading } from './actions';
-import makeSelectSearchContainer from './selectors';
+import makeSelectSearchContainer, { selectSearchResults } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 
@@ -97,14 +97,15 @@ export class SearchContainer extends React.PureComponent { // eslint-disable-lin
 
 	get formattedResults() {
 		const {
-			searchResults,
+			// searchResults,
 			showError,
 			trySearchOptions,
 			lastFiveSearches,
 			loadingResults,
 		} = this.props.searchcontainer;
-		const { bibleId } = this.props;
-		const { filterText, firstSearch } = this.state;
+		const { bibleId, searchResults } = this.props;
+		// console.log('selectedRes', searchResults);
+		const { firstSearch } = this.state;
 
 		if (firstSearch) {
 			return (
@@ -126,10 +127,17 @@ export class SearchContainer extends React.PureComponent { // eslint-disable-lin
 
 		return (
 			<div className={'search-results'}>
-				<h2>Search Results</h2>
 				{
-					(searchResults.length && !showError) ?
-						searchResults.map((r) => <SearchResult filterText={filterText} bibleId={bibleId} key={`${r.book_id}${r.chapter}${r.verse_start}`} result={r} />) :
+					(searchResults.size && !showError) ?
+						searchResults.toIndexedSeq().map((res) => (
+							<div className={'book-result-section'} key={res.get('name')}>
+								<div className={'header'}><h1>{res.get('name')}</h1></div>
+								{
+									res.get('results')
+										.map((r) => <SearchResult bibleId={bibleId} key={`${r.get('book_id')}${r.get('chapter')}${r.get('verse_start')}`} result={r} />)
+								}
+							</div>
+						)) :
 						<div>There were no matches for your search</div>
 				}
 			</div>
@@ -174,10 +182,12 @@ SearchContainer.propTypes = {
 	bibleId: PropTypes.string,
 	searchcontainer: PropTypes.object,
 	loadingResults: PropTypes.bool,
+	searchResults: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
 	searchcontainer: makeSelectSearchContainer(),
+	searchResults: selectSearchResults(),
 });
 
 function mapDispatchToProps(dispatch) {

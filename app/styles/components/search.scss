@@ -73,7 +73,8 @@
 
   .search-results {
     max-height: calc(100% - 108px);
-    padding: 15px;
+    //padding: 15px;
+    width: 100%;
     overflow-y: scroll;
     overflow-x: hidden;
 
@@ -82,6 +83,7 @@
       padding-bottom: 5px;
       text-align: center;
       position: relative;
+      font-size: 1.2em;
 
       &:after {
         content: "";
@@ -96,36 +98,36 @@
         }
       }
     }
+    .book-result-section {
+      width: 100%;
+      .header {
+        width: 100%;
+        font-size: 18px;
+        height: 35px;
+        padding-left: 15px;
+        display: flex;
+        align-items: center;
+
+        @include css4 {
+          background-color: var(--book-dropdown-section-background-color);
+        }
+      }
+    }
 
     .single-result {
       position: relative;
-      margin-bottom: 10px;
-
-      &:before {
-        content: "";
-        width: 100%;
-        height: 1px;
-        position: absolute;
-        bottom: 0;
-
-        @include css4 {
-          background-color: var(--default-text-color);
-        }
-      }
+      padding: 10px 25px;
 
       h4 {
-        font-size: 1.2em;
+        font-size: 16px;
         a {
+          @include css4 {
+            color: var(--notebook-title-date-color);
+          }
           &:hover {
-            @include css4 {
-              color: var(--active-color-primary);
-            }
+            cursor: pointer;
           }
         }
-      }
-
-      p {
-        padding: 5px;
       }
 
       &:last-child {
