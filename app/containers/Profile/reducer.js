@@ -33,11 +33,10 @@ const initialState = fromJS({
 	signupErrorMessage: '',
 	activeDriver: '',
 	userProfile: {
-		email: '',
-		nickname: '',
-		name: '',
-		avatar: '',
-		city: '',
+		email: sessionStorage.getItem('bible_is_12345') || '',
+		nickname: sessionStorage.getItem('bible_is_123456') || '',
+		name: sessionStorage.getItem('bible_is_1234567') || '',
+		avatar: sessionStorage.getItem('bible_is_12345678') || '',
 		verified: false,
 		accounts: [],
 	},
@@ -51,6 +50,10 @@ function profileReducer(state = initialState, action) {
 	case SELECT_ACCOUNT_OPTION:
 		return state.set('activeOption', action.option);
 	case USER_LOGGED_IN:
+		sessionStorage.setItem('bible_is_12345', action.userProfile.email);
+		sessionStorage.setItem('bible_is_123456', action.userProfile.nickname);
+		sessionStorage.setItem('bible_is_1234567', action.userProfile.name);
+		sessionStorage.setItem('bible_is_12345678', action.userProfile.avatar);
 		return state
 			.set('userId', action.userId)
 			.set('userProfile', action.userProfile)

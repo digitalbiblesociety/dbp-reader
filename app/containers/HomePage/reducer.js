@@ -157,7 +157,7 @@ const initialState = fromJS({
 	firstLoad: true,
 	testaments: {},
 	audioPaths: [],
-	audioPlayerState: JSON.parse(sessionStorage.getItem('bible_is_audio_player_state')),
+	audioPlayerState: JSON.parse(sessionStorage.getItem('bible_is_audio_player_state')) === null ? false : JSON.parse(sessionStorage.getItem('bible_is_audio_player_state')),
 });
 
 function homePageReducer(state = initialState, action) {

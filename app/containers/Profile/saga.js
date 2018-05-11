@@ -39,7 +39,8 @@ export function* sendSignUpForm({ password, email, firstName, lastName, wantsUpd
 		if (response.success) {
 			// console.log('res', response);
 
-			yield put({ type: USER_LOGGED_IN, userId: response.id, userProfile: response });
+			yield put({ type: USER_LOGGED_IN, userId: response.user.id, userProfile: response.user });
+			sessionStorage.setItem('bible_is_user_id', response.user.id);
 		} else if (response.error) {
 			// console.log('res error', response);
 			const message = Object.values(response.error.message).reduce((acc, cur) => acc.concat(cur), '');
