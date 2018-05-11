@@ -15,6 +15,7 @@ function AudioOnlyMessage({ chapter, book }) {
 		<div className={'audio-only'}>
 			<SvgWrapper svgid={'audio_only'} />
 			<p>{`${book} ${chapter}`}</p>
+			<span className={'divider'}></span>
 			<FormattedMessage {...messages.audioOnly} />
 		</div>
 	);

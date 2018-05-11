@@ -16,7 +16,7 @@
     .audio-only {
       display: flex;
       justify-content: center;
-      align-content: center;
+      align-items: center;
       flex-direction: column;
 
       svg {
@@ -24,26 +24,18 @@
       }
       p {
         width: max-content;
-        position: relative;
-        margin-bottom: 15px;
-        margin-top: 15px;
-
-        &:after {
-          content: "";
-          position: absolute;
-          bottom: -15px;
-          left: -60px;
-          width: 320px;
-          height: 1px;
-          background-color: #868686;
-          opacity: .3;
-        }
       }
       span {
         width: max-content;
         color: #868686;
         opacity: .3;
         margin-top: 15px;
+      }
+      .divider {
+        width: 175px;
+        height: 1px;
+        background-color: #868686;
+        opacity: .3;
       }
     }
 
