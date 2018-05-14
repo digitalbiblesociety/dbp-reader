@@ -68,7 +68,7 @@ describe('highlightPlainText', () => {
 				verse_end: 2,
 				verse_end_alt: '2',
 				hasHighlight: true,
-				verse_text: `The<em class="text-highlighted" style="background:${sampleHighlights[1].highlighted_color}"> LORD is my</em> rock and my fortress and my deliverer, my God, my rock, in whom I take refuge, my shield, and the horn of my salvation, my stronghold.`,
+				verse_text: `The<em class="text-highlighted" style="background:${sampleHighlights[1].highlighted_color}"> <em class="text-highlighted" style="background:${sampleHighlights[0].highlighted_color}">LORD</em> is my</em> rock and my fortress and my deliverer, my God, my rock, in whom I take refuge, my shield, and the horn of my salvation, my stronghold.`,
 			},
 		];
 
@@ -108,7 +108,7 @@ describe('highlightPlainText', () => {
 
 		expect(highlightPlainText(sampleHighlights, sampleText)).toEqual(result);
 	});
-	it('Case 4: It should two non-overlapping highlights in the same verse', () => {
+	it('Case 4: It should apply two non-overlapping highlights in the same verse', () => {
 		const sampleHighlights = highlightsObject.data.slice(4, 6);
 		const sampleText = chapterText.data.slice(5, 6);
 		const result = [
@@ -205,6 +205,48 @@ describe('highlightPlainText', () => {
 				verse_end_alt: '13',
 				hasHighlight: true,
 				verse_text: `<em class="text-highlighted" style="background:${sampleHighlights[0].highlighted_color}">The LORD also thundered</em> in the heavens, and <em class="text-highlighted" style="background:${sampleHighlights[1].highlighted_color}">the Most </em>High uttered his voice, hailstones and coals of fire.`,
+			},
+		];
+
+		expect(highlightPlainText(sampleHighlights, sampleText)).toEqual(result);
+	});
+	it('Case 7: It should apply two overlapping highlights where newest highlight take priority', () => {
+		const sampleHighlights = [
+			{
+				id: 262,
+				bible_id: 'ENGESV',
+				book_id: 'PSA',
+				chapter: 18,
+				verse_start: 12,
+				highlight_start: 0,
+				highlighted_words: 21,
+				highlighted_color: '#1AF',
+			},
+			{
+				id: 263,
+				bible_id: 'ENGESV',
+				book_id: 'PSA',
+				chapter: 18,
+				verse_start: 12,
+				highlight_start: 11,
+				highlighted_words: 10,
+				highlighted_color: '#5B4',
+			},
+		];
+		const sampleText = chapterText.data.slice(11, 12);
+		const result = [
+			{
+				book_id: 'PSA',
+				book_name: 'Psalm',
+				book_name_alt: 'Psalm',
+				chapter: 18,
+				chapter_alt: '18',
+				verse_start: 12,
+				verse_start_alt: '12',
+				verse_end: 12,
+				verse_end_alt: '12',
+				hasHighlight: true,
+				verse_text: `<em class="text-highlighted" style="background:${sampleHighlights[0].highlighted_color}">Out of the </em><em class="text-highlighted" style="background:${sampleHighlights[1].highlighted_color}">brightness</em> before him hailstones and coals of fire broke through his clouds.`,
 			},
 		];
 

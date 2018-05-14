@@ -1,5 +1,4 @@
 const createHighlights = (highlights, arrayOfVerseObjects) => {
-	// todo: plain text use highlighted_color on highlight to add the background color inline
 	// Todo: Huge issue if highlights overlap, breaks a lot of things
 	/* NOTES
 	* 1. Need to subtract 1 from any addition of highlight_start + highlighted_words, this is because the result is the length not the index
@@ -93,43 +92,106 @@ const createHighlights = (highlights, arrayOfVerseObjects) => {
 			highlightsStartingInVerse.forEach((h, i) => {
 				// Next highlight
 				const nh = highlightsStartingInVerse[i + 1];
-				// console.log('each highlight in verse', h);
+				// Sets the actual index for the verse since this could be the 2nd or 3rd node inside the verse
 				// Highlights are sorted by highlight_start so the first index has the very first highlight
-				if (i === 0 || charsLeft === 0) {
-					// If this is the first highlight or if there are no characters left from the last highlight
-					// console.log(verseText);
+				// Also need to check and see if the highlight can fit in this child node of the verse
+				// console.log('The highlight starts in this section', (verseText.length + prevSectionsLength) >= h.highlight_start && !(prevSectionsLength >= h.highlight_start));
+				if ((i === 0 || charsLeft === 0) && (verseText.length) >= h.highlight_start) {
+					// If the length of the previous sections plus the length of this one is greater than the start of the highlight
+					// And the length of the previous sections is not greater than the start of the highlight
+					// console.log('Starting highlight for highlight id: ', h.id, charsLeft);
 					verseText.splice(h.highlight_start, 1, `<em class="text-highlighted" style="background:${h.highlighted_color ? h.highlighted_color : 'inherit'}">${verseText[h.highlight_start]}`);
-					// Saves where the highlight started
 					hStart = h.highlight_start;
 				}
+				/* HIGHLIGHTS OVERLAP AND ARE THE SAME COLOR */
 				// if the next highlight start is less than the end of this highlight and there is a next highlight
-				/* ESSENTIALLY GATHERS ALL OVERLAPPING HIGHLIGHTS */
-				if (nh && nh.highlight_start <= ((h.highlighted_words + h.highlight_start) - 1)) {
+				if (
+					nh &&
+					nh.highlight_start <= ((h.highlighted_words + h.highlight_start) - 1) &&
+					h.highlighted_color === nh.highlighted_color &&
+					(h.highlight_start !== nh.highlight_start && h.highlighted_words !== nh.highlighted_words)
+				) {
 					// check if the furthest highlighted character for this highlight is greater than the furthest character for the next highlight
-					// console.log('Next highlight start is lower than the end of this one');
+					// console.log('Next highlight start is lower than the end of this one is the same color');
 					// Todo: The function breaks here if there is one highlight overlapping multiple other highlights
 					if (((h.highlighted_words + h.highlight_start) - 1) >= ((nh.highlight_start + nh.highlighted_words) - 1)) {
 						// If the end of this highlight is greater than the end of the next highlight
 						// the next highlight will be contained within this highlight and doesn't need to be accounted for
-						// console.log('current test should apply highlight here', h);
-						charsLeft = h.highlighted_words;
+						// console.log('end is greater than end of next highlight and colors match');
+						continuingColor = h.highlighted_color;
+						charsLeft = h.highlighted_words - nh.highlighted_words;
 					} else {
 						// If the end of this highlight was not greater than the end of the next one, then it must not contain the next highlight
-						// in this case the next highlight will continue to extend past where this one ends
-						charsLeft = (nh.highlighted_words + nh.highlight_start) - 1;
+						// in this case the next highlight will begin at the place this one ends
+						// console.log('end is less than end of next highlight');
+						charsLeft = (nh.highlighted_words);
+						continuingColor = h.highlighted_color;
 					}
-
-					/* IS SINGLE VERSE NON-OVERLAPPING */
-				} else if ((charsLeft + hStart) <= verseText.length && ((h.highlighted_words + h.highlight_start) - 1) < verseText.length) {
+					/* HIGHLIGHTS ARE THE SAME SIZE */
+					// } else if (nh && nh.highlight_start === h.highlight_start && nh.highlighted_words === h.highlighted_words) {
+					// 	if (h.id > nh.id) {
+					// 		// do stuff for h and not nh
+					// 	} else {
+					// 		// do stuff for nh and not h
+					// 	}
+					/* HIGHLIGHTS OVERLAP AND ARE DIFFERENT COLORS */
+				} else if (
+					nh &&
+					nh.highlight_start <= ((h.highlighted_words + h.highlight_start) - 1) &&
+					h.highlighted_color !== nh.highlighted_color &&
+					(h.highlight_start !== nh.highlight_start && h.highlighted_words !== nh.highlighted_words)
+				) {
+					// console.log('Next highlight is a different color and is overlapped by this one');
+					// If the next highlight is in this verse segment - may need to use <= instead of <
+					// And this highlight has an id less than the next highlight
+					// And it ends at or before the next highlight
+					if (h.id < nh.id && h.highlight_start + h.highlighted_words <= nh.highlight_start + nh.highlighted_words && nh.highlight_start < verseText.length) {
+						// End this highlight where the next one starts
+						// Adding closing tag to the end of the character before the start of the next highlight
+						// console.log('current id was less, current highlight length was less, next highlight smaller than verse');
+						verseText.splice(nh.highlight_start - 1, 1, `${verseText[nh.highlight_start - 1]}</em>`);
+						// This highlight ended so there is not a continuing color or any chars left
+						charsLeft = 0;
+						continuingColor = '';
+					} else if (h.highlight_start < nh.highlight_start && h.highlighted_words > nh.highlighted_words && nh.highlight_start < verseText.length) {
+						// This highlight is longer than the next one
+						verseText.splice((h.highlight_start + h.highlighted_words) - 1, 1, `${verseText[(h.highlight_start + h.highlighted_words) - 1]}</em>`);
+						// This highlight ended so there is not a continuing color or any chars left
+						charsLeft = 0;
+						continuingColor = '';
+						// console.log('in else of hacked if');
+					}
+					// Todo: Handle case where this highlight has a larger id than the next highlight
+					/* IS SINGLE VERSE NOT COMPLETELY OVERLAPPING */
+					// I think both of the conditions below are exactly the same...
+				} else if ((charsLeft + h.highlight_start) <= (verseText.length) && ((h.highlighted_words + h.highlight_start) - 1) < (verseText.length)) {
 					// If the characters left plus the start of the highlight are less than the verse length and this highlight is less than the verse length
 					// This highlight doesn't go past the end of the verse
 					if (charsLeft === 0) {
-						// This highlight was not overlapped by another
+						// This highlight was not overlapped by another and the highlight was not started in a child node before this one
 						// If there are not any characters left to highlight then close the em tag at the index where the highlight ends
+						// console.log('splicing text where chars left === 0', h.id);
 						verseText.splice((h.highlighted_words + h.highlight_start) - 1, 1, `${verseText[(h.highlighted_words + h.highlight_start) - 1]}</em>`);
+					} else if (continuingColor !== h.highlighted_color) {
+						// console.log('ending previous highlight and starting new one', h.id);
+						// Ends the previous highlight
+						verseText.splice(h.highlight_start - 1, 1, `${verseText[h.highlight_start - 1]}</em>`);
+						// Starts a new highlight where this one should start
+						verseText.splice(h.highlight_start, 1, `<em class="text-highlighted" style="background:${h.highlighted_color ? h.highlighted_color : 'inherit'}">${verseText[h.highlight_start]}`);
+						if (!nh) {
+							// This is the last highlight in this verse and it does not go past the end of the verse
+							// console.log('No next highlight', h.id);
+							verseText.splice((h.highlighted_words + h.highlight_start) - 1, 1, `${verseText[(h.highlighted_words + h.highlight_start) - 1]}</em>`);
+							// charsLeftAfterVerseEnd = 0;
+						} else {
+							// console.log('setting the new charsLeft and continuing color', h.id);
+							charsLeft = h.highlighted_words;
+							continuingColor = h.highlighted_color;
+						}
 					} else {
-						// Since there are characters left highlight close the em tag at the index that will expend those characters
-						verseText.splice((charsLeft + hStart) - 1, 1, `${verseText[(charsLeft + hStart) - 1]}</em>`);
+						// Since there are characters left to highlight close the em tag at the index that will expend those characters
+						// console.log('splicing text chars left: ', charsLeft, h.id);
+						verseText.splice((charsLeft + h.highlight_start) - 1, 1, `${verseText[(charsLeft + h.highlight_start) - 1]}</em>`);
 						charsLeft = 0;
 					}
 
@@ -137,36 +199,37 @@ const createHighlights = (highlights, arrayOfVerseObjects) => {
 				} else if ((charsLeft + hStart) > verseText.length || ((h.highlighted_words + h.highlight_start) - 1) > verseText.length) {
 					// If the characters left to highlight plus where the highlight started is greater than the verse length or the highlight is longer than the verse
 
+					// console.log('charsLeft + hStart', charsLeft + hStart);
+					// console.log('(h.highlighted_words + h.highlight_start) - 1', (h.highlighted_words + h.highlight_start) - 1);
 					// diff between highlight start and verse end
-					const diff = verseText.length - hStart;
+					if (!(verseText.length < h.highlight_start)) {
+						const diff = verseText.length - hStart;
 
-					// Close the em tag at the end of the verse since this highlight goes on into the next verse
-					verseText.splice(verseText.length - 1, 1, `${verseText[verseText.length - 1]}</em>`);
+						// Close the em tag at the end of the verse since this highlight goes on into the next verse
+						verseText.splice(verseText.length - 1, 1, `${verseText[verseText.length - 1]}</em>`);
 
-					// If the remaining characters in this highlight is greater than the characters leftover
-					// Set the characters left as this highlights remaining
-					// else leave the characters leftover
+						// If the remaining characters in this highlight is greater than the characters leftover
+						// Set the characters left as this highlights remaining
+						// else leave the characters leftover
 
-					if (charsLeft === 0 || (h.highlighted_words - diff) > charsLeft) {
-						// If the previous highlight was completed set the characters left to equal the space remaining un-highlighted in the verse
-						charsLeft = h.highlighted_words - diff;
-						// console.log('Chars left is correct for first highlight', h.highlighted_words === 174 && charsLeft === 70);
+						if (charsLeft === 0 || (h.highlighted_words - diff) > charsLeft) {
+							// If the previous highlight was completed set the characters left to equal the space remaining un-highlighted in the verse
+							charsLeft = h.highlighted_words - diff;
+							// console.log('Chars left is correct for first highlight', h.highlighted_words === 174 && charsLeft === 70);
+						} else {
+							// Subtract the number of characters applied from the number left
+							charsLeft -= diff;
+						}
+						// Set the variables needed for the next verse to continue this highlight
+						charsLeftAfterVerseEnd = charsLeft;
+						continuingColor = h.highlighted_color;
 					} else {
-						// Subtract the number of characters applied from the number left
-						charsLeft -= diff;
+						// May not want everything else to trigger this
+						charsLeftAfterVerseEnd = h.highlighted_words;
+						continuingColor = h.highlighted_color;
 					}
-					// Set the variables needed for the next verse to continue this highlight
-					charsLeftAfterVerseEnd = charsLeft;
-					continuingColor = h.highlighted_color;
 				}
-				// Face I made when I found out highlight_start is a string while everything else is an integer... ( ‾ ʖ̫ ‾)
-				// If the current highlight overlaps another highlight before it. example v5 - v19, v3 - v6 = v3 - v19
-				// If the current highlight overlaps another highlight after it. example v1 - v6, v5 - v9 = v1 - v9
-				// If the current highlight encompasses another highlight. example v1 - v12, v4 - v6 = v1 - v12
-				// If the current highlight is encompassed by another highlight. example v4 - v6, v1 - v12 = v1 - v12
-				// New acc so I don't introduce side effects - mostly so eslint leaves me alone ( ͡~ ͜ʖ ͡°)
 			});
-			// console.log('verse text after highlights', verseText.join(''));
 			// eslint-disable-line no-param-reassign
 			// Use charsLeft to highlight as much of this verse as possible, then carry its value over into the next verse
 			if (verseText.join('') !== verse.verse_text) {
