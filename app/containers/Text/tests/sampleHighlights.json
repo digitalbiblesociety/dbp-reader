@@ -8,7 +8,7 @@
       "verse_start": 1,
       "highlight_start": 2,
       "highlighted_words": 4,
-      "highlighted_color": "#5B4"
+      "highlighted_color": "#85,187,68,.6"
     },
     {
       "id": 257,
@@ -18,7 +18,7 @@
       "verse_start": 2,
       "highlight_start": 4,
       "highlighted_words": 4,
-      "highlighted_color": "#1AF"
+      "highlighted_color": "#17,170,255,.6"
     },
     {
       "id": 258,
@@ -28,7 +28,7 @@
       "verse_start": 2,
       "highlight_start": 3,
       "highlighted_words": 11,
-      "highlighted_color": "#86A"
+      "highlighted_color": "#136,102,170,.6"
     },
     {
       "id": 259,
@@ -38,7 +38,7 @@
       "verse_start": 3,
       "highlight_start": 0,
       "highlighted_words": 156,
-      "highlighted_color": "#D6A"
+      "highlighted_color": "#221,102,170,.6"
     },
     {
       "id": 260,
@@ -48,7 +48,7 @@
       "verse_start": 6,
       "highlight_start": 6,
       "highlighted_words": 8,
-      "highlighted_color": "#FD2"
+      "highlighted_color": "#255,221,34,.6"
     },
     {
       "id": 261,
@@ -58,7 +58,7 @@
       "verse_start": 6,
       "highlight_start": 30,
       "highlighted_words": 5,
-      "highlighted_color": "#5B4"
+      "highlighted_color": "#85,187,68,.6"
     },
     {
       "id": 262,
@@ -68,7 +68,7 @@
       "verse_start": 8,
       "highlight_start": 0,
       "highlighted_words": 174,
-      "highlighted_color": "#1AF"
+      "highlighted_color": "#17,170,255,.6"
     },
     {
       "id": 263,
@@ -78,7 +78,7 @@
       "verse_start": 9,
       "highlight_start": 65,
       "highlighted_words": 74,
-      "highlighted_color": "#5B4"
+      "highlighted_color": "#85,187,68,.6"
     },
     {
       "id": 264,
@@ -88,7 +88,7 @@
       "verse_start": 12,
       "highlight_start": 0,
       "highlighted_words": 110,
-      "highlighted_color": "#1AF"
+      "highlighted_color": "#17,170,255,.6"
     },
     {
       "id": 265,
@@ -98,7 +98,7 @@
       "verse_start": 13,
       "highlight_start": 44,
       "highlighted_words": 9,
-      "highlighted_color": "#5B4"
+      "highlighted_color": "#85,187,68,.6"
     }
   ]
 }

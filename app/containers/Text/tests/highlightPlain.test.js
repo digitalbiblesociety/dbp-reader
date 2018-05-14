@@ -220,7 +220,7 @@ describe('highlightPlainText', () => {
 				verse_start: 12,
 				highlight_start: 0,
 				highlighted_words: 21,
-				highlighted_color: '#1AF',
+				highlighted_color: '#17,170,255,.6',
 			},
 			{
 				id: 263,
@@ -230,7 +230,7 @@ describe('highlightPlainText', () => {
 				verse_start: 12,
 				highlight_start: 11,
 				highlighted_words: 10,
-				highlighted_color: '#5B4',
+				highlighted_color: '#85,187,68,.6',
 			},
 		];
 		const sampleText = chapterText.data.slice(11, 12);
@@ -253,46 +253,56 @@ describe('highlightPlainText', () => {
 		expect(highlightPlainText(sampleHighlights, sampleText)).toEqual(result);
 	});
 	it('Case 8: It should apply a newer highlight over the top of two pre-existing highlights', () => {
-		// const sampleHighlights = [
-		// 	{
-		// 		id: 262,
-		// 		bible_id: 'ENGESV',
-		// 		book_id: 'PSA',
-		// 		chapter: 18,
-		// 		verse_start: 12,
-		// 		highlight_start: 0,
-		// 		highlighted_words: 21,
-		// 		highlighted_color: '#1AF',
-		// 	},
-		// 	{
-		// 		id: 263,
-		// 		bible_id: 'ENGESV',
-		// 		book_id: 'PSA',
-		// 		chapter: 18,
-		// 		verse_start: 12,
-		// 		highlight_start: 11,
-		// 		highlighted_words: 10,
-		// 		highlighted_color: '#5B4',
-		// 	},
-		// ];
-		// const sampleText = chapterText.data.slice(11, 12);
-		// const result = [
-		// 	{
-		// 		book_id: 'PSA',
-		// 		book_name: 'Psalm',
-		// 		book_name_alt: 'Psalm',
-		// 		chapter: 18,
-		// 		chapter_alt: '18',
-		// 		verse_start: 12,
-		// 		verse_start_alt: '12',
-		// 		verse_end: 12,
-		// 		verse_end_alt: '12',
-		// 		hasHighlight: true,
-		// 		verse_text: `<em class="text-highlighted" style="background:${sampleHighlights[0].highlighted_color}">Out of the </em><em class="text-highlighted" style="background:${sampleHighlights[1].highlighted_color}">brightness</em> before him hailstones and coals of fire broke through his clouds.`,
-		// 	},
-		// ];
+		const sampleHighlights = [
+			{
+				id: 262,
+				bible_id: 'ENGESV',
+				book_id: 'PSA',
+				chapter: 18,
+				verse_start: 12,
+				highlight_start: 0,
+				highlighted_words: 3,
+				highlighted_color: '#17,170,255,.6',
+			},
+			{
+				id: 263,
+				bible_id: 'ENGESV',
+				book_id: 'PSA',
+				chapter: 18,
+				verse_start: 12,
+				highlight_start: 11,
+				highlighted_words: 10,
+				highlighted_color: '#85,187,68,.6',
+			},
+			{
+				id: 264,
+				bible_id: 'ENGESV',
+				book_id: 'PSA',
+				chapter: 18,
+				verse_start: 12,
+				highlight_start: 0,
+				highlighted_words: 21,
+				highlighted_color: '#85,187,68,.6',
+			},
+		];
+		const sampleText = chapterText.data.slice(11, 12);
+		const result = [
+			{
+				book_id: 'PSA',
+				book_name: 'Psalm',
+				book_name_alt: 'Psalm',
+				chapter: 18,
+				chapter_alt: '18',
+				verse_start: 12,
+				verse_start_alt: '12',
+				verse_end: 12,
+				verse_end_alt: '12',
+				hasHighlight: true,
+				verse_text: `<em class="text-highlighted" style="background:${sampleHighlights[2].highlighted_color}"><em class="text-highlighted" style="background:${sampleHighlights[0].highlighted_color}">Out</em> of the <em class="text-highlighted" style="background:${sampleHighlights[1].highlighted_color}">brightness</em></em> before him hailstones and coals of fire broke through his clouds.`,
+			},
+		];
 
-		// expect(highlightPlainText(sampleHighlights, sampleText)).toEqual(result);
-		expect(false).toBe(true);
+		expect(highlightPlainText(sampleHighlights, sampleText)).toEqual(result);
+		// expect(false).toBe(true);
 	});
 });
