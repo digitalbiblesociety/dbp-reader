@@ -124,10 +124,10 @@
   animation:thicken 0.3s forwards;
 }
 .text-highlighted 	  {
-  @include css4{
-    //background-color:var(--text-selection-color);
-    color:var(--default-text-color);
-  };
+  //@include css4{
+  //  //background-color:var(--text-selection-color);
+  //  color:var(--default-text-color);
+  //};
   //filter: sepia(40%);
 }
 
