@@ -2,7 +2,6 @@ const createHighlights = (highlights, arrayOfVerseObjects) => {
 	// Todo: Huge issue if highlights overlap, breaks a lot of things
 	/* NOTES
 	* 1. Need to subtract 1 from any addition of highlight_start + highlighted_words, this is because the result is the length not the index
-	*
 	* */
 	// Iterate over each verse
 	// Find all the highlights for a single verse

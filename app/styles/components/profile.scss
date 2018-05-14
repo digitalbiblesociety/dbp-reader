@@ -35,8 +35,12 @@
     margin-left: 15px;
   }
 }
-.profile header .close-icon {position:absolute;top:0;right:10px}
-.profile section            {padding:15px}
+.profile header .close-icon {
+  position:absolute;
+  top:0;
+  right:10px;
+}
+.profile section {padding:15px}
 .profile .profile-content   {
   max-height:calc(100% - 54px);
   width: 320px;
