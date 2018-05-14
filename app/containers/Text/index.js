@@ -431,7 +431,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 								&nbsp;{verse.verse_start_alt || verse.verse_start}&nbsp;
 							</sup>
 							<IconsInText clickHandler={this.handleNoteClick} bookmarkData={{ hasBookmark: verse.hasBookmark, index: verse.bookmarkIndex }} noteData={{ hasNote: verse.hasNote, index: verse.noteIndex }} />
-							{verse.verse_text}
+							<span verseid={verse.verse_start}>{verse.verse_text}</span>
 						</span>
 					)
 			));
@@ -461,7 +461,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 								&nbsp;{verse.verse_start_alt || verse.verse_start}&nbsp;
 							</sup>
 							<IconsInText clickHandler={this.handleNoteClick} bookmarkData={{ hasBookmark: verse.hasBookmark, index: verse.bookmarkIndex }} noteData={{ hasNote: verse.hasNote, index: verse.noteIndex }} />
-							{verse.verse_text}
+							<span verseid={verse.verse_start}>{verse.verse_text}</span>
 						</span>
 					)
 			));
@@ -739,12 +739,13 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				// taking off the first 2 spaces and the verse number from the string
 				// This should only be the case for the first highlight within that verse
 				// todo First highlight is fine
-					// Second if before the first is off by 1
-					// Second if after the first is off by verse number + 2
-					// Third if between is off by verse number + 2
-				const newText = node.textContent.slice(firstVerse.toFixed(0).length + 2);
+					// Second if before the first is closer to the start by 1
+					// Second if after the first is closer to the start by length of verse number + 2
+					// Third if between is closer to the start by length of verse number + 2
+				const newText = node.textContent.slice(0);
 
 				// console.log('plain text node.textContent', node.textContent);
+				// console.log('plain text new text after slice', newText);
 				// console.log('plain text anchorOffset', anchorOffset);
 				// console.log('plain text anchorText', anchorText);
 				// console.log('plain text node.textContent.indexOf(anchorText)', node.textContent.indexOf(anchorText));
