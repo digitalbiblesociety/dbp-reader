@@ -6,7 +6,7 @@
   height:calc(100% - 56px);
   width:320px;
   overflow-x: hidden;
-  overflow-y: scroll;
+  overflow-y: auto;
 
   @include css4{
     background-color:var(--menu-body-background-color);
@@ -80,7 +80,7 @@
     max-height: calc(100% - 108px);
     //padding: 15px;
     width: 100%;
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
 
     .starting {
@@ -125,7 +125,7 @@
     max-height: calc(100% - 108px);
     //padding: 15px;
     width: 100%;
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
 
     .book-result-section {

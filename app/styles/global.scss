@@ -13,7 +13,7 @@ div:focus              {outline:none;}
 a                      {text-decoration:none;color:inherit;}
 //aside                  {position:absolute;top:0;right:0;}
 header {@include css4  {outline: 1px solid var(--menu-border-color);}}
-main                   {overflow-x:hidden;overflow-y:scroll;max-height:100%;-webkit-overflow-scrolling: touch;}
+main                   {overflow-x:hidden;overflow-y:auto;max-height:100%;-webkit-overflow-scrolling: touch;}
 #app                   {max-width:100vw;width:100%;@include css4{background-color:var(--default-background-color);};}
 #app > div             {height:100vh;width:100%;}
 aside {@include css4   {outline: 1px solid var(--menu-border-color);border-bottom:1px solid var(--menu-border-color);}}
