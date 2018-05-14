@@ -12,10 +12,10 @@ export default defineMessages({
 	},
 	providedByAudio: {
 		id: 'app.components.Information.providedByAudio',
-		defaultMessage: 'This bible audio is brought to you by',
+		defaultMessage: 'This Bible audio is brought to you by:',
 	},
 	providedByText: {
 		id: 'app.components.Information.providedByText',
-		defaultMessage: 'This bible text is brought to you by',
+		defaultMessage: 'This Bible text is brought to you by:',
 	},
 });
