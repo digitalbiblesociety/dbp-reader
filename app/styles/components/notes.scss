@@ -71,7 +71,7 @@
 .edit-notes {
   height: calc(100% - 104px);
   overflow-x: hidden;
-  overflow-y: scroll;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -186,7 +186,7 @@
 .edit-notes .note-text   {
   padding:15px;
   height:100px;
-  overflow-y:scroll;
+  overflow-y:auto;
   overflow-x:hidden;
   width:100%;
   font-style:italic;
@@ -212,7 +212,7 @@
     color:var(--default-text-color);
   };
   max-height:100px;
-  overflow-y:scroll;
+  overflow-y:auto;
   overflow-x:hidden;
 
 }
@@ -254,7 +254,7 @@
 .note-list {
   height:calc(100% - 100px);
   max-height:calc(100% - 100px);
-  overflow-y:scroll;
+  overflow-y:auto;
   overflow-x:hidden;
   //background-color:rgb(26,29,33);
   padding:15px;

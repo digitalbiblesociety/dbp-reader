@@ -41,7 +41,7 @@
   max-height:calc(100% - 54px);
   width: 320px;
   height:calc(100% - 54px);
-  overflow-y:scroll;
+  overflow-y:auto;
   overflow-x:hidden;
 }
 .profile .option:hover      {@include css4{color:var(--active-color-primary);};cursor:pointer}

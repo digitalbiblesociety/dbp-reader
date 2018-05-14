@@ -819,6 +819,8 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 	}
 	// Because the system captures the verse numbers this needs to be used
 	calcDist = (l, f, p) => {
+		// l: lastVerse, f: firstVerse, p: isPlainText
+		// If the last verse is equal to the first verse then I don't need a diff
 		if (l === f) return 0;
 		let stringDiff = '';
 
@@ -830,6 +832,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			// console.log(i);
 		}
 		// console.log('string diff', stringDiff);
+		// Gets the total length of the distance needed
 		return stringDiff.length;
 		// return l - f;
 	}
