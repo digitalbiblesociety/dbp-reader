@@ -142,6 +142,9 @@ export function* addHighlight({ bible, book, chapter, userId, verseStart, highli
 	const requestUrl = `https://api.bible.build/users/${userId}/highlights?key=${process.env.DBP_API_KEY}&v=4&bible_id=${bible}&book_id=${book}&chapter=${chapter}&project_id=${process.env.NOTES_PROJECT_ID}`;
 	const formData = new FormData();
 	// console.log('data for highlight { bible, book, chapter, userId, verseStart, highlightStart, highlightedWords, color }', { bible, book, chapter, userId, verseStart, highlightStart, highlightedWords, color });
+	if (!userId || color === 'none') {
+		return;
+	}
 	formData.append('book_id', book);
 	formData.append('user_id', userId);
 	formData.append('bible_id', bible);
