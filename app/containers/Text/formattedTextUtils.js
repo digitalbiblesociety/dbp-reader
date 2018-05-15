@@ -29,9 +29,11 @@ const applyNotes = (source, notes) => {
 	// Then find the verse element
 	// Append the note icon as a svg with the appropriate event handlers
 	// console.log('verses in note func', verses[6]);
+	const versesWithNotes = {};
+
 	notes.forEach((note) => {
 	// console.log('if results', note.verse_start >= getVerseNum(verses[0]) && note.verse_end <= getVerseNum(verses[lastV]));
-		if (note.verse_start >= getVerseNum(verses[0]) && note.verse_end <= getVerseNum(verses[lastV])) {
+		if (note.verse_start >= getVerseNum(verses[0]) && note.verse_end <= getVerseNum(verses[lastV]) && !versesWithNotes[note.verse_start]) {
 			const verseElement = verses.filter((v) => getVerseNum(v) === note.verse_start)[0];
 			const svg = xmlDoc.createElement('svg');
 			const use = xmlDoc.createElement('use');
@@ -44,6 +46,7 @@ const applyNotes = (source, notes) => {
 			// is being loaded, I also default to append as a safe fallback
 			// verseElement.prepend ? verseElement.prepend(svg) : verseElement.appendChild(svg);
 			verseElement.appendChild(svg);
+			versesWithNotes[note.verse_start] = true;
 			// console.log('verseElement', verseElement);
 			// console.log('icon', icon);
 		}
@@ -77,8 +80,10 @@ const applyBookmarks = (source, bookmarks) => {
 	// console.log(verses);
 	// console.log(verses[6]);
 	// console.log(verses[lastV]);
+	const versesWithBookmarks = {};
+
 	bookmarks.forEach((bookmark) => {
-		if (bookmark.verse_start >= getVerseNum(verses[0]) && bookmark.verse_end <= getVerseNum(verses[lastV])) {
+		if (bookmark.verse_start >= getVerseNum(verses[0]) && bookmark.verse_end <= getVerseNum(verses[lastV]) && !versesWithBookmarks[bookmark.verse_start]) {
 			const verseElement = verses.filter((v) => getVerseNum(v) === bookmark.verse_start)[0];
 			const svg = xmlDoc.createElement('svg');
 			const use = xmlDoc.createElement('use');
@@ -93,6 +98,7 @@ const applyBookmarks = (source, bookmarks) => {
 			// verseElement.prepend ? verseElement.prepend(svg) : verseElement.appendChild(svg);
 			verseElement.appendChild(svg);
 			// console.log('verseElement after', verseElement);
+			versesWithBookmarks[bookmark.verse_start] = true;
 			// console.log('svg', svg);
 			// console.log('svg', svg.onclick);
 			// console.log('icon', icon);
