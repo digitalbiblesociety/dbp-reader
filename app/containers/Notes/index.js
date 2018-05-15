@@ -44,7 +44,8 @@ import makeSelectNotes, {
 	selectActiveTextId,
 	vernacularBookNameObject,
 	selectHighlights,
-	// selectListData,
+	selectListData,
+	selectActiveBookName,
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -108,7 +109,7 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 	render() {
 		const {
 			activeChild,
-			listData,
+			// listData,
 			isAddVerseExpanded,
 			isVerseTextVisible,
 			pageSize,
@@ -131,6 +132,8 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 			activeTextId,
 			highlights,
 			vernacularNamesObject,
+			selectedListData,
+			activeBookName,
 		} = this.props;
 		// console.log('notebook props', this.props);
 		// console.log('data in notes', selectedListData);
@@ -174,11 +177,12 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 											notePassage={notePassage}
 											activeTextId={activeTextId}
 											selectedText={selectedText}
+											activeBookName={activeBookName}
 											isVerseTextVisible={isVerseTextVisible}
 											isAddVerseExpanded={isAddVerseExpanded}
 											vernacularNamesObject={vernacularNamesObject}
 											savedTheNote={savedTheNote}
-											setActiveChild={setActiveChild}
+											setActiveChild={this.setActiveChild}
 										/>
 									) : (
 										<MyNotes
@@ -191,7 +195,7 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 											togglePageSelector={this.togglePageSelector}
 											pageSelectorState={pageSelectorState}
 											vernacularNamesObject={vernacularNamesObject}
-											listData={listData}
+											listData={selectedListData}
 											highlights={highlights}
 											sectionType={activeChild}
 											pageSize={pageSize}
@@ -231,7 +235,8 @@ Notes.propTypes = {
 	notePassage: PropTypes.string,
 	selectedText: PropTypes.string,
 	activeTextId: PropTypes.string,
-	// selectedListData: PropTypes.array,
+	selectedListData: PropTypes.array,
+	activeBookName: PropTypes.string,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -244,7 +249,8 @@ const mapStateToProps = createStructuredSelector({
 	activeTextId: selectActiveTextId(),
 	vernacularNamesObject: vernacularBookNameObject(),
 	highlights: selectHighlights(),
-	// selectedListData: selectListData(),
+	selectedListData: selectListData(),
+	activeBookName: selectActiveBookName(),
 });
 
 function mapDispatchToProps(dispatch) {

@@ -46,6 +46,8 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 		}
 	}
 
+	getReference = (verseStart, verseEnd, chapter) => `${this.props.activeBookName} ${chapter}:${verseStart === verseEnd || !verseEnd ? verseStart : `${verseStart}-${verseEnd}`}`
+
 	getCurrentDate = () => {
 		const date = new Date();
 		const day = date.getDate();
@@ -124,7 +126,7 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 				verse_start: verseStart,
 				verse_end: verseEnd,
 				chapter,
-				tags: `title&#58; ${titleText}`,
+				tags: `title: ${titleText}, reference: ${this.getReference(verseStart, verseEnd, chapter)}`,
 				id,
 			});
 		} else {
@@ -136,7 +138,7 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 				verse_start: verseStart,
 				verse_end: verseEnd,
 				chapter,
-				tags: `title&#58; ${titleText}`,
+				tags: `title: ${titleText}, reference: ${this.getReference(verseStart, verseEnd, chapter)}`,
 			});
 		}
 
@@ -172,10 +174,12 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 			activeTextId,
 			notePassage,
 			savedTheNote,
+			// activeBookName,
 		} = this.props;
 		const {
 			savingNote,
 		} = this.state;
+		// console.log('activebookname', activeBookName);
 		// const {
 		// 	selectedBookName,
 		// 	selectedChapter,
@@ -229,6 +233,7 @@ EditNote.propTypes = {
 	notePassage: PropTypes.string,
 	activeTextId: PropTypes.string,
 	savedTheNote: PropTypes.bool,
+	activeBookName: PropTypes.string,
 };
 
 export default EditNote;
