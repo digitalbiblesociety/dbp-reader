@@ -56,7 +56,7 @@ export function* addBookmark(props) {
 
 	// console.log(props.find((p) => p === 'reference'));
 	Object.entries(props.data).forEach((item) => formData.set(item[0], item[1]));
-	formData.append('tags', `reference: ${props.data.reference}`);
+	formData.append('tags', `reference::: ${props.data.reference}`);
 	// formData.append('project_id', process.env.NOTES_PROJECT_ID);
 
 	const options = {

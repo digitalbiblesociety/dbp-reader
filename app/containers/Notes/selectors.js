@@ -4,7 +4,7 @@ import { createSelector } from 'reselect';
 /**
  * Helpers
  */
-const getReference = (h) => `${h.get('bible_id')} - ${h.get('book_id')} - ${h.get('chapter')}:${h.get('verse_start') === h.get('verse_end') || !h.get('verse_end') ? h.get('verse_start') : `${h.get('verse_start')}-${h.get('verse_end')}`} - (${h.get('bible_id')})`;
+// const getReference = (h) => `${h.get('bible_id')} - ${h.get('book_id')} - ${h.get('chapter')}:${h.get('verse_start') === h.get('verse_end') || !h.get('verse_end') ? h.get('verse_start') : `${h.get('verse_start')}-${h.get('verse_end')}`} - (${h.get('bible_id')})`;
 
 /**
  * Direct selector to the notes state domain
@@ -91,14 +91,14 @@ const vernacularBookNameObject = () => createSelector(
 	(books) => books.reduce((names, book) => ({ ...names, [book.book_id]: [book.name] || [book.name_short] }), {})
 );
 
-const selectListData = () => createSelector(
-	selectNotesDomain,
-	(notes) => {
-		const data = notes.get('listData');
-
-		return data.map((note) => note.set('reference', getReference(note))).toJS();
-	}
-);
+// const selectListData = () => createSelector(
+// 	selectNotesDomain,
+// 	(notes) => {
+// 		const data = notes.get('listData');
+//
+// 		return data.map((note) => note.set('reference', getReference(note))).toJS();
+// 	}
+// );
 
 /**
  * Default selector used by Notes
@@ -121,6 +121,6 @@ export {
 	selectUserAuthenticationStatus,
 	vernacularBookNameObject,
 	selectHighlights,
-	selectListData,
+	// selectListData,
 	selectActiveBookName,
 };

@@ -126,7 +126,7 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 				verse_start: verseStart,
 				verse_end: verseEnd,
 				chapter,
-				tags: `title: ${titleText}, reference: ${this.getReference(verseStart, verseEnd, chapter)}`,
+				tags: `title::: ${titleText},reference::: ${this.getReference(verseStart, verseEnd, chapter)}`,
 				id,
 			});
 		} else {
@@ -138,7 +138,7 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 				verse_start: verseStart,
 				verse_end: verseEnd,
 				chapter,
-				tags: `title: ${titleText}, reference: ${this.getReference(verseStart, verseEnd, chapter)}`,
+				tags: `title::: ${titleText},reference::: ${this.getReference(verseStart, verseEnd, chapter)}`,
 			});
 		}
 
@@ -150,6 +150,11 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 
 	get verseReference() {
 		const { vernacularNamesObject, note } = this.props;
+		if (note.get('tags') && note.get('tags').find((tag) => tag.get('type') === 'reference')) {
+			const ref = note.get('tags').find((tag) => tag.get('type') === 'reference');
+			// console.log('has a reference', ref);
+			return ref.get('value');
+		}
 		const book = note.get('book_id');
 		const start = note.get('verse_start');
 		const end = note.get('verse_end');
