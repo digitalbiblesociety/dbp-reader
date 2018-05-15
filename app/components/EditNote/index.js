@@ -29,6 +29,7 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 			selectedBookId: '',
 			titleText,
 			savingNote: false,
+			readTheMessage: false,
 		};
 	}
 
@@ -85,17 +86,21 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 	}
 
 	handleTextareaChange = (e) => {
-		this.setState({ textarea: e.target.value }, () => {
+		e.persist();
+		if (!this.state.readTheMessage) {
 			this.props.readSavedMessage();
 			this.setTimer();
-		});
+		}
+		this.setState((cs) => cs.readTheMessage ? ({ textarea: e.target.value }) : ({ textarea: e.target.value, readTheMessage: true }));
 	}
 
 	handleNoteTitleChange = (e) => {
-		this.setState({ titleText: e.target.value }, () => {
+		e.persist();
+		if (!this.state.readTheMessage) {
 			this.props.readSavedMessage();
 			this.setTimer();
-		});
+		}
+		this.setState((cs) => cs.readTheMessage ? ({ titleText: e.target.value }) : ({ titleText: e.target.value, readTheMessage: true }));
 	}
 
 	handleSave = () => {
@@ -143,10 +148,13 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 		}
 
 		this.setState({ savingNote: true });
-		this.props.setActiveChild('notes');
+		// this.props.setActiveChild('notes');
 	}
 
-	deleteNote = () => this.props.deleteNote({ noteId: this.props.note.get('id') }); // console.log('send api call to delete the note')
+	deleteNote = () => {
+		this.props.deleteNote({ noteId: this.props.note.get('id') });
+		this.props.setActiveChild('notes');
+	} // console.log('send api call to delete the note')
 
 	get verseReference() {
 		const { vernacularNamesObject, note } = this.props;

@@ -43,9 +43,15 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 	}
 
 	getNoteReference(listItem) {
+		// Uses the title if it is there
+		if (listItem.tags && listItem.tags.find((tag) => tag.type === 'title')) {
+			return listItem.tags.find((tag) => tag.type === 'title').value;
+		}
+		// Otherwise uses the reference saved at the time of creation
 		if (listItem.tags && listItem.tags.find((tag) => tag.type === 'reference')) {
 			return listItem.tags.find((tag) => tag.type === 'reference').value;
 		}
+		// As a last resort it tries to generate a sort of reference
 		const verseRef = listItem.verse_end && !(listItem.verse_end === listItem.verse_start) ? `${listItem.verse_start}-${listItem.verse_end}` : listItem.verse_start;
 		const { vernacularNamesObject } = this.props;
 

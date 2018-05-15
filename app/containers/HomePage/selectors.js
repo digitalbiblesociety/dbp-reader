@@ -40,21 +40,24 @@ const selectUserNotes = () => createDeepEqualSelector(
 	[selectNotes, selectHomePageDomain, selectProfilePageDomain],
 	(notes, home, profile) => {
 		// const bibleId = home.get('activeTextId');
-		// const bookId = home.get('activeBookId');
-		// const chapter = home.get('activeChapter');
+		const bookId = home.get('activeBookId');
+		const chapter = home.get('activeChapter');
 		const text = home.get('chapterText');
 		const authd = home.get('userAuthenticated');
 		const userId = home.get('userId');
 		const profAuth = profile.get('userAuthenticated');
 		const profUser = profile.get('userId');
+		// console.log(bookId);
+		// console.log(chapter);
 		// May not need to filter because I am requesting only the notes/bookmarks for this chapter
-		const filteredNotes = notes.get('userNotes');
-		const filteredBookmarks = notes.get('chapterBookmarks');
+		const filteredNotes = notes.get('userNotes').filter((note) => note.get('book_id') === bookId && note.get('chapter') === chapter);
+		const filteredBookmarks = notes.get('chapterBookmarks').filter((note) => note.get('book_id') === bookId && note.get('chapter') === chapter);
 		const bookmarks = filteredBookmarks.toJS ? filteredBookmarks.toJS() : filteredBookmarks;
 		const userNotes = filteredNotes.toJS ? filteredNotes.toJS() : filteredNotes;
-		// console.log('bookmarks', bookmarks);
-		// console.log('userNotes', userNotes);
-		if (!text) {
+		// console.log('filteredBookmarks', filteredBookmarks);
+		// console.log('filteredNotes', filteredNotes);
+		// console.log(home);
+		if (!text || (home.get('formattedSource') && !home.getIn(['userSettings', 'toggleOptions', 'readersMode', 'active']) && !home.getIn(['userSettings', 'toggleOptions', 'oneVersePerLine', 'active']))) {
 			return {
 				text: [],
 				userNotes,
@@ -72,25 +75,29 @@ const selectUserNotes = () => createDeepEqualSelector(
 		}
 		// console.log('list data', notes.get('listData'));
 		let newText = [];
+		const versesWithNotes = {};
 
 		filteredNotes.forEach((n, ni) => {
 			let iToSet = 0;
 			const verse = text.find((t, i) => {
 				// console.log('t',t);
 				// console.log('n',n);
-				if (parseInt(t.get('verse_start'), 10) === n.verse_start) {
+				if (parseInt(t.get('verse_start'), 10) === n.get('verse_start')) {
 					iToSet = i;
 				}
-				return parseInt(t.get('verse_start'), 10) === n.verse_start;
+				return parseInt(t.get('verse_start'), 10) === n.get('verse_start');
 			});
 			// console.log(verse);
+			// console.log('note', n);
 			// console.log(iToSet);
 			if (verse) {
 				// Need to change this since the notes will be allowed to be null
 				// Eventually there will be two separate calls so I can have two piece of state
-				if (n.notes) {
+				if (n.get('notes') && !versesWithNotes[verse.get('verse_start')]) {
 					newText = newText.size ? newText.setIn([iToSet, 'hasNote'], true) : text.setIn([iToSet, 'hasNote'], true);
 					newText = newText.size ? newText.setIn([iToSet, 'noteIndex'], ni) : text.setIn([iToSet, 'noteIndex'], ni);
+					// console.log(versesWithNotes);
+					versesWithNotes[verse.get('verse_start')] = true;
 				}
 			}
 		});
