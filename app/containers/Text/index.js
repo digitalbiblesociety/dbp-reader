@@ -239,6 +239,8 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		this.props.setActiveNote({ note: existingNote || note });
 	}
 
+	getReference = (verseStart, verseEnd) => `${this.props.activeBookName} ${this.props.activeChapter}:${verseStart === verseEnd || !verseEnd ? verseStart : `${verseStart}-${verseEnd}`}`
+
 	getFirstVerse = (e) => {
 		e.stopPropagation();
 		// console.log('getting first verse');
@@ -557,6 +559,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				notes: '\'\'',
 				title: '',
 				bookmark: 1,
+				reference: this.getReference(verseStart, verseEnd),
 				verse_start: verseStart,
 				verse_end: verseEnd,
 			});
@@ -800,6 +803,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 					color,
 					highlightStart,
 					highlightedWords,
+					reference: this.getReference(firstVerse, lastVerse),
 				});
 			}
 		} catch (err) {

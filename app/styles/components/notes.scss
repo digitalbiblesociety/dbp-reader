@@ -278,7 +278,7 @@
 .pagination .item-list .item:hover     {@include css4{color:var(--active-color-primary)};}
 .pagination .item-list .item.active    {@include css4{color:var(--active-color-primary)};}
 
-.page-size-selector                    {display:flex;align-items:center;height:50px;width:120px;color:white;font-size:.98em;font-weight:200;}
+.page-size-selector {display:flex;align-items:center;height:50px;width:120px;font-size:.98em;font-weight:200;}
 .page-size-selector .open {
   display:flex;
   @include css4 {
@@ -291,7 +291,8 @@
   position:absolute;
   height:150px;
   width:120px;
-  bottom:55px;
+  //bottom:55px;
+  bottom:0;
   right:0;
   font-size: 14px;
   :first-child {
@@ -319,9 +320,15 @@
   height:13px;
 }
 .page-size-selector .open div:hover    {opacity:0.65;@include css4{color:var(--active-color-primary);};}
-.page-size-selector .open div.active   { @include css4{fill:var(--active-color-primary);color:var(--active-color-primary);};}
-.page-size-selector .closed            {background-color:inherit;}
-.page-size-selector .closed:hover      {opacity:0.65;cursor:pointer;}
+.page-size-selector .open div.active   {@include css4{fill:var(--active-color-primary);color:var(--active-color-primary);};}
+.page-size-selector .closed            {display:none;background-color:inherit;}
+.page-size-selector .per-page-toggle:hover {
+  opacity:0.65;
+  cursor:pointer;
+  @include css4 {
+    color:var(--active-color-primary);
+  }
+}
 
 .notes .need-to-login                  {@include css4{color:var(--default-text-color)};padding:15px;font-size:1.1em;}
 .notes .need-to-login .login-text      {@include css4{color:var(--active-color-primary)};cursor:pointer;}

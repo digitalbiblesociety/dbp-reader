@@ -43,6 +43,9 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 	}
 
 	getNoteReference(listItem) {
+		if (listItem.tags && listItem.tags.find((tag) => tag.type === 'reference')) {
+			return listItem.tags.find((tag) => tag.type === 'reference').value;
+		}
 		const verseRef = listItem.verse_end && !(listItem.verse_end === listItem.verse_start) ? `${listItem.verse_start}-${listItem.verse_end}` : listItem.verse_start;
 		const { vernacularNamesObject } = this.props;
 
@@ -58,16 +61,21 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 	getFilteredPageList = (pageData) => {
 		const filterText = this.state.filterText;
 
-		return matchSorter(pageData, filterText, { keys: ['notes', 'bible_id', 'book_id', 'chapter', 'verse_start', 'updated_at'] });
+		return matchSorter(pageData, filterText, { keys: [(item) => item.tags.find((tag) => tag.type === 'reference') ? item.tags.find((tag) => tag.type === 'reference').value : item.notes, 'notes', 'bible_id', 'book_id', 'chapter', 'verse_start', 'updated_at'] });
 	}
 
 	getFilteredHighlights = (highlights) => {
 		const filterText = this.state.filterText;
 
-		return matchSorter(highlights, filterText, { keys: ['book_id', 'chapter', 'verse_start'] });
+		return matchSorter(highlights, filterText, { keys: ['reference', 'book_id', 'chapter', 'verse_start'] });
 	}
 
-	getHighlightReference = (h) => `${h.bible_id} - ${h.book_id} - ${h.chapter}:${h.verse_start === h.verse_end || !h.verse_end ? h.verse_start : `${h.verse_start}-${h.verse_end}`} - (${h.bible_id})`
+	getHighlightReference = (h) => {
+		if (h.reference) {
+			return h.reference;
+		}
+		return `${h.bible_id} - ${h.book_id} - ${h.chapter}:${h.verse_start === h.verse_end || !h.verse_end ? h.verse_start : `${h.verse_start}-${h.verse_end}`} - (${h.bible_id})`;
+	}
 
 	handleSearchChange = (e) => this.setState({ filterText: e.target.value })
 

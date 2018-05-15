@@ -54,7 +54,9 @@ export function* addBookmark(props) {
 	const requestUrl = `https://api.bible.build/users/${props.data.user_id}/bookmarks?key=${process.env.DBP_API_KEY}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}`;
 	const formData = new FormData();
 
+	// console.log(props.find((p) => p === 'reference'));
 	Object.entries(props.data).forEach((item) => formData.set(item[0], item[1]));
+	formData.append('tags', `reference::: ${props.data.reference}`);
 	// formData.append('project_id', process.env.NOTES_PROJECT_ID);
 
 	const options = {
@@ -138,10 +140,13 @@ export function* getHighlights({ bible, book, chapter, userId }) {
 	}
 }
 
-export function* addHighlight({ bible, book, chapter, userId, verseStart, highlightStart, highlightedWords, color }) {
+export function* addHighlight({ bible, book, chapter, userId, verseStart, highlightStart, highlightedWords, color, reference }) {
 	const requestUrl = `https://api.bible.build/users/${userId}/highlights?key=${process.env.DBP_API_KEY}&v=4&bible_id=${bible}&book_id=${book}&chapter=${chapter}&project_id=${process.env.NOTES_PROJECT_ID}`;
 	const formData = new FormData();
 	// console.log('data for highlight { bible, book, chapter, userId, verseStart, highlightStart, highlightedWords, color }', { bible, book, chapter, userId, verseStart, highlightStart, highlightedWords, color });
+	if (!userId || color === 'none') {
+		return;
+	}
 	formData.append('book_id', book);
 	formData.append('user_id', userId);
 	formData.append('bible_id', bible);
@@ -153,6 +158,7 @@ export function* addHighlight({ bible, book, chapter, userId, verseStart, highli
 	formData.append('highlight_start', highlightStart);
 	formData.append('highlighted_words', highlightedWords);
 	formData.append('project_id', process.env.NOTES_PROJECT_ID);
+	formData.append('reference', reference);
 
 	const options = {
 		method: 'POST',

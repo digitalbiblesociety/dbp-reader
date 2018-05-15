@@ -46,11 +46,11 @@ function notesReducer(state = initialState, action) {
 	case ADD_NOTE_SUCCESS:
 		return state.set('savedTheNote', true);
 	case LOAD_BOOKMARKS_FOR_CHAPTER:
-		return state.set('chapterBookmarks', action.listData);
+		return state.set('chapterBookmarks', fromJS(action.listData));
 	case LOAD_USER_BOOKMARK_DATA:
 		return state
 			.set('totalPagesBookmark', action.totalPages)
-			.set('bookmarkList', action.listData);
+			.set('bookmarkList', fromJS(action.listData));
 	case LOAD_CHAPTER_FOR_NOTE:
 		return state.set('chapterForNote', action.text);
 	case SET_ACTIVE_CHILD:
@@ -75,12 +75,12 @@ function notesReducer(state = initialState, action) {
 		return state.set('pageSelectorState', !state.get('pageSelectorState'));
 	case LOAD_USER_NOTES:
 		return state
-			.set('userNotes', action.listData);
+			.set('userNotes', fromJS(action.listData));
 	case LOAD_NOTEBOOK_DATA:
 		// console.log('Loading notebook data with active page: ', action.activePage);
 		return state
 			.set('totalPages', action.totalPages)
-			.set('listData', action.listData);
+			.set('listData', fromJS(action.listData));
 	default:
 		return state;
 	}

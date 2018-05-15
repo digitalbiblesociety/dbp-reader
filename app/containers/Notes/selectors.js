@@ -1,5 +1,11 @@
 import { createSelector } from 'reselect';
 
+
+/**
+ * Helpers
+ */
+// const getReference = (h) => `${h.get('bible_id')} - ${h.get('book_id')} - ${h.get('chapter')}:${h.get('verse_start') === h.get('verse_end') || !h.get('verse_end') ? h.get('verse_start') : `${h.get('verse_start')}-${h.get('verse_end')}`} - (${h.get('bible_id')})`;
+
 /**
  * Direct selector to the notes state domain
  */
@@ -13,6 +19,11 @@ const selectHomepageDomain = (state) => state.get('homepage');
 const selectHighlights = () => createSelector(
 	selectHomepageDomain,
 	(homepage) => homepage.get('highlights').toJS()
+);
+
+const selectActiveBookName = () => createSelector(
+	selectHomepageDomain,
+	(home) => home.get('activeBookName')
 );
 
 const selectUserId = () => createSelector(
@@ -83,27 +94,9 @@ const vernacularBookNameObject = () => createSelector(
 // const selectListData = () => createSelector(
 // 	selectNotesDomain,
 // 	(notes) => {
-// 		const child = notes.get('activeChild');
-// 		// console.log('active child', child);
-// 		// console.log('has notes', notes.get('listData').filter((n) => {
-// 		// 	console.log(n.bookmark === 1);
-// 		// 	return n.bookmark === 1;
-// 		// }));
-// 		// console.log('has bookmarks', notes.get('listData').filter((n) => n.bookmark));
-// 		// notes.get('listData').filter((n) => {
-// 		// 	if (n.bookmark === 1) {
-// 		// 		for (let i = 0; i < n.notes.length; i++) {
-// 		// 			console.log(n.notes[i]);
-// 		// 		}
-// 		// 	}
-// 		// 	// console.log(n.notes == '', n.notes == "", n.notes == false);
-// 		// 	return !!n.notes;
-// 		// });
-// 		if (child === 'bookmarks') {
-// 			return notes.get('listData').filter((n) => n.bookmark);
-// 		}
-// 		// Need to check for the strings because the api is returning string literal quotes
-// 		return notes.get('listData').filter((n) => n.notes && n.notes !== '""' && n.notes !== '\'\'');
+// 		const data = notes.get('listData');
+//
+// 		return data.map((note) => note.set('reference', getReference(note))).toJS();
 // 	}
 // );
 
@@ -129,4 +122,5 @@ export {
 	vernacularBookNameObject,
 	selectHighlights,
 	// selectListData,
+	selectActiveBookName,
 };
