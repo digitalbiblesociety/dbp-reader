@@ -11,7 +11,7 @@ import highlightsObject from './sampleHighlights.json';
 *	13-14 & 14: multi-verse that ends up being two highlights in the same verse - false
 *	15 * 3: highlight overlaps multiple other highlights
 *	Tag to insert
-*	<em class="text-highlighted" style="background:${sampleHighlights[0].highlighted_color}">
+*	<em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[0].highlighted_color}),rgba(${sampleHighlights[0].highlighted_color}))">
 * */
 
 describe('highlightPlainText', () => {
@@ -47,7 +47,7 @@ describe('highlightPlainText', () => {
 				hasHighlight: true,
 				verse_end: 1,
 				verse_end_alt: '1',
-				verse_text: `I <em class="text-highlighted" style="background:${sampleHighlights[0].highlighted_color}">love</em> you, O LORD, my strength.`,
+				verse_text: `I <em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[0].highlighted_color}),rgba(${sampleHighlights[0].highlighted_color}))">love</em> you, O LORD, my strength.`,
 			},
 		].concat(chapterText.data.slice(1));
 
@@ -68,7 +68,7 @@ describe('highlightPlainText', () => {
 				verse_end: 2,
 				verse_end_alt: '2',
 				hasHighlight: true,
-				verse_text: `The<em class="text-highlighted" style="background:${sampleHighlights[1].highlighted_color}"> <em class="text-highlighted" style="background:${sampleHighlights[0].highlighted_color}">LORD</em> is my</em> rock and my fortress and my deliverer, my God, my rock, in whom I take refuge, my shield, and the horn of my salvation, my stronghold.`,
+				verse_text: `The<em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[1].highlighted_color}),rgba(${sampleHighlights[1].highlighted_color}))"> <em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[0].highlighted_color}),rgba(${sampleHighlights[0].highlighted_color}))">LORD</em> is my</em> rock and my fortress and my deliverer, my God, my rock, in whom I take refuge, my shield, and the horn of my salvation, my stronghold.`,
 			},
 		];
 
@@ -89,7 +89,7 @@ describe('highlightPlainText', () => {
 				verse_end: 3,
 				verse_end_alt: '3',
 				hasHighlight: true,
-				verse_text: `<em class="text-highlighted" style="background:${sampleHighlights[0].highlighted_color}">I call upon the LORD, who is worthy to be praised, and I am saved from my enemies.</em>`,
+				verse_text: `<em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[0].highlighted_color}),rgba(${sampleHighlights[0].highlighted_color}))">I call upon the LORD, who is worthy to be praised, and I am saved from my enemies.</em>`,
 			},
 			{
 				book_id: 'PSA',
@@ -102,7 +102,7 @@ describe('highlightPlainText', () => {
 				verse_end: 4,
 				verse_end_alt: '4',
 				hasHighlight: true,
-				verse_text: `<em class="text-highlighted" style="background:${sampleHighlights[0].highlighted_color}">The cords of death encompassed me; the torrents of destruction assailed me</em>;`,
+				verse_text: `<em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[0].highlighted_color}),rgba(${sampleHighlights[0].highlighted_color}))">The cords of death encompassed me; the torrents of destruction assailed me</em>;`,
 			},
 		];
 
@@ -123,7 +123,7 @@ describe('highlightPlainText', () => {
 				verse_end: 6,
 				verse_end_alt: '6',
 				hasHighlight: true,
-				verse_text: `In my <em class="text-highlighted" style="background:${sampleHighlights[0].highlighted_color}">distress</em> I called upon t<em class="text-highlighted" style="background:${sampleHighlights[1].highlighted_color}">he LO</em>RD; to my God I cried for help. From his temple he heard my voice, and my cry to him reached his ears.`,
+				verse_text: `In my <em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[0].highlighted_color}),rgba(${sampleHighlights[0].highlighted_color}))">distress</em> I called upon t<em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[1].highlighted_color}),rgba(${sampleHighlights[1].highlighted_color}))">he LO</em>RD; to my God I cried for help. From his temple he heard my voice, and my cry to him reached his ears.`,
 			},
 		];
 
@@ -144,7 +144,7 @@ describe('highlightPlainText', () => {
 				verse_end: 8,
 				verse_end_alt: '8',
 				hasHighlight: true,
-				verse_text: `<em class="text-highlighted" style="background:${sampleHighlights[0].highlighted_color}">Smoke went up from his nostrils, and devouring fire from his mouth; glowing coals flamed forth from him.</em>`,
+				verse_text: `<em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[0].highlighted_color}),rgba(${sampleHighlights[0].highlighted_color}))">Smoke went up from his nostrils, and devouring fire from his mouth; glowing coals flamed forth from him.</em>`,
 			},
 			{
 				book_id: 'PSA',
@@ -157,7 +157,7 @@ describe('highlightPlainText', () => {
 				verse_end: 9,
 				verse_end_alt: '9',
 				hasHighlight: true,
-				verse_text: `<em class="text-highlighted" style="background:${sampleHighlights[0].highlighted_color}">He bowed the heavens and came down; thick darkness was under his </em><em class="text-highlighted" style="background:${sampleHighlights[1].highlighted_color}">feet.</em>`,
+				verse_text: `<em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[0].highlighted_color}),rgba(${sampleHighlights[0].highlighted_color}))">He bowed the heavens and came down; thick darkness was under his </em><em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[1].highlighted_color}),rgba(${sampleHighlights[1].highlighted_color}))">feet.</em>`,
 			},
 			{
 				book_id: 'PSA',
@@ -170,7 +170,7 @@ describe('highlightPlainText', () => {
 				verse_end: 10,
 				verse_end_alt: '10',
 				hasHighlight: true,
-				verse_text: `<em class="text-highlighted" style="background:${sampleHighlights[1].highlighted_color}">He rode on a cherub and flew; he came swiftly on the wings of the win</em>d.`,
+				verse_text: `<em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[1].highlighted_color}),rgba(${sampleHighlights[1].highlighted_color}))">He rode on a cherub and flew; he came swiftly on the wings of the win</em>d.`,
 			},
 		];
 
@@ -191,7 +191,7 @@ describe('highlightPlainText', () => {
 				verse_end: 12,
 				verse_end_alt: '12',
 				hasHighlight: true,
-				verse_text: `<em class="text-highlighted" style="background:${sampleHighlights[0].highlighted_color}">Out of the brightness before him hailstones and coals of fire broke through his clouds.</em>`,
+				verse_text: `<em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[0].highlighted_color}),rgba(${sampleHighlights[0].highlighted_color}))">Out of the brightness before him hailstones and coals of fire broke through his clouds.</em>`,
 			},
 			{
 				book_id: 'PSA',
@@ -204,7 +204,7 @@ describe('highlightPlainText', () => {
 				verse_end: 13,
 				verse_end_alt: '13',
 				hasHighlight: true,
-				verse_text: `<em class="text-highlighted" style="background:${sampleHighlights[0].highlighted_color}">The LORD also thundered</em> in the heavens, and <em class="text-highlighted" style="background:${sampleHighlights[1].highlighted_color}">the Most </em>High uttered his voice, hailstones and coals of fire.`,
+				verse_text: `<em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[0].highlighted_color}),rgba(${sampleHighlights[0].highlighted_color}))">The LORD also thundered</em> in the heavens, and <em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[1].highlighted_color}),rgba(${sampleHighlights[1].highlighted_color}))">the Most </em>High uttered his voice, hailstones and coals of fire.`,
 			},
 		];
 
@@ -246,7 +246,7 @@ describe('highlightPlainText', () => {
 				verse_end: 12,
 				verse_end_alt: '12',
 				hasHighlight: true,
-				verse_text: `<em class="text-highlighted" style="background:${sampleHighlights[0].highlighted_color}">Out of the </em><em class="text-highlighted" style="background:${sampleHighlights[1].highlighted_color}">brightness</em> before him hailstones and coals of fire broke through his clouds.`,
+				verse_text: `<em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[0].highlighted_color}),rgba(${sampleHighlights[0].highlighted_color}))">Out of the </em><em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[1].highlighted_color}),rgba(${sampleHighlights[1].highlighted_color}))">brightness</em> before him hailstones and coals of fire broke through his clouds.`,
 			},
 		];
 
@@ -298,7 +298,7 @@ describe('highlightPlainText', () => {
 				verse_end: 12,
 				verse_end_alt: '12',
 				hasHighlight: true,
-				verse_text: `<em class="text-highlighted" style="background:${sampleHighlights[2].highlighted_color}"><em class="text-highlighted" style="background:${sampleHighlights[0].highlighted_color}">Out</em> of the <em class="text-highlighted" style="background:${sampleHighlights[1].highlighted_color}">brightness</em></em> before him hailstones and coals of fire broke through his clouds.`,
+				verse_text: `<em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[2].highlighted_color}),rgba(${sampleHighlights[2].highlighted_color}))"><em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[0].highlighted_color}),rgba(${sampleHighlights[0].highlighted_color}))">Out</em> of the <em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[1].highlighted_color}),rgba(${sampleHighlights[1].highlighted_color}))">brightness</em></em> before him hailstones and coals of fire broke through his clouds.`,
 			},
 		];
 

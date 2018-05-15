@@ -300,7 +300,7 @@ function handleVerseSection({ previousHighlightId, combinedSectionLength, highli
 		// console.log('continuing color is: ', continuingColor);
 		// End of previous highlight is before the first highlight in this verse
 		if (charsLeftAfterVerseEnd < firstHighlightStart) {
-			verseText.splice(0, 1, `<em class="text-highlighted" style="background:${tempFirstHighlight ? tempFirstHighlight.highlighted_color : continuingColor}">${verseText[0]}`);
+			verseText.splice(0, 1, `<em class="text-highlighted" style="background:linear-gradient(rgba(${tempFirstHighlight ? tempFirstHighlight.highlighted_color : continuingColor}),rgba(${tempFirstHighlight ? tempFirstHighlight.highlighted_color : continuingColor}))">${verseText[0]}`);
 
 			verseText.splice(charsLeftAfterVerseEnd - 1, 1, `</em>${verseText[charsLeftAfterVerseEnd - 1]}`);
 
