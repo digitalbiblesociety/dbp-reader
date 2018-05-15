@@ -220,7 +220,7 @@ describe('highlightPlainText', () => {
 				verse_start: 12,
 				highlight_start: 0,
 				highlighted_words: 21,
-				highlighted_color: '#17,170,255,.6',
+				highlighted_color: '17,170,255,.6',
 			},
 			{
 				id: 263,
@@ -230,7 +230,7 @@ describe('highlightPlainText', () => {
 				verse_start: 12,
 				highlight_start: 11,
 				highlighted_words: 10,
-				highlighted_color: '#85,187,68,.6',
+				highlighted_color: '85,187,68,.6',
 			},
 		];
 		const sampleText = chapterText.data.slice(11, 12);
@@ -262,7 +262,7 @@ describe('highlightPlainText', () => {
 				verse_start: 12,
 				highlight_start: 0,
 				highlighted_words: 3,
-				highlighted_color: '#17,170,255,.6',
+				highlighted_color: '17,170,255,.6',
 			},
 			{
 				id: 263,
@@ -272,7 +272,7 @@ describe('highlightPlainText', () => {
 				verse_start: 12,
 				highlight_start: 11,
 				highlighted_words: 10,
-				highlighted_color: '#85,187,68,.6',
+				highlighted_color: '85,187,68,.6',
 			},
 			{
 				id: 264,
@@ -282,7 +282,7 @@ describe('highlightPlainText', () => {
 				verse_start: 12,
 				highlight_start: 0,
 				highlighted_words: 21,
-				highlighted_color: '#85,187,68,.6',
+				highlighted_color: '221,102,170,.6',
 			},
 		];
 		const sampleText = chapterText.data.slice(11, 12);

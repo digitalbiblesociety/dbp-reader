@@ -74,8 +74,8 @@
     clear: both;
     //overflow:auto;
     @include css4 {
-      background-color: var(--book-dropdown-chapter-background-color);
-      color: var(--book-dropdown-text-color);
+      background-color: var(--text-selection-accordion-body-background);
+      //color: var(--book-dropdown-text-color);
     }
 
     .book-list-section {

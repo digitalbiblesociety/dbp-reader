@@ -69,7 +69,7 @@ const paper = {
 const dark = {
 	'--text-selection-background': '#1B1F24',
 	'--text-selection-accordion-title-background': '#2C3036',
-	'--text-selection-accordion-body-background': '#1B1F24',
+	'--text-selection-accordion-body-background': '#000000',
 	'--text-selection-tab-option-active-background': '#FDF9F3',
 	'--text-selection-tab-option-color': '#FFFFFF',
 	'--text-selection-tab-option-active-color': '#000000',
@@ -134,7 +134,7 @@ const dark = {
 const red = {
 	'--text-selection-background': '#1B1F24',
 	'--text-selection-accordion-title-background': '#2C3036',
-	'--text-selection-accordion-body-background': '#1B1F24',
+	'--text-selection-accordion-body-background': '#000000',
 	'--text-selection-tab-option-active-background': '#FDF9F3',
 	'--text-selection-tab-option-color': '#FFFFFF',
 	'--text-selection-tab-option-active-color': '#000000',
