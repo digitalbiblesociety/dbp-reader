@@ -2,7 +2,6 @@ const createHighlights = (highlights, arrayOfVerseObjects) => {
 	// Todo: Huge issue if highlights overlap, breaks a lot of things
 	/* NOTES
 	* 1. Need to subtract 1 from any addition of highlight_start + highlighted_words, this is because the result is the length not the index
-	*
 	* */
 	// Iterate over each verse
 	// Find all the highlights for a single verse
@@ -39,7 +38,7 @@ const createHighlights = (highlights, arrayOfVerseObjects) => {
 			if (charsLeftAfterVerseEnd && highlightsStartingInVerse.length === 0) {
 				// if there were characters left and there were not any highlights in this verse
 				// console.log('this verse has a highlight that did not start in it', charsLeftAfterVerseEnd);
-				verseText.splice(0, 1, `<em class="text-highlighted" style="background:${continuingColor}">${verseText[0]}`);
+				verseText.splice(0, 1, `<em class="text-highlighted" style="background:linear-gradient(rgba(${continuingColor}),rgba(${continuingColor}))">${verseText[0]}`);
 				if (charsLeftAfterVerseEnd > verseText.length) {
 					// The characters left is greater than the length of this verse
 					// console.log('The characters left is greater than the length of this verse', charsLeftAfterVerseEnd, verseText.length);
@@ -66,14 +65,14 @@ const createHighlights = (highlights, arrayOfVerseObjects) => {
 				// console.log('!(firstHighlightStart === 0)', !(firstHighlightStart === 0));
 				// End of previous highlight is before the first highlight in this verse
 				if (charsLeftAfterVerseEnd < firstHighlightStart) {
-					verseText.splice(0, 1, `<em class="text-highlighted" style="background:${continuingColor}">${verseText[0]}`);
+					verseText.splice(0, 1, `<em class="text-highlighted" style="background:linear-gradient(rgba(${continuingColor}),rgba(${continuingColor}))">${verseText[0]}`);
 
 					verseText.splice(charsLeftAfterVerseEnd, 1, `</em>${verseText[charsLeftAfterVerseEnd]}`);
 
 					charsLeftAfterVerseEnd = 0;
 				} else if (!(firstHighlightStart === 0)) {
 					// console.log('firstHighlightStart is not equal to zero and is less than charsLeftAfterVerseEnd');
-					verseText.splice(0, 1, `<em class="text-highlighted" style="background:${continuingColor}">${verseText[0]}`);
+					verseText.splice(0, 1, `<em class="text-highlighted" style="background:linear-gradient(rgba(${continuingColor}),rgba(${continuingColor}))">${verseText[0]}`);
 
 					// May not need to subtract 1 here - highlight start might be an index instead of a length
 					verseText.splice(firstHighlightStart - 1, 1, `${verseText[firstHighlightStart - 1]}</em>`);
@@ -100,7 +99,7 @@ const createHighlights = (highlights, arrayOfVerseObjects) => {
 					// If the length of the previous sections plus the length of this one is greater than the start of the highlight
 					// And the length of the previous sections is not greater than the start of the highlight
 					// console.log('Starting highlight for highlight id: ', h.id, charsLeft);
-					verseText.splice(h.highlight_start, 1, `<em class="text-highlighted" style="background:${h.highlighted_color ? h.highlighted_color : 'inherit'}">${verseText[h.highlight_start]}`);
+					verseText.splice(h.highlight_start, 1, `<em class="text-highlighted" style="background:linear-gradient(rgba(${h.highlighted_color ? h.highlighted_color : 'inherit'}),rgba(${h.highlighted_color ? h.highlighted_color : 'inherit'}))">${verseText[h.highlight_start]}`);
 					hStart = h.highlight_start;
 				}
 				/* HIGHLIGHTS OVERLAP AND ARE THE SAME COLOR */
@@ -177,7 +176,7 @@ const createHighlights = (highlights, arrayOfVerseObjects) => {
 						// Ends the previous highlight
 						verseText.splice(h.highlight_start - 1, 1, `${verseText[h.highlight_start - 1]}</em>`);
 						// Starts a new highlight where this one should start
-						verseText.splice(h.highlight_start, 1, `<em class="text-highlighted" style="background:${h.highlighted_color ? h.highlighted_color : 'inherit'}">${verseText[h.highlight_start]}`);
+						verseText.splice(h.highlight_start, 1, `<em class="text-highlighted" style="background:linear-gradient(rgba(${h.highlighted_color ? h.highlighted_color : 'inherit'}),rgba(${h.highlighted_color ? h.highlighted_color : 'inherit'}))">${verseText[h.highlight_start]}`);
 						if (!nh) {
 							// This is the last highlight in this verse and it does not go past the end of the verse
 							// console.log('No next highlight', h.id);

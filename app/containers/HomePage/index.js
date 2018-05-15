@@ -94,6 +94,7 @@ import makeSelectHomePage, {
 	selectAuthenticationStatus,
 	selectUserId,
 	selectUserNotes,
+	selectHighlights,
 	// selectChapterText,
 } from './selectors';
 import reducer from './reducer';
@@ -603,7 +604,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			activeNotesView,
 			loadingNewChapterText,
 			invalidBibleId,
-			highlights,
+			// highlights,
 			autoPlayEnabled,
 			audioPaths,
 			audioFilesetId,
@@ -619,6 +620,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			formattedSource,
 			userId,
 			userAuthenticated,
+			highlights,
 			// updatedText,
 		} = this.props;
 
@@ -776,6 +778,7 @@ HomePage.propTypes = {
 	// text: PropTypes.object,
 	textData: PropTypes.object,
 	// updatedText: PropTypes.array,
+	highlights: PropTypes.array,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -788,6 +791,7 @@ const mapStateToProps = createStructuredSelector({
 	userAuthenticated: selectAuthenticationStatus(),
 	userId: selectUserId(),
 	textData: selectUserNotes(),
+	highlights: selectHighlights(),
 	// userNotes: selectUserNotes(),
 	// text: selectUserNotes(),
 	// updatedText: selectChapterText(),

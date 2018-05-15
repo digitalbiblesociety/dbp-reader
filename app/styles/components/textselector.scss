@@ -180,7 +180,7 @@
     .accordion-title-style {
       //&aria-selected["true"]
       @include css4 {
-        background-color: var(--text-selection-accordion-body-background);
+        background-color: var(--text-selection-background);
       }
       &:last-child {padding-bottom:15px;}
       padding-top: 15px;
@@ -209,7 +209,7 @@
       //padding:15px 0 15px 0;
       @include css4 {
         color:var(--text-selection-text-color);
-        background-color: var(--text-selection-accordion-title-background);
+        background-color: var(--text-selection-accordion-body-background);
       }
     }
   }

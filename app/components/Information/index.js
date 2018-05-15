@@ -7,6 +7,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import SvgWrapper from 'components/SvgWrapper';
+import ImageComponent from 'components/ImageComponent';
 import CloseMenuFunctions from 'utils/closeMenuFunctions';
 import { FormattedMessage } from 'react-intl';
 import get from 'lodash/get';
@@ -39,20 +40,16 @@ class Information extends React.PureComponent {// eslint-disable-line react/pref
 	}
 
 	getAudioCopyright = (organizations) => organizations.map((org) => (
-		<h3 key={org.name}><FormattedMessage {...messages.providedByAudio} />&nbsp;<a target={'_blank'} href={org.url}>{org.name}</a>
-			<br />
-			{
-				org.logo ? <img alt={'Copyright owners logo'} src={org.logo.url} height={'40px'} width={'40px'} /> : null
-			}
-		</h3>
+		[
+			<h3 key={org.name}><FormattedMessage {...messages.providedByAudio} /></h3>,
+			org.logo ? <a key={org.url} target={'_blank'} href={org.url}><ImageComponent alt={'Copyright owners logo'} src={org.logo.url} height={'109px'} width={'103px'} /></a> : null,
+		]
 	));
 	getTextCopyright = (organizations) => organizations.map((org) => (
-		<h3 key={org.name}><FormattedMessage {...messages.providedByText} />&nbsp;<a target={'_blank'} href={org.url}>{org.name}</a>
-			<br />
-			{
-				org.logo ? <img alt={'Copyright owners logo'} src={org.logo.url} height={'40px'} width={'40px'} /> : null
-			}
-		</h3>
+		[
+			<h3 key={org.name}><FormattedMessage {...messages.providedByText} /></h3>,
+			org.logo ? <a key={org.url} target={'_blank'} href={org.url}><ImageComponent alt={'Copyright owners logo'} src={org.logo.url} height={'109px'} width={'103px'} /></a> : null,
+		]
 	));
 // {
 // 	copyrights.map((c) => c.organizations.map((o) => (
@@ -72,62 +69,82 @@ class Information extends React.PureComponent {// eslint-disable-line react/pref
 		return (
 			<aside ref={this.setRef} className="profile">
 				<header>
-					<h1 className="section-title">Information</h1>
 					<SvgWrapper className={'icon'} svgid={'info'} onClick={() => toggleInformationModal()} />
+					<h1 className="section-title">Copyright Information</h1>
 					<SvgWrapper className={'icon'} svgid={'arrow_left'} onClick={() => toggleInformationModal()} />
 				</header>
-				<section className="copyrights-section">
+				<div className="copyrights-section">
 					<div className={'ot-copyright'}>
-						<h1>Old Testament</h1>
-						<div className={'cp-section'}>
-							{
-								get(copyrights, ['oldTestament', 'audio', 'organizations']) ?
-									this.getAudioCopyright(get(copyrights, ['oldTestament', 'audio', 'organizations'])) :
-									null
-							}
-							{
-								get(copyrights, ['oldTestament', 'audio', 'message']) ?
-									<p>{copyrights.oldTestament.audio.message}</p> : null
-							}
-						</div>
-						<div className={'cp-section'}>
-							{
-								get(copyrights, ['oldTestament', 'text', 'organizations']) ?
-									this.getTextCopyright(get(copyrights, ['oldTestament', 'text', 'organizations'])) :
-									null
-							}
-							{
-								get(copyrights, ['oldTestament', 'text', 'message']) ?
-									<p>{copyrights.oldTestament.text.message}</p> : null
-							}
-						</div>
+						<div className={'cp-header'}><h1>Old Testament</h1></div>
+						{
+							get(copyrights, ['oldTestament', 'audio', 'organizations']) ||
+							get(copyrights, ['oldTestament', 'audio', 'message']) ?
+								<div className={'cp-section'}>
+									{
+										get(copyrights, ['oldTestament', 'audio', 'organizations']) ?
+											this.getAudioCopyright(get(copyrights, ['oldTestament', 'audio', 'organizations'])) :
+											null
+									}
+									{
+										get(copyrights, ['oldTestament', 'audio', 'message']) ?
+											<p>{copyrights.oldTestament.audio.message}</p> : null
+									}
+								</div> :
+								null
+						}
+						{
+							get(copyrights, ['oldTestament', 'text', 'organizations']) ||
+							get(copyrights, ['oldTestament', 'text', 'message']) ?
+								<div className={'cp-section'}>
+									{
+										get(copyrights, ['oldTestament', 'text', 'organizations']) ?
+											this.getTextCopyright(get(copyrights, ['oldTestament', 'text', 'organizations'])) :
+											null
+									}
+									{
+										get(copyrights, ['oldTestament', 'text', 'message']) ?
+											<p>{copyrights.oldTestament.text.message}</p> : null
+									}
+								</div> :
+								null
+						}
 					</div>
 					<div className={'nt-copyright'}>
-						<h1>New Testament</h1>
-						<div className={'cp-section'}>
-							{
-								get(copyrights, ['newTestament', 'audio', 'organizations']) ?
-									this.getAudioCopyright(get(copyrights, ['newTestament', 'audio', 'organizations'])) :
-									null
-							}
-							{
-								get(copyrights, ['newTestament', 'audio', 'message']) ?
-									<p>{copyrights.newTestament.audio.message}</p> : null
-							}
-						</div>
-						<div className={'cp-section'}>
-							{
-								get(copyrights, ['newTestament', 'text', 'organizations']) ?
-									this.getTextCopyright(get(copyrights, ['newTestament', 'text', 'organizations'])) :
-									null
-							}
-							{
-								get(copyrights, ['newTestament', 'text', 'message']) ?
-									<p>{copyrights.newTestament.text.message}</p> : null
-							}
-						</div>
+						<div className={'cp-header'}><h1>New Testament</h1></div>
+						{
+							get(copyrights, ['newTestament', 'audio', 'organizations']) ||
+							get(copyrights, ['newTestament', 'audio', 'message']) ?
+								<div className={'cp-section'}>
+									{
+										get(copyrights, ['newTestament', 'audio', 'organizations']) ?
+											this.getAudioCopyright(get(copyrights, ['newTestament', 'audio', 'organizations'])) :
+											null
+									}
+									{
+										get(copyrights, ['newTestament', 'audio', 'message']) ?
+											<p>{copyrights.newTestament.audio.message}</p> : null
+									}
+								</div> :
+								null
+						}
+						{
+							get(copyrights, ['newTestament', 'text', 'organizations']) ||
+							get(copyrights, ['newTestament', 'text', 'message']) ?
+								<div className={'cp-section'}>
+									{
+										get(copyrights, ['newTestament', 'text', 'organizations']) ?
+											this.getTextCopyright(get(copyrights, ['newTestament', 'text', 'organizations'])) :
+											null
+									}
+									{
+										get(copyrights, ['newTestament', 'text', 'message']) ?
+											<p>{copyrights.newTestament.text.message}</p> : null
+									}
+								</div> :
+								null
+						}
 					</div>
-				</section>
+				</div>
 			</aside>
 		);
 	}

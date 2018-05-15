@@ -123,8 +123,8 @@ input {
   position:absolute;
   left:0;
   top:0;
-  width:18px;
-  height:18px;
+  width:16px;
+  height:16px;
   background:transparent;
   border-radius:3px;
   @include css4 {
@@ -132,21 +132,28 @@ input {
   }
 }
 [type='checkbox']:checked + label:before {
-  background-color:#6FBC8F;
+  //background-color:#6FBC8F;
+  //position:absolute;
+  background: url("../images/check.svg");
+  //height: 26px;
+  //width: 26px;
+  //left:0;
+  //top:0;
+  //background-repeat: no-repeat;
   border:none;
 }
 // The checkmark
-[type="checkbox"]:not(:checked) + label:after,
-[type="checkbox"]:checked + label:after {
-  content:'\002713';
-  position:absolute;
-  top:.25em;
-  left:.275em;
-  font-size:1em;
-  line-height:0.8;
-  color:#fff;
-  transition: all .2s;
-}
+//[type="checkbox"]:not(:checked) + label:after,
+//[type="checkbox"]:checked + label:after {
+//  content:'\002713';
+//  position:absolute;
+//  top:.25em;
+//  left:.275em;
+//  font-size:1em;
+//  line-height:0.8;
+//  color:#fff;
+//  transition: all .2s;
+//}
 // Small scaling for the transition between checked and unchecked
 [type="checkbox"]:not(:checked) + label:after {
   opacity:0;

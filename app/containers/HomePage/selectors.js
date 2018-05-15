@@ -10,12 +10,31 @@ const createDeepEqualSelector = createSelectorCreator(
 	is
 );
 
+// Todo: Remove this function and selector once all of the highlights in the database have been converted
+const calcRgba = (hex) => {
+	const r = parseInt(hex.slice(1, 2).repeat(2), 16);
+	const g = parseInt(hex.slice(2, 3).repeat(2), 16);
+	const b = parseInt(hex.slice(3, 4).repeat(2), 16);
+
+	return `${r},${g},${b},0.25`;
+};
+
 const selectHomePageDomain = (state) => state.get('homepage');
 const selectHomepageText = (state) => state.getIn(['homepage', 'chapterText']);
 const selectProfilePageDomain = (state) => state.get('profile');
 const selectFormattedTextSource = (state, props) => ({ source: state.getIn(['homepage', 'formattedSource']), props });
 const selectCrossReferenceState = (state) => state.getIn(['homepage', 'userSettings', 'toggleOptions', 'crossReferences', 'active']);
 const selectNotes = (state) => state.get('notes');
+
+const selectHighlights = () => createDeepEqualSelector(
+	selectHomePageDomain,
+	(home) => home.get('highlights').map((h) => {
+		if (h.get('highlighted_color').length === 4) {
+			return h.set('highlighted_color', calcRgba(h.get('highlighted_color')));
+		}
+		return h;
+	}).toJS()
+);
 
 const selectUserNotes = () => createDeepEqualSelector(
 	[selectNotes, selectHomePageDomain, selectProfilePageDomain],
@@ -256,4 +275,5 @@ export {
 	selectUserId,
 	selectChapterText,
 	selectUserNotes,
+	selectHighlights,
 };

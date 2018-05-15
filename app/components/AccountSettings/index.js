@@ -75,7 +75,7 @@ class AccountSettings extends React.PureComponent {
 				<div role="button" tabIndex={0} onClick={logout} className="logout-button"><FormattedMessage {...messages.logout} /></div>
 				<section className="personal-info">
 					{
-						profile.avatar ? <ImageComponent classes="profile-picture" alt="Profile Picture" src={profile.avatar} /> :
+						profile.avatar && profile.avatar !== 'null' ? <ImageComponent classes="profile-picture" alt="Profile Picture" src={profile.avatar} /> :
 						<SvgWrapper className={'avatar-placeholder'} svgid={'avatar_placeholder'} />
 					}
 					<button onClick={this.changePicture} className="change-picture">Change Picture</button>
