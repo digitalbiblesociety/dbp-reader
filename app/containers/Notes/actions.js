@@ -5,6 +5,7 @@
  */
 
 import {
+	UPDATE_HIGHLIGHT,
 	TOGGLE_VERSE_TEXT,
 	TOGGLE_ADD_VERSE_MENU,
 	SET_PAGE_SIZE,
@@ -23,6 +24,11 @@ import {
 	GET_BOOKMARKS_FOR_CHAPTER,
 	READ_SAVED_NOTE,
 } from './constants';
+
+export const updateHighlight = (props) => ({
+	type: UPDATE_HIGHLIGHT,
+	...props,
+});
 
 export const readSavedMessage = (props) => ({
 	type: READ_SAVED_NOTE,

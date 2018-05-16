@@ -18,6 +18,7 @@ import injectReducer from 'utils/injectReducer';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
 import {
 	setActiveNote,
+	deleteHighlights,
 } from 'containers/HomePage/actions';
 import {
 	setActiveChild,
@@ -34,6 +35,7 @@ import {
 	deleteNote,
 	getUserBookmarkData,
 	readSavedMessage,
+	updateHighlight,
 } from './actions';
 import makeSelectNotes, {
 	selectUserId,
@@ -83,6 +85,20 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 	toggleAddVerseMenu = () => this.props.dispatch(toggleAddVerseMenu())
 	togglePageSelector = () => this.props.dispatch(togglePageSelector())
 	addHighlight = (data) => this.props.dispatch(addHighlight({ userId: this.props.userId, data }))
+	updateHighlight = (props) => this.props.dispatch(updateHighlight({
+		userId: this.props.userId,
+		bible: this.props.activeTextId,
+		book: this.props.activeBookId,
+		chapter: this.props.activeChapter,
+		...props,
+	}))
+	deleteHighlights = (props) => this.props.dispatch(deleteHighlights({
+		userId: this.props.userId,
+		bible: this.props.activeTextId,
+		book: this.props.activeBookId,
+		chapter: this.props.activeChapter,
+		...props,
+	}))
 	addNote = (data) => this.props.dispatch(addNote({ userId: this.props.userId, data: { ...data, user_id: this.props.userId } }))
 	updateNote = (data) => this.props.dispatch(updateNote({ userId: this.props.userId, noteId: data.id, data: { ...data, user_id: this.props.userId } }))
 	deleteNote = ({ noteId }) => this.props.dispatch(deleteNote({ userId: this.props.userId, noteId }))
@@ -190,8 +206,10 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 											setPageSize={this.setPageSize}
 											getBookmarks={this.getBookmarks}
 											setActiveNote={this.setActiveNote}
-											setActiveChild={this.setActiveChild}
 											setActivePage={this.setActivePage}
+											setActiveChild={this.setActiveChild}
+											updateHighlight={this.updateHighlight}
+											deleteHighlights={this.deleteHighlights}
 											togglePageSelector={this.togglePageSelector}
 											pageSelectorState={pageSelectorState}
 											vernacularNamesObject={vernacularNamesObject}
@@ -237,6 +255,8 @@ Notes.propTypes = {
 	activeTextId: PropTypes.string,
 	// selectedListData: PropTypes.array,
 	activeBookName: PropTypes.string,
+	activeBookId: PropTypes.string,
+	activeChapter: PropTypes.number,
 };
 
 const mapStateToProps = createStructuredSelector({

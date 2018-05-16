@@ -336,6 +336,34 @@
 
 // Highlight Tab Styles
 .notes {
+  .color-picker {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+
+    @include css4 {
+      background-color: var(--notebook-footer-background-color)
+    }
+
+    .color-group {
+      display: flex;
+      justify-content: center;
+      height: 26px;
+      width: 20%;
+
+      :first-child {
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        @include css4 {
+          border: 1px solid var(--default-text-color);
+        }
+        cursor: pointer;
+      }
+    }
+  }
+
   .highlight-item {
     display: flex;
     //padding: 10px;
@@ -364,6 +392,7 @@
       position: relative;
       font-size: 12px;
       flex-basis: 12.5%;
+      cursor: pointer;
 
       .color-icon:before {
         // Setting the background color inline because it is based on the highlight objects color field

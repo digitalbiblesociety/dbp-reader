@@ -2,6 +2,9 @@ import { take, cancel, takeLatest, call, fork, put } from 'redux-saga/effects';
 import request from 'utils/request';
 import { LOCATION_CHANGE } from 'react-router-redux';
 import {
+	getHighlights,
+} from 'containers/HomePage/saga';
+import {
 	ADD_NOTE,
 	ADD_NOTE_SUCCESS,
 	UPDATE_NOTE,
@@ -18,6 +21,7 @@ import {
 	LOAD_USER_BOOKMARK_DATA,
 	GET_BOOKMARKS_FOR_CHAPTER,
 	GET_USER_BOOKMARK_DATA,
+	UPDATE_HIGHLIGHT,
 } from './constants';
 
 export function* getChapterForNote({ note }) {
@@ -58,6 +62,42 @@ export function* getChapterForNote({ note }) {
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error('error getting chapter for note', err); // eslint-disable-line no-console
+		}
+	}
+}
+
+export function* updateHighlight({ userId, id, color, bible, book, chapter }) {
+	const requestUrl = `https://api.bible.build/users/${userId}/highlights/${id}?key=${process.env.DBP_API_KEY}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}&highlighted_color=${color}`;
+	// const formData = new FormData();
+	// Api does not seem to handle the updating of the note when using form-data - currently the api wants x-www-form-urlencoded
+	// Object.entries(data).forEach((item) => formData.set(item[0], item[1]));
+	// const urlWithData = Object.entries(data).reduce((acc, item) => acc.concat('&', item[0], '=', item[1]), requestUrl);
+	// formData.append('project_id', process.env.NOTES_PROJECT_ID);
+
+	const options = {
+		// body: formData,
+		method: 'PUT',
+	};
+	// console.log('updating note with', data, '\nfor this id', userId);
+	try {
+		const response = yield call(request, requestUrl, options);
+		// console.log('update user note response', response);
+		if (response.success) {
+			// yield put({ type: ADD_NOTE_SUCCESS, response });
+			// console.log('Response', response);
+			// console.log(data);
+			// console.log(noteId);
+			yield fork(getHighlights, { userId, bible, book, chapter });
+		}
+	} catch (err) {
+		if (process.env.NODE_ENV === 'development') {
+			console.error(err); // eslint-disable-line no-console
+		} else if (process.env.NODE_ENV === 'production') {
+			// const options = {
+			// 	header: 'POST',
+			// 	body: formData,
+			// };
+			// fetch('https://api.bible.build/error_logging', options);
 		}
 	}
 }
@@ -326,6 +366,7 @@ export default function* notesSaga() {
 	const addNoteSaga = yield takeLatest(ADD_NOTE, addNote);
 	const getNotesSaga = yield takeLatest(GET_USER_NOTES, getNotesForChapter);
 	const updateNoteSaga = yield takeLatest(UPDATE_NOTE, updateNote);
+	const updateHighlightSaga = yield takeLatest(UPDATE_HIGHLIGHT, updateHighlight);
 	const deleteNoteSaga = yield takeLatest(DELETE_NOTE, deleteNote);
 	const getChapterSaga = yield takeLatest(GET_CHAPTER_FOR_NOTE, getChapterForNote);
 	const getNotebookSaga = yield takeLatest(GET_USER_NOTEBOOK_DATA, getNotesForNotebook);
@@ -343,6 +384,7 @@ export default function* notesSaga() {
 	// yield cancel(setPageSize);
 	// yield cancel(setActivePage);
 	yield cancel(getNotebookSaga);
-	yield cancel(getBookmarksForChapterSaga);
+	yield cancel(updateHighlightSaga);
 	yield cancel(getUserBookmarksSaga);
+	yield cancel(getBookmarksForChapterSaga);
 }
