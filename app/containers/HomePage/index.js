@@ -155,7 +155,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 
 			// Defaulting to esv until browser language detection is implemented
 			// console.log('redirecting from else in did mount');
-			this.props.history.replace('/engesv/gen/1');
+			this.props.history.replace('/engesv/mat/1');
 		}
 
 		const activeTheme = get(this, ['props', 'homepage', 'userSettings', 'activeTheme']);
