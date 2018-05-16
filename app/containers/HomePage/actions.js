@@ -37,7 +37,13 @@ import {
 	UPDATE_SELECTED_TEXT,
 	TOGGLE_SETTINGS_OPTION,
 	TOGGLE_AUTOPLAY,
+	DELETE_HIGHLIGHTS,
 } from './constants';
+
+export const deleteHighlights = (props) => ({
+	type: DELETE_HIGHLIGHTS,
+	...props,
+});
 
 export const setAudioPlayerState = (state) => ({
 	type: SET_AUDIO_PLAYER_STATE,

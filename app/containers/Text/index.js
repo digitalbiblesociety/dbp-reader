@@ -802,15 +802,20 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				highlightObject.highlightedWords = highlightedWords;
 
 				if (color === 'none') {
-					// const highs = this.props.highlights;
-					// const space = highlightStart + highlightedWords;
+					const highs = this.props.highlights;
+					const space = highlightStart + highlightedWords;
 					// // console.log('space', space);
 					// // console.log('highlightStart', highlightStart);
-					//
-					// const highsOverlapped = highs.filter((high) => high.verse_start === firstVerse &&
-					// 	(high.highlight_start <= space && high.highlight_start + high.highlighted_words >= highlightStart));
 
-					// console.log('highsOverlapped', highsOverlapped);
+					const highsToDelete = highs
+						.filter((high) => high.verse_start === firstVerse &&
+							(high.highlight_start <= space && high.highlight_start + high.highlighted_words >= highlightStart))
+						.reduce((a, h) => [...a, h.id], []);
+
+					// console.log('highsToDelete', highsToDelete);
+
+					// should add a confirmation or something here
+					this.props.deleteHighlights({ ids: highsToDelete });
 				} else {
 					// console.log('Tried to add the highlight anyway... -_-', color);
 					this.props.addHighlight({
@@ -1018,6 +1023,7 @@ Text.propTypes = {
 	addBookmark: PropTypes.func,
 	addHighlight: PropTypes.func,
 	goToFullChapter: PropTypes.func,
+	deleteHighlights: PropTypes.func,
 	toggleNotesModal: PropTypes.func,
 	setActiveNotesView: PropTypes.func,
 	toggleInformationModal: PropTypes.func,

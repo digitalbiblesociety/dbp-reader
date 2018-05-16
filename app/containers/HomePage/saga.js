@@ -21,6 +21,7 @@ import {
 	GET_NOTES_HOMEPAGE,
 	GET_COPYRIGHTS,
 	INIT_APPLICATION,
+	DELETE_HIGHLIGHTS,
 } from './constants';
 import {
 	ntCodes,
@@ -40,6 +41,33 @@ import {
 * Overlaps another highlight
 *
 * */
+
+export function* deleteHighlights({ ids, userId, bible, book, chapter }) {
+	// console.log('ids', ids);
+	// console.log('bible', bible);
+	// console.log('userid', userId);
+	const urls = ids.map((id) => `https://api.bible.build/users/${userId}/highlights/${id}?key=${process.env.DBP_API_KEY}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}`);
+	const options = {
+		method: 'DELETE',
+	};
+	try {
+		const res = yield all(urls.map((url) => call(request, url, options)));
+		// console.log(res);
+		if (res.find((r) => r.success)) {
+			yield fork(getHighlights, { bible, book, chapter, userId });
+		}
+	} catch (err) {
+		if (process.env.NODE_ENV === 'development') {
+			console.error('There was an error deleting the highlights', err); // eslint-disable-line no-console
+		} else if (process.env.NODE_ENV === 'production') {
+			// const options = {
+			// 	header: 'POST',
+			// 	body: formData,
+			// };
+			// fetch('https://api.bible.build/error_logging', options);
+		}
+	}
+}
 
 export function* initApplication(props) {
 	const languageISO = props.languageISO;
@@ -842,4 +870,5 @@ export default function* defaultSaga() {
 	yield takeLatest(ADD_BOOKMARK, addBookmark);
 	yield takeLatest(GET_NOTES_HOMEPAGE, getNotesForChapter);
 	yield takeLatest(GET_COPYRIGHTS, getCopyrightSaga);
+	yield takeLatest(DELETE_HIGHLIGHTS, deleteHighlights);
 }
