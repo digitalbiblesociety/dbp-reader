@@ -7,9 +7,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import SvgWrapper from 'components/SvgWrapper';
 // import styled from 'styled-components';
 
 class MyHighlights extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+	highlightIcon(color) {
+		// console.log('color', color);
+		// const colorKey = {
+		// 	'252,230,0,.25': 'yellow',
+		// 	'84,185,72,.25': 'green',
+		// 	'208,105,169,.25': 'pink',
+		// 	'137,103,172,.25': 'purple',
+		// 	'80,165,220,.25': 'blue',
+		// };
+		// return <SvgWrapper className={'icon'} svgid={colorKey[color]} />;
+		return <span className={'color-icon'} style={{ backgroundColor: `rgba(${color})` }} />;
+	}
 	render() {
 		const {
 			highlights,
@@ -17,11 +30,22 @@ class MyHighlights extends React.PureComponent { // eslint-disable-line react/pr
 		} = this.props;
 
 		return highlights.map((highlight) => (
-			<Link to={`/${highlight.bible_id}/${highlight.book_id}/${highlight.chapter}/${highlight.verse_start}`} role="button" tabIndex={0} key={highlight.id} className="list-item">
-				<div className="title-text">
-					<h4 className="title">{getReference(highlight)}</h4>
+			<div className={'highlight-item'}>
+				<Link to={`/${highlight.bible_id}/${highlight.book_id}/${highlight.chapter}/${highlight.verse_start}`} role="button" tabIndex={0} key={highlight.id} className="list-item">
+					<div className="title-text">
+						<h4 className="title">{getReference(highlight)}</h4>
+						<h4>{highlight.bible_id}</h4>
+					</div>
+				</Link>
+				<div className={'edit-color'}>
+					{this.highlightIcon(highlight.highlighted_color)}
+					<span>Edit</span>
 				</div>
-			</Link>
+				<div className={'delete-highlight'}>
+					<SvgWrapper className={'icon'} svgid={'delete'} />
+					<span>Delete</span>
+				</div>
+			</div>
 		));
 	}
 }

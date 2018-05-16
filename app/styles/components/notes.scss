@@ -334,6 +334,58 @@
 .notes .need-to-login .login-text      {@include css4{color:var(--active-color-primary)};cursor:pointer;}
 .notes .need-to-login .login-text:hover{opacity:0.65;}
 
+// Highlight Tab Styles
+.notes {
+  .highlight-item {
+    display: flex;
+    //padding: 10px;
+    align-items: flex-end;
+    justify-content: space-between;
+    height: 54px;
+
+    .list-item {
+      flex-basis: 75%;
+      display: inline-block;
+    }
+
+    .delete-highlight {
+      display: flex;
+      flex-direction: column;
+      font-size: 12px;
+      justify-content: center;
+      flex-basis: 12.5%;
+
+      svg {
+        flex-shrink: 0;
+      }
+    }
+
+    .edit-color {
+      position: relative;
+      font-size: 12px;
+      flex-basis: 12.5%;
+
+      .color-icon:before {
+        // Setting the background color inline because it is based on the highlight objects color field
+        content: "";
+        position: absolute;
+        background-color: inherit;
+        height: 22px;
+        width: 22px;
+        top: -25px;
+        //left: 5px;
+        -webkit-border-radius: 50%;
+        -moz-border-radius: 50%;
+        border-radius: 50%;
+
+        @include css4 {
+          border: 1px solid var(--default-text-color);
+        }
+      }
+    }
+  }
+}
+
 // Keyframe animations
 @keyframes rotate90deg {
   0%   {transform:rotate(0turn);}
