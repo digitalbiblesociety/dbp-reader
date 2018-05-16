@@ -27,6 +27,8 @@ class MyHighlights extends React.PureComponent { // eslint-disable-line react/pr
 		const {
 			highlights,
 			getReference,
+			deleteHighlights,
+			updateHighlight,
 		} = this.props;
 
 		return highlights.map((highlight) => (
@@ -37,12 +39,12 @@ class MyHighlights extends React.PureComponent { // eslint-disable-line react/pr
 						<h4>{highlight.bible_id}</h4>
 					</div>
 				</Link>
-				<div className={'edit-color'}>
+				<div className={'edit-color'} tabIndex={0} role={'button'} onClick={() => updateHighlight({ id: highlight.id, color: highlight.highlighted_color })}>
 					{this.highlightIcon(highlight.highlighted_color)}
 					<span>Edit</span>
 				</div>
 				<div className={'delete-highlight'}>
-					<SvgWrapper className={'icon'} svgid={'delete'} />
+					<SvgWrapper className={'icon'} svgid={'delete'} onClick={() => deleteHighlights({ ids: [highlight.id], bible: highlight.bible_id, book: highlight.book_id, chapter: highlight.chapter })} />
 					<span>Delete</span>
 				</div>
 			</div>
@@ -53,6 +55,8 @@ class MyHighlights extends React.PureComponent { // eslint-disable-line react/pr
 MyHighlights.propTypes = {
 	highlights: PropTypes.array,
 	getReference: PropTypes.func,
+	deleteHighlights: PropTypes.func,
+	updateHighlight: PropTypes.func,
 };
 
 export default MyHighlights;

@@ -112,6 +112,8 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 			pageSizeBookmark,
 			totalPagesBookmark,
 			activePageBookmark,
+			deleteHighlights,
+			updateHighlight,
 		} = this.props;
 		let filteredPageData = [];
 
@@ -159,7 +161,12 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 						) : null
 					}
 					{
-						sectionType === 'highlights' ? <MyHighlights highlights={filteredPageData} getReference={this.getHighlightReference} /> : null
+						sectionType === 'highlights' ? <MyHighlights
+							highlights={filteredPageData}
+							getReference={this.getHighlightReference}
+							deleteHighlights={deleteHighlights}
+							updateHighlight={updateHighlight}
+						/> : null
 					}
 					{
 						sectionType === 'bookmarks' ? <MyBookmarks bookmarks={filteredPageData.filter((n) => n.bookmark)} getFormattedNoteDate={this.getFormattedNoteDate} getNoteReference={this.getNoteReference} /> : null
@@ -203,6 +210,8 @@ MyNotes.propTypes = {
 	totalPagesBookmark: PropTypes.number,
 	activePageBookmark: PropTypes.number,
 	pageSelectorState: PropTypes.bool.isRequired,
+	deleteHighlights: PropTypes.func,
+	updateHighlight: PropTypes.func,
 };
 
 export default MyNotes;
