@@ -27,13 +27,34 @@ export function* getChapterForNote({ note }) {
 	const bibleId = note.bible_id;
 	const bookId = note.book_id;
 	// Need to not use the bible id here
-	const reqUrl = `https://api.bible.build/bibles/${bibleId}/${bookId}/${chapter}?bucket=${process.env.DBP_BUCKET_ID}&key=${process.env.DBP_API_KEY}&v=4&book_id=${bookId}&chapter_id=${chapter}`;
-
+	// const reqUrl = `https://api.bible.build/bibles/${bibleId}/${bookId}/${chapter}?bucket=${process.env.DBP_BUCKET_ID}&key=${process.env.DBP_API_KEY}&v=4&book_id=${bookId}&chapter_id=${chapter}`;
+	const bibleUrl = `https://api.bible.build/bibles/${bibleId}?bucket=${process.env.DBP_BUCKET_ID}&key=${process.env.DBP_API_KEY}&v=4`;
+	// Need to get the bible filesets
 	try {
-		const response = yield call(request, reqUrl);
+		const response = yield call(request, bibleUrl);
+		// console.log('bibles response', response);
+		const filesets = response.data.filesets.filter((f) => f.bucket_id === 'dbp-dev' && f.set_type_code !== 'app' && (f.set_type_code === 'text_plain' || f.set_type_code === 'text_format'));
+		const hasText = !!filesets.length;
+		const plain = filesets.find((f) => f.set_type_code === 'text_plain');
+		let text = [];
+
+		if (hasText) {
+			// console.log('hasText', hasText);
+			if (plain) {
+				// console.log('has plain', plain);
+				const res = yield call(request, `https://api.bible.build/bibles/filesets/${plain.id}/${bookId}/${chapter}?bucket=${process.env.DBP_BUCKET_ID}&key=${process.env.DBP_API_KEY}&v=4&book_id=${bookId}&chapter_id=${chapter}`);
+				text = res.data;
+			} else {
+				// Todo: Implement a version for getting the formatted text and parsing it
+				// const format = filesets.find((f) => f.set_type_code === 'text_format');
+				// const res = yield call(request, `https://api.bible.build/bibles/filesets/${format.id}?bucket=${process.env.DBP_BUCKET_ID}&key=${process.env.DBP_API_KEY}&v=4&book_id=${bookId}&chapter_id=${chapter}`);
+				//
+				// text = res.data;
+			}
+		}
 		// console.log(response);
 
-		yield put({ type: LOAD_CHAPTER_FOR_NOTE, text: response.data.filter((v) => v.verse_start <= note.verse_end && v.verse_start >= note.verse_start) });
+		yield put({ type: LOAD_CHAPTER_FOR_NOTE, text: text.filter((v) => v.verse_start <= note.verse_end && v.verse_start >= note.verse_start) });
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error('error getting chapter for note', err); // eslint-disable-line no-console
@@ -43,18 +64,19 @@ export function* getChapterForNote({ note }) {
 
 export function* updateNote({ userId, data, noteId }) {
 	const requestUrl = `https://api.bible.build/users/${userId}/notes/${noteId}?key=${process.env.DBP_API_KEY}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}`;
-	const formData = new FormData();
-	// Todo: Api does not seem to handle the updating of the note
-	Object.entries(data).forEach((item) => formData.set(item[0], item[1]));
+	// const formData = new FormData();
+	// Api does not seem to handle the updating of the note when using form-data - currently the api wants x-www-form-urlencoded
+	// Object.entries(data).forEach((item) => formData.set(item[0], item[1]));
+	const urlWithData = Object.entries(data).reduce((acc, item) => acc.concat('&', item[0], '=', item[1]), requestUrl);
 	// formData.append('project_id', process.env.NOTES_PROJECT_ID);
 
 	const options = {
-		body: formData,
+		// body: formData,
 		method: 'PUT',
 	};
 	// console.log('updating note with', data, '\nfor this id', userId);
 	try {
-		const response = yield call(request, requestUrl, options);
+		const response = yield call(request, urlWithData, options);
 		// console.log('update user note response', response);
 		if (response.success) {
 			yield put({ type: ADD_NOTE_SUCCESS, response });
