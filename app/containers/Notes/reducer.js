@@ -64,9 +64,13 @@ function notesReducer(state = initialState, action) {
 	case SET_PAGE_SIZE:
 		// console.log('Setting page size', action);
 		if (action.params.sectionType === 'notes') {
-			return state.set('pageSize', action.params.limit);
+			return state
+				.set('activePage', 1)
+				.set('pageSize', action.params.limit);
 		}
-		return state.set('pageSizeBookmark', action.params.limit);
+		return state
+			.set('activePage', 1)
+			.set('pageSizeBookmark', action.params.limit);
 		// Todo: Move this to local state
 	case TOGGLE_VERSE_TEXT:
 		return state.set('isVerseTextVisible', !state.get('isVerseTextVisible'));

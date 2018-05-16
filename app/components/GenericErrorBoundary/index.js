@@ -6,11 +6,11 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
+// import styled from 'styled-components';
 
-const Container = styled.div`
-	padding:15px;
-`;
+// const Container = styled.div`
+// 	padding:15px;
+// `;
 
 // import { FormattedMessage } from 'react-intl';
 // import messages from './messages';
@@ -31,14 +31,14 @@ class GenericErrorBoundary extends React.Component {
 		if (this.state.errorInfo) {
 			// Error path
 			return (
-				<Container>
+				<div>
 					<h2>{`Something went wrong in the ${this.props.affectedArea} component. Please try refreshing the page, if that does not work send an email to Jesse and tell him what the error message was so he can fix it.`}</h2>
 					<details style={{ whiteSpace: 'pre-wrap' }}>
 						{this.state.error && this.state.error.toString()}
 						<br />
 						{this.state.errorInfo.componentStack}
 					</details>
-				</Container>
+				</div>
 			);
 		}
 		// Normally, just render children

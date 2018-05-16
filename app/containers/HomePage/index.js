@@ -692,7 +692,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					{
 						isNotesModalActive ? (
 							<FadeTransition classNames="slide-from-right" in={isNotesModalActive}>
-								<Notes toggleProfile={this.toggleProfile} toggleNotesModal={this.toggleNotesModal} openView={activeNotesView} />
+								<Notes activeBookId={activeBookId} activeChapter={activeChapter} toggleProfile={this.toggleProfile} toggleNotesModal={this.toggleNotesModal} openView={activeNotesView} />
 							</FadeTransition>
 						) : null
 					}
