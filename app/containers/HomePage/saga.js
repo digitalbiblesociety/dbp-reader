@@ -206,7 +206,6 @@ export function* getBibleFromUrl({ bibleId: oldBibleId, bookId: oldBookId, chapt
 	try {
 		const response = yield call(request, requestUrl);
 		// let filesets;
-		// // todo This can be removed once the filesets have been added to the default route
 		// if (!response.data.filesets) {
 		// 	const bibleUrl = `https://api.bible.build/bibles?bucket=${process.env.DBP_BUCKET_ID}&key=${process.env.DBP_API_KEY}&v=4&language_code=${response.data.iso}`;
 		// 	const allBibles = yield call(request, bibleUrl);
