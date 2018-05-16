@@ -43,18 +43,19 @@ export function* getChapterForNote({ note }) {
 
 export function* updateNote({ userId, data, noteId }) {
 	const requestUrl = `https://api.bible.build/users/${userId}/notes/${noteId}?key=${process.env.DBP_API_KEY}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}`;
-	const formData = new FormData();
-	// Todo: Api does not seem to handle the updating of the note
-	Object.entries(data).forEach((item) => formData.set(item[0], item[1]));
+	// const formData = new FormData();
+	// Api does not seem to handle the updating of the note when using form-data - currently the api wants x-www-form-urlencoded
+	// Object.entries(data).forEach((item) => formData.set(item[0], item[1]));
+	const urlWithData = Object.entries(data).reduce((acc, item) => acc.concat('&', item[0], '=', item[1]), requestUrl);
 	// formData.append('project_id', process.env.NOTES_PROJECT_ID);
 
 	const options = {
-		body: formData,
+		// body: formData,
 		method: 'PUT',
 	};
 	// console.log('updating note with', data, '\nfor this id', userId);
 	try {
-		const response = yield call(request, requestUrl, options);
+		const response = yield call(request, urlWithData, options);
 		// console.log('update user note response', response);
 		if (response.success) {
 			yield put({ type: ADD_NOTE_SUCCESS, response });
