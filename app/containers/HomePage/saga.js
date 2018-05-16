@@ -220,8 +220,14 @@ export function* getBibleFromUrl({ bibleId: oldBibleId, bookId: oldBookId, chapt
 			// I probably will want to use 'yield all' for getting the audio and text so they can be run async
 			const bible = response.data;
 			const books = bible.books; // Need to ensure that I have the books here
+			let hasMatt = false;
 			// console.log('books in new bible', books);
-			const activeBook = books.find((b) => b.book_id === bookId);
+			const activeBook = books.find((b) => {
+				if (b.book_id === 'MAT') {
+					hasMatt = true;
+				}
+				return b.book_id === bookId;
+			});
 			// Not exactly sure why I am checking for an active book here
 			let activeChapter = activeBook ? (parseInt(chapter, 10) || 1) : 1;
 			// console.log('active book', activeBook);
@@ -246,7 +252,10 @@ export function* getBibleFromUrl({ bibleId: oldBibleId, bookId: oldBookId, chapt
 			// console.log('activeChapter', activeChapter);
 			// console.log('activeBook.chapters[0]', activeBook.chapters[0]);
 			// const activeChapter = activeBook ? (parseInt(chapter, 10) || 1) : 1;
-			const activeBookId = activeBook ? activeBook.book_id : get(books, [0, 'book_id'], '');
+			// Nesting a ternary here because it keeps me from needing more variables and an if statement
+				// If there wasn't an activeBook for the bookId given then check for if the resource has Matthew
+				// If it has Matthew then use the bookId for that, otherwise just use the first bookId available
+			const activeBookId = activeBook ? activeBook.book_id : (hasMatt ? 'MAT' : get(books, [0, 'book_id'], '')); // eslint-disable-line no-nested-ternary
 			const activeBookName = activeBook ? activeBook.name_short : get(books, [0, 'name_short'], '');
 			const filesets = response.data.filesets.filter((f) => f.bucket_id === 'dbp-dev' && f.set_type_code !== 'app');
 			// calling a generator that will handle the api requests for getting text
