@@ -7,10 +7,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import matchSorter from 'match-sorter';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import SvgWrapper from 'components/SvgWrapper';
 import Pagination from 'components/Pagination';
 import PageSizeSelector from 'components/PageSizeSelector';
+import MyHighlights from 'components/MyHighlights';
+import MyBookmarks from 'components/MyBookmarks';
 // import styled from 'styled-components';
 class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	state = {
@@ -42,7 +44,7 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 		}
 	}
 
-	getNoteReference(listItem) {
+	getNoteReference = (listItem) => {
 		// Uses the title if it is there
 		if (listItem.tags && listItem.tags.find((tag) => tag.type === 'title')) {
 			return listItem.tags.find((tag) => tag.type === 'title').value;
@@ -58,7 +60,7 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 		return `${vernacularNamesObject[listItem.book_id]} ${listItem.chapter}:${verseRef} - (${listItem.bible_id})`;
 	}
 
-	getFormattedNoteDate(timestamp) {
+	getFormattedNoteDate = (timestamp) => {
 		const date = timestamp.slice(0, 10).split('-');
 
 		return `${date[1]}.${date[2]}.${date[0].slice(2)}`;
@@ -157,24 +159,10 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 						) : null
 					}
 					{
-						sectionType === 'highlights' ? filteredPageData.map((highlight) => (
-							<Link to={`/${highlight.bible_id}/${highlight.book_id}/${highlight.chapter}/${highlight.verse_start}`} role="button" tabIndex={0} key={highlight.id} className="list-item">
-								<div className="title-text">
-									<h4 className="title">{this.getHighlightReference(highlight)}</h4>
-								</div>
-							</Link>
-						)) : null
+						sectionType === 'highlights' ? <MyHighlights highlights={filteredPageData} getReference={this.getHighlightReference} /> : null
 					}
 					{
-						sectionType === 'bookmarks' ? (
-							filteredPageData.filter((n) => n.bookmark)).map((listItem) => (
-								<Link to={`/${listItem.bible_id}/${listItem.book_id}/${listItem.chapter}/${listItem.verse_start}`} role="button" tabIndex={0} key={listItem.id} className="list-item">
-									<div className="date">{this.getFormattedNoteDate(listItem.created_at)}</div>
-									<div className="title-text">
-										<h4 className="title">{this.getNoteReference(listItem)}</h4>
-									</div>
-								</Link>
-						)) : null
+						sectionType === 'bookmarks' ? <MyBookmarks bookmarks={filteredPageData.filter((n) => n.bookmark)} getFormattedNoteDate={this.getFormattedNoteDate} getNoteReference={this.getNoteReference} /> : null
 					}
 				</section>
 				<div className="pagination">
