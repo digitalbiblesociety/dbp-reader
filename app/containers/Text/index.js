@@ -662,6 +662,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 						// console.log(aParent.childNodes[0].isSameNode(aNode));
 						const aIndex = getFormattedChildIndex(aParent, aNode);
 						const eIndex = getFormattedChildIndex(aParent, eNode);
+						// console.log('a node', aNode, 'e node', eNode);
 						// console.log('a index', aIndex, 'e index', eIndex);
 						// console.log('a parent childNodes', aParent.childNodes);
 
@@ -789,6 +790,10 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				// 	highlightStart,
 				// 	highlightedWords,
 				// });
+				// If the color is none then we are assuming that the user wants whatever they highlighted to be removed
+				// We could either remove every highlight that was overlapped by this one, or we could try to update all
+				// of those highlights and remove the sections of them that were overlapped
+
 				highlightObject.book = this.props.activeBookId;
 				highlightObject.chapter = this.props.activeChapter;
 				highlightObject.verseStart = firstVerse;
@@ -796,15 +801,33 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				highlightObject.highlightStart = highlightStart;
 				highlightObject.highlightedWords = highlightedWords;
 
-				this.props.addHighlight({
-					book: this.props.activeBookId,
-					chapter: this.props.activeChapter,
-					verseStart: firstVerse,
-					color,
-					highlightStart,
-					highlightedWords,
-					reference: this.getReference(firstVerse, lastVerse),
-				});
+				if (color === 'none') {
+					const highs = this.props.highlights;
+					const space = highlightStart + highlightedWords;
+					// // console.log('space', space);
+					// // console.log('highlightStart', highlightStart);
+
+					const highsToDelete = highs
+						.filter((high) => high.verse_start === firstVerse &&
+							(high.highlight_start <= space && high.highlight_start + high.highlighted_words >= highlightStart))
+						.reduce((a, h) => [...a, h.id], []);
+
+					// console.log('highsToDelete', highsToDelete);
+
+					// should add a confirmation or something here
+					this.props.deleteHighlights({ ids: highsToDelete });
+				} else {
+					// console.log('Tried to add the highlight anyway... -_-', color);
+					this.props.addHighlight({
+						book: this.props.activeBookId,
+						chapter: this.props.activeChapter,
+						verseStart: firstVerse,
+						color,
+						highlightStart,
+						highlightedWords,
+						reference: this.getReference(firstVerse, lastVerse),
+					});
+				}
 			}
 		} catch (err) {
 			if (process.env.NODE_ENV === 'development') {
@@ -1000,6 +1023,7 @@ Text.propTypes = {
 	addBookmark: PropTypes.func,
 	addHighlight: PropTypes.func,
 	goToFullChapter: PropTypes.func,
+	deleteHighlights: PropTypes.func,
 	toggleNotesModal: PropTypes.func,
 	setActiveNotesView: PropTypes.func,
 	toggleInformationModal: PropTypes.func,

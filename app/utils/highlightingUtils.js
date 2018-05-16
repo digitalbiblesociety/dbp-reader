@@ -1,3 +1,16 @@
+const preorderTraverse = (node, array) => {
+	if (!node) {
+		return array;
+	}
+	[...node.childNodes].forEach((child) => {
+		array.push(child);
+		array = preorderTraverse(child, array); // eslint-disable-line no-param-reassign
+	});
+	// array = preorderTraverse(node.left, array);
+	// array = preorderTraverse(node.right, array);
+	return array;
+};
+
 const getFormattedParentVerseNumber = (node, verseNumber) => {
 	// Require both parameters -_- type coercion...
 	if (!node || (!verseNumber && verseNumber !== 0)) {
@@ -44,25 +57,39 @@ const getFormattedParentVerse = (node) => {
 };
 
 const getFormattedChildIndex = (parent, child) => {
+	// if (parent.isSameNode(child)) {
+	// 	return index;
+	// }
 	if (!parent || !child) {
 		return null;
 	}
+	const preorderArray = preorderTraverse(parent, []);
+	// console.log('preorder array', preorderArray);
+	return preorderArray.indexOf(child);
+	// console.log('childIndex', childIndex);
 	// default to -1 to simulate default indexOf
-	let childIndex = -1;
-	let newParent = parent;
-
-	// While there is only one childNode continue iterating
-	while (newParent.childNodes.length === 1 && !(child.isSameNode(newParent))) {
-		newParent = parent.childNodes[0];
-	}
-
-	[...newParent.childNodes].forEach((node, i) => {
-		if (node.isSameNode(child) || node.contains(child)) {
-			childIndex = i;
-		}
-	});
-
-	return childIndex;
+	// let childIndex = index || -1;
+	// let newParent = parent;
+	// console.log('parent in func', parent);
+	// // While there is only one childNode continue iterating
+	// while (newParent.childNodes.length === 1 && !(child.isSameNode(newParent))) {
+	// 	newParent = parent.childNodes[0];
+	// }
+	// console.log('new parent in func', newParent);
+	// // Once I have reached a level where there is more than one child
+	// [...newParent.childNodes].forEach((node, i) => {
+	// 	// Find the index of the child given within those children
+	// 	if (node.isSameNode(child) || node.contains(child)) {
+	// 		childIndex = i;
+	// 	}
+	// });
+	// let parentIndex = 0;
+	// check if there is more than one child
+	// for every child of the parent
+	// check each of its children to see if one of them matches
+	// keep increasing childIndex until the node is found
+	// using for of ... because I need to be able to return out of it.
+	// return childIndex;
 };
 
 const getPlainParentVerse = (node, verseNumber) => {

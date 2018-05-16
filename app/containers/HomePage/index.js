@@ -62,6 +62,7 @@ import textSaga from 'containers/TextSelection/saga';
 import { getBookmarksForChapter, addBookmark } from 'containers/Notes/actions';
 import {
 	addHighlight,
+	deleteHighlights,
 	getBooks,
 	getNotes,
 	getChapterText,
@@ -567,6 +568,8 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 
 	addHighlight = (props) => this.props.dispatch(addHighlight({ ...props, bible: this.props.homepage.activeTextId, userId: this.props.userId }))
 
+	deleteHighlights = (props) => this.props.dispatch(deleteHighlights({ ...props, bible: this.props.homepage.activeTextId, userId: this.props.userId, book: this.props.homepage.activeBookId, chapter: this.props.homepage.activeChapter }))
+
 	toggleFirstLoadForTextSelection = () => this.props.homepage.firstLoad && this.props.dispatch(toggleFirstLoadForTextSelection())
 
 	toggleProfile = () => this.props.dispatch(toggleProfile())
@@ -742,6 +745,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					prevChapter={this.getPrevChapter}
 					setActiveNote={this.setActiveNote}
 					goToFullChapter={this.goToFullChapter}
+					deleteHighlights={this.deleteHighlights}
 					toggleNotesModal={this.toggleNotesModal}
 					setActiveNotesView={this.setActiveNotesView}
 					toggleInformationModal={this.toggleInformationModal}
