@@ -789,6 +789,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				// 	color,
 				// 	highlightStart,
 				// 	highlightedWords,
+				// 	reference: this.getReference(firstVerse, lastVerse),
 				// });
 				// If the color is none then we are assuming that the user wants whatever they highlighted to be removed
 				// We could either remove every highlight that was overlapped by this one, or we could try to update all
@@ -817,7 +818,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 					// should add a confirmation or something here
 					this.props.deleteHighlights({ ids: highsToDelete });
 				} else {
-					// console.log('Tried to add the highlight anyway... -_-', color);
+					// console.log('Tried to add the highlight anyway... -_-');
 					this.props.addHighlight({
 						book: this.props.activeBookId,
 						chapter: this.props.activeChapter,

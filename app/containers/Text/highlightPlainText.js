@@ -12,6 +12,11 @@ const createHighlights = (highlights, arrayOfVerseObjects) => {
 		if (a.verse_start < b.verse_start) return -1;
 		if (a.verse_start > b.verse_start) return 1;
 		if (a.verse_start === b.verse_start) {
+			if (a.highlight_start === b.highlight_start) {
+				// I want the newest (highest id) - Not sure this is helping anything...
+				if (a.id > b.id) return -1;
+				if (a.id < b.id) return 1;
+			}
 			if (a.highlight_start < b.highlight_start) return -1;
 			if (a.highlight_start > b.highlight_start) return 1;
 		}
@@ -108,11 +113,12 @@ const createHighlights = (highlights, arrayOfVerseObjects) => {
 					nh &&
 					nh.highlight_start <= ((h.highlighted_words + h.highlight_start) - 1) &&
 					h.highlighted_color === nh.highlighted_color &&
+					false &&
 					(h.highlight_start !== nh.highlight_start && h.highlighted_words !== nh.highlighted_words)
 				) {
 					// check if the furthest highlighted character for this highlight is greater than the furthest character for the next highlight
 					// console.log('Next highlight start is lower than the end of this one is the same color');
-					// Todo: The function breaks here if there is one highlight overlapping multiple other highlights
+					// Todo: Check to make sure that I do not need this case. I am currently not using it and everything seems fine...
 					if (((h.highlighted_words + h.highlight_start) - 1) >= ((nh.highlight_start + nh.highlighted_words) - 1)) {
 						// If the end of this highlight is greater than the end of the next highlight
 						// the next highlight will be contained within this highlight and doesn't need to be accounted for
@@ -137,7 +143,7 @@ const createHighlights = (highlights, arrayOfVerseObjects) => {
 				} else if (
 					nh &&
 					nh.highlight_start <= ((h.highlighted_words + h.highlight_start) - 1) &&
-					h.highlighted_color !== nh.highlighted_color &&
+					// h.highlighted_color !== nh.highlighted_color &&
 					(h.highlight_start !== nh.highlight_start && h.highlighted_words !== nh.highlighted_words)
 				) {
 					// console.log('Next highlight is a different color and is overlapped by this one');
