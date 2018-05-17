@@ -252,7 +252,7 @@ describe('highlightPlainText', () => {
 
 		expect(highlightPlainText(sampleHighlights, sampleText)).toEqual(result);
 	});
-	it('Case 8: It should apply a newer highlight over the top of two pre-existing highlights', () => {
+	it('Case 8: It should apply a newer highlight over the top of two pre-existing highlights where the new highlight starts at the same index as the first one and ends at the same index of the second', () => {
 		const sampleHighlights = [
 			{
 				id: 262,
@@ -304,5 +304,168 @@ describe('highlightPlainText', () => {
 
 		expect(highlightPlainText(sampleHighlights, sampleText)).toEqual(result);
 		// expect(false).toBe(true);
+	});
+	it('Case 9: It should apply a highlight contained within an older highlight where the new highlight is on top of the old one and they are the same color', () => {
+		const sampleHighlights = [
+			{ bible_id: 'ENGESV', reference: 'Matthew 1:1', chapter: 1, book_id: 'MAT', highlighted_color: '84,185,72,.25', highlight_start: 0, verse_start: 1, id: 224, highlighted_words: 41 },
+			{ bible_id: 'ENGESV', reference: 'Matthew 1:1', chapter: 1, book_id: 'MAT', highlighted_color: '84,185,72,.25', highlight_start: 4, verse_start: 1, id: 500, highlighted_words: 30 },
+		];
+		const sampleText = [
+			{
+				book_id: 'MAT',
+				book_name: 'Matthew',
+				book_name_alt: 'Matthew',
+				chapter: 1,
+				chapter_alt: '1',
+				verse_start: 1,
+				verse_start_alt: '1',
+				verse_end: 1,
+				verse_end_alt: '1',
+				verse_text: 'The book of the genealogy of Jesus Christ, the son of David, the son of Abraham.',
+			},
+		];
+		const result = [
+			{
+				book_id: 'MAT',
+				book_name: 'Matthew',
+				book_name_alt: 'Matthew',
+				chapter: 1,
+				chapter_alt: '1',
+				verse_start: 1,
+				verse_start_alt: '1',
+				verse_end: 1,
+				verse_end_alt: '1',
+				hasHighlight: true,
+				verse_text: `<em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[0].highlighted_color}),rgba(${sampleHighlights[0].highlighted_color}))">The <em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[1].highlighted_color}),rgba(${sampleHighlights[1].highlighted_color}))">book of the genealogy of Jesus</em> Christ</em>, the son of David, the son of Abraham.`,
+			},
+		];
+
+		expect(highlightPlainText(sampleHighlights, sampleText)).toEqual(result);
+	});
+	it('Case 10: It should apply a highlight contained within an older highlight where the new highlight is on top of the old one and they are NOT the same color', () => {
+		const sampleHighlights = [
+			{ bible_id: 'ENGESV', reference: 'Matthew 1:1', chapter: 1, book_id: 'MAT', highlighted_color: '84,185,72,.25', highlight_start: 0, verse_start: 1, id: 224, highlighted_words: 41 },
+			{ bible_id: 'ENGESV', reference: 'Matthew 1:1', chapter: 1, book_id: 'MAT', highlighted_color: '17,170,255,.6', highlight_start: 4, verse_start: 1, id: 500, highlighted_words: 30 },
+		];
+		const sampleText = [
+			{
+				book_id: 'MAT',
+				book_name: 'Matthew',
+				book_name_alt: 'Matthew',
+				chapter: 1,
+				chapter_alt: '1',
+				verse_start: 1,
+				verse_start_alt: '1',
+				verse_end: 1,
+				verse_end_alt: '1',
+				verse_text: 'The book of the genealogy of Jesus Christ, the son of David, the son of Abraham.',
+			},
+		];
+		const result = [
+			{
+				book_id: 'MAT',
+				book_name: 'Matthew',
+				book_name_alt: 'Matthew',
+				chapter: 1,
+				chapter_alt: '1',
+				verse_start: 1,
+				verse_start_alt: '1',
+				verse_end: 1,
+				verse_end_alt: '1',
+				hasHighlight: true,
+				verse_text: `<em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[0].highlighted_color}),rgba(${sampleHighlights[0].highlighted_color}))">The <em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[1].highlighted_color}),rgba(${sampleHighlights[1].highlighted_color}))">book of the genealogy of Jesus</em> Christ</em>, the son of David, the son of Abraham.`,
+			},
+		];
+		const sampleHighlights2 = [
+			{ bible_id: 'ENGESV', reference: 'Matthew 1:13', chapter: 1, book_id: 'MAT', highlighted_color: '84,185,72,.25', highlight_start: 4, verse_start: 13, id: 501, highlighted_words: 30 },
+			{ bible_id: 'ENGESV', reference: 'Matthew 1:13', chapter: 1, book_id: 'MAT', highlighted_color: '80,165,220,.25', highlight_start: 4, verse_start: 13, id: 502, highlighted_words: 10 },
+		];
+		const sampleText2 = [
+			{
+				book_id: 'MAT',
+				book_name: 'Matthew',
+				book_name_alt: 'Matthew',
+				chapter: 1,
+				chapter_alt: '1',
+				verse_start: 13,
+				verse_start_alt: '13',
+				verse_end: 13,
+				verse_end_alt: '13',
+				verse_text: 'and Zerubbabel the father of Abiud, and Abiud the father of Eliakim, and Eliakim the father of Azor,',
+			},
+		];
+		const result2 = [
+			{
+				book_id: 'MAT',
+				book_name: 'Matthew',
+				book_name_alt: 'Matthew',
+				chapter: 1,
+				chapter_alt: '1',
+				verse_start: 13,
+				verse_start_alt: '13',
+				verse_end: 13,
+				verse_end_alt: '13',
+				hasHighlight: true,
+				verse_text: `and <em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights2[0].highlighted_color}),rgba(${sampleHighlights2[0].highlighted_color}))"><em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights2[1].highlighted_color}),rgba(${sampleHighlights2[1].highlighted_color}))">Zerubbabel</em> the father of Abiud</em>, and Abiud the father of Eliakim, and Eliakim the father of Azor,`,
+			},
+		];
+
+		expect(highlightPlainText(sampleHighlights, sampleText)).toEqual(result);
+		expect(highlightPlainText(sampleHighlights2, sampleText2)).toEqual(result2);
+	});
+	it('Case 11: It should apply a newer highlight over the top of two pre-existing highlights where the new highlight does not start at the same index as the first one and does not end at the same index of the second', () => {
+		const sampleHighlights = [
+			{
+				id: 262,
+				bible_id: 'ENGESV',
+				book_id: 'PSA',
+				chapter: 18,
+				verse_start: 12,
+				highlight_start: 3,
+				highlighted_words: 8,
+				highlighted_color: '17,170,255,.6',
+			},
+			{
+				id: 263,
+				bible_id: 'ENGESV',
+				book_id: 'PSA',
+				chapter: 18,
+				verse_start: 12,
+				highlight_start: 11,
+				highlighted_words: 10,
+				highlighted_color: '85,187,68,.6',
+			},
+			{
+				id: 264,
+				bible_id: 'ENGESV',
+				book_id: 'PSA',
+				chapter: 18,
+				verse_start: 12,
+				highlight_start: 0,
+				highlighted_words: 28,
+				highlighted_color: '221,102,170,.6',
+			},
+		];
+		const sampleText = chapterText.data.slice(11, 12);
+		const result = [
+			{
+				book_id: 'PSA',
+				book_name: 'Psalm',
+				book_name_alt: 'Psalm',
+				chapter: 18,
+				chapter_alt: '18',
+				verse_start: 12,
+				verse_start_alt: '12',
+				verse_end: 12,
+				verse_end_alt: '12',
+				hasHighlight: true,
+				verse_text: `<em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[2].highlighted_color}),rgba(${sampleHighlights[2].highlighted_color}))">Out<em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[0].highlighted_color}),rgba(${sampleHighlights[0].highlighted_color}))"> of the </em><em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[1].highlighted_color}),rgba(${sampleHighlights[1].highlighted_color}))">brightness</em> before</em> him hailstones and coals of fire broke through his clouds.`,
+			},
+		];
+
+		expect(highlightPlainText(sampleHighlights, sampleText)).toEqual(result);
+	});
+	it('Case 12: Should handle applying a highlight that spans mutliple verses and starts at the same index as a differently colored highlight', () => {
+		expect('tests to be defined').toBe(true);
 	});
 });

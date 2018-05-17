@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 import FacebookAuthentication from 'containers/FacebookAuthentication';
 import GoogleAuthentication from 'containers/GoogleAuthentication';
 import Checkbox from 'components/Checkbox';
+import checkEmail from 'utils/checkEmailForValidity';
 // import SvgWrapper from 'components/SvgWrapper';
 // import styled from 'styled-components';
 // import { FormattedMessage } from 'react-intl';
@@ -117,13 +118,7 @@ class SignUp extends React.PureComponent {
 		this.setState({ wantsUpdates: e.target.checked });
 	}
 
-	checkValidEmail = () => {
-		const { email } = this.state;
-		const validEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email); // eslint-disable-line no-useless-escape
-		// console.log('is valid email', validEmail);
-
-		return validEmail;
-	}
+	checkValidEmail = () => checkEmail(this.state.email)
 
 	checkValidPassword = () => {
 		const { confirmPassword, password } = this.state;

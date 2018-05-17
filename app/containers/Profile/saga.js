@@ -11,9 +11,11 @@ import {
 	SOCIAL_MEDIA_LOGIN,
 	SOCIAL_MEDIA_LOGIN_SUCCESS,
 	DELETE_USER,
-	// RESET_PASSWORD,
+	RESET_PASSWORD,
 	UPDATE_EMAIL,
 	// UPDATE_PASSWORD,
+	RESET_PASSWORD_SUCCESS,
+	RESET_PASSWORD_ERROR,
 	UPDATE_USER_INFORMATION,
 } from './constants';
 
@@ -32,7 +34,7 @@ export function* sendSignUpForm({ password, email, firstName, lastName, wantsUpd
 		method: 'POST',
 		body: data,
 	};
-	// Todo: Make sure that the api is returning the appropriate data when this call is successful
+
 	try {
 		const response = yield call(request, requestUrl, options);
 
@@ -185,19 +187,36 @@ export function* updateUserInformation({ userId, profile }) {
 // 	}
 // }
 
-// export function* resetPassword() {
-// 	const requestUrl = `https://api.bible.build/?key=${process.env.DBP_API_KEY}&v=4&pretty`;
+export function* resetPassword({ email }) {
+	const requestUrl = `https://api.bible.build/users/reset?key=${process.env.DBP_API_KEY}&v=4&pretty`;
 
-// 	try {
-// 		// const response = yield call(request, requestUrl);
-// 		//
-// 		// yield put('action', response);
-// 	} catch (err) {
-// 		if (process.env.NODE_ENV === 'development') {
-// 			console.error(err); // eslint-disable-line no-console
-// 		}
-// 	}
-// }
+	const formData = new FormData();
+	formData.append('email', email);
+
+	const options = {
+		body: formData,
+		method: 'POST',
+	};
+
+	try {
+		const response = yield call(request, requestUrl, options);
+
+		if (response.error) {
+			// console.log('Failure', response);
+
+			yield put({ type: RESET_PASSWORD_ERROR, message: response.error.message });
+		} else {
+			// console.log('Success', response);
+
+			yield put({ type: RESET_PASSWORD_SUCCESS, message: response.message || 'Thank you! An email with instructions has been sent to your account.' });
+		}
+	} catch (err) {
+		if (process.env.NODE_ENV === 'development') {
+			console.error(err); // eslint-disable-line no-console
+		}
+		yield put({ type: RESET_PASSWORD_ERROR, message: 'There was a problem sending your email. Please try again. ' });
+	}
+}
 
 export function* deleteUser({ userId }) {
 	// console.log('in delete user with id', userId);
@@ -259,7 +278,7 @@ export default function* defaultSaga() {
 	yield takeLatest(SEND_SIGNUP_FORM, sendSignUpForm);
 	yield takeLatest(SEND_LOGIN_FORM, sendLoginForm);
 	// yield takeLatest(UPDATE_PASSWORD, updatePassword);
-	// yield takeLatest(RESET_PASSWORD, resetPassword);
+	yield takeLatest(RESET_PASSWORD, resetPassword);
 	yield takeLatest(DELETE_USER, deleteUser);
 	yield takeLatest(UPDATE_USER_INFORMATION, updateUserInformation);
 	yield takeLatest(UPDATE_EMAIL, updateEmail);

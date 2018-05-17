@@ -641,7 +641,6 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			// console.log('a text', anchorText);
 			// console.log('a offset', anchorOffset);
 			// console.log('first verse', firstVerse, 'last verse', lastVerse);
-			// Todo: May need to also implement this for plain text...
 			if (this.props.formattedSource.main) {
 				if (aText !== focusText) {
 					// if nodes are different
@@ -695,18 +694,51 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 						}
 					}
 				}
-				// console.log('atext', aText);
-				// console.log('focusText', focusText);
-				// console.log('this.state.selectedText', this.state.selectedText);
-				// console.log('index of atext in else', selectedText.indexOf(aText));
-				// console.log('index of focusText in else', selectedText.indexOf(focusText));
-				// if () {
-				// 	anchorOffset = offset;
-				// 	anchorText = aText;
-				// } else {
-				// 	anchorOffset = focusOffset;
-				// 	anchorText = focusText;
-				// }
+			} else if (aText !== focusText) {
+				const aParent = getPlainParentVerseWithoutNumber(aNode);
+				const eParent = getPlainParentVerseWithoutNumber(eNode);
+				// console.log('a parent and e parent', aParent, '\n', eParent);
+				// if the parents are different verses
+				if (aParent.isSameNode(eParent)) {
+					// It doesn't matter from this point which parent is used since they both reference the same object
+					// take the offset that occurs first as a child of the verse
+					console.log('parent verse is the same for both elements');
+					// console.log('child nodes for parent', aParent.childNodes);
+					// console.log(aParent.childNodes[0].isSameNode(aNode));
+					const aIndex = getFormattedChildIndex(aParent, aNode);
+					const eIndex = getFormattedChildIndex(aParent, eNode);
+					// console.log('a node', aNode, 'e node', eNode);
+					// console.log('a index', aIndex, 'e index', eIndex);
+					// console.log('a parent childNodes', aParent.childNodes);
+
+					// Use the text and offset of the node that was closest to the start of the verse
+					if (aIndex < eIndex) {
+						// console.log('aIndex is less than eIndex');
+						anchorText = aText;
+						anchorOffset = offset;
+					} else {
+						anchorText = focusText;
+						anchorOffset = focusOffset;
+					}
+					// (could potentially use next/prev sibling for this)
+				} else {
+					// take the offset that matches the first(lowest) verse between the two
+					// console.log('parent verse is not the same for both elements');
+					const aVerseNumber = aParent.attributes.verseid.value;
+					const eVerseNumber = eParent.attributes.verseid.value;
+					// console.log('aVerseNumber', aVerseNumber);
+					// console.log('eVerseNumber', eVerseNumber);
+
+					// Use the text and offset of the first verse
+					if (aVerseNumber < eVerseNumber) {
+						// console.log('aVerseNumber is less than eVerseNumber');
+						anchorText = aText;
+						anchorOffset = offset;
+					} else {
+						anchorText = focusText;
+						anchorOffset = focusOffset;
+					}
+				}
 			}
 			// console.log('anchorOffset < focusOffset', anchorOffset < focusOffset);
 			// Solve's for formatted text
@@ -742,19 +774,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				node = getPlainParentVerse(node, firstVerse);
 				// taking off the first 2 spaces and the verse number from the string
 				// This should only be the case for the first highlight within that verse
-				// todo First highlight is fine
-					// Second if before the first is closer to the start by 1
-					// Second if after the first is closer to the start by length of verse number + 2
-					// Third if between is closer to the start by length of verse number + 2
 				const newText = node.textContent.slice(0);
-
-				// console.log('plain text node.textContent', node.textContent);
-				// console.log('plain text new text after slice', newText);
-				// console.log('plain text anchorOffset', anchorOffset);
-				// console.log('plain text anchorText', anchorText);
-				// console.log('plain text node.textContent.indexOf(anchorText)', node.textContent.indexOf(anchorText));
-				// console.log('plain text newText.indexOf(anchorText)', newText.indexOf(anchorText));
-				// console.log('plain text node.textContent.slice(firstVerse.toFixed(0).length + 2)', node.textContent.slice(firstVerse.toFixed(0).length + 2));
 
 				if (this.props.userSettings.getIn(['toggleOptions', 'readersMode', 'active'])) {
 					highlightStart = (node.textContent.indexOf(anchorText) + anchorOffset);
@@ -767,12 +787,6 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			// console.log('whole verse node text content', node.textContent);
 			// console.log('calc', node.textContent.indexOf(anchorText) + anchorOffset);
 			// plain text 乁(✿ ͡° ͜ʖ ͡°)و
-			// console.log('dist', dist);
-			// console.log('length of text without n', this.state.selectedText.replace(/\n/g, '').length);
-			// console.log('length of text with n and no split', this.state.selectedText.length);
-			// console.log('length of text with n and a split', this.state.selectedText.split('').length);
-			// console.log('calc highlighted words', highlightedWords);
-			// console.log('window selection length', this.state.selectedText.split('').length);
 			if (this.props.userId && this.props.userAuthenticated) {
 				// console.log('highlight being added', {
 				// 	book: this.props.activeBookId,
@@ -789,6 +803,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				// 	color,
 				// 	highlightStart,
 				// 	highlightedWords,
+				// 	reference: this.getReference(firstVerse, lastVerse),
 				// });
 				// If the color is none then we are assuming that the user wants whatever they highlighted to be removed
 				// We could either remove every highlight that was overlapped by this one, or we could try to update all
@@ -817,7 +832,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 					// should add a confirmation or something here
 					this.props.deleteHighlights({ ids: highsToDelete });
 				} else {
-					// console.log('Tried to add the highlight anyway... -_-', color);
+					// console.log('Tried to add the highlight anyway... -_-');
 					this.props.addHighlight({
 						book: this.props.activeBookId,
 						chapter: this.props.activeChapter,

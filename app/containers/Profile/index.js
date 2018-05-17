@@ -63,10 +63,10 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 	viewErrorMessage = (props) => this.props.dispatch(viewErrorMessage(props))
 	socialMediaLogin = (props) => this.props.dispatch(socialMediaLogin(props))
 	resetPassword = (e, props) => {
+		this.props.dispatch(resetPassword(props));
 		const client = e.target.childNodes[1].getBoundingClientRect() || { x: 0, y: 0 };
 		const coords = { x: client.x, y: client.y };
 		this.openPopup(coords);
-		this.props.dispatch(resetPassword(props));
 	}
 	deleteUser = (props) => this.props.dispatch(deleteUser(props))
 	sendLoginForm = (props) => this.props.dispatch(sendLoginForm(props))
@@ -79,7 +79,12 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 	openPopup = (coords) => {
 		// console.log('opening popup');
 		this.setState({ popupOpen: true, popupCoords: coords }, () => {
-			setTimeout(() => this.setState({ popupOpen: false }), 2500);
+			setTimeout(
+				() => this.setState(
+					{ popupOpen: false },
+					() => this.props.dispatch(clearErrorMessage())
+				),
+				2500);
 		});
 	}
 
@@ -118,7 +123,8 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 			socialLoginLink,
 			activeDriver,
 			errorMessageViewed,
-			passwordResetMessage = 'Thank you! An email with instructions has been sent to your account.',
+			passwordResetError,
+			passwordResetMessage,
 		} = this.props.profile;
 		const { toggleProfile } = this.props;
 		const { popupOpen, popupCoords } = this.state;
@@ -178,7 +184,13 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 									}
 									{
 										activeOption === 'password_reset' ? (
-											<PasswordReset popupCoords={popupCoords} popupOpen={popupOpen} message={passwordResetMessage} resetPassword={this.resetPassword} />
+											<PasswordReset
+												popupCoords={popupCoords}
+												popupOpen={popupOpen}
+												message={passwordResetError || passwordResetMessage}
+												resetPassword={this.resetPassword}
+												openPopup={this.openPopup}
+											/>
 										) : null
 									}
 								</React.Fragment>
