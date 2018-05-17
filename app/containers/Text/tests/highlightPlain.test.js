@@ -465,4 +465,7 @@ describe('highlightPlainText', () => {
 
 		expect(highlightPlainText(sampleHighlights, sampleText)).toEqual(result);
 	});
+	it('Case 12: Should handle applying a highlight that spans mutliple verses and starts at the same index as a differently colored highlight', () => {
+		expect('tests to be defined').toBe(true);
+	});
 });

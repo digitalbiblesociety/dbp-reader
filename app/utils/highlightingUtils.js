@@ -66,30 +66,6 @@ const getFormattedChildIndex = (parent, child) => {
 	const preorderArray = preorderTraverse(parent, []);
 	// console.log('preorder array', preorderArray);
 	return preorderArray.indexOf(child);
-	// console.log('childIndex', childIndex);
-	// default to -1 to simulate default indexOf
-	// let childIndex = index || -1;
-	// let newParent = parent;
-	// console.log('parent in func', parent);
-	// // While there is only one childNode continue iterating
-	// while (newParent.childNodes.length === 1 && !(child.isSameNode(newParent))) {
-	// 	newParent = parent.childNodes[0];
-	// }
-	// console.log('new parent in func', newParent);
-	// // Once I have reached a level where there is more than one child
-	// [...newParent.childNodes].forEach((node, i) => {
-	// 	// Find the index of the child given within those children
-	// 	if (node.isSameNode(child) || node.contains(child)) {
-	// 		childIndex = i;
-	// 	}
-	// });
-	// let parentIndex = 0;
-	// check if there is more than one child
-	// for every child of the parent
-	// check each of its children to see if one of them matches
-	// keep increasing childIndex until the node is found
-	// using for of ... because I need to be able to return out of it.
-	// return childIndex;
 };
 
 const getPlainParentVerse = (node, verseNumber) => {
