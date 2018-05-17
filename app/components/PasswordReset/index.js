@@ -8,6 +8,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import PopupMessage from 'components/PopupMessage';
 import { Link } from 'react-router-dom';
+import checkEmail from 'utils/checkEmailForValidity';
 // import styled from 'styled-components';
 // import { FormattedMessage } from 'react-intl';
 // import messages from './messages';
@@ -19,13 +20,20 @@ class PasswordReset extends React.PureComponent {
 
 	handleSubmit = (e) => {
 		e.preventDefault();
-		this.props.resetPassword(e, { email: this.state.email });
+		const email = this.state.email;
+		if (email && checkEmail(email)) {
+			this.props.resetPassword(e, { email: this.state.email });
+		} else {
+			const client = e.target.childNodes[1].getBoundingClientRect() || { x: 0, y: 0 };
+
+			this.props.openPopup({ x: client.x, y: client.y });
+		}
 	};
 
 	handleInputChange = (e) => this.setState({ email: e.target.value })
 
 	render() {
-		const { popupCoords, popupOpen, message } = this.props;
+		const { popupCoords, popupOpen, message = 'Please enter a valid email.' } = this.props;
 		const { email } = this.state;
 
 		return (
@@ -53,6 +61,7 @@ class PasswordReset extends React.PureComponent {
 PasswordReset.propTypes = {
 	popupOpen: PropTypes.bool,
 	message: PropTypes.string,
+	openPopup: PropTypes.func,
 	resetPassword: PropTypes.func,
 	popupCoords: PropTypes.object,
 };

@@ -15,6 +15,8 @@ import {
 	SOCIAL_MEDIA_LOGIN,
 	ERROR_MESSAGE_VIEWED,
 	CLEAR_ERROR_MESSAGE,
+	RESET_PASSWORD_ERROR,
+	RESET_PASSWORD_SUCCESS,
 	// LOAD_USER_DATA,
 	// GET_USER_DATA,
 	// SEND_LOGIN_FORM,
@@ -41,6 +43,8 @@ const initialState = fromJS({
 		accounts: [],
 	},
 	errorMessageViewed: true,
+	passwordResetError: '',
+	passwordResetMessage: '',
 });
 
 function profileReducer(state = initialState, action) {
@@ -75,12 +79,17 @@ function profileReducer(state = initialState, action) {
 			.set('loginErrorMessage', action.message);
 	case SOCIAL_MEDIA_LOGIN_SUCCESS:
 		return state.set('socialLoginLink', action.url);
+	case RESET_PASSWORD_ERROR:
+		return state.set('passwordResetError', action.message);
 	case ERROR_MESSAGE_VIEWED:
 		return state.set('errorMessageViewed', true);
+	case RESET_PASSWORD_SUCCESS:
+		return state.set('resetPasswordMessage', action.message);
 	case CLEAR_ERROR_MESSAGE:
 		return state
 			.set('errorMessageViewed', true)
 			.set('signupErrorMessage', '')
+			.set('passwordResetError', '')
 			.set('loginErrorMessage', '');
 	default:
 		return state;
