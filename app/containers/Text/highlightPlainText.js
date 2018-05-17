@@ -1,5 +1,6 @@
 const createHighlights = (highlights, arrayOfVerseObjects) => {
 	// Todo: Huge issue if highlights overlap, breaks a lot of things
+	// Todo: Need to apply the shorter highlights first even if they have a higher id
 	/* NOTES
 	* 1. Need to subtract 1 from any addition of highlight_start + highlighted_words, this is because the result is the length not the index
 	* */
@@ -13,6 +14,9 @@ const createHighlights = (highlights, arrayOfVerseObjects) => {
 		if (a.verse_start > b.verse_start) return 1;
 		if (a.verse_start === b.verse_start) {
 			if (a.highlight_start === b.highlight_start) {
+				// if a was smaller than b then a needs to come first
+				if (a.highlight_start + a.highlighted_words < b.highlight_start + b.highlighted_words) return -1;
+				if (a.highlight_start + a.highlighted_words > b.highlight_start + b.highlighted_words) return 1;
 				// I want the newest (highest id) - Not sure this is helping anything...
 				if (a.id > b.id) return -1;
 				if (a.id < b.id) return 1;
