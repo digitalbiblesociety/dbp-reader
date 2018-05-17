@@ -20,6 +20,7 @@ import {
 	getFormattedChildIndex,
 	getFormattedElementVerseId,
 	getPlainParentVerseWithoutNumber,
+	preorderTraverse,
 } from 'utils/highlightingUtils';
 // import differenceObject from 'utils/deepDifferenceObject';
 import isEqual from 'lodash/isEqual';
@@ -30,6 +31,7 @@ import {
 	applyNotes,
 	applyBookmarks,
 } from './formattedTextUtils';
+import {buildFormattedVerse} from '../../utils/highlightingUtils';
 // import { addClickToNotes } from './htmlToReact';
 /* Disabling the jsx-a11y linting because we need to capture the selected text
 	 and the most straight forward way of doing so is with the onMouseUp event */
@@ -123,7 +125,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 	setEventHandlersForFormattedVerses = (ref) => {
 		// Set mousedown and mouseup events on verse elements
 		try {
-			const verses = [...ref.getElementsByClassName('v')];
+			const verses = [...ref.querySelectorAll('[data-id]')].slice(1); // [...ref.getElementsByClassName('v')];
 
 			verses.forEach((verse) => {
 				// console.log('setting events on this verse', verse);
@@ -616,6 +618,8 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			// Globals*
 			const first = parseInt(this.state.firstVerse, 10);
 			const last = parseInt(this.state.lastVerse, 10);
+			const chapter = this.props.activeChapter;
+			const activeBookId = this.props.activeBookId;
 			// Since a user can highlight "backwards" this makes sure the first verse is correct
 			const firstVerse = (first < last ? first : last);
 			const lastVerse = (last > first ? last : first);
@@ -630,15 +634,16 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			const aText = this.state.anchorText;
 			const aNode = this.state.anchorNode;
 			const eNode = this.state.focusNode;
-			// console.log(offset)
-			// console.log(focusOffset)
-			// console.log(focusText)
-			// console.log(aText)
+			// console.log('offset', offset);
+			// console.log('focusOffset', focusOffset);
+			// console.log('focusText', focusText);
+			// console.log('aText', aText);
 			const selectedText = this.state.selectedText;
 			// Setting my anchors with the data that is closest to the start of the passage
 			let anchorOffset = offset < focusOffset ? offset : focusOffset;
 			let anchorText = offset < focusOffset ? aText : focusText;
 			// console.log('a text', anchorText);
+			// console.log('nodes in just 7 verses', preorderTraverse(this.format, []));
 			// console.log('a offset', anchorOffset);
 			// console.log('first verse', firstVerse, 'last verse', lastVerse);
 			if (this.props.formattedSource.main) {
@@ -683,11 +688,36 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 						// console.log('aVerseNumber', aVerseNumber);
 						// console.log('eVerseNumber', eVerseNumber);
 
+						// Need to check for which node comes first
 						// Use the text and offset of the first verse
 						if (aVerseNumber < eVerseNumber) {
 							// console.log('aVerseNumber is less than eVerseNumber');
 							anchorText = aText;
 							anchorOffset = offset;
+						} else if (aVerseNumber === eVerseNumber) {
+							// Use prevChild until I get null and use that node
+							// console.log('aParent', aParent);
+							// console.log('eParent', eParent);
+							// console.log('this.formatHighlight', this.formatHighlight);
+							// console.log('aParent', [...this.formatHighlight.children[0].children].indexOf(aParent));
+							// console.log('eParent', [...this.formatHighlight.children[0].children].indexOf(eParent));
+							// Find distance from each parent back until there is not a sibling with the same verse number
+							// make sure both parents have the q class before searching backwards
+							// Does not work when putting highlight in the second portion of a verse
+
+							// Build verse - get the index of the text out of the built verse
+							const vText = buildFormattedVerse(this.formatHighlight || this.format, firstVerse, chapter, this.props.activeBookId);
+							console.log('v text', vText.indexOf(aText));
+							// I think I want to somehow either make the anchor offset based on the resulting text from
+							// the previous function or to use the resulting text instead of aNode.textContent but
+							// I am not exactly sure which one to do...
+							anchorText = aText;
+							anchorOffset = vText.indexOf(anchorText.replace('\n', ''));
+							console.log('anchorOffset', anchorOffset);
+							console.log('anchorText', anchorText);
+							console.log('state anchor', this.state.anchorText);
+							console.log('state anchor equals what I am trying to select', 'you will judge the peoples with equity,\n' +
+								'and govern' === anchorText);
 						} else {
 							anchorText = focusText;
 							anchorOffset = focusOffset;
@@ -702,7 +732,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				if (aParent.isSameNode(eParent)) {
 					// It doesn't matter from this point which parent is used since they both reference the same object
 					// take the offset that occurs first as a child of the verse
-					console.log('parent verse is the same for both elements');
+					// console.log('parent verse is the same for both elements');
 					// console.log('child nodes for parent', aParent.childNodes);
 					// console.log(aParent.childNodes[0].isSameNode(aNode));
 					const aIndex = getFormattedChildIndex(aParent, aNode);
@@ -744,10 +774,6 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			// Solve's for formatted text
 			let node = anchorOffset < focusOffset ? aNode : eNode;
 			let highlightStart = 0;
-			// The parent with the id should never be more than 10 levels up MAX
-			// I use this counter to prevent the edge case where an infinite loop
-			// Could be caused, this keeps the browser from crashing on accident
-
 			let highlightedWords = 0;
 			const dist = this.calcDist(lastVerse, firstVerse, !!this.props.formattedSource.main);
 			// Also need to check for class="v" to ensure that this was the first verse
@@ -761,9 +787,11 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				// console.log(node.textContent);
 				// console.log(anchorOffset);
 				// console.log(anchorText);
-				// console.log(node.textContent.indexOf(anchorText));
+				console.log('index of anchor text within text content', node.textContent.indexOf(anchorText));
+				console.log('built text equals node text', node.textContent === buildFormattedVerse(this.formatHighlight || this.format, firstVerse, chapter, activeBookId));
 				// Need to subtract by 1 since the anchor offset isn't 0 based
 				highlightStart = (node.textContent.indexOf(anchorText) + anchorOffset);
+				// buildFormattedVerse(this.formatHighlight || this.format, firstVerse, chapter, this.props.activeBookId);
 				// console.log('anchor text', anchorText);
 				// console.log(node.textContent.indexOf(anchorText));
 
@@ -796,15 +824,15 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				// 	highlightStart,
 				// 	highlightedWords,
 				// });
-				// console.log('highlight being added - not sending to db atm', {
-				// 	book: this.props.activeBookId,
-				// 	chapter: this.props.activeChapter,
-				// 	verseStart: firstVerse,
-				// 	color,
-				// 	highlightStart,
-				// 	highlightedWords,
-				// 	reference: this.getReference(firstVerse, lastVerse),
-				// });
+				console.log('highlight being added - not sending to db atm', {
+					book: this.props.activeBookId,
+					chapter: this.props.activeChapter,
+					verseStart: firstVerse,
+					color,
+					highlightStart,
+					highlightedWords,
+					reference: this.getReference(firstVerse, lastVerse),
+				});
 				// If the color is none then we are assuming that the user wants whatever they highlighted to be removed
 				// We could either remove every highlight that was overlapped by this one, or we could try to update all
 				// of those highlights and remove the sections of them that were overlapped
@@ -817,6 +845,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				highlightObject.highlightedWords = highlightedWords;
 
 				if (color === 'none') {
+					// Todo: Test this with q texts
 					const highs = this.props.highlights;
 					const space = highlightStart + highlightedWords;
 					// // console.log('space', space);
@@ -833,15 +862,15 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 					this.props.deleteHighlights({ ids: highsToDelete });
 				} else {
 					// console.log('Tried to add the highlight anyway... -_-');
-					this.props.addHighlight({
-						book: this.props.activeBookId,
-						chapter: this.props.activeChapter,
-						verseStart: firstVerse,
-						color,
-						highlightStart,
-						highlightedWords,
-						reference: this.getReference(firstVerse, lastVerse),
-					});
+					// this.props.addHighlight({
+					// 	book: this.props.activeBookId,
+					// 	chapter: this.props.activeChapter,
+					// 	verseStart: firstVerse,
+					// 	color,
+					// 	highlightStart,
+					// 	highlightedWords,
+					// 	reference: this.getReference(firstVerse, lastVerse),
+					// });
 				}
 			}
 		} catch (err) {
