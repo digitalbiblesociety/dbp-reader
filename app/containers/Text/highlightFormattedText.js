@@ -30,7 +30,7 @@ const createFormattedHighlights = (highlights, formattedTextString, DomCreator) 
 
 	// Doing a deep copy of the highlights since I am going to be mutating it.
 	// Sort the highlights
-	const sortedHighlights = highlights
+	const sortedHighlights = JSON.parse(JSON.stringify(highlights))
 		.sort((a, b) => {
 			if (a.verse_start < b.verse_start) return -1;
 			if (a.verse_start > b.verse_start) return 1;
@@ -70,7 +70,7 @@ const createFormattedHighlights = (highlights, formattedTextString, DomCreator) 
 		const ad = [...xmlDoc.querySelectorAll('[data-id]')].slice(1);
 		// console.log('ad', ad);
 
-		// console.log('------------------------------------------------------------------------');
+		console.log('------------------------------------------------------------------------');
 
 		// Iterate over all the verses
 		ad.forEach((verseElement) => {
@@ -99,10 +99,12 @@ const createFormattedHighlights = (highlights, formattedTextString, DomCreator) 
 				// Verse already started -> need to treat it like a new verse
 				const sameVerse = verseNumber === lastVerseNumber;
 
-				// Get all of the highlights that start in this verse
-				const highlightsStartingInVerse = sortedHighlights.filter((highlight) => highlight.verse_start === verseNumber);
-				console.log('verse.textContent', verse.textContent);
-				console.log('highlightsStartingInVerse', highlightsStartingInVerse);
+				// Get all of the highlights that start in this verse and all the previous highlights that have left over characters
+				const highlightsStartingInVerse = sortedHighlights
+					.filter((highlight) => highlight.verse_start === verseNumber);
+					// .filter((highlight) => highlight.verse_start === verseNumber || (highlight.verse_start < verseNumber && highlight.highlighted_words > 0));
+				// console.log('verse.textContent', verse.textContent);
+				// console.log('highlightsStartingInVerse', highlightsStartingInVerse);
 
 				// Get the text for a verse (really just a section of a verse)
 				let verseText = verse.textContent.split('');
@@ -111,27 +113,7 @@ const createFormattedHighlights = (highlights, formattedTextString, DomCreator) 
 				// use the new highlight start in the next section of the verse
 				if (!isNote) {
 				// If the node is a footnote then skip over it
-					if (sameVerse && children.length > 1) {
-						console.log('Children in the same verse but more than 1 child', verseNumber);
-						// if (verseNumber === 9) {
-							// console.log('children same verse highlights in verse', highlightsStartingInVerse);
-						// }
-						// console.log('previous highlight id is: ', previousHighlightId);
-						const newData = handleVerseSection({
-							combinedSectionLength,
-							highlightsStartingInVerse,
-							charsLeftAfterVerseEnd,
-							continuingColor,
-							verseText,
-							previousHighlightId,
-						});
-
-						verseText = newData.verseText;
-						charsLeftAfterVerseEnd = newData.charsLeftAfterVerseEnd;
-						continuingColor = newData.continuingColor;
-						combinedSectionLength += newData.sectionLength;
-						previousHighlightId = newData.previousHighlightId;
-					} else if (!sameVerse && children.length > 1) {
+					if (sameVerse || children.length > 1) {
 						console.log('Children not in the same verse but more than 1 child', verseNumber);
 						// if (verseNumber === 9) {
 							// console.log('children not same verse highlights in verse', highlightsStartingInVerse);
@@ -151,27 +133,6 @@ const createFormattedHighlights = (highlights, formattedTextString, DomCreator) 
 						continuingColor = newData.continuingColor;
 						combinedSectionLength += newData.sectionLength;
 						previousHighlightId = newData.previousHighlightId;
-					} else if (sameVerse) {
-						// If the verse has the same index as the last one
-						// if (verseNumber === 9) {
-							// console.log('same verse highlights in verse', highlightsStartingInVerse);
-						// }
-						console.log('same verse text', sameVerse);
-						try {
-							const newData = handleSameVerse({
-								charsLeftAfterVerseEnd,
-								continuingColor,
-								verseText,
-							});
-
-							verseText = newData.verseText;
-							charsLeftAfterVerseEnd = newData.charsLeftAfterVerseEnd;
-							continuingColor = newData.continuingColor;
-						} catch (e) {
-							if (process.env.NODE_ENV === 'development') {
-								console.warn('Error in handleNewVerse', e); // eslint-disable-line no-console
-							}
-						}
 					} else {
 						// If the node is not in the same verse as the previous one
 						// if (verseNumber === 9) {
