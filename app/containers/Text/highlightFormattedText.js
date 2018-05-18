@@ -101,8 +101,8 @@ const createFormattedHighlights = (highlights, formattedTextString, DomCreator) 
 
 				// Get all of the highlights that start in this verse and all the previous highlights that have left over characters
 				const highlightsStartingInVerse = sortedHighlights
-					.filter((highlight) => highlight.verse_start === verseNumber);
-					// .filter((highlight) => highlight.verse_start === verseNumber || (highlight.verse_start < verseNumber && highlight.highlighted_words > 0));
+					// .filter((highlight) => highlight.verse_start === verseNumber);
+					.filter((highlight) => highlight.verse_start === verseNumber || (highlight.verse_start < verseNumber && highlight.highlighted_words > 0));
 				// console.log('verse.textContent', verse.textContent);
 				// console.log('highlightsStartingInVerse', highlightsStartingInVerse);
 
