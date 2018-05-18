@@ -13,6 +13,22 @@ const createFormattedHighlights = (highlights, formattedTextString, DomCreator) 
 	* Create a new highlight that has the update range and a start verse of the next verse in line
 	* */
 
+	// Step 1: Create copy of highlight objects and sort them
+	// Step 2: Create a dom based on the formatted text string
+	// Step 3: Get all of the elements with data-id (These are all verse elements with the exception of the first one)
+		// Step 4: Iterate over every verse In order from least to greatest
+			// Step 5: For each verse find all the highlights starting in that verse
+				// Apply each highlight in the verse from shortest to longest
+				// Each time a highlight is applied reduce its highlighted_words field by the number of characters highlighted
+				// If highlighted_words is 0 then remove the highlight from the array
+			// Step 6: At the start of a new verse check for any highlights left over from the previous verse
+				// If highlighted_words is above 0 and the verse ended
+					// Update the verse number to be the next verse
+			// Step 7: Set the innerHTML of the verse element with the new html that contains the highlights for that verse
+		// Step 8: Create a new formatted text string out of the new dom that was created
+	// Step 9: Return new formatted text string
+
+	// Doing a deep copy of the highlights since I am going to be mutating it.
 	// Sort the highlights
 	const sortedHighlights = highlights
 		.sort((a, b) => {
@@ -29,20 +45,6 @@ const createFormattedHighlights = (highlights, formattedTextString, DomCreator) 
 			}
 			return 0;
 		});
-	// Possible solution to highlights that cover the same space
-		// .filter((h, i, c) => {
-		// 	// console.log('c is', c);
-		// 	// Next highlight
-		// 	const nh = c[i + 1];
-		//
-		// 	// If the highlights are the same size only keep the one
-		// 	if (nh && h.highlight_start === nh.highlight_start && h.highlighted_words === nh.highlighted_words) {
-		// 		if (h.id > nh.id) {
-		// 			return true;
-		// 		}
-		// 		return false;
-		// 	}
-		// });
 	// console.log('sortedHighlights', sortedHighlights);
 	try {
 		// Set the env for testing purposes
@@ -64,7 +66,8 @@ const createFormattedHighlights = (highlights, formattedTextString, DomCreator) 
 		let continuingColor = ''; // the color of the last highlight
 		let lastVerseNumber = 0; // the verse number of the last verse to have highlights applied
 
-		const ad = [...xmlDoc.querySelectorAll('[data-id]')].slice(1); // Get all verse elements (the first element with data-id is a div which is why I slice at 1)
+		// Get all verse elements (the first element with data-id is a div which is why I slice at 1)
+		const ad = [...xmlDoc.querySelectorAll('[data-id]')].slice(1);
 		// console.log('ad', ad);
 
 		// console.log('------------------------------------------------------------------------');
@@ -98,6 +101,8 @@ const createFormattedHighlights = (highlights, formattedTextString, DomCreator) 
 
 				// Get all of the highlights that start in this verse
 				const highlightsStartingInVerse = sortedHighlights.filter((highlight) => highlight.verse_start === verseNumber);
+				console.log('verse.textContent', verse.textContent);
+				console.log('highlightsStartingInVerse', highlightsStartingInVerse);
 
 				// Get the text for a verse (really just a section of a verse)
 				let verseText = verse.textContent.split('');
@@ -107,7 +112,7 @@ const createFormattedHighlights = (highlights, formattedTextString, DomCreator) 
 				if (!isNote) {
 				// If the node is a footnote then skip over it
 					if (sameVerse && children.length > 1) {
-						// console.log('Children in the same verse but more than 1 child', verseNumber);
+						console.log('Children in the same verse but more than 1 child', verseNumber);
 						// if (verseNumber === 9) {
 							// console.log('children same verse highlights in verse', highlightsStartingInVerse);
 						// }
@@ -127,7 +132,7 @@ const createFormattedHighlights = (highlights, formattedTextString, DomCreator) 
 						combinedSectionLength += newData.sectionLength;
 						previousHighlightId = newData.previousHighlightId;
 					} else if (!sameVerse && children.length > 1) {
-						// console.log('Children not in the same verse but more than 1 child', verseNumber);
+						console.log('Children not in the same verse but more than 1 child', verseNumber);
 						// if (verseNumber === 9) {
 							// console.log('children not same verse highlights in verse', highlightsStartingInVerse);
 						// }
@@ -151,7 +156,7 @@ const createFormattedHighlights = (highlights, formattedTextString, DomCreator) 
 						// if (verseNumber === 9) {
 							// console.log('same verse highlights in verse', highlightsStartingInVerse);
 						// }
-						// console.log('same verse text', sameVerse);
+						console.log('same verse text', sameVerse);
 						try {
 							const newData = handleSameVerse({
 								charsLeftAfterVerseEnd,
@@ -172,7 +177,7 @@ const createFormattedHighlights = (highlights, formattedTextString, DomCreator) 
 						// if (verseNumber === 9) {
 							// console.log('new verse highlights in verse', highlightsStartingInVerse);
 						// }
-						// console.log('new verse', verseNumber);
+						console.log('new verse', verseNumber);
 						try {
 							const newData = handleNewVerse({
 								highlightsStartingInVerse,
@@ -347,8 +352,9 @@ function handleVerseSection({ previousHighlightId, combinedSectionLength, highli
 		};
 	}
 	// Need another case for when the highlights wrapped but there were more than one in the verse
-	// console.log('continuingColor', continuingColor);
-	
+	console.log('continuingColor', continuingColor);
+	console.log('charsLeftAfterVerseEnd', charsLeftAfterVerseEnd);
+
 	// Case 2: Handle a highlight that is beginning in this verse
 	highlightsStartingInVerse.forEach((h, i) => {
 		// Next highlight
@@ -360,7 +366,7 @@ function handleVerseSection({ previousHighlightId, combinedSectionLength, highli
 		// Also need to check and see if the highlight can fit in this child node of the verse
 		// console.log('The highlight starts in this section', (verseText.length + prevSectionsLength) >= h.highlight_start && !(prevSectionsLength >= h.highlight_start));
 		// console.log('The true index inside verse', trueVerseIndex);
-		// console.log('true highlight start', trueHighlightStart);
+		console.log('true highlight start', trueHighlightStart);
 		if ((i === 0 || charsLeft === 0) && (sectionLength) > trueHighlightStart && trueHighlightStart >= 0) {
 			// If the length of the previous sections plus the length of this one is greater than the start of the highlight
 			// And the length of the previous sections is not greater than the start of the highlight
@@ -371,7 +377,7 @@ function handleVerseSection({ previousHighlightId, combinedSectionLength, highli
 		}
 		/* ESSENTIALLY GATHERS ALL OVERLAPPING HIGHLIGHTS */
 		// if the next highlight start is less than the end of this highlight and there is a next highlight
-		if (nh && nh.highlight_start <= ((h.highlighted_words + trueHighlightStart) - 1)) {
+		if (nh && nh.highlight_start <= ((h.highlighted_words + trueHighlightStart) - 1) && trueHighlightStart >= 0) {
 			// check if the furthest highlighted character for this highlight is greater than the furthest character for the next highlight
 			// console.log('Next highlight start is lower than the end of this one');
 			// Todo: The function breaks here if there is one highlight overlapping multiple other highlights
