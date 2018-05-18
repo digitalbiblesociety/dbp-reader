@@ -117,11 +117,26 @@ const getFormattedElementVerseId = (node) => {
 };
 
 // Get the sibling that is closest to the beginning
-const buildFormattedVerse = (refNode, verse, chapter, book) => {
-	const verseNodes = refNode.querySelectorAll(`[data-id=${book}${chapter}_${verse}]`);
+const getClosestParent = ({ refNode, verse, chapter, book, aParent, eParent }) => {
+	const verseNodes = [...refNode.querySelectorAll(`[data-id=${book}${chapter}_${verse}]`)];
+	const eIndex = verseNodes.indexOf(eParent);
+	const aIndex = verseNodes.indexOf(aParent);
+
+	if (aIndex < eIndex) {
+		return aParent;
+	}
+	return eParent;
 	// console.log(verseNodes);
 	// console.log([...verseNodes].reduce((acc, node) => acc.concat(node.innerText), ''));
-	return [...verseNodes].reduce((acc, node) => acc.concat(node.innerText), '');
+	// return [...verseNodes].reduce((acc, node) => acc.concat(node.innerText), '');
+};
+
+const getOffsetNeededForPsalms = ({ refNode, book, chapter, verse, node }) => {
+	const verseNodes = [...refNode.querySelectorAll(`[data-id=${book}${chapter}_${verse}]`)];
+
+	const previous = verseNodes.slice(0, verseNodes.indexOf(node));
+
+	return previous.reduce((a, c) => a + c.textContent.replace(/[\n\r]/, '').length, 0);
 };
 
 export {
@@ -132,5 +147,6 @@ export {
 	getFormattedElementVerseId,
 	getPlainParentVerseWithoutNumber,
 	preorderTraverse,
-	buildFormattedVerse,
+	getClosestParent,
+	getOffsetNeededForPsalms,
 };

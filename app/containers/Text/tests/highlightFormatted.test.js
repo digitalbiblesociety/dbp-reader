@@ -529,4 +529,33 @@ describe('highlightFormattedText', () => {
 
 		expect(highlightFormattedText(highlights, sampleText, JSDOM)).toEqual(expectedResult);
 	});
+	it('Case: 22 Should apply a highlight in a verse that also has a footnote without the footnote breaking it', () => {
+		const highlights = [
+			{
+				bible_id: 'ENGWEB',
+				book_id: 'GEN',
+				chapter: 2,
+				highlight_start: 0,
+				highlighted_color: '84,185,72,.25',
+				highlighted_words: 6,
+				id: 550,
+				reference: 'Genesis 2:18',
+				verse_start: 18,
+			},
+		];
+		const sampleText = '<div class="chapter section ENGWEB_2_GEN_2 ENGWEB eng PSA latin" dir="ltr" data-id="ENGWEB_2_GEN_2" data-nextid="GEN2" data-previd="GEN2" lang="eng"> <div class="c">2</div><span class="v GEN2_18" data-id="GEN2_18">Yahweh God said, “It is not good for the man to be alone. I will make him a helper comparable to<span class="note" id="note-4"><a href="#footnote-4" class="key">*</a></span> him.”</span></div>';
+		const expectedResult = `<div class="chapter section ENGWEB_2_GEN_2 ENGWEB eng PSA latin" dir="ltr" data-id="ENGWEB_2_GEN_2" data-nextid="GEN2" data-previd="GEN2" lang="eng"> <div class="c">2</div><span class="v GEN2_18" data-id="GEN2_18"><span><em class="text-highlighted" style="background:linear-gradient(rgba(${highlights[0].highlighted_color}),rgba(${highlights[0].highlighted_color}))">Yahweh</em> God said, “It is not good for the man to be alone. I will make him a helper comparable to</span><span class="note" id="note-4"><a href="#footnote-4" class="key">*</a></span><span> him.”</span></span></div>`;
+
+		expect(highlightFormattedText(highlights, sampleText, JSDOM)).toEqual(expectedResult);
+	});
+	it('Case: 23 Should apply a highlight on top of a prexisting one when there is a footnote in the verse and they are different colors', () => {
+		const highlights = [
+			{ bible_id: 'ENGWEB', reference: 'Matthew 5:5', chapter: 5, book_id: 'MAT', highlighted_color: '80,165,220,.25', highlight_start: 0, verse_start: 5, id: 563, highlighted_words: 37 },
+			{ bible_id: 'ENGWEB', reference: 'Matthew 5:5', chapter: 5, book_id: 'MAT', highlighted_color: '208,105,169,.25', highlight_start: 0, verse_start: 5, id: 564, highlighted_words: 37 },
+		];
+		const sampleText = '<div class="chapter section ENGWEB_70_MAT_5 ENGWEB eng MAT latin" dir="ltr" data-id="ENGWEB_70_MAT_5" data-nextid="MAT6" data-previd="MAT4" lang="eng"><div class="c">5</div><div class="q"><span class="verse5 v-num v-5">5&#160;</span><span class="v MAT5_5" data-id="MAT5_5"><span class=\'wj\'>Blessed are the gentle,</span></span></div><div class="q MAT5_5" data-id="MAT5_5"><span class=\'wj\'>for they shall inherit the earth.</span><span class=\'note\' id=\'note-1777\'><a href="#footnote-1777" class="key">*</a></span><span class=\'note\' id=\'note-1778\'><a href="#footnote-1778" class="key">†</a></span></div></div>';
+		const expectedResult = `<div class="chapter section ENGWEB_70_MAT_5 ENGWEB eng MAT latin" dir="ltr" data-id="ENGWEB_70_MAT_5" data-nextid="MAT6" data-previd="MAT4" lang="eng"><div class="c">5</div><div class="q"><span class="verse5 v-num v-5">5&#160;</span><span class="v MAT5_5" data-id="MAT5_5"><span class="wj"><em class="text-highlighted" style="background:linear-gradient(rgba(${highlights[1].highlighted_color}),rgba(${highlights[1].highlighted_color}))"><em class="text-highlighted" style="background:linear-gradient(rgba(${highlights[0].highlighted_color}),rgba(${highlights[0].highlighted_color}))">Blessed are the gentle,</em></em></span></span></div><div class="q MAT5_5" data-id="MAT5_5"><span class="wj"><em class="text-highlighted" style="background:linear-gradient(rgba(${highlights[1].highlighted_color}),rgba(${highlights[1].highlighted_color}))"><em class="text-highlighted" style="background:linear-gradient(rgba(${highlights[0].highlighted_color}),rgba(${highlights[0].highlighted_color}))">for they shall</em></em> inherit the earth.</span><span class="note" id="note-1777"><a href="#footnote-1777" class="key">*</a></span><span class="note" id="note-1778"><a href="#footnote-1778" class="key">†</a></span></div></div>`;
+
+		expect(highlightFormattedText(highlights, sampleText, JSDOM)).toEqual(expectedResult);
+	});
 });
