@@ -44,7 +44,8 @@ const getFormattedParentVerse = (node) => {
 	let newNode = node;
 	// Finds the first parent that has a data-id and a class of .v
 	// Both of these things exist only on a verse element
-	while (!(newNode.attributes && newNode.attributes['data-id'] && newNode.classList && newNode.classList[0] === 'v')) {
+	// I don't think I need to check for the class of v but if things break then I may have to
+	while (!(newNode.attributes && newNode.attributes['data-id'])) {
 		// console.log('new node', newNode);
 		// console.log('new node attributes', newNode.attributes);
 		newNode = newNode.parentNode;
@@ -115,6 +116,29 @@ const getFormattedElementVerseId = (node) => {
 	return null;
 };
 
+// Get the sibling that is closest to the beginning
+const getClosestParent = ({ refNode, verse, chapter, book, aParent, eParent }) => {
+	const verseNodes = [...refNode.querySelectorAll(`[data-id=${book}${chapter}_${verse}]`)];
+	const eIndex = verseNodes.indexOf(eParent);
+	const aIndex = verseNodes.indexOf(aParent);
+
+	if (aIndex < eIndex) {
+		return aParent;
+	}
+	return eParent;
+	// console.log(verseNodes);
+	// console.log([...verseNodes].reduce((acc, node) => acc.concat(node.innerText), ''));
+	// return [...verseNodes].reduce((acc, node) => acc.concat(node.innerText), '');
+};
+
+const getOffsetNeededForPsalms = ({ refNode, book, chapter, verse, node }) => {
+	const verseNodes = [...refNode.querySelectorAll(`[data-id=${book}${chapter}_${verse}]`)];
+
+	const previous = verseNodes.slice(0, verseNodes.indexOf(node));
+
+	return previous.reduce((a, c) => a + c.textContent.replace(/[\n\r]/, '').length, 0);
+};
+
 export {
 	getFormattedParentVerseNumber,
 	getFormattedParentVerse,
@@ -122,4 +146,7 @@ export {
 	getFormattedChildIndex,
 	getFormattedElementVerseId,
 	getPlainParentVerseWithoutNumber,
+	preorderTraverse,
+	getClosestParent,
+	getOffsetNeededForPsalms,
 };

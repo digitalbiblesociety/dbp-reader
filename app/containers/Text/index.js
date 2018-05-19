@@ -20,6 +20,8 @@ import {
 	getFormattedChildIndex,
 	getFormattedElementVerseId,
 	getPlainParentVerseWithoutNumber,
+	getClosestParent,
+	getOffsetNeededForPsalms,
 } from 'utils/highlightingUtils';
 // import differenceObject from 'utils/deepDifferenceObject';
 import isEqual from 'lodash/isEqual';
@@ -123,7 +125,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 	setEventHandlersForFormattedVerses = (ref) => {
 		// Set mousedown and mouseup events on verse elements
 		try {
-			const verses = [...ref.getElementsByClassName('v')];
+			const verses = [...ref.querySelectorAll('[data-id]')].slice(1); // [...ref.getElementsByClassName('v')];
 
 			verses.forEach((verse) => {
 				// console.log('setting events on this verse', verse);
@@ -616,6 +618,8 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			// Globals*
 			const first = parseInt(this.state.firstVerse, 10);
 			const last = parseInt(this.state.lastVerse, 10);
+			const chapter = this.props.activeChapter;
+			const activeBookId = this.props.activeBookId;
 			// Since a user can highlight "backwards" this makes sure the first verse is correct
 			const firstVerse = (first < last ? first : last);
 			const lastVerse = (last > first ? last : first);
@@ -630,15 +634,16 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			const aText = this.state.anchorText;
 			const aNode = this.state.anchorNode;
 			const eNode = this.state.focusNode;
-			// console.log(offset)
-			// console.log(focusOffset)
-			// console.log(focusText)
-			// console.log(aText)
+			// console.log('offset', offset);
+			// console.log('focusOffset', focusOffset);
+			// console.log('focusText', focusText);
+			// console.log('aText', aText);
 			const selectedText = this.state.selectedText;
 			// Setting my anchors with the data that is closest to the start of the passage
 			let anchorOffset = offset < focusOffset ? offset : focusOffset;
 			let anchorText = offset < focusOffset ? aText : focusText;
 			// console.log('a text', anchorText);
+			// console.log('nodes in just 7 verses', preorderTraverse(this.format, []));
 			// console.log('a offset', anchorOffset);
 			// console.log('first verse', firstVerse, 'last verse', lastVerse);
 			if (this.props.formattedSource.main) {
@@ -683,11 +688,38 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 						// console.log('aVerseNumber', aVerseNumber);
 						// console.log('eVerseNumber', eVerseNumber);
 
+						// Need to check for which node comes first
 						// Use the text and offset of the first verse
 						if (aVerseNumber < eVerseNumber) {
 							// console.log('aVerseNumber is less than eVerseNumber');
 							anchorText = aText;
 							anchorOffset = offset;
+							// If the verse numbers are the same but the verse nodes are different then I am dealing with a psalm
+						} else if (aVerseNumber === eVerseNumber) {
+							// Use prevChild until I get null and use that node
+							// Need to decide here whether to use the anchor text or the focus text
+							// console.log('aParent', aParent);
+							// console.log('eParent', eParent);
+							// console.log('this.formatHighlight', this.formatHighlight);
+							// console.log('aParent', [...this.formatHighlight.children[0].children].indexOf(aParent));
+							// console.log('eParent', [...this.formatHighlight.children[0].children].indexOf(eParent));
+							const closestParent = getClosestParent({ aParent, eParent, verse: firstVerse, chapter, book: activeBookId, refNode: this.formatHighlight || this.format });
+							// Find distance from each parent back until there is not a sibling with the same verse number
+							// make sure both parents have the q class before searching backwards
+							// Does not work when putting highlight in the second portion of a verse
+							// Build verse - get the index of the text out of the built verse
+							// I think I want to somehow either make the anchor offset based on the resulting text from
+							// the previous function or to use the resulting text instead of aNode.textContent but
+							// I am not exactly sure which one to do...
+
+							// console.log('closestParent', closestParent);
+							if (aParent.isSameNode(closestParent)) {
+								anchorText = aText;
+								anchorOffset = offset;
+							} else {
+								anchorText = focusText;
+								anchorOffset = focusOffset;
+							}
 						} else {
 							anchorText = focusText;
 							anchorOffset = focusOffset;
@@ -702,7 +734,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				if (aParent.isSameNode(eParent)) {
 					// It doesn't matter from this point which parent is used since they both reference the same object
 					// take the offset that occurs first as a child of the verse
-					console.log('parent verse is the same for both elements');
+					// console.log('parent verse is the same for both elements');
 					// console.log('child nodes for parent', aParent.childNodes);
 					// console.log(aParent.childNodes[0].isSameNode(aNode));
 					const aIndex = getFormattedChildIndex(aParent, aNode);
@@ -742,28 +774,36 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			}
 			// console.log('anchorOffset < focusOffset', anchorOffset < focusOffset);
 			// Solve's for formatted text
+			// Not so sure about this, seems like in theory it should give me the node closest to the beginning but idk
 			let node = anchorOffset < focusOffset ? aNode : eNode;
 			let highlightStart = 0;
-			// The parent with the id should never be more than 10 levels up MAX
-			// I use this counter to prevent the edge case where an infinite loop
-			// Could be caused, this keeps the browser from crashing on accident
-
 			let highlightedWords = 0;
 			const dist = this.calcDist(lastVerse, firstVerse, !!this.props.formattedSource.main);
 			// Also need to check for class="v" to ensure that this was the first verse
-			if (this.props.formattedSource.main && !this.props.userSettings.getIn(['toggleOptions', 'readersMode', 'active'])) {
+			if (this.props.formattedSource.main && !this.props.userSettings.getIn(['toggleOptions', 'readersMode', 'active']) && !this.props.userSettings.getIn(['toggleOptions', 'oneVersePerLine', 'active'])) {
 				// Issue with getting the correct parent node
 				// console.log('starting node', node);
 				// console.log('first verse', firstVerse);
 				node = getFormattedParentVerseNumber(node, firstVerse);
-				// console.log('verse node', node.attributes);
-				// At this point "node" is the first verse
-				// console.log(node.textContent);
-				// console.log(anchorOffset);
-				// console.log(anchorText);
-				// console.log(node.textContent.indexOf(anchorText));
+				// console.log('verse node', node.attributes.class.value.slice(0, 1) === 'q');
+				// // At this point "node" is the first verse
+				// console.log('node.textContent', node.textContent);
+				// // console.log(anchorOffset);
+				// // console.log(anchorText);
+				// console.log('index of anchor text within text content', anchorText);
+				// console.log('built text is : ', getClosestParent(this.formatHighlight || this.format, firstVerse, chapter, activeBookId));
+				// console.log('built text equals node text', getClosestParent(this.formatHighlight || this.format, firstVerse, chapter, activeBookId).indexOf(anchorText.trim()));
+				const nodeClassValue = (node.attributes && node.attributes.class && node.attributes.class.value) || undefined;
+				if (nodeClassValue && nodeClassValue.slice(0, 1) === 'q') {
+					// Get all of the nodes with the same data-id that come before this one in the dom
+					// Add the textContent length of each node to the anchorOffset
+					// console.log('original offset', anchorOffset);
+					anchorOffset += getOffsetNeededForPsalms({ node, verse: firstVerse, chapter, book: activeBookId, refNode: this.formatHighlight || this.format });
+					// console.log('updated offset', anchorOffset);
+				}
 				// Need to subtract by 1 since the anchor offset isn't 0 based
 				highlightStart = (node.textContent.indexOf(anchorText) + anchorOffset);
+				// getClosestParent(this.formatHighlight || this.format, firstVerse, chapter, this.props.activeBookId);
 				// console.log('anchor text', anchorText);
 				// console.log(node.textContent.indexOf(anchorText));
 
@@ -817,6 +857,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				highlightObject.highlightedWords = highlightedWords;
 
 				if (color === 'none') {
+					// Todo: Test this with q texts
 					const highs = this.props.highlights;
 					const space = highlightStart + highlightedWords;
 					// // console.log('space', space);
