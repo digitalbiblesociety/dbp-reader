@@ -1,9 +1,7 @@
 // Optional third arg for testing purposes
 const createFormattedHighlights = (highlights, formattedTextString, DomCreator) => {
-	// TODO: Major! If the starting index in a verse is past the end of the verse then start the highlight on the next line
 	/* NOTES
 	* 1. Need to subtract 1 from any addition of highlight_start + highlighted_words, this is because the result is the length not the index
-	* todo check and see if this function fully supports overlapping highlights
 	* */
 	/* Notes on Logic for function
 	* Iterate over each verse
@@ -81,7 +79,7 @@ const createFormattedHighlights = (highlights, formattedTextString, DomCreator) 
 				Note node: <span class='note'><a class='footnote'>*</a></span>
 				Text node: Adam and Eve had a son
 				Emphasis node: <add>was</add>
-				Highlight node: <em class="text-highlighted" style="...">and they called him Able</em>
+				Highlight node: <em class="text-highlighted" style="...">and they called him Abel</em>
 			*/
 			const children = verseElement.childNodes.length ? [...verseElement.childNodes] : [verseElement];
 			// Parse the verse data-id to get the verse number
@@ -104,7 +102,7 @@ const createFormattedHighlights = (highlights, formattedTextString, DomCreator) 
 				// Map: -> Updates the previous highlights to contain the new verse number and also to start out at 0
 				const highlightsStartingInVerse = previousHighlightArray
 					.filter((h) => h.verse_start === verseNumber || (h.verse_start < verseNumber && h.highlighted_words > 0))
-					.map((h) => h.verse_start !== verseNumber || (h.verse_start === verseNumber && sameVerse) ? { ...h, verse_start: verseNumber, highlight_start: 0 } : h);
+					.map((h) => h.verse_start !== verseNumber || (h.verse_start === verseNumber && sameVerse) ? { ...h, verse_start: verseNumber } : h);
 				// console.log('verse.textContent', verse.textContent);
 				// console.log('highlightsStartingInVerse', highlightsStartingInVerse);
 
@@ -131,7 +129,21 @@ const createFormattedHighlights = (highlights, formattedTextString, DomCreator) 
 
 						// console.log('prev array before the map and reduce', previousHighlightArray[0]);
 						previousHighlightArray = previousHighlightArray
-							.map((h) => newData.highlightsToUpdate[h.id] || newData.highlightsToUpdate[h.id] === 0 ? { ...h, highlighted_words: newData.highlightsToUpdate[h.id] } : h)
+							.map((h) => {
+								// Gets the object representing the changing needing to be made to this highlight
+								if (newData.highlightsToUpdate[h.id]) {
+									// If there was an object it means that this highlight needs to be updated
+									const newH = { ...h };
+									// For each update add the value to the appropriate key in the new highlight
+									Object.entries(newData.highlightsToUpdate[h.id]).forEach((entry) => {
+										newH[entry[0]] = entry[1];
+									});
+									// console.log('newH', newH);
+									return newH;
+								}
+								// Return the initial highlight
+								return h;
+							})
 							.reduce((a, h) => h.verse_start === verseNumber && h.highlighted_words <= 0 ? a : [...a, h], []);
 						// console.log('previousHighlightArray', previousHighlightArray[0]);
 					} catch (e) {
@@ -196,25 +208,67 @@ function handleNewVerse({ highlightsStartingInVerse, verseText }) {
 	* 3. (Highlight is in this verse) -> insert the closing tag at the appropriate place and then set highlighted_words to 0
 	* 4. (Highlight goes past this verse) -> insert closing tag at the end of the verse then reduce highlighted_words by the amount of characters that were highlighted
 	* */
-	highlightsStartingInVerse.forEach((h) => {
+	highlightsStartingInVerse.forEach((h, i) => {
+		const nextHighlight = highlightsStartingInVerse[i + 1];
 		/* COMMONLY USED VALUES */
 		const backgroundStyle = `style="background:linear-gradient(rgba(${h.highlighted_color ? h.highlighted_color : 'inherit'}),rgba(${h.highlighted_color ? h.highlighted_color : 'inherit'}))"`;
 		const highlightLength = h.highlight_start + (h.highlighted_words - 1);
-		/* SETS THE OPENING TAG FOR THE HIGHLIGHT */
-		verseText.splice(h.highlight_start, 1, `<em class="text-highlighted" ${backgroundStyle}>${verseText[h.highlight_start]}`);
-		/* SETS THE CLOSING TAG AND HANDLES UPDATING THE HIGHLIGHT OBJECT */
-		if (verseLength < highlightLength) {
-			// The highlight extends past this verse and into the next one
-			verseText.splice(verseLength - 1, 1, `${verseText[verseLength - 1]}</em>`);
-			// Re-assigning param here because I need to continually update the value and don't want to bother returning it
-			// h.highlighted_words -= verseLength; // eslint-disable-line no-param-reassign
-			highlightsToUpdate[h.id] = h.highlighted_words - (verseLength - h.highlight_start);
+
+		/* HIGHLIGHT STARTS IN A LATER SECTION OF THIS VERSE */
+		if (h.highlight_start >= verseLength) {
+			// Reducing the start of the highlight by the length of the section since it cannot start here
+			highlightsToUpdate[h.id] = { highlight_start: h.highlight_start - (verseLength) };
+		} else if (
+			nextHighlight &&
+			h.highlight_start < nextHighlight.highlight_start &&
+			highlightLength > nextHighlight.highlight_start &&
+			highlightLength < nextHighlight.highlight_start + (nextHighlight.highlighted_words - 1)
+		) {
+			/* HIGHLIGHT STOPS IN MIDDLE OF NEXT HIGHLIGHT */
+			// if two highlights overlap and neither is contained completely in the other
+			// l && fs < ls && fs + fe > ls && fs + fe < le
+			// Start the first highlight
+			verseText.splice(h.highlight_start, 1, `<em class="text-highlighted" ${backgroundStyle}>${verseText[h.highlight_start]}`);
+			// close the first highlight on the character before where the second highlight starts
+			verseText.splice(nextHighlight.highlight_start - 1, 1, `${verseText[nextHighlight.highlight_start - 1]}</em>`);
+			// start the first highlight again where the second starts
+			verseText.splice(nextHighlight.highlight_start, 1, `<em class="text-highlighted" ${backgroundStyle}>${verseText[nextHighlight.highlight_start]}`);
+			// close the first highlight where it ends
+			/* SETS THE CLOSING TAG AND HANDLES UPDATING THE HIGHLIGHT OBJECT */
+			if (verseLength < highlightLength) {
+				// The highlight extends past this verse and into the next one
+				verseText.splice(verseLength - 1, 1, `${verseText[verseLength - 1]}</em>`);
+				// Setting the new value for highlighted_words and start
+				// Sets start to 0 because this highlight needs to resume in the beginning of the next verse
+				highlightsToUpdate[h.id] = {
+					highlighted_words: h.highlighted_words - (verseLength - h.highlight_start),
+					highlight_start: 0,
+				};
+			} else {
+				// The highlight has to be contained within this verse
+				verseText.splice(highlightLength, 1, `${verseText[highlightLength]}</em>`);
+				// Setting the new value for highlighted_words
+				highlightsToUpdate[h.id] = { highlighted_words: 0 };
+			}
 		} else {
-			// The highlight has to be contained within this verse
-			verseText.splice(highlightLength, 1, `${verseText[highlightLength]}</em>`);
-			// Re-assigning param here because I need to continually update the value and don't want to bother returning it
-			h.highlighted_words = 0; // eslint-disable-line no-param-reassign
-			highlightsToUpdate[h.id] = 0;
+			/* SETS THE OPENING TAG FOR THE HIGHLIGHT (BASE CASE) */
+			verseText.splice(h.highlight_start, 1, `<em class="text-highlighted" ${backgroundStyle}>${verseText[h.highlight_start]}`);
+			/* SETS THE CLOSING TAG AND HANDLES UPDATING THE HIGHLIGHT OBJECT */
+			if (verseLength < highlightLength) {
+				// The highlight extends past this verse and into the next one
+				verseText.splice(verseLength - 1, 1, `${verseText[verseLength - 1]}</em>`);
+				// Setting the new value for highlighted_words and start
+				// Sets start to 0 because this highlight needs to resume in the beginning of the next verse
+				highlightsToUpdate[h.id] = {
+					highlighted_words: h.highlighted_words - (verseLength - h.highlight_start),
+					highlight_start: 0,
+				};
+			} else {
+				// The highlight has to be contained within this verse
+				verseText.splice(highlightLength, 1, `${verseText[highlightLength]}</em>`);
+				// Setting the new value for highlighted_words
+				highlightsToUpdate[h.id] = { highlighted_words: 0 };
+			}
 		}
 	});
 

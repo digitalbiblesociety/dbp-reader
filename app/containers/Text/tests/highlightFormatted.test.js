@@ -7,10 +7,10 @@ import highlightFormattedText from '../highlightFormattedText';
 // Can't test formatted text because of XMLSerializer not being available
 
 describe('highlightFormattedText', () => {
-	xit('Should be a function', () => {
+	it('Should be a function', () => {
 		expect(typeof highlightFormattedText).toBe('function');
 	});
-	xit('Should return a string', () => {
+	it('Should return a string', () => {
 		const sampleHighlights = [];
 		const text = '<span class="verse1 v-num v-1">1&#160;</span><span class="v GEN1_1" data-id="GEN1_1"> In the beginning God created the heaven and the earth. </span>';
 
@@ -63,7 +63,7 @@ describe('highlightFormattedText', () => {
 				highlighted_color: '255,221,34,.25',
 			},
 			{
-				id: 99,
+				id: 100,
 				bible_id: 'ENGWEB',
 				book_id: 'GEN',
 				chapter: 4,
@@ -109,7 +109,7 @@ describe('highlightFormattedText', () => {
 				highlighted_color: '255,221,34,.25',
 			},
 			{
-				id: 99,
+				id: 100,
 				bible_id: 'ENGWEB',
 				book_id: 'GEN',
 				chapter: 4,
@@ -173,7 +173,7 @@ describe('highlightFormattedText', () => {
 				highlighted_color: '255,221,34,.25',
 			},
 			{
-				id: 199,
+				id: 200,
 				bible_id: 'ENGWEB',
 				book_id: 'PSA',
 				chapter: 50,
@@ -196,7 +196,7 @@ describe('highlightFormattedText', () => {
 				book_id: 'PSA',
 				chapter: 50,
 				verse_start: 1,
-				highlight_start: 37,
+				highlight_start: 36,
 				highlighted_words: 44,
 				highlighted_color: '85,187,68,.25',
 			},
@@ -224,13 +224,13 @@ describe('highlightFormattedText', () => {
 				book_id: 'PSA',
 				chapter: 50,
 				verse_start: 1,
-				highlight_start: 37,
+				highlight_start: 36,
 				highlighted_words: 44,
 				highlighted_color: '85,187,68,.25',
 			},
 		];
 		const sampleText = '<div class="chapter section ENGWEB_20_PSA_50 ENGWEB eng PSA latin" dir="ltr" data-id="ENGWEB_20_PSA_50" data-nextid="PSA51" data-previd="PSA49" lang="eng"> <div class="c">50</div> <h3>A Psalm by Asaph. </h3><div class="q"><span class="verse1 v-num v-1">1&#160;</span><span class="v PSA50_1" data-id="PSA50_1">The Mighty One, God, Yahweh, speaks,</span> </div><div class="q PSA50_1" data-id="PSA50_1">and calls the earth from sunrise to sunset. </div><div class="q"><span class="verse2 v-num v-2">2&#160;</span><span class="v PSA50_2" data-id="PSA50_2">Out of Zion, the perfection of beauty,</span> </div><div class="q PSA50_2" data-id="PSA50_2">God shines out. </div>';
-		const expectedResult = `<div class="chapter section ENGWEB_20_PSA_50 ENGWEB eng PSA latin" dir="ltr" data-id="ENGWEB_20_PSA_50" data-nextid="PSA51" data-previd="PSA49" lang="eng"> <div class="c">50</div> <h3>A Psalm by Asaph. </h3><div class="q"><span class="verse1 v-num v-1">1&nbsp;</span><span class="v PSA50_1" data-id="PSA50_1"><span><em class="text-highlighted" style="background:linear-gradient(rgba(${highlights[0].highlighted_color}),rgba(${highlights[0].highlighted_color}))">The Mighty One, God, Yahweh, speaks,</em></span></span> </div><div class="q PSA50_1" data-id="PSA50_1"><span><em class="text-highlighted" style="background:linear-gradient(rgba(${highlights[1].highlighted_color}),rgba(${highlights[1].highlighted_color}))">and calls the earth from sunrise to sunset. </em></span></div><div class="q"><span class="verse2 v-num v-2">2&nbsp;</span><span class="v PSA50_2" data-id="PSA50_2"><span>Out of Zion, the perfection of beauty,</span></span> </div><div class="q PSA50_2" data-id="PSA50_2"><span>God shines out. </span></div></div>`;
+		const expectedResult = `<div class="chapter section ENGWEB_20_PSA_50 ENGWEB eng PSA latin" dir="ltr" data-id="ENGWEB_20_PSA_50" data-nextid="PSA51" data-previd="PSA49" lang="eng"> <div class="c">50</div> <h3>A Psalm by Asaph. </h3><div class="q"><span class="verse1 v-num v-1">1&nbsp;</span><span class="v PSA50_1" data-id="PSA50_1"><span><em class="text-highlighted" style="background:linear-gradient(rgba(${highlights[0].highlighted_color}),rgba(${highlights[0].highlighted_color}))">The Mighty One, God, Yahweh, speaks,</em></span></span> </div><div class="q PSA50_1" data-id="PSA50_1"><span><em class="text-highlighted" style="background:linear-gradient(rgba(${highlights[1].highlighted_color}),rgba(${highlights[1].highlighted_color}))"><em class="text-highlighted" style="background:linear-gradient(rgba(${highlights[0].highlighted_color}),rgba(${highlights[0].highlighted_color}))">and calls the earth from sunrise to sunset. </em></em></span></div><div class="q"><span class="verse2 v-num v-2">2&nbsp;</span><span class="v PSA50_2" data-id="PSA50_2"><span>Out of Zion, the perfection of beauty,</span></span> </div><div class="q PSA50_2" data-id="PSA50_2"><span>God shines out. </span></div></div>`;
 
 		expect(highlightFormattedText(highlights, sampleText, JSDOM)).toEqual(expectedResult);
 	});
@@ -265,7 +265,7 @@ describe('highlightFormattedText', () => {
 				highlighted_color: '255,221,34,.25',
 			},
 			{
-				id: 99,
+				id: 100,
 				bible_id: 'ENGWEB',
 				book_id: 'GEN',
 				chapter: 4,
@@ -342,7 +342,7 @@ describe('highlightFormattedText', () => {
 			},
 		];
 		const sampleText = '<div class="chapter section ENGWEB_25_JER_1 ENGWEB eng JER latin" dir="ltr" data-id="ENGWEB_25_JER_1" data-nextid="JER2" data-previd="ISA66" lang="eng"><div class="c">1</div><p><span class="verse3 v-num v-3">3&nbsp;</span><span class="v JER1_3" data-id="JER1_3">It came also in the days of Jehoiakim the son of Josiah, king of Judah, to the end of the eleventh year of Zedekiah, the son of Josiah, king of Judah, to the carrying away of Jerusalem captive in the fifth month.</span></p></div>';
-		const expectedResult = `<div class="chapter section ENGWEB_25_JER_1 ENGWEB eng JER latin" dir="ltr" data-id="ENGWEB_25_JER_1" data-nextid="JER2" data-previd="ISA66" lang="eng"><div class="c">1</div><p><span class="verse3 v-num v-3">3&nbsp;</span><span class="v JER1_3" data-id="JER1_3"><span>It came also in the days of Jehoiakim the <em class="text-highlighted" style="background:linear-gradient(rgba(${highlights[0].highlighted_color}),rgba(${highlights[0].highlighted_color}))">son of </em><em class="text-highlighted" style="background:linear-gradient(rgba(${highlights[1].highlighted_color}),rgba(${highlights[1].highlighted_color}))">Josiah, king</em> of Judah, to the end of the eleventh year of Zedekiah, the son of Josiah, king of Judah, to the carrying away of Jerusalem captive in the fifth month.</span></span></p></div>`;
+		const expectedResult = `<div class="chapter section ENGWEB_25_JER_1 ENGWEB eng JER latin" dir="ltr" data-id="ENGWEB_25_JER_1" data-nextid="JER2" data-previd="ISA66" lang="eng"><div class="c">1</div><p><span class="verse3 v-num v-3">3&nbsp;</span><span class="v JER1_3" data-id="JER1_3"><span>It came also in the days of Jehoiakim the <em class="text-highlighted" style="background:linear-gradient(rgba(${highlights[0].highlighted_color}),rgba(${highlights[0].highlighted_color}))">son of </em><em class="text-highlighted" style="background:linear-gradient(rgba(${highlights[1].highlighted_color}),rgba(${highlights[1].highlighted_color}))"><em class="text-highlighted" style="background:linear-gradient(rgba(${highlights[0].highlighted_color}),rgba(${highlights[0].highlighted_color}))">Josiah</em>, king</em> of Judah, to the end of the eleventh year of Zedekiah, the son of Josiah, king of Judah, to the carrying away of Jerusalem captive in the fifth month.</span></span></p></div>`;
 
 		expect(highlightFormattedText(highlights, sampleText, JSDOM)).toEqual(expectedResult);
 	});
@@ -370,7 +370,7 @@ describe('highlightFormattedText', () => {
 			},
 		];
 		const sampleText = '<div class="chapter section ENGWEB_25_JER_1 ENGWEB eng JER latin" dir="ltr" data-id="ENGWEB_25_JER_1" data-nextid="JER2" data-previd="ISA66" lang="eng"><div class="c">1</div><p><span class="v JER1_9" data-id="JER1_9">Then Yahweh stretched out his hand, and touched my mouth. Then Yahweh said to me, “Behold, I have put my words in your mouth.</span></p></div>';
-		const expectedResult = `<div class="chapter section ENGWEB_25_JER_1 ENGWEB eng JER latin" dir="ltr" data-id="ENGWEB_25_JER_1" data-nextid="JER2" data-previd="ISA66" lang="eng"><div class="c">1</div><p><span class="v JER1_9" data-id="JER1_9"><span>Then <em class="text-highlighted" style="background:linear-gradient(rgba(${highlights[0].highlighted_color}),rgba(${highlights[0].highlighted_color}))"><em class="text-highlighted" style="background:linear-gradient(rgba(${highlights[1].highlighted_color}),rgba(${highlights[1].highlighted_color}))">Yahweh stretched out his hand</em></em>, and touched my mouth. Then Yahweh said to me, “Behold, I have put my words in your mouth.</span></span></p></div>`;
+		const expectedResult = `<div class="chapter section ENGWEB_25_JER_1 ENGWEB eng JER latin" dir="ltr" data-id="ENGWEB_25_JER_1" data-nextid="JER2" data-previd="ISA66" lang="eng"><div class="c">1</div><p><span class="v JER1_9" data-id="JER1_9"><span>Then <em class="text-highlighted" style="background:linear-gradient(rgba(${highlights[1].highlighted_color}),rgba(${highlights[1].highlighted_color}))"><em class="text-highlighted" style="background:linear-gradient(rgba(${highlights[0].highlighted_color}),rgba(${highlights[0].highlighted_color}))">Yahweh stretched out his hand</em></em>, and touched my mouth. Then Yahweh said to me, “Behold, I have put my words in your mouth.</span></span></p></div>`;
 		// Below is how I would prefer the result to look, but the above has the same affect on the display so I am fine with it for now
 		// const expectedResult = `<div class="chapter section ENGWEB_25_JER_1 ENGWEB eng JER latin" dir="ltr" data-id="ENGWEB_25_JER_1" data-nextid="JER2" data-previd="ISA66" lang="eng"><div class="c">1</div><p><span class="v JER1_9" data-id="JER1_9"><span>Then <em class="text-highlighted" style="background:linear-gradient(rgba(${highlights[1].highlighted_color}),rgba(${highlights[1].highlighted_color}))">Yahweh stretched out his hand</em>, and touched my mouth. Then Yahweh said to me, “Behold, I have put my words in your mouth.</span></span></p></div>`;
 
@@ -440,7 +440,7 @@ describe('highlightFormattedText', () => {
 			},
 		];
 		const sampleText = '<div class="chapter section ENGWEB_25_JER_1 ENGWEB eng JER latin" dir="ltr" data-id="ENGWEB_25_JER_1" data-nextid="JER2" data-previd="ISA66" lang="eng"><div class="c">1</div><p><span class="verse3 v-num v-3">3&nbsp;</span><span class="v JER1_3" data-id="JER1_3">It came also in the days of Jehoiakim the son of Josiah, king of Judah, to the end of the eleventh year of Zedekiah, the son of Josiah, king of Judah, to the carrying away of Jerusalem captive in the fifth month.</span></p></div>';
-		const expectedResult = `<div class="chapter section ENGWEB_25_JER_1 ENGWEB eng JER latin" dir="ltr" data-id="ENGWEB_25_JER_1" data-nextid="JER2" data-previd="ISA66" lang="eng"><div class="c">1</div><p><span class="verse3 v-num v-3">3&nbsp;</span><span class="v JER1_3" data-id="JER1_3"><span>It came also in the days of Jehoiakim the <em class="text-highlighted" style="background:linear-gradient(rgba(${highlights[0].highlighted_color}),rgba(${highlights[0].highlighted_color}))">son of </em><em class="text-highlighted" style="background:linear-gradient(rgba(${highlights[1].highlighted_color}),rgba(${highlights[1].highlighted_color}))">Josiah, </em><em class="text-highlighted" style="background:linear-gradient(rgba(${highlights[2].highlighted_color}),rgba(${highlights[2].highlighted_color}))">king</em> of Judah, to the end of the eleventh year of Zedekiah, the son of Josiah, king of Judah, to the carrying away of Jerusalem captive in the fifth month.</span></span></p></div>`;
+		const expectedResult = `<div class="chapter section ENGWEB_25_JER_1 ENGWEB eng JER latin" dir="ltr" data-id="ENGWEB_25_JER_1" data-nextid="JER2" data-previd="ISA66" lang="eng"><div class="c">1</div><p><span class="verse3 v-num v-3">3&nbsp;</span><span class="v JER1_3" data-id="JER1_3"><span>It came also in the days of Jehoiakim the <em class="text-highlighted" style="background:linear-gradient(rgba(${highlights[0].highlighted_color}),rgba(${highlights[0].highlighted_color}))">son of </em><em class="text-highlighted" style="background:linear-gradient(rgba(${highlights[1].highlighted_color}),rgba(${highlights[1].highlighted_color}))"><em class="text-highlighted" style="background:linear-gradient(rgba(${highlights[0].highlighted_color}),rgba(${highlights[0].highlighted_color}))">Josiah</em>, <em class="text-highlighted" style="background:linear-gradient(rgba(${highlights[2].highlighted_color}),rgba(${highlights[2].highlighted_color}))">king</em></em> of Judah, to the end of the eleventh year of Zedekiah, the son of Josiah, king of Judah, to the carrying away of Jerusalem captive in the fifth month.</span></span></p></div>`;
 
 		expect(highlightFormattedText(highlights, sampleText, JSDOM)).toEqual(expectedResult);
 	});
@@ -478,7 +478,7 @@ describe('highlightFormattedText', () => {
 				bible_id: 'ENGWEB',
 				book_id: 'PSA',
 				chapter: 50,
-				highlight_start: 37,
+				highlight_start: 36,
 				highlighted_color: '80,165,220,.25',
 				highlighted_words: 19,
 				id: 536,
@@ -516,7 +516,7 @@ describe('highlightFormattedText', () => {
 				bible_id: 'ENGWEB',
 				book_id: 'PSA',
 				chapter: 50,
-				highlight_start: 37,
+				highlight_start: 36,
 				highlighted_color: '80,165,220,.25',
 				highlighted_words: 56,
 				id: 536,
@@ -571,7 +571,7 @@ describe('highlightFormattedText', () => {
 				highlighted_color: '255,221,34,.25',
 			},
 			{
-				id: 99,
+				id: 100,
 				bible_id: 'ENGWEB',
 				book_id: 'GEN',
 				chapter: 4,
@@ -582,7 +582,25 @@ describe('highlightFormattedText', () => {
 			},
 		];
 		const sampleText = '<div class="chapter section ENGWEB_2_GEN_4 ENGWEB eng GEN latin" dir="ltr" data-id="ENGWEB_2_GEN_4" data-nextid="GEN5" data-previd="GEN3" lang="eng"> <div class="c">4</div><p><span class="verse1 v-num v-1">1&nbsp;</span><span class="v GEN4_1" data-id="GEN4_1">The man knew<span class="note" id="note-6"><a href="#footnote-6" class="key">*</a></span> Eve his wife. She conceived,<span class="note" id="note-7"><a href="#footnote-7" class="key">*</a></span> and gave birth to Cain, and said, “I have gotten a man with Yahweh’s help.”</span><span class="verse2 v-num v-2">2&nbsp;</span><span class="v GEN4_2" data-id="GEN4_2">Again she gave birth, to Cain’s brother Abel. Abel was a keeper of sheep, but Cain was a tiller of the ground.</span><span class="verse3 v-num v-3">3&nbsp;</span><span class="v GEN4_3" data-id="GEN4_3">God saw the light, and saw that it was good. God divided the light from the darkness.</span></p></div>';
-		const expectedResult = `<div class="chapter section ENGWEB_2_GEN_4 ENGWEB eng GEN latin" dir="ltr" data-id="ENGWEB_2_GEN_4" data-nextid="GEN5" data-previd="GEN3" lang="eng"> <div class="c">4</div><p><span class="verse1 v-num v-1">1&nbsp;</span><span class="v GEN4_1" data-id="GEN4_1"><span>The man knew</span><span class="note" id="note-6"><a href="#footnote-6" class="key">*</a></span><span> Eve his wife. She conceived,</span><span class="note" id="note-7"><a href="#footnote-7" class="key">*</a></span><span> and gave birth to Cain, <em class="text-highlighted" style="background:linear-gradient(rgba(${highlights[1].highlighted_color}),rgba(${highlights[1].highlighted_color}))">and said, “I have gotten <em class="text-highlighted" style="background:linear-gradient(rgba(${highlights[0].highlighted_color}),rgba(${highlights[0].highlighted_color}))">a man with Yahweh’s help.”</em></em></span></span><span class="verse2 v-num v-2">2&nbsp;</span><span class="v GEN4_2" data-id="GEN4_2"><span><em class="text-highlighted" style="background:linear-gradient(rgba(${highlights[1].highlighted_color}),rgba(${highlights[1].highlighted_color}))"><em class="text-highlighted" style="background:linear-gradient(rgba(${highlights[0].highlighted_color}),rgba(${highlights[0].highlighted_color}))">Again she gave birth</em>, to Cain’s brother Abel.</em> Abel was a keeper of sheep, but Cain was a tiller of the ground.</span></span><span class="verse3 v-num v-3">3&nbsp;</span><span class="v GEN4_3" data-id="GEN4_3"><span>God saw the light, and saw that it was good. God divided the light from the darkness.</span></span></p></div>`;
+		const expectedResult = `<div class="chapter section ENGWEB_2_GEN_4 ENGWEB eng GEN latin" dir="ltr" data-id="ENGWEB_2_GEN_4" data-nextid="GEN5" data-previd="GEN3" lang="eng"> <div class="c">4</div><p><span class="verse1 v-num v-1">1&nbsp;</span><span class="v GEN4_1" data-id="GEN4_1"><span>The man knew</span><span class="note" id="note-6"><a href="#footnote-6" class="key">*</a></span><span> Eve his wife. She conceived,</span><span class="note" id="note-7"><a href="#footnote-7" class="key">*</a></span><span> and gave birth to Cain, <em class="text-highlighted" style="background:linear-gradient(rgba(${highlights[1].highlighted_color}),rgba(${highlights[1].highlighted_color}))">and said, “I have gotten <em class="text-highlighted" style="background:linear-gradient(rgba(${highlights[0].highlighted_color}),rgba(${highlights[0].highlighted_color}))">a man with Yahweh’s help.”</em></em></span></span><span class="verse2 v-num v-2">2&nbsp;</span><span class="v GEN4_2" data-id="GEN4_2"><span><em class="text-highlighted" style="background:linear-gradient(rgba(${highlights[0].highlighted_color}),rgba(${highlights[0].highlighted_color}))"><em class="text-highlighted" style="background:linear-gradient(rgba(${highlights[1].highlighted_color}),rgba(${highlights[1].highlighted_color}))">Again she gave birth</em>, to Cain’s brother Abel.</em> Abel was a keeper of sheep, but Cain was a tiller of the ground.</span></span><span class="verse3 v-num v-3">3&nbsp;</span><span class="v GEN4_3" data-id="GEN4_3"><span>God saw the light, and saw that it was good. God divided the light from the darkness.</span></span></p></div>`;
+
+		expect(highlightFormattedText(highlights, sampleText, JSDOM)).toEqual(expectedResult);
+	});
+	it('Case: 25 Should apply highlight that spans multiple elements with the same data-id and starts in the second one where the starting index is not zero', () => {
+		const highlights = [
+			{
+				id: 199,
+				bible_id: 'ENGWEB',
+				book_id: 'PSA',
+				chapter: 50,
+				verse_start: 1,
+				highlight_start: 38,
+				highlighted_words: 42,
+				highlighted_color: '85,187,68,.25',
+			},
+		];
+		const sampleText = '<div class="chapter section ENGWEB_20_PSA_50 ENGWEB eng PSA latin" dir="ltr" data-id="ENGWEB_20_PSA_50" data-nextid="PSA51" data-previd="PSA49" lang="eng"> <div class="c">50</div> <h3>A Psalm by Asaph. </h3><div class="q"><span class="verse1 v-num v-1">1&#160;</span><span class="v PSA50_1" data-id="PSA50_1">The Mighty One, God, Yahweh, speaks,</span> </div><div class="q PSA50_1" data-id="PSA50_1">and calls the earth from sunrise to sunset. </div><div class="q"><span class="verse2 v-num v-2">2&#160;</span><span class="v PSA50_2" data-id="PSA50_2">Out of Zion, the perfection of beauty,</span> </div><div class="q PSA50_2" data-id="PSA50_2">God shines out. </div>';
+		const expectedResult = `<div class="chapter section ENGWEB_20_PSA_50 ENGWEB eng PSA latin" dir="ltr" data-id="ENGWEB_20_PSA_50" data-nextid="PSA51" data-previd="PSA49" lang="eng"> <div class="c">50</div> <h3>A Psalm by Asaph. </h3><div class="q"><span class="verse1 v-num v-1">1&nbsp;</span><span class="v PSA50_1" data-id="PSA50_1"><span>The Mighty One, God, Yahweh, speaks,</span></span> </div><div class="q PSA50_1" data-id="PSA50_1"><span>an<em class="text-highlighted" style="background:linear-gradient(rgba(${highlights[0].highlighted_color}),rgba(${highlights[0].highlighted_color}))">d calls the earth from sunrise to sunset. </em></span></div><div class="q"><span class="verse2 v-num v-2">2&nbsp;</span><span class="v PSA50_2" data-id="PSA50_2"><span>Out of Zion, the perfection of beauty,</span></span> </div><div class="q PSA50_2" data-id="PSA50_2"><span>God shines out. </span></div></div>`;
 
 		expect(highlightFormattedText(highlights, sampleText, JSDOM)).toEqual(expectedResult);
 	});
