@@ -155,22 +155,31 @@ const createFormattedHighlights = (highlights, formattedTextString, DomCreator) 
 				// Create a blank node to use in the case that the current node is a text node
 				const newNonTextNode = xmlDoc.createElement('span');
 				let verseTextHtml = '';
+				let isNotValidHtml = false;
 
 				if (env === 'test') {
 					verseTextHtml = verseText.join('');
 				} else {
 					verseTextHtml = parser.parseFromString(verseText.join(''), 'text/html').getElementsByTagName('body')[0].innerHTML;
+
+					try {
+						xmlDoc.createElement('span').innerHTML = verseTextHtml;
+					} catch (err) {
+						isNotValidHtml = true;
+					}
 				}
 
 				if (verse.nodeType === 3) {
-					// this is a text node and cannot have inner html so I need a new element to be able to add the highlight
-					newNonTextNode.innerHTML = verseTextHtml;
+					if (!isNotValidHtml) {
+						// this is a text node and cannot have inner html so I need a new element to be able to add the highlight
+						newNonTextNode.innerHTML = verseTextHtml;
+					}
 				} else if (!isNote) {
 					// Set the inner html for this verse - this overrides any other styling that had been inside that verse
-					// console.log('This is not a note and is an element');
-					// console.log('verse', verse);
-					//
-					verse.innerHTML = verseTextHtml; // eslint-disable-line no-param-reassign
+					if (!isNotValidHtml) {
+						// this is a text node and cannot have inner html so I need a new element to be able to add the highlight
+						verse.innerHTML = verseTextHtml;
+					}
 				}
 				newChildren.push(verse.nodeType === 3 ? newNonTextNode : verse);
 				// console.log('new inner html', verse.innerHTML);
