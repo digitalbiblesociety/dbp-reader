@@ -39,7 +39,7 @@ function PageSizeSelector({ pageSize, togglePageSelector, setPageSize, pageSelec
 						pageSize === 100 ? <SvgWrapper width={'7px'} height={'13px'} svgid={'pagination-arrows'} /> : <span className={'svg-placeholder'}> </span>
 					}
 				</div>
-				<div className={pageSize === 0 ? 'active' : 'inactive'} role="button" tabIndex={0} onClick={() => { setPageSize(1000); togglePageSelector(); }}>
+				<div className={pageSize === 0 ? 'active' : 'inactive'} role="button" tabIndex={0} onClick={() => { setPageSize(10000); togglePageSelector(); }}>
 					<span className={'text'}>VIEW ALL</span>
 					{
 						pageSize === 0 ? <SvgWrapper width={'7px'} height={'13px'} svgid={'pagination-arrows'} /> : <span className={'svg-placeholder'}> </span>
@@ -47,7 +47,7 @@ function PageSizeSelector({ pageSize, togglePageSelector, setPageSize, pageSelec
 				</div>
 			</div>
 			<div role="button" tabIndex={0} onClick={togglePageSelector} className={state ? 'closed per-page-toggle' : 'per-page-toggle'}>
-				{pageSize === 0 ? 'VIEW ALL' : `${pageSize} PER PAGE`}
+				{pageSize === 10000 ? 'VIEW ALL' : `${pageSize} PER PAGE`}
 			</div>
 		</div>
 	);
