@@ -15,18 +15,20 @@ export class GoogleAuthentication extends React.PureComponent { // eslint-disabl
 	state = { popupOpen: false, popupCoords: { x: 0, y: 0 } }
 	handleSocialLogin = () => {
 		// console.log('social login google clicked');
-		const { activeDriver, socialLoginLink, socialMediaLogin } = this.props;
+		const { socialMediaLogin } = this.props;
+		// console.log('Sending Google driver');
 
-		if (activeDriver === 'google' && socialLoginLink) {
-			// console.log('active driver', activeDriver);
-			// console.log('social login link', socialLoginLink);
-			// const socialWindow = window.open(socialLoginLink, '_blank');
-			//
-			// socialWindow.focus();
-		} else {
-			// console.log('sending social driver google');
-			socialMediaLogin({ driver: 'google' });
-		}
+		socialMediaLogin({ driver: 'google' });
+		// if (activeDriver === 'google' && socialLoginLink) {
+		// 	// console.log('active driver', activeDriver);
+		// 	// console.log('social login link', socialLoginLink);
+		// 	// const socialWindow = window.open(socialLoginLink, '_blank');
+		// 	//
+		// 	// socialWindow.focus();
+		// } else {
+		// 	// console.log('sending social driver google');
+		// 	socialMediaLogin({ driver: 'google' });
+		// }
 	}
 	openPopup = (e) => {
 		const coords = { x: e.clientX, y: e.clientY };
@@ -35,7 +37,7 @@ export class GoogleAuthentication extends React.PureComponent { // eslint-disabl
 	}
 	render() {
 		return (
-			<div role={'button'} tabIndex={0} onClick={this.openPopup} className="google">
+			<div role={'button'} tabIndex={0} onClick={this.handleSocialLogin} className="google">
 				<SvgWrapper style={{ backgroundColor: 'white' }} className="svg" height="26px" width="26px" svgid="google" />
 				Sign in with Google
 				{
@@ -47,8 +49,8 @@ export class GoogleAuthentication extends React.PureComponent { // eslint-disabl
 }
 
 GoogleAuthentication.propTypes = {
-	activeDriver: PropTypes.string,
-	socialLoginLink: PropTypes.string,
+	// activeDriver: PropTypes.string,
+	// socialLoginLink: PropTypes.string,
 	socialMediaLogin: PropTypes.func,
 };
 

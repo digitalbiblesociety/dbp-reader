@@ -604,4 +604,22 @@ describe('highlightFormattedText', () => {
 
 		expect(highlightFormattedText(highlights, sampleText, JSDOM)).toEqual(expectedResult);
 	});
+	it('Case: 26 Should apply a highlight that spans 3 verses and starts at the beginning of the first verse', () => {
+		const highlights = [
+			{
+				id: 199,
+				bible_id: 'ENGWEB',
+				book_id: 'MAT',
+				chapter: 1,
+				verse_start: 2,
+				highlight_start: 0,
+				highlighted_words: 243,
+				highlighted_color: '84,185,72,.25',
+			},
+		];
+		const sampleText = '<div class="chapter section ENGWEB_70_MAT_1 ENGWEB eng MAT latin" dir="ltr" data-id="ENGWEB_70_MAT_1" data-nextid="MAT2" data-previd="DAG14" lang="eng">\n<div class="c">1</div><p><span class="verse1 v-num v-1">1&nbsp;</span><span class="v MAT1_1" data-id="MAT1_1">The book of the genealogy of Jesus Christ,<span class=\'note\' id=\'note-1756\'><a href="#footnote-1756" class="key">*</a></span> the son of David, the son of Abraham.</span>\n<span class="verse2 v-num v-2">2&nbsp;</span><span class="v MAT1_2" data-id="MAT1_2">Abraham became the father of Isaac. Isaac became the father of Jacob. Jacob became the father of Judah and his brothers.</span>\n<span class="verse3 v-num v-3">3&nbsp;</span><span class="v MAT1_3" data-id="MAT1_3">Judah became the father of Perez and Zerah by Tamar. Perez became the father of Hezron. Hezron became the father of Ram.</span>\n<span class="verse4 v-num v-4">4&nbsp;</span><span class="v MAT1_4" data-id="MAT1_4">Ram became the father of Amminadab. Amminadab became the father of Nahshon. Nahshon became the father of Salmon.</span></p></div>';
+		const expectedResult = `<div class="chapter section ENGWEB_70_MAT_1 ENGWEB eng MAT latin" dir="ltr" data-id="ENGWEB_70_MAT_1" data-nextid="MAT2" data-previd="DAG14" lang="eng">\n<div class="c">1</div><p><span class="verse1 v-num v-1">1&nbsp;</span><span class="v MAT1_1" data-id="MAT1_1"><span>The book of the genealogy of Jesus Christ,</span><span class="note" id="note-1756"><a href="#footnote-1756" class="key">*</a></span><span> the son of David, the son of Abraham.</span></span>\n<span class="verse2 v-num v-2">2&nbsp;</span><span class="v MAT1_2" data-id="MAT1_2"><span><em class="text-highlighted" style="background:linear-gradient(rgba(${highlights[0].highlighted_color}),rgba(${highlights[0].highlighted_color}))">Abraham became the father of Isaac. Isaac became the father of Jacob. Jacob became the father of Judah and his brothers.</em></span></span>\n<span class="verse3 v-num v-3">3&nbsp;</span><span class="v MAT1_3" data-id="MAT1_3"><span><em class="text-highlighted" style="background:linear-gradient(rgba(${highlights[0].highlighted_color}),rgba(${highlights[0].highlighted_color}))">Judah became the father of Perez and Zerah by Tamar. Perez became the father of Hezron. Hezron became the father of Ram.</em></span></span>\n<span class="verse4 v-num v-4">4&nbsp;</span><span class="v MAT1_4" data-id="MAT1_4"><span><em class="text-highlighted" style="background:linear-gradient(rgba(${highlights[0].highlighted_color}),rgba(${highlights[0].highlighted_color}))">Ram</em> became the father of Amminadab. Amminadab became the father of Nahshon. Nahshon became the father of Salmon.</span></span></p></div>`;
+
+		expect(highlightFormattedText(highlights, sampleText, JSDOM)).toEqual(expectedResult);
+	});
 });

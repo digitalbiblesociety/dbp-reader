@@ -20,7 +20,7 @@ import {
 } from './constants';
 
 export function* sendSignUpForm({ password, email, firstName, lastName, wantsUpdates }) {
-	const requestUrl = `https://api.bible.build/users?key=${process.env.DBP_API_KEY}&v=4&pretty`;
+	const requestUrl = `https://api.bible.build/users?key=${process.env.DBP_API_KEY}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}`;
 	const data = new FormData();
 
 	data.append('email', email);
@@ -63,7 +63,7 @@ export function* sendSignUpForm({ password, email, firstName, lastName, wantsUpd
 }
 
 export function* sendLoginForm({ password, email, stay }) {
-	const requestUrl = `https://api.bible.build/users/login?key=${process.env.DBP_API_KEY}&v=4&pretty`;
+	const requestUrl = `https://api.bible.build/users/login?key=${process.env.DBP_API_KEY}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}`;
 	const formData = new FormData();
 
 	formData.append('password', password);
@@ -251,9 +251,16 @@ export function* socialMediaLogin({ driver }) {
 	// 	id,
 	// 	accessToken,
 	// } = res;
-	const requestUrl = `https://api.bible.build/users/login/${driver}?key=${process.env.DBP_API_KEY}&v=4`;
+	// console.log('Driver supplied to social media login', driver);
+	let requestUrl = `https://api.bible.build/users/login/${driver}?key=${process.env.DBP_API_KEY}&v=4&project_id=${process.env.NOTES_PROJECT_ID}`;
+
+	if (process.env.NODE_ENV === 'development') {
+		requestUrl = `https://api.bible.build/users/login/${driver}?key=${process.env.DBP_API_KEY}&v=4&project_id=${process.env.NOTES_PROJECT_ID}&alt_url=true`;
+	}
 
 	try {
+		// console.log('requestUrl', requestUrl);
+
 		const response = yield call(request, requestUrl);
 		// console.log('social response', response);
 		if (response) {
