@@ -109,6 +109,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		const { userAuthenticated: authenticated, userId } = this.props;
 		// console.log('authenticated in home did mount', authenticated);
 		// console.log('userId in home did mount', userId);
+		// console.log('props location', this.props.location.search.slice(6));
 
 		if (bibleId && bookId && chapter >= 0) {
 			this.props.dispatch({
@@ -132,6 +133,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 				userId,
 			});
 			// console.log('redirecting from bible and book');
+			// console.log(this.props);
 			this.props.history.replace(`/${bibleId.toLowerCase()}/${bookId.toLowerCase()}/1`);
 		} else if (bibleId) {
 			// If the user only enters a version of the bible then
@@ -198,12 +200,37 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 				xfbml: true,
 				version: 'v2.12',
 			});
-			// todo: look into using the login status to see if they gave access
 			// to our app and set their status as authenticated at that point
+			// console.log('getting login status');
 			// FB.getLoginStatus((response) => {
 			// 	console.log('fb login status', response);
+			// 	// console.log('response.authResponse.accessToken', response.authResponse.accessToken);
+			// 	if (response.status === 'connected') {
+			// 		FB.api(
+			// 			'/me',
+			// 			{
+			// 				fields: 'name,last_name,about,birthday,email,id',
+			// 				access_token: response.authResponse.accessToken,
+			// 			},
+			// 			(res) => {
+			// 				console.log('res', res);
+			// 				console.log('res.email', res.email);
+			// 			},
+			// 		);
+			// 	}
 			// 	// statusChangeCallback(response);
 			// });
+
+			// console.log('log user out');
+			// FB.logout((res) => {
+			// 	console.log('logout res', res);
+			// });
+			//
+			// console.log('log user in');
+			// FB.login((res) => {
+			// 	console.log('login res', res);
+			//
+			// }, { scope: 'public_profile,email' });
 		};
 
 		((d, s, id) => {

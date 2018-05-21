@@ -809,7 +809,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 
 				// I think this can stay the same as formatted, it could be made shorter potentially
 				// need to remove all line breaks and note characters
-				highlightedWords = selectedText.replace(/[\n*✝]/g, '').length - dist;
+				highlightedWords = selectedText.replace(/[\r\n*✝]/g, '').length - dist;
 			} else {
 				node = getPlainParentVerse(node, firstVerse);
 				// taking off the first 2 spaces and the verse number from the string

@@ -65,7 +65,7 @@ const selectUserNotes = () => createDeepEqualSelector(
 			};
 		}
 		// If the user isn't authorized then there will not be any notes or bookmarks and I can just end the function here
-		if (!authd && !userId && !profAuth && !profUser) {
+		if ((!authd && !userId) || (!profAuth && !profUser)) {
 			// console.log('no user');
 			return {
 				text: text.toJS(),
@@ -103,21 +103,22 @@ const selectUserNotes = () => createDeepEqualSelector(
 		});
 		filteredBookmarks.forEach((n, ni) => {
 			let iToSet = 0;
+			// console.log('text,n', text,n);
+
 			const verse = text.find((t, i) => {
 				// console.log('t',t);
 				// console.log('n',n);
-				if (parseInt(t.get('verse_start'), 10) === n.verse_start) {
+
+				if (parseInt(t.get('verse_start'), 10) === n.get('verse_start')) {
 					iToSet = i;
 				}
-				return parseInt(t.get('verse_start'), 10) === n.verse_start;
+				return parseInt(t.get('verse_start'), 10) === n.get('verse_start');
 			});
 			// console.log('bookmark verse', verse);
 			// console.log(iToSet);
 			if (verse) {
-				if (n.bookmark) {
-					newText = newText.size ? newText.setIn([iToSet, 'hasBookmark'], true) : text.setIn([iToSet, 'hasBookmark'], true);
-					newText = newText.size ? newText.setIn([iToSet, 'bookmarkIndex'], ni) : text.setIn([iToSet, 'bookmarkIndex'], ni);
-				}
+				newText = newText.size ? newText.setIn([iToSet, 'hasBookmark'], true) : text.setIn([iToSet, 'hasBookmark'], true);
+				newText = newText.size ? newText.setIn([iToSet, 'bookmarkIndex'], ni) : text.setIn([iToSet, 'bookmarkIndex'], ni);
 			}
 		});
 		// console.log(filteredNotes);

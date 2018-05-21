@@ -15,18 +15,19 @@ export class FacebookAuthentication extends React.PureComponent { // eslint-disa
 	state = { popupOpen: false, popupCoords: { x: 0, y: 0 } }
 	handleSocialLogin = () => {
 		// console.log('social login facebook clicked');
-		const { activeDriver, socialLoginLink, socialMediaLogin } = this.props;
-
-		if (activeDriver === 'facebook' && socialLoginLink) {
-			// console.log('active driver', activeDriver);
-			// console.log('social login link after user has already been authd', socialLoginLink);
-			// const socialWindow = window.open(socialLoginLink, '_blank');
-			//
-			// socialWindow.focus();
-		} else {
-			// console.log('sending social driver for facebook');
-			socialMediaLogin({ driver: 'facebook' });
-		}
+		const { socialMediaLogin } = this.props;
+		// console.log('Sending facebook driver');
+		socialMediaLogin({ driver: 'facebook' });
+		// if (activeDriver === 'facebook' && socialLoginLink) {
+		// 	// console.log('active driver', activeDriver);
+		// 	// console.log('social login link after user has already been authd', socialLoginLink);
+		// 	// const socialWindow = window.open(socialLoginLink, '_blank');
+		// 	//
+		// 	// socialWindow.focus();
+		// } else {
+		// 	// console.log('sending social driver for facebook');
+		// 	socialMediaLogin({ driver: 'facebook' });
+		// }
 	}
 	openPopup = (e) => {
 		const coords = { x: e.clientX, y: e.clientY };
@@ -47,8 +48,8 @@ export class FacebookAuthentication extends React.PureComponent { // eslint-disa
 }
 
 FacebookAuthentication.propTypes = {
-	activeDriver: PropTypes.string,
-	socialLoginLink: PropTypes.string,
+	// activeDriver: PropTypes.string,
+	// socialLoginLink: PropTypes.string,
 	socialMediaLogin: PropTypes.func,
 };
 

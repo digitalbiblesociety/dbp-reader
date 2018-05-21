@@ -24,9 +24,8 @@ class Login extends React.PureComponent {
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.socialLoginLink && nextProps.socialLoginLink !== this.props.socialLoginLink) {
 			// console.log('social link', nextProps.socialLoginLink);
-			const socialWindow = window.open(nextProps.socialLoginLink, '_blank');
-
-			socialWindow.focus();
+			window.open(nextProps.socialLoginLink, '_self');
+			// socialWindow.focus();
 		}
 	}
 
