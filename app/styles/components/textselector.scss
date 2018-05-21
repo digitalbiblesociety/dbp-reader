@@ -235,6 +235,7 @@
     };
     display:flex;
     align-items:center;
+    text-transform: capitalize;
 
     &:hover {
       color: inherit;
