@@ -814,12 +814,12 @@ export function* getCopyrightSaga({ filesetIds }) {
 		// console.log('copyright response', copyrights);
 
 		const cText = copyrights.filter((c) => c.testament === 'C' && (c.type === 'text_plain' || c.type === 'text_format'))[0];
-		const ntText = !cText ? copyrights.filter((c) => ntCodes[c.testament] && (c.type === 'text_plain' || c.type === 'text_format')) : [];
-		const otText = !cText ? copyrights.filter((c) => otCodes[c.testament] && (c.type === 'text_plain' || c.type === 'text_format')) : [];
+		const ntText = !cText ? copyrights.filter((c) => ntCodes[c.testament] && (c.type === 'text_plain' || c.type === 'text_format'))[0] : {};
+		const otText = !cText ? copyrights.filter((c) => otCodes[c.testament] && (c.type === 'text_plain' || c.type === 'text_format'))[0] : {};
 
 		const cAudio = copyrights.filter((c) => c.testament === 'C' && (c.type === 'audio' || c.type === 'audio_drama'))[0];
-		const ntAudio = !cAudio ? copyrights.filter((c) => ntCodes[c.testament] && (c.type === 'audio' || c.type === 'audio_drama')) : [];
-		const otAudio = !cAudio ? copyrights.filter((c) => otCodes[c.testament] && (c.type === 'audio' || c.type === 'audio_drama')) : [];
+		const ntAudio = !cAudio ? copyrights.filter((c) => ntCodes[c.testament] && (c.type === 'audio' || c.type === 'audio_drama'))[0] : {};
+		const otAudio = !cAudio ? copyrights.filter((c) => otCodes[c.testament] && (c.type === 'audio' || c.type === 'audio_drama'))[0] : {};
 
 		// console.log('cText', cText);
 		// console.log('ntText', ntText);
