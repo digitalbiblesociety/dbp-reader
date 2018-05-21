@@ -12,7 +12,7 @@ describe('highlightFormattedText', () => {
 	});
 	it('Should return a string', () => {
 		const sampleHighlights = [];
-		const text = '<span class="verse1 v-num v-1">1&#160;</span><span class="v GEN1_1" data-id="GEN1_1"> In the beginning God created the heaven and the earth. </span>';
+		const text = '<span class="verse1 v-num v-1">1&nbsp;</span><span class="v GEN1_1" data-id="GEN1_1"> In the beginning God created the heaven and the earth. </span>';
 
 		expect(typeof highlightFormattedText(sampleHighlights, text, JSDOM)).toBe('string');
 	});
@@ -29,7 +29,7 @@ describe('highlightFormattedText', () => {
 				highlighted_color: '85,187,68,.25',
 			},
 		];
-		const sampleText = '<div class="chapter section ENGWEB_2_GEN_1 ENGWEB eng GEN latin" dir="ltr" data-id="ENGWEB_2_GEN_1" data-nextid="GEN2" lang="eng"><div class="c">1</div><p><span class="verse1 v-num v-1">1&#160;</span><span class="v GEN1_1" data-id="GEN1_1">In the beginning, God<span class=\'note\' id=\'note-0\'><a href="#footnote-0" class="key">*</a></span> created the heavens and the earth.</span></p></div>';
+		const sampleText = '<div class="chapter section ENGWEB_2_GEN_1 ENGWEB eng GEN latin" dir="ltr" data-id="ENGWEB_2_GEN_1" data-nextid="GEN2" lang="eng"><div class="c">1</div><p><span class="verse1 v-num v-1">1&nbsp;</span><span class="v GEN1_1" data-id="GEN1_1">In the beginning, God<span class=\'note\' id=\'note-0\'><a href="#footnote-0" class="key">*</a></span> created the heavens and the earth.</span></p></div>';
 		const result = `<div class="chapter section ENGWEB_2_GEN_1 ENGWEB eng GEN latin" dir="ltr" data-id="ENGWEB_2_GEN_1" data-nextid="GEN2" lang="eng"><div class="c">1</div><p><span class="verse1 v-num v-1">1&nbsp;</span><span class="v GEN1_1" data-id="GEN1_1"><span>In the beginning, <em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[0].highlighted_color}),rgba(${sampleHighlights[0].highlighted_color}))">God</em></span><span class="note" id="note-0"><a href="#footnote-0" class="key">*</a></span><span><em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[0].highlighted_color}),rgba(${sampleHighlights[0].highlighted_color}))"> created</em> the heavens and the earth.</span></span></p></div>`;
 
 		expect(highlightFormattedText(sampleHighlights, sampleText, JSDOM)).toEqual(result);
@@ -619,6 +619,24 @@ describe('highlightFormattedText', () => {
 		];
 		const sampleText = '<div class="chapter section ENGWEB_70_MAT_1 ENGWEB eng MAT latin" dir="ltr" data-id="ENGWEB_70_MAT_1" data-nextid="MAT2" data-previd="DAG14" lang="eng">\n<div class="c">1</div><p><span class="verse1 v-num v-1">1&nbsp;</span><span class="v MAT1_1" data-id="MAT1_1">The book of the genealogy of Jesus Christ,<span class=\'note\' id=\'note-1756\'><a href="#footnote-1756" class="key">*</a></span> the son of David, the son of Abraham.</span>\n<span class="verse2 v-num v-2">2&nbsp;</span><span class="v MAT1_2" data-id="MAT1_2">Abraham became the father of Isaac. Isaac became the father of Jacob. Jacob became the father of Judah and his brothers.</span>\n<span class="verse3 v-num v-3">3&nbsp;</span><span class="v MAT1_3" data-id="MAT1_3">Judah became the father of Perez and Zerah by Tamar. Perez became the father of Hezron. Hezron became the father of Ram.</span>\n<span class="verse4 v-num v-4">4&nbsp;</span><span class="v MAT1_4" data-id="MAT1_4">Ram became the father of Amminadab. Amminadab became the father of Nahshon. Nahshon became the father of Salmon.</span></p></div>';
 		const expectedResult = `<div class="chapter section ENGWEB_70_MAT_1 ENGWEB eng MAT latin" dir="ltr" data-id="ENGWEB_70_MAT_1" data-nextid="MAT2" data-previd="DAG14" lang="eng">\n<div class="c">1</div><p><span class="verse1 v-num v-1">1&nbsp;</span><span class="v MAT1_1" data-id="MAT1_1"><span>The book of the genealogy of Jesus Christ,</span><span class="note" id="note-1756"><a href="#footnote-1756" class="key">*</a></span><span> the son of David, the son of Abraham.</span></span>\n<span class="verse2 v-num v-2">2&nbsp;</span><span class="v MAT1_2" data-id="MAT1_2"><span><em class="text-highlighted" style="background:linear-gradient(rgba(${highlights[0].highlighted_color}),rgba(${highlights[0].highlighted_color}))">Abraham became the father of Isaac. Isaac became the father of Jacob. Jacob became the father of Judah and his brothers.</em></span></span>\n<span class="verse3 v-num v-3">3&nbsp;</span><span class="v MAT1_3" data-id="MAT1_3"><span><em class="text-highlighted" style="background:linear-gradient(rgba(${highlights[0].highlighted_color}),rgba(${highlights[0].highlighted_color}))">Judah became the father of Perez and Zerah by Tamar. Perez became the father of Hezron. Hezron became the father of Ram.</em></span></span>\n<span class="verse4 v-num v-4">4&nbsp;</span><span class="v MAT1_4" data-id="MAT1_4"><span><em class="text-highlighted" style="background:linear-gradient(rgba(${highlights[0].highlighted_color}),rgba(${highlights[0].highlighted_color}))">Ram</em> became the father of Amminadab. Amminadab became the father of Nahshon. Nahshon became the father of Salmon.</span></span></p></div>`;
+
+		expect(highlightFormattedText(highlights, sampleText, JSDOM)).toEqual(expectedResult);
+	});
+	it('Case: 27 Should apply a highlight that starts in wj tag, goes to normal tag, back to wj and then into the next verse', () => {
+		const highlights = [
+			{
+				id: 199,
+				bible_id: 'ENGWEB',
+				book_id: 'MAT',
+				chapter: 9,
+				verse_start: 6,
+				highlight_start: 0,
+				highlighted_words: 170,
+				highlighted_color: '84,185,72,.25',
+			},
+		];
+		const sampleText = '<div class="chapter section ENGWEB_70_MAT_9 ENGWEB eng MAT latin" dir="ltr" data-id="ENGWEB_70_MAT_9" data-nextid="MAT10" data-previd="MAT8" lang="eng">\n<div class="c">9</div><p><span class="verse6 v-num v-6">6&nbsp;</span><span class="v MAT9_6" data-id="MAT9_6"><span class=\'wj\'>But that you may know that the Son of Man has authority on earth to forgive sins-”</span> (then he said to the paralytic), <span class=\'wj\'>“Get up, and take up your mat, and go to your house.”</span></span>\n</p><p><span class="verse7 v-num v-7">7&nbsp;</span><span class="v MAT9_7" data-id="MAT9_7">He arose and departed to his house.</span></p></div>';
+		const expectedResult = `<div class="chapter section ENGWEB_70_MAT_9 ENGWEB eng MAT latin" dir="ltr" data-id="ENGWEB_70_MAT_9" data-nextid="MAT10" data-previd="MAT8" lang="eng">\n<div class="c">9</div><p><span class="verse6 v-num v-6">6&nbsp;</span><span class="v MAT9_6" data-id="MAT9_6"><span class="wj"><em class="text-highlighted" style="background:linear-gradient(rgba(${highlights[0].highlighted_color}),rgba(${highlights[0].highlighted_color}))">But that you may know that the Son of Man has authority on earth to forgive sins-”</em></span><span><em class="text-highlighted" style="background:linear-gradient(rgba(${highlights[0].highlighted_color}),rgba(${highlights[0].highlighted_color}))"> (then he said to the paralytic), </em></span><span class="wj"><em class="text-highlighted" style="background:linear-gradient(rgba(${highlights[0].highlighted_color}),rgba(${highlights[0].highlighted_color}))">“Get up, and take up your mat, and go to your house.”</em></span></span>\n</p><p><span class="verse7 v-num v-7">7&nbsp;</span><span class="v MAT9_7" data-id="MAT9_7"><span><em class="text-highlighted" style="background:linear-gradient(rgba(${highlights[0].highlighted_color}),rgba(${highlights[0].highlighted_color}))">H</em>e arose and departed to his house.</span></span></p></div>`;
 
 		expect(highlightFormattedText(highlights, sampleText, JSDOM)).toEqual(expectedResult);
 	});
