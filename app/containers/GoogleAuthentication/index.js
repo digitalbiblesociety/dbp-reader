@@ -54,7 +54,6 @@ GoogleAuthentication.propTypes = {
 	socialMediaLogin: PropTypes.func,
 };
 
-
 function mapDispatchToProps(dispatch) {
 	return {
 		dispatch,
