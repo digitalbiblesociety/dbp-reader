@@ -102,7 +102,21 @@ const createFormattedHighlights = (highlights, formattedTextString, DomCreator) 
 				// Map: -> Updates the previous highlights to contain the new verse number and also to start out at 0
 				const highlightsStartingInVerse = previousHighlightArray
 					.filter((h) => h.verse_start === verseNumber || (h.verse_start < verseNumber && h.highlighted_words > 0))
-					.map((h) => h.verse_start !== verseNumber || (h.verse_start === verseNumber && sameVerse) ? { ...h, verse_start: verseNumber } : h);
+					.map((h) => h.verse_start !== verseNumber || (h.verse_start === verseNumber && sameVerse) ? { ...h, verse_start: verseNumber } : h)
+					.sort((a, b) => {
+						// I want the highlight that starts first to be applied first
+						if (a.highlight_start === b.highlight_start) {
+							// I need the highlight that ends first to be applied first
+							if (a.highlight_start + a.highlighted_words < b.highlight_start + b.highlighted_words) return -1;
+							if (a.highlight_start + a.highlighted_words > b.highlight_start + b.highlighted_words) return 1;
+							// I want the newest highlight to be before the older highlight
+							if (a.id > b.id) return 1;
+							if (a.id < b.id) return -1;
+						}
+						if (a.highlight_start < b.highlight_start) return -1;
+						if (a.highlight_start > b.highlight_start) return 1;
+						return 0;
+					});
 				// console.log('verse.textContent', verse.textContent);
 				// console.log('highlightsStartingInVerse', highlightsStartingInVerse);
 
@@ -226,6 +240,7 @@ function handleNewVerse({ highlightsStartingInVerse, verseText }) {
 		/* HIGHLIGHT STARTS IN A LATER SECTION OF THIS VERSE */
 		if (h.highlight_start >= verseLength) {
 			// Reducing the start of the highlight by the length of the section since it cannot start here
+
 			highlightsToUpdate[h.id] = { highlight_start: h.highlight_start - (verseLength) };
 		} else if (
 			nextHighlight &&
@@ -236,6 +251,8 @@ function handleNewVerse({ highlightsStartingInVerse, verseText }) {
 			/* HIGHLIGHT STOPS IN MIDDLE OF NEXT HIGHLIGHT */
 			// if two highlights overlap and neither is contained completely in the other
 			// l && fs < ls && fs + fe > ls && fs + fe < le
+			// console.log('Highlight stopping in middle of next one');
+
 			// Start the first highlight
 			verseText.splice(h.highlight_start, 1, `<em class="text-highlighted" ${backgroundStyle}>${verseText[h.highlight_start]}`);
 			// close the first highlight on the character before where the second highlight starts
@@ -249,10 +266,13 @@ function handleNewVerse({ highlightsStartingInVerse, verseText }) {
 				verseText.splice(verseLength - 1, 1, `${verseText[verseLength - 1]}</em>`);
 				// Setting the new value for highlighted_words and start
 				// Sets start to 0 because this highlight needs to resume in the beginning of the next verse
+				// console.log('verseLength', verseLength);
+
 				highlightsToUpdate[h.id] = {
 					highlighted_words: h.highlighted_words - (verseLength - h.highlight_start),
 					highlight_start: 0,
 				};
+				// console.log('highlightsToUpdate', highlightsToUpdate);
 			} else {
 				// The highlight has to be contained within this verse
 				verseText.splice(highlightLength, 1, `${verseText[highlightLength]}</em>`);
@@ -263,17 +283,21 @@ function handleNewVerse({ highlightsStartingInVerse, verseText }) {
 			/* SETS THE OPENING TAG FOR THE HIGHLIGHT (BASE CASE) */
 			verseText.splice(h.highlight_start, 1, `<em class="text-highlighted" ${backgroundStyle}>${verseText[h.highlight_start]}`);
 			/* SETS THE CLOSING TAG AND HANDLES UPDATING THE HIGHLIGHT OBJECT */
-			if (verseLength < highlightLength) {
+			if (verseLength <= highlightLength) {
 				// The highlight extends past this verse and into the next one
 				verseText.splice(verseLength - 1, 1, `${verseText[verseLength - 1]}</em>`);
-				// Setting the new value for highlighted_words and start
+				// console.log('verseLength', verseLength);
+// Setting the new value for highlighted_words and start
 				// Sets start to 0 because this highlight needs to resume in the beginning of the next verse
 				highlightsToUpdate[h.id] = {
 					highlighted_words: h.highlighted_words - (verseLength - h.highlight_start),
 					highlight_start: 0,
 				};
+				// console.log('highlightsToUpdate', highlightsToUpdate);
 			} else {
 				// The highlight has to be contained within this verse
+				// console.log('verseLength', verseLength);
+				// console.log('highlightLength', highlightLength);
 				verseText.splice(highlightLength, 1, `${verseText[highlightLength]}</em>`);
 				// Setting the new value for highlighted_words
 				highlightsToUpdate[h.id] = { highlighted_words: 0 };

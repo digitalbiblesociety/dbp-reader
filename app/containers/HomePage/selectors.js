@@ -147,6 +147,8 @@ const selectFormattedSource = () => createDeepEqualSelector(
 	[selectFormattedTextSource, selectCrossReferenceState],
 	({ source, props }, hasCrossReferences) => {
 		// Todo: Get rid of all dom manipulation in this selector because it is really gross
+		// Todo: run all of the parsing in this function once the source is obtained
+		// Todo: Keep the selection of the single verse and the footnotes here
 		// Pushing update with the formatted text working but not the footnotes
 		// const source = substate.get('formattedSource');
 		if (!source) {
@@ -168,11 +170,13 @@ const selectFormattedSource = () => createDeepEqualSelector(
 		// If there were notes they then use withNotes otherwise use the original string
 		// const updatedSource = withNotes || source;
 		// console.log('Updated source: ', updatedSource);
+		// console.log('source matched in selector', source.match(/[\n\r]/g, ''));
+		const sourceWithoutNewlines = source.replace(/[\n\r]/g, '');
 
 		if (props.match.params.verse) {
 			const parser = new DOMParser();
 			const serializer = new XMLSerializer();
-			const xmlDoc = parser.parseFromString(source, 'text/xml');
+			const xmlDoc = parser.parseFromString(sourceWithoutNewlines, 'text/xml');
 			const verseClassName = `${bookId.toUpperCase()}${chapter}_${verse}`;
 			// console.log('verseClassName', verseClassName);
 			// console.log('xmlDoc', xmlDoc);
@@ -188,19 +192,19 @@ const selectFormattedSource = () => createDeepEqualSelector(
 
 			return { main: newXML ? serializer.serializeToString(newXML) : 'This book does not have a verse matching the url', footnotes: {} };
 		}
-		const chapterStart = source.indexOf('<div class="chapter');
-		const chapterEnd = source.indexOf('<div class="footnotes">', chapterStart);
-		const footnotesStart = source.indexOf('<div class="footnotes">');
-		const footnotesEnd = source.indexOf('<div class="footer">', footnotesStart);
-		const main = source.slice(chapterStart, chapterEnd);
-
+		const chapterStart = sourceWithoutNewlines.indexOf('<div class="chapter');
+		const chapterEnd = sourceWithoutNewlines.indexOf('<div class="footnotes">', chapterStart);
+		const footnotesStart = sourceWithoutNewlines.indexOf('<div class="footnotes">');
+		const footnotesEnd = sourceWithoutNewlines.indexOf('<div class="footer">', footnotesStart);
+		const main = sourceWithoutNewlines.slice(chapterStart, chapterEnd).replace(/v-num v-[0-9]+">/g, '$&&#160;');
+		// console.log(main);
 		if (!hasCrossReferences) {
 			const mainWithoutCRs = main.replace(/<span class=['"]note['"](.*?)<\/span>/g, '');
 
 			return { main: mainWithoutCRs, footnotes: {} };
 		}
 
-		const footnotes = source.slice(footnotesStart, footnotesEnd);
+		const footnotes = sourceWithoutNewlines.slice(footnotesStart, footnotesEnd);
 		const footnotesArray = footnotes.match(/<span class="ft">(.*?)<\/span>/g) || [];
 		const crossReferenceArray = footnotes.match(/<span class="xt">(.*?)<\/span>/g) || [];
 		const combinedArray = footnotesArray.concat(crossReferenceArray);

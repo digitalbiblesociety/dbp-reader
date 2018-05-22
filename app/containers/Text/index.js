@@ -22,6 +22,7 @@ import {
 	getPlainParentVerseWithoutNumber,
 	getClosestParent,
 	getOffsetNeededForPsalms,
+	// getTextInSelectedNodes,
 } from 'utils/highlightingUtils';
 // import differenceObject from 'utils/deepDifferenceObject';
 import isEqual from 'lodash/isEqual';
@@ -639,9 +640,12 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			// console.log('focusText', focusText);
 			// console.log('aText', aText);
 			const selectedText = this.state.selectedText;
+			// const aLength = aText.length;
+			// const fLength = focusText.length;
 			// Setting my anchors with the data that is closest to the start of the passage
 			let anchorOffset = offset < focusOffset ? offset : focusOffset;
 			let anchorText = offset < focusOffset ? aText : focusText;
+			let node = aNode;
 			// console.log('a text', anchorText);
 			// console.log('nodes in just 7 verses', preorderTraverse(this.format, []));
 			// console.log('a offset', anchorOffset);
@@ -675,8 +679,10 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 							// console.log('aIndex is less than eIndex');
 							anchorText = aText;
 							anchorOffset = offset;
+							node = aNode;
 						} else {
 							anchorText = focusText;
+							node = eNode;
 							anchorOffset = focusOffset;
 						}
 						// (could potentially use next/prev sibling for this)
@@ -693,13 +699,14 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 						if (aVerseNumber < eVerseNumber) {
 							// console.log('aVerseNumber is less than eVerseNumber');
 							anchorText = aText;
+							node = aNode;
 							anchorOffset = offset;
 							// If the verse numbers are the same but the verse nodes are different then I am dealing with a psalm
 						} else if (aVerseNumber === eVerseNumber) {
 							// Use prevChild until I get null and use that node
 							// Need to decide here whether to use the anchor text or the focus text
-							// console.log('aParent', aParent);
-							// console.log('eParent', eParent);
+							// console.log('aParent vnums are same', aParent);
+							// console.log('eParent vnums are same', eParent);
 							// console.log('this.formatHighlight', this.formatHighlight);
 							// console.log('aParent', [...this.formatHighlight.children[0].children].indexOf(aParent));
 							// console.log('eParent', [...this.formatHighlight.children[0].children].indexOf(eParent));
@@ -712,16 +719,19 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 							// the previous function or to use the resulting text instead of aNode.textContent but
 							// I am not exactly sure which one to do...
 
-							// console.log('closestParent', closestParent);
+							// console.log('closestParent and aParent', closestParent, aParent);
 							if (aParent.isSameNode(closestParent)) {
 								anchorText = aText;
+								node = aNode;
 								anchorOffset = offset;
 							} else {
 								anchorText = focusText;
+								node = eNode;
 								anchorOffset = focusOffset;
 							}
 						} else {
 							anchorText = focusText;
+							node = eNode;
 							anchorOffset = focusOffset;
 						}
 					}
@@ -747,9 +757,11 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 					if (aIndex < eIndex) {
 						// console.log('aIndex is less than eIndex');
 						anchorText = aText;
+						node = aNode;
 						anchorOffset = offset;
 					} else {
 						anchorText = focusText;
+						node = eNode;
 						anchorOffset = focusOffset;
 					}
 					// (could potentially use next/prev sibling for this)
@@ -765,9 +777,11 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 					if (aVerseNumber < eVerseNumber) {
 						// console.log('aVerseNumber is less than eVerseNumber');
 						anchorText = aText;
+						node = aNode;
 						anchorOffset = offset;
 					} else {
 						anchorText = focusText;
+						node = eNode;
 						anchorOffset = focusOffset;
 					}
 				}
@@ -775,7 +789,6 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			// console.log('anchorOffset < focusOffset', anchorOffset < focusOffset);
 			// Solve's for formatted text
 			// Not so sure about this, seems like in theory it should give me the node closest to the beginning but idk
-			let node = anchorOffset < focusOffset ? aNode : eNode;
 			let highlightStart = 0;
 			let highlightedWords = 0;
 			const dist = this.calcDist(lastVerse, firstVerse, !!this.props.formattedSource.main);
@@ -785,9 +798,23 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				// console.log('starting node', node);
 				// console.log('first verse', firstVerse);
 				node = getFormattedParentVerseNumber(node, firstVerse);
+				// const testNum = getTextInSelectedNodes({
+				// 	node,
+				// 	firstVerse,
+				// 	lastVerse,
+				// 	book: activeBookId,
+				// 	chapter,
+				// 	refNode: this.formatHighlight || this.format,
+				// }) - (offset) - (fLength - focusOffset);
+				// console.log('testNum', testNum);
+				// console.log('(offset)', (offset));
+				// console.log('(fLength - focusOffset)', (fLength - focusOffset));
+
+				// console.log('window.getSelection().toString().length', window.getSelection().toString().length);
+
 				// console.log('verse node', node.attributes.class.value.slice(0, 1) === 'q');
 				// // At this point "node" is the first verse
-				// console.log('node.textContent', node.textContent);
+				// console.log('node.textContent', node);
 				// // console.log(anchorOffset);
 				// // console.log(anchorText);
 				// console.log('index of anchor text within text content', anchorText);
@@ -809,6 +836,11 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 
 				// I think this can stay the same as formatted, it could be made shorter potentially
 				// need to remove all line breaks and note characters
+				// console.log(selectedText.match(/\n/g));
+				// console.log('selectedText.length', selectedText.length);
+				// console.log('selectedText.replace(/[\\r\\n*]/g, "").length', selectedText.replace(/[\r\n*✝]/g, '').length);
+				// console.log('dist', dist);
+
 				highlightedWords = selectedText.replace(/[\r\n*✝]/g, '').length - dist;
 			} else {
 				node = getPlainParentVerse(node, firstVerse);
@@ -828,14 +860,6 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			// console.log('calc', node.textContent.indexOf(anchorText) + anchorOffset);
 			// plain text 乁(✿ ͡° ͜ʖ ͡°)و
 			if (this.props.userId && this.props.userAuthenticated) {
-				// console.log('highlight being added', {
-				// 	book: this.props.activeBookId,
-				// 	chapter: this.props.activeChapter,
-				// 	verseStart: firstVerse,
-				// 	color,
-				// 	highlightStart,
-				// 	highlightedWords,
-				// });
 				// console.log('highlight being added - not sending to db atm', {
 				// 	book: this.props.activeBookId,
 				// 	chapter: this.props.activeChapter,
@@ -911,7 +935,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			// Adds the length of each verse number
 			stringDiff += i.toFixed(0);
 			// Adds 1 character for formatted and 2 for plain text to account for spaces in verse numbers
-			stringDiff += p ? '1' : '11';
+			stringDiff += p ? '11' : '11';
 			// console.log(i);
 		}
 		// console.log('string diff', stringDiff);
