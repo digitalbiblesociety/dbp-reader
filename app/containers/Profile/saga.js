@@ -29,6 +29,7 @@ export function* sendSignUpForm({ password, email, firstName, lastName, wantsUpd
 	data.append('nickname', firstName);
 	data.append('wantsUpdates', wantsUpdates ? '1' : '0');
 	data.append('avatar', '');
+	data.append('project_id', process.env.NOTES_PROJECT_ID);
 
 	const options = {
 		method: 'POST',
@@ -103,7 +104,7 @@ export function* sendLoginForm({ password, email, stay }) {
 
 export function* updateEmail({ userId, email }) {
 	// console.log('in update email with ', userId, email);
-	const requestUrl = `https://api.bible.build/users/${userId}?key=${process.env.DBP_API_KEY}&v=4&pretty`;
+	const requestUrl = `https://api.bible.build/users/${userId}?key=${process.env.DBP_API_KEY}&v=4&project_id=${process.env.NOTES_PROJECT_ID}`;
 	const formData = new FormData();
 
 	formData.append('email', email);
@@ -132,7 +133,7 @@ export function* updateEmail({ userId, email }) {
 
 export function* updateUserInformation({ userId, profile }) {
 	// console.log('in update profile with ', userId, profile);
-	const requestUrl = `https://api.bible.build/users/${userId}?key=${process.env.DBP_API_KEY}&v=4&pretty`;
+	const requestUrl = `https://api.bible.build/users/${userId}?key=${process.env.DBP_API_KEY}&v=4&project_id=${process.env.NOTES_PROJECT_ID}`;
 	const formData = new FormData();
 	Object.entries(profile).forEach((entry) => entry[1] && formData.set(entry[0], entry[1]));
 
@@ -188,10 +189,11 @@ export function* updateUserInformation({ userId, profile }) {
 // }
 
 export function* resetPassword({ email }) {
-	const requestUrl = `https://api.bible.build/users/reset?key=${process.env.DBP_API_KEY}&v=4&pretty`;
+	const requestUrl = `https://api.bible.build/users/reset?key=${process.env.DBP_API_KEY}&v=4&project_id=${process.env.NOTES_PROJECT_ID}`;
 
 	const formData = new FormData();
 	formData.append('email', email);
+	formData.append('project_id', process.env.NOTES_PROJECT_ID);
 
 	const options = {
 		body: formData,
@@ -220,7 +222,7 @@ export function* resetPassword({ email }) {
 
 export function* deleteUser({ userId }) {
 	// console.log('in delete user with id', userId);
-	const requestUrl = `https://api.bible.build/users/${userId}?key=${process.env.DBP_API_KEY}&v=4&pretty`;
+	const requestUrl = `https://api.bible.build/users/${userId}?key=${process.env.DBP_API_KEY}&v=4&project_id=${process.env.NOTES_PROJECT_ID}`;
 	const options = {
 		method: 'DELETE',
 	};
