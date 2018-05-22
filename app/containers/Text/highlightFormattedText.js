@@ -102,7 +102,21 @@ const createFormattedHighlights = (highlights, formattedTextString, DomCreator) 
 				// Map: -> Updates the previous highlights to contain the new verse number and also to start out at 0
 				const highlightsStartingInVerse = previousHighlightArray
 					.filter((h) => h.verse_start === verseNumber || (h.verse_start < verseNumber && h.highlighted_words > 0))
-					.map((h) => h.verse_start !== verseNumber || (h.verse_start === verseNumber && sameVerse) ? { ...h, verse_start: verseNumber } : h);
+					.map((h) => h.verse_start !== verseNumber || (h.verse_start === verseNumber && sameVerse) ? { ...h, verse_start: verseNumber } : h)
+					.sort((a, b) => {
+						// I want the highlight that starts first to be applied first
+						if (a.highlight_start === b.highlight_start) {
+							// I need the highlight that ends first to be applied first
+							if (a.highlight_start + a.highlighted_words < b.highlight_start + b.highlighted_words) return -1;
+							if (a.highlight_start + a.highlighted_words > b.highlight_start + b.highlighted_words) return 1;
+							// I want the newest highlight to be before the older highlight
+							if (a.id > b.id) return 1;
+							if (a.id < b.id) return -1;
+						}
+						if (a.highlight_start < b.highlight_start) return -1;
+						if (a.highlight_start > b.highlight_start) return 1;
+						return 0;
+					});
 				// console.log('verse.textContent', verse.textContent);
 				// console.log('highlightsStartingInVerse', highlightsStartingInVerse);
 
@@ -237,6 +251,8 @@ function handleNewVerse({ highlightsStartingInVerse, verseText }) {
 			/* HIGHLIGHT STOPS IN MIDDLE OF NEXT HIGHLIGHT */
 			// if two highlights overlap and neither is contained completely in the other
 			// l && fs < ls && fs + fe > ls && fs + fe < le
+			// console.log('Highlight stopping in middle of next one');
+
 			// Start the first highlight
 			verseText.splice(h.highlight_start, 1, `<em class="text-highlighted" ${backgroundStyle}>${verseText[h.highlight_start]}`);
 			// close the first highlight on the character before where the second highlight starts

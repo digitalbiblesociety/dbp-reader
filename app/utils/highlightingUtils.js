@@ -136,13 +136,31 @@ const getOffsetNeededForPsalms = ({ refNode, book, chapter, verse, node }) => {
 
 	const previous = verseNodes.slice(0, verseNodes.indexOf(node));
 
-	return previous.reduce((a, c) => a + c.textContent.replace(/[\n\r]/, '').length, 0);
+	return previous.reduce((a, c) => a + c.textContent.replace(/[\n\r*✝]/, '').length, 0);
+};
+
+const getTextInSelectedNodes = ({ refNode, book, chapter, firstVerse, node, lastVerse }) => {
+	if (!refNode || !node) {
+		return '';
+	}
+	// Get all nodes between first and last node
+	const verseNodes = [];
+	let currentVerse = firstVerse;
+
+	while (currentVerse <= lastVerse) {
+		[...refNode.querySelectorAll(`[data-id=${book}${chapter}_${currentVerse}]`)].forEach((v) => verseNodes.push(v));
+		currentVerse += 1;
+	}
+	// console.log('verseNodes', verseNodes);
+
+	return verseNodes.reduce((a, c) => a + c.textContent.replace(/[\n\r*✝]/, '').length, 0);
 };
 
 export {
 	getFormattedParentVerseNumber,
 	getFormattedParentVerse,
 	getPlainParentVerse,
+	getTextInSelectedNodes,
 	getFormattedChildIndex,
 	getFormattedElementVerseId,
 	getPlainParentVerseWithoutNumber,
