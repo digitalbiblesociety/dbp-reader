@@ -58,16 +58,16 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 		return `${month.length === 1 ? `0${month}` : month}.${day}.${year}`;
 	}
 
-	setSelectedChapter = (chapter) => {
-		this.setState({ selectedChapter: chapter });
-	}
+	// setSelectedChapter = (chapter) => {
+	// 	this.setState({ selectedChapter: chapter });
+	// }
+	//
+	// setSelectedBookName = ({ book, id }) => {
+	// 	this.setState({ selectedBookName: book, selectedBookId: id });
+	// }
 
-	setSelectedBookName = ({ book, id }) => {
-		this.setState({ selectedBookName: book, selectedBookId: id });
-	}
-
-	// Use this to suggest to the user that they may want to save thier note
-	setTimer = () => {
+	// Use this to suggest to the user that they may want to save their note
+	// setTimer = () => {
 		// const titleText = this.state.titleText;
 		// const textArea = this.state.textarea;
 		// // Clears the timeout so that at most there will only be one request per 2.5 seconds
@@ -83,22 +83,24 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 		// 	// Make a function to alert the user that their work is not saved
 		// 	this.handleSave();
 		// }, 5000);
-	}
+	// }
 
 	handleTextareaChange = (e) => {
 		e.persist();
-		if (!this.state.readTheMessage) {
+		if (!this.state.readTheMessage || this.props.savedTheNote) {
+			// console.log('reading the saved message');
 			this.props.readSavedMessage();
-			this.setTimer();
+			// this.setTimer();
 		}
 		this.setState((cs) => cs.readTheMessage ? ({ textarea: e.target.value }) : ({ textarea: e.target.value, readTheMessage: true }));
 	}
 
 	handleNoteTitleChange = (e) => {
 		e.persist();
-		if (!this.state.readTheMessage) {
+		if (!this.state.readTheMessage || this.props.savedTheNote) {
+			// console.log('reading the saved message');
 			this.props.readSavedMessage();
-			this.setTimer();
+			// this.setTimer();
 		}
 		this.setState((cs) => cs.readTheMessage ? ({ titleText: e.target.value }) : ({ titleText: e.target.value, readTheMessage: true }));
 	}

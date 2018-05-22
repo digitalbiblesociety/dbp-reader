@@ -124,19 +124,6 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 		} else {
 			filteredPageData = this.getFilteredPageList(listData);
 		}
-		// console.log(this.getFilteredPageList(activePageData));
-		// console.log(highlights);
-		// console.log(this.props);
-		// Use concept like this to enhance modularity
-		// const dataTypes = {
-		// 	highlights,
-		// 	notes: listData,
-		// 	bookmarks: [],
-		// };
-		// const dataToMap = dataTypes[sectionType];
-		// console.log('highlights in my notes', highlights);
-		// console.log('active page data', activePageData);
-		// console.log('list data', listData);
 
 		return (
 			<div className="list-sections">

@@ -209,7 +209,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			// 		FB.api(
 			// 			'/me',
 			// 			{
-			// 				fields: 'name,last_name,about,birthday,email,id',
+			// 				fields: 'name,last_name,about,birthday,email,id,picture',
 			// 				access_token: response.authResponse.accessToken,
 			// 			},
 			// 			(res) => {
