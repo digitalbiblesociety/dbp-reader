@@ -123,6 +123,10 @@
     outline: 1px solid var(--menu-border-color);
   }
 
+  &:hover {
+    cursor: pointer;
+  }
+
   &:before {
     content: "";
     filter:blur(15px);
