@@ -159,7 +159,15 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 
 			// Defaulting to esv until browser language detection is implemented
 			// console.log('redirecting from else in did mount');
-			this.props.history.replace('/engesv/mat/1');
+			const sessionBibleId = sessionStorage.getItem('bible_is_1_bible_id');
+			const sessionBookId = sessionStorage.getItem('bible_is_2_book_id');
+			const sessionChapter = sessionStorage.getItem('bible_is_3_chapter');
+
+			if (sessionBibleId && sessionBookId && sessionChapter) {
+				this.props.history.replace(`/${sessionBibleId}/${sessionBookId}/${sessionChapter}`);
+			} else {
+				this.props.history.replace('/engesv/mat/1');
+			}
 		}
 
 		const activeTheme = get(this, ['props', 'homepage', 'userSettings', 'activeTheme']);
