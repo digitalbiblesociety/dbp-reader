@@ -70,7 +70,16 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 		const coords = { x: client.x, y: client.y };
 		this.openPopup(coords);
 	}
-	sendPasswordReset = (props) => this.props.dispatch(sendPasswordReset({ ...props, email: this.props.profile.userProfile.email, userAccessToken: this.props.userAccessToken }))
+	sendPasswordReset = (e, props) => {
+		this.props.dispatch(sendPasswordReset({
+			...props,
+			email: this.props.profile.userProfile.email,
+			userAccessToken: this.props.userAccessToken,
+		}));
+		const client = e.target.childNodes[1].getBoundingClientRect() || { x: 0, y: 0 };
+		const coords = { x: client.x, y: client.y };
+		this.openPopup(coords);
+	}
 	deleteUser = (props) => this.props.dispatch(deleteUser(props))
 	sendLoginForm = (props) => this.props.dispatch(sendLoginForm(props))
 	selectAccountOption = (option) => this.props.dispatch(selectAccountOption(option))
@@ -198,7 +207,12 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 									}
 									{
 										activeOption === 'password_reset_verified' ? (
-											<PasswordResetVerified sendPasswordReset={this.sendPasswordReset} />
+											<PasswordResetVerified
+												sendPasswordReset={this.sendPasswordReset}
+												popupOpen={popupOpen}
+												popupCoords={popupCoords}
+												openPopup={this.openPopup}
+											/>
 										) : null
 									}
 								</React.Fragment>
