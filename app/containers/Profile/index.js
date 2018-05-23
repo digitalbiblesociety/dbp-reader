@@ -17,6 +17,7 @@ import PasswordReset from 'components/PasswordReset';
 import AccountSettings from 'components/AccountSettings';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
 import SvgWrapper from 'components/SvgWrapper';
+import PasswordResetVerified from 'components/PasswordResetVerified';
 import CloseMenuFunctions from 'utils/closeMenuFunctions';
 import {
 	selectAccountOption,
@@ -191,6 +192,11 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 												resetPassword={this.resetPassword}
 												openPopup={this.openPopup}
 											/>
+										) : null
+									}
+									{
+										activeOption === 'password_reset_verified' ? (
+											<PasswordResetVerified />
 										) : null
 									}
 								</React.Fragment>

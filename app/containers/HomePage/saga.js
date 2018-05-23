@@ -7,6 +7,7 @@ import get from 'lodash/get';
 // import uniqBy from 'lodash/uniqBy';
 import uniqWith from 'lodash/uniqWith';
 import { getNotesForChapter, getBookmarksForChapter } from 'containers/Notes/saga';
+import { LOGIN_ERROR, USER_LOGGED_IN } from 'containers/Profile/constants';
 import {
 	getCountries,
 	getLanguages,
@@ -22,6 +23,7 @@ import {
 	GET_COPYRIGHTS,
 	INIT_APPLICATION,
 	DELETE_HIGHLIGHTS,
+	CREATE_USER_WITH_SOCIAL_ACCOUNT,
 } from './constants';
 import {
 	ntCodes,
@@ -856,6 +858,132 @@ export function* getCopyrightSaga({ filesetIds }) {
 	}
 }
 
+export function* createSocialUser({ email, name, nickname, id, avatar, userId, provider }) {
+	// if there is a user id then just add this account to that users profile
+	if (userId) {
+		const requestUrl = `https://api.bible.build/users/login?key=${process.env.DBP_API_KEY}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}`;
+		const formData = new FormData();
+
+		// formData.append('password', password);
+		formData.append('email', email);
+
+		const options = {
+			method: 'POST',
+			body: formData,
+		};
+
+		try {
+			const response = yield call(request, requestUrl, options);
+
+			if (response.error) {
+				yield put({ type: LOGIN_ERROR, message: response.error.message });
+			} else {
+				yield put({ type: USER_LOGGED_IN, userId: response.id, userProfile: response });
+				// May add an else that will save the id to the session so it is persisted through a page refresh
+				sessionStorage.setItem('bible_is_user_id', response.id);
+			}
+		} catch (err) {
+			if (process.env.NODE_ENV === 'development') {
+				console.error(err); // eslint-disable-line no-console
+			} else if (process.env.NODE_ENV === 'production') {
+				// const options = {
+				// 	header: 'POST',
+				// 	body: formData,
+				// };
+				// fetch('https://api.bible.build/error_logging', options);
+			}
+		}
+	} else {
+		// console.log('{ email, name, nickname, id, avatar, userId, provider }', { email, name, nickname, id, avatar, userId, provider });
+
+		// otherwise create a new account with this information
+		const requestUrl = `https://api.bible.build/users?key=${process.env.DBP_API_KEY}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}`;
+		const data = new FormData();
+
+		data.append('email', email);
+		// data.append('password', password);
+		data.append('name', name);
+		data.append('nickname', nickname);
+		data.append('wantsUpdates', '0');
+		data.append('avatar', avatar);
+		data.append('project_id', process.env.NOTES_PROJECT_ID);
+		data.append('social_provider_id', provider);
+		data.append('social_provider_user_id', id);
+
+		const options = {
+			method: 'POST',
+			body: data,
+		};
+
+		try {
+			const response = yield call(request, requestUrl, options);
+
+			if (response.success) {
+				// console.log('res', response);
+
+				yield put({ type: USER_LOGGED_IN, userId: response.user.id, userProfile: response.user });
+				sessionStorage.setItem('bible_is_user_id', response.user.id);
+			} else if (response.error) {
+				// console.log('res error', response);
+				if (process.env.NODE_ENV === 'development') {
+					console.warn(response.error); // eslint-disable-line no-console
+				}
+				// console.log('response.error.message.email', response.error.message.email[0] === 'The email has already been taken.');
+
+				if (response.error.message && response.error.message.email && response.error.message.email[0] === 'The email has already been taken.') {
+					// console.log('response.error.message.email', response.error.message.email);
+
+					const r = `https://api.bible.build/users/login?key=${process.env.DBP_API_KEY}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}`;
+					const fd = new FormData();
+
+					// fd.append('password', password);
+					fd.append('email', email);
+
+					const op = {
+						method: 'POST',
+						body: fd,
+					};
+
+					try {
+						const res = yield call(request, r, op);
+
+						if (res.error) {
+							yield put({ type: LOGIN_ERROR, message: res.error.message });
+						} else {
+							yield put({ type: USER_LOGGED_IN, userId: res.id, userProfile: res });
+							// May add an else that will save the id to the session so it is persisted through a page refresh
+							sessionStorage.setItem('bible_is_user_id', res.id);
+						}
+					} catch (err) {
+						if (process.env.NODE_ENV === 'development') {
+							console.error(err); // eslint-disable-line no-console
+						} else if (process.env.NODE_ENV === 'production') {
+							// const options = {
+							// 	header: 'POST',
+							// 	body: formData,
+							// };
+							// fetch('https://api.bible.build/error_logging', options);
+						}
+					}
+				}
+				// const message = Object.values(response.error.message).reduce((acc, cur) => acc.concat(cur), '');
+				// yield put({ type: SIGNUP_ERROR, message });
+				// yield put('user-login-failed', response.error.message);
+			}
+		} catch (err) {
+			if (process.env.NODE_ENV === 'development') {
+				console.error(err); // eslint-disable-line no-console
+			} else if (process.env.NODE_ENV === 'production') {
+				// const options = {
+				// 	header: 'POST',
+				// 	body: formData,
+				// };
+				// fetch('https://api.bible.build/error_logging', options);
+			}
+		}
+	}
+}
+
 // Individual exports for testing
 export default function* defaultSaga() {
 	yield takeLatest(INIT_APPLICATION, initApplication);
@@ -871,4 +999,5 @@ export default function* defaultSaga() {
 	yield takeLatest(GET_NOTES_HOMEPAGE, getNotesForChapter);
 	yield takeLatest(GET_COPYRIGHTS, getCopyrightSaga);
 	yield takeLatest(DELETE_HIGHLIGHTS, deleteHighlights);
+	yield takeLatest(CREATE_USER_WITH_SOCIAL_ACCOUNT, createSocialUser);
 }

@@ -62,6 +62,7 @@ import textSaga from 'containers/TextSelection/saga';
 import { getBookmarksForChapter, addBookmark } from 'containers/Notes/actions';
 import {
 	addHighlight,
+	createUserWithSocialAccount,
 	deleteHighlights,
 	getBooks,
 	getNotes,
@@ -200,27 +201,39 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 				xfbml: true,
 				version: 'v2.12',
 			});
+
+			FB.getLoginStatus((response) => { // eslint-disable-line no-undef
+				// console.log('fb login status', response);
+				// console.log('response.authResponse.accessToken', response.authResponse.accessToken);
+				if (response.status === 'connected') {
+					FB.api( // eslint-disable-line no-undef
+						'/me',
+						{
+							fields: 'name,last_name,about,birthday,email,id,picture',
+							access_token: response.authResponse.accessToken,
+						},
+						(res) => {
+							const {
+								email,
+								picture,
+								name,
+								last_name: nickname,
+								id,
+							} = res;
+							let avatar = '';
+
+							if (picture && picture.data && picture.data.url) {
+								avatar = picture.data.url;
+							}
+
+							this.props.dispatch(createUserWithSocialAccount({ email, avatar, name, nickname, id, userId: this.props.userId, provider: 'facebook' }));
+						},
+					);
+				}
+				// statusChangeCallback(response);
+			});
 			// to our app and set their status as authenticated at that point
 			// console.log('getting login status');
-			// FB.getLoginStatus((response) => {
-			// 	console.log('fb login status', response);
-			// 	// console.log('response.authResponse.accessToken', response.authResponse.accessToken);
-			// 	if (response.status === 'connected') {
-			// 		FB.api(
-			// 			'/me',
-			// 			{
-			// 				fields: 'name,last_name,about,birthday,email,id,picture',
-			// 				access_token: response.authResponse.accessToken,
-			// 			},
-			// 			(res) => {
-			// 				console.log('res', res);
-			// 				console.log('res.email', res.email);
-			// 			},
-			// 		);
-			// 	}
-			// 	// statusChangeCallback(response);
-			// });
-
 			// console.log('log user out');
 			// FB.logout((res) => {
 			// 	console.log('logout res', res);

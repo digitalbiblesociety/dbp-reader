@@ -13,6 +13,7 @@ import PopupMessage from 'components/PopupMessage';
 
 export class FacebookAuthentication extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	state = { popupOpen: false, popupCoords: { x: 0, y: 0 } }
+
 	handleSocialLogin = () => {
 		// console.log('social login facebook clicked');
 		const { socialMediaLogin } = this.props;
