@@ -10,10 +10,11 @@ import FacebookAuthentication from 'containers/FacebookAuthentication';
 import GoogleAuthentication from 'containers/GoogleAuthentication';
 import Checkbox from 'components/Checkbox';
 import checkEmail from 'utils/checkEmailForValidity';
+import messages from 'components/PasswordResetVerified/messages';
+// import messages from './messages';
 // import SvgWrapper from 'components/SvgWrapper';
 // import styled from 'styled-components';
-// import { FormattedMessage } from 'react-intl';
-// import messages from './messages';
+import { FormattedMessage } from 'react-intl';
 
 class SignUp extends React.PureComponent {
 	state = {
@@ -122,22 +123,25 @@ class SignUp extends React.PureComponent {
 
 	checkValidPassword = () => {
 		const { confirmPassword, password } = this.state;
-		const passLength = password.length >= 8;
+		const passLength = password.length > 8;
 		const passEqual = password === confirmPassword;
 		const passNotPass = password !== 'password';
-		const upperNumSym = /(?=.*\d)|(?=.*[A-Z])|(?=.*[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/])/.test(password); // eslint-disable-line no-useless-escape
+		// const upperNumSym = /(?=.*\d)|(?=.*[A-Z])|(?=.*[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/])/.test(password); // eslint-disable-line no-useless-escape
 		// console.log('upper num sym', upperNumSym);
-		const validPassword = passLength && passEqual && passNotPass && upperNumSym;
+		const validPassword = passLength && passEqual && passNotPass; // && upperNumSym;
 
 		if (!passEqual) {
 			this.setState({ passwordErrorType: 'confirm' });
-		} else if (!passLength) {
-			this.setState({ passwordErrorType: 'length' });
-		} else if (!passNotPass) {
-			this.setState({ passwordErrorType: 'password' });
-		} else if (!upperNumSym) {
-			this.setState({ passwordErrorType: 'upperNumSym' });
 		}
+		if (!passLength) {
+			this.setState({ passwordErrorType: 'length' });
+		}
+		if (!passNotPass) {
+			this.setState({ passwordErrorType: 'password' });
+		}
+		// } else if (!upperNumSym) {
+		// 	this.setState({ passwordErrorType: 'upperNumSym' });
+		// }
 		// console.log('valid password', validPassword);
 
 		if (validPassword) {
@@ -149,24 +153,29 @@ class SignUp extends React.PureComponent {
 
 	get signupError() {
 		const { validEmail, passwordErrorType } = this.state;
+		const errors = [];
 
 		if (passwordErrorType) {
 			if (passwordErrorType === 'confirm') {
-				return <p className={'signup-error-message'}>Your passwords do not match.</p>;
-			} else if (passwordErrorType === 'length') {
-				return <p className={'signup-error-message'}>Your password must be longer than 8 characters.</p>;
-			} else if (passwordErrorType === 'password') {
-				return <p className={'signup-error-message'}>You cannot use, &quot;password&quot; as your password...</p>;
-			} else if (passwordErrorType === 'upperNumSym') {
-				return <p className={'signup-error-message'}>You must have at least one of the following: number, uppercase character, symbol.</p>;
+				errors.push(<p key={'passwordError1'} className={'signup-error-message'}><FormattedMessage {...messages.passwordError1} /></p>);
 			}
+			if (passwordErrorType === 'length') {
+				errors.push(<p key={'passwordError2'} className={'signup-error-message'}><FormattedMessage {...messages.passwordError2} /></p>);
+			}
+			if (passwordErrorType === 'password') {
+				errors.push(<p key={'passwordError3'} className={'signup-error-message'}><FormattedMessage {...messages.passwordError3} /></p>);
+			}
+			// } else if (passwordErrorType === 'upperNumSym') {
+			// 	errors.push(<p key={'passwordError4'} className={'signup-error-message'}><FormattedMessage {...messages.passwordError4} /></p>);
+			// }
 		}
 
+		errors.push(<p key={'passwordError4'} className={'signup-error-message'}><FormattedMessage {...messages.passwordError4} /></p>);
 		if (!validEmail) {
-			return <p className={'signup-error-message'}>You have entered an invalid email.</p>;
+			errors.push(<p key={'emailError'} className={'signup-error-message'}><FormattedMessage {...messages.emailError} /></p>);
 		}
 
-		return <p className={'signup-error-message'}>There was an unknown error, please try again.</p>;
+		return <div className={'errors-div'}>{errors}</div>;
 	}
 
 	get signupForm() {

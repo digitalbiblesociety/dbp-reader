@@ -33,6 +33,7 @@ import {
 	logout,
 	viewErrorMessage,
 	clearErrorMessage,
+	sendPasswordReset,
 } from './actions';
 import makeSelectProfile from './selectors';
 import reducer from './reducer';
@@ -69,6 +70,7 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 		const coords = { x: client.x, y: client.y };
 		this.openPopup(coords);
 	}
+	sendPasswordReset = (props) => this.props.dispatch(sendPasswordReset({ ...props, email: this.props.profile.userProfile.email, userAccessToken: this.props.userAccessToken }))
 	deleteUser = (props) => this.props.dispatch(deleteUser(props))
 	sendLoginForm = (props) => this.props.dispatch(sendLoginForm(props))
 	selectAccountOption = (option) => this.props.dispatch(selectAccountOption(option))
@@ -196,7 +198,7 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 									}
 									{
 										activeOption === 'password_reset_verified' ? (
-											<PasswordResetVerified />
+											<PasswordResetVerified sendPasswordReset={this.sendPasswordReset} />
 										) : null
 									}
 								</React.Fragment>
@@ -213,6 +215,7 @@ Profile.propTypes = {
 	dispatch: PropTypes.func.isRequired,
 	toggleProfile: PropTypes.func,
 	profile: PropTypes.object,
+	userAccessToken: PropTypes.string,
 };
 
 const mapStateToProps = createStructuredSelector({

@@ -946,6 +946,7 @@ export function* createSocialUser({ email, name, nickname, id, avatar, userId, p
 
 					try {
 						const res = yield call(request, r, op);
+// console.log('res', res);
 
 						if (res.error) {
 							yield put({ type: LOGIN_ERROR, message: res.error.message });

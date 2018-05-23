@@ -1,4 +1,5 @@
-import { takeLatest, call, put } from 'redux-saga/effects';
+import { takeLatest, call, take, cancel, put } from 'redux-saga/effects';
+import { LOCATION_CHANGE } from 'react-router-redux';
 import request from 'utils/request';
 import {
 	// GET_USER_DATA,
@@ -8,6 +9,7 @@ import {
 	SEND_LOGIN_FORM,
 	SIGNUP_ERROR,
 	SEND_SIGNUP_FORM,
+	SEND_PASSWORD_RESET,
 	SOCIAL_MEDIA_LOGIN,
 	SOCIAL_MEDIA_LOGIN_SUCCESS,
 	DELETE_USER,
@@ -187,6 +189,36 @@ export function* updateUserInformation({ userId, profile }) {
 // 		}
 // 	}
 // }
+export function* sendResetPassword({ password, email, userAccessToken }) {
+	const requestUrl = `https://api.bible.build/users/reset?key=${process.env.DBP_API_KEY}&v=4&project_id=${process.env.NOTES_PROJECT_ID}`;
+	// console.log({ password, email, userId, userAccessToken });
+	const formData = new FormData();
+	formData.append('email', email);
+	formData.append('project_id', process.env.NOTES_PROJECT_ID);
+	formData.append('new_password', password);
+	// formData.append('user_id', userId);
+	formData.append('user_access_token', userAccessToken);
+
+	const options = {
+		body: formData,
+		method: 'POST',
+	};
+
+	try {
+		const response = yield call(request, requestUrl, options);
+
+		if (response) {
+			// Put stuff here one day to do things
+		}
+		// yield put({ type: USER_LOGGED_IN, userId: response.id, userProfile: response });
+		// sessionStorage.setItem('bible_is_user_id', response.id);
+	} catch (err) {
+		if (process.env.NODE_ENV === 'development') {
+			console.error(err); // eslint-disable-line no-console
+		}
+		yield put({ type: RESET_PASSWORD_ERROR, message: 'There was a problem sending your email. Please try again.' });
+	}
+}
 
 export function* resetPassword({ email }) {
 	const requestUrl = `https://api.bible.build/users/reset?key=${process.env.DBP_API_KEY}&v=4&project_id=${process.env.NOTES_PROJECT_ID}`;
@@ -257,7 +289,7 @@ export function* socialMediaLogin({ driver }) {
 	let requestUrl = `https://api.bible.build/users/login/${driver}?key=${process.env.DBP_API_KEY}&v=4&project_id=${process.env.NOTES_PROJECT_ID}`;
 
 	if (process.env.NODE_ENV === 'development') {
-		requestUrl = `https://api.bible.build/users/login/${driver}?key=${process.env.DBP_API_KEY}&v=4&project_id=${process.env.NOTES_PROJECT_ID}&alt_url=true`;
+		requestUrl = `https://api.bible.build/users/login/${driver}?key=${process.env.DBP_API_KEY}&v=4&project_id=${process.env.NOTES_PROJECT_ID}&alt_url=${process.env.NODE_ENV === 'development'}`;
 	}
 
 	try {
@@ -284,12 +316,23 @@ export function* socialMediaLogin({ driver }) {
 // Individual exports for testing
 export default function* defaultSaga() {
 	// yield takeLatest(GET_USER_DATA, getUserData);
-	yield takeLatest(SEND_SIGNUP_FORM, sendSignUpForm);
-	yield takeLatest(SEND_LOGIN_FORM, sendLoginForm);
+	const sendSignUpFormSaga = yield takeLatest(SEND_SIGNUP_FORM, sendSignUpForm);
+	const sendLoginFormSaga = yield takeLatest(SEND_LOGIN_FORM, sendLoginForm);
 	// yield takeLatest(UPDATE_PASSWORD, updatePassword);
-	yield takeLatest(RESET_PASSWORD, resetPassword);
-	yield takeLatest(DELETE_USER, deleteUser);
-	yield takeLatest(UPDATE_USER_INFORMATION, updateUserInformation);
-	yield takeLatest(UPDATE_EMAIL, updateEmail);
-	yield takeLatest(SOCIAL_MEDIA_LOGIN, socialMediaLogin);
+	const sendResetPasswordSaga = yield takeLatest(SEND_PASSWORD_RESET, sendResetPassword);
+	const resetPasswordSaga = yield takeLatest(RESET_PASSWORD, resetPassword);
+	const deleteUserSaga = yield takeLatest(DELETE_USER, deleteUser);
+	const updateUserInformationSaga = yield takeLatest(UPDATE_USER_INFORMATION, updateUserInformation);
+	const updateEmailSaga = yield takeLatest(UPDATE_EMAIL, updateEmail);
+	const socialMediaLoginSaga = yield takeLatest(SOCIAL_MEDIA_LOGIN, socialMediaLogin);
+
+	yield take(LOCATION_CHANGE);
+	yield cancel(sendSignUpFormSaga);
+	yield cancel(sendLoginFormSaga);
+	yield cancel(sendResetPasswordSaga);
+	yield cancel(resetPasswordSaga);
+	yield cancel(deleteUserSaga);
+	yield cancel(updateUserInformationSaga);
+	yield cancel(updateEmailSaga);
+	yield cancel(socialMediaLoginSaga);
 }

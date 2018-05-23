@@ -302,7 +302,29 @@
     .disclaimer {
       margin-top: 5px;
       padding: 15px;
-
     }
+  }
+  .errors-div {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.forgot-password.password-verified {
+  .title {
+    display: inline-block;
+    color: $sketch-document-color-light-blue;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    margin-left: 15px;
+    font-size: 18px;
+  }
+  .message {
+    margin-top: 0;
+    padding-top: 0;
+  }
+  .disclaimer {
+    margin-top: 0;
+    padding: 15px;
   }
 }

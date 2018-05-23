@@ -79,8 +79,8 @@ class AccountSettings extends React.PureComponent {
 						<SvgWrapper className={'avatar-placeholder'} svgid={'avatar_placeholder'} />
 					}
 					<button onClick={this.changePicture} className="change-picture">Change Picture</button>
-					<h3 className="name">{profile.nickname || 'First Name'}</h3>
-					<span className="name">{profile.name || 'Last Name'}</span>
+					<h3 className="name">{profile.nickname}</h3>
+					<span className="name">{profile.name}</span>
 				</section>
 				<div className="email-section">
 					<span className="title">e-mail</span>

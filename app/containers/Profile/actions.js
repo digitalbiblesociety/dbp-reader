@@ -19,7 +19,13 @@ import {
 	LOG_OUT,
 	ERROR_MESSAGE_VIEWED,
 	CLEAR_ERROR_MESSAGE,
+	SEND_PASSWORD_RESET,
 } from './constants';
+
+export const sendPasswordReset = (props) => ({
+	type: SEND_PASSWORD_RESET,
+	...props,
+});
 
 export const clearErrorMessage = (props) => ({
 	type: CLEAR_ERROR_MESSAGE,
