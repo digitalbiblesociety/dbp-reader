@@ -257,7 +257,7 @@ export function* socialMediaLogin({ driver }) {
 	let requestUrl = `https://api.bible.build/users/login/${driver}?key=${process.env.DBP_API_KEY}&v=4&project_id=${process.env.NOTES_PROJECT_ID}`;
 
 	if (process.env.NODE_ENV === 'development') {
-		requestUrl = `https://api.bible.build/users/login/${driver}?key=${process.env.DBP_API_KEY}&v=4&project_id=${process.env.NOTES_PROJECT_ID}&alt_url=true`;
+		requestUrl = `https://api.bible.build/users/login/${driver}?key=${process.env.DBP_API_KEY}&v=4&project_id=${process.env.NOTES_PROJECT_ID}&alt_url=${process.env.NODE_ENV === 'development'}`;
 	}
 
 	try {
