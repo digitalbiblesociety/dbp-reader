@@ -5,6 +5,7 @@
  */
 
 export const SELECT_ACCOUNT_OPTION = 'app/Profile/SELECT_ACCOUNT_OPTION';
+export const SEND_PASSWORD_RESET = 'app/Profile/SEND_PASSWORD_RESET';
 export const USER_LOGGED_IN = 'app/Profile/USER_LOGGED_IN';
 export const LOAD_USER_DATA = 'app/Profile/LOAD_USER_DATA';
 export const GET_USER_DATA = 'app/Profile/GET_USER_DATA';
