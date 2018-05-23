@@ -38,7 +38,13 @@ import {
 	TOGGLE_SETTINGS_OPTION,
 	TOGGLE_AUTOPLAY,
 	DELETE_HIGHLIGHTS,
+	CREATE_USER_WITH_SOCIAL_ACCOUNT,
 } from './constants';
+
+export const createUserWithSocialAccount = (props) => ({
+	type: CREATE_USER_WITH_SOCIAL_ACCOUNT,
+	...props,
+});
 
 export const deleteHighlights = (props) => ({
 	type: DELETE_HIGHLIGHTS,

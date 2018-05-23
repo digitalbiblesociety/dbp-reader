@@ -27,7 +27,7 @@ export function* sendSignUpForm({ password, email, firstName, lastName, wantsUpd
 	data.append('password', password);
 	data.append('name', lastName);
 	data.append('nickname', firstName);
-	data.append('wantsUpdates', wantsUpdates ? '1' : '0');
+	data.append('subscribed', wantsUpdates ? '1' : '0');
 	data.append('avatar', '');
 	data.append('project_id', process.env.NOTES_PROJECT_ID);
 

@@ -35,8 +35,8 @@ class VersionList extends React.PureComponent { // eslint-disable-line react/pre
 			bibles,
 			activeIsoCode,
 			activeTextId,
-			activeBookId,
-			activeChapter,
+			// activeBookId,
+			// activeChapter,
 			versionsError,
 			filterText,
 		} = this.props;
@@ -46,7 +46,7 @@ class VersionList extends React.PureComponent { // eslint-disable-line react/pre
 		// path, key, types, className, text, clickHandler
 		// console.log('filtered bibles', filteredBibles.get(0).get('filesets').valueSeq());
 		const scrubbedBibles = filteredBibles.reduce((acc, bible) => ([...acc, {
-			path: `/${bible.get('abbr').toLowerCase()}/${activeBookId.toLowerCase()}/${activeChapter}`,
+			path: `/${bible.get('abbr').toLowerCase()}/mat/1`,
 			key: `${bible.get('abbr')}${bible.get('date')}`,
 			clickHandler: (audioType) => this.handleVersionListClick(bible, audioType),
 			className: bible.get('abbr') === activeTextId ? 'active-version' : '',
@@ -180,11 +180,11 @@ VersionList.propTypes = {
 	// toggleLanguageList: PropTypes.func,
 	toggleTextSelection: PropTypes.func,
 	// setCountryListState: PropTypes.func,
-	activeBookId: PropTypes.string,
+	// activeBookId: PropTypes.string,
 	activeIsoCode: PropTypes.string,
 	activeTextId: PropTypes.string,
 	filterText: PropTypes.string,
-	activeChapter: PropTypes.number,
+	// activeChapter: PropTypes.number,
 	active: PropTypes.bool,
 	versionsError: PropTypes.bool,
 	loadingVersions: PropTypes.bool,
