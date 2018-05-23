@@ -821,6 +821,9 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				// console.log('built text is : ', getClosestParent(this.formatHighlight || this.format, firstVerse, chapter, activeBookId));
 				// console.log('built text equals node text', getClosestParent(this.formatHighlight || this.format, firstVerse, chapter, activeBookId).indexOf(anchorText.trim()));
 				const nodeClassValue = (node.attributes && node.attributes.class && node.attributes.class.value) || undefined;
+				// console.log('nodeClassValue', nodeClassValue);
+				// console.log('node.attributes', node.attributes);
+
 				if (nodeClassValue && nodeClassValue.slice(0, 1) === 'q') {
 					// Get all of the nodes with the same data-id that come before this one in the dom
 					// Add the textContent length of each node to the anchorOffset
@@ -832,12 +835,13 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				highlightStart = (node.textContent.indexOf(anchorText) + anchorOffset);
 				// getClosestParent(this.formatHighlight || this.format, firstVerse, chapter, this.props.activeBookId);
 				// console.log('anchor text', anchorText);
+				// console.log('focusText', focusText);
 				// console.log(node.textContent.indexOf(anchorText));
 
 				// I think this can stay the same as formatted, it could be made shorter potentially
 				// need to remove all line breaks and note characters
-				// console.log(selectedText.match(/\n/g));
-				// console.log('selectedText.length', selectedText.length);
+				// console.log('selectedText.match(/\\n/g)', selectedText.match(/\n/g));
+				// console.log('selectedText.length', selectedText);
 				// console.log('selectedText.replace(/[\\r\\n*]/g, "").length', selectedText.replace(/[\r\n*✝]/g, '').length);
 				// console.log('dist', dist);
 
