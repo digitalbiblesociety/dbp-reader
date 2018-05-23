@@ -245,6 +245,7 @@ function homePageReducer(state = initialState, action) {
 		return state.set('selectedBookName', action.book);
 	case 'loadbible':
 		// console.log('loading bible with', action);
+		sessionStorage.setItem('bible_is_audio_player_state', true);
 		return state
 			.set('activeTextId', fromJS(action.bibleId))
 			.set('activeBookId', fromJS(action.activeBookId))
@@ -254,6 +255,7 @@ function homePageReducer(state = initialState, action) {
 			.set('defaultLanguageName', fromJS(action.languageName))
 			.set('activeBookName', fromJS(action.activeBookName))
 			.set('invalidBibleId', false)
+			.set('audioPlayerState', action.chapterData.hasAudio)
 			// .set('hasFormattedText', fromJS(action.chapterData.hasFormattedText))
 			// .set('hasTextInDatabase', fromJS(action.chapterData.hasPlainText))
 			// .set('hasAudio', fromJS(action.chapterData.hasAudio))
