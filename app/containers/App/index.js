@@ -30,6 +30,7 @@ export default function App() {
 				<Route exact path="/404" component={NotFoundPage} />
 				<Route exact path="/privacy-policy" component={PrivacyPolicy} />
 				<Route exact path="/terms-of-use" component={TermsAndConditions} />
+				<Route exact path="/reset/password/:token" component={HomePage} />
 				<Route exact path="/:bibleId?/:bookId?/:chapter?/:verse?" component={HomePage} />
 				<Route component={NotFoundPage} />
 			</Switch>

@@ -813,10 +813,10 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				// console.log('window.getSelection().toString().length', window.getSelection().toString().length);
 
 				// console.log('verse node', node.attributes.class.value.slice(0, 1) === 'q');
-				// // At this point "node" is the first verse
+				// At this point "node" is the first verse
 				// console.log('node.textContent', node);
-				// // console.log(anchorOffset);
-				// // console.log(anchorText);
+				// console.log(anchorOffset);
+				// console.log(anchorText);
 				// console.log('index of anchor text within text content', anchorText);
 				// console.log('built text is : ', getClosestParent(this.formatHighlight || this.format, firstVerse, chapter, activeBookId));
 				// console.log('built text equals node text', getClosestParent(this.formatHighlight || this.format, firstVerse, chapter, activeBookId).indexOf(anchorText.trim()));
