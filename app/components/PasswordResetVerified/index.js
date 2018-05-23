@@ -6,6 +6,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import PopupMessage from 'components/PopupMessage';
 // import styled from 'styled-components';
 
 import { FormattedMessage } from 'react-intl';
@@ -32,7 +33,11 @@ class PasswordResetVerified extends React.PureComponent {
 
 		if (validPassword) {
 			// Send password reset
-			this.props.sendPasswordReset({ password: this.state.firstPass });
+			this.props.sendPasswordReset(e, { password: this.state.firstPass });
+		} else {
+			const client = e.target.childNodes[1].getBoundingClientRect() || { x: 0, y: 0 };
+
+			this.props.openPopup({ x: client.x, y: client.y });
 		}
 		this.setState({ validPassword });
 	}
@@ -92,6 +97,7 @@ class PasswordResetVerified extends React.PureComponent {
 
 	render() {
 		const { validPassword } = this.state;
+		const { popupOpen, popupCoords } = this.props;
 		return (
 			<div className={'forgot-password password-verified'}>
 				<h1 className={'title'}><FormattedMessage {...messages.title} /></h1>
@@ -106,6 +112,9 @@ class PasswordResetVerified extends React.PureComponent {
 				<section className={'message'}>
 					<p className={'disclaimer'}><FormattedMessage {...messages.unableToResetPart1} /><a className={'link'} href={'https://support.bible.is/contact'} target={'_blank'}>&nbsp;contact us&nbsp;</a><FormattedMessage {...messages.unableToResetPart2} /></p>
 				</section>
+				{
+					popupOpen ? <PopupMessage x={popupCoords.x} y={popupCoords.y} message={'Your request is being processed, please try logging in again.'} /> : null
+				}
 			</div>
 		);
 	}
@@ -113,6 +122,9 @@ class PasswordResetVerified extends React.PureComponent {
 
 PasswordResetVerified.propTypes = {
 	sendPasswordReset: PropTypes.func,
+	openPopup: PropTypes.func,
+	popupOpen: PropTypes.bool,
+	popupCoords: PropTypes.object,
 };
 
 export default PasswordResetVerified;

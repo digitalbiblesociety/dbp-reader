@@ -62,7 +62,7 @@ import textSaga from 'containers/TextSelection/saga';
 import { getBookmarksForChapter, addBookmark } from 'containers/Notes/actions';
 import {
 	addHighlight,
-	createUserWithSocialAccount,
+	// createUserWithSocialAccount,
 	deleteHighlights,
 	getBooks,
 	getNotes,
@@ -210,35 +210,6 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					xfbml: true,
 					version: 'v2.12',
 				});
-				FB.getLoginStatus((response) => { // eslint-disable-line no-undef
-					// console.log('fb login status', response);
-					// console.log('response.authResponse.accessToken', response.authResponse.accessToken);
-					if (response.status === 'connected') {
-						FB.api( // eslint-disable-line no-undef
-							'/me',
-							{
-								fields: 'name,last_name,about,birthday,email,id,picture',
-								access_token: response.authResponse.accessToken,
-							},
-							(res) => {
-								const {
-									email,
-									picture,
-									name: nickname,
-									last_name: name,
-									id,
-								} = res;
-								let avatar = '';
-
-								if (picture && picture.data && picture.data.url) {
-									avatar = picture.data.url;
-								}
-								this.props.dispatch(createUserWithSocialAccount({ email, avatar, nickname, name, id, userId: this.props.userId, provider: 'facebook' }));
-							},
-						);
-					}
-					// statusChangeCallback(response);
-				});
 			};
 		}
 
@@ -246,41 +217,11 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		if (!this.props.userId) {
 			gapi.load('auth2', () => { // eslint-disable-line no-undef
 				// console.log('gapi loaded');
-				const auth2 = gapi.auth2.init({ // eslint-disable-line no-undef
+				window.auth2 = gapi.auth2.init({ // eslint-disable-line no-undef
 					client_id: process.env.GOOGLE_APP_ID,
 					scope: 'profile',
 				});
 				// console.log('auth 2 has been initialized', auth2);
-				if (!auth2.isSignedIn.get()) {
-					auth2.signIn().then(() => {
-						const prof = auth2.currentUser.get().getBasicProfile();
-						const user = {
-							name: prof.getName(),
-							nickname: prof.getGivenName(),
-							avatar: prof.getImageUrl(),
-							email: prof.getEmail(),
-							id: prof.getId(),
-						};
-						if (!this.props.userId) {
-							this.props.dispatch(createUserWithSocialAccount({ ...user, userId }));
-						}
-						// console.log('google user', user);
-
-						// console.log('auth2.currentUser.get().getBasicProfile()');
-					});
-					// console.log('auth2.isSignedIn.get()', auth2.isSignedIn.get());
-				} else {
-					const prof = auth2.currentUser.get().getBasicProfile();
-					const user = {
-						name: prof.getName(),
-						avatar: prof.getImageUrl(),
-						email: prof.getEmail(),
-						id: prof.getId(),
-					};
-					if (!this.props.userId) {
-						this.props.dispatch(createUserWithSocialAccount({ ...user, userId, provider: 'google' }));
-					}
-				}
 			});
 		}
 

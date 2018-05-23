@@ -10,25 +10,55 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import SvgWrapper from 'components/SvgWrapper';
 import PopupMessage from 'components/PopupMessage';
+import { createUserWithSocialAccount } from '../HomePage/actions';
 
 export class GoogleAuthentication extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	state = { popupOpen: false, popupCoords: { x: 0, y: 0 } }
 	handleSocialLogin = () => {
-		// console.log('social login google clicked');
-		const { socialMediaLogin } = this.props;
-		// console.log('Sending Google driver');
+		// console.log('social login google clicked', auth2);
+		// const { socialMediaLogin } = this.props;
+		// // console.log('Sending Google driver');
+		//
+		// socialMediaLogin({ driver: 'google' });
+		// // if (activeDriver === 'google' && socialLoginLink) {
+		// // 	// console.log('active driver', activeDriver);
+		// // 	// console.log('social login link', socialLoginLink);
+		// // 	// const socialWindow = window.open(socialLoginLink, '_blank');
+		// // 	//
+		// // 	// socialWindow.focus();
+		// // } else {
+		// // 	// console.log('sending social driver google');
+		// // 	socialMediaLogin({ driver: 'google' });
+		// // }
+		/* eslint-disable no-undef */
+		if (auth2) {
+			if (!auth2.isSignedIn.get()) {
+				auth2.signIn().then(() => {
+					const prof = auth2.currentUser.get().getBasicProfile();
+					const user = {
+						name: prof.getName(),
+						nickname: prof.getGivenName(),
+						avatar: prof.getImageUrl(),
+						email: prof.getEmail(),
+						id: prof.getId(),
+					};
+					this.props.dispatch(createUserWithSocialAccount({ ...user, provider: 'google' }));
+					// console.log('google user', user);
 
-		socialMediaLogin({ driver: 'google' });
-		// if (activeDriver === 'google' && socialLoginLink) {
-		// 	// console.log('active driver', activeDriver);
-		// 	// console.log('social login link', socialLoginLink);
-		// 	// const socialWindow = window.open(socialLoginLink, '_blank');
-		// 	//
-		// 	// socialWindow.focus();
-		// } else {
-		// 	// console.log('sending social driver google');
-		// 	socialMediaLogin({ driver: 'google' });
-		// }
+					// console.log('auth2.currentUser.get().getBasicProfile()');
+				});
+				// console.log('auth2.isSignedIn.get()', auth2.isSignedIn.get());
+			} else {
+				const prof = auth2.currentUser.get().getBasicProfile();
+				const user = {
+					name: prof.getName(),
+					avatar: prof.getImageUrl(),
+					email: prof.getEmail(),
+					id: prof.getId(),
+				};
+				this.props.dispatch(createUserWithSocialAccount({ ...user, provider: 'google' }));
+			}
+		}
 	}
 	openPopup = (e) => {
 		const coords = { x: e.clientX, y: e.clientY };
@@ -51,7 +81,8 @@ export class GoogleAuthentication extends React.PureComponent { // eslint-disabl
 GoogleAuthentication.propTypes = {
 	// activeDriver: PropTypes.string,
 	// socialLoginLink: PropTypes.string,
-	socialMediaLogin: PropTypes.func,
+	dispatch: PropTypes.func,
+	// socialMediaLogin: PropTypes.func,
 };
 
 function mapDispatchToProps(dispatch) {

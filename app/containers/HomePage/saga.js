@@ -859,6 +859,9 @@ export function* getCopyrightSaga({ filesetIds }) {
 }
 
 export function* createSocialUser({ email, name, nickname, id, avatar, userId, provider }) {
+	// console.log('Creating social user');
+	// console.log('{ email, name, nickname, id, avatar, userId, provider }', { email, name, nickname, id, avatar, userId, provider });
+
 	// if there is a user id then just add this account to that users profile
 	if (userId) {
 		const requestUrl = `https://api.bible.build/users/login?key=${process.env.DBP_API_KEY}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}`;
@@ -938,6 +941,8 @@ export function* createSocialUser({ email, name, nickname, id, avatar, userId, p
 
 					// fd.append('password', password);
 					fd.append('email', email);
+					fd.append('social_provider_id', provider);
+					fd.append('social_provider_user_id', id);
 
 					const op = {
 						method: 'POST',
