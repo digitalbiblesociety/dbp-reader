@@ -192,60 +192,6 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			this.toggleFirstLoadForTextSelection();
 		}
 
-		// Init the Facebook api here
-		window.fbAsyncInit = () => {
-			FB.init({ // eslint-disable-line no-undef
-				appId: process.env.FB_APP_ID,
-				autoLogAppEvents: true,
-				cookie: true,
-				xfbml: true,
-				version: 'v2.12',
-			});
-
-			FB.getLoginStatus((response) => { // eslint-disable-line no-undef
-				// console.log('fb login status', response);
-				// console.log('response.authResponse.accessToken', response.authResponse.accessToken);
-				if (response.status === 'connected') {
-					FB.api( // eslint-disable-line no-undef
-						'/me',
-						{
-							fields: 'name,last_name,about,birthday,email,id,picture',
-							access_token: response.authResponse.accessToken,
-						},
-						(res) => {
-							const {
-								email,
-								picture,
-								name,
-								last_name: nickname,
-								id,
-							} = res;
-							let avatar = '';
-
-							if (picture && picture.data && picture.data.url) {
-								avatar = picture.data.url;
-							}
-
-							this.props.dispatch(createUserWithSocialAccount({ email, avatar, name, nickname, id, userId: this.props.userId, provider: 'facebook' }));
-						},
-					);
-				}
-				// statusChangeCallback(response);
-			});
-			// to our app and set their status as authenticated at that point
-			// console.log('getting login status');
-			// console.log('log user out');
-			// FB.logout((res) => {
-			// 	console.log('logout res', res);
-			// });
-			//
-			// console.log('log user in');
-			// FB.login((res) => {
-			// 	console.log('login res', res);
-			//
-			// }, { scope: 'public_profile,email' });
-		};
-
 		((d, s, id) => {
 			let js = d.getElementsByTagName(s)[0];
 			const fjs = d.getElementsByTagName(s)[0];
@@ -254,6 +200,89 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			js.src = `https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.12&appId=${process.env.FB_APP_ID}&autoLogAppEvents=1`;
 			fjs.parentNode.insertBefore(js, fjs);
 		})(document, 'script', 'facebook-jssdk');
+		// Init the Facebook api here
+		if (!this.props.userId) {
+			window.fbAsyncInit = () => {
+				FB.init({ // eslint-disable-line no-undef
+					appId: process.env.FB_APP_ID,
+					autoLogAppEvents: true,
+					cookie: true,
+					xfbml: true,
+					version: 'v2.12',
+				});
+				FB.getLoginStatus((response) => { // eslint-disable-line no-undef
+					// console.log('fb login status', response);
+					// console.log('response.authResponse.accessToken', response.authResponse.accessToken);
+					if (response.status === 'connected') {
+						FB.api( // eslint-disable-line no-undef
+							'/me',
+							{
+								fields: 'name,last_name,about,birthday,email,id,picture',
+								access_token: response.authResponse.accessToken,
+							},
+							(res) => {
+								const {
+									email,
+									picture,
+									name: nickname,
+									last_name: name,
+									id,
+								} = res;
+								let avatar = '';
+
+								if (picture && picture.data && picture.data.url) {
+									avatar = picture.data.url;
+								}
+								this.props.dispatch(createUserWithSocialAccount({ email, avatar, nickname, name, id, userId: this.props.userId, provider: 'facebook' }));
+							},
+						);
+					}
+					// statusChangeCallback(response);
+				});
+			};
+		}
+
+		// May need to create a script and append it to the dom then wait for it to finish loading
+		if (!this.props.userId) {
+			gapi.load('auth2', () => { // eslint-disable-line no-undef
+				// console.log('gapi loaded');
+				const auth2 = gapi.auth2.init({ // eslint-disable-line no-undef
+					client_id: process.env.GOOGLE_APP_ID,
+					scope: 'profile',
+				});
+				// console.log('auth 2 has been initialized', auth2);
+				if (!auth2.isSignedIn.get()) {
+					auth2.signIn().then(() => {
+						const prof = auth2.currentUser.get().getBasicProfile();
+						const user = {
+							name: prof.getName(),
+							nickname: prof.getGivenName(),
+							avatar: prof.getImageUrl(),
+							email: prof.getEmail(),
+							id: prof.getId(),
+						};
+						if (!this.props.userId) {
+							this.props.dispatch(createUserWithSocialAccount({ ...user, userId }));
+						}
+						// console.log('google user', user);
+
+						// console.log('auth2.currentUser.get().getBasicProfile()');
+					});
+					// console.log('auth2.isSignedIn.get()', auth2.isSignedIn.get());
+				} else {
+					const prof = auth2.currentUser.get().getBasicProfile();
+					const user = {
+						name: prof.getName(),
+						avatar: prof.getImageUrl(),
+						email: prof.getEmail(),
+						id: prof.getId(),
+					};
+					if (!this.props.userId) {
+						this.props.dispatch(createUserWithSocialAccount({ ...user, userId, provider: 'google' }));
+					}
+				}
+			});
+		}
 
 		const browserObject = {
 			agent: '',
