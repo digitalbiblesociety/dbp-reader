@@ -124,7 +124,7 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 	// 	}, 4000);
 	// }
 
-	render() {
+	get accountOptions() {
 		const {
 			activeOption,
 			userAuthenticated,
@@ -138,8 +138,70 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 			passwordResetError,
 			passwordResetMessage,
 		} = this.props.profile;
-		const { toggleProfile } = this.props;
 		const { popupOpen, popupCoords } = this.state;
+
+		return userAuthenticated ? (
+			<AccountSettings
+				logout={this.logout}
+				deleteUser={this.deleteUser}
+				updatePassword={this.updatePassword}
+				profile={userProfile}
+				userId={userId}
+				updateEmail={this.updateEmail}
+				updateUserInformation={this.updateUserInformation}
+			/>
+			) : (
+				<React.Fragment>
+					<div className="form-options">
+						<span role="button" tabIndex={0} onClick={() => this.selectAccountOption('login')} className={activeOption === 'login' ? 'login active' : 'login'}>LOGIN</span>
+						<span role="button" tabIndex={0} onClick={() => this.selectAccountOption('signup')} className={activeOption === 'signup' ? 'signup active' : 'signup'}>SIGN UP</span>
+					</div>
+					{
+						activeOption === 'login' ? (
+							<Login
+								sendLoginForm={this.sendLoginForm}
+								selectAccountOption={this.selectAccountOption}
+								socialMediaLogin={this.socialMediaLogin}
+								viewErrorMessage={this.viewErrorMessage}
+								socialLoginLink={socialLoginLink}
+								errorMessage={loginErrorMessage}
+								activeDriver={activeDriver}
+								errorMessageViewed={errorMessageViewed}
+							/>
+						) : null
+					}
+					{
+						activeOption === 'signup' ? (
+							<SignUp
+								sendSignupForm={this.sendSignUpForm}
+								socialMediaLogin={this.socialMediaLogin}
+								viewErrorMessage={this.viewErrorMessage}
+								errorMessage={signupErrorMessage}
+								socialLoginLink={socialLoginLink}
+								activeDriver={activeDriver}
+								errorMessageViewed={errorMessageViewed}
+							/>
+						) : null
+					}
+					{
+						activeOption === 'password_reset' ? (
+							<PasswordReset
+								popupCoords={popupCoords}
+								popupOpen={popupOpen}
+								message={passwordResetError || passwordResetMessage}
+								resetPassword={this.resetPassword}
+								openPopup={this.openPopup}
+							/>
+						) : null
+					}
+				</React.Fragment>
+			);
+	}
+
+	render() {
+		const { toggleProfile, userAccessToken } = this.props;
+		const { popupOpen, popupCoords } = this.state;
+		// console.log('userAccessToken', userAccessToken);
 
 		return (
 			<GenericErrorBoundary affectedArea="Profile">
@@ -151,72 +213,14 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 					</header>
 					<div className="profile-content">
 						{
-							userAuthenticated ? (
-								<AccountSettings
-									logout={this.logout}
-									deleteUser={this.deleteUser}
-									updatePassword={this.updatePassword}
-									profile={userProfile}
-									userId={userId}
-									updateEmail={this.updateEmail}
-									updateUserInformation={this.updateUserInformation}
+							userAccessToken ? (
+								<PasswordResetVerified
+									sendPasswordReset={this.sendPasswordReset}
+									popupOpen={popupOpen}
+									popupCoords={popupCoords}
+									openPopup={this.openPopup}
 								/>
-							) : (
-								<React.Fragment>
-									<div className="form-options">
-										<span role="button" tabIndex={0} onClick={() => this.selectAccountOption('login')} className={activeOption === 'login' ? 'login active' : 'login'}>LOGIN</span>
-										<span role="button" tabIndex={0} onClick={() => this.selectAccountOption('signup')} className={activeOption === 'signup' ? 'signup active' : 'signup'}>SIGN UP</span>
-									</div>
-									{
-										activeOption === 'login' ? (
-											<Login
-												sendLoginForm={this.sendLoginForm}
-												selectAccountOption={this.selectAccountOption}
-												socialMediaLogin={this.socialMediaLogin}
-												viewErrorMessage={this.viewErrorMessage}
-												socialLoginLink={socialLoginLink}
-												errorMessage={loginErrorMessage}
-												activeDriver={activeDriver}
-												errorMessageViewed={errorMessageViewed}
-											/>
-										) : null
-									}
-									{
-										activeOption === 'signup' ? (
-											<SignUp
-												sendSignupForm={this.sendSignUpForm}
-												socialMediaLogin={this.socialMediaLogin}
-												viewErrorMessage={this.viewErrorMessage}
-												errorMessage={signupErrorMessage}
-												socialLoginLink={socialLoginLink}
-												activeDriver={activeDriver}
-												errorMessageViewed={errorMessageViewed}
-											/>
-										) : null
-									}
-									{
-										activeOption === 'password_reset' ? (
-											<PasswordReset
-												popupCoords={popupCoords}
-												popupOpen={popupOpen}
-												message={passwordResetError || passwordResetMessage}
-												resetPassword={this.resetPassword}
-												openPopup={this.openPopup}
-											/>
-										) : null
-									}
-									{
-										activeOption === 'password_reset_verified' ? (
-											<PasswordResetVerified
-												sendPasswordReset={this.sendPasswordReset}
-												popupOpen={popupOpen}
-												popupCoords={popupCoords}
-												openPopup={this.openPopup}
-											/>
-										) : null
-									}
-								</React.Fragment>
-							)
+							) : this.accountOptions
 						}
 					</div>
 				</aside>

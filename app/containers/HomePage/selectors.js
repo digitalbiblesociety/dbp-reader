@@ -172,11 +172,14 @@ const selectFormattedSource = () => createDeepEqualSelector(
 		// console.log('Updated source: ', updatedSource);
 		// console.log('source matched in selector', source.match(/[\n\r]/g, ''));
 		const sourceWithoutNewlines = source.replace(/[\n\r]/g, '');
+		const parser = new DOMParser();
+		const xmlDoc = parser.parseFromString(sourceWithoutNewlines, 'text/xml');
+		const footnotes = hasCrossReferences ? [...xmlDoc.querySelectorAll('.ft, .xt')].reduce((a, n) => ({ ...a, [n.parentElement.parentElement.attributes.id.value.slice(4)]: n.textContent }), {}) : {};
 
 		if (props.match.params.verse) {
-			const parser = new DOMParser();
+			// const parser = new DOMParser();
 			const serializer = new XMLSerializer();
-			const xmlDoc = parser.parseFromString(sourceWithoutNewlines, 'text/xml');
+			// const xmlDoc = parser.parseFromString(sourceWithoutNewlines, 'text/xml');
 			const verseClassName = `${bookId.toUpperCase()}${chapter}_${verse}`;
 			// console.log('verseClassName', verseClassName);
 			// console.log('xmlDoc', xmlDoc);
@@ -190,27 +193,25 @@ const selectFormattedSource = () => createDeepEqualSelector(
 				newXML.appendChild(verseString);
 			}
 
-			return { main: newXML ? serializer.serializeToString(newXML) : 'This book does not have a verse matching the url', footnotes: {} };
+			return { main: newXML ? serializer.serializeToString(newXML) : 'This book does not have a verse matching the url', footnotes };
 		}
 		const chapterStart = sourceWithoutNewlines.indexOf('<div class="chapter');
 		const chapterEnd = sourceWithoutNewlines.indexOf('<div class="footnotes">', chapterStart);
-		const footnotesStart = sourceWithoutNewlines.indexOf('<div class="footnotes">');
-		const footnotesEnd = sourceWithoutNewlines.indexOf('<div class="footer">', footnotesStart);
+		// const footnotesStart = sourceWithoutNewlines.indexOf('<div class="footnotes">');
+		// const footnotesEnd = sourceWithoutNewlines.indexOf('<div class="footer">', footnotesStart);
 		const main = sourceWithoutNewlines.slice(chapterStart, chapterEnd).replace(/v-num v-[0-9]+">/g, '$&&#160;');
 		// console.log(main);
 		if (!hasCrossReferences) {
 			const mainWithoutCRs = main.replace(/<span class=['"]note['"](.*?)<\/span>/g, '');
 
-			return { main: mainWithoutCRs, footnotes: {} };
+			return { main: mainWithoutCRs, footnotes };
 		}
-
-		const footnotes = sourceWithoutNewlines.slice(footnotesStart, footnotesEnd);
-		const footnotesArray = footnotes.match(/<span class="ft">(.*?)<\/span>/g) || [];
-		const crossReferenceArray = footnotes.match(/<span class="xt">(.*?)<\/span>/g) || [];
-		const combinedArray = footnotesArray.concat(crossReferenceArray);
-		const footnotesObject = Array.isArray(combinedArray) ? combinedArray.reduce((acc, note, i) => ({ ...acc, [`footnote-${i}`]: note.slice(17, -7) }), {}) : {};
-
-		return { main, footnotes: footnotesObject };
+		// const mappedNotes = footnotes.map((n) => {
+		// 	console.log(n.parentElement.parentElement.attributes);
+		// 	return ({ [n.parentElement.parentElement.attributes.id.value]: n.textContent });
+		// });
+		// console.log('footnotes', footnotes);
+		return { main, footnotes };
 	}
 );
 

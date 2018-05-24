@@ -133,6 +133,7 @@ const getClosestParent = ({ refNode, verse, chapter, book, aParent, eParent }) =
 
 const getOffsetNeededForPsalms = ({ refNode, book, chapter, verse, node }) => {
 	const verseNodes = [...refNode.querySelectorAll(`[data-id=${book}${chapter}_${verse}]`)];
+	// console.log('verseNodes.reduce((a, node) => a.concat(node.textContent))', verseNodes.reduce((a, n) => a.concat(n.textContent)));
 
 	const previous = verseNodes.slice(0, verseNodes.indexOf(node));
 

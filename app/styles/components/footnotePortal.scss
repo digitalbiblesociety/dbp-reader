@@ -3,15 +3,13 @@
   position: absolute;
   z-index: 4;
   min-height: 50px;
+  max-height: max-content;
   box-shadow: 0 0 10px rgba(0,0,0,0.5),
   inset 0 0 30px #eee;
-  max-height: 150px;
   width: 300px;
   max-width: 300px;
-  padding: 5px;
+  padding: 10px;
   background-color: #FFF;
-  overflow-y: scroll;
-  overflow-x: hidden;
   color: #000;
 
   span {
@@ -28,7 +26,10 @@
   }
 
   p {
-    padding: 15px;
+    max-height: 165px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0 5px;
     margin-right: 5px;
     margin-top: 5px;
   }

@@ -438,6 +438,8 @@ export function* getChapterFromUrl({ filesets, bibleId: oldBibleId, bookId: oldB
 			hasPlainText,
 			hasFormattedText,
 			hasAudio,
+			bookId,
+			chapter,
 		});
 
 		return {

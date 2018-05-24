@@ -9,7 +9,7 @@ export function* getSearchResults({ bibleId, searchText }) {
 	// console.log('decoded Search string', decodeURI(encodeURI(searchString)));
 
 	// https://api.bible.build/search?key=e582134c-8773-4e8a-b3b4-3f2493fc5127&v=4&query=god+loved+world&dam_id=ENGKJV&pretty
-	const reqUrl = `https://api.bible.build/search?dam_id=${bibleId}&key=${process.env.DBP_API_KEY}&v=4&query=${searchString}`;
+	const reqUrl = `https://api.bible.build/search?fileset_id=${bibleId}&key=${process.env.DBP_API_KEY}&v=4&query=${searchString}`;
 
 	// console.log(searchString, 'searchString');
 	// console.log(reqUrl, 'reqUrl');

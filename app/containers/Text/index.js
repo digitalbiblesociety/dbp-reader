@@ -193,8 +193,8 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 	setEventHandlersForFootnotes = (ref) => {
 		const notes = [...ref.getElementsByClassName('note')];
 
-		notes.forEach((note, index) => {
-			// console.log('setting a click handler for: ', note);
+		notes.forEach((note) => {
+			// console.log('setting a click handler for: ', note.attributes);
 			/* eslint-disable no-param-reassign */
 			// May need to change this and change the regex if we do infinite scrolling
 			if (note.childNodes && note.childNodes[0] && typeof note.childNodes[0].removeAttribute === 'function') {
@@ -207,7 +207,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				const rightEdge = window.innerWidth - 300;
 				const x = rightEdge < e.clientX ? rightEdge : e.clientX;
 
-				this.openFootnote({ id: `footnote-${index}`, coords: { x, y: e.clientY } });
+				this.openFootnote({ id: note.attributes.id.value, coords: { x, y: e.clientY } });
 			};
 		});
 	}
@@ -813,14 +813,17 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				// console.log('window.getSelection().toString().length', window.getSelection().toString().length);
 
 				// console.log('verse node', node.attributes.class.value.slice(0, 1) === 'q');
-				// // At this point "node" is the first verse
+				// At this point "node" is the first verse
 				// console.log('node.textContent', node);
-				// // console.log(anchorOffset);
-				// // console.log(anchorText);
+				// console.log(anchorOffset);
+				// console.log(anchorText);
 				// console.log('index of anchor text within text content', anchorText);
 				// console.log('built text is : ', getClosestParent(this.formatHighlight || this.format, firstVerse, chapter, activeBookId));
 				// console.log('built text equals node text', getClosestParent(this.formatHighlight || this.format, firstVerse, chapter, activeBookId).indexOf(anchorText.trim()));
 				const nodeClassValue = (node.attributes && node.attributes.class && node.attributes.class.value) || undefined;
+				// console.log('nodeClassValue', nodeClassValue);
+				// console.log('node.attributes', node.attributes);
+
 				if (nodeClassValue && nodeClassValue.slice(0, 1) === 'q') {
 					// Get all of the nodes with the same data-id that come before this one in the dom
 					// Add the textContent length of each node to the anchorOffset
@@ -832,12 +835,13 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				highlightStart = (node.textContent.indexOf(anchorText) + anchorOffset);
 				// getClosestParent(this.formatHighlight || this.format, firstVerse, chapter, this.props.activeBookId);
 				// console.log('anchor text', anchorText);
+				// console.log('focusText', focusText);
 				// console.log(node.textContent.indexOf(anchorText));
 
 				// I think this can stay the same as formatted, it could be made shorter potentially
 				// need to remove all line breaks and note characters
-				// console.log(selectedText.match(/\n/g));
-				// console.log('selectedText.length', selectedText.length);
+				// console.log('selectedText.match(/\\n/g)', selectedText.match(/\n/g));
+				// console.log('selectedText.length', selectedText);
 				// console.log('selectedText.replace(/[\\r\\n*]/g, "").length', selectedText.replace(/[\r\n*✝]/g, '').length);
 				// console.log('dist', dist);
 

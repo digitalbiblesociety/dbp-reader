@@ -149,17 +149,23 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			});
 			// May want to use replace here at some point
 			// this.props.history.replace(`/${bibleId}/gen/1`);
+		} else if (this.props.match.params.token) {
+			// Open Profile
+			this.toggleProfile();
+			// Give profile the token - done in render
+				// Open Password Reset Verified because there is a token - done in Profile/index
 		} else {
-			// If the user doesn't provide a url then redirect
-			// them to the default bible
-
-			// I think I may need a different saga for this
-			// I will use the browser language and the first
-			// version available in that language as the default
-
 			// Defaulting to esv until browser language detection is implemented
 			// console.log('redirecting from else in did mount');
-			this.props.history.replace('/engesv/mat/1');
+			const sessionBibleId = sessionStorage.getItem('bible_is_1_bible_id');
+			const sessionBookId = sessionStorage.getItem('bible_is_2_book_id');
+			const sessionChapter = sessionStorage.getItem('bible_is_3_chapter');
+
+			if (sessionBibleId && sessionBookId && sessionChapter) {
+				this.props.history.replace(`/${sessionBibleId}/${sessionBookId}/${sessionChapter}`);
+			} else {
+				this.props.history.replace('/engesv/mat/1');
+			}
 		}
 
 		const activeTheme = get(this, ['props', 'homepage', 'userSettings', 'activeTheme']);
@@ -244,31 +250,6 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			// console.log('This is ie 11');
 			// console.log('svg for every', svg4everybody);
 			svg4everybody();
-			// console.log(svg4everybody);
-			// (function(doc) {
-			//   if (doc.getElementById('svgdefs')){ //loop through inlined svg <defs>
-			//     Array.prototype.slice.call(doc.getElementsByTagName('use')).forEach(function(e){
-			//       var svg, symbol, viewBox, id = e.getAttribute('xlink:href').split("#")[1];
-			//       //get the viewbox from symbol node if we have a symbol id-to-fragment match
-			//       if (id && (viewBox = (symbol = doc.getElementById(id)) ? symbol.getAttribute('viewBox') : '')){
-			//         svg = e.parentNode;//svg container
-			//         svg.setAttribute('viewBox', viewBox);//inline viewBox to svg node
-			//         svg.removeChild(e);//remove <use> node, and replace with <symbol>'s svg content
-			//         Array.prototype.slice.call(symbol.childNodes).forEach(function(e){ svg.appendChild(e); });
-			//       }
-			//     });
-			//   }
-			// })(document);
-			// const bannerDiv = document.createElement('div');
-			// bannerDiv.id = 'old-browser-banner';
-			// bannerDiv.textContent = 'You are using an old browser so some things may not function as expected. Please consider using a modern browser.';
-			// document.getElementsByTagName('body')[0].appendChild(bannerDiv);
-			//
-			// setTimeout(() => {
-			// 	const el = document.getElementById('old-browser-banner');
-			// 	const parent = el.parentElement;
-			// 	parent.removeChild(el);
-			// }, 3000);
 		}
 	}
 	// Component updates when the state and props haven't changed 2 of 5 times
@@ -644,7 +625,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		} = this.props.textData;
 		// console.log('text', updatedText);
 		// console.log('Homepage re-rendered bc reasons');
-
+		const token = this.props.match.params.token || '';
 		const verse = this.props.match.params.verse || '';
 
 		return (
@@ -695,7 +676,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					{
 						isProfileActive ? (
 							<FadeTransition classNames="slide-from-left" in={isProfileActive}>
-								<Profile toggleProfile={this.toggleProfile} />
+								<Profile userAccessToken={token} toggleProfile={this.toggleProfile} />
 							</FadeTransition>
 						) : null
 					}

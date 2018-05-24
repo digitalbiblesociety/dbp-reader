@@ -190,14 +190,15 @@ export function* updateUserInformation({ userId, profile }) {
 // 	}
 // }
 export function* sendResetPassword({ password, email, userAccessToken }) {
-	const requestUrl = `https://api.bible.build/users/reset?key=${process.env.DBP_API_KEY}&v=4&project_id=${process.env.NOTES_PROJECT_ID}`;
+	const requestUrl = `https://api.bible.build/users/password/reset?key=${process.env.DBP_API_KEY}&v=4&project_id=${process.env.NOTES_PROJECT_ID}`;
 	// console.log({ password, email, userId, userAccessToken });
 	const formData = new FormData();
 	formData.append('email', email);
 	formData.append('project_id', process.env.NOTES_PROJECT_ID);
 	formData.append('new_password', password);
+	formData.append('new_password_confirmed', password);
 	// formData.append('user_id', userId);
-	formData.append('user_access_token', userAccessToken);
+	formData.append('token_id', userAccessToken);
 
 	const options = {
 		body: formData,
@@ -209,23 +210,29 @@ export function* sendResetPassword({ password, email, userAccessToken }) {
 
 		if (response) {
 			// Put stuff here one day to do things
+			// console.log('response in reset password', response);
 		}
 		// yield put({ type: USER_LOGGED_IN, userId: response.id, userProfile: response });
 		// sessionStorage.setItem('bible_is_user_id', response.id);
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
-			console.error(err); // eslint-disable-line no-console
+			console.error('error in reset password', err); // eslint-disable-line no-console
 		}
 		yield put({ type: RESET_PASSWORD_ERROR, message: 'There was a problem sending your email. Please try again.' });
 	}
 }
 
 export function* resetPassword({ email }) {
-	const requestUrl = `https://api.bible.build/users/reset?key=${process.env.DBP_API_KEY}&v=4&project_id=${process.env.NOTES_PROJECT_ID}`;
+	const requestUrl = `https://api.bible.build/users/password/email?key=${process.env.DBP_API_KEY}&v=4&project_id=${process.env.NOTES_PROJECT_ID}`;
+	const resetPath = process.env.NODE_ENV === 'development' ? 'http://localhost:3000/reset/password/' : 'https://is.bible.build/reset/password/';
+	// Probably want to somehow get the language of the currently active text or something to use here as a fallback
+	const browserLanguage = window && window.navigator ? window.navigator.language : 'en';
 
 	const formData = new FormData();
 	formData.append('email', email);
 	formData.append('project_id', process.env.NOTES_PROJECT_ID);
+	formData.append('iso', browserLanguage);
+	formData.append('reset_path', resetPath);
 
 	const options = {
 		body: formData,
@@ -236,11 +243,11 @@ export function* resetPassword({ email }) {
 		const response = yield call(request, requestUrl, options);
 
 		if (response.error) {
-			// console.log('Failure', response);
+			console.log('Failure in reset email', response);
 
 			yield put({ type: RESET_PASSWORD_ERROR, message: response.error.message });
 		} else {
-			// console.log('Success', response);
+			console.log('Success in reset email', response);
 
 			yield put({ type: RESET_PASSWORD_SUCCESS, message: response.message || 'Thank you! An email with instructions has been sent to your account.' });
 		}
