@@ -269,7 +269,6 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 	componentWillReceiveProps(nextProps) {
 		// console.log('Diff props', differenceObject(nextProps, this.props));
 		// console.log('Diff state', differenceObject(nextState, this.state));
-
 		// console.log('FB at receive props', FB);
 		// let FB = undefined;
 		// if (typeof FB === 'function' && this.c === 0) {
@@ -286,7 +285,12 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		const { params: nextParams } = nextProps.match;
 		// console.log('prev and next match\n', this.props.match, '\n', nextProps.match);
 		const { userAuthenticated, userId } = nextProps;
+		if (nextParams.token && userId && userAuthenticated && !(this.props.userId === userId && this.props.userAuthenticated === userAuthenticated)) {
+			// Reset the password because currently has a token but the user id has changed so the password was reset successfully
+			// console.log('Replacing history');
 
+			this.props.history.replace(`/${localStorage.getItem('bible_is_1_bible_id') || 'engesv'}/${localStorage.getItem('bible_is_2_book_id') || 'mat'}/${localStorage.getItem('bible_is_3_chapter') || '1'}`);
+		}
 		if (!isEqual(params, nextParams)) {
 			// console.log('received params are different', nextParams);
 			// console.log('diff between params and next params', differenceObject(params, nextParams));
@@ -549,6 +553,12 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 
 	setAudioPlayerState = (state) => this.props.dispatch(setAudioPlayerState(state))
 
+	resetPasswordSent = () => {
+			// console.log('replacing history');
+
+		// this.props.history.replace(`/${localStorage.getItem('bible_is_1_bible_id') || 'engesv'}/${localStorage.getItem('bible_is_2_book_id') || 'mat'}/${localStorage.getItem('bible_is_3_chapter') || '1'}`)
+	}
+
 	goToFullChapter = () => {
 		const { bibleId, bookId, chapter } = this.props.match.params;
 
@@ -676,7 +686,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					{
 						isProfileActive ? (
 							<FadeTransition classNames="slide-from-left" in={isProfileActive}>
-								<Profile userAccessToken={token} toggleProfile={this.toggleProfile} />
+								<Profile resetPasswordSent={this.resetPasswordSent} userAccessToken={token} toggleProfile={this.toggleProfile} />
 							</FadeTransition>
 						) : null
 					}

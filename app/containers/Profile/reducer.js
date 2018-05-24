@@ -54,6 +54,8 @@ function profileReducer(state = initialState, action) {
 	case SELECT_ACCOUNT_OPTION:
 		return state.set('activeOption', action.option);
 	case USER_LOGGED_IN:
+		// console.log('Logged in and reducer fired', action);
+
 		sessionStorage.setItem('bible_is_12345', action.userProfile.email);
 		sessionStorage.setItem('bible_is_123456', action.userProfile.nickname);
 		sessionStorage.setItem('bible_is_1234567', action.userProfile.name);
@@ -84,7 +86,7 @@ function profileReducer(state = initialState, action) {
 	case ERROR_MESSAGE_VIEWED:
 		return state.set('errorMessageViewed', true);
 	case RESET_PASSWORD_SUCCESS:
-		return state.set('resetPasswordMessage', action.message);
+		return state.set('passwordResetMessage', action.message);
 	case CLEAR_ERROR_MESSAGE:
 		return state
 			.set('errorMessageViewed', true)

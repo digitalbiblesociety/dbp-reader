@@ -73,12 +73,12 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 	sendPasswordReset = (e, props) => {
 		this.props.dispatch(sendPasswordReset({
 			...props,
-			email: this.props.profile.userProfile.email,
 			userAccessToken: this.props.userAccessToken,
 		}));
-		const client = e.target.childNodes[1].getBoundingClientRect() || { x: 0, y: 0 };
-		const coords = { x: client.x, y: client.y };
-		this.openPopup(coords);
+		this.props.resetPasswordSent();
+		// const client = e.target.childNodes[1].getBoundingClientRect() || { x: 0, y: 0 };
+		// const coords = { x: client.x, y: client.y };
+		// this.openPopup(coords);
 	}
 	deleteUser = (props) => this.props.dispatch(deleteUser(props))
 	sendLoginForm = (props) => this.props.dispatch(sendLoginForm(props))
@@ -139,6 +139,7 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 			passwordResetMessage,
 		} = this.props.profile;
 		const { popupOpen, popupCoords } = this.state;
+		// console.log('passwordResetMessage', passwordResetMessage);
 
 		return userAuthenticated ? (
 			<AccountSettings
@@ -188,7 +189,7 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 							<PasswordReset
 								popupCoords={popupCoords}
 								popupOpen={popupOpen}
-								message={passwordResetError || passwordResetMessage}
+								message={passwordResetMessage || passwordResetError}
 								resetPassword={this.resetPassword}
 								openPopup={this.openPopup}
 							/>
@@ -234,6 +235,7 @@ Profile.propTypes = {
 	toggleProfile: PropTypes.func,
 	profile: PropTypes.object,
 	userAccessToken: PropTypes.string,
+	resetPasswordSent: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({

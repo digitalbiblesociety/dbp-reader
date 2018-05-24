@@ -7,8 +7,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import PopupMessage from 'components/PopupMessage';
-// import styled from 'styled-components';
-
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
 
@@ -60,10 +58,11 @@ class PasswordResetVerified extends React.PureComponent {
 			// 	errors.push(<p key={'passwordError4'} className={'signup-error-message'}><FormattedMessage {...messages.passwordError4} /></p>);
 			// }
 		}
-
 		// errors.push(<p key={'passwordError5'} className={'signup-error-message'}><FormattedMessage {...messages.passwordError5} /></p>);
 		return <div className={'errors-div'}>{errors}</div>;
 	}
+
+	// checkValidEmail = () => checkEmail(this.state.email)
 
 	checkValidPassword = () => {
 		const { firstPass, secondPass } = this.state;
@@ -102,8 +101,8 @@ class PasswordResetVerified extends React.PureComponent {
 			<div className={'forgot-password password-verified'}>
 				<h1 className={'title'}><FormattedMessage {...messages.title} /></h1>
 				<form onSubmit={this.handlePasswordSubmit}>
-					<input className={validPassword ? 'first-password' : 'first-password error'} type={'password'} autoComplete={'new-password'} placeholder={'Enter Password'} onChange={this.handleFirstChange} />
-					<input className={validPassword ? 'second-password' : 'second-password error'} type={'password'} autoComplete={'new-password'} placeholder={'Re-Enter Password'} onChange={this.handleSecondChange} />
+					<input required className={validPassword ? 'first-password' : 'first-password error'} type={'password'} autoComplete={'new-password'} placeholder={'Enter Password'} onChange={this.handleFirstChange} value={this.state.firstPass} />
+					<input required className={validPassword ? 'second-password' : 'second-password error'} type={'password'} autoComplete={'new-password'} placeholder={'Re-Enter Password'} onChange={this.handleSecondChange} value={this.state.secondPass} />
 					{this.signupError}
 					<div className={'sign-up-button'}>
 						<button className={'text'} type={'submit'}><FormattedMessage {...messages.changePassword} /></button>
