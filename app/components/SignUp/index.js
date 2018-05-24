@@ -31,12 +31,12 @@ class SignUp extends React.PureComponent {
 		wantsUpdates: false,
 	}
 
-	componentWillReceiveProps(nextProps) {
-		if (nextProps.socialLoginLink && nextProps.socialLoginLink !== this.props.socialLoginLink) {
-			const socialWindow = window.open(nextProps.socialLoginLink, '_blank');
-
-			socialWindow.focus();
-		}
+	componentWillReceiveProps() {
+		// if (nextProps.socialLoginLink && nextProps.socialLoginLink !== this.props.socialLoginLink) {
+		// 	const socialWindow = window.open(nextProps.socialLoginLink, '_blank');
+		//
+		// 	socialWindow.focus();
+		// }
 	}
 
 	// componentDidUpdate(prevProps, prevState) {
