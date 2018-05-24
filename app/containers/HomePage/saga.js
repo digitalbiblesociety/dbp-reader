@@ -909,7 +909,7 @@ export function* createSocialUser({ email, name, nickname, id, avatar, userId, p
 		// data.append('password', password);
 		data.append('name', name);
 		data.append('nickname', nickname);
-		data.append('wantsUpdates', '0');
+		data.append('subscribed', '0');
 		data.append('avatar', avatar);
 		data.append('project_id', process.env.NOTES_PROJECT_ID);
 		data.append('social_provider_id', provider);

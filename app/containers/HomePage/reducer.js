@@ -8,6 +8,7 @@
 
 import { fromJS } from 'immutable';
 // import esvDefaultFilesets from 'utils/defaultFilesetsForESV.json';
+import { USER_LOGGED_IN } from 'containers/Profile/constants';
 import {
 	ACTIVE_TEXT_ID,
 	LOAD_AUDIO,
@@ -162,6 +163,10 @@ const initialState = fromJS({
 
 function homePageReducer(state = initialState, action) {
 	switch (action.type) {
+	case USER_LOGGED_IN:
+		return state
+			.set('userId', action.userId)
+			.set('userAuthenticated', true);
 	case 'book_metadata':
 		return state.set('testaments', action.testaments);
 	case TOGGLE_FIRST_LOAD_TEXT_SELECTION:
@@ -293,6 +298,7 @@ function homePageReducer(state = initialState, action) {
 		// console.log('loading audio with', action);
 		return state
 			.set('audioPaths', action.audioPaths.slice(1))
+			.set('loadingNewChapterText', false)
 			.set('audioFilesetId', action.audioFilesetId)
 			.set('audioSource', action.audioPaths[0]);
 	case 'getchapter':
