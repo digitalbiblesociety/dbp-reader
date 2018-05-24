@@ -141,7 +141,7 @@ export class SearchContainer extends React.PureComponent { // eslint-disable-lin
 								}
 							</div>
 						)) :
-						<section>There were no matches for your search</section>
+						<section className={'no-matches'}>There were no matches for your search</section>
 				}
 			</div>
 		);

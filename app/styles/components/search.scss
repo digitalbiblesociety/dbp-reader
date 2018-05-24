@@ -8,6 +8,10 @@
   overflow-x: hidden;
   overflow-y: auto;
 
+  .no-matches {
+    text-transform: capitalize;
+  }
+
   @include css4{
     background-color:var(--menu-body-background-color);
     color:var(--settings-text-color);
