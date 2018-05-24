@@ -193,8 +193,8 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 	setEventHandlersForFootnotes = (ref) => {
 		const notes = [...ref.getElementsByClassName('note')];
 
-		notes.forEach((note, index) => {
-			// console.log('setting a click handler for: ', note);
+		notes.forEach((note) => {
+			// console.log('setting a click handler for: ', note.attributes);
 			/* eslint-disable no-param-reassign */
 			// May need to change this and change the regex if we do infinite scrolling
 			if (note.childNodes && note.childNodes[0] && typeof note.childNodes[0].removeAttribute === 'function') {
@@ -207,7 +207,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				const rightEdge = window.innerWidth - 300;
 				const x = rightEdge < e.clientX ? rightEdge : e.clientX;
 
-				this.openFootnote({ id: `footnote-${index}`, coords: { x, y: e.clientY } });
+				this.openFootnote({ id: note.attributes.id.value, coords: { x, y: e.clientY } });
 			};
 		});
 	}
