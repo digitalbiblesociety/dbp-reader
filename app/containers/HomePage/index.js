@@ -111,6 +111,8 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		// console.log('authenticated in home did mount', authenticated);
 		// console.log('userId in home did mount', userId);
 		// console.log('props location', this.props.location.search.slice(6));
+		// console.log('localStorage.getItem(userSettings_toggleOptions_readersMode_active)', localStorage.getItem('userSettings_toggleOptions_readersMode_active') === false);
+		// console.log('localStorage.getItem(userSettings_toggleOptions_crossReferences_active)', localStorage.getItem('userSettings_toggleOptions_crossReferences_active'));
 
 		if (bibleId && bookId && chapter >= 0) {
 			this.props.dispatch({

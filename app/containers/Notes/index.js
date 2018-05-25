@@ -36,6 +36,7 @@ import {
 	getUserBookmarkData,
 	readSavedMessage,
 	updateHighlight,
+	clearNoteErrorMessage,
 } from './actions';
 import makeSelectNotes, {
 	selectUserId,
@@ -103,6 +104,7 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 	updateNote = (data) => this.props.dispatch(updateNote({ userId: this.props.userId, noteId: data.id, data: { ...data, user_id: this.props.userId } }))
 	deleteNote = ({ noteId }) => this.props.dispatch(deleteNote({ userId: this.props.userId, noteId }))
 	readSavedMessage = (props) => this.props.dispatch(readSavedMessage(props))
+	clearNoteErrorMessage = () => this.props.dispatch(clearNoteErrorMessage())
 
 	titleOptions = {
 		edit: 'Edit Note',
@@ -137,6 +139,8 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 			totalPagesBookmark,
 			activePageBookmark,
 			savedTheNote,
+			errorSavingNote,
+			notesErrorMessage,
 		} = this.props.notes;
 		const {
 			toggleNotesModal,
@@ -186,19 +190,22 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 											addNote={this.addNote}
 											deleteNote={this.deleteNote}
 											updateNote={this.updateNote}
+											setActiveChild={this.setActiveChild}
 											toggleVerseText={this.toggleVerseText}
 											readSavedMessage={this.readSavedMessage}
 											toggleAddVerseMenu={this.toggleAddVerseMenu}
+											clearNoteErrorMessage={this.clearNoteErrorMessage}
 											note={note}
 											notePassage={notePassage}
 											activeTextId={activeTextId}
 											selectedText={selectedText}
+											savedTheNote={savedTheNote}
 											activeBookName={activeBookName}
+											errorSavingNote={errorSavingNote}
+											notesErrorMessage={notesErrorMessage}
 											isVerseTextVisible={isVerseTextVisible}
 											isAddVerseExpanded={isAddVerseExpanded}
 											vernacularNamesObject={vernacularNamesObject}
-											savedTheNote={savedTheNote}
-											setActiveChild={this.setActiveChild}
 										/>
 									) : (
 										<MyNotes

@@ -18,6 +18,8 @@ import {
 	ADD_NOTE_SUCCESS,
 	LOAD_BOOKMARKS_FOR_CHAPTER,
 	READ_SAVED_NOTE,
+	ADD_NOTE_FAILED,
+	CLEAR_NOTES_ERROR_MESSAGE,
 } from './constants';
 // Should cache some of this in local storage for faster reloads
 const initialState = fromJS({
@@ -37,14 +39,25 @@ const initialState = fromJS({
 	bookmarkList: [],
 	chapterBookmarks: [],
 	savedTheNote: false,
+	errorSavingNote: false,
+	notesErrorMessage: '',
 });
 
 function notesReducer(state = initialState, action) {
 	switch (action.type) {
+	case CLEAR_NOTES_ERROR_MESSAGE:
+		return state
+			.set('errorSavingNote', false)
+			.set('notesErrorMessage', '');
 	case READ_SAVED_NOTE:
 		return state.set('savedTheNote', false);
 	case ADD_NOTE_SUCCESS:
 		return state.set('savedTheNote', true);
+	case ADD_NOTE_FAILED:
+		return state
+			.set('errorSavingNote', true)
+			.set('notesErrorMessage', action.message)
+			.set('savedTheNote', false);
 	case LOAD_BOOKMARKS_FOR_CHAPTER:
 		return state.set('chapterBookmarks', fromJS(action.listData));
 	case LOAD_USER_BOOKMARK_DATA:

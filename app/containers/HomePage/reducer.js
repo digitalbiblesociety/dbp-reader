@@ -8,6 +8,7 @@
 
 import { fromJS } from 'immutable';
 // import esvDefaultFilesets from 'utils/defaultFilesetsForESV.json';
+import { USER_LOGGED_IN } from 'containers/Profile/constants';
 import {
 	ACTIVE_TEXT_ID,
 	LOAD_AUDIO,
@@ -119,12 +120,12 @@ const initialState = fromJS({
 			},
 			crossReferences: {
 				name: 'CROSS REFERENCE',
-				active: JSON.parse(localStorage.getItem('userSettings_toggleOptions_crossReferences_active')),
+				active: localStorage.getItem('userSettings_toggleOptions_crossReferences_active') ? JSON.parse(localStorage.getItem('userSettings_toggleOptions_crossReferences_active')) : true,
 				available: true,
 			},
 			redLetter: {
 				name: 'RED LETTER',
-				active: JSON.parse(localStorage.getItem('bible_is_words_of_jesus')),
+				active: localStorage.getItem('bible_is_words_of_jesus') ? JSON.parse(localStorage.getItem('bible_is_words_of_jesus')) : true,
 				available: true,
 			},
 			justifiedText: {
@@ -162,6 +163,10 @@ const initialState = fromJS({
 
 function homePageReducer(state = initialState, action) {
 	switch (action.type) {
+	case USER_LOGGED_IN:
+		return state
+			.set('userId', action.userId)
+			.set('userAuthenticated', true);
 	case 'book_metadata':
 		return state.set('testaments', action.testaments);
 	case TOGGLE_FIRST_LOAD_TEXT_SELECTION:
@@ -246,9 +251,9 @@ function homePageReducer(state = initialState, action) {
 	case 'loadbible':
 		// console.log('loading bible with', action);
 		sessionStorage.setItem('bible_is_audio_player_state', true);
-		sessionStorage.setItem('bible_is_1_bible_id', action.bibleId);
-		sessionStorage.setItem('bible_is_2_book_id', action.activeBookId);
-		sessionStorage.setItem('bible_is_3_chapter', action.activeChapter);
+		localStorage.setItem('bible_is_1_bible_id', action.bibleId);
+		localStorage.setItem('bible_is_2_book_id', action.activeBookId);
+		localStorage.setItem('bible_is_3_chapter', action.activeChapter);
 		return state
 			.set('activeTextId', fromJS(action.bibleId))
 			.set('activeBookId', fromJS(action.activeBookId))
@@ -267,8 +272,8 @@ function homePageReducer(state = initialState, action) {
 			// .set('formattedSource', fromJS(action.chapterData.formattedText))
 			.set('activeFilesets', fromJS(action.filesets));
 	case 'loadnewchapter':
-		sessionStorage.setItem('bible_is_2_book_id', action.bookId);
-		sessionStorage.setItem('bible_is_3_chapter', action.chapter);
+		localStorage.setItem('bible_is_2_book_id', action.bookId);
+		localStorage.setItem('bible_is_3_chapter', action.chapter);
 		return state
 			.set('hasFormattedText', fromJS(action.hasFormattedText))
 			.set('hasTextInDatabase', fromJS(action.hasPlainText))
@@ -293,6 +298,7 @@ function homePageReducer(state = initialState, action) {
 		// console.log('loading audio with', action);
 		return state
 			.set('audioPaths', action.audioPaths.slice(1))
+			.set('loadingNewChapterText', false)
 			.set('audioFilesetId', action.audioFilesetId)
 			.set('audioSource', action.audioPaths[0]);
 	case 'getchapter':

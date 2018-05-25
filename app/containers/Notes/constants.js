@@ -6,6 +6,8 @@
 // import range from 'lodash/range';
 
 export const SET_PAGE_SIZE = 'app/Notes/SET_PAGE_SIZE';
+export const CLEAR_NOTES_ERROR_MESSAGE = 'app/Notes/CLEAR_NOTES_ERROR_MESSAGE';
+export const ADD_NOTE_FAILED = 'app/Notes/ADD_NOTE_FAILED';
 export const READ_SAVED_NOTE = 'app/Notes/READ_SAVED_NOTE';
 export const UPDATE_HIGHLIGHT = 'app/Notes/UPDATE_HIGHLIGHT';
 export const SET_ACTIVE_CHILD = 'app/Notes/SET_ACTIVE_CHILD';

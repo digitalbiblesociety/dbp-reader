@@ -41,13 +41,13 @@ class Information extends React.PureComponent {// eslint-disable-line react/pref
 
 	getAudioCopyright = (organizations) => organizations.map((org) => (
 		[
-			<h3 key={org.name}><FormattedMessage {...messages.providedByAudio} /></h3>,
+			<h3 key={`${org.name}_audio`}><FormattedMessage {...messages.providedByAudio} /></h3>,
 			org.logo ? <a key={org.url} target={'_blank'} href={org.url}><ImageComponent alt={'Copyright owners logo'} src={org.logo.url} height={'109px'} width={'103px'} /></a> : null,
 		]
 	));
 	getTextCopyright = (organizations) => organizations.map((org) => (
 		[
-			<h3 key={org.name}><FormattedMessage {...messages.providedByText} /></h3>,
+			<h3 key={`${org.name}_text`}><FormattedMessage {...messages.providedByText} /></h3>,
 			org.logo ? <a key={org.url} target={'_blank'} href={org.url}><ImageComponent alt={'Copyright owners logo'} src={org.logo.url} height={'109px'} width={'103px'} /></a> : null,
 		]
 	));

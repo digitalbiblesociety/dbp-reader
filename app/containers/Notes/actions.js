@@ -23,7 +23,12 @@ import {
 	GET_USER_BOOKMARK_DATA,
 	GET_BOOKMARKS_FOR_CHAPTER,
 	READ_SAVED_NOTE,
+	CLEAR_NOTES_ERROR_MESSAGE,
 } from './constants';
+
+export const clearNoteErrorMessage = () => ({
+	type: CLEAR_NOTES_ERROR_MESSAGE,
+});
 
 export const updateHighlight = (props) => ({
 	type: UPDATE_HIGHLIGHT,
