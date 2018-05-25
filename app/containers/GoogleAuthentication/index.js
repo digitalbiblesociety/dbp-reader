@@ -43,7 +43,7 @@ export class GoogleAuthentication extends React.PureComponent { // eslint-disabl
 						id: prof.getId(),
 					};
 					this.props.dispatch(createUserWithSocialAccount({ ...user, provider: 'google' }));
-					// console.log('google user', user);
+					// console.log('google user not signed in', user);
 
 					// console.log('auth2.currentUser.get().getBasicProfile()');
 				});
@@ -56,6 +56,7 @@ export class GoogleAuthentication extends React.PureComponent { // eslint-disabl
 					email: prof.getEmail(),
 					id: prof.getId(),
 				};
+				// console.log('google user', user);
 				this.props.dispatch(createUserWithSocialAccount({ ...user, provider: 'google' }));
 			}
 		}

@@ -251,9 +251,9 @@ function homePageReducer(state = initialState, action) {
 	case 'loadbible':
 		// console.log('loading bible with', action);
 		sessionStorage.setItem('bible_is_audio_player_state', true);
-		sessionStorage.setItem('bible_is_1_bible_id', action.bibleId);
-		sessionStorage.setItem('bible_is_2_book_id', action.activeBookId);
-		sessionStorage.setItem('bible_is_3_chapter', action.activeChapter);
+		localStorage.setItem('bible_is_1_bible_id', action.bibleId);
+		localStorage.setItem('bible_is_2_book_id', action.activeBookId);
+		localStorage.setItem('bible_is_3_chapter', action.activeChapter);
 		return state
 			.set('activeTextId', fromJS(action.bibleId))
 			.set('activeBookId', fromJS(action.activeBookId))
@@ -272,8 +272,8 @@ function homePageReducer(state = initialState, action) {
 			// .set('formattedSource', fromJS(action.chapterData.formattedText))
 			.set('activeFilesets', fromJS(action.filesets));
 	case 'loadnewchapter':
-		sessionStorage.setItem('bible_is_2_book_id', action.bookId);
-		sessionStorage.setItem('bible_is_3_chapter', action.chapter);
+		localStorage.setItem('bible_is_2_book_id', action.bookId);
+		localStorage.setItem('bible_is_3_chapter', action.chapter);
 		return state
 			.set('hasFormattedText', fromJS(action.hasFormattedText))
 			.set('hasTextInDatabase', fromJS(action.hasPlainText))

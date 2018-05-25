@@ -50,6 +50,7 @@ export class FacebookAuthentication extends React.PureComponent { // eslint-disa
 								id,
 							} = getLoginCbRes;
 							let avatar = '';
+							// console.log('getLoginCbRes', getLoginCbRes);
 
 							if (picture && picture.data && picture.data.url) {
 								avatar = picture.data.url;
@@ -85,6 +86,7 @@ export class FacebookAuthentication extends React.PureComponent { // eslint-disa
 										id,
 									} = loginCbRes;
 									let avatar = '';
+									// console.log('loginCbRes', loginCbRes);
 
 									if (picture && picture.data && picture.data.url) {
 										avatar = picture.data.url;
