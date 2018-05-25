@@ -115,7 +115,7 @@ const initialState = fromJS({
 		toggleOptions: {
 			readersMode: {
 				name: 'READER\'S MODE',
-				active: localStorage.getItem('userSettings_toggleOptions_readersMode_active') ? JSON.parse(localStorage.getItem('userSettings_toggleOptions_readersMode_active')) : true,
+				active: JSON.parse(localStorage.getItem('userSettings_toggleOptions_readersMode_active')),
 				available: true,
 			},
 			crossReferences: {
@@ -130,7 +130,7 @@ const initialState = fromJS({
 			},
 			justifiedText: {
 				name: 'JUSTIFIED TEXT',
-				active: localStorage.getItem('userSettings_toggleOptions_justifiedText_active') ? JSON.parse(localStorage.getItem('userSettings_toggleOptions_justifiedText_active')) : true,
+				active: JSON.parse(localStorage.getItem('userSettings_toggleOptions_justifiedText_active')),
 				available: true,
 			},
 			oneVersePerLine: {
