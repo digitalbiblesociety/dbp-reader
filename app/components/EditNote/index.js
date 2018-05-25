@@ -6,6 +6,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import PopupMessage from 'components/PopupMessage';
 // import BooksTable from 'components/BooksTable';
 import SvgWrapper from 'components/SvgWrapper';
 // import styled from 'styled-components';
@@ -30,6 +31,8 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 			titleText,
 			savingNote: false,
 			readTheMessage: false,
+			popupOpen: false,
+			coords: { x: 0, y: 0 },
 		};
 	}
 
@@ -58,38 +61,31 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 		return `${month.length === 1 ? `0${month}` : month}.${day}.${year}`;
 	}
 
-	// setSelectedChapter = (chapter) => {
-	// 	this.setState({ selectedChapter: chapter });
-	// }
-	//
-	// setSelectedBookName = ({ book, id }) => {
-	// 	this.setState({ selectedBookName: book, selectedBookId: id });
-	// }
-
 	// Use this to suggest to the user that they may want to save their note
 	// setTimer = () => {
-		// const titleText = this.state.titleText;
-		// const textArea = this.state.textarea;
-		// // Clears the timeout so that at most there will only be one request per 2.5 seconds
-		// if (this.timer) {
-		// 	clearTimeout(this.timer);
-		// }
-		// // Don't have to bind 'this' bc of the arrow function
-		// this.timer = setTimeout(() => {
-		// 	// Don't save if there isn't a value
-		// 	if (!textArea || !titleText) {
-		// 		return;
-		// 	}
-		// 	// Make a function to alert the user that their work is not saved
-		// 	this.handleSave();
-		// }, 5000);
+	// 	const titleText = this.state.titleText;
+	// 	const textArea = this.state.textarea;
+	// 	// Clears the timeout so that at most there will only be one request per 2.5 seconds
+	// 	if (this.timer) {
+	// 		clearTimeout(this.timer);
+	// 	}
+	// 	// Don't have to bind 'this' bc of the arrow function
+	// 	this.timer = setTimeout(() => {
+	// 		// Don't save if there isn't a value
+	// 		if (!textArea || !titleText) {
+	// 			return;
+	// 		}
+	// 		// Make a function to alert the user that their work is not saved
+	// 		this.handleSave();
+	// 	}, 5000);
 	// }
 
 	handleTextareaChange = (e) => {
 		e.persist();
-		if (!this.state.readTheMessage || this.props.savedTheNote) {
+		if (!this.state.readTheMessage || this.props.savedTheNote || this.props.errorSavingNote) {
 			// console.log('reading the saved message');
 			this.props.readSavedMessage();
+			this.props.clearNoteErrorMessage();
 			// this.setTimer();
 		}
 		this.setState((cs) => cs.readTheMessage ? ({ textarea: e.target.value }) : ({ textarea: e.target.value, readTheMessage: true }));
@@ -97,16 +93,17 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 
 	handleNoteTitleChange = (e) => {
 		e.persist();
-		if (!this.state.readTheMessage || this.props.savedTheNote) {
+		if (!this.state.readTheMessage || this.props.savedTheNote || this.props.errorSavingNote) {
 			// console.log('reading the saved message');
 			this.props.readSavedMessage();
+			this.props.clearNoteErrorMessage();
 			// this.setTimer();
 		}
 		this.setState((cs) => cs.readTheMessage ? ({ titleText: e.target.value }) : ({ titleText: e.target.value, readTheMessage: true }));
 	}
 
-	handleSave = () => {
-		const { note, activeTextId } = this.props;
+	handleSave = (e) => {
+		const { note, activeTextId, errorSavingNote } = this.props;
 		const { titleText, textarea } = this.state;
 		const chapter = note.get('chapter');
 		const verseStart = note.get('verse_start');
@@ -120,9 +117,26 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 		);
 		const prevTitle = (hasTitle && this.props.note.get('tags').find((t) => t.get('type') === 'title').get('value')) || '';
 
+		if (!textarea) {
+			const coords = e.target.getBoundingClientRect() || { x: 0, y: 0 };
+			this.setState({ popupOpen: true, coords });
+			if (this.timer) {
+				clearTimeout(this.timer);
+			}
+			this.timer = setTimeout(() => {
+				// There may be an issue with doing this here because of the 2500 ms delay
+				if (errorSavingNote) {
+					this.props.clearNoteErrorMessage();
+				}
+				this.setState({ popupOpen: false });
+			}, 2500);
+			return;
+		}
+
 		if (note.get('notes') === textarea && prevTitle === titleText) {
 			// If the original text equals the current text then I don't have to do anything
 			// Because the user has not updated their note
+			this.setState({ savingNote: false });
 			return;
 		} else if (this.state.savedNote) {
 			this.props.updateNote({
@@ -190,9 +204,13 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 			notePassage,
 			savedTheNote,
 			// activeBookName,
+			notesErrorMessage,
+			errorSavingNote,
 		} = this.props;
 		const {
 			savingNote,
+			popupOpen,
+			coords,
 		} = this.state;
 		// console.log('activebookname', activeBookName);
 		// const {
@@ -223,11 +241,14 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 					<SvgWrapper className={'icon'} svgid={'delete'} />
 					<span className="delete-button" role="button" tabIndex={0} onClick={() => this.deleteNote()}>Delete Note</span>
 					{
-						savedTheNote ?
-							<span className="saved-note" role="button" tabIndex={0} onClick={() => this.handleSave()}>Saved</span> :
-							<span className="save-button" role="button" tabIndex={0} onClick={() => this.handleSave()}>{savingNote ? 'Updating...' : 'Save'}</span>
+						savedTheNote && !errorSavingNote ?
+							<span className="saved-note" role="button" tabIndex={0} onClick={this.handleSave}>Saved</span> :
+							<span className={errorSavingNote ? 'save-button failed' : 'save-button'} role="button" tabIndex={0} onClick={this.handleSave}>{savingNote && !errorSavingNote ? 'Updating...' : `${errorSavingNote ? 'Failed' : 'Save'}`}</span>
 					}
 				</div>
+				{
+					popupOpen ? <PopupMessage message={errorSavingNote && notesErrorMessage ? notesErrorMessage : 'The notes field cannot be empty.'} x={coords.x} y={coords.y} /> : null
+				}
 			</section>
 		);
 	}
@@ -249,6 +270,9 @@ EditNote.propTypes = {
 	activeTextId: PropTypes.string,
 	savedTheNote: PropTypes.bool,
 	activeBookName: PropTypes.string,
+	notesErrorMessage: PropTypes.string,
+	errorSavingNote: PropTypes.bool,
+	clearNoteErrorMessage: PropTypes.func,
 };
 
 export default EditNote;

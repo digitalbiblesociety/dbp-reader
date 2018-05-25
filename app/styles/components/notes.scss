@@ -121,6 +121,10 @@
       cursor:pointer;
       font-size:1.05em;
       padding:15px;
+
+      &.failed {
+        color: $sketch-document-color-error;
+      }
     }
 
     .save-button:hover    {

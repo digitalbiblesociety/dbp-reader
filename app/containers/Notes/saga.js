@@ -7,6 +7,7 @@ import {
 import {
 	ADD_NOTE,
 	ADD_NOTE_SUCCESS,
+	ADD_NOTE_FAILED,
 	UPDATE_NOTE,
 	DELETE_NOTE,
 	LOAD_USER_NOTES,
@@ -262,6 +263,8 @@ export function* addNote({ userId, data }) {
 		if (response.success) {
 			yield put({ type: ADD_NOTE_SUCCESS, response });
 			yield fork(getNotesForChapter, { userId: data.user_id, params: { bible_id: data.bible_id, book_id: data.book_id, chapter: data.chapter, limit: 150, page: 1 } });
+		} else if (response.error) {
+			yield put({ type: ADD_NOTE_FAILED, message: response.error.notes[0] });
 		}
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
@@ -273,6 +276,7 @@ export function* addNote({ userId, data }) {
 			// };
 			// fetch('https://api.bible.build/error_logging', options);
 		}
+		yield put({ type: ADD_NOTE_FAILED, message: 'Something went wrong on the server. Please try again in a few minutes.' });
 	}
 }
 
