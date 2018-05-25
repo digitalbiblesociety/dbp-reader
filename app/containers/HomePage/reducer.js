@@ -115,22 +115,22 @@ const initialState = fromJS({
 		toggleOptions: {
 			readersMode: {
 				name: 'READER\'S MODE',
-				active: JSON.parse(localStorage.getItem('userSettings_toggleOptions_readersMode_active')),
+				active: localStorage.getItem('userSettings_toggleOptions_readersMode_active') ? JSON.parse(localStorage.getItem('userSettings_toggleOptions_readersMode_active')) : true,
 				available: true,
 			},
 			crossReferences: {
 				name: 'CROSS REFERENCE',
-				active: JSON.parse(localStorage.getItem('userSettings_toggleOptions_crossReferences_active')),
+				active: localStorage.getItem('userSettings_toggleOptions_crossReferences_active') ? JSON.parse(localStorage.getItem('userSettings_toggleOptions_crossReferences_active')) : true,
 				available: true,
 			},
 			redLetter: {
 				name: 'RED LETTER',
-				active: JSON.parse(localStorage.getItem('bible_is_words_of_jesus')),
+				active: localStorage.getItem('bible_is_words_of_jesus') ? JSON.parse(localStorage.getItem('bible_is_words_of_jesus')) : true,
 				available: true,
 			},
 			justifiedText: {
 				name: 'JUSTIFIED TEXT',
-				active: JSON.parse(localStorage.getItem('userSettings_toggleOptions_justifiedText_active')),
+				active: localStorage.getItem('userSettings_toggleOptions_justifiedText_active') ? JSON.parse(localStorage.getItem('userSettings_toggleOptions_justifiedText_active')) : true,
 				available: true,
 			},
 			oneVersePerLine: {
