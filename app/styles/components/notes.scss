@@ -265,29 +265,33 @@
 }
 .note-list .list-item       {display:flex;}
 .note-list .list-item:hover {cursor:pointer;opacity:0.85;}
-.list-item .date            {@include css4{color:var(--active-color-primary)};}
 .list-item .title-text      {
   display: flex;
   flex-direction: column;
-
-  margin-left:15px;
+  margin-right:15px;
 }
 .list-item .title-text .title          {
   display:inline-block;
   position:relative;
   overflow:hidden;
   white-space:nowrap;
+  span.date {
+    @include css4{
+      color:var(--notebook-title-date-color)
+    };
+  }
   &:after {
     content: "";
     width: 100%;
+    max-width: 290px;
     height: 54px;
     position: absolute;
     top: 0;
     left: 0;
     @include css4 {
-      background: -webkit-linear-gradient(to right, var(--menu-body-background-color-transparent) 80%, var(--menu-body-background-color));
-      background: -moz-linear-gradient(to right, var(--menu-body-background-color-transparent) 80%, var(--menu-body-background-color));
-      background: linear-gradient(to right, var(--menu-body-background-color-transparent) 80%, var(--menu-body-background-color));
+      background: -webkit-linear-gradient(to right, var(--menu-body-background-color-transparent) 75%, var(--menu-body-background-color));
+      background: -moz-linear-gradient(to right, var(--menu-body-background-color-transparent) 75%, var(--menu-body-background-color));
+      background: linear-gradient(to right, var(--menu-body-background-color-transparent) 75%, var(--menu-body-background-color));
     };
   };
   @include css4{
@@ -302,14 +306,15 @@
   &:after {
     content: "";
     width: 100%;
+    max-width: 290px;
     height: 54px;
     position: absolute;
     top: 0;
     left: 0;
     @include css4 {
-      background: -webkit-linear-gradient(to right, var(--menu-body-background-color-transparent) 80%, var(--menu-body-background-color));
-      background: -moz-linear-gradient(to right, var(--menu-body-background-color-transparent) 80%, var(--menu-body-background-color));
-      background: linear-gradient(to right, var(--menu-body-background-color-transparent) 80%, var(--menu-body-background-color));
+      background: -webkit-linear-gradient(to right, var(--menu-body-background-color-transparent) 75%, var(--menu-body-background-color));
+      background: -moz-linear-gradient(to right, var(--menu-body-background-color-transparent) 75%, var(--menu-body-background-color));
+      background: linear-gradient(to right, var(--menu-body-background-color-transparent) 75%, var(--menu-body-background-color));
     };
   };
 
@@ -437,6 +442,7 @@
 
     .list-item {
       flex-basis: 75%;
+      max-width: 75%;
       display: inline-block;
     }
 

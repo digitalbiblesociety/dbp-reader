@@ -139,11 +139,18 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 							filteredPageData.map((listItem) => (
 								<div key={listItem.id} className={'highlight-item'}>
 									<div role="button" tabIndex={0} onClick={() => this.handleClick(listItem)} className="list-item">
-										<div className="date">{this.getFormattedNoteDate(listItem.created_at)}</div>
 										<div className="title-text">
-											<h4 className="title">{this.getNoteReference(listItem)}</h4>
+											<h4 className="title"><span className="date">{this.getFormattedNoteDate(listItem.created_at)}</span> | {this.getNoteReference(listItem)}</h4>
 											<p className="text">{listItem.notes}</p>
 										</div>
+									</div>
+									<div className={'edit-color'} tabIndex={0} role={'button'}>
+										<SvgWrapper className={'icon'} svgid={'edit_note'} />
+										<span>Edit</span>
+									</div>
+									<div className={'delete-highlight'}>
+										<SvgWrapper className={'icon'} svgid={'delete'} />
+										<span>Delete</span>
 									</div>
 								</div>
 							))
