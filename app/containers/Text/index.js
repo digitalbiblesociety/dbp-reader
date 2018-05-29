@@ -358,6 +358,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			verseNumber,
 			userNotes,
 			bookmarks,
+			audioSource,
 			invalidBibleId,
 		} = this.props;
 		// Doing it like this may impact performance, but it is probably cleaner
@@ -380,7 +381,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		const oneVersePerLine = userSettings.getIn(['toggleOptions', 'oneVersePerLine', 'active']);
 		const justifiedText = userSettings.getIn(['toggleOptions', 'justifiedText', 'active']);
 		// console.log(initialText);
-		// todo figure out a way to memoize or cache the highlighted version of the text to improve performance
+		// todo figure out a way to memoize or cache the highlighted version of the text to improve performance - Not a huge issue because even with cpu at 6x throttling this part still worked fine
 		// Need to connect to the api and get the highlights object for this chapter
 		// based on whether the highlights object has any data decide whether to
 		// run this function or not
@@ -407,10 +408,14 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		// Handle exception thrown when there isn't plain text but readers mode is selected
 		/* eslint-disable react/no-danger */
 		if (plainText.length === 0 && !formattedSource.main) {
-			if (invalidBibleId) {
-				textComponents = [<h5 key={'no_text'}>You have entered an invalid bible id, please select a bible from the list or type a different id into the url.</h5>];
-			} else {
+			if (!window.navigator.onLine) {
+				textComponents = [<h5 key={'no_connection'}>We are having trouble contacting the server. Please check your internet connection and then refresh the page.</h5>];
+			} else if (invalidBibleId) {
+				textComponents = [<h5 key={'no_text'}>Text is not currently available for this version.</h5>];
+			} else if (audioSource) {
 				textComponents = [<AudioOnlyMessage key={'no_text'} book={activeBookName} chapter={activeChapter} />];
+			} else {
+				textComponents = [<h5 key={'no_text'}>Text is not currently available for this version.</h5>];
 			}
 		} else if (readersMode) {
 			textComponents = plainText.map((verse) =>
@@ -582,8 +587,6 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 
 	addHighlight = ({ color, popupCoords }) => {
 		const highlightObject = {};
-		// Todo: If color === 'none' then send a request to remove the any highlight that contains or is contained by the new highlight object or something...
-
 		// Getting the data for the tests
 		// console.log(JSON.stringify(this.props));
 		// console.log(JSON.stringify(this.state));
@@ -1089,7 +1092,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 					) : null
 				}
 				{
-					this.state.popupOpen ? <PopupMessage message={'You must be signed in to use this feature'} x={this.state.popupCoords.x} y={this.state.popupCoords.y} /> : null
+					this.state.popupOpen ? <PopupMessage message={'You must be signed in to use this feature.'} x={this.state.popupCoords.x} y={this.state.popupCoords.y} /> : null
 				}
 			</div>
 		);
@@ -1124,6 +1127,7 @@ Text.propTypes = {
 	bibleId: PropTypes.string,
 	verseNumber: PropTypes.string,
 	activeBookId: PropTypes.string,
+	audioSource: PropTypes.string,
 	activeBookName: PropTypes.string,
 };
 

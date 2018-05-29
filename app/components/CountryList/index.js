@@ -40,14 +40,30 @@ class CountryList extends React.PureComponent { // eslint-disable-line react/pre
 		// console.log('filtered countries', filteredCountries);
 
 		if (countries.size === 0) {
-			return <div className={'country-error-message'}>There was an error fetching this resource, an Admin has been notified. We apologize for the inconvenience</div>;
+			return <div className={'country-error-message'}>There was an error fetching this resource, an Admin has been notified. We apologize for the inconvenience.</div>;
 		}
 
 		const renderARow = ({ index, style, key }) => {
 			const country = filteredCountries.get(index);
 			// key={language.get('iso_code')}
 			// if (isScrolling) {
-			// 	return <div key={key} style={style}>scrolling...</div>;
+			// 	return (
+			// 		<div
+			// 			className="country-name"
+			// 			key={key}
+			// 			style={style}
+			// 			role="button"
+			// 			tabIndex={0}
+			// 			onClick={() => {
+			// 				setCountryName({ name: country.get('name'), languages: country.get('languages') });
+			// 				setCountryListState();
+			// 				toggleLanguageList();
+			// 			}}
+			// 		>
+			// 			<svg className={'country-placeholder'} xmlns="http://www.w3.org/2000/svg" height={'25px'} width={'25px'} viewBox="0 0 48 48"><g><rect width="48" height="48" /></g><g /><g /><g /><g /><g /><g /><g /><g /><g /><g /><g /><g /><g /><g /><g /></svg>
+			// 			<h4 className={activeCountryName === country.get('name') ? 'active-language-name' : 'inactive-country'}>{country.get('name')}</h4>
+			// 		</div>
+			// 	);
 			// }
 			return (
 				<div
@@ -92,6 +108,7 @@ class CountryList extends React.PureComponent { // eslint-disable-line react/pre
 				rowHeight={28}
 				scrollToIndex={getActiveIndex()}
 				width={width}
+				scrollToAlignment={'start'}
 			/>
 		) : <div className={'country-error-message'}>There are no matches for your search.</div>;
 	}

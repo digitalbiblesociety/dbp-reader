@@ -103,6 +103,12 @@
       }
     }
   }
+
+  .country-placeholder {
+    @include css4 {
+      fill: var(--default-text-color);
+    }
+  }
 }
 
 // Country Selection Styles
