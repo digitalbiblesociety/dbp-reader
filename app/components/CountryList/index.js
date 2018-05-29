@@ -32,6 +32,7 @@ class CountryList extends React.PureComponent { // eslint-disable-line react/pre
 			activeCountryName,
 			setCountryListState,
 			// toggleVersionList,
+			getCountry,
 			filterText,
 		} = this.props;
 		// const { filterText } = this.state;
@@ -74,6 +75,7 @@ class CountryList extends React.PureComponent { // eslint-disable-line react/pre
 					tabIndex={0}
 					onClick={() => {
 						setCountryName({ name: country.get('name'), languages: country.get('languages') });
+						getCountry({ iso: country.getIn(['codes', 'iso']) });
 						setCountryListState();
 						toggleLanguageList();
 					}}
@@ -159,6 +161,7 @@ CountryList.propTypes = {
 	toggleLanguageList: PropTypes.func,
 	setCountryListState: PropTypes.func,
 	// toggleVersionList: PropTypes.func,
+	getCountry: PropTypes.func,
 	filterText: PropTypes.string,
 	active: PropTypes.bool,
 	loadingCountries: PropTypes.bool,

@@ -6,7 +6,9 @@
 
 import {
 	LOAD_TEXTS,
+	LOAD_COUNTRY,
 	LOAD_COUNTRIES,
+	GET_COUNTRY,
 	GET_DPB_TEXTS,
 	GET_LANGUAGES,
 	GET_COUNTRIES,
@@ -17,6 +19,11 @@ import {
 	SET_COUNTRY_LIST_STATE,
 	SET_COUNTRY_NAME,
 } from './constants';
+
+export const loadCountry = (props) => ({
+	type: LOAD_COUNTRY,
+	...props,
+});
 
 export const loadTexts = ({ texts }) => ({
 	type: LOAD_TEXTS,
@@ -35,6 +42,10 @@ export const getTexts = ({ languageISO }) => ({
 
 export const getLanguages = () => ({
 	type: GET_LANGUAGES,
+});
+
+export const getCountry = () => ({
+	type: GET_COUNTRY,
 });
 
 export const getCountries = () => ({
