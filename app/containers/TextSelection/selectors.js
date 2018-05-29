@@ -21,11 +21,7 @@ const selectHomepageData = () => createSelector(
 
 const selectCountries = () => createSelector(
 	selectTextSelectionDomain,
-	(substate) => {
-		const countries = substate.get('countries');
-
-		return countries.filter((country) => country.get('languages').size > 0);
-	}
+	(substate) => substate.get('countries')
 );
 
 const selectTexts = () => createSelector(

@@ -16,7 +16,7 @@ import {
 import { loadTexts, loadCountries, setLanguages } from './actions';
 
 export function* getCountries() {
-	const requestUrl = `https://api.bible.build/countries?key=${process.env.DBP_API_KEY}&v=4&bucket_id=${process.env.DBP_BUCKET_ID}&has_filesets=true`;
+	const requestUrl = `https://api.bible.build/countries?key=${process.env.DBP_API_KEY}&v=4&bucket_id=${process.env.DBP_BUCKET_ID}&has_filesets=true&include_languages=true`;
 
 	try {
 		const response = yield call(request, requestUrl);
@@ -25,7 +25,7 @@ export function* getCountries() {
 		countriesObject.ANY = { name: 'ANY', languages: { ANY: 'ANY' }, codes: { iso_a2: 'ANY' } };
 
 		const countries = fromJS(countriesObject)
-			.filter((c) => c.get('languages').size > 0 && c.get('name'))
+			.filter((c) => c.get('name'))
 			.sort((a, b) => {
 				if (a.get('name') === 'ANY') {
 					return -1;
