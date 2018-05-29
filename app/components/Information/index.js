@@ -42,13 +42,13 @@ class Information extends React.PureComponent {// eslint-disable-line react/pref
 	getAudioCopyright = (organizations) => organizations.map((org) => (
 		[
 			<h3 key={`${org.name}_audio`}><FormattedMessage {...messages.providedByAudio} /></h3>,
-			org.logo ? <a key={org.url} target={'_blank'} href={org.url}><ImageComponent alt={'Copyright owners logo'} src={org.logo.url} height={'109px'} width={'103px'} /></a> : null,
+			org.logo ? <a key={org.url} target={'_blank'} href={org.url}><ImageComponent alt={'Copyright owners logo'} src={org.logo.url} /></a> : null,
 		]
 	));
 	getTextCopyright = (organizations) => organizations.map((org) => (
 		[
 			<h3 key={`${org.name}_text`}><FormattedMessage {...messages.providedByText} /></h3>,
-			org.logo ? <a key={org.url} target={'_blank'} href={org.url}><ImageComponent alt={'Copyright owners logo'} src={org.logo.url} height={'109px'} width={'103px'} /></a> : null,
+			org.logo ? <a key={org.url} target={'_blank'} href={org.url}><ImageComponent alt={'Copyright owners logo'} src={org.logo.url} /></a> : null,
 		]
 	));
 // {
@@ -69,7 +69,7 @@ class Information extends React.PureComponent {// eslint-disable-line react/pref
 		return (
 			<aside ref={this.setRef} className="profile">
 				<header>
-					<SvgWrapper className={'icon'} svgid={'info'} onClick={() => toggleInformationModal()} />
+					<SvgWrapper style={{ marginTop: '5px' }} className={'icon'} svgid={'info'} onClick={() => toggleInformationModal()} />
 					<h1 className="section-title">Copyright Information</h1>
 					<SvgWrapper className={'icon'} svgid={'arrow_left'} onClick={() => toggleInformationModal()} />
 				</header>

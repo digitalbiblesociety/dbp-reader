@@ -37,7 +37,7 @@
       flex-direction: column;
       justify-content: space-between;
       align-items:center;
-      min-height: 250px;
+      //min-height: 250px;
 
       h3 {
         text-align: center;
@@ -45,6 +45,8 @@
 
       img {
         margin: 10px 0;
+        height: 109px;
+        width: 103px;
       }
     }
   }

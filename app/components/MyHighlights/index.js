@@ -63,7 +63,7 @@ class MyHighlights extends React.PureComponent { // eslint-disable-line react/pr
 							<Link to={`/${highlight.bible_id}/${highlight.book_id}/${highlight.chapter}/${highlight.verse_start}`} role="button" tabIndex={0} className="list-item">
 								<div className="title-text">
 									<h4 className="title">{getReference(highlight)}</h4>
-									<h4>{highlight.bible_id}</h4>
+									<h4 className={'text'}>{highlight.bible_id}</h4>
 								</div>
 							</Link>
 							<div className={'edit-color'} tabIndex={0} role={'button'} onClick={() => this.startUpdateProcess({ id: highlight.id, color: highlight.highlighted_color })}>

@@ -12,6 +12,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
+import SvgWrapper from 'components/SvgWrapper';
 
 import messages from './messages';
 
@@ -19,22 +20,32 @@ export default class NotFound extends React.PureComponent { // eslint-disable-li
 	render() {
 		return (
 			<GenericErrorBoundary affectedArea="NotFound">
-				<h1>
-					<FormattedMessage {...messages.header} />
-				</h1>
-				<FormattedMessage {...messages.cause} />
-				<ul>
-					<li><FormattedMessage {...messages.technical} /></li>
-					<li><FormattedMessage {...messages.moved} /></li>
-					<li><FormattedMessage {...messages.clickedOld} /></li>
-					<li><FormattedMessage {...messages.accident} /></li>
-				</ul>
-				<FormattedMessage {...messages.youDo} />
-				<ul>
-					<li><FormattedMessage {...messages.tryAgain} /></li>
-					<li><FormattedMessage {...messages.homePage} /><a href={'https://bible.is'}><FormattedMessage {...messages.homePageLink} /></a></li>
-				</ul>
-				<FormattedMessage {...messages.weKnow} />
+				<div className={'not-found'}>
+					<div className={'top-bar'}>
+						<a className="logo" href={'http://www.bible.is'} title={'http://www.bible.is'} target={'_blank'} rel={'noopener'}>
+							<SvgWrapper className="svg" svgid={'bible.is_logo'} />
+						</a>
+					</div>
+					<div className={'content'}>
+						<h1 className={'header'}>
+							<FormattedMessage {...messages.headermessage} />
+						</h1>
+						<FormattedMessage {...messages.cause} />
+						<ul>
+							<li><FormattedMessage {...messages.technical} /></li>
+							<li><FormattedMessage {...messages.moved} /></li>
+							<li><FormattedMessage {...messages.clickedOld} /></li>
+							<li><FormattedMessage {...messages.accident} /></li>
+						</ul>
+						<FormattedMessage {...messages.youDo} />
+						<ul>
+							<li><FormattedMessage {...messages.tryAgain} /></li>
+							<li><FormattedMessage {...messages.homePage} /><a href={'http://www.bible.is'}><FormattedMessage {...messages.homePageLink} /></a></li>
+						</ul>
+						<FormattedMessage {...messages.weKnow} />
+					</div>
+					<div className={'bottom-bar'} />
+				</div>
 			</GenericErrorBoundary>
 		);
 	}

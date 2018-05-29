@@ -263,12 +263,65 @@
   //background-color:rgb(26,29,33);
   padding:15px;
 }
-.note-list .list-item                  {display:flex;}
-.note-list .list-item:hover            {cursor:pointer;opacity:0.85;}
-.list-item .date                       {@include css4{color:var(--active-color-primary)};}
-.list-item .title-text                 {margin-left:15px;}
-.list-item .title-text .title          {@include css4{color:var(--active-color-primary)};}
-.list-item .title-text .text           {@include css4{color:var(--default-text-color)};}
+.note-list .list-item       {display:flex;}
+.note-list .list-item:hover {cursor:pointer;opacity:0.85;}
+.list-item .title-text      {
+  display: flex;
+  flex-direction: column;
+  margin-right:15px;
+}
+.list-item .title-text .title          {
+  display:inline-block;
+  position:relative;
+  overflow:hidden;
+  white-space:nowrap;
+  span.date {
+    @include css4{
+      color:var(--notebook-title-date-color)
+    };
+  }
+  &:after {
+    content: "";
+    width: 100%;
+    max-width: 290px;
+    height: 54px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    @include css4 {
+      background: -webkit-linear-gradient(to right, var(--menu-body-background-color-transparent) 75%, var(--menu-body-background-color));
+      background: -moz-linear-gradient(to right, var(--menu-body-background-color-transparent) 75%, var(--menu-body-background-color));
+      background: linear-gradient(to right, var(--menu-body-background-color-transparent) 75%, var(--menu-body-background-color));
+    };
+  };
+  @include css4{
+    color:var(--active-color-primary);
+  };
+}
+.list-item .title-text .text           {
+  display:inline-block;
+  position:relative;
+  overflow:hidden;
+  white-space:nowrap;
+  &:after {
+    content: "";
+    width: 100%;
+    max-width: 290px;
+    height: 54px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    @include css4 {
+      background: -webkit-linear-gradient(to right, var(--menu-body-background-color-transparent) 75%, var(--menu-body-background-color));
+      background: -moz-linear-gradient(to right, var(--menu-body-background-color-transparent) 75%, var(--menu-body-background-color));
+      background: linear-gradient(to right, var(--menu-body-background-color-transparent) 75%, var(--menu-body-background-color));
+    };
+  };
+
+  @include css4{
+    color:var(--default-text-color);
+  };
+}
 
 .list-sections .pagination             {
   display:flex;
@@ -278,9 +331,21 @@
     background-color:var(--notebook-footer-background-color);
   }
 }
-.pagination .item-list                 {cursor:pointer;display:flex;align-items:center;justify-content:space-between;height:50px;width:calc(100% - 120px);margin:0 15px;}
-.pagination .item-list .item:hover     {@include css4{color:var(--active-color-primary)};}
-.pagination .item-list .item.active    {@include css4{color:var(--active-color-primary)};}
+.pagination .item-list                 {
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  height:50px;
+  width:calc(100% - 120px);
+  margin:0 15px;
+}
+.pagination .item-list .item:hover     {
+  @include css4{color:var(--active-color-primary)};
+}
+.pagination .item-list .item.active    {
+  @include css4{color:var(--active-color-primary)};
+}
 
 .page-size-selector {display:flex;align-items:center;height:50px;width:120px;font-size:.98em;font-weight:200;}
 .page-size-selector .open {
@@ -377,6 +442,7 @@
 
     .list-item {
       flex-basis: 75%;
+      max-width: 75%;
       display: inline-block;
     }
 

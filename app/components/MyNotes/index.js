@@ -82,7 +82,7 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 		if (h.reference) {
 			return h.reference;
 		}
-		return `${h.bible_id} - ${h.book_id} - ${h.chapter}:${h.verse_start === h.verse_end || !h.verse_end ? h.verse_start : `${h.verse_start}-${h.verse_end}`} - (${h.bible_id})`;
+		return `${h.book_id} - ${h.chapter}:${h.verse_start === h.verse_end || !h.verse_end ? h.verse_start : `${h.verse_start}-${h.verse_end}`} - (${h.bible_id})`;
 	}
 
 	handleSearchChange = (e) => this.setState({ filterText: e.target.value })
@@ -137,11 +137,20 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 					{
 						sectionType === 'notes' ? (
 							filteredPageData.map((listItem) => (
-								<div role="button" tabIndex={0} onClick={() => this.handleClick(listItem)} key={listItem.id} className="list-item">
-									<div className="date">{this.getFormattedNoteDate(listItem.created_at)}</div>
-									<div className="title-text">
-										<h4 className="title">{this.getNoteReference(listItem)}</h4>
-										<p className="text">{listItem.notes}</p>
+								<div key={listItem.id} className={'highlight-item'}>
+									<div role="button" tabIndex={0} onClick={() => this.handleClick(listItem)} className="list-item">
+										<div className="title-text">
+											<h4 className="title"><span className="date">{this.getFormattedNoteDate(listItem.created_at)}</span> | {this.getNoteReference(listItem)}</h4>
+											<p className="text">{listItem.notes}</p>
+										</div>
+									</div>
+									<div className={'edit-color'} tabIndex={0} role={'button'}>
+										<SvgWrapper className={'icon'} svgid={'edit_note'} />
+										<span>Edit</span>
+									</div>
+									<div className={'delete-highlight'}>
+										<SvgWrapper className={'icon'} svgid={'delete'} />
+										<span>Delete</span>
 									</div>
 								</div>
 							))
