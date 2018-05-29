@@ -226,7 +226,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			gapi.load('auth2', () => { // eslint-disable-line no-undef
 				// console.log('gapi loaded');
 				window.auth2 = gapi.auth2.init({ // eslint-disable-line no-undef
-					client_id: process.env.GOOGLE_APP_ID,
+					client_id: process.env.NODE_ENV === 'development' ? process.env.GOOGLE_APP_ID : process.env.GOOGLE_APP_ID_PROD,
 					scope: 'profile',
 				});
 				// console.log('auth 2 has been initialized', auth2);
