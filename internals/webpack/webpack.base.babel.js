@@ -108,6 +108,7 @@ module.exports = (options) => ({
 				NOTES_PROJECT_ID: JSON.stringify(process.env.NOTES_PROJECT_ID),
 				DBP_BUCKET_ID: JSON.stringify(process.env.DBP_BUCKET_ID),
 				GOOGLE_APP_ID: JSON.stringify(process.env.GOOGLE_APP_ID),
+				GOOGLE_APP_ID_PROD: JSON.stringify(process.env.GOOGLE_APP_ID_PROD),
 			},
 		}),
 		new webpack.NamedModulesPlugin(),
