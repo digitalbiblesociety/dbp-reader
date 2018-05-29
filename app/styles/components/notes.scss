@@ -115,12 +115,14 @@
     justify-content: space-between;
     height: 50px;
     width: 100%;
-    padding: 0 10px 0 20px;
+    padding: 0 20px;
 
     .save-button {
       cursor:pointer;
       font-size:1.05em;
-      padding:15px;
+      //padding:15px;
+      //width: 70px;
+      //float: right;
 
       &.failed {
         color: $sketch-document-color-error;
@@ -142,24 +144,44 @@
     }
 
     .delete-button        {
+      display: flex;
+      align-items: center;
       cursor:pointer;
       font-size:1.05em;
-      flex-grow: 2;
-      padding-left: 10px;
-    }
+      //flex-grow: 2;
+      //padding-left: 10px;
+      //float: left;
 
-    .delete-button:hover  {
-      @include css4 {
-        color:var(--active-color-primary);
+      &:hover  {
+        @include css4 {
+          color:var(--active-color-primary);
+        }
       }
     }
 
     .icon {
-      &:hover {
-        @include css4 {
-          color: var(--active-color-primary);
-        }
-      }
+      //&:hover + .delete-button {
+      //  @include css4 {
+      //    color: var(--active-color-primary);
+      //  }
+      //}
+      //& + .delete-button:hover {
+      //  @include css4 {
+      //    color: var(--active-color-primary);
+      //  }
+      //}
+      //&:hover {
+        //& + .delete-button {
+        //  @include css4 {
+        //    color: var(--active-color-primary);
+        //  }
+        //}
+      //  @include css4 {
+      //    color: var(--active-color-primary);
+      //  }
+      //}
+      margin-right: 10px;
+      flex-shrink: 0;
     }
     //align-self: center;
 
