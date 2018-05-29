@@ -57,7 +57,7 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 		const verseRef = listItem.verse_end && !(listItem.verse_end === listItem.verse_start) ? `${listItem.verse_start}-${listItem.verse_end}` : listItem.verse_start;
 		const { vernacularNamesObject } = this.props;
 
-		return `${vernacularNamesObject[listItem.book_id]} ${listItem.chapter}:${verseRef} - (${listItem.bible_id})`;
+		return `${vernacularNamesObject[listItem.book_id]} ${listItem.chapter}:${verseRef}`;
 	}
 
 	getFormattedNoteDate = (timestamp) => {
@@ -113,6 +113,7 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 			totalPagesBookmark,
 			activePageBookmark,
 			deleteHighlights,
+			deleteNote,
 			updateHighlight,
 		} = this.props;
 		let filteredPageData = [];
@@ -144,11 +145,11 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 											<p className="text">{listItem.notes}</p>
 										</div>
 									</div>
-									<div className={'edit-color'} tabIndex={0} role={'button'}>
+									<div onClick={() => this.handleClick(listItem)} className={'edit-note'} tabIndex={0} role={'button'}>
 										<SvgWrapper className={'icon'} svgid={'edit_note'} />
 										<span>Edit</span>
 									</div>
-									<div className={'delete-highlight'}>
+									<div onClick={() => deleteNote({ noteId: listItem.id })} className={'delete-highlight'} tabIndex={0} role={'button'}>
 										<SvgWrapper className={'icon'} svgid={'delete'} />
 										<span>Delete</span>
 									</div>
@@ -157,15 +158,22 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 						) : null
 					}
 					{
-						sectionType === 'highlights' ? <MyHighlights
-							highlights={filteredPageData}
-							getReference={this.getHighlightReference}
-							deleteHighlights={deleteHighlights}
-							updateHighlight={updateHighlight}
-						/> : null
+						sectionType === 'highlights' ?
+							<MyHighlights
+								highlights={filteredPageData}
+								getReference={this.getHighlightReference}
+								deleteHighlights={deleteHighlights}
+								updateHighlight={updateHighlight}
+							/> : null
 					}
 					{
-						sectionType === 'bookmarks' ? <MyBookmarks bookmarks={filteredPageData.filter((n) => n.bookmark)} getFormattedNoteDate={this.getFormattedNoteDate} getNoteReference={this.getNoteReference} /> : null
+						sectionType === 'bookmarks' ?
+							<MyBookmarks
+								bookmarks={filteredPageData.filter((n) => n.bookmark)}
+								deleteNote={deleteNote}
+								getFormattedNoteDate={this.getFormattedNoteDate}
+								getNoteReference={this.getNoteReference}
+							/> : null
 					}
 				</section>
 				<div className="pagination">
@@ -208,6 +216,7 @@ MyNotes.propTypes = {
 	pageSelectorState: PropTypes.bool.isRequired,
 	deleteHighlights: PropTypes.func,
 	updateHighlight: PropTypes.func,
+	deleteNote: PropTypes.func,
 };
 
 export default MyNotes;
