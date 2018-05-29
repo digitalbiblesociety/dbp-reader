@@ -238,7 +238,7 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 				}
 				<textarea onChange={this.handleTextareaChange} placeholder="CLICK TO ADD NOTE" value={this.state.textarea} className="note-text" />
 				<div className={'delete-note-section'}>
-					<SvgWrapper className={'icon'} svgid={'delete'} />
+					<SvgWrapper className={'icon'} svgid={'delete'} onClick={() => this.deleteNote()} />
 					<span className="delete-button" role="button" tabIndex={0} onClick={() => this.deleteNote()}>Delete Note</span>
 					{
 						savedTheNote && !errorSavingNote ?

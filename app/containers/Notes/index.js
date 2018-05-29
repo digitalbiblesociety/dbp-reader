@@ -102,7 +102,7 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 	}))
 	addNote = (data) => this.props.dispatch(addNote({ userId: this.props.userId, data: { ...data, user_id: this.props.userId } }))
 	updateNote = (data) => this.props.dispatch(updateNote({ userId: this.props.userId, noteId: data.id, data: { ...data, user_id: this.props.userId } }))
-	deleteNote = ({ noteId }) => this.props.dispatch(deleteNote({ userId: this.props.userId, noteId }))
+	deleteNote = ({ noteId }) => this.props.dispatch(deleteNote({ userId: this.props.userId, noteId, pageSize: this.props.notes.pageSize, activePage: this.props.notes.activePage }))
 	readSavedMessage = (props) => this.props.dispatch(readSavedMessage(props))
 	clearNoteErrorMessage = () => this.props.dispatch(clearNoteErrorMessage())
 
