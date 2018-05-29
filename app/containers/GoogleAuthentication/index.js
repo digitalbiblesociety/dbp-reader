@@ -52,6 +52,7 @@ export class GoogleAuthentication extends React.PureComponent { // eslint-disabl
 				const prof = auth2.currentUser.get().getBasicProfile();
 				const user = {
 					name: prof.getName(),
+					nickname: prof.getGivenName(),
 					avatar: prof.getImageUrl(),
 					email: prof.getEmail(),
 					id: prof.getId(),

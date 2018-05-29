@@ -277,7 +277,7 @@
   white-space:nowrap;
   span.date {
     @include css4{
-      color:var(--notebook-title-date-color)
+      color:var(--notebook-title-date-color);
     };
   }
   &:after {
@@ -295,7 +295,7 @@
     };
   };
   @include css4{
-    color:var(--active-color-primary);
+    color:var(--default-text-color);
   };
 }
 .list-item .title-text .text           {

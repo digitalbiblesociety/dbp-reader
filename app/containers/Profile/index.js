@@ -50,6 +50,12 @@ export class Profile extends React.PureComponent { // eslint-disable-line react/
 		this.closeMenuController.onMenuMount();
 	}
 
+	componentWillReceiveProps(nextProps) {
+		if (this.props.profile.activeOption !== nextProps.profile.activeOption) {
+			this.props.dispatch(clearErrorMessage());
+		}
+	}
+
 	componentWillUnmount() {
 		this.closeMenuController.onMenuUnmount();
 		this.props.dispatch(clearErrorMessage());
