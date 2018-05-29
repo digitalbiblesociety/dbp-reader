@@ -5,6 +5,7 @@ import request from 'utils/request';
 import { fromJS } from 'immutable';
 import {
 	GET_COUNTRIES,
+	GET_COUNTRY,
 	GET_DPB_TEXTS,
 	GET_LANGUAGES,
 	ERROR_GETTING_LANGUAGES,
@@ -15,26 +16,16 @@ import {
 import { loadTexts, loadCountries, setLanguages } from './actions';
 
 export function* getCountries() {
-	const requestUrl = `https://api.bible.build/countries?key=${process.env.DBP_API_KEY}&v=4&bucket_id=${process.env.DBP_BUCKET_ID}&has_filesets=true`;
+	const requestUrl = `https://api.bible.build/countries?key=${process.env.DBP_API_KEY}&v=4&bucket_id=${process.env.DBP_BUCKET_ID}&has_filesets=true&include_languages=true`;
 
 	try {
 		const response = yield call(request, requestUrl);
-		const countriesObject = response.data.reduce((acc, country) => {
-			const tempObj = acc;
-			if (typeof country.name !== 'string') {
-				tempObj[country.name.name] = { ...country, name: country.name.name };
-			} else if (country.name === '' || territoryCodes[country.codes.iso_a2]) {
-				return acc;
-			} else {
-				tempObj[country.name] = country;
-			}
-			return tempObj;
-		}, {});
+		const countriesObject = response.data.filter((country) => !territoryCodes[country.codes.iso_a2]);
 
 		countriesObject.ANY = { name: 'ANY', languages: { ANY: 'ANY' }, codes: { iso_a2: 'ANY' } };
 
 		const countries = fromJS(countriesObject)
-			.filter((c) => c.get('languages').size > 0 && c.get('name'))
+			.filter((c) => c.get('name'))
 			.sort((a, b) => {
 				if (a.get('name') === 'ANY') {
 					return -1;
@@ -47,6 +38,26 @@ export function* getCountries() {
 			});
 
 		yield put(loadCountries({ countries }));
+	} catch (err) {
+		if (process.env.NODE_ENV === 'development') {
+			console.error(err); // eslint-disable-line no-console
+		} else if (process.env.NODE_ENV === 'production') {
+			// const options = {
+			// 	header: 'POST',
+			// 	body: formData,
+			// };
+			// fetch('https://api.bible.build/error_logging', options);
+		}
+	}
+}
+
+export function* getCountry() {
+	// const requestUrl = `https://api.bible.build/countries?key=${process.env.DBP_API_KEY}&v=4&bucket_id=${process.env.DBP_BUCKET_ID}&has_filesets=true&include_languages=true&iso=${iso}`;
+
+	try {
+		// const response = yield call(request, requestUrl);
+		//
+		// yield put(loadCountry({ country: response.country }));
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error(err); // eslint-disable-line no-console
@@ -126,6 +137,7 @@ export function* getLanguages() {
 // Individual exports for testing
 export default function* defaultSaga() {
 	yield takeLatest(GET_DPB_TEXTS, getTexts);
+	yield takeLatest(GET_COUNTRY, getCountry);
 	yield takeLatest(GET_LANGUAGES, getLanguages);
 	yield takeLatest(GET_COUNTRIES, getCountries);
 }

@@ -210,6 +210,7 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 									) : (
 										<MyNotes
 											getNotes={this.getNotes}
+											deleteNote={this.deleteNote}
 											setPageSize={this.setPageSize}
 											getBookmarks={this.getBookmarks}
 											setActiveNote={this.setActiveNote}

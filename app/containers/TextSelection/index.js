@@ -28,6 +28,7 @@ import {
 	setActiveIsoCode,
 	setCountryListState,
 	getTexts,
+	getCountry,
 	setCountryName,
 } from './actions';
 import makeSelectTextSelection, {
@@ -83,6 +84,8 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 
 	setCountryName = ({ name, languages }) => this.props.dispatch(setCountryName({ name, languages }));
 
+	getCountry = (props) => this.props.dispatch(getCountry(props));
+
 	getActiveTab() {
 		const {
 			activeIsoCode,
@@ -134,6 +137,7 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 					loadingCountries={loadingCountries}
 					activeCountryName={activeCountryName}
 					setCountryName={this.setCountryName}
+					getCountry={this.getCountry}
 					toggleVersionList={this.toggleVersionList}
 					toggleLanguageList={this.toggleLanguageList}
 					setCountryListState={this.setCountryListState}

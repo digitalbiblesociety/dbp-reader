@@ -277,7 +277,7 @@
   white-space:nowrap;
   span.date {
     @include css4{
-      color:var(--notebook-title-date-color)
+      color:var(--notebook-title-date-color);
     };
   }
   &:after {
@@ -295,7 +295,7 @@
     };
   };
   @include css4{
-    color:var(--active-color-primary);
+    color:var(--default-text-color);
   };
 }
 .list-item .title-text .text           {
@@ -451,10 +451,31 @@
       flex-direction: column;
       font-size: 12px;
       justify-content: center;
+      align-items: center;
       flex-basis: 12.5%;
 
       svg {
         flex-shrink: 0;
+      }
+
+      &:hover {
+        cursor: pointer;
+        opacity: 0.65;
+      }
+    }
+
+    .edit-note {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      font-size: 12px;
+      flex-basis: 12.5%;
+
+      &:hover {
+        cursor: pointer;
+        opacity: 0.65;
       }
     }
 

@@ -731,6 +731,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					bookmarks={bookmarks}
 					bibleId={activeTextId}
 					highlights={highlights}
+					audioSource={audioSource}
 					activeBookId={activeBookId}
 					userSettings={userSettings}
 					activeChapter={activeChapter}

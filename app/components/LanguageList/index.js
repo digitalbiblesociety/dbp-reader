@@ -150,7 +150,7 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 							) : <LoadingSpinner />
 						}
 						{
-							languages.length === 0 ? <span className={'language-error-message'}>There was an error fetching this resource, an Admin has been notified. We apologize for the inconvenience</span> : null
+							languages.length === 0 ? <span className={'language-error-message'}>There was an error fetching this resource, an Admin has been notified. We apologize for the inconvenience.</span> : null
 						}
 					</div>
 				</div>

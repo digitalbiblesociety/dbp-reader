@@ -133,6 +133,7 @@ export function* updateNote({ userId, data, noteId }) {
 			// };
 			// fetch('https://api.bible.build/error_logging', options);
 		}
+		yield put({ type: ADD_NOTE_FAILED, message: 'An error has occurred. Please try again later.' });
 	}
 }
 
@@ -158,6 +159,7 @@ export function* deleteNote({ userId, noteId }) {
 			// };
 			// fetch('https://api.bible.build/error_logging', options);
 		}
+		yield put({ type: ADD_NOTE_FAILED, message: 'An error has occurred. Please try again later.' });
 	}
 }
 // Probably need a getBookmarks function
@@ -276,7 +278,7 @@ export function* addNote({ userId, data }) {
 			// };
 			// fetch('https://api.bible.build/error_logging', options);
 		}
-		yield put({ type: ADD_NOTE_FAILED, message: 'Something went wrong on the server. Please try again in a few minutes.' });
+		yield put({ type: ADD_NOTE_FAILED, message: 'An error has occurred. Please try again later.' });
 	}
 }
 
