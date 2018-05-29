@@ -157,6 +157,12 @@ const initialState = fromJS({
 	filesetTypes: {},
 	firstLoad: true,
 	testaments: {},
+	previousAudioPaths: [],
+	previousAudioFilesetId: '',
+	previousAudioSource: '',
+	nextAudioPaths: [],
+	nextAudioFilesetId: '',
+	nextAudioSource: '',
 	audioPaths: [],
 	audioPlayerState: JSON.parse(sessionStorage.getItem('bible_is_audio_player_state')) === null ? false : JSON.parse(sessionStorage.getItem('bible_is_audio_player_state')),
 });
@@ -296,6 +302,13 @@ function homePageReducer(state = initialState, action) {
 			.set('formattedSource', fromJS(action.formattedText));
 	case 'loadaudio':
 		// console.log('loading audio with', action);
+		if (action.previous) {
+			return state
+				.set('previousAudioSource', action.audioPaths[0]);
+		} else if (action.next) {
+			return state
+				.set('nextAudioSource', action.audioPaths[0]);
+		}
 		return state
 			.set('audioPaths', action.audioPaths.slice(1))
 			.set('loadingNewChapterText', false)

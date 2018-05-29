@@ -250,10 +250,14 @@ export function* getBibleFromUrl({ bibleId: oldBibleId, bookId: oldBookId, chapt
 			const bible = response.data;
 			const books = bible.books; // Need to ensure that I have the books here
 			let hasMatt = false;
+			let activeBookIndex;
 			// console.log('books in new bible', books);
-			const activeBook = books.find((b) => {
+			const activeBook = books.find((b, i) => {
 				if (b.book_id === 'MAT') {
+					activeBookIndex = i;
 					hasMatt = true;
+				} else if (b.book_id === bookId) {
+					activeBookIndex = i;
 				}
 				return b.book_id === bookId;
 			});
@@ -289,10 +293,42 @@ export function* getBibleFromUrl({ bibleId: oldBibleId, bookId: oldBookId, chapt
 			const filesets = response.data.filesets.filter((f) => f.bucket_id === 'dbp-dev' && f.set_type_code !== 'app');
 			// calling a generator that will handle the api requests for getting text
 			// console.log('filtered filesets', filesets);
+			let nextBook = { chapters: [] };
+			let prevBook = { chapters: [] };
+			let nextBookId = '';
+			let prevBookId = '';
+			let nextChapter = activeChapter + 1;
+			let prevChapter = activeChapter - 1;
+
+			if (books[activeBookIndex + 1]) {
+				nextBook = books[activeBookIndex + 1];
+				nextBookId = nextBook.book_id;
+			}
+			if (books[activeBookIndex - 1]) {
+				prevBook = books[activeBookIndex - 1];
+				prevBookId = prevBook.book_id;
+			}
+
+			if (!activeBook.chapters[prevChapter]) {
+				prevChapter = prevBook.chapters[-1];
+			}
+
+			if (!activeBook.chapters[nextChapter]) {
+				nextChapter = nextBook.chapters[0];
+			}
+			// console.log('nextChapter', nextChapter);
+			// console.log('prevChapter', prevChapter);
+			// console.log('nextBookId', nextBookId);
+			// console.log('prevBookId', prevBookId);
+
 			const chapterData = yield call(getChapterFromUrl, {
 				filesets,
 				bibleId,
 				bookId: activeBookId,
+				nextBookId,
+				prevBookId,
+				nextChapter,
+				prevChapter,
 				chapter: activeChapter,
 				authenticated,
 				userId,
@@ -326,9 +362,21 @@ export function* getBibleFromUrl({ bibleId: oldBibleId, bookId: oldBookId, chapt
 		yield put({ type: 'loadbibleerror' });
 	}
 }
-export function* getChapterFromUrl({ filesets, bibleId: oldBibleId, bookId: oldBookId, chapter, authenticated, userId }) {
+export function* getChapterFromUrl({
+  filesets,
+  bibleId: oldBibleId,
+  bookId: oldBookId,
+  chapter,
+  authenticated, userId,
+  nextBookId,
+  prevBookId,
+  nextChapter,
+  prevChapter,
+}) {
 	// console.log('bible, book, chapter', bibleId, bookId, chapter);
 	// console.log('filesets chapter text', filesets);
+	// console.log('next prev in get chapt', nextBookId, nextChapter, prevBookId, prevChapter);
+
 	const bibleId = oldBibleId.toUpperCase();
 	const bookId = oldBookId.toUpperCase();
 	const hasFormattedText = some(filesets, (f) => (f.set_type_code === 'text_format' && f.bucket_id === 'dbp-dev'));
@@ -353,6 +401,16 @@ export function* getChapterFromUrl({ filesets, bibleId: oldBibleId, bookId: oldB
 			// Not yielding this as it doesn't matter when the audio comes back
 			// This function will sometimes have to make multiple api requests
 			// And I don't want it blocking the text from loading
+		// Need to get the next and prev audio sources here as well
+		if (nextBookId && nextChapter) {
+			// console.log('Calling get next audio');
+
+			yield fork(getChapterAudio, { filesets, bookId, nextBookId, nextChapter, next: true });
+		}
+		if (prevChapter && prevBookId) {
+			// console.log('Calling get prev audio');
+			yield fork(getChapterAudio, { filesets, bookId, prevBookId, prevChapter, previous: true });
+		}
 		yield fork(getChapterAudio, { filesets, bookId, chapter });
 		// }
 		yield fork(getBookMetadata, { bibleId });
@@ -511,7 +569,17 @@ function* tryNext({ urls, index, bookId, chapter }) {
 // I think it makes the most sense to start this running from within
 // The getChapterFromUrl function. This may need to be adjusted when
 // RTMP streaming is implemented
-export function* getChapterAudio({ filesets, bookId, chapter }) {
+export function* getChapterAudio({ filesets, bookId: currentBook, chapter: currentChapter, previous = false, next = false, prevBookId, nextBookId, prevChapter, nextChapter }) {
+	let bookId = currentBook;
+	let chapter = currentChapter;
+
+	if (previous) {
+		bookId = prevBookId;
+		chapter = prevChapter;
+	} else if (next) {
+		bookId = nextBookId;
+		chapter = nextChapter;
+	}
 	// Send a loadaudio action for each fail in production so that there isn't a link loaded
 	// This handles the case where a user already has a link but getting the next one fails
 	// console.log('getting audio', filesets, bookId, chapter);
@@ -574,7 +642,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 			// console.log('complete audio response object', response);
 			const audioPaths = [get(response, ['data', 0, 'path'])];
 			// console.log('complete audio path', audioPaths);
-			yield put({ type: 'loadaudio', audioPaths, audioFilesetId: get(completeAudio, [0, 'id']) });
+			yield put({ type: 'loadaudio', previous, next, audioPaths, audioFilesetId: get(completeAudio, [0, 'id']) });
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Caught in getChapterAudio complete audio', error); // eslint-disable-line no-console
@@ -584,7 +652,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 				// 	body: formData,
 				// };
 				// fetch('https://api.bible.build/error_logging', options);
-				yield put({ type: 'loadaudio', audioPaths: [''] });
+				yield put({ type: 'loadaudio', previous, next, audioPaths: [''] });
 			}
 		}
 		return;
@@ -596,7 +664,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 			const audioPaths = [get(response, ['data', 0, 'path'])];
 			// console.log('nt audio path', audioPaths);
 			ntHasUrl = !!audioPaths[0];
-			yield put({ type: 'loadaudio', audioPaths, audioFilesetId: get(ntAudio, [0, 'id']) });
+			yield put({ type: 'loadaudio', previous, next, audioPaths, audioFilesetId: get(ntAudio, [0, 'id']) });
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Caught in getChapterAudio nt audio', error); // eslint-disable-line no-console
@@ -606,7 +674,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 				// 	body: formData,
 				// };
 				// fetch('https://api.bible.build/error_logging', options);
-				yield put({ type: 'loadaudio', audioPaths: [''] });
+				yield put({ type: 'loadaudio', previous, next, audioPaths: [''] });
 			}
 		}
 	} else if (otLength && !ntLength) {
@@ -618,7 +686,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 			// console.log('ot audio path', audioPaths);
 			// otPath = audioPaths;
 			otHasUrl = !!audioPaths[0];
-			yield put({ type: 'loadaudio', audioPaths, audioFilesetId: get(otAudio, [0, 'id']) });
+			yield put({ type: 'loadaudio', previous, next, audioPaths, audioFilesetId: get(otAudio, [0, 'id']) });
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Caught in getChapterAudio ot audio', error); // eslint-disable-line no-console
@@ -628,7 +696,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 				// 	body: formData,
 				// };
 				// fetch('https://api.bible.build/error_logging', options);
-				yield put({ type: 'loadaudio', audioPaths: [''] });
+				yield put({ type: 'loadaudio', previous, next, audioPaths: [''] });
 			}
 		}
 	} else if (ntLength && otLength) {
@@ -643,7 +711,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 			const audioPaths = [get(response, ['data', 0, 'path'])];
 			// console.log('nt audio path', audioPaths);
 			ntPath = audioPaths;
-			// yield put({ type: 'loadaudio', audioPaths });
+			// yield put({ type: 'loadaudio', previous, next, audioPaths });
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Caught in getChapterAudio nt audio', error); // eslint-disable-line no-console
@@ -653,7 +721,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 				// 	body: formData,
 				// };
 				// fetch('https://api.bible.build/error_logging', options);
-				yield put({ type: 'loadaudio', audioPaths: [''] });
+				yield put({ type: 'loadaudio', previous, next, audioPaths: [''] });
 			}
 		}
 		try {
@@ -663,7 +731,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 			const audioPaths = [get(response, ['data', 0, 'path'])];
 			// console.log('ot audio path', audioPaths);
 			otPath = audioPaths;
-			// yield put({ type: 'loadaudio', audioPaths });
+			// yield put({ type: 'loadaudio', previous, next, audioPaths });
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Caught in getChapterAudio ot audio', error); // eslint-disable-line no-console
@@ -673,12 +741,12 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 				// 	body: formData,
 				// };
 				// fetch('https://api.bible.build/error_logging', options);
-				yield put({ type: 'loadaudio', audioPaths: [''] });
+				yield put({ type: 'loadaudio', previous, next, audioPaths: [''] });
 			}
 		}
 		ntHasUrl = !!ntPath;
 		otHasUrl = !!otPath;
-		yield put({ type: 'loadaudio', audioPaths: ntPath || otPath, audioFilesetId: ntPath ? get(ntAudio, [0, 'id']) : get(otAudio, [0, 'id']) });
+		yield put({ type: 'loadaudio', previous, next, audioPaths: ntPath || otPath, audioFilesetId: ntPath ? get(ntAudio, [0, 'id']) : get(otAudio, [0, 'id']) });
 	}
 
 	if (partialOtAudio.length && !otLength && (!otHasUrl && !ntHasUrl)) {
@@ -696,7 +764,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 				audioPaths.push(get(response, ['data', 0, 'path']));
 			}
 			// console.log('partial audio path', audioPaths);
-			yield put({ type: 'loadaudio', audioPaths, audioFilesetId: get(partialOtAudio, [0, 'id']) });
+			yield put({ type: 'loadaudio', previous, next, audioPaths, audioFilesetId: get(partialOtAudio, [0, 'id']) });
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Caught in getChapterAudio partial audio', error); // eslint-disable-line no-console
@@ -706,7 +774,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 				// 	body: formData,
 				// };
 				// fetch('https://api.bible.build/error_logging', options);
-				yield put({ type: 'loadaudio', audioPaths: [''] });
+				yield put({ type: 'loadaudio', previous, next, audioPaths: [''] });
 			}
 		}
 	}
@@ -726,7 +794,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 				audioPaths.push(get(response, ['data', 0, 'path']));
 			}
 			// console.log('partial audio path', audioPaths);
-			yield put({ type: 'loadaudio', audioPaths, audioFilesetId: get(partialNtAudio, [0, 'id']) });
+			yield put({ type: 'loadaudio', previous, next, audioPaths, audioFilesetId: get(partialNtAudio, [0, 'id']) });
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Caught in getChapterAudio partial audio', error); // eslint-disable-line no-console
@@ -736,7 +804,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 				// 	body: formData,
 				// };
 				// fetch('https://api.bible.build/error_logging', options);
-				yield put({ type: 'loadaudio', audioPaths: [''] });
+				yield put({ type: 'loadaudio', previous, next, audioPaths: [''] });
 			}
 		}
 	}
@@ -756,7 +824,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 				audioPaths.push(get(response, ['data', 0, 'path']));
 			}
 			// console.log('partial audio path', audioPaths);
-			yield put({ type: 'loadaudio', audioPaths, audioFilesetId: get(partialNtOtAudio, [0, 'id']) });
+			yield put({ type: 'loadaudio', previous, next, audioPaths, audioFilesetId: get(partialNtOtAudio, [0, 'id']) });
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Caught in getChapterAudio partial audio', error); // eslint-disable-line no-console
@@ -766,7 +834,7 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 				// 	body: formData,
 				// };
 				// fetch('https://api.bible.build/error_logging', options);
-				yield put({ type: 'loadaudio', audioPaths: [''] });
+				yield put({ type: 'loadaudio', previous, next, audioPaths: [''] });
 			}
 		}
 	}
