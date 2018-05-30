@@ -38,7 +38,7 @@ class NavigationBar extends React.PureComponent { // eslint-disable-line react/p
 							theme === 'paper' && userAgent !== 'ms' ? <SvgWrapper className="svg" svgid={'bible.is_logo_light'} /> : null
 						}
 						{
-							theme !== 'paper' || userAgent === 'ms' ? <SvgWrapper className="svg" svgid={'bible.is_logo'} /> : null
+							theme !== 'paper' || userAgent === 'ms' ? <SvgWrapper fill={userAgent === 'ms' ? '#fff' : ''} className="svg" svgid={'bible.is_logo'} /> : null
 						}
 					</a>
 					<span role="button" tabIndex={0} onClick={toggleVersionSelection} className="version">

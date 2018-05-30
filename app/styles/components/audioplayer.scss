@@ -137,6 +137,7 @@
 
   &:before {
     content: "";
+
     filter:blur(15px);
     position: absolute;
     width:100%;
