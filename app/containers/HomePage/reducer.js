@@ -59,6 +59,7 @@ const initialState = fromJS({
 						logo: {
 							url: '',
 						},
+						name: 'name1',
 					},
 				],
 			},
@@ -68,6 +69,7 @@ const initialState = fromJS({
 						logo: {
 							url: '',
 						},
+						name: 'name2',
 					},
 				],
 			},
@@ -79,6 +81,7 @@ const initialState = fromJS({
 						logo: {
 							url: '',
 						},
+						name: 'name3',
 					},
 				],
 			},
@@ -88,6 +91,7 @@ const initialState = fromJS({
 						logo: {
 							url: '',
 						},
+						name: 'name4',
 					},
 				],
 			},

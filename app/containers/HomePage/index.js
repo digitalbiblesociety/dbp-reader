@@ -22,6 +22,7 @@ import { Helmet } from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { TransitionGroup } from 'react-transition-group';
+import { fromJS } from 'immutable';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import isEqual from 'lodash/isEqual';
@@ -312,9 +313,9 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			const newBook = params.bookId !== nextParams.bookId;
 			const newBible = params.bibleId !== nextParams.bibleId;
 			const {
-				nextBook,
-				previousBook,
-				activeBook,
+				nextBook = fromJS({}),
+				previousBook = fromJS({}),
+				activeBook = fromJS({}),
 			} = nextProps;
 			const { activeChapter } = nextProps.homepage.activeChapter;
 			// console.log('typeof activeChapter', typeof activeChapter);
@@ -633,33 +634,34 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 
 	render() {
 		const {
-			activeTextName,
+			audioPaths,
+			audioSource,
 			activeBookId,
 			activeTextId,
-			isSettingsModalActive,
+			activeChapter,
+			activeFilesets,
+			audioFilesetId,
+			activeTextName,
+			activeBookName,
+			activeNotesView,
+			autoPlayEnabled,
+			audioPlayerState,
+			books,
+			copyrights,
+			formattedTextFilesetId,
+			highlights,
+			invalidBibleId,
+			isProfileActive,
 			isNotesModalActive,
+			isSearchModalActive,
+			isSettingsModalActive,
 			isVersionSelectionActive,
 			isChapterSelectionActive,
 			isInformationModalActive,
-			isSearchModalActive,
-			activeBookName,
-			activeChapter,
-			isProfileActive,
-			copyrights,
-			audioSource,
-			activeNotesView,
 			loadingNewChapterText,
-			invalidBibleId,
-			highlights,
-			autoPlayEnabled,
-			audioPaths,
-			audioFilesetId,
-			plainTextFilesetId,
-			formattedTextFilesetId,
-			activeFilesets,
-			audioPlayerState,
 			nextAudioSource,
 			prevAudioSource,
+			plainTextFilesetId,
 			// chapterText: updatedText,
 		} = this.props.homepage;
 
@@ -768,6 +770,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					}
 				</TransitionGroup>
 				<Text
+					books={books}
 					userId={userId}
 					text={updatedText}
 					verseNumber={verse}

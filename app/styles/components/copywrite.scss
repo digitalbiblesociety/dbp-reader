@@ -46,7 +46,13 @@
       img {
         margin: 10px 0;
         height: 109px;
-        width: 103px;
+
+        .image-icon {
+          width: 103px;
+        }
+        .image-landscape {
+          width: 206px;
+        }
       }
     }
   }

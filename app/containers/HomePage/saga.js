@@ -877,11 +877,17 @@ export function* getCopyrightSaga({ filesetIds }) {
 			message: cp.copyright.copyright,
 			testament: cp.set_size_code,
 			type: cp.set_type_code,
-			organizations: cp.copyright.organizations.map((org) => ({
-				name: org.translations[0].name,
-				logo: org.logos[1] ? org.logos[1] : org.logos[0],
-				url: org.url_website,
-			})),
+			organizations: cp.copyright.organizations.map((org) => {
+				const icon = org.logos.find((l) => l.icon);
+				console.log('icon', icon);
+
+				return ({
+					name: org.translations[0].name,
+					logo: icon || org.logos[0],
+					isIcon: icon === undefined ? 0 : 1,
+					url: org.url_website,
+				});
+			}),
 		}));
 		// console.log('copyright response', copyrights);
 

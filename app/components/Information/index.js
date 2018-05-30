@@ -39,16 +39,16 @@ class Information extends React.PureComponent {// eslint-disable-line react/pref
 		this.ref = node;
 	}
 
-	getAudioCopyright = (organizations) => organizations.map((org) => (
+	getAudioCopyright = (organizations, testament) => organizations.map((org) => (
 		[
-			<h3 key={`${org.name}_audio`}><FormattedMessage {...messages.providedByAudio} /></h3>,
-			org.logo ? <a key={org.url} target={'_blank'} href={org.url}><ImageComponent alt={'Copyright owners logo'} src={org.logo.url} /></a> : null,
+			<h3 key={`${org.name}_audio_${testament}`}><FormattedMessage {...messages.providedByAudio} /></h3>,
+			org.logo ? <a key={`${org.url}_audio_${testament}`} target={'_blank'} href={org.url}><ImageComponent className={org.isIcon ? 'image-icon' : 'image-langscape'} alt={'Copyright owners logo'} src={org.logo.url} /></a> : null,
 		]
 	));
-	getTextCopyright = (organizations) => organizations.map((org) => (
+	getTextCopyright = (organizations, testament) => organizations.map((org) => (
 		[
-			<h3 key={`${org.name}_text`}><FormattedMessage {...messages.providedByText} /></h3>,
-			org.logo ? <a key={org.url} target={'_blank'} href={org.url}><ImageComponent alt={'Copyright owners logo'} src={org.logo.url} /></a> : null,
+			<h3 key={`${org.name}_text_${testament}`}><FormattedMessage {...messages.providedByText} /></h3>,
+			org.logo ? <a key={`${org.url}_text_${testament}`} target={'_blank'} href={org.url}><ImageComponent className={org.isIcon ? 'image-icon' : 'image-langscape'} alt={'Copyright owners logo'} src={org.logo.url} /></a> : null,
 		]
 	));
 // {
@@ -82,7 +82,7 @@ class Information extends React.PureComponent {// eslint-disable-line react/pref
 								<div className={'cp-section'}>
 									{
 										get(copyrights, ['oldTestament', 'audio', 'organizations']) ?
-											this.getAudioCopyright(get(copyrights, ['oldTestament', 'audio', 'organizations'])) :
+											this.getAudioCopyright(get(copyrights, ['oldTestament', 'audio', 'organizations']), 'old_testament') :
 											null
 									}
 									{
@@ -98,7 +98,7 @@ class Information extends React.PureComponent {// eslint-disable-line react/pref
 								<div className={'cp-section'}>
 									{
 										get(copyrights, ['oldTestament', 'text', 'organizations']) ?
-											this.getTextCopyright(get(copyrights, ['oldTestament', 'text', 'organizations'])) :
+											this.getTextCopyright(get(copyrights, ['oldTestament', 'text', 'organizations']), 'old_testament') :
 											null
 									}
 									{
@@ -117,7 +117,7 @@ class Information extends React.PureComponent {// eslint-disable-line react/pref
 								<div className={'cp-section'}>
 									{
 										get(copyrights, ['newTestament', 'audio', 'organizations']) ?
-											this.getAudioCopyright(get(copyrights, ['newTestament', 'audio', 'organizations'])) :
+											this.getAudioCopyright(get(copyrights, ['newTestament', 'audio', 'organizations']), 'new_testament') :
 											null
 									}
 									{
@@ -133,7 +133,7 @@ class Information extends React.PureComponent {// eslint-disable-line react/pref
 								<div className={'cp-section'}>
 									{
 										get(copyrights, ['newTestament', 'text', 'organizations']) ?
-											this.getTextCopyright(get(copyrights, ['newTestament', 'text', 'organizations'])) :
+											this.getTextCopyright(get(copyrights, ['newTestament', 'text', 'organizations']), 'new_testament') :
 											null
 									}
 									{

@@ -92,8 +92,8 @@
   align-items: center;
   justify-content: center;
   //margin-top:auto;
-  cursor: pointer;
-  &:hover {
+  &:not(.disabled):hover {
+    cursor: pointer;
     background: rgba(0, 0, 0, 0.2);
   }
 }
