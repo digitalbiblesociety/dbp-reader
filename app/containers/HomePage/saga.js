@@ -152,8 +152,8 @@ export function* getHighlights({ bible, book, chapter, userId }) {
 	try {
 		const response = yield call(request, requestUrl);
 		// console.log('highlight get response', response);
-		if (response.data) {
-			highlights = response.data;
+		if (response) {
+			highlights = response;
 		}
 
 		yield put({ type: LOAD_HIGHLIGHTS, highlights });
