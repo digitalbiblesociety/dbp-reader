@@ -19,6 +19,7 @@ import {
 	LOAD_BOOKS,
 	LOAD_AUDIO,
 	LOAD_CHAPTER_TEXT,
+	SET_USER_AGENT,
 	SET_ACTIVE_CHAPTER,
 	SET_ACTIVE_BOOK_NAME,
 	SET_ACTIVE_NOTES_VIEW,
@@ -40,6 +41,10 @@ import {
 	DELETE_HIGHLIGHTS,
 	CREATE_USER_WITH_SOCIAL_ACCOUNT,
 } from './constants';
+
+export const setUA = () => ({
+	type: SET_USER_AGENT,
+});
 
 export const createUserWithSocialAccount = (props) => ({
 	type: CREATE_USER_WITH_SOCIAL_ACCOUNT,

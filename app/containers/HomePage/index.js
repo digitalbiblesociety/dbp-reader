@@ -80,6 +80,7 @@ import {
 	toggleVersionSelection,
 	toggleFirstLoadForTextSelection,
 	toggleInformationModal,
+	setUA,
 	setActiveNote,
 	setActiveTextId,
 	setActiveChapter,
@@ -263,6 +264,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		if (browserObject.agent === 'msie') {
 			// console.log('This is ie 11');
 			// console.log('svg for every', svg4everybody);
+			this.props.dispatch(setUA());
 			svg4everybody();
 		}
 	}
@@ -662,6 +664,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			nextAudioSource,
 			prevAudioSource,
 			plainTextFilesetId,
+			userAgent,
 			// chapterText: updatedText,
 		} = this.props.homepage;
 
@@ -701,11 +704,12 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					<meta name="description" content="Main page for the Bible.is web app" />
 				</Helmet>
 				<NavigationBar
-					theme={userSettings.get('activeTheme')}
-					activeTextName={activeTextName}
+					userAgent={userAgent}
 					activeTextId={activeTextId}
-					activeBookName={activeBookName}
 					activeChapter={activeChapter}
+					activeTextName={activeTextName}
+					activeBookName={activeBookName}
+					theme={userSettings.get('activeTheme')}
 					isChapterSelectionActive={isChapterSelectionActive}
 					isVersionSelectionActive={isVersionSelectionActive}
 					toggleChapterSelection={this.toggleChapterSelection}

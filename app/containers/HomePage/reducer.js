@@ -14,6 +14,7 @@ import {
 	LOAD_AUDIO,
 	LOAD_BOOKS,
 	LOAD_HIGHLIGHTS,
+	SET_USER_AGENT,
 	SET_ACTIVE_CHAPTER,
 	SET_ACTIVE_BOOK_NAME,
 	SET_ACTIVE_NOTES_VIEW,
@@ -189,6 +190,8 @@ function homePageReducer(state = initialState, action) {
 		return state
 			.set('loadingNewChapterText', true)
 			.set('loadingBooks', true);
+	case SET_USER_AGENT:
+		return state.set('userAgent', 'ms');
 	case LOAD_BOOKS:
 		// Setting the active book name based on whether a name was introduced via
 		// the bookId in the url, this was the best I could come up with

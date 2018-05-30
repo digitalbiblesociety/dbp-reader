@@ -2,6 +2,7 @@
 h1, h2, h3, h4, h5, h6 {all:unset;}
 body, html 	           {height:100%;width:100%;}
 body 				   {
+  font-family: "Noto Sans", Helvetica, sans serif;
   @include css4 {
     color:var(--default-text-color);
     font-family:var(--application-font-family);

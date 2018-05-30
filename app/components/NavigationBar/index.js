@@ -27,6 +27,7 @@ class NavigationBar extends React.PureComponent { // eslint-disable-line react/p
 			isChapterSelectionActive,
 			isVersionSelectionActive,
 			theme,
+			userAgent,
     } = this.props;
 		// may need to wrap each of these in a container div to fix the hover issues
 		return (
@@ -34,10 +35,10 @@ class NavigationBar extends React.PureComponent { // eslint-disable-line react/p
 				<div className="nav-container">
 					<a className="logo" href={'http://www.bible.is'} title={'http://www.bible.is'} target={'_blank'} rel={'noopener'}>
 						{
-							theme === 'paper' ? <SvgWrapper className="svg" svgid={'bible.is_logo_light'} /> : null
+							theme === 'paper' && userAgent !== 'ms' ? <SvgWrapper className="svg" svgid={'bible.is_logo_light'} /> : null
 						}
 						{
-							theme !== 'paper' ? <SvgWrapper className="svg" svgid={'bible.is_logo'} /> : null
+							theme !== 'paper' || userAgent === 'ms' ? <SvgWrapper className="svg" svgid={'bible.is_logo'} /> : null
 						}
 					</a>
 					<span role="button" tabIndex={0} onClick={toggleVersionSelection} className="version">
@@ -62,6 +63,7 @@ class NavigationBar extends React.PureComponent { // eslint-disable-line react/p
 
 NavigationBar.propTypes = {
 	theme: PropTypes.string,
+	userAgent: PropTypes.string,
 	activeTextId: PropTypes.string,
 	activeBookName: PropTypes.string,
 	activeTextName: PropTypes.string,
