@@ -22,6 +22,7 @@ import { Helmet } from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { TransitionGroup } from 'react-transition-group';
+import { fromJS } from 'immutable';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import isEqual from 'lodash/isEqual';
@@ -79,6 +80,7 @@ import {
 	toggleVersionSelection,
 	toggleFirstLoadForTextSelection,
 	toggleInformationModal,
+	setUA,
 	setActiveNote,
 	setActiveTextId,
 	setActiveChapter,
@@ -96,7 +98,7 @@ import makeSelectHomePage, {
 	selectAuthenticationStatus,
 	selectUserId,
 	selectUserNotes,
-	selectHighlights,
+	// selectHighlights,
 	// selectChapterText,
 } from './selectors';
 import reducer from './reducer';
@@ -199,38 +201,49 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			this.props.dispatch(initApplication({ languageISO: this.props.homepage.defaultLanguageIso }));
 			this.toggleFirstLoadForTextSelection();
 		}
-
-		((d, s, id) => {
-			let js = d.getElementsByTagName(s)[0];
-			const fjs = d.getElementsByTagName(s)[0];
-			if (d.getElementById(id)) return;
-			js = d.createElement(s); js.id = id;
-			js.src = `https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.12&appId=${process.env.FB_APP_ID}&autoLogAppEvents=1`;
-			fjs.parentNode.insertBefore(js, fjs);
-		})(document, 'script', 'facebook-jssdk');
-		// Init the Facebook api here
-		if (!this.props.userId) {
-			window.fbAsyncInit = () => {
-				FB.init({ // eslint-disable-line no-undef
-					appId: process.env.FB_APP_ID,
-					autoLogAppEvents: true,
-					cookie: true,
-					xfbml: true,
-					version: 'v2.12',
-				});
-			};
+		try {
+			((d, s, id) => {
+				let js = d.getElementsByTagName(s)[0];
+				const fjs = d.getElementsByTagName(s)[0];
+				if (d.getElementById(id)) return;
+				js = d.createElement(s); js.id = id;
+				js.src = `https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.12&appId=${process.env.FB_APP_ID}&autoLogAppEvents=1`;
+				fjs.parentNode.insertBefore(js, fjs);
+			})(document, 'script', 'facebook-jssdk');
+			// Init the Facebook api here
+			if (!this.props.userId) {
+				window.fbAsyncInit = () => {
+					FB.init({ // eslint-disable-line no-undef
+						appId: process.env.FB_APP_ID,
+						autoLogAppEvents: true,
+						cookie: true,
+						xfbml: true,
+						version: 'v2.12',
+					});
+				};
+			}
+		} catch (err) {
+			if (process.env.NODE_ENV === 'development') {
+				console.error('Error initializing fb api', err); // eslint-disable-line no-console
+			}
 		}
 
-		// May need to create a script and append it to the dom then wait for it to finish loading
-		if (!this.props.userId) {
-			gapi.load('auth2', () => { // eslint-disable-line no-undef
-				// console.log('gapi loaded');
-				window.auth2 = gapi.auth2.init({ // eslint-disable-line no-undef
-					client_id: process.env.NODE_ENV === 'development' ? process.env.GOOGLE_APP_ID : process.env.GOOGLE_APP_ID_PROD,
-					scope: 'profile',
+		try {
+			// May need to create a script and append it to the dom then wait for it to finish loading
+			if (!this.props.userId) {
+				gapi.load('auth2', () => { // eslint-disable-line no-undef
+					// console.log('gapi loaded');
+					window.auth2 = gapi.auth2.init({ // eslint-disable-line no-undef
+						client_id: process.env.NODE_ENV === 'development' ? process.env.GOOGLE_APP_ID : process.env.GOOGLE_APP_ID_PROD,
+						scope: 'profile',
+					});
+					// console.log('auth 2 has been initialized', auth2);
 				});
-				// console.log('auth 2 has been initialized', auth2);
-			});
+			}
+		} catch (err) {
+			if (process.env.NODE_ENV === 'development') {
+				console.error('Error initializing google api', err); // eslint-disable-line no-console
+			}
 		}
 
 		const browserObject = {
@@ -251,6 +264,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		if (browserObject.agent === 'msie') {
 			// console.log('This is ie 11');
 			// console.log('svg for every', svg4everybody);
+			this.props.dispatch(setUA());
 			svg4everybody();
 		}
 	}
@@ -300,6 +314,27 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			const newChapter = params.chapter !== nextParams.chapter;
 			const newBook = params.bookId !== nextParams.bookId;
 			const newBible = params.bibleId !== nextParams.bibleId;
+			const {
+				nextBook = fromJS({}),
+				previousBook = fromJS({}),
+				activeBook = fromJS({}),
+			} = nextProps;
+			const { activeChapter } = nextProps.homepage.activeChapter;
+			// console.log('typeof activeChapter', typeof activeChapter);
+			// console.log(nextBook, previousBook, activeBook);
+
+			const nextBookId = nextBook.get('book_id');
+			const prevBookId = previousBook.get('book_id');
+			let nextChapter = activeChapter + 1;
+			let prevChapter = activeChapter - 1;
+
+			if (!activeBook.getIn(['chapters', prevChapter])) {
+				prevChapter = previousBook.getIn(['chapters', -1]);
+			}
+
+			if (!activeBook.getIn(['chapters', nextChapter])) {
+				nextChapter = nextBook.getIn(['chapters', 0]);
+			}
 			// console.log('new bible', newBible);
 			// console.log('new book', newBook);
 			// console.log('new chapter', newChapter);
@@ -331,6 +366,10 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					bibleId: nextParams.bibleId,
 					bookId: nextParams.bookId,
 					chapter: nextParams.chapter,
+					nextBookId,
+					prevBookId,
+					nextChapter,
+					prevChapter,
 					authenticated: userAuthenticated,
 					userId,
 				});
@@ -344,6 +383,10 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					bibleId: nextParams.bibleId,
 					bookId: nextParams.bookId,
 					chapter: nextParams.chapter,
+					nextBookId,
+					prevBookId,
+					nextChapter,
+					prevChapter,
 					authenticated: userAuthenticated,
 					userId,
 				});
@@ -593,31 +636,35 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 
 	render() {
 		const {
-			activeTextName,
+			audioPaths,
+			audioSource,
 			activeBookId,
 			activeTextId,
-			isSettingsModalActive,
+			activeChapter,
+			activeFilesets,
+			audioFilesetId,
+			activeTextName,
+			activeBookName,
+			activeNotesView,
+			autoPlayEnabled,
+			audioPlayerState,
+			books,
+			copyrights,
+			formattedTextFilesetId,
+			highlights,
+			invalidBibleId,
+			isProfileActive,
 			isNotesModalActive,
+			isSearchModalActive,
+			isSettingsModalActive,
 			isVersionSelectionActive,
 			isChapterSelectionActive,
 			isInformationModalActive,
-			isSearchModalActive,
-			activeBookName,
-			activeChapter,
-			isProfileActive,
-			copyrights,
-			audioSource,
-			activeNotesView,
 			loadingNewChapterText,
-			invalidBibleId,
-			// highlights,
-			autoPlayEnabled,
-			audioPaths,
-			audioFilesetId,
+			nextAudioSource,
+			prevAudioSource,
 			plainTextFilesetId,
-			formattedTextFilesetId,
-			activeFilesets,
-			audioPlayerState,
+			userAgent,
 			// chapterText: updatedText,
 		} = this.props.homepage;
 
@@ -626,7 +673,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			formattedSource,
 			userId,
 			userAuthenticated,
-			highlights,
+			// highlights,
 			// updatedText,
 		} = this.props;
 
@@ -657,11 +704,12 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					<meta name="description" content="Main page for the Bible.is web app" />
 				</Helmet>
 				<NavigationBar
-					theme={userSettings.get('activeTheme')}
-					activeTextName={activeTextName}
+					userAgent={userAgent}
 					activeTextId={activeTextId}
-					activeBookName={activeBookName}
 					activeChapter={activeChapter}
+					activeTextName={activeTextName}
+					activeBookName={activeBookName}
+					theme={userSettings.get('activeTheme')}
 					isChapterSelectionActive={isChapterSelectionActive}
 					isVersionSelectionActive={isVersionSelectionActive}
 					toggleChapterSelection={this.toggleChapterSelection}
@@ -672,6 +720,8 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					autoPlay={autoPlayEnabled}
 					audioPlayerState={audioPlayerState}
 					audioSource={audioSource}
+					nextAudioSource={nextAudioSource}
+					prevAudioSource={prevAudioSource}
 					setAudioPlayerState={this.setAudioPlayerState}
 					toggleAutoPlay={this.toggleAutoPlay}
 					skipBackward={this.getPrevChapter}
@@ -724,6 +774,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					}
 				</TransitionGroup>
 				<Text
+					books={books}
 					userId={userId}
 					text={updatedText}
 					verseNumber={verse}
@@ -786,7 +837,7 @@ HomePage.propTypes = {
 	// text: PropTypes.object,
 	textData: PropTypes.object,
 	// updatedText: PropTypes.array,
-	highlights: PropTypes.array,
+	// highlights: PropTypes.array,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -799,7 +850,7 @@ const mapStateToProps = createStructuredSelector({
 	userAuthenticated: selectAuthenticationStatus(),
 	userId: selectUserId(),
 	textData: selectUserNotes(),
-	highlights: selectHighlights(),
+	// highlights: selectHighlights(),
 	// userNotes: selectUserNotes(),
 	// text: selectUserNotes(),
 	// updatedText: selectChapterText(),

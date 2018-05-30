@@ -5,6 +5,7 @@
  */
 
 export const GET_CHAPTER_TEXT = 'app/HomePage/GET_CHAPTER_TEXT';
+export const SET_USER_AGENT = 'app/HomePage/SET_USER_AGENT';
 export const CREATE_USER_WITH_SOCIAL_ACCOUNT = 'app/HomePage/CREATE_USER_WITH_SOCIAL_ACCOUNT';
 export const SET_AUDIO_PLAYER_STATE = 'app/HomePage/SET_AUDIO_PLAYER_STATE';
 export const GET_HIGHLIGHTS = 'app/HomePage/GET_HIGHLIGHTS';

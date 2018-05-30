@@ -164,6 +164,18 @@
     height: 40px;
     font-size: 1.2em;
     text-align: center;
+    @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+      //margin-top: 1em;
+      margin-bottom: 2em;
+    }
+
+    h3 {
+      display: block;
+      width: 100%;
+      @include css4 {
+        background-color: var(--book-dropdown-section-background-color);
+      }
+    }
     @include css4 {
       background-color: var(--book-dropdown-section-background-color);
     }

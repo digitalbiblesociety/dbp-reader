@@ -1025,6 +1025,40 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		this.closeContextMenu();
 	}
 
+	get isEndOfBible() {
+		const books = this.props.books;
+		if (!books || !books.length) {
+			return false;
+		}
+		const book = books[books.length - 1];
+
+		if (!book) {
+			return false;
+		}
+		const chapters = book.chapters;
+		const chapter = chapters[chapters.length - 1];
+
+		const bookId = book.book_id;
+
+		return bookId === this.props.activeBookId && chapter === this.props.activeChapter;
+	}
+
+	get isStartOfBible() {
+		const books = this.props.books;
+		if (!books || !books.length) {
+			return false;
+		}
+		const book = books[0];
+
+		if (!book) {
+			return false;
+		}
+		const chapter = book.chapters[0];
+		const bookId = book.book_id;
+
+		return bookId === this.props.activeBookId && chapter === this.props.activeChapter;
+	}
+
 	render() {
 		const {
 			nextChapter,
@@ -1060,8 +1094,12 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		return (
 			<div className="text-container">
 				<SvgWrapper className={audioPlayerState ? 'icon info-button' : 'icon info-button closed'} svgid={'info'} onClick={() => !informationActive && toggleInformationModal()} />
-				<div onClick={prevChapter} className={'arrow-wrapper'}>
-					<SvgWrapper className="prev-arrow-svg" svgid="arrow_left" />
+				<div onClick={!this.isStartOfBible ? prevChapter : () => {}} className={!this.isStartOfBible ? 'arrow-wrapper' : 'arrow-wrapper disabled'}>
+					{
+						!this.isStartOfBible ? (
+							<SvgWrapper className="prev-arrow-svg" svgid="arrow_left" />
+						) : null
+					}
 				</div>
 				<main ref={this.setMainRef} className={formattedSource.main && !readersMode && !oneVersePerLine ? '' : `chapter ${justifiedClass}`}>
 					{
@@ -1078,8 +1116,12 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 						) : null
 					}
 				</main>
-				<div onClick={nextChapter} className={'arrow-wrapper'}>
-					<SvgWrapper className="next-arrow-svg" svgid="arrow_right" />
+				<div onClick={!this.isEndOfBible ? nextChapter : () => {}} className={!this.isEndOfBible ? 'arrow-wrapper' : 'arrow-wrapper disabled'}>
+					{
+						!this.isEndOfBible ? (
+							<SvgWrapper className="next-arrow-svg" svgid="arrow_right" />
+						) : null
+					}
 				</div>
 				{
 					contextMenuState ? (
@@ -1101,6 +1143,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 
 Text.propTypes = {
 	text: PropTypes.array,
+	books: PropTypes.array,
 	userNotes: PropTypes.array,
 	bookmarks: PropTypes.array,
 	highlights: PropTypes.array,

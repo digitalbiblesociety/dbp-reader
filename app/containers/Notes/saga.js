@@ -137,7 +137,7 @@ export function* updateNote({ userId, data, noteId }) {
 	}
 }
 
-export function* deleteNote({ userId, noteId }) {
+export function* deleteNote({ userId, noteId, pageSize, activePage }) {
 	const requestUrl = `https://api.bible.build/users/${userId}/notes/${noteId}?key=${process.env.DBP_API_KEY}&v=4&pretty&note_id=${noteId}&project_id=${process.env.NOTES_PROJECT_ID}`;
 	const options = {
 		method: 'DELETE',
@@ -148,6 +148,7 @@ export function* deleteNote({ userId, noteId }) {
 
 		if (response.success) {
 			// console.log('successfully deleted note!', response);
+			yield fork(getNotesForNotebook, { userId, params: { limit: pageSize, page: activePage } });
 		}
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {

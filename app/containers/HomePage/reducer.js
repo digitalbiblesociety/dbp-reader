@@ -14,6 +14,7 @@ import {
 	LOAD_AUDIO,
 	LOAD_BOOKS,
 	LOAD_HIGHLIGHTS,
+	SET_USER_AGENT,
 	SET_ACTIVE_CHAPTER,
 	SET_ACTIVE_BOOK_NAME,
 	SET_ACTIVE_NOTES_VIEW,
@@ -59,6 +60,7 @@ const initialState = fromJS({
 						logo: {
 							url: '',
 						},
+						name: 'name1',
 					},
 				],
 			},
@@ -68,6 +70,7 @@ const initialState = fromJS({
 						logo: {
 							url: '',
 						},
+						name: 'name2',
 					},
 				],
 			},
@@ -79,6 +82,7 @@ const initialState = fromJS({
 						logo: {
 							url: '',
 						},
+						name: 'name3',
 					},
 				],
 			},
@@ -88,6 +92,7 @@ const initialState = fromJS({
 						logo: {
 							url: '',
 						},
+						name: 'name4',
 					},
 				],
 			},
@@ -157,6 +162,12 @@ const initialState = fromJS({
 	filesetTypes: {},
 	firstLoad: true,
 	testaments: {},
+	previousAudioPaths: [],
+	previousAudioFilesetId: '',
+	previousAudioSource: '',
+	nextAudioPaths: [],
+	nextAudioFilesetId: '',
+	nextAudioSource: '',
 	audioPaths: [],
 	audioPlayerState: JSON.parse(sessionStorage.getItem('bible_is_audio_player_state')) === null ? false : JSON.parse(sessionStorage.getItem('bible_is_audio_player_state')),
 });
@@ -179,6 +190,8 @@ function homePageReducer(state = initialState, action) {
 		return state
 			.set('loadingNewChapterText', true)
 			.set('loadingBooks', true);
+	case SET_USER_AGENT:
+		return state.set('userAgent', 'ms');
 	case LOAD_BOOKS:
 		// Setting the active book name based on whether a name was introduced via
 		// the bookId in the url, this was the best I could come up with
@@ -296,6 +309,13 @@ function homePageReducer(state = initialState, action) {
 			.set('formattedSource', fromJS(action.formattedText));
 	case 'loadaudio':
 		// console.log('loading audio with', action);
+		if (action.previous) {
+			return state
+				.set('previousAudioSource', action.audioPaths[0]);
+		} else if (action.next) {
+			return state
+				.set('nextAudioSource', action.audioPaths[0]);
+		}
 		return state
 			.set('audioPaths', action.audioPaths.slice(1))
 			.set('loadingNewChapterText', false)

@@ -104,6 +104,12 @@
   border-radius:50%;
 }
 .personal-info .change-picture {
+  @include css4{
+    background:var(--menu-body-background-color);
+    color:var(--default-text-color);
+  }
+  border: none;
+
   all:unset;
   margin-top: 10px;
 
