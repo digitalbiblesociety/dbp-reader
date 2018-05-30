@@ -1,5 +1,8 @@
 *, *::after, *::before {box-sizing:border-box;margin:0;padding:0;}
-h1, h2, h3, h4, h5, h6 {all:unset;}
+h1, h2, h3, h4, h5, h6 {
+  font-size: 100%;
+  all:unset;
+}
 body, html 	           {height:100%;width:100%;}
 body 				   {
   font-family: "Noto Sans", Helvetica, sans serif;
@@ -49,7 +52,10 @@ aside {@include css4   {outline: 1px solid var(--menu-border-color);border-botto
   }
 }
 // Remove default styling on em tags since I use those for highlighting
-em                     {font-style: unset;}
+em {
+  font-style: inherit;
+  font-style: unset;
+}
 
 // images
 img                    {max-width:100%;height:auto}
