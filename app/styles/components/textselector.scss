@@ -164,6 +164,10 @@
     width:100%;
     min-height:50px;
 
+    .accordion {
+      cursor: initial;
+    }
+
     .version-list-section-title {
       padding: 15px;
       min-height:50px;
@@ -191,7 +195,6 @@
       &:last-child {padding-bottom:15px;}
       padding-top: 15px;
       //padding-left: 15px;
-      cursor: pointer;
 
       & .accordion__title[aria-selected="true"] {
         padding-bottom: 15px;
@@ -202,6 +205,7 @@
 
       & .accordion__title {
         //padding:0 15px;
+        cursor: pointer;
 
         h4 {
           display: inline-block;
@@ -213,11 +217,10 @@
           width: 100%;
           //padding: 0 15px;
         }
-      }
-
-      &:hover {
-        @include css4 {
-          color: var(--active-color-primary);
+        &:hover {
+          @include css4 {
+            color: var(--active-color-primary);
+          }
         }
       }
     }
