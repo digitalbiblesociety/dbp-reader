@@ -149,6 +149,7 @@
       border:none;
       font-size:0.98em;
       @include css4{
+        background-color: var(--text-selection-background);
         color:var(--default-text-color);
       };
     }
@@ -223,7 +224,9 @@
   .login-button {
     font-size:0.98em;
     cursor:pointer;
-    background-color:inherit;
+    @include css4 {
+      background-color: var(--text-selection-background);
+    }
     margin-left: 83px;
     border:none;
     @include css4{
