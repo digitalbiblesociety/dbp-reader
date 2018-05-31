@@ -402,7 +402,7 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 
 		return (
 			<GenericErrorBoundary affectedArea="AudioPlayer">
-				<div role={'button'} tabIndex={0} className={(audioPlayerState && hasAudio) ? 'audioplayer-handle' : 'audioplayer-handle closed'} onClick={(e) => { e.stopPropagation(); this.toggleAudioPlayer(); }}>
+				<div role={'button'} tabIndex={0} className={(audioPlayerState && hasAudio && source !== '') ? 'audioplayer-handle' : 'audioplayer-handle closed'} onClick={(e) => { e.stopPropagation(); this.toggleAudioPlayer(); }}>
 					<SvgWrapper
 						width="26px"
 						height="26px"
@@ -411,8 +411,8 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 						svgid="arrow_down"
 					/>
 				</div>
-				<div role="button" tabIndex={0} className={audioPlayerState && hasAudio ? 'audio-player-background' : 'audio-player-background closed'} ref={this.setAudioPlayerRef} onClick={this.handleBackgroundClick}>
-					<div className={audioPlayerState && hasAudio ? 'audio-player-container' : 'audio-player-container closed'}>
+				<div role="button" tabIndex={0} className={audioPlayerState && hasAudio && source !== '' ? 'audio-player-background' : 'audio-player-background closed'} ref={this.setAudioPlayerRef} onClick={this.handleBackgroundClick}>
+					<div className={audioPlayerState && hasAudio && source !== '' ? 'audio-player-container' : 'audio-player-container closed'}>
 						{this.prevIcon}
 						{this.state.playing ? this.pauseIcon : this.playIcon}
 						{this.nextIcon}

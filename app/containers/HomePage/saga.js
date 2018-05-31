@@ -249,10 +249,13 @@ export function* getBibleFromUrl({ bibleId: oldBibleId, bookId: oldBookId, chapt
 			// I probably will want to use 'yield all' for getting the audio and text so they can be run async
 			const bible = response.data;
 			const books = bible.books; // Need to ensure that I have the books here
+			// console.log('books', books);
+			// console.log('response', response);
+
 			let hasMatt = false;
 			let activeBookIndex;
 			// console.log('books in new bible', books);
-			const activeBook = books.find((b, i) => {
+			let activeBook = books.find((b, i) => {
 				if (b.book_id === 'MAT') {
 					activeBookIndex = i;
 					hasMatt = true;
@@ -271,14 +274,17 @@ export function* getBibleFromUrl({ bibleId: oldBibleId, bookId: oldBookId, chapt
 					const parsedC = parseInt(chapter, 10);
 
 					// console.log('38 is greater than 6', lastChapterIndex < parsedC, lastChapterIndex, parsedC);
+					// Checks if the entered number is greater than the last chapter
 					if (activeBook.chapters[lastChapterIndex] < parsedC) {
 						activeChapter = activeBook.chapters[lastChapterIndex];
+						// Checks if the entered number is less than the starting number
 					} else if (activeBook.chapters[0] > parsedC) {
 						activeChapter = activeBook.chapters[0];
 					} else {
 						activeChapter = parsedC;
 					}
 				} else {
+					// If a non number was entered then it will start at the first chapter in the book
 					activeChapter = activeBook.chapters[0];
 				}
 			}
@@ -290,7 +296,17 @@ export function* getBibleFromUrl({ bibleId: oldBibleId, bookId: oldBookId, chapt
 				// If it has Matthew then use the bookId for that, otherwise just use the first bookId available
 			const activeBookId = activeBook ? activeBook.book_id : (hasMatt ? 'MAT' : get(books, [0, 'book_id'], '')); // eslint-disable-line no-nested-ternary
 			const activeBookName = activeBook ? activeBook.name_short : get(books, [0, 'name_short'], '');
-			const filesets = response.data.filesets.filter((f) => f.bucket_id === 'dbp-dev' && f.set_type_code !== 'app');
+			if (!activeBook) {
+				activeBook = books.find((b) => b.book_id === activeBookId);
+			}
+			// console.log('activeBook', activeBook);
+			// console.log('activeBookId', activeBookId);
+			// console.log('hasMatt', hasMatt);
+			// console.log('get(books, [0, "book_id"])', get(books, [0, 'book_id']));
+
+			const filesets = response.data.filesets['dbp-dev'].filter((f) => (f.type === 'audio' || f.type === 'audio_drama' || f.type === 'text_plain' || f.type === 'text_format'));
+			// console.log('response.data', response.data);
+
 			// calling a generator that will handle the api requests for getting text
 			// console.log('filtered filesets', filesets);
 			let nextBook = { chapters: [] };
@@ -379,16 +395,16 @@ export function* getChapterFromUrl({
 
 	const bibleId = oldBibleId.toUpperCase();
 	const bookId = oldBookId.toUpperCase();
-	const hasFormattedText = some(filesets, (f) => (f.set_type_code === 'text_format' && f.bucket_id === 'dbp-dev'));
+	const hasFormattedText = some(filesets, (f) => (f.type === 'text_format'));
 	// checking for audio but not fetching it as a part of this saga
-	const hasAudio = some(filesets, (f) => (f.set_type_code === 'audio' && f.bucket_id === 'dbp-dev') || (f.set_type_code === 'audio_drama' && f.bucket_id === 'dbp-dev'));
+	const hasAudio = some(filesets, (f) => (f.type === 'audio') || (f.type === 'audio_drama'));
 
 	try {
 		let formattedText = '';
 		let formattedTextFilesetId = '';
 		let plainTextFilesetId = '';
 		let plainText = [];
-		let hasPlainText = some(filesets, (f) => (f.set_type_code === 'text_plain' && f.bucket_id === 'dbp-dev'));
+		let hasPlainText = some(filesets, (f) => (f.type === 'text_plain'));
 
 		if (authenticated) {
 			yield fork(getHighlights, { bible: bibleId, book: bookId, chapter, userId });
@@ -419,7 +435,7 @@ export function* getChapterFromUrl({
 		if (hasFormattedText) {
 			try {
 				// Gets the last fileset id for a formatted text
-				const filesetId = reduce(filesets, (a, c) => (c.set_type_code === 'text_format' && c.bucket_id === 'dbp-dev') ? c.id : a, '') || bibleId;
+				const filesetId = reduce(filesets, (a, c) => (c.type === 'text_format') ? c.id : a, '') || bibleId;
 				// console.log('before fork');
 				// yield fork(getCopyrightSaga, { filesetId });
 				// console.log('after fork');
@@ -449,12 +465,12 @@ export function* getChapterFromUrl({
 		// When this fails it should fail gracefully and not cause anything to break
 		try {
 			let filesetId = '';
-			if (filesets.filter((set) => set.set_type_code === 'text_plain' && set.bucket_id === 'dbp-dev').length > 1) {
+			if (filesets.filter((set) => set.type === 'text_plain').length > 1) {
 				// console.log('has more than 1');
-				filesetId = reduce(filesets, (a, c) => (c.set_size_code === 'C' && c.set_type_code === 'text_plain' && c.bucket_id === 'dbp-dev') ? a.concat(c.id) : a, []);
+				filesetId = reduce(filesets, (a, c) => (c.size === 'C' && c.type === 'text_plain') ? a.concat(c.id) : a, []);
 			} else {
 				// console.log('only has one');
-				filesetId = reduce(filesets, (a, c) => (c.set_type_code === 'text_plain' && c.bucket_id === 'dbp-dev') ? c.id : a, '');
+				filesetId = reduce(filesets, (a, c) => (c.type === 'text_plain') ? c.id : a, '');
 			}
 
 			if (Array.isArray(filesetId) && filesetId.length > 1) {
@@ -589,7 +605,7 @@ export function* getChapterAudio({ filesets, bookId: currentBook, chapter: curre
 	const filteredFilesets = reduce(filesets, (a, file) => {
 		const newFile = { ...a };
 
-		if ((file.set_type_code === 'audio' || file.set_type_code === 'audio_drama') && file.id.slice(-4) !== 'DA16') {
+		if ((file.type === 'audio' || file.type === 'audio_drama') && file.id.slice(-4) !== 'DA16') {
 			// console.log('is 16 bit', file.id.slice(-4) === 'DA16')
 			newFile[file.id] = file;
 		}
@@ -613,17 +629,17 @@ export function* getChapterAudio({ filesets, bookId: currentBook, chapter: curre
 	const partialNtOtAudio = [];
 
 	Object.entries(filteredFilesets).forEach((fileset) => {
-		if (fileset[1].set_size_code === 'C') {
+		if (fileset[1].size === 'C') {
 			completeAudio.push({ id: fileset[0], data: fileset[1] });
-		} else if (fileset[1].set_size_code === 'NT') {
+		} else if (fileset[1].size === 'NT') {
 			ntAudio.push({ id: fileset[0], data: fileset[1] });
-		} else if (fileset[1].set_size_code === 'OT') {
+		} else if (fileset[1].size === 'OT') {
 			otAudio.push({ id: fileset[0], data: fileset[1] });
-		} else if (fileset[1].set_size_code === 'OTP') {
+		} else if (fileset[1].size === 'OTP') {
 			partialOtAudio.push({ id: fileset[0], data: fileset[1] });
-		} else if (fileset[1].set_size_code === 'NTP') {
+		} else if (fileset[1].size === 'NTP') {
 			partialNtAudio.push({ id: fileset[0], data: fileset[1] });
-		} else if (fileset[1].set_size_code === 'NTPOTP') {
+		} else if (fileset[1].size === 'NTPOTP') {
 			partialNtOtAudio.push({ id: fileset[0], data: fileset[1] });
 		}
 	});
@@ -637,7 +653,7 @@ export function* getChapterAudio({ filesets, bookId: currentBook, chapter: curre
 	if (completeAudio.length) {
 		// console.log('Bible has complete audio', completeAudio);
 		try {
-			const reqUrl = `https://api.bible.build/bibles/filesets/${get(completeAudio, [0, 'id'])}?bucket=${process.env.DBP_BUCKET_ID}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(completeAudio, [0, 'data', 'set_type_code'])}`;
+			const reqUrl = `https://api.bible.build/bibles/filesets/${get(completeAudio, [0, 'id'])}?bucket=${process.env.DBP_BUCKET_ID}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(completeAudio, [0, 'data', 'type'])}`;
 			const response = yield call(request, reqUrl);
 			// console.log('complete audio response object', response);
 			const audioPaths = [get(response, ['data', 0, 'path'])];
@@ -658,7 +674,7 @@ export function* getChapterAudio({ filesets, bookId: currentBook, chapter: curre
 		return;
 	} else if (ntLength && !otLength) {
 		try {
-			const reqUrl = `https://api.bible.build/bibles/filesets/${get(ntAudio, [0, 'id'])}?bucket=${process.env.DBP_BUCKET_ID}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(ntAudio, [0, 'data', 'set_type_code'])}`;
+			const reqUrl = `https://api.bible.build/bibles/filesets/${get(ntAudio, [0, 'id'])}?bucket=${process.env.DBP_BUCKET_ID}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(ntAudio, [0, 'data', 'type'])}`;
 			const response = yield call(request, reqUrl);
 			// console.log('nt audio response object', response);
 			const audioPaths = [get(response, ['data', 0, 'path'])];
@@ -679,7 +695,7 @@ export function* getChapterAudio({ filesets, bookId: currentBook, chapter: curre
 		}
 	} else if (otLength && !ntLength) {
 		try {
-			const reqUrl = `https://api.bible.build/bibles/filesets/${get(otAudio, [0, 'id'])}?bucket=${process.env.DBP_BUCKET_ID}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(otAudio, [0, 'data', 'set_type_code'])}`;
+			const reqUrl = `https://api.bible.build/bibles/filesets/${get(otAudio, [0, 'id'])}?bucket=${process.env.DBP_BUCKET_ID}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(otAudio, [0, 'data', 'type'])}`;
 			const response = yield call(request, reqUrl);
 			// console.log('ot audio response object', response);
 			const audioPaths = [get(response, ['data', 0, 'path'])];
@@ -705,7 +721,7 @@ export function* getChapterAudio({ filesets, bookId: currentBook, chapter: curre
 		// console.log('trying nt & ot', ntLength && !otLength, '\n', ntAudio, '\n', otAudio);
 
 		try {
-			const reqUrl = `https://api.bible.build/bibles/filesets/${get(ntAudio, [0, 'id'])}?bucket=${process.env.DBP_BUCKET_ID}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(ntAudio, [0, 'data', 'set_type_code'])}`;
+			const reqUrl = `https://api.bible.build/bibles/filesets/${get(ntAudio, [0, 'id'])}?bucket=${process.env.DBP_BUCKET_ID}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(ntAudio, [0, 'data', 'type'])}`;
 			const response = yield call(request, reqUrl);
 			// console.log('nt audio response object', response);
 			const audioPaths = [get(response, ['data', 0, 'path'])];
@@ -725,7 +741,7 @@ export function* getChapterAudio({ filesets, bookId: currentBook, chapter: curre
 			}
 		}
 		try {
-			const reqUrl = `https://api.bible.build/bibles/filesets/${get(otAudio, [0, 'id'])}?bucket=${process.env.DBP_BUCKET_ID}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(otAudio, [0, 'data', 'set_type_code'])}`;
+			const reqUrl = `https://api.bible.build/bibles/filesets/${get(otAudio, [0, 'id'])}?bucket=${process.env.DBP_BUCKET_ID}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(otAudio, [0, 'data', 'type'])}`;
 			const response = yield call(request, reqUrl);
 			// console.log('ot audio response object', response);
 			const audioPaths = [get(response, ['data', 0, 'path'])];
@@ -754,7 +770,7 @@ export function* getChapterAudio({ filesets, bookId: currentBook, chapter: curre
 		// console.log('files that contain partial audio', partialAudio);
 		try {
 			// Need to iterate over each object here to see if I can find the right chapter
-			const reqUrl = `https://api.bible.build/bibles/filesets/${get(partialOtAudio, [0, 'id'])}?bucket=${process.env.DBP_BUCKET_ID}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(partialOtAudio, [0, 'data', 'set_type_code'])}`;
+			const reqUrl = `https://api.bible.build/bibles/filesets/${get(partialOtAudio, [0, 'id'])}?bucket=${process.env.DBP_BUCKET_ID}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(partialOtAudio, [0, 'data', 'type'])}`;
 			const response = yield call(request, reqUrl);
 			// console.log('partial audio response object', response);
 			const audioPaths = [];
@@ -784,7 +800,7 @@ export function* getChapterAudio({ filesets, bookId: currentBook, chapter: curre
 		// console.log('files that contain partial audio', partialAudio);
 		try {
 			// Need to iterate over each object here to see if I can find the right chapter
-			const reqUrl = `https://api.bible.build/bibles/filesets/${get(partialNtAudio, [0, 'id'])}?bucket=${process.env.DBP_BUCKET_ID}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(partialNtAudio, [0, 'data', 'set_type_code'])}`;
+			const reqUrl = `https://api.bible.build/bibles/filesets/${get(partialNtAudio, [0, 'id'])}?bucket=${process.env.DBP_BUCKET_ID}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(partialNtAudio, [0, 'data', 'type'])}`;
 			const response = yield call(request, reqUrl);
 			// console.log('partial audio response object', response);
 			const audioPaths = [];
@@ -814,7 +830,7 @@ export function* getChapterAudio({ filesets, bookId: currentBook, chapter: curre
 		// console.log('files that contain partial audio', partialAudio);
 		try {
 			// Need to iterate over each object here to see if I can find the right chapter
-			const reqUrl = `https://api.bible.build/bibles/filesets/${get(partialNtOtAudio, [0, 'id'])}?bucket=${process.env.DBP_BUCKET_ID}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(partialNtOtAudio, [0, 'data', 'set_type_code'])}`;
+			const reqUrl = `https://api.bible.build/bibles/filesets/${get(partialNtOtAudio, [0, 'id'])}?bucket=${process.env.DBP_BUCKET_ID}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(partialNtOtAudio, [0, 'data', 'type'])}`;
 			const response = yield call(request, reqUrl);
 			// console.log('partial audio response object', response);
 			const audioPaths = [];
@@ -843,17 +859,17 @@ export function* getChapterAudio({ filesets, bookId: currentBook, chapter: curre
 export function* getCopyrightSaga({ filesetIds }) {
 	// Todo: Try to optimize at least a little bit
 	// console.log('In the fork');
-	// console.log('uniq codes', uniqWith(filesetIds.filter((f) => codes[f.set_type_code] && codes[f.set_size_code]), (a, b) => a.set_type_code === b.set_type_code || (a.set_type_code.includes('audio_drama') && b.set_type_code.includes('audio'))));
+	// console.log('uniq codes', uniqWith(filesetIds.filter((f) => codes[f.type] && codes[f.size]), (a, b) => a.type === b.type || (a.type.includes('audio_drama') && b.type.includes('audio'))));
 	// const typesAlreadyPushed = {};
 	// const filteredFilesetIds = filesetIds.reduce((a, c) => {
-	// 	if (!typesAlreadyPushed[c.set_type_code]) {
-	// 		typesAlreadyPushed[c.set_type_code] = true;
-	// 		return a.concat({ id: c.id, size: c.set_size_code, type: c.set_type_code });
+	// 	if (!typesAlreadyPushed[c.type]) {
+	// 		typesAlreadyPushed[c.type] = true;
+	// 		return a.concat({ id: c.id, size: c.size, type: c.type });
 	// 	}
 	// 	return a;
 	// }, []);
 	// console.log('filesetIds', filesetIds);
-	const filteredFilesetIds = uniqWith(filesetIds.filter((f) => codes[f.set_type_code] && codes[f.set_size_code]), (a, b) => a.set_type_code === b.set_type_code && a.set_size_code === b.set_size_code);
+	const filteredFilesetIds = uniqWith(filesetIds.filter((f) => codes[f.type] && codes[f.size]), (a, b) => a.type === b.type && a.size === b.size);
 	// console.log('filteredFilesetIds', filteredFilesetIds);
 	// if (filteredFilesetIds.includes((i) => i.type === 'audio') && filteredFilesetIds.includes((i) => i.type === 'audio_drama')) {
 	// 	// Remove one of the ids
@@ -872,11 +888,11 @@ export function* getCopyrightSaga({ filesetIds }) {
 		const response = yield all(reqUrls.map((url) => call(request, url)));
 		// console.log(response);
 		// const copyrightArray = response
-		// 	.map((res) => ({ set_size_code: res.set_size_code, organizations: res.copyright.organizations, copyright: res.copyright.copyright }));
+		// 	.map((res) => ({ size: res.size, organizations: res.copyright.organizations, copyright: res.copyright.copyright }));
 		const copyrights = response.map((cp) => ({
 			message: cp.copyright.copyright,
-			testament: cp.set_size_code,
-			type: cp.set_type_code,
+			testament: cp.size,
+			type: cp.type,
 			organizations: cp.copyright.organizations.map((org) => {
 				const icon = org.logos.find((l) => l.icon);
 				console.log('icon', icon);

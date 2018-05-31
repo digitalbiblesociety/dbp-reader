@@ -95,11 +95,13 @@ export function* getTexts({ languageISO }) {
 		const response = yield call(request, requestUrl);
 		// Some texts may have plain text in the database but no filesets
 		// This filters out all texts that don't have a fileset
-		const texts = response.data.filter((text) => (text.name && text.language && text.iso && text.abbr) && (Array.isArray(text.filesets) && text.filesets.length && text.filesets.find((f) => (f.set_type_code === 'audio' || f.set_type_code === 'audio_drama' || f.set_type_code === 'text_plain' || f.set_type_code === 'text_format'))));
+		const texts = response.data.filter((text) => (text.name && text.language && text.iso && text.abbr) && (text.filesets['dbp-dev'] && text.filesets['dbp-dev'].find((f) => (f.type === 'audio' || f.type === 'audio_drama' || f.type === 'text_plain' || f.type === 'text_format'))));
+		const mappedTexts = texts.map((text) => ({ ...text, filesets: text.filesets['dbp-dev'].filter((f) => (f.type === 'audio' || f.type === 'audio_drama' || f.type === 'text_plain' || f.type === 'text_format')) || [] }));
 		// console.log(texts);
+		// console.log('mappedTexts', mappedTexts);
 
 		yield put({ type: CLEAR_ERROR_GETTING_VERSIONS });
-		yield put(loadTexts({ texts }));
+		yield put(loadTexts({ texts: mappedTexts }));
 	} catch (error) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error(error); // eslint-disable-line no-console
