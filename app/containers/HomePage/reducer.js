@@ -320,7 +320,7 @@ function homePageReducer(state = initialState, action) {
 			.set('audioPaths', action.audioPaths.slice(1))
 			.set('loadingNewChapterText', false)
 			.set('audioFilesetId', action.audioFilesetId)
-			.set('audioSource', action.audioPaths[0]);
+			.set('audioSource', action.audioPaths[0] || '');
 	case 'getchapter':
 		return state.set('loadingNewChapterText', true);
 	case 'getbible':
