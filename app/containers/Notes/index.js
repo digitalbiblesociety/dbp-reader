@@ -16,6 +16,7 @@ import MyNotes from 'components/MyNotes';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
+import CloseMenuFunctions from 'utils/closeMenuFunctions';
 import {
 	setActiveNote,
 	deleteHighlights,
@@ -61,12 +62,15 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 		this.props.dispatch(setActiveChild(props.openView));
 	}
 	componentDidMount() {
+		this.closeMenuController = new CloseMenuFunctions(this.ref, this.props.toggleNotesModal);
+		this.closeMenuController.onMenuMount();
 		// console.log('Notes mounted');
-		document.addEventListener('click', this.handleClickOutside);
+		// document.addEventListener('click', this.handleClickOutside);
 	}
 
 	componentWillUnmount() {
-		document.removeEventListener('click', this.handleClickOutside);
+		this.closeMenuController.onMenuUnmount();
+		// document.removeEventListener('click', this.handleClickOutside);
 	}
 
 	setRef = (node) => {
@@ -113,16 +117,16 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 		highlights: 'My Highlights',
 	}
 
-	handleClickOutside = (event) => {
-		const bounds = this.ref.getBoundingClientRect();
-		const insideWidth = event.x >= bounds.x && event.x <= bounds.x + bounds.width;
-		const insideHeight = event.y >= bounds.y && event.y <= bounds.y + bounds.height;
-
-		if (this.ref && !(insideWidth && insideHeight)) {
-			this.props.toggleNotesModal();
-			document.removeEventListener('click', this.handleClickOutside);
-		}
-	}
+	// handleClickOutside = (event) => {
+	// 	const bounds = this.ref.getBoundingClientRect();
+	// 	const insideWidth = event.x >= bounds.x && event.x <= bounds.x + bounds.width;
+	// 	const insideHeight = event.y >= bounds.y && event.y <= bounds.y + bounds.height;
+	//
+	// 	if (this.ref && !(insideWidth && insideHeight)) {
+	// 		this.props.toggleNotesModal();
+	// 		document.removeEventListener('click', this.handleClickOutside);
+	// 	}
+	// }
 
 	render() {
 		const {
