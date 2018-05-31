@@ -169,10 +169,11 @@
     }
 
     .version-list-section-title {
-      padding: 15px;
-      min-height:50px;
-      height:50px;
+      padding: 10px 20px;
+      min-height:40px;
+      height:40px;
       width:100%;
+      //font-size: 16px;
       @include css4 {
         background-color: var(--text-selection-accordion-title-background);
       }
@@ -192,8 +193,9 @@
       @include css4 {
         background-color: var(--text-selection-background);
       }
-      &:last-child {padding-bottom:15px;}
+      &:last-child {padding-bottom:30px;}
       padding-top: 15px;
+      padding-bottom: 15px;
       //padding-left: 15px;
 
       & .accordion__title[aria-selected="true"] {
@@ -209,7 +211,7 @@
 
         h4 {
           display: inline-block;
-          padding: 0 15px;
+          padding: 0 20px;
         }
 
         a {
@@ -230,6 +232,18 @@
       @include css4 {
         color:var(--text-selection-text-color);
         background-color: var(--text-selection-accordion-body-background);
+      }
+      a {
+        display: inline-block;
+        padding-left: 40px;
+        width: 100%;
+
+        &:hover {
+          @include css4 {
+            color: var(--active-color-primary);
+          }
+        }
+        //padding: 0 15px;
       }
     }
   }

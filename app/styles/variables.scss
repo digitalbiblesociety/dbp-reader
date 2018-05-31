@@ -80,8 +80,8 @@ $login-twitter-color: rgb(42,163,239);
   $header-footer-background-color: light rgb(180, 145, 130) normal rgb(158, 30, 53) dark rgb(44, 48, 54)
 */
 
-$default-font-family: "Noto Sans", Helvetica, sans serif;
-$sans-font-family-option: "Noto Sans", Helvetica, sans serif;
+$default-font-family: "Raleway", Helvetica, sans serif;
+$sans-font-family-option: "Raleway", Helvetica, sans serif;
 $serif-font-family-option: "Alegreya", "Palatino Linotype", Palatino, serif;
 $slab-font-family-option: "Roboto Slab", Rockwell, Courier, monospace;
 
@@ -90,8 +90,8 @@ $slab-font-family-option: "Roboto Slab", Rockwell, Courier, monospace;
 :root {
   --application-base-font-size: 0.98em;
   --application-menu-font-size: 0.98em;
-  --application-font-family: "Noto Sans", Helvetica, sans serif;
-  --sans-font-family-option: "Noto Sans", Helvetica, sans serif;
+  --application-font-family: "Raleway", Helvetica, sans serif;
+  --sans-font-family-option: "Raleway", Helvetica, sans serif;
   --serif-font-family-option: "Alegreya", "Palatino Linotype", Palatino, serif;
   --slab-font-family-option: "Roboto Slab", Rockwell, Courier, monospace;
   //--text-selection-background: #1B1F24;
@@ -168,7 +168,7 @@ $compatibility: true;
 //it is nessesary to define the variables in sass map instead of :root, for compatibility reasons.
 $variables: (
     --text-selection-background: #1B1F24,
-    --text-selection-accordion-title-background: #2C3036,
+    --text-selection-accordion-title-background: rgba(255,255,255,.3),
     --text-selection-accordion-body-background: #000000,
     --text-selection-tab-option-active-background: #FDF9F3,
     --text-selection-tab-option-color: #FFFFFF,
@@ -177,7 +177,7 @@ $variables: (
     --book-dropdown-background-color: #2C3036,
     --book-dropdown-chapter-background-color: #6E747F,
     --book-dropdown-text-color: #000000,
-    --book-dropdown-section-background-color: #6E747F,
+    --book-dropdown-section-background-color: rgba(255,255,255,.3),
     --main-textarea-svg-color: #000000,
     --main-textarea-svg-fill-color: #000000,
     --main-textarea-read-chapter-background: #FFFFF5,
@@ -213,6 +213,7 @@ $variables: (
     --audio-player-gripper-background-color: rgba(25,25,25,0.9),
     --audio-player-gripper-before-color: rgba(255, 255, 255, 0.8),
     --menu-body-background-color: #2C3036,
+    --menu-background-color-opaque: rgba(255, 255, 255, .10),
     --menu-body-background-color-transparent: rgba(44, 48, 54, 0),
     --menu-header-background-color: #7E0E2A,
     --menu-border-color: transparent,
