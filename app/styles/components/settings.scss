@@ -41,7 +41,12 @@
 //.color-schemes .option.red {background-color:$color-primary;border-color:$color-secondary}
 //.color-schemes .option.paper {background-color:$paper-sidebar;border-color:$paper-secondary}
 //.color-schemes .title {text-transform:uppercase;font-size:14px;font-weight:bold;text-align:center}
-.color-schemes {display:flex;align-items:center;justify-content:space-around;margin-top:10px;}
+.color-schemes {
+  display:flex;
+  align-items:center;
+  justify-content:space-around;
+  margin-top:10px;
+}
 .color-schemes .option {
   @include css4{
     background-color:var(--dark-theme-primary);
@@ -135,14 +140,24 @@
 .font-sizes .option.medium          {font-size:2rem}
 .font-sizes .option.large           {font-size:2.5rem}
 .font-sizes .option.largest         {font-size:3rem}
-.font-sizes .option.active          {@include css4{color:var(--default-text-color);};}
+.font-sizes .option.active          {
+  @include css4{
+    color:var(--default-text-color);
+  }
+}
 
 // FONT SIZES SLIDER
-.font-sizes-slider                  {width:80%;margin-left:25px;}
+.font-sizes-slider {width:80%;margin-left:25px;}
 
 // CHECKBOX SETTINGS
 // Will need a .inactive class for disabling the options
-.checkbox-settings label            {height:40px;display:block;@include css4{color:var(--default-text-color);};}
+.checkbox-settings label            {
+  height:40px;
+  display:block;
+  @include css4{
+    color:var(--default-text-color);
+  }
+}
 .checkbox-settings.disabled {
   .switch {
     .slider {
@@ -160,7 +175,13 @@
     }
   }
 }
-.checkbox-settings label span       {@include css4{font-size:var(--application-menu-font-size)};float: left;cursor:pointer;}
+.checkbox-settings label span       {
+  @include css4{
+    font-size:var(--application-menu-font-size);
+  }
+  float: left;
+  cursor:pointer;
+}
 //.checkbox-settings label span:hover {@include css4{color:var(--active-color-primary);};}
 
 // SWITCH
@@ -219,6 +240,39 @@
   bottom:-2px;
 }
 
+
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+  .font-settings .option.sans.active:before {
+    margin:-1px 0 0 19px;
+  }
+  .font-settings .option.serif.active:before {
+    margin:-1px 0 0 18px;
+  }
+  .font-settings .option.slab.active:before {
+    margin:-1px 0 0 20px;
+  }
+
+  .switch .slider:before {
+    left:-1.5px;
+    bottom:-2px;
+  }
+
+  .color-schemes .option {
+    &:before {
+      content: '';
+      position: absolute;
+      margin: -8.5px 0 0 -9px;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+
+      @include css4 {
+        border: 6px solid var(--menu-body-background-color);
+        //border: 6px solid blue;
+      }
+    }
+  }
+}
 // for justified apply these styles to root or something
 /*
 text-align: justify;
