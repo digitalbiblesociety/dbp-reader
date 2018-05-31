@@ -249,10 +249,13 @@ export function* getBibleFromUrl({ bibleId: oldBibleId, bookId: oldBookId, chapt
 			// I probably will want to use 'yield all' for getting the audio and text so they can be run async
 			const bible = response.data;
 			const books = bible.books; // Need to ensure that I have the books here
+			console.log('books', books);
+			console.log('response', response);
+
 			let hasMatt = false;
 			let activeBookIndex;
 			// console.log('books in new bible', books);
-			const activeBook = books.find((b, i) => {
+			let activeBook = books.find((b, i) => {
 				if (b.book_id === 'MAT') {
 					activeBookIndex = i;
 					hasMatt = true;
@@ -271,14 +274,17 @@ export function* getBibleFromUrl({ bibleId: oldBibleId, bookId: oldBookId, chapt
 					const parsedC = parseInt(chapter, 10);
 
 					// console.log('38 is greater than 6', lastChapterIndex < parsedC, lastChapterIndex, parsedC);
+					// Checks if the entered number is greater than the last chapter
 					if (activeBook.chapters[lastChapterIndex] < parsedC) {
 						activeChapter = activeBook.chapters[lastChapterIndex];
+						// Checks if the entered number is less than the starting number
 					} else if (activeBook.chapters[0] > parsedC) {
 						activeChapter = activeBook.chapters[0];
 					} else {
 						activeChapter = parsedC;
 					}
 				} else {
+					// If a non number was entered then it will start at the first chapter in the book
 					activeChapter = activeBook.chapters[0];
 				}
 			}
@@ -290,6 +296,14 @@ export function* getBibleFromUrl({ bibleId: oldBibleId, bookId: oldBookId, chapt
 				// If it has Matthew then use the bookId for that, otherwise just use the first bookId available
 			const activeBookId = activeBook ? activeBook.book_id : (hasMatt ? 'MAT' : get(books, [0, 'book_id'], '')); // eslint-disable-line no-nested-ternary
 			const activeBookName = activeBook ? activeBook.name_short : get(books, [0, 'name_short'], '');
+			if (!activeBook) {
+				activeBook = books.find((b) => b.book_id === activeBookId);
+			}
+			console.log('activeBook', activeBook);
+			console.log('activeBookId', activeBookId);
+			console.log('hasMatt', hasMatt);
+			console.log('get(books, [0, "book_id"])', get(books, [0, 'book_id']));
+
 			const filesets = response.data.filesets.filter((f) => f.bucket_id === 'dbp-dev' && f.set_type_code !== 'app');
 			// calling a generator that will handle the api requests for getting text
 			// console.log('filtered filesets', filesets);
