@@ -249,8 +249,8 @@ export function* getBibleFromUrl({ bibleId: oldBibleId, bookId: oldBookId, chapt
 			// I probably will want to use 'yield all' for getting the audio and text so they can be run async
 			const bible = response.data;
 			const books = bible.books; // Need to ensure that I have the books here
-			console.log('books', books);
-			console.log('response', response);
+			// console.log('books', books);
+			// console.log('response', response);
 
 			let hasMatt = false;
 			let activeBookIndex;
@@ -299,10 +299,10 @@ export function* getBibleFromUrl({ bibleId: oldBibleId, bookId: oldBookId, chapt
 			if (!activeBook) {
 				activeBook = books.find((b) => b.book_id === activeBookId);
 			}
-			console.log('activeBook', activeBook);
-			console.log('activeBookId', activeBookId);
-			console.log('hasMatt', hasMatt);
-			console.log('get(books, [0, "book_id"])', get(books, [0, 'book_id']));
+			// console.log('activeBook', activeBook);
+			// console.log('activeBookId', activeBookId);
+			// console.log('hasMatt', hasMatt);
+			// console.log('get(books, [0, "book_id"])', get(books, [0, 'book_id']));
 
 			const filesets = response.data.filesets.filter((f) => f.bucket_id === 'dbp-dev' && f.set_type_code !== 'app');
 			// calling a generator that will handle the api requests for getting text
