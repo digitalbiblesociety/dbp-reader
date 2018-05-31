@@ -49,7 +49,7 @@ function textSelectionReducer(state = initialState, action) {
 			.set('loadingLanguages', true)
 			.set('loadingVersions', true);
 	case LOAD_COUNTRY:
-		return state.set('country', action.country);
+		return state.set('country', fromJS(action.country));
 	case GET_COUNTRIES:
 		return state.set('loadingCountries', true);
 	case GET_LANGUAGES:

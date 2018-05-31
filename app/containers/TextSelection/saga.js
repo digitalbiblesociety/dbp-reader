@@ -20,7 +20,18 @@ export function* getCountries() {
 
 	try {
 		const response = yield call(request, requestUrl);
-		const countriesObject = response.data.filter((country) => !territoryCodes[country.codes.iso_a2]);
+		const countriesObject = response.data.reduce((acc, country) => {
+			const tempObj = acc;
+			if (typeof country.name !== 'string') {
+				tempObj[country.name.name] = { ...country, name: country.name.name };
+			} else if (country.name === '' || territoryCodes[country.codes.iso_a2]) {
+				return acc;
+			} else {
+				tempObj[country.name] = country;
+			}
+			return tempObj;
+		}, {});
+		// const countriesObject = response.data.filter((country) => !territoryCodes[country.codes.iso_a2]);
 
 		countriesObject.ANY = { name: 'ANY', languages: { ANY: 'ANY' }, codes: { iso_a2: 'ANY' } };
 
