@@ -212,7 +212,7 @@ const themes = {
 };
 
 const fonts = {
-	sans: '"Noto Sans", Helvetica, sans serif',
+	sans: '"Raleway", Helvetica, sans serif',
 	serif: '"Alegreya", "Palatino Linotype", Palatino, serif',
 	slab: '"Roboto Slab", Rockwell, Courier, monospace',
 };

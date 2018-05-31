@@ -89,11 +89,11 @@
 .font-settings .option small  {display:block;text-transform:uppercase;font-size:14px}
 .font-settings .option.active {@include css4{color:var(--default-text-color);};}
 .font-settings .option.sans.active:before {
-  margin:-1px 0 0 -7px;
+  margin:-5px 0 0 -7px;
   position:absolute;
   content:"";
-  height:56px;
-  width:56px;
+  height:57px;
+  width:57px;
   border-radius:100%;
   @include css4{
     border:2px solid var(--active-color-primary);
@@ -128,7 +128,7 @@
 //.font-settings .option.sans > span  {@include css4{font-family:var(--sans-font-family-option) !important;};}
 //.font-settings .option.serif > span {@include css4{font-family:var(--serif-font-family-option) !important;};}
 //.font-settings .option.slab > span  {@include css4{font-family:var(--slab-font-family-option) !important;};}
-.font-settings .option.sans > span  {font-family:'Noto Sans', Helvetica, sans serif;}
+.font-settings .option.sans > span  {font-family:'Raleway', Helvetica, sans serif;}
 .font-settings .option.serif > span {font-family:'Alegreya', 'Palatino Linotype', Palatino, serif;}
 .font-settings .option.slab > span  {font-family:'Roboto Slab', Rockwell, Courier, monospace;}
 
