@@ -10,7 +10,7 @@ const paper = {
 	'--book-dropdown-background-color': '#FDF9F3',
 	'--book-dropdown-chapter-background-color': '#FFFFFF',
 	'--book-dropdown-text-color': '#000000',
-	'--book-dropdown-section-background-color': '#B2BBC6',
+	'--book-dropdown-section-background-color': 'rgba(0,0,0,0.1)',
 	'--main-textarea-svg-color': '#000000',
 	'--main-textarea-svg-fill-color': '#000000',
 	'--main-textarea-read-chapter-background': '#FFFFF5',
@@ -69,7 +69,7 @@ const paper = {
 
 const dark = {
 	'--text-selection-background': '#1B1F24',
-	'--text-selection-accordion-title-background': '#2C3036',
+	'--text-selection-accordion-title-background': 'rgba(255,255,255,.3)',
 	'--text-selection-accordion-body-background': '#000000',
 	'--text-selection-tab-option-active-background': '#FDF9F3',
 	'--text-selection-tab-option-color': '#FFFFFF',
@@ -78,7 +78,7 @@ const dark = {
 	'--book-dropdown-background-color': '#F8E4D3',
 	'--book-dropdown-chapter-background-color': '#6E747F',
 	'--book-dropdown-text-color': '#000000',
-	'--book-dropdown-section-background-color': '#6E747F',
+	'--book-dropdown-section-background-color': 'rgba(255,255,255,.3)',
 	'--main-textarea-svg-color': '#FFFFFF',
 	'--main-textarea-svg-fill-color': '#FFFFFF',
 	'--main-textarea-read-chapter-background': '#FFFFF5',
@@ -135,7 +135,7 @@ const dark = {
 
 const red = {
 	'--text-selection-background': '#1B1F24',
-	'--text-selection-accordion-title-background': '#2C3036',
+	'--text-selection-accordion-title-background': 'rgba(255,255,255,.3)',
 	'--text-selection-accordion-body-background': '#000000',
 	'--text-selection-tab-option-active-background': '#FDF9F3',
 	'--text-selection-tab-option-color': '#FFFFFF',
@@ -144,7 +144,7 @@ const red = {
 	'--book-dropdown-background-color': '#2C3036',
 	'--book-dropdown-chapter-background-color': '#6E747F',
 	'--book-dropdown-text-color': '#000000',
-	'--book-dropdown-section-background-color': '#6E747F',
+	'--book-dropdown-section-background-color': 'rgba(255,255,255,.3)',
 	'--main-textarea-svg-color': '#000000',
 	'--main-textarea-svg-fill-color': '#000000',
 	'--main-textarea-read-chapter-background': '#FFFFF5',

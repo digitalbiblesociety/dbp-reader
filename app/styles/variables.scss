@@ -168,7 +168,7 @@ $compatibility: true;
 //it is nessesary to define the variables in sass map instead of :root, for compatibility reasons.
 $variables: (
     --text-selection-background: #1B1F24,
-    --text-selection-accordion-title-background: #2C3036,
+    --text-selection-accordion-title-background: rgba(255,255,255,.3),
     --text-selection-accordion-body-background: #000000,
     --text-selection-tab-option-active-background: #FDF9F3,
     --text-selection-tab-option-color: #FFFFFF,
@@ -177,7 +177,7 @@ $variables: (
     --book-dropdown-background-color: #2C3036,
     --book-dropdown-chapter-background-color: #6E747F,
     --book-dropdown-text-color: #000000,
-    --book-dropdown-section-background-color: #6E747F,
+    --book-dropdown-section-background-color: rgba(255,255,255,.3),
     --main-textarea-svg-color: #000000,
     --main-textarea-svg-fill-color: #000000,
     --main-textarea-read-chapter-background: #FFFFF5,
