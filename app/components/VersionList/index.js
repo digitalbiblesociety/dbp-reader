@@ -51,7 +51,7 @@ class VersionList extends React.PureComponent { // eslint-disable-line react/pre
 			clickHandler: (audioType) => this.handleVersionListClick(bible, audioType),
 			className: bible.get('abbr') === activeTextId ? 'active-version' : '',
 			text: bible.get('name'),
-			types: bible.get('filesets').reduce((a, c) => ({ ...a, [c.get('set_type_code')]: true }), {}),
+			types: bible.get('filesets').reduce((a, c) => ({ ...a, [c.get('type')]: true }), {}),
 		}]), []);
 		// console.log('scrubbed bibles', scrubbedBibles);
 		// When I first get the response from the server with filesets
@@ -133,11 +133,11 @@ class VersionList extends React.PureComponent { // eslint-disable-line react/pre
 		} = this.props;
 
 		if (bible) {
-			const filesets = bible.get('filesets').filter((f) => f.get('bucket_id') === 'dbp-dev' && f.get('set_type_code') !== 'app');
+			const filesets = bible.get('filesets').filter((f) => f.get('type') !== 'app');
 			// console.log('version list', filesets);
 
 			if (audioType) {
-				setActiveText({ textId: bible.get('abbr'), textName: bible.get('name'), filesets: filesets.filter((fileset) => (fileset.get('set_type_code') === audioType || fileset.get('set_type_code') === 'text_plain' || fileset.get('set_type_code') === 'text_format')) });
+				setActiveText({ textId: bible.get('abbr'), textName: bible.get('name'), filesets: filesets.filter((fileset) => (fileset.get('type') === audioType || fileset.get('type') === 'text_plain' || fileset.get('type') === 'text_format')) });
 				toggleTextSelection();
 			} else {
 				setActiveText({ textId: bible.get('abbr'), textName: bible.get('name'), filesets });
