@@ -21,12 +21,14 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 	}
 	// Need this for when a user has edited a note and come back here
 	componentDidMount() {
-		if (this.props.sectionType === 'notes') {
-			// console.log('Getting notebook data in did mount');
-			this.props.getNotes({ limit: this.props.pageSize, page: this.props.activePage });
-		} else if (this.props.sectionType === 'bookmarks') {
-			this.props.getBookmarks({ limit: this.props.pageSizeBookmark, page: this.props.activePageBookmark });
-		}
+		// if (this.props.sectionType === 'notes') {
+		// 	// console.log('Getting notebook data in did mount');
+		// } else if (this.props.sectionType === 'bookmarks') {
+		// } else if (this.props.sectionType === 'highlights') {
+		// }
+		this.props.getNotes({ limit: this.props.pageSize, page: this.props.activePage });
+		this.props.getBookmarks({ limit: this.props.pageSizeBookmark, page: this.props.activePageBookmark });
+		this.props.getHighlights({ limit: this.props.pageSizeHighlight, page: this.props.activePageHighlight });
 	}
 
 	// componentDidUpdate() {
@@ -38,9 +40,21 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 			this.props.getNotes({ limit: nextProps.pageSize, page: nextProps.activePage });
 		} else if (nextProps.sectionType === 'bookmarks' && (this.props.pageSizeBookmark !== nextProps.pageSizeBookmark || this.props.activePageBookmark !== nextProps.activePageBookmark)) {
 			this.props.getBookmarks({ limit: nextProps.pageSizeBookmark, page: nextProps.activePageBookmark });
+		} else if (nextProps.sectionType === 'highlights' && (this.props.pageSizeHighlight !== nextProps.pageSizeHighlight || this.props.activePageHighlight !== nextProps.activePageHighlight)) {
+			this.props.getHighlights({ limit: nextProps.pageSizeHighlight, page: nextProps.activePageHighlight });
 		}
-		if (this.props.sectionType === 'notes' && nextProps.sectionType === 'bookmarks' && this.props.bookmarkList.length === 0) {
-			this.props.getBookmarks({ limit: nextProps.pageSizeBookmark, page: 1 });
+
+		if (nextProps.sectionType !== this.props.sectionType) {
+			if (nextProps.sectionType === 'notes') {
+				// console.log('Getting notes');
+				this.props.getNotes({ limit: nextProps.pageSize, page: nextProps.activePage });
+			} else if (nextProps.sectionType === 'bookmarks') {
+				// console.log('getting bookmarks');
+				nextProps.getBookmarks({ limit: nextProps.pageSizeBookmark, page: nextProps.activePageBookmark });
+			} else if (nextProps.sectionType === 'highlights') {
+				// console.log('getting highlights');
+				nextProps.getHighlights({ limit: nextProps.pageSizeHighlight, page: nextProps.activePageHighlight });
+			}
 		}
 	}
 
@@ -98,20 +112,44 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 
 	handleSettingPageSize = (pageSize) => this.props.setPageSize({ sectionType: this.props.sectionType, limit: pageSize, page: 1 })
 
+	get pagesize() {
+		const type = this.props.sectionType;
+		if (type === 'notes') {
+			return this.props.pageSize;
+		} else if (type === 'bookmarks') {
+			return this.props.pageSizeBookmark;
+		}
+		return this.props.pageSizeHighlight;
+	}
+
+	get activepage() {
+		const type = this.props.sectionType;
+		if (type === 'notes') {
+			return this.props.activePage;
+		} else if (type === 'bookmarks') {
+			return this.props.activePageBookmark;
+		}
+		return this.props.activePageHighlight;
+	}
+
+	get totalpages() {
+		const type = this.props.sectionType;
+		if (type === 'notes') {
+			return this.props.totalPages;
+		} else if (type === 'bookmarks') {
+			return this.props.totalPagesBookmark;
+		}
+		return this.props.totalPagesHighlight;
+	}
+
 	render() {
 		const {
 			sectionType,
 			listData,
 			bookmarkList,
 			highlights,
-			activePage,
-			pageSize,
-			totalPages,
 			pageSelectorState,
 			togglePageSelector,
-			pageSizeBookmark,
-			totalPagesBookmark,
-			activePageBookmark,
 			deleteHighlights,
 			deleteNote,
 			updateHighlight,
@@ -179,13 +217,13 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 				<div className="pagination">
 					<Pagination
 						onChangePage={this.handlePageClick}
-						activePage={sectionType === 'notes' ? activePage : activePageBookmark}
-						totalPages={sectionType === 'notes' ? totalPages : totalPagesBookmark}
+						activePage={this.activepage}
+						totalPages={this.totalpages}
 					/>
 					<PageSizeSelector
 						togglePageSelector={togglePageSelector}
 						pageSelectorState={pageSelectorState}
-						pageSize={sectionType === 'notes' ? pageSize : pageSizeBookmark}
+						pageSize={this.pagesize}
 						setPageSize={this.handleSettingPageSize}
 					/>
 				</div>
@@ -202,6 +240,7 @@ MyNotes.propTypes = {
 	setPageSize: PropTypes.func.isRequired,
 	getNotes: PropTypes.func.isRequired,
 	getBookmarks: PropTypes.func.isRequired,
+	getHighlights: PropTypes.func,
 	listData: PropTypes.array.isRequired,
 	bookmarkList: PropTypes.array.isRequired,
 	highlights: PropTypes.array,
@@ -213,6 +252,9 @@ MyNotes.propTypes = {
 	pageSizeBookmark: PropTypes.number.isRequired,
 	totalPagesBookmark: PropTypes.number,
 	activePageBookmark: PropTypes.number,
+	pageSizeHighlight: PropTypes.number,
+	totalPagesHighlight: PropTypes.number,
+	activePageHighlight: PropTypes.number,
 	pageSelectorState: PropTypes.bool.isRequired,
 	deleteHighlights: PropTypes.func,
 	updateHighlight: PropTypes.func,
