@@ -1,7 +1,15 @@
-.notes                                           {
-  z-index:1;position:fixed;top:0;right:0;
-  height:calc(100% - 56px);width:320px;
-  @include css4{background-color:var(--menu-body-background-color);color:var(--default-text-color)}}
+.notes {
+  z-index:1;
+  position:fixed;
+  top:0;
+  right:0;
+  height:calc(100% - 56px);
+  width:320px;
+  @include css4{
+    background-color:var(--menu-body-background-color);
+    color:var(--default-text-color);
+  }
+}
 .notes header                                    {
   position:relative;
   @include css4{
@@ -16,8 +24,7 @@
   align-items: center;
   justify-content: flex-start;
   padding: 15px;
-
-  svg {
+  .book-icon-header {
     margin-right: 15px;
   }
 }
@@ -61,11 +68,60 @@
   textarea:focus:-ms-input-placeholder      {color:transparent;}
 }
 // Svg
-.notes .top-bar                        {display:flex;@include css4{background-color:inherit;};height:50px;width:100%;align-items:center;}
-.notes .top-bar *:focus                {outline:none;}
-.notes .top-bar .svg.active            {@include css4{fill:var(--active-color-primary)};opacity:1;}
-.notes .top-bar .svg                   {opacity:1;cursor:pointer;@include css4{fill:var(--default-text-color)};margin-left:15px;}
-.notes .top-bar .text                  {@include css4{color:var(--default-text-color)};margin-left:15px;}
+.notes .top-bar {
+  display:flex;
+  height:54px;
+  width:100%;
+  align-items:center;
+
+  @include css4{
+    background-color:inherit;
+  }
+
+  .nav-button {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 5px 0;
+    width: 33%;
+    height: 54px;
+
+    &.active {
+      @include css4 {
+        background-color: var(--menu-background-color-opaque);
+      }
+    }
+
+    &:hover {
+      cursor: pointer;
+      @include css4 {
+        background-color: var(--menu-background-color-opaque);
+      }
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    svg {
+      margin: 0;
+      flex-shrink: 0;
+    }
+  }
+}
+.notes .top-bar *:focus                {
+  outline:none;
+}
+.notes .top-bar .svg.active            {
+  @include css4{fill:var(--active-color-primary)};opacity:1;
+}
+.notes .top-bar .svg                   {
+  opacity:1;cursor:pointer;@include css4{fill:var(--default-text-color)};margin-left:15px;
+}
+.notes .top-bar .text                  {
+  @include css4{color:var(--default-text-color)};margin-left:15px;
+}
 
 // Edit Notes Section
 .edit-notes {
@@ -76,6 +132,34 @@
   flex-direction: column;
   justify-content: space-between;
   align-content: stretch;
+
+  .go-back {
+    width: 100%;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    svg {
+      flex-shrink: 0;
+      margin-left: 20px;
+    }
+
+    span {
+      margin-left: 25px;
+    }
+
+    &:hover {
+      cursor: pointer;
+      @include css4 {
+        color: var(--active-color-primary);
+      }
+    }
+
+    @include css4 {
+      background-color: var(--menu-background-color-opaque);
+    }
+  }
 
   .date-title {
     display:flex;

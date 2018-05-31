@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
+import { FormattedMessage } from 'react-intl';
 // import isEqual from 'lodash/isEqual';
 import SvgWrapper from 'components/SvgWrapper';
 import EditNote from 'components/EditNote';
@@ -54,8 +55,7 @@ import makeSelectNotes, {
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
-// import { FormattedMessage } from 'react-intl';
-// import messages from './messages';
+import messages from './messages';
 
 export class Notes extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 	constructor(props) {
@@ -167,32 +167,39 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 		} = this.props;
 		// console.log('notebook props', this.props);
 		// console.log('data in notes', selectedListData);
-
 		return (
 			<GenericErrorBoundary affectedArea="Notes">
 				<aside ref={this.setRef} className="notes">
 					<header>
 						<SvgWrapper className={'icon'} fill="#fff" svgid="arrow_right" onClick={() => { setActiveChild('notes'); toggleNotesModal(); }} />
-						<SvgWrapper className={'icon'} svgid={'notebook'} onClick={() => { setActiveChild('notes'); toggleNotesModal(); }} />
+						<SvgWrapper className={'icon book-icon-header'} svgid={'notebook'} onClick={() => { setActiveChild('notes'); toggleNotesModal(); }} />
 						<h1 className="section-title">Notebook</h1>
 					</header>
 					{
 						authenticationStatus ? (
 							<React.Fragment>
 								<div className="top-bar">
-									{
-										activeChild === 'notes' ? (
-											<SvgWrapper role="button" tabIndex={0} onClick={() => this.setActiveChild('edit')} className={activeChild === 'notes' ? 'svg active' : 'svg'} height="26px" width="26px" svgid="edit_note" />
-										) : null
-									}
-									{
-										activeChild !== 'notes' ? (
-											<SvgWrapper role="button" tabIndex={0} onClick={() => this.setActiveChild('notes')} className={activeChild === 'edit' ? 'svg active' : 'svg'} height="26px" width="26px" svgid="notes" />
-										) : null
-									}
-									<SvgWrapper role="button" tabIndex={0} onClick={() => this.setActiveChild('highlights')} className={activeChild === 'highlights' ? 'svg active' : 'svg'} height="26px" width="26px" svgid="highlight" />
-									<SvgWrapper role="button" tabIndex={0} onClick={() => this.setActiveChild('bookmarks')} className={activeChild === 'bookmarks' ? 'svg active' : 'svg'} height="26px" width="26px" svgid="bookmark" />
-									<h1 className="text">{this.titleOptions[activeChild]}</h1>
+									<div role={'button'} tabIndex={0} onClick={() => this.setActiveChild('notes')} className={activeChild === 'notes' || activeChild === 'edit' ? 'nav-button active' : 'nav-button'}>
+										{
+											activeChild === 'notes' ? (
+												<SvgWrapper role="button" tabIndex={0} className={'svg'} height="26px" width="26px" svgid="notes" />
+											) : null
+										}
+										{
+											activeChild === 'edit' ? (
+												<SvgWrapper role="button" tabIndex={0} className={'svg'} height="26px" width="26px" svgid="edit_note" />
+											) : null
+										}
+										<h1>{<FormattedMessage {...messages.notesHeader} />}</h1>
+									</div>
+									<div role={'button'} tabIndex={0} onClick={() => this.setActiveChild('highlights')} className={activeChild === 'highlights' ? 'nav-button active' : 'nav-button'}>
+										<SvgWrapper role="button" tabIndex={0} className={'svg'} height="26px" width="26px" svgid="highlight" />
+										<h1>{<FormattedMessage {...messages.highlightsHeader} />}</h1>
+									</div>
+									<div role={'button'} tabIndex={0} onClick={() => this.setActiveChild('bookmarks')} className={activeChild === 'bookmarks' ? 'nav-button active' : 'nav-button'}>
+										<SvgWrapper role="button" tabIndex={0} className={'svg'} height="26px" width="26px" svgid="bookmark" />
+										<h1>{<FormattedMessage {...messages.bookmarksHeader} />}</h1>
+									</div>
 								</div>
 								{
 									activeChild === 'edit' ? (

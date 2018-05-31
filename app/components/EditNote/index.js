@@ -220,6 +220,10 @@ class EditNote extends React.PureComponent { // eslint-disable-line react/prefer
 
 		return (
 			<section className="edit-notes">
+				<div tabIndex={0} role={'button'} onClick={() => this.props.setActiveChild('notes')} className={'go-back'}>
+					<SvgWrapper className={'icon'} svgid={'arrow_left'} />
+					<span>View All Notes</span>
+				</div>
 				<div className="date-title">
 					<input onChange={this.handleNoteTitleChange} placeholder="CLICK TO ADD TITLE" className="title" value={this.state.titleText} />
 					<span className="date">{note.get('date') || this.getCurrentDate()}</span>
