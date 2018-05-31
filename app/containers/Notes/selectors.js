@@ -16,10 +16,10 @@ const selectHomepageDomain = (state) => state.get('homepage');
 /**
  * Other specific selectors
  */
-const selectHighlights = () => createSelector(
-	selectHomepageDomain,
-	(homepage) => homepage.get('highlights').toJS()
-);
+// const selectHighlights = () => createSelector(
+// 	selectHomepageDomain,
+// 	(homepage) => homepage.get('highlights').toJS()
+// );
 
 const selectActiveBookName = () => createSelector(
 	selectHomepageDomain,
@@ -120,7 +120,7 @@ export {
 	selectHighlightedText,
 	selectUserAuthenticationStatus,
 	vernacularBookNameObject,
-	selectHighlights,
+	// selectHighlights,
 	// selectListData,
 	selectActiveBookName,
 };

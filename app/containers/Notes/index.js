@@ -38,6 +38,7 @@ import {
 	readSavedMessage,
 	updateHighlight,
 	clearNoteErrorMessage,
+	getUserHighlights,
 } from './actions';
 import makeSelectNotes, {
 	selectUserId,
@@ -47,7 +48,7 @@ import makeSelectNotes, {
 	selectNotePassage,
 	selectActiveTextId,
 	vernacularBookNameObject,
-	selectHighlights,
+	// selectHighlights,
 	// selectListData,
 	selectActiveBookName,
 } from './selectors';
@@ -86,6 +87,7 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 	setPageSize = (props) => this.props.dispatch(setPageSize({ userId: this.props.userId, params: { ...props } }))
 	getNotes = (props) => this.props.dispatch(getNotesForNotebook({ userId: this.props.userId, params: { ...props } }))
 	getBookmarks = (props) => this.props.dispatch(getUserBookmarkData({ userId: this.props.userId, params: { ...props } }))
+	getHighlights = (props) => this.props.dispatch(getUserHighlights({ userId: this.props.userId, params: { ...props } }))
 	toggleVerseText = () => this.props.dispatch(toggleVerseText())
 	toggleAddVerseMenu = () => this.props.dispatch(toggleAddVerseMenu())
 	togglePageSelector = () => this.props.dispatch(togglePageSelector())
@@ -139,9 +141,13 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 			activePage,
 			pageSelectorState,
 			bookmarkList,
+			userHighlights,
 			pageSizeBookmark,
 			totalPagesBookmark,
 			activePageBookmark,
+			pageSizeHighlight,
+			totalPagesHighlight,
+			activePageHighlight,
 			savedTheNote,
 			errorSavingNote,
 			notesErrorMessage,
@@ -154,7 +160,7 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 			toggleProfile,
 			notePassage,
 			activeTextId,
-			highlights,
+			// highlights,
 			vernacularNamesObject,
 			// selectedListData,
 			activeBookName,
@@ -217,6 +223,7 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 											deleteNote={this.deleteNote}
 											setPageSize={this.setPageSize}
 											getBookmarks={this.getBookmarks}
+											getHighlights={this.getHighlights}
 											setActiveNote={this.setActiveNote}
 											setActivePage={this.setActivePage}
 											setActiveChild={this.setActiveChild}
@@ -226,7 +233,7 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 											pageSelectorState={pageSelectorState}
 											vernacularNamesObject={vernacularNamesObject}
 											listData={listData}
-											highlights={highlights}
+											highlights={userHighlights}
 											sectionType={activeChild}
 											pageSize={pageSize}
 											totalPages={totalPages}
@@ -235,6 +242,9 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 											pageSizeBookmark={pageSizeBookmark}
 											totalPagesBookmark={totalPagesBookmark}
 											activePageBookmark={activePageBookmark}
+											pageSizeHighlight={pageSizeHighlight}
+											totalPagesHighlight={totalPagesHighlight}
+											activePageHighlight={activePageHighlight}
 										/>
 									)
 								}
@@ -259,7 +269,7 @@ Notes.propTypes = {
 	note: PropTypes.object,
 	notes: PropTypes.object,
 	vernacularNamesObject: PropTypes.object,
-	highlights: PropTypes.array,
+	// highlights: PropTypes.array,
 	userId: PropTypes.string,
 	openView: PropTypes.string,
 	notePassage: PropTypes.string,
@@ -280,7 +290,7 @@ const mapStateToProps = createStructuredSelector({
 	notePassage: selectNotePassage(),
 	activeTextId: selectActiveTextId(),
 	vernacularNamesObject: vernacularBookNameObject(),
-	highlights: selectHighlights(),
+	// highlights: selectHighlights(),
 	// selectedListData: selectListData(),
 	activeBookName: selectActiveBookName(),
 });

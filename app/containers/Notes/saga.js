@@ -22,6 +22,8 @@ import {
 	LOAD_USER_BOOKMARK_DATA,
 	GET_BOOKMARKS_FOR_CHAPTER,
 	GET_USER_BOOKMARK_DATA,
+	GET_USER_HIGHLIGHTS,
+	LOAD_USER_HIGHLIGHTS,
 	UPDATE_HIGHLIGHT,
 } from './constants';
 
@@ -91,6 +93,27 @@ export function* updateHighlight({ userId, id, color, bible, book, chapter }) {
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error(err); // eslint-disable-line no-console
+		} else if (process.env.NODE_ENV === 'production') {
+			// const options = {
+			// 	header: 'POST',
+			// 	body: formData,
+			// };
+			// fetch('https://api.bible.build/error_logging', options);
+		}
+	}
+}
+
+export function* getUserHighlights({ userId, params }) {
+	const requestUrl = `https://api.bible.build/users/${userId}/highlights?key=${process.env.DBP_API_KEY}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}&paginate=${params.limit}&page=${params.page}`;
+	// const updatedUrl = params.reduce((a, c) => a.concat(c), requestUrl);
+	try {
+		const response = yield call(request, requestUrl);
+		// console.log('highlight response', response);
+		// console.log('update user note response', response);
+		yield put({ type: LOAD_USER_HIGHLIGHTS, highlights: response.data, totalPages: parseInt(response.last_page, 10) });
+	} catch (err) {
+		if (process.env.NODE_ENV === 'development') {
+			console.error('Error getting user highlights', err); // eslint-disable-line no-console
 		} else if (process.env.NODE_ENV === 'production') {
 			// const options = {
 			// 	header: 'POST',
@@ -375,6 +398,7 @@ export default function* notesSaga() {
 	const deleteNoteSaga = yield takeLatest(DELETE_NOTE, deleteNote);
 	const getChapterSaga = yield takeLatest(GET_CHAPTER_FOR_NOTE, getChapterForNote);
 	const getNotebookSaga = yield takeLatest(GET_USER_NOTEBOOK_DATA, getNotesForNotebook);
+	const getUserHighlightsSaga = yield takeLatest(GET_USER_HIGHLIGHTS, getUserHighlights);
 	// const setPageSize = yield takeLatest(SET_PAGE_SIZE, getNotesForNotebook);
 	// const setActivePage = yield takeLatest(SET_ACTIVE_PAGE_DATA, getNotesForNotebook);
 	const getBookmarksForChapterSaga = yield takeLatest(GET_BOOKMARKS_FOR_CHAPTER, getBookmarksForChapter);
@@ -392,4 +416,5 @@ export default function* notesSaga() {
 	yield cancel(updateHighlightSaga);
 	yield cancel(getUserBookmarksSaga);
 	yield cancel(getBookmarksForChapterSaga);
+	yield cancel(getUserHighlightsSaga);
 }

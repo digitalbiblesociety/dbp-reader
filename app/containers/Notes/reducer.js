@@ -7,6 +7,7 @@
 import { fromJS } from 'immutable';
 import {
 	SET_ACTIVE_CHILD,
+	LOAD_USER_HIGHLIGHTS,
 	TOGGLE_VERSE_TEXT,
 	SET_ACTIVE_PAGE_DATA,
 	SET_PAGE_SIZE,
@@ -33,9 +34,13 @@ const initialState = fromJS({
 	pageSizeBookmark: 10,
 	totalPagesBookmark: 1,
 	activePageBookmark: 1,
+	pageSizeHighlight: 10,
+	totalPagesHighlight: 1,
+	activePageHighlight: 1,
 	chapterForNote: [],
 	listData: [],
 	userNotes: [],
+	userHighlights: [],
 	bookmarkList: [],
 	chapterBookmarks: [],
 	savedTheNote: false,
@@ -45,6 +50,10 @@ const initialState = fromJS({
 
 function notesReducer(state = initialState, action) {
 	switch (action.type) {
+	case LOAD_USER_HIGHLIGHTS:
+		return state
+			.set('totalPagesHighlight', action.totalPages)
+			.set('userHighlights', fromJS(action.highlights));
 	case CLEAR_NOTES_ERROR_MESSAGE:
 		return state
 			.set('errorSavingNote', false)
@@ -72,6 +81,8 @@ function notesReducer(state = initialState, action) {
 		// console.log('Setting page data', action);
 		if (action.params.sectionType === 'notes') {
 			return state.set('activePage', action.params.page);
+		} else if (action.params.sectionType === 'highlights') {
+			return state.set('activePageHighlight', action.params.page);
 		}
 		return state.set('activePageBookmark', action.params.page);
 	case SET_PAGE_SIZE:
@@ -80,6 +91,10 @@ function notesReducer(state = initialState, action) {
 			return state
 				.set('activePage', 1)
 				.set('pageSize', action.params.limit);
+		} else if (action.params.sectionType === 'highlights') {
+			return state
+				.set('activePageHighlight', 1)
+				.set('pageSizeHighlight', action.params.limit);
 		}
 		return state
 			.set('activePage', 1)
