@@ -2,7 +2,7 @@ import 'whatwg-fetch';
 import { takeLatest, call, all, put, fork } from 'redux-saga/effects';
 import request from 'utils/request';
 import some from 'lodash/some';
-import reduce from 'lodash/reduce';
+// import reduce from 'lodash/reduce';
 import get from 'lodash/get';
 // import uniqBy from 'lodash/uniqBy';
 import uniqWith from 'lodash/uniqWith';
@@ -436,7 +436,7 @@ export function* getChapterFromUrl({
 		if (hasFormattedText) {
 			try {
 				// Gets the last fileset id for a formatted text
-				const filesetId = reduce(filesets, (a, c) => (c.type === 'text_format') ? c.id : a, '') || bibleId;
+				const filesetId = filesets.reduce((a, c) => (c.type === 'text_format') ? c.id : a, '') || bibleId;
 				// console.log('before fork');
 				// yield fork(getCopyrightSaga, { filesetId });
 				// console.log('after fork');
@@ -471,7 +471,7 @@ export function* getChapterFromUrl({
 				filesetId = filesets.reduce((a, c) => (c.type === 'text_plain') ? a.concat(c.id) : a, []);
 				// console.log('filesetId', filesetId);
 			} else {
-				filesetId = reduce(filesets, (a, c) => (c.type === 'text_plain') ? c.id : a, '');
+				filesetId = filesets.reduce((a, c) => (c.type === 'text_plain') ? c.id : a, '');
 				// console.log('only has one', filesetId);
 			}
 
@@ -604,7 +604,7 @@ export function* getChapterAudio({ filesets, bookId: currentBook, chapter: curre
 	// Parse filesets |▰╭╮▰|
 	// TODO: Need to handle when there are multiple filesets for the same audio type
 	// console.log('filesets', filesets);
-	const filteredFilesets = reduce(filesets, (a, file) => {
+	const filteredFilesets = filesets.reduce((a, file) => {
 		const newFile = { ...a };
 
 		if ((file.type === 'audio' || file.type === 'audio_drama') && file.id.slice(-4) !== 'DA16') {

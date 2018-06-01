@@ -39,6 +39,20 @@
       align-items:center;
       //min-height: 250px;
 
+      .org-name {
+        margin: 10px 0;
+
+        .link {
+          &:hover {
+            cursor: pointer;
+            opacity: 0.8;
+          }
+          @include css4 {
+            color: var(--notebook-title-date-color);
+          }
+        }
+      }
+
       h3 {
         text-align: center;
       }
