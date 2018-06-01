@@ -880,6 +880,7 @@ export function* getCopyrightSaga({ filesetIds }) {
 	// }
 	const reqUrls = [];
 	// console.log('ids', filesetIds);
+	// Todo: Need a type param to add on to the end of this call so that I will get the copy write type that I need
 	filteredFilesetIds.forEach((set) => reqUrls.push(`https://api.bible.build/bibles/filesets/${set.id}/copyright?key=${process.env.DBP_API_KEY}&v=4`));
 	// uniq(fileteredFilesetIds.filter((f) => !!f)).forEach((id) => reqUrls.push(`https://api.bible.build/bibles/filesets/${id}/copyright?key=${process.env.DBP_API_KEY}&v=4`));
 	// console.log('reqUrls', reqUrls);
@@ -889,13 +890,14 @@ export function* getCopyrightSaga({ filesetIds }) {
 		// console.log(response);
 		// const copyrightArray = response
 		// 	.map((res) => ({ size: res.size, organizations: res.copyright.organizations, copyright: res.copyright.copyright }));
+		// Todo: Once the api is updated remove the set_size_code and set_type_code usages below
 		const copyrights = response.map((cp) => ({
 			message: cp.copyright.copyright,
-			testament: cp.size,
-			type: cp.type,
+			testament: cp.size || cp.set_size_code,
+			type: cp.type || cp.set_type_code,
 			organizations: cp.copyright.organizations.map((org) => {
 				const icon = org.logos.find((l) => l.icon);
-				console.log('icon', icon);
+				// console.log('icon', icon);
 
 				return ({
 					name: org.translations[0].name,
