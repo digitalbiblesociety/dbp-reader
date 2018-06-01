@@ -880,6 +880,7 @@ export function* getCopyrightSaga({ filesetIds }) {
 	// }
 	const reqUrls = [];
 	// console.log('ids', filesetIds);
+	// Todo: Need a type param to add on to the end of this call so that I will get the copy write type that I need
 	filteredFilesetIds.forEach((set) => reqUrls.push(`https://api.bible.build/bibles/filesets/${set.id}/copyright?key=${process.env.DBP_API_KEY}&v=4`));
 	// uniq(fileteredFilesetIds.filter((f) => !!f)).forEach((id) => reqUrls.push(`https://api.bible.build/bibles/filesets/${id}/copyright?key=${process.env.DBP_API_KEY}&v=4`));
 	// console.log('reqUrls', reqUrls);
@@ -895,7 +896,7 @@ export function* getCopyrightSaga({ filesetIds }) {
 			type: cp.type,
 			organizations: cp.copyright.organizations.map((org) => {
 				const icon = org.logos.find((l) => l.icon);
-				console.log('icon', icon);
+				// console.log('icon', icon);
 
 				return ({
 					name: org.translations[0].name,
