@@ -39,16 +39,18 @@ class Information extends React.PureComponent {// eslint-disable-line react/pref
 		this.ref = node;
 	}
 
-	getAudioCopyright = (organizations, testament) => organizations.map((org) =>
-		org.logo ? [
+	getAudioCopyright = (organizations, testament) => organizations.map((org) => (
+		[
 			<h3 key={`${org.name}_audio_${testament}`}><FormattedMessage {...messages.providedByAudio} /></h3>,
-			<a key={`${org.url}_audio_${testament}`} target={'_blank'} href={org.url}><ImageComponent className={org.isIcon ? 'image-icon' : 'image-langscape'} alt={'Copyright owners logo'} src={org.logo.url} /></a>,
-		] : null);
-	getTextCopyright = (organizations, testament) => organizations.map((org) =>
-		org.logo ? [
+			org.logo ? <a key={`${org.url}_audio_${testament}`} target={'_blank'} href={org.url}><ImageComponent className={org.isIcon ? 'image-icon' : 'image-langscape'} alt={'Copyright owners logo'} src={org.logo.url} /></a> : <a className={org.url ? 'org-name link' : 'org-name'} key={`${org.url}_audio_${testament}`} target={'_blank'} href={org.url}>{org.name}</a>,
+		]
+	));
+	getTextCopyright = (organizations, testament) => organizations.map((org) => (
+		[
 			<h3 key={`${org.name}_text_${testament}`}><FormattedMessage {...messages.providedByText} /></h3>,
-			<a key={`${org.url}_text_${testament}`} target={'_blank'} href={org.url}><ImageComponent className={org.isIcon ? 'image-icon' : 'image-langscape'} alt={'Copyright owners logo'} src={org.logo.url} /></a>,
-		] : null);
+			org.logo ? <a key={`${org.url}_text_${testament}`} target={'_blank'} href={org.url}><ImageComponent className={org.isIcon ? 'image-icon' : 'image-langscape'} alt={'Copyright owners logo'} src={org.logo.url} /></a> : <a className={org.url ? 'org-name link' : 'org-name'} key={`${org.url}_text_${testament}`} target={'_blank'} href={org.url}>{org.name}</a>,
+		]
+	));
 // {
 // 	copyrights.map((c) => c.organizations.map((o) => (
 // <div key={`${o.name}_${o.url}`}>
