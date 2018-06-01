@@ -29,6 +29,7 @@ import {
 	ntCodes,
 	otCodes,
 	codes,
+	// sortBySetSize,
 } from './sagaUtils';
 // import { fromJS } from 'immutable';
 // import unionWith from 'lodash/unionWith';
@@ -305,7 +306,7 @@ export function* getBibleFromUrl({ bibleId: oldBibleId, bookId: oldBookId, chapt
 			// console.log('get(books, [0, "book_id"])', get(books, [0, 'book_id']));
 
 			const filesets = response.data.filesets['dbp-dev'].filter((f) => (f.type === 'audio' || f.type === 'audio_drama' || f.type === 'text_plain' || f.type === 'text_format'));
-			// console.log('response.data', response.data);
+			// console.log('responseesponse.data', response.data);
 
 			// calling a generator that will handle the api requests for getting text
 			// console.log('filtered filesets', filesets);
@@ -466,11 +467,12 @@ export function* getChapterFromUrl({
 		try {
 			let filesetId = '';
 			if (filesets.filter((set) => set.type === 'text_plain').length > 1) {
-				// console.log('has more than 1');
-				filesetId = reduce(filesets, (a, c) => (c.size === 'C' && c.type === 'text_plain') ? a.concat(c.id) : a, []);
+				// console.log('has more than 1', filesets.filter((set) => set.type === 'text_plain').length > 1);
+				filesetId = filesets.reduce((a, c) => (c.type === 'text_plain') ? a.concat(c.id) : a, []);
+				// console.log('filesetId', filesetId);
 			} else {
-				// console.log('only has one');
 				filesetId = reduce(filesets, (a, c) => (c.type === 'text_plain') ? c.id : a, '');
+				// console.log('only has one', filesetId);
 			}
 
 			if (Array.isArray(filesetId) && filesetId.length > 1) {
