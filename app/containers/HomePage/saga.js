@@ -890,10 +890,11 @@ export function* getCopyrightSaga({ filesetIds }) {
 		// console.log(response);
 		// const copyrightArray = response
 		// 	.map((res) => ({ size: res.size, organizations: res.copyright.organizations, copyright: res.copyright.copyright }));
+		// Todo: Once the api is updated remove the set_size_code and set_type_code usages below
 		const copyrights = response.map((cp) => ({
 			message: cp.copyright.copyright,
-			testament: cp.size,
-			type: cp.type,
+			testament: cp.size || cp.set_size_code,
+			type: cp.type || cp.set_type_code,
 			organizations: cp.copyright.organizations.map((org) => {
 				const icon = org.logos.find((l) => l.icon);
 				// console.log('icon', icon);
