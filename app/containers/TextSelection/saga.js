@@ -86,15 +86,17 @@ export function* getTexts({ languageISO }) {
 	let requestUrl = '';
 
 	if (languageISO === 'ANY') {
-		requestUrl = `https://api.bible.build/bibles?&bucket=${process.env.DBP_BUCKET_ID}&key=${process.env.DBP_API_KEY}&v=4`;
+		requestUrl = `https://api.bible.build/bibles?&bucket_id=${process.env.DBP_BUCKET_ID}&key=${process.env.DBP_API_KEY}&v=4`;
 	} else {
-		requestUrl = `https://api.bible.build/bibles?&bucket=${process.env.DBP_BUCKET_ID}&key=${process.env.DBP_API_KEY}&language_code=${languageISO}&v=4`;
+		requestUrl = `https://api.bible.build/bibles?&bucket_id=${process.env.DBP_BUCKET_ID}&key=${process.env.DBP_API_KEY}&language_code=${languageISO}&v=4`;
 	}
 
 	try {
 		const response = yield call(request, requestUrl);
 		// Some texts may have plain text in the database but no filesets
 		// This filters out all texts that don't have a fileset
+		// console.log('response', response);
+		/* I am getting a strange response for certain texts that are in the dbp-dev bucket. However I only get the response when I have the bucket specified. So far it is only occurring for the Melpa and Mende bibles.  If you are still working tonight I can send you more details, otherwise I can just leave it until Monday. */
 		const texts = response.data.filter((text) => (text.name && text.language && text.iso && text.abbr) && (text.filesets['dbp-dev'] && text.filesets['dbp-dev'].find((f) => (f.type === 'audio' || f.type === 'audio_drama' || f.type === 'text_plain' || f.type === 'text_format'))));
 		const mappedTexts = texts.map((text) => ({ ...text, filesets: text.filesets['dbp-dev'].filter((f) => (f.type === 'audio' || f.type === 'audio_drama' || f.type === 'text_plain' || f.type === 'text_format')) || [] }));
 		// console.log(texts);

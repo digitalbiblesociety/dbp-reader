@@ -40,6 +40,92 @@ import {
 	GET_CHAPTER_TEXT,
 } from './constants';
 
+const newBibleState = fromJS({
+	books: [],
+	note: {},
+	chapterText: [],
+	audioObjects: [],
+	activeFilesets: [],
+	audioFilesetId: '',
+	plainTextFilesetId: '',
+	formattedTextFilesetId: '',
+	highlights: [],
+	copyrights: {
+		newTestament: {
+			audio: {
+				// message: 'Copyright is either loading or does not exist.',
+				// organizations: [
+				// 	{
+				// 		logo: {
+				// 			url: '',
+				// 		},
+				// 		name: 'name1',
+				// 	},
+				// ],
+			},
+			text: {
+				// message: 'Copyright is either loading or does not exist.',
+				// organizations: [
+				// 	{
+				// 		logo: {
+				// 			url: '',
+				// 		},
+				// 		name: 'name2',
+				// 	},
+				// ],
+			},
+		},
+		oldTestament: {
+			audio: {
+				// message: 'Copyright is either loading or does not exist.',
+				// organizations: [
+				// 	{
+				// 		logo: {
+				// 			url: '',
+				// 		},
+				// 		name: 'name3',
+				// 	},
+				// ],
+			},
+			text: {
+				// message: 'Copyright is either loading or does not exist.',
+				// organizations: [
+				// 	{
+				// 		logo: {
+				// 			url: '',
+				// 		},
+				// 		name: 'name4',
+				// 	},
+				// ],
+			},
+		},
+	},
+	activeChapter: 1,
+	activeBookName: '',
+	activeTextName: '',
+	activeNotesView: 'notes',
+	activeTextId: '',
+	activeBookId: '',
+	loadingBooks: false,
+	selectedText: '',
+	selectedBookName: '',
+	audioSource: '',
+	invalidBibleId: false,
+	hasAudio: false,
+	formattedSource: '',
+	hasTextInDatabase: true,
+	filesetTypes: {},
+	testaments: {},
+	previousAudioPaths: [],
+	previousAudioFilesetId: '',
+	previousAudioSource: '',
+	nextAudioPaths: [],
+	nextAudioFilesetId: '',
+	nextAudioSource: '',
+	audioPaths: [],
+	loadingNewChapterText: true,
+});
+
 const initialState = fromJS({
 	books: [],
 	note: {},
@@ -55,46 +141,50 @@ const initialState = fromJS({
 	copyrights: {
 		newTestament: {
 			audio: {
-				organizations: [
-					{
-						logo: {
-							url: '',
-						},
-						name: 'name1',
-					},
-				],
+				// message: 'Copyright is either loading or does not exist.',
+				// organizations: [
+				// 	{
+				// 		logo: {
+				// 			url: '',
+				// 		},
+				// 		name: 'name1',
+				// 	},
+				// ],
 			},
 			text: {
-				organizations: [
-					{
-						logo: {
-							url: '',
-						},
-						name: 'name2',
-					},
-				],
+				// message: 'Copyright is either loading or does not exist.',
+				// organizations: [
+				// 	{
+				// 		logo: {
+				// 			url: '',
+				// 		},
+				// 		name: 'name2',
+				// 	},
+				// ],
 			},
 		},
 		oldTestament: {
 			audio: {
-				organizations: [
-					{
-						logo: {
-							url: '',
-						},
-						name: 'name3',
-					},
-				],
+				// message: 'Copyright is either loading or does not exist.',
+				// organizations: [
+				// 	{
+				// 		logo: {
+				// 			url: '',
+				// 		},
+				// 		name: 'name3',
+				// 	},
+				// ],
 			},
 			text: {
-				organizations: [
-					{
-						logo: {
-							url: '',
-						},
-						name: 'name4',
-					},
-				],
+				// message: 'Copyright is either loading or does not exist.',
+				// organizations: [
+				// 	{
+				// 		logo: {
+				// 			url: '',
+				// 		},
+				// 		name: 'name4',
+				// 	},
+				// ],
 			},
 		},
 	},
@@ -153,7 +243,7 @@ const initialState = fromJS({
 	autoPlayEnabled: false,
 	loadingBooks: false,
 	selectedText: '',
-	selectedBookName: 'Genesis',
+	selectedBookName: '',
 	audioSource: '',
 	invalidBibleId: false,
 	hasAudio: false,
@@ -324,7 +414,7 @@ function homePageReducer(state = initialState, action) {
 	case 'getchapter':
 		return state.set('loadingNewChapterText', true);
 	case 'getbible':
-		return state.set('loadingNewChapterText', true);
+		return state.map((data, key) => newBibleState.get(key) || data);
 	case 'loadbibleerror':
 		return state
 			.set('invalidBibleId', true)
