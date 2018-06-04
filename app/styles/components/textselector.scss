@@ -306,7 +306,7 @@
 //.version-item-button .svg.inactive {
 //  @include css4{fill:var(--inactive-font-option);};
 //}
-.active-version                    {
+.active-version {
   @include css4{color:var(--active-color-primary);};
 }
 // capture location of the client relative to the scroll container
