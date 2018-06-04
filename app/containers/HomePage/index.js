@@ -668,6 +668,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 			prevAudioSource,
 			plainTextFilesetId,
 			userAgent,
+			textDirection,
 			// chapterText: updatedText,
 		} = this.props.homepage;
 
@@ -788,6 +789,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					audioSource={audioSource}
 					activeBookId={activeBookId}
 					userSettings={userSettings}
+					textDirection={textDirection}
 					activeChapter={activeChapter}
 					invalidBibleId={invalidBibleId}
 					activeBookName={activeBookName}

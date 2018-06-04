@@ -250,6 +250,7 @@ export function* getBibleFromUrl({ bibleId: oldBibleId, bookId: oldBookId, chapt
 			// I probably will want to use 'yield all' for getting the audio and text so they can be run async
 			const bible = response.data;
 			const books = bible.books; // Need to ensure that I have the books here
+			const textDirection = response.data.alphabet && response.data.alphabet.direction;
 			// console.log('books', books);
 			// console.log('response', response);
 
@@ -357,6 +358,7 @@ export function* getBibleFromUrl({ bibleId: oldBibleId, bookId: oldBookId, chapt
 				filesets,
 				name: bible.vname || bible.name,
 				iso: bible.iso,
+				textDirection,
 				languageName: bible.language,
 				books,
 				chapterData,
