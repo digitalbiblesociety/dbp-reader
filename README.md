@@ -4,8 +4,13 @@ The Koinos Reader is a joint project of the [Digital Bible Society](https://dbs.
 and [Faith Comes by Hearing](https://faithcomesbyhearing.com).
 
 ## QuickStart
-
-    npm install; npm start
+- If you do not have Node follow the installation instructions here: [Node.js](https://nodejs.org/en/download/).
+- Clone the repo:
+    - <code>git clone https://dbsdevs@bitbucket.org/dbsdevs/dbp_4_reader.git</code>
+- Once you have successfully installed Node and cloned the repo run the following 
+commands in the root folder of the 
+project: 
+    - <code>npm install && npm start</code>
 
 ## Description
 

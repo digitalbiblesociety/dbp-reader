@@ -4,7 +4,7 @@
   "description": "Bible is website",
   "repository": {
     "type": "git",
-    "url": "git://github.com/react-boilerplate/react-boilerplate.git"
+    "url": "https://dbsdevs@bitbucket.org/dbsdevs/dbp_4_reader.git"
   },
   "engines": {
     "npm": ">=3",
