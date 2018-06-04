@@ -159,6 +159,7 @@
   }
 }
 .checkbox-settings.disabled {
+  opacity: 0.5;
   .switch {
     .slider {
       cursor: default;
