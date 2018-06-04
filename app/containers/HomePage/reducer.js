@@ -260,6 +260,7 @@ const initialState = fromJS({
 	nextAudioSource: '',
 	audioPaths: [],
 	audioPlayerState: JSON.parse(sessionStorage.getItem('bible_is_audio_player_state')) === null ? false : JSON.parse(sessionStorage.getItem('bible_is_audio_player_state')),
+	textDirection: 'ltr',
 });
 
 function homePageReducer(state = initialState, action) {
@@ -367,6 +368,7 @@ function homePageReducer(state = initialState, action) {
 			.set('activeBookName', fromJS(action.activeBookName))
 			.set('invalidBibleId', false)
 			.set('audioPlayerState', action.chapterData.hasAudio)
+			.set('textDirection', action.textDirection)
 			// .set('hasFormattedText', fromJS(action.chapterData.hasFormattedText))
 			// .set('hasTextInDatabase', fromJS(action.chapterData.hasPlainText))
 			// .set('hasAudio', fromJS(action.chapterData.hasAudio))

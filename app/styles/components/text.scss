@@ -10,9 +10,14 @@
     color: var(--application-text-container-color);
     font-size: var(--application-base-font-size);
   }
+
   main {
     padding: 15px 15px 45px 15px;
     margin: 0 auto;
+
+    &.rtl {
+      direction: rtl;
+    }
 
     h1,h2,h3,h4,h5,h6 {
       font-weight: bold;
@@ -192,7 +197,7 @@
 
     .info-button {
       bottom: 166px;
-      z-index: 2;
+      z-index: 5;
     }
   }
 }

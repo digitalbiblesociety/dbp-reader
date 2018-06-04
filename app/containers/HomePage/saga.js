@@ -250,6 +250,7 @@ export function* getBibleFromUrl({ bibleId: oldBibleId, bookId: oldBookId, chapt
 			// I probably will want to use 'yield all' for getting the audio and text so they can be run async
 			const bible = response.data;
 			const books = bible.books; // Need to ensure that I have the books here
+			const textDirection = response.data.alphabet && response.data.alphabet.direction;
 			// console.log('books', books);
 			// console.log('response', response);
 
@@ -357,6 +358,7 @@ export function* getBibleFromUrl({ bibleId: oldBibleId, bookId: oldBookId, chapt
 				filesets,
 				name: bible.vname || bible.name,
 				iso: bible.iso,
+				textDirection,
 				languageName: bible.language,
 				books,
 				chapterData,
@@ -586,11 +588,12 @@ function* tryNext({ urls, index, bookId, chapter }) {
 
 // I think it makes the most sense to start this running from within
 // The getChapterFromUrl function. This may need to be adjusted when
-// RTMP streaming is implemented
+// HLS streaming is implemented
 export function* getChapterAudio({ filesets, bookId: currentBook, chapter: currentChapter, previous = false, next = false, prevBookId, nextBookId, prevChapter, nextChapter }) {
 	let bookId = currentBook;
 	let chapter = currentChapter;
-
+// console.log('{ filesets, bookId: currentBook, chapter: currentChapter, previous = false, next = false, prevBookId, nextBookId, prevChapter, nextChapter }', { filesets, bookId: currentBook, chapter: currentChapter, previous, next, prevBookId, nextBookId, prevChapter, nextChapter });
+// console.trace()
 	if (previous) {
 		bookId = prevBookId;
 		chapter = prevChapter;

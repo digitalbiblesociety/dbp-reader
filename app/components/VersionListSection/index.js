@@ -53,7 +53,7 @@ function VersionListSection({ items }) {
 								<Link
 									to={item.path}
 									key={item.key}
-									onClick={item.clickHandler}
+									onClick={() => item.clickHandler('')}
 								>
 									<h4 className={item.className}>{item.text}</h4>
 								</Link>

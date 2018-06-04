@@ -45,14 +45,16 @@ class VersionList extends React.PureComponent { // eslint-disable-line react/pre
 		// Change the way I figure out if a resource has text or audio
 		// path, key, types, className, text, clickHandler
 		// console.log('filtered bibles', filteredBibles.get(0).get('filesets').valueSeq());
-		const scrubbedBibles = filteredBibles.reduce((acc, bible) => ([...acc, {
-			path: `/${bible.get('abbr').toLowerCase()}/mat/1`,
-			key: `${bible.get('abbr')}${bible.get('date')}`,
-			clickHandler: (audioType) => this.handleVersionListClick(bible, audioType),
-			className: bible.get('abbr') === activeTextId ? 'active-version' : '',
-			text: bible.get('name'),
-			types: bible.get('filesets').reduce((a, c) => ({ ...a, [c.get('type')]: true }), {}),
-		}]), []);
+		const scrubbedBibles = filteredBibles.reduce((acc, bible) =>
+			([...acc, {
+				path: `/${bible.get('abbr').toLowerCase()}/mat/1`,
+				key: `${bible.get('abbr')}${bible.get('date')}`,
+				clickHandler: (audioType) => this.handleVersionListClick(bible, audioType),
+				className: bible.get('abbr') === activeTextId ? 'active-version' : '',
+				text: bible.get('name'),
+				types: bible.get('filesets').reduce((a, c) => ({ ...a, [c.get('type')]: true }), {}),
+			}]), []
+		);
 		// console.log('scrubbed bibles', scrubbedBibles);
 		// When I first get the response from the server with filesets
 		const audioAndText = []; // filteredBibles.reduce();
@@ -135,9 +137,12 @@ class VersionList extends React.PureComponent { // eslint-disable-line react/pre
 		if (bible) {
 			const filesets = bible.get('filesets').filter((f) => f.get('type') !== 'app');
 			// console.log('version list', filesets);
+			// console.log('audioType', audioType);
 
 			if (audioType) {
-				setActiveText({ textId: bible.get('abbr'), textName: bible.get('name'), filesets: filesets.filter((fileset) => (fileset.get('type') === audioType || fileset.get('type') === 'text_plain' || fileset.get('type') === 'text_format')) });
+				// console.log('filesets', filesets);
+				// console.log('filetered sets', filesets.filter((f) => (f.get('type') === audioType || f.get('type') === 'text_plain' || f.get('type') === 'text_format')));
+				setActiveText({ textId: bible.get('abbr'), textName: bible.get('name'), filesets: filesets.filter((f) => (f.get('type') === audioType || f.get('type') === 'text_plain' || f.get('type') === 'text_format')) });
 				toggleTextSelection();
 			} else {
 				setActiveText({ textId: bible.get('abbr'), textName: bible.get('name'), filesets });

@@ -101,6 +101,7 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 		} = this.props.textselection;
 		const {
 			activeTextName,
+			activeTextId,
 		} = this.props.homepageData;
 		const {
 			bibles,
@@ -150,6 +151,7 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 				filterText={filterText}
 				active={versionListActive}
 				activeIsoCode={activeIsoCode}
+				activeTextId={activeTextId}
 				activeTextName={activeTextName}
 				loadingVersions={loadingVersions}
 				setActiveText={this.setActiveTextId}

@@ -361,6 +361,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			audioSource,
 			invalidBibleId,
 		} = this.props;
+		const chapterAlt = initialText[0] && initialText[0].chapter_alt;
 		// Doing it like this may impact performance, but it is probably cleaner
 		// than most other ways of doing it...
 		const formattedSource = initialFormattedSource.main ? {
@@ -478,7 +479,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		}
 
 		if (!formattedSource.main && !readersMode && !oneVersePerLine && Array.isArray(textComponents) && textComponents[0].key !== 'no_text') {
-			textComponents.unshift(<span key={'chapterNumber'} className={'drop-caps'}>{activeChapter}</span>);
+			textComponents.unshift(<span key={'chapterNumber'} className={'drop-caps'}>{chapterAlt || activeChapter}</span>);
 		}
 		// console.log('text components that are about to be mounted', textComponents);
 		// Using parseInt to determine whether or not the verseNumber is a real number or if it is a series of characters
@@ -1059,6 +1060,22 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		return bookId === this.props.activeBookId && chapter === this.props.activeChapter;
 	}
 
+	get classNameForMain() {
+		const {
+			formattedSource,
+			userSettings,
+			textDirection,
+		} = this.props;
+		const readersMode = userSettings.getIn(['toggleOptions', 'readersMode', 'active']);
+		const oneVersePerLine = userSettings.getIn(['toggleOptions', 'oneVersePerLine', 'active']);
+		const justifiedClass = userSettings.getIn(['toggleOptions', 'justifiedText', 'active']) ? 'justify' : '';
+		const isRtl = textDirection === 'rtl' ? 'rtl' : '';
+
+		// formattedSource.main && !readersMode && !oneVersePerLine ? '' : `chapter ${justifiedClass}`
+
+		return formattedSource.main && !readersMode && !oneVersePerLine ? `${isRtl}` : `chapter ${justifiedClass} ${isRtl}`;
+	}
+
 	render() {
 		const {
 			nextChapter,
@@ -1085,14 +1102,16 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		} = this.state;
 		const readersMode = userSettings.getIn(['toggleOptions', 'readersMode', 'active']);
 		const oneVersePerLine = userSettings.getIn(['toggleOptions', 'oneVersePerLine', 'active']);
-		const justifiedClass = userSettings.getIn(['toggleOptions', 'justifiedText', 'active']) ? 'justify' : '';
+		const chapterAlt = text[0] && text[0].chapter_alt;
+		// console.log('chapterAlt', chapterAlt);
+		// const justifiedClass = userSettings.getIn(['toggleOptions', 'justifiedText', 'active']) ? 'justify' : '';
 
 		if (loadingNewChapterText) {
 			return <LoadingSpinner />;
 		}
 
 		return (
-			<div className="text-container">
+			<div className={'text-container'}>
 				<SvgWrapper className={audioPlayerState ? 'icon info-button' : 'icon info-button closed'} svgid={'info'} onClick={() => !informationActive && toggleInformationModal()} />
 				<div onClick={!this.isStartOfBible ? prevChapter : () => {}} className={!this.isStartOfBible ? 'arrow-wrapper' : 'arrow-wrapper disabled'}>
 					{
@@ -1101,10 +1120,10 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 						) : null
 					}
 				</div>
-				<main ref={this.setMainRef} className={formattedSource.main && !readersMode && !oneVersePerLine ? '' : `chapter ${justifiedClass}`}>
+				<main ref={this.setMainRef} className={this.classNameForMain}>
 					{
 						((formattedSource.main && !readersMode && !oneVersePerLine) || (text.length === 0) || (!readersMode && !oneVersePerLine)) ? null : (
-							<div className="active-chapter-title"><h1 className="active-chapter-title">{activeChapter}</h1></div>
+							<div className="active-chapter-title"><h1 className="active-chapter-title">{chapterAlt || activeChapter}</h1></div>
 						)
 					}
 					{this.getTextComponents}
@@ -1172,6 +1191,7 @@ Text.propTypes = {
 	activeBookId: PropTypes.string,
 	audioSource: PropTypes.string,
 	activeBookName: PropTypes.string,
+	textDirection: PropTypes.string,
 };
 
 export default Text;
