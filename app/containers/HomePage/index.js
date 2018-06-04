@@ -115,6 +115,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		// console.log('props location', this.props.location.search.slice(6));
 		// console.log('localStorage.getItem(userSettings_toggleOptions_readersMode_active)', localStorage.getItem('userSettings_toggleOptions_readersMode_active') === false);
 		// console.log('localStorage.getItem(userSettings_toggleOptions_crossReferences_active)', localStorage.getItem('userSettings_toggleOptions_crossReferences_active'));
+		// console.log('params', params);
 
 		if (bibleId && bookId && chapter >= 0) {
 			this.props.dispatch({
@@ -462,6 +463,8 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 		// Below code is for when the same version is selected but the audio type is changed
 		if (!isEqual(nextProps.homepage.activeFilesets, this.props.homepage.activeFilesets) && nextProps.homepage.activeTextId === this.props.homepage.activeTextId) {
 			// do something
+			// console.log('this.props.homepage.activeFilesets', this.props.homepage.activeFilesets);
+			//
 			// console.log('filesets changed', nextProps.homepage.activeFilesets);
 			this.props.dispatch({
 				type: 'getaudio',

@@ -586,11 +586,12 @@ function* tryNext({ urls, index, bookId, chapter }) {
 
 // I think it makes the most sense to start this running from within
 // The getChapterFromUrl function. This may need to be adjusted when
-// RTMP streaming is implemented
+// HLS streaming is implemented
 export function* getChapterAudio({ filesets, bookId: currentBook, chapter: currentChapter, previous = false, next = false, prevBookId, nextBookId, prevChapter, nextChapter }) {
 	let bookId = currentBook;
 	let chapter = currentChapter;
-
+// console.log('{ filesets, bookId: currentBook, chapter: currentChapter, previous = false, next = false, prevBookId, nextBookId, prevChapter, nextChapter }', { filesets, bookId: currentBook, chapter: currentChapter, previous, next, prevBookId, nextBookId, prevChapter, nextChapter });
+// console.trace()
 	if (previous) {
 		bookId = prevBookId;
 		chapter = prevChapter;
