@@ -38,7 +38,7 @@ const selectLanguages = () => createSelector(
 		const activeCountryLanguages = countryMap.getIn([activeCountry, 'languages']);
 
 		if (activeCountryLanguages && activeCountry !== 'ANY') {
-			return languages.filter((language) => activeCountryLanguages.has(language.get('iso'))).toJS();
+			return languages.filter((language) => activeCountryLanguages.includes(language.get('iso'))).toJS();
 		}
 		return languages.toJS();
 	}
