@@ -12,32 +12,64 @@
     color: var(--default-text-color);
   }
 
-  div {
-    margin-top:15px;
-    margin-bottom: 15px;
-    width: 100%;
+  .copyrights-section {
+    //padding: 15px;
+    font-size: 10px;
+    margin: 15px auto;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 90%;
 
-    .cp-header {
-      width: 100%;
-      padding-left: 15px;
-
-      @include css4{
-        background-color: var(--book-dropdown-section-background-color);
+    &:before {
+      content: "";
+      position: absolute;
+      width: 80%;
+      height: 1px;
+      left: 10%;
+      @include css4 {
+        background-color: var(--before-after-border-color);
+        //border-top: 1px solid var(--before-after-border-color);
       }
-      h1 {
-        font-size: 20px;
+    }
+
+    .nt-copyright, .ot-copyright {
+      display: flex;
+      //flex-direction: row;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      width:100%;
+
+      .cp-header {
+        padding-left: 15px;
+
+        @include css4{
+          background-color: var(--book-dropdown-section-background-color);
+        }
+        h1 {
+          font-size: 20px;
 
         //text-decoration: underline;
       }
     }
 
-    .cp-section {
-      padding: 0 25px;
-      display:flex;
-      flex-direction: column;
-      justify-content: space-between;
-      align-items:center;
-      //min-height: 250px;
+      //.nt-copyright {
+      //}
+      //
+      //.ot-copyright {
+      //}
+
+      .cp-section {
+        display:flex;
+        flex-direction: column;
+        //justify-content: space-between;
+        align-items:center;
+        //min-height: 250px;
+        //min-width: 280px;
+        //max-width: 500px;
+        margin-top: 15px;
+        padding: 0 20px;
 
       .org-name {
         margin: 10px 0;
