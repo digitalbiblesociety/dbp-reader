@@ -1,5 +1,12 @@
 // Leaving unused class here because the copyright component
 // will need more styling once we have all the correct data
+.information {
+  .link {
+    color:$sketch-document-color-light-blue;
+    font-weight:200;
+    margin-left: 15px;
+    cursor:pointer;
+  }
   .copyrights-section {
     //padding: 15px;
     font-size: 10px;
@@ -27,81 +34,84 @@
       justify-content: center;
       align-items: center;
       flex-wrap: wrap;
-      width:100%;
+      width: 100%;
 
       .cp-header {
         padding-left: 15px;
 
-        @include css4{
+        @include css4 {
           background-color: var(--book-dropdown-section-background-color);
         }
         h1 {
           font-size: 20px;
 
-        //text-decoration: underline;
-      }
-    }
-
-      //.nt-copyright {
-      //}
-      //
-      //.ot-copyright {
-      //}
-
-      .cp-section {
-        display:flex;
-        flex-direction: column;
-        //justify-content: space-between;
-        align-items:center;
-        //min-height: 250px;
-        //min-width: 280px;
-        //max-width: 500px;
-        margin-top: 15px;
-        padding: 0 20px;
-
-      .org-name {
-        margin: 10px 0;
-
-        .link {
-          &:hover {
-            cursor: pointer;
-            opacity: 0.8;
-          }
           @include css4 {
-            color: var(--notebook-title-date-color);
+            background-color: var(--book-dropdown-section-background-color);
+          }
+          h1 {
+            font-size: 20px;
+
+            //text-decoration: underline;
           }
         }
-      }
 
-      h3 {
-        text-align: center;
-      }
+        .cp-section {
+          display: flex;
+          flex-direction: column;
+          //justify-content: space-between;
+          align-items: center;
+          //min-height: 250px;
+          //min-width: 280px;
+          //max-width: 500px;
+          margin-top: 15px;
+          padding: 0 20px;
 
-      img {
-        margin: 10px 0;
-        height: 109px;
+          .org-name {
+            margin: 10px 0;
+
+            .link {
+              &:hover {
+                cursor: pointer;
+                opacity: 0.8;
+              }
+              @include css4 {
+                color: var(--notebook-title-date-color);
+              }
+            }
+          }
+
+          h3 {
+            text-align: center;
+          }
+
+          img {
+            margin: 10px 0;
+            height: 35px;
+            //height: 109px;
+          }
+        }
       }
     }
   }
-}
 
-@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
-  .copyrights-section {
-    div {
-      .cp-section {
-        text-align: center;
-
-        p {
-          max-width: 100%;
-          white-space: normal;
-        }
-
-        a {
+  @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+    .copyrights-section {
+      div {
+        .cp-section {
           text-align: center;
-        }
 
-        img {
-          margin: 10px auto;
+          p {
+            max-width: 100%;
+            white-space: normal;
+          }
+
+          a {
+            text-align: center;
+          }
+
+          img {
+            margin: 10px auto;
+          }
         }
       }
     }

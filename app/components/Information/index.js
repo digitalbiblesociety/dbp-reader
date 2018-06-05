@@ -6,39 +6,15 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import SvgWrapper from 'components/SvgWrapper';
+// import SvgWrapper from 'components/SvgWrapper';
 import ImageComponent from 'components/ImageComponent';
-import CloseMenuFunctions from 'utils/closeMenuFunctions';
+// import CloseMenuFunctions from 'utils/closeMenuFunctions';
 import { FormattedMessage } from 'react-intl';
 import get from 'lodash/get';
 import messages from './messages';
 
 class Information extends React.PureComponent {
 	// eslint-disable-line react/prefer-stateless-function
-	componentDidMount() {
-		this.closeMenuController = new CloseMenuFunctions(
-			this.ref,
-			this.props.toggleInformationModal,
-		);
-		this.closeMenuController.onMenuMount();
-		this.props.getCopyrights({
-			filesetIds: this.props.activeFilesets,
-			// filesetIds: [
-			// 	this.props.audioFilesetId,
-			// 	this.props.plainTextFilesetId,
-			// 	this.props.formattedTextFilesetId,
-			// ],
-			// filesetIds: [
-			// 	'ENGNIVC2DA',
-			// 	'ENGNIV',
-			// ],
-		});
-	}
-
-	componentWillUnmount() {
-		this.closeMenuController.onMenuUnmount();
-	}
-
 	setRef = (node) => {
 		this.ref = node;
 	};
@@ -108,30 +84,17 @@ class Information extends React.PureComponent {
 	// )))
 	// }
 	render() {
-		const { copyrights, toggleInformationModal } = this.props;
+		const {
+			copyrights,
+			// toggleInformationModal,
+		} = this.props;
 
 		// console.log('copyrights information render', copyrights);
 		return (
-			<aside ref={this.setRef} className="profile">
-				<header>
-					<SvgWrapper
-						style={{ marginTop: '5px' }}
-						className={'icon'}
-						svgid={'info'}
-						onClick={() => toggleInformationModal()}
-					/>
-					<h1 className="section-title">Copyright Information</h1>
-					<SvgWrapper
-						className={'icon'}
-						svgid={'arrow_left'}
-						onClick={() => toggleInformationModal()}
-					/>
-				</header>
+			<section ref={this.setRef} className="information">
 				<div className="copyrights-section">
 					<div className={'ot-copyright'}>
-						<div className={'cp-header'}>
-							<h1>Old Testament</h1>
-						</div>
+						{/* <div className={'cp-header'}><h1>Old Testament</h1></div> */}
 						{get(copyrights, ['oldTestament', 'audio', 'organizations']) ||
 						get(copyrights, ['oldTestament', 'audio', 'message']) ? (
 							<div className={'cp-section'}>
@@ -170,9 +133,7 @@ class Information extends React.PureComponent {
 						) : null}
 					</div>
 					<div className={'nt-copyright'}>
-						<div className={'cp-header'}>
-							<h1>New Testament</h1>
-						</div>
+						{/* <div className={'cp-header'}><h1>New Testament</h1></div> */}
 						{get(copyrights, ['newTestament', 'audio', 'organizations']) ||
 						get(copyrights, ['newTestament', 'audio', 'message']) ? (
 							<div className={'cp-section'}>
@@ -211,19 +172,19 @@ class Information extends React.PureComponent {
 						) : null}
 					</div>
 				</div>
-			</aside>
+			</section>
 		);
 	}
 }
 
 Information.propTypes = {
-	toggleInformationModal: PropTypes.func,
-	getCopyrights: PropTypes.func,
+	// toggleInformationModal: PropTypes.func,
+	// getCopyrights: PropTypes.func,
 	copyrights: PropTypes.object,
 	// audioFilesetId: PropTypes.string,
 	// plainTextFilesetId: PropTypes.string,
 	// formattedTextFilesetId: PropTypes.string,
-	activeFilesets: PropTypes.array,
+	// activeFilesets: PropTypes.array,
 };
 
 export default Information;

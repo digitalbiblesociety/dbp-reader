@@ -390,7 +390,7 @@ export function* getBibleFromUrl({
 					f.id.slice(-4) !== 'DA16',
 			);
 			// console.log('responseesponse.data', response.data);
-
+			yield fork(getCopyrightSaga, { filesetIds: filesets });
 			// calling a generator that will handle the api requests for getting text
 			// console.log('filtered filesets', filesets);
 			let nextBook = { chapters: [] };
@@ -1238,7 +1238,7 @@ export function* getCopyrightSaga({ filesetIds }) {
 		const copyrightObject = {
 			newTestament: {
 				audio: cAudio || ntAudio,
-				text: (cText || ntText),
+				text: cText || ntText,
 			},
 			oldTestament: {
 				audio: !(cAudio || ntAudio) && (cAudio || otAudio),
