@@ -16,13 +16,18 @@
     overflow-x: hidden;
     max-height: 90%;
 
-    div {
+    .nt-copyright, .ot-copyright {
       margin-top: 10px;
       margin-bottom: 10px;
-      width: 100%;
+      display: flex;
+      //flex-direction: row;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      width:100%;
 
       .cp-header {
-        width: 100%;
         padding-left: 15px;
 
         @include css4{
@@ -35,13 +40,21 @@
         }
       }
 
+      //.nt-copyright {
+      //}
+      //
+      //.ot-copyright {
+      //}
+
       .cp-section {
-        padding: 0 25px;
         display:flex;
         flex-direction: column;
-        justify-content: space-between;
+        //justify-content: space-between;
         align-items:center;
         //min-height: 250px;
+        //min-width: 280px;
+        //max-width: 500px;
+        padding: 0 20px;
 
         .org-name {
           margin: 10px 0;
