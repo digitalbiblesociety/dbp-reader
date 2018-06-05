@@ -74,10 +74,27 @@ export function* deleteHighlights({ ids, userId, bible, book, chapter }) {
 
 export function* initApplication(props) {
 	const languageISO = props.languageISO;
+	// yield fork(getIpAddress);
 	// Forking each of these sagas here on the init of the application so that they all run in parallel
 	yield fork(getCountries);
 	yield fork(getLanguages);
 	yield fork(getTexts, { languageISO });
+}
+
+export function* getIpAddress() {
+	try {
+		const response = yield call(request, 'https://api.ipify.org?format=json');
+
+		if (response) {
+			// console.log('response', response);
+			// const location = yield call(request, `https://api.bible.build/users/geolocate?v=4&key=${process.env.DBP_API_KEY}&ip_address=${response.ip}`);
+			// console.log('location', location);
+		}
+	} catch (err) {
+		if (process.env.NODE_ENV === 'development') {
+			console.log('err', err); // eslint-disable-line no-console
+		}
+	}
 }
 
 export function* addBookmark(props) {
