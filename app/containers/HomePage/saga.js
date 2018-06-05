@@ -323,7 +323,7 @@ export function* getBibleFromUrl({ bibleId: oldBibleId, bookId: oldBookId, chapt
 			// console.log('hasMatt', hasMatt);
 			// console.log('get(books, [0, "book_id"])', get(books, [0, 'book_id']));
 
-			const filesets = response.data.filesets['dbp-dev'].filter((f) => (f.type === 'audio' || f.type === 'audio_drama' || f.type === 'text_plain' || f.type === 'text_format'));
+			const filesets = response.data.filesets['dbp-dev'].filter((f) => (f.type === 'audio' || f.type === 'audio_drama' || f.type === 'text_plain' || f.type === 'text_format') && f.id.slice(-4) !== 'DA16');
 			// console.log('responseesponse.data', response.data);
 
 			// calling a generator that will handle the api requests for getting text
@@ -880,32 +880,11 @@ export function* getChapterAudio({ filesets, bookId: currentBook, chapter: curre
 
 export function* getCopyrightSaga({ filesetIds }) {
 	// Todo: Try to optimize at least a little bit
-	// console.log('In the fork');
-	// console.log('uniq codes', uniqWith(filesetIds.filter((f) => codes[f.type] && codes[f.size]), (a, b) => a.type === b.type || (a.type.includes('audio_drama') && b.type.includes('audio'))));
-	// const typesAlreadyPushed = {};
-	// const filteredFilesetIds = filesetIds.reduce((a, c) => {
-	// 	if (!typesAlreadyPushed[c.type]) {
-	// 		typesAlreadyPushed[c.type] = true;
-	// 		return a.concat({ id: c.id, size: c.size, type: c.type });
-	// 	}
-	// 	return a;
-	// }, []);
-	// console.log('filesetIds', filesetIds);
 	const filteredFilesetIds = uniqWith(filesetIds.filter((f) => codes[f.type] && codes[f.size]), (a, b) => a.type === b.type && a.size === b.size);
-	// console.log('filteredFilesetIds', filteredFilesetIds);
-	// if (filteredFilesetIds.includes((i) => i.type === 'audio') && filteredFilesetIds.includes((i) => i.type === 'audio_drama')) {
-	// 	// Remove one of the ids
-	// }
-	//
-	// if (filteredFilesetIds.includes((i) => i.type === 'text_plain') && filteredFilesetIds.includes((i) => i.type === 'text_format')) {
-	// 	// Remove one of the ids
-	// }
 	const reqUrls = [];
-	// console.log('ids', filesetIds);
-	// Todo: Need a type param to add on to the end of this call so that I will get the copy write type that I need
+
+	// Todo: Need a type param to add on to the end of this call so that I will get the copyright type that I need
 	filteredFilesetIds.forEach((set) => reqUrls.push(`https://api.bible.build/bibles/filesets/${set.id}/copyright?key=${process.env.DBP_API_KEY}&v=4`));
-	// uniq(fileteredFilesetIds.filter((f) => !!f)).forEach((id) => reqUrls.push(`https://api.bible.build/bibles/filesets/${id}/copyright?key=${process.env.DBP_API_KEY}&v=4`));
-	// console.log('reqUrls', reqUrls);
 
 	try {
 		const response = yield all(reqUrls.map((url) => call(request, url)));
@@ -913,20 +892,27 @@ export function* getCopyrightSaga({ filesetIds }) {
 		// const copyrightArray = response
 		// 	.map((res) => ({ size: res.size, organizations: res.copyright.organizations, copyright: res.copyright.copyright }));
 		// Todo: Once the api is updated remove the set_size_code and set_type_code usages below
+		// Takes the response and turns it into an array that is more easily used and that doesn't contain unnecessary fields
 		const copyrights = response.map((cp) => ({
 			message: cp.copyright.copyright,
 			testament: cp.size || cp.set_size_code,
 			type: cp.type || cp.set_type_code,
 			organizations: cp.copyright.organizations.map((org) => {
 				const icon = org.logos.find((l) => l.icon);
-				// console.log('icon', icon);
-
-				return ({
-					name: org.translations[0].name,
-					logo: icon || org.logos[0],
-					isIcon: icon === undefined ? 0 : 1,
-					url: org.url_website,
-				});
+				if (org.logos.length && org.translations.length && org.url_website) {
+					return {
+						name: org.translations[0].name,
+						logo: icon || org.logos[0],
+						isIcon: icon === undefined ? 0 : 1,
+						url: org.url_website,
+					};
+				}
+				return {
+					name: '',
+					logo: '',
+					isIcon: 0,
+					url: '',
+				};
 			}),
 		}));
 		// console.log('copyright response', copyrights);
