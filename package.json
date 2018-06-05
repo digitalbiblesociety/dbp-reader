@@ -152,6 +152,7 @@
       "no-confusing-arrow": 0,
       "no-console": 1,
       "no-use-before-define": 0,
+      "no-mixed-spaces-and-tabs": ["warn", "smart-tabs"],
       "prefer-template": 2,
       "react/forbid-prop-types": 0,
       "react/jsx-first-prop-new-line": [
