@@ -1,8 +1,8 @@
 /**
-*
-* ContextPortal
-*
-*/
+ *
+ * ContextPortal
+ *
+ */
 
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -29,10 +29,13 @@ class ContextPortal extends React.PureComponent {
 		highlightOpen: false,
 		openPopup: false,
 		popupCoords: { x: 0, y: 0 },
-	}
+	};
 
 	componentDidMount() {
-		this.closeMenuController = new CloseMenuFunctions(this.componentRef, this.props.closeContextMenu);
+		this.closeMenuController = new CloseMenuFunctions(
+			this.componentRef,
+			this.props.closeContextMenu,
+		);
 		this.closeMenuController.onMenuMount();
 	}
 
@@ -42,7 +45,7 @@ class ContextPortal extends React.PureComponent {
 
 	setComponentRef = (el) => {
 		this.componentRef = el;
-	}
+	};
 
 	handleNoteClick = (e) => {
 		if (!this.props.notesActive) {
@@ -58,12 +61,18 @@ class ContextPortal extends React.PureComponent {
 			// Todo: Function chains like this should be promisified so they will return in the expected order
 			this.props.setActiveNotesView('bookmarks');
 			this.props.toggleNotesModal();
-			this.props.setActiveNote({ bookmark: true, coords: { x: e.clientX, y: e.clientY } });
+			this.props.setActiveNote({
+				bookmark: true,
+				coords: { x: e.clientX, y: e.clientY },
+			});
 			this.props.handleAddBookmark();
 			this.props.closeContextMenu();
 		} else {
 			this.props.setActiveNotesView('bookmarks');
-			this.props.setActiveNote({ bookmark: true, coords: { x: e.clientX, y: e.clientY } });
+			this.props.setActiveNote({
+				bookmark: true,
+				coords: { x: e.clientX, y: e.clientY },
+			});
 			this.props.closeContextMenu();
 		}
 	};
@@ -71,17 +80,20 @@ class ContextPortal extends React.PureComponent {
 	handleHighlightClick = ({ color, popupCoords }) => {
 		// toggle the colors sub menu
 		this.props.addHighlight({ color, popupCoords });
-	}
+	};
 
 	handleCopy = (e) => {
 		// console.log('before setting clipboard data');
 		e.clipboardData.setData('text/plain', window.location.href);
 		// console.log('clipboard data', e.clipboardData);
 		e.preventDefault();
-	}
+	};
 
 	handleMouseEnter = (e) => {
-		this.clonedRange = window.getSelection().getRangeAt(0).cloneRange();
+		this.clonedRange = window
+			.getSelection()
+			.getRangeAt(0)
+			.cloneRange();
 		// console.log('mouse entered', e.target.id);
 		if (e.target.id === 'copy-button') {
 			// handle the button being the target
@@ -101,7 +113,7 @@ class ContextPortal extends React.PureComponent {
 			textBox.select();
 			// console.log('input when mouse entered copy', textBox);
 		}
-	}
+	};
 
 	handleMouseLeave = (e) => {
 		// console.log('mouse left', e.target.id);
@@ -124,7 +136,7 @@ class ContextPortal extends React.PureComponent {
 		// Doing this so that if the user accidentally hovers over the copy link they won't have to reselect the text
 		window.getSelection().removeAllRanges();
 		window.getSelection().addRange(this.clonedRange);
-	}
+	};
 
 	copyLinkToClipboard = (e) => {
 		const coords = { x: e.clientX, y: e.clientY };
@@ -134,12 +146,12 @@ class ContextPortal extends React.PureComponent {
 		document.addEventListener('copy', this.handleCopy);
 		document.execCommand('copy');
 		document.removeEventListener('copy', this.handleCopy);
-	}
+	};
 
 	toggleHighlightColors = (e) => {
 		e.preventDefault();
 		this.setState({ highlightOpen: !this.state.highlightOpen });
-	}
+	};
 
 	render() {
 		const {
@@ -155,50 +167,140 @@ class ContextPortal extends React.PureComponent {
 		} = this.props;
 
 		const component = (
-			<div style={{ left: `${coordinates.x}px`, top: `${coordinates.y}px` }} ref={this.setComponentRef} className={'context-menu shadow'}>
+			<div
+				style={{ left: `${coordinates.x}px`, top: `${coordinates.y}px` }}
+				ref={this.setComponentRef}
+				className={'context-menu shadow'}
+			>
 				<div className={'menu-row'}>
-					<span role={'button'} tabIndex={0} className={'menu-item normal'} title={'Add a note'} onClick={this.handleNoteClick}>
+					<span
+						role={'button'}
+						tabIndex={0}
+						className={'menu-item normal'}
+						title={'Add a note'}
+						onClick={this.handleNoteClick}
+					>
 						<SvgWrapper className={'icon'} svgid="notes" />
 						<span className={'item-text'}>Notes</span>
 					</span>
-					<span role={'button'} tabIndex={0} className={this.state.highlightOpen ? 'menu-item active' : 'menu-item normal'} title={'Add a highlight'} onClick={this.toggleHighlightColors}>
+					<span
+						role={'button'}
+						tabIndex={0}
+						className={
+							this.state.highlightOpen ? 'menu-item active' : 'menu-item normal'
+						}
+						title={'Add a highlight'}
+						onClick={this.toggleHighlightColors}
+					>
 						<SvgWrapper className={'icon'} svgid="highlight" />
 						<span className={'item-text'}>Highlight</span>
-						<div className={this.state.highlightOpen ? 'highlight-colors active' : 'highlight-colors'}>
+						<div
+							className={
+								this.state.highlightOpen
+									? 'highlight-colors active'
+									: 'highlight-colors'
+							}
+						>
 							<HighlightColors addHighlight={this.handleHighlightClick} />
 						</div>
 					</span>
-					<span role={'button'} tabIndex={0} className={'menu-item normal'} title={'Add a bookmark'} onClick={this.handleBookmarkClick}>
+					<span
+						role={'button'}
+						tabIndex={0}
+						className={'menu-item normal'}
+						title={'Add a bookmark'}
+						onClick={this.handleBookmarkClick}
+					>
 						<SvgWrapper className={'icon'} svgid="bookmark" />
 						<span className={'item-text'}>Bookmark</span>
 					</span>
-					<EmailShareButton className={'menu-item normal'} onShareWindowClose={closeContextMenu} subject={document.title} body={`"${window.getSelection().toString()}"\n\nTo listen to the audio click here: ${window.location.href}`} url={window.location.href}>
+					<EmailShareButton
+						className={'menu-item normal'}
+						onShareWindowClose={closeContextMenu}
+						subject={document.title}
+						body={`"${window
+							.getSelection()
+							.toString()}"\n\nTo listen to the audio click here: ${
+							window.location.href
+						}`}
+						url={window.location.href}
+					>
 						<SvgWrapper className={'icon'} svgid="e-mail" />
 						<span className={'item-text'}>E-mail</span>
 					</EmailShareButton>
 				</div>
 				<div className={'menu-row'}>
-					<FacebookShareButton onShareWindowClose={closeContextMenu} className="menu-item social facebook fb-share-button" quote={`"${window.getSelection().toString()}"`} url={window.location.href}>
+					<FacebookShareButton
+						onShareWindowClose={closeContextMenu}
+						className="menu-item social facebook fb-share-button"
+						quote={`"${window.getSelection().toString()}"`}
+						url={window.location.href}
+					>
 						<SvgWrapper className={'icon'} svgid="facebook" />
 					</FacebookShareButton>
-					<GooglePlusShareButton onShareWindowClose={closeContextMenu} className={'menu-item social google'} url={window.location.href}>
+					<GooglePlusShareButton
+						onShareWindowClose={closeContextMenu}
+						className={'menu-item social google'}
+						url={window.location.href}
+					>
 						<SvgWrapper className={'icon'} svgid="google" />
 					</GooglePlusShareButton>
-					<TwitterShareButton onShareWindowClose={closeContextMenu} className={'menu-item social twitter'} title={document.title} hashtags={[`${document.title.split('|')[0].replace(/\s/g, '')}`]} url={window.location.href}>
+					<TwitterShareButton
+						onShareWindowClose={closeContextMenu}
+						className={'menu-item social twitter'}
+						title={document.title}
+						hashtags={[`${document.title.split('|')[0].replace(/\s/g, '')}`]}
+						url={window.location.href}
+					>
 						<SvgWrapper className={'icon'} svgid="twitter" />
 					</TwitterShareButton>
-					<div role={'button'} tabIndex={0} className={'menu-item social like-button facebook'} title={'Like on Facebook'} onClick={addFacebookLike}>
-						<span className={'share-count'}><FacebookShareCount url={window.location.href} /></span>
-						<span className={'like-thumb'}><SvgWrapper height={'24px'} width={'24px'} svgid="like_one-color" /> Like</span>
+					<div
+						role={'button'}
+						tabIndex={0}
+						className={'menu-item social like-button facebook'}
+						title={'Like on Facebook'}
+						onClick={addFacebookLike}
+					>
+						<span className={'share-count'}>
+							<FacebookShareCount url={window.location.href} />
+						</span>
+						<span className={'like-thumb'}>
+							<SvgWrapper
+								height={'24px'}
+								width={'24px'}
+								svgid="like_one-color"
+							/>{' '}
+							Like
+						</span>
 					</div>
 				</div>
-				<div id={'copy-container'} role={'button'} tabIndex={0} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} onClick={this.copyLinkToClipboard} className={'menu-row'} title={'Copy link to page'}>
-					<input readOnly id={'link-to-copy'} className={'copy-link'} value={window.location.href} />
-					<span id={'copy-button'} className={'copy-button'}>Copy</span>
+				<div
+					id={'copy-container'}
+					role={'button'}
+					tabIndex={0}
+					onMouseEnter={this.handleMouseEnter}
+					onMouseLeave={this.handleMouseLeave}
+					onClick={this.copyLinkToClipboard}
+					className={'menu-row'}
+					title={'Copy link to page'}
+				>
+					<input
+						readOnly
+						id={'link-to-copy'}
+						className={'copy-link'}
+						value={window.location.href}
+					/>
+					<span id={'copy-button'} className={'copy-button'}>
+						Copy
+					</span>
 				</div>
-				{
-					this.state.openPopup ? <PopupMessage message={'Link Copied!'} x={this.state.coords.x} y={this.state.coords.y} /> : null
-				}
+				{this.state.openPopup ? (
+					<PopupMessage
+						message={'Link Copied!'}
+						x={this.state.coords.x}
+						y={this.state.coords.y}
+					/>
+				) : null}
 			</div>
 		);
 
