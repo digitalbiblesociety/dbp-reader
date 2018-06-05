@@ -325,7 +325,7 @@ export function* getBibleFromUrl({ bibleId: oldBibleId, bookId: oldBookId, chapt
 
 			const filesets = response.data.filesets['dbp-dev'].filter((f) => (f.type === 'audio' || f.type === 'audio_drama' || f.type === 'text_plain' || f.type === 'text_format'));
 			// console.log('responseesponse.data', response.data);
-			yield fork(getCopyrightSaga, { filesetIds: filesets });
+
 			// calling a generator that will handle the api requests for getting text
 			// console.log('filtered filesets', filesets);
 			let nextBook = { chapters: [] };

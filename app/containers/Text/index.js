@@ -6,7 +6,6 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import Information from 'components/Information';
 import SvgWrapper from 'components/SvgWrapper';
 import ContextPortal from 'components/ContextPortal';
 import FootnotePortal from 'components/FootnotePortal';
@@ -1091,14 +1090,9 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			userSettings,
 			verseNumber,
 			goToFullChapter,
-			// toggleInformationModal,
-			// informationActive,
-			// audioPlayerState,
-			copyrights,
-			activeFilesets,
-			audioFilesetId,
-			plainTextFilesetId,
-			formattedTextFilesetId,
+			toggleInformationModal,
+			informationActive,
+			audioPlayerState,
 		} = this.props;
 		const {
 			coords,
@@ -1118,6 +1112,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 
 		return (
 			<div className={'text-container'}>
+				<SvgWrapper className={audioPlayerState ? 'icon info-button' : 'icon info-button closed'} svgid={'info'} onClick={() => !informationActive && toggleInformationModal()} />
 				<div onClick={!this.isStartOfBible ? prevChapter : () => {}} className={!this.isStartOfBible ? 'arrow-wrapper' : 'arrow-wrapper disabled'}>
 					{
 						!this.isStartOfBible ? (
@@ -1139,13 +1134,6 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 							</div>
 						) : null
 					}
-					<Information
-						copyrights={copyrights}
-						activeFilesets={activeFilesets}
-						audioFilesetId={audioFilesetId}
-						plainTextFilesetId={plainTextFilesetId}
-						formattedTextFilesetId={formattedTextFilesetId}
-					/>
 				</main>
 				<div onClick={!this.isEndOfBible ? nextChapter : () => {}} className={!this.isEndOfBible ? 'arrow-wrapper' : 'arrow-wrapper disabled'}>
 					{
@@ -1187,12 +1175,12 @@ Text.propTypes = {
 	deleteHighlights: PropTypes.func,
 	toggleNotesModal: PropTypes.func,
 	setActiveNotesView: PropTypes.func,
-	// toggleInformationModal: PropTypes.func,
+	toggleInformationModal: PropTypes.func,
 	activeChapter: PropTypes.number,
 	notesActive: PropTypes.bool,
 	invalidBibleId: PropTypes.bool,
-	// audioPlayerState: PropTypes.bool,
-	// informationActive: PropTypes.bool,
+	audioPlayerState: PropTypes.bool,
+	informationActive: PropTypes.bool,
 	userAuthenticated: PropTypes.bool,
 	loadingNewChapterText: PropTypes.bool,
 	formattedSource: PropTypes.object,
@@ -1204,12 +1192,6 @@ Text.propTypes = {
 	audioSource: PropTypes.string,
 	activeBookName: PropTypes.string,
 	textDirection: PropTypes.string,
-	copyrights: PropTypes.object,
-	activeFilesets: PropTypes.object,
-	audioFilesetId: PropTypes.string,
-	plainTextFilesetId: PropTypes.string,
-	formattedTextFilesetId: PropTypes.string,
-	// getCopyrights: PropTypes.func,
 };
 
 export default Text;
