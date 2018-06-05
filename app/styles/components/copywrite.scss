@@ -1,89 +1,96 @@
 // Leaving unused class here because the copyright component
 // will need more styling once we have all the correct data
-.copyrights-section {
-  //padding: 15px;
-  margin-top:5px;
-  overflow-y: auto;
-  overflow-x: hidden;
-  max-height: 90%;
-  width: 320px;
-
-  @include css4 {
-    color: var(--default-text-color);
+.information {
+  .link {
+    color:$sketch-document-color-light-blue;
+    font-weight:200;
+    margin-left: 15px;
+    cursor:pointer;
   }
 
-  div {
-    margin-top:15px;
-    margin-bottom: 15px;
-    width: 100%;
-
-    .cp-header {
-      width: 100%;
-      padding-left: 15px;
-
-      @include css4{
-        background-color: var(--book-dropdown-section-background-color);
-      }
-      h1 {
-        font-size: 20px;
-
-        //text-decoration: underline;
-      }
-    }
-
-    .cp-section {
-      padding: 0 25px;
-      display:flex;
-      flex-direction: column;
-      justify-content: space-between;
-      align-items:center;
-      //min-height: 250px;
-
-      .org-name {
-        margin: 10px 0;
-
-        .link {
-          &:hover {
-            cursor: pointer;
-            opacity: 0.8;
-          }
-          @include css4 {
-            color: var(--notebook-title-date-color);
-          }
-        }
-      }
-
-      h3 {
-        text-align: center;
-      }
-
-      img {
-        margin: 10px 0;
-        height: 109px;
-      }
-    }
-  }
-}
-
-@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
   .copyrights-section {
-    div {
-      .cp-section {
-        text-align: center;
+    //padding: 15px;
+    font-size: 10px;
+    margin: 5px auto;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 90%;
 
-        p {
-          max-width: 100%;
-          white-space: normal;
+    div {
+      margin-top: 10px;
+      margin-bottom: 10px;
+      width: 100%;
+
+      .cp-header {
+        width: 100%;
+        padding-left: 15px;
+
+        @include css4{
+          background-color: var(--book-dropdown-section-background-color);
+        }
+        h1 {
+          font-size: 20px;
+
+          //text-decoration: underline;
+        }
+      }
+
+      .cp-section {
+        padding: 0 25px;
+        display:flex;
+        //flex-direction: column;
+        justify-content: space-between;
+        align-items:center;
+        //min-height: 250px;
+
+        .org-name {
+          margin: 10px 0;
+
+          .link {
+            &:hover {
+              cursor: pointer;
+              opacity: 0.8;
+            }
+            @include css4 {
+              color: var(--notebook-title-date-color);
+            }
+          }
         }
 
-        a {
+        h3 {
           text-align: center;
         }
 
         img {
-          margin: 10px auto;
+          margin: 10px 0;
+          height: 35px;
+          //height: 109px;
         }
       }
     }
   }
+
+  @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+    .copyrights-section {
+      div {
+        .cp-section {
+          text-align: center;
+
+          p {
+            max-width: 100%;
+            white-space: normal;
+          }
+
+          a {
+            text-align: center;
+          }
+
+          img {
+            margin: 10px auto;
+          }
+        }
+      }
+    }
+  }
+
 }

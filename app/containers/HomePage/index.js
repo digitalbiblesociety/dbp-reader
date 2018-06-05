@@ -33,7 +33,6 @@ import Profile from 'containers/Profile';
 import Notes from 'containers/Notes';
 import Text from 'containers/Text';
 import NavigationBar from 'components/NavigationBar';
-import Information from 'components/Information';
 import Footer from 'components/Footer';
 import SearchContainer from 'containers/SearchContainer';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
@@ -754,22 +753,6 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 						) : null
 					}
 					{
-						isInformationModalActive ? (
-							<FadeTransition classNames="slide-from-left" in={isInformationModalActive}>
-								<Information
-									active={isInformationModalActive}
-									copyrights={copyrights}
-									getCopyrights={this.getCopyrights}
-									toggleInformationModal={this.toggleInformationModal}
-									audioFilesetId={audioFilesetId}
-									formattedTextFilesetId={formattedTextFilesetId}
-									plainTextFilesetId={plainTextFilesetId}
-									activeFilesets={activeFilesets}
-								/>
-							</FadeTransition>
-						) : null
-					}
-					{
 						isSearchModalActive ? (
 							<FadeTransition classNames="slide-from-left" in={isSearchModalActive}>
 								<SearchContainer bibleId={activeTextId} toggleSearchModal={this.toggleSearchModal} />
@@ -778,6 +761,12 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
 					}
 				</TransitionGroup>
 				<Text
+					copyrights={copyrights}
+					activeFilesets={activeFilesets}
+					audioFilesetId={audioFilesetId}
+					plainTextFilesetId={plainTextFilesetId}
+					formattedTextFilesetId={formattedTextFilesetId}
+					getCopyrights={this.getCopyrights}
 					books={books}
 					userId={userId}
 					text={updatedText}
