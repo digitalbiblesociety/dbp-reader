@@ -51,7 +51,7 @@ class VersionList extends React.PureComponent { // eslint-disable-line react/pre
 				key: `${bible.get('abbr')}${bible.get('date')}`,
 				clickHandler: (audioType) => this.handleVersionListClick(bible, audioType),
 				className: bible.get('abbr') === activeTextId ? 'active-version' : '',
-				text: bible.get('name'),
+				text: bible.get('vname') || bible.get('name'),
 				types: bible.get('filesets').reduce((a, c) => ({ ...a, [c.get('type')]: true }), {}),
 			}]), []
 		);
@@ -109,16 +109,22 @@ class VersionList extends React.PureComponent { // eslint-disable-line react/pre
 
 	filterFunction = (bible, filterText, iso) => {
 		const lowerCaseText = filterText.toLowerCase();
+		const language = bible.get('language') || '';
+		const abbr = bible.get('abbr') || '';
+		const name = bible.get('name') || '';
+		const vname = bible.get('vname') || '';
 
 		if (!(bible.get('iso') === iso) && iso !== 'ANY') {
 			return false;
 		}
 
-		if (bible.get('language').toLowerCase().includes(lowerCaseText)) {
+		if (language.toLowerCase().includes(lowerCaseText)) {
 			return true;
-		} else if (bible.get('abbr').toLowerCase().includes(lowerCaseText)) {
+		} else if (abbr.toLowerCase().includes(lowerCaseText)) {
 			return true;
-		} else if (bible.get('name').toLowerCase().includes(lowerCaseText)) {
+		} else if (name.toLowerCase().includes(lowerCaseText)) {
+			return true;
+		} else if (vname.toLowerCase().includes(lowerCaseText)) {
 			return true;
 		}
 		return false;
