@@ -15,6 +15,9 @@
     overflow-y: auto;
     overflow-x: hidden;
     max-height: 90%;
+    @include css4 {
+      border-top: 1px solid var(--before-after-border-color);
+    }
 
     .nt-copyright, .ot-copyright {
       margin-top: 10px;
