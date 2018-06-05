@@ -442,7 +442,7 @@ export class AudioPlayer extends React.Component { // eslint-disable-line react/
 								{this.currentSpeedSvg}
 								<FormattedMessage {...messages.speed} />
 							</div>
-							<SpeedControl active={this.state.speedControlState} options={[0.75, 1, 1.25, 1.5, 2]} onCloseFunction={this.closeModals} setSpeed={this.updatePlayerSpeed} currentSpeed={currentSpeed} />
+							<SpeedControl active={this.state.speedControlState} options={[0.75, 1, 1.25, 1.5, 1.75]} onCloseFunction={this.closeModals} setSpeed={this.updatePlayerSpeed} currentSpeed={currentSpeed} />
 						</div>
 					</div>
 					<audio preload={'auto'} ref={this.handleRef} className="audio-player" src={source}></audio>
