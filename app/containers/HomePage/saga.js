@@ -958,11 +958,11 @@ export function* getCopyrightSaga({ filesetIds }) {
 		const copyrightObject = {
 			newTestament: {
 				audio: cAudio || ntAudio,
-				text: cText || ntText,
+				text: (cText || ntText),
 			},
 			oldTestament: {
-				audio: cAudio || otAudio,
-				text: cText || otText,
+				audio: !(cAudio || ntAudio) && (cAudio || otAudio),
+				text: !(cAudio || ntAudio) && (cText || otText),
 			},
 		};
 		// console.log('copyrights', copyrightObject);
