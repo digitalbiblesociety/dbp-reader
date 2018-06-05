@@ -1,17 +1,5 @@
 // Leaving unused class here because the copyright component
 // will need more styling once we have all the correct data
-.copyrights-section {
-  //padding: 15px;
-  margin-top:5px;
-  overflow-y: auto;
-  overflow-x: hidden;
-  max-height: 90%;
-  width: 320px;
-
-  @include css4 {
-    color: var(--default-text-color);
-  }
-
   .copyrights-section {
     //padding: 15px;
     font-size: 10px;
