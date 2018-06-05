@@ -41,14 +41,14 @@ class Information extends React.PureComponent {// eslint-disable-line react/pref
 
 	getAudioCopyright = (organizations, testament) => organizations.map((org) => (
 		[
-			<h3 key={`${org.name}_audio_${testament}`}><FormattedMessage {...messages.providedByAudio} /></h3>,
-			org.logo ? <a key={`${org.url}_audio_${testament}`} target={'_blank'} href={org.url}><ImageComponent className={org.isIcon ? 'image-icon' : 'image-langscape'} alt={`Copyright owners logo: ${org.name}`} src={org.logo.url} /></a> : <a className={org.url ? 'org-name link' : 'org-name'} key={`${org.url}_audio_${testament}`} target={'_blank'} href={org.url}>{org.name}</a>,
+			<h3 key={`${org.name}_audio_name_${testament}`}><FormattedMessage {...messages.providedByAudio} /></h3>,
+			org.logo ? <a key={`${org.url}_audio_url_${testament}`} target={'_blank'} href={org.url}><ImageComponent className={org.isIcon ? 'image-icon' : 'image-langscape'} alt={`Copyright owners logo: ${org.name}`} src={org.logo.url} /></a> : <a className={org.url ? 'org-name link' : 'org-name'} key={`${org.url}_audio_${testament}`} target={'_blank'} href={org.url}>{org.name}</a>,
 		]
 	));
 	getTextCopyright = (organizations, testament) => organizations.map((org) => (
 		[
-			<h3 key={`${org.name}_text_${testament}`}><FormattedMessage {...messages.providedByText} /></h3>,
-			org.logo ? <a key={`${org.url}_text_${testament}`} target={'_blank'} href={org.url}><ImageComponent className={org.isIcon ? 'image-icon' : 'image-langscape'} alt={`Copyright owners logo: ${org.name}`} src={org.logo.url} /></a> : <a className={org.url ? 'org-name link' : 'org-name'} key={`${org.url}_text_${testament}`} target={'_blank'} href={org.url}>{org.name}</a>,
+			<h3 key={`${org.name}_text_name_${testament}`}><FormattedMessage {...messages.providedByText} /></h3>,
+			org.logo ? <a key={`${org.url}_text_url_${testament}`} target={'_blank'} href={org.url}><ImageComponent className={org.isIcon ? 'image-icon' : 'image-langscape'} alt={`Copyright owners logo: ${org.name}`} src={org.logo.url} /></a> : <a className={org.url ? 'org-name link' : 'org-name'} key={`${org.url}_text_${testament}`} target={'_blank'} href={org.url}>{org.name}</a>,
 		]
 	));
 // {
