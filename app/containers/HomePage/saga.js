@@ -1162,10 +1162,10 @@ export function* getCopyrightSaga({ filesetIds }) {
 			type: cp.type || cp.set_type_code,
 			organizations: cp.copyright.organizations.map((org) => {
 				const icon = org.logos.find((l) => l.icon);
-				if (org.logos.length && org.translations.length && org.url_website) {
+				if (org.translations.length) {
 					return {
 						name: org.translations[0].name,
-						logo: icon || org.logos[0],
+						logo: icon || (org.logos && org.logos[0]),
 						isIcon: icon === undefined ? 0 : 1,
 						url: org.url_website,
 					};
@@ -1219,13 +1219,13 @@ export function* getCopyrightSaga({ filesetIds }) {
 			  )[0]
 			: {};
 
-		// console.log('cText', cText);
-		// console.log('ntText', ntText);
-		// console.log('otText', otText);
-		//
-		// console.log('cAudio', cAudio);
-		// console.log('ntAudio', ntAudio);
-		// console.log('otAudio', otAudio);
+		console.log('cText', cText);
+		console.log('ntText', ntText);
+		console.log('otText', otText);
+
+		console.log('cAudio', cAudio);
+		console.log('ntAudio', ntAudio);
+		console.log('otAudio', otAudio);
 		// One audio || audio_drama for C
 		// One text_plain || text_format for C
 		// or
@@ -1262,46 +1262,6 @@ export function* createSocialUser({
 	avatar,
 	provider,
 }) {
-	// console.log('Creating social user');
-	// console.log('{ email, name, nickname, id, avatar, userId, provider }', { email, name, nickname, id, avatar, userId, provider });
-
-	// if there is a user id then just add this account to that users profile - I don't think this is needed
-	// if (userId) {
-	// 	const requestUrl = `https://api.bible.build/users/login?key=${process.env.DBP_API_KEY}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}`;
-	// 	const formData = new FormData();
-	//
-	// 	// formData.append('password', password);
-	// 	formData.append('email', email);
-	//
-	// 	const options = {
-	// 		method: 'POST',
-	// 		body: formData,
-	// 	};
-	//
-	// 	try {
-	// 		const response = yield call(request, requestUrl, options);
-	//
-	// 		if (response.error) {
-	// 			yield put({ type: LOGIN_ERROR, message: response.error.message });
-	// 		} else {
-	// 			yield put({ type: USER_LOGGED_IN, userId: response.id, userProfile: response });
-	// 			// May add an else that will save the id to the session so it is persisted through a page refresh
-	// 			sessionStorage.setItem('bible_is_user_id', response.id);
-	// 		}
-	// 	} catch (err) {
-	// 		if (process.env.NODE_ENV === 'development') {
-	// 			console.error(err); // eslint-disable-line no-console
-	// 		} else if (process.env.NODE_ENV === 'production') {
-	// 			// const options = {
-	// 			// 	header: 'POST',
-	// 			// 	body: formData,
-	// 			// };
-	// 			// fetch('https://api.bible.build/error_logging', options);
-	// 		}
-	// 	}
-	// } else {
-	// console.log('{ email, name, nickname, id, avatar, userId, provider }', { email, name, nickname, id, avatar, userId, provider });
-
 	// otherwise create a new account with this information
 	const requestUrl = `https://api.bible.build/users?key=${
 		process.env.DBP_API_KEY
