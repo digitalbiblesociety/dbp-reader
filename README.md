@@ -1,16 +1,17 @@
 # The Koinos Reader
 
-The Koinos Reader is a joint project of the [Digital Bible Society](https://dbs.org) 
+The Koinos Reader is a joint project of the [Digital Bible Society](https://dbs.org)
 and [Faith Comes by Hearing](https://faithcomesbyhearing.com).
 
 ## QuickStart
+
 - If you do not have Node follow the installation instructions here: [Node.js](https://nodejs.org/en/download/).
 - Clone the repo:
-    - ```git clone https://dbsdevs@bitbucket.org/dbsdevs/dbp_4_reader.git```
-- Once you have successfully installed Node and cloned the repo run the following 
-commands in the root folder of the 
-project: 
-    - ```npm install && npm start```
+  - `git clone https://dbsdevs@bitbucket.org/dbsdevs/dbp_4_reader.git`
+- Once you have successfully installed Node and cloned the repo run the following
+  commands in the root folder of the
+  project: - `npm install && npm start`
+- Now navigate to localhost:3000 to see the development site
 
 ## Description
 
@@ -21,22 +22,27 @@ portability. It is in many ways the spiritual successor to the bible browser and
 ## Goals
 
 - ** Accessibility **
-  - The reader is focused on supporting disadvantaged groups especially the blind or 
-  disabled. Following the recommendation of WAI and ensuring the site is built to be 
-  compatible with WAI-ARIA 1.1a will ensure that the app is easy to use and navigate
-  - The reader will be heavily icon driven but given the limitations of icon-focused 
-  communication. The reader will also need to be multi-lingual. The driving text for
-  web app itself should be translated in the top eight most common gateway languages
+  - The reader is focused on supporting disadvantaged groups especially the blind or
+    disabled. Following the recommendation of WAI and ensuring the site is built to be
+    compatible with WAI-ARIA 1.1a will ensure that the app is easy to use and navigate
+  - The reader will be heavily icon driven but given the limitations of icon-focused
+    communication. The reader will also need to be multi-lingual. The driving text for
+    web app itself should be translated in the top eight most common gateway languages
   - The reader will be simple and intuitive. Easy to locate settings should exist to
-   increase font size for those with poor eyesight. It will also be possible for the
-   users to adjust the playing speed of audio for new speakers and language learners
+    increase font size for those with poor eyesight. It will also be possible for the
+    users to adjust the playing speed of audio for new speakers and language learners
 - ** Robust **
-  - The Reader will be fully backed by a series of tests to ensure smooth operations 
-  across multiple platforms with focus for eventual deployment as a react native app
+  - The Reader will be fully backed by a series of tests to ensure smooth operations
+    across multiple platforms with focus for eventual deployment as a react native app
   - The reader should leverage service workers and support some offline capabilities
   - The reader will use promises and load content asynchronously whenever it is wise
 - ** Multipurpose **
+
   - The Reader will be built with the intention of porting it over to mobile devices
-  via the implementation of [React Native](https://facebook.github.io/react-native/)
+    via the implementation of [React Native](https://facebook.github.io/react-native/)
   - The Reader will contain components to be re-used for a few partners like gideons
   - The Reader will contain components for bible dictionaries for study and research
+
+## Setting up your Environment
+
+- Sample env file

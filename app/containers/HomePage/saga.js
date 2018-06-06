@@ -38,16 +38,6 @@ import {
 // import unionWith from 'lodash/unionWith';
 // import { ADD_HIGHLIGHTS, LOAD_HIGHLIGHTS, GET_CHAPTER_TEXT, GET_HIGHLIGHTS, GET_BOOKS, GET_AUDIO, INIT_APPLICATION } from './constants';
 
-/* Highlight possibilities
-*
-* Part of a verse
-*
-* Entire verse and part of other verses
-*
-* Overlaps another highlight
-*
-* */
-
 export function* deleteHighlights({ ids, userId, bible, book, chapter }) {
 	// console.log('ids', ids);
 	// console.log('bible', bible);
@@ -1219,13 +1209,13 @@ export function* getCopyrightSaga({ filesetIds }) {
 			  )[0]
 			: {};
 
-		console.log('cText', cText);
-		console.log('ntText', ntText);
-		console.log('otText', otText);
-
-		console.log('cAudio', cAudio);
-		console.log('ntAudio', ntAudio);
-		console.log('otAudio', otAudio);
+		// console.log('cText', cText);
+		// console.log('ntText', ntText);
+		// console.log('otText', otText);
+		//
+		// console.log('cAudio', cAudio);
+		// console.log('ntAudio', ntAudio);
+		// console.log('otAudio', otAudio);
 		// One audio || audio_drama for C
 		// One text_plain || text_format for C
 		// or
