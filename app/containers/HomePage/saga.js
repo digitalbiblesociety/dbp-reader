@@ -37,7 +37,7 @@ import {
 // import { fromJS } from 'immutable';
 // import unionWith from 'lodash/unionWith';
 // import { ADD_HIGHLIGHTS, LOAD_HIGHLIGHTS, GET_CHAPTER_TEXT, GET_HIGHLIGHTS, GET_BOOKS, GET_AUDIO, INIT_APPLICATION } from './constants';
-
+// Todo: Use the env variable for the base of all the routes
 export function* deleteHighlights({ ids, userId, bible, book, chapter }) {
 	// console.log('ids', ids);
 	// console.log('bible', bible);

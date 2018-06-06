@@ -11,6 +11,8 @@ and [Faith Comes by Hearing](https://faithcomesbyhearing.com).
 - Once you have successfully installed Node and cloned the repo run the following
   commands in the root folder of the
   project: - `npm install && npm start`
+- Please examine the sample_env.txt file that is located in the root of this project for
+  an example of the variables you will need to set in order to run this locally.
 - Now navigate to localhost:3000 to see the development site
 
 ## Description
@@ -42,7 +44,3 @@ portability. It is in many ways the spiritual successor to the bible browser and
     via the implementation of [React Native](https://facebook.github.io/react-native/)
   - The Reader will contain components to be re-used for a few partners like gideons
   - The Reader will contain components for bible dictionaries for study and research
-
-## Setting up your Environment
-
-- Sample env file
