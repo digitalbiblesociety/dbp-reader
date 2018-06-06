@@ -16,7 +16,11 @@ import {
 import { loadTexts, loadCountries, setLanguages } from './actions';
 
 export function* getCountries() {
-	const requestUrl = `https://api.bible.build/countries?key=${process.env.DBP_API_KEY}&v=4&bucket_id=${process.env.DBP_BUCKET_ID}&has_filesets=true&include_languages=true`;
+	const requestUrl = `${process.env.BASE_API_ROUTE}/countries?key=${
+		process.env.DBP_API_KEY
+	}&v=4&bucket_id=${
+		process.env.DBP_BUCKET_ID
+	}&has_filesets=true&include_languages=true`;
 
 	try {
 		const response = yield call(request, requestUrl);
@@ -33,7 +37,11 @@ export function* getCountries() {
 		}, {});
 		// const countriesObject = response.data.filter((country) => !territoryCodes[country.codes.iso_a2]);
 
-		countriesObject.ANY = { name: 'ANY', languages: { ANY: 'ANY' }, codes: { iso_a2: 'ANY' } };
+		countriesObject.ANY = {
+			name: 'ANY',
+			languages: { ANY: 'ANY' },
+			codes: { iso_a2: 'ANY' },
+		};
 
 		const countries = fromJS(countriesObject)
 			.filter((c) => c.get('name'))
@@ -57,13 +65,13 @@ export function* getCountries() {
 			// 	header: 'POST',
 			// 	body: formData,
 			// };
-			// fetch('https://api.bible.build/error_logging', options);
+			// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
 		}
 	}
 }
 
 export function* getCountry() {
-	// const requestUrl = `https://api.bible.build/countries?key=${process.env.DBP_API_KEY}&v=4&bucket_id=${process.env.DBP_BUCKET_ID}&has_filesets=true&include_languages=true&iso=${iso}`;
+	// const requestUrl = `${process.env.BASE_API_ROUTE}/countries?key=${process.env.DBP_API_KEY}&v=4&bucket_id=${process.env.DBP_BUCKET_ID}&has_filesets=true&include_languages=true&iso=${iso}`;
 
 	try {
 		// const response = yield call(request, requestUrl);
@@ -77,7 +85,7 @@ export function* getCountry() {
 			// 	header: 'POST',
 			// 	body: formData,
 			// };
-			// fetch('https://api.bible.build/error_logging', options);
+			// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
 		}
 	}
 }
@@ -86,9 +94,13 @@ export function* getTexts({ languageISO }) {
 	let requestUrl = '';
 
 	if (languageISO === 'ANY') {
-		requestUrl = `https://api.bible.build/bibles?&bucket_id=${process.env.DBP_BUCKET_ID}&key=${process.env.DBP_API_KEY}&v=4`;
+		requestUrl = `${process.env.BASE_API_ROUTE}/bibles?&bucket_id=${
+			process.env.DBP_BUCKET_ID
+		}&key=${process.env.DBP_API_KEY}&v=4`;
 	} else {
-		requestUrl = `https://api.bible.build/bibles?&bucket_id=${process.env.DBP_BUCKET_ID}&key=${process.env.DBP_API_KEY}&language_code=${languageISO}&v=4`;
+		requestUrl = `${process.env.BASE_API_ROUTE}/bibles?&bucket_id=${
+			process.env.DBP_BUCKET_ID
+		}&key=${process.env.DBP_API_KEY}&language_code=${languageISO}&v=4`;
 	}
 
 	try {
@@ -97,8 +109,32 @@ export function* getTexts({ languageISO }) {
 		// This filters out all texts that don't have a fileset
 		// console.log('response', response);
 		/* I am getting a strange response for certain texts that are in the dbp-dev bucket. However I only get the response when I have the bucket specified. So far it is only occurring for the Melpa and Mende bibles.  If you are still working tonight I can send you more details, otherwise I can just leave it until Monday. */
-		const texts = response.data.filter((text) => (text.name && text.language && text.iso && text.abbr) && (text.filesets['dbp-dev'] && text.filesets['dbp-dev'].find((f) => (f.type === 'audio' || f.type === 'audio_drama' || f.type === 'text_plain' || f.type === 'text_format'))));
-		const mappedTexts = texts.map((text) => ({ ...text, filesets: text.filesets['dbp-dev'].filter((f) => (f.type === 'audio' || f.type === 'audio_drama' || f.type === 'text_plain' || f.type === 'text_format')) || [] }));
+		const texts = response.data.filter(
+			(text) =>
+				text.name &&
+				text.language &&
+				text.iso &&
+				text.abbr &&
+				(text.filesets['dbp-dev'] &&
+					text.filesets['dbp-dev'].find(
+						(f) =>
+							f.type === 'audio' ||
+							f.type === 'audio_drama' ||
+							f.type === 'text_plain' ||
+							f.type === 'text_format',
+					)),
+		);
+		const mappedTexts = texts.map((text) => ({
+			...text,
+			filesets:
+				text.filesets['dbp-dev'].filter(
+					(f) =>
+						f.type === 'audio' ||
+						f.type === 'audio_drama' ||
+						f.type === 'text_plain' ||
+						f.type === 'text_format',
+				) || [],
+		}));
 		// console.log(texts);
 		// console.log('mappedTexts', mappedTexts);
 
@@ -112,7 +148,7 @@ export function* getTexts({ languageISO }) {
 			// 	header: 'POST',
 			// 	body: formData,
 			// };
-			// fetch('https://api.bible.build/error_logging', options);
+			// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
 		}
 
 		yield put({ type: ERROR_GETTING_VERSIONS });
@@ -120,7 +156,9 @@ export function* getTexts({ languageISO }) {
 }
 
 export function* getLanguages() {
-	const requestUrl = `https://api.bible.build/languages?key=${process.env.DBP_API_KEY}&v=4&bucket_id=${process.env.DBP_BUCKET_ID}&has_filesets=true`;
+	const requestUrl = `${process.env.BASE_API_ROUTE}/languages?key=${
+		process.env.DBP_API_KEY
+	}&v=4&bucket_id=${process.env.DBP_BUCKET_ID}&has_filesets=true`;
 
 	try {
 		const response = yield call(request, requestUrl);
@@ -142,7 +180,7 @@ export function* getLanguages() {
 			// 	header: 'POST',
 			// 	body: formData,
 			// };
-			// fetch('https://api.bible.build/error_logging', options);
+			// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
 		}
 
 		yield put({ type: ERROR_GETTING_LANGUAGES });
