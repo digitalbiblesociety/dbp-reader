@@ -835,7 +835,7 @@ class Text extends React.PureComponent {
 
 	openPopup = (coords) => {
 		this.setState({ popupOpen: true, popupCoords: coords });
-		setTimeout(() => this.setState({ popupOpen: false }), 1500);
+		setTimeout(() => this.setState({ popupOpen: false }), 2500);
 	};
 	// has an issue with highlights in the same verse
 	// This is likely going to be really slow...
