@@ -279,6 +279,7 @@ export function* getBibleFromUrl({
 	chapter,
 	authenticated,
 	userId,
+	verse,
 }) {
 	// This function needs to return the data listed below
 	// Books
@@ -424,6 +425,7 @@ export function* getBibleFromUrl({
 				chapter: activeChapter,
 				authenticated,
 				userId,
+				verse,
 			});
 			// console.log('chapter data', chapterData);
 			// still need to include to active book name so that iteration happens here
@@ -466,6 +468,7 @@ export function* getChapterFromUrl({
 	prevBookId,
 	nextChapter,
 	prevChapter,
+	verse,
 }) {
 	// console.log('bible, book, chapter', bibleId, bookId, chapter);
 	// console.log('filesets chapter text', filesets);
@@ -656,6 +659,7 @@ export function* getChapterFromUrl({
 			hasAudio,
 			bookId,
 			chapter,
+			verse,
 		});
 
 		return {

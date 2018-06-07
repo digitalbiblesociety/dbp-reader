@@ -109,6 +109,7 @@ class HomePage extends React.PureComponent {
 		// Get the first bible based on the url here
 		const { params } = this.props.match;
 		const { bibleId, bookId, chapter } = params;
+		const verse = params.verse || '';
 		const { userAuthenticated: authenticated, userId } = this.props;
 		// console.log('authenticated in home did mount', authenticated);
 		// console.log('userId in home did mount', userId);
@@ -125,6 +126,7 @@ class HomePage extends React.PureComponent {
 				chapter,
 				authenticated,
 				userId,
+				verse,
 			});
 			// console.log('not redirecting in bible, book and chapter');
 		} else if (bibleId && bookId) {
@@ -137,6 +139,7 @@ class HomePage extends React.PureComponent {
 				chapter: 1,
 				authenticated,
 				userId,
+				verse,
 			});
 			// console.log('redirecting from bible and book');
 			// console.log(this.props);
@@ -153,6 +156,7 @@ class HomePage extends React.PureComponent {
 				chapter: 1,
 				authenticated,
 				userId,
+				verse,
 			});
 			// May want to use replace here at some point
 			// this.props.history.replace(`/${bibleId}/gen/1`);
@@ -329,17 +333,6 @@ class HomePage extends React.PureComponent {
 	// Need to fix how many times this gets called. The main issue is all the state that is managed by this one thing
 	// c = 0
 	componentWillReceiveProps(nextProps) {
-		// console.log('Diff props', differenceObject(nextProps, this.props));
-		// console.log('Diff state', differenceObject(nextState, this.state));
-		// console.log('FB at receive props', FB);
-		// let FB = undefined;
-		// if (typeof FB === 'function' && this.c === 0) {
-		// 	this.c++
-		// 	FB.getLoginStatus((response) => {
-		// 		// console.log('fb login status', response);
-		// 		statusChangeCallback(response);
-		// 	});
-		// }
 		// Deals with updating page based on the url params
 		// previous props
 		const { params } = this.props.match;
@@ -372,6 +365,7 @@ class HomePage extends React.PureComponent {
 			const newChapter = params.chapter !== nextParams.chapter;
 			const newBook = params.bookId !== nextParams.bookId;
 			const newBible = params.bibleId !== nextParams.bibleId;
+
 			const {
 				nextBook = fromJS({}),
 				previousBook = fromJS({}),
@@ -408,6 +402,7 @@ class HomePage extends React.PureComponent {
 					bibleId: nextParams.bibleId,
 					bookId: nextParams.bookId,
 					chapter: nextParams.chapter,
+					verse: nextParams.verse || '',
 					authenticated: userAuthenticated,
 					userId,
 				});
@@ -424,6 +419,7 @@ class HomePage extends React.PureComponent {
 					bibleId: nextParams.bibleId,
 					bookId: nextParams.bookId,
 					chapter: nextParams.chapter,
+					verse: nextParams.verse || '',
 					nextBookId,
 					prevBookId,
 					nextChapter,
@@ -441,6 +437,7 @@ class HomePage extends React.PureComponent {
 					bibleId: nextParams.bibleId,
 					bookId: nextParams.bookId,
 					chapter: nextParams.chapter,
+					verse: nextParams.verse || '',
 					nextBookId,
 					prevBookId,
 					nextChapter,
@@ -459,7 +456,11 @@ class HomePage extends React.PureComponent {
 			this.props.history.replace(
 				`/${nextProps.homepage.activeTextId.toLowerCase()}/${nextProps.homepage.activeBookId.toLowerCase()}/${
 					nextProps.homepage.activeChapter
-				}${nextParams.verse ? `/${nextParams.verse}` : ''}`,
+				}${
+					nextProps.homepage.activeVerse
+						? `/${nextProps.homepage.activeVerse}`
+						: ''
+				}`,
 			);
 			// console.log('route that I pushed', `/${nextProps.homepage.activeTextId}/${nextProps.homepage.activeBookId}/${nextProps.homepage.activeChapter}`);
 		} else if (
@@ -479,6 +480,7 @@ class HomePage extends React.PureComponent {
 		) {
 			// If url did not change && bibleId, bookId and chapter in props did not change - Might need to include verse as well...
 			// This section may not work with SSR because the state might be persisted through a refresh
+			// console.log('this.props.homepage.activeVerse', this.props.homepage.activeVerse);
 
 			// Handles the cases where the url needs to be updated
 			const nextPropUrl = `/${nextProps.homepage.activeTextId.toLowerCase()}/${nextProps.homepage.activeBookId.toLowerCase()}/${
@@ -513,7 +515,11 @@ class HomePage extends React.PureComponent {
 				this.props.history.replace(
 					`/${nextProps.homepage.activeTextId.toLowerCase()}/${nextProps.homepage.activeBookId.toLowerCase()}/${
 						nextProps.homepage.activeChapter
-					}${nextParams.verse ? `/${nextParams.verse}` : ''}`,
+					}${
+						nextProps.homepage.activeVerse
+							? `/${nextProps.homepage.activeVerse}`
+							: ''
+					}`,
 				);
 			}
 		}
