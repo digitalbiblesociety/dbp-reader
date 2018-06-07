@@ -277,13 +277,23 @@ class HomePage extends React.PureComponent {
 			if (!this.props.userId) {
 				gapi.load('auth2', () => {
 					// console.log('gapi loaded');
-					window.auth2 = gapi.auth2.init({
-						client_id:
-							process.env.NODE_ENV === 'development'
-								? process.env.GOOGLE_APP_ID
-								: process.env.GOOGLE_APP_ID_PROD || '',
-						scope: 'profile',
-					});
+					try {
+						window.auth2 = gapi.auth2.init({
+							client_id:
+								process.env.NODE_ENV === 'development'
+									? process.env.GOOGLE_APP_ID
+									: process.env.GOOGLE_APP_ID_PROD || 'no_client',
+							scope: 'profile',
+						});
+					} catch (err) {
+						if (process.env.NODE_ENV === 'development') {
+							console.warn(
+								// eslint-disable-line no-console
+								'Error initializing google api caught in inner try',
+								err,
+							);
+						}
+					}
 					// console.log('auth 2 has been initialized', auth2);
 				});
 			}

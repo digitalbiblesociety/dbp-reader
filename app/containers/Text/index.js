@@ -13,6 +13,7 @@ import FootnotePortal from 'components/FootnotePortal';
 import LoadingSpinner from 'components/LoadingSpinner';
 import IconsInText from 'components/IconsInText';
 import PopupMessage from 'components/PopupMessage';
+import PleaseSignInMessage from 'components/PleaseSignInMessage';
 import AudioOnlyMessage from 'components/AudioOnlyMessage';
 import {
 	getFormattedParentVerseNumber,
@@ -666,7 +667,6 @@ class Text extends React.PureComponent {
 				);
 			}
 		} else {
-			// console.log(text);
 			textComponents = plainText.map(
 				(verse) =>
 					verse.hasHighlight ? (
@@ -1510,7 +1510,7 @@ class Text extends React.PureComponent {
 				{footnoteState ? <FootnotePortal {...footnotePortal} /> : null}
 				{this.state.popupOpen ? (
 					<PopupMessage
-						message={'You must be signed in to use this feature.'}
+						message={<PleaseSignInMessage message={'toUseFeature'} />}
 						x={this.state.popupCoords.x}
 						y={this.state.popupCoords.y}
 					/>
