@@ -45,7 +45,7 @@
 		"coveralls": "cat ./coverage/lcov.info | coveralls"
 	},
 	"lint-staged": {
-		"*.{js,json,css,md}": [
+		"*.{js,json,scss,md}": [
 			"prettier --single-quote=true --arrow-parens=always --use-tabs --write --single-quote --trailing-comma=all",
 			"git add"
 		],
