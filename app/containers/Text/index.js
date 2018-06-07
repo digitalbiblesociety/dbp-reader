@@ -652,7 +652,7 @@ class Text extends React.PureComponent {
 				textComponents = (
 					<div
 						ref={this.setFormattedRefHighlight}
-						className={justifiedText ? 'chapter justify' : 'chapter'}
+						className={justifiedText ? 'justify' : ''}
 						dangerouslySetInnerHTML={{ __html: formattedText }}
 					/>
 				);
@@ -660,7 +660,7 @@ class Text extends React.PureComponent {
 				textComponents = (
 					<div
 						ref={this.setFormattedRef}
-						className={justifiedText ? 'chapter justify' : 'chapter'}
+						className={justifiedText ? 'justify' : ''}
 						dangerouslySetInnerHTML={{ __html: formattedSource.main }}
 					/>
 				);
