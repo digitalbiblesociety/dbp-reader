@@ -7,10 +7,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
+import { createStructuredSelector } from 'reselect';
 import { FormattedMessage } from 'react-intl';
 // import isEqual from 'lodash/isEqual';
+import PleaseSignInMessage from 'components/PleaseSignInMessage';
 import SvgWrapper from 'components/SvgWrapper';
 import EditNote from 'components/EditNote';
 import MyNotes from 'components/MyNotes';
@@ -18,10 +19,7 @@ import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
 import CloseMenuFunctions from 'utils/closeMenuFunctions';
-import {
-	setActiveNote,
-	deleteHighlights,
-} from 'containers/HomePage/actions';
+import { setActiveNote, deleteHighlights } from 'containers/HomePage/actions';
 import {
 	setActiveChild,
 	setPageSize,
@@ -57,13 +55,17 @@ import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
 
-export class Notes extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+export class Notes extends React.PureComponent {
+	// eslint-disable-line react/prefer-stateless-function
 	constructor(props) {
 		super(props);
 		this.props.dispatch(setActiveChild(props.openView));
 	}
 	componentDidMount() {
-		this.closeMenuController = new CloseMenuFunctions(this.ref, this.props.toggleNotesModal);
+		this.closeMenuController = new CloseMenuFunctions(
+			this.ref,
+			this.props.toggleNotesModal,
+		);
 		this.closeMenuController.onMenuMount();
 		// console.log('Notes mounted');
 		// document.addEventListener('click', this.handleClickOutside);
@@ -76,48 +78,91 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 
 	setRef = (node) => {
 		this.ref = node;
-	}
+	};
 
-	setActiveChild = (child) => this.props.dispatch(setActiveChild(child))
-	setActivePage = (props) => this.props.dispatch(setActivePage({ userId: this.props.userId, params: { ...props } }))
+	setActiveChild = (child) => this.props.dispatch(setActiveChild(child));
+	setActivePage = (props) =>
+		this.props.dispatch(
+			setActivePage({ userId: this.props.userId, params: { ...props } }),
+		);
 	setActiveNote = ({ note }) => {
 		this.props.dispatch(getChapterForNote({ note }));
 		this.props.dispatch(setActiveNote({ note }));
-	}
-	setPageSize = (props) => this.props.dispatch(setPageSize({ userId: this.props.userId, params: { ...props } }))
-	getNotes = (props) => this.props.dispatch(getNotesForNotebook({ userId: this.props.userId, params: { ...props } }))
-	getBookmarks = (props) => this.props.dispatch(getUserBookmarkData({ userId: this.props.userId, params: { ...props } }))
-	getHighlights = (props) => this.props.dispatch(getUserHighlights({ userId: this.props.userId, params: { ...props } }))
-	toggleVerseText = () => this.props.dispatch(toggleVerseText())
-	toggleAddVerseMenu = () => this.props.dispatch(toggleAddVerseMenu())
-	togglePageSelector = () => this.props.dispatch(togglePageSelector())
-	addHighlight = (data) => this.props.dispatch(addHighlight({ userId: this.props.userId, data }))
-	updateHighlight = (props) => this.props.dispatch(updateHighlight({
-		userId: this.props.userId,
-		bible: this.props.activeTextId,
-		book: this.props.activeBookId,
-		chapter: this.props.activeChapter,
-		...props,
-	}))
-	deleteHighlights = (props) => this.props.dispatch(deleteHighlights({
-		userId: this.props.userId,
-		bible: this.props.activeTextId,
-		book: this.props.activeBookId,
-		chapter: this.props.activeChapter,
-		...props,
-	}))
-	addNote = (data) => this.props.dispatch(addNote({ userId: this.props.userId, data: { ...data, user_id: this.props.userId } }))
-	updateNote = (data) => this.props.dispatch(updateNote({ userId: this.props.userId, noteId: data.id, data: { ...data, user_id: this.props.userId } }))
-	deleteNote = ({ noteId }) => this.props.dispatch(deleteNote({ userId: this.props.userId, noteId, pageSize: this.props.notes.pageSize, activePage: this.props.notes.activePage }))
-	readSavedMessage = (props) => this.props.dispatch(readSavedMessage(props))
-	clearNoteErrorMessage = () => this.props.dispatch(clearNoteErrorMessage())
+	};
+	setPageSize = (props) =>
+		this.props.dispatch(
+			setPageSize({ userId: this.props.userId, params: { ...props } }),
+		);
+	getNotes = (props) =>
+		this.props.dispatch(
+			getNotesForNotebook({ userId: this.props.userId, params: { ...props } }),
+		);
+	getBookmarks = (props) =>
+		this.props.dispatch(
+			getUserBookmarkData({ userId: this.props.userId, params: { ...props } }),
+		);
+	getHighlights = (props) =>
+		this.props.dispatch(
+			getUserHighlights({ userId: this.props.userId, params: { ...props } }),
+		);
+	toggleVerseText = () => this.props.dispatch(toggleVerseText());
+	toggleAddVerseMenu = () => this.props.dispatch(toggleAddVerseMenu());
+	togglePageSelector = () => this.props.dispatch(togglePageSelector());
+	addHighlight = (data) =>
+		this.props.dispatch(addHighlight({ userId: this.props.userId, data }));
+	updateHighlight = (props) =>
+		this.props.dispatch(
+			updateHighlight({
+				userId: this.props.userId,
+				bible: this.props.activeTextId,
+				book: this.props.activeBookId,
+				chapter: this.props.activeChapter,
+				...props,
+			}),
+		);
+	deleteHighlights = (props) =>
+		this.props.dispatch(
+			deleteHighlights({
+				userId: this.props.userId,
+				bible: this.props.activeTextId,
+				book: this.props.activeBookId,
+				chapter: this.props.activeChapter,
+				...props,
+			}),
+		);
+	addNote = (data) =>
+		this.props.dispatch(
+			addNote({
+				userId: this.props.userId,
+				data: { ...data, user_id: this.props.userId },
+			}),
+		);
+	updateNote = (data) =>
+		this.props.dispatch(
+			updateNote({
+				userId: this.props.userId,
+				noteId: data.id,
+				data: { ...data, user_id: this.props.userId },
+			}),
+		);
+	deleteNote = ({ noteId }) =>
+		this.props.dispatch(
+			deleteNote({
+				userId: this.props.userId,
+				noteId,
+				pageSize: this.props.notes.pageSize,
+				activePage: this.props.notes.activePage,
+			}),
+		);
+	readSavedMessage = (props) => this.props.dispatch(readSavedMessage(props));
+	clearNoteErrorMessage = () => this.props.dispatch(clearNoteErrorMessage());
 
 	titleOptions = {
 		edit: 'Edit Note',
 		notes: 'My Notes',
 		bookmarks: 'My Bookmarks',
 		highlights: 'My Highlights',
-	}
+	};
 
 	// handleClickOutside = (event) => {
 	// 	const bounds = this.ref.getBoundingClientRect();
@@ -157,7 +202,7 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 			selectedText,
 			authenticationStatus,
 			note,
-			toggleProfile,
+			// toggleProfile,
 			notePassage,
 			activeTextId,
 			// highlights,
@@ -171,97 +216,157 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 			<GenericErrorBoundary affectedArea="Notes">
 				<aside ref={this.setRef} className="notes">
 					<header>
-						<SvgWrapper className={'icon'} fill="#fff" svgid="arrow_right" onClick={() => { setActiveChild('notes'); toggleNotesModal(); }} />
-						<SvgWrapper className={'icon book-icon-header'} svgid={'notebook'} onClick={() => { setActiveChild('notes'); toggleNotesModal(); }} />
+						<SvgWrapper
+							className={'icon'}
+							fill="#fff"
+							svgid="arrow_right"
+							onClick={() => {
+								setActiveChild('notes');
+								toggleNotesModal();
+							}}
+						/>
+						<SvgWrapper
+							className={'icon book-icon-header'}
+							svgid={'notebook'}
+							onClick={() => {
+								setActiveChild('notes');
+								toggleNotesModal();
+							}}
+						/>
 						<h1 className="section-title">Notebook</h1>
 					</header>
-					{
-						authenticationStatus ? (
-							<React.Fragment>
-								<div className="top-bar">
-									<div role={'button'} tabIndex={0} onClick={() => this.setActiveChild('notes')} className={activeChild === 'notes' || activeChild === 'edit' ? 'nav-button active' : 'nav-button'}>
-										{
-											activeChild === 'notes' ? (
-												<SvgWrapper role="button" tabIndex={0} className={'svg'} height="26px" width="26px" svgid="notes" />
-											) : null
-										}
-										{
-											activeChild === 'edit' ? (
-												<SvgWrapper role="button" tabIndex={0} className={'svg'} height="26px" width="26px" svgid="edit_note" />
-											) : null
-										}
-										<h1>{<FormattedMessage {...messages.notesHeader} />}</h1>
-									</div>
-									<div role={'button'} tabIndex={0} onClick={() => this.setActiveChild('highlights')} className={activeChild === 'highlights' ? 'nav-button active' : 'nav-button'}>
-										<SvgWrapper role="button" tabIndex={0} className={'svg'} height="26px" width="26px" svgid="highlight" />
-										<h1>{<FormattedMessage {...messages.highlightsHeader} />}</h1>
-									</div>
-									<div role={'button'} tabIndex={0} onClick={() => this.setActiveChild('bookmarks')} className={activeChild === 'bookmarks' ? 'nav-button active' : 'nav-button'}>
-										<SvgWrapper role="button" tabIndex={0} className={'svg'} height="26px" width="26px" svgid="bookmark" />
-										<h1>{<FormattedMessage {...messages.bookmarksHeader} />}</h1>
-									</div>
+					{authenticationStatus ? (
+						<React.Fragment>
+							<div className="top-bar">
+								<div
+									role={'button'}
+									tabIndex={0}
+									onClick={() => this.setActiveChild('notes')}
+									className={
+										activeChild === 'notes' || activeChild === 'edit'
+											? 'nav-button active'
+											: 'nav-button'
+									}
+								>
+									{activeChild === 'notes' ? (
+										<SvgWrapper
+											role="button"
+											tabIndex={0}
+											className={'svg'}
+											height="26px"
+											width="26px"
+											svgid="notes"
+										/>
+									) : null}
+									{activeChild === 'edit' ? (
+										<SvgWrapper
+											role="button"
+											tabIndex={0}
+											className={'svg'}
+											height="26px"
+											width="26px"
+											svgid="edit_note"
+										/>
+									) : null}
+									<h1>{<FormattedMessage {...messages.notesHeader} />}</h1>
 								</div>
-								{
-									activeChild === 'edit' ? (
-										<EditNote
-											addNote={this.addNote}
-											deleteNote={this.deleteNote}
-											updateNote={this.updateNote}
-											setActiveChild={this.setActiveChild}
-											toggleVerseText={this.toggleVerseText}
-											readSavedMessage={this.readSavedMessage}
-											toggleAddVerseMenu={this.toggleAddVerseMenu}
-											clearNoteErrorMessage={this.clearNoteErrorMessage}
-											note={note}
-											notePassage={notePassage}
-											activeTextId={activeTextId}
-											selectedText={selectedText}
-											savedTheNote={savedTheNote}
-											activeBookName={activeBookName}
-											errorSavingNote={errorSavingNote}
-											notesErrorMessage={notesErrorMessage}
-											isVerseTextVisible={isVerseTextVisible}
-											isAddVerseExpanded={isAddVerseExpanded}
-											vernacularNamesObject={vernacularNamesObject}
-										/>
-									) : (
-										<MyNotes
-											getNotes={this.getNotes}
-											deleteNote={this.deleteNote}
-											setPageSize={this.setPageSize}
-											getBookmarks={this.getBookmarks}
-											getHighlights={this.getHighlights}
-											setActiveNote={this.setActiveNote}
-											setActivePage={this.setActivePage}
-											setActiveChild={this.setActiveChild}
-											updateHighlight={this.updateHighlight}
-											deleteHighlights={this.deleteHighlights}
-											togglePageSelector={this.togglePageSelector}
-											pageSelectorState={pageSelectorState}
-											vernacularNamesObject={vernacularNamesObject}
-											listData={listData}
-											highlights={userHighlights}
-											sectionType={activeChild}
-											pageSize={pageSize}
-											totalPages={totalPages}
-											bookmarkList={bookmarkList}
-											activePage={activePage}
-											pageSizeBookmark={pageSizeBookmark}
-											totalPagesBookmark={totalPagesBookmark}
-											activePageBookmark={activePageBookmark}
-											pageSizeHighlight={pageSizeHighlight}
-											totalPagesHighlight={totalPagesHighlight}
-											activePageHighlight={activePageHighlight}
-										/>
-									)
-								}
-							</React.Fragment>
-						) : (
-							<div className="need-to-login">
-								<p>Please <span className="login-text" role="button" tabIndex={0} onClick={() => { toggleNotesModal(); toggleProfile(); }}>sign in</span> to access your notebook.</p>
+								<div
+									role={'button'}
+									tabIndex={0}
+									onClick={() => this.setActiveChild('highlights')}
+									className={
+										activeChild === 'highlights'
+											? 'nav-button active'
+											: 'nav-button'
+									}
+								>
+									<SvgWrapper
+										role="button"
+										tabIndex={0}
+										className={'svg'}
+										height="26px"
+										width="26px"
+										svgid="highlight"
+									/>
+									<h1>{<FormattedMessage {...messages.highlightsHeader} />}</h1>
+								</div>
+								<div
+									role={'button'}
+									tabIndex={0}
+									onClick={() => this.setActiveChild('bookmarks')}
+									className={
+										activeChild === 'bookmarks'
+											? 'nav-button active'
+											: 'nav-button'
+									}
+								>
+									<SvgWrapper
+										role="button"
+										tabIndex={0}
+										className={'svg'}
+										height="26px"
+										width="26px"
+										svgid="bookmark"
+									/>
+									<h1>{<FormattedMessage {...messages.bookmarksHeader} />}</h1>
+								</div>
 							</div>
-						)
-					}
+							{activeChild === 'edit' ? (
+								<EditNote
+									addNote={this.addNote}
+									deleteNote={this.deleteNote}
+									updateNote={this.updateNote}
+									setActiveChild={this.setActiveChild}
+									toggleVerseText={this.toggleVerseText}
+									readSavedMessage={this.readSavedMessage}
+									toggleAddVerseMenu={this.toggleAddVerseMenu}
+									clearNoteErrorMessage={this.clearNoteErrorMessage}
+									note={note}
+									notePassage={notePassage}
+									activeTextId={activeTextId}
+									selectedText={selectedText}
+									savedTheNote={savedTheNote}
+									activeBookName={activeBookName}
+									errorSavingNote={errorSavingNote}
+									notesErrorMessage={notesErrorMessage}
+									isVerseTextVisible={isVerseTextVisible}
+									isAddVerseExpanded={isAddVerseExpanded}
+									vernacularNamesObject={vernacularNamesObject}
+								/>
+							) : (
+								<MyNotes
+									getNotes={this.getNotes}
+									deleteNote={this.deleteNote}
+									setPageSize={this.setPageSize}
+									getBookmarks={this.getBookmarks}
+									getHighlights={this.getHighlights}
+									setActiveNote={this.setActiveNote}
+									setActivePage={this.setActivePage}
+									setActiveChild={this.setActiveChild}
+									updateHighlight={this.updateHighlight}
+									deleteHighlights={this.deleteHighlights}
+									togglePageSelector={this.togglePageSelector}
+									pageSelectorState={pageSelectorState}
+									vernacularNamesObject={vernacularNamesObject}
+									listData={listData}
+									highlights={userHighlights}
+									sectionType={activeChild}
+									pageSize={pageSize}
+									totalPages={totalPages}
+									bookmarkList={bookmarkList}
+									activePage={activePage}
+									pageSizeBookmark={pageSizeBookmark}
+									totalPagesBookmark={totalPagesBookmark}
+									activePageBookmark={activePageBookmark}
+									pageSizeHighlight={pageSizeHighlight}
+									totalPagesHighlight={totalPagesHighlight}
+									activePageHighlight={activePageHighlight}
+								/>
+							)}
+						</React.Fragment>
+					) : (
+						<PleaseSignInMessage message={'accessNotebook'} />
+					)}
 				</aside>
 			</GenericErrorBoundary>
 		);
@@ -270,7 +375,7 @@ export class Notes extends React.PureComponent { // eslint-disable-line react/pr
 
 Notes.propTypes = {
 	dispatch: PropTypes.func.isRequired,
-	toggleProfile: PropTypes.func,
+	// toggleProfile: PropTypes.func,
 	toggleNotesModal: PropTypes.func,
 	authenticationStatus: PropTypes.bool,
 	note: PropTypes.object,
@@ -308,7 +413,10 @@ function mapDispatchToProps(dispatch) {
 	};
 }
 
-const withConnect = connect(mapStateToProps, mapDispatchToProps);
+const withConnect = connect(
+	mapStateToProps,
+	mapDispatchToProps,
+);
 
 const withReducer = injectReducer({ key: 'notes', reducer });
 const withSaga = injectSaga({ key: 'notes', saga });

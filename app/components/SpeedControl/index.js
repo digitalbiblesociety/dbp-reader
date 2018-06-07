@@ -1,33 +1,64 @@
 /**
-*
-* SpeedControl
-*
-*/
+ *
+ * SpeedControl
+ *
+ */
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import CloseMenuFunctions from 'utils/closeMenuFunctions';
 // import styled from 'styled-components';
 
 class SpeedControl extends React.PureComponent {
+	componentDidMount() {
+		this.closeMenuController = new CloseMenuFunctions(
+			this.ref,
+			this.props.onCloseFunction,
+			{ speed: 'speed' },
+		);
+		this.closeMenuController.onMenuMount();
+	}
+
+	componentWillReceiveProps(nextProps) {
+		if (
+			this.ref &&
+			nextProps.active &&
+			nextProps.active !== this.props.active
+		) {
+			this.closeMenuController.onMenuUnmount();
+			this.closeMenuController.onMenuMount();
+		}
+	}
+
+	componentWillUnmount() {
+		this.closeMenuController.onMenuUnmount();
+	}
+
+	setRef = (el) => (this.ref = el);
 	render() {
 		const { active, options, setSpeed, currentSpeed } = this.props;
 
 		return (
-			<div className={active ? 'speed-control-container' : 'speed-control-container closed'}>
+			<div
+				ref={this.setRef}
+				className={
+					active ? 'speed-control-container' : 'speed-control-container closed'
+				}
+			>
 				<div className="speed-control">
-					{
-						options.map((option) => (
-							<span
-								key={option}
-								className={currentSpeed === option ? 'speed-item active' : 'speed-item'}
-								role="button"
-								tabIndex={0}
-								onClick={() => setSpeed(option)}
-							>
-								{option}
-							</span>
-						))
-					}
+					{options.map((option) => (
+						<span
+							key={option}
+							className={
+								currentSpeed === option ? 'speed-item active' : 'speed-item'
+							}
+							role="button"
+							tabIndex={0}
+							onClick={() => setSpeed(option)}
+						>
+							{option}
+						</span>
+					))}
 				</div>
 			</div>
 		);
@@ -39,7 +70,7 @@ SpeedControl.propTypes = {
 	setSpeed: PropTypes.func,
 	active: PropTypes.bool,
 	currentSpeed: PropTypes.number,
-	// onCloseFunction: PropTypes.func,
+	onCloseFunction: PropTypes.func,
 };
 
 export default SpeedControl;
