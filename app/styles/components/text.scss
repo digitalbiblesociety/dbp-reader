@@ -1,205 +1,215 @@
 .text-container {
-  display: flex;
-  max-width: 1000px;
-  height:calc(100vh - 135px);
-  margin:0 auto;
-  padding: 0 10px;
-  align-items: center;
-  @include css4 {
-    color: #000000; // fallback for IE
-    color: var(--application-text-container-color);
-    font-size: var(--application-base-font-size);
-  }
+	display: flex;
+	max-width: 1000px;
+	height: calc(100vh - 135px);
+	margin: 0 auto;
+	padding: 0 10px;
+	align-items: center;
+	@include css4 {
+		color: #000000; // fallback for IE
+		color: var(--application-text-container-color);
+		font-size: var(--application-base-font-size);
+	}
 
-  main {
-    padding: 15px 15px 45px 15px;
-    margin: 0 auto;
+	main {
+		padding: 15px 15px 45px 15px;
+		margin: 0 auto;
 
-    &.rtl {
-      direction: rtl;
-    }
+		&.rtl {
+			direction: rtl;
 
-    h1,h2,h3,h4,h5,h6 {
-      font-weight: bold;
-      display: block;
-    }
+			.drop-caps {
+				float: right;
+				margin: 0 0.5em 0.25em 0;
+			}
+		}
 
-    h3 + h3:before {
-      content: "\A";
-    }
+		h1,
+		h2,
+		h3,
+		h4,
+		h5,
+		h6 {
+			font-weight: bold;
+			display: block;
+		}
 
-    .audio-only {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
+		h3 + h3:before {
+			content: '\A';
+		}
 
-      svg {
-        width: 115px;
-      }
-      p {
-        width: max-content;
-      }
-      span {
-        width: max-content;
-        color: #868686;
-        opacity: .3;
-        margin-top: 15px;
-      }
-      .divider {
-        width: 175px;
-        height: 1px;
-        background-color: #868686;
-        opacity: .3;
-      }
-    }
+		.audio-only {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			flex-direction: column;
 
-    .readers-spaces {
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
-    }
-  }
+			svg {
+				width: 115px;
+			}
+			p {
+				width: max-content;
+			}
+			span {
+				width: max-content;
+				color: #868686;
+				opacity: 0.3;
+				margin-top: 15px;
+			}
+			.divider {
+				width: 175px;
+				height: 1px;
+				background-color: #868686;
+				opacity: 0.3;
+			}
+		}
 
-  .info-button {
-    position: absolute;
-    bottom: 136px;
+		.readers-spaces {
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+		}
+	}
 
-    &.closed {
-      bottom: 86px;
-    }
-  }
+	.info-button {
+		position: absolute;
+		bottom: 136px;
 
-  .note-in-verse {
-    z-index: 4;
+		&.closed {
+			bottom: 86px;
+		}
+	}
 
-    @include css4 {
-      fill: var(--application-text-container-color)
-    }
-  }
+	.note-in-verse {
+		z-index: 4;
+
+		@include css4 {
+			fill: var(--application-text-container-color);
+		}
+	}
 }
 
 .verse-number {
-  top: 0;
+	top: 0;
 }
 
 .verse-text {
-  margin-top: auto;
-  margin-bottom: auto;
-  padding-left: 5px;
+	margin-top: auto;
+	margin-bottom: auto;
+	padding-left: 5px;
 }
 
 .arrow-wrapper {
-  height: 80%;
-  width:26px;
-  display:flex;
-  align-items: center;
-  justify-content: center;
-  //margin-top:auto;
-  &:not(.disabled):hover {
-    cursor: pointer;
-    background: rgba(0, 0, 0, 0.2);
-  }
+	height: 80%;
+	width: 26px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	//margin-top:auto;
+	&:not(.disabled):hover {
+		cursor: pointer;
+		background: rgba(0, 0, 0, 0.2);
+	}
 }
 //.text-container span {white-space:nowrap;display:inline-block;}
 .prev-arrow-svg {
-  cursor:pointer;
-  @include css4{
-    fill:var(--main-textarea-svg-fill-color);
-  };
-  width:26px;
-  height:26px;
-  //margin-left:10px;
-  //width:25px;
-  //min-width:25px;
-  //min-height:52px;
-  //height:52px;
-  //margin-top:calc(50vh - 104px);
+	cursor: pointer;
+	@include css4 {
+		fill: var(--main-textarea-svg-fill-color);
+	}
+	width: 26px;
+	height: 26px;
+	//margin-left:10px;
+	//width:25px;
+	//min-width:25px;
+	//min-height:52px;
+	//height:52px;
+	//margin-top:calc(50vh - 104px);
 }
 .next-arrow-svg {
-  cursor:pointer;
-  @include css4{
-    fill:var(--main-textarea-svg-fill-color);
-  };
-  width:26px;
-  height:26px;
-  //margin-right:5px;
-  //width:25px;
-  //min-width:25px;
-  //min-height:52px;
-  //height:52px;
-  //margin-top:calc(50vh - 104px);
+	cursor: pointer;
+	@include css4 {
+		fill: var(--main-textarea-svg-fill-color);
+	}
+	width: 26px;
+	height: 26px;
+	//margin-right:5px;
+	//width:25px;
+	//min-width:25px;
+	//min-height:52px;
+	//height:52px;
+	//margin-top:calc(50vh - 104px);
 }
 .prev-arrow-svg:hover {
-  animation:thicken 0.3s forwards;
+	animation: thicken 0.3s forwards;
 }
 .next-arrow-svg:hover {
-  animation:thicken 0.3s forwards;
+	animation: thicken 0.3s forwards;
 }
-.text-highlighted 	  {
-  //@include css4{
-  //  //background-color:var(--text-selection-color);
-  //  color:var(--default-text-color);
-  //};
-  //filter: sepia(40%);
+.text-highlighted {
+	//@include css4{
+	//  //background-color:var(--text-selection-color);
+	//  color:var(--default-text-color);
+	//};
+	//filter: sepia(40%);
 }
 
 .active-chapter-title {
-  margin:auto;
-  max-width: 30px;
-  text-align:center;
-  font-size:130%;
+	margin: auto;
+	max-width: 30px;
+	text-align: center;
+	font-size: 130%;
 }
 
-.drop-caps 			  {
-  font-size:2em;
-  line-height:1;
-  margin: 0 .25em .5em 0;
+.drop-caps {
+	font-size: 2em;
+	line-height: 1;
+	margin: 0 0.25em 0.5em 0;
 }
 
 .read-chapter-container {
-  display:flex;
-  justify-content: center;
+	display: flex;
+	justify-content: center;
 }
 
-.read-chapter 			{
-  height: 35px;
-  border-radius: 6px;
-  width:130px;
-  max-width: 150px;
-  text-align:center;
-  background-color: #FFFFF5;
-  box-shadow: 1px 1px 1px 1px #B1A77A;
-  cursor: pointer;
-  font-size: 11px;
-  white-space: nowrap;
-  padding: 5px;
+.read-chapter {
+	height: 35px;
+	border-radius: 6px;
+	width: 130px;
+	max-width: 150px;
+	text-align: center;
+	background-color: #fffff5;
+	box-shadow: 1px 1px 1px 1px #b1a77a;
+	cursor: pointer;
+	font-size: 11px;
+	white-space: nowrap;
+	padding: 5px;
 }
 
 .read-chapter:active {
-  box-shadow: none;
-  color: #000;
+	box-shadow: none;
+	color: #000;
 }
 
 .read-chapter:focus {
-  border: 1px solid #B1A77A;
-  color: #000;
-  outline: none;
+	border: 1px solid #b1a77a;
+	color: #000;
+	outline: none;
 }
 
 @media only screen and (max-width: $audio-player-bp) {
-  .text-container {
-    main {
-      padding-bottom: 75px;
-      z-index: 0;
-    }
+	.text-container {
+		main {
+			padding-bottom: 75px;
+			z-index: 0;
+		}
 
-    .info-button {
-      bottom: 166px;
-      z-index: 5;
-    }
-  }
+		.info-button {
+			bottom: 166px;
+			z-index: 5;
+		}
+	}
 }
 
 // Style that I like but that isn't in the comps
