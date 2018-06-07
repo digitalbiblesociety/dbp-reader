@@ -369,11 +369,6 @@ export function* getBibleFromUrl({
 			if (!activeBook) {
 				activeBook = books.find((b) => b.book_id === activeBookId);
 			}
-			// console.log('activeBook', activeBook);
-			// console.log('activeBookId', activeBookId);
-			// console.log('hasMatt', hasMatt);
-			// console.log('get(books, [0, "book_id"])', get(books, [0, 'book_id']));
-
 			const filesets = response.data.filesets['dbp-dev'].filter(
 				(f) =>
 					(f.type === 'audio' ||

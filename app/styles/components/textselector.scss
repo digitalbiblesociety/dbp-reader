@@ -8,7 +8,6 @@
 .text-selection-section {
 	max-height: calc(100% - 100px);
 	height: calc(100% - 100px);
-	//text-transform:uppercase;
 }
 .text-selection-title {
 	display: flex;
@@ -32,7 +31,6 @@
 	left: 0;
 	right: 0;
 	min-width: 291px;
-	//left:calc(50% - 116px);
 	height: calc(100vh - 110px);
 	@include css4 {
 		background-color: var(--text-selection-background);
@@ -98,7 +96,6 @@
 		display: flex;
 		align-items: center;
 		height: 54px;
-		//padding:0 10px;
 
 		.icon {
 			flex-shrink: 0;
@@ -148,11 +145,6 @@
 	cursor: pointer;
 	margin-top: 5px;
 	margin-bottom: 5px;
-
-	//&:nth-child(odd) {
-	//  background-color: #ddd;
-	//  //opacity: .8;
-	//}
 }
 .language-name:hover {
 	@include css4 {
@@ -191,7 +183,6 @@
 	height: calc(100%);
 	max-height: calc(100%);
 	overflow: auto;
-	//padding:15px;
 	/* Navigation/Dark Text Fill Copy 6: */
 	.version-list-section {
 		width: 100%;
@@ -216,15 +207,8 @@
 			&:hover {
 				cursor: default;
 			}
-			//filter:invert(1);
 		}
-		//padding:15px;
-
-		//.accordion {
-		//  padding: 15px;
-		//}
 		.accordion-title-style {
-			//&aria-selected["true"]
 			@include css4 {
 				background-color: var(--text-selection-background);
 			}
@@ -233,7 +217,6 @@
 			}
 			padding-top: 15px;
 			padding-bottom: 15px;
-			//padding-left: 15px;
 			text-transform: uppercase;
 
 			& .accordion__title[aria-selected='true'] {
@@ -244,7 +227,6 @@
 			}
 
 			& .accordion__title {
-				//padding:0 15px;
 				cursor: pointer;
 
 				h4 {
@@ -255,7 +237,6 @@
 				a {
 					display: inline-block;
 					width: 100%;
-					//padding: 0 15px;
 				}
 				&:hover {
 					@include css4 {
@@ -266,7 +247,6 @@
 		}
 
 		.accordion-body-style {
-			//padding:15px 0 15px 0;
 			@include css4 {
 				color: var(--text-selection-text-color);
 				background-color: var(--text-selection-accordion-body-background);
@@ -281,7 +261,6 @@
 						color: var(--active-color-primary);
 					}
 				}
-				//padding: 0 15px;
 			}
 		}
 	}
@@ -320,37 +299,8 @@
 	}
 }
 
-// Version Selection Styles
-//.version-item-button             {
-//  display:flex;
-//  align-items:flex-start;
-//  margin:10px 0;
-//  cursor:pointer;
-//  :nth-child(2){margin:0 10px;}
-//}
-//.version-item-button:hover         {
-//  @include css4{
-//    color:var(--text-selection-active-item-color);
-//    fill:var(--text-selection-active-item-color);
-//  };
-//}
-//.version-item-button .svg          {
-//  min-height: 20px;
-//  min-width:20px;
-//}
-//.version-item-button .svg.active   {
-//  @include css4{fill:var(--text-selection-text-color);};
-//}
-//.version-item-button .svg.inactive {
-//  @include css4{fill:var(--inactive-font-option);};
-//}
 .active-version {
 	@include css4 {
 		color: var(--active-color-primary);
 	}
 }
-// capture location of the client relative to the scroll container
-// once the previously active book is closed reset scroll height
-// if the new book is above the previous book do nothing
-// if the new book is below the previous book then subtract the
-// height of the closed book from the saved scroll position
