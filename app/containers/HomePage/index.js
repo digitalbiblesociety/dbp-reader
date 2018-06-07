@@ -334,6 +334,8 @@ class HomePage extends React.PureComponent {
 	// c = 0
 	componentWillReceiveProps(nextProps) {
 		// Deals with updating page based on the url params
+		// console.log('Received props --------------------------------------');
+
 		// previous props
 		const { params } = this.props.match;
 		// next props
@@ -359,13 +361,12 @@ class HomePage extends React.PureComponent {
 			);
 		}
 		if (!isEqual(params, nextParams)) {
-			// console.log('received params are different', nextParams);
-			// console.log('diff between params and next params', differenceObject(params, nextParams));
 			// if the route isn't the same as before find which parts changed
 			const newChapter = params.chapter !== nextParams.chapter;
 			const newBook = params.bookId !== nextParams.bookId;
 			const newBible = params.bibleId !== nextParams.bibleId;
 
+			// Default each of these to an empty map to avoid an error being thrown
 			const {
 				nextBook = fromJS({}),
 				previousBook = fromJS({}),
@@ -449,29 +450,44 @@ class HomePage extends React.PureComponent {
 		} else if (
 			this.props.homepage.activeBookId !== nextProps.homepage.activeBookId
 		) {
-			// Deals with when the new text doesn't have the same books
-			// 	console.log('the current id does not match');
-			// 	console.log(this.props);
-			// 	console.log('redirecting from activeBookId willReceiveProps');
+			// console.log('Book changed');
+
+			// Deals with when the new text doesn't have the same book
+			// Still using the verse param since it may not have been set in the homepage object yet
 			this.props.history.replace(
 				`/${nextProps.homepage.activeTextId.toLowerCase()}/${nextProps.homepage.activeBookId.toLowerCase()}/${
 					nextProps.homepage.activeChapter
-				}${
-					nextProps.homepage.activeVerse
-						? `/${nextProps.homepage.activeVerse}`
-						: ''
-				}`,
+				}${nextParams.verse ? `/${nextParams.verse}` : ''}`,
 			);
 			// console.log('route that I pushed', `/${nextProps.homepage.activeTextId}/${nextProps.homepage.activeBookId}/${nextProps.homepage.activeChapter}`);
 		} else if (
 			this.props.homepage.activeChapter !== nextProps.homepage.activeChapter &&
 			nextProps.homepage.activeChapter !== nextParams.chapter
 		) {
-			this.props.history.replace(
-				`/${nextProps.homepage.activeTextId.toLowerCase()}/${nextProps.homepage.activeBookId.toLowerCase()}/${
-					nextProps.homepage.activeChapter
-				}`,
-			);
+			// console.log('chapter changed both in params and props');
+			// Need to account for if the verse changed here
+			// If the chapters are different
+			if (
+				nextParams.verse !== nextProps.homepage.activeVerse &&
+				nextParams.verse
+			) {
+				// console.log('The verses were different as well so I am not updating the url');
+				this.props.history.replace(
+					`/${nextParams.bibleId.toLowerCase()}/${nextParams.bookId.toLowerCase()}/${
+						nextParams.chapter
+					}${nextParams.verse ? `/${nextParams.verse}` : ''}`,
+				);
+			} else {
+				this.props.history.replace(
+					`/${nextProps.homepage.activeTextId.toLowerCase()}/${nextProps.homepage.activeBookId.toLowerCase()}/${
+						nextProps.homepage.activeChapter
+					}${
+						nextProps.homepage.activeVerse
+							? `/${nextProps.homepage.activeVerse}`
+							: ''
+					}`,
+				);
+			}
 		} else if (
 			isEqual(params, nextParams) &&
 			this.props.homepage.activeBookId === nextProps.homepage.activeBookId &&
@@ -480,6 +496,8 @@ class HomePage extends React.PureComponent {
 		) {
 			// If url did not change && bibleId, bookId and chapter in props did not change - Might need to include verse as well...
 			// This section may not work with SSR because the state might be persisted through a refresh
+			// console.log('Url did not change and current props equal next props');
+
 			// console.log('this.props.homepage.activeVerse', this.props.homepage.activeVerse);
 
 			// Handles the cases where the url needs to be updated
@@ -510,6 +528,8 @@ class HomePage extends React.PureComponent {
 				nextParamUrl !== curParamUrl
 			) {
 				// console.log('Params do not match props', nextPropUrl !== nextParamUrl, !(curParamUrl === curPropUrl));
+				// there are props, the current props and params match, the next params are different, the next props do not equal the next params
+				// console.log('there are props, the current props and params match, the next params are different, the next props do not equal the next params');
 
 				// Redirect to the appropriate url
 				this.props.history.replace(
