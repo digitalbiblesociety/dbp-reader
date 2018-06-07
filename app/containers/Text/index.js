@@ -1,11 +1,12 @@
 /**
-*
-* Text
-*
-*/
+ *
+ * Text
+ *
+ */
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import Information from 'components/Information';
 import SvgWrapper from 'components/SvgWrapper';
 import ContextPortal from 'components/ContextPortal';
 import FootnotePortal from 'components/FootnotePortal';
@@ -29,16 +30,14 @@ import isEqual from 'lodash/isEqual';
 // import some from 'lodash/some';
 import createHighlights from './highlightPlainText';
 import createFormattedHighlights from './highlightFormattedText';
-import {
-	applyNotes,
-	applyBookmarks,
-} from './formattedTextUtils';
+import { applyNotes, applyBookmarks } from './formattedTextUtils';
 // import { addClickToNotes } from './htmlToReact';
 /* Disabling the jsx-a11y linting because we need to capture the selected text
 	 and the most straight forward way of doing so is with the onMouseUp event */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 // Todo: Fix issue with this component being rendered so many times...
-class Text extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+class Text extends React.PureComponent {
+	// eslint-disable-line react/prefer-stateless-function
 	state = {
 		contextMenuState: false,
 		footnoteState: false,
@@ -78,7 +77,11 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		// 	console.log('component did update state difference: \n', differenceObject(this.state, prevState));
 		// }
 		// Logic below ensures that the proper event handlers are set on each footnote
-		if (this.props.formattedSource.main && prevProps.formattedSource.main !== this.props.formattedSource.main && (this.format || this.formatHighlight)) {
+		if (
+			this.props.formattedSource.main &&
+			prevProps.formattedSource.main !== this.props.formattedSource.main &&
+			(this.format || this.formatHighlight)
+		) {
 			if (this.format) {
 				// console.log('setting event listeners on format first');
 				this.setEventHandlersForFootnotes(this.format);
@@ -88,13 +91,29 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				this.setEventHandlersForFootnotes(this.formatHighlight);
 				this.setEventHandlersForFormattedVerses(this.formatHighlight);
 			}
-		} else if (!isEqual(this.props.highlights, prevProps.highlights) && this.formatHighlight) {
+		} else if (
+			!isEqual(this.props.highlights, prevProps.highlights) &&
+			this.formatHighlight
+		) {
 			// console.log('setting event listeners on formatHighlight because highlights changed second');
 			this.setEventHandlersForFootnotes(this.formatHighlight);
 			this.setEventHandlersForFormattedVerses(this.formatHighlight);
 		} else if (
-			prevProps.userSettings.getIn(['toggleOptions', 'readersMode', 'active']) !== this.props.userSettings.getIn(['toggleOptions', 'readersMode', 'active']) &&
-			!this.props.userSettings.getIn(['toggleOptions', 'readersMode', 'active']) &&
+			prevProps.userSettings.getIn([
+				'toggleOptions',
+				'readersMode',
+				'active',
+			]) !==
+				this.props.userSettings.getIn([
+					'toggleOptions',
+					'readersMode',
+					'active',
+				]) &&
+			!this.props.userSettings.getIn([
+				'toggleOptions',
+				'readersMode',
+				'active',
+			]) &&
 			(this.formatHighlight || this.format)
 		) {
 			// Need to set event handlers again here because they are removed once the plain text is rendered
@@ -110,12 +129,20 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		}
 
 		// This handles setting the events on a page refresh or navigation via url
-		if (this.format && !this.state.handlersAreSet && !this.props.loadingNewChapterText) {
+		if (
+			this.format &&
+			!this.state.handlersAreSet &&
+			!this.props.loadingNewChapterText
+		) {
 			// console.log('setting event listeners on format fourth');
 			this.setEventHandlersForFootnotes(this.format);
 			this.setEventHandlersForFormattedVerses(this.format);
 			this.callSetStateNotInUpdate();
-		} else if (this.formatHighlight && !this.state.handlersAreSet && !this.props.loadingNewChapterText) {
+		} else if (
+			this.formatHighlight &&
+			!this.state.handlersAreSet &&
+			!this.props.loadingNewChapterText
+		) {
 			// console.log('setting event listeners on formatHighlight fourth ');
 			this.setEventHandlersForFootnotes(this.formatHighlight);
 			this.setEventHandlersForFormattedVerses(this.formatHighlight);
@@ -188,7 +215,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			}
 			// if Production then log error to service
 		}
-	}
+	};
 
 	setEventHandlersForFootnotes = (ref) => {
 		const notes = [...ref.getElementsByClassName('note')];
@@ -197,7 +224,11 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			// console.log('setting a click handler for: ', note.attributes);
 			/* eslint-disable no-param-reassign */
 			// May need to change this and change the regex if we do infinite scrolling
-			if (note.childNodes && note.childNodes[0] && typeof note.childNodes[0].removeAttribute === 'function') {
+			if (
+				note.childNodes &&
+				note.childNodes[0] &&
+				typeof note.childNodes[0].removeAttribute === 'function'
+			) {
 				note.childNodes[0].removeAttribute('href');
 			}
 
@@ -207,22 +238,25 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				const rightEdge = window.innerWidth - 300;
 				const x = rightEdge < e.clientX ? rightEdge : e.clientX;
 
-				this.openFootnote({ id: note.attributes.id.value, coords: { x, y: e.clientY } });
+				this.openFootnote({
+					id: note.attributes.id.value,
+					coords: { x, y: e.clientY },
+				});
 			};
 		});
-	}
+	};
 
 	setFormattedRefHighlight = (el) => {
 		this.formatHighlight = el;
-	}
+	};
 
 	setFormattedRef = (el) => {
 		this.format = el;
-	}
+	};
 
 	setMainRef = (el) => {
 		this.main = el;
-	}
+	};
 	// Use selected text only when marking highlights
 	setActiveNote = ({ coords, existingNote, bookmark }) => {
 		if (!this.props.userAuthenticated || !this.props.userId) {
@@ -240,24 +274,50 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		};
 
 		this.props.setActiveNote({ note: existingNote || note });
-	}
+	};
 
-	getReference = (verseStart, verseEnd) => `${this.props.activeBookName} ${this.props.activeChapter}:${verseStart === verseEnd || !verseEnd ? verseStart : `${verseStart}-${verseEnd}`}`
+	getReference = (verseStart, verseEnd) =>
+		`${this.props.activeBookName} ${this.props.activeChapter}:${
+			verseStart === verseEnd || !verseEnd
+				? verseStart
+				: `${verseStart}-${verseEnd}`
+		}`;
 
 	getFirstVerse = (e) => {
 		e.stopPropagation();
 		// console.log('getting first verse');
 		const target = e.target;
-		const isFormatted = !!this.props.formattedSource.main &&
-			(!this.props.userSettings.getIn(['toggleOptions', 'readersMode', 'active']) || !this.props.userSettings.getIn(['toggleOptions', 'readersMode', 'available'])) &&
-			(!this.props.userSettings.getIn(['toggleOptions', 'oneVersePerLine', 'active']) || !this.props.userSettings.getIn(['toggleOptions', 'oneVersePerLine', 'available']));
+		const isFormatted =
+			!!this.props.formattedSource.main &&
+			(!this.props.userSettings.getIn([
+				'toggleOptions',
+				'readersMode',
+				'active',
+			]) ||
+				!this.props.userSettings.getIn([
+					'toggleOptions',
+					'readersMode',
+					'available',
+				])) &&
+			(!this.props.userSettings.getIn([
+				'toggleOptions',
+				'oneVersePerLine',
+				'active',
+			]) ||
+				!this.props.userSettings.getIn([
+					'toggleOptions',
+					'oneVersePerLine',
+					'available',
+				]));
 		const primaryButton = e.button === 0;
 
 		try {
 			// if formatted iterate up the dom looking for data-id
 			if (isFormatted) {
 				const verseNode = getFormattedParentVerse(target);
-				const firstVerse = verseNode ? verseNode.attributes['data-id'].value.split('_')[1] : '';
+				const firstVerse = verseNode
+					? verseNode.attributes['data-id'].value.split('_')[1]
+					: '';
 				// console.log('first formatted verse', firstVerse);
 				// third check may not be required, if micro optimization is needed then look into removing contains
 				if (primaryButton && this.main.contains(target) && firstVerse) {
@@ -281,14 +341,33 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				console.warn('Error with getting last verse and opening menu', err); // eslint-disable-line no-console
 			}
 		}
-	}
+	};
 
 	getLastVerse = (e) => {
 		const target = e.target;
 		// const parent = e.target.parentElement;
-		const isFormatted = !!this.props.formattedSource.main &&
-			(!this.props.userSettings.getIn(['toggleOptions', 'readersMode', 'active']) || !this.props.userSettings.getIn(['toggleOptions', 'readersMode', 'available'])) &&
-			(!this.props.userSettings.getIn(['toggleOptions', 'oneVersePerLine', 'active']) || !this.props.userSettings.getIn(['toggleOptions', 'oneVersePerLine', 'available']));
+		const isFormatted =
+			!!this.props.formattedSource.main &&
+			(!this.props.userSettings.getIn([
+				'toggleOptions',
+				'readersMode',
+				'active',
+			]) ||
+				!this.props.userSettings.getIn([
+					'toggleOptions',
+					'readersMode',
+					'available',
+				])) &&
+			(!this.props.userSettings.getIn([
+				'toggleOptions',
+				'oneVersePerLine',
+				'active',
+			]) ||
+				!this.props.userSettings.getIn([
+					'toggleOptions',
+					'oneVersePerLine',
+					'available',
+				]));
 		// console.log('is formatted', isFormatted);
 		// May need to get the parent using the same functions as for highlighting
 		// console.log('Get last verse target', target);
@@ -300,52 +379,70 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		// if formatted iterate up the dom looking for data-id
 		if (isFormatted) {
 			const verseNode = getFormattedParentVerse(target);
-			const lastVerse = verseNode ? verseNode.attributes['data-id'].value.split('_')[1] : '';
+			const lastVerse = verseNode
+				? verseNode.attributes['data-id'].value.split('_')[1]
+				: '';
 			// console.log('last formatted verse', lastVerse);
 			// third check may not be required, if micro optimization is needed then look into removing contains
-			if (primaryButton && window.getSelection().toString() && this.main.contains(target) && lastVerse) {
+			if (
+				primaryButton &&
+				window.getSelection().toString() &&
+				this.main.contains(target) &&
+				lastVerse
+			) {
 				typeof e.persist === 'function' && e.persist();
 				const selectedText = window.getSelection().toString();
 
-				this.setState({
-					lastVerse,
-					anchorOffset: window.getSelection().anchorOffset,
-					anchorText: window.getSelection().anchorNode.data,
-					anchorNode: window.getSelection().anchorNode,
-					focusOffset: window.getSelection().focusOffset,
-					focusText: window.getSelection().focusNode.data,
-					focusNode: window.getSelection().focusNode,
-					selectedText,
-				}, () => {
-					this.openContextMenu(e);
-				});
+				this.setState(
+					{
+						lastVerse,
+						anchorOffset: window.getSelection().anchorOffset,
+						anchorText: window.getSelection().anchorNode.data,
+						anchorNode: window.getSelection().anchorNode,
+						focusOffset: window.getSelection().focusOffset,
+						focusText: window.getSelection().focusNode.data,
+						focusNode: window.getSelection().focusNode,
+						selectedText,
+					},
+					() => {
+						this.openContextMenu(e);
+					},
+				);
 			}
 		} else if (!isFormatted) {
 			const verseNode = getPlainParentVerseWithoutNumber(target);
 			const lastVerse = verseNode ? verseNode.attributes.verseid.value : '';
 			// console.log('last plain verse', lastVerse);
 			// third check may not be required, if micro optimization is needed then look into removing contains
-			if (primaryButton && window.getSelection().toString() && this.main.contains(target) && lastVerse) {
+			if (
+				primaryButton &&
+				window.getSelection().toString() &&
+				this.main.contains(target) &&
+				lastVerse
+			) {
 				typeof e.persist === 'function' && e.persist();
 				const selectedText = window.getSelection().toString();
 
-				this.setState({
-					lastVerse,
-					anchorOffset: window.getSelection().anchorOffset,
-					anchorText: window.getSelection().anchorNode.data,
-					anchorNode: window.getSelection().anchorNode,
-					focusOffset: window.getSelection().focusOffset,
-					focusText: window.getSelection().focusNode.data,
-					focusNode: window.getSelection().focusNode,
-					selectedText,
-				}, () => {
-					this.openContextMenu(e);
-				});
+				this.setState(
+					{
+						lastVerse,
+						anchorOffset: window.getSelection().anchorOffset,
+						anchorText: window.getSelection().anchorNode.data,
+						anchorNode: window.getSelection().anchorNode,
+						focusOffset: window.getSelection().focusOffset,
+						focusText: window.getSelection().focusNode.data,
+						focusNode: window.getSelection().focusNode,
+						selectedText,
+					},
+					() => {
+						this.openContextMenu(e);
+					},
+				);
 			}
 		} else {
 			this.openContextMenu(e);
 		}
-	}
+	};
 
 	get getTextComponents() {
 		const {
@@ -364,12 +461,14 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		const chapterAlt = initialText[0] && initialText[0].chapter_alt;
 		// Doing it like this may impact performance, but it is probably cleaner
 		// than most other ways of doing it...
-		const formattedSource = initialFormattedSource.main ? {
-			...initialFormattedSource,
-			main: [initialFormattedSource.main]
-				.map((s) => applyNotes(s, userNotes, this.handleNoteClick))
-				.map((s) => applyBookmarks(s, bookmarks, this.handleNoteClick))[0],
-		} : initialFormattedSource;
+		const formattedSource = initialFormattedSource.main
+			? {
+					...initialFormattedSource,
+					main: [initialFormattedSource.main]
+						.map((s) => applyNotes(s, userNotes, this.handleNoteClick))
+						.map((s) => applyBookmarks(s, bookmarks, this.handleNoteClick))[0],
+			  }
+			: initialFormattedSource;
 		// console.log('new src', formattedSource);
 		// console.log('diff', differenceObject(formattedSource, initialFormattedSource));
 		// if (userNotes) {
@@ -378,9 +477,21 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		// 	// do something to display a svg
 		// }
 		// console.log(userNotes);
-		const readersMode = userSettings.getIn(['toggleOptions', 'readersMode', 'active']);
-		const oneVersePerLine = userSettings.getIn(['toggleOptions', 'oneVersePerLine', 'active']);
-		const justifiedText = userSettings.getIn(['toggleOptions', 'justifiedText', 'active']);
+		const readersMode = userSettings.getIn([
+			'toggleOptions',
+			'readersMode',
+			'active',
+		]);
+		const oneVersePerLine = userSettings.getIn([
+			'toggleOptions',
+			'oneVersePerLine',
+			'active',
+		]);
+		const justifiedText = userSettings.getIn([
+			'toggleOptions',
+			'justifiedText',
+			'active',
+		]);
 		// console.log(initialText);
 		// todo figure out a way to memoize or cache the highlighted version of the text to improve performance - Not a huge issue because even with cpu at 6x throttling this part still worked fine
 		// Need to connect to the api and get the highlights object for this chapter
@@ -389,14 +500,26 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		let plainText = [];
 		let formattedText = [];
 
-		if (highlights.length && (!oneVersePerLine && !readersMode && formattedSource.main)) {
+		if (
+			highlights.length &&
+			(!oneVersePerLine && !readersMode && formattedSource.main)
+		) {
 			// Temporary fix for the fact that highlight_start is a string... ... ...
-			const highlightsToPass = highlights.map((h) => ({ ...h, highlight_start: parseInt(h.highlight_start, 10) }));
+			const highlightsToPass = highlights.map((h) => ({
+				...h,
+				highlight_start: parseInt(h.highlight_start, 10),
+			}));
 			// Use function for highlighting the formatted formattedText
-			formattedText = createFormattedHighlights(highlightsToPass, formattedSource.main);
+			formattedText = createFormattedHighlights(
+				highlightsToPass,
+				formattedSource.main,
+			);
 		} else if (highlights.length && initialText.length) {
 			// Temporary fix for the fact that highlight_start is a string... ... ...
-			const highlightsToPass = highlights.map((h) => ({ ...h, highlight_start: parseInt(h.highlight_start, 10) }));
+			const highlightsToPass = highlights.map((h) => ({
+				...h,
+				highlight_start: parseInt(h.highlight_start, 10),
+			}));
 			// Use function for highlighting the plain plainText
 			plainText = createHighlights(highlightsToPass, initialText);
 		} else {
@@ -410,84 +533,215 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		/* eslint-disable react/no-danger */
 		if (plainText.length === 0 && !formattedSource.main) {
 			if (!window.navigator.onLine) {
-				textComponents = [<h5 key={'no_connection'}>We are having trouble contacting the server. Please check your internet connection and then refresh the page.</h5>];
+				textComponents = [
+					<h5 key={'no_connection'}>
+						We are having trouble contacting the server. Please check your
+						internet connection and then refresh the page.
+					</h5>,
+				];
 			} else if (invalidBibleId) {
-				textComponents = [<h5 key={'no_text'}>Text is not currently available for this version.</h5>];
+				textComponents = [
+					<h5 key={'no_text'}>
+						Text is not currently available for this version.
+					</h5>,
+				];
 			} else if (audioSource) {
-				textComponents = [<AudioOnlyMessage key={'no_text'} book={activeBookName} chapter={activeChapter} />];
+				textComponents = [
+					<AudioOnlyMessage
+						key={'no_text'}
+						book={activeBookName}
+						chapter={activeChapter}
+					/>,
+				];
 			} else {
-				textComponents = [<h5 key={'no_text'}>Text is not currently available for this version.</h5>];
+				textComponents = [
+					<h5 key={'no_text'}>
+						Text is not currently available for this version.
+					</h5>,
+				];
 			}
 		} else if (readersMode) {
-			textComponents = plainText.map((verse) =>
-				verse.hasHighlight ?
-					[<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} verseid={verse.verse_start} key={verse.verse_start} dangerouslySetInnerHTML={{ __html: verse.verse_text }} />, <span key={`${verse.verse_end}spaces`} className={'readers-spaces'}>&nbsp;</span>] :
-					[<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} verseid={verse.verse_start} key={verse.verse_start}>{verse.verse_text}</span>, <span key={`${verse.verse_end}spaces`} className={'readers-spaces'}>&nbsp;</span>]
+			textComponents = plainText.map(
+				(verse) =>
+					verse.hasHighlight
+						? [
+								<span
+									onMouseUp={this.handleMouseUp}
+									onMouseDown={this.getFirstVerse}
+									verseid={verse.verse_start}
+									key={verse.verse_start}
+									dangerouslySetInnerHTML={{ __html: verse.verse_text }}
+								/>,
+								<span
+									key={`${verse.verse_end}spaces`}
+									className={'readers-spaces'}
+								>
+									&nbsp;
+								</span>,
+						  ]
+						: [
+								<span
+									onMouseUp={this.handleMouseUp}
+									onMouseDown={this.getFirstVerse}
+									verseid={verse.verse_start}
+									key={verse.verse_start}
+								>
+									{verse.verse_text}
+								</span>,
+								<span
+									key={`${verse.verse_end}spaces`}
+									className={'readers-spaces'}
+								>
+									&nbsp;
+								</span>,
+						  ],
 			);
 		} else if (oneVersePerLine) {
-			textComponents = plainText.map((verse) => (
-				verse.hasHighlight ?
-					(
-						<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} verseid={verse.verse_start} key={verse.verse_start}>
-							<br /><sup verseid={verse.verse_start}>
+			textComponents = plainText.map(
+				(verse) =>
+					verse.hasHighlight ? (
+						<span
+							onMouseUp={this.handleMouseUp}
+							onMouseDown={this.getFirstVerse}
+							verseid={verse.verse_start}
+							key={verse.verse_start}
+						>
+							<br />
+							<sup verseid={verse.verse_start}>
 								&nbsp;{verse.verse_start_alt || verse.verse_start}&nbsp;
 							</sup>
-							<IconsInText clickHandler={this.handleNoteClick} bookmarkData={{ hasBookmark: verse.hasBookmark, index: verse.bookmarkIndex }} noteData={{ hasNote: verse.hasNote, index: verse.noteIndex }} />
-							<span verseid={verse.verse_start} dangerouslySetInnerHTML={{ __html: verse.verse_text }} />
+							<IconsInText
+								clickHandler={this.handleNoteClick}
+								bookmarkData={{
+									hasBookmark: verse.hasBookmark,
+									index: verse.bookmarkIndex,
+								}}
+								noteData={{ hasNote: verse.hasNote, index: verse.noteIndex }}
+							/>
+							<span
+								verseid={verse.verse_start}
+								dangerouslySetInnerHTML={{ __html: verse.verse_text }}
+							/>
 						</span>
-					) :
-					(
-						<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} verseid={verse.verse_start} key={verse.verse_start}>
-							<br /><sup verseid={verse.verse_start}>
+					) : (
+						<span
+							onMouseUp={this.handleMouseUp}
+							onMouseDown={this.getFirstVerse}
+							verseid={verse.verse_start}
+							key={verse.verse_start}
+						>
+							<br />
+							<sup verseid={verse.verse_start}>
 								&nbsp;{verse.verse_start_alt || verse.verse_start}&nbsp;
 							</sup>
-							<IconsInText clickHandler={this.handleNoteClick} bookmarkData={{ hasBookmark: verse.hasBookmark, index: verse.bookmarkIndex }} noteData={{ hasNote: verse.hasNote, index: verse.noteIndex }} />
+							<IconsInText
+								clickHandler={this.handleNoteClick}
+								bookmarkData={{
+									hasBookmark: verse.hasBookmark,
+									index: verse.bookmarkIndex,
+								}}
+								noteData={{ hasNote: verse.hasNote, index: verse.noteIndex }}
+							/>
 							<span verseid={verse.verse_start}>{verse.verse_text}</span>
 						</span>
-					)
-			));
+					),
+			);
 		} else if (formattedSource.main) {
 			// Need to run a function to highlight the formatted text if this option is selected
 			if (!Array.isArray(formattedText)) {
-				textComponents = (<div ref={this.setFormattedRefHighlight} className={justifiedText ? 'chapter justify' : 'chapter'} dangerouslySetInnerHTML={{ __html: formattedText }} />);
+				textComponents = (
+					<div
+						ref={this.setFormattedRefHighlight}
+						className={justifiedText ? 'chapter justify' : 'chapter'}
+						dangerouslySetInnerHTML={{ __html: formattedText }}
+					/>
+				);
 			} else {
-				textComponents = (<div ref={this.setFormattedRef} className={justifiedText ? 'chapter justify' : 'chapter'} dangerouslySetInnerHTML={{ __html: formattedSource.main }} />);
+				textComponents = (
+					<div
+						ref={this.setFormattedRef}
+						className={justifiedText ? 'chapter justify' : 'chapter'}
+						dangerouslySetInnerHTML={{ __html: formattedSource.main }}
+					/>
+				);
 			}
 		} else {
 			// console.log(text);
-			textComponents = plainText.map((verse) => (
-				verse.hasHighlight ?
-					(
-						<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} className={'align-left'} verseid={verse.verse_start} key={verse.verse_start}>
+			textComponents = plainText.map(
+				(verse) =>
+					verse.hasHighlight ? (
+						<span
+							onMouseUp={this.handleMouseUp}
+							onMouseDown={this.getFirstVerse}
+							className={'align-left'}
+							verseid={verse.verse_start}
+							key={verse.verse_start}
+						>
 							<sup verseid={verse.verse_start}>
 								&nbsp;{verse.verse_start_alt || verse.verse_start}&nbsp;
 							</sup>
-							<IconsInText clickHandler={this.handleNoteClick} bookmarkData={{ hasBookmark: verse.hasBookmark, index: verse.bookmarkIndex }} noteData={{ hasNote: verse.hasNote, index: verse.noteIndex }} />
-							<span verseid={verse.verse_start} dangerouslySetInnerHTML={{ __html: verse.verse_text }} />
+							<IconsInText
+								clickHandler={this.handleNoteClick}
+								bookmarkData={{
+									hasBookmark: verse.hasBookmark,
+									index: verse.bookmarkIndex,
+								}}
+								noteData={{ hasNote: verse.hasNote, index: verse.noteIndex }}
+							/>
+							<span
+								verseid={verse.verse_start}
+								dangerouslySetInnerHTML={{ __html: verse.verse_text }}
+							/>
 						</span>
-					) :
-					(
-						<span onMouseUp={this.handleMouseUp} onMouseDown={this.getFirstVerse} className={'align-left'} verseid={verse.verse_start} key={verse.verse_start}>
+					) : (
+						<span
+							onMouseUp={this.handleMouseUp}
+							onMouseDown={this.getFirstVerse}
+							className={'align-left'}
+							verseid={verse.verse_start}
+							key={verse.verse_start}
+						>
 							<sup verseid={verse.verse_start}>
 								&nbsp;{verse.verse_start_alt || verse.verse_start}&nbsp;
 							</sup>
-							<IconsInText clickHandler={this.handleNoteClick} bookmarkData={{ hasBookmark: verse.hasBookmark, index: verse.bookmarkIndex }} noteData={{ hasNote: verse.hasNote, index: verse.noteIndex }} />
+							<IconsInText
+								clickHandler={this.handleNoteClick}
+								bookmarkData={{
+									hasBookmark: verse.hasBookmark,
+									index: verse.bookmarkIndex,
+								}}
+								noteData={{ hasNote: verse.hasNote, index: verse.noteIndex }}
+							/>
 							<span verseid={verse.verse_start}>{verse.verse_text}</span>
 						</span>
-					)
-			));
+					),
+			);
 		}
 
-		if (!formattedSource.main && !readersMode && !oneVersePerLine && Array.isArray(textComponents) && textComponents[0].key !== 'no_text') {
-			textComponents.unshift(<span key={'chapterNumber'} className={'drop-caps'}>{chapterAlt || activeChapter}</span>);
+		if (
+			!formattedSource.main &&
+			!readersMode &&
+			!oneVersePerLine &&
+			Array.isArray(textComponents) &&
+			textComponents[0].key !== 'no_text'
+		) {
+			textComponents.unshift(
+				<span key={'chapterNumber'} className={'drop-caps'}>
+					{chapterAlt || activeChapter}
+				</span>,
+			);
 		}
 		// console.log('text components that are about to be mounted', textComponents);
 		// Using parseInt to determine whether or not the verseNumber is a real number or if it is a series of characters
 		if (verseNumber && Array.isArray(textComponents)) {
 			if (readersMode) {
-				return textComponents.filter((c) => c[0].key === (parseInt(verseNumber, 10) ? verseNumber : '1'));
+				return textComponents.filter(
+					(c) => c[0].key === (parseInt(verseNumber, 10) ? verseNumber : '1'),
+				);
 			}
-			return textComponents.filter((c) => c.key === (parseInt(verseNumber, 10) ? verseNumber : '1'));
+			return textComponents.filter(
+				(c) => c.key === (parseInt(verseNumber, 10) ? verseNumber : '1'),
+			);
 		}
 
 		return textComponents;
@@ -497,10 +751,14 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		e.stopPropagation();
 		// console.log('handling mouseup');
 		this.getLastVerse(e);
-		if (e.button === 0 && this.state.footnoteState && e.target.className !== 'key') {
+		if (
+			e.button === 0 &&
+			this.state.footnoteState &&
+			e.target.className !== 'key'
+		) {
 			this.closeFootnote();
 		}
-	}
+	};
 
 	handleNoteClick = (noteIndex, clickedBookmark) => {
 		const userNotes = this.props.userNotes;
@@ -525,7 +783,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			}
 			this.closeContextMenu();
 		}
-	}
+	};
 	handleAddBookmark = () => {
 		// console.log('Props available in bookmarks', this.props);
 		// console.log('State available in bookmarks', this.state);
@@ -536,10 +794,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			activeChapter,
 			bibleId,
 		} = this.props;
-		const {
-			firstVerse,
-			lastVerse,
-		} = this.state;
+		const { firstVerse, lastVerse } = this.state;
 		// Need to make first verse and last verse integers for the < comparison
 		const fv = parseInt(firstVerse, 10);
 		const lv = parseInt(lastVerse, 10);
@@ -565,7 +820,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				chapter: activeChapter,
 				user_id: userId,
 				bible_id: bibleId,
-				notes: '\'\'',
+				notes: "''",
 				title: '',
 				bookmark: 1,
 				reference: this.getReference(verseStart, verseEnd),
@@ -573,18 +828,18 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				verse_end: verseEnd,
 			});
 		}
-	}
+	};
 
 	// Probably need to stop doing this here
-	callSetStateNotInUpdate = () => this.setState({ handlersAreSet: true })
+	callSetStateNotInUpdate = () => this.setState({ handlersAreSet: true });
 
 	openPopup = (coords) => {
 		this.setState({ popupOpen: true, popupCoords: coords });
 		setTimeout(() => this.setState({ popupOpen: false }), 1500);
-	}
+	};
 	// has an issue with highlights in the same verse
 	// This is likely going to be really slow...
-	highlightPlainText = (props) => createHighlights(props)
+	highlightPlainText = (props) => createHighlights(props);
 
 	addHighlight = ({ color, popupCoords }) => {
 		const highlightObject = {};
@@ -603,17 +858,17 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		// Adds userId and bible in homepage container where action is dispatched
 		// { bible, book, chapter, userId, verseStart, highlightStart, highlightedWords }
 		// Available data
-			// text and node where highlight started,
-			// text and node where highlight ended
-			// verse number of highlight start
-			// verse number of highlight end
-			// text selected
+		// text and node where highlight started,
+		// text and node where highlight ended
+		// verse number of highlight start
+		// verse number of highlight end
+		// text selected
 
 		// formatted solution
-			// get the dom node for the selection start
-				// mark the index for selection start inside that dom node
-			// go up the dom until I get the entire verse
-			// This should accurately get the verse node no matter what node started on
+		// get the dom node for the selection start
+		// mark the index for selection start inside that dom node
+		// go up the dom until I get the entire verse
+		// This should accurately get the verse node no matter what node started on
 		// split all the text nodes and join them into an array
 		// find the index of the marked character
 		// use that index as the highlight start
@@ -626,8 +881,8 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			const chapter = this.props.activeChapter;
 			const activeBookId = this.props.activeBookId;
 			// Since a user can highlight "backwards" this makes sure the first verse is correct
-			const firstVerse = (first < last ? first : last);
-			const lastVerse = (last > first ? last : first);
+			const firstVerse = first < last ? first : last;
+			const lastVerse = last > first ? last : first;
 			// console.log('first verse state', first);
 			// console.log('last verse state', last);
 			// console.log('first verse', firstVerse);
@@ -657,15 +912,15 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			if (this.props.formattedSource.main) {
 				if (aText !== focusText) {
 					// if nodes are different
-						// I have access to the parent node
+					// I have access to the parent node
 					// if texts match
-						// reverse order of anchor and focus
+					// reverse order of anchor and focus
 					// if texts dont match
-						// find the parent of each that has a verse id
+					// find the parent of each that has a verse id
 					const aParent = getFormattedParentVerse(aNode);
 					const eParent = getFormattedParentVerse(eNode);
 					// console.log('a parent and e parent', aParent, '\n', eParent);
-							// if the parents are different verses
+					// if the parents are different verses
 					if (aParent.isSameNode(eParent)) {
 						// It doesn't matter from this point which parent is used since they both reference the same object
 						// take the offset that occurs first as a child of the verse
@@ -714,7 +969,14 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 							// console.log('this.formatHighlight', this.formatHighlight);
 							// console.log('aParent', [...this.formatHighlight.children[0].children].indexOf(aParent));
 							// console.log('eParent', [...this.formatHighlight.children[0].children].indexOf(eParent));
-							const closestParent = getClosestParent({ aParent, eParent, verse: firstVerse, chapter, book: activeBookId, refNode: this.formatHighlight || this.format });
+							const closestParent = getClosestParent({
+								aParent,
+								eParent,
+								verse: firstVerse,
+								chapter,
+								book: activeBookId,
+								refNode: this.formatHighlight || this.format,
+							});
 							// Find distance from each parent back until there is not a sibling with the same verse number
 							// make sure both parents have the q class before searching backwards
 							// Does not work when putting highlight in the second portion of a verse
@@ -795,9 +1057,25 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			// Not so sure about this, seems like in theory it should give me the node closest to the beginning but idk
 			let highlightStart = 0;
 			let highlightedWords = 0;
-			const dist = this.calcDist(lastVerse, firstVerse, !!this.props.formattedSource.main);
+			const dist = this.calcDist(
+				lastVerse,
+				firstVerse,
+				!!this.props.formattedSource.main,
+			);
 			// Also need to check for class="v" to ensure that this was the first verse
-			if (this.props.formattedSource.main && !this.props.userSettings.getIn(['toggleOptions', 'readersMode', 'active']) && !this.props.userSettings.getIn(['toggleOptions', 'oneVersePerLine', 'active'])) {
+			if (
+				this.props.formattedSource.main &&
+				!this.props.userSettings.getIn([
+					'toggleOptions',
+					'readersMode',
+					'active',
+				]) &&
+				!this.props.userSettings.getIn([
+					'toggleOptions',
+					'oneVersePerLine',
+					'active',
+				])
+			) {
 				// Issue with getting the correct parent node
 				// console.log('starting node', node);
 				// console.log('first verse', firstVerse);
@@ -824,7 +1102,11 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				// console.log('index of anchor text within text content', anchorText);
 				// console.log('built text is : ', getClosestParent(this.formatHighlight || this.format, firstVerse, chapter, activeBookId));
 				// console.log('built text equals node text', getClosestParent(this.formatHighlight || this.format, firstVerse, chapter, activeBookId).indexOf(anchorText.trim()));
-				const nodeClassValue = (node.attributes && node.attributes.class && node.attributes.class.value) || undefined;
+				const nodeClassValue =
+					(node.attributes &&
+						node.attributes.class &&
+						node.attributes.class.value) ||
+					undefined;
 				// console.log('nodeClassValue', nodeClassValue);
 				// console.log('node.attributes', node.attributes);
 
@@ -832,11 +1114,17 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 					// Get all of the nodes with the same data-id that come before this one in the dom
 					// Add the textContent length of each node to the anchorOffset
 					// console.log('original offset', anchorOffset);
-					anchorOffset += getOffsetNeededForPsalms({ node, verse: firstVerse, chapter, book: activeBookId, refNode: this.formatHighlight || this.format });
+					anchorOffset += getOffsetNeededForPsalms({
+						node,
+						verse: firstVerse,
+						chapter,
+						book: activeBookId,
+						refNode: this.formatHighlight || this.format,
+					});
 					// console.log('updated offset', anchorOffset);
 				}
 				// Need to subtract by 1 since the anchor offset isn't 0 based
-				highlightStart = (node.textContent.indexOf(anchorText) + anchorOffset);
+				highlightStart = node.textContent.indexOf(anchorText) + anchorOffset;
 				// getClosestParent(this.formatHighlight || this.format, firstVerse, chapter, this.props.activeBookId);
 				// console.log('anchor text', anchorText);
 				// console.log('focusText', focusText);
@@ -856,11 +1144,17 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				// This should only be the case for the first highlight within that verse
 				const newText = node.textContent.slice(0);
 
-				if (this.props.userSettings.getIn(['toggleOptions', 'readersMode', 'active'])) {
-					highlightStart = (node.textContent.indexOf(anchorText) + anchorOffset);
+				if (
+					this.props.userSettings.getIn([
+						'toggleOptions',
+						'readersMode',
+						'active',
+					])
+				) {
+					highlightStart = node.textContent.indexOf(anchorText) + anchorOffset;
 					highlightedWords = selectedText.replace(/\n/g, '').length;
 				} else {
-					highlightStart = (newText.indexOf(anchorText) + anchorOffset);
+					highlightStart = newText.indexOf(anchorText) + anchorOffset;
 					highlightedWords = selectedText.replace(/\n/g, '').length - dist;
 				}
 			}
@@ -896,8 +1190,13 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 					// // console.log('highlightStart', highlightStart);
 
 					const highsToDelete = highs
-						.filter((high) => high.verse_start === firstVerse &&
-							(high.highlight_start <= space && high.highlight_start + high.highlighted_words >= highlightStart))
+						.filter(
+							(high) =>
+								high.verse_start === firstVerse &&
+								(high.highlight_start <= space &&
+									high.highlight_start + high.highlighted_words >=
+										highlightStart),
+						)
 						.reduce((a, h) => [...a, h.id], []);
 
 					// console.log('highsToDelete', highsToDelete);
@@ -931,7 +1230,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 
 		// Returning the highlight for testing purposes
 		return highlightObject;
-	}
+	};
 	// Because the system captures the verse numbers this needs to be used
 	calcDist = (l, f, p) => {
 		// l: lastVerse, f: firstVerse, p: isPlainText
@@ -950,24 +1249,28 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		// Gets the total length of the distance needed
 		return stringDiff.length;
 		// return l - f;
-	}
+	};
 
 	addFacebookLike = () => {
-	// 	console.log('testing adding a like');
+		// 	console.log('testing adding a like');
 		const fb = window.FB;
-	// 	fb.ui({
-	// 		method: 'share_open_graph',
-	// 		action_type: 'og.likes',
-	// 		action_properties: JSON.stringify({
-	// 			object: 'http://is.bible.build/',
-	// 		}),
-	// 	}, (res) => console.log('like res', res));
+		// 	fb.ui({
+		// 		method: 'share_open_graph',
+		// 		action_type: 'og.likes',
+		// 		action_properties: JSON.stringify({
+		// 			object: 'http://is.bible.build/',
+		// 		}),
+		// 	}, (res) => console.log('like res', res));
 
-		fb.api(`${process.env.FB_APP_ID}?metadata=1`, {
-			access_token: process.env.FB_ACCESS,
-		}, (res) => res); // console.log('bible is object res', res));
+		fb.api(
+			`${process.env.FB_APP_ID}?metadata=1`,
+			{
+				access_token: process.env.FB_ACCESS,
+			},
+			(res) => res,
+		); // console.log('bible is object res', res));
 		this.closeContextMenu();
-	}
+	};
 
 	openFootnote = ({ id, coords }) => {
 		this.setState({
@@ -978,7 +1281,7 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				coords,
 			},
 		});
-	}
+	};
 
 	openContextMenu = (e) => {
 		const rightEdge = window.innerWidth - 250;
@@ -1002,29 +1305,31 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 				});
 			}
 		}, 0);
-	}
+	};
 
-	closeFootnote = () => this.setState({ footnoteState: false })
+	closeFootnote = () => this.setState({ footnoteState: false });
 
-	closeContextMenu = () => this.setState({ contextMenuState: false })
+	closeContextMenu = () => this.setState({ contextMenuState: false });
 
 	shareHighlightToFacebook = () => {
 		const FB = window.FB;
 		const { activeBookName: book, activeChapter: chapter } = this.props;
-		const {
-			firstVerse: v1,
-			lastVerse: v2,
-			selectedText: sl,
-		} = this.state;
-		const verseRange = v1 === v2 ? `${book} ${chapter}:${v1}\n${sl}` : `${book} ${chapter}:${v1}-${v2}\n"${sl}"`;
+		const { firstVerse: v1, lastVerse: v2, selectedText: sl } = this.state;
+		const verseRange =
+			v1 === v2
+				? `${book} ${chapter}:${v1}\n${sl}`
+				: `${book} ${chapter}:${v1}-${v2}\n"${sl}"`;
 
-		FB.ui({
-			method: 'share',
-			quote: verseRange,
-			href: 'http://is.bible.build/',
-		}, (res) => res);
+		FB.ui(
+			{
+				method: 'share',
+				quote: verseRange,
+				href: 'http://is.bible.build/',
+			},
+			(res) => res,
+		);
 		this.closeContextMenu();
-	}
+	};
 
 	get isEndOfBible() {
 		const books = this.props.books;
@@ -1041,7 +1346,9 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 
 		const bookId = book.book_id;
 
-		return bookId === this.props.activeBookId && chapter === this.props.activeChapter;
+		return (
+			bookId === this.props.activeBookId && chapter === this.props.activeChapter
+		);
 	}
 
 	get isStartOfBible() {
@@ -1057,23 +1364,37 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 		const chapter = book.chapters[0];
 		const bookId = book.book_id;
 
-		return bookId === this.props.activeBookId && chapter === this.props.activeChapter;
+		return (
+			bookId === this.props.activeBookId && chapter === this.props.activeChapter
+		);
 	}
 
 	get classNameForMain() {
-		const {
-			formattedSource,
-			userSettings,
-			textDirection,
-		} = this.props;
-		const readersMode = userSettings.getIn(['toggleOptions', 'readersMode', 'active']);
-		const oneVersePerLine = userSettings.getIn(['toggleOptions', 'oneVersePerLine', 'active']);
-		const justifiedClass = userSettings.getIn(['toggleOptions', 'justifiedText', 'active']) ? 'justify' : '';
+		const { formattedSource, userSettings, textDirection } = this.props;
+		const readersMode = userSettings.getIn([
+			'toggleOptions',
+			'readersMode',
+			'active',
+		]);
+		const oneVersePerLine = userSettings.getIn([
+			'toggleOptions',
+			'oneVersePerLine',
+			'active',
+		]);
+		const justifiedClass = userSettings.getIn([
+			'toggleOptions',
+			'justifiedText',
+			'active',
+		])
+			? 'justify'
+			: '';
 		const isRtl = textDirection === 'rtl' ? 'rtl' : '';
 
 		// formattedSource.main && !readersMode && !oneVersePerLine ? '' : `chapter ${justifiedClass}`
 
-		return formattedSource.main && !readersMode && !oneVersePerLine ? `${isRtl}` : `chapter ${justifiedClass} ${isRtl}`;
+		return formattedSource.main && !readersMode && !oneVersePerLine
+			? `${isRtl}`
+			: `chapter ${justifiedClass} ${isRtl}`;
 	}
 
 	render() {
@@ -1090,9 +1411,14 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			userSettings,
 			verseNumber,
 			goToFullChapter,
-			toggleInformationModal,
-			informationActive,
-			audioPlayerState,
+			// toggleInformationModal,
+			// informationActive,
+			// audioPlayerState,
+			copyrights,
+			activeFilesets,
+			audioFilesetId,
+			plainTextFilesetId,
+			formattedTextFilesetId,
 		} = this.props;
 		const {
 			coords,
@@ -1100,8 +1426,16 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 			footnoteState,
 			footnotePortal,
 		} = this.state;
-		const readersMode = userSettings.getIn(['toggleOptions', 'readersMode', 'active']);
-		const oneVersePerLine = userSettings.getIn(['toggleOptions', 'oneVersePerLine', 'active']);
+		const readersMode = userSettings.getIn([
+			'toggleOptions',
+			'readersMode',
+			'active',
+		]);
+		const oneVersePerLine = userSettings.getIn([
+			'toggleOptions',
+			'oneVersePerLine',
+			'active',
+		]);
 		const chapterAlt = text[0] && text[0].chapter_alt;
 		// console.log('chapterAlt', chapterAlt);
 		// const justifiedClass = userSettings.getIn(['toggleOptions', 'justifiedText', 'active']) ? 'justify' : '';
@@ -1112,49 +1446,75 @@ class Text extends React.PureComponent { // eslint-disable-line react/prefer-sta
 
 		return (
 			<div className={'text-container'}>
-				<SvgWrapper className={audioPlayerState ? 'icon info-button' : 'icon info-button closed'} svgid={'info'} onClick={() => !informationActive && toggleInformationModal()} />
-				<div onClick={!this.isStartOfBible ? prevChapter : () => {}} className={!this.isStartOfBible ? 'arrow-wrapper' : 'arrow-wrapper disabled'}>
-					{
-						!this.isStartOfBible ? (
-							<SvgWrapper className="prev-arrow-svg" svgid="arrow_left" />
-						) : null
+				<div
+					onClick={!this.isStartOfBible ? prevChapter : () => {}}
+					className={
+						!this.isStartOfBible ? 'arrow-wrapper' : 'arrow-wrapper disabled'
 					}
+				>
+					{!this.isStartOfBible ? (
+						<SvgWrapper className="prev-arrow-svg" svgid="arrow_left" />
+					) : null}
 				</div>
 				<main ref={this.setMainRef} className={this.classNameForMain}>
-					{
-						((formattedSource.main && !readersMode && !oneVersePerLine) || (text.length === 0) || (!readersMode && !oneVersePerLine)) ? null : (
-							<div className="active-chapter-title"><h1 className="active-chapter-title">{chapterAlt || activeChapter}</h1></div>
-						)
-					}
+					{(formattedSource.main && !readersMode && !oneVersePerLine) ||
+					text.length === 0 ||
+					(!readersMode && !oneVersePerLine) ? null : (
+						<div className="active-chapter-title">
+							<h1 className="active-chapter-title">
+								{chapterAlt || activeChapter}
+							</h1>
+						</div>
+					)}
 					{this.getTextComponents}
-					{
-						verseNumber ? (
-							<div className={'read-chapter-container'}>
-								<button onClick={goToFullChapter} className={'read-chapter'}>Read Full Chapter</button>
-							</div>
-						) : null
-					}
+					{verseNumber ? (
+						<div className={'read-chapter-container'}>
+							<button onClick={goToFullChapter} className={'read-chapter'}>
+								Read Full Chapter
+							</button>
+						</div>
+					) : null}
+					<Information
+						copyrights={copyrights}
+						activeFilesets={activeFilesets}
+						audioFilesetId={audioFilesetId}
+						plainTextFilesetId={plainTextFilesetId}
+						formattedTextFilesetId={formattedTextFilesetId}
+					/>
 				</main>
-				<div onClick={!this.isEndOfBible ? nextChapter : () => {}} className={!this.isEndOfBible ? 'arrow-wrapper' : 'arrow-wrapper disabled'}>
-					{
-						!this.isEndOfBible ? (
-							<SvgWrapper className="next-arrow-svg" svgid="arrow_right" />
-						) : null
+				<div
+					onClick={!this.isEndOfBible ? nextChapter : () => {}}
+					className={
+						!this.isEndOfBible ? 'arrow-wrapper' : 'arrow-wrapper disabled'
 					}
+				>
+					{!this.isEndOfBible ? (
+						<SvgWrapper className="next-arrow-svg" svgid="arrow_right" />
+					) : null}
 				</div>
-				{
-					contextMenuState ? (
-						<ContextPortal handleAddBookmark={this.handleAddBookmark} addHighlight={this.addHighlight} addFacebookLike={this.addFacebookLike} shareHighlightToFacebook={this.shareHighlightToFacebook} setActiveNote={this.setActiveNote} setActiveNotesView={setActiveNotesView} closeContextMenu={this.closeContextMenu} toggleNotesModal={toggleNotesModal} notesActive={notesActive} parentNode={this.main} coordinates={coords} />
-					) : null
-				}
-				{
-					footnoteState ? (
-						<FootnotePortal {...footnotePortal} />
-					) : null
-				}
-				{
-					this.state.popupOpen ? <PopupMessage message={'You must be signed in to use this feature.'} x={this.state.popupCoords.x} y={this.state.popupCoords.y} /> : null
-				}
+				{contextMenuState ? (
+					<ContextPortal
+						handleAddBookmark={this.handleAddBookmark}
+						addHighlight={this.addHighlight}
+						addFacebookLike={this.addFacebookLike}
+						shareHighlightToFacebook={this.shareHighlightToFacebook}
+						setActiveNote={this.setActiveNote}
+						setActiveNotesView={setActiveNotesView}
+						closeContextMenu={this.closeContextMenu}
+						toggleNotesModal={toggleNotesModal}
+						notesActive={notesActive}
+						parentNode={this.main}
+						coordinates={coords}
+					/>
+				) : null}
+				{footnoteState ? <FootnotePortal {...footnotePortal} /> : null}
+				{this.state.popupOpen ? (
+					<PopupMessage
+						message={'You must be signed in to use this feature.'}
+						x={this.state.popupCoords.x}
+						y={this.state.popupCoords.y}
+					/>
+				) : null}
 			</div>
 		);
 	}
@@ -1166,25 +1526,27 @@ Text.propTypes = {
 	userNotes: PropTypes.array,
 	bookmarks: PropTypes.array,
 	highlights: PropTypes.array,
+	activeFilesets: PropTypes.array,
+	copyrights: PropTypes.object,
 	userSettings: PropTypes.object,
+	formattedSource: PropTypes.object,
 	nextChapter: PropTypes.func,
 	prevChapter: PropTypes.func,
 	addBookmark: PropTypes.func,
 	addHighlight: PropTypes.func,
+	setActiveNote: PropTypes.func,
 	goToFullChapter: PropTypes.func,
 	deleteHighlights: PropTypes.func,
 	toggleNotesModal: PropTypes.func,
 	setActiveNotesView: PropTypes.func,
-	toggleInformationModal: PropTypes.func,
+	// toggleInformationModal: PropTypes.func,
 	activeChapter: PropTypes.number,
 	notesActive: PropTypes.bool,
 	invalidBibleId: PropTypes.bool,
-	audioPlayerState: PropTypes.bool,
-	informationActive: PropTypes.bool,
+	// audioPlayerState: PropTypes.bool,
+	// informationActive: PropTypes.bool,
 	userAuthenticated: PropTypes.bool,
 	loadingNewChapterText: PropTypes.bool,
-	formattedSource: PropTypes.object,
-	setActiveNote: PropTypes.func,
 	userId: PropTypes.string,
 	bibleId: PropTypes.string,
 	verseNumber: PropTypes.string,
@@ -1192,6 +1554,10 @@ Text.propTypes = {
 	audioSource: PropTypes.string,
 	activeBookName: PropTypes.string,
 	textDirection: PropTypes.string,
+	audioFilesetId: PropTypes.string,
+	plainTextFilesetId: PropTypes.string,
+	formattedTextFilesetId: PropTypes.string,
+	// getCopyrights: PropTypes.func,
 };
 
 export default Text;

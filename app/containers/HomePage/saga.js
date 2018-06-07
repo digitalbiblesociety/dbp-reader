@@ -37,24 +37,14 @@ import {
 // import { fromJS } from 'immutable';
 // import unionWith from 'lodash/unionWith';
 // import { ADD_HIGHLIGHTS, LOAD_HIGHLIGHTS, GET_CHAPTER_TEXT, GET_HIGHLIGHTS, GET_BOOKS, GET_AUDIO, INIT_APPLICATION } from './constants';
-
-/* Highlight possibilities
-*
-* Part of a verse
-*
-* Entire verse and part of other verses
-*
-* Overlaps another highlight
-*
-* */
-
+// Todo: Use the env variable for the base of all the routes
 export function* deleteHighlights({ ids, userId, bible, book, chapter }) {
 	// console.log('ids', ids);
 	// console.log('bible', bible);
 	// console.log('userid', userId);
 	const urls = ids.map(
 		(id) =>
-			`https://api.bible.build/users/${userId}/highlights/${id}?key=${
+			`${process.env.BASE_API_ROUTE}/users/${userId}/highlights/${id}?key=${
 				process.env.DBP_API_KEY
 			}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}`,
 	);
@@ -75,7 +65,7 @@ export function* deleteHighlights({ ids, userId, bible, book, chapter }) {
 			// 	header: 'POST',
 			// 	body: formData,
 			// };
-			// fetch('https://api.bible.build/error_logging', options);
+			// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
 		}
 	}
 }
@@ -95,7 +85,7 @@ export function* getIpAddress() {
 
 		if (response) {
 			// console.log('response', response);
-			// const location = yield call(request, `https://api.bible.build/users/geolocate?v=4&key=${process.env.DBP_API_KEY}&ip_address=${response.ip}`);
+			// const location = yield call(request, `${process.env.BASE_API_ROUTE}/users/geolocate?v=4&key=${process.env.DBP_API_KEY}&ip_address=${response.ip}`);
 			// console.log('location', location);
 		}
 	} catch (err) {
@@ -107,7 +97,7 @@ export function* getIpAddress() {
 
 export function* addBookmark(props) {
 	// console.log('adding bookmark with props: ', props);
-	const requestUrl = `https://api.bible.build/users/${
+	const requestUrl = `${process.env.BASE_API_ROUTE}/users/${
 		props.data.user_id
 	}/bookmarks?key=${process.env.DBP_API_KEY}&v=4&pretty&project_id=${
 		process.env.NOTES_PROJECT_ID
@@ -151,13 +141,13 @@ export function* addBookmark(props) {
 			// 	header: 'POST',
 			// 	body: formData,
 			// };
-			// fetch('https://api.bible.build/error_logging', options);
+			// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
 		}
 	}
 }
 
 export function* getBookMetadata({ bibleId }) {
-	const reqUrl = `https://api.bible.build/bibles/${bibleId}/book?key=${
+	const reqUrl = `${process.env.BASE_API_ROUTE}/bibles/${bibleId}/book?key=${
 		process.env.DBP_API_KEY
 	}&bucket=${process.env.DBP_BUCKET_ID}&v=4`;
 	try {
@@ -177,13 +167,13 @@ export function* getBookMetadata({ bibleId }) {
 			// 	header: 'POST',
 			// 	body: formData,
 			// };
-			// fetch('https://api.bible.build/error_logging', options);
+			// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
 		}
 	}
 }
 
 export function* getHighlights({ bible, book, chapter, userId }) {
-	const requestUrl = `https://api.bible.build/users/${userId ||
+	const requestUrl = `${process.env.BASE_API_ROUTE}/users/${userId ||
 		'no_user_id'}/highlights?key=${process.env.DBP_API_KEY}&v=4&project_id=${
 		process.env.NOTES_PROJECT_ID
 	}&bible_id=${bible}&book_id=${book}&chapter=${chapter}`;
@@ -212,7 +202,7 @@ export function* getHighlights({ bible, book, chapter, userId }) {
 			// 	header: 'POST',
 			// 	body: formData,
 			// };
-			// fetch('https://api.bible.build/error_logging', options);
+			// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
 		}
 	}
 }
@@ -228,7 +218,9 @@ export function* addHighlight({
 	color,
 	reference,
 }) {
-	const requestUrl = `https://api.bible.build/users/${userId}/highlights?key=${
+	const requestUrl = `${
+		process.env.BASE_API_ROUTE
+	}/users/${userId}/highlights?key=${
 		process.env.DBP_API_KEY
 	}&v=4&bible_id=${bible}&book_id=${book}&chapter=${chapter}&project_id=${
 		process.env.NOTES_PROJECT_ID
@@ -276,7 +268,7 @@ export function* addHighlight({
 			// 	header: 'POST',
 			// 	body: formData,
 			// };
-			// fetch('https://api.bible.build/error_logging', options);
+			// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
 		}
 	}
 }
@@ -297,7 +289,7 @@ export function* getBibleFromUrl({
 	// todo Use other methods combined with the ones below to validate the url before try to use it in saga
 	const bibleId = oldBibleId.toUpperCase();
 	const bookId = oldBookId.toUpperCase();
-	const requestUrl = `https://api.bible.build/bibles/${bibleId}?bucket=${
+	const requestUrl = `${process.env.BASE_API_ROUTE}/bibles/${bibleId}?bucket=${
 		process.env.DBP_BUCKET_ID
 	}&key=${process.env.DBP_API_KEY}&v=4`;
 
@@ -306,7 +298,7 @@ export function* getBibleFromUrl({
 		const response = yield call(request, requestUrl);
 		// let filesets;
 		// if (!response.data.filesets) {
-		// 	const bibleUrl = `https://api.bible.build/bibles?bucket=${process.env.DBP_BUCKET_ID}&key=${process.env.DBP_API_KEY}&v=4&language_code=${response.data.iso}`;
+		// 	const bibleUrl = `${process.env.BASE_API_ROUTE}/bibles?bucket=${process.env.DBP_BUCKET_ID}&key=${process.env.DBP_API_KEY}&v=4&language_code=${response.data.iso}`;
 		// 	const allBibles = yield call(request, bibleUrl);
 		// 	// console.log('all bibles in language', allBibles);
 		// 	const activeBible = allBibles.data.find((bible) => bible.abbr === bibleId) || {};
@@ -390,7 +382,7 @@ export function* getBibleFromUrl({
 					f.id.slice(-4) !== 'DA16',
 			);
 			// console.log('responseesponse.data', response.data);
-
+			yield fork(getCopyrightSaga, { filesetIds: filesets });
 			// calling a generator that will handle the api requests for getting text
 			// console.log('filtered filesets', filesets);
 			let nextBook = { chapters: [] };
@@ -458,7 +450,7 @@ export function* getBibleFromUrl({
 			// 	header: 'POST',
 			// 	body: formData,
 			// };
-			// fetch('https://api.bible.build/error_logging', options);
+			// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
 		}
 		yield put({ type: 'loadbibleerror' });
 	}
@@ -567,7 +559,9 @@ export function* getChapterFromUrl({
 				// console.log('before fork');
 				// yield fork(getCopyrightSaga, { filesetId });
 				// console.log('after fork');
-				const reqUrl = `https://api.bible.build/bibles/filesets/${filesetId}?bucket=${
+				const reqUrl = `${
+					process.env.BASE_API_ROUTE
+				}/bibles/filesets/${filesetId}?bucket=${
 					process.env.DBP_BUCKET_ID
 				}&key=${
 					process.env.DBP_API_KEY
@@ -588,7 +582,7 @@ export function* getChapterFromUrl({
 					// 	header: 'POST',
 					// 	body: formData,
 					// };
-					// fetch('https://api.bible.build/error_logging', options);
+					// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
 				}
 			}
 		}
@@ -624,7 +618,9 @@ export function* getChapterFromUrl({
 				plainText = results.plainText;
 				plainTextFilesetId = results.plainTextFilesetId;
 			} else {
-				const reqUrl = `https://api.bible.build/bibles/filesets/${filesetId}/${bookId}/${chapter}?key=${
+				const reqUrl = `${
+					process.env.BASE_API_ROUTE
+				}/bibles/filesets/${filesetId}/${bookId}/${chapter}?key=${
 					process.env.DBP_API_KEY
 				}&v=4&book_id=${bookId}&chapter_id=${chapter}`;
 				const res = yield call(request, reqUrl);
@@ -641,7 +637,7 @@ export function* getChapterFromUrl({
 				// 	header: 'POST',
 				// 	body: formData,
 				// };
-				// fetch('https://api.bible.build/error_logging', options);
+				// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
 			}
 			hasPlainText = false;
 		}
@@ -677,7 +673,7 @@ export function* getChapterFromUrl({
 			// 	header: 'POST',
 			// 	body: formData,
 			// };
-			// fetch('https://api.bible.build/error_logging', options);
+			// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
 		}
 	}
 
@@ -698,7 +694,7 @@ function* tryNext({ urls, index, bookId, chapter }) {
 	let plainText = [];
 	let plainTextFilesetId = '';
 	try {
-		const reqUrl = `https://api.bible.build/bibles/filesets/${
+		const reqUrl = `${process.env.BASE_API_ROUTE}/bibles/filesets/${
 			urls[index]
 		}/${bookId}/${chapter}?key=${
 			process.env.DBP_API_KEY
@@ -817,7 +813,7 @@ export function* getChapterAudio({
 	if (completeAudio.length) {
 		// console.log('Bible has complete audio', completeAudio);
 		try {
-			const reqUrl = `https://api.bible.build/bibles/filesets/${get(
+			const reqUrl = `${process.env.BASE_API_ROUTE}/bibles/filesets/${get(
 				completeAudio,
 				[0, 'id'],
 			)}?bucket=${
@@ -845,17 +841,17 @@ export function* getChapterAudio({
 				// 	header: 'POST',
 				// 	body: formData,
 				// };
-				// fetch('https://api.bible.build/error_logging', options);
+				// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
 				yield put({ type: 'loadaudio', previous, next, audioPaths: [''] });
 			}
 		}
 		return;
 	} else if (ntLength && !otLength) {
 		try {
-			const reqUrl = `https://api.bible.build/bibles/filesets/${get(ntAudio, [
-				0,
-				'id',
-			])}?bucket=${
+			const reqUrl = `${process.env.BASE_API_ROUTE}/bibles/filesets/${get(
+				ntAudio,
+				[0, 'id'],
+			)}?bucket=${
 				process.env.DBP_BUCKET_ID
 			}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(
 				ntAudio,
@@ -881,16 +877,16 @@ export function* getChapterAudio({
 				// 	header: 'POST',
 				// 	body: formData,
 				// };
-				// fetch('https://api.bible.build/error_logging', options);
+				// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
 				yield put({ type: 'loadaudio', previous, next, audioPaths: [''] });
 			}
 		}
 	} else if (otLength && !ntLength) {
 		try {
-			const reqUrl = `https://api.bible.build/bibles/filesets/${get(otAudio, [
-				0,
-				'id',
-			])}?bucket=${
+			const reqUrl = `${process.env.BASE_API_ROUTE}/bibles/filesets/${get(
+				otAudio,
+				[0, 'id'],
+			)}?bucket=${
 				process.env.DBP_BUCKET_ID
 			}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(
 				otAudio,
@@ -917,7 +913,7 @@ export function* getChapterAudio({
 				// 	header: 'POST',
 				// 	body: formData,
 				// };
-				// fetch('https://api.bible.build/error_logging', options);
+				// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
 				yield put({ type: 'loadaudio', previous, next, audioPaths: [''] });
 			}
 		}
@@ -927,10 +923,10 @@ export function* getChapterAudio({
 		// console.log('trying nt & ot', ntLength && !otLength, '\n', ntAudio, '\n', otAudio);
 
 		try {
-			const reqUrl = `https://api.bible.build/bibles/filesets/${get(ntAudio, [
-				0,
-				'id',
-			])}?bucket=${
+			const reqUrl = `${process.env.BASE_API_ROUTE}/bibles/filesets/${get(
+				ntAudio,
+				[0, 'id'],
+			)}?bucket=${
 				process.env.DBP_BUCKET_ID
 			}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(
 				ntAudio,
@@ -950,15 +946,15 @@ export function* getChapterAudio({
 				// 	header: 'POST',
 				// 	body: formData,
 				// };
-				// fetch('https://api.bible.build/error_logging', options);
+				// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
 				yield put({ type: 'loadaudio', previous, next, audioPaths: [''] });
 			}
 		}
 		try {
-			const reqUrl = `https://api.bible.build/bibles/filesets/${get(otAudio, [
-				0,
-				'id',
-			])}?bucket=${
+			const reqUrl = `${process.env.BASE_API_ROUTE}/bibles/filesets/${get(
+				otAudio,
+				[0, 'id'],
+			)}?bucket=${
 				process.env.DBP_BUCKET_ID
 			}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(
 				otAudio,
@@ -978,7 +974,7 @@ export function* getChapterAudio({
 				// 	header: 'POST',
 				// 	body: formData,
 				// };
-				// fetch('https://api.bible.build/error_logging', options);
+				// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
 				yield put({ type: 'loadaudio', previous, next, audioPaths: [''] });
 			}
 		}
@@ -1000,7 +996,7 @@ export function* getChapterAudio({
 		// console.log('files that contain partial audio', partialAudio);
 		try {
 			// Need to iterate over each object here to see if I can find the right chapter
-			const reqUrl = `https://api.bible.build/bibles/filesets/${get(
+			const reqUrl = `${process.env.BASE_API_ROUTE}/bibles/filesets/${get(
 				partialOtAudio,
 				[0, 'id'],
 			)}?bucket=${
@@ -1033,7 +1029,7 @@ export function* getChapterAudio({
 				// 	header: 'POST',
 				// 	body: formData,
 				// };
-				// fetch('https://api.bible.build/error_logging', options);
+				// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
 				yield put({ type: 'loadaudio', previous, next, audioPaths: [''] });
 			}
 		}
@@ -1044,7 +1040,7 @@ export function* getChapterAudio({
 		// console.log('files that contain partial audio', partialAudio);
 		try {
 			// Need to iterate over each object here to see if I can find the right chapter
-			const reqUrl = `https://api.bible.build/bibles/filesets/${get(
+			const reqUrl = `${process.env.BASE_API_ROUTE}/bibles/filesets/${get(
 				partialNtAudio,
 				[0, 'id'],
 			)}?bucket=${
@@ -1077,7 +1073,7 @@ export function* getChapterAudio({
 				// 	header: 'POST',
 				// 	body: formData,
 				// };
-				// fetch('https://api.bible.build/error_logging', options);
+				// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
 				yield put({ type: 'loadaudio', previous, next, audioPaths: [''] });
 			}
 		}
@@ -1092,7 +1088,7 @@ export function* getChapterAudio({
 		// console.log('files that contain partial audio', partialAudio);
 		try {
 			// Need to iterate over each object here to see if I can find the right chapter
-			const reqUrl = `https://api.bible.build/bibles/filesets/${get(
+			const reqUrl = `${process.env.BASE_API_ROUTE}/bibles/filesets/${get(
 				partialNtOtAudio,
 				[0, 'id'],
 			)}?bucket=${
@@ -1125,7 +1121,7 @@ export function* getChapterAudio({
 				// 	header: 'POST',
 				// 	body: formData,
 				// };
-				// fetch('https://api.bible.build/error_logging', options);
+				// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
 				yield put({ type: 'loadaudio', previous, next, audioPaths: [''] });
 			}
 		}
@@ -1143,7 +1139,7 @@ export function* getCopyrightSaga({ filesetIds }) {
 	// Todo: Need a type param to add on to the end of this call so that I will get the copyright type that I need
 	filteredFilesetIds.forEach((set) =>
 		reqUrls.push(
-			`https://api.bible.build/bibles/filesets/${set.id}/copyright?key=${
+			`${process.env.BASE_API_ROUTE}/bibles/filesets/${set.id}/copyright?key=${
 				process.env.DBP_API_KEY
 			}&v=4`,
 		),
@@ -1162,10 +1158,10 @@ export function* getCopyrightSaga({ filesetIds }) {
 			type: cp.type || cp.set_type_code,
 			organizations: cp.copyright.organizations.map((org) => {
 				const icon = org.logos.find((l) => l.icon);
-				if (org.logos.length && org.translations.length && org.url_website) {
+				if (org.translations.length) {
 					return {
 						name: org.translations[0].name,
-						logo: icon || org.logos[0],
+						logo: icon || (org.logos && org.logos[0]),
 						isIcon: icon === undefined ? 0 : 1,
 						url: org.url_website,
 					};
@@ -1241,8 +1237,8 @@ export function* getCopyrightSaga({ filesetIds }) {
 				text: cText || ntText,
 			},
 			oldTestament: {
-				audio: cAudio || otAudio,
-				text: cText || otText,
+				audio: !(cAudio || ntAudio) && (cAudio || otAudio),
+				text: !(cAudio || ntAudio) && (cText || otText),
 			},
 		};
 		// console.log('copyrights', copyrightObject);
@@ -1262,48 +1258,8 @@ export function* createSocialUser({
 	avatar,
 	provider,
 }) {
-	// console.log('Creating social user');
-	// console.log('{ email, name, nickname, id, avatar, userId, provider }', { email, name, nickname, id, avatar, userId, provider });
-
-	// if there is a user id then just add this account to that users profile - I don't think this is needed
-	// if (userId) {
-	// 	const requestUrl = `https://api.bible.build/users/login?key=${process.env.DBP_API_KEY}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}`;
-	// 	const formData = new FormData();
-	//
-	// 	// formData.append('password', password);
-	// 	formData.append('email', email);
-	//
-	// 	const options = {
-	// 		method: 'POST',
-	// 		body: formData,
-	// 	};
-	//
-	// 	try {
-	// 		const response = yield call(request, requestUrl, options);
-	//
-	// 		if (response.error) {
-	// 			yield put({ type: LOGIN_ERROR, message: response.error.message });
-	// 		} else {
-	// 			yield put({ type: USER_LOGGED_IN, userId: response.id, userProfile: response });
-	// 			// May add an else that will save the id to the session so it is persisted through a page refresh
-	// 			sessionStorage.setItem('bible_is_user_id', response.id);
-	// 		}
-	// 	} catch (err) {
-	// 		if (process.env.NODE_ENV === 'development') {
-	// 			console.error(err); // eslint-disable-line no-console
-	// 		} else if (process.env.NODE_ENV === 'production') {
-	// 			// const options = {
-	// 			// 	header: 'POST',
-	// 			// 	body: formData,
-	// 			// };
-	// 			// fetch('https://api.bible.build/error_logging', options);
-	// 		}
-	// 	}
-	// } else {
-	// console.log('{ email, name, nickname, id, avatar, userId, provider }', { email, name, nickname, id, avatar, userId, provider });
-
 	// otherwise create a new account with this information
-	const requestUrl = `https://api.bible.build/users?key=${
+	const requestUrl = `${process.env.BASE_API_ROUTE}/users?key=${
 		process.env.DBP_API_KEY
 	}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}`;
 	const data = new FormData();
@@ -1349,7 +1305,7 @@ export function* createSocialUser({
 			) {
 				// console.log('response.error.message.email', response.error.message.email);
 
-				const r = `https://api.bible.build/users/login?key=${
+				const r = `${process.env.BASE_API_ROUTE}/users/login?key=${
 					process.env.DBP_API_KEY
 				}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}`;
 				const fd = new FormData();
@@ -1387,7 +1343,7 @@ export function* createSocialUser({
 						// 	header: 'POST',
 						// 	body: formData,
 						// };
-						// fetch('https://api.bible.build/error_logging', options);
+						// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
 					}
 				}
 			}
@@ -1403,7 +1359,7 @@ export function* createSocialUser({
 			// 	header: 'POST',
 			// 	body: formData,
 			// };
-			// fetch('https://api.bible.build/error_logging', options);
+			// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
 		}
 	}
 	// }

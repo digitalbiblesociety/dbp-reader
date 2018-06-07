@@ -141,7 +141,7 @@
 			"import/prefer-default-export": 0,
 			"no-tabs": 0,
 			"indent": [
-				"error",
+				1,
 				"tab"
 			],
 			"jsx-a11y/aria-props": 2,
@@ -167,7 +167,7 @@
 				"multiline"
 			],
 			"react/jsx-indent": [
-				2,
+				1,
 				"tab"
 			],
 			"react/jsx-indent-props": [

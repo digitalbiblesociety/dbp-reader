@@ -15,10 +15,14 @@ process.noDeprecation = true;
 
 module.exports = (options) => ({
 	entry: options.entry,
-	output: Object.assign({ // Compile into js/build.js
-		path: path.resolve(process.cwd(), 'build'),
-		publicPath: '/',
-	}, options.output), // Merge with env dependent settings
+	output: Object.assign(
+		{
+			// Compile into js/build.js
+			path: path.resolve(process.cwd(), 'build'),
+			publicPath: '/',
+		},
+		options.output,
+	), // Merge with env dependent settings
 	module: {
 		rules: [
 			{
@@ -30,15 +34,15 @@ module.exports = (options) => ({
 				},
 			},
 			{
-        // Preprocess our own .css files
-        // This is the place to add your own loaders (e.g. sass/less etc.)
-        // for a list of loaders, see https://webpack.js.org/loaders/#styling
+				// Preprocess our own .css files
+				// This is the place to add your own loaders (e.g. sass/less etc.)
+				// for a list of loaders, see https://webpack.js.org/loaders/#styling
 				test: /\.css$|\.scss$/,
 				include: /app/,
 				loaders: ['style-loader', 'css-loader', 'sass-loader'],
 			},
 			{
-        // Preprocess 3rd party .css files located in node_modules
+				// Preprocess 3rd party .css files located in node_modules
 				test: /\.css$/,
 				include: /node_modules/,
 				use: ['style-loader', 'css-loader'],
@@ -91,18 +95,19 @@ module.exports = (options) => ({
 	},
 	plugins: options.plugins.concat([
 		new webpack.ProvidePlugin({
-      // make fetch available
+			// make fetch available
 			fetch: 'exports-loader?self.fetch!whatwg-fetch',
 		}),
 
-    // Always expose NODE_ENV to webpack, in order to use `process.env.NODE_ENV`
-    // inside your code for any environment checks; UglifyJS will automatically
-    // drop any unreachable code.
-    // and any env variables here such as api keys
+		// Always expose NODE_ENV to webpack, in order to use `process.env.NODE_ENV`
+		// inside your code for any environment checks; UglifyJS will automatically
+		// drop any unreachable code.
+		// and any env variables here such as api keys
 		new webpack.DefinePlugin({
 			'process.env': {
 				NODE_ENV: JSON.stringify(process.env.NODE_ENV),
 				DBP_API_KEY: JSON.stringify(process.env.DBP_API_KEY),
+				BASE_API_ROUTE: JSON.stringify(process.env.BASE_API_ROUTE),
 				FB_APP_ID: JSON.stringify(process.env.FB_APP_ID),
 				FB_ACCESS: JSON.stringify(process.env.FB_ACCESS),
 				NOTES_PROJECT_ID: JSON.stringify(process.env.NOTES_PROJECT_ID),
@@ -115,16 +120,8 @@ module.exports = (options) => ({
 	]),
 	resolve: {
 		modules: ['app', 'node_modules'],
-		extensions: [
-			'.js',
-			'.jsx',
-			'.react.js',
-		],
-		mainFields: [
-			'browser',
-			'jsnext:main',
-			'main',
-		],
+		extensions: ['.js', '.jsx', '.react.js'],
+		mainFields: ['browser', 'jsnext:main', 'main'],
 	},
 	devtool: options.devtool,
 	target: 'web', // Make web variables accessible to webpack, e.g. window

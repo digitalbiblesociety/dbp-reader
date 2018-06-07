@@ -4,7 +4,7 @@
 // import { loadBooksAndCopywrite } from './actions';
 //
 // export function* getBooks({ textId }) {
-// 	const requestUrl = `https://api.bible.build/bibles/${textId}?key=${process.env.DBP_API_KEY}&v=4&pretty`;
+// 	const requestUrl = `${process.env.BASE_API_ROUTE}/bibles/${textId}?key=${process.env.DBP_API_KEY}&v=4&pretty`;
 //
 // 	try {
 // 		const response = yield call(request, requestUrl);
