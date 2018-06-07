@@ -268,7 +268,7 @@ class HomePage extends React.PureComponent {
 			}
 		} catch (err) {
 			if (process.env.NODE_ENV === 'development') {
-				console.error('Error initializing fb api', err); // eslint-disable-line no-console
+				console.warn('Error initializing fb api', err); // eslint-disable-line no-console
 			}
 		}
 
@@ -281,7 +281,7 @@ class HomePage extends React.PureComponent {
 						client_id:
 							process.env.NODE_ENV === 'development'
 								? process.env.GOOGLE_APP_ID
-								: process.env.GOOGLE_APP_ID_PROD,
+								: process.env.GOOGLE_APP_ID_PROD || '',
 						scope: 'profile',
 					});
 					// console.log('auth 2 has been initialized', auth2);
@@ -289,7 +289,7 @@ class HomePage extends React.PureComponent {
 			}
 		} catch (err) {
 			if (process.env.NODE_ENV === 'development') {
-				console.error('Error initializing google api', err); // eslint-disable-line no-console
+				console.warn('Error initializing google api', err); // eslint-disable-line no-console
 			}
 		}
 
