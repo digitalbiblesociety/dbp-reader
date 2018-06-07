@@ -420,37 +420,40 @@ export class AudioPlayer extends React.Component {
 	);
 
 	prevIcon = (
-		<div className={'icon-wrap'} title={messages.prevTitle.defaultMessage}>
-			<SvgWrapper
-				onClick={this.skipBackward}
-				className="svgitem icon"
-				fill="#fff"
-				svgid="previous"
-			/>
+		<div
+			onClick={this.skipBackward}
+			role={'button'}
+			tabIndex={0}
+			className={'icon-wrap'}
+			title={messages.prevTitle.defaultMessage}
+		>
+			<SvgWrapper className="svgitem icon" fill="#fff" svgid="previous" />
 			<FormattedMessage {...messages.prev} />
 		</div>
 	);
 
 	pauseIcon = (
-		<div className={'icon-wrap'} title={messages.pauseTitle.defaultMessage}>
-			<SvgWrapper
-				onClick={this.pauseVideo}
-				className="svgitem icon"
-				fill="#fff"
-				svgid="pause"
-			/>
+		<div
+			onClick={this.pauseVideo}
+			role={'button'}
+			tabIndex={0}
+			className={'icon-wrap'}
+			title={messages.pauseTitle.defaultMessage}
+		>
+			<SvgWrapper className="svgitem icon" fill="#fff" svgid="pause" />
 			<FormattedMessage {...messages.pause} />
 		</div>
 	);
 
 	playIcon = (
-		<div className={'icon-wrap'} title={messages.playTitle.defaultMessage}>
-			<SvgWrapper
-				onClick={this.playVideo}
-				className="svgitem icon"
-				fill="#fff"
-				svgid="play"
-			/>
+		<div
+			onClick={this.playVideo}
+			role={'button'}
+			tabIndex={0}
+			className={'icon-wrap'}
+			title={messages.playTitle.defaultMessage}
+		>
+			<SvgWrapper className="svgitem icon" fill="#fff" svgid="play" />
 			<FormattedMessage {...messages.play} />
 		</div>
 	);
