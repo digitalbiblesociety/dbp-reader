@@ -381,6 +381,7 @@ export function* getBibleFromUrl({
 			yield fork(getCopyrightSaga, { filesetIds: filesets });
 			// calling a generator that will handle the api requests for getting text
 			// console.log('filtered filesets', filesets);
+			// Next and previous are getting the next and previous books every time
 			let nextBook = { chapters: [] };
 			let prevBook = { chapters: [] };
 			let nextBookId = '';
