@@ -232,7 +232,9 @@ const initialState = fromJS({
 			},
 		},
 	},
-	autoPlayEnabled: false,
+	autoPlayEnabled: sessionStorage.getItem('bible_is_autoplay')
+		? JSON.parse(sessionStorage.getItem('bible_is_autoplay'))
+		: false,
 	loadingBooks: false,
 	selectedText: '',
 	selectedBookName: '',
@@ -271,6 +273,10 @@ function homePageReducer(state = initialState, action) {
 		case TOGGLE_FIRST_LOAD_TEXT_SELECTION:
 			return state.set('firstLoad', false);
 		case TOGGLE_AUTOPLAY:
+			sessionStorage.setItem(
+				'bible_is_autoplay',
+				!state.get('autoPlayEnabled'),
+			);
 			return state.set('autoPlayEnabled', !state.get('autoPlayEnabled'));
 		case GET_CHAPTER_TEXT:
 			return state.set('loadingNewChapterText', true);
