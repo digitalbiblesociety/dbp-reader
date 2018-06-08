@@ -352,7 +352,7 @@ export function* addNote({ userId, data }) {
 	try {
 		const response = yield call(request, requestUrl, options);
 		// console.log('add user note response', response);
-		if (response.success) {
+		if (response.success || !response.error) {
 			yield put({ type: ADD_NOTE_SUCCESS, response });
 			yield fork(getNotesForChapter, {
 				userId: data.user_id,
