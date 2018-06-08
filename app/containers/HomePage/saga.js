@@ -369,7 +369,7 @@ export function* getBibleFromUrl({
 			if (!activeBook) {
 				activeBook = books.find((b) => b.book_id === activeBookId);
 			}
-			const filesets = response.data.filesets['dbp-dev'].filter(
+			const filesets = response.data.filesets[process.env.DBP_BUCKET_ID].filter(
 				(f) =>
 					(f.type === 'audio' ||
 						f.type === 'audio_drama' ||

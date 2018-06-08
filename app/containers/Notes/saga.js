@@ -37,15 +37,14 @@ export function* getChapterForNote({ note }) {
 	// Need to get the bible filesets
 	try {
 		const response = yield call(request, bibleUrl);
-		// console.log('bibles response', response);
-		const filesets = response.data.filesets.filter(
+		// console.log('bibles response', response.data.filesets);
+		const filesets = response.data.filesets[process.env.DBP_BUCKET_ID].filter(
 			(f) =>
-				f.bucket_id === 'dbp-dev' &&
-				f.set_type_code !== 'app' &&
-				(f.set_type_code === 'text_plain' || f.set_type_code === 'text_format'),
+				f.type !== 'app' &&
+				(f.type === 'text_plain' || f.type === 'text_format'),
 		);
 		const hasText = !!filesets.length;
-		const plain = filesets.find((f) => f.set_type_code === 'text_plain');
+		const plain = filesets.find((f) => f.type === 'text_plain');
 		let text = [];
 
 		if (hasText) {
@@ -56,17 +55,34 @@ export function* getChapterForNote({ note }) {
 					request,
 					`${process.env.BASE_API_ROUTE}/bibles/filesets/${
 						plain.id
-					}/${bookId}/${chapter}?bucket=${process.env.DBP_BUCKET_ID}&key=${
+					}/${bookId}/${chapter}?key=${
 						process.env.DBP_API_KEY
 					}&v=4&book_id=${bookId}&chapter_id=${chapter}`,
 				);
+				// console.log('res', res);
+
 				text = res.data;
 			} else {
 				// Todo: Implement a version for getting the formatted text and parsing it
 				// const format = filesets.find((f) => f.set_type_code === 'text_format');
 				// const res = yield call(request, `${process.env.BASE_API_ROUTE}/bibles/filesets/${format.id}?bucket=${process.env.DBP_BUCKET_ID}&key=${process.env.DBP_API_KEY}&v=4&book_id=${bookId}&chapter_id=${chapter}`);
 				//
+				const format = filesets.find((f) => f.type === 'text_format');
 				// text = res.data;
+				const res = yield call(
+					request,
+					`${process.env.BASE_API_ROUTE}/bibles/filesets/${format.id}?bucket=${
+						process.env.DBP_BUCKET_ID
+					}&key=${
+						process.env.DBP_API_KEY
+					}&v=4&book_id=${bookId}&chapter_id=${chapter}&type=text_format`,
+				);
+				const path = res.data && res.data[0] ? res.data[0].path : undefined;
+				const formattedText = yield path
+					? fetch(path).then((b) => b.text())
+					: '';
+
+				console.log('formattedText', formattedText);
 			}
 		}
 		// console.log(response);
