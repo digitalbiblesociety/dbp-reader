@@ -330,18 +330,8 @@ class HomePage extends React.PureComponent {
 	}
 	// Component updates when the state and props haven't changed 2 of 5 times
 	// If there is a significant slow down we may need to do some deep equality checks on the state
-	// componentDidUpdate(prevProps, prevState) {
-	// 	console.log('previous props', prevProps);
-	// 	console.log('current props', this.props);
-	// 	console.log('current props equal to previous props', isEqual(this.props, prevProps));
-	// 	console.log('previous state', prevState);
-	// 	console.log('current state', this.state);
-	// 	console.log('current state equal to previous state', isEqual(this.state, prevState));
-	// }
-	// The current version of the below function is gross and prone to breaking
-	// This function needs to solve the issue of requesting the new data from the api when a new version is clicked
+
 	// Need to fix how many times this gets called. The main issue is all the state that is managed by this one thing
-	// c = 0
 	componentWillReceiveProps(nextProps) {
 		// Deals with updating page based on the url params
 		// console.log('Received props --------------------------------------');
@@ -362,7 +352,6 @@ class HomePage extends React.PureComponent {
 			)
 		) {
 			// Reset the password because currently has a token but the user id has changed so the password was reset successfully
-			// console.log('Replacing history');
 
 			this.props.history.replace(
 				`/${localStorage.getItem('bible_is_1_bible_id') ||
@@ -383,8 +372,6 @@ class HomePage extends React.PureComponent {
 				activeBook = fromJS({}),
 			} = nextProps;
 			const { activeChapter } = nextProps.homepage.activeChapter;
-			// console.log('typeof activeChapter', typeof activeChapter);
-			// console.log(nextBook, previousBook, activeBook);
 
 			const nextBookId = nextBook.get('book_id');
 			const prevBookId = previousBook.get('book_id');
@@ -398,10 +385,7 @@ class HomePage extends React.PureComponent {
 			if (!activeBook.getIn(['chapters', nextChapter])) {
 				nextChapter = nextBook.getIn(['chapters', 0]);
 			}
-			// console.log('new bible', newBible);
-			// console.log('new book', newBook);
-			// console.log('new chapter', newChapter);
-			// todo need to update the url if the parameters given weren't valid
+
 			if (newBible) {
 				// console.log('new bible');
 				// Need to get the bible object with /bibles/[bibleId]
@@ -881,12 +865,14 @@ class HomePage extends React.PureComponent {
 			isVersionSelectionActive,
 			isChapterSelectionActive,
 			isInformationModalActive,
-			loadingNewChapterText,
 			nextAudioSource,
 			prevAudioSource,
 			plainTextFilesetId,
 			userAgent,
 			textDirection,
+			loadingAudio,
+			loadingCopyright,
+			loadingNewChapterText,
 			// chapterText: updatedText,
 		} = this.props.homepage;
 
@@ -1010,12 +996,6 @@ class HomePage extends React.PureComponent {
 					) : null}
 				</TransitionGroup>
 				<Text
-					copyrights={copyrights}
-					activeFilesets={activeFilesets}
-					audioFilesetId={audioFilesetId}
-					plainTextFilesetId={plainTextFilesetId}
-					formattedTextFilesetId={formattedTextFilesetId}
-					getCopyrights={this.getCopyrights}
 					books={books}
 					userId={userId}
 					text={updatedText}
@@ -1024,23 +1004,31 @@ class HomePage extends React.PureComponent {
 					bookmarks={bookmarks}
 					bibleId={activeTextId}
 					highlights={highlights}
+					copyrights={copyrights}
 					audioSource={audioSource}
 					activeBookId={activeBookId}
 					userSettings={userSettings}
+					loadingAudio={loadingAudio}
 					textDirection={textDirection}
 					activeChapter={activeChapter}
 					invalidBibleId={invalidBibleId}
 					activeBookName={activeBookName}
+					activeFilesets={activeFilesets}
+					audioFilesetId={audioFilesetId}
 					notesActive={isNotesModalActive}
 					formattedSource={formattedSource}
+					loadingCopyright={loadingCopyright}
 					audioPlayerState={audioPlayerState}
 					userAuthenticated={userAuthenticated}
+					plainTextFilesetId={plainTextFilesetId}
 					informationActive={isInformationModalActive}
 					loadingNewChapterText={loadingNewChapterText}
+					formattedTextFilesetId={formattedTextFilesetId}
 					addBookmark={this.addBookmark}
 					addHighlight={this.addHighlight}
 					nextChapter={this.getNextChapter}
 					prevChapter={this.getPrevChapter}
+					getCopyrights={this.getCopyrights}
 					setActiveNote={this.setActiveNote}
 					goToFullChapter={this.goToFullChapter}
 					deleteHighlights={this.deleteHighlights}

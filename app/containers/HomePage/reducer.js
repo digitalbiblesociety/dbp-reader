@@ -38,6 +38,7 @@ import {
 	UPDATE_SELECTED_TEXT,
 	GET_BOOKS,
 	GET_CHAPTER_TEXT,
+	GET_COPYRIGHTS,
 } from './constants';
 
 const newBibleState = fromJS({
@@ -125,6 +126,7 @@ const newBibleState = fromJS({
 	nextAudioSource: '',
 	audioPaths: [],
 	loadingNewChapterText: true,
+	loadingCopyright: true,
 });
 
 const initialState = fromJS({
@@ -147,52 +149,12 @@ const initialState = fromJS({
 	highlights: [],
 	copyrights: {
 		newTestament: {
-			audio: {
-				// message: 'Copyright is either loading or does not exist.',
-				// organizations: [
-				// 	{
-				// 		logo: {
-				// 			url: '',
-				// 		},
-				// 		name: 'name1',
-				// 	},
-				// ],
-			},
-			text: {
-				// message: 'Copyright is either loading or does not exist.',
-				// organizations: [
-				// 	{
-				// 		logo: {
-				// 			url: '',
-				// 		},
-				// 		name: 'name2',
-				// 	},
-				// ],
-			},
+			audio: {},
+			text: {},
 		},
 		oldTestament: {
-			audio: {
-				// message: 'Copyright is either loading or does not exist.',
-				// organizations: [
-				// 	{
-				// 		logo: {
-				// 			url: '',
-				// 		},
-				// 		name: 'name3',
-				// 	},
-				// ],
-			},
-			text: {
-				// message: 'Copyright is either loading or does not exist.',
-				// organizations: [
-				// 	{
-				// 		logo: {
-				// 			url: '',
-				// 		},
-				// 		name: 'name4',
-				// 	},
-				// ],
-			},
+			audio: {},
+			text: {},
 		},
 	},
 	activeChapter: 1,
@@ -295,6 +257,9 @@ const initialState = fromJS({
 			? false
 			: JSON.parse(sessionStorage.getItem('bible_is_audio_player_state')),
 	textDirection: 'ltr',
+	loadingNewChapterText: true,
+	loadingCopyright: true,
+	loadingAudio: true,
 });
 
 function homePageReducer(state = initialState, action) {
@@ -406,63 +371,53 @@ function homePageReducer(state = initialState, action) {
 			localStorage.setItem('bible_is_1_bible_id', action.bibleId);
 			localStorage.setItem('bible_is_2_book_id', action.activeBookId);
 			localStorage.setItem('bible_is_3_chapter', action.activeChapter);
-			return (
-				state
-					.set('activeTextId', fromJS(action.bibleId))
-					.set('activeBookId', fromJS(action.activeBookId))
-					.set('activeChapter', fromJS(action.activeChapter))
-					.set('activeTextName', fromJS(action.name))
-					.set('defaultLanguageIso', fromJS(action.iso))
-					.set('defaultLanguageName', fromJS(action.languageName))
-					.set('activeBookName', fromJS(action.activeBookName))
-					.set('invalidBibleId', false)
-					.set('audioPlayerState', action.chapterData.hasAudio)
-					.set('activeVerse', action.chapterData.verse)
-					.set('textDirection', action.textDirection)
-					// .set('hasFormattedText', fromJS(action.chapterData.hasFormattedText))
-					// .set('hasTextInDatabase', fromJS(action.chapterData.hasPlainText))
-					// .set('hasAudio', fromJS(action.chapterData.hasAudio))
-					// .set('chapterText', fromJS(action.chapterData.plainText))
-					.set('books', fromJS(action.books))
-					// .set('formattedSource', fromJS(action.chapterData.formattedText))
-					.set('activeFilesets', fromJS(action.filesets))
-			);
+			return state
+				.set('activeTextId', fromJS(action.bibleId))
+				.set('activeBookId', fromJS(action.activeBookId))
+				.set('activeChapter', fromJS(action.activeChapter))
+				.set('activeTextName', fromJS(action.name))
+				.set('defaultLanguageIso', fromJS(action.iso))
+				.set('defaultLanguageName', fromJS(action.languageName))
+				.set('activeBookName', fromJS(action.activeBookName))
+				.set('invalidBibleId', false)
+				.set('audioPlayerState', action.chapterData.hasAudio)
+				.set('activeVerse', action.chapterData.verse)
+				.set('textDirection', action.textDirection)
+				.set('books', fromJS(action.books))
+				.set('activeFilesets', fromJS(action.filesets));
 		case 'loadnewchapter':
 			localStorage.setItem('bible_is_2_book_id', action.bookId);
 			localStorage.setItem('bible_is_3_chapter', action.chapter);
-			return (
-				state
-					.set('hasFormattedText', fromJS(action.hasFormattedText))
-					.set('hasTextInDatabase', fromJS(action.hasPlainText))
-					.set('hasAudio', fromJS(action.hasAudio))
-					// .set('audioPlayerState', action.hasAudio)
-					.set('chapterText', fromJS(action.plainText))
-					.set('loadingNewChapterText', false)
-					.setIn(
-						['userSettings', 'toggleOptions', 'crossReferences', 'available'],
-						action.hasFormattedText &&
-							(action.formattedText.includes('class="ft"') ||
-								action.formattedText.includes('class="xt"')),
-					)
-					.setIn(
-						['userSettings', 'toggleOptions', 'redLetter', 'available'],
-						action.hasFormattedText &&
-							(action.formattedText.includes('class="wj"') ||
-								action.formattedText.includes("class='wj'")),
-					)
-					.setIn(
-						['userSettings', 'toggleOptions', 'readersMode', 'available'],
-						action.hasPlainText,
-					)
-					.setIn(
-						['userSettings', 'toggleOptions', 'oneVersePerLine', 'available'],
-						action.hasPlainText,
-					)
-					.set('formattedTextFilesetId', action.formattedTextFilesetId)
-					.set('plainTextFilesetId', action.plainTextFilesetId)
-					.set('activeVerse', action.verse)
-					.set('formattedSource', fromJS(action.formattedText))
-			);
+			return state
+				.set('hasFormattedText', fromJS(action.hasFormattedText))
+				.set('hasTextInDatabase', fromJS(action.hasPlainText))
+				.set('hasAudio', fromJS(action.hasAudio))
+				.set('chapterText', fromJS(action.plainText))
+				.set('loadingNewChapterText', false)
+				.setIn(
+					['userSettings', 'toggleOptions', 'crossReferences', 'available'],
+					action.hasFormattedText &&
+						(action.formattedText.includes('class="ft"') ||
+							action.formattedText.includes('class="xt"')),
+				)
+				.setIn(
+					['userSettings', 'toggleOptions', 'redLetter', 'available'],
+					action.hasFormattedText &&
+						(action.formattedText.includes('class="wj"') ||
+							action.formattedText.includes("class='wj'")),
+				)
+				.setIn(
+					['userSettings', 'toggleOptions', 'readersMode', 'available'],
+					action.hasPlainText,
+				)
+				.setIn(
+					['userSettings', 'toggleOptions', 'oneVersePerLine', 'available'],
+					action.hasPlainText,
+				)
+				.set('formattedTextFilesetId', action.formattedTextFilesetId)
+				.set('plainTextFilesetId', action.plainTextFilesetId)
+				.set('activeVerse', action.verse)
+				.set('formattedSource', fromJS(action.formattedText));
 		case 'loadaudio':
 			// console.log('loading audio with', action);
 			if (action.previous) {
@@ -470,21 +425,30 @@ function homePageReducer(state = initialState, action) {
 			} else if (action.next) {
 				return state.set('nextAudioSource', action.audioPaths[0]);
 			}
-			return state
-				.set('audioPaths', action.audioPaths.slice(1))
-				.set('loadingNewChapterText', false)
-				.set('audioFilesetId', action.audioFilesetId)
-				.set('audioSource', action.audioPaths[0] || '');
+			return (
+				state
+					.set('audioPaths', action.audioPaths.slice(1))
+					// .set('loadingNewChapterText', false)
+					.set('audioFilesetId', action.audioFilesetId)
+					.set('loadingAudio', false)
+					.set('audioSource', action.audioPaths[0] || '')
+			);
 		case 'getchapter':
-			return state.set('loadingNewChapterText', true);
+			return state.set('loadingAudio', true).set('loadingNewChapterText', true);
 		case 'getbible':
 			return state.map((data, key) => newBibleState.get(key) || data);
 		case 'loadbibleerror':
 			return state
 				.set('invalidBibleId', true)
+				.set('loadingCopyright', false)
+				.set('loadingAudio', false)
 				.set('loadingNewChapterText', false);
+		case GET_COPYRIGHTS:
+			return state.set('loadingCopyright', true);
 		case 'loadcopyright':
-			return state.set('copyrights', action.copyrights);
+			return state
+				.set('loadingCopyright', false)
+				.set('copyrights', action.copyrights);
 		default:
 			return state;
 	}
