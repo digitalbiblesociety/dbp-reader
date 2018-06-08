@@ -470,14 +470,6 @@ class Text extends React.PureComponent {
 						.map((s) => applyBookmarks(s, bookmarks, this.handleNoteClick))[0],
 			  }
 			: initialFormattedSource;
-		// console.log('new src', formattedSource);
-		// console.log('diff', differenceObject(formattedSource, initialFormattedSource));
-		// if (userNotes) {
-		// 	// console.log('notes', userNotes);
-		// 	// console.log('text', initialText);
-		// 	// do something to display a svg
-		// }
-		// console.log(userNotes);
 		const readersMode = userSettings.getIn([
 			'toggleOptions',
 			'readersMode',
@@ -1408,6 +1400,8 @@ class Text extends React.PureComponent {
 			formattedSource,
 			text,
 			loadingNewChapterText,
+			loadingAudio,
+			loadingCopyright,
 			userSettings,
 			verseNumber,
 			goToFullChapter,
@@ -1440,7 +1434,7 @@ class Text extends React.PureComponent {
 		// console.log('chapterAlt', chapterAlt);
 		// const justifiedClass = userSettings.getIn(['toggleOptions', 'justifiedText', 'active']) ? 'justify' : '';
 
-		if (loadingNewChapterText) {
+		if (loadingNewChapterText || loadingAudio || loadingCopyright) {
 			return <LoadingSpinner />;
 		}
 
@@ -1542,10 +1536,12 @@ Text.propTypes = {
 	// toggleInformationModal: PropTypes.func,
 	activeChapter: PropTypes.number,
 	notesActive: PropTypes.bool,
+	loadingAudio: PropTypes.bool,
 	invalidBibleId: PropTypes.bool,
+	loadingCopyright: PropTypes.bool,
+	userAuthenticated: PropTypes.bool,
 	// audioPlayerState: PropTypes.bool,
 	// informationActive: PropTypes.bool,
-	userAuthenticated: PropTypes.bool,
 	loadingNewChapterText: PropTypes.bool,
 	userId: PropTypes.string,
 	bibleId: PropTypes.string,
