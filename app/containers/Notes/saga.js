@@ -37,15 +37,14 @@ export function* getChapterForNote({ note }) {
 	// Need to get the bible filesets
 	try {
 		const response = yield call(request, bibleUrl);
-		// console.log('bibles response', response);
-		const filesets = response.data.filesets.filter(
+		// console.log('bibles response', response.data.filesets);
+		const filesets = response.data.filesets[process.env.DBP_BUCKET_ID].filter(
 			(f) =>
-				f.bucket_id === 'dbp-dev' &&
-				f.set_type_code !== 'app' &&
-				(f.set_type_code === 'text_plain' || f.set_type_code === 'text_format'),
+				f.type !== 'app' &&
+				(f.type === 'text_plain' || f.type === 'text_format'),
 		);
 		const hasText = !!filesets.length;
-		const plain = filesets.find((f) => f.set_type_code === 'text_plain');
+		const plain = filesets.find((f) => f.type === 'text_plain');
 		let text = [];
 
 		if (hasText) {
@@ -56,17 +55,33 @@ export function* getChapterForNote({ note }) {
 					request,
 					`${process.env.BASE_API_ROUTE}/bibles/filesets/${
 						plain.id
-					}/${bookId}/${chapter}?bucket=${process.env.DBP_BUCKET_ID}&key=${
+					}/${bookId}/${chapter}?key=${
 						process.env.DBP_API_KEY
 					}&v=4&book_id=${bookId}&chapter_id=${chapter}`,
 				);
+				// console.log('res', res);
+
 				text = res.data;
 			} else {
 				// Todo: Implement a version for getting the formatted text and parsing it
 				// const format = filesets.find((f) => f.set_type_code === 'text_format');
 				// const res = yield call(request, `${process.env.BASE_API_ROUTE}/bibles/filesets/${format.id}?bucket=${process.env.DBP_BUCKET_ID}&key=${process.env.DBP_API_KEY}&v=4&book_id=${bookId}&chapter_id=${chapter}`);
 				//
-				// text = res.data;
+				// const format = filesets.find((f) => f.type === 'text_format');
+				// // text = res.data;
+				// const res = yield call(
+				// 	request,
+				// 	`${process.env.BASE_API_ROUTE}/bibles/filesets/${format.id}?bucket=${
+				// 		process.env.DBP_BUCKET_ID
+				// 	}&key=${
+				// 		process.env.DBP_API_KEY
+				// 	}&v=4&book_id=${bookId}&chapter_id=${chapter}&type=text_format`,
+				// );
+				// const path = res.data && res.data[0] ? res.data[0].path : undefined;
+				// const formattedText = yield path
+				// 	? fetch(path).then((b) => b.text())
+				// 	: '';
+				// console.log('formattedText', formattedText);
 			}
 		}
 		// console.log(response);
@@ -204,7 +219,17 @@ export function* updateNote({ userId, data, noteId }) {
 	}
 }
 
-export function* deleteNote({ userId, noteId, pageSize, activePage }) {
+export function* deleteNote({
+	userId,
+	noteId,
+	pageSize,
+	activePage,
+	bibleId,
+	bookId,
+	chapter,
+	isBookmark,
+}) {
+	// console.log('deleting note or in delete note');
 	const requestUrl = `${
 		process.env.BASE_API_ROUTE
 	}/users/${userId}/notes/${noteId}?key=${
@@ -218,10 +243,36 @@ export function* deleteNote({ userId, noteId, pageSize, activePage }) {
 		const response = yield call(request, requestUrl, options);
 
 		if (response.success) {
+			if (isBookmark) {
+				yield fork(getUserBookmarks, {
+					userId,
+					params: { limit: pageSize, page: activePage },
+				});
+				yield fork(getBookmarksForChapter, {
+					userId,
+					params: {
+						bible_id: bibleId,
+						book_id: bookId,
+						chapter,
+						limit: 150,
+						page: 1,
+					},
+				});
+			}
 			// console.log('successfully deleted note!', response);
 			yield fork(getNotesForNotebook, {
 				userId,
 				params: { limit: pageSize, page: activePage },
+			});
+			yield fork(getNotesForChapter, {
+				userId,
+				params: {
+					bible_id: bibleId,
+					book_id: bookId,
+					chapter,
+					limit: 150,
+					page: 1,
+				},
 			});
 		}
 	} catch (err) {
@@ -268,7 +319,7 @@ export function* getNotesForChapter({ userId, params = {} }) {
 		// };
 		// console.log('get note response current page, last page and per page', response.current_page, response.last_page, response.per_page);
 
-		// console.log('get note response', response);
+		// console.log('got chapter notes get note response', response);
 		yield put({
 			type: LOAD_USER_NOTES,
 			listData: response.data,
@@ -313,6 +364,7 @@ export function* getNotesForNotebook({ userId, params = {} }) {
 		// 	pages: response.total,
 		// };
 		// console.log('get note response current page, last page and per page', response.current_page, response.last_page, response.per_page);
+		// console.log('got the notebook notes response', response);
 
 		yield put({
 			type: LOAD_NOTEBOOK_DATA,
@@ -352,7 +404,7 @@ export function* addNote({ userId, data }) {
 	try {
 		const response = yield call(request, requestUrl, options);
 		// console.log('add user note response', response);
-		if (response.success) {
+		if (response.success || !response.error) {
 			yield put({ type: ADD_NOTE_SUCCESS, response });
 			yield fork(getNotesForChapter, {
 				userId: data.user_id,

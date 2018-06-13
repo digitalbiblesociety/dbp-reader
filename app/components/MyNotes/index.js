@@ -1,8 +1,8 @@
 /**
-*
-* MyNotes
-*
-*/
+ *
+ * MyNotes
+ *
+ */
 
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -14,11 +14,12 @@ import PageSizeSelector from 'components/PageSizeSelector';
 import MyHighlights from 'components/MyHighlights';
 import MyBookmarks from 'components/MyBookmarks';
 // import styled from 'styled-components';
-class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+class MyNotes extends React.PureComponent {
+	// eslint-disable-line react/prefer-stateless-function
 	state = {
 		// Need to reset this once user goes from notes to bookmarks
 		filterText: '',
-	}
+	};
 	// Need this for when a user has edited a note and come back here
 	componentDidMount() {
 		// if (this.props.sectionType === 'notes') {
@@ -26,9 +27,18 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 		// } else if (this.props.sectionType === 'bookmarks') {
 		// } else if (this.props.sectionType === 'highlights') {
 		// }
-		this.props.getNotes({ limit: this.props.pageSize, page: this.props.activePage });
-		this.props.getBookmarks({ limit: this.props.pageSizeBookmark, page: this.props.activePageBookmark });
-		this.props.getHighlights({ limit: this.props.pageSizeHighlight, page: this.props.activePageHighlight });
+		this.props.getNotes({
+			limit: this.props.pageSize,
+			page: this.props.activePage,
+		});
+		this.props.getBookmarks({
+			limit: this.props.pageSizeBookmark,
+			page: this.props.activePageBookmark,
+		});
+		this.props.getHighlights({
+			limit: this.props.pageSizeHighlight,
+			page: this.props.activePageHighlight,
+		});
 	}
 
 	// componentDidUpdate() {
@@ -36,24 +46,54 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 	// }
 
 	componentWillReceiveProps(nextProps) {
-		if (nextProps.sectionType === 'notes' && (this.props.pageSize !== nextProps.pageSize || this.props.activePage !== nextProps.activePage)) {
-			this.props.getNotes({ limit: nextProps.pageSize, page: nextProps.activePage });
-		} else if (nextProps.sectionType === 'bookmarks' && (this.props.pageSizeBookmark !== nextProps.pageSizeBookmark || this.props.activePageBookmark !== nextProps.activePageBookmark)) {
-			this.props.getBookmarks({ limit: nextProps.pageSizeBookmark, page: nextProps.activePageBookmark });
-		} else if (nextProps.sectionType === 'highlights' && (this.props.pageSizeHighlight !== nextProps.pageSizeHighlight || this.props.activePageHighlight !== nextProps.activePageHighlight)) {
-			this.props.getHighlights({ limit: nextProps.pageSizeHighlight, page: nextProps.activePageHighlight });
+		if (
+			nextProps.sectionType === 'notes' &&
+			(this.props.pageSize !== nextProps.pageSize ||
+				this.props.activePage !== nextProps.activePage)
+		) {
+			this.props.getNotes({
+				limit: nextProps.pageSize,
+				page: nextProps.activePage,
+			});
+		} else if (
+			nextProps.sectionType === 'bookmarks' &&
+			(this.props.pageSizeBookmark !== nextProps.pageSizeBookmark ||
+				this.props.activePageBookmark !== nextProps.activePageBookmark)
+		) {
+			this.props.getBookmarks({
+				limit: nextProps.pageSizeBookmark,
+				page: nextProps.activePageBookmark,
+			});
+		} else if (
+			nextProps.sectionType === 'highlights' &&
+			(this.props.pageSizeHighlight !== nextProps.pageSizeHighlight ||
+				this.props.activePageHighlight !== nextProps.activePageHighlight)
+		) {
+			this.props.getHighlights({
+				limit: nextProps.pageSizeHighlight,
+				page: nextProps.activePageHighlight,
+			});
 		}
 
 		if (nextProps.sectionType !== this.props.sectionType) {
 			if (nextProps.sectionType === 'notes') {
 				// console.log('Getting notes');
-				this.props.getNotes({ limit: nextProps.pageSize, page: nextProps.activePage });
+				this.props.getNotes({
+					limit: nextProps.pageSize,
+					page: nextProps.activePage,
+				});
 			} else if (nextProps.sectionType === 'bookmarks') {
 				// console.log('getting bookmarks');
-				nextProps.getBookmarks({ limit: nextProps.pageSizeBookmark, page: nextProps.activePageBookmark });
+				nextProps.getBookmarks({
+					limit: nextProps.pageSizeBookmark,
+					page: nextProps.activePageBookmark,
+				});
 			} else if (nextProps.sectionType === 'highlights') {
 				// console.log('getting highlights');
-				nextProps.getHighlights({ limit: nextProps.pageSizeHighlight, page: nextProps.activePageHighlight });
+				nextProps.getHighlights({
+					limit: nextProps.pageSizeHighlight,
+					page: nextProps.activePageHighlight,
+				});
 			}
 		}
 	}
@@ -64,53 +104,93 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 			return listItem.tags.find((tag) => tag.type === 'title').value;
 		}
 		// Otherwise uses the reference saved at the time of creation
-		if (listItem.tags && listItem.tags.find((tag) => tag.type === 'reference')) {
+		if (
+			listItem.tags &&
+			listItem.tags.find((tag) => tag.type === 'reference')
+		) {
 			return listItem.tags.find((tag) => tag.type === 'reference').value;
 		}
 		// As a last resort it tries to generate a sort of reference
-		const verseRef = listItem.verse_end && !(listItem.verse_end === listItem.verse_start) ? `${listItem.verse_start}-${listItem.verse_end}` : listItem.verse_start;
+		const verseRef =
+			listItem.verse_end && !(listItem.verse_end === listItem.verse_start)
+				? `${listItem.verse_start}-${listItem.verse_end}`
+				: listItem.verse_start;
 		const { vernacularNamesObject } = this.props;
 
-		return `${vernacularNamesObject[listItem.book_id]} ${listItem.chapter}:${verseRef}`;
-	}
+		return `${vernacularNamesObject[listItem.book_id]} ${
+			listItem.chapter
+		}:${verseRef}`;
+	};
 
 	getFormattedNoteDate = (timestamp) => {
 		const date = timestamp.slice(0, 10).split('-');
 
 		return `${date[1]}.${date[2]}.${date[0].slice(2)}`;
-	}
+	};
 
 	getFilteredPageList = (pageData) => {
 		const filterText = this.state.filterText;
 
-		return matchSorter(pageData, filterText, { keys: [(item) => item.tags.find((tag) => tag.type === 'reference') ? item.tags.find((tag) => tag.type === 'reference').value : item.notes, 'notes', 'bible_id', 'book_id', 'chapter', 'verse_start', 'updated_at'] });
-	}
+		return matchSorter(pageData, filterText, {
+			keys: [
+				(item) =>
+					item.tags.find((tag) => tag.type === 'reference')
+						? item.tags.find((tag) => tag.type === 'reference').value
+						: item.notes,
+				'notes',
+				'bible_id',
+				'book_id',
+				'chapter',
+				'verse_start',
+				'updated_at',
+			],
+		});
+	};
 
 	getFilteredHighlights = (highlights) => {
 		const filterText = this.state.filterText;
 
-		return matchSorter(highlights, filterText, { keys: ['reference', 'book_id', 'chapter', 'verse_start'] });
-	}
+		return matchSorter(highlights, filterText, {
+			keys: ['reference', 'book_id', 'chapter', 'verse_start'],
+		});
+	};
 
 	getHighlightReference = (h) => {
 		if (h.reference) {
 			return h.reference;
 		}
-		return `${h.book_id} - ${h.chapter}:${h.verse_start === h.verse_end || !h.verse_end ? h.verse_start : `${h.verse_start}-${h.verse_end}`} - (${h.bible_id})`;
-	}
+		return `${h.book_id} - ${h.chapter}:${
+			h.verse_start === h.verse_end || !h.verse_end
+				? h.verse_start
+				: `${h.verse_start}-${h.verse_end}`
+		} - (${h.bible_id})`;
+	};
 
-	handleSearchChange = (e) => this.setState({ filterText: e.target.value })
+	handleSearchChange = (e) => this.setState({ filterText: e.target.value });
 
-	handlePageClick = (page) => this.props.setActivePage({ sectionType: this.props.sectionType, limit: this.props.sectionType === 'notes' ? this.props.pageSize : this.props.pageSizeBookmark, page })
+	handlePageClick = (page) =>
+		this.props.setActivePage({
+			sectionType: this.props.sectionType,
+			limit:
+				this.props.sectionType === 'notes'
+					? this.props.pageSize
+					: this.props.pageSizeBookmark,
+			page,
+		});
 
 	handleClick = (listItem) => {
 		if (this.props.sectionType === 'notes') {
 			this.props.setActiveNote({ note: listItem });
 			this.props.setActiveChild('edit');
 		}
-	}
+	};
 
-	handleSettingPageSize = (pageSize) => this.props.setPageSize({ sectionType: this.props.sectionType, limit: pageSize, page: 1 })
+	handleSettingPageSize = (pageSize) =>
+		this.props.setPageSize({
+			sectionType: this.props.sectionType,
+			limit: pageSize,
+			page: 1,
+		});
 
 	get pagesize() {
 		const type = this.props.sectionType;
@@ -152,6 +232,7 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 			togglePageSelector,
 			deleteHighlights,
 			deleteNote,
+			deleteBookmark,
 			updateHighlight,
 		} = this.props;
 		let filteredPageData = [];
@@ -169,50 +250,70 @@ class MyNotes extends React.PureComponent { // eslint-disable-line react/prefer-
 				<div className="searchbar">
 					<span className={'input-wrapper'}>
 						<SvgWrapper className={'icon'} svgid={'search'} />
-						<input onChange={this.handleSearchChange} value={this.state.filterText} placeholder={`SEARCH ${sectionType.toUpperCase()}`} />
+						<input
+							onChange={this.handleSearchChange}
+							value={this.state.filterText}
+							placeholder={`SEARCH ${sectionType.toUpperCase()}`}
+						/>
 					</span>
 				</div>
 				<section className="note-list">
-					{
-						sectionType === 'notes' ? (
-							filteredPageData.map((listItem) => (
+					{sectionType === 'notes'
+						? filteredPageData.map((listItem) => (
 								<div key={listItem.id} className={'highlight-item'}>
-									<div role="button" tabIndex={0} onClick={() => this.handleClick(listItem)} className="list-item">
+									<div
+										role="button"
+										tabIndex={0}
+										onClick={() => this.handleClick(listItem)}
+										className="list-item"
+									>
 										<div className="title-text">
-											<h4 className="title"><span className="date">{this.getFormattedNoteDate(listItem.created_at)}</span> | {this.getNoteReference(listItem)}</h4>
+											<h4 className="title">
+												<span className="date">
+													{this.getFormattedNoteDate(listItem.created_at)}
+												</span>{' '}
+												| {this.getNoteReference(listItem)}
+											</h4>
 											<p className="text">{listItem.notes}</p>
 										</div>
 									</div>
-									<div onClick={() => this.handleClick(listItem)} className={'edit-note'} tabIndex={0} role={'button'}>
+									<div
+										onClick={() => this.handleClick(listItem)}
+										className={'edit-note'}
+										tabIndex={0}
+										role={'button'}
+									>
 										<SvgWrapper className={'icon'} svgid={'edit_note'} />
 										<span>Edit</span>
 									</div>
-									<div onClick={() => deleteNote({ noteId: listItem.id })} className={'delete-highlight'} tabIndex={0} role={'button'}>
+									<div
+										onClick={() => deleteNote({ noteId: listItem.id })}
+										className={'delete-highlight'}
+										tabIndex={0}
+										role={'button'}
+									>
 										<SvgWrapper className={'icon'} svgid={'delete'} />
 										<span>Delete</span>
 									</div>
 								</div>
-							))
-						) : null
-					}
-					{
-						sectionType === 'highlights' ?
-							<MyHighlights
-								highlights={filteredPageData}
-								getReference={this.getHighlightReference}
-								deleteHighlights={deleteHighlights}
-								updateHighlight={updateHighlight}
-							/> : null
-					}
-					{
-						sectionType === 'bookmarks' ?
-							<MyBookmarks
-								bookmarks={filteredPageData.filter((n) => n.bookmark)}
-								deleteNote={deleteNote}
-								getFormattedNoteDate={this.getFormattedNoteDate}
-								getNoteReference={this.getNoteReference}
-							/> : null
-					}
+						  ))
+						: null}
+					{sectionType === 'highlights' ? (
+						<MyHighlights
+							highlights={filteredPageData}
+							getReference={this.getHighlightReference}
+							deleteHighlights={deleteHighlights}
+							updateHighlight={updateHighlight}
+						/>
+					) : null}
+					{sectionType === 'bookmarks' ? (
+						<MyBookmarks
+							bookmarks={filteredPageData.filter((n) => n.bookmark)}
+							deleteNote={deleteBookmark}
+							getFormattedNoteDate={this.getFormattedNoteDate}
+							getNoteReference={this.getNoteReference}
+						/>
+					) : null}
 				</section>
 				<div className="pagination">
 					<Pagination
@@ -241,6 +342,7 @@ MyNotes.propTypes = {
 	getNotes: PropTypes.func.isRequired,
 	getBookmarks: PropTypes.func.isRequired,
 	getHighlights: PropTypes.func,
+	deleteBookmark: PropTypes.func,
 	listData: PropTypes.array.isRequired,
 	bookmarkList: PropTypes.array.isRequired,
 	highlights: PropTypes.array,
