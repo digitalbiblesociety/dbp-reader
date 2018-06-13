@@ -18,19 +18,28 @@ import LoadingSpinner from 'components/LoadingSpinner';
 import CloseMenuFunctions from 'utils/closeMenuFunctions';
 import SearchResult from 'components/SearchResult';
 import RecentSearches from 'components/RecentSearches';
-import { getSearchResults, viewError, stopLoading, startLoading } from './actions';
+import {
+	getSearchResults,
+	viewError,
+	stopLoading,
+	startLoading,
+} from './actions';
 import makeSelectSearchContainer, { selectSearchResults } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 
-export class SearchContainer extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+export class SearchContainer extends React.PureComponent {
+	// eslint-disable-line react/prefer-stateless-function
 	state = {
 		filterText: '',
 		firstSearch: true,
-	}
+	};
 
 	componentDidMount() {
-		this.closeMenuController = new CloseMenuFunctions(this.ref, this.props.toggleSearchModal);
+		this.closeMenuController = new CloseMenuFunctions(
+			this.ref,
+			this.props.toggleSearchModal,
+		);
 		this.closeMenuController.onMenuMount();
 	}
 
@@ -42,15 +51,32 @@ export class SearchContainer extends React.PureComponent { // eslint-disable-lin
 
 	setRef = (node) => {
 		this.ref = node;
-	}
+	};
 
-	getSearchResults = (props) => this.props.dispatch(getSearchResults(props))
+	getSearchResults = (props) => this.props.dispatch(getSearchResults(props));
 
 	handleSearchModalToggle = () => {
 		// document.removeEventListener('click', this.handleClickOutside);
 
 		this.props.toggleSearchModal();
-	}
+	};
+
+	handleSearchInputEnter = (e) => {
+		if (
+			((e.keyCode && e.keyCode === 13) || (e.which && e.which === 13)) &&
+			e.target.value
+		) {
+			if (this.timer) {
+				clearTimeout(this.timer);
+			}
+
+			this.getSearchResults({
+				bibleId: this.props.bibleId,
+				searchText: e.target.value,
+			});
+			this.setState({ firstSearch: false });
+		}
+	};
 
 	handleSearchInputChange = (e) => {
 		const val = e.target.value;
@@ -67,6 +93,7 @@ export class SearchContainer extends React.PureComponent { // eslint-disable-lin
 		if (this.timer) {
 			clearTimeout(this.timer);
 		}
+
 		// Don't have to bind 'this' bc of the arrow function
 		this.timer = setTimeout(() => {
 			if (!val) {
@@ -75,25 +102,27 @@ export class SearchContainer extends React.PureComponent { // eslint-disable-lin
 			this.getSearchResults({ bibleId, searchText: val });
 			this.setState({ firstSearch: false });
 		}, 1000);
-	}
+	};
 
 	handleSearchOptionClick = (filterText) => {
-		const bibleId = this.props.bibleId;
-
-		this.setState({ filterText });
+		// const bibleId = this.props.bibleId;
+		// this.setState({ filterText });
 
 		if (this.timer) {
 			clearTimeout(this.timer);
 		}
+		if (!filterText) {
+			return;
+		}
+		this.getSearchResults({
+			bibleId: this.props.bibleId,
+			searchText: filterText,
+		});
+		this.setState({ firstSearch: false, filterText });
 
-		this.timer = setTimeout(() => {
-			if (!filterText) {
-				return;
-			}
-			this.getSearchResults({ bibleId, searchText: filterText });
-			this.setState({ firstSearch: false });
-		}, 1000);
-	}
+		// this.timer = setTimeout(() => {
+		// }, 1000);
+	};
 
 	get formattedResults() {
 		const {
@@ -112,13 +141,24 @@ export class SearchContainer extends React.PureComponent { // eslint-disable-lin
 				<div className={'search-history'}>
 					<div className={'starting'}>
 						<h2>Need a place to start? Try Searching:</h2>
-						{
-							trySearchOptions.map((o) => <button key={o.id} className={'search-history-item'} onClick={() => this.handleSearchOptionClick(o.searchText)}>{o.searchText}</button>)
-						}
+						{trySearchOptions.map((o) => (
+							<button
+								key={o.id}
+								className={'search-history-item'}
+								onClick={() => this.handleSearchOptionClick(o.searchText)}
+							>
+								{o.searchText}
+							</button>
+						))}
 					</div>
 					<div className={'history'}>
-						<div className={'header'}><h2>Search History:</h2></div>
-						<RecentSearches searches={lastFiveSearches} clickHandler={this.handleSearchOptionClick} />
+						<div className={'header'}>
+							<h2>Search History:</h2>
+						</div>
+						<RecentSearches
+							searches={lastFiveSearches}
+							clickHandler={this.handleSearchOptionClick}
+						/>
 					</div>
 				</div>
 			);
@@ -130,19 +170,30 @@ export class SearchContainer extends React.PureComponent { // eslint-disable-lin
 
 		return (
 			<div className={'search-results'}>
-				{
-					(searchResults.size && !showError) ?
-						searchResults.toIndexedSeq().map((res) => (
-							<div className={'book-result-section'} key={res.get('name')}>
-								<div className={'header'}><h1>{res.get('name')}</h1></div>
-								{
-									res.get('results')
-										.map((r) => <SearchResult bibleId={bibleId} key={`${r.get('book_id')}${r.get('chapter')}${r.get('verse_start')}`} result={r} />)
-								}
+				{searchResults.size && !showError ? (
+					searchResults.toIndexedSeq().map((res) => (
+						<div className={'book-result-section'} key={res.get('name')}>
+							<div className={'header'}>
+								<h1>{res.get('name')}</h1>
 							</div>
-						)) :
-						<section className={'no-matches'}>There were no matches for your search</section>
-				}
+							{res
+								.get('results')
+								.map((r) => (
+									<SearchResult
+										bibleId={bibleId}
+										key={`${r.get('book_id')}${r.get('chapter')}${r.get(
+											'verse_start',
+										)}`}
+										result={r}
+									/>
+								))}
+						</div>
+					))
+				) : (
+					<section className={'no-matches'}>
+						There were no matches for your search
+					</section>
+				)}
 			</div>
 		);
 	}
@@ -150,7 +201,6 @@ export class SearchContainer extends React.PureComponent { // eslint-disable-lin
 	render() {
 		const { filterText } = this.state;
 		const { loadingResults } = this.props.searchcontainer;
-		// console.log('last five', this.props.searchcontainer.lastFiveSearches);
 		// Need a good method of telling whether there are no results because a user hasn't searched
 		// or if it was because this was the first visit to the tab
 		return (
@@ -160,15 +210,18 @@ export class SearchContainer extends React.PureComponent { // eslint-disable-lin
 						<SvgWrapper className={'icon'} svgid={'search'} />
 						<input
 							onChange={this.handleSearchInputChange}
+							onKeyPress={this.handleSearchInputEnter}
 							value={filterText}
 							className={'input-class'}
 							placeholder={'Search'}
 						/>
-						<SvgWrapper onClick={this.handleSearchModalToggle} className={'icon'} svgid={'arrow_left'} />
+						<SvgWrapper
+							onClick={this.handleSearchModalToggle}
+							className={'icon'}
+							svgid={'arrow_left'}
+						/>
 					</header>
-					{
-						loadingResults ? <LoadingSpinner /> : this.formattedResults
-					}
+					{loadingResults ? <LoadingSpinner /> : this.formattedResults}
 				</aside>
 			</GenericErrorBoundary>
 		);
@@ -195,7 +248,10 @@ function mapDispatchToProps(dispatch) {
 	};
 }
 
-const withConnect = connect(mapStateToProps, mapDispatchToProps);
+const withConnect = connect(
+	mapStateToProps,
+	mapDispatchToProps,
+);
 
 const withReducer = injectReducer({ key: 'searchContainer', reducer });
 const withSaga = injectSaga({ key: 'searchContainer', saga });
