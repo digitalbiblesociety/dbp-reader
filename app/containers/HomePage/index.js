@@ -881,6 +881,7 @@ class HomePage extends React.PureComponent {
 			formattedSource,
 			userId,
 			userAuthenticated,
+			history,
 			// highlights,
 			// updatedText,
 		} = this.props;
@@ -990,6 +991,8 @@ class HomePage extends React.PureComponent {
 						>
 							<SearchContainer
 								bibleId={activeTextId}
+								history={history}
+								books={books}
 								toggleSearchModal={this.toggleSearchModal}
 							/>
 						</FadeTransition>

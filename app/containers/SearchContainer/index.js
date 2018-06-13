@@ -70,17 +70,25 @@ export class SearchContainer extends React.PureComponent {
 				clearTimeout(this.timer);
 			}
 
-			this.getSearchResults({
-				bibleId: this.props.bibleId,
-				searchText: e.target.value,
-			});
-			this.setState({ firstSearch: false });
+			const refObject = this.checkInputForReference(e.target.value);
+
+			if (refObject.isReference) {
+				this.handleReferenceRedirect(refObject);
+			} else {
+				this.getSearchResults({
+					bibleId: this.props.bibleId,
+					searchText: e.target.value,
+				});
+				this.setState({ firstSearch: false });
+			}
 		}
 	};
 
 	handleSearchInputChange = (e) => {
+		// console.log('is a reference changed', this.checkInputForReference(e.target.value));
 		const val = e.target.value;
 		const { bibleId, loadingResults } = this.props;
+		const refObject = this.checkInputForReference(e.target.value);
 
 		this.setState({ filterText: val, firstSearch: !val });
 		// May want to not control the loading state with redux and just use setState instead
@@ -99,29 +107,107 @@ export class SearchContainer extends React.PureComponent {
 			if (!val) {
 				return;
 			}
-			this.getSearchResults({ bibleId, searchText: val });
-			this.setState({ firstSearch: false });
-		}, 1000);
+			if (refObject.isReference) {
+				this.handleReferenceRedirect(refObject);
+			} else {
+				this.getSearchResults({ bibleId, searchText: val });
+				this.setState({ firstSearch: false });
+			}
+		}, 2000);
 	};
 
 	handleSearchOptionClick = (filterText) => {
-		// const bibleId = this.props.bibleId;
-		// this.setState({ filterText });
-
 		if (this.timer) {
 			clearTimeout(this.timer);
 		}
 		if (!filterText) {
 			return;
 		}
-		this.getSearchResults({
-			bibleId: this.props.bibleId,
-			searchText: filterText,
-		});
-		this.setState({ firstSearch: false, filterText });
+		const refObject = this.checkInputForReference(filterText);
 
-		// this.timer = setTimeout(() => {
-		// }, 1000);
+		if (refObject.isReference) {
+			// Navigate to the verse url
+			// probably need to have access to push
+			// Iterate over the book list
+			// if any of the books match the book given && the book has the chapter given && the chapter has the verse given
+			// push the url of the book id, chapter, verse in the current bible
+			// display error saying that we could not find what they were searching for
+			this.handleReferenceRedirect(refObject);
+		} else {
+			this.getSearchResults({
+				bibleId: this.props.bibleId,
+				searchText: filterText,
+			});
+		}
+
+		this.setState({ firstSearch: false, filterText });
+	};
+
+	handleReferenceRedirect = ({ book, chapter, firstVerse }) => {
+		const books = this.props.books;
+		const bibleId = this.props.bibleId;
+		const lBook = book.toLowerCase();
+		const bookObject = books.find(
+			(b) =>
+				((b.name && b.name.toLowerCase() === lBook) ||
+					(b.book_id && b.book_id.toLowerCase() === lBook) ||
+					(b.name_short && b.name_short.toLowerCase() === lBook)) &&
+				b.chapters.includes(chapter),
+		);
+		// console.log('handling redirect', bookObject);
+
+		if (bookObject) {
+			// console.log('url to be pushed...', `/${bibleId}/${bookObject.book_id.toLowerCase()}/${chapter}${firstVerse ? `/${firstVerse}` : ''}`);
+			this.props.toggleSearchModal();
+			this.props.history.push(
+				`/${bibleId.toLowerCase()}/${bookObject.book_id.toLowerCase()}/${chapter}${
+					firstVerse ? `/${firstVerse}` : ''
+				}`,
+			);
+		}
+	};
+
+	checkInputForReference = (searchText) => {
+		// Separators between verse numbers
+		const vs = '[-.]*';
+		// Start verse and end verse may end up needing different parameters
+		const startVerse = '[0-9]*';
+		const endVerse = '[0-9]*';
+		// Separators between chapter and verse numbers
+		const cs = '[:.]*';
+		// Gets the chapter number
+		const chapters = '[0-9]+';
+		// Get the book name
+		const book = '\\w+\\s*';
+		// Regular expression for testing whether a user entered a reference
+		// book | chapter(s) | chapter separator | start verse | verse separator | end verse
+		// \w+\s*[0-9]+[:.]*[0-9]*[-.]*[0-9]*
+		// There must be at least a word then whitespace then a number
+		const regex = new RegExp(
+			`${book}${chapters}${cs}${startVerse}${vs}${endVerse}`,
+		);
+		const isReference = regex.test(searchText);
+
+		if (isReference) {
+			// Return the whether it was a reference plus the book, chapter and verse(s)
+			const matchRegex = new RegExp(
+				`(${book})(${chapters})${cs}(${startVerse})${vs}(${endVerse})`,
+			);
+			const match = searchText.match(matchRegex);
+			// Using trim to remove any whitespace
+			// Using parseInt to turn the numbers into integers
+			return {
+				isReference,
+				book: match[1] && match[1].trim(),
+				chapter: match[2] && parseInt(match[2].trim(), 10),
+				firstVerse: match[3] && parseInt(match[3].trim(), 10),
+				lastVerse: match[4] && parseInt(match[4].trim(), 10),
+			};
+		}
+
+		return {
+			isReference,
+		};
 	};
 
 	get formattedResults() {
@@ -232,9 +318,11 @@ SearchContainer.propTypes = {
 	dispatch: PropTypes.func.isRequired,
 	toggleSearchModal: PropTypes.func.isRequired,
 	bibleId: PropTypes.string,
+	history: PropTypes.object,
+	searchResults: PropTypes.object,
 	searchcontainer: PropTypes.object,
 	loadingResults: PropTypes.bool,
-	searchResults: PropTypes.object,
+	books: PropTypes.array,
 };
 
 const mapStateToProps = createStructuredSelector({
