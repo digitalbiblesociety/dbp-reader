@@ -18,19 +18,28 @@ import LoadingSpinner from 'components/LoadingSpinner';
 import CloseMenuFunctions from 'utils/closeMenuFunctions';
 import SearchResult from 'components/SearchResult';
 import RecentSearches from 'components/RecentSearches';
-import { getSearchResults, viewError, stopLoading, startLoading } from './actions';
+import {
+	getSearchResults,
+	viewError,
+	stopLoading,
+	startLoading,
+} from './actions';
 import makeSelectSearchContainer, { selectSearchResults } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 
-export class SearchContainer extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+export class SearchContainer extends React.PureComponent {
+	// eslint-disable-line react/prefer-stateless-function
 	state = {
 		filterText: '',
 		firstSearch: true,
-	}
+	};
 
 	componentDidMount() {
-		this.closeMenuController = new CloseMenuFunctions(this.ref, this.props.toggleSearchModal);
+		this.closeMenuController = new CloseMenuFunctions(
+			this.ref,
+			this.props.toggleSearchModal,
+		);
 		this.closeMenuController.onMenuMount();
 	}
 
@@ -42,19 +51,44 @@ export class SearchContainer extends React.PureComponent { // eslint-disable-lin
 
 	setRef = (node) => {
 		this.ref = node;
-	}
+	};
 
-	getSearchResults = (props) => this.props.dispatch(getSearchResults(props))
+	getSearchResults = (props) => this.props.dispatch(getSearchResults(props));
 
 	handleSearchModalToggle = () => {
 		// document.removeEventListener('click', this.handleClickOutside);
 
 		this.props.toggleSearchModal();
-	}
+	};
+
+	handleSearchInputEnter = (e) => {
+		if (
+			((e.keyCode && e.keyCode === 13) || (e.which && e.which === 13)) &&
+			e.target.value
+		) {
+			if (this.timer) {
+				clearTimeout(this.timer);
+			}
+
+			const refObject = this.checkInputForReference(e.target.value);
+
+			if (refObject.isReference) {
+				this.handleReferenceRedirect(refObject);
+			} else {
+				this.getSearchResults({
+					bibleId: this.props.bibleId,
+					searchText: e.target.value,
+				});
+				this.setState({ firstSearch: false });
+			}
+		}
+	};
 
 	handleSearchInputChange = (e) => {
+		// console.log('is a reference changed', this.checkInputForReference(e.target.value));
 		const val = e.target.value;
 		const { bibleId, loadingResults } = this.props;
+		const refObject = this.checkInputForReference(e.target.value);
 
 		this.setState({ filterText: val, firstSearch: !val });
 		// May want to not control the loading state with redux and just use setState instead
@@ -67,33 +101,122 @@ export class SearchContainer extends React.PureComponent { // eslint-disable-lin
 		if (this.timer) {
 			clearTimeout(this.timer);
 		}
+
 		// Don't have to bind 'this' bc of the arrow function
 		this.timer = setTimeout(() => {
 			if (!val) {
 				return;
 			}
-			this.getSearchResults({ bibleId, searchText: val });
-			this.setState({ firstSearch: false });
-		}, 1000);
-	}
+			if (refObject.isReference) {
+				this.handleReferenceRedirect(refObject);
+			} else {
+				this.getSearchResults({ bibleId, searchText: val });
+				this.setState({ firstSearch: false });
+			}
+		}, 2000);
+	};
 
 	handleSearchOptionClick = (filterText) => {
-		const bibleId = this.props.bibleId;
-
-		this.setState({ filterText });
-
 		if (this.timer) {
 			clearTimeout(this.timer);
 		}
+		if (!filterText) {
+			return;
+		}
+		const refObject = this.checkInputForReference(filterText);
 
-		this.timer = setTimeout(() => {
-			if (!filterText) {
-				return;
-			}
-			this.getSearchResults({ bibleId, searchText: filterText });
-			this.setState({ firstSearch: false });
-		}, 1000);
-	}
+		if (refObject.isReference) {
+			// Navigate to the verse url
+			// probably need to have access to push
+			// Iterate over the book list
+			// if any of the books match the book given && the book has the chapter given && the chapter has the verse given
+			// push the url of the book id, chapter, verse in the current bible
+			// display error saying that we could not find what they were searching for
+			this.handleReferenceRedirect(refObject);
+		} else {
+			this.getSearchResults({
+				bibleId: this.props.bibleId,
+				searchText: filterText,
+			});
+		}
+
+		this.setState({ firstSearch: false, filterText });
+	};
+
+	handleReferenceRedirect = ({ book, chapter, firstVerse }) => {
+		const books = this.props.books;
+		const bibleId = this.props.bibleId;
+		const lBook = book.toLowerCase();
+		const bookObject = books.find(
+			(b) =>
+				((b.name && b.name.toLowerCase() === lBook) ||
+					(b.book_id && b.book_id.toLowerCase() === lBook) ||
+					(b.name_short && b.name_short.toLowerCase() === lBook)) &&
+				b.chapters.includes(chapter),
+		);
+		// console.log('handling redirect', books);
+
+		if (bookObject) {
+			// console.log('url to be pushed...', `/${bibleId}/${bookObject.book_id.toLowerCase()}/${chapter}${firstVerse ? `/${firstVerse}` : ''}`);
+			this.props.toggleSearchModal();
+			this.props.history.push(
+				`/${bibleId.toLowerCase()}/${bookObject.book_id.toLowerCase()}/${chapter}${
+					firstVerse ? `/${firstVerse}` : ''
+				}`,
+			);
+		}
+	};
+
+	checkInputForReference = (searchText) => {
+		// Separators between verse numbers
+		const vs = '[-.]*';
+		// Start verse and end verse may end up needing different parameters
+		const startVerse = '[0-9]*';
+		const endVerse = '[0-9]*';
+		// Separators between chapter and verse numbers
+		const cs = '[:.]*';
+		// Gets the chapter number
+		const chapters = '[0-9]+';
+		// Get the book name
+		const book = '\\w+\\s*';
+		// Regular expression for testing whether a user entered a reference
+		// book | chapter(s) | chapter separator | start verse | verse separator | end verse
+		// es2016 ([\p{L}]+\p{Z}*)(\p{N}+)\p{P}*(\p{N}*)\p{P}*(\p{N}*) - multi-lingual (Does not work for Arabic)
+
+		// book | chapter(s) | chapter separator | start verse | verse separator | end verse
+		// es2015 \w+\s*[0-9]+[:.]*[0-9]*[-.]*[0-9]* - english only
+		// There must be at least a word then whitespace then a number
+		const regex = new RegExp(
+			`${book}${chapters}${cs}${startVerse}${vs}${endVerse}`,
+		);
+		const isReference = regex.test(searchText);
+		// console.log('es2016', /([\p{L}]+\p{Z}*)(\p{N}+)\p{P}*(\p{N}*)\p{P}*(\p{N}*)/u.test(searchText));
+		// console.log('searchText', searchText);
+		// console.log('isReference', isReference);
+
+		if (isReference) {
+			// Return the whether it was a reference plus the book, chapter and verse(s)
+			const matchRegex = new RegExp(
+				`(${book})(${chapters})${cs}(${startVerse})${vs}(${endVerse})`,
+			);
+			const match = searchText.match(matchRegex);
+			// console.log('match', match);
+
+			// Using trim to remove any whitespace
+			// Using parseInt to turn the numbers into integers
+			return {
+				isReference,
+				book: match[1] && match[1].trim(),
+				chapter: match[2] && parseInt(match[2].trim(), 10),
+				firstVerse: match[3] && parseInt(match[3].trim(), 10),
+				lastVerse: match[4] && parseInt(match[4].trim(), 10),
+			};
+		}
+
+		return {
+			isReference,
+		};
+	};
 
 	get formattedResults() {
 		const {
@@ -112,13 +235,24 @@ export class SearchContainer extends React.PureComponent { // eslint-disable-lin
 				<div className={'search-history'}>
 					<div className={'starting'}>
 						<h2>Need a place to start? Try Searching:</h2>
-						{
-							trySearchOptions.map((o) => <button key={o.id} className={'search-history-item'} onClick={() => this.handleSearchOptionClick(o.searchText)}>{o.searchText}</button>)
-						}
+						{trySearchOptions.map((o) => (
+							<button
+								key={o.id}
+								className={'search-history-item'}
+								onClick={() => this.handleSearchOptionClick(o.searchText)}
+							>
+								{o.searchText}
+							</button>
+						))}
 					</div>
 					<div className={'history'}>
-						<div className={'header'}><h2>Search History:</h2></div>
-						<RecentSearches searches={lastFiveSearches} clickHandler={this.handleSearchOptionClick} />
+						<div className={'header'}>
+							<h2>Search History:</h2>
+						</div>
+						<RecentSearches
+							searches={lastFiveSearches}
+							clickHandler={this.handleSearchOptionClick}
+						/>
 					</div>
 				</div>
 			);
@@ -130,19 +264,30 @@ export class SearchContainer extends React.PureComponent { // eslint-disable-lin
 
 		return (
 			<div className={'search-results'}>
-				{
-					(searchResults.size && !showError) ?
-						searchResults.toIndexedSeq().map((res) => (
-							<div className={'book-result-section'} key={res.get('name')}>
-								<div className={'header'}><h1>{res.get('name')}</h1></div>
-								{
-									res.get('results')
-										.map((r) => <SearchResult bibleId={bibleId} key={`${r.get('book_id')}${r.get('chapter')}${r.get('verse_start')}`} result={r} />)
-								}
+				{searchResults.size && !showError ? (
+					searchResults.toIndexedSeq().map((res) => (
+						<div className={'book-result-section'} key={res.get('name')}>
+							<div className={'header'}>
+								<h1>{res.get('name')}</h1>
 							</div>
-						)) :
-						<section className={'no-matches'}>There were no matches for your search</section>
-				}
+							{res
+								.get('results')
+								.map((r) => (
+									<SearchResult
+										bibleId={bibleId}
+										key={`${r.get('book_id')}${r.get('chapter')}${r.get(
+											'verse_start',
+										)}`}
+										result={r}
+									/>
+								))}
+						</div>
+					))
+				) : (
+					<section className={'no-matches'}>
+						There were no matches for your search
+					</section>
+				)}
 			</div>
 		);
 	}
@@ -150,7 +295,6 @@ export class SearchContainer extends React.PureComponent { // eslint-disable-lin
 	render() {
 		const { filterText } = this.state;
 		const { loadingResults } = this.props.searchcontainer;
-		// console.log('last five', this.props.searchcontainer.lastFiveSearches);
 		// Need a good method of telling whether there are no results because a user hasn't searched
 		// or if it was because this was the first visit to the tab
 		return (
@@ -160,15 +304,18 @@ export class SearchContainer extends React.PureComponent { // eslint-disable-lin
 						<SvgWrapper className={'icon'} svgid={'search'} />
 						<input
 							onChange={this.handleSearchInputChange}
+							onKeyPress={this.handleSearchInputEnter}
 							value={filterText}
 							className={'input-class'}
 							placeholder={'Search'}
 						/>
-						<SvgWrapper onClick={this.handleSearchModalToggle} className={'icon'} svgid={'arrow_left'} />
+						<SvgWrapper
+							onClick={this.handleSearchModalToggle}
+							className={'icon'}
+							svgid={'arrow_left'}
+						/>
 					</header>
-					{
-						loadingResults ? <LoadingSpinner /> : this.formattedResults
-					}
+					{loadingResults ? <LoadingSpinner /> : this.formattedResults}
 				</aside>
 			</GenericErrorBoundary>
 		);
@@ -179,9 +326,11 @@ SearchContainer.propTypes = {
 	dispatch: PropTypes.func.isRequired,
 	toggleSearchModal: PropTypes.func.isRequired,
 	bibleId: PropTypes.string,
+	history: PropTypes.object,
+	searchResults: PropTypes.object,
 	searchcontainer: PropTypes.object,
 	loadingResults: PropTypes.bool,
-	searchResults: PropTypes.object,
+	books: PropTypes.array,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -195,7 +344,10 @@ function mapDispatchToProps(dispatch) {
 	};
 }
 
-const withConnect = connect(mapStateToProps, mapDispatchToProps);
+const withConnect = connect(
+	mapStateToProps,
+	mapDispatchToProps,
+);
 
 const withReducer = injectReducer({ key: 'searchContainer', reducer });
 const withSaga = injectSaga({ key: 'searchContainer', saga });
