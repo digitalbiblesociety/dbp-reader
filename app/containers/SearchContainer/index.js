@@ -154,7 +154,7 @@ export class SearchContainer extends React.PureComponent {
 					(b.name_short && b.name_short.toLowerCase() === lBook)) &&
 				b.chapters.includes(chapter),
 		);
-		// console.log('handling redirect', bookObject);
+		// console.log('handling redirect', books);
 
 		if (bookObject) {
 			// console.log('url to be pushed...', `/${bibleId}/${bookObject.book_id.toLowerCase()}/${chapter}${firstVerse ? `/${firstVerse}` : ''}`);
@@ -181,12 +181,18 @@ export class SearchContainer extends React.PureComponent {
 		const book = '\\w+\\s*';
 		// Regular expression for testing whether a user entered a reference
 		// book | chapter(s) | chapter separator | start verse | verse separator | end verse
-		// \w+\s*[0-9]+[:.]*[0-9]*[-.]*[0-9]*
+		// es2016 ([\p{L}]+\p{Z}*)(\p{N}+)\p{P}*(\p{N}*)\p{P}*(\p{N}*) - multi-lingual (Does not work for Arabic)
+
+		// book | chapter(s) | chapter separator | start verse | verse separator | end verse
+		// es2015 \w+\s*[0-9]+[:.]*[0-9]*[-.]*[0-9]* - english only
 		// There must be at least a word then whitespace then a number
 		const regex = new RegExp(
 			`${book}${chapters}${cs}${startVerse}${vs}${endVerse}`,
 		);
 		const isReference = regex.test(searchText);
+		// console.log('es2016', /([\p{L}]+\p{Z}*)(\p{N}+)\p{P}*(\p{N}*)\p{P}*(\p{N}*)/u.test(searchText));
+		// console.log('searchText', searchText);
+		// console.log('isReference', isReference);
 
 		if (isReference) {
 			// Return the whether it was a reference plus the book, chapter and verse(s)
@@ -194,6 +200,8 @@ export class SearchContainer extends React.PureComponent {
 				`(${book})(${chapters})${cs}(${startVerse})${vs}(${endVerse})`,
 			);
 			const match = searchText.match(matchRegex);
+			// console.log('match', match);
+
 			// Using trim to remove any whitespace
 			// Using parseInt to turn the numbers into integers
 			return {
