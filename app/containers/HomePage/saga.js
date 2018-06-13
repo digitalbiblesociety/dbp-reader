@@ -37,7 +37,6 @@ import {
 // import { fromJS } from 'immutable';
 // import unionWith from 'lodash/unionWith';
 // import { ADD_HIGHLIGHTS, LOAD_HIGHLIGHTS, GET_CHAPTER_TEXT, GET_HIGHLIGHTS, GET_BOOKS, GET_AUDIO, INIT_APPLICATION } from './constants';
-// Todo: Use the env variable for the base of all the routes
 export function* deleteHighlights({ ids, userId, bible, book, chapter }) {
 	// console.log('ids', ids);
 	// console.log('bible', bible);
@@ -52,11 +51,11 @@ export function* deleteHighlights({ ids, userId, bible, book, chapter }) {
 		method: 'DELETE',
 	};
 	try {
-		const res = yield all(urls.map((url) => call(request, url, options)));
+		yield all(urls.map((url) => call(request, url, options)));
 		// console.log(res);
-		if (res.find((r) => r.success)) {
-			yield fork(getHighlights, { bible, book, chapter, userId });
-		}
+		// if (res.find((r) => r.success)) {
+		yield fork(getHighlights, { bible, book, chapter, userId });
+		// }
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error('There was an error deleting the highlights', err); // eslint-disable-line no-console
@@ -380,14 +379,17 @@ export function* getBibleFromUrl({
 			// console.log('responseesponse.data', response.data);
 			yield fork(getCopyrightSaga, { filesetIds: filesets });
 			// calling a generator that will handle the api requests for getting text
-			// console.log('filtered filesets', filesets);
+			// console.log('filtered filesets', filesets);2
 			// Next and previous are getting the next and previous books every time
 			let nextBook = { chapters: [] };
 			let prevBook = { chapters: [] };
 			let nextBookId = '';
 			let prevBookId = '';
+			// Active chapter is not an index - it should be greater than its index by 1
 			let nextChapter = activeChapter + 1;
 			let prevChapter = activeChapter - 1;
+			// let chapterIsInNextBook = false;
+			// let chapterIsInPrevBook = false;
 
 			if (books[activeBookIndex + 1]) {
 				nextBook = books[activeBookIndex + 1];
