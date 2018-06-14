@@ -114,7 +114,7 @@ export class SearchContainer extends React.PureComponent {
 				this.getSearchResults({ bibleId, searchText: val });
 				this.setState({ firstSearch: false });
 			}
-		}, 2000);
+		}, 1500);
 	};
 
 	handleSearchOptionClick = (filterText) => {
