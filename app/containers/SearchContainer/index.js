@@ -190,6 +190,9 @@ export class SearchContainer extends React.PureComponent {
 			`${book}${chapters}${cs}${startVerse}${vs}${endVerse}`,
 		);
 		const isReference = regex.test(searchText);
+		// const unicodeRegex = new RegExp('([\u{L}]+\u{Z}*)', '(\u{N}+)', '\u{P}*', '(\u{N}*)', '\u{P}*', '(\u{N}*)');
+		// console.log('unicodeRegex', unicodeRegex);
+
 		// console.log('es2016', /([\p{L}]+\p{Z}*)(\p{N}+)\p{P}*(\p{N}*)\p{P}*(\p{N}*)/u.test(searchText));
 		// console.log('searchText', searchText);
 		// console.log('isReference', isReference);
