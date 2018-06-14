@@ -7,6 +7,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+// import XRegExp from 'xregexp';
 // import { Link } from 'react-router-dom';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
@@ -168,17 +169,6 @@ export class SearchContainer extends React.PureComponent {
 	};
 
 	checkInputForReference = (searchText) => {
-		// Separators between verse numbers
-		const vs = '[-.]*';
-		// Start verse and end verse may end up needing different parameters
-		const startVerse = '[0-9]*';
-		const endVerse = '[0-9]*';
-		// Separators between chapter and verse numbers
-		const cs = '[:.]*';
-		// Gets the chapter number
-		const chapters = '[0-9]+';
-		// Get the book name
-		const book = '\\w+\\s*';
 		// Regular expression for testing whether a user entered a reference
 		// book | chapter(s) | chapter separator | start verse | verse separator | end verse
 		// es2016 ([\p{L}]+\p{Z}*)(\p{N}+)\p{P}*(\p{N}*)\p{P}*(\p{N}*) - multi-lingual (Does not work for Arabic)
@@ -186,12 +176,19 @@ export class SearchContainer extends React.PureComponent {
 		// book | chapter(s) | chapter separator | start verse | verse separator | end verse
 		// es2015 \w+\s*[0-9]+[:.]*[0-9]*[-.]*[0-9]* - english only
 		// There must be at least a word then whitespace then a number
-		const regex = new RegExp(
-			`${book}${chapters}${cs}${startVerse}${vs}${endVerse}`,
-		);
+		const regex = /(.*?)\s*(\d+):?(\d+)?.*/;
+
 		const isReference = regex.test(searchText);
+		/* Leaving the logs below in on the off chance that we need to do a unicode regex */
+		// console.log('isReference', isReference);
+		// console.log('regex', regex);
+		// console.log('searchText.match(regex, g)', searchText.match(regex, 'g'));
+
 		// const unicodeRegex = new RegExp('([\u{L}]+\u{Z}*)', '(\u{N}+)', '\u{P}*', '(\u{N}*)', '\u{P}*', '(\u{N}*)');
-		// console.log('unicodeRegex', unicodeRegex);
+		// const unicodeReg = new XRegExp('([\\p{L}]+)\\p{Z}*(\\p{N}+)\\p{P}*(\\p{N}*)\\p{P}*(\\p{N}*)');
+		// console.log('unicodeReg', unicodeReg);
+		// console.log('unicodeReg test', unicodeReg.test(searchText));
+		// console.log('unicodeReg match', searchText.match(unicodeReg, 'g'));
 
 		// console.log('es2016', /([\p{L}]+\p{Z}*)(\p{N}+)\p{P}*(\p{N}*)\p{P}*(\p{N}*)/u.test(searchText));
 		// console.log('searchText', searchText);
@@ -199,20 +196,16 @@ export class SearchContainer extends React.PureComponent {
 
 		if (isReference) {
 			// Return the whether it was a reference plus the book, chapter and verse(s)
-			const matchRegex = new RegExp(
-				`(${book})(${chapters})${cs}(${startVerse})${vs}(${endVerse})`,
-			);
-			const match = searchText.match(matchRegex);
+			const match = searchText.match(regex);
 			// console.log('match', match);
 
 			// Using trim to remove any whitespace
 			// Using parseInt to turn the numbers into integers
 			return {
 				isReference,
-				book: match[1] && match[1].trim(),
-				chapter: match[2] && parseInt(match[2].trim(), 10),
-				firstVerse: match[3] && parseInt(match[3].trim(), 10),
-				lastVerse: match[4] && parseInt(match[4].trim(), 10),
+				book: match[1] && match[1],
+				chapter: match[2] && parseInt(match[2], 10),
+				firstVerse: match[3] && parseInt(match[3], 10),
 			};
 		}
 
