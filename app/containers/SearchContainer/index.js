@@ -63,18 +63,19 @@ export class SearchContainer extends React.PureComponent {
 	};
 
 	handleSearchInputEnter = (e) => {
+		const searchText = e.target.value;
 		if (
 			((e.keyCode && e.keyCode === 13) || (e.which && e.which === 13)) &&
-			e.target.value
+			searchText
 		) {
 			if (this.timer) {
 				clearTimeout(this.timer);
 			}
 
-			const refObject = this.checkInputForReference(e.target.value);
+			const refObject = this.checkInputForReference(searchText);
 
 			if (refObject.isReference) {
-				this.handleReferenceRedirect(refObject);
+				this.handleReferenceRedirect({ ...refObject, searchText });
 			} else {
 				this.getSearchResults({
 					bibleId: this.props.bibleId,
@@ -109,7 +110,7 @@ export class SearchContainer extends React.PureComponent {
 				return;
 			}
 			if (refObject.isReference) {
-				this.handleReferenceRedirect(refObject);
+				this.handleReferenceRedirect({ ...refObject, searchText: val });
 			} else {
 				this.getSearchResults({ bibleId, searchText: val });
 				this.setState({ firstSearch: false });
@@ -133,7 +134,7 @@ export class SearchContainer extends React.PureComponent {
 			// if any of the books match the book given && the book has the chapter given && the chapter has the verse given
 			// push the url of the book id, chapter, verse in the current bible
 			// display error saying that we could not find what they were searching for
-			this.handleReferenceRedirect(refObject);
+			this.handleReferenceRedirect({ ...refObject, searchText: filterText });
 		} else {
 			this.getSearchResults({
 				bibleId: this.props.bibleId,
@@ -144,7 +145,7 @@ export class SearchContainer extends React.PureComponent {
 		this.setState({ firstSearch: false, filterText });
 	};
 
-	handleReferenceRedirect = ({ book, chapter, firstVerse }) => {
+	handleReferenceRedirect = ({ book, chapter, firstVerse, searchText }) => {
 		const books = this.props.books;
 		const bibleId = this.props.bibleId;
 		const lBook = book.toLowerCase();
@@ -165,6 +166,11 @@ export class SearchContainer extends React.PureComponent {
 					firstVerse ? `/${firstVerse}` : ''
 				}`,
 			);
+		} else {
+			this.getSearchResults({
+				bibleId,
+				searchText,
+			});
 		}
 	};
 
