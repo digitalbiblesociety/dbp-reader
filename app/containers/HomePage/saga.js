@@ -626,6 +626,8 @@ export function* getChapterFromUrl({
 					bookId,
 					chapter,
 				});
+				// console.log('Try next finished running');
+
 				plainText = results.plainText;
 				plainTextFilesetId = results.plainTextFilesetId;
 			} else {
@@ -711,6 +713,8 @@ function* tryNext({ urls, index, bookId, chapter }) {
 		}/${bookId}/${chapter}?key=${
 			process.env.DBP_API_KEY
 		}&v=4&book_id=${bookId}&chapter_id=${chapter}`;
+		// console.log('built url', reqUrl);
+
 		const res = yield call(request, reqUrl);
 		// console.log('response for plain text', res);
 		plainText = res.data;
@@ -726,7 +730,36 @@ function* tryNext({ urls, index, bookId, chapter }) {
 		if (err) {
 			console.warn('Error in try next function', err); // eslint-disable-line no-console
 		}
-		return tryNext(urls, index + 1);
+		// console.log('calling function again');
+
+		try {
+			const reqUrl = `${process.env.BASE_API_ROUTE}/bibles/filesets/${
+				urls[index + 1]
+			}/${bookId}/${chapter}?key=${
+				process.env.DBP_API_KEY
+			}&v=4&book_id=${bookId}&chapter_id=${chapter}`;
+			// console.log('built url', reqUrl);
+
+			const res = yield call(request, reqUrl);
+			// console.log('response for plain text', res);
+			plainText = res.data;
+
+			plainTextFilesetId = urls[index];
+
+			// console.log('returning stuff');
+			return {
+				plainText,
+				plainTextFilesetId,
+			};
+		} catch (error) {
+			if (error) {
+				console.warn('Error in try next function', error); // eslint-disable-line no-console
+			}
+			return {
+				plainText,
+				plainTextFilesetId,
+			};
+		}
 	}
 	// if (results.plainText) {
 	// 	return {

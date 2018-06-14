@@ -96,6 +96,7 @@ import makeSelectHomePage, {
 	selectFormattedSource,
 	selectAuthenticationStatus,
 	selectUserId,
+	selectMenuOpenState,
 	selectUserNotes,
 	// selectHighlights,
 	// selectChapterText,
@@ -882,6 +883,7 @@ class HomePage extends React.PureComponent {
 			userId,
 			userAuthenticated,
 			history,
+			isMenuOpen,
 			// highlights,
 			// updatedText,
 		} = this.props;
@@ -1003,6 +1005,7 @@ class HomePage extends React.PureComponent {
 					userId={userId}
 					text={updatedText}
 					verseNumber={verse}
+					menuIsOpen={isMenuOpen}
 					userNotes={userNotes}
 					bookmarks={bookmarks}
 					bibleId={activeTextId}
@@ -1070,6 +1073,7 @@ HomePage.propTypes = {
 	userId: PropTypes.string,
 	// text: PropTypes.object,
 	textData: PropTypes.object,
+	isMenuOpen: PropTypes.bool,
 	// updatedText: PropTypes.array,
 	// highlights: PropTypes.array,
 };
@@ -1084,6 +1088,7 @@ const mapStateToProps = createStructuredSelector({
 	userAuthenticated: selectAuthenticationStatus(),
 	userId: selectUserId(),
 	textData: selectUserNotes(),
+	isMenuOpen: selectMenuOpenState(),
 	// highlights: selectHighlights(),
 	// userNotes: selectUserNotes(),
 	// text: selectUserNotes(),
