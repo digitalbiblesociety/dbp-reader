@@ -100,7 +100,16 @@ export function* getChapterForNote({ note }) {
 	}
 }
 
-export function* updateHighlight({ userId, id, color, bible, book, chapter }) {
+export function* updateHighlight({
+	userId,
+	id,
+	color,
+	bible,
+	book,
+	chapter,
+	limit,
+	page,
+}) {
 	const requestUrl = `${
 		process.env.BASE_API_ROUTE
 	}/users/${userId}/highlights/${id}?key=${
@@ -128,6 +137,7 @@ export function* updateHighlight({ userId, id, color, bible, book, chapter }) {
 			// console.log(data);
 			// console.log(noteId);
 			yield fork(getHighlights, { userId, bible, book, chapter });
+			yield fork(getUserHighlights, { userId, params: { limit, page } });
 		}
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {

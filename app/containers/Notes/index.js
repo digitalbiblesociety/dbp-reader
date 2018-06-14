@@ -117,6 +117,8 @@ export class Notes extends React.PureComponent {
 				bible: this.props.activeTextId,
 				book: this.props.activeBookId,
 				chapter: this.props.activeChapter,
+				limit: this.props.notes.pageSizeHighlight,
+				page: this.props.notes.activePageHighlight,
 				...props,
 			}),
 		);
@@ -127,6 +129,8 @@ export class Notes extends React.PureComponent {
 				bible: this.props.activeTextId,
 				book: this.props.activeBookId,
 				chapter: this.props.activeChapter,
+				limit: this.props.notes.pageSizeHighlight,
+				page: this.props.notes.activePageHighlight,
 				...props,
 			}),
 		);

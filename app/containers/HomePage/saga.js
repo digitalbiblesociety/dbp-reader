@@ -9,6 +9,7 @@ import uniqWith from 'lodash/uniqWith';
 import {
 	getNotesForChapter,
 	getBookmarksForChapter,
+	getUserHighlights,
 } from 'containers/Notes/saga';
 import { LOGIN_ERROR, USER_LOGGED_IN } from 'containers/Profile/constants';
 import {
@@ -37,7 +38,15 @@ import {
 // import { fromJS } from 'immutable';
 // import unionWith from 'lodash/unionWith';
 // import { ADD_HIGHLIGHTS, LOAD_HIGHLIGHTS, GET_CHAPTER_TEXT, GET_HIGHLIGHTS, GET_BOOKS, GET_AUDIO, INIT_APPLICATION } from './constants';
-export function* deleteHighlights({ ids, userId, bible, book, chapter }) {
+export function* deleteHighlights({
+	ids,
+	userId,
+	bible,
+	book,
+	chapter,
+	limit,
+	page,
+}) {
 	// console.log('ids', ids);
 	// console.log('bible', bible);
 	// console.log('userid', userId);
@@ -55,6 +64,7 @@ export function* deleteHighlights({ ids, userId, bible, book, chapter }) {
 		// console.log(res);
 		// if (res.find((r) => r.success)) {
 		yield fork(getHighlights, { bible, book, chapter, userId });
+		yield fork(getUserHighlights, { userId, params: { limit, page } });
 		// }
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
