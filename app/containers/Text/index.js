@@ -1413,6 +1413,7 @@ class Text extends React.PureComponent {
 			audioFilesetId,
 			plainTextFilesetId,
 			formattedTextFilesetId,
+			menuIsOpen,
 		} = this.props;
 		const {
 			coords,
@@ -1441,9 +1442,11 @@ class Text extends React.PureComponent {
 		return (
 			<div className={'text-container'}>
 				<div
-					onClick={!this.isStartOfBible ? prevChapter : () => {}}
+					onClick={!this.isStartOfBible && !menuIsOpen ? prevChapter : () => {}}
 					className={
-						!this.isStartOfBible ? 'arrow-wrapper' : 'arrow-wrapper disabled'
+						!this.isStartOfBible && !menuIsOpen
+							? 'arrow-wrapper'
+							: 'arrow-wrapper disabled'
 					}
 				>
 					{!this.isStartOfBible ? (
@@ -1477,9 +1480,11 @@ class Text extends React.PureComponent {
 					/>
 				</main>
 				<div
-					onClick={!this.isEndOfBible ? nextChapter : () => {}}
+					onClick={!this.isEndOfBible && !menuIsOpen ? nextChapter : () => {}}
 					className={
-						!this.isEndOfBible ? 'arrow-wrapper' : 'arrow-wrapper disabled'
+						!this.isEndOfBible && !menuIsOpen
+							? 'arrow-wrapper'
+							: 'arrow-wrapper disabled'
 					}
 				>
 					{!this.isEndOfBible ? (
@@ -1553,6 +1558,7 @@ Text.propTypes = {
 	audioFilesetId: PropTypes.string,
 	plainTextFilesetId: PropTypes.string,
 	formattedTextFilesetId: PropTypes.string,
+	menuIsOpen: PropTypes.bool,
 	// getCopyrights: PropTypes.func,
 };
 
