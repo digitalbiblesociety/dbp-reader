@@ -51,15 +51,15 @@ export class AudioPlayer extends React.Component {
 	componentDidMount() {
 		// console.log('audio paths', this.props.audioPaths);
 		// console.log('first track', this.state.nextTrack);
-		if (this.props.prevAudioSource) {
-			// console.log('prevAudioSource in will mount', this.props.prevAudioSource);
+		// if (this.props.prevAudioSource) {
+		// console.log('prevAudioSource in will mount', this.props.prevAudioSource);
 
-			this.preLoadPath(this.props.prevAudioSource);
-		}
-		if (this.props.nextAudioSource) {
-			// console.log('nextAudioSource in will mount', this.props.nextAudioSource);
-			this.preLoadPath(this.props.nextAudioSource);
-		}
+		// this.preLoadPath(this.props.prevAudioSource);
+		// }
+		// if (this.props.nextAudioSource) {
+		// console.log('nextAudioSource in will mount', this.props.nextAudioSource);
+		// this.preLoadPath(this.props.nextAudioSource);
+		// }
 		if (this.props.audioPaths.length) {
 			this.props.audioPaths.forEach((path) => this.preLoadPath(path));
 		}
@@ -118,15 +118,15 @@ export class AudioPlayer extends React.Component {
 			});
 		}
 
-		if (nextProps.nextAudioSource !== this.props.nextAudioSource) {
-			// console.log('nextAudioSource in will receive', nextProps.nextAudioSource);
-			this.preLoadPath(nextProps.nextAudioSource);
-		}
+		// if (nextProps.nextAudioSource !== this.props.nextAudioSource) {
+		// console.log('nextAudioSource in will receive', nextProps.nextAudioSource);
+		// this.preLoadPath(nextProps.nextAudioSource);
+		// }
 
-		if (nextProps.prevAudioSource !== this.props.prevAudioSource) {
-			// console.log('prevAudioSource in will receive', nextProps.prevAudioSource);
-			this.preLoadPath(nextProps.prevAudioSource);
-		}
+		// if (nextProps.prevAudioSource !== this.props.prevAudioSource) {
+		// console.log('prevAudioSource in will receive', nextProps.prevAudioSource);
+		// 	this.preLoadPath(nextProps.prevAudioSource);
+		// }
 
 		// if (nextProps.autoPlay) {
 		// console.log('auto play is now true');
@@ -606,8 +606,8 @@ AudioPlayer.propTypes = {
 	hasAudio: PropTypes.bool,
 	autoPlay: PropTypes.bool,
 	audioPlayerState: PropTypes.bool.isRequired,
-	prevAudioSource: PropTypes.string,
-	nextAudioSource: PropTypes.string,
+	// prevAudioSource: PropTypes.string,
+	// nextAudioSource: PropTypes.string,
 };
 
 const mapStateToProps = createStructuredSelector({
