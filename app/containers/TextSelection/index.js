@@ -41,28 +41,50 @@ import makeSelectTextSelection, {
 // import saga from './saga';
 import messages from './messages';
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-export class TextSelection extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+export class TextSelection extends React.PureComponent {
+	// eslint-disable-line react/prefer-stateless-function
 	state = {
 		filterText: '',
-	}
+	};
 
 	componentDidMount() {
-		this.props.dispatch(setActiveIsoCode({ iso: this.props.homepageData.initialIsoCode, name: this.props.homepageData.initialLanguageName }));
-		this.closeMenuController = new CloseMenuFunctions(this.ref, this.toggleVersionSelection);
+		this.props.dispatch(
+			setActiveIsoCode({
+				iso: this.props.homepageData.initialIsoCode,
+				name: this.props.homepageData.initialLanguageName,
+			}),
+		);
+		this.closeMenuController = new CloseMenuFunctions(
+			this.ref,
+			this.toggleVersionSelection,
+		);
 		this.closeMenuController.onMenuMount();
 	}
 
 	componentWillReceiveProps(nextProps) {
-		if (nextProps.textselection.activeIsoCode !== this.props.textselection.activeIsoCode) {
-			this.props.dispatch(getTexts({ languageISO: nextProps.textselection.activeIsoCode }));
-		} else if (nextProps.homepageData.initialIsoCode !== this.props.homepageData.initialIsoCode) {
-			this.props.dispatch(getTexts({ languageISO: nextProps.homepageData.initialIsoCode }));
+		if (
+			nextProps.textselection.activeIsoCode !==
+			this.props.textselection.activeIsoCode
+		) {
+			this.props.dispatch(
+				getTexts({ languageISO: nextProps.textselection.activeIsoCode }),
+			);
+		} else if (
+			nextProps.homepageData.initialIsoCode !==
+			this.props.homepageData.initialIsoCode
+		) {
+			this.props.dispatch(
+				getTexts({ languageISO: nextProps.homepageData.initialIsoCode }),
+			);
 		}
 
 		if (
-			nextProps.textselection.versionListActive !== this.props.textselection.versionListActive ||
-			nextProps.textselection.countryListActive !== this.props.textselection.countryListActive ||
-			nextProps.textselection.languageListActive !== this.props.textselection.languageListActive
+			nextProps.textselection.versionListActive !==
+				this.props.textselection.versionListActive ||
+			nextProps.textselection.countryListActive !==
+				this.props.textselection.countryListActive ||
+			nextProps.textselection.languageListActive !==
+				this.props.textselection.languageListActive
 		) {
 			this.setState({ filterText: '' });
 		}
@@ -74,15 +96,17 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 
 	setRef = (node) => {
 		this.ref = node;
-	}
+	};
 
 	setCountryListState = () => this.props.dispatch(setCountryListState());
 
-	setActiveIsoCode = ({ iso, name }) => this.props.dispatch(setActiveIsoCode({ iso, name }));
+	setActiveIsoCode = ({ iso, name }) =>
+		this.props.dispatch(setActiveIsoCode({ iso, name }));
 
-	setActiveTextId = (props) => this.props.dispatch(setActiveTextId(props))
+	setActiveTextId = (props) => this.props.dispatch(setActiveTextId(props));
 
-	setCountryName = ({ name, languages }) => this.props.dispatch(setCountryName({ name, languages }));
+	setCountryName = ({ name, languages }) =>
+		this.props.dispatch(setCountryName({ name, languages }));
 
 	getCountry = (props) => this.props.dispatch(getCountry(props));
 
@@ -99,18 +123,9 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 			loadingLanguages,
 			loadingVersions,
 		} = this.props.textselection;
-		const {
-			activeTextName,
-			activeTextId,
-		} = this.props.homepageData;
-		const {
-			bibles,
-			languages,
-			countries,
-		} = this.props;
-		const {
-			filterText,
-		} = this.state;
+		const { activeTextName, activeTextId } = this.props.homepageData;
+		const { bibles, languages, countries } = this.props;
+		const { filterText } = this.state;
 
 		if (languageListActive) {
 			return (
@@ -163,11 +178,11 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 		);
 	}
 
-	stopClickProp = (e) => e.stopPropagation()
+	stopClickProp = (e) => e.stopPropagation();
 
-	stopTouchProp = (e) => e.stopPropagation()
+	stopTouchProp = (e) => e.stopPropagation();
 
-	toggleVersionSelection = () => this.props.dispatch(toggleVersionSelection())
+	toggleVersionSelection = () => this.props.dispatch(toggleVersionSelection());
 
 	toggleLanguageList = () => this.props.dispatch(setLanguageListState());
 
@@ -179,7 +194,18 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 	// 	this.toggleVersionSelection();
 	// }
 
-	handleSearchInputChange = (e) => this.setState({ filterText: e.target.value })
+	handleSearchInputChange = (e) =>
+		this.setState({ filterText: e.target.value });
+
+	get inputPlaceholder() {
+		if (this.props.textselection.countryListActive) {
+			return 'countryMessage';
+		} else if (this.props.textselection.languageListActive) {
+			return 'languageMessage';
+		}
+
+		return 'versionMessage';
+	}
 
 	render() {
 		const {
@@ -191,15 +217,42 @@ export class TextSelection extends React.PureComponent { // eslint-disable-line 
 
 		return (
 			<GenericErrorBoundary affectedArea="TextSelection">
-				<aside ref={this.setRef} onTouchEnd={this.stopTouchProp} onClick={this.stopClickProp} className="text-selection-dropdown">
+				<aside
+					ref={this.setRef}
+					onTouchEnd={this.stopTouchProp}
+					onClick={this.stopClickProp}
+					className="text-selection-dropdown"
+				>
 					<div className={'search-input-bar'}>
 						<SvgWrapper className={'icon'} svgid={'search'} />
-						<input onChange={this.handleSearchInputChange} value={filterText} className={'input-class'} placeholder={messages.search.defaultMessage} />
+						<input
+							onChange={this.handleSearchInputChange}
+							value={filterText}
+							className={'input-class'}
+							placeholder={messages[this.inputPlaceholder].defaultMessage}
+						/>
 					</div>
 					<div className={'tab-options'}>
-						<span onClick={countryListActive ? () => {} : this.setCountryListState} className={countryListActive ? 'tab-option active' : 'tab-option'}><FormattedMessage {...messages.country} /></span>
-						<span onClick={languageListActive ? () => {} : this.toggleLanguageList} className={languageListActive ? 'tab-option active' : 'tab-option'}><FormattedMessage {...messages.language} /></span>
-						<span onClick={versionListActive ? () => {} : this.toggleVersionList} className={versionListActive ? 'tab-option active' : 'tab-option'}><FormattedMessage {...messages.version} /></span>
+						<span
+							onClick={countryListActive ? () => {} : this.setCountryListState}
+							className={countryListActive ? 'tab-option active' : 'tab-option'}
+						>
+							<FormattedMessage {...messages.country} />
+						</span>
+						<span
+							onClick={languageListActive ? () => {} : this.toggleLanguageList}
+							className={
+								languageListActive ? 'tab-option active' : 'tab-option'
+							}
+						>
+							<FormattedMessage {...messages.language} />
+						</span>
+						<span
+							onClick={versionListActive ? () => {} : this.toggleVersionList}
+							className={versionListActive ? 'tab-option active' : 'tab-option'}
+						>
+							<FormattedMessage {...messages.version} />
+						</span>
 					</div>
 					{this.getActiveTab(filterText)}
 				</aside>
@@ -234,7 +287,10 @@ function mapDispatchToProps(dispatch) {
 	};
 }
 
-const withConnect = connect(mapStateToProps, mapDispatchToProps);
+const withConnect = connect(
+	mapStateToProps,
+	mapDispatchToProps,
+);
 
 // const withReducer = injectReducer({ key: 'textSelection', reducer });
 // const withSaga = injectSaga({ key: 'textSelection', saga });
