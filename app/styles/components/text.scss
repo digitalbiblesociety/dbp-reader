@@ -10,6 +10,13 @@
 		color: var(--application-text-container-color);
 		font-size: var(--application-base-font-size);
 	}
+	transition: 200ms ease-in-out;
+
+	&.scrolled-down {
+		padding-top: 10px;
+		transform: translateY(-54px);
+		height: calc(100vh - 25px);
+	}
 
 	main {
 		padding: 15px 15px 45px 15px;

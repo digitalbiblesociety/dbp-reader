@@ -105,6 +105,9 @@ import reducer from './reducer';
 import saga from './saga';
 
 class HomePage extends React.PureComponent {
+	state = {
+		isScrollingDown: false,
+	};
 	// eslint-disable-line react/prefer-stateless-function
 	componentDidMount() {
 		// Get the first bible based on the url here
@@ -328,10 +331,24 @@ class HomePage extends React.PureComponent {
 			this.props.dispatch(setUA());
 			svg4everybody();
 		}
+
+		// Check for if the screen size is small enough to be a mobile device
+		// Google Pixel 2 XL is 411x823
+
+		if (
+			window &&
+			document &&
+			document.firstElementChild &&
+			document.firstElementChild.clientHeight < 900 &&
+			document.firstElementChild.clientWidth < 500
+		) {
+			// console.log('Added scroll listener');
+			this.main = document.getElementsByTagName('main')[0];
+			window.addEventListener('scroll', this.handleScrolling, true);
+		}
 	}
 	// Component updates when the state and props haven't changed 2 of 5 times
 	// If there is a significant slow down we may need to do some deep equality checks on the state
-
 	// Need to fix how many times this gets called. The main issue is all the state that is managed by this one thing
 	componentWillReceiveProps(nextProps) {
 		// Deals with updating page based on the url params
@@ -625,6 +642,10 @@ class HomePage extends React.PureComponent {
 		// }
 	}
 
+	componentWillUnmount() {
+		window.removeEventListener('scroll', this.handleScrolling, true);
+	}
+
 	setNextVerse = (verse) => {
 		const { bibleId, bookId, chapter } = this.props.match.params;
 		const { chapterText } = this.props.homepage;
@@ -787,6 +808,94 @@ class HomePage extends React.PureComponent {
 	setAudioPlayerState = (state) =>
 		this.props.dispatch(setAudioPlayerState(state));
 
+	get mainHeight() {
+		return Math.max(
+			this.main.offsetHeight,
+			this.main.clientHeight,
+			this.main.scrollHeight,
+		);
+	}
+
+	get mainPhysicalHeight() {
+		return Math.max(this.main.offsetHeight, this.main.clientHeight);
+	}
+
+	get scrollTop() {
+		return this.main.scrollTop;
+	}
+
+	get outOfBounds() {
+		// console.log('this.scrollTop, this.mainPhysicalHeight, this.mainHeight', this.scrollTop, this.mainPhysicalHeight, this.mainHeight);
+		// console.log('this.scrollTop', this.scrollTop);
+		// console.log('this.mainPhysicalHeight', this.mainPhysicalHeight);
+		// console.log('this.mainHeight', this.mainHeight);
+
+		return (
+			this.scrollTop + this.mainPhysicalHeight >= this.mainHeight ||
+			this.scrollTop < 0
+		);
+	}
+
+	handleScrolling = () => {
+		// console.log('this.scrollTicking', this.scrollTicking);
+
+		if (
+			!this.scrollTicking &&
+			!this.props.homepage.isProfileActive &&
+			!this.props.homepage.isNotesModalActive &&
+			!this.props.homepage.isSearchModalActive &&
+			!this.props.homepage.isSettingsModalActive &&
+			!this.props.homepage.isVersionSelectionActive &&
+			!this.props.homepage.isChapterSelectionActive &&
+			!this.props.homepage.isInformationModalActive
+		) {
+			// console.log('scroll scrollticking');
+
+			this.scrollTicking = true;
+			requestAnimationFrame(this.updateScrollDirection);
+		}
+	};
+
+	updateScrollDirection = () => {
+		this.main = document.getElementsByTagName('main')[0];
+		if (!this.outOfBounds) {
+			// console.log('this.state.isScrollingDown', this.state.isScrollingDown);
+
+			if (
+				this.scrollTop >= this.previousScrollTop &&
+				!this.state.isScrollingDown
+			) {
+				this.setState({ isScrollingDown: true }, () => {
+					// console.log('Setting new prev scroll and stuff for down');
+
+					this.previousScrollTop = this.scrollTop;
+					this.scrollTicking = false;
+				});
+			} else if (
+				this.scrollTop < this.previousScrollTop &&
+				this.state.isScrollingDown
+			) {
+				this.setState({ isScrollingDown: false }, () => {
+					// console.log('Setting new prev scroll and stuff for up');
+
+					this.previousScrollTop = this.scrollTop;
+					this.scrollTicking = false;
+				});
+			} else {
+				this.previousScrollTop = this.scrollTop;
+				this.scrollTicking = false;
+			}
+		} else {
+			this.previousScrollTop = this.scrollTop;
+			this.scrollTicking = false;
+		}
+	};
+
+	// This may be buggy if the function got called before the dom was mounted
+	previousScrollTop = this.main ? this.main.scrollTop : 0;
+
+	scrollTicking = false;
+
 	resetPasswordSent = () => {
 		// console.log('replacing history');
 		// this.props.history.replace(`/${localStorage.getItem('bible_is_1_bible_id') || 'engesv'}/${localStorage.getItem('bible_is_2_book_id') || 'mat'}/${localStorage.getItem('bible_is_3_chapter') || '1'}`)
@@ -888,6 +997,8 @@ class HomePage extends React.PureComponent {
 			// updatedText,
 		} = this.props;
 
+		const { isScrollingDown } = this.state;
+
 		const { userNotes, bookmarks, text: updatedText } = this.props.textData;
 		// console.log('text', updatedText);
 		// console.log('Homepage re-rendered bc reasons');
@@ -934,6 +1045,7 @@ class HomePage extends React.PureComponent {
 					activeTextName={activeTextName}
 					activeBookName={activeBookName}
 					theme={userSettings.get('activeTheme')}
+					isScrollingDown={isScrollingDown}
 					isChapterSelectionActive={isChapterSelectionActive}
 					isVersionSelectionActive={isVersionSelectionActive}
 					toggleChapterSelection={this.toggleChapterSelection}
@@ -944,6 +1056,7 @@ class HomePage extends React.PureComponent {
 					autoPlay={autoPlayEnabled}
 					audioPlayerState={audioPlayerState}
 					audioSource={audioSource}
+					isScrollingDown={isScrollingDown}
 					// nextAudioSource={nextAudioSource}
 					// prevAudioSource={prevAudioSource}
 					setAudioPlayerState={this.setAudioPlayerState}
@@ -1005,26 +1118,27 @@ class HomePage extends React.PureComponent {
 					userId={userId}
 					text={updatedText}
 					verseNumber={verse}
-					menuIsOpen={isMenuOpen}
 					userNotes={userNotes}
 					bookmarks={bookmarks}
 					bibleId={activeTextId}
+					menuIsOpen={isMenuOpen}
 					highlights={highlights}
 					copyrights={copyrights}
 					audioSource={audioSource}
 					activeBookId={activeBookId}
-					userSettings={userSettings}
 					loadingAudio={loadingAudio}
+					userSettings={userSettings}
 					textDirection={textDirection}
 					activeChapter={activeChapter}
 					invalidBibleId={invalidBibleId}
+					audioFilesetId={audioFilesetId}
 					activeBookName={activeBookName}
 					activeFilesets={activeFilesets}
-					audioFilesetId={audioFilesetId}
 					notesActive={isNotesModalActive}
 					formattedSource={formattedSource}
-					loadingCopyright={loadingCopyright}
+					isScrollingDown={isScrollingDown}
 					audioPlayerState={audioPlayerState}
+					loadingCopyright={loadingCopyright}
 					userAuthenticated={userAuthenticated}
 					plainTextFilesetId={plainTextFilesetId}
 					informationActive={isInformationModalActive}
@@ -1034,11 +1148,11 @@ class HomePage extends React.PureComponent {
 					addHighlight={this.addHighlight}
 					nextChapter={this.getNextChapter}
 					prevChapter={this.getPrevChapter}
-					getCopyrights={this.getCopyrights}
 					setActiveNote={this.setActiveNote}
+					getCopyrights={this.getCopyrights}
 					goToFullChapter={this.goToFullChapter}
-					deleteHighlights={this.deleteHighlights}
 					toggleNotesModal={this.toggleNotesModal}
+					deleteHighlights={this.deleteHighlights}
 					setActiveNotesView={this.setActiveNotesView}
 					toggleInformationModal={this.toggleInformationModal}
 				/>
@@ -1047,6 +1161,7 @@ class HomePage extends React.PureComponent {
 					searchActive={isSearchModalActive}
 					notebookActive={isNotesModalActive}
 					settingsActive={isSettingsModalActive}
+					isScrollingDown={isScrollingDown}
 					toggleProfile={this.toggleProfile}
 					toggleSearch={this.toggleSearchModal}
 					toggleNotebook={this.toggleNotesModal}

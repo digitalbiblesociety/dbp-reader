@@ -1414,6 +1414,7 @@ class Text extends React.PureComponent {
 			plainTextFilesetId,
 			formattedTextFilesetId,
 			menuIsOpen,
+			isScrollingDown,
 		} = this.props;
 		const {
 			coords,
@@ -1440,7 +1441,11 @@ class Text extends React.PureComponent {
 		}
 
 		return (
-			<div className={'text-container'}>
+			<div
+				className={
+					isScrollingDown ? 'text-container scrolled-down' : 'text-container'
+				}
+			>
 				<div
 					onClick={!this.isStartOfBible && !menuIsOpen ? prevChapter : () => {}}
 					className={
@@ -1543,6 +1548,7 @@ Text.propTypes = {
 	notesActive: PropTypes.bool,
 	loadingAudio: PropTypes.bool,
 	invalidBibleId: PropTypes.bool,
+	isScrollingDown: PropTypes.bool,
 	loadingCopyright: PropTypes.bool,
 	userAuthenticated: PropTypes.bool,
 	// audioPlayerState: PropTypes.bool,

@@ -1,8 +1,8 @@
 /**
-*
-* NavigationBar
-*
-*/
+ *
+ * NavigationBar
+ *
+ */
 
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -15,45 +15,97 @@ import SvgWrapper from 'components/SvgWrapper';
 // import { FormattedMessage } from 'react-intl';
 // import messages from './messages';
 
-class NavigationBar extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+class NavigationBar extends React.PureComponent {
+	// eslint-disable-line react/prefer-stateless-function
 	render() {
 		const {
 			activeTextId,
 			activeBookName,
 			activeTextName,
-      toggleChapterSelection,
+			toggleChapterSelection,
 			toggleVersionSelection,
 			activeChapter,
+			isScrollingDown,
 			isChapterSelectionActive,
 			isVersionSelectionActive,
 			theme,
 			userAgent,
-    } = this.props;
+		} = this.props;
 		// may need to wrap each of these in a container div to fix the hover issues
 		return (
-			<div className={'nav-background'}>
+			<div
+				className={isScrollingDown ? 'nav-background closed' : 'nav-background'}
+			>
 				<div className="nav-container">
-					<a className="logo" href={'http://www.bible.is'} title={'http://www.bible.is'} target={'_blank'} rel={'noopener'}>
-						{
-							theme === 'paper' && userAgent !== 'ms' ? <SvgWrapper className="svg" svgid={'bible.is_logo_light'} /> : null
-						}
-						{
-							theme !== 'paper' || userAgent === 'ms' ? <SvgWrapper fill={userAgent === 'ms' ? '#fff' : ''} className="svg" svgid={'bible.is_logo'} /> : null
-						}
+					<a
+						className="logo"
+						href={'http://www.bible.is'}
+						title={'http://www.bible.is'}
+						target={'_blank'}
+						rel={'noopener'}
+					>
+						{theme === 'paper' && userAgent !== 'ms' ? (
+							<SvgWrapper className="svg" svgid={'bible.is_logo_light'} />
+						) : null}
+						{theme !== 'paper' || userAgent === 'ms' ? (
+							<SvgWrapper
+								fill={userAgent === 'ms' ? '#fff' : ''}
+								className="svg"
+								svgid={'bible.is_logo'}
+							/>
+						) : null}
 					</a>
-					<span role="button" tabIndex={0} onClick={toggleVersionSelection} className="version">
-						<SvgWrapper className="svg icon" fill="#fff" svgid="arrow_down" opacity=".5" />
-						<h1 title={activeTextName || 'No Version Selected'} className={'version-text'}>{activeTextName ? `${activeTextId.slice(0, 3) === 'ENG' ? `${activeTextId.slice(3)} - ` : ''}${activeTextName}` : 'No Version Selected'}</h1>
-						{
-							isVersionSelectionActive ? <TextSelection /> : null
-						}
+					<span
+						role="button"
+						tabIndex={0}
+						onClick={toggleVersionSelection}
+						className="version"
+					>
+						<SvgWrapper
+							className="svg icon"
+							fill="#fff"
+							svgid="arrow_down"
+							opacity=".5"
+						/>
+						<h1
+							title={activeTextName || 'No Version Selected'}
+							className={'version-text'}
+						>
+							{activeTextName
+								? `${
+										activeTextId.slice(0, 3) === 'ENG'
+											? `${activeTextId.slice(3)} - `
+											: ''
+								  }${activeTextName}`
+								: 'No Version Selected'}
+						</h1>
+						{isVersionSelectionActive ? <TextSelection /> : null}
 					</span>
-					<span role="button" tabIndex={0} onClick={toggleChapterSelection} className="book-chapter">
-						<SvgWrapper className="svg icon" fill="#fff" svgid="arrow_down" opacity=".5" />
-						<h1 title={activeBookName ? `${activeBookName} ${activeChapter}` : 'No Book Selected'} className={'book-chapter-text'}>{ activeBookName ? `${activeBookName} ${activeChapter}` : 'No Book Selected' }</h1>
-						{
-							isChapterSelectionActive ? <ChapterSelection /> : null
-						}
+					<span
+						role="button"
+						tabIndex={0}
+						onClick={toggleChapterSelection}
+						className="book-chapter"
+					>
+						<SvgWrapper
+							className="svg icon"
+							fill="#fff"
+							svgid="arrow_down"
+							opacity=".5"
+						/>
+						<h1
+							title={
+								activeBookName
+									? `${activeBookName} ${activeChapter}`
+									: 'No Book Selected'
+							}
+							className={'book-chapter-text'}
+						>
+							{activeBookName
+								? `${activeBookName} ${activeChapter}`
+								: 'No Book Selected'}
+						</h1>
+						{isChapterSelectionActive ? <ChapterSelection /> : null}
 					</span>
 				</div>
 			</div>
@@ -70,6 +122,7 @@ NavigationBar.propTypes = {
 	toggleChapterSelection: PropTypes.func,
 	toggleVersionSelection: PropTypes.func,
 	activeChapter: PropTypes.number,
+	isScrollingDown: PropTypes.bool,
 	isChapterSelectionActive: PropTypes.bool,
 	isVersionSelectionActive: PropTypes.bool,
 };
