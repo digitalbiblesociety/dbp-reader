@@ -826,9 +826,12 @@ class HomePage extends React.PureComponent {
 
 	get outOfBounds() {
 		// console.log('this.scrollTop, this.mainPhysicalHeight, this.mainHeight', this.scrollTop, this.mainPhysicalHeight, this.mainHeight);
+		// console.log('this.scrollTop', this.scrollTop);
+		// console.log('this.mainPhysicalHeight', this.mainPhysicalHeight);
+		// console.log('this.mainHeight', this.mainHeight);
 
 		return (
-			this.scrollTop + this.mainPhysicalHeight > this.mainHeight ||
+			this.scrollTop + this.mainPhysicalHeight >= this.mainHeight ||
 			this.scrollTop < 0
 		);
 	}
@@ -882,6 +885,9 @@ class HomePage extends React.PureComponent {
 				this.previousScrollTop = this.scrollTop;
 				this.scrollTicking = false;
 			}
+		} else {
+			this.previousScrollTop = this.scrollTop;
+			this.scrollTicking = false;
 		}
 	};
 
