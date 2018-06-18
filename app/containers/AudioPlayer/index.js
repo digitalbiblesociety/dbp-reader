@@ -459,7 +459,12 @@ export class AudioPlayer extends React.Component {
 	);
 
 	render() {
-		const { audioSource: source, hasAudio, audioPlayerState } = this.props;
+		const {
+			audioSource: source,
+			hasAudio,
+			audioPlayerState,
+			isScrollingDown,
+		} = this.props;
 		const { autoPlayChecked, currentSpeed } = this.state;
 
 		return (
@@ -469,8 +474,10 @@ export class AudioPlayer extends React.Component {
 					tabIndex={0}
 					className={
 						audioPlayerState && hasAudio && source !== ''
-							? 'audioplayer-handle'
-							: 'audioplayer-handle closed'
+							? `audioplayer-handle${isScrollingDown ? ' scrolled-down' : ''}`
+							: `audioplayer-handle closed${
+									isScrollingDown ? ' scrolled-down' : ''
+							  }`
 					}
 					onClick={(e) => {
 						e.stopPropagation();
@@ -492,8 +499,12 @@ export class AudioPlayer extends React.Component {
 					tabIndex={0}
 					className={
 						audioPlayerState && hasAudio && source !== ''
-							? 'audio-player-background'
-							: 'audio-player-background closed'
+							? `audio-player-background${
+									isScrollingDown ? ' scrolled-down' : ''
+							  }`
+							: `audio-player-background closed${
+									isScrollingDown ? ' scrolled-down' : ''
+							  }`
 					}
 					ref={this.setAudioPlayerRef}
 					onClick={this.handleBackgroundClick}
@@ -605,6 +616,7 @@ AudioPlayer.propTypes = {
 	toggleAutoPlay: PropTypes.func,
 	hasAudio: PropTypes.bool,
 	autoPlay: PropTypes.bool,
+	isScrollingDown: PropTypes.bool,
 	audioPlayerState: PropTypes.bool.isRequired,
 	// prevAudioSource: PropTypes.string,
 	// nextAudioSource: PropTypes.string,
