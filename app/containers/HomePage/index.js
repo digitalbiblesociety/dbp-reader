@@ -22,7 +22,7 @@ import { Helmet } from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { TransitionGroup } from 'react-transition-group';
-import { fromJS } from 'immutable';
+// import { fromJS } from 'immutable';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import isEqual from 'lodash/isEqual';
@@ -96,6 +96,7 @@ import makeSelectHomePage, {
 	selectFormattedSource,
 	selectAuthenticationStatus,
 	selectUserId,
+	selectMenuOpenState,
 	selectUserNotes,
 	// selectHighlights,
 	// selectChapterText,
@@ -286,13 +287,13 @@ class HomePage extends React.PureComponent {
 							scope: 'profile',
 						});
 					} catch (err) {
-						if (process.env.NODE_ENV === 'development') {
-							console.warn(
-								// eslint-disable-line no-console
-								'Error initializing google api caught in inner try',
-								err,
-							);
-						}
+						// if (process.env.NODE_ENV === 'development') {
+						// 	console.warn(
+						// 		// eslint-disable-line no-console
+						// 		'Error initializing google api caught in inner try',
+						// 		err,
+						// 	);
+						// }
 					}
 					// console.log('auth 2 has been initialized', auth2);
 				});
@@ -366,25 +367,25 @@ class HomePage extends React.PureComponent {
 			const newBible = params.bibleId !== nextParams.bibleId;
 
 			// Default each of these to an empty map to avoid an error being thrown
-			const {
-				nextBook = fromJS({}),
-				previousBook = fromJS({}),
-				activeBook = fromJS({}),
-			} = nextProps;
-			const { activeChapter } = nextProps.homepage.activeChapter;
+			// const {
+			// 	nextBook = fromJS({}),
+			// 	previousBook = fromJS({}),
+			// 	activeBook = fromJS({}),
+			// } = nextProps;
+			// const { activeChapter } = nextProps.homepage.activeChapter;
 
-			const nextBookId = nextBook.get('book_id');
-			const prevBookId = previousBook.get('book_id');
-			let nextChapter = activeChapter + 1;
-			let prevChapter = activeChapter - 1;
-
-			if (!activeBook.getIn(['chapters', prevChapter])) {
-				prevChapter = previousBook.getIn(['chapters', -1]);
-			}
-
-			if (!activeBook.getIn(['chapters', nextChapter])) {
-				nextChapter = nextBook.getIn(['chapters', 0]);
-			}
+			// const nextBookId = nextBook.get('book_id');
+			// const prevBookId = previousBook.get('book_id');
+			// let nextChapter = activeChapter + 1;
+			// let prevChapter = activeChapter - 1;
+			//
+			// if (!activeBook.getIn(['chapters', prevChapter])) {
+			// 	prevChapter = previousBook.getIn(['chapters', -1]);
+			// }
+			//
+			// if (!activeBook.getIn(['chapters', nextChapter])) {
+			// 	nextChapter = nextBook.getIn(['chapters', 0]);
+			// }
 
 			if (newBible) {
 				// console.log('new bible');
@@ -415,10 +416,10 @@ class HomePage extends React.PureComponent {
 					bookId: nextParams.bookId,
 					chapter: nextParams.chapter,
 					verse: nextParams.verse || '',
-					nextBookId,
-					prevBookId,
-					nextChapter,
-					prevChapter,
+					// nextBookId,
+					// prevBookId,
+					// nextChapter,
+					// prevChapter,
 					authenticated: userAuthenticated,
 					userId,
 				});
@@ -433,10 +434,10 @@ class HomePage extends React.PureComponent {
 					bookId: nextParams.bookId,
 					chapter: nextParams.chapter,
 					verse: nextParams.verse || '',
-					nextBookId,
-					prevBookId,
-					nextChapter,
-					prevChapter,
+					// nextBookId,
+					// prevBookId,
+					// nextChapter,
+					// prevChapter,
 					authenticated: userAuthenticated,
 					userId,
 				});
@@ -865,8 +866,8 @@ class HomePage extends React.PureComponent {
 			isVersionSelectionActive,
 			isChapterSelectionActive,
 			isInformationModalActive,
-			nextAudioSource,
-			prevAudioSource,
+			// nextAudioSource,
+			// prevAudioSource,
 			plainTextFilesetId,
 			userAgent,
 			textDirection,
@@ -881,6 +882,8 @@ class HomePage extends React.PureComponent {
 			formattedSource,
 			userId,
 			userAuthenticated,
+			history,
+			isMenuOpen,
 			// highlights,
 			// updatedText,
 		} = this.props;
@@ -941,8 +944,8 @@ class HomePage extends React.PureComponent {
 					autoPlay={autoPlayEnabled}
 					audioPlayerState={audioPlayerState}
 					audioSource={audioSource}
-					nextAudioSource={nextAudioSource}
-					prevAudioSource={prevAudioSource}
+					// nextAudioSource={nextAudioSource}
+					// prevAudioSource={prevAudioSource}
 					setAudioPlayerState={this.setAudioPlayerState}
 					toggleAutoPlay={this.toggleAutoPlay}
 					skipBackward={this.getPrevChapter}
@@ -990,6 +993,8 @@ class HomePage extends React.PureComponent {
 						>
 							<SearchContainer
 								bibleId={activeTextId}
+								history={history}
+								books={books}
 								toggleSearchModal={this.toggleSearchModal}
 							/>
 						</FadeTransition>
@@ -1000,6 +1005,7 @@ class HomePage extends React.PureComponent {
 					userId={userId}
 					text={updatedText}
 					verseNumber={verse}
+					menuIsOpen={isMenuOpen}
 					userNotes={userNotes}
 					bookmarks={bookmarks}
 					bibleId={activeTextId}
@@ -1067,6 +1073,7 @@ HomePage.propTypes = {
 	userId: PropTypes.string,
 	// text: PropTypes.object,
 	textData: PropTypes.object,
+	isMenuOpen: PropTypes.bool,
 	// updatedText: PropTypes.array,
 	// highlights: PropTypes.array,
 };
@@ -1081,6 +1088,7 @@ const mapStateToProps = createStructuredSelector({
 	userAuthenticated: selectAuthenticationStatus(),
 	userId: selectUserId(),
 	textData: selectUserNotes(),
+	isMenuOpen: selectMenuOpenState(),
 	// highlights: selectHighlights(),
 	// userNotes: selectUserNotes(),
 	// text: selectUserNotes(),

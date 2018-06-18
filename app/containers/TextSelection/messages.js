@@ -18,8 +18,16 @@ export default defineMessages({
 		id: 'app.containers.TextSelection.version',
 		defaultMessage: 'Version',
 	},
-	search: {
+	countryMessage: {
 		id: 'app.containers.TextSelection.search',
-		defaultMessage: 'Search',
+		defaultMessage: 'Search Country',
+	},
+	languageMessage: {
+		id: 'app.containers.TextSelection.search',
+		defaultMessage: 'Search Language',
+	},
+	versionMessage: {
+		id: 'app.containers.TextSelection.search',
+		defaultMessage: 'Search Version',
 	},
 });

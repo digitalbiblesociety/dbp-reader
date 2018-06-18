@@ -117,6 +117,8 @@ export class Notes extends React.PureComponent {
 				bible: this.props.activeTextId,
 				book: this.props.activeBookId,
 				chapter: this.props.activeChapter,
+				limit: this.props.notes.pageSizeHighlight,
+				page: this.props.notes.activePageHighlight,
 				...props,
 			}),
 		);
@@ -127,6 +129,8 @@ export class Notes extends React.PureComponent {
 				bible: this.props.activeTextId,
 				book: this.props.activeBookId,
 				chapter: this.props.activeChapter,
+				limit: this.props.notes.pageSizeHighlight,
+				page: this.props.notes.activePageHighlight,
 				...props,
 			}),
 		);
@@ -145,13 +149,28 @@ export class Notes extends React.PureComponent {
 				data: { ...data, user_id: this.props.userId },
 			}),
 		);
-	deleteNote = ({ noteId }) =>
+	deleteNote = (props) =>
 		this.props.dispatch(
 			deleteNote({
+				...props,
 				userId: this.props.userId,
-				noteId,
 				pageSize: this.props.notes.pageSize,
 				activePage: this.props.notes.activePage,
+				bibleId: this.props.activeTextId,
+				bookId: this.props.activeBookId,
+				chapter: this.props.activeChapter,
+			}),
+		);
+	deleteBookmark = (props) =>
+		this.props.dispatch(
+			deleteNote({
+				...props,
+				userId: this.props.userId,
+				pageSize: this.props.notes.pageSizeBookmark,
+				activePage: this.props.notes.activePageBookmark,
+				bibleId: this.props.activeTextId,
+				bookId: this.props.activeBookId,
+				chapter: this.props.activeChapter,
 			}),
 		);
 	readSavedMessage = (props) => this.props.dispatch(readSavedMessage(props));
@@ -248,7 +267,7 @@ export class Notes extends React.PureComponent {
 											: 'nav-button'
 									}
 								>
-									{activeChild === 'notes' ? (
+									{activeChild !== 'edit' ? (
 										<SvgWrapper
 											role="button"
 											tabIndex={0}
@@ -343,6 +362,7 @@ export class Notes extends React.PureComponent {
 									setActiveNote={this.setActiveNote}
 									setActivePage={this.setActivePage}
 									setActiveChild={this.setActiveChild}
+									deleteBookmark={this.deleteBookmark}
 									updateHighlight={this.updateHighlight}
 									deleteHighlights={this.deleteHighlights}
 									togglePageSelector={this.togglePageSelector}
