@@ -309,7 +309,6 @@ export function* getBibleFromUrl({
 	// Active or first chapter audio
 	// Bible name
 	// Bible id
-	// todo Use other methods combined with the ones below to validate the url before try to use it in saga
 	const bibleId = oldBibleId.toUpperCase();
 	const bookId = oldBookId.toUpperCase();
 	const requestUrl = `${process.env.BASE_API_ROUTE}/bibles/${bibleId}?bucket=${

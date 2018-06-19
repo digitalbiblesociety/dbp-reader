@@ -375,6 +375,7 @@ export class Notes extends React.PureComponent {
 									totalPages={totalPages}
 									bookmarkList={bookmarkList}
 									activePage={activePage}
+									toggleNotesModal={toggleNotesModal}
 									pageSizeBookmark={pageSizeBookmark}
 									totalPagesBookmark={totalPagesBookmark}
 									activePageBookmark={activePageBookmark}
