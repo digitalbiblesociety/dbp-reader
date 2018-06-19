@@ -1,8 +1,8 @@
 /**
-*
-* AudioProgressBar
-*
-*/
+ *
+ * AudioProgressBar
+ *
+ */
 
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -31,16 +31,20 @@ import Slider from 'rc-slider/lib/Slider';
 class AudioProgressBar extends React.PureComponent {
 	handleChange = (v) => {
 		// console.log('value', v);
+		// alert(`value in change event: ${v}`);
 		// console.log('duration', this.props.duration);
 		// console.log('current time', this.props.currentTime);
-		this.props.setCurrentTime((this.props.duration * (v / 100)) || 0);
-	}
+		this.props.setCurrentTime(this.props.duration * (v / 100) || 0);
+	};
 
 	get timeLeft() {
 		const dur = this.props.duration;
 		const durSecs = Math.floor(dur % 60);
 		const durMins = Math.floor(dur / 60);
-		const durSecsString = durSecs.toFixed(0).length === 1 ? `0${durSecs.toFixed(0)}` : durSecs.toFixed(0);
+		const durSecsString =
+			durSecs.toFixed(0).length === 1
+				? `0${durSecs.toFixed(0)}`
+				: durSecs.toFixed(0);
 		const durMinsString = durMins.toFixed(0);
 
 		if (durMinsString.length === 1) {
@@ -55,7 +59,10 @@ class AudioProgressBar extends React.PureComponent {
 		const cur = this.props.currentTime;
 		const curSecs = Math.floor(cur % 60);
 		const curMins = Math.floor(cur / 60);
-		const curSecsString = curSecs.toFixed(0).length === 1 ? `0${curSecs.toFixed(0)}` : curSecs.toFixed(0);
+		const curSecsString =
+			curSecs.toFixed(0).length === 1
+				? `0${curSecs.toFixed(0)}`
+				: curSecs.toFixed(0);
 		const curMinsString = curMins.toFixed(0);
 
 		if (curMinsString.length === 1) {
@@ -67,13 +74,21 @@ class AudioProgressBar extends React.PureComponent {
 	}
 
 	render() {
-		const percent = (100 * (this.props.currentTime / this.props.duration)) || 0;
+		const percent = 100 * (this.props.currentTime / this.props.duration) || 0;
 		// console.log('rendering progress bar', percent);
 		return (
-			<div className={'progress-slider'} data-value-dur={this.timeLeft} data-value-cur={this.timePassed}>
+			<div
+				className={'progress-slider'}
+				data-value-dur={this.timeLeft}
+				data-value-cur={this.timePassed}
+			>
 				<Slider
 					onChange={this.handleChange}
-					handleStyle={{ border: '2px solid rgb(98,177,130)', backgroundColor: 'rgb(0,0,0)', top: '5px' }}
+					handleStyle={{
+						border: '2px solid rgb(98,177,130)',
+						backgroundColor: 'rgb(0,0,0)',
+						top: '5px',
+					}}
 					railStyle={{ backgroundColor: '#111', height: '4px' }}
 					trackStyle={{ backgroundColor: 'rgb(98,177,130)', height: '4px' }}
 					value={percent}

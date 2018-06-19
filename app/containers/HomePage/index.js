@@ -121,7 +121,6 @@ class HomePage extends React.PureComponent {
 		// console.log('localStorage.getItem(userSettings_toggleOptions_readersMode_active)', localStorage.getItem('userSettings_toggleOptions_readersMode_active') === false);
 		// console.log('localStorage.getItem(userSettings_toggleOptions_crossReferences_active)', localStorage.getItem('userSettings_toggleOptions_crossReferences_active'));
 		// console.log('params', params);
-
 		if (bibleId && bookId && chapter >= 0) {
 			this.props.dispatch({
 				type: 'getbible',
