@@ -1458,32 +1458,34 @@ class Text extends React.PureComponent {
 						<SvgWrapper className="prev-arrow-svg" svgid="arrow_left" />
 					) : null}
 				</div>
-				<main ref={this.setMainRef} className={this.classNameForMain}>
-					{(formattedSource.main && !readersMode && !oneVersePerLine) ||
-					text.length === 0 ||
-					(!readersMode && !oneVersePerLine) ? null : (
-						<div className="active-chapter-title">
-							<h1 className="active-chapter-title">
-								{chapterAlt || activeChapter}
-							</h1>
-						</div>
-					)}
-					{this.getTextComponents}
-					{verseNumber ? (
-						<div className={'read-chapter-container'}>
-							<button onClick={goToFullChapter} className={'read-chapter'}>
-								Read Full Chapter
-							</button>
-						</div>
-					) : null}
-					<Information
-						copyrights={copyrights}
-						activeFilesets={activeFilesets}
-						audioFilesetId={audioFilesetId}
-						plainTextFilesetId={plainTextFilesetId}
-						formattedTextFilesetId={formattedTextFilesetId}
-					/>
-				</main>
+				<div className={'main-wrapper'}>
+					<main ref={this.setMainRef} className={this.classNameForMain}>
+						{(formattedSource.main && !readersMode && !oneVersePerLine) ||
+						text.length === 0 ||
+						(!readersMode && !oneVersePerLine) ? null : (
+							<div className="active-chapter-title">
+								<h1 className="active-chapter-title">
+									{chapterAlt || activeChapter}
+								</h1>
+							</div>
+						)}
+						{this.getTextComponents}
+						{verseNumber ? (
+							<div className={'read-chapter-container'}>
+								<button onClick={goToFullChapter} className={'read-chapter'}>
+									Read Full Chapter
+								</button>
+							</div>
+						) : null}
+						<Information
+							copyrights={copyrights}
+							activeFilesets={activeFilesets}
+							audioFilesetId={audioFilesetId}
+							plainTextFilesetId={plainTextFilesetId}
+							formattedTextFilesetId={formattedTextFilesetId}
+						/>
+					</main>
+				</div>
 				<div
 					onClick={!this.isEndOfBible && !menuIsOpen ? nextChapter : () => {}}
 					className={

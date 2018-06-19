@@ -41,15 +41,6 @@ class MyHighlights extends React.PureComponent {
 	};
 
 	highlightIcon(color) {
-		// console.log('color', color);
-		// const colorKey = {
-		// 	'252,230,0,.25': 'yellow',
-		// 	'84,185,72,.25': 'green',
-		// 	'208,105,169,.25': 'pink',
-		// 	'137,103,172,.25': 'purple',
-		// 	'80,165,220,.25': 'blue',
-		// };
-		// return <SvgWrapper className={'icon'} svgid={colorKey[color]} />;
 		return (
 			<span
 				className={'color-icon'}
