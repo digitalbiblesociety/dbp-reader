@@ -435,13 +435,14 @@ export class AudioPlayer extends React.Component {
 	}
 
 	nextIcon = (
-		<div className={'icon-wrap'} title={messages.nextTitle.defaultMessage}>
-			<SvgWrapper
-				onClick={this.skipForward}
-				className="svgitem icon"
-				fill="#fff"
-				svgid="next"
-			/>
+		<div
+			role={'button'}
+			tabIndex={0}
+			onClick={this.skipForward}
+			className={'icon-wrap'}
+			title={messages.nextTitle.defaultMessage}
+		>
+			<SvgWrapper className="svgitem icon" fill="#fff" svgid="next" />
 			<FormattedMessage {...messages.next} />
 		</div>
 	);
