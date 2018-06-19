@@ -808,6 +808,7 @@ class HomePage extends React.PureComponent {
 	setAudioPlayerState = (state) =>
 		this.props.dispatch(setAudioPlayerState(state));
 
+	// Height of the entire scroll container including the invisible portions
 	get mainHeight() {
 		return Math.max(
 			this.main.offsetHeight,
@@ -815,15 +816,17 @@ class HomePage extends React.PureComponent {
 			this.main.scrollHeight,
 		);
 	}
-
+	// Height of the visible portion of the scroll container
 	get mainPhysicalHeight() {
 		return Math.max(this.main.offsetHeight, this.main.clientHeight);
 	}
 
+	// The current scroll position
 	get scrollTop() {
 		return this.main.scrollTop;
 	}
 
+	// If the scroll event would result in a value above or below the actual size of the container
 	get outOfBounds() {
 		// console.log('this.scrollTop, this.mainPhysicalHeight, this.mainHeight', this.scrollTop, this.mainPhysicalHeight, this.mainHeight);
 		// console.log('this.scrollTop', this.scrollTop);
@@ -832,13 +835,13 @@ class HomePage extends React.PureComponent {
 
 		return (
 			this.scrollTop + this.mainPhysicalHeight >= this.mainHeight ||
-			this.scrollTop < 0
+			this.scrollTop < 5
 		);
 	}
 
 	handleScrolling = () => {
 		// console.log('this.scrollTicking', this.scrollTicking);
-
+		// Only hides the header/footer if all of the menus are closed
 		if (
 			!this.scrollTicking &&
 			!this.props.homepage.isProfileActive &&
@@ -850,7 +853,7 @@ class HomePage extends React.PureComponent {
 			!this.props.homepage.isInformationModalActive
 		) {
 			// console.log('scroll scrollticking');
-
+			// Using this value to determine when the animation frame completed
 			this.scrollTicking = true;
 			requestAnimationFrame(this.updateScrollDirection);
 		}
