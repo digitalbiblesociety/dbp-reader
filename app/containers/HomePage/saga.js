@@ -79,8 +79,21 @@ export function* deleteHighlights({
 	}
 }
 
+export function* getCountriesAndLanguages() {
+	yield fork(getCountries);
+	yield fork(getLanguages);
+}
+
 export function* initApplication(props) {
 	const languageISO = props.languageISO;
+	// Set a timeout for 24 hours so that if the user does not refresh the page
+	// within that time the languages and countries will be re-fetched
+	const timeoutDuration = 1000 * 60 * 60 * 24;
+	setTimeout(function runTimeout() {
+		getCountriesAndLanguages();
+		setTimeout(runTimeout, timeoutDuration);
+	}, timeoutDuration);
+
 	// yield fork(getIpAddress);
 	// Forking each of these sagas here on the init of the application so that they all run in parallel
 	yield fork(getCountries);
