@@ -5,12 +5,20 @@
 	margin: 0 auto;
 	padding: 0 10px;
 	align-items: center;
+
 	@include css4 {
 		color: #000000; // fallback for IE
 		color: var(--application-text-container-color);
 		font-size: var(--application-base-font-size);
 	}
 	transition: 200ms ease-in-out;
+
+	.active-verse {
+		// Setting to gray because it won't obscure the font and it will work regardless of the app's background color
+		@include css4 {
+			background-color: var(--application-text-selection-color);
+		}
+	}
 
 	&.scrolled-down {
 		padding-top: 10px;

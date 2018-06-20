@@ -48,6 +48,9 @@ class Text extends React.PureComponent {
 		lastVerse: 0,
 		highlightActive: this.props.highlights || false,
 		handlersAreSet: false,
+		handledMouseDown: false,
+		activeVerseInfo: { verse: 0 },
+		wholeVerseIsSelected: false,
 	};
 
 	componentDidMount() {
@@ -65,11 +68,11 @@ class Text extends React.PureComponent {
 
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.formattedSource.main !== this.props.formattedSource.main) {
-			this.setState({ footnoteState: false });
+			this.setState({ footnoteState: false, activeVerseInfo: {} });
 		}
 	}
 
-	componentDidUpdate(prevProps) {
+	componentDidUpdate(prevProps, prevState) {
 		// Todo: I think the issue with the page refresh is due to the initial values in redux
 		// Todo: There is an issue with the event listeners being removed once a new note is added
 		// console.log(this.format, this.formatHighlight);
@@ -77,6 +80,62 @@ class Text extends React.PureComponent {
 		// 	console.log('component did update props difference: \n', differenceObject(prevProps, this.props));
 		// 	console.log('component did update state difference: \n', differenceObject(this.state, prevState));
 		// }
+		// console.log('updating---------------------------------------------');
+
+		if (
+			this.main &&
+			(this.format || this.formatHighlight) &&
+			this.state.activeVerseInfo.isPlain === false &&
+			this.state.activeVerseInfo.verse !== prevState.activeVerseInfo.verse &&
+			this.state.activeVerseInfo.verse
+		) {
+			// console.log('this.state.activeVerseInfo', this.state.activeVerseInfo);
+			// Add the highlight to the new active verse
+			const verse = this.state.activeVerseInfo.verse;
+			const verseNode = this.main.querySelector(
+				`[data-id=${this.props.activeBookId}${
+					this.props.activeChapter
+				}_${verse}]`,
+			);
+			if (verseNode) {
+				verseNode.className = `${verseNode.className} active-verse`;
+				// console.log('should update the color of the active verse');
+			}
+			// Remove the highlight from the old active verse
+			const prevVerse = prevState.activeVerseInfo.verse;
+			// console.log('prevState.activeVerseInfo', prevState.activeVerseInfo);
+			const prevVerseNode = this.main.querySelector(
+				`[data-id=${this.props.activeBookId}${
+					this.props.activeChapter
+				}_${prevVerse}]`,
+			);
+			if (prevVerseNode) {
+				// console.log('removing class from old active verse');
+				// console.log('prevVerseNode.className.slice(0 -13)', prevVerseNode.className.slice(0, -13));
+
+				prevVerseNode.className = prevVerseNode.className.slice(0, -13);
+			}
+		} else if (
+			this.main &&
+			(this.format || this.formatHighlight) &&
+			this.state.activeVerseInfo.isPlain === false
+		) {
+			// console.log('should remove highlight');
+			// Remove the highlight from the old active verse
+			const prevVerse = prevState.activeVerseInfo.verse;
+			// console.log('prevState.activeVerseInfo', prevState.activeVerseInfo);
+			const prevVerseNode = this.main.querySelector(
+				`[data-id=${this.props.activeBookId}${
+					this.props.activeChapter
+				}_${prevVerse}]`,
+			);
+			if (prevVerseNode) {
+				// console.log('removing class from old active verse');
+				// console.log('prevVerseNode.className.slice(0 -13)', prevVerseNode.className.slice(0, -13));
+
+				prevVerseNode.className = prevVerseNode.className.slice(0, -13);
+			}
+		}
 		// Logic below ensures that the proper event handlers are set on each footnote
 		if (
 			this.props.formattedSource.main &&
@@ -285,6 +344,7 @@ class Text extends React.PureComponent {
 		}`;
 
 	getFirstVerse = (e) => {
+		// alert('mousedown fired');
 		e.stopPropagation();
 		// console.log('getting first verse');
 		const target = e.target;
@@ -396,6 +456,7 @@ class Text extends React.PureComponent {
 
 				this.setState(
 					{
+						wholeVerseIsSelected: false,
 						lastVerse,
 						anchorOffset: window.getSelection().anchorOffset,
 						anchorText: window.getSelection().anchorNode.data,
@@ -409,6 +470,10 @@ class Text extends React.PureComponent {
 						this.openContextMenu(e);
 					},
 				);
+			} else if (lastVerse && this.main.contains(target) && primaryButton) {
+				// treat the event as a click and allow the whole verse to be highlighted
+				// console.log('counts as a click not a text selection formatted');
+				this.selectedWholeVerse(lastVerse, false, e.clientX, e.clientY);
 			}
 		} else if (!isFormatted) {
 			const verseNode = getPlainParentVerseWithoutNumber(target);
@@ -426,6 +491,7 @@ class Text extends React.PureComponent {
 
 				this.setState(
 					{
+						wholeVerseIsSelected: false,
 						lastVerse,
 						anchorOffset: window.getSelection().anchorOffset,
 						anchorText: window.getSelection().anchorNode.data,
@@ -439,6 +505,10 @@ class Text extends React.PureComponent {
 						this.openContextMenu(e);
 					},
 				);
+			} else if (lastVerse && this.main.contains(target) && primaryButton) {
+				// treat the event as a click and allow the whole verse to be highlighted
+				// console.log('counts as a click not a text selection for plain');
+				this.selectedWholeVerse(lastVerse, true, e.clientX, e.clientY);
 			}
 		} else {
 			this.openContextMenu(e);
@@ -460,6 +530,9 @@ class Text extends React.PureComponent {
 			invalidBibleId,
 		} = this.props;
 		const chapterAlt = initialText[0] && initialText[0].chapter_alt;
+		const verseIsActive =
+			this.state.activeVerseInfo.verse && this.state.activeVerseInfo.isPlain;
+		const activeVerse = this.state.activeVerseInfo.verse || 0;
 		// Doing it like this may impact performance, but it is probably cleaner
 		// than most other ways of doing it...
 		const formattedSource = initialFormattedSource.main
@@ -665,7 +738,14 @@ class Text extends React.PureComponent {
 						<span
 							onMouseUp={this.handleMouseUp}
 							onMouseDown={this.getFirstVerse}
-							className={'align-left'}
+							onClick={this.handleHighlightClick}
+							className={
+								verseIsActive &&
+								(parseInt(activeVerse, 10) === verse.verse_start ||
+									activeVerse === verse.verse_start_alt)
+									? 'align-left active-verse'
+									: 'align-left'
+							}
 							verseid={verse.verse_start}
 							key={verse.verse_start}
 						>
@@ -689,7 +769,14 @@ class Text extends React.PureComponent {
 						<span
 							onMouseUp={this.handleMouseUp}
 							onMouseDown={this.getFirstVerse}
-							className={'align-left'}
+							onClick={this.handleHighlightClick}
+							className={
+								verseIsActive &&
+								(parseInt(activeVerse, 10) === verse.verse_start ||
+									activeVerse === verse.verse_start_alt)
+									? 'align-left active-verse'
+									: 'align-left'
+							}
 							verseid={verse.verse_start}
 							key={verse.verse_start}
 						>
@@ -739,9 +826,47 @@ class Text extends React.PureComponent {
 		return textComponents;
 	}
 
+	handleHighlightClick = () => {
+		// Unless there is a click event the mouseup and mousedown events won't fire for mobile devices
+		// Left this blank since I actually don't need to do anything with it
+	};
+	/* May end up needing these for highlighting or changing chapter on swipe
+	handleHighlightTouchStart = (e) => {
+		console.log('event in touch start', e.target);
+		console.log('e.handler', e.handler);
+
+		this.touchTarget = e.target;
+		this.main.addEventListener('touchend', this.handleTouchEnd);
+		this.main.addEventListener('touchcancel', this.handleTouchCancel);
+		// alert('touch event fired so I know the whole verse needs to be selected');
+	}
+
+	handleTouchEnd = (e) => {
+		console.log('touch ended');
+		// Likely want to compare the x y coords to see if they swiped
+		if (e.target.isSameNode(this.touchTarget)) {
+			console.log('ended on same verse');
+		}
+		this.main.removeEventListener('touchend', this.handleTouchEnd);
+		this.main.removeEventListener('touchcancel', this.handleTouchCancel);
+	}
+
+	handleTouchCancel = (e) => {
+		console.log('touch canceled');
+		if (e.target.isSameNode(this.touchTarget)) {
+			console.log('ended on same verse');
+		}
+		this.main.removeEventListener('touchend', this.handleTouchEnd);
+		this.main.removeEventListener('touchcancel', this.handleTouchCancel);
+	}
+	*/
 	handleMouseUp = (e) => {
+		// alert(`mouse up fired: ${e.button}: ${e.changedTouches}`);
 		e.stopPropagation();
-		// console.log('handling mouseup');
+		// alert('handling mouseup');
+		// alert(e.button);
+		// console.log('e.changedTouches', e.changedTouches);
+
 		this.getLastVerse(e);
 		if (
 			e.button === 0 &&
@@ -834,7 +959,9 @@ class Text extends React.PureComponent {
 	highlightPlainText = (props) => createHighlights(props);
 
 	addHighlight = ({ color, popupCoords }) => {
-		const highlightObject = {};
+		let highlightObject = {};
+		// console.log('this.state.wholeVerseIsSelected', this.state.wholeVerseIsSelected);
+
 		// Getting the data for the tests
 		// console.log(JSON.stringify(this.props));
 		// console.log(JSON.stringify(this.state));
@@ -866,51 +993,192 @@ class Text extends React.PureComponent {
 		// use that index as the highlight start
 		// if the selected text starts at the end of the anchor node
 		// else if the selected text starts at the end of the focus node
-		try {
-			// Globals*
-			const first = parseInt(this.state.firstVerse, 10);
-			const last = parseInt(this.state.lastVerse, 10);
-			const chapter = this.props.activeChapter;
-			const activeBookId = this.props.activeBookId;
-			// Since a user can highlight "backwards" this makes sure the first verse is correct
-			const firstVerse = first < last ? first : last;
-			const lastVerse = last > first ? last : first;
-			// console.log('first verse state', first);
-			// console.log('last verse state', last);
-			// console.log('first verse', firstVerse);
-			// console.log('last verse', lastVerse);
-			// Getting each offset to determine which is closest to the start of the passage
-			const offset = this.state.anchorOffset;
-			const focusOffset = this.state.focusOffset;
-			const focusText = this.state.focusText;
-			const aText = this.state.anchorText;
-			const aNode = this.state.anchorNode;
-			const eNode = this.state.focusNode;
-			// console.log('offset', offset);
-			// console.log('focusOffset', focusOffset);
-			// console.log('focusText', focusText);
-			// console.log('aText', aText);
-			const selectedText = this.state.selectedText;
-			// const aLength = aText.length;
-			// const fLength = focusText.length;
-			// Setting my anchors with the data that is closest to the start of the passage
-			let anchorOffset = offset < focusOffset ? offset : focusOffset;
-			let anchorText = offset < focusOffset ? aText : focusText;
-			let node = aNode;
-			// console.log('a text', anchorText);
-			// console.log('nodes in just 7 verses', preorderTraverse(this.format, []));
-			// console.log('a offset', anchorOffset);
-			// console.log('first verse', firstVerse, 'last verse', lastVerse);
-			if (this.props.formattedSource.main) {
-				if (aText !== focusText) {
-					// if nodes are different
-					// I have access to the parent node
-					// if texts match
-					// reverse order of anchor and focus
-					// if texts dont match
-					// find the parent of each that has a verse id
-					const aParent = getFormattedParentVerse(aNode);
-					const eParent = getFormattedParentVerse(eNode);
+		if (this.state.wholeVerseIsSelected) {
+			try {
+				// do stuff
+				// console.log('Highlighting the whole verse');
+				const verse = this.state.activeVerseInfo.verse;
+				const isPlain = this.state.activeVerseInfo.isPlain;
+				// const highlightedWords = this.props.text
+				if (isPlain) {
+					const highlightedWords = this.props.text.find(
+						(t) =>
+							t.verse_start === parseInt(verse, 10) ||
+							t.verse_start_alt === verse,
+					).verse_text.length;
+					highlightObject = {
+						book: this.props.activeBookId,
+						chapter: this.props.activeChapter,
+						verseStart: verse,
+						color,
+						highlightStart: 0,
+						highlightedWords,
+						reference: this.getReference(verse, verse),
+					};
+				} else {
+					const highlightedWords = this.main
+						? this.main.querySelector(
+								`[data-id=${this.props.activeBookId}${
+									this.props.activeChapter
+								}_${verse}]`,
+						  ).textContent.length
+						: 0;
+					highlightObject = {
+						book: this.props.activeBookId,
+						chapter: this.props.activeChapter,
+						verseStart: verse,
+						color,
+						highlightStart: 0,
+						highlightedWords,
+						reference: this.getReference(verse, verse),
+					};
+				}
+
+				if (highlightObject) {
+					// console.log('highlightObject', highlightObject);
+
+					this.props.addHighlight(highlightObject);
+				}
+
+				this.setState({
+					wholeVerseIsSelected: false,
+					activeVerseInfo: { verse: 0 },
+				});
+			} catch (err) {
+				// do stuff with err
+			}
+		} else {
+			try {
+				// Globals*
+				const first = parseInt(this.state.firstVerse, 10);
+				const last = parseInt(this.state.lastVerse, 10);
+				const chapter = this.props.activeChapter;
+				const activeBookId = this.props.activeBookId;
+				// Since a user can highlight "backwards" this makes sure the first verse is correct
+				const firstVerse = first < last ? first : last;
+				const lastVerse = last > first ? last : first;
+				// console.log('first verse state', first);
+				// console.log('last verse state', last);
+				// console.log('first verse', firstVerse);
+				// console.log('last verse', lastVerse);
+				// Getting each offset to determine which is closest to the start of the passage
+				const offset = this.state.anchorOffset;
+				const focusOffset = this.state.focusOffset;
+				const focusText = this.state.focusText;
+				const aText = this.state.anchorText;
+				const aNode = this.state.anchorNode;
+				const eNode = this.state.focusNode;
+				// console.log('offset', offset);
+				// console.log('focusOffset', focusOffset);
+				// console.log('focusText', focusText);
+				// console.log('aText', aText);
+				const selectedText = this.state.selectedText;
+				// const aLength = aText.length;
+				// const fLength = focusText.length;
+				// Setting my anchors with the data that is closest to the start of the passage
+				let anchorOffset = offset < focusOffset ? offset : focusOffset;
+				let anchorText = offset < focusOffset ? aText : focusText;
+				let node = aNode;
+				// console.log('a text', anchorText);
+				// console.log('nodes in just 7 verses', preorderTraverse(this.format, []));
+				// console.log('a offset', anchorOffset);
+				// console.log('first verse', firstVerse, 'last verse', lastVerse);
+				if (this.props.formattedSource.main) {
+					if (aText !== focusText) {
+						// if nodes are different
+						// I have access to the parent node
+						// if texts match
+						// reverse order of anchor and focus
+						// if texts dont match
+						// find the parent of each that has a verse id
+						const aParent = getFormattedParentVerse(aNode);
+						const eParent = getFormattedParentVerse(eNode);
+						// console.log('a parent and e parent', aParent, '\n', eParent);
+						// if the parents are different verses
+						if (aParent.isSameNode(eParent)) {
+							// It doesn't matter from this point which parent is used since they both reference the same object
+							// take the offset that occurs first as a child of the verse
+							// console.log('parent verse is the same for both elements');
+							// console.log('child nodes for parent', aParent.childNodes);
+							// console.log(aParent.childNodes[0].isSameNode(aNode));
+							const aIndex = getFormattedChildIndex(aParent, aNode);
+							const eIndex = getFormattedChildIndex(aParent, eNode);
+							// console.log('a node', aNode, 'e node', eNode);
+							// console.log('a index', aIndex, 'e index', eIndex);
+							// console.log('a parent childNodes', aParent.childNodes);
+
+							// Use the text and offset of the node that was closest to the start of the verse
+							if (aIndex < eIndex) {
+								// console.log('aIndex is less than eIndex');
+								anchorText = aText;
+								anchorOffset = offset;
+								node = aNode;
+							} else {
+								anchorText = focusText;
+								node = eNode;
+								anchorOffset = focusOffset;
+							}
+							// (could potentially use next/prev sibling for this)
+						} else {
+							// take the offset that matches the first(lowest) verse between the two
+							// console.log('parent verse is not the same for both elements');
+							const aVerseNumber = getFormattedElementVerseId(aParent);
+							const eVerseNumber = getFormattedElementVerseId(eParent);
+							// console.log('aVerseNumber', aVerseNumber);
+							// console.log('eVerseNumber', eVerseNumber);
+
+							// Need to check for which node comes first
+							// Use the text and offset of the first verse
+							if (aVerseNumber < eVerseNumber) {
+								// console.log('aVerseNumber is less than eVerseNumber');
+								anchorText = aText;
+								node = aNode;
+								anchorOffset = offset;
+								// If the verse numbers are the same but the verse nodes are different then I am dealing with a psalm
+							} else if (aVerseNumber === eVerseNumber) {
+								// Use prevChild until I get null and use that node
+								// Need to decide here whether to use the anchor text or the focus text
+								// console.log('aParent vnums are same', aParent);
+								// console.log('eParent vnums are same', eParent);
+								// console.log('this.formatHighlight', this.formatHighlight);
+								// console.log('aParent', [...this.formatHighlight.children[0].children].indexOf(aParent));
+								// console.log('eParent', [...this.formatHighlight.children[0].children].indexOf(eParent));
+								const closestParent = getClosestParent({
+									aParent,
+									eParent,
+									verse: firstVerse,
+									chapter,
+									book: activeBookId,
+									refNode: this.formatHighlight || this.format,
+								});
+								// Find distance from each parent back until there is not a sibling with the same verse number
+								// make sure both parents have the q class before searching backwards
+								// Does not work when putting highlight in the second portion of a verse
+								// Build verse - get the index of the text out of the built verse
+								// I think I want to somehow either make the anchor offset based on the resulting text from
+								// the previous function or to use the resulting text instead of aNode.textContent but
+								// I am not exactly sure which one to do...
+
+								// console.log('closestParent and aParent', closestParent, aParent);
+								if (aParent.isSameNode(closestParent)) {
+									anchorText = aText;
+									node = aNode;
+									anchorOffset = offset;
+								} else {
+									anchorText = focusText;
+									node = eNode;
+									anchorOffset = focusOffset;
+								}
+							} else {
+								anchorText = focusText;
+								node = eNode;
+								anchorOffset = focusOffset;
+							}
+						}
+					}
+				} else if (aText !== focusText) {
+					const aParent = getPlainParentVerseWithoutNumber(aNode);
+					const eParent = getPlainParentVerseWithoutNumber(eNode);
 					// console.log('a parent and e parent', aParent, '\n', eParent);
 					// if the parents are different verses
 					if (aParent.isSameNode(eParent)) {
@@ -929,8 +1197,8 @@ class Text extends React.PureComponent {
 						if (aIndex < eIndex) {
 							// console.log('aIndex is less than eIndex');
 							anchorText = aText;
-							anchorOffset = offset;
 							node = aNode;
+							anchorOffset = offset;
 						} else {
 							anchorText = focusText;
 							node = eNode;
@@ -940,53 +1208,17 @@ class Text extends React.PureComponent {
 					} else {
 						// take the offset that matches the first(lowest) verse between the two
 						// console.log('parent verse is not the same for both elements');
-						const aVerseNumber = getFormattedElementVerseId(aParent);
-						const eVerseNumber = getFormattedElementVerseId(eParent);
+						const aVerseNumber = aParent.attributes.verseid.value;
+						const eVerseNumber = eParent.attributes.verseid.value;
 						// console.log('aVerseNumber', aVerseNumber);
 						// console.log('eVerseNumber', eVerseNumber);
 
-						// Need to check for which node comes first
 						// Use the text and offset of the first verse
 						if (aVerseNumber < eVerseNumber) {
 							// console.log('aVerseNumber is less than eVerseNumber');
 							anchorText = aText;
 							node = aNode;
 							anchorOffset = offset;
-							// If the verse numbers are the same but the verse nodes are different then I am dealing with a psalm
-						} else if (aVerseNumber === eVerseNumber) {
-							// Use prevChild until I get null and use that node
-							// Need to decide here whether to use the anchor text or the focus text
-							// console.log('aParent vnums are same', aParent);
-							// console.log('eParent vnums are same', eParent);
-							// console.log('this.formatHighlight', this.formatHighlight);
-							// console.log('aParent', [...this.formatHighlight.children[0].children].indexOf(aParent));
-							// console.log('eParent', [...this.formatHighlight.children[0].children].indexOf(eParent));
-							const closestParent = getClosestParent({
-								aParent,
-								eParent,
-								verse: firstVerse,
-								chapter,
-								book: activeBookId,
-								refNode: this.formatHighlight || this.format,
-							});
-							// Find distance from each parent back until there is not a sibling with the same verse number
-							// make sure both parents have the q class before searching backwards
-							// Does not work when putting highlight in the second portion of a verse
-							// Build verse - get the index of the text out of the built verse
-							// I think I want to somehow either make the anchor offset based on the resulting text from
-							// the previous function or to use the resulting text instead of aNode.textContent but
-							// I am not exactly sure which one to do...
-
-							// console.log('closestParent and aParent', closestParent, aParent);
-							if (aParent.isSameNode(closestParent)) {
-								anchorText = aText;
-								node = aNode;
-								anchorOffset = offset;
-							} else {
-								anchorText = focusText;
-								node = eNode;
-								anchorOffset = focusOffset;
-							}
 						} else {
 							anchorText = focusText;
 							node = eNode;
@@ -994,228 +1226,177 @@ class Text extends React.PureComponent {
 						}
 					}
 				}
-			} else if (aText !== focusText) {
-				const aParent = getPlainParentVerseWithoutNumber(aNode);
-				const eParent = getPlainParentVerseWithoutNumber(eNode);
-				// console.log('a parent and e parent', aParent, '\n', eParent);
-				// if the parents are different verses
-				if (aParent.isSameNode(eParent)) {
-					// It doesn't matter from this point which parent is used since they both reference the same object
-					// take the offset that occurs first as a child of the verse
-					// console.log('parent verse is the same for both elements');
-					// console.log('child nodes for parent', aParent.childNodes);
-					// console.log(aParent.childNodes[0].isSameNode(aNode));
-					const aIndex = getFormattedChildIndex(aParent, aNode);
-					const eIndex = getFormattedChildIndex(aParent, eNode);
-					// console.log('a node', aNode, 'e node', eNode);
-					// console.log('a index', aIndex, 'e index', eIndex);
-					// console.log('a parent childNodes', aParent.childNodes);
-
-					// Use the text and offset of the node that was closest to the start of the verse
-					if (aIndex < eIndex) {
-						// console.log('aIndex is less than eIndex');
-						anchorText = aText;
-						node = aNode;
-						anchorOffset = offset;
-					} else {
-						anchorText = focusText;
-						node = eNode;
-						anchorOffset = focusOffset;
-					}
-					// (could potentially use next/prev sibling for this)
-				} else {
-					// take the offset that matches the first(lowest) verse between the two
-					// console.log('parent verse is not the same for both elements');
-					const aVerseNumber = aParent.attributes.verseid.value;
-					const eVerseNumber = eParent.attributes.verseid.value;
-					// console.log('aVerseNumber', aVerseNumber);
-					// console.log('eVerseNumber', eVerseNumber);
-
-					// Use the text and offset of the first verse
-					if (aVerseNumber < eVerseNumber) {
-						// console.log('aVerseNumber is less than eVerseNumber');
-						anchorText = aText;
-						node = aNode;
-						anchorOffset = offset;
-					} else {
-						anchorText = focusText;
-						node = eNode;
-						anchorOffset = focusOffset;
-					}
-				}
-			}
-			// console.log('anchorOffset < focusOffset', anchorOffset < focusOffset);
-			// Solve's for formatted text
-			// Not so sure about this, seems like in theory it should give me the node closest to the beginning but idk
-			let highlightStart = 0;
-			let highlightedWords = 0;
-			const dist = this.calcDist(
-				lastVerse,
-				firstVerse,
-				!!this.props.formattedSource.main,
-			);
-			// Also need to check for class="v" to ensure that this was the first verse
-			if (
-				this.props.formattedSource.main &&
-				!this.props.userSettings.getIn([
-					'toggleOptions',
-					'readersMode',
-					'active',
-				]) &&
-				!this.props.userSettings.getIn([
-					'toggleOptions',
-					'oneVersePerLine',
-					'active',
-				])
-			) {
-				// Issue with getting the correct parent node
-				// console.log('starting node', node);
-				// console.log('first verse', firstVerse);
-				node = getFormattedParentVerseNumber(node, firstVerse);
-				// const testNum = getTextInSelectedNodes({
-				// 	node,
-				// 	firstVerse,
-				// 	lastVerse,
-				// 	book: activeBookId,
-				// 	chapter,
-				// 	refNode: this.formatHighlight || this.format,
-				// }) - (offset) - (fLength - focusOffset);
-				// console.log('testNum', testNum);
-				// console.log('(offset)', (offset));
-				// console.log('(fLength - focusOffset)', (fLength - focusOffset));
-
-				// console.log('window.getSelection().toString().length', window.getSelection().toString().length);
-
-				// console.log('verse node', node.attributes.class.value.slice(0, 1) === 'q');
-				// At this point "node" is the first verse
-				// console.log('node.textContent', node);
-				// console.log(anchorOffset);
-				// console.log(anchorText);
-				// console.log('index of anchor text within text content', anchorText);
-				// console.log('built text is : ', getClosestParent(this.formatHighlight || this.format, firstVerse, chapter, activeBookId));
-				// console.log('built text equals node text', getClosestParent(this.formatHighlight || this.format, firstVerse, chapter, activeBookId).indexOf(anchorText.trim()));
-				const nodeClassValue =
-					(node.attributes &&
-						node.attributes.class &&
-						node.attributes.class.value) ||
-					undefined;
-				// console.log('nodeClassValue', nodeClassValue);
-				// console.log('node.attributes', node.attributes);
-
-				if (nodeClassValue && nodeClassValue.slice(0, 1) === 'q') {
-					// Get all of the nodes with the same data-id that come before this one in the dom
-					// Add the textContent length of each node to the anchorOffset
-					// console.log('original offset', anchorOffset);
-					anchorOffset += getOffsetNeededForPsalms({
-						node,
-						verse: firstVerse,
-						chapter,
-						book: activeBookId,
-						refNode: this.formatHighlight || this.format,
-					});
-					// console.log('updated offset', anchorOffset);
-				}
-				// Need to subtract by 1 since the anchor offset isn't 0 based
-				highlightStart = node.textContent.indexOf(anchorText) + anchorOffset;
-				// getClosestParent(this.formatHighlight || this.format, firstVerse, chapter, this.props.activeBookId);
-				// console.log('anchor text', anchorText);
-				// console.log('focusText', focusText);
-				// console.log(node.textContent.indexOf(anchorText));
-
-				// I think this can stay the same as formatted, it could be made shorter potentially
-				// need to remove all line breaks and note characters
-				// console.log('selectedText.match(/\\n/g)', selectedText.match(/\n/g));
-				// console.log('selectedText.length', selectedText);
-				// console.log('selectedText.replace(/[\\r\\n*]/g, "").length', selectedText.replace(/[\r\n*✝]/g, '').length);
-				// console.log('dist', dist);
-
-				highlightedWords = selectedText.replace(/[\r\n*✝]/g, '').length - dist;
-			} else {
-				node = getPlainParentVerse(node, firstVerse);
-				// taking off the first 2 spaces and the verse number from the string
-				// This should only be the case for the first highlight within that verse
-				const newText = node.textContent.slice(0);
-
+				// console.log('anchorOffset < focusOffset', anchorOffset < focusOffset);
+				// Solve's for formatted text
+				// Not so sure about this, seems like in theory it should give me the node closest to the beginning but idk
+				let highlightStart = 0;
+				let highlightedWords = 0;
+				const dist = this.calcDist(
+					lastVerse,
+					firstVerse,
+					!!this.props.formattedSource.main,
+				);
+				// Also need to check for class="v" to ensure that this was the first verse
 				if (
-					this.props.userSettings.getIn([
+					this.props.formattedSource.main &&
+					!this.props.userSettings.getIn([
 						'toggleOptions',
 						'readersMode',
 						'active',
+					]) &&
+					!this.props.userSettings.getIn([
+						'toggleOptions',
+						'oneVersePerLine',
+						'active',
 					])
 				) {
+					// Issue with getting the correct parent node
+					// console.log('starting node', node);
+					// console.log('first verse', firstVerse);
+					node = getFormattedParentVerseNumber(node, firstVerse);
+					// const testNum = getTextInSelectedNodes({
+					// 	node,
+					// 	firstVerse,
+					// 	lastVerse,
+					// 	book: activeBookId,
+					// 	chapter,
+					// 	refNode: this.formatHighlight || this.format,
+					// }) - (offset) - (fLength - focusOffset);
+					// console.log('testNum', testNum);
+					// console.log('(offset)', (offset));
+					// console.log('(fLength - focusOffset)', (fLength - focusOffset));
+
+					// console.log('window.getSelection().toString().length', window.getSelection().toString().length);
+
+					// console.log('verse node', node.attributes.class.value.slice(0, 1) === 'q');
+					// At this point "node" is the first verse
+					// console.log('node.textContent', node);
+					// console.log(anchorOffset);
+					// console.log(anchorText);
+					// console.log('index of anchor text within text content', anchorText);
+					// console.log('built text is : ', getClosestParent(this.formatHighlight || this.format, firstVerse, chapter, activeBookId));
+					// console.log('built text equals node text', getClosestParent(this.formatHighlight || this.format, firstVerse, chapter, activeBookId).indexOf(anchorText.trim()));
+					const nodeClassValue =
+						(node.attributes &&
+							node.attributes.class &&
+							node.attributes.class.value) ||
+						undefined;
+					// console.log('nodeClassValue', nodeClassValue);
+					// console.log('node.attributes', node.attributes);
+
+					if (nodeClassValue && nodeClassValue.slice(0, 1) === 'q') {
+						// Get all of the nodes with the same data-id that come before this one in the dom
+						// Add the textContent length of each node to the anchorOffset
+						// console.log('original offset', anchorOffset);
+						anchorOffset += getOffsetNeededForPsalms({
+							node,
+							verse: firstVerse,
+							chapter,
+							book: activeBookId,
+							refNode: this.formatHighlight || this.format,
+						});
+						// console.log('updated offset', anchorOffset);
+					}
+					// Need to subtract by 1 since the anchor offset isn't 0 based
 					highlightStart = node.textContent.indexOf(anchorText) + anchorOffset;
-					highlightedWords = selectedText.replace(/\n/g, '').length;
+					// getClosestParent(this.formatHighlight || this.format, firstVerse, chapter, this.props.activeBookId);
+					// console.log('anchor text', anchorText);
+					// console.log('focusText', focusText);
+					// console.log(node.textContent.indexOf(anchorText));
+
+					// I think this can stay the same as formatted, it could be made shorter potentially
+					// need to remove all line breaks and note characters
+					// console.log('selectedText.match(/\\n/g)', selectedText.match(/\n/g));
+					// console.log('selectedText.length', selectedText);
+					// console.log('selectedText.replace(/[\\r\\n*]/g, "").length', selectedText.replace(/[\r\n*✝]/g, '').length);
+					// console.log('dist', dist);
+
+					highlightedWords =
+						selectedText.replace(/[\r\n*✝]/g, '').length - dist;
 				} else {
-					highlightStart = newText.indexOf(anchorText) + anchorOffset;
-					highlightedWords = selectedText.replace(/\n/g, '').length - dist;
+					node = getPlainParentVerse(node, firstVerse);
+					// taking off the first 2 spaces and the verse number from the string
+					// This should only be the case for the first highlight within that verse
+					const newText = node.textContent.slice(0);
+
+					if (
+						this.props.userSettings.getIn([
+							'toggleOptions',
+							'readersMode',
+							'active',
+						])
+					) {
+						highlightStart =
+							node.textContent.indexOf(anchorText) + anchorOffset;
+						highlightedWords = selectedText.replace(/\n/g, '').length;
+					} else {
+						highlightStart = newText.indexOf(anchorText) + anchorOffset;
+						highlightedWords = selectedText.replace(/\n/g, '').length - dist;
+					}
 				}
-			}
-			// console.log('whole verse node text content', node.textContent);
-			// console.log('calc', node.textContent.indexOf(anchorText) + anchorOffset);
-			// plain text 乁(✿ ͡° ͜ʖ ͡°)و
-			if (this.props.userId && this.props.userAuthenticated) {
-				// console.log('highlight being added - not sending to db atm', {
-				// 	book: this.props.activeBookId,
-				// 	chapter: this.props.activeChapter,
-				// 	verseStart: firstVerse,
-				// 	color,
-				// 	highlightStart,
-				// 	highlightedWords,
-				// 	reference: this.getReference(firstVerse, lastVerse),
-				// });
-				// If the color is none then we are assuming that the user wants whatever they highlighted to be removed
-				// We could either remove every highlight that was overlapped by this one, or we could try to update all
-				// of those highlights and remove the sections of them that were overlapped
+				// console.log('whole verse node text content', node.textContent);
+				// console.log('calc', node.textContent.indexOf(anchorText) + anchorOffset);
+				// plain text 乁(✿ ͡° ͜ʖ ͡°)و
+				if (this.props.userId && this.props.userAuthenticated) {
+					// console.log('highlight being added - not sending to db atm', {
+					// 	book: this.props.activeBookId,
+					// 	chapter: this.props.activeChapter,
+					// 	verseStart: firstVerse,
+					// 	color,
+					// 	highlightStart,
+					// 	highlightedWords,
+					// 	reference: this.getReference(firstVerse, lastVerse),
+					// });
+					// If the color is none then we are assuming that the user wants whatever they highlighted to be removed
+					// We could either remove every highlight that was overlapped by this one, or we could try to update all
+					// of those highlights and remove the sections of them that were overlapped
 
-				highlightObject.book = this.props.activeBookId;
-				highlightObject.chapter = this.props.activeChapter;
-				highlightObject.verseStart = firstVerse;
-				highlightObject.color = color;
-				highlightObject.highlightStart = highlightStart;
-				highlightObject.highlightedWords = highlightedWords;
-
-				if (color === 'none') {
-					// Todo: Test this with q texts
-					const highs = this.props.highlights;
-					const space = highlightStart + highlightedWords;
-					// // console.log('space', space);
-					// // console.log('highlightStart', highlightStart);
-
-					const highsToDelete = highs
-						.filter(
-							(high) =>
-								high.verse_start === firstVerse &&
-								(high.highlight_start <= space &&
-									high.highlight_start + high.highlighted_words >=
-										highlightStart),
-						)
-						.reduce((a, h) => [...a, h.id], []);
-
-					// console.log('highsToDelete', highsToDelete);
-
-					// should add a confirmation or something here
-					this.props.deleteHighlights({ ids: highsToDelete });
-				} else {
-					// console.log('Tried to add the highlight anyway... -_-');
-					this.props.addHighlight({
-						book: this.props.activeBookId,
-						chapter: this.props.activeChapter,
-						verseStart: firstVerse,
-						color,
-						highlightStart,
-						highlightedWords,
-						reference: this.getReference(firstVerse, lastVerse),
-					});
+					highlightObject.book = this.props.activeBookId;
+					highlightObject.chapter = this.props.activeChapter;
+					highlightObject.verseStart = firstVerse;
+					highlightObject.color = color;
+					highlightObject.highlightStart = highlightStart;
+					highlightObject.highlightedWords = highlightedWords;
+					if (color === 'none') {
+						// Todo: Test this with q texts
+						const highs = this.props.highlights;
+						const space = highlightStart + highlightedWords;
+						// // console.log('space', space);
+						// // console.log('highlightStart', highlightStart);
+						const highsToDelete = highs
+							.filter(
+								(high) =>
+									high.verse_start === firstVerse &&
+									(high.highlight_start <= space &&
+										high.highlight_start + high.highlighted_words >=
+											highlightStart),
+							)
+							.reduce((a, h) => [...a, h.id], []);
+						// console.log('highsToDelete', highsToDelete);
+						// should add a confirmation or something here
+						this.props.deleteHighlights({ ids: highsToDelete });
+					} else {
+						// console.log('Tried to add the highlight anyway... -_-');
+						this.props.addHighlight({
+							book: this.props.activeBookId,
+							chapter: this.props.activeChapter,
+							verseStart: firstVerse,
+							color,
+							highlightStart,
+							highlightedWords,
+							reference: this.getReference(firstVerse, lastVerse),
+						});
+					}
 				}
+			} catch (err) {
+				if (process.env.NODE_ENV === 'development') {
+					console.warn('Error adding highlight', err); // eslint-disable-line no-console
+				} else if (process.env.NODE_ENV === 'test') {
+					console.log('Error adding highlight', err); // eslint-disable-line no-console
+				}
+				// dispatch action to log error and also show an error message
+				this.closeContextMenu();
 			}
-		} catch (err) {
-			if (process.env.NODE_ENV === 'development') {
-				console.warn('Error adding highlight', err); // eslint-disable-line no-console
-			} else if (process.env.NODE_ENV === 'test') {
-				console.log('Error adding highlight', err); // eslint-disable-line no-console
-			}
-			// dispatch action to log error and also show an error message
-			this.closeContextMenu();
 		}
 
 		this.closeContextMenu();
@@ -1302,6 +1483,51 @@ class Text extends React.PureComponent {
 	closeFootnote = () => this.setState({ footnoteState: false });
 
 	closeContextMenu = () => this.setState({ contextMenuState: false });
+
+	selectedWholeVerse = (verse, isPlain, clientX, clientY) => {
+		// console.log('verse: ', verse, '\nisPlain: ', isPlain);
+		const rightEdge = window.innerWidth - 250;
+		const bottomEdge = window.innerHeight - 297;
+		const x = rightEdge < clientX ? rightEdge : clientX;
+		const y = bottomEdge < clientY ? bottomEdge : clientY;
+
+		if (isPlain) {
+			// console.log('text array', this.props.text);
+			// console.log('stuff to compare plain', verse, this.state.activeVerseInfo.verse);
+			// const verseObject = this.props.text.find((v) => v.verse_start === parseInt(verse, 10) || v.verse_start_alt === verse);
+			// console.log('verseObject', verseObject);
+			this.setState((currentState) => ({
+				coords: { x, y },
+				wholeVerseIsSelected: !(
+					currentState.wholeVerseIsSelected &&
+					currentState.activeVerseInfo.verse === verse
+				),
+				contextMenuState: currentState.activeVerseInfo.verse !== verse,
+				activeVerseInfo: {
+					verse: currentState.activeVerseInfo.verse !== verse ? verse : 0,
+					isPlain,
+				},
+			}));
+		} else {
+			// is formatted
+			// Adding the highlight here since it has to be done through dom manipulation... -_-
+			// console.log('stuff to compare format', verse, this.state.activeVerseInfo.verse);
+			// console.log('verseNode', verseNode);
+			// console.log('verseNode.textContent', verseNode.textContent);
+			this.setState((currentState) => ({
+				coords: { x, y },
+				wholeVerseIsSelected: !(
+					currentState.wholeVerseIsSelected &&
+					currentState.activeVerseInfo.verse === verse
+				),
+				contextMenuState: currentState.activeVerseInfo.verse !== verse,
+				activeVerseInfo: {
+					verse: currentState.activeVerseInfo.verse !== verse ? verse : 0,
+					isPlain,
+				},
+			}));
+		}
+	};
 
 	shareHighlightToFacebook = () => {
 		const FB = window.FB;
