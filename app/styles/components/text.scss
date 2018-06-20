@@ -23,6 +23,11 @@
 		margin: 0 auto;
 		padding: 15px 15px 45px 15px;
 		height: 100%;
+
+		@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+			overflow-y: auto;
+			overflow-x: hidden;
+		}
 	}
 
 	main {
