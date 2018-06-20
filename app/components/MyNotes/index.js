@@ -234,6 +234,7 @@ class MyNotes extends React.PureComponent {
 			deleteNote,
 			deleteBookmark,
 			updateHighlight,
+			toggleNotesModal,
 		} = this.props;
 		let filteredPageData = [];
 
@@ -302,6 +303,7 @@ class MyNotes extends React.PureComponent {
 						<MyHighlights
 							highlights={filteredPageData}
 							getReference={this.getHighlightReference}
+							toggleNotesModal={toggleNotesModal}
 							deleteHighlights={deleteHighlights}
 							updateHighlight={updateHighlight}
 						/>
@@ -310,6 +312,7 @@ class MyNotes extends React.PureComponent {
 						<MyBookmarks
 							bookmarks={filteredPageData.filter((n) => n.bookmark)}
 							deleteNote={deleteBookmark}
+							toggleNotesModal={toggleNotesModal}
 							getFormattedNoteDate={this.getFormattedNoteDate}
 							getNoteReference={this.getNoteReference}
 						/>
@@ -334,15 +337,19 @@ class MyNotes extends React.PureComponent {
 }
 
 MyNotes.propTypes = {
-	setActiveChild: PropTypes.func.isRequired,
-	setActiveNote: PropTypes.func.isRequired,
-	setActivePage: PropTypes.func.isRequired,
-	togglePageSelector: PropTypes.func.isRequired,
-	setPageSize: PropTypes.func.isRequired,
-	getNotes: PropTypes.func.isRequired,
-	getBookmarks: PropTypes.func.isRequired,
+	getNotes: PropTypes.func,
+	deleteNote: PropTypes.func,
+	setPageSize: PropTypes.func,
+	getBookmarks: PropTypes.func,
 	getHighlights: PropTypes.func,
+	setActiveNote: PropTypes.func,
+	setActivePage: PropTypes.func,
+	setActiveChild: PropTypes.func,
 	deleteBookmark: PropTypes.func,
+	updateHighlight: PropTypes.func,
+	deleteHighlights: PropTypes.func,
+	toggleNotesModal: PropTypes.func,
+	togglePageSelector: PropTypes.func,
 	listData: PropTypes.array.isRequired,
 	bookmarkList: PropTypes.array.isRequired,
 	highlights: PropTypes.array,
@@ -358,9 +365,6 @@ MyNotes.propTypes = {
 	totalPagesHighlight: PropTypes.number,
 	activePageHighlight: PropTypes.number,
 	pageSelectorState: PropTypes.bool.isRequired,
-	deleteHighlights: PropTypes.func,
-	updateHighlight: PropTypes.func,
-	deleteNote: PropTypes.func,
 };
 
 export default MyNotes;

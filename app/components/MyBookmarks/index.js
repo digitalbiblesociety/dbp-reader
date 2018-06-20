@@ -18,6 +18,7 @@ class MyBookmarks extends React.PureComponent {
 			bookmarks,
 			deleteNote,
 			getNoteReference,
+			toggleNotesModal,
 			getFormattedNoteDate,
 		} = this.props;
 		return bookmarks.map((listItem) => (
@@ -26,6 +27,7 @@ class MyBookmarks extends React.PureComponent {
 					to={`/${listItem.bible_id}/${listItem.book_id}/${listItem.chapter}/${
 						listItem.verse_start
 					}`}
+					onClick={toggleNotesModal}
 					role="button"
 					tabIndex={0}
 					className="list-item"
@@ -58,6 +60,7 @@ MyBookmarks.propTypes = {
 	bookmarks: PropTypes.array,
 	getFormattedNoteDate: PropTypes.func,
 	getNoteReference: PropTypes.func,
+	toggleNotesModal: PropTypes.func,
 	deleteNote: PropTypes.func,
 };
 
