@@ -329,9 +329,14 @@ class Text extends React.PureComponent {
 				note.childNodes[0].removeAttribute('href');
 			}
 
+			// note.ontouchend = (e) => {
+			//
+			// }
+
 			note.onclick = (e) => {
 				e.stopPropagation();
 				// console.log('clicked note');
+				// todo keep it from going outside the borders of the window
 				const rightEdge = window.innerWidth - 300;
 				const x = rightEdge < e.clientX ? rightEdge : e.clientX;
 
