@@ -44,6 +44,10 @@
 		max-height: 100%;
 		box-sizing: content-box;
 
+		&.menu-is-open {
+			-webkit-overflow-scrolling: initial;
+		}
+
 		&.rtl {
 			direction: rtl;
 

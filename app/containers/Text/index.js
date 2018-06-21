@@ -1592,7 +1592,12 @@ class Text extends React.PureComponent {
 	}
 
 	get classNameForMain() {
-		const { formattedSource, userSettings, textDirection } = this.props;
+		const {
+			formattedSource,
+			userSettings,
+			textDirection,
+			menuIsOpen,
+		} = this.props;
 		const readersMode = userSettings.getIn([
 			'toggleOptions',
 			'readersMode',
@@ -1611,12 +1616,13 @@ class Text extends React.PureComponent {
 			? 'justify'
 			: '';
 		const isRtl = textDirection === 'rtl' ? 'rtl' : '';
+		const menuOpenClass = menuIsOpen ? ' menu-is-open' : '';
 
 		// formattedSource.main && !readersMode && !oneVersePerLine ? '' : `chapter ${justifiedClass}`
 
 		return formattedSource.main && !readersMode && !oneVersePerLine
-			? `${isRtl}`
-			: `chapter ${justifiedClass} ${isRtl}`;
+			? `${isRtl}${menuOpenClass}`
+			: `chapter ${justifiedClass} ${isRtl}${menuOpenClass}`;
 	}
 
 	render() {
