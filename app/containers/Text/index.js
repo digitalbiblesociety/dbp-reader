@@ -1478,6 +1478,7 @@ class Text extends React.PureComponent {
 	openFootnote = ({ id, coords }) => {
 		this.setState({
 			footnoteState: true,
+			contextMenuState: false,
 			footnotePortal: {
 				message: this.props.formattedSource.footnotes[id],
 				closeFootnote: this.closeFootnote,
