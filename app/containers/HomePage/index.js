@@ -839,7 +839,6 @@ class HomePage extends React.PureComponent {
 	}
 
 	handleScrolling = () => {
-		// console.log('this.scrollTicking', this.scrollTicking);
 		// Only hides the header/footer if all of the menus are closed
 		if (
 			!this.scrollTicking &&

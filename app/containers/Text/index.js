@@ -64,23 +64,32 @@ class Text extends React.PureComponent {
 			this.setEventHandlersForFootnotes(this.formatHighlight);
 			this.setEventHandlersForFormattedVerses(this.formatHighlight);
 		}
+
+		// if (this.main) {
+		// 	this.main.addEventListener('scroll', this.handleScrollOnMain, true);
+		// }
 	}
 
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.formattedSource.main !== this.props.formattedSource.main) {
-			this.setState({ footnoteState: false, activeVerseInfo: {} });
+			this.setState({ footnoteState: false, activeVerseInfo: { verse: 0 } });
+		}
+		if (!isEqual(nextProps.text, this.props.text)) {
+			this.setState({ activeVerseInfo: { verse: 0 } });
 		}
 	}
 
 	componentDidUpdate(prevProps, prevState) {
-		// Todo: I think the issue with the page refresh is due to the initial values in redux
-		// Todo: There is an issue with the event listeners being removed once a new note is added
 		// console.log(this.format, this.formatHighlight);
 		// if (Object.keys(differenceObject(this.state, prevState)).length || Object.keys(differenceObject(this.props, prevProps)).length) {
 		// 	console.log('component did update props difference: \n', differenceObject(prevProps, this.props));
 		// 	console.log('component did update state difference: \n', differenceObject(this.state, prevState));
 		// }
 		// console.log('updating---------------------------------------------');
+		// if (this.main) {
+		// 	this.main.removeEventListener('scroll', this.handleScrollOnMain, true);
+		// 	this.main.addEventListener('scroll', this.handleScrollOnMain, true);
+		// }
 
 		if (
 			this.main &&
@@ -210,6 +219,14 @@ class Text extends React.PureComponent {
 		}
 	}
 
+	// componentWillUnmount() {
+	// 	if (this.main) {
+	// 		console.log('removed scroll listener');
+	//
+	// 		this.main.removeEventListener('scroll', this.handleScrollOnMain, true);
+	// 	}
+	// }
+
 	setEventHandlersForFormattedVerses = (ref) => {
 		// Set mousedown and mouseup events on verse elements
 		try {
@@ -229,6 +246,7 @@ class Text extends React.PureComponent {
 
 					this.handleMouseUp(e);
 				};
+				verse.onclick = () => {};
 			});
 		} catch (err) {
 			if (process.env.NODE_ENV === 'development') {
@@ -634,6 +652,7 @@ class Text extends React.PureComponent {
 								<span
 									onMouseUp={this.handleMouseUp}
 									onMouseDown={this.getFirstVerse}
+									onClick={this.handleHighlightClick}
 									verseid={verse.verse_start}
 									key={verse.verse_start}
 									dangerouslySetInnerHTML={{ __html: verse.verse_text }}
@@ -649,6 +668,7 @@ class Text extends React.PureComponent {
 								<span
 									onMouseUp={this.handleMouseUp}
 									onMouseDown={this.getFirstVerse}
+									onClick={this.handleHighlightClick}
 									verseid={verse.verse_start}
 									key={verse.verse_start}
 								>
@@ -669,6 +689,7 @@ class Text extends React.PureComponent {
 						<span
 							onMouseUp={this.handleMouseUp}
 							onMouseDown={this.getFirstVerse}
+							onClick={this.handleHighlightClick}
 							verseid={verse.verse_start}
 							key={verse.verse_start}
 						>
@@ -693,6 +714,7 @@ class Text extends React.PureComponent {
 						<span
 							onMouseUp={this.handleMouseUp}
 							onMouseDown={this.getFirstVerse}
+							onClick={this.handleHighlightClick}
 							verseid={verse.verse_start}
 							key={verse.verse_start}
 						>
@@ -825,6 +847,12 @@ class Text extends React.PureComponent {
 
 		return textComponents;
 	}
+
+	handleScrollOnMain = () => {
+		if (this.state.contextMenuState) {
+			this.setState({ contextMenuState: false, activeVerseInfo: { verse: 0 } });
+		}
+	};
 
 	handleHighlightClick = () => {
 		// Unless there is a click event the mouseup and mousedown events won't fire for mobile devices
@@ -1251,31 +1279,9 @@ class Text extends React.PureComponent {
 					])
 				) {
 					// Issue with getting the correct parent node
-					// console.log('starting node', node);
-					// console.log('first verse', firstVerse);
 					node = getFormattedParentVerseNumber(node, firstVerse);
-					// const testNum = getTextInSelectedNodes({
-					// 	node,
-					// 	firstVerse,
-					// 	lastVerse,
-					// 	book: activeBookId,
-					// 	chapter,
-					// 	refNode: this.formatHighlight || this.format,
-					// }) - (offset) - (fLength - focusOffset);
-					// console.log('testNum', testNum);
-					// console.log('(offset)', (offset));
-					// console.log('(fLength - focusOffset)', (fLength - focusOffset));
 
-					// console.log('window.getSelection().toString().length', window.getSelection().toString().length);
-
-					// console.log('verse node', node.attributes.class.value.slice(0, 1) === 'q');
 					// At this point "node" is the first verse
-					// console.log('node.textContent', node);
-					// console.log(anchorOffset);
-					// console.log(anchorText);
-					// console.log('index of anchor text within text content', anchorText);
-					// console.log('built text is : ', getClosestParent(this.formatHighlight || this.format, firstVerse, chapter, activeBookId));
-					// console.log('built text equals node text', getClosestParent(this.formatHighlight || this.format, firstVerse, chapter, activeBookId).indexOf(anchorText.trim()));
 					const nodeClassValue =
 						(node.attributes &&
 							node.attributes.class &&
@@ -1299,17 +1305,8 @@ class Text extends React.PureComponent {
 					}
 					// Need to subtract by 1 since the anchor offset isn't 0 based
 					highlightStart = node.textContent.indexOf(anchorText) + anchorOffset;
-					// getClosestParent(this.formatHighlight || this.format, firstVerse, chapter, this.props.activeBookId);
-					// console.log('anchor text', anchorText);
-					// console.log('focusText', focusText);
-					// console.log(node.textContent.indexOf(anchorText));
-
 					// I think this can stay the same as formatted, it could be made shorter potentially
 					// need to remove all line breaks and note characters
-					// console.log('selectedText.match(/\\n/g)', selectedText.match(/\n/g));
-					// console.log('selectedText.length', selectedText);
-					// console.log('selectedText.replace(/[\\r\\n*]/g, "").length', selectedText.replace(/[\r\n*✝]/g, '').length);
-					// console.log('dist', dist);
 
 					highlightedWords =
 						selectedText.replace(/[\r\n*✝]/g, '').length - dist;
@@ -1482,12 +1479,19 @@ class Text extends React.PureComponent {
 
 	closeFootnote = () => this.setState({ footnoteState: false });
 
-	closeContextMenu = () => this.setState({ contextMenuState: false });
+	closeContextMenu = () =>
+		this.setState({ contextMenuState: false, activeVerseInfo: { verse: 0 } });
 
 	selectedWholeVerse = (verse, isPlain, clientX, clientY) => {
 		// console.log('verse: ', verse, '\nisPlain: ', isPlain);
-		const rightEdge = window.innerWidth - 250;
-		const bottomEdge = window.innerHeight - 297;
+		const rightEdge =
+			window.innerWidth < 500
+				? window.innerWidth - 295
+				: window.innerWidth - 250;
+		const bottomEdge =
+			window.innerHeight < 900
+				? window.innerHeight - 317
+				: window.innerHeight - 297;
 		const x = rightEdge < clientX ? rightEdge : clientX;
 		const y = bottomEdge < clientY ? bottomEdge : clientY;
 
@@ -1685,7 +1689,11 @@ class Text extends React.PureComponent {
 					) : null}
 				</div>
 				<div className={'main-wrapper'}>
-					<main ref={this.setMainRef} className={this.classNameForMain}>
+					<main
+						ref={this.setMainRef}
+						className={this.classNameForMain}
+						onScroll={this.handleScrollOnMain}
+					>
 						{(formattedSource.main && !readersMode && !oneVersePerLine) ||
 						text.length === 0 ||
 						(!readersMode && !oneVersePerLine) ? null : (
@@ -1735,7 +1743,6 @@ class Text extends React.PureComponent {
 						closeContextMenu={this.closeContextMenu}
 						toggleNotesModal={toggleNotesModal}
 						notesActive={notesActive}
-						parentNode={this.main}
 						coordinates={coords}
 					/>
 				) : null}
