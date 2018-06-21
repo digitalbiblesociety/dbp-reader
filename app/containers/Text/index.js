@@ -101,28 +101,41 @@ class Text extends React.PureComponent {
 			// console.log('this.state.activeVerseInfo', this.state.activeVerseInfo);
 			// Add the highlight to the new active verse
 			const verse = this.state.activeVerseInfo.verse;
-			const verseNode = this.main.querySelector(
-				`[data-id=${this.props.activeBookId}${
-					this.props.activeChapter
-				}_${verse}]`,
-			);
-			if (verseNode) {
-				verseNode.className = `${verseNode.className} active-verse`;
+			const verseNodes = [
+				...this.main.querySelectorAll(
+					`[data-id=${this.props.activeBookId}${
+						this.props.activeChapter
+					}_${verse}]`,
+				),
+			];
+			if (verseNodes.length) {
+				// console.log('adding class');
+				// console.log('verseNodes', verseNodes);
+				verseNodes.forEach(
+					(n) => (n.className = `${n.className} active-verse`), // eslint-disable-line no-param-reassign
+				); // eslint-disable-line no-param-reassign
+				// verseNode.className = `${verseNode.className} active-verse`;
 				// console.log('should update the color of the active verse');
 			}
 			// Remove the highlight from the old active verse
 			const prevVerse = prevState.activeVerseInfo.verse;
 			// console.log('prevState.activeVerseInfo', prevState.activeVerseInfo);
-			const prevVerseNode = this.main.querySelector(
-				`[data-id=${this.props.activeBookId}${
-					this.props.activeChapter
-				}_${prevVerse}]`,
-			);
-			if (prevVerseNode) {
+			const prevVerseNodes = [
+				...this.main.querySelectorAll(
+					`[data-id=${this.props.activeBookId}${
+						this.props.activeChapter
+					}_${prevVerse}]`,
+				),
+			];
+			if (prevVerseNodes.length) {
 				// console.log('removing class from old active verse');
-				// console.log('prevVerseNode.className.slice(0 -13)', prevVerseNode.className.slice(0, -13));
+				// console.log('prevVerseNodes', prevVerseNodes);
 
-				prevVerseNode.className = prevVerseNode.className.slice(0, -13);
+				// console.log('prevVerseNodes.className.slice(0 -13)', prevVerseNodes.className.slice(0, -13));
+				prevVerseNodes.forEach(
+					(n) => (n.className = n.className.slice(0, -13)), // eslint-disable-line no-param-reassign
+				); // eslint-disable-line no-param-reassign
+				// prevVerseNodes.className = prevVerseNodes.className.slice(0, -13);
 			}
 		} else if (
 			this.main &&
@@ -133,16 +146,22 @@ class Text extends React.PureComponent {
 			// Remove the highlight from the old active verse
 			const prevVerse = prevState.activeVerseInfo.verse;
 			// console.log('prevState.activeVerseInfo', prevState.activeVerseInfo);
-			const prevVerseNode = this.main.querySelector(
-				`[data-id=${this.props.activeBookId}${
-					this.props.activeChapter
-				}_${prevVerse}]`,
-			);
-			if (prevVerseNode) {
+			const prevVerseNodes = [
+				...this.main.querySelectorAll(
+					`[data-id=${this.props.activeBookId}${
+						this.props.activeChapter
+					}_${prevVerse}]`,
+				),
+			];
+			if (prevVerseNodes.length) {
 				// console.log('removing class from old active verse');
-				// console.log('prevVerseNode.className.slice(0 -13)', prevVerseNode.className.slice(0, -13));
-
-				prevVerseNode.className = prevVerseNode.className.slice(0, -13);
+				// console.log('prevVerseNodes', prevVerseNodes);
+				// console.log('removing class from old active verse');
+				// console.log('prevVerseNodes.className.slice(0 -13)', prevVerseNodes.className.slice(0, -13));
+				prevVerseNodes.forEach(
+					(n) => (n.className = n.className.slice(0, -13)), // eslint-disable-line no-param-reassign
+				);
+				// prevVerseNodes.className = prevVerseNode.className.slice(0, -13);
 			}
 		}
 		// Logic below ensures that the proper event handlers are set on each footnote
@@ -310,9 +329,14 @@ class Text extends React.PureComponent {
 				note.childNodes[0].removeAttribute('href');
 			}
 
+			// note.ontouchend = (e) => {
+			//
+			// }
+
 			note.onclick = (e) => {
 				e.stopPropagation();
 				// console.log('clicked note');
+				// todo keep it from going outside the borders of the window
 				const rightEdge = window.innerWidth - 300;
 				const x = rightEdge < e.clientX ? rightEdge : e.clientX;
 
@@ -1044,13 +1068,22 @@ class Text extends React.PureComponent {
 						reference: this.getReference(verse, verse),
 					};
 				} else {
-					const highlightedWords = this.main
-						? this.main.querySelector(
-								`[data-id=${this.props.activeBookId}${
-									this.props.activeChapter
-								}_${verse}]`,
-						  ).textContent.length
-						: 0;
+					const verseElements = this.main
+						? [
+								...this.main.querySelectorAll(
+									`[data-id=${this.props.activeBookId}${
+										this.props.activeChapter
+									}_${verse}]`,
+								),
+						  ]
+						: [];
+					// console.log('verseElements', verseElements);
+					// console.log('verseElements.reduce((a, c) => a.concat(c.textContent), \'\')', verseElements.reduce((a, c) => a.concat(c.textContent), ''));
+
+					const highlightedWords = verseElements
+						.reduce((a, c) => a.concat(c.textContent), '')
+						.replace(/[\r\n*✝]/g, '').length;
+					// console.log('highlightedWords', highlightedWords);
 					highlightObject = {
 						book: this.props.activeBookId,
 						chapter: this.props.activeChapter,
@@ -1445,6 +1478,7 @@ class Text extends React.PureComponent {
 	openFootnote = ({ id, coords }) => {
 		this.setState({
 			footnoteState: true,
+			contextMenuState: false,
 			footnotePortal: {
 				message: this.props.formattedSource.footnotes[id],
 				closeFootnote: this.closeFootnote,
@@ -1592,7 +1626,12 @@ class Text extends React.PureComponent {
 	}
 
 	get classNameForMain() {
-		const { formattedSource, userSettings, textDirection } = this.props;
+		const {
+			formattedSource,
+			userSettings,
+			textDirection,
+			menuIsOpen,
+		} = this.props;
 		const readersMode = userSettings.getIn([
 			'toggleOptions',
 			'readersMode',
@@ -1611,12 +1650,13 @@ class Text extends React.PureComponent {
 			? 'justify'
 			: '';
 		const isRtl = textDirection === 'rtl' ? 'rtl' : '';
+		const menuOpenClass = menuIsOpen ? ' menu-is-open' : '';
 
 		// formattedSource.main && !readersMode && !oneVersePerLine ? '' : `chapter ${justifiedClass}`
 
 		return formattedSource.main && !readersMode && !oneVersePerLine
-			? `${isRtl}`
-			: `chapter ${justifiedClass} ${isRtl}`;
+			? `${isRtl}${menuOpenClass}`
+			: `chapter ${justifiedClass} ${isRtl}${menuOpenClass}`;
 	}
 
 	render() {

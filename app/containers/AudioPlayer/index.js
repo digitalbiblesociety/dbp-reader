@@ -12,12 +12,12 @@ import { compose } from 'redux';
 import { FormattedMessage } from 'react-intl';
 import isEqual from 'lodash/isEqual';
 import injectReducer from 'utils/injectReducer';
-import closeEventHoc from 'components/CloseEventHoc';
+// import closeEventHoc from 'components/CloseEventHoc';
 import SvgWrapper from 'components/SvgWrapper';
 import SpeedControl from 'components/SpeedControl';
 import AudioProgressBar from 'components/AudioProgressBar';
 import VolumeSlider from 'components/VolumeSlider';
-import AudioPlayerMenu from 'components/AudioPlayerMenu';
+// import AudioPlayerMenu from 'components/AudioPlayerMenu';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
 import makeSelectAudioPlayer, { selectHasAudio } from './selectors';
 import reducer from './reducer';
@@ -422,18 +422,6 @@ export class AudioPlayer extends React.Component {
 		return <SvgWrapper className={'icon'} fill="#fff" svgid="playback_2x" />;
 	}
 
-	get volumeControl() {
-		return closeEventHoc(VolumeSlider, this.closeModals);
-	}
-
-	get speedControl() {
-		return closeEventHoc(SpeedControl, this.closeModals);
-	}
-
-	get playerMenu() {
-		return closeEventHoc(AudioPlayerMenu, this.closeModals);
-	}
-
 	nextIcon = (
 		<div
 			role={'button'}
@@ -576,10 +564,18 @@ export class AudioPlayer extends React.Component {
 								className={
 									this.state.volumeSliderState ? 'item active' : 'item'
 								}
+								onTouchEnd={(e) => {
+									e.preventDefault();
+									if (!this.state.volumeSliderState) {
+										this.setVolumeSliderState(true);
+									}
+									this.setSpeedControlState(false);
+									this.setElipsisState(false);
+								}}
 								onClick={() => {
-									this.state.volumeSliderState
-										? this.setVolumeSliderState(false)
-										: this.setVolumeSliderState(true);
+									if (!this.state.volumeSliderState) {
+										this.setVolumeSliderState(true);
+									}
 									this.setSpeedControlState(false);
 									this.setElipsisState(false);
 								}}
@@ -603,10 +599,18 @@ export class AudioPlayer extends React.Component {
 								className={
 									this.state.speedControlState ? 'item active' : 'item'
 								}
+								onTouchEnd={(e) => {
+									e.preventDefault();
+									if (!this.state.speedControlState) {
+										this.setSpeedControlState(true);
+									}
+									this.setElipsisState(false);
+									this.setVolumeSliderState(false);
+								}}
 								onClick={() => {
-									this.state.speedControlState
-										? this.setSpeedControlState(false)
-										: this.setSpeedControlState(true);
+									if (!this.state.speedControlState) {
+										this.setSpeedControlState(true);
+									}
 									this.setElipsisState(false);
 									this.setVolumeSliderState(false);
 								}}

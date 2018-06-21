@@ -838,6 +838,10 @@ class HomePage extends React.PureComponent {
 		);
 	}
 
+	get isAtTop() {
+		return this.scrollTop < 5;
+	}
+
 	handleScrolling = () => {
 		// Only hides the header/footer if all of the menus are closed
 		if (
@@ -861,7 +865,6 @@ class HomePage extends React.PureComponent {
 		this.main = document.getElementsByTagName('main')[0];
 		if (!this.outOfBounds) {
 			// console.log('this.state.isScrollingDown', this.state.isScrollingDown);
-
 			if (
 				this.scrollTop >= this.previousScrollTop &&
 				!this.state.isScrollingDown
@@ -886,6 +889,11 @@ class HomePage extends React.PureComponent {
 				this.previousScrollTop = this.scrollTop;
 				this.scrollTicking = false;
 			}
+		} else if (this.isAtTop) {
+			this.setState({ isScrollingDown: false }, () => {
+				this.previousScrollTop = this.scrollTop;
+				this.scrollTicking = false;
+			});
 		} else {
 			this.previousScrollTop = this.scrollTop;
 			this.scrollTicking = false;

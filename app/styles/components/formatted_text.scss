@@ -226,7 +226,7 @@ margin: 1.5em 0 0.5em 0;
 .note .key,
 .cf .key {
 	vertical-align: top;
-	font-size: 60%;
+	font-size: 70%;
 	//font-weight: normal;
 	//font-style: normal;
 	color: #7491ce;
@@ -236,6 +236,12 @@ margin: 1.5em 0 0.5em 0;
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
+}
+
+@media screen and (max-width: 500px) {
+	.note .key {
+		font-size: 100%;
+	}
 }
 
 .chapter .note .key:hover,

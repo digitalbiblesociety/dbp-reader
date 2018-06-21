@@ -15,6 +15,7 @@ class CloseMenuFunctions {
 
 	handleTouchend = (event) => {
 		if (event.changedTouches.length === 1) {
+			// event.preventDefault();
 			// console.log('target', event.target);
 			// If a touch was outside the menu and there was only one touch close it
 			const singleTouch = event.changedTouches[0];
@@ -75,24 +76,13 @@ class CloseMenuFunctions {
 				event.clientY >= bounds.top &&
 				event.clientY <= bounds.top + bounds.height;
 		}
-		// console.log(event);
-		// console.log('event width', event.x, 'vs', event.clientX);
-		// console.log('event height', event.y, 'vs', event.clientY);
-		// console.log('bounds width', bounds.left);
-		// console.log('bounds height', bounds.top);
-		// console.log('click location is inside width and height', insideWidth, insideHeight);
-		// console.log('!(insideWidth && insideHeight)', !(insideWidth && insideHeight));
-		//
-		// console.log('this.ref', this.ref);
-		// console.log('event.target', event.target);
-		// console.log('this.ref.contains(event.target)', this.ref.contains(event.target));
-		// May need !this.ref.contains(event.target), testing the removal of it for IE...
 		if (
 			this.ref &&
 			!(insideWidth && insideHeight) &&
 			!this.ref.contains(event.target)
 		) {
 			// console.log('Closing menu bc of outside click');
+			// alert('closing bc outside click');
 			this.closeFunction(this.onCloseOptions);
 			document.removeEventListener('click', this.handleClickOutside);
 		}
