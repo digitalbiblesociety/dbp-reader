@@ -68,13 +68,14 @@ class Text extends React.PureComponent {
 
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.formattedSource.main !== this.props.formattedSource.main) {
-			this.setState({ footnoteState: false, activeVerseInfo: {} });
+			this.setState({ footnoteState: false, activeVerseInfo: { verse: 0 } });
+		}
+		if (!isEqual(nextProps.text, this.props.text)) {
+			this.setState({ activeVerseInfo: { verse: 0 } });
 		}
 	}
 
 	componentDidUpdate(prevProps, prevState) {
-		// Todo: I think the issue with the page refresh is due to the initial values in redux
-		// Todo: There is an issue with the event listeners being removed once a new note is added
 		// console.log(this.format, this.formatHighlight);
 		// if (Object.keys(differenceObject(this.state, prevState)).length || Object.keys(differenceObject(this.props, prevProps)).length) {
 		// 	console.log('component did update props difference: \n', differenceObject(prevProps, this.props));
@@ -229,6 +230,7 @@ class Text extends React.PureComponent {
 
 					this.handleMouseUp(e);
 				};
+				verse.onclick = () => {};
 			});
 		} catch (err) {
 			if (process.env.NODE_ENV === 'development') {
@@ -634,6 +636,7 @@ class Text extends React.PureComponent {
 								<span
 									onMouseUp={this.handleMouseUp}
 									onMouseDown={this.getFirstVerse}
+									onClick={this.handleHighlightClick}
 									verseid={verse.verse_start}
 									key={verse.verse_start}
 									dangerouslySetInnerHTML={{ __html: verse.verse_text }}
@@ -649,6 +652,7 @@ class Text extends React.PureComponent {
 								<span
 									onMouseUp={this.handleMouseUp}
 									onMouseDown={this.getFirstVerse}
+									onClick={this.handleHighlightClick}
 									verseid={verse.verse_start}
 									key={verse.verse_start}
 								>
@@ -669,6 +673,7 @@ class Text extends React.PureComponent {
 						<span
 							onMouseUp={this.handleMouseUp}
 							onMouseDown={this.getFirstVerse}
+							onClick={this.handleHighlightClick}
 							verseid={verse.verse_start}
 							key={verse.verse_start}
 						>
@@ -693,6 +698,7 @@ class Text extends React.PureComponent {
 						<span
 							onMouseUp={this.handleMouseUp}
 							onMouseDown={this.getFirstVerse}
+							onClick={this.handleHighlightClick}
 							verseid={verse.verse_start}
 							key={verse.verse_start}
 						>
@@ -1482,7 +1488,8 @@ class Text extends React.PureComponent {
 
 	closeFootnote = () => this.setState({ footnoteState: false });
 
-	closeContextMenu = () => this.setState({ contextMenuState: false });
+	closeContextMenu = () =>
+		this.setState({ contextMenuState: false, activeVerseInfo: { verse: 0 } });
 
 	selectedWholeVerse = (verse, isPlain, clientX, clientY) => {
 		// console.log('verse: ', verse, '\nisPlain: ', isPlain);
