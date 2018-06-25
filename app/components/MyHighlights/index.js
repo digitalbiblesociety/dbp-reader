@@ -8,36 +8,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import SvgWrapper from 'components/SvgWrapper';
-import ColorPicker from 'components/ColorPicker';
+// import ColorPicker from 'components/ColorPicker';
 // import styled from 'styled-components';
 
 class MyHighlights extends React.PureComponent {
 	// eslint-disable-line react/prefer-stateless-function
 	state = {
-		colorPickerState: false,
 		selectedId: '',
 		selectedColor: '',
-	};
-
-	handlePickedColor = ({ color }) => {
-		if (color !== this.state.selectedColor) {
-			this.props.updateHighlight({ color, id: this.state.selectedId });
-		}
-
-		this.setState({
-			colorPickerState: false,
-			selectedId: '',
-			selectedColor: '',
-		});
-	};
-
-	startUpdateProcess = ({ id, color }) => {
-		// console.log('start updating', id, color);
-		this.setState({
-			colorPickerState: true,
-			selectedId: id,
-			selectedColor: color,
-		});
 	};
 
 	highlightIcon(color) {
@@ -55,15 +33,12 @@ class MyHighlights extends React.PureComponent {
 			getReference,
 			deleteHighlights,
 			toggleNotesModal,
+			startUpdateProcess,
 		} = this.props;
-		const { colorPickerState } = this.state;
 		// console.log('colorPickerState', colorPickerState);
 
 		return (
 			<div>
-				{colorPickerState ? (
-					<ColorPicker handlePickedColor={this.handlePickedColor} />
-				) : null}
 				{highlights.map((highlight) => (
 					<div
 						key={`${highlight.id}_${highlight.highlighted_color}`}
@@ -88,7 +63,7 @@ class MyHighlights extends React.PureComponent {
 							tabIndex={0}
 							role={'button'}
 							onClick={() =>
-								this.startUpdateProcess({
+								startUpdateProcess({
 									id: highlight.id,
 									color: highlight.highlighted_color,
 								})
@@ -116,8 +91,9 @@ MyHighlights.propTypes = {
 	highlights: PropTypes.array,
 	getReference: PropTypes.func,
 	deleteHighlights: PropTypes.func,
-	updateHighlight: PropTypes.func,
+	// updateHighlight: PropTypes.func,
 	toggleNotesModal: PropTypes.func,
+	startUpdateProcess: PropTypes.func,
 };
 
 export default MyHighlights;

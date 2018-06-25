@@ -13,12 +13,14 @@ import Pagination from 'components/Pagination';
 import PageSizeSelector from 'components/PageSizeSelector';
 import MyHighlights from 'components/MyHighlights';
 import MyBookmarks from 'components/MyBookmarks';
+import ColorPicker from '../ColorPicker';
 // import styled from 'styled-components';
 class MyNotes extends React.PureComponent {
 	// eslint-disable-line react/prefer-stateless-function
 	state = {
 		// Need to reset this once user goes from notes to bookmarks
 		filterText: '',
+		colorPickerState: false,
 	};
 	// Need this for when a user has edited a note and come back here
 	componentDidMount() {
@@ -192,6 +194,27 @@ class MyNotes extends React.PureComponent {
 			page: 1,
 		});
 
+	handlePickedColor = ({ color }) => {
+		if (color !== this.state.selectedColor) {
+			this.props.updateHighlight({ color, id: this.state.selectedId });
+		}
+
+		this.setState({
+			colorPickerState: false,
+			selectedId: '',
+			selectedColor: '',
+		});
+	};
+
+	startUpdateProcess = ({ id, color }) => {
+		// console.log('start updating', id, color);
+		this.setState({
+			colorPickerState: true,
+			selectedId: id,
+			selectedColor: color,
+		});
+	};
+
 	get pagesize() {
 		const type = this.props.sectionType;
 		if (type === 'notes') {
@@ -233,9 +256,9 @@ class MyNotes extends React.PureComponent {
 			deleteHighlights,
 			deleteNote,
 			deleteBookmark,
-			updateHighlight,
 			toggleNotesModal,
 		} = this.props;
+		const { colorPickerState } = this.state;
 		let filteredPageData = [];
 
 		if (sectionType === 'highlights') {
@@ -258,6 +281,9 @@ class MyNotes extends React.PureComponent {
 						/>
 					</span>
 				</div>
+				{sectionType === 'highlights' && colorPickerState ? (
+					<ColorPicker handlePickedColor={this.handlePickedColor} />
+				) : null}
 				<section className="note-list">
 					{sectionType === 'notes'
 						? filteredPageData.map((listItem) => (
@@ -305,7 +331,7 @@ class MyNotes extends React.PureComponent {
 							getReference={this.getHighlightReference}
 							toggleNotesModal={toggleNotesModal}
 							deleteHighlights={deleteHighlights}
-							updateHighlight={updateHighlight}
+							startUpdateProcess={this.startUpdateProcess}
 						/>
 					) : null}
 					{sectionType === 'bookmarks' ? (
