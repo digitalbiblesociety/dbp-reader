@@ -168,6 +168,23 @@ export function* getLanguages() {
 		// const languages = response.data.filter((language) => language.bibles > 0).sort((a, b) => a.name > b.name);
 		const languages = response.data;
 		languages.unshift({ name: 'ANY', iso: 'ANY' });
+
+		/* Update to languages call to sort them client side */
+		// const sortedLanguages = Object.entries(languages)
+		// 	.sort((a, b) => {
+		// 		if (a[1][0] > b[1][0]) return 1;
+		// 		if (a[1][0] < b[1][0]) return -1;
+		// 		return 0;
+		// 	});
+		/* May need something like the code below instead
+			.map(l => ({ ...l, name: { [l.iso]: [l.name] } }))
+			.sort((a, b) => {
+					if (a.name[a.iso][0] > b.name[b.iso][0]) return 1
+					if (a.name[a.iso][0] < b.name[b.iso][0]) return -1
+					return 0
+			})
+		* */
+		// yield put(setLanguages({ languages: sortedLanguages });
 		// console.log('languages', languages);
 		yield put(setLanguages({ languages }));
 		yield put({ type: CLEAR_ERROR_GETTING_LANGUAGES });
