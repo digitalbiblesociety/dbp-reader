@@ -499,6 +499,7 @@ export class AudioPlayer extends React.Component {
 				<div
 					role={'button'}
 					tabIndex={0}
+					name={'Audio player toggle'}
 					className={
 						audioPlayerState && hasAudio && source !== ''
 							? `audioplayer-handle${isScrollingDown ? ' scrolled-down' : ''}`
