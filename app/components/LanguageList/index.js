@@ -32,7 +32,15 @@ class LanguageList extends React.PureComponent {
 		// console.log('match-sorter languages', matchSorter(languages, filterText, { keys: ['name', 'iso'] }));
 		const filteredLanguages = filterText
 			? matchSorter(languages, filterText, {
-					keys: ['name', 'iso', 'alt_names'],
+					threshold: matchSorter.rankings.ACRONYM,
+					keys: [
+						'name',
+						'iso',
+						{
+							maxRanking: matchSorter.rankings.STARTS_WITH,
+							key: 'alt_names',
+						},
+					],
 			  })
 			: languages;
 
