@@ -1,4 +1,4 @@
-import { takeLatest, call, put } from 'redux-saga/effects';
+import { takeLatest, call, fork, put } from 'redux-saga/effects';
 import territoryCodes from 'utils/territoryCodes.json';
 // import languageList from 'utils/languagesWithResources.json';
 import request from 'utils/request';
@@ -167,10 +167,28 @@ export function* getLanguages() {
 		// Temporary fix until the api returns the list pre-sorted
 		// const languages = response.data.filter((language) => language.bibles > 0).sort((a, b) => a.name > b.name);
 		const languages = response.data;
-		languages.unshift({ name: 'ANY', iso: 'ANY' });
+		languages.unshift({ name: 'ANY', iso: 'ANY', alt_names: [] });
+
+		/* Update to languages call to sort them client side */
+		// const sortedLanguages = Object.entries(languages)
+		// 	.sort((a, b) => {
+		// 		if (a[1][0] > b[1][0]) return 1;
+		// 		if (a[1][0] < b[1][0]) return -1;
+		// 		return 0;
+		// 	});
+		/* May need something like the code below instead
+			.map(l => ({ ...l, name: { [l.iso]: [l.name] } }))
+			.sort((a, b) => {
+					if (a.name[a.iso][0] > b.name[b.iso][0]) return 1
+					if (a.name[a.iso][0] < b.name[b.iso][0]) return -1
+					return 0
+			})
+		* */
+		// yield put(setLanguages({ languages: sortedLanguages });
 		// console.log('languages', languages);
 		yield put(setLanguages({ languages }));
 		yield put({ type: CLEAR_ERROR_GETTING_LANGUAGES });
+		yield fork(getLanguageAltNames);
 		// yield put(setLanguages({ languages: response.data }));
 	} catch (error) {
 		if (process.env.NODE_ENV === 'development') {
@@ -184,6 +202,51 @@ export function* getLanguages() {
 		}
 
 		yield put({ type: ERROR_GETTING_LANGUAGES });
+	}
+}
+
+function sortLanguagesByVname(a, b) {
+	if (a.vernacular_name > b.vernacular_name) return 1;
+	if (a.vernacular_name < b.vernacular_name) return -1;
+	return 0;
+}
+// Second call for the more robust language data
+export function* getLanguageAltNames() {
+	const requestUrl = `${process.env.BASE_API_ROUTE}/languages?key=${
+		process.env.DBP_API_KEY
+	}&v=4&bucket_id=${
+		process.env.DBP_BUCKET_ID
+	}&has_filesets=true&include_alt_names=true`;
+	try {
+		const response = yield call(request, requestUrl);
+		const languages = response.data
+			.map((l) => {
+				if (l.alt_names) {
+					const altSet = new Set(
+						Object.values(l.alt_names).reduce((a, c) => [...a, ...c], []),
+					);
+					return {
+						...l,
+						vernacular_name: l.alt_names[l.iso]
+							? l.alt_names[l.iso][0]
+							: l.name,
+						alt_names: Array.from(altSet),
+					};
+				}
+				return {
+					...l,
+					alt_names: [],
+					vernacular_name: l.name,
+				};
+			})
+			.sort(sortLanguagesByVname);
+		languages.unshift({ name: 'ANY', iso: 'ANY', alt_names: [] });
+		// console.log('Done getting the alt names');
+		yield put(setLanguages({ languages }));
+	} catch (err) {
+		if (process.env.NODE_ENV === 'development') {
+			console.error(err); // eslint-disable-line no-console
+		}
 	}
 }
 

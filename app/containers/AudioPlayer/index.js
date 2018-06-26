@@ -191,7 +191,9 @@ export class AudioPlayer extends React.Component {
 				currentTime: time,
 			},
 			() => {
+				// alert(`Setting current time is: ${this.audioRef.currentTime}`);
 				this.audioRef.currentTime = time;
+				// alert(`new time is: ${this.audioRef.currentTime}`);
 			},
 		);
 	};
@@ -258,20 +260,23 @@ export class AudioPlayer extends React.Component {
 	};
 
 	timeUpdateEventListener = (e) => {
+		// alert(`time at update: ${e.target.currentTime}`)
 		this.setState({
 			currentTime: e.target.currentTime,
 		});
 	};
 
 	seekingEventListener = (e) => {
-		// console.log('player is seeking', e);
+		// console.log('player is seeking', e.target.currentTime);
+		// alert(`time in seeking: ${e.target.currentTime}`)
 		this.setState({
 			currentTime: e.target.currentTime,
 		});
 	};
 
 	seekedEventListener = (e) => {
-		// console.log('player is done seeking', e);
+		// console.log('player is done seeking', e.target.currentTime);
+		// alert(`time in seeked: ${e.target.currentTime}`)
 		this.setState({
 			currentTime: e.target.currentTime,
 		});
@@ -336,9 +341,15 @@ export class AudioPlayer extends React.Component {
 
 	playAudio = () => {
 		// alert(`audio ref\n ${this.audioRef}`);
-		// alert(`play function\n ${this.audioRef.play}`);
+		// alert(`time in play: ${this.audioRef.currentTime}`);
+		// alert(`Current time in state: ${this.state.currentTime}\nCurrent time in audio: ${this.audioRef.currentTime}`);
 		this.audioRef.play().then(() => {
 			// alert('audio should be playing now');
+			// alert(`time in play callback: ${this.audioRef.currentTime}`);
+			// alert(`Current time in state: ${this.state.currentTime}\nCurrent time in audio: ${this.audioRef.currentTime}`);
+			if (this.state.currentTime !== this.audioRef.currentTime) {
+				this.audioRef.currentTime = this.state.currentTime;
+			}
 			this.setState({
 				playing: true,
 			});
@@ -488,6 +499,7 @@ export class AudioPlayer extends React.Component {
 				<div
 					role={'button'}
 					tabIndex={0}
+					name={'Audio player toggle'}
 					className={
 						audioPlayerState && hasAudio && source !== ''
 							? `audioplayer-handle${isScrollingDown ? ' scrolled-down' : ''}`

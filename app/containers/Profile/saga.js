@@ -19,6 +19,7 @@ import {
 	RESET_PASSWORD_SUCCESS,
 	RESET_PASSWORD_ERROR,
 	UPDATE_USER_INFORMATION,
+	DELETE_USER_SUCCESS,
 } from './constants';
 
 export function* sendSignUpForm({
@@ -331,7 +332,7 @@ export function* deleteUser({ userId }) {
 		const response = yield call(request, requestUrl, options);
 
 		// console.log(response);
-		yield put({ type: 'DELETE_USER_SUCCESS', response });
+		yield put({ type: DELETE_USER_SUCCESS, response });
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error(err); // eslint-disable-line no-console
