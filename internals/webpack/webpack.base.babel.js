@@ -70,16 +70,16 @@ module.exports = (options) => ({
 				],
 			},
 			{
-				test: /manifest\.json/,
-				use: 'file-loader',
-			},
-			{
 				test: /\.html$/,
 				use: 'html-loader',
 			},
 			{
-				test: /\.json$/,
+				test: /(^manifest)\.json$/,
 				use: 'json-loader',
+			},
+			{
+				test: /manifest\.json/,
+				use: 'file-loader',
 			},
 			{
 				test: /\.(mp4|webm)$/,

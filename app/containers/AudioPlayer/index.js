@@ -12,12 +12,12 @@ import { compose } from 'redux';
 import { FormattedMessage } from 'react-intl';
 import isEqual from 'lodash/isEqual';
 import injectReducer from 'utils/injectReducer';
-import closeEventHoc from 'components/CloseEventHoc';
+// import closeEventHoc from 'components/CloseEventHoc';
 import SvgWrapper from 'components/SvgWrapper';
 import SpeedControl from 'components/SpeedControl';
 import AudioProgressBar from 'components/AudioProgressBar';
 import VolumeSlider from 'components/VolumeSlider';
-import AudioPlayerMenu from 'components/AudioPlayerMenu';
+// import AudioPlayerMenu from 'components/AudioPlayerMenu';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
 import makeSelectAudioPlayer, { selectHasAudio } from './selectors';
 import reducer from './reducer';
@@ -49,24 +49,21 @@ export class AudioPlayer extends React.Component {
 	}
 
 	componentDidMount() {
-		// console.log('audio paths', this.props.audioPaths);
-		// console.log('first track', this.state.nextTrack);
-		// if (this.props.prevAudioSource) {
-		// console.log('prevAudioSource in will mount', this.props.prevAudioSource);
-
-		// this.preLoadPath(this.props.prevAudioSource);
-		// }
-		// if (this.props.nextAudioSource) {
-		// console.log('nextAudioSource in will mount', this.props.nextAudioSource);
-		// this.preLoadPath(this.props.nextAudioSource);
-		// }
 		if (this.props.audioPaths.length) {
 			this.props.audioPaths.forEach((path) => this.preLoadPath(path));
 		}
 		// If auto play is enabled I need to start the player
 		if (this.props.autoPlay) {
 			// console.log('component mounted and auto play was true');
-			this.audioRef.addEventListener('canplay', this.autoPlayListener);
+			if (
+				navigator &&
+				navigator.userAgent &&
+				/iPhone|iPod|iPad/i.test(navigator.userAgent)
+			) {
+				this.audioRef.addEventListener('loadedmetadata', this.autoPlayListener);
+			} else {
+				this.audioRef.addEventListener('canplay', this.autoPlayListener);
+			}
 		}
 		this.audioRef.playbackRate = this.state.currentSpeed;
 		// Add all the event listeners I need for the audio player
@@ -83,7 +80,7 @@ export class AudioPlayer extends React.Component {
 
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.audioSource !== this.props.audioSource) {
-			// this.pauseVideo();
+			// this.pauseAudio();
 			if (nextProps.audioSource) {
 				this.setState({ playing: false });
 			} else if (this.props.audioPlayerState && !nextProps.audioSource) {
@@ -93,13 +90,35 @@ export class AudioPlayer extends React.Component {
 			}
 			if (nextProps.autoPlay) {
 				// console.log('source changed and auto play is true');
-				this.audioRef.addEventListener('canplay', this.autoPlayListener);
+				if (
+					navigator &&
+					navigator.userAgent &&
+					/iPhone|iPod|iPad/i.test(navigator.userAgent)
+				) {
+					this.audioRef.addEventListener(
+						'loadedmetadata',
+						this.autoPlayListener,
+					);
+				} else {
+					this.audioRef.addEventListener('canplay', this.autoPlayListener);
+				}
 			}
 		}
 
 		if (!nextProps.autoPlay) {
 			// console.log('auto play is now false');
-			this.audioRef.removeEventListener('canplay', this.autoPlayListener);
+			if (
+				navigator &&
+				navigator.userAgent &&
+				/iPhone|iPod|iPad/i.test(navigator.userAgent)
+			) {
+				this.audioRef.removeEventListener(
+					'loadedmetadata',
+					this.autoPlayListener,
+				);
+			} else {
+				this.audioRef.removeEventListener('canplay', this.autoPlayListener);
+			}
 		}
 
 		if (
@@ -117,20 +136,6 @@ export class AudioPlayer extends React.Component {
 				},
 			});
 		}
-
-		// if (nextProps.nextAudioSource !== this.props.nextAudioSource) {
-		// console.log('nextAudioSource in will receive', nextProps.nextAudioSource);
-		// this.preLoadPath(nextProps.nextAudioSource);
-		// }
-
-		// if (nextProps.prevAudioSource !== this.props.prevAudioSource) {
-		// console.log('prevAudioSource in will receive', nextProps.prevAudioSource);
-		// 	this.preLoadPath(nextProps.prevAudioSource);
-		// }
-
-		// if (nextProps.autoPlay) {
-		// console.log('auto play is now true');
-		// }
 	}
 
 	componentDidUpdate() {
@@ -153,7 +158,18 @@ export class AudioPlayer extends React.Component {
 
 	componentWillUnmount() {
 		// Removing all the event listeners in the case that this component is unmounted
-		this.audioRef.removeEventListener('canplay', this.autoPlayListener);
+		if (
+			navigator &&
+			navigator.userAgent &&
+			/iPhone|iPod|iPad/i.test(navigator.userAgent)
+		) {
+			this.audioRef.removeEventListener(
+				'loadedmetadata',
+				this.autoPlayListener,
+			);
+		} else {
+			this.audioRef.removeEventListener('canplay', this.autoPlayListener);
+		}
 		this.audioRef.removeEventListener(
 			'durationchange',
 			this.durationChangeEventListener,
@@ -169,10 +185,17 @@ export class AudioPlayer extends React.Component {
 	}
 
 	setCurrentTime = (time) => {
-		this.audioRef.currentTime = time;
-		this.setState({
-			currentTime: time,
-		});
+		// alert(`value in set time function: ${time}`);
+		this.setState(
+			{
+				currentTime: time,
+			},
+			() => {
+				// alert(`Setting current time is: ${this.audioRef.currentTime}`);
+				this.audioRef.currentTime = time;
+				// alert(`new time is: ${this.audioRef.currentTime}`);
+			},
+		);
 	};
 
 	setAudioPlayerRef = (el) => {
@@ -206,6 +229,7 @@ export class AudioPlayer extends React.Component {
 	}
 
 	handleRef = (el) => {
+		// alert('Audio ref changed');
 		this.audioRef = el;
 	};
 
@@ -223,9 +247,10 @@ export class AudioPlayer extends React.Component {
 	};
 
 	autoPlayListener = () => {
+		// alert('auto play listener fired');
 		// can accept event as a parameter
 		// console.log('can play fired and was true');
-		this.playVideo();
+		this.playAudio();
 	};
 
 	durationChangeEventListener = (e) => {
@@ -235,20 +260,23 @@ export class AudioPlayer extends React.Component {
 	};
 
 	timeUpdateEventListener = (e) => {
+		// alert(`time at update: ${e.target.currentTime}`)
 		this.setState({
 			currentTime: e.target.currentTime,
 		});
 	};
 
 	seekingEventListener = (e) => {
-		// console.log('player is seeking', e);
+		// console.log('player is seeking', e.target.currentTime);
+		// alert(`time in seeking: ${e.target.currentTime}`)
 		this.setState({
 			currentTime: e.target.currentTime,
 		});
 	};
 
 	seekedEventListener = (e) => {
-		// console.log('player is done seeking', e);
+		// console.log('player is done seeking', e.target.currentTime);
+		// alert(`time in seeked: ${e.target.currentTime}`)
 		this.setState({
 			currentTime: e.target.currentTime,
 		});
@@ -271,14 +299,14 @@ export class AudioPlayer extends React.Component {
 					},
 					// May need to trigger a play event after the next track loaded in
 				}),
-				() => this.playVideo(),
+				() => this.playAudio(),
 			);
 		} else {
 			// console.log('in else for ended event listener');
 			if (this.props.autoPlay) {
 				this.skipForward();
 			}
-			this.pauseVideo();
+			this.pauseAudio();
 		}
 	};
 
@@ -286,7 +314,7 @@ export class AudioPlayer extends React.Component {
 		// console.log('loading path', path);
 		const audio = new Audio();
 
-		// audio.addEventListener('canplaythrough', () => console.log('can play through'), false);
+		// audio.addEventListener('loadedmetadata', () => console.log('can play through'), false);
 		audio.src = path;
 	};
 
@@ -304,19 +332,29 @@ export class AudioPlayer extends React.Component {
 		}
 	};
 
-	pauseVideo = () => {
+	pauseAudio = () => {
 		this.audioRef.pause();
 		this.setState({
 			playing: false,
 		});
 	};
 
-	playVideo = () =>
-		this.audioRef.play().then(() =>
+	playAudio = () => {
+		// alert(`audio ref\n ${this.audioRef}`);
+		// alert(`time in play: ${this.audioRef.currentTime}`);
+		// alert(`Current time in state: ${this.state.currentTime}\nCurrent time in audio: ${this.audioRef.currentTime}`);
+		this.audioRef.play().then(() => {
+			// alert('audio should be playing now');
+			// alert(`time in play callback: ${this.audioRef.currentTime}`);
+			// alert(`Current time in state: ${this.state.currentTime}\nCurrent time in audio: ${this.audioRef.currentTime}`);
+			if (this.state.currentTime !== this.audioRef.currentTime) {
+				this.audioRef.currentTime = this.state.currentTime;
+			}
 			this.setState({
 				playing: true,
-			}),
-		);
+			});
+		}); // .catch((e) => alert(`There was a problem playing the audio: \n${e}`));
+	};
 
 	updatePlayerSpeed = (rate) => {
 		if (this.state.currentSpeed !== rate) {
@@ -329,7 +367,7 @@ export class AudioPlayer extends React.Component {
 
 	skipBackward = () => {
 		this.setCurrentTime(0);
-		this.pauseVideo();
+		this.pauseAudio();
 		this.props.skipBackward();
 		this.setState({
 			playing: false,
@@ -338,7 +376,7 @@ export class AudioPlayer extends React.Component {
 
 	skipForward = () => {
 		this.setCurrentTime(0);
-		this.pauseVideo();
+		this.pauseAudio();
 		this.props.skipForward();
 		this.setState({
 			playing: false,
@@ -395,26 +433,15 @@ export class AudioPlayer extends React.Component {
 		return <SvgWrapper className={'icon'} fill="#fff" svgid="playback_2x" />;
 	}
 
-	get volumeControl() {
-		return closeEventHoc(VolumeSlider, this.closeModals);
-	}
-
-	get speedControl() {
-		return closeEventHoc(SpeedControl, this.closeModals);
-	}
-
-	get playerMenu() {
-		return closeEventHoc(AudioPlayerMenu, this.closeModals);
-	}
-
 	nextIcon = (
-		<div className={'icon-wrap'} title={messages.nextTitle.defaultMessage}>
-			<SvgWrapper
-				onClick={this.skipForward}
-				className="svgitem icon"
-				fill="#fff"
-				svgid="next"
-			/>
+		<div
+			role={'button'}
+			tabIndex={0}
+			onClick={this.skipForward}
+			className={'icon-wrap'}
+			title={messages.nextTitle.defaultMessage}
+		>
+			<SvgWrapper className="svgitem icon" fill="#fff" svgid="next" />
 			<FormattedMessage {...messages.next} />
 		</div>
 	);
@@ -434,7 +461,7 @@ export class AudioPlayer extends React.Component {
 
 	pauseIcon = (
 		<div
-			onClick={this.pauseVideo}
+			onClick={this.pauseAudio}
 			role={'button'}
 			tabIndex={0}
 			className={'icon-wrap'}
@@ -447,7 +474,7 @@ export class AudioPlayer extends React.Component {
 
 	playIcon = (
 		<div
-			onClick={this.playVideo}
+			onClick={this.playAudio}
 			role={'button'}
 			tabIndex={0}
 			className={'icon-wrap'}
@@ -459,7 +486,12 @@ export class AudioPlayer extends React.Component {
 	);
 
 	render() {
-		const { audioSource: source, hasAudio, audioPlayerState } = this.props;
+		const {
+			audioSource: source,
+			hasAudio,
+			audioPlayerState,
+			isScrollingDown,
+		} = this.props;
 		const { autoPlayChecked, currentSpeed } = this.state;
 
 		return (
@@ -467,10 +499,13 @@ export class AudioPlayer extends React.Component {
 				<div
 					role={'button'}
 					tabIndex={0}
+					name={'Audio player toggle'}
 					className={
 						audioPlayerState && hasAudio && source !== ''
-							? 'audioplayer-handle'
-							: 'audioplayer-handle closed'
+							? `audioplayer-handle${isScrollingDown ? ' scrolled-down' : ''}`
+							: `audioplayer-handle closed${
+									isScrollingDown ? ' scrolled-down' : ''
+							  }`
 					}
 					onClick={(e) => {
 						e.stopPropagation();
@@ -492,8 +527,12 @@ export class AudioPlayer extends React.Component {
 					tabIndex={0}
 					className={
 						audioPlayerState && hasAudio && source !== ''
-							? 'audio-player-background'
-							: 'audio-player-background closed'
+							? `audio-player-background${
+									isScrollingDown ? ' scrolled-down' : ''
+							  }`
+							: `audio-player-background closed${
+									isScrollingDown ? ' scrolled-down' : ''
+							  }`
 					}
 					ref={this.setAudioPlayerRef}
 					onClick={this.handleBackgroundClick}
@@ -537,10 +576,18 @@ export class AudioPlayer extends React.Component {
 								className={
 									this.state.volumeSliderState ? 'item active' : 'item'
 								}
+								onTouchEnd={(e) => {
+									e.preventDefault();
+									if (!this.state.volumeSliderState) {
+										this.setVolumeSliderState(true);
+									}
+									this.setSpeedControlState(false);
+									this.setElipsisState(false);
+								}}
 								onClick={() => {
-									this.state.volumeSliderState
-										? this.setVolumeSliderState(false)
-										: this.setVolumeSliderState(true);
+									if (!this.state.volumeSliderState) {
+										this.setVolumeSliderState(true);
+									}
 									this.setSpeedControlState(false);
 									this.setElipsisState(false);
 								}}
@@ -564,10 +611,18 @@ export class AudioPlayer extends React.Component {
 								className={
 									this.state.speedControlState ? 'item active' : 'item'
 								}
+								onTouchEnd={(e) => {
+									e.preventDefault();
+									if (!this.state.speedControlState) {
+										this.setSpeedControlState(true);
+									}
+									this.setElipsisState(false);
+									this.setVolumeSliderState(false);
+								}}
 								onClick={() => {
-									this.state.speedControlState
-										? this.setSpeedControlState(false)
-										: this.setSpeedControlState(true);
+									if (!this.state.speedControlState) {
+										this.setSpeedControlState(true);
+									}
 									this.setElipsisState(false);
 									this.setVolumeSliderState(false);
 								}}
@@ -584,12 +639,7 @@ export class AudioPlayer extends React.Component {
 							/>
 						</div>
 					</div>
-					<audio
-						preload={'auto'}
-						ref={this.handleRef}
-						className="audio-player"
-						src={source}
-					/>
+					<audio ref={this.handleRef} className="audio-player" src={source} />
 				</div>
 			</GenericErrorBoundary>
 		);
@@ -605,6 +655,7 @@ AudioPlayer.propTypes = {
 	toggleAutoPlay: PropTypes.func,
 	hasAudio: PropTypes.bool,
 	autoPlay: PropTypes.bool,
+	isScrollingDown: PropTypes.bool,
 	audioPlayerState: PropTypes.bool.isRequired,
 	// prevAudioSource: PropTypes.string,
 	// nextAudioSource: PropTypes.string,

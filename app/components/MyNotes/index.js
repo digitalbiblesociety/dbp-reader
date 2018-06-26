@@ -13,12 +13,14 @@ import Pagination from 'components/Pagination';
 import PageSizeSelector from 'components/PageSizeSelector';
 import MyHighlights from 'components/MyHighlights';
 import MyBookmarks from 'components/MyBookmarks';
+import ColorPicker from '../ColorPicker';
 // import styled from 'styled-components';
 class MyNotes extends React.PureComponent {
 	// eslint-disable-line react/prefer-stateless-function
 	state = {
 		// Need to reset this once user goes from notes to bookmarks
 		filterText: '',
+		colorPickerState: false,
 	};
 	// Need this for when a user has edited a note and come back here
 	componentDidMount() {
@@ -192,6 +194,27 @@ class MyNotes extends React.PureComponent {
 			page: 1,
 		});
 
+	handlePickedColor = ({ color }) => {
+		if (color !== this.state.selectedColor) {
+			this.props.updateHighlight({ color, id: this.state.selectedId });
+		}
+
+		this.setState({
+			colorPickerState: false,
+			selectedId: '',
+			selectedColor: '',
+		});
+	};
+
+	startUpdateProcess = ({ id, color }) => {
+		// console.log('start updating', id, color);
+		this.setState({
+			colorPickerState: true,
+			selectedId: id,
+			selectedColor: color,
+		});
+	};
+
 	get pagesize() {
 		const type = this.props.sectionType;
 		if (type === 'notes') {
@@ -233,8 +256,9 @@ class MyNotes extends React.PureComponent {
 			deleteHighlights,
 			deleteNote,
 			deleteBookmark,
-			updateHighlight,
+			toggleNotesModal,
 		} = this.props;
+		const { colorPickerState } = this.state;
 		let filteredPageData = [];
 
 		if (sectionType === 'highlights') {
@@ -257,6 +281,9 @@ class MyNotes extends React.PureComponent {
 						/>
 					</span>
 				</div>
+				{sectionType === 'highlights' && colorPickerState ? (
+					<ColorPicker handlePickedColor={this.handlePickedColor} />
+				) : null}
 				<section className="note-list">
 					{sectionType === 'notes'
 						? filteredPageData.map((listItem) => (
@@ -302,14 +329,16 @@ class MyNotes extends React.PureComponent {
 						<MyHighlights
 							highlights={filteredPageData}
 							getReference={this.getHighlightReference}
+							toggleNotesModal={toggleNotesModal}
 							deleteHighlights={deleteHighlights}
-							updateHighlight={updateHighlight}
+							startUpdateProcess={this.startUpdateProcess}
 						/>
 					) : null}
 					{sectionType === 'bookmarks' ? (
 						<MyBookmarks
 							bookmarks={filteredPageData.filter((n) => n.bookmark)}
 							deleteNote={deleteBookmark}
+							toggleNotesModal={toggleNotesModal}
 							getFormattedNoteDate={this.getFormattedNoteDate}
 							getNoteReference={this.getNoteReference}
 						/>
@@ -334,15 +363,19 @@ class MyNotes extends React.PureComponent {
 }
 
 MyNotes.propTypes = {
-	setActiveChild: PropTypes.func.isRequired,
-	setActiveNote: PropTypes.func.isRequired,
-	setActivePage: PropTypes.func.isRequired,
-	togglePageSelector: PropTypes.func.isRequired,
-	setPageSize: PropTypes.func.isRequired,
-	getNotes: PropTypes.func.isRequired,
-	getBookmarks: PropTypes.func.isRequired,
+	getNotes: PropTypes.func,
+	deleteNote: PropTypes.func,
+	setPageSize: PropTypes.func,
+	getBookmarks: PropTypes.func,
 	getHighlights: PropTypes.func,
+	setActiveNote: PropTypes.func,
+	setActivePage: PropTypes.func,
+	setActiveChild: PropTypes.func,
 	deleteBookmark: PropTypes.func,
+	updateHighlight: PropTypes.func,
+	deleteHighlights: PropTypes.func,
+	toggleNotesModal: PropTypes.func,
+	togglePageSelector: PropTypes.func,
 	listData: PropTypes.array.isRequired,
 	bookmarkList: PropTypes.array.isRequired,
 	highlights: PropTypes.array,
@@ -358,9 +391,6 @@ MyNotes.propTypes = {
 	totalPagesHighlight: PropTypes.number,
 	activePageHighlight: PropTypes.number,
 	pageSelectorState: PropTypes.bool.isRequired,
-	deleteHighlights: PropTypes.func,
-	updateHighlight: PropTypes.func,
-	deleteNote: PropTypes.func,
 };
 
 export default MyNotes;

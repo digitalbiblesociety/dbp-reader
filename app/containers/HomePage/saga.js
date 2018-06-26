@@ -79,8 +79,21 @@ export function* deleteHighlights({
 	}
 }
 
+export function* getCountriesAndLanguages() {
+	yield fork(getCountries);
+	yield fork(getLanguages);
+}
+
 export function* initApplication(props) {
 	const languageISO = props.languageISO;
+	// Set a timeout for 24 hours so that if the user does not refresh the page
+	// within that time the languages and countries will be re-fetched
+	const timeoutDuration = 1000 * 60 * 60 * 24;
+	setTimeout(function runTimeout() {
+		getCountriesAndLanguages();
+		setTimeout(runTimeout, timeoutDuration);
+	}, timeoutDuration);
+
 	// yield fork(getIpAddress);
 	// Forking each of these sagas here on the init of the application so that they all run in parallel
 	yield fork(getCountries);
@@ -88,6 +101,9 @@ export function* initApplication(props) {
 	yield fork(getTexts, { languageISO });
 }
 
+// Need to send another call for the bibles once this is done
+// The new call will need a [region_lock=true] parameter so I do not
+// fetch all of the content that is already being displayed
 export function* getIpAddress() {
 	try {
 		const response = yield call(request, 'https://api.ipify.org?format=json');
@@ -296,7 +312,6 @@ export function* getBibleFromUrl({
 	// Active or first chapter audio
 	// Bible name
 	// Bible id
-	// todo Use other methods combined with the ones below to validate the url before try to use it in saga
 	const bibleId = oldBibleId.toUpperCase();
 	const bookId = oldBookId.toUpperCase();
 	const requestUrl = `${process.env.BASE_API_ROUTE}/bibles/${bibleId}?bucket=${

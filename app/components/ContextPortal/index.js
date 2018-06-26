@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
+// import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 // import styled from 'styled-components';
 import {
@@ -159,7 +159,7 @@ class ContextPortal extends React.PureComponent {
 			addFacebookLike,
 			// setActiveNote,
 			coordinates,
-			parentNode,
+			// parentNode,
 			// toggleNotesModal,
 			// notesActive,
 			closeContextMenu,
@@ -168,7 +168,11 @@ class ContextPortal extends React.PureComponent {
 
 		const component = (
 			<div
-				style={{ left: `${coordinates.x}px`, top: `${coordinates.y}px` }}
+				style={{
+					position: 'absolute',
+					left: `${coordinates.x}px`,
+					top: `${coordinates.y}px`,
+				}}
 				ref={this.setComponentRef}
 				className={'context-menu shadow'}
 			>
@@ -304,11 +308,11 @@ class ContextPortal extends React.PureComponent {
 			</div>
 		);
 
-		if (parentNode instanceof HTMLElement || parentNode instanceof Node) {
-			return ReactDOM.createPortal(component, parentNode);
-		}
+		// if (parentNode instanceof HTMLElement || parentNode instanceof Node) {
+		// 	return ReactDOM.createPortal(component, parentNode);
+		// }
 
-		return null;
+		return component;
 	}
 	// Component if I go back to not using react-share
 	// const component = (
@@ -330,7 +334,7 @@ class ContextPortal extends React.PureComponent {
 }
 
 ContextPortal.propTypes = {
-	parentNode: PropTypes.object,
+	// parentNode: PropTypes.object,
 	coordinates: PropTypes.object,
 	notesActive: PropTypes.bool,
 	addHighlight: PropTypes.func,

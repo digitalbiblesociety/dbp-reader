@@ -26,6 +26,7 @@ class Information extends React.PureComponent {
 			</h3>,
 			org.logo ? (
 				<a
+					rel={'noopener'}
 					key={`${org.url}_audio_url_${testament}`}
 					target={'_blank'}
 					href={org.url}
@@ -38,6 +39,7 @@ class Information extends React.PureComponent {
 				</a>
 			) : (
 				<a
+					rel={'noopener'}
 					className={org.url ? 'org-name link' : 'org-name'}
 					key={`${org.url}_audio_${testament}`}
 					target={'_blank'}
@@ -54,6 +56,7 @@ class Information extends React.PureComponent {
 			</h3>,
 			org.logo ? (
 				<a
+					rel={'noopener'}
 					key={`${org.url}_text_url_${testament}`}
 					target={'_blank'}
 					href={org.url}
@@ -66,6 +69,7 @@ class Information extends React.PureComponent {
 				</a>
 			) : (
 				<a
+					rel={'noopener'}
 					className={org.url ? 'org-name link' : 'org-name'}
 					key={`${org.url}_text_${testament}`}
 					target={'_blank'}
@@ -78,7 +82,7 @@ class Information extends React.PureComponent {
 	// {
 	// 	copyrights.map((c) => c.organizations.map((o) => (
 	// <div key={`${o.name}_${o.url}`}>
-	// <h3>Provided to you by <a href={o.url}>{o.name}</a></h3>
+	// <h3>Provided to you by <a// 						rel={'noopener'}href={o.url}>{o.name}</a></h3>
 	// <p>{c.message}</p>
 	// </div>
 	// )))

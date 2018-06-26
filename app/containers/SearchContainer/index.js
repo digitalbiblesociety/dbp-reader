@@ -234,27 +234,29 @@ export class SearchContainer extends React.PureComponent {
 
 		if (firstSearch) {
 			return (
-				<div className={'search-history'}>
-					<div className={'starting'}>
-						<h2>Need a place to start? Try Searching:</h2>
-						{trySearchOptions.map((o) => (
-							<button
-								key={o.id}
-								className={'search-history-item'}
-								onClick={() => this.handleSearchOptionClick(o.searchText)}
-							>
-								{o.searchText}
-							</button>
-						))}
-					</div>
-					<div className={'history'}>
-						<div className={'header'}>
-							<h2>Search History:</h2>
+				<div className={'search-history-wrapper'}>
+					<div className={'search-history'}>
+						<div className={'starting'}>
+							<h2>Need a place to start? Try Searching:</h2>
+							{trySearchOptions.map((o) => (
+								<button
+									key={o.id}
+									className={'search-history-item'}
+									onClick={() => this.handleSearchOptionClick(o.searchText)}
+								>
+									{o.searchText}
+								</button>
+							))}
 						</div>
-						<RecentSearches
-							searches={lastFiveSearches}
-							clickHandler={this.handleSearchOptionClick}
-						/>
+						<div className={'history'}>
+							<div className={'header'}>
+								<h2>Search History:</h2>
+							</div>
+							<RecentSearches
+								searches={lastFiveSearches}
+								clickHandler={this.handleSearchOptionClick}
+							/>
+						</div>
 					</div>
 				</div>
 			);
@@ -301,24 +303,26 @@ export class SearchContainer extends React.PureComponent {
 		// or if it was because this was the first visit to the tab
 		return (
 			<GenericErrorBoundary affectedArea="Search">
-				<aside ref={this.setRef} className="search">
-					<header>
-						<SvgWrapper className={'icon'} svgid={'search'} />
-						<input
-							onChange={this.handleSearchInputChange}
-							onKeyPress={this.handleSearchInputEnter}
-							value={filterText}
-							className={'input-class'}
-							placeholder={'Search'}
-						/>
-						<SvgWrapper
-							onClick={this.handleSearchModalToggle}
-							className={'icon'}
-							svgid={'arrow_left'}
-						/>
-					</header>
-					{loadingResults ? <LoadingSpinner /> : this.formattedResults}
-				</aside>
+				<div className={'search-wrapper'}>
+					<aside ref={this.setRef} className="search">
+						<header>
+							<SvgWrapper className={'icon'} svgid={'search'} />
+							<input
+								onChange={this.handleSearchInputChange}
+								onKeyPress={this.handleSearchInputEnter}
+								value={filterText}
+								className={'input-class'}
+								placeholder={'Search'}
+							/>
+							<SvgWrapper
+								onClick={this.handleSearchModalToggle}
+								className={'icon'}
+								svgid={'arrow_left'}
+							/>
+						</header>
+						{loadingResults ? <LoadingSpinner /> : this.formattedResults}
+					</aside>
+				</div>
 			</GenericErrorBoundary>
 		);
 	}
