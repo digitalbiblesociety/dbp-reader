@@ -171,7 +171,7 @@ class LanguageList extends React.PureComponent {
 						) : (
 							<LoadingSpinner />
 						)}
-						{languages.length === 0 ? (
+						{languages.length === 0 && !loadingLanguages ? (
 							<span className={'language-error-message'}>
 								There was an error fetching this resource, an Admin has been
 								notified. We apologize for the inconvenience.
