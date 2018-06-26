@@ -58,6 +58,11 @@ class LanguageList extends React.PureComponent {
 			// 		<h4 className={language.get('iso') === activeIsoCode ? 'active-language-name' : ''}>{language.get('name')}</h4>
 			// 	</div>
 			// );
+
+			// Code below as a potential solution for searching a name that is not displayed
+			// const topNames = filterText ? matchSorter(language.alt_names, filterText) : [];
+			// const topNamesLength = topNames.length;
+			// topNames.slice(0, topNamesLength < 3 ? topNamesLength : 3).join(', ')
 			return (
 				<div
 					style={style}
