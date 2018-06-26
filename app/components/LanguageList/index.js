@@ -78,6 +78,7 @@ class LanguageList extends React.PureComponent {
 					className="language-name"
 					role="button"
 					tabIndex={0}
+					title={language.englishName || language.name}
 					onClick={(e) => this.handleLanguageClick(e, language)}
 				>
 					<h4
@@ -87,7 +88,9 @@ class LanguageList extends React.PureComponent {
 					>
 						{language.alt_names && language.alt_names.includes(filterText)
 							? filterText
-							: language.vernacular_name || language.name}
+							: language.vernacular_name ||
+							  language.englishName ||
+							  language.name}
 					</h4>
 				</div>
 			);

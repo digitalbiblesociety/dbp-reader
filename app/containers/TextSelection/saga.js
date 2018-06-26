@@ -231,12 +231,14 @@ export function* getLanguageAltNames() {
 							? l.alt_names[l.iso][0]
 							: l.name,
 						alt_names: Array.from(altSet),
+						englishName: l.alt_names.eng ? l.alt_names.eng[0] : l.name,
 					};
 				}
 				return {
 					...l,
 					alt_names: [],
 					vernacular_name: l.name,
+					englishName: l.name,
 				};
 			})
 			.sort(sortLanguagesByVname);
