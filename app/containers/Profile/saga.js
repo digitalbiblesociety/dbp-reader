@@ -20,6 +20,7 @@ import {
 	RESET_PASSWORD_ERROR,
 	UPDATE_USER_INFORMATION,
 	DELETE_USER_SUCCESS,
+	DELETE_USER_ERROR,
 } from './constants';
 
 export function* sendSignUpForm({
@@ -343,6 +344,10 @@ export function* deleteUser({ userId }) {
 			// };
 			// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
 		}
+		yield put({
+			type: DELETE_USER_ERROR,
+			message: 'There was an error deleting your account.',
+		});
 	}
 }
 

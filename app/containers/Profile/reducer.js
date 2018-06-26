@@ -18,13 +18,7 @@ import {
 	RESET_PASSWORD_ERROR,
 	RESET_PASSWORD_SUCCESS,
 	DELETE_USER_SUCCESS,
-	// LOAD_USER_DATA,
-	// GET_USER_DATA,
-	// SEND_LOGIN_FORM,
-	// SEND_SIGNUP_FORM,
-	// UPDATE_PASSWORD,
-	// RESET_PASSWORD,
-	// DELETE_USER,
+	DELETE_USER_ERROR,
 } from './constants';
 
 const initialState = fromJS({
@@ -52,6 +46,8 @@ const initialState = fromJS({
 	errorMessageViewed: true,
 	passwordResetError: '',
 	passwordResetMessage: '',
+	deleteUserError: false,
+	deleteUserMessage: '',
 });
 
 function profileReducer(state = initialState, action) {
@@ -89,7 +85,10 @@ function profileReducer(state = initialState, action) {
 		case RESET_PASSWORD_ERROR:
 			return state.set('passwordResetError', action.message);
 		case ERROR_MESSAGE_VIEWED:
-			return state.set('errorMessageViewed', true);
+			return state
+				.set('errorMessageViewed', true)
+				.set('deleteUserError', false)
+				.set('deleteUserMessage', '');
 		case RESET_PASSWORD_SUCCESS:
 			return state.set('passwordResetMessage', action.message);
 		case CLEAR_ERROR_MESSAGE:
@@ -101,6 +100,10 @@ function profileReducer(state = initialState, action) {
 		case DELETE_USER_SUCCESS:
 			localStorage.removeItem('bible_is_user_id');
 			return state.set('userAuthenticated', false).set('userId', '');
+		case DELETE_USER_ERROR:
+			return state
+				.set('deleteUserError', true)
+				.set('deleteUserMessage', action.message);
 		default:
 			return state;
 	}

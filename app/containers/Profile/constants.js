@@ -27,3 +27,4 @@ export const CLEAR_ERROR_MESSAGE = 'app/Profile/CLEAR_ERROR_MESSAGE';
 export const RESET_PASSWORD_ERROR = 'app/Profile/RESET_PASSWORD_ERROR';
 export const RESET_PASSWORD_SUCCESS = 'app/Profile/RESET_PASSWORD_SUCCESS';
 export const DELETE_USER_SUCCESS = 'app/Profile/DELETE_USER_SUCCESS';
+export const DELETE_USER_ERROR = 'app/Profile/DELETE_USER_ERROR';
