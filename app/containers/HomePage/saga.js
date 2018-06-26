@@ -101,6 +101,9 @@ export function* initApplication(props) {
 	yield fork(getTexts, { languageISO });
 }
 
+// Need to send another call for the bibles once this is done
+// The new call will need a [region_lock=true] parameter so I do not
+// fetch all of the content that is already being displayed
 export function* getIpAddress() {
 	try {
 		const response = yield call(request, 'https://api.ipify.org?format=json');

@@ -48,7 +48,7 @@ module.exports = require('./webpack.base.babel')({
 		// assets manipulations and do leak its manipulations to HtmlWebpackPlugin
 		new OfflinePlugin({
 			relativePaths: false,
-			appShell: '/',
+			// appShell: '/',
 			publicPath: '/',
 
 			// No need to cache .htaccess. See http://mxs.is/googmp,
@@ -88,6 +88,11 @@ module.exports = require('./webpack.base.babel')({
 				}&v=4&bucket_id=${
 					process.env.DBP_BUCKET_ID
 				}&has_filesets=true&include_languages=true`,
+				`${process.env.BASE_API_ROUTE}/languages?key=${
+					process.env.DBP_API_KEY
+				}&v=4&bucket_id=${
+					process.env.DBP_BUCKET_ID
+				}&has_filesets=true&include_alt_names=true`,
 				`${process.env.BASE_API_ROUTE}/languages?key=${
 					process.env.DBP_API_KEY
 				}&v=4&bucket_id=${process.env.DBP_BUCKET_ID}&has_filesets=true`,

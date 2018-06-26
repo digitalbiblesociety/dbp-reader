@@ -1,8 +1,8 @@
 /**
-*
-* LanguageList
-*
-*/
+ *
+ * LanguageList
+ *
+ */
 
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -10,7 +10,8 @@ import { List, AutoSizer } from 'react-virtualized';
 import matchSorter from 'match-sorter';
 import LoadingSpinner from 'components/LoadingSpinner';
 
-class LanguageList extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+class LanguageList extends React.PureComponent {
+	// eslint-disable-line react/prefer-stateless-function
 	// constructor(props) {
 	// 	super(props);
 	// 	this.state = {
@@ -29,7 +30,11 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 		// const { filterText } = this.state;
 		// console.log('languages', languages);
 		// console.log('match-sorter languages', matchSorter(languages, filterText, { keys: ['name', 'iso'] }));
-		const filteredLanguages = filterText ? matchSorter(languages, filterText, { keys: ['name', 'iso'] }) : languages;
+		const filteredLanguages = filterText
+			? matchSorter(languages, filterText, {
+					keys: ['name', 'iso', 'alt_names'],
+			  })
+			: languages;
 
 		// const components = () => filteredLanguages.map((language) => (
 		// 	<div className="language-name" key={language.get('iso')} role="button" tabIndex={0} onClick={() => this.handleLanguageClick(language)}>
@@ -54,8 +59,23 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 			// 	</div>
 			// );
 			return (
-				<div style={style} key={key} className="language-name" role="button" tabIndex={0} onClick={(e) => this.handleLanguageClick(e, language)}>
-					<h4 className={language.iso === activeIsoCode ? 'active-language-name' : ''}>{language.name}</h4>
+				<div
+					style={style}
+					key={key}
+					className="language-name"
+					role="button"
+					tabIndex={0}
+					onClick={(e) => this.handleLanguageClick(e, language)}
+				>
+					<h4
+						className={
+							language.iso === activeIsoCode ? 'active-language-name' : ''
+						}
+					>
+						{language.alt_names && language.alt_names.includes(filterText)
+							? filterText
+							: language.vernacular_name || language.name}
+					</h4>
 				</div>
 			);
 		};
@@ -88,7 +108,11 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 				width={width}
 				scrollToAlignment={'start'}
 			/>
-		) : <div className={'language-error-message'}>There are no matches for your search.</div>;
+		) : (
+			<div className={'language-error-message'}>
+				There are no matches for your search.
+			</div>
+		);
 
 		// return components.length ? components : <span>There are no matches for your search.</span>;
 	}
@@ -102,7 +126,7 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 			return true;
 		}
 		return false;
-	}
+	};
 
 	handleLanguageClick = (e, language) => {
 		if ('stopPropagation' in e && typeof e.stopPropagation === 'function') {
@@ -127,31 +151,32 @@ class LanguageList extends React.PureComponent { // eslint-disable-line react/pr
 			// this.setState({ filterText: '' });
 			toggleVersionList();
 		}
-	}
+	};
 
 	// handleChange = (e) => this.setState({ filterText: e.target.value });
 
 	render() {
-		const {
-			active,
-			loadingLanguages,
-			languages,
-		} = this.props;
+		const { active, loadingLanguages, languages } = this.props;
 
 		if (active) {
 			return (
 				<div className="text-selection-section">
 					<div className="language-name-list">
-						{
-							!loadingLanguages ? (
-								<AutoSizer>
-									{({ width, height }) => this.getFilteredLanguages(width, height)}
-								</AutoSizer>
-							) : <LoadingSpinner />
-						}
-						{
-							languages.length === 0 ? <span className={'language-error-message'}>There was an error fetching this resource, an Admin has been notified. We apologize for the inconvenience.</span> : null
-						}
+						{!loadingLanguages ? (
+							<AutoSizer>
+								{({ width, height }) =>
+									this.getFilteredLanguages(width, height)
+								}
+							</AutoSizer>
+						) : (
+							<LoadingSpinner />
+						)}
+						{languages.length === 0 ? (
+							<span className={'language-error-message'}>
+								There was an error fetching this resource, an Admin has been
+								notified. We apologize for the inconvenience.
+							</span>
+						) : null}
 					</div>
 				</div>
 			);
