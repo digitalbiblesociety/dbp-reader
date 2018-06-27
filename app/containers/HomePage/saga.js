@@ -1201,12 +1201,13 @@ export function* getCopyrightSaga({ filesetIds }) {
 			testament: cp.size || cp.set_size_code,
 			type: cp.type || cp.set_type_code,
 			organizations: cp.copyright.organizations.map((org) => {
-				const icon = org.logos.find((l) => l.icon);
+				// Getting landscape instead of icons
+				const icon = org.logos.find((l) => !l.icon);
 				if (org.translations.length) {
 					return {
 						name: org.translations[0].name,
 						logo: icon || (org.logos && org.logos[0]),
-						isIcon: icon === undefined ? 0 : 1,
+						isIcon: icon === undefined ? 1 : 0,
 						url: org.url_website,
 					};
 				}

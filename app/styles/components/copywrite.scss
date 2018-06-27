@@ -1,101 +1,111 @@
 // Leaving unused class here because the copyright component
 // will need more styling once we have all the correct data
 .information {
-  color: #aaa;
+	color: #aaa;
 
-  .link {
-    color:$sketch-document-color-light-blue;
-    font-weight:200;
-    margin-left: 15px;
-    cursor:pointer;
-  }
-  .copyrights-section {
-    //padding: 15px;
-    font-size: 10px;
-    margin: 15px auto;
-    overflow-y: auto;
-    overflow-x: hidden;
-    max-height: 90%;
+	.link {
+		color: $sketch-document-color-light-blue;
+		font-weight: 200;
+		margin-left: 15px;
+		cursor: pointer;
+	}
+	.copyrights-section {
+		//padding: 15px;
+		font-size: 10px;
+		margin: 15px auto;
+		overflow-y: auto;
+		overflow-x: hidden;
+		max-height: 90%;
 
-    &:before {
-      content: "";
-      position: absolute;
-      width: 80%;
-      height: 1px;
-      left: 10%;
-      @include css4 {
-        background-color: var(--before-after-border-color);
-        //border-top: 1px solid var(--before-after-border-color);
-      }
-    }
+		&:before {
+			content: '';
+			position: absolute;
+			width: 80%;
+			height: 1px;
+			left: 10%;
+			@include css4 {
+				background-color: var(--before-after-border-color);
+				//border-top: 1px solid var(--before-after-border-color);
+			}
+		}
 
-    .nt-copyright, .ot-copyright {
-      display: flex;
-      //flex-direction: row;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      flex-wrap: wrap;
-      width: 100%;
+		.nt-copyright,
+		.ot-copyright {
+			display: flex;
+			//flex-direction: row;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			flex-wrap: wrap;
+			width: 100%;
 
-      .cp-section {
-        display: flex;
-        flex-direction: column;
-        //justify-content: space-between;
-        align-items: center;
-        //min-height: 250px;
-        //min-width: 280px;
-        //max-width: 500px;
-        margin-top: 15px;
-        padding: 0 20px;
+			.cp-section {
+				display: flex;
+				flex-direction: column;
+				//justify-content: space-between;
+				align-items: center;
+				//min-height: 250px;
+				//min-width: 280px;
+				//max-width: 500px;
+				margin-top: 15px;
+				padding: 0 20px;
 
-        .org-name {
-          margin: 10px 0;
+				.org-name {
+					margin: 10px 0;
 
-          .link {
-            &:hover {
-              cursor: pointer;
-              opacity: 0.8;
-            }
-            @include css4 {
-              color: var(--notebook-title-date-color);
-            }
-          }
-        }
+					.link {
+						&:hover {
+							cursor: pointer;
+							opacity: 0.8;
+						}
+						@include css4 {
+							color: var(--notebook-title-date-color);
+						}
+					}
+				}
 
-        h3 {
-          text-align: center;
-        }
+				h3 {
+					text-align: center;
+				}
 
-        img {
-          margin: 10px 0;
-          height: 35px;
-          //height: 109px;
-        }
-      }
-    }
-  }
+				img.image-landscape {
+					width: 100px;
+					height: auto;
+					max-height: 50px;
+				}
+				img.fcbh-copyright-logo {
+					width: 150px;
+					max-height: 75px;
+				}
+				img {
+					margin: 10px 0;
+					height: 35px;
+					//height: 109px;
+				}
+			}
+		}
+	}
 
-  @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
-    .copyrights-section {
-      div {
-        .cp-section {
-          text-align: center;
+	@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+		.copyrights-section {
+			div {
+				.cp-section {
+					text-align: center;
 
-          p {
-            max-width: 100%;
-            white-space: normal;
-          }
+					p {
+						max-width: 100%;
+						white-space: normal;
+					}
 
-          a {
-            text-align: center;
-          }
+					a {
+						text-align: center;
+					}
 
-          img {
-            margin: 10px auto;
-          }
-        }
-      }
-    }
-  }
+					img {
+						margin: 10px auto;
+					}
+				}
+			}
+		}
+	}
 }
