@@ -32,7 +32,11 @@ class Information extends React.PureComponent {
 					href={org.url}
 				>
 					<ImageComponent
-						className={org.isIcon ? 'image-icon' : 'image-landscape'}
+						className={
+							org.isIcon
+								? 'image-icon fcbh-copyright-logo'
+								: 'image-landscape fcbh-copyright-logo'
+						}
 						alt={`Copyright owners logo: ${org.name}`}
 						src={org.logo.url}
 					/>
