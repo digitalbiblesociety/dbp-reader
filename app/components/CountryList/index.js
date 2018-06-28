@@ -13,15 +13,10 @@ import flags from 'images/flags.svg';
 class CountryList extends React.PureComponent {
 	// eslint-disable-line react/prefer-stateless-function
 	state = {
-		top: 0,
-		originalOffset: 0,
-		velocity: 0,
-		timeOfLastDragEvent: 0,
-		touchStartX: 0,
-		prevTouchX: 0,
-		beingTouched: false,
-		height: 0,
-		intervalId: null,
+		startY: 0,
+		distance: 0,
+		endY: 0,
+		pulling: false,
 	};
 
 	getFilteredCountries(width, height) {
@@ -126,72 +121,61 @@ class CountryList extends React.PureComponent {
 	// Check if list's scroll top is 0
 	// If it is at 0 then activate the logic for refreshing the countries
 	// Otherwise do not do anything
-	handleStart = (clientX) => {
-		if (this.state.intervalId !== null) {
-			clearInterval(this.state.intervalId);
-		}
-		this.setState({
-			originalOffset: this.state.top,
-			velocity: 0,
-			timeOfLastDragEvent: Date.now(),
-			touchStartX: clientX,
-			beingTouched: true,
-			intervalId: null,
-		});
-	};
-
-	animateSlidingToZero = () => {
-		let { top, velocity } = this.state;
-		const beingTouched = this.state.beingTouched;
-		if (!beingTouched && top < -0.01) {
-			velocity += 10 * 0.033;
-			top += velocity;
-			if (top < -350) {
-				clearInterval(this.state.intervalId);
-				// console.log('Caught the swipe');
-			}
-			this.setState({ top, velocity });
-		} else if (!beingTouched) {
-			top = 0;
-			velocity = 0;
-			clearInterval(this.state.intervalId);
-			this.setState({ top, velocity, intervalId: null, originalOffset: 0 });
+	handleStart = (clientY) => {
+		if (this.listScrollTop() === 0) {
+			this.setState({ startY: clientY, pulling: true });
 		}
 	};
 
-	handleMove = (clientX) => {
-		if (this.state.beingTouched) {
-			const touchX = clientX;
-			const currTime = Date.now();
-			const elapsed = currTime - this.state.timeOfLastDragEvent;
-			const velocity = (20 * (touchX - this.state.prevTouchX)) / elapsed;
-			let deltaX =
-				touchX - (this.state.touchStartX + this.state.originalOffset);
-			if (deltaX < -350) {
-				// console.log('Caught the swipe');
-			} else if (deltaX > 0) {
-				deltaX = 0;
-			}
+	handleMove = (clientY) => {
+		// Difference between this move position and the start position
+		// is the distance the refresh message should be from where it started
+		const maxDistance = 80;
+		const minDistance = 0;
+		if (
+			this.listScrollTop() === 0 &&
+			this.state.startY === 0 &&
+			!this.state.pulling
+		) {
+			this.setState({ startY: clientY, pulling: true });
+		} else if (
+			clientY - this.state.startY <= maxDistance &&
+			clientY - this.state.startY >= minDistance &&
+			this.state.pulling
+		) {
+			this.setState({ distance: clientY - this.state.startY });
+		}
+	};
+
+	handleEnd = (clientY) => {
+		// User must have pulled at least 40px
+		const minDistance = 40;
+		if (
+			this.state.startY < clientY &&
+			this.state.pulling &&
+			this.state.distance > minDistance
+		) {
+			console.log('ended and needs to send api call');
 			this.setState({
-				top: deltaX,
-				velocity,
-				timeOfLastDragEvent: currTime,
-				prevTouchX: touchX,
+				startY: 0,
+				distance: 0,
+				endY: 0,
+				pulling: false,
+			});
+			this.props.getCountries();
+		} else {
+			console.log('ended but should not send api call');
+			this.setState({
+				startY: 0,
+				distance: 0,
+				endY: 0,
+				pulling: false,
 			});
 		}
 	};
 
-	handleEnd = () => {
-		this.setState({
-			velocity: this.state.velocity,
-			touchStartX: 0,
-			beingTouched: false,
-			intervalId: setInterval(this.animateSlidingToZero.bind(this), 33),
-		});
-	};
-
 	handleTouchStart = (touchStartEvent) => {
-		touchStartEvent.preventDefault();
+		// touchStartEvent.preventDefault();
 		this.handleStart(touchStartEvent.targetTouches[0].clientY);
 	};
 
@@ -199,9 +183,31 @@ class CountryList extends React.PureComponent {
 		this.handleMove(touchMoveEvent.targetTouches[0].clientY);
 	};
 
-	handleTouchEnd = () => {
-		this.handleEnd();
+	handleTouchEnd = (e) => {
+		this.handleEnd(e.changedTouches[0].clientY);
 	};
+
+	handleMouseDown = (mouseDownEvent) => {
+		// mouseDownEvent.preventDefault();
+		this.handleStart(mouseDownEvent.clientY);
+	};
+
+	handleMouseMove = (mouseMoveEvent) => {
+		this.handleMove(mouseMoveEvent.clientY);
+	};
+
+	handleMouseUp = (e) => {
+		this.handleEnd(e.clientY);
+	};
+
+	handleMouseLeave = (e) => {
+		this.handleMouseUp(e);
+	};
+
+	listScrollTop = () =>
+		document && document.getElementById('list-element')
+			? document.getElementById('list-element').scrollTop
+			: 0;
 	// handleListTouch = (e) => {
 	// 	console.log('touch started');
 	//
@@ -274,6 +280,7 @@ class CountryList extends React.PureComponent {
 
 	render() {
 		const { active, loadingCountries } = this.props;
+		const { distance } = this.state;
 
 		if (active) {
 			return (
@@ -283,8 +290,22 @@ class CountryList extends React.PureComponent {
 						onTouchStart={this.handleTouchStart}
 						onTouchEnd={this.handleTouchEnd}
 						onTouchMove={this.handleTouchMove}
+						onMouseDown={this.handleMouseDown}
+						onMouseMove={this.handleMouseMove}
+						onMouseUp={this.handleMouseUp}
+						onMouseLeave={this.handleMouseLeave}
 						className="country-name-list"
 					>
+						<div
+							style={{ height: distance, maxHeight: distance }}
+							className={
+								distance ? 'pull-down-refresh pulling' : 'pull-down-refresh'
+							}
+						>
+							<span style={{ textAlign: 'center', width: '100%' }}>{`${
+								distance > 40 ? 'Release' : 'Pull'
+							} to Refresh`}</span>
+						</div>
 						{loadingCountries ? (
 							<LoadingSpinner />
 						) : (
@@ -309,9 +330,13 @@ CountryList.propTypes = {
 	setCountryListState: PropTypes.func,
 	// toggleVersionList: PropTypes.func,
 	getCountry: PropTypes.func,
+	getCountries: PropTypes.func,
 	filterText: PropTypes.string,
 	active: PropTypes.bool,
 	loadingCountries: PropTypes.bool,
+	// Using two different loading variables to keep the
+	// list from disappearing on a manual refresh
+	// finishedLoadingCountries: PropTypes.bool,
 	activeCountryName: PropTypes.string,
 };
 

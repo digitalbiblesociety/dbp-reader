@@ -12,6 +12,7 @@ import {
 	ERROR_GETTING_VERSIONS,
 	CLEAR_ERROR_GETTING_VERSIONS,
 	CLEAR_ERROR_GETTING_LANGUAGES,
+	LOAD_COUNTRIES_ERROR,
 } from './constants';
 import { loadTexts, loadCountries, setLanguages } from './actions';
 
@@ -67,6 +68,7 @@ export function* getCountries() {
 			// };
 			// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
 		}
+		yield put({ type: LOAD_COUNTRIES_ERROR });
 	}
 }
 
