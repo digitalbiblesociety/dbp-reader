@@ -206,6 +206,7 @@ class LanguageList extends React.PureComponent {
 	handleMouseDown = (mouseDownEvent) => {
 		// mouseDownEvent.preventDefault();
 		this.handleStart(mouseDownEvent.clientY);
+		this.container.addEventListener('mousemove', this.handleMouseMove);
 	};
 
 	handleMouseMove = (mouseMoveEvent) => {
@@ -214,6 +215,7 @@ class LanguageList extends React.PureComponent {
 
 	handleMouseUp = (e) => {
 		this.handleEnd(e.clientY);
+		this.container.removeEventListener('mousemove', this.handleMouseMove);
 	};
 
 	handleMouseLeave = (e) => {
@@ -260,7 +262,9 @@ class LanguageList extends React.PureComponent {
 			toggleVersionList();
 		}
 	};
-
+	handleRef = (el) => {
+		this.container = el;
+	};
 	// handleChange = (e) => this.setState({ filterText: e.target.value });
 
 	render() {
@@ -277,7 +281,6 @@ class LanguageList extends React.PureComponent {
 						onTouchEnd={this.handleTouchEnd}
 						onTouchMove={this.handleTouchMove}
 						onMouseDown={this.handleMouseDown}
-						onMouseMove={this.handleMouseMove}
 						onMouseUp={this.handleMouseUp}
 						onMouseLeave={this.handleMouseLeave}
 						className="language-name-list"
