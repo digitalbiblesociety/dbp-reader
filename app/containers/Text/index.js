@@ -103,9 +103,9 @@ class Text extends React.PureComponent {
 			const verse = this.state.activeVerseInfo.verse;
 			const verseNodes = [
 				...this.main.querySelectorAll(
-					`[data-id=${this.props.activeBookId}${
+					`[data-id="${this.props.activeBookId}${
 						this.props.activeChapter
-					}_${verse}]`,
+					}_${verse}"]`,
 				),
 			];
 			if (verseNodes.length) {
@@ -122,9 +122,9 @@ class Text extends React.PureComponent {
 			// console.log('prevState.activeVerseInfo', prevState.activeVerseInfo);
 			const prevVerseNodes = [
 				...this.main.querySelectorAll(
-					`[data-id=${this.props.activeBookId}${
+					`[data-id="${this.props.activeBookId}${
 						this.props.activeChapter
-					}_${prevVerse}]`,
+					}_${prevVerse}"]`,
 				),
 			];
 			if (prevVerseNodes.length) {
@@ -148,9 +148,9 @@ class Text extends React.PureComponent {
 			// console.log('prevState.activeVerseInfo', prevState.activeVerseInfo);
 			const prevVerseNodes = [
 				...this.main.querySelectorAll(
-					`[data-id=${this.props.activeBookId}${
+					`[data-id="${this.props.activeBookId}${
 						this.props.activeChapter
-					}_${prevVerse}]`,
+					}_${prevVerse}"]`,
 				),
 			];
 			if (prevVerseNodes.length) {
@@ -1068,12 +1068,18 @@ class Text extends React.PureComponent {
 						reference: this.getReference(verse, verse),
 					};
 				} else {
+					// console.log(this.main);
+					// console.log(this.main.querySelectorAll)
+					// console.log(`[data-id="${this.props.activeBookId}${
+					// 	this.props.activeChapter
+					// 	}_${verse}"]`);
+
 					const verseElements = this.main
 						? [
 								...this.main.querySelectorAll(
-									`[data-id=${this.props.activeBookId}${
+									`[data-id="${this.props.activeBookId}${
 										this.props.activeChapter
-									}_${verse}]`,
+									}_${verse}"]`,
 								),
 						  ]
 						: [];
