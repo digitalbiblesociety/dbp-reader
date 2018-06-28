@@ -190,6 +190,8 @@ class CountryList extends React.PureComponent {
 	handleMouseDown = (mouseDownEvent) => {
 		// mouseDownEvent.preventDefault();
 		this.handleStart(mouseDownEvent.clientY);
+		this.container.addEventListener('mousemove', this.handleMouseMove);
+		// document.getElementsByClassName('country-name-list')[0].addEventListenter('mousemove', this.handleMouseMove);
 	};
 
 	handleMouseMove = (mouseMoveEvent) => {
@@ -198,6 +200,9 @@ class CountryList extends React.PureComponent {
 
 	handleMouseUp = (e) => {
 		this.handleEnd(e.clientY);
+		// console.log('document.getElementsByClassName(\'country-name-list\')[0]', document.getElementsByClassName('country-name-list')[0]);
+		this.container.removeEventListener('mousemove', this.handleMouseMove);
+		// document.getElementsByClassName('country-name-list')[0].removeEventListenter('mousemove', this.handleMouseMove);
 	};
 
 	handleMouseLeave = (e) => {
@@ -291,7 +296,6 @@ class CountryList extends React.PureComponent {
 						onTouchEnd={this.handleTouchEnd}
 						onTouchMove={this.handleTouchMove}
 						onMouseDown={this.handleMouseDown}
-						onMouseMove={this.handleMouseMove}
 						onMouseUp={this.handleMouseUp}
 						onMouseLeave={this.handleMouseLeave}
 						className="country-name-list"
