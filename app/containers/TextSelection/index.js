@@ -30,6 +30,7 @@ import {
 	getTexts,
 	getCountry,
 	getCountries,
+	getLanguages,
 	setCountryName,
 } from './actions';
 import makeSelectTextSelection, {
@@ -113,6 +114,8 @@ export class TextSelection extends React.PureComponent {
 
 	getCountries = () => this.props.dispatch(getCountries());
 
+	getLanguages = () => this.props.dispatch(getLanguages());
+
 	getActiveTab() {
 		const {
 			activeIsoCode,
@@ -142,6 +145,7 @@ export class TextSelection extends React.PureComponent {
 					loadingLanguages={loadingLanguages}
 					countryListActive={countryListActive}
 					activeLanguageName={activeLanguageName}
+					getLanguages={this.getLanguages}
 					setActiveIsoCode={this.setActiveIsoCode}
 					toggleVersionList={this.toggleVersionList}
 					toggleLanguageList={this.toggleLanguageList}

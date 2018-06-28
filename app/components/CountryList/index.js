@@ -155,7 +155,7 @@ class CountryList extends React.PureComponent {
 			this.state.pulling &&
 			this.state.distance > minDistance
 		) {
-			console.log('ended and needs to send api call');
+			// console.log('ended and needs to send api call');
 			this.setState({
 				startY: 0,
 				distance: 0,
@@ -164,7 +164,7 @@ class CountryList extends React.PureComponent {
 			});
 			this.props.getCountries();
 		} else {
-			console.log('ended but should not send api call');
+			// console.log('ended but should not send api call');
 			this.setState({
 				startY: 0,
 				distance: 0,
@@ -281,7 +281,7 @@ class CountryList extends React.PureComponent {
 	render() {
 		const { active, loadingCountries } = this.props;
 		const { distance } = this.state;
-
+		/* eslint-disable jsx-a11y/no-static-element-interactions */
 		if (active) {
 			return (
 				<div className="text-selection-section">
