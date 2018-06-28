@@ -1,8 +1,8 @@
 /**
-*
-* CountryList
-*
-*/
+ *
+ * CountryList
+ *
+ */
 
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -10,19 +10,14 @@ import { List, AutoSizer } from 'react-virtualized';
 import LoadingSpinner from 'components/LoadingSpinner';
 import flags from 'images/flags.svg';
 
-class CountryList extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
-	// constructor(props) {
-	// 	super(props);
-	// 	this.state = {
-	// 		filterText: '',
-	// 	};
-	// }
-	//
-	// componentWillReceiveProps(nextProps) {
-	// 	if (!nextProps.active && nextProps.active !== this.props.active) {
-	// 		this.setState({ filterText: '' });
-	// 	}
-	// }
+class CountryList extends React.PureComponent {
+	// eslint-disable-line react/prefer-stateless-function
+	state = {
+		startY: 0,
+		distance: 0,
+		endY: 0,
+		pulling: false,
+	};
 
 	getFilteredCountries(width, height) {
 		const {
@@ -36,36 +31,24 @@ class CountryList extends React.PureComponent { // eslint-disable-line react/pre
 			filterText,
 		} = this.props;
 		// const { filterText } = this.state;
-		const filteredCountryMap = filterText ? countries.filter((country) => this.filterFunction(country, filterText)) : countries;
+		const filteredCountryMap = filterText
+			? countries.filter((country) => this.filterFunction(country, filterText))
+			: countries;
 		const filteredCountries = filteredCountryMap.valueSeq();
 		// console.log('filtered countries', filteredCountries);
 
 		if (countries.size === 0) {
-			return <div className={'country-error-message'}>There was an error fetching this resource, an Admin has been notified. We apologize for the inconvenience.</div>;
+			return (
+				<div className={'country-error-message'}>
+					There was an error fetching this resource, an Admin has been notified.
+					We apologize for the inconvenience.
+				</div>
+			);
 		}
 
 		const renderARow = ({ index, style, key }) => {
 			const country = filteredCountries.get(index);
-			// key={language.get('iso_code')}
-			// if (isScrolling) {
-			// 	return (
-			// 		<div
-			// 			className="country-name"
-			// 			key={key}
-			// 			style={style}
-			// 			role="button"
-			// 			tabIndex={0}
-			// 			onClick={() => {
-			// 				setCountryName({ name: country.get('name'), languages: country.get('languages') });
-			// 				setCountryListState();
-			// 				toggleLanguageList();
-			// 			}}
-			// 		>
-			// 			<svg className={'country-placeholder'} xmlns="http://www.w3.org/2000/svg" height={'25px'} width={'25px'} viewBox="0 0 48 48"><g><rect width="48" height="48" /></g><g /><g /><g /><g /><g /><g /><g /><g /><g /><g /><g /><g /><g /><g /><g /></svg>
-			// 			<h4 className={activeCountryName === country.get('name') ? 'active-language-name' : 'inactive-country'}>{country.get('name')}</h4>
-			// 		</div>
-			// 	);
-			// }
+
 			return (
 				<div
 					className="country-name"
@@ -74,16 +57,30 @@ class CountryList extends React.PureComponent { // eslint-disable-line react/pre
 					role="button"
 					tabIndex={0}
 					onClick={() => {
-						setCountryName({ name: country.get('name'), languages: country.get('languages') });
+						setCountryName({
+							name: country.get('name'),
+							languages: country.get('languages'),
+						});
 						getCountry({ iso: country.getIn(['codes', 'iso']) });
 						setCountryListState();
 						toggleLanguageList();
 					}}
 				>
 					<svg className="icon" height="25px" width="25px">
-						<use xmlnsXlink="http://www.w3.org/1999/xlink" xlinkHref={`${flags}#${country.getIn(['codes', 'iso_a2'])}`}></use>
+						<use
+							xmlnsXlink="http://www.w3.org/1999/xlink"
+							xlinkHref={`${flags}#${country.getIn(['codes', 'iso_a2'])}`}
+						/>
 					</svg>
-					<h4 className={activeCountryName === country.get('name') ? 'active-language-name' : 'inactive-country'}>{country.get('name')}</h4>
+					<h4
+						className={
+							activeCountryName === country.get('name')
+								? 'active-language-name'
+								: 'inactive-country'
+						}
+					>
+						{country.get('name')}
+					</h4>
 				</div>
 			);
 		};
@@ -102,6 +99,7 @@ class CountryList extends React.PureComponent { // eslint-disable-line react/pre
 
 		return filteredCountries.size ? (
 			<List
+				id={'list-element'}
 				estimatedRowSize={28 * filteredCountries.size}
 				height={height}
 				rowRenderer={renderARow}
@@ -112,41 +110,211 @@ class CountryList extends React.PureComponent { // eslint-disable-line react/pre
 				width={width}
 				scrollToAlignment={'start'}
 			/>
-		) : <div className={'country-error-message'}>There are no matches for your search.</div>;
+		) : (
+			<div className={'country-error-message'}>
+				There are no matches for your search.
+			</div>
+		);
 	}
+
+	// If a swipe happened
+	// Check if list's scroll top is 0
+	// If it is at 0 then activate the logic for refreshing the countries
+	// Otherwise do not do anything
+	handleStart = (clientY) => {
+		if (this.listScrollTop() === 0) {
+			this.setState({ startY: clientY, pulling: true });
+		}
+	};
+
+	handleMove = (clientY) => {
+		// Difference between this move position and the start position
+		// is the distance the refresh message should be from where it started
+		const maxDistance = 80;
+		const minDistance = 0;
+		if (
+			this.listScrollTop() === 0 &&
+			this.state.startY === 0 &&
+			!this.state.pulling
+		) {
+			this.setState({ startY: clientY, pulling: true });
+		} else if (
+			clientY - this.state.startY <= maxDistance &&
+			clientY - this.state.startY >= minDistance &&
+			this.state.pulling
+		) {
+			this.setState({ distance: clientY - this.state.startY });
+		}
+	};
+
+	handleEnd = (clientY) => {
+		// User must have pulled at least 40px
+		const minDistance = 40;
+		if (
+			this.state.startY < clientY &&
+			this.state.pulling &&
+			this.state.distance > minDistance
+		) {
+			// console.log('ended and needs to send api call');
+			this.setState({
+				startY: 0,
+				distance: 0,
+				endY: 0,
+				pulling: false,
+			});
+			this.props.getCountries();
+		} else {
+			// console.log('ended but should not send api call');
+			this.setState({
+				startY: 0,
+				distance: 0,
+				endY: 0,
+				pulling: false,
+			});
+		}
+	};
+
+	handleTouchStart = (touchStartEvent) => {
+		// touchStartEvent.preventDefault();
+		this.handleStart(touchStartEvent.targetTouches[0].clientY);
+	};
+
+	handleTouchMove = (touchMoveEvent) => {
+		this.handleMove(touchMoveEvent.targetTouches[0].clientY);
+	};
+
+	handleTouchEnd = (e) => {
+		this.handleEnd(e.changedTouches[0].clientY);
+	};
+
+	handleMouseDown = (mouseDownEvent) => {
+		// mouseDownEvent.preventDefault();
+		this.handleStart(mouseDownEvent.clientY);
+	};
+
+	handleMouseMove = (mouseMoveEvent) => {
+		this.handleMove(mouseMoveEvent.clientY);
+	};
+
+	handleMouseUp = (e) => {
+		this.handleEnd(e.clientY);
+	};
+
+	handleMouseLeave = (e) => {
+		this.handleMouseUp(e);
+	};
+
+	listScrollTop = () =>
+		document && document.getElementById('list-element')
+			? document.getElementById('list-element').scrollTop
+			: 0;
+	// handleListTouch = (e) => {
+	// 	console.log('touch started');
+	//
+	// 	// this.container.addEventListener('touchend', this.handleTouchEnd);
+	// 	// this.container.addEventListener('touchcancel', this.handleTouchEnd);
+	// 	// this.container.addEventListener('touchmove', this.handleTouchMove);
+	// 	const touches = e.targetTouches;
+	// 	let list = {};
+	// 	if (document) {
+	// 		list = document.getElementById('list-element');
+	// 	}
+	//
+	// 	if (list.scrollTop === 0) {
+	// 		this.setState({ listIsAtTop: true }, function startListState() {
+	// 			this.container.addEventListener('touchend', this.handleTouchEnd);
+	// 			this.container.addEventListener('touchcancel', this.handleTouchEnd);
+	// 			this.container.addEventListener('touchmove', this.handleTouchMove);
+	// 		});
+	// 	} else {
+	// 		this.setState({ listIsAtTop: false }, function stopListState() {
+	// 			this.container.removeEventListener('touchend', this.handleTouchEnd);
+	// 			this.container.removeEventListener('touchcancel', this.handleTouchEnd);
+	// 			this.container.removeEventListener('touchmove', this.handleTouchMove);
+	// 		});
+	// 	}
+	// 	console.log('this.container', this.container);
+	//
+	// 	console.log('list', list);
+	//
+	// 	console.log('touches', touches);
+	// 	console.log('this.container.scrollTop', this.container.scrollTop);
+	// 	console.log('this.container.scrollHeight', this.container.scrollHeight);
+	// }
+	//
+	// handleTouchEnd = () => {
+	// 	this.container.removeEventListener('touchend', this.handleTouchEnd);
+	// 	this.container.removeEventListener('touchcancel', this.handleTouchEnd);
+	// 	this.container.removeEventListener('touchmove', this.handleTouchMove);
+	// }
+	//
+	// handleTouchMove = (e) => {
+	// 	console.log('e.targetTouches in move', e.targetTouches);
+	// }
 
 	filterFunction = (country, filterText) => {
 		const lowerCaseText = filterText.toLowerCase();
 
-		if (country.getIn(['codes', 'iso_a2']).toLowerCase().includes(lowerCaseText)) {
+		if (
+			country
+				.getIn(['codes', 'iso_a2'])
+				.toLowerCase()
+				.includes(lowerCaseText)
+		) {
 			return true;
-		} else if (country.get('name') !== '' && country.get('name').toLowerCase().includes(lowerCaseText)) {
+		} else if (
+			country.get('name') !== '' &&
+			country
+				.get('name')
+				.toLowerCase()
+				.includes(lowerCaseText)
+		) {
 			return true;
 		}
 		return false;
-	}
+	};
 
-	// handleChange = (e) => this.setState({ filterText: e.target.value });
+	handleRef = (el) => {
+		this.container = el;
+	};
 
 	render() {
-		const {
-			active,
-			loadingCountries,
-		} = this.props;
-
+		const { active, loadingCountries } = this.props;
+		const { distance } = this.state;
+		/* eslint-disable jsx-a11y/no-static-element-interactions */
 		if (active) {
 			return (
 				<div className="text-selection-section">
-					<div className="country-name-list">
-						{
-							loadingCountries ? (
-								<LoadingSpinner />
-							) : (
-								<AutoSizer>
-									{({ width, height }) => this.getFilteredCountries(width, height)}
-								</AutoSizer>
-							)
-						}
+					<div
+						ref={this.handleRef}
+						onTouchStart={this.handleTouchStart}
+						onTouchEnd={this.handleTouchEnd}
+						onTouchMove={this.handleTouchMove}
+						onMouseDown={this.handleMouseDown}
+						onMouseMove={this.handleMouseMove}
+						onMouseUp={this.handleMouseUp}
+						onMouseLeave={this.handleMouseLeave}
+						className="country-name-list"
+					>
+						<div
+							style={{ height: distance, maxHeight: distance }}
+							className={
+								distance ? 'pull-down-refresh pulling' : 'pull-down-refresh'
+							}
+						>
+							<span style={{ textAlign: 'center', width: '100%' }}>{`${
+								distance > 40 ? 'Release' : 'Pull'
+							} to Refresh`}</span>
+						</div>
+						{loadingCountries ? (
+							<LoadingSpinner />
+						) : (
+							<AutoSizer>
+								{({ width, height }) =>
+									this.getFilteredCountries(width, height)
+								}
+							</AutoSizer>
+						)}
 					</div>
 				</div>
 			);
@@ -162,9 +330,13 @@ CountryList.propTypes = {
 	setCountryListState: PropTypes.func,
 	// toggleVersionList: PropTypes.func,
 	getCountry: PropTypes.func,
+	getCountries: PropTypes.func,
 	filterText: PropTypes.string,
 	active: PropTypes.bool,
 	loadingCountries: PropTypes.bool,
+	// Using two different loading variables to keep the
+	// list from disappearing on a manual refresh
+	// finishedLoadingCountries: PropTypes.bool,
 	activeCountryName: PropTypes.string,
 };
 

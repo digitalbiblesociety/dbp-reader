@@ -29,6 +29,8 @@ import {
 	setCountryListState,
 	getTexts,
 	getCountry,
+	getCountries,
+	getLanguages,
 	setCountryName,
 } from './actions';
 import makeSelectTextSelection, {
@@ -110,6 +112,10 @@ export class TextSelection extends React.PureComponent {
 
 	getCountry = (props) => this.props.dispatch(getCountry(props));
 
+	getCountries = () => this.props.dispatch(getCountries());
+
+	getLanguages = () => this.props.dispatch(getLanguages());
+
 	getActiveTab() {
 		const {
 			activeIsoCode,
@@ -122,6 +128,7 @@ export class TextSelection extends React.PureComponent {
 			loadingCountries,
 			loadingLanguages,
 			loadingVersions,
+			finishedLoadingCountries,
 		} = this.props.textselection;
 		const { activeTextName, activeTextId } = this.props.homepageData;
 		const { bibles, languages, countries } = this.props;
@@ -138,6 +145,7 @@ export class TextSelection extends React.PureComponent {
 					loadingLanguages={loadingLanguages}
 					countryListActive={countryListActive}
 					activeLanguageName={activeLanguageName}
+					getLanguages={this.getLanguages}
 					setActiveIsoCode={this.setActiveIsoCode}
 					toggleVersionList={this.toggleVersionList}
 					toggleLanguageList={this.toggleLanguageList}
@@ -152,8 +160,10 @@ export class TextSelection extends React.PureComponent {
 					active={countryListActive}
 					loadingCountries={loadingCountries}
 					activeCountryName={activeCountryName}
+					finishedLoadingCountries={finishedLoadingCountries}
 					setCountryName={this.setCountryName}
 					getCountry={this.getCountry}
+					getCountries={this.getCountries}
 					toggleVersionList={this.toggleVersionList}
 					toggleLanguageList={this.toggleLanguageList}
 					setCountryListState={this.setCountryListState}

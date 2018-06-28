@@ -1,8 +1,8 @@
 /**
-*
-* GenericErrorBoundary
-*
-*/
+ *
+ * GenericErrorBoundary
+ *
+ */
 
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -24,22 +24,28 @@ class GenericErrorBoundary extends React.Component {
 	componentDidCatch(error, errorInfo) {
 		// Catch errors in any components below and re-render with error message
 		this.setState({ error, errorInfo });
-        // TODO: log error messages to an error reporting service here
+		// TODO: log error messages to an error reporting service here
 	}
 
 	render() {
 		if (this.state.errorInfo) {
 			// Error path
-			return (
-				<div>
-					<h2>{`Something went wrong in the ${this.props.affectedArea} component. Please try refreshing the page, if that does not work send an email to Jesse and tell him what the error message was so he can fix it.`}</h2>
-					<details style={{ whiteSpace: 'pre-wrap' }}>
-						{this.state.error && this.state.error.toString()}
-						<br />
-						{this.state.errorInfo.componentStack}
-					</details>
-				</div>
-			);
+			if (process.env.NODE_ENV === 'development') {
+				return (
+					<div>
+						<h2>{`Something went wrong in the ${
+							this.props.affectedArea
+						} component. Please try refreshing the page, if that does not work send an email to Jesse and tell him what the error message was so he can fix it.`}</h2>
+						<details style={{ whiteSpace: 'pre-wrap' }}>
+							{this.state.error && this.state.error.toString()}
+							<br />
+							{this.state.errorInfo.componentStack}
+						</details>
+					</div>
+				);
+			} else if (window && window.location) {
+				window.location.reload();
+			}
 		}
 		// Normally, just render children
 		return this.props.children;

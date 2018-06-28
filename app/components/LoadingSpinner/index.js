@@ -1,14 +1,15 @@
 /**
-*
-* LoadingSpinner
-*
-*/
+ *
+ * LoadingSpinner
+ *
+ */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 
-function LoadingSpinner() {
+function LoadingSpinner({ styles }) {
 	return (
-		<div className="loading-spinner">
+		<div style={styles} className="loading-spinner">
 			<span className="loading-spinner1 loading-spinner-child" />
 			<span className="loading-spinner2 loading-spinner-child" />
 			<span className="loading-spinner3 loading-spinner-child" />
@@ -26,7 +27,7 @@ function LoadingSpinner() {
 }
 
 LoadingSpinner.propTypes = {
-
+	styles: PropTypes.object,
 };
 
 export default LoadingSpinner;
