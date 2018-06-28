@@ -8,6 +8,7 @@
 .text-selection-section {
 	max-height: calc(100% - 100px);
 	height: calc(100% - 100px);
+	overflow: hidden;
 
 	.pull-down-refresh {
 		display: flex;
