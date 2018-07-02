@@ -603,17 +603,6 @@ class HomePage extends React.PureComponent {
 				);
 			}
 		}
-		// I am not sure what I thought this was for... I think I don't need it
-		// } else if (!isEqual(highlights, this.props.homepage.highlights)) {
-		// 	console.log('getting the highlights');
-		// 	this.props.dispatch(getHighlights({
-		// 		bible: activeTextId,
-		// 		book: activeBookId,
-		// 		chapter: activeChapter,
-		// 		userAuthenticated,
-		// 		userId,
-		// 	}));
-		// }
 		// Below code is for when the same version is selected but the audio type is changed
 		if (
 			!isEqual(
@@ -633,15 +622,12 @@ class HomePage extends React.PureComponent {
 				chapter: nextParams.chapter,
 			});
 		}
-
-		// Resets application to english standard version genesis 1 in the case an invalid bible id was used
-		// Commented out because it may be worse to re-route rather than display an error message
-		// if (nextProps.homepage.invalidBibleId && !this.props.homepage.invalidBibleId) {
-		// 	this.props.history.replace('/engesv/gen/1');
-		// }
 	}
 
 	componentWillUnmount() {
+		// Even though for this function to fire the user has to refresh
+		// the entire page it is good practice to remove any lingering
+		// event listeners
 		window.removeEventListener('scroll', this.handleScrolling, true);
 	}
 
@@ -900,13 +886,15 @@ class HomePage extends React.PureComponent {
 		}
 	};
 
-	// This may be buggy if the function got called before the dom was mounted
+	// This may be buggy if the function got called before the
+	// dom was mounted but I have yet to experience any bugs
 	previousScrollTop = this.main ? this.main.scrollTop : 0;
 
 	scrollTicking = false;
 
 	resetPasswordSent = () => {
-		// console.log('replacing history');
+		// We might still want this to try and provide a slightly better user experience
+		// the idea is to take the user back to where they were once they reset their password
 		// this.props.history.replace(`/${localStorage.getItem('bible_is_1_bible_id') || 'engesv'}/${localStorage.getItem('bible_is_2_book_id') || 'mat'}/${localStorage.getItem('bible_is_3_chapter') || '1'}`)
 	};
 

@@ -585,20 +585,24 @@ export function* getChapterFromUrl({
 				// console.log('before fork');
 				// yield fork(getCopyrightSaga, { filesetId });
 				// console.log('after fork');
-				const reqUrl = `${
-					process.env.BASE_API_ROUTE
-				}/bibles/filesets/${filesetId}?bucket=${
-					process.env.DBP_BUCKET_ID
-				}&key=${
-					process.env.DBP_API_KEY
-				}&v=4&book_id=${bookId}&chapter_id=${chapter}&type=text_format`; // hard coded since this only ever needs to get formatted text
-				// console.log(reqUrl);
-				const formattedChapterObject = yield call(request, reqUrl);
-				const path = get(formattedChapterObject.data, [0, 'path']);
-				// console.log('response for formatted text', formattedChapterObject);
-				formattedText = yield path ? fetch(path).then((res) => res.text()) : '';
+				if (filesetId) {
+					const reqUrl = `${
+						process.env.BASE_API_ROUTE
+					}/bibles/filesets/${filesetId}?bucket=${
+						process.env.DBP_BUCKET_ID
+					}&key=${
+						process.env.DBP_API_KEY
+					}&v=4&book_id=${bookId}&chapter_id=${chapter}&type=text_format`; // hard coded since this only ever needs to get formatted text
+					// console.log(reqUrl);
+					const formattedChapterObject = yield call(request, reqUrl);
+					const path = get(formattedChapterObject.data, [0, 'path']);
+					// console.log('response for formatted text', formattedChapterObject);
+					formattedText = yield path
+						? fetch(path).then((res) => res.text())
+						: '';
 
-				formattedTextFilesetId = formattedText ? filesetId : '';
+					formattedTextFilesetId = filesetId;
+				}
 				// console.log(formattedText);
 			} catch (error) {
 				if (process.env.NODE_ENV === 'development') {
@@ -645,7 +649,7 @@ export function* getChapterFromUrl({
 
 				plainText = results.plainText;
 				plainTextFilesetId = results.plainTextFilesetId;
-			} else {
+			} else if (filesetId) {
 				const reqUrl = `${
 					process.env.BASE_API_ROUTE
 				}/bibles/filesets/${filesetId}/${bookId}/${chapter}?key=${
@@ -1343,6 +1347,7 @@ export function* createSocialUser({
 			}
 			// console.log('response.error.message.email', response.error.message.email[0] === 'The email has already been taken.');
 
+			// Probably not the safest because if the message is ever different then this will fail silently
 			if (
 				response.error.message &&
 				response.error.message.email &&

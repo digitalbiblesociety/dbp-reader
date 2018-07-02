@@ -98,7 +98,6 @@ class Text extends React.PureComponent {
 			this.state.activeVerseInfo.verse !== prevState.activeVerseInfo.verse &&
 			this.state.activeVerseInfo.verse
 		) {
-			// console.log('this.state.activeVerseInfo', this.state.activeVerseInfo);
 			// Add the highlight to the new active verse
 			const verse = this.state.activeVerseInfo.verse;
 			const verseNodes = [
@@ -109,17 +108,12 @@ class Text extends React.PureComponent {
 				),
 			];
 			if (verseNodes.length) {
-				// console.log('adding class');
-				// console.log('verseNodes', verseNodes);
 				verseNodes.forEach(
 					(n) => (n.className = `${n.className} active-verse`), // eslint-disable-line no-param-reassign
-				); // eslint-disable-line no-param-reassign
-				// verseNode.className = `${verseNode.className} active-verse`;
-				// console.log('should update the color of the active verse');
+				);
 			}
 			// Remove the highlight from the old active verse
 			const prevVerse = prevState.activeVerseInfo.verse;
-			// console.log('prevState.activeVerseInfo', prevState.activeVerseInfo);
 			const prevVerseNodes = [
 				...this.main.querySelectorAll(
 					`[data-id="${this.props.activeBookId}${
@@ -128,24 +122,17 @@ class Text extends React.PureComponent {
 				),
 			];
 			if (prevVerseNodes.length) {
-				// console.log('removing class from old active verse');
-				// console.log('prevVerseNodes', prevVerseNodes);
-
-				// console.log('prevVerseNodes.className.slice(0 -13)', prevVerseNodes.className.slice(0, -13));
 				prevVerseNodes.forEach(
 					(n) => (n.className = n.className.slice(0, -13)), // eslint-disable-line no-param-reassign
 				); // eslint-disable-line no-param-reassign
-				// prevVerseNodes.className = prevVerseNodes.className.slice(0, -13);
 			}
 		} else if (
 			this.main &&
 			(this.format || this.formatHighlight) &&
 			this.state.activeVerseInfo.isPlain === false
 		) {
-			// console.log('should remove highlight');
 			// Remove the highlight from the old active verse
 			const prevVerse = prevState.activeVerseInfo.verse;
-			// console.log('prevState.activeVerseInfo', prevState.activeVerseInfo);
 			const prevVerseNodes = [
 				...this.main.querySelectorAll(
 					`[data-id="${this.props.activeBookId}${
@@ -154,14 +141,9 @@ class Text extends React.PureComponent {
 				),
 			];
 			if (prevVerseNodes.length) {
-				// console.log('removing class from old active verse');
-				// console.log('prevVerseNodes', prevVerseNodes);
-				// console.log('removing class from old active verse');
-				// console.log('prevVerseNodes.className.slice(0 -13)', prevVerseNodes.className.slice(0, -13));
 				prevVerseNodes.forEach(
 					(n) => (n.className = n.className.slice(0, -13)), // eslint-disable-line no-param-reassign
 				);
-				// prevVerseNodes.className = prevVerseNode.className.slice(0, -13);
 			}
 		}
 		// Logic below ensures that the proper event handlers are set on each footnote
@@ -265,6 +247,7 @@ class Text extends React.PureComponent {
 
 					this.handleMouseUp(e);
 				};
+				// Noop to get the mouse events to fire on iOS
 				verse.onclick = () => {};
 			});
 		} catch (err) {
@@ -1519,8 +1502,12 @@ class Text extends React.PureComponent {
 
 	closeFootnote = () => this.setState({ footnoteState: false });
 
-	closeContextMenu = () =>
-		this.setState({ contextMenuState: false, activeVerseInfo: { verse: 0 } });
+	closeContextMenu = () => {
+		this.setState({
+			contextMenuState: false,
+			activeVerseInfo: { verse: 0, isPlain: false },
+		});
+	};
 
 	selectedWholeVerse = (verse, isPlain, clientX, clientY) => {
 		// console.log('verse: ', verse, '\nisPlain: ', isPlain);
@@ -1681,9 +1668,6 @@ class Text extends React.PureComponent {
 			userSettings,
 			verseNumber,
 			goToFullChapter,
-			// toggleInformationModal,
-			// informationActive,
-			// audioPlayerState,
 			copyrights,
 			activeFilesets,
 			audioFilesetId,
