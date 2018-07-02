@@ -11,7 +11,8 @@ import {
 	getBookmarksForChapter,
 	getUserHighlights,
 } from 'containers/Notes/saga';
-import { LOGIN_ERROR, USER_LOGGED_IN } from 'containers/Profile/constants';
+import { USER_LOGGED_IN } from 'containers/Profile/constants';
+// import { LOGIN_ERROR, USER_LOGGED_IN } from 'containers/Profile/constants';
 import {
 	getCountries,
 	getLanguages,
@@ -1307,7 +1308,24 @@ export function* createSocialUser({
 	avatar,
 	provider,
 }) {
-	// otherwise create a new account with this information
+	/*
+		There is a problem when I need to link a provider to an account, I do not have a way to get only that users user_id via the api
+			I either need to be able to link the account by only providing the email, or have a way to get the user_id that is associated with an email
+		Case 1: User does not have account
+			User tries to sign in with provider
+			Action: Create a new account with the provided information, link this provider to the account created with the email
+		Case 2: User has account - not linked to provider
+			User tries to sign in with provider to their existing account
+			Action: Try to sign user in, sign in fails, get user id using their email, use user id to link this provider and social_id to their account based on the email + id
+		Case 3: User has account - linked to provider
+			User tries to sign in with provider to their existing account
+			Action: Try to sign user in, sign in fails, get user id using their email, use user id to sign them into their account based on the email + id
+		Case 4: User has account made with provider but no password and tries to sign in using their password - May not need to handle here
+			User tries to sign in with provider to their existing account
+			Action: Sign user in without password because they have been verified by the provider
+	* */
+
+	// Case 3: Create a new account with this information
 	const requestUrl = `${process.env.BASE_API_ROUTE}/users?key=${
 		process.env.DBP_API_KEY
 	}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}`;
@@ -1332,8 +1350,7 @@ export function* createSocialUser({
 		const response = yield call(request, requestUrl, options);
 
 		if (response.success) {
-			// console.log('res', response);
-
+			// Case 1: Success!
 			yield put({
 				type: USER_LOGGED_IN,
 				userId: response.user.id,
@@ -1341,26 +1358,24 @@ export function* createSocialUser({
 			});
 			sessionStorage.setItem('bible_is_user_id', response.user.id);
 		} else if (response.error) {
-			// console.log('res error', response);
+			// Case 1: Fail, find which case is now applicable
 			if (process.env.NODE_ENV === 'development') {
+				// Log the specific error if in development
 				console.warn(response.error); // eslint-disable-line no-console
 			}
-			// console.log('response.error.message.email', response.error.message.email[0] === 'The email has already been taken.');
-
+			// Check for Case 3
 			// Probably not the safest because if the message is ever different then this will fail silently
 			if (
 				response.error.message &&
 				response.error.message.email &&
 				response.error.message.email[0] === 'The email has already been taken.'
 			) {
-				// console.log('response.error.message.email', response.error.message.email);
-
+				// Case 3: User has account - Linked to provider
 				const r = `${process.env.BASE_API_ROUTE}/users/login?key=${
 					process.env.DBP_API_KEY
 				}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}`;
 				const fd = new FormData();
 
-				// fd.append('password', password);
 				fd.append('email', email);
 				fd.append('social_provider_id', provider);
 				fd.append('social_provider_user_id', id);
@@ -1371,12 +1386,46 @@ export function* createSocialUser({
 				};
 
 				try {
+					// Case 3: Sending sign in request
 					const res = yield call(request, r, op);
 					// console.log('res', res);
 
 					if (res.error) {
-						yield put({ type: LOGIN_ERROR, message: res.error.message });
+						// Case 3: Fail! May want to check for the link between account and provider here.
+						// Now Case 2 is active
+						// Case 2: User has account - Not linked to provider
+
+						// console.log('Need to get the user id');
+						// const getUserReq = `${process.env.BASE_API_ROUTE}/users?key=${
+						// 	process.env.DBP_API_KEY
+						// 	}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}`;
+						try {
+							// const getUserRes = yield call(request, getUserReq);
+							// console.log('getUserRes', getUserRes);
+							// console.log('email: ', email);
+							// console.log('getUserRes.find(u => u.email === email)', getUserRes.data.find(u => u.email === email));
+							// console.log('id, provider', id, provider);
+							// const case2Req = `${process.env.BASE_API_ROUTE}/accounts?key=${
+							// 	process.env.DBP_API_KEY
+							// 	}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}&user_id=${getUserRes.data.find((u) => u.email === email).id}`;
+							// const case2Fd = new FormData();
+							// case2Fd.append('email', email);
+							// case2Fd.append('social_provider_id', provider);
+							// case2Fd.append('social_provider_user_id', id);
+							// const case2Opt = {
+							// 	method: 'POST',
+							// 	body: case2Fd,
+							// };
+							// const case2Res = yield call(request, case2Req, case2Opt);
+							// console.log('case2Res', case2Res);
+						} catch (err) {
+							if (process.env.NODE_ENV === 'development') {
+								console.error('There was an error: ', err); // eslint-disable-line no-console
+							}
+						}
+						// Link account to the user that has a matching email
 					} else {
+						// Case 3: Success!
 						yield put({
 							type: USER_LOGGED_IN,
 							userId: res.id,
@@ -1388,15 +1437,10 @@ export function* createSocialUser({
 				} catch (err) {
 					if (process.env.NODE_ENV === 'development') {
 						console.error(err); // eslint-disable-line no-console
-					} else if (process.env.NODE_ENV === 'production') {
-						// const options = {
-						// 	header: 'POST',
-						// 	body: formData,
-						// };
-						// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
 					}
 				}
 			}
+
 			// const message = Object.values(response.error.message).reduce((acc, cur) => acc.concat(cur), '');
 			// yield put({ type: SIGNUP_ERROR, message });
 			// yield put('user-login-failed', response.error.message);
