@@ -4,6 +4,7 @@
  *
  */
 
+export const CHANGE_PICTURE = 'app/Profile/CHANGE_PICTURE';
 export const SELECT_ACCOUNT_OPTION = 'app/Profile/SELECT_ACCOUNT_OPTION';
 export const SEND_PASSWORD_RESET = 'app/Profile/SEND_PASSWORD_RESET';
 export const USER_LOGGED_IN = 'app/Profile/USER_LOGGED_IN';
