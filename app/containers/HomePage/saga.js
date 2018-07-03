@@ -323,6 +323,8 @@ export function* getBibleFromUrl({
 	try {
 		const response = yield call(request, requestUrl);
 		// let filesets;
+		// console.log('response in getbible call', response);
+
 		// if (!response.data.filesets) {
 		// 	const bibleUrl = `${process.env.BASE_API_ROUTE}/bibles?bucket=${process.env.DBP_BUCKET_ID}&key=${process.env.DBP_API_KEY}&v=4&language_code=${response.data.iso}`;
 		// 	const allBibles = yield call(request, bibleUrl);
@@ -821,6 +823,7 @@ export function* getChapterAudio({
 	// console.log('getting audio', filesets, bookId, chapter);
 	// Parse filesets |▰╭╮▰|
 	// TODO: Need to handle when there are multiple filesets for the same audio type
+	// Todo: Sort the list by the audio type where drama comes first
 	// console.log('filesets', filesets);
 	const filteredFilesets = filesets.reduce((a, file) => {
 		const newFile = { ...a };
@@ -851,21 +854,29 @@ export function* getChapterAudio({
 	const partialNtAudio = [];
 	const partialNtOtAudio = [];
 
-	Object.entries(filteredFilesets).forEach((fileset) => {
-		if (fileset[1].size === 'C') {
-			completeAudio.push({ id: fileset[0], data: fileset[1] });
-		} else if (fileset[1].size === 'NT') {
-			ntAudio.push({ id: fileset[0], data: fileset[1] });
-		} else if (fileset[1].size === 'OT') {
-			otAudio.push({ id: fileset[0], data: fileset[1] });
-		} else if (fileset[1].size === 'OTP') {
-			partialOtAudio.push({ id: fileset[0], data: fileset[1] });
-		} else if (fileset[1].size === 'NTP') {
-			partialNtAudio.push({ id: fileset[0], data: fileset[1] });
-		} else if (fileset[1].size === 'NTPOTP') {
-			partialNtOtAudio.push({ id: fileset[0], data: fileset[1] });
-		}
-	});
+	Object.entries(filteredFilesets)
+		.sort((a, b) => {
+			if (a[1].type === 'audio_drama') return 1;
+			if (b[1].type === 'audio_drama') return 1;
+			if (a[1].type > b[1].type) return 1;
+			if (a[1].type < b[1].type) return -1;
+			return 0;
+		})
+		.forEach((fileset) => {
+			if (fileset[1].size === 'C') {
+				completeAudio.push({ id: fileset[0], data: fileset[1] });
+			} else if (fileset[1].size === 'NT') {
+				ntAudio.push({ id: fileset[0], data: fileset[1] });
+			} else if (fileset[1].size === 'OT') {
+				otAudio.push({ id: fileset[0], data: fileset[1] });
+			} else if (fileset[1].size === 'OTP') {
+				partialOtAudio.push({ id: fileset[0], data: fileset[1] });
+			} else if (fileset[1].size === 'NTP') {
+				partialNtAudio.push({ id: fileset[0], data: fileset[1] });
+			} else if (fileset[1].size === 'NTPOTP') {
+				partialNtOtAudio.push({ id: fileset[0], data: fileset[1] });
+			}
+		});
 	// console.log('audio arrays', '\n', completeAudio, '\n', ntAudio, '\n', otAudio, '\n', partialAudio);
 	const otLength = otAudio.length;
 	const ntLength = ntAudio.length;
@@ -897,6 +908,7 @@ export function* getChapterAudio({
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Caught in getChapterAudio complete audio', error); // eslint-disable-line no-console
+				yield put({ type: 'loadaudio', audioPaths: [''] });
 			} else if (process.env.NODE_ENV === 'production') {
 				// const options = {
 				// 	header: 'POST',
@@ -909,6 +921,8 @@ export function* getChapterAudio({
 		return;
 	} else if (ntLength && !otLength) {
 		try {
+			// console.log('ntAudio', ntAudio);
+
 			const reqUrl = `${process.env.BASE_API_ROUTE}/bibles/filesets/${get(
 				ntAudio,
 				[0, 'id'],
@@ -931,6 +945,7 @@ export function* getChapterAudio({
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Caught in getChapterAudio nt audio', error); // eslint-disable-line no-console
+				yield put({ type: 'loadaudio', audioPaths: [''] });
 			} else if (process.env.NODE_ENV === 'production') {
 				// const options = {
 				// 	header: 'POST',
@@ -965,6 +980,7 @@ export function* getChapterAudio({
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Caught in getChapterAudio ot audio', error); // eslint-disable-line no-console
+				yield put({ type: 'loadaudio', audioPaths: [''] });
 			} else if (process.env.NODE_ENV === 'production') {
 				// const options = {
 				// 	header: 'POST',
@@ -998,6 +1014,7 @@ export function* getChapterAudio({
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Caught in getChapterAudio nt audio', error); // eslint-disable-line no-console
+				yield put({ type: 'loadaudio', audioPaths: [''] });
 			} else if (process.env.NODE_ENV === 'production') {
 				// const options = {
 				// 	header: 'POST',
@@ -1026,6 +1043,7 @@ export function* getChapterAudio({
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Caught in getChapterAudio ot audio', error); // eslint-disable-line no-console
+				yield put({ type: 'loadaudio', audioPaths: [''] });
 			} else if (process.env.NODE_ENV === 'production') {
 				// const options = {
 				// 	header: 'POST',
@@ -1077,6 +1095,7 @@ export function* getChapterAudio({
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Caught in getChapterAudio partial audio', error); // eslint-disable-line no-console
+				yield put({ type: 'loadaudio', audioPaths: [''] });
 			} else if (process.env.NODE_ENV === 'production') {
 				// const options = {
 				// 	header: 'POST',
@@ -1119,6 +1138,7 @@ export function* getChapterAudio({
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Caught in getChapterAudio partial audio', error); // eslint-disable-line no-console
+				yield put({ type: 'loadaudio', audioPaths: [''] });
 			} else if (process.env.NODE_ENV === 'production') {
 				// const options = {
 				// 	header: 'POST',
@@ -1165,6 +1185,7 @@ export function* getChapterAudio({
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Caught in getChapterAudio partial audio', error); // eslint-disable-line no-console
+				yield put({ type: 'loadaudio', audioPaths: [''] });
 			} else if (process.env.NODE_ENV === 'production') {
 				// const options = {
 				// 	header: 'POST',
