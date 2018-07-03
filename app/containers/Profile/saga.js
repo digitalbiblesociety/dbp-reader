@@ -4,6 +4,7 @@ import request from 'utils/request';
 import {
 	// GET_USER_DATA,
 	// LOAD_USER_DATA,
+	CHANGE_PICTURE,
 	LOGIN_ERROR,
 	USER_LOGGED_IN,
 	SEND_LOGIN_FORM,
@@ -188,6 +189,43 @@ export function* updateUserInformation({ userId, profile }) {
 			// 	body: formData,
 			// };
 			// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
+		}
+	}
+}
+
+// Route: /users/{id}
+// Method: POST
+// Extra Header: _method: PUT
+// Content Type: form-data
+export function* changePicture({ userId, avatar }) {
+	console.log('userId, avatar', userId, avatar);
+
+	const requestUrl = `${process.env.BASE_API_ROUTE}/users/${userId}?key=${
+		process.env.DBP_API_KEY
+	}&v=4`;
+	const requestData = new FormData();
+
+	requestData.append('avatar', avatar);
+	requestData.append('_method', 'PUT');
+
+	const requestOptions = {
+		method: 'POST',
+		_method: 'PUT',
+		body: requestData,
+	};
+
+	try {
+		const response = yield call(request, requestUrl, requestOptions);
+
+		console.log('response');
+		if (response.success) {
+			console.log('picture was saved successfully');
+		} else {
+			console.log('picture was not saved', response);
+		}
+	} catch (err) {
+		if (process.env.NODE_ENV === 'development') {
+			console.warn('Error saving picture: ', err);
 		}
 	}
 }
@@ -413,8 +451,10 @@ export default function* defaultSaga() {
 		SOCIAL_MEDIA_LOGIN,
 		socialMediaLogin,
 	);
+	const changePictureSaga = yield takeLatest(CHANGE_PICTURE, changePicture);
 
 	yield take(LOCATION_CHANGE);
+	yield cancel(changePictureSaga);
 	yield cancel(sendSignUpFormSaga);
 	yield cancel(sendLoginFormSaga);
 	yield cancel(sendResetPasswordSaga);

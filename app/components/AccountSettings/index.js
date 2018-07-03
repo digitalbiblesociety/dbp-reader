@@ -29,6 +29,20 @@ class AccountSettings extends React.PureComponent {
 		this.props.deleteUser({ userId: this.props.userId });
 	};
 
+	handleFileInputChange = (e) => {
+		if (e.target.files[0]) {
+			this.props.changePicture({ avatar: e.target.files[0] });
+		} else {
+			this.setState({ popupOpen: true });
+			if (this.timer) {
+				clearTimeout(this.timer);
+			}
+			setTimeout(() => {
+				// console.log('Selection after 50ms', window.getSelection().toString());
+				this.setState({ popupOpen: false });
+			}, 2500);
+		}
+	};
 	// handleAddressFieldChange = (e, field) => {
 	// 	this.setState({
 	// 		[field]: e.target.value,
@@ -52,18 +66,21 @@ class AccountSettings extends React.PureComponent {
 	//
 	// 	this.props.updateUserInformation({ profile, userId });
 	// }
-	changePicture = () => {
-		// Need to implement some sort of image upload thing here
-		// Or need to have a short dialogue indicating to the user that they need to use a link
-		this.setState({ popupOpen: true });
-		if (this.timer) {
-			clearTimeout(this.timer);
-		}
-		setTimeout(() => {
-			// console.log('Selection after 50ms', window.getSelection().toString());
-			this.setState({ popupOpen: false });
-		}, 2500);
-	};
+	// changePicture = () => {
+	// 	if (this.inputElement) {
+	// 		this.inputElement.click();
+	// 	}
+	// 	// Need to implement some sort of image upload thing here
+	// 	// Or need to have a short dialogue indicating to the user that they need to use a link
+	// 	// this.setState({ popupOpen: true });
+	// 	// if (this.timer) {
+	// 	// 	clearTimeout(this.timer);
+	// 	// }
+	// 	// setTimeout(() => {
+	// 	// 	// console.log('Selection after 50ms', window.getSelection().toString());
+	// 	// 	this.setState({ popupOpen: false });
+	// 	// }, 2500);
+	// };
 
 	render() {
 		const { logout, profile } = this.props;
@@ -101,9 +118,15 @@ class AccountSettings extends React.PureComponent {
 							svgid={'avatar_placeholder'}
 						/>
 					)}
-					<button onClick={this.changePicture} className="change-picture">
+					<input
+						id={'fileInput'}
+						className={'change-picture-input'}
+						type={'file'}
+						onChange={this.handleFileInputChange}
+					/>
+					<label htmlFor={'fileInput'} className={'change-picture'}>
 						Change Picture
-					</button>
+					</label>
 					<h3 className="name">{profile.nickname}</h3>
 					<span className="name">{profile.name}</span>
 				</section>
@@ -141,9 +164,7 @@ class AccountSettings extends React.PureComponent {
 				</div>
 				{popupOpen ? (
 					<PopupMessage
-						message={
-							'The feature is not available at this time. We apologize for the inconvenience'
-						}
+						message={'Please select a valid image file.'}
 						x={160}
 						y={250}
 					/>
@@ -157,6 +178,7 @@ AccountSettings.propTypes = {
 	logout: PropTypes.func,
 	deleteUser: PropTypes.func,
 	updateEmail: PropTypes.func,
+	changePicture: PropTypes.func,
 	// updateUserInformation: PropTypes.func,
 	profile: PropTypes.object,
 	userId: PropTypes.string,

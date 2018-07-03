@@ -5,6 +5,7 @@
  */
 
 import {
+	CHANGE_PICTURE,
 	SELECT_ACCOUNT_OPTION,
 	LOAD_USER_DATA,
 	GET_USER_DATA,
@@ -21,6 +22,11 @@ import {
 	CLEAR_ERROR_MESSAGE,
 	SEND_PASSWORD_RESET,
 } from './constants';
+
+export const changePicture = (props) => ({
+	type: CHANGE_PICTURE,
+	...props,
+});
 
 export const sendPasswordReset = (props) => ({
 	type: SEND_PASSWORD_RESET,

@@ -42,6 +42,7 @@ class VersionList extends React.PureComponent {
 			filterText,
 		} = this.props;
 		// const { filterText } = this.state;
+
 		const filteredBibles = filterText
 			? bibles.filter((bible) =>
 					this.filterFunction(bible, filterText, activeIsoCode),
@@ -172,6 +173,8 @@ class VersionList extends React.PureComponent {
 			setActiveText,
 			// active,
 		} = this.props;
+
+		console.log('bible in version click', bible);
 
 		if (bible) {
 			const filesets = bible
