@@ -174,7 +174,7 @@ class VersionList extends React.PureComponent {
 			// active,
 		} = this.props;
 
-		console.log('bible in version click', bible);
+		// console.log('bible in version click', bible);
 
 		if (bible) {
 			const filesets = bible
