@@ -7,7 +7,10 @@ const argv = require('./argv');
 const port = require('./port');
 const setup = require('./middlewares/frontendMiddleware');
 const isDev = process.env.NODE_ENV !== 'production';
-const ngrok = (isDev && process.env.ENABLE_TUNNEL) || argv.tunnel ? require('ngrok') : false;
+const ngrok =
+	(isDev && process.env.ENABLE_TUNNEL) || argv.tunnel
+		? require('ngrok')
+		: false;
 const resolve = require('path').resolve;
 const app = express();
 
@@ -31,15 +34,18 @@ app.listen(port, host, (err) => {
 		return logger.error(err.message);
 	}
 
-  // Connect to ngrok in dev mode
+	// Connect to ngrok in dev mode
 	if (ngrok) {
-		ngrok.connect(port, (innerErr, url) => {
-			if (innerErr) {
-				return logger.error(innerErr);
-			}
+		ngrok.connect(
+			port,
+			(innerErr, url) => {
+				if (innerErr) {
+					return logger.error(innerErr);
+				}
 
-			logger.appStarted(port, prettyHost, url);
-		});
+				logger.appStarted(port, prettyHost, url);
+			},
+		);
 	} else {
 		logger.appStarted(port, prettyHost);
 	}

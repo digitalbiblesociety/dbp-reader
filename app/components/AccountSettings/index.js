@@ -30,6 +30,8 @@ class AccountSettings extends React.PureComponent {
 	};
 
 	handleFileInputChange = (e) => {
+		// console.log('e.target.files[0]', e.target.files[0]);
+
 		if (e.target.files[0]) {
 			this.props.changePicture({ avatar: e.target.files[0] });
 		} else {
@@ -118,15 +120,15 @@ class AccountSettings extends React.PureComponent {
 							svgid={'avatar_placeholder'}
 						/>
 					)}
-					<input
-						id={'fileInput'}
-						className={'change-picture-input'}
-						type={'file'}
-						onChange={this.handleFileInputChange}
-					/>
-					<label htmlFor={'fileInput'} className={'change-picture'}>
-						Change Picture
-					</label>
+					{/* <input */}
+					{/* id={'fileInput'} */}
+					{/* className={'change-picture-input'} */}
+					{/* type={'file'} */}
+					{/* onChange={this.handleFileInputChange} */}
+					{/* /> */}
+					{/* <label htmlFor={'fileInput'} className={'change-picture'}> */}
+					{/* Change Picture */}
+					{/* </label> */}
 					<h3 className="name">{profile.nickname}</h3>
 					<span className="name">{profile.name}</span>
 				</section>

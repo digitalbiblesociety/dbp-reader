@@ -1808,7 +1808,6 @@ Text.propTypes = {
 	deleteHighlights: PropTypes.func,
 	toggleNotesModal: PropTypes.func,
 	setActiveNotesView: PropTypes.func,
-	// toggleInformationModal: PropTypes.func,
 	activeChapter: PropTypes.number,
 	notesActive: PropTypes.bool,
 	loadingAudio: PropTypes.bool,
@@ -1816,8 +1815,6 @@ Text.propTypes = {
 	isScrollingDown: PropTypes.bool,
 	loadingCopyright: PropTypes.bool,
 	userAuthenticated: PropTypes.bool,
-	// audioPlayerState: PropTypes.bool,
-	// informationActive: PropTypes.bool,
 	loadingNewChapterText: PropTypes.bool,
 	userId: PropTypes.string,
 	bibleId: PropTypes.string,
@@ -1830,7 +1827,6 @@ Text.propTypes = {
 	plainTextFilesetId: PropTypes.string,
 	formattedTextFilesetId: PropTypes.string,
 	menuIsOpen: PropTypes.bool,
-	// getCopyrights: PropTypes.func,
 };
 
 export default Text;
