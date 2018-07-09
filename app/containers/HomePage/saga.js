@@ -1337,7 +1337,8 @@ export function* createSocialUser({
 			Action: Create a new account with the provided information, link this provider to the account created with the email
 		Case 2: User has account - not linked to provider
 			User tries to sign in with provider to their existing account
-			Action: Try to sign user in, sign in fails, get user id using their email, use user id to link this provider and social_id to their account based on the email + id
+			Action: Try to sign user in, sign in fails, get user id using their email, use user id to link this provider and social_id to their account
+			based on the email + id
 		Case 3: User has account - linked to provider
 			User tries to sign in with provider to their existing account
 			Action: Try to sign user in, sign in fails, get user id using their email, use user id to sign them into their account based on the email + id
@@ -1378,6 +1379,8 @@ export function* createSocialUser({
 				userProfile: response.user,
 			});
 			sessionStorage.setItem('bible_is_user_id', response.user.id);
+			// If I remember correctly the account is linked automatically - should check
+			// with Jon to see if this is actually the case
 		} else if (response.error) {
 			// Case 1: Fail, find which case is now applicable
 			if (process.env.NODE_ENV === 'development') {
@@ -1386,6 +1389,7 @@ export function* createSocialUser({
 			}
 			// Check for Case 3
 			// Probably not the safest because if the message is ever different then this will fail silently
+			// Discuss this request with Jon and see if there could be a better response
 			if (
 				response.error.message &&
 				response.error.message.email &&
@@ -1415,12 +1419,17 @@ export function* createSocialUser({
 						// Case 3: Fail! May want to check for the link between account and provider here.
 						// Now Case 2 is active
 						// Case 2: User has account - Not linked to provider
-
+						// This causes issues because I do not have a way to obtain the
+						// user id in order to link the provider to this account
+						// I could solve this by sending a call to the /users route and then
+						// finding the email but that would expose all of the users to the
+						// front end and would be a terrible idea
 						// console.log('Need to get the user id');
 						// const getUserReq = `${process.env.BASE_API_ROUTE}/users?key=${
 						// 	process.env.DBP_API_KEY
 						// 	}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}`;
 						try {
+							// Below sends call to get the user id and then another call to sign in
 							// const getUserRes = yield call(request, getUserReq);
 							// console.log('getUserRes', getUserRes);
 							// console.log('email: ', email);

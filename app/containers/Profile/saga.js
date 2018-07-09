@@ -198,12 +198,37 @@ export function* updateUserInformation({ userId, profile }) {
 // Extra Header: _method: PUT
 // Content Type: form-data
 export function* changePicture({ userId, avatar }) {
-	console.log('userId, avatar', userId, avatar);
+	// console.log('userId, avatar', userId, avatar);
+	// console.log('avatar.source', avatar.source);
 
 	const requestUrl = `${process.env.BASE_API_ROUTE}/users/${userId}?key=${
 		process.env.DBP_API_KEY
 	}&v=4`;
 	const requestData = new FormData();
+	// const reader = new FileReader();
+	// let avatarBase64;
+	//
+	// reader.addEventListener(
+	// 	'load',
+	// 	() => {
+	// 		console.log('Read the avatar', reader.result);
+	//
+	// 		avatarBase64 = reader.result;
+	// 	},
+	// 	false,
+	// );
+	//
+	// reader.addEventListener('loadend', () => {
+	// 	console.log('avatarBase64', avatarBase64);
+	// });
+	//
+	// if (avatar) {
+	// 	console.log('Started reading avatar');
+	//
+	// 	yield reader.readAsDataURL(avatar);
+	// }
+
+	// yield setTimeout(() => {}, 500);
 
 	requestData.append('avatar', avatar);
 	requestData.append('_method', 'PUT');
@@ -212,52 +237,27 @@ export function* changePicture({ userId, avatar }) {
 		method: 'POST',
 		_method: 'PUT',
 		body: requestData,
+		// headers: {
+		// 	'Content-Type': 'application/x-www-form-urlencoded',
+		// },
 	};
 
 	try {
 		const response = yield call(request, requestUrl, requestOptions);
 
-		console.log('response');
+		// console.log('response');
 		if (response.success) {
-			console.log('picture was saved successfully');
+			// console.log('picture was saved successfully');
 		} else {
-			console.log('picture was not saved', response);
+			// console.log('picture was not saved', response);
 		}
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
-			console.warn('Error saving picture: ', err);
+			// console.warn('Error saving picture: ', err);
 		}
 	}
 }
 
-// export function* updatePassword({ userId, password }) {
-// 	// console.log('in update password with ', userId, password);
-// 	const requestUrl = `${process.env.BASE_API_ROUTE}/users/${userId}?key=${process.env.DBP_API_KEY}&v=4&pretty`;
-// 	const formData = new FormData();
-//
-// 	formData.append('password', password);
-//
-// 	const options = {
-// 		method: 'PUT',
-// 		body: formData,
-// 	};
-//
-// 	try {
-// 		const response = yield call(request, requestUrl, options);
-// 		// console.log('update password response', response);
-// 		yield put({ type: 'UPDATE_EMAIL_SUCCESS', response });
-// 	} catch (err) {
-// 		if (process.env.NODE_ENV === 'development') {
-// 			console.error(err); // eslint-disable-line no-console
-// 		} else if (process.env.NODE_ENV === 'production') {
-// 			// const options = {
-// 			// 	header: 'POST',
-// 			// 	body: formData,
-// 			// };
-// 			// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
-// 		}
-// 	}
-// }
 export function* sendResetPassword({ password, userAccessToken }) {
 	const requestUrl = `${process.env.BASE_API_ROUTE}/users/password/reset?key=${
 		process.env.DBP_API_KEY
