@@ -1,6 +1,6 @@
 const path = require('path');
 const express = require('express');
-const pupperender = require('pupperender');
+// const pupperender = require('pupperender');
 const compression = require('compression');
 
 module.exports = function addProdMiddlewares(app, options) {
@@ -11,7 +11,7 @@ module.exports = function addProdMiddlewares(app, options) {
 	// smaller (applies also to assets). You can read more about that technique
 	// and other good practices on official Express.js docs http://mxs.is/googmy
 	app.use(compression());
-	app.use(pupperender.makeMiddleware({}));
+	// app.use(pupperender.makeMiddleware({}));
 	app.use(publicPath, express.static(outputPath));
 
 	app.get('*', (req, res) =>

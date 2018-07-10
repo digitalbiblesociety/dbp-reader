@@ -1,5 +1,5 @@
 const path = require('path');
-const pupperender = require('pupperender');
+// const pupperender = require('pupperender');
 const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
@@ -22,7 +22,7 @@ module.exports = function addDevMiddlewares(app, webpackConfig) {
 
 	app.use(middleware);
 	app.use(webpackHotMiddleware(compiler));
-	app.use(pupperender.makeMiddleware({ debug: true }));
+	// app.use(pupperender.makeMiddleware({ debug: true }));
 
 	// Since webpackDevMiddleware uses memory-fs internally to store build
 	// artifacts, we use it instead
