@@ -1156,6 +1156,9 @@ class HomePage extends React.PureComponent {
 				<Footer
 					profileActive={isProfileActive}
 					searchActive={isSearchModalActive}
+					scrolledToBottom
+					theme={userSettings.get('activeTheme')}
+					userAgent={userAgent}
 					notebookActive={isNotesModalActive}
 					settingsActive={isSettingsModalActive}
 					isScrollingDown={isScrollingDown}

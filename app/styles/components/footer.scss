@@ -1,6 +1,7 @@
 .footer-background {
 	display: flex;
 	justify-content: center;
+	flex-direction: column;
 	align-items: center;
 	z-index: 2;
 	position: fixed;
@@ -14,6 +15,56 @@
 	//transform: translateY(0);
 
 	&.closed {
+		transform: translateY(100%);
+	}
+
+	.footer-about-content {
+		display: flex;
+		font-size: 14px;
+		align-items: center;
+		justify-content: space-between;
+		flex-wrap: wrap;
+
+		.footer-link-container {
+			display: flex;
+			width: 60%;
+			align-items: center;
+			justify-content: space-between;
+		}
+
+		.footer-link {
+			//width: 20%;
+		}
+
+		.logo-container {
+			width: 40%;
+			display: flex;
+			align-items: center;
+			justify-content: flex-start;
+		}
+
+		.logo {
+			height: 54px;
+			width: calc(10% + 15px);
+			min-width: 111px;
+			display: flex;
+			align-items: center;
+			padding-left: 15px;
+
+			&:hover {
+				opacity: 0.65;
+				background: rgba(0, 0, 0, 0.2);
+			}
+			//max-width: 111px;
+			svg {
+				height: 26px;
+				width: 81px;
+			}
+		}
+	}
+
+	.footer-autohide {
+		// Not sure if I want to transform or display none...
 		transform: translateY(100%);
 	}
 }
