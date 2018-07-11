@@ -2,6 +2,37 @@
 // will need more styling once we have all the correct data
 .information {
 	color: #aaa;
+	margin-bottom: 55px;
+
+	&:before {
+		content: '';
+		position: absolute;
+		width: 80%;
+		height: 1px;
+		left: 10%;
+		@include css4 {
+			background-color: var(--before-after-border-color);
+			//border-top: 1px solid var(--before-after-border-color);
+		}
+	}
+
+	.information-toggle {
+		// Reset default button styles
+		all: unset;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 100%;
+
+		&:hover {
+			cursor: pointer;
+			opacity: 0.85;
+		}
+
+		.rotate {
+			transform: rotate(180deg);
+		}
+	}
 
 	.link {
 		color: $sketch-document-color-light-blue;
@@ -16,18 +47,6 @@
 		overflow-y: auto;
 		overflow-x: hidden;
 		max-height: 90%;
-
-		&:before {
-			content: '';
-			position: absolute;
-			width: 80%;
-			height: 1px;
-			left: 10%;
-			@include css4 {
-				background-color: var(--before-after-border-color);
-				//border-top: 1px solid var(--before-after-border-color);
-			}
-		}
 
 		.nt-copyright,
 		.ot-copyright {
