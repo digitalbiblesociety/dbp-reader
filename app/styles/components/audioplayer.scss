@@ -455,17 +455,17 @@
 @media only screen and (max-width: 499px) {
 	.audioplayer-handle {
 		&.sub-footer-open {
-			bottom: 349px;
+			bottom: 331px;
 		}
 
 		&.closed.sub-footer-open {
-			bottom: 264px;
+			bottom: 248px;
 		}
 	}
 
 	.audio-player-background {
 		&.sub-footer-open {
-			bottom: 264px;
+			bottom: 248px;
 		}
 	}
 }

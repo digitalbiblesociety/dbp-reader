@@ -455,7 +455,7 @@ export class AudioPlayer extends React.Component {
 			classNames += ' scrolled-down';
 		}
 
-		if (subFooterOpen) {
+		if (subFooterOpen && !isScrollingDown) {
 			classNames += ' sub-footer-open';
 		}
 
@@ -483,7 +483,7 @@ export class AudioPlayer extends React.Component {
 			classNames += ' scrolled-down';
 		}
 
-		if (subFooterOpen) {
+		if (subFooterOpen && !isScrollingDown) {
 			classNames += ' sub-footer-open';
 		}
 

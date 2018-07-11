@@ -862,6 +862,7 @@ class HomePage extends React.PureComponent {
 		this.main = document.getElementsByTagName('main')[0];
 		if (!this.outOfBounds) {
 			// console.log('this.state.isScrollingDown', this.state.isScrollingDown);
+			// Previous state was not scrolling down but new state is
 			if (
 				this.scrollTop >= this.previousScrollTop &&
 				!this.state.isScrollingDown
@@ -879,6 +880,7 @@ class HomePage extends React.PureComponent {
 						this.scrollTicking = false;
 					},
 				);
+				// New state is scrolling up and old state is scrolling down
 			} else if (
 				this.scrollTop < this.previousScrollTop &&
 				this.state.isScrollingDown
@@ -1164,8 +1166,9 @@ class HomePage extends React.PureComponent {
 					activeBookId={activeBookId}
 					loadingAudio={loadingAudio}
 					userSettings={userSettings}
-					textDirection={textDirection}
 					activeChapter={activeChapter}
+					textDirection={textDirection}
+					subFooterOpen={subFooterOpen}
 					invalidBibleId={invalidBibleId}
 					audioFilesetId={audioFilesetId}
 					activeBookName={activeBookName}

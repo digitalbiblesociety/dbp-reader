@@ -100,24 +100,59 @@ const Footer = ({
 						/>
 					) : null}
 				</a>
-				<a>
+				<a
+					href={'http://www.bible.is'}
+					title={'http://www.bible.is'}
+					target={'_blank'}
+					rel={'noopener'}
+				>
 					<FormattedMessage {...messages.ministry} />
 				</a>
 			</div>
 			<div className={'footer-link-container'}>
-				<a className={'footer-link'}>
+				<a
+					className={'footer-link'}
+					href={'http://www.bible.is/download/audio'}
+					title={'http://www.bible.is/download/audio'}
+					target={'_blank'}
+					rel={'noopener'}
+				>
 					<FormattedMessage {...messages.audioDownload} />
 				</a>
-				<a className={'footer-link'}>
+				<a
+					className={'footer-link'}
+					href={'http://www.bible.is/privacy'}
+					title={'http://www.bible.is/privacy'}
+					target={'_blank'}
+					rel={'noopener'}
+				>
 					<FormattedMessage {...messages.privacy} />
 				</a>
-				<a className={'footer-link'}>
+				<a
+					className={'footer-link'}
+					href={'http://www.bible.is/terms'}
+					title={'http://www.bible.is/terms'}
+					target={'_blank'}
+					rel={'noopener'}
+				>
 					<FormattedMessage {...messages.terms} />
 				</a>
-				<a className={'footer-link'}>
+				<a
+					className={'footer-link'}
+					href={'http://www.bible.is/radio'}
+					title={'http://www.bible.is/radio'}
+					target={'_blank'}
+					rel={'noopener'}
+				>
 					<FormattedMessage {...messages.radio} />
 				</a>
-				<a className={'footer-link'}>
+				<a
+					className={'footer-link'}
+					href={'http://www.bible.is/contact'}
+					title={'http://www.bible.is/contact'}
+					target={'_blank'}
+					rel={'noopener'}
+				>
 					<FormattedMessage {...messages.support} />
 				</a>
 			</div>
