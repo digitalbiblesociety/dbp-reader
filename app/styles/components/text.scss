@@ -243,6 +243,29 @@
 	}
 }
 
+//@media only screen and (min-width: 500px) and (max-width: $large-bp) {
+//	.text-container {
+//		&.sub-footer-open {
+//			margin-bottom: 190px;
+//		}
+//	}
+//	@media only screen and (max-width: $audio-player-bp) {
+//		.text-container {
+//			&.sub-footer-open {
+//				margin-bottom: 45px;
+//			}
+//		}
+//	}
+//}
+//
+//@media only screen and (max-width: 499px) {
+//	.text-container {
+//		&.sub-footer-open {
+//			margin-bottom: 45px;
+//		}
+//	}
+//}
+
 // Style that I like but that isn't in the comps
 //@keyframes thicken {
 //	0%   { transform: scale(1.00); fill:rgba(158, 30, 53, 0.253); }
