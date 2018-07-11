@@ -14,9 +14,9 @@ module.exports = function addProdMiddlewares(app, options) {
 	app.use(compression());
 	// app.use(pupperender.makeMiddleware({}));
 	app.use(publicPath, express.static(outputPath));
-	console.log('Inside add prod middleware');
+	// console.log('Inside add prod middleware');
 	app.get('*', async (req, res) => {
-		console.log('Inside app.get for prod');
+		// console.log('Inside app.get for prod');
 		// whole url = `${req.protocol}://${req.get('host')}${req.originalUrl}`
 		if (req.originalUrl) {
 			const parsedUrl = req.originalUrl
@@ -31,13 +31,18 @@ module.exports = function addProdMiddlewares(app, options) {
 					if (!err) {
 						hasHtml = true;
 					}
-					console.log(`Has Html = ${err ? 'false' : 'true'}`);
+					// console.log(`Has Html = ${err ? 'false' : 'true'}`);
 				},
 			);
-			console.log('Sending rendered html');
-			res.sendFile(path.resolve(outputPath, `${parsedUrl}.html`));
+
+			if (hasHtml) {
+				res.sendFile(path.resolve(outputPath, `${parsedUrl}.html`));
+			} else {
+				res.sendFile(path.resolve(outputPath, 'index.html'));
+			}
+			// console.log('Sending rendered html');
 		} else {
-			console.log('Sending normal html');
+			// console.log('Sending normal html');
 			res.sendFile(path.resolve(outputPath, 'index.html'));
 		}
 	});

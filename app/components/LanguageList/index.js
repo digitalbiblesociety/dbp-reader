@@ -262,6 +262,7 @@ class LanguageList extends React.PureComponent {
 			toggleVersionList();
 		}
 	};
+
 	handleRef = (el) => {
 		this.container = el;
 	};

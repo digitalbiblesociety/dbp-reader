@@ -131,12 +131,12 @@ Footer.propTypes = {
 	searchActive: PropTypes.bool,
 	notebookActive: PropTypes.bool,
 	isScrollingDown: PropTypes.bool,
+	scrolledToBottom: PropTypes.bool,
 	toggleNotebook: PropTypes.func,
 	toggleSettingsModal: PropTypes.func,
 	toggleProfile: PropTypes.func,
 	toggleSearch: PropTypes.func,
 	setActiveNotesView: PropTypes.func,
-	scrolledToBottom: PropTypes.bool,
 	theme: PropTypes.string,
 	userAgent: PropTypes.string,
 };

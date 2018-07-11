@@ -55,6 +55,7 @@ export class AudioPlayer extends React.Component {
 		// If auto play is enabled I need to start the player
 		if (this.props.autoPlay) {
 			// console.log('component mounted and auto play was true');
+			// Checking User Agent because the canplay event fails silently on mobile apple devices
 			if (
 				navigator &&
 				navigator.userAgent &&
@@ -433,6 +434,62 @@ export class AudioPlayer extends React.Component {
 		return <SvgWrapper className={'icon'} fill="#fff" svgid="playback_2x" />;
 	}
 
+	get classNamesForHandle() {
+		const {
+			audioSource: source,
+			hasAudio,
+			audioPlayerState,
+			isScrollingDown,
+			subFooterOpen,
+		} = this.props;
+
+		let classNames = '';
+
+		if (audioPlayerState && hasAudio && source !== '') {
+			classNames += 'audioplayer-handle';
+		} else {
+			classNames += 'audioplayer-handle closed';
+		}
+
+		if (isScrollingDown) {
+			classNames += ' scrolled-down';
+		}
+
+		if (subFooterOpen) {
+			classNames += ' sub-footer-open';
+		}
+
+		return classNames;
+	}
+
+	get classNamesForBackground() {
+		const {
+			audioSource: source,
+			hasAudio,
+			audioPlayerState,
+			isScrollingDown,
+			subFooterOpen,
+		} = this.props;
+
+		let classNames = '';
+
+		if (audioPlayerState && hasAudio && source !== '') {
+			classNames += 'audio-player-background';
+		} else {
+			classNames += 'audio-player-background closed';
+		}
+
+		if (isScrollingDown) {
+			classNames += ' scrolled-down';
+		}
+
+		if (subFooterOpen) {
+			classNames += ' sub-footer-open';
+		}
+
+		return classNames;
+	}
+
 	nextIcon = (
 		<div
 			role={'button'}
@@ -490,7 +547,7 @@ export class AudioPlayer extends React.Component {
 			audioSource: source,
 			hasAudio,
 			audioPlayerState,
-			isScrollingDown,
+			// isScrollingDown,
 		} = this.props;
 		const { autoPlayChecked, currentSpeed } = this.state;
 
@@ -500,13 +557,7 @@ export class AudioPlayer extends React.Component {
 					role={'button'}
 					tabIndex={0}
 					name={'Audio player toggle'}
-					className={
-						audioPlayerState && hasAudio && source !== ''
-							? `audioplayer-handle${isScrollingDown ? ' scrolled-down' : ''}`
-							: `audioplayer-handle closed${
-									isScrollingDown ? ' scrolled-down' : ''
-							  }`
-					}
+					className={this.classNamesForHandle}
 					onClick={(e) => {
 						e.stopPropagation();
 						this.toggleAudioPlayer();
@@ -525,15 +576,7 @@ export class AudioPlayer extends React.Component {
 				<div
 					role="button"
 					tabIndex={0}
-					className={
-						audioPlayerState && hasAudio && source !== ''
-							? `audio-player-background${
-									isScrollingDown ? ' scrolled-down' : ''
-							  }`
-							: `audio-player-background closed${
-									isScrollingDown ? ' scrolled-down' : ''
-							  }`
-					}
+					className={this.classNamesForBackground}
 					ref={this.setAudioPlayerRef}
 					onClick={this.handleBackgroundClick}
 				>
@@ -657,6 +700,7 @@ AudioPlayer.propTypes = {
 	autoPlay: PropTypes.bool,
 	isScrollingDown: PropTypes.bool,
 	audioPlayerState: PropTypes.bool.isRequired,
+	subFooterOpen: PropTypes.bool,
 	// prevAudioSource: PropTypes.string,
 	// nextAudioSource: PropTypes.string,
 };

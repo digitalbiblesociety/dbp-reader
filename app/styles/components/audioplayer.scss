@@ -18,6 +18,10 @@
 	&.closed {
 		border: none;
 	}
+
+	&.sub-footer-open {
+		bottom: 110px;
+	}
 }
 // General Audio Player Styles
 .audio-player-container .svgitem {
@@ -141,6 +145,10 @@
 	transition: transform 200ms ease-in-out;
 	//transform: translateY(0);
 
+	&.sub-footer-open {
+		bottom: 160px;
+	}
+
 	&.scrolled-down {
 		transform: translateY(56px);
 	}
@@ -174,6 +182,14 @@
 
 	&.closed {
 		bottom: 56px;
+
+		@include css4 {
+			border-bottom: 1px solid var(--menu-border-color);
+		}
+	}
+
+	&.closed.sub-footer-open {
+		bottom: 110px;
 
 		@include css4 {
 			border-bottom: 1px solid var(--menu-border-color);
@@ -402,6 +418,54 @@
 		}
 	}
 	.audioplayer-handle {
-		bottom: 136px;
+		bottom: 139px;
+	}
+}
+
+@media only screen and (min-width: 500px) and (max-width: $large-bp) {
+	.audioplayer-handle {
+		&.sub-footer-open {
+			bottom: 246px;
+		}
+
+		&.closed.sub-footer-open {
+			bottom: 194px;
+		}
+	}
+
+	.audio-player-background {
+		&.sub-footer-open {
+			bottom: 194px;
+		}
+	}
+
+	@media only screen and (max-width: $audio-player-bp) {
+		.audioplayer-handle {
+			&.sub-footer-open {
+				bottom: 279px;
+			}
+
+			&.closed.sub-footer-open {
+				bottom: 194px;
+			}
+		}
+	}
+}
+
+@media only screen and (max-width: 499px) {
+	.audioplayer-handle {
+		&.sub-footer-open {
+			bottom: 349px;
+		}
+
+		&.closed.sub-footer-open {
+			bottom: 264px;
+		}
+	}
+
+	.audio-player-background {
+		&.sub-footer-open {
+			bottom: 264px;
+		}
 	}
 }

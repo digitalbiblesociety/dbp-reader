@@ -20,24 +20,35 @@
 
 	.footer-about-content {
 		display: flex;
+		width: 1000px;
+		max-width: 1000px;
 		font-size: 14px;
 		align-items: center;
+		transition: height 0.2s ease-in-out;
 		justify-content: space-between;
 		flex-wrap: wrap;
 
 		.footer-link-container {
 			display: flex;
-			width: 60%;
 			align-items: center;
 			justify-content: space-between;
+			min-width: 480px;
 		}
 
 		.footer-link {
 			//width: 20%;
+			height: 54px;
+			display: flex;
+			align-items: center;
+			width: 100px;
+			padding: 0 10px;
+			text-align: center;
+			justify-content: center;
 		}
 
 		.logo-container {
-			width: 40%;
+			min-width: 384px;
+			max-width: 384px;
 			display: flex;
 			align-items: center;
 			justify-content: flex-start;
@@ -65,7 +76,9 @@
 
 	.footer-autohide {
 		// Not sure if I want to transform or display none...
-		transform: translateY(100%);
+		display: none;
+		//transform: translateY(100%);
+		//transition: height 0.3s, min-height 0.3s;
 	}
 }
 .footer-content {
@@ -137,6 +150,51 @@
 	}
 }
 
+@media only screen and (max-width: 499px) {
+	.footer-background {
+		.footer-about-content {
+			width: 320px;
+			max-width: 320px;
+			justify-content: center;
+			padding: 15px 10px;
+
+			.footer-link-container {
+				max-width: 300px;
+				min-width: 300px;
+				flex-wrap: wrap;
+				justify-content: center;
+			}
+
+			.logo-container {
+				min-width: 300px;
+				max-width: 300px;
+				flex-wrap: wrap;
+				justify-content: center;
+			}
+		}
+	}
+}
+
+@media only screen and (min-width: 500px) and (max-width: $large-bp) {
+	.footer-background {
+		.footer-about-content {
+			width: 480px;
+			max-width: 480px;
+			justify-content: center;
+			padding: 15px 10px;
+
+			.footer-link-container {
+				min-width: 480px;
+			}
+
+			.logo-container {
+				min-width: 384px;
+				max-width: 384px;
+			}
+		}
+	}
+}
+
 @media only screen and (min-width: $medium-bp) {
 	// padding left and right are 15px
 	.footer-content {
@@ -144,6 +202,7 @@
 		width: 405px;
 		max-width: 405px;
 	}
+
 	.footer-content .item .title-text {
 		font-size: inherit;
 	}
