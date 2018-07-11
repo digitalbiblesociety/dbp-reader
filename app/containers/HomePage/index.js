@@ -860,6 +860,8 @@ class HomePage extends React.PureComponent {
 
 	updateScrollDirection = () => {
 		this.main = document.getElementsByTagName('main')[0];
+		// Height that scrollTop needs to be within for the sub footer to activate
+		const resizeHeight = 5;
 		if (!this.outOfBounds) {
 			// console.log('this.state.isScrollingDown', this.state.isScrollingDown);
 			// Previous state was not scrolling down but new state is
@@ -870,7 +872,8 @@ class HomePage extends React.PureComponent {
 				this.setState(
 					{
 						subFooterOpen:
-							this.scrollTop + this.mainPhysicalHeight > this.mainHeight - 50,
+							this.scrollTop + this.mainPhysicalHeight >
+							this.mainHeight - resizeHeight,
 						isScrollingDown: !!this.isMobileSized,
 					},
 					() => {
@@ -888,7 +891,8 @@ class HomePage extends React.PureComponent {
 				this.setState(
 					{
 						subFooterOpen:
-							this.scrollTop + this.mainPhysicalHeight > this.mainHeight - 50,
+							this.scrollTop + this.mainPhysicalHeight >
+							this.mainHeight - resizeHeight,
 						isScrollingDown: false,
 					},
 					() => {
@@ -902,7 +906,8 @@ class HomePage extends React.PureComponent {
 				this.setState(
 					{
 						subFooterOpen:
-							this.scrollTop + this.mainPhysicalHeight > this.mainHeight - 50,
+							this.scrollTop + this.mainPhysicalHeight >
+							this.mainHeight - resizeHeight,
 					},
 					() => {
 						// console.log('Setting new prev scroll and stuff for up');
@@ -916,7 +921,8 @@ class HomePage extends React.PureComponent {
 			this.setState(
 				{
 					subFooterOpen:
-						this.scrollTop + this.mainPhysicalHeight > this.mainHeight - 50,
+						this.scrollTop + this.mainPhysicalHeight >
+						this.mainHeight - resizeHeight,
 					isScrollingDown: false,
 				},
 				() => {
@@ -928,7 +934,8 @@ class HomePage extends React.PureComponent {
 			this.setState(
 				{
 					subFooterOpen:
-						this.scrollTop + this.mainPhysicalHeight > this.mainHeight - 50,
+						this.scrollTop + this.mainPhysicalHeight >
+						this.mainHeight - resizeHeight,
 				},
 				() => {
 					// console.log('Setting new prev scroll and stuff for up');
