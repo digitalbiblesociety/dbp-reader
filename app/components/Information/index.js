@@ -111,7 +111,9 @@ class Information extends React.PureComponent {
 				<button onClick={this.toggleCopyright} className="information-toggle">
 					<FormattedMessage {...messages.material} />
 					&nbsp;|&nbsp;
-					<FormattedMessage {...messages.learnMore} />
+					<span className={'learn-more'}>
+						<FormattedMessage {...messages.learnMore} />
+					</span>
 					<SvgWrapper
 						className={this.state.opened ? 'icon rotate' : 'icon'}
 						svgid={'arrow_down'}

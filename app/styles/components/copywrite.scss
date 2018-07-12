@@ -2,7 +2,7 @@
 // will need more styling once we have all the correct data
 .information {
 	color: #aaa;
-	margin-bottom: 55px;
+	margin-bottom: 65px;
 
 	&:before {
 		content: '';
@@ -18,19 +18,39 @@
 
 	.information-toggle {
 		// Reset default button styles
-		all: unset;
+		//all: unset;
+		background-color: transparent;
+		border: none;
+		outline: none;
+		font-size: 60%;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		width: 100%;
+		transition: transform 200ms ease-in-out;
+
+		&:focus {
+			outline: none;
+		}
+
+		.learn-more {
+			@include css4 {
+				color: var(--notebook-title-date-color);
+			}
+		}
 
 		&:hover {
 			cursor: pointer;
 			opacity: 0.85;
 		}
 
+		.icon {
+			transition: transform 200ms ease-in-out;
+			transform: rotate(0deg);
+		}
+
 		.rotate {
-			transform: rotate(180deg);
+			transform: rotate(-180deg);
 		}
 	}
 
@@ -126,5 +146,23 @@
 				}
 			}
 		}
+	}
+}
+
+@media only screen and (min-width: 500px) and (max-width: $large-bp) {
+	.information {
+		margin-bottom: 155px;
+	}
+
+	@media only screen and (max-width: $audio-player-bp) {
+		.information {
+			margin-bottom: 180px;
+		}
+	}
+}
+
+@media only screen and (max-width: 499px) {
+	.information {
+		margin-bottom: 230px;
 	}
 }

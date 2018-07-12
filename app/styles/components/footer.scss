@@ -89,6 +89,22 @@
 	height: 56px;
 	justify-content: space-between;
 	align-items: center;
+
+	// For if we want something to differentiate the nav icons
+	// with the about us related links in the footer
+	&:after {
+		//content: "";
+		height: 1px;
+		width: 50%;
+		position: absolute;
+		left: 25%;
+		top: 66px;
+		//left: 50%;
+		//right: 10%;
+		@include css4 {
+			background-color: var(--before-after-border-color);
+		}
+	}
 }
 .footer-content .item {
 	//margin-top:5px;
