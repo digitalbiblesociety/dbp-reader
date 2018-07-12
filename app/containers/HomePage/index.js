@@ -861,7 +861,7 @@ class HomePage extends React.PureComponent {
 	updateScrollDirection = () => {
 		this.main = document.getElementsByTagName('main')[0];
 		// Height that scrollTop needs to be within for the sub footer to activate
-		const resizeHeight = 5;
+		const resizeHeight = 50;
 		if (!this.outOfBounds) {
 			// console.log('this.state.isScrollingDown', this.state.isScrollingDown);
 			// Previous state was not scrolling down but new state is
