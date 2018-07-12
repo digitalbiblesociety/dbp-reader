@@ -303,7 +303,7 @@ export class SearchContainer extends React.PureComponent {
 		// or if it was because this was the first visit to the tab
 		return (
 			<GenericErrorBoundary affectedArea="Search">
-				<div className={'search-wrapper'}>
+				<aside className={'search-wrapper'}>
 					<aside ref={this.setRef} className="search">
 						<header>
 							<SvgWrapper className={'icon'} svgid={'search'} />
@@ -322,7 +322,7 @@ export class SearchContainer extends React.PureComponent {
 						</header>
 						{loadingResults ? <LoadingSpinner /> : this.formattedResults}
 					</aside>
-				</div>
+				</aside>
 			</GenericErrorBoundary>
 		);
 	}
