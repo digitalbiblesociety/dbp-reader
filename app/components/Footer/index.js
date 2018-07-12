@@ -7,6 +7,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import SvgWrapper from 'components/SvgWrapper';
+import { FormattedMessage } from 'react-intl';
+import messages from './messages';
 // import styled from 'styled-components';
 // Todo: Use a transition to animate the closing and opening of the footer
 const Footer = ({
@@ -20,6 +22,9 @@ const Footer = ({
 	toggleSearch,
 	isScrollingDown,
 	setActiveNotesView,
+	scrolledToBottom,
+	theme,
+	userAgent,
 }) => (
 	<div
 		className={
@@ -35,7 +40,7 @@ const Footer = ({
 				onClick={() => !profileActive && toggleProfile()}
 			>
 				<SvgWrapper className={'icon'} fill="#fff" svgid="profile" />
-				<h4 className={'title-text'}>Profile</h4>
+				<span className={'title-text'}>Profile</span>
 			</span>
 			<span
 				title={'Search'}
@@ -45,7 +50,7 @@ const Footer = ({
 				onClick={() => !searchActive && toggleSearch()}
 			>
 				<SvgWrapper className={'icon'} fill="#fff" svgid="search" />
-				<h4 className={'title-text'}>Search</h4>
+				<span className={'title-text'}>Search</span>
 			</span>
 			<span
 				title={'Notebook'}
@@ -60,7 +65,7 @@ const Footer = ({
 				}}
 			>
 				<SvgWrapper className={'icon'} fill="#fff" svgid="notebook" />
-				<h4 className={'title-text'}>Notebook</h4>
+				<span className={'title-text'}>Notebook</span>
 			</span>
 			<span
 				title={'Settings'}
@@ -70,8 +75,87 @@ const Footer = ({
 				onClick={() => !settingsActive && toggleSettingsModal()}
 			>
 				<SvgWrapper className={'icon'} fill="#fff" svgid="text_options" />
-				<h4 className={'title-text'}>Options</h4>
+				<span className={'title-text'}>Options</span>
 			</span>
+		</div>
+		<div
+			className={scrolledToBottom ? 'footer-about-content' : 'footer-autohide'}
+		>
+			<div className={'logo-container'}>
+				<a
+					className="logo"
+					href={'http://www.bible.is'}
+					title={'http://www.bible.is'}
+					target={'_blank'}
+					rel={'noopener'}
+				>
+					{theme === 'paper' && userAgent !== 'ms' ? (
+						<SvgWrapper className="svg" svgid={'bible.is_logo_light'} />
+					) : null}
+					{theme !== 'paper' || userAgent === 'ms' ? (
+						<SvgWrapper
+							fill={userAgent === 'ms' ? '#fff' : ''}
+							className="svg"
+							svgid={'bible.is_logo'}
+						/>
+					) : null}
+				</a>
+				<a
+					href={'http://www.bible.is'}
+					title={'http://www.bible.is'}
+					target={'_blank'}
+					rel={'noopener'}
+				>
+					<FormattedMessage {...messages.ministry} />
+				</a>
+			</div>
+			<div className={'footer-link-container'}>
+				<a
+					className={'footer-link'}
+					href={'http://www.bible.is/download/audio'}
+					title={'http://www.bible.is/download/audio'}
+					target={'_blank'}
+					rel={'noopener'}
+				>
+					<FormattedMessage {...messages.audioDownload} />
+				</a>
+				<a
+					className={'footer-link'}
+					href={'http://www.bible.is/privacy'}
+					title={'http://www.bible.is/privacy'}
+					target={'_blank'}
+					rel={'noopener'}
+				>
+					<FormattedMessage {...messages.privacy} />
+				</a>
+				<a
+					className={'footer-link'}
+					href={'http://www.bible.is/terms'}
+					title={'http://www.bible.is/terms'}
+					target={'_blank'}
+					rel={'noopener'}
+				>
+					<FormattedMessage {...messages.terms} />
+				</a>
+				<a
+					className={'footer-link'}
+					href={'http://www.bible.is/radio'}
+					title={'http://www.bible.is/radio'}
+					target={'_blank'}
+					rel={'noopener'}
+				>
+					<FormattedMessage {...messages.radio} />
+				</a>
+				<a
+					className={'footer-link'}
+					href={'http://www.bible.is/contact'}
+					title={'http://www.bible.is/contact'}
+					target={'_blank'}
+					rel={'noopener'}
+				>
+					<FormattedMessage {...messages.support} />
+				</a>
+			</div>
 		</div>
 	</div>
 );
@@ -82,11 +166,14 @@ Footer.propTypes = {
 	searchActive: PropTypes.bool,
 	notebookActive: PropTypes.bool,
 	isScrollingDown: PropTypes.bool,
+	scrolledToBottom: PropTypes.bool,
 	toggleNotebook: PropTypes.func,
 	toggleSettingsModal: PropTypes.func,
 	toggleProfile: PropTypes.func,
 	toggleSearch: PropTypes.func,
 	setActiveNotesView: PropTypes.func,
+	theme: PropTypes.string,
+	userAgent: PropTypes.string,
 };
 
 export default Footer;

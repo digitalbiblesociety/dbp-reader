@@ -336,6 +336,8 @@ export function* getBibleFromUrl({
 		if (response.data && Object.keys(response.data).length) {
 			// Creating new objects for each set of data needed to ensure I don't forget something
 			// I probably will want to use 'yield all' for getting the audio and text so they can be run async
+			// console.log('reponses', response);
+			// console.log('bibleId', bibleId);
 			const bible = response.data;
 			const books = bible.books; // Need to ensure that I have the books here
 			const textDirection =
@@ -453,12 +455,12 @@ export function* getBibleFromUrl({
 				userId,
 				verse,
 			});
-			// console.log('chapter data', chapterData);
+			// console.log('chapter data', bible);
 			// still need to include to active book name so that iteration happens here
 			yield put({
 				type: 'loadbible',
 				filesets,
-				name: bible.vname || bible.name,
+				name: bible.vname ? bible.vname : bible.name,
 				iso: bible.iso,
 				textDirection,
 				languageName: bible.language,

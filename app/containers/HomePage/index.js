@@ -107,6 +107,7 @@ import saga from './saga';
 class HomePage extends React.PureComponent {
 	state = {
 		isScrollingDown: false,
+		subFooterOpen: false,
 	};
 	// eslint-disable-line react/prefer-stateless-function
 	componentDidMount() {
@@ -333,17 +334,17 @@ class HomePage extends React.PureComponent {
 
 		// Check for if the screen size is small enough to be a mobile device
 		// Google Pixel 2 XL is 411x823
-
-		if (
-			window &&
-			document &&
-			document.firstElementChild &&
-			document.firstElementChild.clientHeight < 900 &&
-			document.firstElementChild.clientWidth < 500
-		) {
+		// Add the event listeners anyway but check for this
+		// in RAF to determine what state to update
+		if (window && document && document.firstElementChild) {
 			// console.log('Added scroll listener');
 			this.main = document.getElementsByTagName('main')[0];
 			window.addEventListener('scroll', this.handleScrolling, true);
+			//
+			// console.log(document.getElementById('app').firstChild.scrollTop);
+			// document.getElementById('app').firstChild.scrollTop = 1;
+			// console.log(document.getElementById('app').firstChild.scrollTop);
+			// console.log(document.getElementById('app').firstChild.scrollHeight);
 		}
 	}
 	// Component updates when the state and props haven't changed 2 of 5 times
@@ -793,6 +794,16 @@ class HomePage extends React.PureComponent {
 	setAudioPlayerState = (state) =>
 		this.props.dispatch(setAudioPlayerState(state));
 
+	get isMobileSized() {
+		return (
+			window &&
+			document &&
+			document.firstElementChild &&
+			document.firstElementChild.clientHeight < 900 &&
+			document.firstElementChild.clientWidth < 500
+		);
+	}
+
 	// Height of the entire scroll container including the invisible portions
 	get mainHeight() {
 		return Math.max(
@@ -849,40 +860,90 @@ class HomePage extends React.PureComponent {
 
 	updateScrollDirection = () => {
 		this.main = document.getElementsByTagName('main')[0];
+		// Height that scrollTop needs to be within for the sub footer to activate
+		const resizeHeight = 50;
 		if (!this.outOfBounds) {
 			// console.log('this.state.isScrollingDown', this.state.isScrollingDown);
+			// Previous state was not scrolling down but new state is
 			if (
 				this.scrollTop >= this.previousScrollTop &&
 				!this.state.isScrollingDown
 			) {
-				this.setState({ isScrollingDown: true }, () => {
-					// console.log('Setting new prev scroll and stuff for down');
+				this.setState(
+					{
+						subFooterOpen:
+							this.scrollTop + this.mainPhysicalHeight >
+							this.mainHeight - resizeHeight,
+						isScrollingDown: !!this.isMobileSized,
+					},
+					() => {
+						// console.log('Setting new prev scroll and stuff for down');
 
-					this.previousScrollTop = this.scrollTop;
-					this.scrollTicking = false;
-				});
+						this.previousScrollTop = this.scrollTop;
+						this.scrollTicking = false;
+					},
+				);
+				// New state is scrolling up and old state is scrolling down
 			} else if (
 				this.scrollTop < this.previousScrollTop &&
 				this.state.isScrollingDown
 			) {
-				this.setState({ isScrollingDown: false }, () => {
+				this.setState(
+					{
+						subFooterOpen:
+							this.scrollTop + this.mainPhysicalHeight >
+							this.mainHeight - resizeHeight,
+						isScrollingDown: false,
+					},
+					() => {
+						// console.log('Setting new prev scroll and stuff for up');
+
+						this.previousScrollTop = this.scrollTop;
+						this.scrollTicking = false;
+					},
+				);
+			} else {
+				this.setState(
+					{
+						subFooterOpen:
+							this.scrollTop + this.mainPhysicalHeight >
+							this.mainHeight - resizeHeight,
+					},
+					() => {
+						// console.log('Setting new prev scroll and stuff for up');
+
+						this.previousScrollTop = this.scrollTop;
+						this.scrollTicking = false;
+					},
+				);
+			}
+		} else if (this.isAtTop) {
+			this.setState(
+				{
+					subFooterOpen:
+						this.scrollTop + this.mainPhysicalHeight >
+						this.mainHeight - resizeHeight,
+					isScrollingDown: false,
+				},
+				() => {
+					this.previousScrollTop = this.scrollTop;
+					this.scrollTicking = false;
+				},
+			);
+		} else {
+			this.setState(
+				{
+					subFooterOpen:
+						this.scrollTop + this.mainPhysicalHeight >
+						this.mainHeight - resizeHeight,
+				},
+				() => {
 					// console.log('Setting new prev scroll and stuff for up');
 
 					this.previousScrollTop = this.scrollTop;
 					this.scrollTicking = false;
-				});
-			} else {
-				this.previousScrollTop = this.scrollTop;
-				this.scrollTicking = false;
-			}
-		} else if (this.isAtTop) {
-			this.setState({ isScrollingDown: false }, () => {
-				this.previousScrollTop = this.scrollTop;
-				this.scrollTicking = false;
-			});
-		} else {
-			this.previousScrollTop = this.scrollTop;
-			this.scrollTicking = false;
+				},
+			);
 		}
 	};
 
@@ -994,7 +1055,7 @@ class HomePage extends React.PureComponent {
 			// updatedText,
 		} = this.props;
 
-		const { isScrollingDown } = this.state;
+		const { isScrollingDown, subFooterOpen } = this.state;
 
 		const { userNotes, bookmarks, text: updatedText } = this.props.textData;
 		// console.log('text', updatedText);
@@ -1047,19 +1108,6 @@ class HomePage extends React.PureComponent {
 					isVersionSelectionActive={isVersionSelectionActive}
 					toggleChapterSelection={this.toggleChapterSelection}
 					toggleVersionSelection={this.toggleVersionSelection}
-				/>
-				<AudioPlayer
-					audioPaths={audioPaths}
-					autoPlay={autoPlayEnabled}
-					audioPlayerState={audioPlayerState}
-					audioSource={audioSource}
-					isScrollingDown={isScrollingDown}
-					// nextAudioSource={nextAudioSource}
-					// prevAudioSource={prevAudioSource}
-					setAudioPlayerState={this.setAudioPlayerState}
-					toggleAutoPlay={this.toggleAutoPlay}
-					skipBackward={this.getPrevChapter}
-					skipForward={this.getNextChapter}
 				/>
 				<TransitionGroup>
 					{isSettingsModalActive ? (
@@ -1125,8 +1173,9 @@ class HomePage extends React.PureComponent {
 					activeBookId={activeBookId}
 					loadingAudio={loadingAudio}
 					userSettings={userSettings}
-					textDirection={textDirection}
 					activeChapter={activeChapter}
+					textDirection={textDirection}
+					subFooterOpen={subFooterOpen}
 					invalidBibleId={invalidBibleId}
 					audioFilesetId={audioFilesetId}
 					activeBookName={activeBookName}
@@ -1153,9 +1202,26 @@ class HomePage extends React.PureComponent {
 					setActiveNotesView={this.setActiveNotesView}
 					toggleInformationModal={this.toggleInformationModal}
 				/>
+				<AudioPlayer
+					audioPaths={audioPaths}
+					autoPlay={autoPlayEnabled}
+					audioPlayerState={audioPlayerState}
+					audioSource={audioSource}
+					isScrollingDown={isScrollingDown}
+					subFooterOpen={subFooterOpen}
+					// nextAudioSource={nextAudioSource}
+					// prevAudioSource={prevAudioSource}
+					setAudioPlayerState={this.setAudioPlayerState}
+					toggleAutoPlay={this.toggleAutoPlay}
+					skipBackward={this.getPrevChapter}
+					skipForward={this.getNextChapter}
+				/>
 				<Footer
 					profileActive={isProfileActive}
 					searchActive={isSearchModalActive}
+					scrolledToBottom={subFooterOpen}
+					theme={userSettings.get('activeTheme')}
+					userAgent={userAgent}
 					notebookActive={isNotesModalActive}
 					settingsActive={isSettingsModalActive}
 					isScrollingDown={isScrollingDown}

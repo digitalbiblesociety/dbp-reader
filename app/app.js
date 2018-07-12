@@ -67,14 +67,14 @@ const render = (messages) => {
 				</ConnectedRouter>
 			</LanguageProvider>
 		</Provider>,
-    MOUNT_NODE
-  );
+		MOUNT_NODE,
+	);
 };
 
 if (module.hot) {
-  // Hot reloadable React components and translation json files
-  // modules.hot.accept does not accept dynamic dependencies,
-  // have to be constants at compile-time
+	// Hot reloadable React components and translation json files
+	// modules.hot.accept does not accept dynamic dependencies,
+	// have to be constants at compile-time
 	module.hot.accept(['./i18n', 'containers/App'], () => {
 		ReactDOM.unmountComponentAtNode(MOUNT_NODE);
 		render(translationMessages);
@@ -83,19 +83,21 @@ if (module.hot) {
 
 // Chunked polyfill for browsers without Intl support
 if (!window.Intl) {
-	(new Promise((resolve) => {
+	new Promise((resolve) => {
 		resolve(import('intl'));
-	}))
-    .then(() => Promise.all([
-	import('intl/locale-data/jsonp/en.js'),
-	import('intl/locale-data/jsonp/th.js'),
-	import('intl/locale-data/jsonp/ru.js'),
-	import('intl/locale-data/jsonp/es.js'),
-]))
-    .then(() => render(translationMessages))
-    .catch((err) => {
-	throw err;
-});
+	})
+		.then(() =>
+			Promise.all([
+				import('intl/locale-data/jsonp/en.js'),
+				import('intl/locale-data/jsonp/th.js'),
+				import('intl/locale-data/jsonp/ru.js'),
+				import('intl/locale-data/jsonp/es.js'),
+			]),
+		)
+		.then(() => render(translationMessages))
+		.catch((err) => {
+			throw err;
+		});
 } else {
 	render(translationMessages);
 }

@@ -1652,6 +1652,21 @@ class Text extends React.PureComponent {
 			: `chapter ${justifiedClass} ${isRtl}${menuOpenClass}`;
 	}
 
+	get textContainerClass() {
+		const { isScrollingDown, subFooterOpen } = this.props;
+		let classNames = 'text-container';
+
+		if (isScrollingDown) {
+			classNames += ' scrolled-down';
+		}
+
+		if (subFooterOpen && !isScrollingDown) {
+			classNames += ' sub-footer-open';
+		}
+
+		return classNames;
+	}
+
 	render() {
 		const {
 			nextChapter,
@@ -1674,7 +1689,7 @@ class Text extends React.PureComponent {
 			plainTextFilesetId,
 			formattedTextFilesetId,
 			menuIsOpen,
-			isScrollingDown,
+			// isScrollingDown,
 		} = this.props;
 		const {
 			coords,
@@ -1701,11 +1716,7 @@ class Text extends React.PureComponent {
 		}
 
 		return (
-			<div
-				className={
-					isScrollingDown ? 'text-container scrolled-down' : 'text-container'
-				}
-			>
+			<div className={this.textContainerClass}>
 				<div
 					onClick={!this.isStartOfBible && !menuIsOpen ? prevChapter : () => {}}
 					className={
@@ -1811,6 +1822,7 @@ Text.propTypes = {
 	activeChapter: PropTypes.number,
 	notesActive: PropTypes.bool,
 	loadingAudio: PropTypes.bool,
+	subFooterOpen: PropTypes.bool,
 	invalidBibleId: PropTypes.bool,
 	isScrollingDown: PropTypes.bool,
 	loadingCopyright: PropTypes.bool,
