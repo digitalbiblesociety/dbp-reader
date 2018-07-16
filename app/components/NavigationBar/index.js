@@ -106,7 +106,8 @@ class NavigationBar extends React.PureComponent {
 								? `${activeBookName} ${activeChapter}`
 								: 'No Book Selected'}
 						</h1>
-						{isChapterSelectionActive ? <ChapterSelection /> : null}
+						<ChapterSelection active={isChapterSelectionActive} />
+						{/* {isChapterSelectionActive ? <ChapterSelection /> : null} */}
 					</span>
 				</div>
 			</div>

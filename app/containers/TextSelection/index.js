@@ -50,20 +50,34 @@ export class TextSelection extends React.PureComponent {
 	};
 
 	componentDidMount() {
+		// Should probably initialize this somewhere else since this will be mounted only once
 		this.props.dispatch(
 			setActiveIsoCode({
 				iso: this.props.homepageData.initialIsoCode,
 				name: this.props.homepageData.initialLanguageName,
 			}),
 		);
-		this.closeMenuController = new CloseMenuFunctions(
-			this.ref,
-			this.toggleVersionSelection,
-		);
-		this.closeMenuController.onMenuMount();
+		if (this.props.active) {
+			this.closeMenuController = new CloseMenuFunctions(
+				this.ref,
+				this.toggleVersionSelection,
+			);
+			this.closeMenuController.onMenuMount();
+		}
 	}
 
 	componentWillReceiveProps(nextProps) {
+		if (this.props.active && !nextProps.active && this.closeMenuController) {
+			this.closeMenuController.onMenuUnmount();
+			// Might want to add !this.closeMenuController to the if below
+		} else if (nextProps.active && !this.props.active) {
+			this.closeMenuController = new CloseMenuFunctions(
+				this.ref,
+				this.toggleVersionSelection,
+			);
+			this.closeMenuController.onMenuMount();
+		}
+
 		if (
 			nextProps.textselection.activeIsoCode !==
 			this.props.textselection.activeIsoCode
@@ -93,7 +107,9 @@ export class TextSelection extends React.PureComponent {
 	}
 
 	componentWillUnmount() {
-		this.closeMenuController.onMenuUnmount();
+		if (this.closeMenuController) {
+			this.closeMenuController.onMenuUnmount();
+		}
 	}
 
 	setRef = (node) => {
