@@ -116,78 +116,6 @@ export class TextSelection extends React.PureComponent {
 
 	getLanguages = () => this.props.dispatch(getLanguages());
 
-	getActiveTab() {
-		const {
-			activeIsoCode,
-			languageListActive,
-			versionListActive,
-			activeLanguageName,
-			countryListActive,
-			activeCountryName,
-			countryLanguages,
-			loadingCountries,
-			loadingLanguages,
-			loadingVersions,
-			finishedLoadingCountries,
-		} = this.props.textselection;
-		const { activeTextName, activeTextId } = this.props.homepageData;
-		const { bibles, languages, countries } = this.props;
-		const { filterText } = this.state;
-
-		if (languageListActive) {
-			return (
-				<LanguageList
-					languages={languages}
-					filterText={filterText}
-					active={languageListActive}
-					activeIsoCode={activeIsoCode}
-					countryLanguages={countryLanguages}
-					loadingLanguages={loadingLanguages}
-					countryListActive={countryListActive}
-					activeLanguageName={activeLanguageName}
-					getLanguages={this.getLanguages}
-					setActiveIsoCode={this.setActiveIsoCode}
-					toggleVersionList={this.toggleVersionList}
-					toggleLanguageList={this.toggleLanguageList}
-					setCountryListState={this.setCountryListState}
-				/>
-			);
-		} else if (countryListActive) {
-			return (
-				<CountryList
-					countries={countries}
-					filterText={filterText}
-					active={countryListActive}
-					loadingCountries={loadingCountries}
-					activeCountryName={activeCountryName}
-					finishedLoadingCountries={finishedLoadingCountries}
-					setCountryName={this.setCountryName}
-					getCountry={this.getCountry}
-					getCountries={this.getCountries}
-					toggleVersionList={this.toggleVersionList}
-					toggleLanguageList={this.toggleLanguageList}
-					setCountryListState={this.setCountryListState}
-				/>
-			);
-		}
-		return (
-			<VersionList
-				bibles={bibles}
-				filterText={filterText}
-				active={versionListActive}
-				activeIsoCode={activeIsoCode}
-				activeTextId={activeTextId}
-				activeTextName={activeTextName}
-				loadingVersions={loadingVersions}
-				setActiveText={this.setActiveTextId}
-				toggleVersionList={this.toggleVersionList}
-				toggleLanguageList={this.toggleLanguageList}
-				setCountryListState={this.setCountryListState}
-				toggleTextSelection={this.toggleVersionSelection}
-			/>
-		);
-	}
-
 	stopClickProp = (e) => e.stopPropagation();
 
 	stopTouchProp = (e) => e.stopPropagation();
@@ -220,18 +148,29 @@ export class TextSelection extends React.PureComponent {
 	render() {
 		const {
 			countryListActive,
+			activeIsoCode,
+			activeLanguageName,
 			languageListActive,
+			loadingVersions,
 			versionListActive,
+			activeCountryName,
+			countryLanguages,
+			loadingCountries,
+			loadingLanguages,
+			finishedLoadingCountries,
 		} = this.props.textselection;
+		const { activeTextName, activeTextId } = this.props.homepageData;
+		const { bibles, active, languages, countries } = this.props;
 		const { filterText } = this.state;
 
 		return (
 			<GenericErrorBoundary affectedArea="TextSelection">
 				<aside
+					style={{ display: active ? 'flex' : 'none' }}
 					ref={this.setRef}
 					onTouchEnd={this.stopTouchProp}
 					onClick={this.stopClickProp}
-					className="text-selection-dropdown"
+					className={'text-selection-dropdown'}
 				>
 					<div className={'search-input-bar'}>
 						<SvgWrapper className={'icon'} svgid={'search'} />
@@ -264,7 +203,49 @@ export class TextSelection extends React.PureComponent {
 							<FormattedMessage {...messages.version} />
 						</span>
 					</div>
-					{this.getActiveTab(filterText)}
+					<CountryList
+						countries={countries}
+						filterText={filterText}
+						active={countryListActive}
+						loadingCountries={loadingCountries}
+						activeCountryName={activeCountryName}
+						finishedLoadingCountries={finishedLoadingCountries}
+						setCountryName={this.setCountryName}
+						getCountry={this.getCountry}
+						getCountries={this.getCountries}
+						toggleVersionList={this.toggleVersionList}
+						toggleLanguageList={this.toggleLanguageList}
+						setCountryListState={this.setCountryListState}
+					/>
+					<LanguageList
+						languages={languages}
+						filterText={filterText}
+						active={languageListActive}
+						activeIsoCode={activeIsoCode}
+						countryLanguages={countryLanguages}
+						loadingLanguages={loadingLanguages}
+						countryListActive={countryListActive}
+						activeLanguageName={activeLanguageName}
+						getLanguages={this.getLanguages}
+						setActiveIsoCode={this.setActiveIsoCode}
+						toggleVersionList={this.toggleVersionList}
+						toggleLanguageList={this.toggleLanguageList}
+						setCountryListState={this.setCountryListState}
+					/>
+					<VersionList
+						bibles={bibles}
+						filterText={filterText}
+						active={versionListActive}
+						activeIsoCode={activeIsoCode}
+						activeTextId={activeTextId}
+						activeTextName={activeTextName}
+						loadingVersions={loadingVersions}
+						setActiveText={this.setActiveTextId}
+						toggleVersionList={this.toggleVersionList}
+						toggleLanguageList={this.toggleLanguageList}
+						setCountryListState={this.setCountryListState}
+						toggleTextSelection={this.toggleVersionSelection}
+					/>
 				</aside>
 			</GenericErrorBoundary>
 		);
@@ -278,6 +259,7 @@ TextSelection.propTypes = {
 	countries: PropTypes.object,
 	textselection: PropTypes.object,
 	homepageData: PropTypes.object,
+	active: PropTypes.bool,
 	// getAudio: PropTypes.func,
 	// setActiveText: PropTypes.func,
 	// toggleVersionSelection: PropTypes.func,

@@ -218,20 +218,23 @@ class VersionList extends React.PureComponent {
 			versionsError,
 		} = this.props;
 
-		if (active) {
-			return (
-				<div className="text-selection-section">
-					<div className="version-name-list">
-						{loadingVersions && !versionsError ? (
-							<LoadingSpinner />
-						) : (
-							this.filteredVersionList
-						)}
-					</div>
+		// if (active) {
+		return (
+			<div
+				style={{ display: active ? 'block' : 'none' }}
+				className="text-selection-section"
+			>
+				<div className="version-name-list">
+					{loadingVersions && !versionsError ? (
+						<LoadingSpinner />
+					) : (
+						this.filteredVersionList
+					)}
 				</div>
-			);
-		}
-		return null;
+			</div>
+		);
+		// }
+		// return null;
 	}
 }
 

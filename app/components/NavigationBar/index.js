@@ -79,7 +79,8 @@ class NavigationBar extends React.PureComponent {
 								  }${activeTextName}`
 								: 'No Version Selected'}
 						</h1>
-						{isVersionSelectionActive ? <TextSelection /> : null}
+						<TextSelection active={isVersionSelectionActive} />
+						{/* {isVersionSelectionActive ? <TextSelection /> : null} */}
 					</span>
 					<span
 						role="button"
