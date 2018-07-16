@@ -11,7 +11,7 @@ import {
 	getBookmarksForChapter,
 	getUserHighlights,
 } from 'containers/Notes/saga';
-import { USER_LOGGED_IN } from 'containers/Profile/constants';
+import { USER_LOGGED_IN, OAUTH_ERROR } from 'containers/Profile/constants';
 // import { LOGIN_ERROR, USER_LOGGED_IN } from 'containers/Profile/constants';
 import {
 	getCountries,
@@ -485,6 +485,7 @@ export function* getBibleFromUrl({
 		yield put({ type: 'loadbibleerror' });
 	}
 }
+
 export function* getChapterFromUrl({
 	filesets,
 	bibleId: oldBibleId,
@@ -1387,7 +1388,7 @@ export function* createSocialUser({
 			// Case 1: Fail, find which case is now applicable
 			if (process.env.NODE_ENV === 'development') {
 				// Log the specific error if in development
-				console.warn(response.error); // eslint-disable-line no-console
+				console.warn('There was a case 1 error: ', response.error); // eslint-disable-line no-console
 			}
 			// Check for Case 3
 			// Probably not the safest because if the message is ever different then this will fail silently
@@ -1430,29 +1431,34 @@ export function* createSocialUser({
 						// const getUserReq = `${process.env.BASE_API_ROUTE}/users?key=${
 						// 	process.env.DBP_API_KEY
 						// 	}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}`;
+
 						try {
+							yield put({
+								type: OAUTH_ERROR,
+								message: response.error.message.email[0],
+							});
 							// Below sends call to get the user id and then another call to sign in
 							// const getUserRes = yield call(request, getUserReq);
-							// console.log('getUserRes', getUserRes);
+							// console.log('doing something that had an error ', res.error);
 							// console.log('email: ', email);
 							// console.log('getUserRes.find(u => u.email === email)', getUserRes.data.find(u => u.email === email));
 							// console.log('id, provider', id, provider);
 							// const case2Req = `${process.env.BASE_API_ROUTE}/accounts?key=${
-							// 	process.env.DBP_API_KEY
-							// 	}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}&user_id=${getUserRes.data.find((u) => u.email === email).id}`;
+							// 	 process.env.DBP_API_KEY
+							// 	 }&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}&user_id=${getUserRes.data.find((u) => u.email === email).id}`;
 							// const case2Fd = new FormData();
 							// case2Fd.append('email', email);
 							// case2Fd.append('social_provider_id', provider);
 							// case2Fd.append('social_provider_user_id', id);
 							// const case2Opt = {
-							// 	method: 'POST',
-							// 	body: case2Fd,
+							// 	 method: 'POST',
+							// 	 body: case2Fd,
 							// };
 							// const case2Res = yield call(request, case2Req, case2Opt);
 							// console.log('case2Res', case2Res);
 						} catch (err) {
 							if (process.env.NODE_ENV === 'development') {
-								console.error('There was an error: ', err); // eslint-disable-line no-console
+								console.error('There was a case 3 error: ', err); // eslint-disable-line no-console
 							}
 						}
 						// Link account to the user that has a matching email
@@ -1468,7 +1474,7 @@ export function* createSocialUser({
 					}
 				} catch (err) {
 					if (process.env.NODE_ENV === 'development') {
-						console.error(err); // eslint-disable-line no-console
+						console.error('There was a case 2 error: ', err); // eslint-disable-line no-console
 					}
 				}
 			}
@@ -1479,7 +1485,7 @@ export function* createSocialUser({
 		}
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
-			console.error(err); // eslint-disable-line no-console
+			console.error('There was a top level error: ', err); // eslint-disable-line no-console
 		} else if (process.env.NODE_ENV === 'production') {
 			// const options = {
 			// 	header: 'POST',

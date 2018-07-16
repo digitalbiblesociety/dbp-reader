@@ -19,6 +19,8 @@ import {
 	RESET_PASSWORD_SUCCESS,
 	DELETE_USER_SUCCESS,
 	DELETE_USER_ERROR,
+	OAUTH_ERROR,
+	READ_OAUTH_ERROR,
 } from './constants';
 
 const initialState = fromJS({
@@ -54,6 +56,12 @@ function profileReducer(state = initialState, action) {
 	switch (action.type) {
 		case SOCIAL_MEDIA_LOGIN:
 			return state.set('activeDriver', action.driver);
+		case OAUTH_ERROR:
+			return state
+				.set('oauthError', true)
+				.set('oauthErrorMessage', action.message);
+		case READ_OAUTH_ERROR:
+			return state.set('oauthError', false);
 		case SELECT_ACCOUNT_OPTION:
 			return state.set('activeOption', action.option);
 		case USER_LOGGED_IN:

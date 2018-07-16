@@ -1,7 +1,7 @@
 /*
  *
  * Profile actions
- * TODO: Add factory function for actions to reduce boilerplate
+ *
  */
 
 import {
@@ -20,8 +20,14 @@ import {
 	LOG_OUT,
 	ERROR_MESSAGE_VIEWED,
 	CLEAR_ERROR_MESSAGE,
+	READ_OAUTH_ERROR,
 	SEND_PASSWORD_RESET,
 } from './constants';
+
+export const readOauthError = (props) => ({
+	type: READ_OAUTH_ERROR,
+	...props,
+});
 
 export const changePicture = (props) => ({
 	type: CHANGE_PICTURE,
