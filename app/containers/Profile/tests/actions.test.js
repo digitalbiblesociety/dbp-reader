@@ -1,10 +1,5 @@
-
-import {
-	defaultAction,
-} from '../actions';
-import {
-	SELECT_ACCOUNT_OPTION,
-} from '../constants';
+import { defaultAction } from '../actions';
+import { SELECT_ACCOUNT_OPTION } from '../constants';
 
 describe('Profile actions', () => {
 	describe('Default Action', () => {

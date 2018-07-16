@@ -35,6 +35,7 @@ import {
 	clearErrorMessage,
 	changePicture,
 	sendPasswordReset,
+	readOauthError,
 } from './actions';
 import makeSelectProfile from './selectors';
 import reducer from './reducer';
@@ -100,6 +101,7 @@ export class Profile extends React.PureComponent {
 		// this.openPopup(coords);
 	};
 	deleteUser = (props) => this.props.dispatch(deleteUser(props));
+	readOauthError = (props) => this.props.dispatch(readOauthError(props));
 	sendLoginForm = (props) => this.props.dispatch(sendLoginForm(props));
 	selectAccountOption = (option) =>
 		this.props.dispatch(selectAccountOption(option));
@@ -159,6 +161,8 @@ export class Profile extends React.PureComponent {
 			errorMessageViewed,
 			passwordResetError,
 			passwordResetMessage,
+			oauthError,
+			oauthErrorMessage,
 		} = this.props.profile;
 		const { popupOpen, popupCoords } = this.state;
 		// console.log('passwordResetMessage', passwordResetMessage);
@@ -200,10 +204,13 @@ export class Profile extends React.PureComponent {
 						selectAccountOption={this.selectAccountOption}
 						socialMediaLogin={this.socialMediaLogin}
 						viewErrorMessage={this.viewErrorMessage}
+						readOauthError={this.readOauthError}
 						socialLoginLink={socialLoginLink}
 						errorMessage={loginErrorMessage}
 						activeDriver={activeDriver}
 						errorMessageViewed={errorMessageViewed}
+						oauthError={oauthError}
+						oauthErrorMessage={oauthErrorMessage}
 					/>
 				) : null}
 				{activeOption === 'signup' ? (
@@ -212,9 +219,12 @@ export class Profile extends React.PureComponent {
 						socialMediaLogin={this.socialMediaLogin}
 						viewErrorMessage={this.viewErrorMessage}
 						errorMessage={signupErrorMessage}
+						readOauthError={this.readOauthError}
 						socialLoginLink={socialLoginLink}
 						activeDriver={activeDriver}
 						errorMessageViewed={errorMessageViewed}
+						oauthError={oauthError}
+						oauthErrorMessage={oauthErrorMessage}
 					/>
 				) : null}
 				{activeOption === 'password_reset' ? (

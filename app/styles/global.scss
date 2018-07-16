@@ -58,7 +58,8 @@ main {
 	height: 100vh;
 	width: 100%;
 }
-aside {
+html #app aside {
+	z-index: 2;
 	@include css4 {
 		outline: 1px solid var(--menu-border-color);
 		border-bottom: 1px solid var(--menu-border-color);

@@ -14,6 +14,12 @@
 	color: #000;
 	z-index: 50;
 	box-shadow: 2px 2px 3px #aaa, 1px 1px 4px #1af;
+
+	.logo {
+		@include css4 {
+			color: var(--notebook-title-date-color);
+		}
+	}
 }
 
 .need-to-login {

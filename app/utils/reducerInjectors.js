@@ -11,13 +11,18 @@ export function injectReducerFactory(store, isValid) {
 		if (!isValid) checkStore(store);
 
 		invariant(
-      isString(key) && !isEmpty(key) && isFunction(reducer),
-      '(app/utils...) injectReducer: Expected `reducer` to be a reducer function'
-    );
+			isString(key) && !isEmpty(key) && isFunction(reducer),
+			'(app/utils...) injectReducer: Expected `reducer` to be a reducer function',
+		);
 
-    // Check `store.injectedReducers[key] === reducer` for hot reloading when a key is the same but a reducer is different
-		if (Reflect.has(store.injectedReducers, key) && store.injectedReducers[key] === reducer) return;
-
+		// Check `store.injectedReducers[key] === reducer` for hot reloading when a key is the same but a reducer is different
+		/* eslint-disable curly */
+		if (
+			Reflect.has(store.injectedReducers, key) &&
+			store.injectedReducers[key] === reducer
+		)
+			return;
+		/* eslint-enable */
 		store.injectedReducers[key] = reducer; // eslint-disable-line no-param-reassign
 		store.replaceReducer(createReducer(store.injectedReducers));
 	};

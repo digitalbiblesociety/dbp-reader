@@ -29,3 +29,5 @@ export const RESET_PASSWORD_ERROR = 'app/Profile/RESET_PASSWORD_ERROR';
 export const RESET_PASSWORD_SUCCESS = 'app/Profile/RESET_PASSWORD_SUCCESS';
 export const DELETE_USER_SUCCESS = 'app/Profile/DELETE_USER_SUCCESS';
 export const DELETE_USER_ERROR = 'app/Profile/DELETE_USER_ERROR';
+export const OAUTH_ERROR = 'app/Profile/OAUTH_ERROR';
+export const READ_OAUTH_ERROR = 'app/Profile/READ_OAUTH_ERROR';
