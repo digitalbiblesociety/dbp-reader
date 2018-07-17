@@ -352,7 +352,10 @@ class HomePage extends React.PureComponent {
 	// Need to fix how many times this gets called. The main issue is all the state that is managed by this one thing
 	componentWillReceiveProps(nextProps) {
 		// Deals with updating page based on the url params
+		// Should probably try to batch process any state updates at the end of this function
 		// console.log('Received props --------------------------------------');
+
+		this.setState({ subFooterOpen: false });
 
 		// previous props
 		const { params } = this.props.match;
