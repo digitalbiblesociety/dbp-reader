@@ -6,6 +6,7 @@ stats.json
 .env
 app/utils/ENGKJV
 reduxStoreShape.js
+sitemaps/
 # Cruft
 .DS_Store
 npm-debug.log
