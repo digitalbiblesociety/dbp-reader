@@ -814,6 +814,13 @@ class HomePage extends React.PureComponent {
 	}
 	// Height of the visible portion of the scroll container
 	get mainPhysicalHeight() {
+		console.log('this.main.offsetHeight', this.main.offsetHeight);
+		console.log('this.main.clientHeight', this.main.clientHeight);
+		console.log(
+			'Math.max(this.main.offsetHeight, this.main.clientHeight)',
+			Math.max(this.main.offsetHeight, this.main.clientHeight),
+		);
+
 		return Math.max(this.main.offsetHeight, this.main.clientHeight);
 	}
 
@@ -824,19 +831,38 @@ class HomePage extends React.PureComponent {
 
 	// If the scroll event would result in a value above or below the actual size of the container
 	get outOfBounds() {
-		// console.log('this.scrollTop, this.mainPhysicalHeight, this.mainHeight', this.scrollTop, this.mainPhysicalHeight, this.mainHeight);
-		// console.log('this.scrollTop', this.scrollTop);
-		// console.log('this.mainPhysicalHeight', this.mainPhysicalHeight);
-		// console.log('this.mainHeight', this.mainHeight);
+		// console.log(
+		// 	'Bounds::: this.mainPhysicalHeight',
+		// 	this.mainPhysicalHeight + this.scrollTop,
+		// );
+		// console.log('Bounds::: this.mainHeight - 50', this.mainHeight - 50);
+		// console.log(
+		// 	'Bounds::: this.scrollTop + this.mainPhysicalHeight >= this.mainHeight - 50',
+		// 	this.scrollTop + this.mainPhysicalHeight >= this.mainHeight - 50,
+		// );
 
 		return (
-			this.scrollTop + this.mainPhysicalHeight >= this.mainHeight ||
+			this.scrollTop + this.mainPhysicalHeight >= this.mainHeight - 50 ||
 			this.scrollTop < 5
 		);
 	}
 
 	get isAtTop() {
 		return this.scrollTop < 5;
+	}
+
+	get isAtBottom() {
+		// console.log('this.mainHeight - 50', this.mainHeight - 50);
+		// console.log(
+		// 	'this.mainPhysicalHeight',
+		// 	this.mainPhysicalHeight + this.scrollTop,
+		// );
+		// console.log(
+		// 	'this.scrollTop + this.mainPhysicalHeight >= this.mainHeight - 50',
+		// 	this.scrollTop + this.mainPhysicalHeight >= this.mainHeight - 50,
+		// );
+
+		return this.scrollTop + this.mainPhysicalHeight >= this.mainHeight - 50;
 	}
 
 	handleScrolling = () => {
@@ -917,7 +943,7 @@ class HomePage extends React.PureComponent {
 					},
 				);
 			}
-		} else if (this.isAtTop) {
+		} else if (this.isAtTop || this.isAtBottom) {
 			this.setState(
 				{
 					subFooterOpen:
