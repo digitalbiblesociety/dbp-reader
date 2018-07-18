@@ -79,7 +79,11 @@ const Footer = ({
 			</span>
 		</div>
 		<div
-			className={scrolledToBottom ? 'footer-about-content' : 'footer-autohide'}
+			className={
+				scrolledToBottom
+					? 'footer-about-content'
+					: 'footer-about-content footer-hide'
+			}
 		>
 			<div className={'logo-container'}>
 				<a
@@ -101,6 +105,7 @@ const Footer = ({
 					) : null}
 				</a>
 				<a
+					className={'logo-text'}
 					href={'http://www.bible.is'}
 					title={'http://www.bible.is'}
 					target={'_blank'}
