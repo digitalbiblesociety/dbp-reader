@@ -1667,6 +1667,36 @@ class Text extends React.PureComponent {
 		return classNames;
 	}
 
+	get textContainerStyle() {
+		const { isLargeBp, isAudioPlayerBp, isMobileBp, distance } = this.props;
+
+		if (!distance) {
+			return {};
+		}
+
+		if (isLargeBp) {
+			return {
+				height: `calc(100vh - ${distance}px - 215px)`,
+				maxHeight: `calc(100vh - ${distance}px - 215px)`,
+			};
+		} else if (isAudioPlayerBp) {
+			return {
+				height: `calc(100vh - ${distance}px - 220px)`,
+				maxHeight: `calc(100vh - ${distance}px - 220px)`,
+			};
+		} else if (isMobileBp) {
+			return {
+				height: `calc(100vh - ${distance}px - 220px)`,
+				maxHeight: `calc(100vh - ${distance}px - 220px)`,
+			};
+		}
+
+		return {
+			height: `calc(100vh - ${distance}px - 190px)`,
+			maxHeight: `calc(100vh - ${distance}px - 190px)`,
+		};
+	}
+
 	render() {
 		const {
 			nextChapter,
@@ -1691,6 +1721,16 @@ class Text extends React.PureComponent {
 			menuIsOpen,
 			// isScrollingDown,
 		} = this.props;
+		// console.log(
+		// 	'break point',
+		// 	this.props.isAudioPlayerBp
+		// 		? 'audio'
+		// 		: this.props.isMobileBp
+		// 			? 'mobile'
+		// 			: 'large',
+		// );
+		// console.log('distance in text', this.props.distance);
+		// console.log('style for text container', this.textContainerStyle);
 		const {
 			coords,
 			contextMenuState,
@@ -1713,14 +1753,17 @@ class Text extends React.PureComponent {
 
 		if (loadingNewChapterText || loadingAudio || loadingCopyright) {
 			return (
-				<div className={this.textContainerClass}>
+				<div
+					style={this.textContainerStyle}
+					className={this.textContainerClass}
+				>
 					<LoadingSpinner />
 				</div>
 			);
 		}
 
 		return (
-			<div className={this.textContainerClass}>
+			<div style={this.textContainerStyle} className={this.textContainerClass}>
 				<div
 					onClick={!this.isStartOfBible && !menuIsOpen ? prevChapter : () => {}}
 					className={
@@ -1824,6 +1867,7 @@ Text.propTypes = {
 	toggleNotesModal: PropTypes.func,
 	setActiveNotesView: PropTypes.func,
 	activeChapter: PropTypes.number,
+	distance: PropTypes.number,
 	notesActive: PropTypes.bool,
 	loadingAudio: PropTypes.bool,
 	subFooterOpen: PropTypes.bool,
@@ -1843,6 +1887,9 @@ Text.propTypes = {
 	plainTextFilesetId: PropTypes.string,
 	formattedTextFilesetId: PropTypes.string,
 	menuIsOpen: PropTypes.bool,
+	isLargeBp: PropTypes.bool,
+	isMobileBp: PropTypes.bool,
+	isAudioPlayerBp: PropTypes.bool,
 };
 
 export default Text;

@@ -812,6 +812,26 @@ class HomePage extends React.PureComponent {
 		);
 	}
 
+	get isLargeBp() {
+		return (
+			window &&
+			document &&
+			document.firstElementChild &&
+			document.firstElementChild.clientWidth > 500 &&
+			document.firstElementChild.clientWidth < 1001
+		);
+	}
+
+	get isAudioPlayerBp() {
+		return (
+			window &&
+			document &&
+			document.firstElementChild &&
+			document.firstElementChild.clientWidth > 500 &&
+			document.firstElementChild.clientWidth < 551
+		);
+	}
+
 	// Height of the entire scroll container including the invisible portions
 	get mainHeight() {
 		// console.log(
@@ -1137,10 +1157,10 @@ class HomePage extends React.PureComponent {
 		const {
 			isScrollingDown,
 			subFooterOpen,
-			heightDifference: height,
+			// heightDifference: height,
 			footerDistance: distance,
 		} = this.state;
-		console.log('height diffs', height, distance);
+		// console.log('height diffs', height, distance);
 		// const distance = 0;
 		// const height = 0;
 
@@ -1250,6 +1270,7 @@ class HomePage extends React.PureComponent {
 						books={books}
 						userId={userId}
 						text={updatedText}
+						distance={distance}
 						verseNumber={verse}
 						userNotes={userNotes}
 						bookmarks={bookmarks}
@@ -1278,12 +1299,15 @@ class HomePage extends React.PureComponent {
 						informationActive={isInformationModalActive}
 						loadingNewChapterText={loadingNewChapterText}
 						formattedTextFilesetId={formattedTextFilesetId}
+						isLargeBp={this.isLargeBp}
+						isMobileBp={this.isMobileSized}
 						addBookmark={this.addBookmark}
 						addHighlight={this.addHighlight}
 						nextChapter={this.getNextChapter}
 						prevChapter={this.getPrevChapter}
 						setActiveNote={this.setActiveNote}
 						getCopyrights={this.getCopyrights}
+						isAudioPlayerBp={this.isAudioPlayerBp}
 						goToFullChapter={this.goToFullChapter}
 						toggleNotesModal={this.toggleNotesModal}
 						deleteHighlights={this.deleteHighlights}

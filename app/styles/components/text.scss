@@ -254,20 +254,22 @@
 	}
 }
 
-//@media only screen and (min-width: 500px) and (max-width: $large-bp) {
-//	.text-container {
-//		&.sub-footer-open {
-//			margin-bottom: 190px;
-//		}
-//	}
-//	@media only screen and (max-width: $audio-player-bp) {
-//		.text-container {
-//			&.sub-footer-open {
-//				margin-bottom: 45px;
-//			}
-//		}
-//	}
-//}
+@media only screen and (min-width: 500px) and (max-width: $large-bp) {
+	.text-container {
+		height: calc(100vh - 215px);
+		max-height: calc(100vh - 215px);
+		//&.sub-footer-open {
+		//	margin-bottom: 190px;
+		//}
+	}
+	@media only screen and (max-width: $audio-player-bp) {
+		//.text-container {
+		//	&.sub-footer-open {
+		//		margin-bottom: 45px;
+		//	}
+		//}
+	}
+}
 //
 //@media only screen and (max-width: 499px) {
 //	.text-container {
