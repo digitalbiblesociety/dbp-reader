@@ -1712,7 +1712,11 @@ class Text extends React.PureComponent {
 		// const justifiedClass = userSettings.getIn(['toggleOptions', 'justifiedText', 'active']) ? 'justify' : '';
 
 		if (loadingNewChapterText || loadingAudio || loadingCopyright) {
-			return <LoadingSpinner />;
+			return (
+				<div className={this.textContainerClass}>
+					<LoadingSpinner />
+				</div>
+			);
 		}
 
 		return (

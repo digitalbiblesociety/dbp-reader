@@ -36,6 +36,7 @@ import NavigationBar from 'components/NavigationBar';
 import Footer from 'components/Footer';
 import SearchContainer from 'containers/SearchContainer';
 import GenericErrorBoundary from 'components/GenericErrorBoundary';
+import SubFooter from 'components/SubFooter';
 import FadeTransition from 'components/FadeTransition';
 import logo from 'images/app-icons/favicon-96x96.png';
 import svg4everybody from 'utils/svgPolyfill';
@@ -108,6 +109,8 @@ class HomePage extends React.PureComponent {
 	state = {
 		isScrollingDown: false,
 		subFooterOpen: false,
+		footerDistance: 0,
+		heightDifference: 0,
 	};
 	// eslint-disable-line react/prefer-stateless-function
 	componentDidMount() {
@@ -338,6 +341,7 @@ class HomePage extends React.PureComponent {
 		// in RAF to determine what state to update
 		if (window && document && document.firstElementChild) {
 			// console.log('Added scroll listener');
+			// Main can be unset in this instance
 			this.main = document.getElementsByTagName('main')[0];
 			window.addEventListener('scroll', this.handleScrolling, true);
 			//
@@ -797,6 +801,7 @@ class HomePage extends React.PureComponent {
 	setAudioPlayerState = (state) =>
 		this.props.dispatch(setAudioPlayerState(state));
 
+	// May need more than one to determine the different audio player heights
 	get isMobileSized() {
 		return (
 			window &&
@@ -809,6 +814,15 @@ class HomePage extends React.PureComponent {
 
 	// Height of the entire scroll container including the invisible portions
 	get mainHeight() {
+		// console.log(
+		// 	'Math.max(this.main.offsetHeight,this.main.clientHeight,this.main.scrollHeight)',
+		// 	Math.max(
+		// 		this.main.offsetHeight,
+		// 		this.main.clientHeight,
+		// 		this.main.scrollHeight,
+		// 	),
+		// );
+
 		return Math.max(
 			this.main.offsetHeight,
 			this.main.clientHeight,
@@ -817,18 +831,23 @@ class HomePage extends React.PureComponent {
 	}
 	// Height of the visible portion of the scroll container
 	get mainPhysicalHeight() {
-		console.log('this.main.offsetHeight', this.main.offsetHeight);
-		console.log('this.main.clientHeight', this.main.clientHeight);
-		console.log(
-			'Math.max(this.main.offsetHeight, this.main.clientHeight)',
-			Math.max(this.main.offsetHeight, this.main.clientHeight),
-		);
+		// console.log('this.main.offsetHeight', this.main.offsetHeight);
+		// console.log('this.main.clientHeight', this.main.clientHeight);
+		// console.log(
+		// 	'Math.max(this.main.offsetHeight, this.main.clientHeight)',
+		// 	Math.max(this.main.offsetHeight, this.main.clientHeight),
+		// );
 
 		return Math.max(this.main.offsetHeight, this.main.clientHeight);
 	}
 
 	// The current scroll position
 	get scrollTop() {
+		// console.log('main', document.getElementsByTagName('main')[0]);
+		// console.log(
+		// 	'scroll top main',
+		// 	document.getElementsByTagName('main')[0].scrollTop,
+		// );
 		return this.main.scrollTop;
 	}
 
@@ -845,7 +864,7 @@ class HomePage extends React.PureComponent {
 		// );
 
 		return (
-			this.scrollTop + this.mainPhysicalHeight >= this.mainHeight - 50 ||
+			this.scrollTop + this.mainPhysicalHeight >= this.mainHeight ||
 			this.scrollTop < 5
 		);
 	}
@@ -865,8 +884,12 @@ class HomePage extends React.PureComponent {
 		// 	this.scrollTop + this.mainPhysicalHeight >= this.mainHeight - 50,
 		// );
 
-		return this.scrollTop + this.mainPhysicalHeight >= this.mainHeight - 50;
+		return this.scrollTop + this.mainPhysicalHeight >= this.mainHeight;
 	}
+
+	handleHeightRef = (el) => {
+		this.heightRef = el;
+	};
 
 	handleScrolling = () => {
 		// Only hides the header/footer if all of the menus are closed
@@ -889,8 +912,35 @@ class HomePage extends React.PureComponent {
 
 	updateScrollDirection = () => {
 		this.main = document.getElementsByTagName('main')[0];
+		const distance = this.isMobileSized ? 211 : 64;
+		const difference =
+			this.mainHeight - (this.scrollTop + this.mainPhysicalHeight);
+		// console.log('difference', difference);
+		// console.log('distance', distance);
+		// console.log('difference <= distance', difference <= distance);
+
 		// Height that scrollTop needs to be within for the sub footer to activate
-		const resizeHeight = 50;
+		if (difference <= distance) {
+			// console.log(
+			// 	'diff for height',
+			// 	Math.max(this.heightRef.offsetHeight, this.heightRef.clientHeight) -
+			// 		(Math.max(this.heightRef.offsetHeight, this.heightRef.clientHeight) -
+			// 			(distance - difference)),
+			// );
+
+			this.setState({
+				footerDistance: distance - difference,
+				heightDifference:
+					Math.max(this.heightRef.offsetHeight, this.heightRef.clientHeight) -
+					(distance - difference),
+			});
+		} else if (this.state.footerDistance) {
+			this.setState({
+				footerDistance: 0,
+			});
+		}
+
+		const resizeHeight = 0;
 		if (!this.outOfBounds) {
 			// console.log('this.state.isScrollingDown', this.state.isScrollingDown);
 			// Previous state was not scrolling down but new state is
@@ -1084,7 +1134,15 @@ class HomePage extends React.PureComponent {
 			// updatedText,
 		} = this.props;
 
-		const { isScrollingDown, subFooterOpen } = this.state;
+		const {
+			isScrollingDown,
+			subFooterOpen,
+			heightDifference: height,
+			footerDistance: distance,
+		} = this.state;
+		console.log('height diffs', height, distance);
+		// const distance = 0;
+		// const height = 0;
 
 		const { userNotes, bookmarks, text: updatedText } = this.props.textData;
 		// console.log('text', updatedText);
@@ -1125,141 +1183,151 @@ class HomePage extends React.PureComponent {
 						content="Main page for the Bible.is web app"
 					/>
 				</Helmet>
-				<NavigationBar
-					userAgent={userAgent}
-					activeTextId={activeTextId}
-					activeChapter={activeChapter}
-					activeTextName={activeTextName}
-					activeBookName={activeBookName}
-					theme={userSettings.get('activeTheme')}
-					isScrollingDown={isScrollingDown}
-					isChapterSelectionActive={isChapterSelectionActive}
-					isVersionSelectionActive={isVersionSelectionActive}
-					toggleChapterSelection={this.toggleChapterSelection}
-					toggleVersionSelection={this.toggleVersionSelection}
-				/>
-				<TransitionGroup>
-					{isSettingsModalActive ? (
-						<FadeTransition
-							classNames="slide-from-right"
-							in={isSettingsModalActive}
-						>
-							<Settings
-								userSettings={userSettings}
-								toggleSettingsModal={this.toggleSettingsModal}
-							/>
-						</FadeTransition>
-					) : null}
-					{isProfileActive ? (
-						<FadeTransition classNames="slide-from-left" in={isProfileActive}>
-							<Profile
-								resetPasswordSent={this.resetPasswordSent}
-								userAccessToken={token}
-								toggleProfile={this.toggleProfile}
-							/>
-						</FadeTransition>
-					) : null}
-					{isNotesModalActive ? (
-						<FadeTransition
-							classNames="slide-from-right"
-							in={isNotesModalActive}
-						>
-							<Notes
-								activeBookId={activeBookId}
-								activeChapter={activeChapter}
-								toggleProfile={this.toggleProfile}
-								toggleNotesModal={this.toggleNotesModal}
-								openView={activeNotesView}
-							/>
-						</FadeTransition>
-					) : null}
-					{isSearchModalActive ? (
-						<FadeTransition
-							classNames="slide-from-left"
-							in={isSearchModalActive}
-						>
-							<SearchContainer
-								bibleId={activeTextId}
-								history={history}
-								books={books}
-								toggleSearchModal={this.toggleSearchModal}
-							/>
-						</FadeTransition>
-					) : null}
-				</TransitionGroup>
-				<Text
-					books={books}
-					userId={userId}
-					text={updatedText}
-					verseNumber={verse}
-					userNotes={userNotes}
-					bookmarks={bookmarks}
-					bibleId={activeTextId}
-					menuIsOpen={isMenuOpen}
-					highlights={highlights}
-					copyrights={copyrights}
-					audioSource={audioSource}
-					activeBookId={activeBookId}
-					loadingAudio={loadingAudio}
-					userSettings={userSettings}
-					activeChapter={activeChapter}
-					textDirection={textDirection}
-					subFooterOpen={subFooterOpen}
-					invalidBibleId={invalidBibleId}
-					audioFilesetId={audioFilesetId}
-					activeBookName={activeBookName}
-					activeFilesets={activeFilesets}
-					notesActive={isNotesModalActive}
-					formattedSource={formattedSource}
-					isScrollingDown={isScrollingDown}
-					audioPlayerState={audioPlayerState}
-					loadingCopyright={loadingCopyright}
-					userAuthenticated={userAuthenticated}
-					plainTextFilesetId={plainTextFilesetId}
-					informationActive={isInformationModalActive}
-					loadingNewChapterText={loadingNewChapterText}
-					formattedTextFilesetId={formattedTextFilesetId}
-					addBookmark={this.addBookmark}
-					addHighlight={this.addHighlight}
-					nextChapter={this.getNextChapter}
-					prevChapter={this.getPrevChapter}
-					setActiveNote={this.setActiveNote}
-					getCopyrights={this.getCopyrights}
-					goToFullChapter={this.goToFullChapter}
-					toggleNotesModal={this.toggleNotesModal}
-					deleteHighlights={this.deleteHighlights}
-					setActiveNotesView={this.setActiveNotesView}
-					toggleInformationModal={this.toggleInformationModal}
-				/>
-				<AudioPlayer
-					audioPaths={audioPaths}
-					autoPlay={autoPlayEnabled}
-					audioPlayerState={audioPlayerState}
-					audioSource={audioSource}
-					isScrollingDown={isScrollingDown}
-					subFooterOpen={subFooterOpen}
-					// nextAudioSource={nextAudioSource}
-					// prevAudioSource={prevAudioSource}
-					setAudioPlayerState={this.setAudioPlayerState}
-					toggleAutoPlay={this.toggleAutoPlay}
-					skipBackward={this.getPrevChapter}
-					skipForward={this.getNextChapter}
-				/>
-				<Footer
-					profileActive={isProfileActive}
-					searchActive={isSearchModalActive}
-					scrolledToBottom={subFooterOpen}
-					theme={userSettings.get('activeTheme')}
-					userAgent={userAgent}
-					notebookActive={isNotesModalActive}
-					settingsActive={isSettingsModalActive}
-					isScrollingDown={isScrollingDown}
-					toggleProfile={this.toggleProfile}
-					toggleSearch={this.toggleSearchModal}
-					toggleNotebook={this.toggleNotesModal}
-					setActiveNotesView={this.setActiveNotesView}
-					toggleSettingsModal={this.toggleSettingsModal}
-				/>
+				<div ref={this.handleHeightRef} className={'homepage'}>
+					<NavigationBar
+						userAgent={userAgent}
+						activeTextId={activeTextId}
+						activeChapter={activeChapter}
+						activeTextName={activeTextName}
+						activeBookName={activeBookName}
+						theme={userSettings.get('activeTheme')}
+						isScrollingDown={isScrollingDown}
+						isChapterSelectionActive={isChapterSelectionActive}
+						isVersionSelectionActive={isVersionSelectionActive}
+						toggleChapterSelection={this.toggleChapterSelection}
+						toggleVersionSelection={this.toggleVersionSelection}
+					/>
+					<TransitionGroup>
+						{isSettingsModalActive ? (
+							<FadeTransition
+								classNames="slide-from-right"
+								in={isSettingsModalActive}
+							>
+								<Settings
+									userSettings={userSettings}
+									toggleSettingsModal={this.toggleSettingsModal}
+								/>
+							</FadeTransition>
+						) : null}
+						{isProfileActive ? (
+							<FadeTransition classNames="slide-from-left" in={isProfileActive}>
+								<Profile
+									resetPasswordSent={this.resetPasswordSent}
+									userAccessToken={token}
+									toggleProfile={this.toggleProfile}
+								/>
+							</FadeTransition>
+						) : null}
+						{isNotesModalActive ? (
+							<FadeTransition
+								classNames="slide-from-right"
+								in={isNotesModalActive}
+							>
+								<Notes
+									activeBookId={activeBookId}
+									activeChapter={activeChapter}
+									toggleProfile={this.toggleProfile}
+									toggleNotesModal={this.toggleNotesModal}
+									openView={activeNotesView}
+								/>
+							</FadeTransition>
+						) : null}
+						{isSearchModalActive ? (
+							<FadeTransition
+								classNames="slide-from-left"
+								in={isSearchModalActive}
+							>
+								<SearchContainer
+									bibleId={activeTextId}
+									history={history}
+									books={books}
+									toggleSearchModal={this.toggleSearchModal}
+								/>
+							</FadeTransition>
+						) : null}
+					</TransitionGroup>
+					<Text
+						books={books}
+						userId={userId}
+						text={updatedText}
+						verseNumber={verse}
+						userNotes={userNotes}
+						bookmarks={bookmarks}
+						bibleId={activeTextId}
+						menuIsOpen={isMenuOpen}
+						highlights={highlights}
+						copyrights={copyrights}
+						audioSource={audioSource}
+						activeBookId={activeBookId}
+						loadingAudio={loadingAudio}
+						userSettings={userSettings}
+						activeChapter={activeChapter}
+						textDirection={textDirection}
+						subFooterOpen={subFooterOpen}
+						invalidBibleId={invalidBibleId}
+						audioFilesetId={audioFilesetId}
+						activeBookName={activeBookName}
+						activeFilesets={activeFilesets}
+						notesActive={isNotesModalActive}
+						formattedSource={formattedSource}
+						isScrollingDown={isScrollingDown}
+						audioPlayerState={audioPlayerState}
+						loadingCopyright={loadingCopyright}
+						userAuthenticated={userAuthenticated}
+						plainTextFilesetId={plainTextFilesetId}
+						informationActive={isInformationModalActive}
+						loadingNewChapterText={loadingNewChapterText}
+						formattedTextFilesetId={formattedTextFilesetId}
+						addBookmark={this.addBookmark}
+						addHighlight={this.addHighlight}
+						nextChapter={this.getNextChapter}
+						prevChapter={this.getPrevChapter}
+						setActiveNote={this.setActiveNote}
+						getCopyrights={this.getCopyrights}
+						goToFullChapter={this.goToFullChapter}
+						toggleNotesModal={this.toggleNotesModal}
+						deleteHighlights={this.deleteHighlights}
+						setActiveNotesView={this.setActiveNotesView}
+						toggleInformationModal={this.toggleInformationModal}
+					/>
+					<AudioPlayer
+						audioPaths={audioPaths}
+						autoPlay={autoPlayEnabled}
+						audioPlayerState={audioPlayerState}
+						audioSource={audioSource}
+						isScrollingDown={isScrollingDown}
+						subFooterOpen={subFooterOpen}
+						// nextAudioSource={nextAudioSource}
+						// prevAudioSource={prevAudioSource}
+						setAudioPlayerState={this.setAudioPlayerState}
+						toggleAutoPlay={this.toggleAutoPlay}
+						skipBackward={this.getPrevChapter}
+						skipForward={this.getNextChapter}
+					/>
+					<Footer
+						profileActive={isProfileActive}
+						searchActive={isSearchModalActive}
+						notebookActive={isNotesModalActive}
+						settingsActive={isSettingsModalActive}
+						isScrollingDown={isScrollingDown}
+						toggleProfile={this.toggleProfile}
+						toggleSearch={this.toggleSearchModal}
+						toggleNotebook={this.toggleNotesModal}
+						setActiveNotesView={this.setActiveNotesView}
+						toggleSettingsModal={this.toggleSettingsModal}
+					/>
+				</div>
+				<div
+					style={
+						distance ? { height: distance, maxHeight: distance, flex: 1 } : {}
+					}
+					className={'sub-footer'}
+				>
+					<SubFooter
+						userAgent={userAgent}
+						theme={userSettings.get('activeTheme')}
+					/>
+				</div>
 			</GenericErrorBoundary>
 		);
 	}

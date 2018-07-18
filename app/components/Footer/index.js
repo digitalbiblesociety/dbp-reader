@@ -7,10 +7,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import SvgWrapper from 'components/SvgWrapper';
-import { FormattedMessage } from 'react-intl';
-import messages from './messages';
+// import { FormattedMessage } from 'react-intl';
+// import messages from './messages';
 // import styled from 'styled-components';
-// Todo: Use a transition to animate the closing and opening of the footer
 const Footer = ({
 	settingsActive,
 	profileActive,
@@ -22,9 +21,6 @@ const Footer = ({
 	toggleSearch,
 	isScrollingDown,
 	setActiveNotesView,
-	scrolledToBottom,
-	theme,
-	userAgent,
 }) => (
 	<div
 		className={
@@ -78,90 +74,6 @@ const Footer = ({
 				<span className={'title-text'}>Options</span>
 			</span>
 		</div>
-		<div
-			className={
-				scrolledToBottom
-					? 'footer-about-content'
-					: 'footer-about-content footer-hide'
-			}
-		>
-			<div className={'logo-container'}>
-				<a
-					className="logo"
-					href={'http://www.bible.is'}
-					title={'http://www.bible.is'}
-					target={'_blank'}
-					rel={'noopener'}
-				>
-					{theme === 'paper' && userAgent !== 'ms' ? (
-						<SvgWrapper className="svg" svgid={'bible.is_logo_light'} />
-					) : null}
-					{theme !== 'paper' || userAgent === 'ms' ? (
-						<SvgWrapper
-							fill={userAgent === 'ms' ? '#fff' : ''}
-							className="svg"
-							svgid={'bible.is_logo'}
-						/>
-					) : null}
-				</a>
-				<a
-					className={'logo-text'}
-					href={'http://www.bible.is'}
-					title={'http://www.bible.is'}
-					target={'_blank'}
-					rel={'noopener'}
-				>
-					<FormattedMessage {...messages.ministry} />
-				</a>
-			</div>
-			<div className={'footer-link-container'}>
-				<a
-					className={'footer-link'}
-					href={'http://www.bible.is/download/audio'}
-					title={'http://www.bible.is/download/audio'}
-					target={'_blank'}
-					rel={'noopener'}
-				>
-					<FormattedMessage {...messages.audioDownload} />
-				</a>
-				<a
-					className={'footer-link'}
-					href={'http://www.bible.is/privacy'}
-					title={'http://www.bible.is/privacy'}
-					target={'_blank'}
-					rel={'noopener'}
-				>
-					<FormattedMessage {...messages.privacy} />
-				</a>
-				<a
-					className={'footer-link'}
-					href={'http://www.bible.is/terms'}
-					title={'http://www.bible.is/terms'}
-					target={'_blank'}
-					rel={'noopener'}
-				>
-					<FormattedMessage {...messages.terms} />
-				</a>
-				<a
-					className={'footer-link'}
-					href={'http://www.bible.is/radio'}
-					title={'http://www.bible.is/radio'}
-					target={'_blank'}
-					rel={'noopener'}
-				>
-					<FormattedMessage {...messages.radio} />
-				</a>
-				<a
-					className={'footer-link'}
-					href={'http://www.bible.is/contact'}
-					title={'http://www.bible.is/contact'}
-					target={'_blank'}
-					rel={'noopener'}
-				>
-					<FormattedMessage {...messages.support} />
-				</a>
-			</div>
-		</div>
 	</div>
 );
 
@@ -171,14 +83,11 @@ Footer.propTypes = {
 	searchActive: PropTypes.bool,
 	notebookActive: PropTypes.bool,
 	isScrollingDown: PropTypes.bool,
-	scrolledToBottom: PropTypes.bool,
 	toggleNotebook: PropTypes.func,
 	toggleSettingsModal: PropTypes.func,
 	toggleProfile: PropTypes.func,
 	toggleSearch: PropTypes.func,
 	setActiveNotesView: PropTypes.func,
-	theme: PropTypes.string,
-	userAgent: PropTypes.string,
 };
 
 export default Footer;
