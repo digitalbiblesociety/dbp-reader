@@ -1668,32 +1668,55 @@ class Text extends React.PureComponent {
 	}
 
 	get textContainerStyle() {
-		const { isLargeBp, isAudioPlayerBp, isMobileBp, distance } = this.props;
+		const {
+			isLargeBp,
+			isAudioPlayerBp,
+			isMobileBp,
+			distance,
+			audioSource,
+			audioPlayerState,
+		} = this.props;
+		let headerHeight = 190;
 
-		if (!distance) {
-			return {};
-		}
+		// if (!distance) {
+		// 	return {};
+		// }
 
 		if (isLargeBp) {
-			return {
-				height: `calc(100vh - ${distance}px - 215px)`,
-				maxHeight: `calc(100vh - ${distance}px - 215px)`,
-			};
+			headerHeight += 25;
+
+			if (!audioSource || !audioPlayerState) {
+				headerHeight -= 56;
+			}
+			// return {
+			// 	height: `calc(100vh - ${distance}px - ${headerHeight}215px)`,
+			// 	maxHeight: `calc(100vh - ${distance}px - ${headerHeight}215px)`,
+			// };
 		} else if (isAudioPlayerBp) {
-			return {
-				height: `calc(100vh - ${distance}px - 220px)`,
-				maxHeight: `calc(100vh - ${distance}px - 220px)`,
-			};
+			headerHeight += 30;
+
+			if (!audioSource || !audioPlayerState) {
+				headerHeight -= 96;
+			}
+			// return {
+			// 	height: `calc(100vh - ${distance}px - ${headerHeight}220px)`,
+			// 	maxHeight: `calc(100vh - ${distance}px - ${headerHeight}220px)`,
+			// };
 		} else if (isMobileBp) {
-			return {
-				height: `calc(100vh - ${distance}px - 220px)`,
-				maxHeight: `calc(100vh - ${distance}px - 220px)`,
-			};
+			headerHeight += 30;
+
+			if (!audioSource || !audioPlayerState) {
+				headerHeight -= 85;
+			}
+			// return {
+			// 	height: `calc(100vh - ${distance}px - ${headerHeight}220px)`,
+			// 	maxHeight: `calc(100vh - ${distance}px - ${headerHeight}220px)`,
+			// };
 		}
 
 		return {
-			height: `calc(100vh - ${distance}px - 190px)`,
-			maxHeight: `calc(100vh - ${distance}px - 190px)`,
+			height: `calc(100vh - ${distance}px - ${headerHeight}px)`,
+			maxHeight: `calc(100vh - ${distance}px - ${headerHeight}px)`,
 		};
 	}
 
@@ -1753,7 +1776,10 @@ class Text extends React.PureComponent {
 
 		if (loadingNewChapterText || loadingAudio || loadingCopyright) {
 			return (
-				<div className={this.textContainerClass}>
+				<div
+					style={this.textContainerStyle}
+					className={this.textContainerClass}
+				>
 					<LoadingSpinner />
 				</div>
 			);
@@ -1887,6 +1913,7 @@ Text.propTypes = {
 	isLargeBp: PropTypes.bool,
 	isMobileBp: PropTypes.bool,
 	isAudioPlayerBp: PropTypes.bool,
+	audioPlayerState: PropTypes.bool,
 };
 
 export default Text;
