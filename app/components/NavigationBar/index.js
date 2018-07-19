@@ -34,6 +34,7 @@ class NavigationBar extends React.PureComponent {
 		// may need to wrap each of these in a container div to fix the hover issues
 		return (
 			<div
+				id={'navigation-bar'}
 				className={isScrollingDown ? 'nav-background closed' : 'nav-background'}
 			>
 				<div className="nav-container">

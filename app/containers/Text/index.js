@@ -1668,15 +1668,16 @@ class Text extends React.PureComponent {
 	}
 
 	get textContainerStyle() {
+		// Should move these styles into different classes
 		const {
 			isLargeBp,
 			isAudioPlayerBp,
 			isMobileBp,
-			distance,
+			// distance,
 			audioSource,
 			audioPlayerState,
 		} = this.props;
-		let headerHeight = 190;
+		let headerHeight = 136;
 
 		// if (!distance) {
 		// 	return {};
@@ -1714,9 +1715,13 @@ class Text extends React.PureComponent {
 			// };
 		}
 
+		// return {
+		// 	height: `calc(100vh - ${distance}px - ${headerHeight}px)`,
+		// 	maxHeight: `calc(100vh - ${distance}px - ${headerHeight}px)`,
+		// };
 		return {
-			height: `calc(100vh - ${distance}px - ${headerHeight}px)`,
-			maxHeight: `calc(100vh - ${distance}px - ${headerHeight}px)`,
+			height: `calc(100vh - ${headerHeight}px)`,
+			maxHeight: `calc(100vh - ${headerHeight}px)`,
 		};
 	}
 
@@ -1890,7 +1895,7 @@ Text.propTypes = {
 	toggleNotesModal: PropTypes.func,
 	setActiveNotesView: PropTypes.func,
 	activeChapter: PropTypes.number,
-	distance: PropTypes.number,
+	// distance: PropTypes.number,
 	notesActive: PropTypes.bool,
 	loadingAudio: PropTypes.bool,
 	subFooterOpen: PropTypes.bool,

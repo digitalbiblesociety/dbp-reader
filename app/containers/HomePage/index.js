@@ -931,35 +931,77 @@ class HomePage extends React.PureComponent {
 		}
 	};
 
+	handleAtBottom = () => {
+		// console.log('inside handle at bottom');
+		if (!document) {
+			return;
+		}
+		// Need a way to undo all of this
+		if (this.isAtBottom && !this.scrollingIntoView) {
+			const subfooter = document.getElementById('sub-footer');
+			// console.log('sub', subfooter);
+
+			subfooter.scrollIntoView({ behavior: 'smooth' });
+			this.scrollingIntoView = true;
+			this.subIsInView = true;
+			// const app = document.getElementById('app');
+			// const nav = document.getElementById('navigation-bar');
+			// nav.style = { ...nav.style, position: 'fixed' };
+			// app.firstElementChild.style = { ...app.firstElementChild.style, overflowY: 'scroll', overflowX: 'hidden' };
+			// Need to check for screen size
+			// app.firstElementChild.scrollTop = 136;
+			// window.scroll({ top: 135, behavior: 'smooth' });
+			// smoothscroll-polyfill
+		} else {
+			// Scroll back to top if no longer at the bottom
+			document.getElementById('app').firstElementChild.scrollTop = 0;
+
+			this.scrollingIntoView = false;
+			this.secondAnimFrame = false;
+		}
+	};
+
+	scrollingIntoView = false;
+
+	secondAnimFrame = false;
+
+	subIsInView = false;
+
 	updateScrollDirection = () => {
 		this.main = document.getElementsByTagName('main')[0];
-		const distance = this.isMobileSized ? 211 : 64;
-		const difference =
-			this.mainHeight - (this.scrollTop + this.mainPhysicalHeight);
+		// const distance = this.isMobileSized ? 211 : 64;
+		// const difference =
+		// 	this.mainHeight - (this.scrollTop + this.mainPhysicalHeight);
 		// console.log('difference', difference);
 		// console.log('distance', distance);
 		// console.log('difference <= distance', difference <= distance);
-
-		// Height that scrollTop needs to be within for the sub footer to activate
-		if (difference <= distance) {
-			// console.log(
-			// 	'diff for height',
-			// 	Math.max(this.heightRef.offsetHeight, this.heightRef.clientHeight) -
-			// 		(Math.max(this.heightRef.offsetHeight, this.heightRef.clientHeight) -
-			// 			(distance - difference)),
-			// );
-
-			this.setState({
-				footerDistance: distance - difference,
-				heightDifference:
-					Math.max(this.heightRef.offsetHeight, this.heightRef.clientHeight) -
-					(distance - difference),
-			});
-		} else if (this.state.footerDistance) {
-			this.setState({
-				footerDistance: 0,
-			});
+		if (this.isAtBottom && !this.secondAnimFrame) {
+			this.secondAnimframe = true;
+			requestAnimationFrame(this.handleAtBottom);
+		} else if (!this.isAtBottom && this.subIsInView) {
+			this.secondAnimFrame = true;
+			requestAnimationFrame(this.handleAtBottom);
 		}
+		// Height that scrollTop needs to be within for the sub footer to activate
+		// if (difference <= distance) {
+		// 	// console.log(
+		// 	// 	'diff for height',
+		// 	// 	Math.max(this.heightRef.offsetHeight, this.heightRef.clientHeight) -
+		// 	// 		(Math.max(this.heightRef.offsetHeight, this.heightRef.clientHeight) -
+		// 	// 			(distance - difference)),
+		// 	// );
+		//
+		// 	this.setState({
+		// 		footerDistance: distance - difference,
+		// 		heightDifference:
+		// 			Math.max(this.heightRef.offsetHeight, this.heightRef.clientHeight) -
+		// 			(distance - difference),
+		// 	});
+		// } else if (this.state.footerDistance) {
+		// 	this.setState({
+		// 		footerDistance: 0,
+		// 	});
+		// }
 
 		const resizeHeight = 0;
 		if (!this.outOfBounds) {
@@ -1175,10 +1217,10 @@ class HomePage extends React.PureComponent {
 		const {
 			isScrollingDown,
 			subFooterOpen,
-			heightDifference: height,
+			// heightDifference: height,
 			footerDistance: distance,
 		} = this.state;
-		console.log('height diffs', height, distance);
+		// console.log('height diffs', height, distance);
 		// const distance = 0;
 		// const height = 0;
 
@@ -1373,9 +1415,10 @@ class HomePage extends React.PureComponent {
 				{/* )} */}
 				{/* </Transition> */}
 				<div
-					style={
-						distance ? { height: distance, maxHeight: distance, flex: 1 } : {}
-					}
+					// style={
+					// 	distance ? { height: distance, maxHeight: distance, flex: 1 } : {}
+					// }
+					id={'sub-footer'}
 					className={'sub-footer'}
 				>
 					<SubFooter
