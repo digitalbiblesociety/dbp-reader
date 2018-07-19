@@ -258,6 +258,7 @@
 		"rc-slider": "^8.5.0",
 		"react": "^16.2.0",
 		"react-accessible-accordion": "^2.2.1",
+		"react-animate-height": "^2.0.3",
 		"react-custom-properties": "^1.2.0",
 		"react-dom": "^16.2.0",
 		"react-facebook": "^4.2.1",

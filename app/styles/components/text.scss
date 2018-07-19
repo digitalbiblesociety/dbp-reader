@@ -14,7 +14,7 @@
 		color: var(--application-text-container-color);
 		font-size: var(--application-base-font-size);
 	}
-	transition: 200ms ease-in-out;
+	transition: 50ms ease-in, 25ms ease-out;
 
 	.active-verse {
 		// Setting to gray because it won't obscure the font and it will work regardless of the app's background color

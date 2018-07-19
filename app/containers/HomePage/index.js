@@ -22,6 +22,7 @@ import { Helmet } from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { TransitionGroup } from 'react-transition-group';
+// import AnimateHeight from 'react-animate-height';
 // import { fromJS } from 'immutable';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
@@ -960,13 +961,17 @@ class HomePage extends React.PureComponent {
 			});
 		}
 
-		const resizeHeight = 0;
+		const resizeHeight = distance + 1;
 		if (!this.outOfBounds) {
 			// console.log('this.state.isScrollingDown', this.state.isScrollingDown);
 			// Previous state was not scrolling down but new state is
 			if (
 				this.scrollTop >= this.previousScrollTop &&
-				!this.state.isScrollingDown
+				!this.state.isScrollingDown &&
+				!(
+					this.scrollTop + this.mainPhysicalHeight >=
+					this.mainHeight - resizeHeight
+				)
 			) {
 				this.setState(
 					{
@@ -997,6 +1002,19 @@ class HomePage extends React.PureComponent {
 					() => {
 						// console.log('Setting new prev scroll and stuff for up');
 
+						this.previousScrollTop = this.scrollTop;
+						this.scrollTicking = false;
+					},
+				);
+			} else if (
+				this.scrollTop + this.mainPhysicalHeight >=
+				this.mainHeight - resizeHeight
+			) {
+				this.setState(
+					{
+						isScrollingDown: false,
+					},
+					() => {
 						this.previousScrollTop = this.scrollTop;
 						this.scrollTicking = false;
 					},
@@ -1341,6 +1359,19 @@ class HomePage extends React.PureComponent {
 						toggleSettingsModal={this.toggleSettingsModal}
 					/>
 				</div>
+				{/* <AnimateHeight> */}
+				{/* */}
+				{/* </AnimateHeight> */}
+				{/* <Transition in={subFooterOpen} timeout={200}> */}
+				{/* {(state) => ( */}
+				{/* <div className={`sub-footer slide-from-${state}`}> */}
+				{/* <SubFooter */}
+				{/* userAgent={userAgent} */}
+				{/* theme={userSettings.get('activeTheme')} */}
+				{/* /> */}
+				{/* </div> */}
+				{/* )} */}
+				{/* </Transition> */}
 				<div
 					style={
 						distance ? { height: distance, maxHeight: distance, flex: 1 } : {}

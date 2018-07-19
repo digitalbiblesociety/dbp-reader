@@ -73,7 +73,7 @@ html #app aside {
 .homepage {
 	overflow: hidden;
 	flex: 1;
-	transition: flex 0.3s, height 0.3s, min-height 0.3s;
+	transition: flex 50ms, height 50ms, min-height 50ms;
 }
 
 .sub-footer {
@@ -87,7 +87,7 @@ html #app aside {
 	//position: absolute;
 	//top: -40px;
 	flex: 0;
-	transition: height 0.3s, min-height 0.3s;
+	transition: height 50ms ease, min-height 50ms ease;
 	width: 100%;
 	//align-content: stretch;
 
