@@ -185,7 +185,7 @@
 	}
 
 	&.closed {
-		bottom: 56px;
+		//bottom: 56px;
 
 		@include css4 {
 			border-bottom: 1px solid var(--menu-border-color);
