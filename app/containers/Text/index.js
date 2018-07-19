@@ -1753,10 +1753,7 @@ class Text extends React.PureComponent {
 
 		if (loadingNewChapterText || loadingAudio || loadingCopyright) {
 			return (
-				<div
-					style={this.textContainerStyle}
-					className={this.textContainerClass}
-				>
+				<div className={this.textContainerClass}>
 					<LoadingSpinner />
 				</div>
 			);

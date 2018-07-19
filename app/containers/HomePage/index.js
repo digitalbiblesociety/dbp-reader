@@ -961,7 +961,7 @@ class HomePage extends React.PureComponent {
 			});
 		}
 
-		const resizeHeight = distance + 1;
+		const resizeHeight = 0;
 		if (!this.outOfBounds) {
 			// console.log('this.state.isScrollingDown', this.state.isScrollingDown);
 			// Previous state was not scrolling down but new state is
@@ -1175,10 +1175,10 @@ class HomePage extends React.PureComponent {
 		const {
 			isScrollingDown,
 			subFooterOpen,
-			// heightDifference: height,
+			heightDifference: height,
 			footerDistance: distance,
 		} = this.state;
-		// console.log('height diffs', height, distance);
+		console.log('height diffs', height, distance);
 		// const distance = 0;
 		// const height = 0;
 
