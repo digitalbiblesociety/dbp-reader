@@ -7,7 +7,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import SvgWrapper from 'components/SvgWrapper';
+import SvgWrapper from '../SvgWrapper';
 // import ColorPicker from 'components/ColorPicker';
 // import styled from 'styled-components';
 

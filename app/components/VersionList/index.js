@@ -13,8 +13,8 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { FormattedMessage } from 'react-intl';
 // import SvgWrapper from 'components/SvgWrapper';
-import LoadingSpinner from 'components/LoadingSpinner';
-import VersionListSection from 'components/VersionListSection';
+import LoadingSpinner from '../LoadingSpinner';
+import VersionListSection from '../VersionListSection';
 import messages from './messages';
 import {
 	getVersionsError,

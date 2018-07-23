@@ -18,13 +18,13 @@ import {
 	getChapterText,
 	// setActiveBookName,
 	// setActiveChapter,
-} from 'containers/HomePage/actions';
-import LoadingSpinner from 'components/LoadingSpinner';
-import ChaptersContainer from 'components/ChaptersContainer';
+} from '../../containers/HomePage/actions';
+import LoadingSpinner from '../LoadingSpinner';
+import ChaptersContainer from '../ChaptersContainer';
 import {
 	selectAuthenticationStatus,
 	selectUserId,
-} from 'containers/HomePage/selectors';
+} from '../../containers/HomePage/selectors';
 import {
 	selectActiveTextId,
 	selectBooks,

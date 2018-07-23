@@ -11,14 +11,14 @@ import { connect } from 'react-redux';
 // import { Link } from 'react-router-dom';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import injectSaga from 'utils/injectSaga';
-import injectReducer from 'utils/injectReducer';
-import GenericErrorBoundary from 'components/GenericErrorBoundary';
-import SvgWrapper from 'components/SvgWrapper';
-import LoadingSpinner from 'components/LoadingSpinner';
-import CloseMenuFunctions from 'utils/closeMenuFunctions';
-import SearchResult from 'components/SearchResult';
-import RecentSearches from 'components/RecentSearches';
+import injectSaga from '../../utils/injectSaga';
+import injectReducer from '../../utils/injectReducer';
+import GenericErrorBoundary from '../../components/GenericErrorBoundary';
+import SvgWrapper from '../../components/SvgWrapper';
+import LoadingSpinner from '../../components/LoadingSpinner';
+import CloseMenuFunctions from '../../utils/closeMenuFunctions';
+import SearchResult from '../../components/SearchResult';
+import RecentSearches from '../../components/RecentSearches';
 import {
 	getSearchResults,
 	viewError,

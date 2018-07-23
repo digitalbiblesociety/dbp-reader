@@ -6,11 +6,12 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+// import '../../styles/components/navbar.scss';
 // import Logo from 'components/Logo';
 // import LocaleToggle from 'containers/LocaleToggle';
-import ChapterSelection from 'containers/ChapterSelection';
-import TextSelection from 'containers/TextSelection';
-import SvgWrapper from 'components/SvgWrapper';
+import ChapterSelection from '../../containers/ChapterSelection';
+import TextSelection from '../../containers/TextSelection';
+import SvgWrapper from '../SvgWrapper';
 // import styled from 'styled-components';
 // import { FormattedMessage } from 'react-intl';
 // import messages from './messages';

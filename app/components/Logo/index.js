@@ -1,8 +1,8 @@
 /**
-*
-* Logo
-*
-*/
+ *
+ * Logo
+ *
+ */
 
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -11,14 +11,15 @@ import { createSelector } from 'reselect';
 import { changeLocale } from '../../containers/LanguageProvider/actions';
 import { makeSelectLocale } from '../../containers/LanguageProvider/selectors';
 
-import logo from '../../images/logos.svg';
+// import logo from '../../images/logos.svg';
 
 const logoSize = {
 	height: '54px',
 	width: '120px',
 };
 
-class Logo extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+class Logo extends React.PureComponent {
+	// eslint-disable-line react/prefer-stateless-function
 
 	constructor(props) {
 		super(props);
@@ -28,7 +29,14 @@ class Logo extends React.PureComponent { // eslint-disable-line react/prefer-sta
 	}
 
 	render() {
-		return <svg style={logoSize} className="icon"><use xmlnsXlink="http://www.w3.org/1999/xlink" xlinkHref={`${logo}#${this.props.locale}`}></use></svg>;
+		return (
+			<svg style={logoSize} className="icon">
+				<use
+					xmlnsXlink="http://www.w3.org/1999/xlink"
+					xlinkHref={`/static/logos.svg#${this.props.locale}`}
+				/>
+			</svg>
+		);
 	}
 }
 
@@ -36,10 +44,9 @@ Logo.propTypes = {
 	locale: PropTypes.string,
 };
 
-const mapStateToProps = createSelector(
-    makeSelectLocale(),
-    (locale) => ({ locale })
-);
+const mapStateToProps = createSelector(makeSelectLocale(), (locale) => ({
+	locale,
+}));
 
 export function mapDispatchToProps(dispatch) {
 	return {
@@ -48,4 +55,7 @@ export function mapDispatchToProps(dispatch) {
 	};
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Logo);
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps,
+)(Logo);

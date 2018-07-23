@@ -1,6 +1,6 @@
 import { takeLatest, call, take, cancel, put } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
-import request from 'utils/request';
+import request from '../../utils/request';
 import {
 	// GET_USER_DATA,
 	// LOAD_USER_DATA,

@@ -5,7 +5,7 @@
  */
 
 import { fromJS } from 'immutable';
-import { INIT_APPLICATION } from 'containers/HomePage/constants';
+import { INIT_APPLICATION } from '../HomePage/constants';
 import {
 	LOAD_TEXTS,
 	LOAD_COUNTRY,
@@ -36,7 +36,8 @@ const initialState = fromJS({
 	activeLanguageName: '',
 	activeCountryName: 'ANY',
 	initialBookId: 'GEN',
-	activeIsoCode: window.navigator.language || 'eng',
+	activeIsoCode: 'eng',
+	// activeIsoCode: (window && window.navigator.language) || 'eng',
 	loadingCountries: false,
 	loadingLanguages: false,
 	loadingVersions: false,

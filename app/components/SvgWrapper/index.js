@@ -1,12 +1,12 @@
 /**
-*
-* SvgWrapper
-*
-*/
+ *
+ * SvgWrapper
+ *
+ */
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import svgs from 'images/svglist.svg';
+// import svgs from '/static/svglist.svg';
 // import styled from 'styled-components';
 
 /* May need some or all of the script below if we try to support IE
@@ -30,7 +30,10 @@ bottom script after #svgdefs targeting IE/Edge < 13 and U3 0.8 (UCWeb 11 or more
 function SvgWrapper({ svgid, ...props }) {
 	return (
 		<svg {...props}>
-			<use xmlnsXlink="http://www.w3.org/1999/xlink" xlinkHref={`${svgs}#${svgid}`}></use>
+			<use
+				xmlnsXlink="http://www.w3.org/1999/xlink"
+				xlinkHref={`/static/svglist.svg#${svgid}`}
+			/>
 		</svg>
 	);
 }

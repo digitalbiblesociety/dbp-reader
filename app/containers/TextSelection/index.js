@@ -12,16 +12,13 @@ import { compose } from 'redux';
 import { FormattedMessage } from 'react-intl';
 // import injectSaga from 'utils/injectSaga';
 // import injectReducer from 'utils/injectReducer';
-import CountryList from 'components/CountryList';
-import LanguageList from 'components/LanguageList';
-import VersionList from 'components/VersionList';
-import SvgWrapper from 'components/SvgWrapper';
-import GenericErrorBoundary from 'components/GenericErrorBoundary';
-import CloseMenuFunctions from 'utils/closeMenuFunctions';
-import {
-	setActiveTextId,
-	toggleVersionSelection,
-} from 'containers/HomePage/actions';
+import CountryList from '../../components/CountryList';
+import LanguageList from '../../components/LanguageList';
+import VersionList from '../../components/VersionList';
+import SvgWrapper from '../../components/SvgWrapper';
+import GenericErrorBoundary from '../../components/GenericErrorBoundary';
+import CloseMenuFunctions from '../../utils/closeMenuFunctions';
+import { setActiveTextId, toggleVersionSelection } from '../HomePage/actions';
 import {
 	setVersionListState,
 	setLanguageListState,

@@ -6,15 +6,17 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import Information from 'components/Information';
-import SvgWrapper from 'components/SvgWrapper';
-import ContextPortal from 'components/ContextPortal';
-import FootnotePortal from 'components/FootnotePortal';
-import LoadingSpinner from 'components/LoadingSpinner';
-import IconsInText from 'components/IconsInText';
-import PopupMessage from 'components/PopupMessage';
-import PleaseSignInMessage from 'components/PleaseSignInMessage';
-import AudioOnlyMessage from 'components/AudioOnlyMessage';
+import dynamic from 'next/dynamic';
+import isEqual from 'lodash/isEqual';
+import Information from '../../components/Information';
+import SvgWrapper from '../../components/SvgWrapper';
+import ContextPortal from '../../components/ContextPortal';
+import FootnotePortal from '../../components/FootnotePortal';
+import LoadingSpinner from '../../components/LoadingSpinner';
+import IconsInText from '../../components/IconsInText';
+import PopupMessage from '../../components/PopupMessage';
+import PleaseSignInMessage from '../../components/PleaseSignInMessage';
+import AudioOnlyMessage from '../../components/AudioOnlyMessage';
 import {
 	getFormattedParentVerseNumber,
 	getPlainParentVerse,
@@ -25,13 +27,9 @@ import {
 	getClosestParent,
 	getOffsetNeededForPsalms,
 	// getTextInSelectedNodes,
-} from 'utils/highlightingUtils';
+} from '../../utils/highlightingUtils';
 // import differenceObject from 'utils/deepDifferenceObject';
-import isEqual from 'lodash/isEqual';
 // import some from 'lodash/some';
-import createHighlights from './highlightPlainText';
-import createFormattedHighlights from './highlightFormattedText';
-import { applyNotes, applyBookmarks } from './formattedTextUtils';
 // import { addClickToNotes } from './htmlToReact';
 /* Disabling the jsx-a11y linting because we need to capture the selected text
 	 and the most straight forward way of doing so is with the onMouseUp event */
@@ -54,6 +52,17 @@ class Text extends React.PureComponent {
 	};
 
 	componentDidMount() {
+		this.createHighlights = dynamic(import('./highlightPlainText'));
+		this.createFormattedHighlights = dynamic(
+			import('./highlightFormattedText'),
+		);
+		this.applyNotesAndBookmarks = dynamic(import('./formattedTextUtils'));
+		this.applyNotes = this.applyNotesAndBookmarks.applyNotes;
+		this.applyBookmarks = this.applyNotesAndBookmarks.applyBookmarks;
+		// this.createHighlights = dynamic(import './formattedTextUtils');
+		// import createHighlights from './highlightPlainText';
+		// import createFormattedHighlights from './highlightFormattedText';
+		// import { applyNotes, applyBookmarks } from './formattedTextUtils';
 		// console.log('Component did mount with: ', this.format, ' and ', this.formatHighlight);
 		if (this.format) {
 			// console.log('setting event listeners on format');
@@ -554,20 +563,27 @@ class Text extends React.PureComponent {
 			audioSource,
 			invalidBibleId,
 		} = this.props;
+
 		const chapterAlt = initialText[0] && initialText[0].chapter_alt;
 		const verseIsActive =
 			this.state.activeVerseInfo.verse && this.state.activeVerseInfo.isPlain;
 		const activeVerse = this.state.activeVerseInfo.verse || 0;
 		// Doing it like this may impact performance, but it is probably cleaner
 		// than most other ways of doing it...
-		const formattedSource = initialFormattedSource.main
-			? {
-					...initialFormattedSource,
-					main: [initialFormattedSource.main]
-						.map((s) => applyNotes(s, userNotes, this.handleNoteClick))
-						.map((s) => applyBookmarks(s, bookmarks, this.handleNoteClick))[0],
-			  }
-			: initialFormattedSource;
+		let formattedSource = initialFormattedSource;
+
+		if (this.applyNotes && this.applyBookmarks) {
+			formattedSource = initialFormattedSource.main
+				? {
+						...initialFormattedSource,
+						main: [initialFormattedSource.main]
+							.map((s) => this.applyNotes(s, userNotes, this.handleNoteClick))
+							.map((s) =>
+								this.applyBookmarks(s, bookmarks, this.handleNoteClick),
+							)[0],
+				  }
+				: initialFormattedSource;
+		}
 		const readersMode = userSettings.getIn([
 			'toggleOptions',
 			'readersMode',
@@ -593,7 +609,8 @@ class Text extends React.PureComponent {
 
 		if (
 			highlights.length &&
-			(!oneVersePerLine && !readersMode && formattedSource.main)
+			(!oneVersePerLine && !readersMode && formattedSource.main) &&
+			this.createFormattedHighlights
 		) {
 			// Temporary fix for the fact that highlight_start is a string... ... ...
 			const highlightsToPass = highlights.map((h) => ({
@@ -601,18 +618,22 @@ class Text extends React.PureComponent {
 				highlight_start: parseInt(h.highlight_start, 10),
 			}));
 			// Use function for highlighting the formatted formattedText
-			formattedText = createFormattedHighlights(
+			formattedText = this.createFormattedHighlights(
 				highlightsToPass,
 				formattedSource.main,
 			);
-		} else if (highlights.length && initialText.length) {
+		} else if (
+			highlights.length &&
+			initialText.length &&
+			this.createHighlights
+		) {
 			// Temporary fix for the fact that highlight_start is a string... ... ...
 			const highlightsToPass = highlights.map((h) => ({
 				...h,
 				highlight_start: parseInt(h.highlight_start, 10),
 			}));
 			// Use function for highlighting the plain plainText
-			plainText = createHighlights(highlightsToPass, initialText);
+			plainText = this.createHighlights(highlightsToPass, initialText);
 		} else {
 			plainText = initialText || [];
 		}
@@ -623,7 +644,7 @@ class Text extends React.PureComponent {
 		// Handle exception thrown when there isn't plain text but readers mode is selected
 		/* eslint-disable react/no-danger */
 		if (plainText.length === 0 && !formattedSource.main) {
-			if (!window.navigator.onLine) {
+			if (window && !window.navigator.onLine) {
 				textComponents = [
 					<h5 key={'no_connection'}>
 						We are having trouble contacting the server. Please check your
@@ -631,6 +652,7 @@ class Text extends React.PureComponent {
 					</h5>,
 				];
 			} else if (invalidBibleId) {
+				// THis appears too often
 				textComponents = [
 					<h5 key={'no_text'}>
 						Text is not currently available for this version.
@@ -865,36 +887,7 @@ class Text extends React.PureComponent {
 		// Unless there is a click event the mouseup and mousedown events won't fire for mobile devices
 		// Left this blank since I actually don't need to do anything with it
 	};
-	/* May end up needing these for highlighting or changing chapter on swipe
-	handleHighlightTouchStart = (e) => {
-		console.log('event in touch start', e.target);
-		console.log('e.handler', e.handler);
 
-		this.touchTarget = e.target;
-		this.main.addEventListener('touchend', this.handleTouchEnd);
-		this.main.addEventListener('touchcancel', this.handleTouchCancel);
-		// alert('touch event fired so I know the whole verse needs to be selected');
-	}
-
-	handleTouchEnd = (e) => {
-		console.log('touch ended');
-		// Likely want to compare the x y coords to see if they swiped
-		if (e.target.isSameNode(this.touchTarget)) {
-			console.log('ended on same verse');
-		}
-		this.main.removeEventListener('touchend', this.handleTouchEnd);
-		this.main.removeEventListener('touchcancel', this.handleTouchCancel);
-	}
-
-	handleTouchCancel = (e) => {
-		console.log('touch canceled');
-		if (e.target.isSameNode(this.touchTarget)) {
-			console.log('ended on same verse');
-		}
-		this.main.removeEventListener('touchend', this.handleTouchEnd);
-		this.main.removeEventListener('touchcancel', this.handleTouchCancel);
-	}
-	*/
 	handleMouseUp = (e) => {
 		// alert(`mouse up fired: ${e.button}: ${e.changedTouches}`);
 		e.stopPropagation();
@@ -991,7 +984,7 @@ class Text extends React.PureComponent {
 	};
 	// has an issue with highlights in the same verse
 	// This is likely going to be really slow...
-	highlightPlainText = (props) => createHighlights(props);
+	// highlightPlainText = (props) => createHighlights(props);
 
 	addHighlight = ({ color, popupCoords }) => {
 		let highlightObject = {};
@@ -1769,16 +1762,7 @@ class Text extends React.PureComponent {
 			menuIsOpen,
 			// isScrollingDown,
 		} = this.props;
-		// console.log(
-		// 	'break point',
-		// 	this.props.isAudioPlayerBp
-		// 		? 'audio'
-		// 		: this.props.isMobileBp
-		// 			? 'mobile'
-		// 			: 'large',
-		// );
-		// console.log('distance in text', this.props.distance);
-		// console.log('style for text container', this.textContainerStyle);
+
 		const {
 			coords,
 			contextMenuState,

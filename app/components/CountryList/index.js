@@ -7,8 +7,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { List, AutoSizer } from 'react-virtualized';
-import LoadingSpinner from 'components/LoadingSpinner';
-import flags from 'images/flags.svg';
+import LoadingSpinner from '../LoadingSpinner';
+// import flags from '../../images/flags.svg';
 
 class CountryList extends React.PureComponent {
 	// eslint-disable-line react/prefer-stateless-function
@@ -69,7 +69,10 @@ class CountryList extends React.PureComponent {
 					<svg className="icon" height="25px" width="25px">
 						<use
 							xmlnsXlink="http://www.w3.org/1999/xlink"
-							xlinkHref={`${flags}#${country.getIn(['codes', 'iso_a2'])}`}
+							xlinkHref={`/static/flags.svg#${country.getIn([
+								'codes',
+								'iso_a2',
+							])}`}
 						/>
 					</svg>
 					<h4

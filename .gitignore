@@ -4,6 +4,9 @@ build
 node_modules
 stats.json
 .env
+.next
+.next/
+.next/*
 app/utils/ENGKJV
 reduxStoreShape.js
 next-server

@@ -9,16 +9,16 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import injectSaga from 'utils/injectSaga';
-import injectReducer from 'utils/injectReducer';
-import SignUp from 'components/SignUp';
-import Login from 'components/Login';
-import PasswordReset from 'components/PasswordReset';
-import AccountSettings from 'components/AccountSettings';
-import GenericErrorBoundary from 'components/GenericErrorBoundary';
-import SvgWrapper from 'components/SvgWrapper';
-import PasswordResetVerified from 'components/PasswordResetVerified';
-import CloseMenuFunctions from 'utils/closeMenuFunctions';
+import injectSaga from '../../utils/injectSaga';
+import injectReducer from '../../utils/injectReducer';
+import SignUp from '../../components/SignUp';
+import Login from '../../components/Login';
+import PasswordReset from '../../components/PasswordReset';
+import AccountSettings from '../../components/AccountSettings';
+import GenericErrorBoundary from '../../components/GenericErrorBoundary';
+import SvgWrapper from '../../components/SvgWrapper';
+import PasswordResetVerified from '../../components/PasswordResetVerified';
+import CloseMenuFunctions from '../../utils/closeMenuFunctions';
 import {
 	selectAccountOption,
 	sendLoginForm,

@@ -1,13 +1,13 @@
 /**
-*
-* AudioOnlyMessage
-*
-*/
+ *
+ * AudioOnlyMessage
+ *
+ */
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import SvgWrapper from 'components/SvgWrapper';
 import { FormattedMessage } from 'react-intl';
+import SvgWrapper from '../SvgWrapper';
 import messages from './messages';
 
 function AudioOnlyMessage({ chapter, book }) {
@@ -15,7 +15,7 @@ function AudioOnlyMessage({ chapter, book }) {
 		<div className={'audio-only'}>
 			<SvgWrapper svgid={'audio_only'} />
 			<p>{`${book} ${chapter}`}</p>
-			<span className={'divider'}></span>
+			<span className={'divider'} />
 			<FormattedMessage {...messages.audioOnly} />
 		</div>
 	);

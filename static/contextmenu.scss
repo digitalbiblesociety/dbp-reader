@@ -1,0 +1,303 @@
+.context-menu {
+	width: 250px;
+	height: 166px;
+	position: absolute;
+	background-color: #fff;
+	border-radius: 6px;
+	color: #000;
+
+	@include css4 {
+		border: 2px solid var(--active-color-primary);
+	}
+
+	svg {
+		fill: #000;
+	}
+	&.shadow {
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 2px 3px 3px rgba(0, 0, 0, 0.24) !important;
+	}
+
+	.menu-item {
+		display: flex;
+		position: relative;
+		align-items: center;
+		justify-content: center;
+		flex-direction: column;
+		//background-color:rgb(204,178,165);
+		//background-color:var(--context-menu-background-color);
+		width: 62px;
+		height: 54px;
+		cursor: pointer;
+		-moz-user-select: none;
+		-khtml-user-select: none;
+		-webkit-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
+
+		&:after {
+			height: 46px;
+			width: 1px;
+			background-color: #bbb;
+			position: absolute;
+			top: 2px;
+			right: 0;
+			content: '';
+		}
+
+		&:nth-child(1) {
+			border-top-left-radius: 6px;
+		}
+
+		&:nth-child(4) {
+			border-top-right-radius: 6px;
+		}
+
+		&:nth-child(4):after {
+			all: unset;
+		}
+
+		// Overrides default react-share style
+		div.SocialMediaShareButton--email {
+			height: 26px;
+			font-size: 10px;
+		}
+
+		&:nth-child(2).active {
+			@include css4 {
+				background-color: var(--context-menu-highlight-active-background-color);
+			}
+		}
+
+		.item-text {
+			font-size: 10px;
+		}
+
+		&.normal:hover {
+			//opacity: 0.6;
+			fill: rgba(0, 0, 0, 0.65);
+			cursor: pointer;
+
+			@include css4 {
+				background-color: var(--context-menu-hover-color);
+			}
+		}
+
+		&.social {
+			width: 46px;
+			height: 46px;
+			box-shadow: 0 1px 3px rgba(0, 0, 0, 0.52);
+			border-radius: 6px;
+
+			&:hover {
+				//background-color: $login-facebook-color;
+				box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.72);
+			}
+		}
+
+		&.social svg {
+			fill: #fff;
+		}
+
+		&.google svg {
+			fill: initial;
+		}
+
+		// Two selectors below remove the gray borders
+		&.social:after {
+			all: unset;
+		}
+	}
+
+	.menu-row {
+		display: flex;
+		justify-content: space-around;
+		align-items: center;
+		height: 54px;
+		width: 100%;
+		//margin-bottom: 5px;
+
+		#link-to-copy {
+			background-color: #fff;
+			color: black;
+		}
+
+		.copy-link {
+			width: 80%;
+			color: gray;
+			font-size: 12px;
+			padding: 8px 5px 5px 5px;
+			text-decoration: underline;
+			text-overflow: ellipsis;
+			overflow: hidden;
+			cursor: pointer;
+
+			&:hover {
+				color: #1da1f2;
+			}
+		}
+
+		.copy-button {
+			font-size: 15px;
+			display: flex;
+			align-items: center;
+			padding-left: 5px;
+			padding-right: 5px;
+			width: 54px;
+			height: 54px;
+			text-align: center;
+			cursor: pointer;
+
+			&:hover {
+				@include css4 {
+					background-color: var(--context-menu-hover-color);
+				}
+			}
+		}
+
+		.like-button {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+
+			.share-count {
+				background-color: #fff;
+				display: flex;
+				height: 27px;
+				width: 100%;
+				align-items: center;
+				justify-content: center;
+				font-size: 14px;
+			}
+
+			.like-thumb {
+				height: 24px;
+				width: 100%;
+				display: flex;
+				align-items: center;
+				color: #fff;
+				font-size: 10px;
+				background-color: $login-facebook-color;
+				border-bottom-right-radius: 6px;
+				border-bottom-left-radius: 6px;
+			}
+		}
+	}
+
+	.highlight-colors {
+		display: none;
+		width: 246px;
+		height: 108px;
+		position: absolute;
+		top: 50px;
+		left: -62px;
+		@include css4 {
+			background-color: var(--context-menu-highlight-active-background-color);
+		}
+		z-index: 4;
+		border-top: 1px solid #ccc;
+		border-bottom-right-radius: 3px;
+		border-bottom-left-radius: 3px;
+
+		&.active {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: center;
+
+			.color-group {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				width: 33%;
+
+				:first-child {
+					width: 26px;
+					height: 26px;
+					border-radius: 50%;
+				}
+
+				.green {
+					background-color: $sketch-document-color-bright-green;
+					//width: 26px;
+					//height: 26px;
+					//border-radius: 50%;
+
+					&:hover {
+						border: 1px solid #000;
+					}
+				}
+
+				.pink {
+					background-color: $sketch-document-color-pink;
+					//width: 26px;
+					//height: 26px;
+					//border-radius: 50%;
+
+					&:hover {
+						border: 1px solid #000;
+					}
+				}
+
+				.purple {
+					background-color: $sketch-document-color-purple;
+					//width: 26px;
+					//height: 26px;
+					//border-radius: 50%;
+
+					&:hover {
+						border: 1px solid #000;
+					}
+				}
+
+				.blue {
+					background-color: $sketch-document-color-bright-blue;
+					//width: 26px;
+					//height: 26px;
+					//border-radius: 50%;
+
+					&:hover {
+						border: 1px solid #000;
+					}
+				}
+
+				.yellow {
+					background-color: $sketch-document-color-yellow;
+					//width: 26px;
+					//height: 26px;
+					//border-radius: 50%;
+
+					&:hover {
+						border: 1px solid #000;
+					}
+				}
+
+				.none {
+					border: 1px solid #000;
+					position: relative;
+					//width: 26px;
+					//height: 26px;
+					//border-radius: 50%;
+
+					&:hover {
+						border: 1px solid #116699;
+					}
+				}
+
+				.none:after {
+					content: '';
+					width: 1px;
+					height: 25px;
+					position: absolute;
+					top: 0;
+					right: 11.5px;
+					background-color: #000;
+					transform: rotate(45deg);
+				}
+
+				.color-text {
+					font-size: 12px;
+				}
+			}
+		}
+	}
+}

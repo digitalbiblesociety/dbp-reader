@@ -1,0 +1,29 @@
+// I think these aren't used and will delete them eventually
+
+//.menu-sidebar                         {left:0;z-index:1;}
+.menu-link-list {
+	display: flex;
+	flex-direction: column;
+	padding-left: 10px;
+	padding-top: 5px;
+	@include css4 {
+		color: var(--default-text-color);
+	}
+}
+.menu-link-list .item {
+	margin-top: 15px;
+	@include css4 {
+		color: var(--default-text-color);
+	}
+}
+.menu-link-list .item:hover {
+	opacity: 0.5;
+}
+.menu-link-list .item .item-container {
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+}
+.menu-link-list .item .svg {
+	margin-right: 15px;
+}

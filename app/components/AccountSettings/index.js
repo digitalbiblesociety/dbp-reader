@@ -7,9 +7,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import ImageComponent from 'components/ImageComponent';
-import SvgWrapper from 'components/SvgWrapper';
-import PopupMessage from 'components/PopupMessage';
+import ImageComponent from '../ImageComponent';
+import SvgWrapper from '../SvgWrapper';
+import PopupMessage from '../PopupMessage';
 import messages from './messages';
 
 class AccountSettings extends React.PureComponent {

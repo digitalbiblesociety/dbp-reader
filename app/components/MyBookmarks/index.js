@@ -7,7 +7,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import SvgWrapper from 'components/SvgWrapper';
+import SvgWrapper from '../SvgWrapper';
 // import { FormattedMessage } from 'react-intl';
 // import messages from './messages';
 

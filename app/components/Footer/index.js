@@ -6,7 +6,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import SvgWrapper from 'components/SvgWrapper';
+import SvgWrapper from '../SvgWrapper';
 // import { FormattedMessage } from 'react-intl';
 // import messages from './messages';
 // import styled from 'styled-components';

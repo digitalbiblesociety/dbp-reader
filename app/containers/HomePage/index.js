@@ -22,25 +22,25 @@ import { Helmet } from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { TransitionGroup } from 'react-transition-group';
-// import AnimateHeight from 'react-animate-height';
-// import { fromJS } from 'immutable';
-import injectSaga from 'utils/injectSaga';
-import injectReducer from 'utils/injectReducer';
 import isEqual from 'lodash/isEqual';
 import get from 'lodash/get';
-import Settings from 'containers/Settings';
-import AudioPlayer from 'containers/AudioPlayer';
-import Profile from 'containers/Profile';
-import Notes from 'containers/Notes';
-import Text from 'containers/Text';
-import NavigationBar from 'components/NavigationBar';
-import Footer from 'components/Footer';
-import SearchContainer from 'containers/SearchContainer';
-import GenericErrorBoundary from 'components/GenericErrorBoundary';
-import SubFooter from 'components/SubFooter';
-import FadeTransition from 'components/FadeTransition';
-import logo from 'images/app-icons/favicon-96x96.png';
-import svg4everybody from 'utils/svgPolyfill';
+// import AnimateHeight from 'react-animate-height';
+// import { fromJS } from 'immutable';
+import injectSaga from '../../utils/injectSaga';
+import injectReducer from '../../utils/injectReducer';
+import Settings from '../Settings';
+import AudioPlayer from '../AudioPlayer';
+import Profile from '../Profile';
+import Notes from '../Notes';
+import Text from '../Text';
+import NavigationBar from '../../components/NavigationBar';
+import Footer from '../../components/Footer';
+import SearchContainer from '../SearchContainer';
+import GenericErrorBoundary from '../../components/GenericErrorBoundary';
+import SubFooter from '../../components/SubFooter';
+import FadeTransition from '../../components/FadeTransition';
+// import logo from '../../../static/favicon-96x96.png';
+import svg4everybody from '../../utils/svgPolyfill';
 // import {
 // 	statusChangeCallback,
 // 	checkLoginState,
@@ -50,18 +50,18 @@ import {
 	applyFontFamily,
 	applyFontSize,
 	toggleWordsOfJesus,
-} from 'containers/Settings/themes';
+} from '../Settings/themes';
 // import {
 // 	getCountries,
 // 	getLanguages,
 // 	getTexts,
-// } from 'containers/TextSelection/actions';
+// } from '../TextSelection/actions';
 // import differenceObject from 'utils/deepDifferenceObject';
-import notesReducer from 'containers/Notes/reducer';
-import textReducer from 'containers/TextSelection/reducer';
-// import notesSaga from 'containers/Notes/saga';
-import textSaga from 'containers/TextSelection/saga';
-import { getBookmarksForChapter, addBookmark } from 'containers/Notes/actions';
+import notesReducer from '../Notes/reducer';
+import textReducer from '../TextSelection/reducer';
+// import notesSaga from '../Notes/saga';
+import textSaga from '../TextSelection/saga';
+import { getBookmarksForChapter, addBookmark } from '../Notes/actions';
 import {
 	addHighlight,
 	// createUserWithSocialAccount,
@@ -116,7 +116,9 @@ class HomePage extends React.PureComponent {
 	// eslint-disable-line react/prefer-stateless-function
 	componentDidMount() {
 		// Get the first bible based on the url here
-		const { params } = this.props.match;
+		const { params } = this.props.match
+			? this.props.match
+			: { params: { bibleId: 'ENGESV', bookId: 'GEN', chapter: 1 } };
 		const { bibleId, bookId, chapter } = params;
 		const verse = params.verse || '';
 		const { userAuthenticated: authenticated, userId } = this.props;
@@ -354,6 +356,38 @@ class HomePage extends React.PureComponent {
 			// console.log(document.getElementById('app').firstChild.scrollTop);
 			// console.log(document.getElementById('app').firstChild.scrollHeight);
 		}
+
+		this.isMobileSized = () => {
+			// console.log('resized mobile');
+			return (
+				window &&
+				document &&
+				document.firstElementChild &&
+				document.firstElementChild.clientWidth < 500
+			);
+		};
+
+		this.isLargeBp = () => {
+			// console.log('resized large');
+			return (
+				window &&
+				document &&
+				document.firstElementChild &&
+				document.firstElementChild.clientWidth > 500 &&
+				document.firstElementChild.clientWidth < 1001
+			);
+		};
+
+		this.isAudioPlayerBp = () => {
+			// console.log('resized audio');
+			return (
+				window &&
+				document &&
+				document.firstElementChild &&
+				document.firstElementChild.clientWidth > 500 &&
+				document.firstElementChild.clientWidth < 551
+			);
+		};
 	}
 	// Component updates when the state and props haven't changed 2 of 5 times
 	// If there is a significant slow down we may need to do some deep equality checks on the state
@@ -364,11 +398,28 @@ class HomePage extends React.PureComponent {
 		// console.log('Received props --------------------------------------');
 
 		this.setState({ subFooterOpen: false });
-
+		const match = this.props.match || {
+			params: {
+				token: '',
+				verse: '',
+				chapter: 1,
+				bookId: 'MAT',
+				bibleId: 'ENGESV',
+			},
+		};
 		// previous props
-		const { params } = this.props.match;
+		const { params } = match;
 		// next props
-		const { params: nextParams } = nextProps.match;
+		const nextMatch = nextProps.match || {
+			params: {
+				token: '',
+				verse: '',
+				chapter: 1,
+				bookId: 'MAT',
+				bibleId: 'ENGESV',
+			},
+		};
+		const { params: nextParams } = nextMatch;
 		// console.log('prev and next match\n', this.props.match, '\n', nextProps.match);
 		const { userAuthenticated, userId } = nextProps;
 		if (
@@ -393,27 +444,6 @@ class HomePage extends React.PureComponent {
 			const newChapter = params.chapter !== nextParams.chapter;
 			const newBook = params.bookId !== nextParams.bookId;
 			const newBible = params.bibleId !== nextParams.bibleId;
-
-			// Default each of these to an empty map to avoid an error being thrown
-			// const {
-			// 	nextBook = fromJS({}),
-			// 	previousBook = fromJS({}),
-			// 	activeBook = fromJS({}),
-			// } = nextProps;
-			// const { activeChapter } = nextProps.homepage.activeChapter;
-
-			// const nextBookId = nextBook.get('book_id');
-			// const prevBookId = previousBook.get('book_id');
-			// let nextChapter = activeChapter + 1;
-			// let prevChapter = activeChapter - 1;
-			//
-			// if (!activeBook.getIn(['chapters', prevChapter])) {
-			// 	prevChapter = previousBook.getIn(['chapters', -1]);
-			// }
-			//
-			// if (!activeBook.getIn(['chapters', nextChapter])) {
-			// 	nextChapter = nextBook.getIn(['chapters', 0]);
-			// }
 
 			if (newBible) {
 				// console.log('new bible');
@@ -444,10 +474,6 @@ class HomePage extends React.PureComponent {
 					bookId: nextParams.bookId,
 					chapter: nextParams.chapter,
 					verse: nextParams.verse || '',
-					// nextBookId,
-					// prevBookId,
-					// nextChapter,
-					// prevChapter,
 					authenticated: userAuthenticated,
 					userId,
 				});
@@ -462,10 +488,6 @@ class HomePage extends React.PureComponent {
 					bookId: nextParams.bookId,
 					chapter: nextParams.chapter,
 					verse: nextParams.verse || '',
-					// nextBookId,
-					// prevBookId,
-					// nextChapter,
-					// prevChapter,
 					authenticated: userAuthenticated,
 					userId,
 				});
@@ -831,36 +853,19 @@ class HomePage extends React.PureComponent {
 	}
 
 	// May need more than one to determine the different audio player heights
-	get isMobileSized() {
+	isMobileSized() {
 		// console.log('resized mobile');
-		return (
-			window &&
-			document &&
-			document.firstElementChild &&
-			document.firstElementChild.clientWidth < 500
-		);
+		return true;
 	}
 
-	get isLargeBp() {
+	isLargeBp() {
 		// console.log('resized large');
-		return (
-			window &&
-			document &&
-			document.firstElementChild &&
-			document.firstElementChild.clientWidth > 500 &&
-			document.firstElementChild.clientWidth < 1001
-		);
+		return false;
 	}
 
-	get isAudioPlayerBp() {
+	isAudioPlayerBp() {
 		// console.log('resized audio');
-		return (
-			window &&
-			document &&
-			document.firstElementChild &&
-			document.firstElementChild.clientWidth > 500 &&
-			document.firstElementChild.clientWidth < 551
-		);
+		return false;
 	}
 
 	// Height of the entire scroll container including the invisible portions
@@ -1154,9 +1159,12 @@ class HomePage extends React.PureComponent {
 	};
 
 	goToFullChapter = () => {
-		const { bibleId, bookId, chapter } = this.props.match.params;
+		const match = this.props.match;
+		if (match) {
+			const { bibleId, bookId, chapter } = this.props.match.params;
 
-		this.props.history.push(`/${bibleId}/${bookId}/${chapter}`);
+			this.props.history.push(`/${bibleId}/${bookId}/${chapter}`);
+		}
 	};
 
 	addBookmark = (data) => this.props.dispatch(addBookmark({ ...data }));
@@ -1262,8 +1270,12 @@ class HomePage extends React.PureComponent {
 		const { userNotes, bookmarks, text: updatedText } = this.props.textData;
 		// console.log('text', updatedText);
 		// console.log('Homepage re-rendered bc reasons');
-		const token = this.props.match.params.token || '';
-		const verse = this.props.match.params.verse || '';
+		// Todo: Get token and verse off of context as well as the full location
+		const contextLocation = { href: 'https://is.bible.build/engesv/gen/1' };
+		// const token = this.props.match.params.token || '';
+		// const verse = this.props.match.params.verse || '';
+		const token = '';
+		const verse = '';
 
 		return (
 			<GenericErrorBoundary affectedArea="Homepage">
@@ -1279,14 +1291,14 @@ class HomePage extends React.PureComponent {
 								verse ? `:${verse}` : ''
 							}`,
 						},
-						{ property: 'og:url', content: window.location.href },
+						{ property: 'og:url', content: contextLocation },
 						{
 							property: 'og:description',
 							content: 'Main page for the Bible.is web app',
 						},
 						{ property: 'og:type', content: 'website' },
 						{ property: 'og:site_name', content: 'Bible.is' },
-						{ property: 'og:image', content: logo },
+						{ property: 'og:image', content: '/static/apple-icon-180x180.png' },
 					]}
 				>
 					<title>
@@ -1394,15 +1406,15 @@ class HomePage extends React.PureComponent {
 						informationActive={isInformationModalActive}
 						loadingNewChapterText={loadingNewChapterText}
 						formattedTextFilesetId={formattedTextFilesetId}
-						isLargeBp={this.isLargeBp}
-						isMobileBp={this.isMobileSized}
+						isLargeBp={this.isLargeBp()}
+						isMobileBp={this.isMobileSized()}
 						addBookmark={this.addBookmark}
 						addHighlight={this.addHighlight}
 						nextChapter={this.getNextChapter}
 						prevChapter={this.getPrevChapter}
 						setActiveNote={this.setActiveNote}
 						getCopyrights={this.getCopyrights}
-						isAudioPlayerBp={this.isAudioPlayerBp}
+						isAudioPlayerBp={this.isAudioPlayerBp()}
 						goToFullChapter={this.goToFullChapter}
 						toggleNotesModal={this.toggleNotesModal}
 						deleteHighlights={this.deleteHighlights}

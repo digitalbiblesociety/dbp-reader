@@ -6,8 +6,8 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import SvgWrapper from 'components/SvgWrapper';
 import { FormattedMessage } from 'react-intl';
+import SvgWrapper from '../SvgWrapper';
 import messages from './messages';
 
 class SubFooter extends React.PureComponent {

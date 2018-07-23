@@ -1,0 +1,168 @@
+// Leaving unused class here because the copyright component
+// will need more styling once we have all the correct data
+.information {
+	color: #aaa;
+	//margin-bottom: 65px;
+
+	&:before {
+		content: '';
+		position: absolute;
+		width: 80%;
+		height: 1px;
+		left: 10%;
+		@include css4 {
+			background-color: var(--before-after-border-color);
+			//border-top: 1px solid var(--before-after-border-color);
+		}
+	}
+
+	.information-toggle {
+		// Reset default button styles
+		//all: unset;
+		background-color: transparent;
+		border: none;
+		outline: none;
+		font-size: 60%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 100%;
+		transition: transform 200ms ease-in-out;
+
+		&:focus {
+			outline: none;
+		}
+
+		.learn-more {
+			@include css4 {
+				color: var(--notebook-title-date-color);
+			}
+		}
+
+		&:hover {
+			cursor: pointer;
+			opacity: 0.85;
+		}
+
+		.icon {
+			transition: transform 200ms ease-in-out;
+			transform: rotate(0deg);
+		}
+
+		.rotate {
+			transform: rotate(-180deg);
+		}
+	}
+
+	.link {
+		color: $sketch-document-color-light-blue;
+		font-weight: 200;
+		margin-left: 15px;
+		cursor: pointer;
+	}
+	.copyrights-section {
+		//padding: 15px;
+		font-size: 10px;
+		margin: 15px auto;
+		overflow-y: auto;
+		overflow-x: hidden;
+		max-height: 90%;
+
+		.nt-copyright,
+		.ot-copyright {
+			display: flex;
+			//flex-direction: row;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			flex-wrap: wrap;
+			width: 100%;
+
+			.cp-section {
+				display: flex;
+				flex-direction: column;
+				//justify-content: space-between;
+				align-items: center;
+				//min-height: 250px;
+				//min-width: 280px;
+				//max-width: 500px;
+				margin-top: 15px;
+				padding: 0 20px;
+
+				.org-name {
+					margin: 10px 0;
+
+					.link {
+						&:hover {
+							cursor: pointer;
+							opacity: 0.8;
+						}
+						@include css4 {
+							color: var(--notebook-title-date-color);
+						}
+					}
+				}
+
+				h3 {
+					text-align: center;
+				}
+
+				img.image-landscape {
+					width: 100px;
+					height: auto;
+					max-height: 50px;
+				}
+				img.fcbh-copyright-logo {
+					width: 150px;
+					max-height: 75px;
+				}
+				img {
+					margin: 10px 0;
+					height: 35px;
+					//height: 109px;
+				}
+			}
+		}
+	}
+
+	@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+		.copyrights-section {
+			div {
+				.cp-section {
+					text-align: center;
+
+					p {
+						max-width: 100%;
+						white-space: normal;
+					}
+
+					a {
+						text-align: center;
+					}
+
+					img {
+						margin: 10px auto;
+					}
+				}
+			}
+		}
+	}
+}
+
+//@media only screen and (min-width: 500px) and (max-width: $large-bp) {
+//	.information {
+//		margin-bottom: 155px;
+//	}
+//
+//	@media only screen and (max-width: $audio-player-bp) {
+//		.information {
+//			margin-bottom: 180px;
+//		}
+//	}
+//}
+//
+//@media only screen and (max-width: 499px) {
+//	.information {
+//		margin-bottom: 230px;
+//	}
+//}

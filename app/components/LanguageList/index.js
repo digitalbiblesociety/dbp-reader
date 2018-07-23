@@ -8,7 +8,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { List, AutoSizer } from 'react-virtualized';
 import matchSorter from 'match-sorter';
-import LoadingSpinner from 'components/LoadingSpinner';
+import LoadingSpinner from '../LoadingSpinner';
 
 class LanguageList extends React.PureComponent {
 	// eslint-disable-line react/prefer-stateless-function

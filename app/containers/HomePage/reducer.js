@@ -8,7 +8,7 @@
 
 import { fromJS } from 'immutable';
 // import esvDefaultFilesets from 'utils/defaultFilesetsForESV.json';
-import { USER_LOGGED_IN } from 'containers/Profile/constants';
+import { USER_LOGGED_IN } from '../Profile/constants';
 import {
 	ACTIVE_TEXT_ID,
 	LOAD_AUDIO,
@@ -134,12 +134,12 @@ const initialState = fromJS({
 	note: {},
 	chapterText: [],
 	userAuthenticated:
-		!!localStorage.getItem('bible_is_user_id') ||
-		!!sessionStorage.getItem('bible_is_user_id') ||
+		// !!localStorage.getItem('bible_is_user_id') ||
+		// !!sessionStorage.getItem('bible_is_user_id') ||
 		false,
 	userId:
-		localStorage.getItem('bible_is_user_id') ||
-		sessionStorage.getItem('bible_is_user_id') ||
+		// localStorage.getItem('bible_is_user_id') ||
+		// sessionStorage.getItem('bible_is_user_id') ||
 		'',
 	audioObjects: [],
 	activeFilesets: [],
@@ -170,59 +170,99 @@ const initialState = fromJS({
 	activeNotesView: 'notes',
 	activeTextId: '',
 	defaultLanguageIso: 'eng',
-	defaultLanguageName: window.navigator.language
-		? window.navigator.language
-		: 'English',
+	// defaultLanguageName: window.navigator.language
+	// 	? window.navigator.language
+	// 	: 'English',
+	defaultLanguageName: 'English',
 	activeBookId: '',
 	userSettings: {
-		activeTheme: sessionStorage.getItem('bible_is_theme') || 'red',
-		activeFontType: sessionStorage.getItem('bible_is_font_family') || 'sans',
-		activeFontSize:
-			parseInt(sessionStorage.getItem('bible_is_font_size'), 10) || 42,
+		// 	activeTheme: sessionStorage.getItem('bible_is_theme') || 'red',
+		// 	activeFontType: sessionStorage.getItem('bible_is_font_family') || 'sans',
+		// 	activeFontSize:
+		// 		parseInt(sessionStorage.getItem('bible_is_font_size'), 10) || 42,
+		// 	toggleOptions: {
+		// 		readersMode: {
+		// 			name: "READER'S MODE",
+		// 			active: JSON.parse(
+		// 				localStorage.getItem('userSettings_toggleOptions_readersMode_active'),
+		// 			),
+		// 			available: true,
+		// 		},
+		// 		crossReferences: {
+		// 			name: 'CROSS REFERENCE',
+		// 			active: localStorage.getItem(
+		// 				'userSettings_toggleOptions_crossReferences_active',
+		// 			)
+		// 				? JSON.parse(
+		// 						localStorage.getItem(
+		// 							'userSettings_toggleOptions_crossReferences_active',
+		// 						),
+		// 				  )
+		// 				: true,
+		// 			available: true,
+		// 		},
+		// 		redLetter: {
+		// 			name: 'RED LETTER',
+		// 			active: localStorage.getItem('bible_is_words_of_jesus')
+		// 				? JSON.parse(localStorage.getItem('bible_is_words_of_jesus'))
+		// 				: true,
+		// 			available: true,
+		// 		},
+		// 		justifiedText: {
+		// 			name: 'JUSTIFIED TEXT',
+		// 			active: JSON.parse(
+		// 				localStorage.getItem(
+		// 					'userSettings_toggleOptions_justifiedText_active',
+		// 				),
+		// 			),
+		// 			available: true,
+		// 		},
+		// 		oneVersePerLine: {
+		// 			name: 'ONE VERSE PER LINE',
+		// 			active: JSON.parse(
+		// 				localStorage.getItem(
+		// 					'userSettings_toggleOptions_oneVersePerLine_active',
+		// 				),
+		// 			),
+		// 			available: true,
+		// 		},
+		// 		verticalScrolling: {
+		// 			name: 'VERTICAL SCROLLING',
+		// 			active: false,
+		// 			available: false,
+		// 		},
+		// 	},
+		// },
+		// autoPlayEnabled: sessionStorage.getItem('bible_is_autoplay')
+		// 	? JSON.parse(sessionStorage.getItem('bible_is_autoplay'))
+		// 	: false,
+		activeTheme: 'red',
+		activeFontType: 'sans',
+		activeFontSize: 42,
 		toggleOptions: {
 			readersMode: {
 				name: "READER'S MODE",
-				active: JSON.parse(
-					localStorage.getItem('userSettings_toggleOptions_readersMode_active'),
-				),
+				active: false,
 				available: true,
 			},
 			crossReferences: {
 				name: 'CROSS REFERENCE',
-				active: localStorage.getItem(
-					'userSettings_toggleOptions_crossReferences_active',
-				)
-					? JSON.parse(
-							localStorage.getItem(
-								'userSettings_toggleOptions_crossReferences_active',
-							),
-					  )
-					: true,
+				active: true,
 				available: true,
 			},
 			redLetter: {
 				name: 'RED LETTER',
-				active: localStorage.getItem('bible_is_words_of_jesus')
-					? JSON.parse(localStorage.getItem('bible_is_words_of_jesus'))
-					: true,
+				active: true,
 				available: true,
 			},
 			justifiedText: {
 				name: 'JUSTIFIED TEXT',
-				active: JSON.parse(
-					localStorage.getItem(
-						'userSettings_toggleOptions_justifiedText_active',
-					),
-				),
+				active: true,
 				available: true,
 			},
 			oneVersePerLine: {
 				name: 'ONE VERSE PER LINE',
-				active: JSON.parse(
-					localStorage.getItem(
-						'userSettings_toggleOptions_oneVersePerLine_active',
-					),
-				),
+				active: false,
 				available: true,
 			},
 			verticalScrolling: {
@@ -232,9 +272,7 @@ const initialState = fromJS({
 			},
 		},
 	},
-	autoPlayEnabled: sessionStorage.getItem('bible_is_autoplay')
-		? JSON.parse(sessionStorage.getItem('bible_is_autoplay'))
-		: false,
+	autoPlayEnabled: false,
 	loadingBooks: false,
 	selectedText: '',
 	selectedBookName: '',
@@ -254,10 +292,7 @@ const initialState = fromJS({
 	nextAudioSource: '',
 	activeVerse: '',
 	audioPaths: [],
-	audioPlayerState:
-		JSON.parse(sessionStorage.getItem('bible_is_audio_player_state')) === null
-			? false
-			: JSON.parse(sessionStorage.getItem('bible_is_audio_player_state')),
+	audioPlayerState: true,
 	textDirection: 'ltr',
 	loadingNewChapterText: true,
 	loadingCopyright: true,
@@ -273,10 +308,10 @@ function homePageReducer(state = initialState, action) {
 		case TOGGLE_FIRST_LOAD_TEXT_SELECTION:
 			return state.set('firstLoad', false);
 		case TOGGLE_AUTOPLAY:
-			sessionStorage.setItem(
-				'bible_is_autoplay',
-				!state.get('autoPlayEnabled'),
-			);
+			// sessionStorage.setItem(
+			// 	'bible_is_autoplay',
+			// 	!state.get('autoPlayEnabled'),
+			// );
 			return state.set('autoPlayEnabled', !state.get('autoPlayEnabled'));
 		case GET_CHAPTER_TEXT:
 			return state.set('loadingNewChapterText', true);
@@ -342,7 +377,7 @@ function homePageReducer(state = initialState, action) {
 				.set('activeTextName', action.textName)
 				.set('activeTextId', action.textId);
 		case SET_AUDIO_PLAYER_STATE:
-			sessionStorage.setItem('bible_is_audio_player_state', action.state);
+			// sessionStorage.setItem('bible_is_audio_player_state', action.state);
 			return state.set('audioPlayerState', action.state);
 		case LOAD_HIGHLIGHTS:
 			return state.set('highlights', fromJS(action.highlights));
@@ -356,13 +391,13 @@ function homePageReducer(state = initialState, action) {
 			return state.setIn(['userSettings', 'activeFontSize'], action.size);
 		case TOGGLE_SETTINGS_OPTION:
 			if (action.exclusivePath) {
-				localStorage.setItem(action.exclusivePath.join('_'), false);
-				localStorage.setItem(action.path.join('_'), !state.getIn(action.path));
+				// localStorage.setItem(action.exclusivePath.join('_'), false);
+				// localStorage.setItem(action.path.join('_'), !state.getIn(action.path));
 				return state
 					.setIn(action.exclusivePath, false)
 					.setIn(action.path, !state.getIn(action.path));
 			}
-			localStorage.setItem(action.path.join('_'), !state.getIn(action.path));
+			// localStorage.setItem(action.path.join('_'), !state.getIn(action.path));
 
 			return state.setIn(action.path, !state.getIn(action.path));
 		case TOGGLE_SETTINGS_OPTION_AVAILABILITY:
@@ -373,10 +408,10 @@ function homePageReducer(state = initialState, action) {
 			return state.set('selectedBookName', action.book);
 		case 'loadbible':
 			// console.log('loading bible with', action);
-			sessionStorage.setItem('bible_is_audio_player_state', true);
-			localStorage.setItem('bible_is_1_bible_id', action.bibleId);
-			localStorage.setItem('bible_is_2_book_id', action.activeBookId);
-			localStorage.setItem('bible_is_3_chapter', action.activeChapter);
+			// sessionStorage.setItem('bible_is_audio_player_state', true);
+			// localStorage.setItem('bible_is_1_bible_id', action.bibleId);
+			// localStorage.setItem('bible_is_2_book_id', action.activeBookId);
+			// localStorage.setItem('bible_is_3_chapter', action.activeChapter);
 			return state
 				.set('activeTextId', fromJS(action.bibleId))
 				.set('activeBookId', fromJS(action.activeBookId))
@@ -392,8 +427,8 @@ function homePageReducer(state = initialState, action) {
 				.set('books', fromJS(action.books))
 				.set('activeFilesets', fromJS(action.filesets));
 		case 'loadnewchapter':
-			localStorage.setItem('bible_is_2_book_id', action.bookId);
-			localStorage.setItem('bible_is_3_chapter', action.chapter);
+			// localStorage.setItem('bible_is_2_book_id', action.bookId);
+			// localStorage.setItem('bible_is_3_chapter', action.chapter);
 			return state
 				.set('hasFormattedText', fromJS(action.hasFormattedText))
 				.set('hasTextInDatabase', fromJS(action.hasPlainText))

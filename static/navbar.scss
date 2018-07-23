@@ -1,0 +1,222 @@
+.nav-background {
+	width: 100%;
+	height: 54px;
+	display: flex;
+	position: fixed;
+	justify-content: center;
+	z-index: 10;
+	@include css4 {
+		background-color: var(--default-header-background-color);
+		outline: 1px solid var(--menu-border-color);
+	}
+	//transform: translateY(0);
+	transition: transform 200ms ease-in-out;
+
+	&.closed {
+		transform: translateY(-100%);
+	}
+}
+
+.nav-container {
+	@include css4 {
+		background-color: var(--default-header-background-color);
+		color: var(--default-text-color);
+	}
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	height: 54px;
+	width: 100%;
+	max-width: 1000px;
+
+	.logo {
+		height: 54px;
+		width: calc(10% + 15px);
+		min-width: 111px;
+		display: flex;
+		align-items: center;
+		padding-left: 15px;
+
+		&:hover {
+			opacity: 0.65;
+			background: rgba(0, 0, 0, 0.2);
+		}
+		//max-width: 111px;
+		svg {
+			height: 26px;
+			width: 81px;
+		}
+	}
+
+	.version {
+		height: 54px;
+		//min-width: 45%;
+		width: calc(45% - 7.5px);
+		//max-width: 450px;
+		display: flex;
+		position: relative;
+		align-items: center;
+		cursor: pointer;
+
+		.version-text {
+			display: inline-block;
+			position: relative;
+			overflow: hidden;
+			white-space: nowrap;
+		}
+
+		&:hover {
+			&.svg,
+			& .version-text {
+				opacity: 0.65;
+			}
+			background: rgba(0, 0, 0, 0.2);
+		}
+
+		&:after {
+			content: '';
+			width: 100%;
+			height: 54px;
+			position: absolute;
+			top: 0;
+			left: 0;
+			@include css4 {
+				background: -webkit-linear-gradient(
+					to right,
+					var(--default-header-background-color-transparent) 80%,
+					var(--default-header-background-color)
+				);
+				background: -moz-linear-gradient(
+					to right,
+					var(--default-header-background-color-transparent) 80%,
+					var(--default-header-background-color)
+				);
+				background: linear-gradient(
+					to right,
+					var(--default-header-background-color-transparent) 80%,
+					var(--default-header-background-color)
+				);
+			}
+		}
+
+		svg {
+			margin-left: 15px;
+			margin-top: -3px;
+			margin-right: 2px;
+			flex-shrink: 0;
+		}
+	}
+
+	.book-chapter {
+		//max-width: 420px;
+		//min-width:calc(45% - 7.5px);
+		width: calc(45% - 7.5px);
+		height: 54px;
+		display: flex;
+		position: relative;
+		align-items: center;
+		cursor: pointer;
+
+		.book-chapter-text {
+			display: inline-block;
+			position: relative;
+			overflow: hidden;
+			white-space: nowrap;
+		}
+
+		&:hover {
+			& .svg,
+			& .book-chapter-text {
+				opacity: 0.65;
+			}
+			background: rgba(0, 0, 0, 0.2);
+		}
+
+		&:after {
+			content: '';
+			width: 100%;
+			height: 54px;
+			position: absolute;
+			top: 0;
+			left: 0;
+			@include css4 {
+				background: -webkit-linear-gradient(
+					to right,
+					var(--default-header-background-color-transparent) 80%,
+					var(--default-header-background-color)
+				);
+				background: -moz-linear-gradient(
+					to right,
+					var(--default-header-background-color-transparent) 80%,
+					var(--default-header-background-color)
+				);
+				background: linear-gradient(
+					to right,
+					var(--default-header-background-color-transparent) 80%,
+					var(--default-header-background-color)
+				);
+			}
+		}
+
+		svg {
+			margin-left: 15px;
+			margin-top: -3px;
+			margin-right: 2px;
+			flex-shrink: 0;
+			//margin-top:5px;
+		}
+	}
+
+	// pseudo elements
+	.book-chapter:before {
+		content: '';
+		width: 1px;
+		height: 50px;
+		background-color: rgba(0, 0, 0, 0.2);
+		position: absolute;
+		top: 2px;
+	}
+	.version:before {
+		content: '';
+		width: 1px;
+		height: 50px;
+		background-color: rgba(0, 0, 0, 0.2);
+		position: absolute;
+		top: 2px;
+	}
+}
+
+//@media only screen and (max-width:$large-bp) {
+//  // Using a linear-gradient seems to break for safari
+//  // This style could potentially be applied regardless of the screen size
+//  .nav-container .version {
+//
+//  }
+//
+//  .nav-container .book-chapter {
+//    svg {
+//      margin-left: 10px;
+//    }
+//  }
+//}
+
+@media only screen and (max-width: $medium-bp) {
+	.nav-container {
+		.logo {
+			display: none;
+		}
+		.version {
+			padding-left: 10px;
+			width: 50%;
+			svg {
+				margin-left: 0;
+			}
+		}
+		.version:before {
+			all: unset;
+		}
+		.book-chapter {
+			width: 50%;
+		}
+	}
+}

@@ -6,9 +6,9 @@ import { combineReducers } from 'redux-immutable';
 import { fromJS } from 'immutable';
 import { LOCATION_CHANGE } from 'react-router-redux';
 
-import languageProviderReducer from 'containers/LanguageProvider/reducer';
-import errorReducer from 'containers/App/errorReducer';
-import profileReducer from 'containers/Profile/reducer';
+import languageProviderReducer from './containers/LanguageProvider/reducer';
+import errorReducer from './containers/App/errorReducer';
+import profileReducer from './containers/Profile/reducer';
 
 /*
  * routeReducer

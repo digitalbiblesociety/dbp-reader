@@ -6,15 +6,15 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import FacebookAuthentication from 'containers/FacebookAuthentication';
-import GoogleAuthentication from 'containers/GoogleAuthentication';
-import Checkbox from 'components/Checkbox';
-import checkEmail from 'utils/checkEmailForValidity';
-import messages from 'components/PasswordResetVerified/messages';
+import { FormattedMessage } from 'react-intl';
+import FacebookAuthentication from '../../containers/FacebookAuthentication';
+import GoogleAuthentication from '../../containers/GoogleAuthentication';
+import Checkbox from '../Checkbox';
+import checkEmail from '../../utils/checkEmailForValidity';
+import messages from '../PasswordResetVerified/messages';
 // import messages from './messages';
 // import SvgWrapper from 'components/SvgWrapper';
 // import styled from 'styled-components';
-import { FormattedMessage } from 'react-intl';
 
 class SignUp extends React.PureComponent {
 	state = {

@@ -1,0 +1,191 @@
+// Account Settings
+.account-settings {
+	max-height: calc(100%);
+	height: calc(100%);
+	overflow-y: auto;
+	overflow-x: hidden;
+	display: flex;
+	flex-direction: column;
+
+	.wrapper {
+		display: flex;
+		align-items: center;
+		height: 54px;
+		margin: 15px 0;
+
+		.icon {
+			flex-shrink: 0;
+			margin-left: 15px;
+			@include css4 {
+				color: var(--default-text-color);
+			}
+		}
+
+		input {
+			background-color: inherit;
+			margin-left: 25px;
+			margin-right: 25px;
+			width: 270px;
+
+			@include css4 {
+				color: var(--default-text-color);
+			}
+		}
+	}
+
+	.avatar-placeholder {
+		width: 150px;
+		height: 150px;
+		flex-shrink: 0;
+
+		svg {
+			min-height: 150px;
+			min-width: 150px;
+		}
+
+		@include css4 {
+			fill: var(--default-text-color);
+		}
+	}
+}
+.account-settings .logout-button {
+	margin-top: 20px;
+	margin-left: 20px;
+	cursor: pointer;
+	&:hover {
+		@include css4 {
+			color: var(--active-color-primary);
+		}
+	}
+}
+.account-settings .button {
+	@include css4 {
+		color: var(--default-text-color);
+	}
+	font-weight: 400;
+	cursor: pointer;
+	align-self: flex-end;
+	margin: 0 20px 0 0;
+	font-size: 0.9em;
+
+	&:hover {
+		@include css4 {
+			color: var(--active-color-primary);
+		}
+	}
+}
+.account-settings .delete-account {
+	margin-bottom: 20px;
+	margin-top: auto;
+	color: inherit;
+	align-self: flex-end;
+	font-style: italic;
+	font-weight: 200;
+}
+//.account-settings .svg {fill:currentColor;
+// }
+.account-settings .title {
+	@include css4 {
+		color: var(--default-text-color);
+	}
+	padding-left: 20px;
+	margin-bottom: 5px;
+	top: 30px;
+	position: relative;
+}
+
+// Personal Information Styles
+.personal-info {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+
+	.change-picture-input {
+		display: none;
+	}
+}
+.personal-info .profile-picture {
+	width: 150px;
+	height: 150px;
+	border-radius: 50%;
+}
+.personal-info .change-picture {
+	@include css4 {
+		background: var(--menu-body-background-color);
+		color: var(--default-text-color);
+	}
+	border: none;
+
+	all: unset;
+	margin-top: 10px;
+
+	@include css4 {
+		color: var(--default-text-color);
+	}
+
+	&:hover {
+		cursor: pointer;
+
+		@include css4 {
+			color: var(--active-color-primary);
+		}
+	}
+}
+.personal-info .name {
+	@include css4 {
+		color: var(--active-color-primary);
+	}
+	font-style: italic;
+	margin-top: 5px;
+}
+
+// Email Section Styles
+.email-section {
+	display: flex;
+	flex-direction: column;
+	margin-top: 15px;
+}
+.email-section .email {
+	@include css4 {
+		background-color: var(--menu-body-background-color);
+		color: var(--default-text-color);
+	}
+	width: 100%;
+	height: 50px;
+	display: flex;
+	align-items: center;
+}
+
+// Password Section Styles
+.password-section {
+	display: flex;
+	flex-direction: column;
+	margin-top: 15px;
+}
+.password-section .password {
+	@include css4 {
+		background-color: var(--menu-body-background-color);
+		color: var(--default-text-color);
+	}
+	width: 100%;
+	height: 50px;
+	display: flex;
+	align-items: center;
+}
+
+// Address Section Styles - May have something here in the future
+.address-section {
+	margin-top: 15px;
+	display: flex;
+	flex-direction: column;
+}
+//.address-section .input-svg {display:block;
+// position:absolute;margin-top:10px;margin-left:20px;@include css4{fill:var(--menu-font-color);};}
+//.address-section input {height:40px;font-size:.8em;font-style:italic;/* border-bottom:1px solid white; */}
+//.address-section .country {}
+//.address-section .address-1 {}
+//.address-section .address-2 {}
+//.address-section .city {}
+//.address-section .state {}
+//.address-section .postal-code {}

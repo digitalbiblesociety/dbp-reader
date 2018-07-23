@@ -13,13 +13,13 @@ import {
 	setActiveChapter,
 	setActiveBookName,
 	toggleChapterSelection,
-} from 'containers/HomePage/actions';
-import BooksTable from 'components/BooksTable';
-// import SvgWrapper from 'components/SvgWrapper';
-import injectSaga from 'utils/injectSaga';
-import injectReducer from 'utils/injectReducer';
-import GenericErrorBoundary from 'components/GenericErrorBoundary';
-import CloseMenuFunctions from 'utils/closeMenuFunctions';
+} from '../HomePage/actions';
+import BooksTable from '../../components/BooksTable';
+// import SvgWrapper from '../../components/SvgWrapper';
+import injectSaga from '../../utils/injectSaga';
+import injectReducer from '../../utils/injectReducer';
+import GenericErrorBoundary from '../../components/GenericErrorBoundary';
+import CloseMenuFunctions from '../../utils/closeMenuFunctions';
 import { selectActiveBookName, selectActiveChapter } from './selectors';
 import reducer from './reducer';
 import saga from './saga';

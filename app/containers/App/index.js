@@ -13,31 +13,32 @@
  */
 
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+// import { Switch, Route } from 'react-router-dom';
 
-import HomePage from 'containers/HomePage/Loadable';
-import AboutPage from 'containers/AboutPage/Loadable';
-import NotFoundPage from 'containers/NotFoundPage/Loadable';
-import PrivacyPolicy from 'components/PrivacyPolicy';
-import TermsAndConditions from 'components/TermsAndConditions';
+import HomePage from '../HomePage';
+// import AboutPage from '../AboutPage/Loadable';
+// import NotFoundPage from '../NotFoundPage/Loadable';
+// import PrivacyPolicy from '../../components/PrivacyPolicy';
+// import TermsAndConditions from '../../components/TermsAndConditions';
 // Need to either redirect from / or add the necessary params so that the first page loads correctly
+// 			{/* <Switch> */}
+// 			{/* <Route exact path="/" component={HomePage} /> */}
+// 			{/* <Route exact path="/about" component={AboutPage} /> */}
+// 			{/* <Route exact path="/404" component={NotFoundPage} /> */}
+// 			{/* <Route exact path="/privacy-policy" component={PrivacyPolicy} /> */}
+// 			{/* <Route exact path="/terms-of-use" component={TermsAndConditions} /> */}
+// 			{/* <Route exact path="/reset/password/:token" component={HomePage} /> */}
+// 			{/* <Route */}
+// 			{/* exact */}
+// 			{/* path="/:bibleId?/:bookId?/:chapter?/:verse?" */}
+// 			{/* component={HomePage} */}
+// 			{/* /> */}
+// 			{/* <Route component={NotFoundPage} /> */}
+// 			{/* </Switch> */}
 export default function App() {
 	return (
 		<div>
-			<Switch>
-				<Route exact path="/" component={HomePage} />
-				<Route exact path="/about" component={AboutPage} />
-				<Route exact path="/404" component={NotFoundPage} />
-				<Route exact path="/privacy-policy" component={PrivacyPolicy} />
-				<Route exact path="/terms-of-use" component={TermsAndConditions} />
-				<Route exact path="/reset/password/:token" component={HomePage} />
-				<Route
-					exact
-					path="/:bibleId?/:bookId?/:chapter?/:verse?"
-					component={HomePage}
-				/>
-				<Route component={NotFoundPage} />
-			</Switch>
+			<HomePage />
 		</div>
 	);
 }

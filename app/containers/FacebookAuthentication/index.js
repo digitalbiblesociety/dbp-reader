@@ -8,8 +8,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import SvgWrapper from 'components/SvgWrapper';
-import PopupMessage from 'components/PopupMessage';
+import SvgWrapper from '../../components/SvgWrapper';
+import PopupMessage from '../../components/PopupMessage';
 import { createUserWithSocialAccount } from '../HomePage/actions';
 
 export class FacebookAuthentication extends React.PureComponent {

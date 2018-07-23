@@ -1,5 +1,5 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
-import request from 'utils/request';
+import request from '../../utils/request';
 import {
 	GET_SEARCH_RESULTS,
 	LOAD_SEARCH_RESULTS,
