@@ -5,6 +5,7 @@
 	//max-height: calc(100vh - 190px);
 	//margin: 54px auto 108px auto;
 	margin: 0 auto;
+	margin-top: 15px;
 	//padding: 54px 10px 116px 10px;
 	padding: 10px;
 	padding-top: 56px;
@@ -240,6 +241,7 @@
 
 @media only screen and (max-width: $audio-player-bp) {
 	.text-container {
+		padding-top: 36px;
 		//height: calc(100vh - 220px);
 		//max-height: calc(100vh - 220px);
 
@@ -257,6 +259,7 @@
 
 @media only screen and (min-width: 500px) and (max-width: $large-bp) {
 	.text-container {
+		padding-top: 36px;
 		//height: calc(100vh - 215px);
 		//max-height: calc(100vh - 215px);
 		//&.sub-footer-open {
@@ -264,11 +267,12 @@
 		//}
 	}
 	@media only screen and (max-width: $audio-player-bp) {
-		//.text-container {
-		//	&.sub-footer-open {
-		//		margin-bottom: 45px;
-		//	}
-		//}
+		.text-container {
+			margin-top: 0;
+			//&.sub-footer-open {
+			//	margin-bottom: 45px;
+			//}
+		}
 	}
 }
 //

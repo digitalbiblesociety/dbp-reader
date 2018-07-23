@@ -345,6 +345,9 @@ class HomePage extends React.PureComponent {
 			// Main can be unset in this instance
 			this.main = document.getElementsByTagName('main')[0];
 			window.addEventListener('scroll', this.handleScrolling, true);
+			// window.addEventListener('resize', this.handleResize, true);
+			// this.throttle('resize', 'optimizedResize');
+			// window.addEventListener('optimizedResize', this.handleResize);
 			//
 			// console.log(document.getElementById('app').firstChild.scrollTop);
 			// document.getElementById('app').firstChild.scrollTop = 1;
@@ -802,18 +805,44 @@ class HomePage extends React.PureComponent {
 	setAudioPlayerState = (state) =>
 		this.props.dispatch(setAudioPlayerState(state));
 
+	// handleResize = (e) => {
+	// console.log('resized', e);
+	// this.isMobileSized;
+	// this.isLargeBp;
+	// this.isAudioPlayerBp;
+	// };
+
+	// May want to use this for the scroll event to try and limit the number of events handled
+	throttle(type, name, node) {
+		const obj = node || window;
+		let running = false;
+		const callback = () => {
+			if (running) {
+				return;
+			}
+			running = true;
+			requestAnimationFrame(() => {
+				obj.dispatchEvent(new CustomEvent(name));
+				running = false;
+			});
+		};
+
+		obj.addEventListener(type, callback);
+	}
+
 	// May need more than one to determine the different audio player heights
 	get isMobileSized() {
+		// console.log('resized mobile');
 		return (
 			window &&
 			document &&
 			document.firstElementChild &&
-			document.firstElementChild.clientHeight < 900 &&
 			document.firstElementChild.clientWidth < 500
 		);
 	}
 
 	get isLargeBp() {
+		// console.log('resized large');
 		return (
 			window &&
 			document &&
@@ -824,6 +853,7 @@ class HomePage extends React.PureComponent {
 	}
 
 	get isAudioPlayerBp() {
+		// console.log('resized audio');
 		return (
 			window &&
 			document &&
@@ -931,41 +961,46 @@ class HomePage extends React.PureComponent {
 		}
 	};
 
-	handleAtBottom = () => {
-		// console.log('inside handle at bottom');
-		if (!document) {
-			return;
-		}
-		// Need a way to undo all of this
-		if (this.isAtBottom && !this.scrollingIntoView) {
-			const subfooter = document.getElementById('sub-footer');
-			// console.log('sub', subfooter);
+	// handleAtBottom = () => {
+	// 	// console.log('inside handle at bottom');
+	// 	if (!document) {
+	// 		return;
+	// 	}
+	// 	// Need a way to undo all of this
+	// 	if (this.isAtBottom && !this.scrollingIntoView && !this.subIsInView) {
+	// 		console.log('Scroll sub footer into view');
+	//
+	// 		const subfooter = document.getElementById('sub-footer');
+	// 		// console.log('sub', subfooter);
+	//
+	// 		// subfooter.scrollIntoView({ behavior: 'smooth' });
+	// 		this.scrollingIntoView = true;
+	// 		this.subIsInView = true;
+	// 		// const app = document.getElementById('app');
+	// 		// const nav = document.getElementById('navigation-bar');
+	// 		// nav.style = { ...nav.style, position: 'fixed' };
+	// 		// app.firstElementChild.style = { ...app.firstElementChild.style, overflowY: 'scroll', overflowX: 'hidden' };
+	// 		// Need to check for screen size
+	// 		// app.firstElementChild.scrollTop = 136;
+	// 		// window.scroll({ top: 135, behavior: 'smooth' });
+	// 		// smoothscroll-polyfill
+	// 	} else if (this.subIsInView) {
+	// 		// Scroll back to top if no longer at the bottom
+	// 		console.log('Set scroll top back to 0 to hide the sub footer');
+	//
+	// 		// document.getElementById('app').firstElementChild.scrollTop = 0;
+	//
+	// 		this.scrollingIntoView = false;
+	// 		this.subIsInView = false;
+	// 		this.secondAnimFrame = false;
+	// 	}
+	// };
 
-			subfooter.scrollIntoView({ behavior: 'smooth' });
-			this.scrollingIntoView = true;
-			this.subIsInView = true;
-			// const app = document.getElementById('app');
-			// const nav = document.getElementById('navigation-bar');
-			// nav.style = { ...nav.style, position: 'fixed' };
-			// app.firstElementChild.style = { ...app.firstElementChild.style, overflowY: 'scroll', overflowX: 'hidden' };
-			// Need to check for screen size
-			// app.firstElementChild.scrollTop = 136;
-			// window.scroll({ top: 135, behavior: 'smooth' });
-			// smoothscroll-polyfill
-		} else {
-			// Scroll back to top if no longer at the bottom
-			document.getElementById('app').firstElementChild.scrollTop = 0;
+	// scrollingIntoView = false;
 
-			this.scrollingIntoView = false;
-			this.secondAnimFrame = false;
-		}
-	};
+	// secondAnimFrame = false;
 
-	scrollingIntoView = false;
-
-	secondAnimFrame = false;
-
-	subIsInView = false;
+	// subIsInView = false;
 
 	updateScrollDirection = () => {
 		this.main = document.getElementsByTagName('main')[0];
@@ -975,13 +1010,13 @@ class HomePage extends React.PureComponent {
 		// console.log('difference', difference);
 		// console.log('distance', distance);
 		// console.log('difference <= distance', difference <= distance);
-		if (this.isAtBottom && !this.secondAnimFrame) {
-			this.secondAnimframe = true;
-			requestAnimationFrame(this.handleAtBottom);
-		} else if (!this.isAtBottom && this.subIsInView) {
-			this.secondAnimFrame = true;
-			requestAnimationFrame(this.handleAtBottom);
-		}
+		// if (this.isAtBottom && !this.secondAnimFrame) {
+		// 	this.secondAnimframe = true;
+		// 	requestAnimationFrame(this.handleAtBottom);
+		// } else if (!this.isAtBottom && this.subIsInView) {
+		// 	this.secondAnimFrame = true;
+		// 	requestAnimationFrame(this.handleAtBottom);
+		// }
 		// Height that scrollTop needs to be within for the sub footer to activate
 		// if (difference <= distance) {
 		// 	// console.log(

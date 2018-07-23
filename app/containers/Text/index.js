@@ -1674,10 +1674,15 @@ class Text extends React.PureComponent {
 			isAudioPlayerBp,
 			isMobileBp,
 			// distance,
+			isScrollingDown,
 			audioSource,
 			audioPlayerState,
 		} = this.props;
 		let headerHeight = 136;
+
+		if (isScrollingDown) {
+			headerHeight -= 5;
+		}
 
 		// if (!distance) {
 		// 	return {};
@@ -1687,6 +1692,11 @@ class Text extends React.PureComponent {
 			headerHeight += 25;
 
 			if (!audioSource || !audioPlayerState) {
+				// console.log(
+				// 	'audio source or state are false largeBP',
+				// 	audioPlayerState,
+				// 	audioSource,
+				// );
 				headerHeight -= 56;
 			}
 			// return {
@@ -1697,6 +1707,11 @@ class Text extends React.PureComponent {
 			headerHeight += 30;
 
 			if (!audioSource || !audioPlayerState) {
+				// console.log(
+				// 	'audio source or state are false audioplayerBP',
+				// 	audioPlayerState,
+				// 	audioSource,
+				// );
 				headerHeight -= 96;
 			}
 			// return {
@@ -1704,9 +1719,14 @@ class Text extends React.PureComponent {
 			// 	maxHeight: `calc(100vh - ${distance}px - ${headerHeight}220px)`,
 			// };
 		} else if (isMobileBp) {
-			headerHeight += 30;
+			headerHeight += 50;
 
 			if (!audioSource || !audioPlayerState) {
+				// console.log(
+				// 	'audio source or state are false small BP',
+				// 	audioPlayerState,
+				// 	audioSource,
+				// );
 				headerHeight -= 85;
 			}
 			// return {
@@ -1896,11 +1916,16 @@ Text.propTypes = {
 	setActiveNotesView: PropTypes.func,
 	activeChapter: PropTypes.number,
 	// distance: PropTypes.number,
+	isLargeBp: PropTypes.bool,
+	menuIsOpen: PropTypes.bool,
+	isMobileBp: PropTypes.bool,
 	notesActive: PropTypes.bool,
 	loadingAudio: PropTypes.bool,
 	subFooterOpen: PropTypes.bool,
 	invalidBibleId: PropTypes.bool,
 	isScrollingDown: PropTypes.bool,
+	isAudioPlayerBp: PropTypes.bool,
+	audioPlayerState: PropTypes.bool,
 	loadingCopyright: PropTypes.bool,
 	userAuthenticated: PropTypes.bool,
 	loadingNewChapterText: PropTypes.bool,
@@ -1914,11 +1939,6 @@ Text.propTypes = {
 	audioFilesetId: PropTypes.string,
 	plainTextFilesetId: PropTypes.string,
 	formattedTextFilesetId: PropTypes.string,
-	menuIsOpen: PropTypes.bool,
-	isLargeBp: PropTypes.bool,
-	isMobileBp: PropTypes.bool,
-	isAudioPlayerBp: PropTypes.bool,
-	audioPlayerState: PropTypes.bool,
 };
 
 export default Text;
