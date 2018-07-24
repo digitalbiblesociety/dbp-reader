@@ -35,10 +35,10 @@ import HomePage from '../HomePage';
 // 			{/* /> */}
 // 			{/* <Route component={NotFoundPage} /> */}
 // 			{/* </Switch> */}
-export default function App() {
+export default function App({ appProps }) {
 	return (
 		<div>
-			<HomePage />
+			<HomePage match={appProps.match} bible={appProps.bible} />
 		</div>
 	);
 }

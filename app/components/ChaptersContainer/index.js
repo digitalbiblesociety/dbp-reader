@@ -6,7 +6,8 @@
 
 import React from 'react';
 import { PropTypes } from 'prop-types';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
+// import { Link } from 'react-router-dom';
 // import styled from 'styled-components';
 // import { FormattedMessage } from 'react-intl';
 // import messages from './messages';
@@ -33,23 +34,24 @@ function ChaptersContainer({
 				}`}
 			>
 				{chapters.map((chapter) => (
-					<Link
-						to={`/${activeTextId.toLowerCase()}/${bookId.toLowerCase()}/${chapter}`}
-						key={chapter}
-						onClick={() => handleChapterClick(book, chapter)}
-						className={'chapter-box'}
-					>
-						<span
-							className={
-								activeChapter === chapter &&
-								(bookName || bookNameShort) === activeBookName
-									? 'active-chapter'
-									: ''
-							}
+					<span className={'chapter-box'} key={chapter}>
+						<Link
+							href={`/${activeTextId.toLowerCase()}/${bookId.toLowerCase()}/${chapter}`}
+							as={`/bible/${activeTextId.toLowerCase()}/${bookId.toLowerCase()}/${chapter}`}
 						>
-							{chapter}
-						</span>
-					</Link>
+							<span
+								onClick={() => handleChapterClick(book, chapter)}
+								className={
+									activeChapter === chapter &&
+									(bookName || bookNameShort) === activeBookName
+										? 'active-chapter'
+										: ''
+								}
+							>
+								{chapter}
+							</span>
+						</Link>
+					</span>
 				))}
 			</div>
 		);

@@ -161,13 +161,13 @@ export class TextSelection extends React.PureComponent {
 	render() {
 		const {
 			countryListActive,
+			languageListActive,
+			versionListActive,
 			activeIsoCode,
 			activeLanguageName,
-			languageListActive,
-			loadingVersions,
-			versionListActive,
 			activeCountryName,
 			countryLanguages,
+			loadingVersions,
 			loadingCountries,
 			loadingLanguages,
 			finishedLoadingCountries,

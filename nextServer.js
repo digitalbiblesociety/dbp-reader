@@ -15,8 +15,13 @@ app
 		// 	const queryParams = { id: req.params.id };
 		// 	app.render(req, res, actualPage, queryParams);
 		// });
+		// server.get('/http:/*', (req, res) => {
+		// 	console.log('caught the api request I hope', `${req.protocol}://${req.get('host')}${req.originalUrl}`);
+		// 	handle(req, res);
+		// })
+
 		server.get('/_next*', (req, res) => {
-			console.log('caught _next request');
+			// console.log('caught _next request');
 			handle(req, res);
 		});
 
@@ -25,10 +30,10 @@ app
 			const queryParams = {
 				token: req.params.token,
 			};
-			console.log(
-				'Getting reset password token',
-				`${req.protocol}://${req.get('host')}${req.originalUrl}`,
-			);
+			// console.log(
+			// 	'Getting reset password token',
+			// 	`${req.protocol}://${req.get('host')}${req.originalUrl}`,
+			// );
 
 			app.render(req, res, actualPage, queryParams);
 		});
@@ -48,12 +53,12 @@ app
 		// 	};
 		// 	app.render(req, res, actualPage, queryParams);
 		// });
-		server.get('/:bibleId/:bookId', (req, res) => {
+		server.get('/bible/:bibleId/:bookId', (req, res) => {
 			const actualPage = '/app';
-			console.log(
-				'Getting bible and book for route',
-				`${req.protocol}://${req.get('host')}${req.originalUrl}`,
-			);
+			// console.log(
+			// 	'Getting bible and book for route',
+			// 	`${req.protocol}://${req.get('host')}${req.originalUrl}`,
+			// );
 			// Params may not actually be passed using this method
 			const queryParams = {
 				bibleId: req.params.bibleId,
@@ -61,13 +66,13 @@ app
 			};
 			app.render(req, res, actualPage, queryParams);
 		});
-		server.get('/:bibleId/:bookId/:chapter', (req, res) => {
+		server.get('/bible/:bibleId/:bookId/:chapter', (req, res) => {
 			const actualPage = '/app';
 			// Params may not actually be passed using this method
-			console.log(
-				'Getting bible and book and chapter for route',
-				`${req.protocol}://${req.get('host')}${req.originalUrl}`,
-			);
+			// console.log(
+			// 	'Getting bible and book and chapter for route',
+			// 	`${req.protocol}://${req.get('host')}${req.originalUrl}`,
+			// );
 			const queryParams = {
 				bibleId: req.params.bibleId,
 				bookId: req.params.bookId,
@@ -75,12 +80,12 @@ app
 			};
 			app.render(req, res, actualPage, queryParams);
 		});
-		server.get('/:bibleId/:bookId/:chapter/:verse', (req, res) => {
+		server.get('/bible/:bibleId/:bookId/:chapter/:verse', (req, res, nextP) => {
 			const actualPage = '/app';
-			console.log(
-				'Getting bible and book and chapter and verse for route',
-				`${req.protocol}://${req.get('host')}${req.originalUrl}`,
-			);
+			// console.log(
+			// 	'Getting bible and book and chapter and verse for route',
+			// 	`${req.protocol}://${req.get('host')}${req.originalUrl}`,
+			// );
 			// Params may not actually be passed using this method
 			const queryParams = {
 				bibleId: req.params.bibleId,
@@ -88,14 +93,17 @@ app
 				chapter: req.params.chapter,
 				verse: req.params.verse,
 			};
-			app.render(req, res, actualPage, queryParams);
+			if (queryParams.verse !== 'style.css') {
+				app.render(req, res, actualPage, queryParams);
+			}
+			nextP();
 		});
 
 		server.get('*', (req, res) => {
-			console.log(
-				'in catch all with: ',
-				`${req.protocol}://${req.get('host')}${req.originalUrl}`,
-			);
+			// console.log(
+			// 	'in get * with url: ',
+			// 	`${req.protocol}://${req.get('host')}${req.originalUrl}`,
+			// );
 
 			// const actualPage = '/app';
 			// // Params may not actually be passed using this method
@@ -111,13 +119,15 @@ app
 
 		server.listen(3000, (err) => {
 			if (err) throw err;
-			console.log('> Ready on http://localhost:3000');
+			console.log('> Ready on http://localhost:3000'); // eslint-disable-line no-console
 		});
 	})
 	.catch((ex) => {
+		/* eslint-disable no-console */
 		console.error(
 			'---------------------------------------------------------------\n',
 			ex.stack,
 		);
+		/* eslint-enable no-console */
 		process.exit(1);
 	});

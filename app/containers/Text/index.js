@@ -644,14 +644,16 @@ class Text extends React.PureComponent {
 		// Handle exception thrown when there isn't plain text but readers mode is selected
 		/* eslint-disable react/no-danger */
 		if (plainText.length === 0 && !formattedSource.main) {
-			if (window && !window.navigator.onLine) {
-				textComponents = [
-					<h5 key={'no_connection'}>
-						We are having trouble contacting the server. Please check your
-						internet connection and then refresh the page.
-					</h5>,
-				];
-			} else if (invalidBibleId) {
+			// Need to have a way to know if this is being run on the server or not
+			// if (window && !window.navigator.onLine) {
+			// 	textComponents = [
+			// 		<h5 key={'no_connection'}>
+			// 			We are having trouble contacting the server. Please check your
+			// 			internet connection and then refresh the page.
+			// 		</h5>,
+			// 	];
+			// }
+			if (invalidBibleId) {
 				// THis appears too often
 				textComponents = [
 					<h5 key={'no_text'}>
