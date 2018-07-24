@@ -7,7 +7,6 @@ export default class MyDocument extends Document {
 				<Head>
 					<meta charSet="utf-8" />
 					<link rel="stylesheet" href="/_next/static/style.css" />
-					<link rel="stylesheet" href="/_next/static/style.scss" />
 					<link rel="stylesheet" href="../.next/static/style.css" />
 					<meta name="viewport" content="width=device-width, initial-scale=1" />
 					<link rel="manifest" href="../app/manifest.json" />

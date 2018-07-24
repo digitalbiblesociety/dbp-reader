@@ -10,6 +10,7 @@ stats.json
 app/utils/ENGKJV
 reduxStoreShape.js
 next-server
+env-config.js
 sitemaps/
 # Cruft
 .DS_Store

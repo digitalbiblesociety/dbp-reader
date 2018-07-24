@@ -13,6 +13,20 @@ and [Faith Comes by Hearing](https://faithcomesbyhearing.com).
   project: - `npm install && npm start`
 - Please examine the sample_env.txt file that is located in the root of this project for
   an example of the variables you will need to set in order to run this locally.
+- Create a file named `env-config.js` use the template below but replace "YOUR_VAR_1" with your own env variables:
+
+  ```
+  require('dotenv').config();
+
+  module.exports = {
+      'process.env': {
+          YOUR_VAR_1: JSON.stringify(process.env.YOUR_VAR_1),
+          YOUR_VAR_2: JSON.stringify(process.env.YOUR_VAR_2),
+          YOUR_API_KEY: JSON.stringify(process.env.YOUR_API_KEY),
+      },
+  }
+  ```
+
 - Now navigate to localhost:3000 to see the development site
 
 ## Description
