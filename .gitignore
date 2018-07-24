@@ -7,6 +7,10 @@ stats.json
 .next
 .next/
 .next/*
+.next/static
+.next/server
+.next/static/*
+.next/server/*
 app/utils/ENGKJV
 reduxStoreShape.js
 next-server
