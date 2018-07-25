@@ -65,6 +65,7 @@ app
 		// });
 		server.get('/bible/:bibleId/:bookId', (req, res, nextP) => {
 			const actualPage = '/app';
+			// console.log(req.originalUrl.includes('/static'))
 			// console.log(
 			// 	'Getting bible and book for route',
 			// 	`${req.protocol}://${req.get('host')}${req.originalUrl}`,
@@ -75,17 +76,20 @@ app
 				bookId: req.params.bookId,
 				chapter: '1',
 			};
+
 			if (
 				queryParams.verse !== 'style.css' &&
 				!req.originalUrl.includes('/static')
 			) {
 				app.render(req, res, actualPage, queryParams);
+			} else {
+				nextP();
 			}
-			nextP();
 		});
 		server.get('/bible/:bibleId/:bookId/:chapter', (req, res, nextP) => {
 			const actualPage = '/app';
 			// Params may not actually be passed using this method
+			// console.log(req.originalUrl.includes('/static'))
 			// console.log(
 			// 	'Getting bible and book and chapter for route',
 			// 	`${req.protocol}://${req.get('host')}${req.originalUrl}`,
@@ -100,11 +104,13 @@ app
 				!req.originalUrl.includes('/static')
 			) {
 				app.render(req, res, actualPage, queryParams);
+			} else {
+				nextP();
 			}
-			nextP();
 		});
 		server.get('/bible/:bibleId/:bookId/:chapter/:verse', (req, res, nextP) => {
 			const actualPage = '/app';
+			// console.log(req.originalUrl.includes('/static'))
 			// console.log(
 			// 	'Getting bible and book and chapter and verse for route',
 			// 	`${req.protocol}://${req.get('host')}${req.originalUrl}`,
@@ -121,8 +127,9 @@ app
 				!req.originalUrl.includes('/static')
 			) {
 				app.render(req, res, actualPage, queryParams);
+			} else {
+				nextP();
 			}
-			nextP();
 		});
 
 		server.get('*', (req, res) => handle(req, res));

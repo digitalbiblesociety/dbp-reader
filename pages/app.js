@@ -236,13 +236,6 @@ AppContainer.getInitialProps = async (context) => {
 	}
 
 	// The function is being run on the server so fetching data here will not conflict with the Sagas
-	// if (context.req) {
-	// 	isServer = true;
-	// console.log('context.query in app on server', context.query);
-	/* Urls that I need data from in order to render the first page */
-	// const biblesUrl = `${process.env.BASE_API_ROUTE}/bibles?bucket=${
-	// 	process.env.DBP_BUCKET_ID
-	// }&key=${process.env.DBP_API_KEY}&v=4`;
 
 	const singleBibleUrl = `${
 		process.env.BASE_API_ROUTE
@@ -261,35 +254,6 @@ AppContainer.getInitialProps = async (context) => {
 	}/bibles/${bibleId}/book?key=${process.env.DBP_API_KEY}&v=4&iso=eng&bucket=${
 		process.env.DBP_BUCKET_ID
 	}`;
-	// const countryUrl = `${process.env.BASE_API_ROUTE}/countries?key=${
-	// 	process.env.DBP_API_KEY
-	// 	}&v=4&bucket_id=${
-	// 	process.env.DBP_BUCKET_ID
-	// 	}&has_filesets=true&include_languages=true`
-	// const languageUrl = `${process.env.BASE_API_ROUTE}/languages?key=${
-	// 	process.env.DBP_API_KEY
-	// 	}&v=4&bucket_id=${process.env.DBP_BUCKET_ID}&has_filesets=true`
-
-	// Get country data
-	// const countryRes = await fetch(countryUrl);
-	// const countryJson = await countryRes.json();
-	// // The app was used to ingesting the country data this way so I have to keep doing it
-	// const countries = countryJson.data.reduce((acc, country) => {
-	// 	const tempObj = acc;
-	// 	if (typeof country.name !== 'string') {
-	// 		tempObj[country.name.name] = { ...country, name: country.name.name };
-	// 	} else if (country.name === '' || territoryCodes[country.codes.iso_a2]) {
-	// 		return acc;
-	// 	} else {
-	// 		tempObj[country.name] = country;
-	// 	}
-	// 	return tempObj;
-	// }, {});
-
-	// Get languages data
-	// const languageRes = await fetch(languageUrl);
-	// const languageJson = await languageRes.json();
-	// const languages = languageJson.data;
 
 	// Get all bibles
 	// const bibleRes = await fetch(biblesUrl);
@@ -355,19 +319,6 @@ AppContainer.getInitialProps = async (context) => {
 			},
 		},
 	};
-	// }
-
-	// return {
-	// 	isServer,
-	// 	match: {
-	// 		params: {
-	// 			bibleId,
-	// 			bookId,
-	// 			chapter,
-	// 			verse,
-	// 		},
-	// 	},
-	// };
 };
 
 AppContainer.propTypes = {

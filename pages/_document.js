@@ -9,7 +9,7 @@ export default class MyDocument extends Document {
 					<link rel="stylesheet" href="/_next/static/style.css" />
 					{/*<link rel="stylesheet" href="../.next/static/style.css" />*/}
 					<meta name="viewport" content="width=device-width, initial-scale=1" />
-					<link rel="manifest" href="../app/manifest.json" />
+					<link rel="manifest" href="/static/manifest.json" />
 					<link rel="icon" type="image/x-icon" href="/static/favicon.ico" />
 					<meta
 						name="msvalidate.01"
@@ -23,10 +23,7 @@ export default class MyDocument extends Document {
 					<meta name="apple-mobile-web-app-title" content="Bible Is" />
 					<meta name="apple-mobile-web-app-capable" content="yes" />
 					<meta name="theme-color" content="#941B2F" />
-					<link
-						rel="apple-touch-icon"
-						href="../app/images/app-icons/favicon-96x96.png"
-					/>
+					<link rel="apple-touch-icon" href="/static/favicon-96x96.png" />
 					<link
 						rel="preload"
 						as="style"
@@ -45,10 +42,7 @@ export default class MyDocument extends Document {
 					/>
 					<meta property="og:type" content="website" />
 					<meta property="og:site_name" content="Bible.is" />
-					<meta
-						property="og:image"
-						content="../app/images/app-icons/favicon-96x96.png"
-					/>
+					<meta property="og:image" content="/static/favicon-96x96.png" />
 					<meta property="fb:app_id" content="173528326559718" />
 					<script src="https://apis.google.com/js/platform.js" async defer />
 				</Head>
