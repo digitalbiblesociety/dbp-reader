@@ -6,6 +6,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import Link from 'next/link';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
@@ -22,6 +23,8 @@ import GenericErrorBoundary from '../../components/GenericErrorBoundary';
 import makeSelectAudioPlayer, { selectHasAudio } from './selectors';
 import reducer from './reducer';
 import messages from './messages';
+import getNextChapterUrl from '../../utils/getNextChapterUrl';
+import getPreviousChapterUrl from '../../utils/getPreviousChapterUrl';
 /* eslint-disable jsx-a11y/media-has-caption */
 /* disabled the above eslint config options because you can't add tracks to audio elements */
 
@@ -366,23 +369,23 @@ export class AudioPlayer extends React.Component {
 		}
 	};
 
-	skipBackward = () => {
-		this.setCurrentTime(0);
-		this.pauseAudio();
-		this.props.skipBackward();
-		this.setState({
-			playing: false,
-		});
-	};
-
-	skipForward = () => {
-		this.setCurrentTime(0);
-		this.pauseAudio();
-		this.props.skipForward();
-		this.setState({
-			playing: false,
-		});
-	};
+	// skipBackward = () => {
+	// 	this.setCurrentTime(0);
+	// 	this.pauseAudio();
+	// 	this.props.skipBackward();
+	// 	this.setState({
+	// 		playing: false,
+	// 	});
+	// };
+	//
+	// skipForward = () => {
+	// 	this.setCurrentTime(0);
+	// 	this.pauseAudio();
+	// 	this.props.skipForward();
+	// 	this.setState({
+	// 		playing: false,
+	// 	});
+	// };
 
 	toggleAudioPlayer = () => {
 		if (this.props.audioSource && this.props.hasAudio) {
@@ -491,29 +494,67 @@ export class AudioPlayer extends React.Component {
 	}
 
 	nextIcon = (
-		<div
-			role={'button'}
-			tabIndex={0}
-			onClick={this.skipForward}
-			className={'icon-wrap'}
-			title={messages.nextTitle.defaultMessage}
+		<Link
+			as={getNextChapterUrl(
+				this.props.books,
+				this.props.activeChapter,
+				this.props.activeBookId.toLowerCase(),
+				this.props.activeTextId.toLowerCase(),
+				this.props.verseNumber,
+				this.props.text,
+			)}
+			href={getNextChapterUrl(
+				this.props.books,
+				this.props.activeChapter,
+				this.props.activeBookId.toLowerCase(),
+				this.props.activeTextId.toLowerCase(),
+				this.props.verseNumber,
+				this.props.text,
+			)}
+			prefetch
 		>
-			<SvgWrapper className="svgitem icon" fill="#fff" svgid="next" />
-			<FormattedMessage {...messages.next} />
-		</div>
+			<div
+				role={'button'}
+				tabIndex={0}
+				className={'icon-wrap'}
+				title={messages.nextTitle.defaultMessage}
+			>
+				<SvgWrapper className="svgitem icon" fill="#fff" svgid="next" />
+				<FormattedMessage {...messages.next} />
+			</div>
+		</Link>
 	);
 
 	prevIcon = (
-		<div
-			onClick={this.skipBackward}
-			role={'button'}
-			tabIndex={0}
-			className={'icon-wrap'}
-			title={messages.prevTitle.defaultMessage}
+		<Link
+			as={getPreviousChapterUrl(
+				this.props.books,
+				this.props.activeChapter,
+				this.props.activeBookId.toLowerCase(),
+				this.props.activeTextId.toLowerCase(),
+				this.props.verseNumber,
+				this.props.text,
+			)}
+			href={getPreviousChapterUrl(
+				this.props.books,
+				this.props.activeChapter,
+				this.props.activeBookId.toLowerCase(),
+				this.props.activeTextId.toLowerCase(),
+				this.props.verseNumber,
+				this.props.text,
+			)}
+			prefetch
 		>
-			<SvgWrapper className="svgitem icon" fill="#fff" svgid="previous" />
-			<FormattedMessage {...messages.prev} />
-		</div>
+			<div
+				role={'button'}
+				tabIndex={0}
+				className={'icon-wrap'}
+				title={messages.prevTitle.defaultMessage}
+			>
+				<SvgWrapper className="svgitem icon" fill="#fff" svgid="previous" />
+				<FormattedMessage {...messages.prev} />
+			</div>
+		</Link>
 	);
 
 	pauseIcon = (
@@ -692,8 +733,8 @@ export class AudioPlayer extends React.Component {
 AudioPlayer.propTypes = {
 	audioSource: PropTypes.string,
 	audioPaths: PropTypes.array,
-	skipBackward: PropTypes.func.isRequired,
-	skipForward: PropTypes.func.isRequired,
+	// skipBackward: PropTypes.func.isRequired,
+	// skipForward: PropTypes.func.isRequired,
 	setAudioPlayerState: PropTypes.func.isRequired,
 	toggleAutoPlay: PropTypes.func,
 	hasAudio: PropTypes.bool,
@@ -701,6 +742,12 @@ AudioPlayer.propTypes = {
 	isScrollingDown: PropTypes.bool,
 	audioPlayerState: PropTypes.bool.isRequired,
 	subFooterOpen: PropTypes.bool,
+	books: PropTypes.array,
+	text: PropTypes.array,
+	activeBookId: PropTypes.string,
+	activeTextId: PropTypes.string,
+	verseNumber: PropTypes.string,
+	activeChapter: PropTypes.number,
 	// prevAudioSource: PropTypes.string,
 	// nextAudioSource: PropTypes.string,
 };

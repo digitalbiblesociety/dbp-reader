@@ -1820,13 +1820,18 @@ class Text extends React.PureComponent {
 						activeChapter,
 						activeBookId.toLowerCase(),
 						activeTextId.toLowerCase(),
+						verseNumber,
+						text,
 					)}
 					href={getPreviousChapterUrl(
 						books,
 						activeChapter,
 						activeBookId.toLowerCase(),
 						activeTextId.toLowerCase(),
+						verseNumber,
+						text,
 					)}
+					prefetch
 				>
 					<div
 						onClick={
@@ -1886,13 +1891,18 @@ class Text extends React.PureComponent {
 						activeChapter,
 						activeBookId.toLowerCase(),
 						activeTextId.toLowerCase(),
+						verseNumber,
+						text,
 					)}
 					href={getNextChapterUrl(
 						books,
 						activeChapter,
 						activeBookId.toLowerCase(),
 						activeTextId.toLowerCase(),
+						verseNumber,
+						text,
 					)}
+					prefetch
 				>
 					<div
 						onClick={

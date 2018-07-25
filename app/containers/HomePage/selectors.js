@@ -299,35 +299,6 @@ const selectFormattedSource = () =>
 /**
  * Other specific selectors
  */
-// const selectActiveBook = () =>
-// 	createDeepEqualSelector(selectHomePageDomain, (substate) => {
-// 		const books = substate.get('books');
-// 		const activeBookId = substate.get('activeBookId');
-//
-// 		return books.filter((book) => book.get('book_id') === activeBookId).get(0);
-// 	});
-//
-// const selectNextBook = () =>
-// 	createDeepEqualSelector(selectHomePageDomain, (substate) => {
-// 		const books = substate.get('books');
-// 		const activeBookId = substate.get('activeBookId');
-// 		const activeBookIndex = books.findIndex(
-// 			(book) => book.get('book_id') === activeBookId,
-// 		);
-//
-// 		return books.get(activeBookIndex + 1) || fromJS({});
-// 	});
-
-// const selectPrevBook = () =>
-// 	createDeepEqualSelector(selectHomePageDomain, (substate) => {
-// 		const books = substate.get('books');
-// 		const activeBookId = substate.get('activeBookId');
-// 		const activeBookIndex = books.findIndex(
-// 			(book) => book.get('book_id') === activeBookId,
-// 		);
-//
-// 		return books.get(activeBookIndex - 1) || fromJS({});
-// 	});
 
 const selectSettings = () =>
 	createDeepEqualSelector(

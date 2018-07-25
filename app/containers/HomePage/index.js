@@ -116,61 +116,15 @@ class HomePage extends React.PureComponent {
 	// eslint-disable-line react/prefer-stateless-function
 	componentDidMount() {
 		// Get the first bible based on the url here
-		// const { params } = this.props.match
-		// 	? this.props.match
-		// 	: { params: { bibleId: 'ENGESV', bookId: 'GEN', chapter: 1 } };
-		// const { bibleId, bookId, chapter } = params;
-		// const verse = params.verse || '';
-		// const { userAuthenticated: authenticated, userId } = this.props;
-		// console.log('authenticated in home did mount', authenticated);
-		// console.log('userId in home did mount', userId);
-		// console.log('props location', this.props.location.search.slice(6));
-		// console.log('localStorage.getItem(userSettings_toggleOptions_readersMode_active)', localStorage.getItem('userSettings_toggleOptions_readersMode_active') === false);
-		// console.log('localStorage.getItem(userSettings_toggleOptions_crossReferences_active)', localStorage.getItem('userSettings_toggleOptions_crossReferences_active'));
-		// console.log('params', params);
-		// if (bibleId && bookId && chapter >= 0) {
-		// this.props.dispatch({
-		// 	type: 'getbible',
-		// 	bibleId,
-		// 	bookId,
-		// 	chapter,
-		// 	authenticated,
-		// 	userId,
-		// 	verse,
-		// });
-		// console.log('not redirecting in bible, book and chapter');
-		// } else if (bibleId && bookId) {
-		// run saga but default the chapter
-		// I can auto default to 1 here because logic -_- 乁( ⁰͡ Ĺ̯ ⁰͡ ) ㄏ
-		// this.props.dispatch({
-		// 	type: 'getbible',
-		// 	bibleId,
-		// 	bookId,
-		// 	chapter: 1,
-		// 	authenticated,
-		// 	userId,
-		// 	verse,
-		// });
-		// console.log('redirecting from bible and book');
-		// console.log(this.props);
-		// this.props.history.replace(
-		// 	`/${bibleId.toLowerCase()}/${bookId.toLowerCase()}/1`,
-		// );
-		// } else if (bibleId) {
-		// If the user only enters a version of the bible then
-		// I want to default to the first book that bible has
-		// this.props.dispatch({
-		// 	type: 'getbible',
-		// 	bibleId,
-		// 	bookId: '', // This works because of how the saga fetches the next chapter
-		// 	chapter: 1,
-		// 	authenticated,
-		// 	userId,
-		// 	verse,
-		// });
+
 		// May want to use replace here at some point
-		// // this.props.history.replace(`/${bibleId}/gen/1`);
-		// } else
+		this.props.dispatch({
+			type: 'getaudio',
+			filesets: this.props.homepage.activeFilesets,
+			bookId: this.props.homepage.activeBookId,
+			chapter: this.props.homepage.activeChapter,
+		});
+
 		if (this.props.match.params.token) {
 			// Open Profile
 			this.toggleProfile();
@@ -1273,12 +1227,16 @@ class HomePage extends React.PureComponent {
 						audioSource={audioSource}
 						isScrollingDown={isScrollingDown}
 						subFooterOpen={subFooterOpen}
+						books={books}
+						text={updatedText}
+						verseNumber={verse}
+						activeTextId={activeTextId}
+						activeBookId={activeBookId}
+						activeChapter={activeChapter}
 						// nextAudioSource={nextAudioSource}
 						// prevAudioSource={prevAudioSource}
 						setAudioPlayerState={this.setAudioPlayerState}
 						toggleAutoPlay={this.toggleAutoPlay}
-						skipBackward={this.getPrevChapter}
-						skipForward={this.getNextChapter}
 					/>
 					<Footer
 						profileActive={isProfileActive}

@@ -1,10 +1,26 @@
 import { fromJS } from 'immutable';
 
-export default (books, chapter, bookId, textId, verseNumber) => {
+export default (books, chapter, bookId, textId, verseNumber, chapterText) => {
 	const baseUrl = '/bible';
 
-	if (verseNumber) {
-		// handle setting verse baseUrl
+	if (verseNumber && chapterText) {
+		const prevVerse = parseInt(verseNumber, 10) - 1 || 1;
+		const lastVerse = chapterText.length;
+		// Is it past the max verses for the chapter?
+		// if not increment it by 1
+		if (prevVerse <= lastVerse && prevVerse > 0) {
+			// Verse was valid
+
+			return `${baseUrl}/${textId}/${bookId}/${chapter}/${prevVerse}`;
+		} else if (prevVerse < 0) {
+			// Verse was below valid range
+
+			return `${baseUrl}/${textId}/${bookId}/${chapter}/1`;
+		} else if (prevVerse > lastVerse) {
+			// Verse was above valid range
+
+			return `${baseUrl}/${textId}/${bookId}/${chapter}/${lastVerse}`;
+		}
 		return `${baseUrl}/${textId}/${bookId}/${chapter}`;
 	}
 
