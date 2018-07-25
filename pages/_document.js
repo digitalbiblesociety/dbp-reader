@@ -10,6 +10,7 @@ export default class MyDocument extends Document {
 					<link rel="stylesheet" href="../.next/static/style.css" />
 					<meta name="viewport" content="width=device-width, initial-scale=1" />
 					<link rel="manifest" href="../app/manifest.json" />
+					<link rel="icon" type="image/x-icon" href="../app/favicon.ico" />
 					<meta
 						name="msvalidate.01"
 						content="ECDC0FFC6CCBA2520B05CD8B4F535D3C"

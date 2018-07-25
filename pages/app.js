@@ -40,7 +40,7 @@ import fetch from 'isomorphic-fetch';
 /* eslint-enable import/no-unresolved, import/extensions */
 // Import Language Provider
 import LanguageProvider from '../app/containers/LanguageProvider';
-import territoryCodes from '../app/utils/territoryCodes.json';
+// import territoryCodes from '../app/utils/territoryCodes.json';
 // import homeReducer from '../app/containers/HomePage/reducer';
 // import textReducer from '../app/containers/TextSelection/reducer';
 // import { fromJS } from 'immutable'
@@ -256,9 +256,9 @@ AppContainer.getInitialProps = async (context) => {
 		isServer = true;
 		// console.log('context.query in app on server', context.query);
 		/* Urls that I need data from in order to render the first page */
-		const biblesUrl = `${process.env.BASE_API_ROUTE}/bibles?bucket=${
-			process.env.DBP_BUCKET_ID
-		}&key=${process.env.DBP_API_KEY}&v=4`;
+		// const biblesUrl = `${process.env.BASE_API_ROUTE}/bibles?bucket=${
+		// 	process.env.DBP_BUCKET_ID
+		// }&key=${process.env.DBP_API_KEY}&v=4`;
 
 		const singleBibleUrl = `${
 			process.env.BASE_API_ROUTE
@@ -302,9 +302,9 @@ AppContainer.getInitialProps = async (context) => {
 		// const languages = languageJson.data;
 
 		// Get all bibles
-		const bibleRes = await fetch(biblesUrl);
-		const bibleJson = await bibleRes.json();
-		const texts = bibleJson.data;
+		// const bibleRes = await fetch(biblesUrl);
+		// const bibleJson = await bibleRes.json();
+		// const texts = bibleJson.data;
 
 		// Get active bible data
 		const singleBibleRes = await fetch(singleBibleUrl);
@@ -321,11 +321,9 @@ AppContainer.getInitialProps = async (context) => {
 			// next id
 		}
 
-		const activeBook = bible.books.find((book) => {
-			// console.log(book.book_id.toLowerCase())
-			// console.log(bookId.toLowerCase())
-			return book.book_id.toLowerCase() === bookId.toLowerCase();
-		});
+		const activeBook = bible.books.find(
+			(book) => book.book_id.toLowerCase() === bookId.toLowerCase(),
+		);
 		// console.log('activeBook', activeBook);
 		// console.log('bible.books', bible.books);
 
@@ -342,7 +340,7 @@ AppContainer.getInitialProps = async (context) => {
 			activeIsoCode: bible.iso,
 			activeLanguageName: bible.language,
 			textDirection: bible.alphabet.direction,
-			texts,
+			// texts,
 			match: {
 				params: {
 					bibleId,
@@ -382,13 +380,13 @@ AppContainer.propTypes = {
 	activeBookName: PropTypes.string,
 	verseNumber: PropTypes.string,
 	activeTextId: PropTypes.string,
-	activeIsoCode: PropTypes.string,
-	activeCountryName: PropTypes.string,
-	activeLanguageName: PropTypes.string,
-	countryLanguages: PropTypes.array,
-	languages: PropTypes.array,
-	countries: PropTypes.object,
-	texts: PropTypes.array,
+	// activeIsoCode: PropTypes.string,
+	// activeCountryName: PropTypes.string,
+	// activeLanguageName: PropTypes.string,
+	// countryLanguages: PropTypes.array,
+	// languages: PropTypes.array,
+	// countries: PropTypes.object,
+	// texts: PropTypes.array,
 };
 
 export default AppContainer;

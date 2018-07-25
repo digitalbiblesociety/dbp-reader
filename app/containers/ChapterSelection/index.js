@@ -72,17 +72,6 @@ export class ChapterSelection extends React.PureComponent {
 	toggleChapterSelection = (props) =>
 		this.props.dispatch(toggleChapterSelection(props));
 
-	// handleClickOutside = (event) => {
-	// 	const bounds = this.aside.getBoundingClientRect();
-	// 	const insideWidth = event.x >= bounds.x && event.x <= bounds.x + bounds.width;
-	// 	const insideHeight = event.y >= bounds.y && event.y <= bounds.y + bounds.height;
-	//
-	// 	if (this.aside && !(insideWidth && insideHeight)) {
-	// 		this.toggleChapterSelection();
-	// 		document.removeEventListener('click', this.handleClickOutside);
-	// 	}
-	// }
-
 	handleChapterToggle = () => {
 		document.removeEventListener('click', this.handleClickOutside);
 
@@ -91,7 +80,7 @@ export class ChapterSelection extends React.PureComponent {
 
 	render() {
 		const { activeBookName, active } = this.props;
-		// Todo: Add a loading spinner to this and stop relying on activeBookName before rendering the list
+
 		return (
 			<GenericErrorBoundary affectedArea="ChapterSelection">
 				<aside
@@ -101,16 +90,12 @@ export class ChapterSelection extends React.PureComponent {
 					onClick={this.stopClickProp}
 					className="chapter-text-dropdown"
 				>
-					{activeBookName ? (
-						<BooksTable
-							setActiveChapter={this.setActiveChapter}
-							closeBookTable={this.toggleChapterSelection}
-							setActiveBookName={this.setActiveBookName}
-							initialBookName={activeBookName}
-						/>
-					) : (
-						'There was an error retrieving this resource. We apologize for the inconvenience. An admin has been notified. '
-					)}
+					<BooksTable
+						setActiveChapter={this.setActiveChapter}
+						closeBookTable={this.toggleChapterSelection}
+						setActiveBookName={this.setActiveBookName}
+						initialBookName={activeBookName}
+					/>
 				</aside>
 			</GenericErrorBoundary>
 		);
