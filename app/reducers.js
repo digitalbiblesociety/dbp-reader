@@ -9,7 +9,7 @@ import { LOCATION_CHANGE } from 'react-router-redux';
 import languageProviderReducer from './containers/LanguageProvider/reducer';
 import errorReducer from './containers/App/errorReducer';
 import profileReducer from './containers/Profile/reducer';
-import textSelectionReducer from './containers/TextSelection/reducer';
+// import textSelectionReducer from './containers/TextSelection/reducer';
 import homepageReducer from './containers/HomePage/reducer';
 
 /*
@@ -50,7 +50,7 @@ export default function createReducer(injectedReducers) {
 		profile: profileReducer,
 		language: languageProviderReducer,
 		homepage: homepageReducer,
-		textselection: textSelectionReducer,
+		// textselection: textSelectionReducer,
 		...injectedReducers,
 	});
 }

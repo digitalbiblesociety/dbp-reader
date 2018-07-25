@@ -158,6 +158,8 @@ class BooksTable extends React.PureComponent {
 		} = this.props;
 		const { selectedBookName } = this.state;
 		// console.log('Rendering again');
+		// console.log('books', books);
+		// console.log('this.props', this.props);
 
 		if (loadingBooks) {
 			return <LoadingSpinner />;

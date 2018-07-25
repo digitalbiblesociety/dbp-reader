@@ -90,143 +90,127 @@ const AppContainer = (props) => {
 		}
 
 	*/
-	if (props.isServer) {
-		const {
+	const {
+		books,
+		textDirection,
+		activeChapter,
+		chapterText,
+		activeBookName,
+		activeBookId,
+		verseNumber,
+		testaments,
+		filesets,
+		activeTextId,
+		activeTextName,
+		defaultLanguageName,
+		defaultLanguageIso,
+	} = props;
+	// Create redux store with history
+	const initialState = {
+		homepage: {
 			books,
 			textDirection,
+			activeTextName,
 			activeChapter,
-			chapterText,
 			activeBookName,
 			verseNumber,
 			activeTextId,
-		} = props;
-		// Create redux store with history
-		const initialState = {
-			homepage: {
-				books,
-				textDirection,
-				activeChapter,
-				chapterText: chapterText || [],
-				loadingNewChapterText: false,
-				loadingAudio: false,
-				loadingCopyright: false,
-				activeBookName,
-				verseNumber,
-				activeTextId,
-				loadingBooks: false,
-				note: {},
-				userAuthenticated: false,
-				userId: '',
-				audioObjects: [],
-				activeFilesets: [],
-				audioFilesetId: '',
-				plainTextFilesetId: '',
-				formattedTextFilesetId: '',
-				highlights: [],
-				copyrights: {
-					newTestament: {
-						audio: {},
-						text: {},
-					},
-					oldTestament: {
-						audio: {},
-						text: {},
-					},
+			defaultLanguageName,
+			defaultLanguageIso,
+			activeBookId,
+			testaments,
+			activeFilesets: filesets,
+			chapterText: chapterText || [],
+			loadingNewChapterText: false,
+			loadingAudio: false,
+			loadingCopyright: false,
+			loadingBooks: false,
+			note: {},
+			userAuthenticated: false,
+			userId: '',
+			audioObjects: [],
+			audioFilesetId: '',
+			plainTextFilesetId: '',
+			formattedTextFilesetId: '',
+			highlights: [],
+			copyrights: {
+				newTestament: {
+					audio: {},
+					text: {},
 				},
-				isChapterSelectionActive: false,
-				isProfileActive: false,
-				isSettingsModalActive: false,
-				isSearchModalActive: false,
-				isNotesModalActive: false,
-				isVersionSelectionActive: false,
-				isInformationModalActive: false,
-				activeTextName: '',
-				activeNotesView: 'notes',
-				defaultLanguageIso: 'eng',
-				defaultLanguageName: 'English',
-				activeBookId: '',
-				userSettings: {
-					activeTheme: 'red',
-					activeFontType: 'sans',
-					activeFontSize: 42,
-					toggleOptions: {
-						readersMode: {
-							name: "READER'S MODE",
-							active: false,
-							available: true,
-						},
-						crossReferences: {
-							name: 'CROSS REFERENCE',
-							active: true,
-							available: true,
-						},
-						redLetter: {
-							name: 'RED LETTER',
-							active: true,
-							available: true,
-						},
-						justifiedText: {
-							name: 'JUSTIFIED TEXT',
-							active: true,
-							available: true,
-						},
-						oneVersePerLine: {
-							name: 'ONE VERSE PER LINE',
-							active: false,
-							available: true,
-						},
-						verticalScrolling: {
-							name: 'VERTICAL SCROLLING',
-							active: false,
-							available: false,
-						},
-					},
+				oldTestament: {
+					audio: {},
+					text: {},
 				},
-				autoPlayEnabled: false,
-				selectedText: '',
-				selectedBookName: '',
-				audioSource: '',
-				invalidBibleId: false,
-				hasAudio: false,
-				formattedSource: '',
-				hasTextInDatabase: true,
-				filesetTypes: {},
-				firstLoad: true,
-				testaments: {},
-				previousAudioPaths: [],
-				previousAudioFilesetId: '',
-				previousAudioSource: '',
-				nextAudioPaths: [],
-				nextAudioFilesetId: '',
-				nextAudioSource: '',
-				activeVerse: '',
-				audioPaths: [],
-				audioPlayerState: true,
 			},
-		};
+			isChapterSelectionActive: false,
+			isProfileActive: false,
+			isSettingsModalActive: false,
+			isSearchModalActive: false,
+			isNotesModalActive: false,
+			isVersionSelectionActive: false,
+			isInformationModalActive: false,
+			activeNotesView: 'notes',
+			userSettings: {
+				activeTheme: 'red',
+				activeFontType: 'sans',
+				activeFontSize: 42,
+				toggleOptions: {
+					readersMode: {
+						name: "READER'S MODE",
+						active: false,
+						available: true,
+					},
+					crossReferences: {
+						name: 'CROSS REFERENCE',
+						active: true,
+						available: true,
+					},
+					redLetter: {
+						name: 'RED LETTER',
+						active: true,
+						available: true,
+					},
+					justifiedText: {
+						name: 'JUSTIFIED TEXT',
+						active: true,
+						available: true,
+					},
+					oneVersePerLine: {
+						name: 'ONE VERSE PER LINE',
+						active: false,
+						available: true,
+					},
+					verticalScrolling: {
+						name: 'VERTICAL SCROLLING',
+						active: false,
+						available: false,
+					},
+				},
+			},
+			autoPlayEnabled: false,
+			selectedText: '',
+			selectedBookName: '',
+			audioSource: '',
+			invalidBibleId: false,
+			hasAudio: false,
+			formattedSource: '',
+			hasTextInDatabase: true,
+			filesetTypes: {},
+			firstLoad: true,
+			previousAudioPaths: [],
+			previousAudioFilesetId: '',
+			previousAudioSource: '',
+			nextAudioPaths: [],
+			nextAudioFilesetId: '',
+			nextAudioSource: '',
+			activeVerse: '',
+			audioPaths: [],
+			audioPlayerState: true,
+		},
+	};
 
-		// console.log('all keys available in initialState', Object.keys(initialState));
-		// console.log('props', props);
-
-		// const history = createHistory();
-		const store = configureStore({}, {}, initialState);
-
-		return (
-			<Provider store={store}>
-				<LanguageProvider messages={translationMessages}>
-					{/* <ConnectedRouter history={history}> */}
-					<App appProps={props} />
-					{/* </ConnectedRouter> */}
-				</LanguageProvider>
-			</Provider>
-		);
-	}
-
-	// console.log('all keys available in initialState', Object.keys(initialState));
-	// console.log('props', props);
-
-	// const history = createHistory();
-	const store = configureStore({}, {}, {});
+	const store = configureStore({}, {}, initialState);
 
 	return (
 		<Provider store={store}>
@@ -241,7 +225,7 @@ const AppContainer = (props) => {
 
 AppContainer.getInitialProps = async (context) => {
 	const { bibleId, bookId, chapter, verse } = context.query;
-	let isServer = false;
+	// let isServer = false;
 
 	if (!context.req) {
 		// This is from the client
@@ -252,114 +236,116 @@ AppContainer.getInitialProps = async (context) => {
 	}
 
 	// The function is being run on the server so fetching data here will not conflict with the Sagas
-	if (context.req) {
-		isServer = true;
-		// console.log('context.query in app on server', context.query);
-		/* Urls that I need data from in order to render the first page */
-		// const biblesUrl = `${process.env.BASE_API_ROUTE}/bibles?bucket=${
-		// 	process.env.DBP_BUCKET_ID
-		// }&key=${process.env.DBP_API_KEY}&v=4`;
-
-		const singleBibleUrl = `${
-			process.env.BASE_API_ROUTE
-		}/bibles/${bibleId}?bucket=${process.env.DBP_BUCKET_ID}&key=${
-			process.env.DBP_API_KEY
-		}&v=4`;
-
-		const textUrl = `${
-			process.env.BASE_API_ROUTE
-		}/bibles/filesets/${bibleId}/${bookId}/${chapter}?key=${
-			process.env.DBP_API_KEY
-		}&v=4`;
-		// const countryUrl = `${process.env.BASE_API_ROUTE}/countries?key=${
-		// 	process.env.DBP_API_KEY
-		// 	}&v=4&bucket_id=${
-		// 	process.env.DBP_BUCKET_ID
-		// 	}&has_filesets=true&include_languages=true`
-		// const languageUrl = `${process.env.BASE_API_ROUTE}/languages?key=${
-		// 	process.env.DBP_API_KEY
-		// 	}&v=4&bucket_id=${process.env.DBP_BUCKET_ID}&has_filesets=true`
-
-		// Get country data
-		// const countryRes = await fetch(countryUrl);
-		// const countryJson = await countryRes.json();
-		// // The app was used to ingesting the country data this way so I have to keep doing it
-		// const countries = countryJson.data.reduce((acc, country) => {
-		// 	const tempObj = acc;
-		// 	if (typeof country.name !== 'string') {
-		// 		tempObj[country.name.name] = { ...country, name: country.name.name };
-		// 	} else if (country.name === '' || territoryCodes[country.codes.iso_a2]) {
-		// 		return acc;
-		// 	} else {
-		// 		tempObj[country.name] = country;
-		// 	}
-		// 	return tempObj;
-		// }, {});
-
-		// Get languages data
-		// const languageRes = await fetch(languageUrl);
-		// const languageJson = await languageRes.json();
-		// const languages = languageJson.data;
-
-		// Get all bibles
-		// const bibleRes = await fetch(biblesUrl);
-		// const bibleJson = await bibleRes.json();
-		// const texts = bibleJson.data;
-
-		// Get active bible data
-		const singleBibleRes = await fetch(singleBibleUrl);
-		const singleBibleJson = await singleBibleRes.json();
-		const bible = singleBibleJson.data;
-
-		// Get text for chapter
-		const textRes = await fetch(textUrl);
-		const textJson = await textRes.json();
-		const chapterText = textJson.data;
-		// console.log('chapterText', chapterText);
-		// Need to try the other bible id if there wasn't any chapter text
-		if (!chapterText) {
-			// next id
-		}
-
-		const activeBook = bible.books.find(
-			(book) => book.book_id.toLowerCase() === bookId.toLowerCase(),
-		);
-		// console.log('activeBook', activeBook);
-		// console.log('bible.books', bible.books);
-
-		const activeBookName = activeBook ? activeBook.name : '';
-
-		return {
-			isServer,
-			chapterText,
-			books: bible.books,
-			activeChapter: parseInt(chapter, 10),
-			activeBookName,
-			verseNumber: verse,
-			activeTextId: bible.abbr,
-			activeIsoCode: bible.iso,
-			activeLanguageName: bible.language,
-			textDirection: bible.alphabet.direction,
-			// texts,
-			match: {
-				params: {
-					bibleId,
-					bookId,
-					chapter,
-					verse,
-				},
-			},
-		};
-	}
-	// May want to consider also fetching a certain amount of data for when this is run on the client
-	// const res = await fetch(`${process.env.BASE_API_ROUTE}/bibles/${bibleId}?bucket=${
+	// if (context.req) {
+	// 	isServer = true;
+	// console.log('context.query in app on server', context.query);
+	/* Urls that I need data from in order to render the first page */
+	// const biblesUrl = `${process.env.BASE_API_ROUTE}/bibles?bucket=${
 	// 	process.env.DBP_BUCKET_ID
-	// 	}&key=${process.env.DBP_API_KEY}&v=4`)
-	// const bibleJson = await res.json()
-	// const bible = bibleJson.data
+	// }&key=${process.env.DBP_API_KEY}&v=4`;
+
+	const singleBibleUrl = `${
+		process.env.BASE_API_ROUTE
+	}/bibles/${bibleId}?bucket=${process.env.DBP_BUCKET_ID}&key=${
+		process.env.DBP_API_KEY
+	}&v=4`;
+
+	const textUrl = `${
+		process.env.BASE_API_ROUTE
+	}/bibles/filesets/${bibleId}/${bookId}/${chapter}?key=${
+		process.env.DBP_API_KEY
+	}&v=4`;
+
+	const bookMetaDataUrl = `${
+		process.env.BASE_API_ROUTE
+	}/bibles/${bibleId}/book?key=${process.env.DBP_API_KEY}&v=4&iso=eng&bucket=${
+		process.env.DBP_BUCKET_ID
+	}`;
+	// const countryUrl = `${process.env.BASE_API_ROUTE}/countries?key=${
+	// 	process.env.DBP_API_KEY
+	// 	}&v=4&bucket_id=${
+	// 	process.env.DBP_BUCKET_ID
+	// 	}&has_filesets=true&include_languages=true`
+	// const languageUrl = `${process.env.BASE_API_ROUTE}/languages?key=${
+	// 	process.env.DBP_API_KEY
+	// 	}&v=4&bucket_id=${process.env.DBP_BUCKET_ID}&has_filesets=true`
+
+	// Get country data
+	// const countryRes = await fetch(countryUrl);
+	// const countryJson = await countryRes.json();
+	// // The app was used to ingesting the country data this way so I have to keep doing it
+	// const countries = countryJson.data.reduce((acc, country) => {
+	// 	const tempObj = acc;
+	// 	if (typeof country.name !== 'string') {
+	// 		tempObj[country.name.name] = { ...country, name: country.name.name };
+	// 	} else if (country.name === '' || territoryCodes[country.codes.iso_a2]) {
+	// 		return acc;
+	// 	} else {
+	// 		tempObj[country.name] = country;
+	// 	}
+	// 	return tempObj;
+	// }, {});
+
+	// Get languages data
+	// const languageRes = await fetch(languageUrl);
+	// const languageJson = await languageRes.json();
+	// const languages = languageJson.data;
+
+	// Get all bibles
+	// const bibleRes = await fetch(biblesUrl);
+	// const bibleJson = await bibleRes.json();
+	// const texts = bibleJson.data;
+
+	// Get active bible data
+	const singleBibleRes = await fetch(singleBibleUrl);
+	const singleBibleJson = await singleBibleRes.json();
+	const bible = singleBibleJson.data;
+
+	// Get text for chapter
+	const textRes = await fetch(textUrl);
+	const textJson = await textRes.json();
+	const chapterText = textJson.data;
+	// console.log('chapterText', chapterText);
+	// Need to try the other bible id if there wasn't any chapter text
+	if (!chapterText) {
+		// next id
+	}
+
+	const activeBook = bible.books.find(
+		(book) => book.book_id.toLowerCase() === bookId.toLowerCase(),
+	);
+	// console.log('activeBook', activeBook);
+	// console.log('bible.books', bible.books);
+
+	const activeBookName = activeBook ? activeBook.name : '';
+
+	const bookMetaRes = await fetch(bookMetaDataUrl);
+	const bookMetaJson = await bookMetaRes.json();
+	// console.log('bookMetaJson', bookMetaJson);
+
+	const testaments = bookMetaJson.data.reduce(
+		(a, c) => ({ ...a, [c.id]: c.book_testament }),
+		{},
+	);
 
 	return {
-		isServer,
+		// isServer,
+		chapterText,
+		testaments,
+		books: bible.books,
+		activeChapter: parseInt(chapter, 10),
+		activeBookName,
+		verseNumber: verse,
+		activeTextId: bible.abbr,
+		activeIsoCode: bible.iso,
+		activeLanguageName: bible.language,
+		textDirection: bible.alphabet.direction,
+		filesets: bible.filesets['dbp-dev'],
+		defaultLanguageIso: bible.iso || 'eng',
+		defaultLanguageName: bible.language || 'English',
+		activeTextName: bible.vname || bible.name,
+		activeBookId: bookId.toUpperCase(),
+		// texts,
 		match: {
 			params: {
 				bibleId,
@@ -369,17 +355,36 @@ AppContainer.getInitialProps = async (context) => {
 			},
 		},
 	};
+	// }
+
+	// return {
+	// 	isServer,
+	// 	match: {
+	// 		params: {
+	// 			bibleId,
+	// 			bookId,
+	// 			chapter,
+	// 			verse,
+	// 		},
+	// 	},
+	// };
 };
 
 AppContainer.propTypes = {
 	books: PropTypes.array,
-	isServer: PropTypes.bool,
+	// isServer: PropTypes.bool,
+	filesets: PropTypes.array,
+	testaments: PropTypes.object,
 	textDirection: PropTypes.string,
 	activeChapter: PropTypes.number,
 	chapterText: PropTypes.array,
 	activeBookName: PropTypes.string,
 	verseNumber: PropTypes.string,
 	activeTextId: PropTypes.string,
+	activeTextName: PropTypes.string,
+	activeBookId: PropTypes.string,
+	defaultLanguageIso: PropTypes.string,
+	defaultLanguageName: PropTypes.string,
 	// activeIsoCode: PropTypes.string,
 	// activeCountryName: PropTypes.string,
 	// activeLanguageName: PropTypes.string,

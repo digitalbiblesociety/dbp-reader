@@ -13,6 +13,7 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 // import { Switch, Route } from 'react-router-dom';
 
 import HomePage from '../HomePage';
@@ -38,7 +39,11 @@ import HomePage from '../HomePage';
 export default function App({ appProps }) {
 	return (
 		<div>
-			<HomePage match={appProps.match} bible={appProps.bible} />
+			<HomePage match={appProps.match} />
 		</div>
 	);
 }
+
+App.propTypes = {
+	appProps: PropTypes.object,
+};

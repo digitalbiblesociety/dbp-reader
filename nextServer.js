@@ -31,16 +31,6 @@ app
 			res.status(200).sendFile('favicon.ico', faviconOptions),
 		);
 
-		// server.get('/p/:id', (req, res) => {
-		// 	const actualPage = '/post';
-		// 	const queryParams = { id: req.params.id };
-		// 	app.render(req, res, actualPage, queryParams);
-		// });
-		// server.get('/http:/*', (req, res) => {
-		// 	console.log('caught the api request I hope', `${req.protocol}://${req.get('host')}${req.originalUrl}`);
-		// 	handle(req, res);
-		// })
-
 		server.get('/_next*', (req, res) => {
 			// console.log('caught _next request');
 			handle(req, res);
@@ -74,7 +64,7 @@ app
 		// 	};
 		// 	app.render(req, res, actualPage, queryParams);
 		// });
-		server.get('/bible/:bibleId/:bookId', (req, res) => {
+		server.get('/bible/:bibleId/:bookId', (req, res, nextP) => {
 			const actualPage = '/app';
 			// console.log(
 			// 	'Getting bible and book for route',
@@ -84,10 +74,17 @@ app
 			const queryParams = {
 				bibleId: req.params.bibleId,
 				bookId: req.params.bookId,
+				chapter: '1',
 			};
-			app.render(req, res, actualPage, queryParams);
+			if (
+				queryParams.verse !== 'style.css' &&
+				!req.originalUrl.includes('/static')
+			) {
+				app.render(req, res, actualPage, queryParams);
+			}
+			nextP();
 		});
-		server.get('/bible/:bibleId/:bookId/:chapter', (req, res) => {
+		server.get('/bible/:bibleId/:bookId/:chapter', (req, res, nextP) => {
 			const actualPage = '/app';
 			// Params may not actually be passed using this method
 			// console.log(
@@ -99,7 +96,13 @@ app
 				bookId: req.params.bookId,
 				chapter: req.params.chapter,
 			};
-			app.render(req, res, actualPage, queryParams);
+			if (
+				queryParams.verse !== 'style.css' &&
+				!req.originalUrl.includes('/static')
+			) {
+				app.render(req, res, actualPage, queryParams);
+			}
+			nextP();
 		});
 		server.get('/bible/:bibleId/:bookId/:chapter/:verse', (req, res, nextP) => {
 			const actualPage = '/app';
@@ -114,7 +117,10 @@ app
 				chapter: req.params.chapter,
 				verse: req.params.verse,
 			};
-			if (queryParams.verse !== 'style.css') {
+			if (
+				queryParams.verse !== 'style.css' &&
+				!req.originalUrl.includes('/static')
+			) {
 				app.render(req, res, actualPage, queryParams);
 			}
 			nextP();

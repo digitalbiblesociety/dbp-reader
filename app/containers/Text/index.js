@@ -7,6 +7,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 import isEqual from 'lodash/isEqual';
 import Information from '../../components/Information';
 import SvgWrapper from '../../components/SvgWrapper';
@@ -28,6 +29,8 @@ import {
 	getOffsetNeededForPsalms,
 	// getTextInSelectedNodes,
 } from '../../utils/highlightingUtils';
+import getPreviousChapterUrl from '../../utils/getPreviousChapterUrl';
+import getNextChapterUrl from '../../utils/getNextChapterUrl';
 // import differenceObject from 'utils/deepDifferenceObject';
 // import some from 'lodash/some';
 // import { addClickToNotes } from './htmlToReact';
@@ -48,6 +51,7 @@ class Text extends React.PureComponent {
 		handlersAreSet: false,
 		handledMouseDown: false,
 		activeVerseInfo: { verse: 0 },
+		loadingNextPage: false,
 		wholeVerseIsSelected: false,
 	};
 
@@ -907,6 +911,10 @@ class Text extends React.PureComponent {
 		}
 	};
 
+	handleArrowClick = () => {
+		this.setState({ loadingNextPage: true });
+	};
+
 	handleNoteClick = (noteIndex, clickedBookmark) => {
 		const userNotes = this.props.userNotes;
 		const existingNote = userNotes[noteIndex];
@@ -1742,8 +1750,8 @@ class Text extends React.PureComponent {
 
 	render() {
 		const {
-			nextChapter,
-			prevChapter,
+			// nextChapter,
+			// prevChapter,
 			activeChapter,
 			toggleNotesModal,
 			notesActive,
@@ -1755,10 +1763,13 @@ class Text extends React.PureComponent {
 			loadingCopyright,
 			userSettings,
 			verseNumber,
-			goToFullChapter,
+			// goToFullChapter,
 			copyrights,
 			activeFilesets,
 			audioFilesetId,
+			activeTextId,
+			activeBookId,
+			books,
 			plainTextFilesetId,
 			formattedTextFilesetId,
 			menuIsOpen,
@@ -1785,7 +1796,12 @@ class Text extends React.PureComponent {
 		// console.log('chapterAlt', chapterAlt);
 		// const justifiedClass = userSettings.getIn(['toggleOptions', 'justifiedText', 'active']) ? 'justify' : '';
 
-		if (loadingNewChapterText || loadingAudio || loadingCopyright) {
+		if (
+			loadingNewChapterText ||
+			loadingAudio ||
+			loadingCopyright ||
+			this.state.loadingNextPage
+		) {
 			return (
 				<div
 					style={this.textContainerStyle}
@@ -1798,18 +1814,37 @@ class Text extends React.PureComponent {
 
 		return (
 			<div style={this.textContainerStyle} className={this.textContainerClass}>
-				<div
-					onClick={!this.isStartOfBible && !menuIsOpen ? prevChapter : () => {}}
-					className={
-						!this.isStartOfBible && !menuIsOpen
-							? 'arrow-wrapper'
-							: 'arrow-wrapper disabled'
-					}
+				<Link
+					as={getPreviousChapterUrl(
+						books,
+						activeChapter,
+						activeBookId.toLowerCase(),
+						activeTextId.toLowerCase(),
+					)}
+					href={getPreviousChapterUrl(
+						books,
+						activeChapter,
+						activeBookId.toLowerCase(),
+						activeTextId.toLowerCase(),
+					)}
 				>
-					{!this.isStartOfBible ? (
-						<SvgWrapper className="prev-arrow-svg" svgid="arrow_left" />
-					) : null}
-				</div>
+					<div
+						onClick={
+							!this.isStartOfBible && !menuIsOpen
+								? this.handleArrowClick
+								: () => {}
+						}
+						className={
+							!this.isStartOfBible && !menuIsOpen
+								? 'arrow-wrapper'
+								: 'arrow-wrapper disabled'
+						}
+					>
+						{!this.isStartOfBible ? (
+							<SvgWrapper className="prev-arrow-svg" svgid="arrow_left" />
+						) : null}
+					</div>
+				</Link>
 				<div className={'main-wrapper'}>
 					<main
 						ref={this.setMainRef}
@@ -1828,9 +1863,12 @@ class Text extends React.PureComponent {
 						{this.getTextComponents}
 						{verseNumber ? (
 							<div className={'read-chapter-container'}>
-								<button onClick={goToFullChapter} className={'read-chapter'}>
-									Read Full Chapter
-								</button>
+								<Link
+									href={`/bible/${activeTextId.toLowerCase()}/${activeBookId.toLowerCase()}/${activeChapter}`}
+									as={`/bible/${activeTextId.toLowerCase()}/${activeBookId.toLowerCase()}/${activeChapter}`}
+								>
+									<button className={'read-chapter'}>Read Full Chapter</button>
+								</Link>
 							</div>
 						) : null}
 						<Information
@@ -1842,18 +1880,37 @@ class Text extends React.PureComponent {
 						/>
 					</main>
 				</div>
-				<div
-					onClick={!this.isEndOfBible && !menuIsOpen ? nextChapter : () => {}}
-					className={
-						!this.isEndOfBible && !menuIsOpen
-							? 'arrow-wrapper'
-							: 'arrow-wrapper disabled'
-					}
+				<Link
+					as={getNextChapterUrl(
+						books,
+						activeChapter,
+						activeBookId.toLowerCase(),
+						activeTextId.toLowerCase(),
+					)}
+					href={getNextChapterUrl(
+						books,
+						activeChapter,
+						activeBookId.toLowerCase(),
+						activeTextId.toLowerCase(),
+					)}
 				>
-					{!this.isEndOfBible ? (
-						<SvgWrapper className="next-arrow-svg" svgid="arrow_right" />
-					) : null}
-				</div>
+					<div
+						onClick={
+							!this.isEndOfBible && !menuIsOpen
+								? this.handleArrowClick
+								: () => {}
+						}
+						className={
+							!this.isEndOfBible && !menuIsOpen
+								? 'arrow-wrapper'
+								: 'arrow-wrapper disabled'
+						}
+					>
+						{!this.isEndOfBible ? (
+							<SvgWrapper className="next-arrow-svg" svgid="arrow_right" />
+						) : null}
+					</div>
+				</Link>
 				{contextMenuState ? (
 					<ContextPortal
 						handleAddBookmark={this.handleAddBookmark}
@@ -1891,12 +1948,9 @@ Text.propTypes = {
 	copyrights: PropTypes.object,
 	userSettings: PropTypes.object,
 	formattedSource: PropTypes.object,
-	nextChapter: PropTypes.func,
-	prevChapter: PropTypes.func,
 	addBookmark: PropTypes.func,
 	addHighlight: PropTypes.func,
 	setActiveNote: PropTypes.func,
-	goToFullChapter: PropTypes.func,
 	deleteHighlights: PropTypes.func,
 	toggleNotesModal: PropTypes.func,
 	setActiveNotesView: PropTypes.func,
@@ -1918,6 +1972,7 @@ Text.propTypes = {
 	userId: PropTypes.string,
 	bibleId: PropTypes.string,
 	verseNumber: PropTypes.string,
+	activeTextId: PropTypes.string,
 	activeBookId: PropTypes.string,
 	audioSource: PropTypes.string,
 	activeBookName: PropTypes.string,

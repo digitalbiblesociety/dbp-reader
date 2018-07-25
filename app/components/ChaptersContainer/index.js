@@ -19,10 +19,10 @@ function ChaptersContainer({
 	selectedBookName,
 	chapters,
 	activeTextId,
-	book,
+	// book,
 	activeChapter,
 	activeBookName,
-	handleChapterClick,
+	// handleChapterClick,
 }) {
 	if (bookName || bookNameShort) {
 		return (
@@ -39,8 +39,8 @@ function ChaptersContainer({
 							href={`/${activeTextId.toLowerCase()}/${bookId.toLowerCase()}/${chapter}`}
 							as={`/bible/${activeTextId.toLowerCase()}/${bookId.toLowerCase()}/${chapter}`}
 						>
-							<span
-								onClick={() => handleChapterClick(book, chapter)}
+							<a
+								// onClick={() => handleChapterClick(book, chapter)}
 								className={
 									activeChapter === chapter &&
 									(bookName || bookNameShort) === activeBookName
@@ -49,7 +49,7 @@ function ChaptersContainer({
 								}
 							>
 								{chapter}
-							</span>
+							</a>
 						</Link>
 					</span>
 				))}
@@ -64,13 +64,13 @@ ChaptersContainer.propTypes = {
 	activeTextId: PropTypes.string,
 	activeChapter: PropTypes.number,
 	activeBookName: PropTypes.string,
-	handleChapterClick: PropTypes.func,
+	// handleChapterClick: PropTypes.func,
 	selectedBookName: PropTypes.string,
 	bookName: PropTypes.string,
 	bookNameShort: PropTypes.string,
 	bookId: PropTypes.string,
 	chapters: PropTypes.object,
-	book: PropTypes.object,
+	// book: PropTypes.object,
 };
 
 export default ChaptersContainer;

@@ -41,140 +41,106 @@ import {
 	GET_COPYRIGHTS,
 } from './constants';
 
-const newBibleState = fromJS({
-	books: [],
-	note: {},
-	chapterText: [],
-	audioObjects: [],
-	activeFilesets: [],
-	audioFilesetId: '',
-	plainTextFilesetId: '',
-	formattedTextFilesetId: '',
-	highlights: [],
-	copyrights: {
-		newTestament: {
-			audio: {
-				// message: 'Copyright is either loading or does not exist.',
-				// organizations: [
-				// 	{
-				// 		logo: {
-				// 			url: '',
-				// 		},
-				// 		name: 'name1',
-				// 	},
-				// ],
-			},
-			text: {
-				// message: 'Copyright is either loading or does not exist.',
-				// organizations: [
-				// 	{
-				// 		logo: {
-				// 			url: '',
-				// 		},
-				// 		name: 'name2',
-				// 	},
-				// ],
-			},
-		},
-		oldTestament: {
-			audio: {
-				// message: 'Copyright is either loading or does not exist.',
-				// organizations: [
-				// 	{
-				// 		logo: {
-				// 			url: '',
-				// 		},
-				// 		name: 'name3',
-				// 	},
-				// ],
-			},
-			text: {
-				// message: 'Copyright is either loading or does not exist.',
-				// organizations: [
-				// 	{
-				// 		logo: {
-				// 			url: '',
-				// 		},
-				// 		name: 'name4',
-				// 	},
-				// ],
-			},
-		},
-	},
-	activeChapter: 1,
-	activeBookName: '',
-	activeTextName: '',
-	activeVerse: '',
-	activeNotesView: 'notes',
-	activeTextId: '',
-	activeBookId: '',
-	loadingBooks: false,
-	selectedText: '',
-	selectedBookName: '',
-	audioSource: '',
-	invalidBibleId: false,
-	hasAudio: false,
-	formattedSource: '',
-	hasTextInDatabase: true,
-	filesetTypes: {},
-	testaments: {},
-	previousAudioPaths: [],
-	previousAudioFilesetId: '',
-	previousAudioSource: '',
-	nextAudioPaths: [],
-	nextAudioFilesetId: '',
-	nextAudioSource: '',
-	audioPaths: [],
-	loadingNewChapterText: true,
-	loadingCopyright: true,
-});
+// const newBibleState = fromJS({
+// 	books: [],
+// 	note: {},
+// 	chapterText: [],
+// 	audioObjects: [],
+// 	activeFilesets: [],
+// 	audioFilesetId: '',
+// 	plainTextFilesetId: '',
+// 	formattedTextFilesetId: '',
+// 	highlights: [],
+// 	copyrights: {
+// 		newTestament: {
+// 			audio: {
+// 				// message: 'Copyright is either loading or does not exist.',
+// 				// organizations: [
+// 				// 	{
+// 				// 		logo: {
+// 				// 			url: '',
+// 				// 		},
+// 				// 		name: 'name1',
+// 				// 	},
+// 				// ],
+// 			},
+// 			text: {
+// 				// message: 'Copyright is either loading or does not exist.',
+// 				// organizations: [
+// 				// 	{
+// 				// 		logo: {
+// 				// 			url: '',
+// 				// 		},
+// 				// 		name: 'name2',
+// 				// 	},
+// 				// ],
+// 			},
+// 		},
+// 		oldTestament: {
+// 			audio: {
+// 				// message: 'Copyright is either loading or does not exist.',
+// 				// organizations: [
+// 				// 	{
+// 				// 		logo: {
+// 				// 			url: '',
+// 				// 		},
+// 				// 		name: 'name3',
+// 				// 	},
+// 				// ],
+// 			},
+// 			text: {
+// 				// message: 'Copyright is either loading or does not exist.',
+// 				// organizations: [
+// 				// 	{
+// 				// 		logo: {
+// 				// 			url: '',
+// 				// 		},
+// 				// 		name: 'name4',
+// 				// 	},
+// 				// ],
+// 			},
+// 		},
+// 	},
+// 	activeChapter: 1,
+// 	activeBookName: '',
+// 	activeTextName: '',
+// 	activeVerse: '',
+// 	activeNotesView: 'notes',
+// 	activeTextId: '',
+// 	activeBookId: '',
+// 	loadingBooks: false,
+// 	selectedText: '',
+// 	selectedBookName: '',
+// 	audioSource: '',
+// 	invalidBibleId: false,
+// 	hasAudio: false,
+// 	formattedSource: '',
+// 	hasTextInDatabase: true,
+// 	filesetTypes: {},
+// 	testaments: {},
+// 	previousAudioPaths: [],
+// 	previousAudioFilesetId: '',
+// 	previousAudioSource: '',
+// 	nextAudioPaths: [],
+// 	nextAudioFilesetId: '',
+// 	nextAudioSource: '',
+// 	audioPaths: [],
+// 	loadingNewChapterText: true,
+// 	loadingCopyright: true,
+// });
 
 const initialState = fromJS({
 	books: [],
-	note: {},
 	chapterText: [],
-	userAuthenticated:
-		// !!localStorage.getItem('bible_is_user_id') ||
-		// !!sessionStorage.getItem('bible_is_user_id') ||
-		false,
-	userId:
-		// localStorage.getItem('bible_is_user_id') ||
-		// sessionStorage.getItem('bible_is_user_id') ||
-		'',
 	audioObjects: [],
 	activeFilesets: [],
-	audioFilesetId: '',
-	plainTextFilesetId: '',
-	formattedTextFilesetId: '',
 	highlights: [],
-	copyrights: {
-		newTestament: {
-			audio: {},
-			text: {},
-		},
-		oldTestament: {
-			audio: {},
-			text: {},
-		},
-	},
-	activeChapter: 1,
-	isChapterSelectionActive: false,
-	isProfileActive: false,
-	isSettingsModalActive: false,
-	isSearchModalActive: false,
-	isNotesModalActive: false,
-	isVersionSelectionActive: false,
-	isInformationModalActive: false,
-	activeBookName: '',
-	activeTextName: '',
-	activeNotesView: 'notes',
-	activeTextId: '',
-	defaultLanguageIso: 'eng',
-	// defaultLanguageName: window.navigator.language
-	// 	? window.navigator.language
-	// 	: 'English',
-	defaultLanguageName: 'English',
-	activeBookId: '',
+	previousAudioPaths: [],
+	nextAudioPaths: [],
+	audioPaths: [],
+	note: {},
+	filesetTypes: {},
+	testaments: {},
 	userSettings: {
 		// 	activeTheme: sessionStorage.getItem('bible_is_theme') || 'red',
 		// 	activeFontType: sessionStorage.getItem('bible_is_font_family') || 'sans',
@@ -272,31 +238,62 @@ const initialState = fromJS({
 			},
 		},
 	},
+	copyrights: {
+		newTestament: {
+			audio: {},
+			text: {},
+		},
+		oldTestament: {
+			audio: {},
+			text: {},
+		},
+	},
+	activeChapter: 1,
+	userAuthenticated:
+		// !!localStorage.getItem('bible_is_user_id') ||
+		// !!sessionStorage.getItem('bible_is_user_id') ||
+		false,
+	isChapterSelectionActive: false,
+	isProfileActive: false,
+	isSettingsModalActive: false,
+	isSearchModalActive: false,
+	isNotesModalActive: false,
+	isVersionSelectionActive: false,
+	isInformationModalActive: false,
 	autoPlayEnabled: false,
 	loadingBooks: false,
-	selectedText: '',
-	selectedBookName: '',
-	audioSource: '',
 	invalidBibleId: false,
 	hasAudio: false,
-	formattedSource: '',
 	hasTextInDatabase: true,
-	filesetTypes: {},
 	firstLoad: true,
-	testaments: {},
-	previousAudioPaths: [],
-	previousAudioFilesetId: '',
-	previousAudioSource: '',
-	nextAudioPaths: [],
-	nextAudioFilesetId: '',
-	nextAudioSource: '',
-	activeVerse: '',
-	audioPaths: [],
 	audioPlayerState: true,
-	textDirection: 'ltr',
 	loadingNewChapterText: true,
 	loadingCopyright: true,
 	loadingAudio: true,
+	userId:
+		// localStorage.getItem('bible_is_user_id') ||
+		// sessionStorage.getItem('bible_is_user_id') ||
+		'',
+	audioFilesetId: '',
+	plainTextFilesetId: '',
+	formattedTextFilesetId: '',
+	activeBookName: '',
+	activeTextName: '',
+	activeNotesView: 'notes',
+	activeTextId: '',
+	defaultLanguageIso: 'eng',
+	defaultLanguageName: 'English',
+	activeBookId: '',
+	selectedText: '',
+	selectedBookName: '',
+	audioSource: '',
+	formattedSource: '',
+	previousAudioFilesetId: '',
+	previousAudioSource: '',
+	nextAudioFilesetId: '',
+	nextAudioSource: '',
+	activeVerse: '',
+	textDirection: 'ltr',
 });
 
 function homePageReducer(state = initialState, action) {
@@ -476,8 +473,8 @@ function homePageReducer(state = initialState, action) {
 			);
 		case 'getchapter':
 			return state.set('loadingAudio', true).set('loadingNewChapterText', true);
-		case 'getbible':
-			return state.map((data, key) => newBibleState.get(key) || data);
+		// case 'getbible':
+		// 	return state.map((data, key) => newBibleState.get(key) || data);
 		case 'loadbibleerror':
 			return state
 				.set('invalidBibleId', true)

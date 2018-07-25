@@ -7,7 +7,6 @@
  * component (SFC), hot reloading does not currently support SFCs. If hot
  * reloading is not a necessity for you then you can refactor it and remove
  * the linting exception.
- * TODO: Refactor to have everything use immutablejs and not plain js
  */
 
 // import { fromJS, is } from 'immutable';
@@ -93,9 +92,9 @@ import {
 } from './actions';
 import makeSelectHomePage, {
 	selectSettings,
-	selectPrevBook,
-	selectNextBook,
-	selectActiveBook,
+	// selectPrevBook,
+	// selectNextBook,
+	// selectActiveBook,
 	selectFormattedSource,
 	selectAuthenticationStatus,
 	selectUserId,
@@ -117,80 +116,82 @@ class HomePage extends React.PureComponent {
 	// eslint-disable-line react/prefer-stateless-function
 	componentDidMount() {
 		// Get the first bible based on the url here
-		const { params } = this.props.match
-			? this.props.match
-			: { params: { bibleId: 'ENGESV', bookId: 'GEN', chapter: 1 } };
-		const { bibleId, bookId, chapter } = params;
-		const verse = params.verse || '';
-		const { userAuthenticated: authenticated, userId } = this.props;
+		// const { params } = this.props.match
+		// 	? this.props.match
+		// 	: { params: { bibleId: 'ENGESV', bookId: 'GEN', chapter: 1 } };
+		// const { bibleId, bookId, chapter } = params;
+		// const verse = params.verse || '';
+		// const { userAuthenticated: authenticated, userId } = this.props;
 		// console.log('authenticated in home did mount', authenticated);
 		// console.log('userId in home did mount', userId);
 		// console.log('props location', this.props.location.search.slice(6));
 		// console.log('localStorage.getItem(userSettings_toggleOptions_readersMode_active)', localStorage.getItem('userSettings_toggleOptions_readersMode_active') === false);
 		// console.log('localStorage.getItem(userSettings_toggleOptions_crossReferences_active)', localStorage.getItem('userSettings_toggleOptions_crossReferences_active'));
 		// console.log('params', params);
-		if (bibleId && bookId && chapter >= 0) {
-			this.props.dispatch({
-				type: 'getbible',
-				bibleId,
-				bookId,
-				chapter,
-				authenticated,
-				userId,
-				verse,
-			});
-			// console.log('not redirecting in bible, book and chapter');
-		} else if (bibleId && bookId) {
-			// run saga but default the chapter
-			// I can auto default to 1 here because logic -_- 乁( ⁰͡ Ĺ̯ ⁰͡ ) ㄏ
-			this.props.dispatch({
-				type: 'getbible',
-				bibleId,
-				bookId,
-				chapter: 1,
-				authenticated,
-				userId,
-				verse,
-			});
-			// console.log('redirecting from bible and book');
-			// console.log(this.props);
-			// this.props.history.replace(
-			// 	`/${bibleId.toLowerCase()}/${bookId.toLowerCase()}/1`,
-			// );
-		} else if (bibleId) {
-			// If the user only enters a version of the bible then
-			// I want to default to the first book that bible has
-			this.props.dispatch({
-				type: 'getbible',
-				bibleId,
-				bookId: '', // This works because of how the saga fetches the next chapter
-				chapter: 1,
-				authenticated,
-				userId,
-				verse,
-			});
-			// May want to use replace here at some point
-			// // this.props.history.replace(`/${bibleId}/gen/1`);
-		} else if (this.props.match.params.token) {
+		// if (bibleId && bookId && chapter >= 0) {
+		// this.props.dispatch({
+		// 	type: 'getbible',
+		// 	bibleId,
+		// 	bookId,
+		// 	chapter,
+		// 	authenticated,
+		// 	userId,
+		// 	verse,
+		// });
+		// console.log('not redirecting in bible, book and chapter');
+		// } else if (bibleId && bookId) {
+		// run saga but default the chapter
+		// I can auto default to 1 here because logic -_- 乁( ⁰͡ Ĺ̯ ⁰͡ ) ㄏ
+		// this.props.dispatch({
+		// 	type: 'getbible',
+		// 	bibleId,
+		// 	bookId,
+		// 	chapter: 1,
+		// 	authenticated,
+		// 	userId,
+		// 	verse,
+		// });
+		// console.log('redirecting from bible and book');
+		// console.log(this.props);
+		// this.props.history.replace(
+		// 	`/${bibleId.toLowerCase()}/${bookId.toLowerCase()}/1`,
+		// );
+		// } else if (bibleId) {
+		// If the user only enters a version of the bible then
+		// I want to default to the first book that bible has
+		// this.props.dispatch({
+		// 	type: 'getbible',
+		// 	bibleId,
+		// 	bookId: '', // This works because of how the saga fetches the next chapter
+		// 	chapter: 1,
+		// 	authenticated,
+		// 	userId,
+		// 	verse,
+		// });
+		// May want to use replace here at some point
+		// // this.props.history.replace(`/${bibleId}/gen/1`);
+		// } else
+		if (this.props.match.params.token) {
 			// Open Profile
 			this.toggleProfile();
 			// Give profile the token - done in render
 			// Open Password Reset Verified because there is a token - done in Profile/index
-		} else {
-			// Defaulting to esv until browser language detection is implemented
-			// console.log('redirecting from else in did mount');
-			const sessionBibleId = sessionStorage.getItem('bible_is_1_bible_id');
-			const sessionBookId = sessionStorage.getItem('bible_is_2_book_id');
-			const sessionChapter = sessionStorage.getItem('bible_is_3_chapter');
-
-			if (sessionBibleId && sessionBookId && sessionChapter) {
-				// this.props.history.replace(
-				// 	`/${sessionBibleId}/${sessionBookId}/${sessionChapter}`,
-				// );
-			} else {
-				// this.props.history.replace('/engesv/mat/1');
-			}
 		}
+		// } else {
+		// Defaulting to esv until browser language detection is implemented
+		// console.log('redirecting from else in did mount');
+		// 	const sessionBibleId = sessionStorage.getItem('bible_is_1_bible_id');
+		// 	const sessionBookId = sessionStorage.getItem('bible_is_2_book_id');
+		// 	const sessionChapter = sessionStorage.getItem('bible_is_3_chapter');
+		//
+		// 	if (sessionBibleId && sessionBookId && sessionChapter) {
+		// 		// this.props.history.replace(
+		// 		// 	`/${sessionBibleId}/${sessionBookId}/${sessionChapter}`,
+		// 		// );
+		// 	} else {
+		// 		// this.props.history.replace('/engesv/mat/1');
+		// 	}
+		// }
 
 		const activeTheme = get(this, [
 			'props',
@@ -358,38 +359,26 @@ class HomePage extends React.PureComponent {
 			// console.log(document.getElementById('app').firstChild.scrollHeight);
 		}
 
-		this.isMobileSized = () => {
-			// console.log('resized mobile');
-			return (
-				window &&
-				document &&
-				document.firstElementChild &&
-				document.firstElementChild.clientWidth < 500
-			);
-		};
+		this.isMobileSized = () =>
+			window &&
+			document &&
+			document.firstElementChild &&
+			document.firstElementChild.clientWidth < 500;
 
-		this.isLargeBp = () => {
-			// console.log('resized large');
-			return (
-				window &&
-				document &&
-				document.firstElementChild &&
-				document.firstElementChild.clientWidth > 500 &&
-				document.firstElementChild.clientWidth < 1001
-			);
-		};
+		this.isLargeBp = () =>
+			window &&
+			document &&
+			document.firstElementChild &&
+			document.firstElementChild.clientWidth > 500 &&
+			document.firstElementChild.clientWidth < 1001;
 
-		this.isAudioPlayerBp = () => {
-			// console.log('resized audio');
-			return (
-				window &&
-				document &&
-				document.firstElementChild &&
-				document.firstElementChild.clientWidth > 500 &&
-				document.firstElementChild.clientWidth < 551
-			);
-		};
-		console.log('props in did mount home', this.props);
+		this.isAudioPlayerBp = () =>
+			window &&
+			document &&
+			document.firstElementChild &&
+			document.firstElementChild.clientWidth > 500 &&
+			document.firstElementChild.clientWidth < 551;
+		// console.log('props in did mount home', this.props);
 	}
 	// Component updates when the state and props haven't changed 2 of 5 times
 	// If there is a significant slow down we may need to do some deep equality checks on the state
@@ -452,15 +441,15 @@ class HomePage extends React.PureComponent {
 				// Need to send a request to get the audio and text once the previous request is done - (maybe handled in saga?)
 				// Needs to preserve the current book and chapter to try and use it first
 				// Needs to default to the first available book and chapter if the current option isn't available
-				this.props.dispatch({
-					type: 'getbible',
-					bibleId: nextParams.bibleId,
-					bookId: nextParams.bookId,
-					chapter: nextParams.chapter,
-					verse: nextParams.verse || '',
-					authenticated: userAuthenticated,
-					userId,
-				});
+				// this.props.dispatch({
+				// 	type: 'getbible',
+				// 	bibleId: nextParams.bibleId,
+				// 	bookId: nextParams.bookId,
+				// 	chapter: nextParams.chapter,
+				// 	verse: nextParams.verse || '',
+				// 	authenticated: userAuthenticated,
+				// 	userId,
+				// });
 			} else if (newBook) {
 				// console.log('new book');
 				// This needs to be here for the case when a user goes from Genesis 7 to Mark 7 via the dropdown menu
@@ -468,30 +457,30 @@ class HomePage extends React.PureComponent {
 				// Preserve current chapter and try to use it first
 				// Default to first chapter if the new book doesn't have the current chapter
 				// console.log('new book', nextProps.homepage.activeFilesets);
-				this.props.dispatch({
-					type: 'getchapter',
-					filesets: nextProps.homepage.activeFilesets,
-					bibleId: nextParams.bibleId,
-					bookId: nextParams.bookId,
-					chapter: nextParams.chapter,
-					verse: nextParams.verse || '',
-					authenticated: userAuthenticated,
-					userId,
-				});
+				// this.props.dispatch({
+				// 	type: 'getchapter',
+				// 	filesets: nextProps.homepage.activeFilesets,
+				// 	bibleId: nextParams.bibleId,
+				// 	bookId: nextParams.bookId,
+				// 	chapter: nextParams.chapter,
+				// 	verse: nextParams.verse || '',
+				// 	authenticated: userAuthenticated,
+				// 	userId,
+				// });
 			} else if (newChapter) {
 				// console.log('new chapter');
 				// Need to get the audio and text for the new chapter /bibles/[bibleId]/[bookId]/chapter
 				// if the chapter is not invalid default to first chapter of the current book
-				this.props.dispatch({
-					type: 'getchapter',
-					filesets: nextProps.homepage.activeFilesets,
-					bibleId: nextParams.bibleId,
-					bookId: nextParams.bookId,
-					chapter: nextParams.chapter,
-					verse: nextParams.verse || '',
-					authenticated: userAuthenticated,
-					userId,
-				});
+				// this.props.dispatch({
+				// 	type: 'getchapter',
+				// 	filesets: nextProps.homepage.activeFilesets,
+				// 	bibleId: nextParams.bibleId,
+				// 	bookId: nextParams.bookId,
+				// 	chapter: nextParams.chapter,
+				// 	verse: nextParams.verse || '',
+				// 	authenticated: userAuthenticated,
+				// 	userId,
+				// });
 			}
 		} else if (
 			this.props.homepage.activeBookId !== nextProps.homepage.activeBookId
@@ -542,50 +531,47 @@ class HomePage extends React.PureComponent {
 			// If url did not change && bibleId, bookId and chapter in props did not change - Might need to include verse as well...
 			// This section may not work with SSR because the state might be persisted through a refresh
 			// console.log('Url did not change and current props equal next props');
-
 			// console.log('this.props.homepage.activeVerse', this.props.homepage.activeVerse);
-
 			// Handles the cases where the url needs to be updated
-			const nextPropUrl = `/${nextProps.homepage.activeTextId.toLowerCase()}/${nextProps.homepage.activeBookId.toLowerCase()}/${
-				nextProps.homepage.activeChapter
-			}`;
-			const nextParamUrl = `/${nextParams.bibleId}/${nextParams.bookId}/${
-				nextParams.chapter
-			}`;
-			const curPropUrl = `/${this.props.homepage.activeTextId.toLowerCase()}/${this.props.homepage.activeBookId.toLowerCase()}/${
-				this.props.homepage.activeChapter
-			}`;
-			const curParamUrl = `/${params.bibleId}/${params.bookId}/${
-				params.chapter
-			}`;
-
-			const propsExist =
-				nextProps.homepage.activeChapter &&
-				nextProps.homepage.activeBookId &&
-				nextProps.homepage.activeTextId;
+			// const nextPropUrl = `/${nextProps.homepage.activeTextId.toLowerCase()}/${nextProps.homepage.activeBookId.toLowerCase()}/${
+			// 	nextProps.homepage.activeChapter
+			// }`;
+			// const nextParamUrl = `/${nextParams.bibleId}/${nextParams.bookId}/${
+			// 	nextParams.chapter
+			// }`;
+			// const curPropUrl = `/${this.props.homepage.activeTextId.toLowerCase()}/${this.props.homepage.activeBookId.toLowerCase()}/${
+			// 	this.props.homepage.activeChapter
+			// }`;
+			// const curParamUrl = `/${params.bibleId}/${params.bookId}/${
+			// 	params.chapter
+			// }`;
+			// const propsExist =
+			// 	nextProps.homepage.activeChapter &&
+			// 	nextProps.homepage.activeBookId &&
+			// 	nextProps.homepage.activeTextId;
 			// if there are props in the next state of the application
 			// and the next props do not match the next url
 			// and the current url does not match the current props
-			if (
-				propsExist &&
-				nextPropUrl !== nextParamUrl &&
-				curParamUrl !== curPropUrl &&
-				nextParamUrl !== curParamUrl
-			) {
-				// console.log('Params do not match props', nextPropUrl !== nextParamUrl, !(curParamUrl === curPropUrl));
-				// there are props, the current props and params match, the next params are different, the next props do not equal the next params
-				// console.log('there are props, the current props and params match, the next params are different, the next props do not equal the next params');
-				// Redirect to the appropriate url
-				// this.props.history.replace(
-				// 	`/${nextProps.homepage.activeTextId.toLowerCase()}/${nextProps.homepage.activeBookId.toLowerCase()}/${
-				// 		nextProps.homepage.activeChapter
-				// 	}${
-				// 		nextProps.homepage.activeVerse
-				// 			? `/${nextProps.homepage.activeVerse}`
-				// 			: ''
-				// 	}`,
-				// );
-			}
+			// if (
+			// 	propsExist &&
+			// 	nextPropUrl !== nextParamUrl &&
+			// 	curParamUrl !== curPropUrl &&
+			// 	nextParamUrl !== curParamUrl
+			// ) {
+			// 	// console.log('Params do not match props', nextPropUrl !== nextParamUrl, !(curParamUrl === curPropUrl));
+			// 	// there are props, the current props and params match, the next params are different, the next props do not equal the next params
+			// 	// console.log('there are props, the current props and params match, the next params are different, the next props do not equal the next params');
+			// 	// Redirect to the appropriate url
+			// 	// this.props.history.replace(
+			// 	// 	`/${nextProps.homepage.activeTextId.toLowerCase()}/${nextProps.homepage.activeBookId.toLowerCase()}/${
+			// 	// 		nextProps.homepage.activeChapter
+			// 	// 	}${
+			// 	// 		nextProps.homepage.activeVerse
+			// 	// 			? `/${nextProps.homepage.activeVerse}`
+			// 	// 			: ''
+			// 	// 	}`,
+			// 	// );
+			// }
 		}
 
 		// Deals with updating the interface if a user is authenticated or added highlights
@@ -664,146 +650,49 @@ class HomePage extends React.PureComponent {
 		window.removeEventListener('scroll', this.handleScrolling, true);
 	}
 
-	setNextVerse = (verse) => {
-		const { bibleId, bookId, chapter } = this.props.match.params;
-		const { chapterText } = this.props.homepage;
-		const nextVerse = parseInt(verse, 10) + 1 || 1;
-		const lastVerse = chapterText.length;
-		// Is it past the max verses for the chapter?
-		// if not increment it by 1
-		if (nextVerse <= lastVerse && nextVerse > 0) {
-			// this.props.history.push(
-			// 	`/${bibleId.toLowerCase()}/${bookId.toLowerCase()}/${chapter}/${nextVerse}`,
-			// );
-		} else if (nextVerse < 0) {
-			// this.props.history.replace(
-			// 	`/${bibleId.toLowerCase()}/${bookId.toLowerCase()}/${chapter}/1`,
-			// );
-		} else if (nextVerse > lastVerse) {
-			// this.props.history.replace(
-			// 	`/${bibleId.toLowerCase()}/${bookId.toLowerCase()}/${chapter}/${lastVerse}`,
-			// );
-		}
-	};
-
-	setPrevVerse = (verse) => {
-		const { bibleId, bookId, chapter } = this.props.match.params;
-		const { chapterText } = this.props.homepage;
-		const prevVerse = parseInt(verse, 10) - 1 || 1;
-		const lastVerse = chapterText.length;
-		// Is it past the max verses for the chapter?
-		// if not increment it by 1
-		if (prevVerse <= lastVerse && prevVerse > 0) {
-			// this.props.history.push(
-			// 	`/${bibleId.toLowerCase()}/${bookId.toLowerCase()}/${chapter}/${prevVerse}`,
-			// );
-		} else if (prevVerse < 0) {
-			// this.props.history.replace(
-			// 	`/${bibleId.toLowerCase()}/${bookId.toLowerCase()}/${chapter}/1`,
-			// );
-		} else if (prevVerse > lastVerse) {
-			// this.props.history.replace(
-			// 	`/${bibleId.toLowerCase()}/${bookId.toLowerCase()}/${chapter}/${lastVerse}`,
-			// );
-		}
-	};
-
-	getNextChapter = () => {
-		const { activeTextId, activeChapter, activeBookId } = this.props.homepage;
-		const { activeBook, nextBook } = this.props;
-		const verseNumber = this.props.match.params.verse || '';
-		const maxChapter = activeBook.getIn(['chapters', -1]);
-
-		if (verseNumber) {
-			this.setNextVerse(verseNumber);
-			return;
-		}
-		// If the next book in line doesn't exist and we are already at the last chapter just return
-		if (!nextBook.size && activeChapter === maxChapter) {
-			return;
-		}
-
-		if (activeChapter === maxChapter) {
-			this.setActiveBookName({
-				book: nextBook.get('name'),
-				id: nextBook.get('book_id'),
-			});
-			// this.getChapters({ userAuthenticated, userId, bible: activeTextId, book: nextBook.get('book_id'), chapter: 1, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
-			this.setActiveChapter(nextBook.getIn(['chapters', 0]));
-			// this.props.history.push(
-			// 	`/${activeTextId.toLowerCase()}/${nextBook
-			// 		.get('book_id')
-			// 		.toLowerCase()}/${nextBook.getIn(['chapters', 0])}`,
-			// );
-		} else {
-			const activeChapterIndex = activeBook
-				.get('chapters')
-				.findIndex((c) => c === activeChapter || c > activeChapter);
-			const nextChapterIndex =
-				activeBook.getIn(['chapters', activeChapterIndex]) === activeChapter
-					? activeChapterIndex + 1
-					: activeChapterIndex;
-
-			// this.getChapters({ userAuthenticated, userId, bible: activeTextId, book: activeBookId, chapter: activeChapter + 1, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
-			this.setActiveChapter(activeBook.getIn(['chapters', nextChapterIndex]));
-			// this.props.history.push(
-			// 	`/${activeTextId.toLowerCase()}/${activeBookId.toLowerCase()}/${activeBook.getIn(
-			// 		['chapters', nextChapterIndex],
-			// 	)}`,
-			// );
-		}
-	};
-
-	getPrevChapter = () => {
-		const {
-			activeTextId,
-			activeChapter,
-			activeBookId,
-			books,
-		} = this.props.homepage;
-		const { previousBook, activeBook } = this.props;
-		const verseNumber = this.props.match.params.verse || '';
-
-		if (verseNumber) {
-			this.setPrevVerse(verseNumber);
-			return;
-		}
-		// Keeps the button from trying to go backwards to a book that doesn't exist
-		if (activeBookId === books[0].book_id && activeChapter - 1 === 0) {
-			return;
-		}
-		// Goes to the previous book in the bible in canonical order from the current book
-		if (activeChapter - 1 === 0) {
-			const lastChapter = previousBook.getIn(['chapters', -1]);
-
-			this.setActiveBookName({
-				book: previousBook.get('name'),
-				id: previousBook.get('book_id'),
-			});
-			// this.getChapters({ userAuthenticated, userId, bible: activeTextId, book: previousBook.get('book_id'), chapter: lastChapter, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
-			this.setActiveChapter(lastChapter);
-			// this.props.history.push(
-			// 	`/${activeTextId.toLowerCase()}/${previousBook
-			// 		.get('book_id')
-			// 		.toLowerCase()}/${lastChapter}`,
-			// );
-			// Goes to the previous Chapter
-		} else {
-			// If the chapter number is greater than the active chapter then weve gone too far and need to get the previous chapter
-			const activeChapterIndex = activeBook
-				.get('chapters')
-				.findIndex((c) => c === activeChapter || c > activeChapter);
-			// this.getChapters({ userAuthenticated, userId, bible: activeTextId, book: activeBookId, chapter: activeChapter - 1, audioObjects, hasTextInDatabase, formattedText: filesetTypes.text_formatt });
-			this.setActiveChapter(
-				activeBook.getIn(['chapters', activeChapterIndex - 1]),
-			);
-			// this.props.history.push(
-			// 	`/${activeTextId.toLowerCase()}/${activeBookId.toLowerCase()}/${activeBook.getIn(
-			// 		['chapters', activeChapterIndex - 1],
-			// 	)}`,
-			// );
-		}
-	};
+	// setNextVerse = (verse) => {
+	// 	const { bibleId, bookId, chapter } = this.props.match.params;
+	// 	const { chapterText } = this.props.homepage;
+	// 	const nextVerse = parseInt(verse, 10) + 1 || 1;
+	// 	const lastVerse = chapterText.length;
+	// 	// Is it past the max verses for the chapter?
+	// 	// if not increment it by 1
+	// 	if (nextVerse <= lastVerse && nextVerse > 0) {
+	// 		// this.props.history.push(
+	// 		// 	`/${bibleId.toLowerCase()}/${bookId.toLowerCase()}/${chapter}/${nextVerse}`,
+	// 		// );
+	// 	} else if (nextVerse < 0) {
+	// 		// this.props.history.replace(
+	// 		// 	`/${bibleId.toLowerCase()}/${bookId.toLowerCase()}/${chapter}/1`,
+	// 		// );
+	// 	} else if (nextVerse > lastVerse) {
+	// 		// this.props.history.replace(
+	// 		// 	`/${bibleId.toLowerCase()}/${bookId.toLowerCase()}/${chapter}/${lastVerse}`,
+	// 		// );
+	// 	}
+	// };
+	//
+	// setPrevVerse = (verse) => {
+	// 	const { bibleId, bookId, chapter } = this.props.match.params;
+	// 	const { chapterText } = this.props.homepage;
+	// 	const prevVerse = parseInt(verse, 10) - 1 || 1;
+	// 	const lastVerse = chapterText.length;
+	// 	// Is it past the max verses for the chapter?
+	// 	// if not increment it by 1
+	// 	if (prevVerse <= lastVerse && prevVerse > 0) {
+	// 		// this.props.history.push(
+	// 		// 	`/${bibleId.toLowerCase()}/${bookId.toLowerCase()}/${chapter}/${prevVerse}`,
+	// 		// );
+	// 	} else if (prevVerse < 0) {
+	// 		// this.props.history.replace(
+	// 		// 	`/${bibleId.toLowerCase()}/${bookId.toLowerCase()}/${chapter}/1`,
+	// 		// );
+	// 	} else if (prevVerse > lastVerse) {
+	// 		// this.props.history.replace(
+	// 		// 	`/${bibleId.toLowerCase()}/${bookId.toLowerCase()}/${chapter}/${lastVerse}`,
+	// 		// );
+	// 	}
+	// };
 
 	getBooks = (props) => this.props.dispatch(getBooks(props));
 
@@ -965,47 +854,6 @@ class HomePage extends React.PureComponent {
 		}
 	};
 
-	// handleAtBottom = () => {
-	// 	// console.log('inside handle at bottom');
-	// 	if (!document) {
-	// 		return;
-	// 	}
-	// 	// Need a way to undo all of this
-	// 	if (this.isAtBottom && !this.scrollingIntoView && !this.subIsInView) {
-	// 		console.log('Scroll sub footer into view');
-	//
-	// 		const subfooter = document.getElementById('sub-footer');
-	// 		// console.log('sub', subfooter);
-	//
-	// 		// subfooter.scrollIntoView({ behavior: 'smooth' });
-	// 		this.scrollingIntoView = true;
-	// 		this.subIsInView = true;
-	// 		// const app = document.getElementById('app');
-	// 		// const nav = document.getElementById('navigation-bar');
-	// 		// nav.style = { ...nav.style, position: 'fixed' };
-	// 		// app.firstElementChild.style = { ...app.firstElementChild.style, overflowY: 'scroll', overflowX: 'hidden' };
-	// 		// Need to check for screen size
-	// 		// app.firstElementChild.scrollTop = 136;
-	// 		// window.scroll({ top: 135, behavior: 'smooth' });
-	// 		// smoothscroll-polyfill
-	// 	} else if (this.subIsInView) {
-	// 		// Scroll back to top if no longer at the bottom
-	// 		console.log('Set scroll top back to 0 to hide the sub footer');
-	//
-	// 		// document.getElementById('app').firstElementChild.scrollTop = 0;
-	//
-	// 		this.scrollingIntoView = false;
-	// 		this.subIsInView = false;
-	// 		this.secondAnimFrame = false;
-	// 	}
-	// };
-
-	// scrollingIntoView = false;
-
-	// secondAnimFrame = false;
-
-	// subIsInView = false;
-
 	updateScrollDirection = () => {
 		this.main = document.getElementsByTagName('main')[0];
 		// const distance = this.isMobileSized ? 211 : 64;
@@ -1157,15 +1005,6 @@ class HomePage extends React.PureComponent {
 		// // this.props.history.replace(`/${localStorage.getItem('bible_is_1_bible_id') || 'engesv'}/${localStorage.getItem('bible_is_2_book_id') || 'mat'}/${localStorage.getItem('bible_is_3_chapter') || '1'}`)
 	};
 
-	goToFullChapter = () => {
-		const match = this.props.match;
-		if (match) {
-			const { bibleId, bookId, chapter } = this.props.match.params;
-
-			// this.props.history.push(`/${bibleId}/${bookId}/${chapter}`);
-		}
-	};
-
 	addBookmark = (data) => this.props.dispatch(addBookmark({ ...data }));
 
 	addHighlight = (props) =>
@@ -1242,7 +1081,7 @@ class HomePage extends React.PureComponent {
 			loadingAudio,
 			loadingCopyright,
 			loadingNewChapterText,
-			chapterText,
+			// chapterText,
 			// chapterText: updatedText,
 		} = this.props.homepage;
 
@@ -1384,7 +1223,7 @@ class HomePage extends React.PureComponent {
 					<Text
 						books={books}
 						userId={userId}
-						text={chapterText || updatedText}
+						text={updatedText}
 						distance={distance}
 						verseNumber={verse}
 						userNotes={userNotes}
@@ -1394,6 +1233,7 @@ class HomePage extends React.PureComponent {
 						highlights={highlights}
 						copyrights={copyrights}
 						audioSource={audioSource}
+						activeTextId={activeTextId}
 						activeBookId={activeBookId}
 						loadingAudio={loadingAudio}
 						userSettings={userSettings}
@@ -1418,12 +1258,9 @@ class HomePage extends React.PureComponent {
 						isMobileBp={this.isMobileSized()}
 						addBookmark={this.addBookmark}
 						addHighlight={this.addHighlight}
-						nextChapter={this.getNextChapter}
-						prevChapter={this.getPrevChapter}
 						setActiveNote={this.setActiveNote}
 						getCopyrights={this.getCopyrights}
 						isAudioPlayerBp={this.isAudioPlayerBp()}
-						goToFullChapter={this.goToFullChapter}
 						toggleNotesModal={this.toggleNotesModal}
 						deleteHighlights={this.deleteHighlights}
 						setActiveNotesView={this.setActiveNotesView}
@@ -1476,9 +1313,9 @@ class HomePage extends React.PureComponent {
 HomePage.propTypes = {
 	dispatch: PropTypes.func.isRequired,
 	homepage: PropTypes.object.isRequired,
-	activeBook: PropTypes.object,
-	previousBook: PropTypes.object,
-	nextBook: PropTypes.object,
+	// activeBook: PropTypes.object,
+	// previousBook: PropTypes.object,
+	// nextBook: PropTypes.object,
 	userSettings: PropTypes.object,
 	formattedSource: PropTypes.object,
 	history: PropTypes.object,
@@ -1495,9 +1332,9 @@ HomePage.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
 	homepage: makeSelectHomePage(),
-	previousBook: selectPrevBook(),
-	nextBook: selectNextBook(),
-	activeBook: selectActiveBook(),
+	// previousBook: selectPrevBook(),
+	// nextBook: selectNextBook(),
+	// activeBook: selectActiveBook(),
 	userSettings: selectSettings(),
 	formattedSource: selectFormattedSource(),
 	userAuthenticated: selectAuthenticationStatus(),
