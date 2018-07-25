@@ -52,7 +52,6 @@ app
 		server.get('/terms', (req, res) => handle(req, res));
 		server.get('/privacy-policy', (req, res) => handle(req, res));
 		server.get('/about-page', (req, res) => handle(req, res));
-		server.get('/404', (req, res) => handle(req, res));
 
 		// server.get('/:bibleId', (req, res) => {
 		// 	const actualPage = '/app';
