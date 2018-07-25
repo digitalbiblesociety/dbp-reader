@@ -10,6 +10,27 @@ app
 	.then(() => {
 		const server = express();
 
+		const sitemapOptions = {
+			root: `${__dirname}/static/sitemaps/`,
+			headers: {
+				'Content-Type': 'text/xml;charset=UTF-8',
+			},
+		};
+		server.get('/sitemap.xml', (req, res) =>
+			res.status(200).sendFile('sitemap-index.xml', sitemapOptions),
+		);
+
+		server.get('/dev-sitemap*', (req, res) =>
+			res.status(200).sendFile(req.originalUrl, sitemapOptions),
+		);
+
+		const faviconOptions = {
+			root: `${__dirname}/static/`,
+		};
+		server.get('/favicon.ico', (req, res) =>
+			res.status(200).sendFile('favicon.ico', faviconOptions),
+		);
+
 		// server.get('/p/:id', (req, res) => {
 		// 	const actualPage = '/post';
 		// 	const queryParams = { id: req.params.id };
@@ -99,23 +120,7 @@ app
 			nextP();
 		});
 
-		server.get('*', (req, res) => {
-			// console.log(
-			// 	'in get * with url: ',
-			// 	`${req.protocol}://${req.get('host')}${req.originalUrl}`,
-			// );
-
-			// const actualPage = '/app';
-			// // Params may not actually be passed using this method
-			// const queryParams = {
-			// 	bibleId: req.params.bibleId,
-			// 	bookId: req.params.bookId,
-			// 	chapter: req.params.chapter,
-			// 	verse: req.params.verse,
-			// };
-			// app.render(req, res, actualPage, queryParams);
-			return handle(req, res);
-		});
+		server.get('*', (req, res) => handle(req, res));
 
 		server.listen(3000, (err) => {
 			if (err) throw err;
