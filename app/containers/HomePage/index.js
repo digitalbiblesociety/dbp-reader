@@ -115,6 +115,7 @@ class HomePage extends React.PureComponent {
 	// eslint-disable-line react/prefer-stateless-function
 	componentDidMount() {
 		// Get the first bible based on the url here
+		console.log('Component did mount');
 
 		// May want to use replace here at some point
 		this.props.dispatch({
@@ -123,6 +124,8 @@ class HomePage extends React.PureComponent {
 			bookId: this.props.homepage.activeBookId,
 			chapter: this.props.homepage.activeChapter,
 		});
+
+		this.getCopyrights({ filesetIds: this.props.homepage.activeFilesets });
 
 		if (this.props.match.params.token) {
 			// Open Profile

@@ -7,10 +7,6 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
 import Link from 'next/link';
-// import { Link } from 'react-router-dom';
-// import styled from 'styled-components';
-// import { FormattedMessage } from 'react-intl';
-// import messages from './messages';
 
 function ChaptersContainer({
 	bookName,
@@ -19,10 +15,9 @@ function ChaptersContainer({
 	selectedBookName,
 	chapters,
 	activeTextId,
-	// book,
 	activeChapter,
 	activeBookName,
-	// handleChapterClick,
+	handleChapterClick,
 }) {
 	if (bookName || bookNameShort) {
 		return (
@@ -34,13 +29,18 @@ function ChaptersContainer({
 				}`}
 			>
 				{chapters.map((chapter) => (
-					<span className={'chapter-box'} key={chapter}>
-						<Link
-							href={`/${activeTextId.toLowerCase()}/${bookId.toLowerCase()}/${chapter}`}
-							as={`/bible/${activeTextId.toLowerCase()}/${bookId.toLowerCase()}/${chapter}`}
+					<Link
+						href={`/${activeTextId.toLowerCase()}/${bookId.toLowerCase()}/${chapter}`}
+						as={`/bible/${activeTextId.toLowerCase()}/${bookId.toLowerCase()}/${chapter}`}
+						key={chapter}
+					>
+						<a
+							role={'button'}
+							tabIndex={0}
+							className={'chapter-box'}
+							onClick={() => handleChapterClick()}
 						>
-							<a
-								// onClick={() => handleChapterClick(book, chapter)}
+							<span
 								className={
 									activeChapter === chapter &&
 									(bookName || bookNameShort) === activeBookName
@@ -49,9 +49,9 @@ function ChaptersContainer({
 								}
 							>
 								{chapter}
-							</a>
-						</Link>
-					</span>
+							</span>
+						</a>
+					</Link>
 				))}
 			</div>
 		);
@@ -64,13 +64,12 @@ ChaptersContainer.propTypes = {
 	activeTextId: PropTypes.string,
 	activeChapter: PropTypes.number,
 	activeBookName: PropTypes.string,
-	// handleChapterClick: PropTypes.func,
+	handleChapterClick: PropTypes.func,
 	selectedBookName: PropTypes.string,
 	bookName: PropTypes.string,
 	bookNameShort: PropTypes.string,
 	bookId: PropTypes.string,
 	chapters: PropTypes.object,
-	// book: PropTypes.object,
 };
 
 export default ChaptersContainer;

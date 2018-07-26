@@ -72,12 +72,6 @@ export class ChapterSelection extends React.PureComponent {
 	toggleChapterSelection = (props) =>
 		this.props.dispatch(toggleChapterSelection(props));
 
-	handleChapterToggle = () => {
-		document.removeEventListener('click', this.handleClickOutside);
-
-		this.toggleChapterSelection();
-	};
-
 	render() {
 		const { activeBookName, active } = this.props;
 

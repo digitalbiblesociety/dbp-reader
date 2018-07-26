@@ -120,14 +120,14 @@ class BooksTable extends React.PureComponent {
 		);
 	};
 
-	handleChapterClick = (book, chapter) => {
-		const { closeBookTable, setActiveChapter, setActiveBookName } = this.props;
+	handleChapterClick = () => {
+		const { closeBookTable } = this.props;
 
-		setActiveChapter(chapter);
-		setActiveBookName({
-			book: book.get('name') || book.get('name_short'),
-			id: book.get('book_id'),
-		});
+		// setActiveChapter(chapter);
+		// setActiveBookName({
+		// 	book: book.get('name') || book.get('name_short'),
+		// 	id: book.get('book_id'),
+		// });
 		closeBookTable();
 	};
 
@@ -336,8 +336,8 @@ class BooksTable extends React.PureComponent {
 BooksTable.propTypes = {
 	dispatch: PropTypes.func,
 	closeBookTable: PropTypes.func, // closes the window open
-	setActiveChapter: PropTypes.func, // Set chapter in parent component
-	setActiveBookName: PropTypes.func, // Set book in parent component
+	// setActiveChapter: PropTypes.func, // Set chapter in parent component
+	// setActiveBookName: PropTypes.func, // Set book in parent component
 	books: PropTypes.object,
 	audioObjects: PropTypes.array,
 	userId: PropTypes.string,

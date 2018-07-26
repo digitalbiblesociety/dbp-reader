@@ -69,8 +69,8 @@ main {
 	overflow-y: auto;
 	overflow-x: hidden;
 }
-html #app aside {
-	z-index: 2;
+html #__next aside {
+	z-index: 11;
 	@include css4 {
 		outline: 1px solid var(--menu-border-color);
 		border-bottom: 1px solid var(--menu-border-color);
