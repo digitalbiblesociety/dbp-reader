@@ -17,7 +17,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Helmet } from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { TransitionGroup } from 'react-transition-group';
@@ -1071,46 +1070,13 @@ class HomePage extends React.PureComponent {
 		// }
 		// console.log('text', updatedText);
 		// console.log('Homepage re-rendered bc reasons');
-		// Todo: Get token and verse off of context as well as the full location
-		const contextLocation = { href: 'https://is.bible.build/engesv/gen/1' };
-		// const token = this.props.match.params.token || '';
-		// const verse = this.props.match.params.verse || '';
-		const token = '';
-		const verse = '';
+		const token = this.props.match.params.token || '';
+		const verse = this.props.match.params.verse || '';
+		// const token = '';
+		// const verse = '';
 
 		return (
 			<GenericErrorBoundary affectedArea="Homepage">
-				<Helmet
-					meta={[
-						{
-							name: 'description',
-							content: 'Main page for the Bible.is web app',
-						},
-						{
-							property: 'og:title',
-							content: `${activeBookName} ${activeChapter}${
-								verse ? `:${verse}` : ''
-							}`,
-						},
-						{ property: 'og:url', content: contextLocation },
-						{
-							property: 'og:description',
-							content: 'Main page for the Bible.is web app',
-						},
-						{ property: 'og:type', content: 'website' },
-						{ property: 'og:site_name', content: 'Bible.is' },
-						{ property: 'og:image', content: '/static/apple-icon-180x180.png' },
-					]}
-				>
-					<title>
-						{`${activeBookName} ${activeChapter}${verse ? `:${verse}` : ''}`} |
-						Bible.is
-					</title>
-					<meta
-						name="description"
-						content="Main page for the Bible.is web app"
-					/>
-				</Helmet>
 				<div ref={this.handleHeightRef} className={'homepage'}>
 					<NavigationBar
 						userAgent={userAgent}

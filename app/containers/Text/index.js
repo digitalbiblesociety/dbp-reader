@@ -31,6 +31,15 @@ import {
 } from '../../utils/highlightingUtils';
 import getPreviousChapterUrl from '../../utils/getPreviousChapterUrl';
 import getNextChapterUrl from '../../utils/getNextChapterUrl';
+import {
+	calcDistance,
+	getClassNameForMain,
+	getClassNameForTextContainer,
+	getInlineStyleForTextContainer,
+	getReference,
+	isEndOfBible,
+	isStartOfBible,
+} from './textRenderUtils';
 // import differenceObject from 'utils/deepDifferenceObject';
 // import some from 'lodash/some';
 // import { addClickToNotes } from './htmlToReact';
@@ -63,11 +72,6 @@ class Text extends React.PureComponent {
 		this.applyNotesAndBookmarks = dynamic(import('./formattedTextUtils'));
 		this.applyNotes = this.applyNotesAndBookmarks.applyNotes;
 		this.applyBookmarks = this.applyNotesAndBookmarks.applyBookmarks;
-		// this.createHighlights = dynamic(import './formattedTextUtils');
-		// import createHighlights from './highlightPlainText';
-		// import createFormattedHighlights from './highlightFormattedText';
-		// import { applyNotes, applyBookmarks } from './formattedTextUtils';
-		// console.log('Component did mount with: ', this.format, ' and ', this.formatHighlight);
 		if (this.format) {
 			// console.log('setting event listeners on format');
 			this.setEventHandlersForFootnotes(this.format);
@@ -77,10 +81,6 @@ class Text extends React.PureComponent {
 			this.setEventHandlersForFootnotes(this.formatHighlight);
 			this.setEventHandlersForFormattedVerses(this.formatHighlight);
 		}
-
-		// if (this.main) {
-		// 	this.main.addEventListener('scroll', this.handleScrollOnMain, true);
-		// }
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -233,14 +233,6 @@ class Text extends React.PureComponent {
 		}
 	}
 
-	// componentWillUnmount() {
-	// 	if (this.main) {
-	// 		console.log('removed scroll listener');
-	//
-	// 		this.main.removeEventListener('scroll', this.handleScrollOnMain, true);
-	// 	}
-	// }
-
 	setEventHandlersForFormattedVerses = (ref) => {
 		// Set mousedown and mouseup events on verse elements
 		try {
@@ -373,13 +365,6 @@ class Text extends React.PureComponent {
 
 		this.props.setActiveNote({ note: existingNote || note });
 	};
-
-	getReference = (verseStart, verseEnd) =>
-		`${this.props.activeBookName} ${this.props.activeChapter}:${
-			verseStart === verseEnd || !verseEnd
-				? verseStart
-				: `${verseStart}-${verseEnd}`
-		}`;
 
 	getFirstVerse = (e) => {
 		// alert('mousedown fired');
@@ -978,7 +963,12 @@ class Text extends React.PureComponent {
 				notes: "''",
 				title: '',
 				bookmark: 1,
-				reference: this.getReference(verseStart, verseEnd),
+				reference: getReference(
+					verseStart,
+					verseEnd,
+					this.props.activeBookName,
+					this.props.activeChapter,
+				),
 				verse_start: verseStart,
 				verse_end: verseEnd,
 			});
@@ -1051,7 +1041,12 @@ class Text extends React.PureComponent {
 						color,
 						highlightStart: 0,
 						highlightedWords,
-						reference: this.getReference(verse, verse),
+						reference: getReference(
+							verse,
+							verse,
+							this.props.activeBookName,
+							this.props.activeChapter,
+						),
 					};
 				} else {
 					// console.log(this.main);
@@ -1083,7 +1078,12 @@ class Text extends React.PureComponent {
 						color,
 						highlightStart: 0,
 						highlightedWords,
-						reference: this.getReference(verse, verse),
+						reference: getReference(
+							verse,
+							verse,
+							this.props.activeBookName,
+							this.props.activeChapter,
+						),
 					};
 				}
 
@@ -1284,7 +1284,7 @@ class Text extends React.PureComponent {
 				// Not so sure about this, seems like in theory it should give me the node closest to the beginning but idk
 				let highlightStart = 0;
 				let highlightedWords = 0;
-				const dist = this.calcDist(
+				const dist = calcDistance(
 					lastVerse,
 					firstVerse,
 					!!this.props.formattedSource.main,
@@ -1367,7 +1367,7 @@ class Text extends React.PureComponent {
 					// 	color,
 					// 	highlightStart,
 					// 	highlightedWords,
-					// 	reference: this.getReference(firstVerse, lastVerse),
+					// 	reference: getReference(firstVerse, lastVerse, this.props.activeBookName, this.props.activeChapter),
 					// });
 					// If the color is none then we are assuming that the user wants whatever they highlighted to be removed
 					// We could either remove every highlight that was overlapped by this one, or we could try to update all
@@ -1406,7 +1406,12 @@ class Text extends React.PureComponent {
 							color,
 							highlightStart,
 							highlightedWords,
-							reference: this.getReference(firstVerse, lastVerse),
+							reference: getReference(
+								firstVerse,
+								lastVerse,
+								this.props.activeBookName,
+								this.props.activeChapter,
+							),
 						});
 					}
 				}
@@ -1425,25 +1430,6 @@ class Text extends React.PureComponent {
 
 		// Returning the highlight for testing purposes
 		return highlightObject;
-	};
-	// Because the system captures the verse numbers this needs to be used
-	calcDist = (l, f, p) => {
-		// l: lastVerse, f: firstVerse, p: isPlainText
-		// If the last verse is equal to the first verse then I don't need a diff
-		if (l === f) return 0;
-		let stringDiff = '';
-
-		for (let i = f + 1; i <= l; i += 1) {
-			// Adds the length of each verse number
-			stringDiff += i.toFixed(0);
-			// Adds 1 character for formatted and 2 for plain text to account for spaces in verse numbers
-			stringDiff += p ? '11' : '11';
-			// console.log(i);
-		}
-		// console.log('string diff', stringDiff);
-		// Gets the total length of the distance needed
-		return stringDiff.length;
-		// return l - f;
 	};
 
 	addFacebookLike = () => {
@@ -1583,175 +1569,8 @@ class Text extends React.PureComponent {
 		this.closeContextMenu();
 	};
 
-	get isEndOfBible() {
-		const books = this.props.books;
-		if (!books || !books.length) {
-			return false;
-		}
-		const book = books[books.length - 1];
-
-		if (!book) {
-			return false;
-		}
-		const chapters = book.chapters;
-		const chapter = chapters[chapters.length - 1];
-
-		const bookId = book.book_id;
-
-		return (
-			bookId === this.props.activeBookId && chapter === this.props.activeChapter
-		);
-	}
-
-	get isStartOfBible() {
-		const books = this.props.books;
-		if (!books || !books.length) {
-			return false;
-		}
-		const book = books[0];
-
-		if (!book) {
-			return false;
-		}
-		const chapter = book.chapters[0];
-		const bookId = book.book_id;
-
-		return (
-			bookId === this.props.activeBookId && chapter === this.props.activeChapter
-		);
-	}
-
-	get classNameForMain() {
-		const {
-			formattedSource,
-			userSettings,
-			textDirection,
-			menuIsOpen,
-		} = this.props;
-		const readersMode = userSettings.getIn([
-			'toggleOptions',
-			'readersMode',
-			'active',
-		]);
-		const oneVersePerLine = userSettings.getIn([
-			'toggleOptions',
-			'oneVersePerLine',
-			'active',
-		]);
-		const justifiedClass = userSettings.getIn([
-			'toggleOptions',
-			'justifiedText',
-			'active',
-		])
-			? 'justify'
-			: '';
-		const isRtl = textDirection === 'rtl' ? 'rtl' : '';
-		const menuOpenClass = menuIsOpen ? ' menu-is-open' : '';
-
-		// formattedSource.main && !readersMode && !oneVersePerLine ? '' : `chapter ${justifiedClass}`
-
-		return formattedSource.main && !readersMode && !oneVersePerLine
-			? `${isRtl}${menuOpenClass}`
-			: `chapter ${justifiedClass} ${isRtl}${menuOpenClass}`;
-	}
-
-	get textContainerClass() {
-		const { isScrollingDown, subFooterOpen } = this.props;
-		let classNames = 'text-container';
-
-		if (isScrollingDown) {
-			classNames += ' scrolled-down';
-		}
-
-		if (subFooterOpen && !isScrollingDown) {
-			classNames += ' sub-footer-open';
-		}
-
-		return classNames;
-	}
-
-	get textContainerStyle() {
-		// Should move these styles into different classes
-		const {
-			isLargeBp,
-			isAudioPlayerBp,
-			isMobileBp,
-			// distance,
-			isScrollingDown,
-			audioSource,
-			audioPlayerState,
-		} = this.props;
-		let headerHeight = 136;
-
-		if (isScrollingDown) {
-			headerHeight -= 5;
-		}
-
-		// if (!distance) {
-		// 	return {};
-		// }
-
-		if (isLargeBp) {
-			headerHeight += 25;
-
-			if (!audioSource || !audioPlayerState) {
-				// console.log(
-				// 	'audio source or state are false largeBP',
-				// 	audioPlayerState,
-				// 	audioSource,
-				// );
-				headerHeight -= 56;
-			}
-			// return {
-			// 	height: `calc(100vh - ${distance}px - ${headerHeight}215px)`,
-			// 	maxHeight: `calc(100vh - ${distance}px - ${headerHeight}215px)`,
-			// };
-		} else if (isAudioPlayerBp) {
-			headerHeight += 30;
-
-			if (!audioSource || !audioPlayerState) {
-				// console.log(
-				// 	'audio source or state are false audioplayerBP',
-				// 	audioPlayerState,
-				// 	audioSource,
-				// );
-				headerHeight -= 96;
-			}
-			// return {
-			// 	height: `calc(100vh - ${distance}px - ${headerHeight}220px)`,
-			// 	maxHeight: `calc(100vh - ${distance}px - ${headerHeight}220px)`,
-			// };
-		} else if (isMobileBp) {
-			headerHeight += 50;
-
-			if (!audioSource || !audioPlayerState) {
-				// console.log(
-				// 	'audio source or state are false small BP',
-				// 	audioPlayerState,
-				// 	audioSource,
-				// );
-				headerHeight -= 85;
-			}
-			// return {
-			// 	height: `calc(100vh - ${distance}px - ${headerHeight}220px)`,
-			// 	maxHeight: `calc(100vh - ${distance}px - ${headerHeight}220px)`,
-			// };
-		}
-
-		// return {
-		// 	height: `calc(100vh - ${distance}px - ${headerHeight}px)`,
-		// 	maxHeight: `calc(100vh - ${distance}px - ${headerHeight}px)`,
-		// };
-		return {
-			height: `calc(100vh - ${headerHeight}px)`,
-			maxHeight: `calc(100vh - ${headerHeight}px)`,
-		};
-	}
-
 	render() {
 		const {
-			// nextChapter,
-			// prevChapter,
 			activeChapter,
 			toggleNotesModal,
 			notesActive,
@@ -1763,7 +1582,6 @@ class Text extends React.PureComponent {
 			loadingCopyright,
 			userSettings,
 			verseNumber,
-			// goToFullChapter,
 			copyrights,
 			activeFilesets,
 			audioFilesetId,
@@ -1773,7 +1591,14 @@ class Text extends React.PureComponent {
 			plainTextFilesetId,
 			formattedTextFilesetId,
 			menuIsOpen,
-			// isScrollingDown,
+			isLargeBp,
+			isAudioPlayerBp,
+			isMobileBp,
+			isScrollingDown,
+			audioSource,
+			audioPlayerState,
+			subFooterOpen,
+			textDirection,
 		} = this.props;
 
 		const {
@@ -1804,8 +1629,18 @@ class Text extends React.PureComponent {
 		) {
 			return (
 				<div
-					style={this.textContainerStyle}
-					className={this.textContainerClass}
+					style={getInlineStyleForTextContainer(
+						isLargeBp,
+						isAudioPlayerBp,
+						isMobileBp,
+						isScrollingDown,
+						audioSource,
+						audioPlayerState,
+					)}
+					className={getClassNameForTextContainer(
+						isScrollingDown,
+						subFooterOpen,
+					)}
 				>
 					<LoadingSpinner />
 				</div>
@@ -1813,7 +1648,17 @@ class Text extends React.PureComponent {
 		}
 
 		return (
-			<div style={this.textContainerStyle} className={this.textContainerClass}>
+			<div
+				style={getInlineStyleForTextContainer(
+					isLargeBp,
+					isAudioPlayerBp,
+					isMobileBp,
+					isScrollingDown,
+					audioSource,
+					audioPlayerState,
+				)}
+				className={getClassNameForTextContainer(isScrollingDown, subFooterOpen)}
+			>
 				<Link
 					as={getPreviousChapterUrl(
 						books,
@@ -1835,17 +1680,17 @@ class Text extends React.PureComponent {
 				>
 					<div
 						onClick={
-							!this.isStartOfBible && !menuIsOpen
+							!isStartOfBible(books, activeBookId, activeChapter) && !menuIsOpen
 								? this.handleArrowClick
 								: () => {}
 						}
 						className={
-							!this.isStartOfBible && !menuIsOpen
+							!isStartOfBible(books, activeBookId, activeChapter) && !menuIsOpen
 								? 'arrow-wrapper'
 								: 'arrow-wrapper disabled'
 						}
 					>
-						{!this.isStartOfBible ? (
+						{!isStartOfBible(books, activeBookId, activeChapter) ? (
 							<SvgWrapper className="prev-arrow-svg" svgid="arrow_left" />
 						) : null}
 					</div>
@@ -1853,7 +1698,12 @@ class Text extends React.PureComponent {
 				<div className={'main-wrapper'}>
 					<main
 						ref={this.setMainRef}
-						className={this.classNameForMain}
+						className={getClassNameForMain(
+							formattedSource,
+							userSettings,
+							textDirection,
+							menuIsOpen,
+						)}
 						onScroll={this.handleScrollOnMain}
 					>
 						{(formattedSource.main && !readersMode && !oneVersePerLine) ||
@@ -1906,17 +1756,17 @@ class Text extends React.PureComponent {
 				>
 					<div
 						onClick={
-							!this.isEndOfBible && !menuIsOpen
+							!isEndOfBible(books, activeBookId, activeChapter) && !menuIsOpen
 								? this.handleArrowClick
 								: () => {}
 						}
 						className={
-							!this.isEndOfBible && !menuIsOpen
+							!isEndOfBible(books, activeBookId, activeChapter) && !menuIsOpen
 								? 'arrow-wrapper'
 								: 'arrow-wrapper disabled'
 						}
 					>
-						{!this.isEndOfBible ? (
+						{!isEndOfBible(books, activeBookId, activeChapter) ? (
 							<SvgWrapper className="next-arrow-svg" svgid="arrow_right" />
 						) : null}
 					</div>
