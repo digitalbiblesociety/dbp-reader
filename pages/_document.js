@@ -34,15 +34,6 @@ export default class MyDocument extends Document {
 						name="google-site-verification"
 						content="frHSU18EKPDnEoKj--plFdubfj_GB7hXesy-3N1o57s"
 					/>
-					<meta property="og:title" content="Bible.is" />
-					<meta property="og:url" content="https://is.bible.build" />
-					<meta
-						property="og:description"
-						content="Main page for the Bible.is web app"
-					/>
-					<meta property="og:type" content="website" />
-					<meta property="og:site_name" content="Bible.is" />
-					<meta property="og:image" content="/static/favicon-96x96.png" />
 					<meta property="fb:app_id" content="173528326559718" />
 					<script src="https://apis.google.com/js/platform.js" async defer />
 				</Head>

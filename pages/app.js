@@ -19,6 +19,7 @@ import 'rc-slider/assets/index.css';
 import 'react-accessible-accordion/dist/minimal-example.css';
 // import 'sanitize.css/sanitize.css';
 import fetch from 'isomorphic-fetch';
+import Head from 'next/head';
 // Load the favicon, the manifest.json file and the .htaccess file
 /* eslint-disable import/no-unresolved, import/extensions */
 // import '../static/apple-icon-72x72.png';
@@ -215,16 +216,45 @@ const AppContainer = (props) => {
 	return (
 		<Provider store={store}>
 			<LanguageProvider messages={translationMessages}>
-				{/* <ConnectedRouter history={history}> */}
-				<App appProps={props} />
-				{/* </ConnectedRouter> */}
+				<div>
+					<Head>
+						<meta
+							name={'description'}
+							content={chapterText.map((v) => v.verse_text).join(' ')}
+						/>
+						<meta
+							property={'og:title'}
+							content={`${activeBookName} ${activeChapter}${
+								props.match.params.verse ? `:${props.match.params.verse}` : ''
+							}`}
+						/>
+						<meta property={'og:url'} content="contextLocation" />
+						<meta
+							property={'og:description'}
+							content={chapterText.map((v) => v.verse_text).join(' ')}
+						/>
+						<meta property={'og:type'} content={'website'} />
+						<meta property={'og:site_name'} content={'Bible.is'} />
+						<meta
+							property={'og:image'}
+							content={'/static/apple-icon-180x180.png'}
+						/>
+						<title>
+							{`${activeBookName} ${activeChapter}${
+								props.match.params.verse ? `:${props.match.params.verse}` : ''
+							}`}{' '}
+							| Bible.is
+						</title>
+					</Head>
+					<App appProps={props} />
+				</div>
 			</LanguageProvider>
 		</Provider>
 	);
 };
 
 AppContainer.getInitialProps = async (context) => {
-	const { bibleId, bookId, chapter, verse } = context.query;
+	const { bibleId, bookId, chapter, verse, token } = context.query;
 	// let isServer = false;
 
 	if (!context.req) {
@@ -316,6 +346,7 @@ AppContainer.getInitialProps = async (context) => {
 				bookId,
 				chapter,
 				verse,
+				token,
 			},
 		},
 	};
@@ -336,6 +367,7 @@ AppContainer.propTypes = {
 	activeBookId: PropTypes.string,
 	defaultLanguageIso: PropTypes.string,
 	defaultLanguageName: PropTypes.string,
+	match: PropTypes.object,
 	// activeIsoCode: PropTypes.string,
 	// activeCountryName: PropTypes.string,
 	// activeLanguageName: PropTypes.string,
