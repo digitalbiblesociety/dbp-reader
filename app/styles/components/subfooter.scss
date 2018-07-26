@@ -1,0 +1,110 @@
+.footer-about-content {
+	display: flex;
+	width: 1000px;
+	max-width: 1000px;
+	font-size: 10px;
+	align-items: center;
+	//transition: height 0.2s ease-in-out;
+	justify-content: center;
+	flex-wrap: wrap;
+
+	.footer-link-container {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		min-width: 480px;
+	}
+
+	.footer-link {
+		//width: 20%;
+		height: 54px;
+		display: flex;
+		align-items: center;
+		width: 60px;
+		padding: 0 10px;
+		text-align: center;
+		justify-content: center;
+	}
+
+	.logo-container {
+		min-width: 384px;
+		max-width: 384px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.logo {
+		height: 54px;
+		width: calc(10% + 15px);
+		min-width: 111px;
+		display: flex;
+		align-items: center;
+		padding-left: 15px;
+
+		&:hover {
+			opacity: 0.65;
+			background: rgba(0, 0, 0, 0.2);
+		}
+		//max-width: 111px;
+		svg {
+			height: 26px;
+			width: 81px;
+		}
+	}
+	&.footer-hide {
+		// Not sure if I want to transform or display none...
+		//display: none;
+		height: 0;
+		box-sizing: content-box;
+		overflow: hidden;
+		flex: 0;
+		padding: 0;
+		//transform: translateY(100%);
+		//transition: height 0.3s, min-height 0.3s;
+	}
+}
+
+@media only screen and (max-width: 499px) {
+	.footer-about-content {
+		width: 320px;
+		max-width: 320px;
+		justify-content: center;
+		padding: 15px 10px;
+
+		.footer-link-container {
+			max-width: 300px;
+			min-width: 300px;
+			flex-wrap: wrap;
+			justify-content: center;
+		}
+
+		.logo-container {
+			min-width: 300px;
+			max-width: 300px;
+			flex-wrap: wrap;
+			justify-content: center;
+		}
+	}
+}
+
+@media only screen and (min-width: 500px) and (max-width: $large-bp) {
+	.footer-about-content {
+		width: 480px;
+		max-width: 480px;
+		justify-content: center;
+		padding: 15px 10px;
+
+		.footer-link-container {
+			//min-width: 480px;
+			min-width: 384px;
+			max-width: 384px;
+		}
+
+		.logo-container {
+			min-width: 384px;
+			max-width: 384px;
+			justify-content: center;
+		}
+	}
+}

@@ -6,10 +6,7 @@
 
 import React from 'react';
 import { PropTypes } from 'prop-types';
-import { Link } from 'react-router-dom';
-// import styled from 'styled-components';
-// import { FormattedMessage } from 'react-intl';
-// import messages from './messages';
+import Link from 'next/link';
 
 function ChaptersContainer({
 	bookName,
@@ -18,7 +15,6 @@ function ChaptersContainer({
 	selectedBookName,
 	chapters,
 	activeTextId,
-	book,
 	activeChapter,
 	activeBookName,
 	handleChapterClick,
@@ -34,21 +30,27 @@ function ChaptersContainer({
 			>
 				{chapters.map((chapter) => (
 					<Link
-						to={`/${activeTextId.toLowerCase()}/${bookId.toLowerCase()}/${chapter}`}
+						href={`/${activeTextId.toLowerCase()}/${bookId.toLowerCase()}/${chapter}`}
+						as={`/bible/${activeTextId.toLowerCase()}/${bookId.toLowerCase()}/${chapter}`}
 						key={chapter}
-						onClick={() => handleChapterClick(book, chapter)}
-						className={'chapter-box'}
 					>
-						<span
-							className={
-								activeChapter === chapter &&
-								(bookName || bookNameShort) === activeBookName
-									? 'active-chapter'
-									: ''
-							}
+						<a
+							role={'button'}
+							tabIndex={0}
+							className={'chapter-box'}
+							onClick={() => handleChapterClick()}
 						>
-							{chapter}
-						</span>
+							<span
+								className={
+									activeChapter === chapter &&
+									(bookName || bookNameShort) === activeBookName
+										? 'active-chapter'
+										: ''
+								}
+							>
+								{chapter}
+							</span>
+						</a>
 					</Link>
 				))}
 			</div>
@@ -68,7 +70,6 @@ ChaptersContainer.propTypes = {
 	bookNameShort: PropTypes.string,
 	bookId: PropTypes.string,
 	chapters: PropTypes.object,
-	book: PropTypes.object,
 };
 
 export default ChaptersContainer;

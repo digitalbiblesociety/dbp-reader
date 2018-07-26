@@ -18,13 +18,13 @@ import {
 	getChapterText,
 	// setActiveBookName,
 	// setActiveChapter,
-} from 'containers/HomePage/actions';
-import LoadingSpinner from 'components/LoadingSpinner';
-import ChaptersContainer from 'components/ChaptersContainer';
+} from '../../containers/HomePage/actions';
+import LoadingSpinner from '../LoadingSpinner';
+import ChaptersContainer from '../ChaptersContainer';
 import {
 	selectAuthenticationStatus,
 	selectUserId,
-} from 'containers/HomePage/selectors';
+} from '../../containers/HomePage/selectors';
 import {
 	selectActiveTextId,
 	selectBooks,
@@ -120,14 +120,14 @@ class BooksTable extends React.PureComponent {
 		);
 	};
 
-	handleChapterClick = (book, chapter) => {
-		const { closeBookTable, setActiveChapter, setActiveBookName } = this.props;
+	handleChapterClick = () => {
+		const { closeBookTable } = this.props;
 
-		setActiveChapter(chapter);
-		setActiveBookName({
-			book: book.get('name') || book.get('name_short'),
-			id: book.get('book_id'),
-		});
+		// setActiveChapter(chapter);
+		// setActiveBookName({
+		// 	book: book.get('name') || book.get('name_short'),
+		// 	id: book.get('book_id'),
+		// });
 		closeBookTable();
 	};
 
@@ -158,6 +158,8 @@ class BooksTable extends React.PureComponent {
 		} = this.props;
 		const { selectedBookName } = this.state;
 		// console.log('Rendering again');
+		// console.log('books', books);
+		// console.log('this.props', this.props);
 
 		if (loadingBooks) {
 			return <LoadingSpinner />;
@@ -334,8 +336,8 @@ class BooksTable extends React.PureComponent {
 BooksTable.propTypes = {
 	dispatch: PropTypes.func,
 	closeBookTable: PropTypes.func, // closes the window open
-	setActiveChapter: PropTypes.func, // Set chapter in parent component
-	setActiveBookName: PropTypes.func, // Set book in parent component
+	// setActiveChapter: PropTypes.func, // Set chapter in parent component
+	// setActiveBookName: PropTypes.func, // Set book in parent component
 	books: PropTypes.object,
 	audioObjects: PropTypes.array,
 	userId: PropTypes.string,

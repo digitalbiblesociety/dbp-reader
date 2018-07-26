@@ -1,8 +1,8 @@
 import { takeLatest, call, fork, put } from 'redux-saga/effects';
-import territoryCodes from 'utils/territoryCodes.json';
-// import languageList from 'utils/languagesWithResources.json';
-import request from 'utils/request';
 import { fromJS } from 'immutable';
+import territoryCodes from '../../utils/territoryCodes.json';
+// import languageList from 'utils/languagesWithResources.json';
+import request from '../../utils/request';
 import {
 	GET_COUNTRIES,
 	GET_COUNTRY,

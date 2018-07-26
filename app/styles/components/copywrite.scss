@@ -2,7 +2,7 @@
 // will need more styling once we have all the correct data
 .information {
 	color: #aaa;
-	margin-bottom: 65px;
+	//margin-bottom: 65px;
 
 	&:before {
 		content: '';
@@ -149,20 +149,20 @@
 	}
 }
 
-@media only screen and (min-width: 500px) and (max-width: $large-bp) {
-	.information {
-		margin-bottom: 155px;
-	}
-
-	@media only screen and (max-width: $audio-player-bp) {
-		.information {
-			margin-bottom: 180px;
-		}
-	}
-}
-
-@media only screen and (max-width: 499px) {
-	.information {
-		margin-bottom: 230px;
-	}
-}
+//@media only screen and (min-width: 500px) and (max-width: $large-bp) {
+//	.information {
+//		margin-bottom: 155px;
+//	}
+//
+//	@media only screen and (max-width: $audio-player-bp) {
+//		.information {
+//			margin-bottom: 180px;
+//		}
+//	}
+//}
+//
+//@media only screen and (max-width: 499px) {
+//	.information {
+//		margin-bottom: 230px;
+//	}
+//}

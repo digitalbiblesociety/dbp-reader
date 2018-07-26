@@ -1,0 +1,792 @@
+.notes {
+	z-index: 1;
+	position: fixed;
+	top: 0;
+	right: 0;
+	height: calc(100% - 56px);
+	width: 320px;
+	@include css4 {
+		background-color: var(--menu-body-background-color);
+		color: var(--default-text-color);
+	}
+}
+.notes header {
+	position: relative;
+	@include css4 {
+		background-color: var(--menu-header-background-color);
+		color: var(--default-text-color);
+	}
+	text-align: center;
+	height: 54px;
+	line-height: 54px;
+	font-size: 1.05em;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	padding: 15px;
+	.book-icon-header {
+		margin-right: 15px;
+	}
+}
+//.notes header .close-icon {
+//  position:absolute;
+//  top:7px;
+//  left:10px;
+//}
+//.notes header .close-icon:hover {cursor:pointer;opacity:0.8;}
+
+.notes {
+	.input-wrapper {
+		display: flex;
+		align-items: center;
+
+		.icon {
+			flex-shrink: 0;
+			margin-left: 15px;
+		}
+	}
+
+	input {
+		background-color: inherit;
+		font-size: 0.98em;
+		margin-left: 15px;
+		margin-right: 15px;
+		width: 200px;
+
+		@include css4 {
+			color: var(--default-text-color);
+		}
+	}
+
+	textarea {
+		resize: none;
+		background-color: inherit;
+		border: none;
+		font-size: 0.98em;
+	}
+	textarea::-webkit-input-placeholder {
+		@include css4 {
+			color: var(--default-text-color);
+		}
+	}
+	textarea::-moz-placeholder {
+		@include css4 {
+			color: var(--default-text-color);
+		}
+	}
+	textarea:-ms-input-placeholder {
+		@include css4 {
+			color: var(--default-text-color);
+		}
+	}
+	textarea:focus {
+		outline: none;
+	}
+	textarea:focus::-webkit-input-placeholder {
+		color: transparent;
+	}
+	textarea:focus::-moz-placeholder {
+		color: transparent;
+	}
+	textarea:focus:-ms-input-placeholder {
+		color: transparent;
+	}
+}
+// Svg
+.notes .top-bar {
+	display: flex;
+	height: 54px;
+	width: 100%;
+	align-items: center;
+
+	@include css4 {
+		background-color: inherit;
+	}
+
+	.nav-button {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		padding: 5px 0;
+		width: 33%;
+		height: 54px;
+
+		&.active {
+			@include css4 {
+				background-color: var(--menu-background-color-opaque);
+			}
+		}
+
+		&:hover {
+			cursor: pointer;
+			@include css4 {
+				background-color: var(--menu-background-color-opaque);
+			}
+		}
+
+		h1 {
+			text-align: center;
+		}
+
+		svg {
+			margin: 0;
+			flex-shrink: 0;
+		}
+	}
+}
+.notes .top-bar *:focus {
+	outline: none;
+}
+.notes .top-bar .svg.active {
+	@include css4 {
+		fill: var(--active-color-primary);
+	}
+	opacity: 1;
+}
+.notes .top-bar .svg {
+	opacity: 1;
+	cursor: pointer;
+	@include css4 {
+		fill: var(--default-text-color);
+	}
+	margin-left: 15px;
+}
+.notes .top-bar .text {
+	@include css4 {
+		color: var(--default-text-color);
+	}
+	margin-left: 15px;
+}
+
+// Edit Notes Section
+.edit-notes {
+	height: calc(100% - 104px);
+	overflow-x: hidden;
+	overflow-y: auto;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-content: stretch;
+
+	.go-back {
+		width: 100%;
+		height: 50px;
+		display: flex;
+		align-items: center;
+		justify-content: flex-start;
+
+		svg {
+			flex-shrink: 0;
+			margin-left: 20px;
+		}
+
+		span {
+			margin-left: 25px;
+		}
+
+		&:hover {
+			cursor: pointer;
+			@include css4 {
+				color: var(--active-color-primary);
+			}
+		}
+
+		@include css4 {
+			background-color: var(--menu-background-color-opaque);
+		}
+	}
+
+	.date-title {
+		display: flex;
+		align-items: center;
+		flex-direction: column;
+		height: 50px;
+		width: 100%;
+		margin-top: 10px;
+		//padding:15px;
+		padding: 0 25px;
+
+		input {
+			margin: unset;
+		}
+
+		.date {
+			font-size: 10px;
+			align-self: flex-start;
+			@include css4 {
+				color: var(--profile-forgot-password-color);
+			}
+		}
+
+		.title {
+			@include css4 {
+				color: var(--default-text-color);
+			}
+			//margin-left:15px;
+			width: 100%;
+			font-weight: 200;
+		}
+	}
+
+	.delete-note-section {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		height: 50px;
+		width: 100%;
+		padding: 0 20px;
+
+		.save-button {
+			cursor: pointer;
+			font-size: 1.05em;
+			//padding:15px;
+			//width: 70px;
+			//float: right;
+
+			&.failed {
+				color: $sketch-document-color-error;
+			}
+		}
+
+		.save-button:hover {
+			@include css4 {
+				color: var(--active-color-primary);
+			}
+		}
+
+		.saved-note {
+			font-style: italic;
+
+			@include css4 {
+				color: var(--active-color-primary);
+			}
+		}
+
+		.delete-button {
+			display: flex;
+			align-items: center;
+			cursor: pointer;
+			font-size: 1.05em;
+			//flex-grow: 2;
+			//padding-left: 10px;
+			//float: left;
+
+			&:hover {
+				@include css4 {
+					color: var(--active-color-primary);
+				}
+			}
+		}
+
+		.icon {
+			//&:hover + .delete-button {
+			//  @include css4 {
+			//    color: var(--active-color-primary);
+			//  }
+			//}
+			//& + .delete-button:hover {
+			//  @include css4 {
+			//    color: var(--active-color-primary);
+			//  }
+			//}
+			//&:hover {
+			//& + .delete-button {
+			//  @include css4 {
+			//    color: var(--active-color-primary);
+			//  }
+			//}
+			//  @include css4 {
+			//    color: var(--active-color-primary);
+			//  }
+			//}
+			margin-right: 10px;
+			flex-shrink: 0;
+		}
+		//align-self: center;
+
+		@include css4 {
+			background-color: var(--notebook-footer-background-color);
+		}
+	}
+}
+
+.edit-notes .verse-dropdown {
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+	width: 100%;
+	height: 40px;
+	padding: 15px;
+}
+.verse-dropdown .version-dropdown {
+	@include css4 {
+		color: var(--active-color-primary);
+	}
+}
+.verse-dropdown .svg {
+	fill: currentColor;
+}
+.verse-dropdown.open .icon {
+	transform: rotate(0.25turn);
+}
+.verse-dropdown .svg:hover {
+	opacity: 0.65;
+	cursor: pointer;
+}
+.verse-dropdown .text {
+	@include css4 {
+		color: var(--default-text-color);
+	}
+	margin-left: 15px;
+	flex-grow: 2;
+}
+
+.edit-notes .add-verse {
+	height: 30px;
+	display: flex;
+	width: 100%;
+	align-items: center;
+	padding: 15px;
+}
+.add-verse .plus {
+	fill: currentColor;
+}
+.add-verse .plus:hover {
+	opacity: 0.65;
+	cursor: pointer;
+}
+.add-verse .text {
+	@include css4 {
+		color: var(--default-text-color);
+	}
+	margin-left: 15px;
+	font-style: italic;
+}
+.edit-notes .note-text {
+	padding: 15px;
+	height: 100px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	width: 100%;
+	font-style: italic;
+	margin-top: 15px;
+	font-weight: 200;
+	flex-grow: 2;
+
+	@include css4 {
+		color: var(--default-text-color);
+		caret-color: var(--application-text-caret-color);
+	}
+}
+
+.add-verse-expanded {
+	padding: 15px;
+	height: 100px;
+	width: 320px;
+	display: flex;
+	@include css4 {
+		background-color: var(--menu-body-background-color);
+		border: 1px solid var(--active-color-primary);
+	}
+}
+.add-verse-expanded .book-table {
+	width: 280px;
+}
+.add-verse-expanded .plus-expanded {
+	@include css4 {
+		background-color: var(--active-color-primary);
+		height: 100%;
+		width: 40px;
+	}
+}
+.add-verse-expanded .plus-expanded svg {
+	width: 20px;
+	height: 20px;
+	margin-left: 10px;
+	margin-top: 5px;
+	cursor: pointer;
+}
+
+.edit-notes .verse-text {
+	padding: 10px 15px;
+	@include css4 {
+		background-color: var(--notebook-footer-background-color);
+		color: var(--default-text-color);
+	}
+	max-height: 100px;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+// List Sections
+.list-sections {
+	height: calc(100% - 104px);
+	max-height: calc(100% - 104px);
+}
+.list-sections .searchbar {
+	display: flex;
+	width: 100%;
+	height: 50px;
+}
+.searchbar .add-note {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	@include css4 {
+		background-color: var(--active-color-primary);
+	}
+	width: 50px;
+	height: 50px;
+	cursor: pointer;
+}
+.searchbar ::-webkit-input-placeholder {
+	@include css4 {
+		color: var(--application-input-placeholder-color);
+	}
+}
+.searchbar ::-moz-placeholder {
+	@include css4 {
+		color: var(--application-input-placeholder-color);
+	}
+}
+.searchbar :-ms-input-placeholder {
+	@include css4 {
+		color: var(--application-input-placeholder-color);
+	}
+}
+.searchbar .search {
+	width: calc(100% - 50px);
+	border: none;
+	height: 50px;
+	@include css4 {
+		background-color: var(--application-input-background);
+		color: var(--default-text-color);
+		caret-color: var(--application-text-caret-color);
+	}
+	font-size: 0.9em;
+	font-weight: 200;
+	padding-left: 10px;
+}
+
+.note-list {
+	height: calc(100% - 100px);
+	max-height: calc(100% - 100px);
+	overflow-y: auto;
+	overflow-x: hidden;
+	//background-color:rgb(26,29,33);
+	padding: 15px;
+}
+.note-list .list-item {
+	display: flex;
+}
+.note-list .list-item:hover {
+	cursor: pointer;
+	opacity: 0.85;
+}
+.list-item .title-text {
+	display: flex;
+	flex-direction: column;
+	margin-right: 15px;
+}
+.list-item .title-text .title {
+	display: inline-block;
+	position: relative;
+	overflow: hidden;
+	white-space: nowrap;
+	span.date {
+		@include css4 {
+			color: var(--notebook-title-date-color);
+		}
+	}
+	&:after {
+		content: '';
+		width: 100%;
+		max-width: 290px;
+		height: 54px;
+		position: absolute;
+		top: 0;
+		left: 0;
+		@include css4 {
+			background: -webkit-linear-gradient(
+				to right,
+				var(--menu-body-background-color-transparent) 75%,
+				var(--menu-body-background-color)
+			);
+			background: -moz-linear-gradient(
+				to right,
+				var(--menu-body-background-color-transparent) 75%,
+				var(--menu-body-background-color)
+			);
+			background: linear-gradient(
+				to right,
+				var(--menu-body-background-color-transparent) 75%,
+				var(--menu-body-background-color)
+			);
+		}
+	}
+	@include css4 {
+		color: var(--default-text-color);
+	}
+}
+.list-item .title-text .text {
+	display: inline-block;
+	position: relative;
+	overflow: hidden;
+	white-space: nowrap;
+	&:after {
+		content: '';
+		width: 100%;
+		max-width: 290px;
+		height: 54px;
+		position: absolute;
+		top: 0;
+		left: 0;
+		@include css4 {
+			background: -webkit-linear-gradient(
+				to right,
+				var(--menu-body-background-color-transparent) 75%,
+				var(--menu-body-background-color)
+			);
+			background: -moz-linear-gradient(
+				to right,
+				var(--menu-body-background-color-transparent) 75%,
+				var(--menu-body-background-color)
+			);
+			background: linear-gradient(
+				to right,
+				var(--menu-body-background-color-transparent) 75%,
+				var(--menu-body-background-color)
+			);
+		}
+	}
+
+	@include css4 {
+		color: var(--default-text-color);
+	}
+}
+
+.list-sections .pagination {
+	display: flex;
+	align-items: center;
+	height: 50px;
+	@include css4 {
+		background-color: var(--notebook-footer-background-color);
+	}
+}
+.pagination .item-list {
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	height: 50px;
+	width: calc(100% - 120px);
+	margin: 0 15px;
+}
+.pagination .item-list .item:hover {
+	@include css4 {
+		color: var(--active-color-primary);
+	}
+}
+.pagination .item-list .item.active {
+	@include css4 {
+		color: var(--active-color-primary);
+	}
+}
+
+.page-size-selector {
+	display: flex;
+	align-items: center;
+	height: 50px;
+	width: 120px;
+	font-size: 0.98em;
+	font-weight: 200;
+}
+.page-size-selector .open {
+	display: flex;
+	@include css4 {
+		border: 1px solid var(--active-color-primary);
+		background-color: var(--menu-body-background-color);
+	}
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-between;
+	position: absolute;
+	height: 150px;
+	width: 120px;
+	//bottom:55px;
+	bottom: 0;
+	right: 0;
+	font-size: 14px;
+	:first-child {
+		margin-top: 5px;
+	}
+	:last-child {
+		margin-bottom: 10px;
+	}
+}
+.page-size-selector .open div {
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	:last-child {
+		margin: 5px 6px 0 6px;
+	}
+	width: 100%;
+}
+.page-size-selector .open div span.text {
+	text-align: right;
+}
+.page-size-selector .open div span.svg-placeholder {
+	width: 7px;
+	height: 13px;
+}
+.page-size-selector .open div:hover {
+	opacity: 0.65;
+	@include css4 {
+		color: var(--active-color-primary);
+	}
+}
+.page-size-selector .open div.active {
+	@include css4 {
+		fill: var(--active-color-primary);
+		color: var(--active-color-primary);
+	}
+}
+.page-size-selector .closed {
+	display: none;
+	background-color: inherit;
+}
+.page-size-selector .per-page-toggle:hover {
+	opacity: 0.65;
+	cursor: pointer;
+	@include css4 {
+		color: var(--active-color-primary);
+	}
+}
+
+// Highlight Tab Styles
+.notes {
+	.color-picker {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		height: 56px;
+
+		@include css4 {
+			background-color: var(--notebook-footer-background-color);
+		}
+
+		.color-group {
+			display: flex;
+			justify-content: center;
+			height: 26px;
+			width: 20%;
+
+			:first-child {
+				width: 26px;
+				height: 26px;
+				border-radius: 50%;
+				@include css4 {
+					border: 1px solid var(--default-text-color);
+				}
+				cursor: pointer;
+			}
+		}
+	}
+
+	.highlight-item {
+		display: flex;
+		//padding: 10px;
+		align-items: flex-end;
+		justify-content: space-between;
+		height: 54px;
+
+		.list-item {
+			flex-basis: 75%;
+			max-width: 75%;
+			display: inline-block;
+		}
+
+		.delete-highlight {
+			display: flex;
+			flex-direction: column;
+			font-size: 12px;
+			justify-content: center;
+			align-items: center;
+			flex-basis: 12.5%;
+
+			svg {
+				flex-shrink: 0;
+			}
+
+			&:hover {
+				cursor: pointer;
+				opacity: 0.65;
+			}
+		}
+
+		.edit-note {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			position: relative;
+			font-size: 12px;
+			flex-basis: 12.5%;
+
+			&:hover {
+				cursor: pointer;
+				opacity: 0.65;
+			}
+		}
+
+		.edit-color {
+			position: relative;
+			font-size: 12px;
+			flex-basis: 12.5%;
+			cursor: pointer;
+
+			.color-icon:before {
+				// Setting the background color inline because it is based on the highlight objects color field
+				content: '';
+				position: absolute;
+				background-color: inherit;
+				height: 22px;
+				width: 22px;
+				top: -25px;
+				//left: 5px;
+				-webkit-border-radius: 50%;
+				-moz-border-radius: 50%;
+				border-radius: 50%;
+
+				@include css4 {
+					border: 1px solid var(--default-text-color);
+				}
+			}
+		}
+	}
+}
+
+// Keyframe animations
+@keyframes rotate90deg {
+	0% {
+		transform: rotate(0turn);
+	}
+	20% {
+		transform: rotate(0.05turn);
+	}
+	40% {
+		transform: rotate(0.1turn);
+	}
+	60% {
+		transform: rotate(0.15turn);
+	}
+	80% {
+		transform: rotate(0.2turn);
+	}
+	100% {
+		transform: rotate(0.25turn);
+	}
+}

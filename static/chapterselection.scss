@@ -1,0 +1,243 @@
+.chapter-text-dropdown {
+	display: flex;
+	flex-direction: column;
+	position: absolute;
+	top: 54px;
+	left: 0;
+	right: 0;
+	min-width: 291px;
+	//left:calc(50% - 116px);
+	height: calc(100vh - 110px);
+	@include css4 {
+		background-color: var(--menu-body-background-color);
+		color: var(--default-text-color);
+	}
+	z-index: 3;
+
+	header {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		@include css4 {
+			background: var(--menu-header-background-color);
+			color: var(--default-text-color);
+		}
+		text-align: center;
+		height: 54px;
+		line-height: 54px;
+		white-space: nowrap;
+
+		.close-icon {
+			margin-left: 20px;
+		}
+	}
+
+	.chapter-selection-section {
+		max-height: 100%;
+		height: 100%;
+		//text-transform:uppercase;
+		//padding: 15px;
+	}
+
+	.chapter-box {
+		//display:block;
+		width: 55px;
+		height: 30px;
+		//float: left;
+		text-align: center;
+
+		&:hover {
+			cursor: pointer;
+
+			@include css4 {
+				color: var(--active-color-primary);
+				background-color: #eee;
+			}
+		}
+	}
+
+	.chapter-container {
+		//  display:grid;
+		//  margin:auto;
+		//  padding-top:10px;
+		//  grid-template-columns:repeat(5,60px);
+		//  grid-template-rows:auto;
+		display: flex;
+		flex-wrap: wrap;
+		flex-shrink: 0;
+		min-height: 30px;
+		height: auto;
+		margin-top: 15px;
+		margin-bottom: 15px;
+		//padding-top:5px;
+		padding: 10px 15px 5px 15px;
+		clear: both;
+		//overflow:auto;
+		@include css4 {
+			background-color: var(--text-selection-accordion-body-background);
+			//color: var(--book-dropdown-text-color);
+		}
+
+		&.inactive-book-chapters {
+			display: none;
+		}
+
+		&.active-book-chapters {
+			display: flex;
+		}
+
+		.book-list-section {
+			width: 100%;
+			min-height: 50px;
+
+			.book-list-section-title {
+				padding: 15px;
+				min-height: 50px;
+				height: 50px;
+				width: 100%;
+				@include css4 {
+					background-color: var(--text-selection-accordion-title-background);
+				}
+
+				&:hover {
+					cursor: default;
+				}
+				//filter:invert(1);
+			}
+			//padding:15px;
+
+			//.accordion {
+			//  padding: 15px;
+			//}
+			.accordion-title-style {
+				//&aria-selected["true"]
+				@include css4 {
+					background-color: var(--text-selection-accordion-body-background);
+				}
+				&:last-child {
+					padding-bottom: 15px;
+				}
+				padding-top: 15px;
+				//padding-left: 15px;
+				cursor: pointer;
+
+				& .accordion__title[aria-selected='true'] {
+					padding-bottom: 15px;
+					@include css4 {
+						color: var(--active-color-primary);
+					}
+				}
+
+				& .accordion__title {
+					padding: 0 15px;
+				}
+
+				&:hover {
+					@include css4 {
+						color: var(--active-color-primary);
+					}
+				}
+			}
+
+			.accordion-body-style {
+				//padding:15px 0 15px 0;
+				@include css4 {
+					color: var(--text-selection-text-color);
+					background-color: var(--text-selection-accordion-title-background);
+				}
+			}
+		}
+	}
+
+	.active-book {
+		@include css4 {
+			color: var(--active-color-primary);
+		}
+	}
+
+	.book-container {
+		max-height: 100%;
+		height: 100%;
+		overflow-y: auto;
+		overflow-x: hidden;
+		-webkit-overflow-scrolling: touch;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.testament-title {
+		display: block;
+		width: 100%;
+		cursor: default;
+		margin-bottom: 15px;
+		padding-top: 1px;
+		height: 40px;
+		font-size: 1.2em;
+		text-align: center;
+		@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+			//margin-top: 1em;
+			margin-bottom: 2em;
+		}
+
+		h3 {
+			display: block;
+			width: 100%;
+			@include css4 {
+				background-color: var(--book-dropdown-section-background-color);
+			}
+		}
+		@include css4 {
+			background-color: var(--book-dropdown-section-background-color);
+		}
+	}
+
+	.book-button {
+		//display: inline-block;
+		display: flex;
+		flex-direction: column;
+		flex-shrink: 0;
+		//margin-bottom:10px;
+		min-height: 36px;
+		//height: 36px;
+		width: 100%;
+		//padding: 0 15px 5px 15px;
+		//padding-bottom: 5px;
+		clear: both;
+		overflow: hidden;
+
+		h4 {
+			padding: 0 15px;
+		}
+
+		h4:hover {
+			cursor: pointer;
+			@include css4 {
+				color: var(--active-color-secondary);
+			}
+		}
+	}
+
+	.active-chapter {
+		@include css4 {
+			color: var(--active-color-primary);
+		}
+	}
+}
+
+@media only screen and (max-width: $chapter-dropdown-bp) {
+	.chapter-text-dropdown {
+		width: 291px;
+		position: fixed;
+		right: 0;
+		left: unset;
+	}
+}
+
+@media only screen and (max-width: 720px) {
+	.chapter-text-dropdown .chapter-box {
+		width: 52px;
+		height: 30px;
+		float: left;
+		text-align: center;
+	}
+}

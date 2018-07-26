@@ -2,6 +2,7 @@
 	width: 100%;
 	height: 54px;
 	display: flex;
+	position: fixed;
 	justify-content: center;
 	z-index: 10;
 	@include css4 {

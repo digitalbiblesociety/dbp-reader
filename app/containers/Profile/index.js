@@ -9,16 +9,16 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import injectSaga from 'utils/injectSaga';
-import injectReducer from 'utils/injectReducer';
-import SignUp from 'components/SignUp';
-import Login from 'components/Login';
-import PasswordReset from 'components/PasswordReset';
-import AccountSettings from 'components/AccountSettings';
-import GenericErrorBoundary from 'components/GenericErrorBoundary';
-import SvgWrapper from 'components/SvgWrapper';
-import PasswordResetVerified from 'components/PasswordResetVerified';
-import CloseMenuFunctions from 'utils/closeMenuFunctions';
+import injectSaga from '../../utils/injectSaga';
+import injectReducer from '../../utils/injectReducer';
+import SignUp from '../../components/SignUp';
+import Login from '../../components/Login';
+import PasswordReset from '../../components/PasswordReset';
+import AccountSettings from '../../components/AccountSettings';
+import GenericErrorBoundary from '../../components/GenericErrorBoundary';
+import SvgWrapper from '../../components/SvgWrapper';
+import PasswordResetVerified from '../../components/PasswordResetVerified';
+import CloseMenuFunctions from '../../utils/closeMenuFunctions';
 import {
 	selectAccountOption,
 	sendLoginForm,
@@ -30,6 +30,7 @@ import {
 	updatePassword,
 	updateUserInformation,
 	deleteUser,
+	setUserLoginStatus,
 	logout,
 	viewErrorMessage,
 	clearErrorMessage,
@@ -54,6 +55,26 @@ export class Profile extends React.PureComponent {
 			this.props.toggleProfile,
 		);
 		this.closeMenuController.onMenuMount();
+		const userProfile = {};
+		const userId =
+			localStorage.getItem('bible_is_user_id') ||
+			sessionStorage.getItem('bible_is_user_id');
+		const userAuthenticated = !!(
+			localStorage.getItem('bible_is_user_id') ||
+			sessionStorage.getItem('bible_is_user_id')
+		);
+		userProfile.email = sessionStorage.getItem('bible_is_12345');
+		userProfile.nickname = sessionStorage.getItem('bible_is_123456');
+		userProfile.name = sessionStorage.getItem('bible_is_1234567');
+		userProfile.avatar = sessionStorage.getItem('bible_is_12345678');
+
+		this.props.dispatch(
+			setUserLoginStatus({
+				userProfile,
+				userId,
+				userAuthenticated,
+			}),
+		);
 	}
 
 	componentWillReceiveProps(nextProps) {

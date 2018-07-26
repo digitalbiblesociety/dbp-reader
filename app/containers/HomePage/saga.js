@@ -1,24 +1,27 @@
 import 'whatwg-fetch';
 import { takeLatest, call, all, put, fork } from 'redux-saga/effects';
-import request from 'utils/request';
 import some from 'lodash/some';
 // import reduce from 'lodash/reduce';
 import get from 'lodash/get';
 // import uniqBy from 'lodash/uniqBy';
 import uniqWith from 'lodash/uniqWith';
+import request from '../../utils/request';
 import {
 	getNotesForChapter,
 	getBookmarksForChapter,
 	getUserHighlights,
-} from 'containers/Notes/saga';
-import { USER_LOGGED_IN, OAUTH_ERROR } from 'containers/Profile/constants';
+} from '../../containers/Notes/saga';
+import {
+	USER_LOGGED_IN,
+	OAUTH_ERROR,
+} from '../../containers/Profile/constants';
 // import { LOGIN_ERROR, USER_LOGGED_IN } from 'containers/Profile/constants';
 import {
 	getCountries,
 	getLanguages,
 	getTexts,
-} from 'containers/TextSelection/saga';
-import { ADD_BOOKMARK } from 'containers/Notes/constants';
+} from '../../containers/TextSelection/saga';
+import { ADD_BOOKMARK } from '../../containers/Notes/constants';
 // import filter from 'lodash/filter';
 import {
 	ADD_HIGHLIGHTS,

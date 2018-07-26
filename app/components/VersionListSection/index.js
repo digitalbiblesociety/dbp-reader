@@ -12,8 +12,9 @@ import {
 	AccordionItemBody,
 	AccordionItemTitle,
 } from 'react-accessible-accordion';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 // import styled from 'styled-components';
+import Link from 'next/link';
 
 function VersionListSection({ items }) {
 	return (
@@ -29,20 +30,28 @@ function VersionListSection({ items }) {
 							</AccordionItemTitle>
 							<AccordionItemBody className={'accordion-body-style'}>
 								<Link
-									to={item.path}
-									className="version-item-button"
+									href={item.path}
+									as={`/bible${item.path}`}
 									key={`${item.key}_drama`}
-									onClick={() => item.clickHandler('audio_drama')}
 								>
-									Dramatized Version
+									<span
+										className="version-item-button"
+										onClick={() => item.clickHandler('audio_drama')}
+									>
+										Dramatized Version
+									</span>
 								</Link>
 								<Link
-									to={item.path}
-									className="version-item-button"
+									href={item.path}
+									as={`/bible${item.path}`}
 									key={`${item.key}_plain`}
-									onClick={() => item.clickHandler('audio')}
 								>
-									Non-Dramatized Version
+									<span
+										className="version-item-button"
+										onClick={() => item.clickHandler('audio')}
+									>
+										Non-Dramatized Version
+									</span>
 								</Link>
 							</AccordionItemBody>
 						</AccordionItem>
@@ -51,13 +60,14 @@ function VersionListSection({ items }) {
 				return (
 					<AccordionItem className={'accordion-title-style'} key={item.key}>
 						<AccordionItemTitle>
-							<Link
-								to={item.path}
-								title={item.title}
-								key={item.key}
-								onClick={() => item.clickHandler('')}
-							>
-								<h4 className={item.className}>{item.text}</h4>
+							<Link href={item.path} as={`/bible${item.path}`} key={item.key}>
+								<h4
+									title={item.title}
+									className={item.className}
+									onClick={() => item.clickHandler('')}
+								>
+									{item.text}
+								</h4>
 							</Link>
 						</AccordionItemTitle>
 						<AccordionItemBody />

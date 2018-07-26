@@ -1,4 +1,4 @@
-import 'whatwg-fetch';
+import fetch from 'isomorphic-fetch';
 
 const parseJSON = (res) => res.json();
 
@@ -12,8 +12,9 @@ const checkStatus = (res) => {
 	throw error;
 };
 
-const request = (url, options) => fetch(url, options)
-  .then(checkStatus)
-  .then(parseJSON);
+const request = (url, options) =>
+	fetch(url, options)
+		.then(checkStatus)
+		.then(parseJSON);
 
 export default request;

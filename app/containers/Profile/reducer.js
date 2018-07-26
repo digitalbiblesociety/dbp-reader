@@ -26,22 +26,26 @@ import {
 const initialState = fromJS({
 	activeOption: 'login',
 	userAuthenticated:
-		!!localStorage.getItem('bible_is_user_id') ||
-		!!sessionStorage.getItem('bible_is_user_id') ||
+		// !!localStorage.getItem('bible_is_user_id') ||
+		// !!sessionStorage.getItem('bible_is_user_id') ||
 		false,
 	userId:
-		localStorage.getItem('bible_is_user_id') ||
-		sessionStorage.getItem('bible_is_user_id') ||
+		// localStorage.getItem('bible_is_user_id') ||
+		// sessionStorage.getItem('bible_is_user_id') ||
 		'',
 	loginErrorMessage: '',
 	socialLoginLink: '',
 	signupErrorMessage: '',
 	activeDriver: '',
 	userProfile: {
-		email: sessionStorage.getItem('bible_is_12345') || '',
-		nickname: sessionStorage.getItem('bible_is_123456') || '',
-		name: sessionStorage.getItem('bible_is_1234567') || '',
-		avatar: sessionStorage.getItem('bible_is_12345678') || '',
+		// email: sessionStorage.getItem('bible_is_12345') || '',
+		// nickname: sessionStorage.getItem('bible_is_123456') || '',
+		// name: sessionStorage.getItem('bible_is_1234567') || '',
+		// avatar: sessionStorage.getItem('bible_is_12345678') || '',
+		email: '',
+		nickname: '',
+		name: '',
+		avatar: '',
 		verified: false,
 		accounts: [],
 	},

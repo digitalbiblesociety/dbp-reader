@@ -1,15 +1,15 @@
 import get from 'lodash/get';
-import svgs from 'images/svglist.svg';
+// import svgs from '../../../static/svglist.svg';
 // Declare Globals - I use these in multiple functions below
 // so it makes sense to only declare them once
-const serializer = new XMLSerializer();
-const parser = new DOMParser();
-
 /*
 	source is a serializable string
 	notes is a list of the notes in this chapter
 */
 const applyNotes = (source, notes) => {
+	const serializer = new XMLSerializer();
+	const parser = new DOMParser();
+
 	if (!source || !notes.length) {
 		return source;
 	}
@@ -32,14 +32,20 @@ const applyNotes = (source, notes) => {
 	const versesWithNotes = {};
 
 	notes.forEach((note) => {
-	// console.log('if results', note.verse_start >= getVerseNum(verses[0]) && note.verse_end <= getVerseNum(verses[lastV]));
-		if (note.verse_start >= getVerseNum(verses[0]) && note.verse_end <= getVerseNum(verses[lastV]) && !versesWithNotes[note.verse_start]) {
-			const verseElement = verses.filter((v) => getVerseNum(v) === note.verse_start)[0];
+		// console.log('if results', note.verse_start >= getVerseNum(verses[0]) && note.verse_end <= getVerseNum(verses[lastV]));
+		if (
+			note.verse_start >= getVerseNum(verses[0]) &&
+			note.verse_end <= getVerseNum(verses[lastV]) &&
+			!versesWithNotes[note.verse_start]
+		) {
+			const verseElement = verses.filter(
+				(v) => getVerseNum(v) === note.verse_start,
+			)[0];
 			const svg = xmlDoc.createElement('svg');
 			const use = xmlDoc.createElement('use');
 			// Can't set the event handlers here because this "dom" is removed
 			use.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink');
-			use.setAttribute('xlink:href', `${svgs}#note_in_verse`);
+			use.setAttribute('xlink:href', '/static/svglist.svg#note_in_verse');
 			svg.setAttribute('class', 'icon note-in-verse');
 			svg.appendChild(use);
 			// If there are errors in Edge or IE check that the pollyfill for prepend
@@ -60,6 +66,9 @@ const applyNotes = (source, notes) => {
 	bookmarks is a list of the bookmarks in this chapter
 */
 const applyBookmarks = (source, bookmarks) => {
+	const serializer = new XMLSerializer();
+	const parser = new DOMParser();
+
 	if (!source || !bookmarks.length) {
 		return source;
 	}
@@ -83,13 +92,19 @@ const applyBookmarks = (source, bookmarks) => {
 	const versesWithBookmarks = {};
 
 	bookmarks.forEach((bookmark) => {
-		if (bookmark.verse_start >= getVerseNum(verses[0]) && bookmark.verse_end <= getVerseNum(verses[lastV]) && !versesWithBookmarks[bookmark.verse_start]) {
-			const verseElement = verses.filter((v) => getVerseNum(v) === bookmark.verse_start)[0];
+		if (
+			bookmark.verse_start >= getVerseNum(verses[0]) &&
+			bookmark.verse_end <= getVerseNum(verses[lastV]) &&
+			!versesWithBookmarks[bookmark.verse_start]
+		) {
+			const verseElement = verses.filter(
+				(v) => getVerseNum(v) === bookmark.verse_start,
+			)[0];
 			const svg = xmlDoc.createElement('svg');
 			const use = xmlDoc.createElement('use');
 			// Can't set the event handlers here because this "dom" is removed
 			use.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink');
-			use.setAttribute('xlink:href', `${svgs}#bookmark_in_verse`);
+			use.setAttribute('xlink:href', '/static/svglist.svg#bookmark_in_verse');
 			svg.setAttribute('class', 'icon bookmark-in-verse');
 			svg.appendChild(use);
 			// If there are errors in Edge or IE check that the pollyfill for prepend
@@ -117,7 +132,4 @@ function getVerseNum(verse) {
 	return parseInt(num, 10);
 }
 
-export {
-	applyNotes,
-	applyBookmarks,
-};
+export { applyNotes, applyBookmarks };

@@ -1,7 +1,7 @@
 import { take, cancel, takeLatest, call, fork, put } from 'redux-saga/effects';
-import request from 'utils/request';
 import { LOCATION_CHANGE } from 'react-router-redux';
-import { getHighlights } from 'containers/HomePage/saga';
+import request from '../../utils/request';
+import { getHighlights } from '../../containers/HomePage/saga';
 import {
 	ADD_NOTE,
 	ADD_NOTE_SUCCESS,

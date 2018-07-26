@@ -12,7 +12,7 @@ import {
 	ERROR_GETTING_VERSIONS,
 	CLEAR_ERROR_GETTING_VERSIONS,
 	CLEAR_ERROR_GETTING_LANGUAGES,
-} from 'containers/TextSelection/constants';
+} from '../TextSelection/constants';
 // import esvDefaultFilesets from 'utils/defaultFilesetsForESV.json';
 
 const initialState = fromJS({
@@ -22,16 +22,16 @@ const initialState = fromJS({
 
 function errorReducer(state = initialState, action) {
 	switch (action.type) {
-	case ERROR_GETTING_LANGUAGES:
-		return state.set('getLanguagesError', true);
-	case ERROR_GETTING_VERSIONS:
-		return state.set('getVersionsError', true);
-	case CLEAR_ERROR_GETTING_VERSIONS:
-		return state.set('getVersionsError', false);
-	case CLEAR_ERROR_GETTING_LANGUAGES:
-		return state.set('getLanguagesError', false);
-	default:
-		return state;
+		case ERROR_GETTING_LANGUAGES:
+			return state.set('getLanguagesError', true);
+		case ERROR_GETTING_VERSIONS:
+			return state.set('getVersionsError', true);
+		case CLEAR_ERROR_GETTING_VERSIONS:
+			return state.set('getVersionsError', false);
+		case CLEAR_ERROR_GETTING_LANGUAGES:
+			return state.set('getLanguagesError', false);
+		default:
+			return state;
 	}
 }
 

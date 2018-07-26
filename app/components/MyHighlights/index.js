@@ -6,8 +6,9 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
-import SvgWrapper from 'components/SvgWrapper';
+// import { Link } from 'react-router-dom';
+import Link from 'next/link';
+import SvgWrapper from '../SvgWrapper';
 // import ColorPicker from 'components/ColorPicker';
 // import styled from 'styled-components';
 
@@ -46,7 +47,10 @@ class MyHighlights extends React.PureComponent {
 					>
 						<Link
 							onClick={toggleNotesModal}
-							to={`/${highlight.bible_id}/${highlight.book_id}/${
+							as={`/bible/${highlight.bible_id}/${highlight.book_id}/${
+								highlight.chapter
+							}/${highlight.verse_start}`}
+							href={`/bible/${highlight.bible_id}/${highlight.book_id}/${
 								highlight.chapter
 							}/${highlight.verse_start}`}
 							role="button"

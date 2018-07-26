@@ -1,5 +1,5 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
-import request from 'utils/request';
+import request from '../../utils/request';
 import {
 	GET_SEARCH_RESULTS,
 	LOAD_SEARCH_RESULTS,
@@ -15,7 +15,7 @@ export function* getSearchResults({ bibleId, searchText }) {
 	// ${process.env.BASE_API_ROUTE}/search?key=e582134c-8773-4e8a-b3b4-3f2493fc5127&v=4&query=god+loved+world&dam_id=ENGKJV&pretty
 	const reqUrl = `${
 		process.env.BASE_API_ROUTE
-	}/search?fileset_id=${bibleId}&key=${
+	}/search?fileset_id=${bibleId}&dam_id=${bibleId}&key=${
 		process.env.DBP_API_KEY
 	}&v=4&query=${searchString}`;
 

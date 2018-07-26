@@ -15,9 +15,9 @@ import {
 	EmailShareButton,
 	FacebookShareCount,
 } from 'react-share';
-import SvgWrapper from 'components/SvgWrapper';
-import HighlightColors from 'components/HighlightColors';
-import CloseMenuFunctions from 'utils/closeMenuFunctions';
+import SvgWrapper from '../SvgWrapper';
+import HighlightColors from '../HighlightColors';
+import CloseMenuFunctions from '../../utils/closeMenuFunctions';
 import PopupMessage from '../PopupMessage';
 
 // TODO: Clean up this component

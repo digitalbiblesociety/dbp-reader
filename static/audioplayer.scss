@@ -1,0 +1,475 @@
+.audio-player-background {
+	@include css4 {
+		background-color: var(--audio-player-background);
+		color: var(--default-text-color);
+		border-bottom: 1px solid var(--menu-border-color);
+		border-top: 1px solid var(--menu-border-color);
+	}
+	//position: fixed;
+	width: 100%;
+	//bottom: 56px;
+	//height: 56px;
+	//flex: 1;
+	z-index: 2;
+	transition: transform 200ms ease-in-out;
+	//transform: translateY(0);
+
+	&.scrolled-down {
+		transform: translateY(56px);
+	}
+	&.closed {
+		border: none;
+	}
+
+	//&.sub-footer-open {
+	//	bottom: 110px;
+	//}
+}
+// General Audio Player Styles
+.audio-player-container .svgitem {
+	cursor: pointer;
+	margin: 0 auto;
+	//margin-right:18px;
+}
+.audio-player-container {
+	@include css4 {
+		background-color: var(--audio-player-background);
+	}
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 50px;
+	max-width: 1000px;
+	margin: auto;
+	//:nth-child(3) {
+	//  margin-right:18px;
+	//};
+	font-size: 12px;
+
+	&.closed {
+		display: none;
+	}
+}
+.audio-player-container .item {
+	border: 1px solid transparent;
+	cursor: pointer;
+	width: 100%;
+	height: 50px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+//.audio-player-container .item:hover    {opacity:.65;}
+//.audio-player-container .svgitem:hover {opacity:.65;}
+.audio-player-container .item.active {
+	@include css4 {
+		border: 1px solid var(--active-color-primary);
+		border-top: 1px solid var(--application-transparent-gray);
+		background-color: var(--application-transparent-gray);
+		//filter: invert(1);
+		color: var(--application-light-color-option);
+	}
+	z-index: 4;
+}
+.audio-player {
+	display: none;
+}
+
+// Speed Control Styles
+.speed-control-container {
+	display: block;
+	right: 151px;
+	position: absolute;
+	z-index: 3;
+	top: -29px;
+	bottom: auto;
+
+	&.closed {
+		display: none;
+	}
+}
+.speed-control {
+	position: absolute;
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+
+	@include css4 {
+		//border:1px solid var(--active-color-primary);
+		outline: 1px solid var(--active-color-primary);
+		background-color: var(--application-transparent-gray);
+	}
+	height: 30px;
+	width: 150px;
+}
+.speed-control .speed-item {
+	@include css4 {
+		color: var(--application-light-color-option);
+	}
+	cursor: pointer;
+}
+.speed-control .speed-item:hover {
+	@include css4 {
+		color: var(--active-color-primary);
+	}
+}
+.speed-control .speed-item.active {
+	@include css4 {
+		color: var(--active-color-primary);
+	}
+}
+
+// Progress Bar Styles
+//.progress-bar {
+//  width:50%;
+//  @include css4{
+//    background-color:var(--audio-player-progress-bar-background);
+//  };
+//  height:3px;
+//  cursor:pointer;
+//  margin-top: -5px;
+//}
+//.progress-bar:focus {outline: none;}
+
+// Gripper Styles
+.audioplayer-handle {
+	//position: fixed;
+	//bottom: 106px;
+	position: relative;
+	overflow: hidden;
+	height: 25px;
+	width: 100%;
+	z-index: 3;
+	@include css4 {
+		background: var(--audio-player-gripper-background-color);
+		outline: 1px solid var(--menu-border-color);
+	}
+
+	transition: transform 200ms ease-in-out;
+	//transform: translateY(0);
+
+	//&.sub-footer-open {
+	//	bottom: 160px;
+	//}
+
+	&.scrolled-down {
+		transform: translateY(56px);
+	}
+
+	&:hover {
+		cursor: pointer;
+	}
+
+	&:before {
+		content: '';
+
+		filter: blur(15px);
+		position: absolute;
+		width: 100%;
+		height: 15px;
+		top: 0;
+		left: 0;
+		@include css4 {
+			background: var(--audio-player-gripper-before-color);
+		}
+	}
+
+	@include css4 {
+		color: var(--default-text-color);
+		//background-color:var(--audioplayer-handle-background-color);
+		//filter: blur(2px);
+		//background: -webkit-linear-gradient(to bottom, transparent 2px, var(--audioplayer-handle-background-color));
+		//background: -moz-linear-gradient(to bottom, transparent 2px, var(--audioplayer-handle-background-color));
+		//background: linear-gradient(to bottom, transparent 2px, var(--audioplayer-handle-background-color));
+	}
+
+	&.closed {
+		//bottom: 56px;
+
+		@include css4 {
+			border-bottom: 1px solid var(--menu-border-color);
+		}
+	}
+
+	//&.closed.sub-footer-open {
+	//	bottom: 110px;
+	//
+	//	@include css4 {
+	//		border-bottom: 1px solid var(--menu-border-color);
+	//	}
+	//}
+	//background: rgba(0,0,0,0.5);
+}
+.audio-gripper {
+	display: block;
+	fill: currentColor;
+	position: relative;
+	left: calc(50% - 14px);
+	bottom: 0;
+	cursor: pointer;
+
+	&.closed {
+		transform: rotate(180deg);
+	}
+}
+
+// Move the checkbox to be above the label
+.audio-player-container {
+	#autoplay-wrap {
+		[type='checkbox']:not(:checked) + label:before,
+		[type='checkbox']:checked + label:before {
+			content: '';
+			position: absolute;
+			left: 16px;
+			top: -20px;
+		}
+		[type='checkbox']:not(:checked) + label:after,
+		[type='checkbox']:checked + label:after {
+			position: absolute;
+			top: calc(-20px + 0.35em);
+			left: calc(16px + 0.45em);
+		}
+		[type='checkbox']:not(:checked) + label,
+		[type='checkbox']:checked + label {
+			padding-left: 0;
+			top: 12px;
+		}
+	}
+}
+
+// aligning text and icons
+.audio-player-container .icon-wrap {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 65px;
+	height: 52px;
+	margin: 0 auto;
+	text-align: center;
+}
+#speed-wrap .item {
+	display: flex;
+	flex-direction: column;
+}
+// Speed Changer
+#speed-wrap {
+	position: relative;
+	//margin-left:18px;
+}
+#volume-wrap .item {
+	display: flex;
+	flex-direction: column;
+}
+// Volume Slider
+#volume-wrap {
+	position: relative;
+	//margin-left:18px;
+}
+.volume-slider-container {
+	display: none;
+	left: 0;
+	position: absolute;
+	top: -24px;
+	bottom: auto;
+	&.active {
+		display: block;
+	}
+}
+.volume-slider {
+	@include css4 {
+		//border:1px solid var(--active-color-primary);
+		outline: 1px solid var(--active-color-primary);
+		background-color: var(--application-transparent-gray);
+	}
+
+	height: 25px;
+	position: absolute;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 175px;
+	margin-left: -75px;
+}
+.volume-slider .tracker {
+	@include css4 {
+		background-color: var(--active-color-primary);
+	}
+	border-radius: 50%;
+	width: 15px;
+	height: 15px;
+	margin-top: -6px;
+}
+.volume-slider .fill {
+	height: 3px;
+	@include css4 {
+		background-color: var(--active-color-primary);
+	}
+	width: 100px;
+	border-radius: 5px;
+}
+.volume-slider .slider {
+	width: 80%;
+}
+
+.progress-slider {
+	width: 50%;
+	height: 3px;
+	margin-top: -20px;
+	position: relative;
+	padding: 0 5px;
+
+	div {
+		&.rc-slider-rail {
+			@include css4 {
+				background-color: var(
+					--audio-player-progress-bar-background
+				) !important;
+			}
+		}
+		&.rc-slider-handle {
+			@include css4 {
+				border: 2px solid var(--active-color-primary) !important;
+				background-color: var(--audio-player-handle-background) !important;
+			}
+		}
+	}
+
+	&:before {
+		content: attr(data-value-cur);
+		position: absolute;
+		width: 25px;
+		height: 25px;
+		left: 5px;
+		top: 13px;
+		z-index: 50;
+
+		@include css4 {
+			color: var(--default-text-color);
+		}
+	}
+
+	&:after {
+		content: attr(data-value-dur);
+		position: absolute;
+		width: 25px;
+		height: 25px;
+		right: 9px;
+		top: 13px;
+		z-index: 50;
+
+		@include css4 {
+			color: var(--default-text-color);
+		}
+	}
+}
+
+// Elipsis TODO: update styles to make the element match the wireframe
+.elipsis {
+	display: block;
+	position: absolute;
+	right: 320px;
+	top: -114px;
+	bottom: auto;
+	z-index: 3;
+}
+
+.elipsis .container {
+	position: absolute;
+	padding: 15px;
+	display: flex;
+	justify-content: space-between;
+	flex-direction: column;
+	width: 320px;
+	height: 115px;
+
+	@include css4 {
+		color: var(--default-text-color);
+		border: 1px solid var(--active-color-primary);
+		background-color: var(--application-transparent-gray);
+	}
+}
+
+.container div {
+	display: flex;
+	align-items: center;
+}
+
+.container span {
+	margin-left: 15px;
+}
+
+@media only screen and (max-width: $audio-player-bp) {
+	.audio-player-container {
+		flex-wrap: wrap;
+		height: 83px;
+
+		.icon-wrap {
+			min-width: 40px;
+			width: auto;
+		}
+
+		.progress-slider {
+			order: 1;
+			width: 55%;
+			min-width: 291px;
+			margin: 0 25px 24px 25px;
+		}
+		//:nth-child(4) {order:1;width:55%;min-width:291px;margin:0 25px 17px 25px;}
+		:nth-child(3) {
+			margin-right: 0;
+		}
+	}
+	.audioplayer-handle {
+		//bottom: 139px;
+	}
+}
+
+//@media only screen and (min-width: 500px) and (max-width: $large-bp) {
+//	.audioplayer-handle {
+//		&.sub-footer-open {
+//			bottom: 246px;
+//		}
+//
+//		&.closed.sub-footer-open {
+//			bottom: 194px;
+//		}
+//	}
+//
+//	.audio-player-background {
+//		&.sub-footer-open {
+//			bottom: 194px;
+//		}
+//	}
+//
+//	@media only screen and (max-width: $audio-player-bp) {
+//		.audioplayer-handle {
+//			&.sub-footer-open {
+//				bottom: 279px;
+//			}
+//
+//			&.closed.sub-footer-open {
+//				bottom: 194px;
+//			}
+//		}
+//	}
+//}
+
+//@media only screen and (max-width: 499px) {
+//	.audioplayer-handle {
+//		&.sub-footer-open {
+//			bottom: 331px;
+//		}
+//
+//		&.closed.sub-footer-open {
+//			bottom: 248px;
+//		}
+//	}
+//
+//	.audio-player-background {
+//		&.sub-footer-open {
+//			bottom: 248px;
+//		}
+//	}
+//}

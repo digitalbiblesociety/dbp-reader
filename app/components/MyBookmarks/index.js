@@ -6,8 +6,8 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
-import SvgWrapper from 'components/SvgWrapper';
+import Link from 'next/link';
+import SvgWrapper from '../SvgWrapper';
 // import { FormattedMessage } from 'react-intl';
 // import messages from './messages';
 
@@ -24,9 +24,12 @@ class MyBookmarks extends React.PureComponent {
 		return bookmarks.map((listItem) => (
 			<div key={listItem.id} className={'highlight-item'}>
 				<Link
-					to={`/${listItem.bible_id}/${listItem.book_id}/${listItem.chapter}/${
-						listItem.verse_start
-					}`}
+					as={`/bible/${listItem.bible_id}/${listItem.book_id}/${
+						listItem.chapter
+					}/${listItem.verse_start}`}
+					href={`/bible/${listItem.bible_id}/${listItem.book_id}/${
+						listItem.chapter
+					}/${listItem.verse_start}`}
 					onClick={toggleNotesModal}
 					role="button"
 					tabIndex={0}

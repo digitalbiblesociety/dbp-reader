@@ -1,14 +1,14 @@
 /**
-*
-* PasswordReset
-*
-*/
+ *
+ * PasswordReset
+ *
+ */
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import PopupMessage from 'components/PopupMessage';
 import { Link } from 'react-router-dom';
-import checkEmail from 'utils/checkEmailForValidity';
+import PopupMessage from '../PopupMessage';
+import checkEmail from '../../utils/checkEmailForValidity';
 // import styled from 'styled-components';
 // import { FormattedMessage } from 'react-intl';
 // import messages from './messages';
@@ -16,7 +16,7 @@ import checkEmail from 'utils/checkEmailForValidity';
 class PasswordReset extends React.PureComponent {
 	state = {
 		email: '',
-	}
+	};
 
 	handleSubmit = (e) => {
 		e.preventDefault();
@@ -24,35 +24,55 @@ class PasswordReset extends React.PureComponent {
 		if (email && checkEmail(email)) {
 			this.props.resetPassword(e, { email: this.state.email });
 		} else {
-			const client = e.target.childNodes[1].getBoundingClientRect() || { x: 0, y: 0 };
+			const client = e.target.childNodes[1].getBoundingClientRect() || {
+				x: 0,
+				y: 0,
+			};
 
 			this.props.openPopup({ x: client.x, y: client.y });
 		}
 	};
 
-	handleInputChange = (e) => this.setState({ email: e.target.value })
+	handleInputChange = (e) => this.setState({ email: e.target.value });
 
 	render() {
-		const { popupCoords, popupOpen, message = 'Please enter a valid email.' } = this.props;
+		const {
+			popupCoords,
+			popupOpen,
+			message = 'Please enter a valid email.',
+		} = this.props;
 		const { email } = this.state;
 
 		return (
 			<React.Fragment>
 				<div className="forgot-password">
-					<p>In order to reset your password, please enter the email address you used to register for Bible.is.</p>
+					<p>
+						In order to reset your password, please enter the email address you
+						used to register for Bible.is.
+					</p>
 					<form onSubmit={this.handleSubmit} className={'wrapper'}>
-						<input onChange={this.handleInputChange} value={email} autoComplete={'email'} placeholder="E-mail" />
-						<button type={'submit'} className="text">Reset Password</button>
+						<input
+							onChange={this.handleInputChange}
+							value={email}
+							autoComplete={'email'}
+							placeholder="E-mail"
+						/>
+						<button type={'submit'} className="text">
+							Reset Password
+						</button>
 					</form>
 					<div className="disclaimer">
 						If you are unable to reset your password, please
-						<Link className="link" to="/contact-form"> contact us </Link>
+						<Link className="link" to="/contact-form">
+							{' '}
+							contact us{' '}
+						</Link>
 						for support.
 					</div>
 				</div>
-				{
-					popupOpen ? <PopupMessage x={popupCoords.x} y={popupCoords.y} message={message} /> : null
-				}
+				{popupOpen ? (
+					<PopupMessage x={popupCoords.x} y={popupCoords.y} message={message} />
+				) : null}
 			</React.Fragment>
 		);
 	}

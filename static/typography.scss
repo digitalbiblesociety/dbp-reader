@@ -1,0 +1,89 @@
+/* 1rem(16px) @ 30rem(480px) increasing to 2rem(32px) @ 120rem(1920px) */
+@media (min-width: 30rem) {
+	.chapter {
+		@include css4 {
+			font-size: calc(
+				var(--application-base-font-size) + ((1vw - 0.25em) * 1.1111)
+			);
+		}
+		//font-size: calc(1rem + ((1vw - 0.3rem) * 1.1111));
+		/* Where: * 1.1111 = 100 * font_Size_Difference / viewport_Width_Difference */
+	}
+}
+/* Prevent font scaling beyond this breakpoint */
+@media (min-width: 1000px) {
+	.chapter {
+		@include css4 {
+			font-size: calc(var(--application-base-font-size) + ((0.45em) * 1.1111));
+		}
+	}
+}
+.chapter {
+	@include css4 {
+		font-family: var(--application-font-family);
+	}
+	//line-height:1.75;
+	//text-align:justify;
+	max-width: 1000px;
+	margin: 0 auto;
+	overflow-wrap: normal;
+	line-break: auto;
+	&.justify {
+		text-align: justify;
+		// Could potentially need the items below but they don't seem to help at this time
+		//-webkit-text-align-last: start;
+		//-o-text-align-last: start;
+		//text-align-last: start;
+		//-webkit-hyphens: auto;
+		//-ms-hyphens: auto;
+		//-o-hyphens: auto;
+		//hyphens: auto;
+	}
+
+	sup {
+		font-size: smaller;
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
+		@include css4 {
+			color: #000000; // fallback for IE
+			color: var(--application-text-container-color);
+		}
+	}
+	.align-left {
+		text-align: left;
+	}
+}
+
+//@media (min-width: 1120px) {
+//  .chapter {max-width:850px}
+//}
+//
+//@media (min-width: 1220px) {
+//  .chapter {max-width:900px}
+//}
+//
+//@media (min-width: 1420px) {
+//  .chapter {max-width:950px}
+//}
+//
+//@media (min-width: 1620px) {
+//  .chapter {max-width:1100px}
+//}
+//
+//@media (min-width: 1800px) {
+//  .chapter {max-width:1200px}
+//}
+/* Available font stacks for options in settings
+.sans-serif-stack {
+  font-family:"Noto Sans" (Google Font), Helvetica, sans serif;
+}
+
+.serif-type-stack {
+  font-family:"Alegreva" (Google Font), "Palatino Linotype", Palatino, serif;
+}
+
+.slab-serif-stack {
+  font-family:"Roboto Slab" (Google Font), Rockwell, Courier, monospace;
+}*/

@@ -7,10 +7,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 // import SvgWrapper from 'components/SvgWrapper';
-import ImageComponent from 'components/ImageComponent';
 // import CloseMenuFunctions from 'utils/closeMenuFunctions';
 import { FormattedMessage } from 'react-intl';
 import get from 'lodash/get';
+import ImageComponent from '../ImageComponent';
 import messages from './messages';
 import SvgWrapper from '../SvgWrapper';
 

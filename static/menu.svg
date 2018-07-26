@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg">
+
+    <symbol viewBox="0 0 18 18" id="close">
+        <path d="M0 2l1-1h2l6 5 5-5h2l1 1v1l-5 6 5 5v2l-1 1h-2l-5-5-6 5H1l-1-1v-2l6-5-6-6V2" />
+    </symbol>
+
+</svg>

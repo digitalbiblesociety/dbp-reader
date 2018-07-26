@@ -1,0 +1,48 @@
+.light-theme {
+	// Text / Selection Dropdown Styles
+	$text-selection-background: #fdf9f3;
+	$text-selection-accordion-title-background: #f8e4d3;
+	$text-selection-accordion-body-background: #fdf9f3;
+	// Book / Chapter Dropdown Styles
+	$book-dropdown-background-color: #f8e4d3;
+	$book-dropdown-chapter-background-color: #ffffff;
+	$book-dropdown-text-color: #000000;
+	$book-dropdown-section-background-color: #6e747f;
+	// Main Text Area Styles
+	$svg-fill-color: #000000;
+	// Active Colors
+	$active-color-primary: #4eb07b;
+	$active-color-secondary: #6fbc8f;
+	// Highlight Colors
+	$highlight-blue: #387dbf;
+	$highlight-pink: #d069a9;
+	$highlight-yellow: #fce600;
+	$highlight-green: #2e924d;
+	$highlight-purple: #8967ac;
+	// Settings Menu Styles
+	$disabled-input-option: #b2bbc6;
+	$inactive-font-option: #868686;
+	// Notebook Menu Styles
+	$notebook-footer-background-color: #fdf9f3;
+	$notebook-title-date-color: #6ec3e2;
+	// Profile Menu Styles
+	$profile-forgot-password-color: #6ec3e2;
+	$profile-login-signup-background-color: #d4d8dd;
+	$profile-invalid-input-background-color: #9e1e35;
+	// Context Menu Styles
+	$context-menu-background-color: #ffffff;
+	$context-menu-svg-fill-color: #000000;
+	$context-menu-text-color: #000000;
+	$context-menu-highlight-active-background-color: #868686;
+	// Audio Player Styles
+	// None that differ from the base styles at this time
+	// Basic Menu Styles
+	$body-background-color: #f8e4d3;
+	$header-background-color: #f8e4d3;
+	// Application Wide Styles
+	$default-background-color: #f8e4d3;
+	$default-text-color: #000000;
+	$before-after-border-color: #999999;
+	$default-svg-fill-color: #000000;
+	$default-input-placeholder-color: #000000;
+}

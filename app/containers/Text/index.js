@@ -6,15 +6,17 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import Information from 'components/Information';
-import SvgWrapper from 'components/SvgWrapper';
-import ContextPortal from 'components/ContextPortal';
-import FootnotePortal from 'components/FootnotePortal';
-import LoadingSpinner from 'components/LoadingSpinner';
-import IconsInText from 'components/IconsInText';
-import PopupMessage from 'components/PopupMessage';
-import PleaseSignInMessage from 'components/PleaseSignInMessage';
-import AudioOnlyMessage from 'components/AudioOnlyMessage';
+import Link from 'next/link';
+import isEqual from 'lodash/isEqual';
+import Information from '../../components/Information';
+import SvgWrapper from '../../components/SvgWrapper';
+import ContextPortal from '../../components/ContextPortal';
+import FootnotePortal from '../../components/FootnotePortal';
+import LoadingSpinner from '../../components/LoadingSpinner';
+import IconsInText from '../../components/IconsInText';
+import PopupMessage from '../../components/PopupMessage';
+import PleaseSignInMessage from '../../components/PleaseSignInMessage';
+import AudioOnlyMessage from '../../components/AudioOnlyMessage';
 import {
 	getFormattedParentVerseNumber,
 	getPlainParentVerse,
@@ -25,13 +27,25 @@ import {
 	getClosestParent,
 	getOffsetNeededForPsalms,
 	// getTextInSelectedNodes,
-} from 'utils/highlightingUtils';
-// import differenceObject from 'utils/deepDifferenceObject';
-import isEqual from 'lodash/isEqual';
-// import some from 'lodash/some';
+} from '../../utils/highlightingUtils';
+import getPreviousChapterUrl from '../../utils/getPreviousChapterUrl';
+import getNextChapterUrl from '../../utils/getNextChapterUrl';
+import {
+	calcDistance,
+	getClassNameForMain,
+	getClassNameForTextContainer,
+	getInlineStyleForTextContainer,
+	getReference,
+	isEndOfBible,
+	isStartOfBible,
+} from './textRenderUtils';
 import createHighlights from './highlightPlainText';
 import createFormattedHighlights from './highlightFormattedText';
 import { applyNotes, applyBookmarks } from './formattedTextUtils';
+
+// const dynamicCreateHighlights = dynamic(import('./highlightPlainText'), { ssr: false });
+// import differenceObject from 'utils/deepDifferenceObject';
+// import some from 'lodash/some';
 // import { addClickToNotes } from './htmlToReact';
 /* Disabling the jsx-a11y linting because we need to capture the selected text
 	 and the most straight forward way of doing so is with the onMouseUp event */
@@ -50,11 +64,16 @@ class Text extends React.PureComponent {
 		handlersAreSet: false,
 		handledMouseDown: false,
 		activeVerseInfo: { verse: 0 },
+		loadingNextPage: false,
 		wholeVerseIsSelected: false,
 	};
 
 	componentDidMount() {
-		// console.log('Component did mount with: ', this.format, ' and ', this.formatHighlight);
+		this.createHighlights = createHighlights;
+		this.createFormattedHighlights = createFormattedHighlights;
+		this.applyNotes = applyNotes;
+		this.applyBookmarks = applyBookmarks;
+
 		if (this.format) {
 			// console.log('setting event listeners on format');
 			this.setEventHandlersForFootnotes(this.format);
@@ -64,10 +83,6 @@ class Text extends React.PureComponent {
 			this.setEventHandlersForFootnotes(this.formatHighlight);
 			this.setEventHandlersForFormattedVerses(this.formatHighlight);
 		}
-
-		// if (this.main) {
-		// 	this.main.addEventListener('scroll', this.handleScrollOnMain, true);
-		// }
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -220,14 +235,6 @@ class Text extends React.PureComponent {
 		}
 	}
 
-	// componentWillUnmount() {
-	// 	if (this.main) {
-	// 		console.log('removed scroll listener');
-	//
-	// 		this.main.removeEventListener('scroll', this.handleScrollOnMain, true);
-	// 	}
-	// }
-
 	setEventHandlersForFormattedVerses = (ref) => {
 		// Set mousedown and mouseup events on verse elements
 		try {
@@ -360,13 +367,6 @@ class Text extends React.PureComponent {
 
 		this.props.setActiveNote({ note: existingNote || note });
 	};
-
-	getReference = (verseStart, verseEnd) =>
-		`${this.props.activeBookName} ${this.props.activeChapter}:${
-			verseStart === verseEnd || !verseEnd
-				? verseStart
-				: `${verseStart}-${verseEnd}`
-		}`;
 
 	getFirstVerse = (e) => {
 		// alert('mousedown fired');
@@ -554,20 +554,27 @@ class Text extends React.PureComponent {
 			audioSource,
 			invalidBibleId,
 		} = this.props;
+
 		const chapterAlt = initialText[0] && initialText[0].chapter_alt;
 		const verseIsActive =
 			this.state.activeVerseInfo.verse && this.state.activeVerseInfo.isPlain;
 		const activeVerse = this.state.activeVerseInfo.verse || 0;
 		// Doing it like this may impact performance, but it is probably cleaner
 		// than most other ways of doing it...
-		const formattedSource = initialFormattedSource.main
-			? {
-					...initialFormattedSource,
-					main: [initialFormattedSource.main]
-						.map((s) => applyNotes(s, userNotes, this.handleNoteClick))
-						.map((s) => applyBookmarks(s, bookmarks, this.handleNoteClick))[0],
-			  }
-			: initialFormattedSource;
+		let formattedSource = initialFormattedSource;
+
+		if (this.applyNotes && this.applyBookmarks) {
+			formattedSource = initialFormattedSource.main
+				? {
+						...initialFormattedSource,
+						main: [initialFormattedSource.main]
+							.map((s) => this.applyNotes(s, userNotes, this.handleNoteClick))
+							.map((s) =>
+								this.applyBookmarks(s, bookmarks, this.handleNoteClick),
+							)[0],
+				  }
+				: initialFormattedSource;
+		}
 		const readersMode = userSettings.getIn([
 			'toggleOptions',
 			'readersMode',
@@ -593,7 +600,8 @@ class Text extends React.PureComponent {
 
 		if (
 			highlights.length &&
-			(!oneVersePerLine && !readersMode && formattedSource.main)
+			(!oneVersePerLine && !readersMode && formattedSource.main) &&
+			this.createFormattedHighlights
 		) {
 			// Temporary fix for the fact that highlight_start is a string... ... ...
 			const highlightsToPass = highlights.map((h) => ({
@@ -601,18 +609,22 @@ class Text extends React.PureComponent {
 				highlight_start: parseInt(h.highlight_start, 10),
 			}));
 			// Use function for highlighting the formatted formattedText
-			formattedText = createFormattedHighlights(
+			formattedText = this.createFormattedHighlights(
 				highlightsToPass,
 				formattedSource.main,
 			);
-		} else if (highlights.length && initialText.length) {
+		} else if (
+			highlights.length &&
+			initialText.length &&
+			this.createHighlights
+		) {
 			// Temporary fix for the fact that highlight_start is a string... ... ...
 			const highlightsToPass = highlights.map((h) => ({
 				...h,
 				highlight_start: parseInt(h.highlight_start, 10),
 			}));
 			// Use function for highlighting the plain plainText
-			plainText = createHighlights(highlightsToPass, initialText);
+			plainText = this.createHighlights(highlightsToPass, initialText);
 		} else {
 			plainText = initialText || [];
 		}
@@ -623,14 +635,17 @@ class Text extends React.PureComponent {
 		// Handle exception thrown when there isn't plain text but readers mode is selected
 		/* eslint-disable react/no-danger */
 		if (plainText.length === 0 && !formattedSource.main) {
-			if (!window.navigator.onLine) {
-				textComponents = [
-					<h5 key={'no_connection'}>
-						We are having trouble contacting the server. Please check your
-						internet connection and then refresh the page.
-					</h5>,
-				];
-			} else if (invalidBibleId) {
+			// Need to have a way to know if this is being run on the server or not
+			// if (window && !window.navigator.onLine) {
+			// 	textComponents = [
+			// 		<h5 key={'no_connection'}>
+			// 			We are having trouble contacting the server. Please check your
+			// 			internet connection and then refresh the page.
+			// 		</h5>,
+			// 	];
+			// }
+			if (invalidBibleId) {
+				// THis appears too often
 				textComponents = [
 					<h5 key={'no_text'}>
 						Text is not currently available for this version.
@@ -865,36 +880,7 @@ class Text extends React.PureComponent {
 		// Unless there is a click event the mouseup and mousedown events won't fire for mobile devices
 		// Left this blank since I actually don't need to do anything with it
 	};
-	/* May end up needing these for highlighting or changing chapter on swipe
-	handleHighlightTouchStart = (e) => {
-		console.log('event in touch start', e.target);
-		console.log('e.handler', e.handler);
 
-		this.touchTarget = e.target;
-		this.main.addEventListener('touchend', this.handleTouchEnd);
-		this.main.addEventListener('touchcancel', this.handleTouchCancel);
-		// alert('touch event fired so I know the whole verse needs to be selected');
-	}
-
-	handleTouchEnd = (e) => {
-		console.log('touch ended');
-		// Likely want to compare the x y coords to see if they swiped
-		if (e.target.isSameNode(this.touchTarget)) {
-			console.log('ended on same verse');
-		}
-		this.main.removeEventListener('touchend', this.handleTouchEnd);
-		this.main.removeEventListener('touchcancel', this.handleTouchCancel);
-	}
-
-	handleTouchCancel = (e) => {
-		console.log('touch canceled');
-		if (e.target.isSameNode(this.touchTarget)) {
-			console.log('ended on same verse');
-		}
-		this.main.removeEventListener('touchend', this.handleTouchEnd);
-		this.main.removeEventListener('touchcancel', this.handleTouchCancel);
-	}
-	*/
 	handleMouseUp = (e) => {
 		// alert(`mouse up fired: ${e.button}: ${e.changedTouches}`);
 		e.stopPropagation();
@@ -910,6 +896,10 @@ class Text extends React.PureComponent {
 		) {
 			this.closeFootnote();
 		}
+	};
+
+	handleArrowClick = () => {
+		this.setState({ loadingNextPage: true });
 	};
 
 	handleNoteClick = (noteIndex, clickedBookmark) => {
@@ -975,7 +965,12 @@ class Text extends React.PureComponent {
 				notes: "''",
 				title: '',
 				bookmark: 1,
-				reference: this.getReference(verseStart, verseEnd),
+				reference: getReference(
+					verseStart,
+					verseEnd,
+					this.props.activeBookName,
+					this.props.activeChapter,
+				),
 				verse_start: verseStart,
 				verse_end: verseEnd,
 			});
@@ -991,7 +986,7 @@ class Text extends React.PureComponent {
 	};
 	// has an issue with highlights in the same verse
 	// This is likely going to be really slow...
-	highlightPlainText = (props) => createHighlights(props);
+	// highlightPlainText = (props) => createHighlights(props);
 
 	addHighlight = ({ color, popupCoords }) => {
 		let highlightObject = {};
@@ -1048,7 +1043,12 @@ class Text extends React.PureComponent {
 						color,
 						highlightStart: 0,
 						highlightedWords,
-						reference: this.getReference(verse, verse),
+						reference: getReference(
+							verse,
+							verse,
+							this.props.activeBookName,
+							this.props.activeChapter,
+						),
 					};
 				} else {
 					// console.log(this.main);
@@ -1080,7 +1080,12 @@ class Text extends React.PureComponent {
 						color,
 						highlightStart: 0,
 						highlightedWords,
-						reference: this.getReference(verse, verse),
+						reference: getReference(
+							verse,
+							verse,
+							this.props.activeBookName,
+							this.props.activeChapter,
+						),
 					};
 				}
 
@@ -1281,7 +1286,7 @@ class Text extends React.PureComponent {
 				// Not so sure about this, seems like in theory it should give me the node closest to the beginning but idk
 				let highlightStart = 0;
 				let highlightedWords = 0;
-				const dist = this.calcDist(
+				const dist = calcDistance(
 					lastVerse,
 					firstVerse,
 					!!this.props.formattedSource.main,
@@ -1364,7 +1369,7 @@ class Text extends React.PureComponent {
 					// 	color,
 					// 	highlightStart,
 					// 	highlightedWords,
-					// 	reference: this.getReference(firstVerse, lastVerse),
+					// 	reference: getReference(firstVerse, lastVerse, this.props.activeBookName, this.props.activeChapter),
 					// });
 					// If the color is none then we are assuming that the user wants whatever they highlighted to be removed
 					// We could either remove every highlight that was overlapped by this one, or we could try to update all
@@ -1403,7 +1408,12 @@ class Text extends React.PureComponent {
 							color,
 							highlightStart,
 							highlightedWords,
-							reference: this.getReference(firstVerse, lastVerse),
+							reference: getReference(
+								firstVerse,
+								lastVerse,
+								this.props.activeBookName,
+								this.props.activeChapter,
+							),
 						});
 					}
 				}
@@ -1422,25 +1432,6 @@ class Text extends React.PureComponent {
 
 		// Returning the highlight for testing purposes
 		return highlightObject;
-	};
-	// Because the system captures the verse numbers this needs to be used
-	calcDist = (l, f, p) => {
-		// l: lastVerse, f: firstVerse, p: isPlainText
-		// If the last verse is equal to the first verse then I don't need a diff
-		if (l === f) return 0;
-		let stringDiff = '';
-
-		for (let i = f + 1; i <= l; i += 1) {
-			// Adds the length of each verse number
-			stringDiff += i.toFixed(0);
-			// Adds 1 character for formatted and 2 for plain text to account for spaces in verse numbers
-			stringDiff += p ? '11' : '11';
-			// console.log(i);
-		}
-		// console.log('string diff', stringDiff);
-		// Gets the total length of the distance needed
-		return stringDiff.length;
-		// return l - f;
 	};
 
 	addFacebookLike = () => {
@@ -1580,97 +1571,8 @@ class Text extends React.PureComponent {
 		this.closeContextMenu();
 	};
 
-	get isEndOfBible() {
-		const books = this.props.books;
-		if (!books || !books.length) {
-			return false;
-		}
-		const book = books[books.length - 1];
-
-		if (!book) {
-			return false;
-		}
-		const chapters = book.chapters;
-		const chapter = chapters[chapters.length - 1];
-
-		const bookId = book.book_id;
-
-		return (
-			bookId === this.props.activeBookId && chapter === this.props.activeChapter
-		);
-	}
-
-	get isStartOfBible() {
-		const books = this.props.books;
-		if (!books || !books.length) {
-			return false;
-		}
-		const book = books[0];
-
-		if (!book) {
-			return false;
-		}
-		const chapter = book.chapters[0];
-		const bookId = book.book_id;
-
-		return (
-			bookId === this.props.activeBookId && chapter === this.props.activeChapter
-		);
-	}
-
-	get classNameForMain() {
-		const {
-			formattedSource,
-			userSettings,
-			textDirection,
-			menuIsOpen,
-		} = this.props;
-		const readersMode = userSettings.getIn([
-			'toggleOptions',
-			'readersMode',
-			'active',
-		]);
-		const oneVersePerLine = userSettings.getIn([
-			'toggleOptions',
-			'oneVersePerLine',
-			'active',
-		]);
-		const justifiedClass = userSettings.getIn([
-			'toggleOptions',
-			'justifiedText',
-			'active',
-		])
-			? 'justify'
-			: '';
-		const isRtl = textDirection === 'rtl' ? 'rtl' : '';
-		const menuOpenClass = menuIsOpen ? ' menu-is-open' : '';
-
-		// formattedSource.main && !readersMode && !oneVersePerLine ? '' : `chapter ${justifiedClass}`
-
-		return formattedSource.main && !readersMode && !oneVersePerLine
-			? `${isRtl}${menuOpenClass}`
-			: `chapter ${justifiedClass} ${isRtl}${menuOpenClass}`;
-	}
-
-	get textContainerClass() {
-		const { isScrollingDown, subFooterOpen } = this.props;
-		let classNames = 'text-container';
-
-		if (isScrollingDown) {
-			classNames += ' scrolled-down';
-		}
-
-		if (subFooterOpen && !isScrollingDown) {
-			classNames += ' sub-footer-open';
-		}
-
-		return classNames;
-	}
-
 	render() {
 		const {
-			nextChapter,
-			prevChapter,
 			activeChapter,
 			toggleNotesModal,
 			notesActive,
@@ -1682,15 +1584,25 @@ class Text extends React.PureComponent {
 			loadingCopyright,
 			userSettings,
 			verseNumber,
-			goToFullChapter,
 			copyrights,
 			activeFilesets,
 			audioFilesetId,
+			activeTextId,
+			activeBookId,
+			books,
 			plainTextFilesetId,
 			formattedTextFilesetId,
 			menuIsOpen,
-			// isScrollingDown,
+			isLargeBp,
+			isAudioPlayerBp,
+			isMobileBp,
+			isScrollingDown,
+			audioSource,
+			audioPlayerState,
+			subFooterOpen,
+			textDirection,
 		} = this.props;
+
 		const {
 			coords,
 			contextMenuState,
@@ -1711,28 +1623,89 @@ class Text extends React.PureComponent {
 		// console.log('chapterAlt', chapterAlt);
 		// const justifiedClass = userSettings.getIn(['toggleOptions', 'justifiedText', 'active']) ? 'justify' : '';
 
-		if (loadingNewChapterText || loadingAudio || loadingCopyright) {
-			return <LoadingSpinner />;
+		if (
+			loadingNewChapterText ||
+			loadingAudio ||
+			loadingCopyright ||
+			this.state.loadingNextPage
+		) {
+			return (
+				<div
+					style={getInlineStyleForTextContainer(
+						isLargeBp,
+						isAudioPlayerBp,
+						isMobileBp,
+						isScrollingDown,
+						audioSource,
+						audioPlayerState,
+					)}
+					className={getClassNameForTextContainer(
+						isScrollingDown,
+						subFooterOpen,
+					)}
+				>
+					<LoadingSpinner />
+				</div>
+			);
 		}
 
 		return (
-			<div className={this.textContainerClass}>
-				<div
-					onClick={!this.isStartOfBible && !menuIsOpen ? prevChapter : () => {}}
-					className={
-						!this.isStartOfBible && !menuIsOpen
-							? 'arrow-wrapper'
-							: 'arrow-wrapper disabled'
-					}
+			<div
+				style={getInlineStyleForTextContainer(
+					isLargeBp,
+					isAudioPlayerBp,
+					isMobileBp,
+					isScrollingDown,
+					audioSource,
+					audioPlayerState,
+				)}
+				className={getClassNameForTextContainer(isScrollingDown, subFooterOpen)}
+			>
+				<Link
+					as={getPreviousChapterUrl(
+						books,
+						activeChapter,
+						activeBookId.toLowerCase(),
+						activeTextId.toLowerCase(),
+						verseNumber,
+						text,
+					)}
+					href={getPreviousChapterUrl(
+						books,
+						activeChapter,
+						activeBookId.toLowerCase(),
+						activeTextId.toLowerCase(),
+						verseNumber,
+						text,
+					)}
+					prefetch
 				>
-					{!this.isStartOfBible ? (
-						<SvgWrapper className="prev-arrow-svg" svgid="arrow_left" />
-					) : null}
-				</div>
+					<div
+						onClick={
+							!isStartOfBible(books, activeBookId, activeChapter) && !menuIsOpen
+								? this.handleArrowClick
+								: () => {}
+						}
+						className={
+							!isStartOfBible(books, activeBookId, activeChapter) && !menuIsOpen
+								? 'arrow-wrapper'
+								: 'arrow-wrapper disabled'
+						}
+					>
+						{!isStartOfBible(books, activeBookId, activeChapter) ? (
+							<SvgWrapper className="prev-arrow-svg" svgid="arrow_left" />
+						) : null}
+					</div>
+				</Link>
 				<div className={'main-wrapper'}>
 					<main
 						ref={this.setMainRef}
-						className={this.classNameForMain}
+						className={getClassNameForMain(
+							formattedSource,
+							userSettings,
+							textDirection,
+							menuIsOpen,
+						)}
 						onScroll={this.handleScrollOnMain}
 					>
 						{(formattedSource.main && !readersMode && !oneVersePerLine) ||
@@ -1747,9 +1720,12 @@ class Text extends React.PureComponent {
 						{this.getTextComponents}
 						{verseNumber ? (
 							<div className={'read-chapter-container'}>
-								<button onClick={goToFullChapter} className={'read-chapter'}>
-									Read Full Chapter
-								</button>
+								<Link
+									href={`/bible/${activeTextId.toLowerCase()}/${activeBookId.toLowerCase()}/${activeChapter}`}
+									as={`/bible/${activeTextId.toLowerCase()}/${activeBookId.toLowerCase()}/${activeChapter}`}
+								>
+									<button className={'read-chapter'}>Read Full Chapter</button>
+								</Link>
 							</div>
 						) : null}
 						<Information
@@ -1761,18 +1737,42 @@ class Text extends React.PureComponent {
 						/>
 					</main>
 				</div>
-				<div
-					onClick={!this.isEndOfBible && !menuIsOpen ? nextChapter : () => {}}
-					className={
-						!this.isEndOfBible && !menuIsOpen
-							? 'arrow-wrapper'
-							: 'arrow-wrapper disabled'
-					}
+				<Link
+					as={getNextChapterUrl(
+						books,
+						activeChapter,
+						activeBookId.toLowerCase(),
+						activeTextId.toLowerCase(),
+						verseNumber,
+						text,
+					)}
+					href={getNextChapterUrl(
+						books,
+						activeChapter,
+						activeBookId.toLowerCase(),
+						activeTextId.toLowerCase(),
+						verseNumber,
+						text,
+					)}
+					prefetch
 				>
-					{!this.isEndOfBible ? (
-						<SvgWrapper className="next-arrow-svg" svgid="arrow_right" />
-					) : null}
-				</div>
+					<div
+						onClick={
+							!isEndOfBible(books, activeBookId, activeChapter) && !menuIsOpen
+								? this.handleArrowClick
+								: () => {}
+						}
+						className={
+							!isEndOfBible(books, activeBookId, activeChapter) && !menuIsOpen
+								? 'arrow-wrapper'
+								: 'arrow-wrapper disabled'
+						}
+					>
+						{!isEndOfBible(books, activeBookId, activeChapter) ? (
+							<SvgWrapper className="next-arrow-svg" svgid="arrow_right" />
+						) : null}
+					</div>
+				</Link>
 				{contextMenuState ? (
 					<ContextPortal
 						handleAddBookmark={this.handleAddBookmark}
@@ -1810,27 +1810,31 @@ Text.propTypes = {
 	copyrights: PropTypes.object,
 	userSettings: PropTypes.object,
 	formattedSource: PropTypes.object,
-	nextChapter: PropTypes.func,
-	prevChapter: PropTypes.func,
 	addBookmark: PropTypes.func,
 	addHighlight: PropTypes.func,
 	setActiveNote: PropTypes.func,
-	goToFullChapter: PropTypes.func,
 	deleteHighlights: PropTypes.func,
 	toggleNotesModal: PropTypes.func,
 	setActiveNotesView: PropTypes.func,
 	activeChapter: PropTypes.number,
+	// distance: PropTypes.number,
+	isLargeBp: PropTypes.bool,
+	menuIsOpen: PropTypes.bool,
+	isMobileBp: PropTypes.bool,
 	notesActive: PropTypes.bool,
 	loadingAudio: PropTypes.bool,
 	subFooterOpen: PropTypes.bool,
 	invalidBibleId: PropTypes.bool,
 	isScrollingDown: PropTypes.bool,
+	isAudioPlayerBp: PropTypes.bool,
+	audioPlayerState: PropTypes.bool,
 	loadingCopyright: PropTypes.bool,
 	userAuthenticated: PropTypes.bool,
 	loadingNewChapterText: PropTypes.bool,
 	userId: PropTypes.string,
 	bibleId: PropTypes.string,
 	verseNumber: PropTypes.string,
+	activeTextId: PropTypes.string,
 	activeBookId: PropTypes.string,
 	audioSource: PropTypes.string,
 	activeBookName: PropTypes.string,
@@ -1838,7 +1842,6 @@ Text.propTypes = {
 	audioFilesetId: PropTypes.string,
 	plainTextFilesetId: PropTypes.string,
 	formattedTextFilesetId: PropTypes.string,
-	menuIsOpen: PropTypes.bool,
 };
 
 export default Text;

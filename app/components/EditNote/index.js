@@ -6,9 +6,9 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import PopupMessage from 'components/PopupMessage';
-// import BooksTable from 'components/BooksTable';
-import SvgWrapper from 'components/SvgWrapper';
+import PopupMessage from '../PopupMessage';
+// import BooksTable from '../BooksTable';
+import SvgWrapper from '../SvgWrapper';
 // import styled from 'styled-components';
 
 class EditNote extends React.PureComponent {

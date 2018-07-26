@@ -1,0 +1,301 @@
+.text-container {
+	display: flex;
+	max-width: 1000px;
+	//height: calc(100vh - 190px);
+	//max-height: calc(100vh - 190px);
+	//margin: 54px auto 108px auto;
+	margin: 0 auto;
+	margin-top: 15px;
+	//padding: 54px 10px 116px 10px;
+	padding: 10px;
+	padding-top: 56px;
+	align-items: center;
+
+	@include css4 {
+		color: #000000; // fallback for IE
+		color: var(--application-text-container-color);
+		font-size: var(--application-base-font-size);
+	}
+	transition: height 50ms ease-in, height 50ms ease-out;
+
+	.active-verse {
+		// Setting to gray because it won't obscure the font and it will work regardless of the app's background color
+		@include css4 {
+			background-color: var(--application-text-selection-color);
+		}
+	}
+
+	&.scrolled-down {
+		//padding-top: 10px;
+		//padding-bottom: 86px;
+		// may need padding instead of margin
+		//margin-top: 0;
+		//margin-bottom: 25px;
+
+		//transform: translateY(-54px);
+		//height: calc(100vh - 25px);
+	}
+
+	.main-wrapper {
+		overflow: hidden;
+		margin: 0 auto;
+		padding: 15px 15px 15px 15px;
+		height: 100%;
+
+		@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+			overflow-y: auto;
+			overflow-x: hidden;
+		}
+	}
+
+	main {
+		padding-right: 30px;
+		width: 100%;
+		max-height: 100%;
+		box-sizing: content-box;
+
+		&.menu-is-open {
+			-webkit-overflow-scrolling: initial;
+		}
+
+		&.rtl {
+			direction: rtl;
+
+			.drop-caps {
+				float: right;
+				margin: 0 0.5em 0.25em 0;
+			}
+		}
+
+		h1,
+		h2,
+		h3,
+		h4,
+		h5,
+		h6 {
+			font-weight: bold;
+			display: block;
+		}
+
+		h3 + h3:before {
+			content: '\A';
+		}
+
+		.audio-only {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			flex-direction: column;
+
+			svg {
+				width: 115px;
+			}
+			p {
+				width: max-content;
+			}
+			span {
+				width: max-content;
+				color: #868686;
+				opacity: 0.3;
+				margin-top: 15px;
+			}
+			.divider {
+				width: 175px;
+				height: 1px;
+				background-color: #868686;
+				opacity: 0.3;
+			}
+		}
+
+		.readers-spaces {
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+		}
+	}
+
+	.info-button {
+		position: absolute;
+		bottom: 136px;
+
+		&.closed {
+			bottom: 86px;
+		}
+	}
+
+	.note-in-verse {
+		z-index: 4;
+
+		@include css4 {
+			fill: var(--application-text-container-color);
+		}
+	}
+}
+
+.verse-number {
+	top: 0;
+}
+
+.verse-text {
+	margin-top: auto;
+	margin-bottom: auto;
+	padding-left: 5px;
+}
+
+.arrow-wrapper {
+	height: 80%;
+	width: 26px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	//margin-top:auto;
+	&:not(.disabled):hover {
+		cursor: pointer;
+		background: rgba(0, 0, 0, 0.2);
+	}
+}
+//.text-container span {white-space:nowrap;display:inline-block;}
+.prev-arrow-svg {
+	@include css4 {
+		fill: var(--main-textarea-svg-fill-color);
+	}
+	width: 26px;
+	height: 26px;
+	//margin-left:10px;
+	//width:25px;
+	//min-width:25px;
+	//min-height:52px;
+	//height:52px;
+	//margin-top:calc(50vh - 104px);
+}
+.next-arrow-svg {
+	@include css4 {
+		fill: var(--main-textarea-svg-fill-color);
+	}
+	width: 26px;
+	height: 26px;
+	//margin-right:5px;
+	//width:25px;
+	//min-width:25px;
+	//min-height:52px;
+	//height:52px;
+	//margin-top:calc(50vh - 104px);
+}
+.prev-arrow-svg:hover {
+	animation: thicken 0.3s forwards;
+}
+.next-arrow-svg:hover {
+	animation: thicken 0.3s forwards;
+}
+.text-highlighted {
+	//@include css4{
+	//  //background-color:var(--text-selection-color);
+	//  color:var(--default-text-color);
+	//};
+	//filter: sepia(40%);
+}
+
+.active-chapter-title {
+	margin: auto;
+	max-width: 30px;
+	text-align: center;
+	font-size: 130%;
+}
+
+.drop-caps {
+	font-size: 2em;
+	line-height: 1;
+	margin: 0 0.25em 0.5em 0;
+}
+
+.read-chapter-container {
+	display: flex;
+	justify-content: center;
+}
+
+.read-chapter {
+	height: 35px;
+	border-radius: 6px;
+	width: 130px;
+	max-width: 150px;
+	text-align: center;
+	background-color: #fffff5;
+	box-shadow: 1px 1px 1px 1px #b1a77a;
+	cursor: pointer;
+	font-size: 11px;
+	white-space: nowrap;
+	padding: 5px;
+}
+
+.read-chapter:active {
+	box-shadow: none;
+	color: #000;
+}
+
+.read-chapter:focus {
+	border: 1px solid #b1a77a;
+	color: #000;
+	outline: none;
+}
+
+@media only screen and (max-width: $audio-player-bp) {
+	.text-container {
+		padding-top: 36px;
+		//height: calc(100vh - 220px);
+		//max-height: calc(100vh - 220px);
+
+		main {
+			//padding-bottom: 75px;
+			//z-index: 0;
+		}
+
+		.info-button {
+			//bottom: 166px;
+			//z-index: 5;
+		}
+	}
+}
+
+@media only screen and (min-width: 500px) and (max-width: $large-bp) {
+	.text-container {
+		padding-top: 36px;
+		//height: calc(100vh - 215px);
+		//max-height: calc(100vh - 215px);
+		//&.sub-footer-open {
+		//	margin-bottom: 190px;
+		//}
+	}
+	@media only screen and (max-width: $audio-player-bp) {
+		.text-container {
+			margin-top: 0;
+			//&.sub-footer-open {
+			//	margin-bottom: 45px;
+			//}
+		}
+	}
+}
+//
+//@media only screen and (max-width: 499px) {
+//	.text-container {
+//		&.sub-footer-open {
+//			margin-bottom: 45px;
+//		}
+//	}
+//}
+
+// Style that I like but that isn't in the comps
+//@keyframes thicken {
+//	0%   { transform: scale(1.00); fill:rgba(158, 30, 53, 0.253); }
+//	25%  { transform: scale(1.10); fill:rgba(158, 30, 53, 0.453); }
+//	50%  { transform: scale(1.15); fill:rgba(158, 30, 53, 0.653); }
+//	75%  { transform: scale(1.20); fill:rgba(158, 30, 53, 0.853); }
+//	100% { transform: scale(1.25); fill:rgba(158, 30, 53, 1.000); }
+//}
+//@keyframes thicken {
+//	0%   { transform: scale(1.00); }
+//	25%  { transform: scale(1.10); }
+//	50%  { transform: scale(1.15); }
+//	75%  { transform: scale(1.20); }
+//	100% { transform: scale(1.25); }
+//}

@@ -6,10 +6,10 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import SvgWrapper from 'components/SvgWrapper';
-import FacebookAuthentication from 'containers/FacebookAuthentication';
-import GoogleAuthentication from 'containers/GoogleAuthentication';
-import checkEmailForValidity from 'utils/checkEmailForValidity';
+import SvgWrapper from '../SvgWrapper';
+import FacebookAuthentication from '../../containers/FacebookAuthentication';
+import GoogleAuthentication from '../../containers/GoogleAuthentication';
+import checkEmailForValidity from '../../utils/checkEmailForValidity';
 // import styled from 'styled-components';
 // import { FormattedMessage } from 'react-intl';
 // import messages from './messages';

@@ -4,8 +4,17 @@ build
 node_modules
 stats.json
 .env
+.next
+.next/
+.next/*
+.next/static
+.next/server
+.next/static/*
+.next/server/*
 app/utils/ENGKJV
 reduxStoreShape.js
+next-server
+env-config.js
 sitemaps/
 # Cruft
 .DS_Store
@@ -13,3 +22,11 @@ npm-debug.log
 .idea
 # Don't check the temp json file into source
 app/utils/parsedCountries.json
+.next/server/bundles/pages/_app.js.map
+.next/server/bundles/pages/_document.js
+.next/server/bundles/pages/_document.js.map
+.next/server/bundles/pages/_error.js.map
+.next/static/commons/main.js
+.next/static/commons/main.js.map
+.next/static/commons/manifest.js
+.next/static/commons/manifest.js.map

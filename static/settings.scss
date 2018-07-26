@@ -1,0 +1,373 @@
+// GLOBAL SETTINGS
+.settings {
+	position: fixed;
+	z-index: 1;
+	top: 0;
+	right: 0;
+	height: calc(100% - 56px);
+	width: 320px;
+
+	@include css4 {
+		background-color: var(--menu-body-background-color);
+		color: var(--settings-text-color);
+	}
+
+	.settings-wrapper {
+		height: calc(100% - 110px);
+		overflow: hidden;
+	}
+
+	.settings-content {
+		height: 100%;
+		width: 100%;
+		overflow-x: visible;
+		overflow-y: auto;
+		padding-right: 30px;
+		box-sizing: content-box;
+	}
+}
+.settings header {
+	position: relative;
+	text-align: center;
+	height: 54px;
+	line-height: 54px;
+	@include css4 {
+		background-color: var(--menu-header-background-color);
+		color: var(--default-text-color);
+	}
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	padding: 15px;
+
+	svg {
+		margin-right: 15px;
+	}
+}
+.settings header .close-icon {
+	position: absolute;
+	top: 0;
+	right: 10px;
+}
+.settings section {
+	padding: 15px;
+}
+.settings .option:hover {
+	@include css4 {
+		color: var(--active-color-primary);
+	}
+	cursor: pointer;
+}
+//.settings .active {@include css4{color:var(--active-color-primary)};}
+
+// COlOR SCHEMES
+// Styles for v1 scheme options
+//.color-schemes .option {position:relative;width:33%;display:inline-block;text-align:center}
+//.color-schemes .option:before {content:"";border-radius:100%;width:38px;height:38px;margin:0 auto;border:thin solid #D4D8DD;display:block;}
+//.color-schemes .option.red {background-color:$color-primary;border-color:$color-secondary}
+//.color-schemes .option.paper {background-color:$paper-sidebar;border-color:$paper-secondary}
+//.color-schemes .title {text-transform:uppercase;font-size:14px;font-weight:bold;text-align:center}
+.color-schemes {
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+	margin-top: 10px;
+}
+.color-schemes .option {
+	@include css4 {
+		background-color: var(--dark-theme-primary);
+		// I use this border to keep the elements an even width apart since I am using an svg for the active option
+		border: 7.5px solid var(--menu-body-background-color);
+	}
+	border-radius: 50%;
+	width: 55px;
+	height: 55px;
+}
+.color-schemes .option.red {
+	@include css4 {
+		background-color: var(--default-theme-primary);
+		border-color: var(--menu-body-background-color);
+	}
+}
+.color-schemes .option.paper {
+	@include css4 {
+		background-color: var(--light-theme-primary);
+		border-color: var(--menu-body-background-color);
+	}
+}
+// Started using an svg for this since they wanted several colors in the circle
+//.color-schemes .option.active {
+//  @include css4{
+//    border:4px solid var(--menu-secondary-background-color);
+//  };
+//}
+//.color-schemes .option.active:after {
+//  content:"";
+//  margin:-6px -6.5px;
+//  border-radius:50%;
+//  width:55px;
+//  height:55px;
+//  @include css4{border:2px solid var(--menu-active-color);
+//  };
+//  display:block;
+//}
+
+// FONT SETTINGS
+.font-settings .option {
+	@include css4 {
+		color: var(--inactive-font-option);
+	}
+	display: inline-block;
+	text-align: center;
+	font-size: 36px;
+	width: 33%;
+}
+.font-settings .option small {
+	display: block;
+	text-transform: uppercase;
+	font-size: 14px;
+}
+.font-settings .option.active {
+	@include css4 {
+		color: var(--default-text-color);
+	}
+}
+.font-settings .option.sans.active:before {
+	margin: -5px 0 0 -7px;
+	position: absolute;
+	content: '';
+	height: 57px;
+	width: 57px;
+	border-radius: 100%;
+	@include css4 {
+		border: 2px solid var(--active-color-primary);
+	}
+}
+.font-settings .option.serif.active:before {
+	margin: -1px 0 0 -10px;
+	position: absolute;
+	content: '';
+	height: 56px;
+	width: 56px;
+	border-radius: 100%;
+	@include css4 {
+		border: 2px solid var(--active-color-primary);
+	}
+}
+.font-settings .option.slab.active:before {
+	margin: -1px 0 0 -5px;
+	position: absolute;
+	content: '';
+	height: 56px;
+	width: 56px;
+	border-radius: 100%;
+	@include css4 {
+		border: 2px solid var(--active-color-primary);
+	}
+}
+// Can't use the margins for positioning here because the font size changes
+// might have to do a different style for each option so that they each can be custom
+.font-settings .option.active:before {
+	margin: -1px 0 0 -7px;
+	position: absolute;
+	content: '';
+	height: 56px;
+	width: 56px;
+	border-radius: 100%;
+	@include css4 {
+		border: 2px solid var(--active-color-primary);
+	}
+}
+
+//.font-settings .option.sans > span  {@include css4{font-family:var(--sans-font-family-option) !important;};}
+//.font-settings .option.serif > span {@include css4{font-family:var(--serif-font-family-option) !important;};}
+//.font-settings .option.slab > span  {@include css4{font-family:var(--slab-font-family-option) !important;};}
+.font-settings .option.sans > span {
+	font-family: 'Raleway', Helvetica, sans serif;
+}
+.font-settings .option.serif > span {
+	font-family: 'Alegreya', 'Palatino Linotype', Palatino, serif;
+}
+.font-settings .option.slab > span {
+	font-family: 'Roboto Slab', Rockwell, Courier, monospace;
+}
+
+// FONT SIZES
+.font-sizes {
+	height: 60px;
+	align-items: flex-end;
+	display: flex;
+	justify-content: space-between;
+	line-height: 0.75;
+}
+.font-sizes .option {
+	@include css4 {
+		color: var(--inactive-font-option);
+	}
+	text-align: center;
+	font-size: 36px;
+	float: left;
+}
+.font-sizes .option.smallest {
+	font-size: 1rem;
+}
+.font-sizes .option.small {
+	font-size: 1.5rem;
+}
+.font-sizes .option.medium {
+	font-size: 2rem;
+}
+.font-sizes .option.large {
+	font-size: 2.5rem;
+}
+.font-sizes .option.largest {
+	font-size: 3rem;
+}
+.font-sizes .option.active {
+	@include css4 {
+		color: var(--default-text-color);
+	}
+}
+
+// FONT SIZES SLIDER
+.font-sizes-slider {
+	width: 80%;
+	margin-left: 25px;
+}
+
+// CHECKBOX SETTINGS
+// Will need a .inactive class for disabling the options
+.checkbox-settings label {
+	height: 40px;
+	display: block;
+	@include css4 {
+		color: var(--default-text-color);
+	}
+}
+.checkbox-settings.disabled {
+	opacity: 0.5;
+	.switch {
+		.slider {
+			cursor: default;
+		}
+	}
+	label span {
+		cursor: default;
+	}
+
+	@include css4 {
+		color: var(--disabled-input-option);
+		svg {
+			fill: var(--disabled-input-option);
+		}
+	}
+}
+.checkbox-settings label span {
+	@include css4 {
+		font-size: var(--application-menu-font-size);
+	}
+	float: left;
+	cursor: pointer;
+}
+//.checkbox-settings label span:hover {@include css4{color:var(--active-color-primary);};}
+
+// SWITCH
+// make these variables in case they need to change
+.switch {
+	position: relative;
+	display: inline-block;
+	width: 35px;
+	height: 18px;
+	float: right;
+}
+.switch input {
+	display: none;
+}
+.switch .slider {
+	position: absolute;
+	cursor: pointer;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: inherit;
+	@include css4 {
+		border: 1px solid var(--default-text-color);
+	}
+	transition: 0.4s;
+	height: 18px;
+	border-radius: 35px;
+}
+.switch .slider:before {
+	position: absolute;
+	content: '';
+	height: 20px;
+	width: 20px;
+	left: -1px;
+	bottom: -1.5px;
+	@include css4 {
+		//background-color:var(--settings-option-inactive-color);
+		border: 2px solid var(--default-text-color);
+	}
+	transition: 0.4s;
+	border-radius: 50%;
+	opacity: 1;
+}
+.switch input:checked + .slider {
+	@include css4 {
+		//background-color:var(--settings-option-active-secondary-color);
+		border: 1px solid var(--active-color-primary);
+	}
+}
+.switch input:checked + .slider:before {
+	@include css4 {
+		background-color: var(--active-color-secondary);
+		border: 2px solid var(--active-color-primary);
+	}
+	transform: translateX(15.5px);
+	bottom: -2px;
+}
+
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+	.font-settings .option.sans.active:before {
+		margin: -1px 0 0 19px;
+	}
+	.font-settings .option.serif.active:before {
+		margin: -1px 0 0 18px;
+	}
+	.font-settings .option.slab.active:before {
+		margin: -1px 0 0 20px;
+	}
+
+	.switch .slider:before {
+		left: -1.5px;
+		bottom: -2px;
+	}
+
+	.color-schemes .option {
+		&:before {
+			content: '';
+			position: absolute;
+			margin: -8.5px 0 0 -9px;
+			border-radius: 50%;
+			width: 60px;
+			height: 60px;
+
+			@include css4 {
+				border: 6px solid var(--menu-body-background-color);
+				//border: 6px solid blue;
+			}
+		}
+	}
+}
+// for justified apply these styles to root or something
+/*
+text-align: justify;
+    -webkit-text-align-last: start;
+    -o-text-align-last: start;
+    text-align-last: start;
+    -webkit-hyphens: auto;
+    -ms-hyphens: auto;
+    -o-hyphens: auto;
+    hyphens: auto;
+*/
