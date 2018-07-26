@@ -30,6 +30,7 @@ import {
 	updatePassword,
 	updateUserInformation,
 	deleteUser,
+	setUserLoginStatus,
 	logout,
 	viewErrorMessage,
 	clearErrorMessage,
@@ -54,6 +55,26 @@ export class Profile extends React.PureComponent {
 			this.props.toggleProfile,
 		);
 		this.closeMenuController.onMenuMount();
+		const userProfile = {};
+		const userId =
+			localStorage.getItem('bible_is_user_id') ||
+			sessionStorage.getItem('bible_is_user_id');
+		const userAuthenticated = !!(
+			localStorage.getItem('bible_is_user_id') ||
+			sessionStorage.getItem('bible_is_user_id')
+		);
+		userProfile.email = sessionStorage.getItem('bible_is_12345');
+		userProfile.nickname = sessionStorage.getItem('bible_is_123456');
+		userProfile.name = sessionStorage.getItem('bible_is_1234567');
+		userProfile.avatar = sessionStorage.getItem('bible_is_12345678');
+
+		this.props.dispatch(
+			setUserLoginStatus({
+				userProfile,
+				userId,
+				userAuthenticated,
+			}),
+		);
 	}
 
 	componentWillReceiveProps(nextProps) {

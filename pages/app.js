@@ -12,6 +12,7 @@ import 'babel-polyfill';
 import React from 'react';
 import PropTypes from 'prop-types';
 // import ReactDOM from 'react-dom';
+import { fromJS } from 'immutable';
 import { Provider } from 'react-redux';
 // import { ConnectedRouter } from 'react-router-redux';
 // import createHistory from 'history/createBrowserHistory';
@@ -105,10 +106,18 @@ const AppContainer = (props) => {
 		activeTextName,
 		defaultLanguageName,
 		defaultLanguageIso,
+		userId,
+		isAuthenticated,
+		userProfile,
+		isFromServer,
 	} = props;
 	// Create redux store with history
+	// Probably need to figure out a way to persist this after it is loaded for the first time
+	// If from server then create a new store
+	// If from client then use the old store
 	const initialState = {
 		homepage: {
+			userProfile,
 			books,
 			textDirection,
 			activeTextName,
@@ -120,15 +129,15 @@ const AppContainer = (props) => {
 			defaultLanguageIso,
 			activeBookId,
 			testaments,
+			userId,
 			activeFilesets: filesets,
+			userAuthenticated: isAuthenticated,
 			chapterText: chapterText || [],
 			loadingNewChapterText: false,
 			loadingAudio: false,
 			loadingCopyright: false,
 			loadingBooks: false,
 			note: {},
-			userAuthenticated: false,
-			userId: '',
 			audioObjects: [],
 			audioFilesetId: '',
 			plainTextFilesetId: '',
@@ -209,9 +218,48 @@ const AppContainer = (props) => {
 			audioPaths: [],
 			audioPlayerState: true,
 		},
+		profile: {
+			activeOption: 'login',
+			userAuthenticated: isAuthenticated,
+			userId,
+			loginErrorMessage: '',
+			socialLoginLink: '',
+			signupErrorMessage: '',
+			activeDriver: '',
+			userProfile: {
+				...userProfile,
+				verified: false,
+				accounts: [],
+			},
+			errorMessageViewed: true,
+			passwordResetError: '',
+			passwordResetMessage: '',
+			deleteUserError: false,
+			deleteUserMessage: '',
+		},
 	};
 
-	const store = configureStore({}, {}, initialState);
+	let store;
+
+	if (isFromServer) {
+		store = configureStore({}, {}, initialState);
+	} else {
+		// console.log('Was not from server');
+
+		/* eslint-disable no-underscore-dangle */
+		if (!window.__NEXT_REDUX_STORE__) {
+			store = configureStore({}, {}, initialState);
+			window.__NEXT_REDUX_STORE__ = configureStore({}, {}, initialState);
+		}
+		window.__NEXT_REDUX_STORE__.dispatch((state) => {
+			if (state.isMap) {
+				return state.mergeWith(fromJS(initialState));
+			}
+			return { ...state, ...initialState };
+		});
+		store = window.__NEXT_REDUX_STORE__;
+		/* eslint-enable no-underscore-dangle */
+	}
 
 	return (
 		<Provider store={store}>
@@ -255,10 +303,32 @@ const AppContainer = (props) => {
 
 AppContainer.getInitialProps = async (context) => {
 	const { bibleId, bookId, chapter, verse, token } = context.query;
-	// let isServer = false;
+	let isFromServer = true;
+	const userProfile = {};
+	let userId = '';
+	let isAuthenticated = false;
 
 	if (!context.req) {
-		// This is from the client
+		isFromServer = false;
+		// This is from the client so local and session storage should be available now
+		userId =
+			localStorage.getItem('bible_is_user_id') ||
+			sessionStorage.getItem('bible_is_user_id');
+		isAuthenticated = !!(
+			localStorage.getItem('bible_is_user_id') ||
+			sessionStorage.getItem('bible_is_user_id')
+		);
+		userProfile.email = sessionStorage.getItem('bible_is_12345');
+		userProfile.nickname = sessionStorage.getItem('bible_is_123456');
+		userProfile.name = sessionStorage.getItem('bible_is_1234567');
+		userProfile.avatar = sessionStorage.getItem('bible_is_12345678');
+
+		// sessionStorage.setItem('bible_is_12345', action.userProfile.email);
+		// sessionStorage.setItem('bible_is_123456', action.userProfile.nickname);
+		// sessionStorage.setItem('bible_is_1234567', action.userProfile.name);
+		// sessionStorage.setItem('bible_is_12345678', action.userProfile.avatar);
+		// localStorage.removeItem('bible_is_user_id');
+		// sessionStorage.removeItem('bible_is_user_id');
 		// console.log('context.props in app on client', context.props);
 		// console.log('context.query in app on client', context.query);
 		// console.log('context.params in app on client', context.params);
@@ -339,7 +409,10 @@ AppContainer.getInitialProps = async (context) => {
 		defaultLanguageName: bible.language || 'English',
 		activeTextName: bible.vname || bible.name,
 		activeBookId: bookId.toUpperCase(),
-		// texts,
+		userProfile,
+		userId: userId || '',
+		isAuthenticated: isAuthenticated || false,
+		isFromServer,
 		match: {
 			params: {
 				bibleId,
@@ -354,7 +427,7 @@ AppContainer.getInitialProps = async (context) => {
 
 AppContainer.propTypes = {
 	books: PropTypes.array,
-	// isServer: PropTypes.bool,
+	isFromServer: PropTypes.bool,
 	filesets: PropTypes.array,
 	testaments: PropTypes.object,
 	textDirection: PropTypes.string,
@@ -368,6 +441,9 @@ AppContainer.propTypes = {
 	defaultLanguageIso: PropTypes.string,
 	defaultLanguageName: PropTypes.string,
 	match: PropTypes.object,
+	userId: PropTypes.string,
+	isAuthenticated: PropTypes.bool,
+	userProfile: PropTypes.object,
 	// activeIsoCode: PropTypes.string,
 	// activeCountryName: PropTypes.string,
 	// activeLanguageName: PropTypes.string,
@@ -379,37 +455,6 @@ AppContainer.propTypes = {
 
 export default AppContainer;
 
-// if (module.hot) {
-// 	// Hot reloadable React components and translation json files
-// 	// modules.hot.accept does not accept dynamic dependencies,
-// 	// have to be constants at compile-time
-// 	module.hot.accept(['./i18n', 'containers/App'], () => {
-// 		ReactDOM.unmountComponentAtNode(MOUNT_NODE);
-// 		render(translationMessages);
-// 	});
-// }
-// Todo: Figure out how to do intl with nextjs
-// // Chunked polyfill for browsers without Intl support
-// if (!window.Intl) {
-// 	new Promise((resolve) => {
-// 		resolve(import('intl'));
-// 	})
-// 		.then(() =>
-// 			Promise.all([
-// 				import('intl/locale-data/jsonp/en.js'),
-// 				import('intl/locale-data/jsonp/th.js'),
-// 				import('intl/locale-data/jsonp/ru.js'),
-// 				import('intl/locale-data/jsonp/es.js'),
-// 			]),
-// 		)
-// 		.then(() => render(translationMessages))
-// 		.catch((err) => {
-// 			throw err;
-// 		});
-// } else {
-// 	render(translationMessages);
-// }
-//
 // // Install ServiceWorker and AppCache in the end since
 // // it's not most important operation and if main code fails,
 // // we do not want it installed

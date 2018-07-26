@@ -115,17 +115,108 @@ class HomePage extends React.PureComponent {
 	// eslint-disable-line react/prefer-stateless-function
 	componentDidMount() {
 		// Get the first bible based on the url here
-		console.log('Component did mount');
+		// console.log('Component did mount');
 
+		const {
+			activeFilesets,
+			activeBookId,
+			activeChapter,
+			activeTextId,
+			userAuthenticated,
+			userId,
+		} = this.props.homepage;
 		// May want to use replace here at some point
 		this.props.dispatch({
 			type: 'getaudio',
-			filesets: this.props.homepage.activeFilesets,
-			bookId: this.props.homepage.activeBookId,
-			chapter: this.props.homepage.activeChapter,
+			filesets: activeFilesets,
+			bookId: activeBookId,
+			chapter: activeChapter,
 		});
 
-		this.getCopyrights({ filesetIds: this.props.homepage.activeFilesets });
+		this.getCopyrights({ filesetIds: activeFilesets });
+
+		if (userId && userAuthenticated) {
+			// console.log('User was signed in by getInitialProps');
+
+			this.props.dispatch(
+				getHighlights({
+					bible: activeTextId,
+					book: activeBookId,
+					chapter: activeChapter,
+					userAuthenticated,
+					userId,
+				}),
+			);
+			if (userId) {
+				// console.log('getting the notes', userId);
+				this.props.dispatch(
+					getNotes({
+						userId,
+						params: {
+							bible_id: activeTextId,
+							book_id: activeBookId,
+							chapter: activeChapter,
+							limit: 150,
+							page: 1,
+						},
+					}),
+				);
+				this.props.dispatch(
+					getBookmarksForChapter({
+						userId,
+						params: {
+							bible_id: activeTextId,
+							book_id: activeBookId,
+							chapter: activeChapter,
+							limit: 150,
+							page: 1,
+						},
+					}),
+				);
+			}
+		} else {
+			// console.log('localStorage.getItem(user_id)', localStorage.getItem('bible_is_user_id'));
+			// console.log('sessionStorage.getItem(user_id)', sessionStorage.getItem('bible_is_user_id'));
+			const sessionId =
+				localStorage.getItem('bible_is_user_id') ||
+				sessionStorage.getItem('bible_is_user_id');
+			this.props.dispatch(
+				getHighlights({
+					bible: activeTextId,
+					book: activeBookId,
+					chapter: activeChapter,
+					userAuthenticated: !!sessionId,
+					userId: sessionId,
+				}),
+			);
+			if (sessionId) {
+				// console.log('getting the notes', userId: sessionId);
+				this.props.dispatch(
+					getNotes({
+						userId: sessionId,
+						params: {
+							bible_id: activeTextId,
+							book_id: activeBookId,
+							chapter: activeChapter,
+							limit: 150,
+							page: 1,
+						},
+					}),
+				);
+				this.props.dispatch(
+					getBookmarksForChapter({
+						userId: sessionId,
+						params: {
+							bible_id: activeTextId,
+							book_id: activeBookId,
+							chapter: activeChapter,
+							limit: 150,
+							page: 1,
+						},
+					}),
+				);
+			}
+		}
 
 		if (this.props.match.params.token) {
 			// Open Profile
@@ -296,25 +387,14 @@ class HomePage extends React.PureComponent {
 			svg4everybody();
 		}
 
-		// Check for if the screen size is small enough to be a mobile device
-		// Google Pixel 2 XL is 411x823
-		// Add the event listeners anyway but check for this
-		// in RAF to determine what state to update
 		if (window && document && document.firstElementChild) {
 			// console.log('Added scroll listener');
 			// Main can be unset in this instance
 			this.main = document.getElementsByTagName('main')[0];
 			window.addEventListener('scroll', this.handleScrolling, true);
-			// window.addEventListener('resize', this.handleResize, true);
-			// this.throttle('resize', 'optimizedResize');
-			// window.addEventListener('optimizedResize', this.handleResize);
-			//
-			// console.log(document.getElementById('app').firstChild.scrollTop);
-			// document.getElementById('app').firstChild.scrollTop = 1;
-			// console.log(document.getElementById('app').firstChild.scrollTop);
-			// console.log(document.getElementById('app').firstChild.scrollHeight);
 		}
 
+		// Should move these to being tracked in state or move them to media queries
 		this.isMobileSized = () =>
 			window &&
 			document &&
@@ -345,17 +425,6 @@ class HomePage extends React.PureComponent {
 		// console.log('Received props --------------------------------------');
 
 		this.setState({ subFooterOpen: false });
-		const match = this.props.match || {
-			params: {
-				token: '',
-				verse: '',
-				chapter: 1,
-				bookId: 'MAT',
-				bibleId: 'ENGESV',
-			},
-		};
-		// previous props
-		const { params } = match;
 		// next props
 		const nextMatch = nextProps.match || {
 			params: {
@@ -367,174 +436,14 @@ class HomePage extends React.PureComponent {
 			},
 		};
 		const { params: nextParams } = nextMatch;
-		// console.log('prev and next match\n', this.props.match, '\n', nextProps.match);
-		const { userAuthenticated, userId } = nextProps;
-		if (
-			nextParams.token &&
-			userId &&
-			userAuthenticated &&
-			!(
-				this.props.userId === userId &&
-				this.props.userAuthenticated === userAuthenticated
-			)
-		) {
-			// Reset the password because currently has a token but the user id has changed so the password was reset successfully
-			// this.props.history.replace(
-			// 	`/${localStorage.getItem('bible_is_1_bible_id') ||
-			// 		'engesv'}/${localStorage.getItem('bible_is_2_book_id') ||
-			// 		'mat'}/${localStorage.getItem('bible_is_3_chapter') || '1'}`,
-			// );
-		}
-		if (!isEqual(params, nextParams)) {
-			// if the route isn't the same as before find which parts changed
-			const newChapter = params.chapter !== nextParams.chapter;
-			const newBook = params.bookId !== nextParams.bookId;
-			const newBible = params.bibleId !== nextParams.bibleId;
-
-			if (newBible) {
-				// console.log('new bible');
-				// Need to get the bible object with /bibles/[bibleId]
-				// Need to send a request to get the audio and text once the previous request is done - (maybe handled in saga?)
-				// Needs to preserve the current book and chapter to try and use it first
-				// Needs to default to the first available book and chapter if the current option isn't available
-				// this.props.dispatch({
-				// 	type: 'getbible',
-				// 	bibleId: nextParams.bibleId,
-				// 	bookId: nextParams.bookId,
-				// 	chapter: nextParams.chapter,
-				// 	verse: nextParams.verse || '',
-				// 	authenticated: userAuthenticated,
-				// 	userId,
-				// });
-			} else if (newBook) {
-				// console.log('new book');
-				// This needs to be here for the case when a user goes from Genesis 7 to Mark 7 via the dropdown menu
-				// Need to get the audio and text for the new book /bibles/[bibleId]/[bookId]/chapter
-				// Preserve current chapter and try to use it first
-				// Default to first chapter if the new book doesn't have the current chapter
-				// console.log('new book', nextProps.homepage.activeFilesets);
-				// this.props.dispatch({
-				// 	type: 'getchapter',
-				// 	filesets: nextProps.homepage.activeFilesets,
-				// 	bibleId: nextParams.bibleId,
-				// 	bookId: nextParams.bookId,
-				// 	chapter: nextParams.chapter,
-				// 	verse: nextParams.verse || '',
-				// 	authenticated: userAuthenticated,
-				// 	userId,
-				// });
-			} else if (newChapter) {
-				// console.log('new chapter');
-				// Need to get the audio and text for the new chapter /bibles/[bibleId]/[bookId]/chapter
-				// if the chapter is not invalid default to first chapter of the current book
-				// this.props.dispatch({
-				// 	type: 'getchapter',
-				// 	filesets: nextProps.homepage.activeFilesets,
-				// 	bibleId: nextParams.bibleId,
-				// 	bookId: nextParams.bookId,
-				// 	chapter: nextParams.chapter,
-				// 	verse: nextParams.verse || '',
-				// 	authenticated: userAuthenticated,
-				// 	userId,
-				// });
-			}
-		} else if (
-			this.props.homepage.activeBookId !== nextProps.homepage.activeBookId
-		) {
-			// console.log('Book changed');
-			// Deals with when the new text doesn't have the same book
-			// Still using the verse param since it may not have been set in the homepage object yet
-			// this.props.history.replace(
-			// 	`/${nextProps.homepage.activeTextId.toLowerCase()}/${nextProps.homepage.activeBookId.toLowerCase()}/${
-			// 		nextProps.homepage.activeChapter
-			// 	}${nextParams.verse ? `/${nextParams.verse}` : ''}`,
-			// );
-			// console.log('route that I pushed', `/${nextProps.homepage.activeTextId}/${nextProps.homepage.activeBookId}/${nextProps.homepage.activeChapter}`);
-		} else if (
-			this.props.homepage.activeChapter !== nextProps.homepage.activeChapter &&
-			nextProps.homepage.activeChapter !== nextParams.chapter
-		) {
-			// console.log('chapter changed both in params and props');
-			// Need to account for if the verse changed here
-			// If the chapters are different
-			if (
-				nextParams.verse !== nextProps.homepage.activeVerse &&
-				nextParams.verse
-			) {
-				// console.log('The verses were different as well so I am not updating the url');
-				// this.props.history.replace(
-				// 	`/${nextParams.bibleId.toLowerCase()}/${nextParams.bookId.toLowerCase()}/${
-				// 		nextParams.chapter
-				// 	}${nextParams.verse ? `/${nextParams.verse}` : ''}`,
-				// );
-			} else {
-				// this.props.history.replace(
-				// 	`/${nextProps.homepage.activeTextId.toLowerCase()}/${nextProps.homepage.activeBookId.toLowerCase()}/${
-				// 		nextProps.homepage.activeChapter
-				// 	}${
-				// 		nextProps.homepage.activeVerse
-				// 			? `/${nextProps.homepage.activeVerse}`
-				// 			: ''
-				// 	}`,
-				// );
-			}
-		} else if (
-			isEqual(params, nextParams) &&
-			this.props.homepage.activeBookId === nextProps.homepage.activeBookId &&
-			this.props.homepage.activeChapter === nextProps.homepage.activeChapter &&
-			this.props.homepage.activeTextId === nextProps.homepage.activeTextId
-		) {
-			// If url did not change && bibleId, bookId and chapter in props did not change - Might need to include verse as well...
-			// This section may not work with SSR because the state might be persisted through a refresh
-			// console.log('Url did not change and current props equal next props');
-			// console.log('this.props.homepage.activeVerse', this.props.homepage.activeVerse);
-			// Handles the cases where the url needs to be updated
-			// const nextPropUrl = `/${nextProps.homepage.activeTextId.toLowerCase()}/${nextProps.homepage.activeBookId.toLowerCase()}/${
-			// 	nextProps.homepage.activeChapter
-			// }`;
-			// const nextParamUrl = `/${nextParams.bibleId}/${nextParams.bookId}/${
-			// 	nextParams.chapter
-			// }`;
-			// const curPropUrl = `/${this.props.homepage.activeTextId.toLowerCase()}/${this.props.homepage.activeBookId.toLowerCase()}/${
-			// 	this.props.homepage.activeChapter
-			// }`;
-			// const curParamUrl = `/${params.bibleId}/${params.bookId}/${
-			// 	params.chapter
-			// }`;
-			// const propsExist =
-			// 	nextProps.homepage.activeChapter &&
-			// 	nextProps.homepage.activeBookId &&
-			// 	nextProps.homepage.activeTextId;
-			// if there are props in the next state of the application
-			// and the next props do not match the next url
-			// and the current url does not match the current props
-			// if (
-			// 	propsExist &&
-			// 	nextPropUrl !== nextParamUrl &&
-			// 	curParamUrl !== curPropUrl &&
-			// 	nextParamUrl !== curParamUrl
-			// ) {
-			// 	// console.log('Params do not match props', nextPropUrl !== nextParamUrl, !(curParamUrl === curPropUrl));
-			// 	// there are props, the current props and params match, the next params are different, the next props do not equal the next params
-			// 	// console.log('there are props, the current props and params match, the next params are different, the next props do not equal the next params');
-			// 	// Redirect to the appropriate url
-			// 	// this.props.history.replace(
-			// 	// 	`/${nextProps.homepage.activeTextId.toLowerCase()}/${nextProps.homepage.activeBookId.toLowerCase()}/${
-			// 	// 		nextProps.homepage.activeChapter
-			// 	// 	}${
-			// 	// 		nextProps.homepage.activeVerse
-			// 	// 			? `/${nextProps.homepage.activeVerse}`
-			// 	// 			: ''
-			// 	// 	}`,
-			// 	// );
-			// }
-		}
 
 		// Deals with updating the interface if a user is authenticated or added highlights
 		const {
 			activeTextId,
 			activeBookId,
 			activeChapter,
+			userAuthenticated,
+			userId,
 			// highlights,
 		} = nextProps.homepage;
 		// console.log('nextHighlights', highlights);
@@ -606,50 +515,6 @@ class HomePage extends React.PureComponent {
 		window.removeEventListener('scroll', this.handleScrolling, true);
 	}
 
-	// setNextVerse = (verse) => {
-	// 	const { bibleId, bookId, chapter } = this.props.match.params;
-	// 	const { chapterText } = this.props.homepage;
-	// 	const nextVerse = parseInt(verse, 10) + 1 || 1;
-	// 	const lastVerse = chapterText.length;
-	// 	// Is it past the max verses for the chapter?
-	// 	// if not increment it by 1
-	// 	if (nextVerse <= lastVerse && nextVerse > 0) {
-	// 		// this.props.history.push(
-	// 		// 	`/${bibleId.toLowerCase()}/${bookId.toLowerCase()}/${chapter}/${nextVerse}`,
-	// 		// );
-	// 	} else if (nextVerse < 0) {
-	// 		// this.props.history.replace(
-	// 		// 	`/${bibleId.toLowerCase()}/${bookId.toLowerCase()}/${chapter}/1`,
-	// 		// );
-	// 	} else if (nextVerse > lastVerse) {
-	// 		// this.props.history.replace(
-	// 		// 	`/${bibleId.toLowerCase()}/${bookId.toLowerCase()}/${chapter}/${lastVerse}`,
-	// 		// );
-	// 	}
-	// };
-	//
-	// setPrevVerse = (verse) => {
-	// 	const { bibleId, bookId, chapter } = this.props.match.params;
-	// 	const { chapterText } = this.props.homepage;
-	// 	const prevVerse = parseInt(verse, 10) - 1 || 1;
-	// 	const lastVerse = chapterText.length;
-	// 	// Is it past the max verses for the chapter?
-	// 	// if not increment it by 1
-	// 	if (prevVerse <= lastVerse && prevVerse > 0) {
-	// 		// this.props.history.push(
-	// 		// 	`/${bibleId.toLowerCase()}/${bookId.toLowerCase()}/${chapter}/${prevVerse}`,
-	// 		// );
-	// 	} else if (prevVerse < 0) {
-	// 		// this.props.history.replace(
-	// 		// 	`/${bibleId.toLowerCase()}/${bookId.toLowerCase()}/${chapter}/1`,
-	// 		// );
-	// 	} else if (prevVerse > lastVerse) {
-	// 		// this.props.history.replace(
-	// 		// 	`/${bibleId.toLowerCase()}/${bookId.toLowerCase()}/${chapter}/${lastVerse}`,
-	// 		// );
-	// 	}
-	// };
-
 	getBooks = (props) => this.props.dispatch(getBooks(props));
 
 	getChapters = (props) => this.props.dispatch(getChapterText(props));
@@ -671,31 +536,6 @@ class HomePage extends React.PureComponent {
 	setAudioPlayerState = (state) =>
 		this.props.dispatch(setAudioPlayerState(state));
 
-	// handleResize = (e) => {
-	// console.log('resized', e);
-	// this.isMobileSized;
-	// this.isLargeBp;
-	// this.isAudioPlayerBp;
-	// };
-
-	// May want to use this for the scroll event to try and limit the number of events handled
-	throttle(type, name, node) {
-		const obj = node || window;
-		let running = false;
-		const callback = () => {
-			if (running) {
-				return;
-			}
-			running = true;
-			requestAnimationFrame(() => {
-				obj.dispatchEvent(new CustomEvent(name));
-				running = false;
-			});
-		};
-
-		obj.addEventListener(type, callback);
-	}
-
 	// May need more than one to determine the different audio player heights
 	isMobileSized() {
 		// console.log('resized mobile');
@@ -714,15 +554,6 @@ class HomePage extends React.PureComponent {
 
 	// Height of the entire scroll container including the invisible portions
 	get mainHeight() {
-		// console.log(
-		// 	'Math.max(this.main.offsetHeight,this.main.clientHeight,this.main.scrollHeight)',
-		// 	Math.max(
-		// 		this.main.offsetHeight,
-		// 		this.main.clientHeight,
-		// 		this.main.scrollHeight,
-		// 	),
-		// );
-
 		return Math.max(
 			this.main.offsetHeight,
 			this.main.clientHeight,

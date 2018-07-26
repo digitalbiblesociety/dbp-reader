@@ -71,18 +71,18 @@ function profileReducer(state = initialState, action) {
 		case USER_LOGGED_IN:
 			// console.log('Logged in and reducer fired', action);
 
-			// sessionStorage.setItem('bible_is_12345', action.userProfile.email);
-			// sessionStorage.setItem('bible_is_123456', action.userProfile.nickname);
-			// sessionStorage.setItem('bible_is_1234567', action.userProfile.name);
-			// sessionStorage.setItem('bible_is_12345678', action.userProfile.avatar);
+			sessionStorage.setItem('bible_is_12345', action.userProfile.email);
+			sessionStorage.setItem('bible_is_123456', action.userProfile.nickname);
+			sessionStorage.setItem('bible_is_1234567', action.userProfile.name);
+			sessionStorage.setItem('bible_is_12345678', action.userProfile.avatar);
 			return state
 				.set('userId', action.userId)
 				.set('userProfile', action.userProfile)
 				.set('userAuthenticated', true);
 		case LOG_OUT:
 			// Need to remove the user's id from storage when they log out
-			// localStorage.removeItem('bible_is_user_id');
-			// sessionStorage.removeItem('bible_is_user_id');
+			localStorage.removeItem('bible_is_user_id');
+			sessionStorage.removeItem('bible_is_user_id');
 			return state.set('userId', '').set('userAuthenticated', false);
 		case SIGNUP_ERROR:
 			return state

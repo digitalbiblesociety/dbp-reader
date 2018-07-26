@@ -2,14 +2,14 @@ import get from 'lodash/get';
 // import svgs from '../../../static/svglist.svg';
 // Declare Globals - I use these in multiple functions below
 // so it makes sense to only declare them once
-const serializer = new XMLSerializer();
-const parser = new DOMParser();
-
 /*
 	source is a serializable string
 	notes is a list of the notes in this chapter
 */
 const applyNotes = (source, notes) => {
+	const serializer = new XMLSerializer();
+	const parser = new DOMParser();
+
 	if (!source || !notes.length) {
 		return source;
 	}
@@ -66,6 +66,9 @@ const applyNotes = (source, notes) => {
 	bookmarks is a list of the bookmarks in this chapter
 */
 const applyBookmarks = (source, bookmarks) => {
+	const serializer = new XMLSerializer();
+	const parser = new DOMParser();
+
 	if (!source || !bookmarks.length) {
 		return source;
 	}

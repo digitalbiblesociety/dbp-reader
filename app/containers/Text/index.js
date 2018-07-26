@@ -6,7 +6,6 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import isEqual from 'lodash/isEqual';
 import Information from '../../components/Information';
@@ -40,6 +39,11 @@ import {
 	isEndOfBible,
 	isStartOfBible,
 } from './textRenderUtils';
+import createHighlights from './highlightPlainText';
+import createFormattedHighlights from './highlightFormattedText';
+import { applyNotes, applyBookmarks } from './formattedTextUtils';
+
+// const dynamicCreateHighlights = dynamic(import('./highlightPlainText'), { ssr: false });
 // import differenceObject from 'utils/deepDifferenceObject';
 // import some from 'lodash/some';
 // import { addClickToNotes } from './htmlToReact';
@@ -65,13 +69,11 @@ class Text extends React.PureComponent {
 	};
 
 	componentDidMount() {
-		this.createHighlights = dynamic(import('./highlightPlainText'));
-		this.createFormattedHighlights = dynamic(
-			import('./highlightFormattedText'),
-		);
-		this.applyNotesAndBookmarks = dynamic(import('./formattedTextUtils'));
-		this.applyNotes = this.applyNotesAndBookmarks.applyNotes;
-		this.applyBookmarks = this.applyNotesAndBookmarks.applyBookmarks;
+		this.createHighlights = createHighlights;
+		this.createFormattedHighlights = createFormattedHighlights;
+		this.applyNotes = applyNotes;
+		this.applyBookmarks = applyBookmarks;
+
 		if (this.format) {
 			// console.log('setting event listeners on format');
 			this.setEventHandlersForFootnotes(this.format);

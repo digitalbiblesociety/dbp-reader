@@ -140,6 +140,7 @@ const initialState = fromJS({
 	audioPaths: [],
 	note: {},
 	filesetTypes: {},
+	userProfile: {},
 	testaments: {},
 	userSettings: {
 		// 	activeTheme: sessionStorage.getItem('bible_is_theme') || 'red',

@@ -9,6 +9,7 @@ import {
 	SELECT_ACCOUNT_OPTION,
 	LOAD_USER_DATA,
 	GET_USER_DATA,
+	USER_LOGGED_IN,
 	SEND_LOGIN_FORM,
 	SEND_SIGNUP_FORM,
 	SOCIAL_MEDIA_LOGIN,
@@ -23,6 +24,11 @@ import {
 	READ_OAUTH_ERROR,
 	SEND_PASSWORD_RESET,
 } from './constants';
+
+export const setUserLoginStatus = (props) => ({
+	type: USER_LOGGED_IN,
+	...props,
+});
 
 export const readOauthError = (props) => ({
 	type: READ_OAUTH_ERROR,
