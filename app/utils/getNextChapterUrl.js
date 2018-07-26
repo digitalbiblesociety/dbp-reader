@@ -29,8 +29,10 @@ export default (books, chapter, bookId, textId, verseNumber, chapterText) => {
 	books.forEach((book, index) => {
 		if (book.book_id.toLowerCase() === bookId) {
 			activeBookIndex = index;
-			if (index + 1) {
+			if (index + 1 <= books.length - 1) {
 				nextBookIndex = index + 1;
+			} else {
+				nextBookIndex = index;
 			}
 		}
 	});

@@ -12,30 +12,11 @@
  *
  */
 
+// Can probably just remove this component altogether as it is just a wrapper
 import React from 'react';
 import PropTypes from 'prop-types';
-// import { Switch, Route } from 'react-router-dom';
-
 import HomePage from '../HomePage';
-// import AboutPage from '../AboutPage/Loadable';
-// import NotFoundPage from '../NotFoundPage/Loadable';
-// import PrivacyPolicy from '../../components/PrivacyPolicy';
-// import TermsAndConditions from '../../components/TermsAndConditions';
-// Need to either redirect from / or add the necessary params so that the first page loads correctly
-// 			{/* <Switch> */}
-// 			{/* <Route exact path="/" component={HomePage} /> */}
-// 			{/* <Route exact path="/about" component={AboutPage} /> */}
-// 			{/* <Route exact path="/404" component={NotFoundPage} /> */}
-// 			{/* <Route exact path="/privacy-policy" component={PrivacyPolicy} /> */}
-// 			{/* <Route exact path="/terms-of-use" component={TermsAndConditions} /> */}
-// 			{/* <Route exact path="/reset/password/:token" component={HomePage} /> */}
-// 			{/* <Route */}
-// 			{/* exact */}
-// 			{/* path="/:bibleId?/:bookId?/:chapter?/:verse?" */}
-// 			{/* component={HomePage} */}
-// 			{/* /> */}
-// 			{/* <Route component={NotFoundPage} /> */}
-// 			{/* </Switch> */}
+
 export default function App({ appProps }) {
 	return (
 		<div>
