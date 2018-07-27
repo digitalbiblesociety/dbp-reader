@@ -39,6 +39,7 @@ import {
 	codes,
 	// sortBySetSize,
 } from './sagaUtils';
+
 // import { fromJS } from 'immutable';
 // import unionWith from 'lodash/unionWith';
 // import { ADD_HIGHLIGHTS, LOAD_HIGHLIGHTS, GET_CHAPTER_TEXT, GET_HIGHLIGHTS, GET_BOOKS, GET_AUDIO, INIT_APPLICATION } from './constants';
