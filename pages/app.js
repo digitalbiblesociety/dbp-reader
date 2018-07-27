@@ -7,20 +7,20 @@
 
 // Needed for redux-saga es6 generator support
 import 'babel-polyfill';
-
 // Import all the third party stuff
 import React from 'react';
 import PropTypes from 'prop-types';
 // import ReactDOM from 'react-dom';
-import { fromJS } from 'immutable';
+// import { fromJS } from 'immutable';
 import { Provider } from 'react-redux';
 // import { ConnectedRouter } from 'react-router-redux';
 // import createHistory from 'history/createBrowserHistory';
 import 'rc-slider/assets/index.css';
 import 'react-accessible-accordion/dist/minimal-example.css';
 // import 'sanitize.css/sanitize.css';
-import fetch from 'isomorphic-fetch';
+// import fetch from 'isomorphic-fetch';
 import Head from 'next/head';
+import cachedFetch, { overrideCache } from '../app/utils/cachedFetch';
 // Load the favicon, the manifest.json file and the .htaccess file
 /* eslint-disable import/no-unresolved, import/extensions */
 // import '../static/apple-icon-72x72.png';
@@ -62,7 +62,14 @@ import '../static/app.scss';
 
 // const MOUNT_NODE = document.getElementById('app');
 
-const AppContainer = (props) => {
+class AppContainer extends React.Component {
+	componentDidMount() {
+		if (this.props.isFromServer) {
+			this.props.fetchedUrls.forEach((url) => {
+				overrideCache(url.href, url.data);
+			});
+		}
+	}
 	/*
 		{
 		// Minimum to render <Text />
@@ -92,214 +99,219 @@ const AppContainer = (props) => {
 		}
 
 	*/
-	const {
-		books,
-		textDirection,
-		activeChapter,
-		chapterText,
-		activeBookName,
-		activeBookId,
-		verseNumber,
-		testaments,
-		filesets,
-		activeTextId,
-		activeTextName,
-		defaultLanguageName,
-		defaultLanguageIso,
-		userId,
-		isAuthenticated,
-		userProfile,
-		isFromServer,
-	} = props;
-	// Create redux store with history
-	// Probably need to figure out a way to persist this after it is loaded for the first time
-	// If from server then create a new store
-	// If from client then use the old store
-	const initialState = {
-		homepage: {
-			userProfile,
+	render() {
+		const {
 			books,
 			textDirection,
-			activeTextName,
 			activeChapter,
+			chapterText,
 			activeBookName,
+			activeBookId,
 			verseNumber,
+			testaments,
+			filesets,
 			activeTextId,
+			activeTextName,
 			defaultLanguageName,
 			defaultLanguageIso,
-			activeBookId,
-			testaments,
 			userId,
-			activeFilesets: filesets,
-			userAuthenticated: isAuthenticated,
-			chapterText: chapterText || [],
-			loadingNewChapterText: false,
-			loadingAudio: false,
-			loadingCopyright: false,
-			loadingBooks: false,
-			note: {},
-			audioObjects: [],
-			audioFilesetId: '',
-			plainTextFilesetId: '',
-			formattedTextFilesetId: '',
-			highlights: [],
-			copyrights: {
-				newTestament: {
-					audio: {},
-					text: {},
-				},
-				oldTestament: {
-					audio: {},
-					text: {},
-				},
-			},
-			isChapterSelectionActive: false,
-			isProfileActive: false,
-			isSettingsModalActive: false,
-			isSearchModalActive: false,
-			isNotesModalActive: false,
-			isVersionSelectionActive: false,
-			isInformationModalActive: false,
-			activeNotesView: 'notes',
-			userSettings: {
-				activeTheme: 'red',
-				activeFontType: 'sans',
-				activeFontSize: 42,
-				toggleOptions: {
-					readersMode: {
-						name: "READER'S MODE",
-						active: false,
-						available: true,
+			isAuthenticated,
+			userProfile,
+			isFromServer,
+		} = this.props;
+		// Create redux store with history
+		// Probably need to figure out a way to persist this after it is loaded for the first time
+		// If from server then create a new store
+		// If from client then use the old store
+		const initialState = {
+			homepage: {
+				userProfile,
+				books,
+				textDirection,
+				activeTextName,
+				activeChapter,
+				activeBookName,
+				verseNumber,
+				activeTextId,
+				defaultLanguageName,
+				defaultLanguageIso,
+				activeBookId,
+				testaments,
+				userId,
+				activeFilesets: filesets,
+				userAuthenticated: isAuthenticated,
+				chapterText: chapterText || [],
+				loadingNewChapterText: false,
+				loadingAudio: false,
+				loadingCopyright: false,
+				loadingBooks: false,
+				note: {},
+				audioObjects: [],
+				audioFilesetId: '',
+				plainTextFilesetId: '',
+				formattedTextFilesetId: '',
+				highlights: [],
+				copyrights: {
+					newTestament: {
+						audio: {},
+						text: {},
 					},
-					crossReferences: {
-						name: 'CROSS REFERENCE',
-						active: true,
-						available: true,
-					},
-					redLetter: {
-						name: 'RED LETTER',
-						active: true,
-						available: true,
-					},
-					justifiedText: {
-						name: 'JUSTIFIED TEXT',
-						active: true,
-						available: true,
-					},
-					oneVersePerLine: {
-						name: 'ONE VERSE PER LINE',
-						active: false,
-						available: true,
-					},
-					verticalScrolling: {
-						name: 'VERTICAL SCROLLING',
-						active: false,
-						available: false,
+					oldTestament: {
+						audio: {},
+						text: {},
 					},
 				},
+				isChapterSelectionActive: false,
+				isProfileActive: false,
+				isSettingsModalActive: false,
+				isSearchModalActive: false,
+				isNotesModalActive: false,
+				isVersionSelectionActive: false,
+				isInformationModalActive: false,
+				activeNotesView: 'notes',
+				userSettings: {
+					activeTheme: 'red',
+					activeFontType: 'sans',
+					activeFontSize: 42,
+					toggleOptions: {
+						readersMode: {
+							name: "READER'S MODE",
+							active: false,
+							available: true,
+						},
+						crossReferences: {
+							name: 'CROSS REFERENCE',
+							active: true,
+							available: true,
+						},
+						redLetter: {
+							name: 'RED LETTER',
+							active: true,
+							available: true,
+						},
+						justifiedText: {
+							name: 'JUSTIFIED TEXT',
+							active: true,
+							available: true,
+						},
+						oneVersePerLine: {
+							name: 'ONE VERSE PER LINE',
+							active: false,
+							available: true,
+						},
+						verticalScrolling: {
+							name: 'VERTICAL SCROLLING',
+							active: false,
+							available: false,
+						},
+					},
+				},
+				autoPlayEnabled: false,
+				selectedText: '',
+				selectedBookName: '',
+				audioSource: '',
+				invalidBibleId: false,
+				hasAudio: false,
+				formattedSource: '',
+				hasTextInDatabase: true,
+				filesetTypes: {},
+				firstLoad: true,
+				previousAudioPaths: [],
+				previousAudioFilesetId: '',
+				previousAudioSource: '',
+				nextAudioPaths: [],
+				nextAudioFilesetId: '',
+				nextAudioSource: '',
+				activeVerse: '',
+				audioPaths: [],
+				audioPlayerState: true,
 			},
-			autoPlayEnabled: false,
-			selectedText: '',
-			selectedBookName: '',
-			audioSource: '',
-			invalidBibleId: false,
-			hasAudio: false,
-			formattedSource: '',
-			hasTextInDatabase: true,
-			filesetTypes: {},
-			firstLoad: true,
-			previousAudioPaths: [],
-			previousAudioFilesetId: '',
-			previousAudioSource: '',
-			nextAudioPaths: [],
-			nextAudioFilesetId: '',
-			nextAudioSource: '',
-			activeVerse: '',
-			audioPaths: [],
-			audioPlayerState: true,
-		},
-		profile: {
-			activeOption: 'login',
-			userAuthenticated: isAuthenticated,
-			userId,
-			loginErrorMessage: '',
-			socialLoginLink: '',
-			signupErrorMessage: '',
-			activeDriver: '',
-			userProfile: {
-				...userProfile,
-				verified: false,
-				accounts: [],
+			profile: {
+				activeOption: 'login',
+				userAuthenticated: isAuthenticated,
+				userId,
+				loginErrorMessage: '',
+				socialLoginLink: '',
+				signupErrorMessage: '',
+				activeDriver: '',
+				userProfile: {
+					...userProfile,
+					verified: false,
+					accounts: [],
+				},
+				errorMessageViewed: true,
+				passwordResetError: '',
+				passwordResetMessage: '',
+				deleteUserError: false,
+				deleteUserMessage: '',
 			},
-			errorMessageViewed: true,
-			passwordResetError: '',
-			passwordResetMessage: '',
-			deleteUserError: false,
-			deleteUserMessage: '',
-		},
-	};
+		};
 
-	let store;
+		let store;
 
-	if (isFromServer) {
-		store = configureStore({}, {}, initialState);
-	} else {
-		// console.log('Was not from server');
-
-		/* eslint-disable no-underscore-dangle */
-		if (!window.__NEXT_REDUX_STORE__) {
+		if (isFromServer) {
 			store = configureStore({}, {}, initialState);
-			window.__NEXT_REDUX_STORE__ = configureStore({}, {}, initialState);
+		} else {
+			// console.log('Was not from server');
+			/* eslint-disable no-underscore-dangle */
+			// if (!window.__NEXT_REDUX_STORE__) {
+			// 	store = configureStore({}, {}, initialState);
+			// 	window.__NEXT_REDUX_STORE__ = configureStore({}, {}, initialState);
+			// }
+			// window.__NEXT_REDUX_STORE__.dispatch((state) => {
+			// 	if (state.isMap) {
+			// 		return state.mergeWith(fromJS(initialState));
+			// 	}
+			// 	return { ...state, ...initialState };
+			// });
+			// store = window.__NEXT_REDUX_STORE__;
+			/* eslint-enable no-underscore-dangle */
 		}
-		window.__NEXT_REDUX_STORE__.dispatch((state) => {
-			if (state.isMap) {
-				return state.mergeWith(fromJS(initialState));
-			}
-			return { ...state, ...initialState };
-		});
-		store = window.__NEXT_REDUX_STORE__;
-		/* eslint-enable no-underscore-dangle */
-	}
 
-	return (
-		<Provider store={store}>
-			<LanguageProvider messages={translationMessages}>
-				<div>
-					<Head>
-						<meta
-							name={'description'}
-							content={chapterText.map((v) => v.verse_text).join(' ')}
-						/>
-						<meta
-							property={'og:title'}
-							content={`${activeBookName} ${activeChapter}${
-								props.match.params.verse ? `:${props.match.params.verse}` : ''
-							}`}
-						/>
-						<meta property={'og:url'} content="contextLocation" />
-						<meta
-							property={'og:description'}
-							content={chapterText.map((v) => v.verse_text).join(' ')}
-						/>
-						<meta property={'og:type'} content={'website'} />
-						<meta property={'og:site_name'} content={'Bible.is'} />
-						<meta
-							property={'og:image'}
-							content={'/static/apple-icon-180x180.png'}
-						/>
-						<title>
-							{`${activeBookName} ${activeChapter}${
-								props.match.params.verse ? `:${props.match.params.verse}` : ''
-							}`}{' '}
-							| Bible.is
-						</title>
-					</Head>
-					<App appProps={props} />
-				</div>
-			</LanguageProvider>
-		</Provider>
-	);
-};
+		return (
+			<Provider store={store}>
+				<LanguageProvider messages={translationMessages}>
+					<div>
+						<Head>
+							<meta
+								name={'description'}
+								content={chapterText.map((v) => v.verse_text).join(' ')}
+							/>
+							<meta
+								property={'og:title'}
+								content={`${activeBookName} ${activeChapter}${
+									this.props.match.params.verse
+										? `:${this.props.match.params.verse}`
+										: ''
+								}`}
+							/>
+							<meta property={'og:url'} content="contextLocation" />
+							<meta
+								property={'og:description'}
+								content={chapterText.map((v) => v.verse_text).join(' ')}
+							/>
+							<meta property={'og:type'} content={'website'} />
+							<meta property={'og:site_name'} content={'Bible.is'} />
+							<meta
+								property={'og:image'}
+								content={'/static/apple-icon-180x180.png'}
+							/>
+							<title>
+								{`${activeBookName} ${activeChapter}${
+									this.props.match.params.verse
+										? `:${this.props.match.params.verse}`
+										: ''
+								}`}{' '}
+								| Bible.is
+							</title>
+						</Head>
+						<App appProps={this.props} />
+					</div>
+				</LanguageProvider>
+			</Provider>
+		);
+	}
+}
 
 AppContainer.getInitialProps = async (context) => {
 	const { bibleId, bookId, chapter, verse, token } = context.query;
@@ -322,17 +334,6 @@ AppContainer.getInitialProps = async (context) => {
 		userProfile.nickname = sessionStorage.getItem('bible_is_123456');
 		userProfile.name = sessionStorage.getItem('bible_is_1234567');
 		userProfile.avatar = sessionStorage.getItem('bible_is_12345678');
-
-		// sessionStorage.setItem('bible_is_12345', action.userProfile.email);
-		// sessionStorage.setItem('bible_is_123456', action.userProfile.nickname);
-		// sessionStorage.setItem('bible_is_1234567', action.userProfile.name);
-		// sessionStorage.setItem('bible_is_12345678', action.userProfile.avatar);
-		// localStorage.removeItem('bible_is_user_id');
-		// sessionStorage.removeItem('bible_is_user_id');
-		// console.log('context.props in app on client', context.props);
-		// console.log('context.query in app on client', context.query);
-		// console.log('context.params in app on client', context.params);
-		// console.log('context in homepage on client', context);
 	}
 
 	// The function is being run on the server so fetching data here will not conflict with the Sagas
@@ -361,13 +362,13 @@ AppContainer.getInitialProps = async (context) => {
 	// const texts = bibleJson.data;
 
 	// Get active bible data
-	const singleBibleRes = await fetch(singleBibleUrl);
-	const singleBibleJson = await singleBibleRes.json();
+	const singleBibleRes = await cachedFetch(singleBibleUrl);
+	const singleBibleJson = singleBibleRes;
 	const bible = singleBibleJson.data;
 
 	// Get text for chapter
-	const textRes = await fetch(textUrl);
-	const textJson = await textRes.json();
+	const textRes = await cachedFetch(textUrl);
+	const textJson = textRes;
 	const chapterText = textJson.data;
 	// console.log('chapterText', chapterText);
 	// Need to try the other bible id if there wasn't any chapter text
@@ -383,8 +384,8 @@ AppContainer.getInitialProps = async (context) => {
 
 	const activeBookName = activeBook ? activeBook.name : '';
 
-	const bookMetaRes = await fetch(bookMetaDataUrl);
-	const bookMetaJson = await bookMetaRes.json();
+	const bookMetaRes = await cachedFetch(bookMetaDataUrl);
+	const bookMetaJson = bookMetaRes;
 	// console.log('bookMetaJson', bookMetaJson);
 
 	const testaments = bookMetaJson.data.reduce(
@@ -422,6 +423,11 @@ AppContainer.getInitialProps = async (context) => {
 				token,
 			},
 		},
+		fetchedUrls: [
+			{ href: bookMetaDataUrl, data: bookMetaJson },
+			{ href: singleBibleUrl, data: singleBibleJson },
+			{ href: textUrl, data: textJson },
+		],
 	};
 };
 
@@ -444,6 +450,7 @@ AppContainer.propTypes = {
 	userId: PropTypes.string,
 	isAuthenticated: PropTypes.bool,
 	userProfile: PropTypes.object,
+	fetchedUrls: PropTypes.array,
 	// activeIsoCode: PropTypes.string,
 	// activeCountryName: PropTypes.string,
 	// activeLanguageName: PropTypes.string,
@@ -454,10 +461,3 @@ AppContainer.propTypes = {
 };
 
 export default AppContainer;
-
-// // Install ServiceWorker and AppCache in the end since
-// // it's not most important operation and if main code fails,
-// // we do not want it installed
-if (process.env.NODE_ENV === 'production') {
-	require('offline-plugin/runtime').install(); // eslint-disable-line global-require
-}

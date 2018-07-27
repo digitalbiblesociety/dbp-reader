@@ -6,8 +6,9 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import Link from 'next/link';
+// import Link from 'next/link';
 import isEqual from 'lodash/isEqual';
+import PrefetchLink from '../../utils/PrefetchLink';
 import Information from '../../components/Information';
 import SvgWrapper from '../../components/SvgWrapper';
 import ContextPortal from '../../components/ContextPortal';
@@ -42,7 +43,6 @@ import {
 import createHighlights from './highlightPlainText';
 import createFormattedHighlights from './highlightFormattedText';
 import { applyNotes, applyBookmarks } from './formattedTextUtils';
-
 // const dynamicCreateHighlights = dynamic(import('./highlightPlainText'), { ssr: false });
 // import differenceObject from 'utils/deepDifferenceObject';
 // import some from 'lodash/some';
@@ -73,6 +73,7 @@ class Text extends React.PureComponent {
 		this.createFormattedHighlights = createFormattedHighlights;
 		this.applyNotes = applyNotes;
 		this.applyBookmarks = applyBookmarks;
+		this.window = window;
 
 		if (this.format) {
 			// console.log('setting event listeners on format');
@@ -326,14 +327,15 @@ class Text extends React.PureComponent {
 			note.onclick = (e) => {
 				e.stopPropagation();
 				// console.log('clicked note');
-				// todo keep it from going outside the borders of the window
-				const rightEdge = window.innerWidth - 300;
-				const x = rightEdge < e.clientX ? rightEdge : e.clientX;
+				if (typeof this.window !== 'undefined') {
+					const rightEdge = this.window.innerWidth - 300;
+					const x = rightEdge < e.clientX ? rightEdge : e.clientX;
 
-				this.openFootnote({
-					id: note.attributes.id.value,
-					coords: { x, y: e.clientY },
-				});
+					this.openFootnote({
+						id: note.attributes.id.value,
+						coords: { x, y: e.clientY },
+					});
+				}
 			};
 		});
 	};
@@ -459,84 +461,86 @@ class Text extends React.PureComponent {
 		// console.log('Get last verse target', target);
 		// console.log('Get last verse parent', parent);
 		// console.log('Get last verse event', e);
-		// console.log('Selection in last verse event', window.getSelection());
+		// console.log('Selection in last verse event', this.window.getSelection());
 		const primaryButton = e.button === 0;
-		// console.log(window.getSelection().toString());
-		// if formatted iterate up the dom looking for data-id
-		if (isFormatted) {
-			const verseNode = getFormattedParentVerse(target);
-			const lastVerse = verseNode
-				? verseNode.attributes['data-id'].value.split('_')[1]
-				: '';
-			// console.log('last formatted verse', lastVerse);
-			// third check may not be required, if micro optimization is needed then look into removing contains
-			if (
-				primaryButton &&
-				window.getSelection().toString() &&
-				this.main.contains(target) &&
-				lastVerse
-			) {
-				typeof e.persist === 'function' && e.persist();
-				const selectedText = window.getSelection().toString();
+		// console.log(this.window.getSelection().toString());
+		if (typeof this.window !== 'undefined') {
+			// if formatted iterate up the dom looking for data-id
+			if (isFormatted) {
+				const verseNode = getFormattedParentVerse(target);
+				const lastVerse = verseNode
+					? verseNode.attributes['data-id'].value.split('_')[1]
+					: '';
+				// console.log('last formatted verse', lastVerse);
+				// third check may not be required, if micro optimization is needed then look into removing contains
+				if (
+					primaryButton &&
+					this.window.getSelection().toString() &&
+					this.main.contains(target) &&
+					lastVerse
+				) {
+					typeof e.persist === 'function' && e.persist();
+					const selectedText = this.window.getSelection().toString();
 
-				this.setState(
-					{
-						wholeVerseIsSelected: false,
-						lastVerse,
-						anchorOffset: window.getSelection().anchorOffset,
-						anchorText: window.getSelection().anchorNode.data,
-						anchorNode: window.getSelection().anchorNode,
-						focusOffset: window.getSelection().focusOffset,
-						focusText: window.getSelection().focusNode.data,
-						focusNode: window.getSelection().focusNode,
-						selectedText,
-					},
-					() => {
-						this.openContextMenu(e);
-					},
-				);
-			} else if (lastVerse && this.main.contains(target) && primaryButton) {
-				// treat the event as a click and allow the whole verse to be highlighted
-				// console.log('counts as a click not a text selection formatted');
-				this.selectedWholeVerse(lastVerse, false, e.clientX, e.clientY);
-			}
-		} else if (!isFormatted) {
-			const verseNode = getPlainParentVerseWithoutNumber(target);
-			const lastVerse = verseNode ? verseNode.attributes.verseid.value : '';
-			// console.log('last plain verse', lastVerse);
-			// third check may not be required, if micro optimization is needed then look into removing contains
-			if (
-				primaryButton &&
-				window.getSelection().toString() &&
-				this.main.contains(target) &&
-				lastVerse
-			) {
-				typeof e.persist === 'function' && e.persist();
-				const selectedText = window.getSelection().toString();
+					this.setState(
+						{
+							wholeVerseIsSelected: false,
+							lastVerse,
+							anchorOffset: this.window.getSelection().anchorOffset,
+							anchorText: this.window.getSelection().anchorNode.data,
+							anchorNode: this.window.getSelection().anchorNode,
+							focusOffset: this.window.getSelection().focusOffset,
+							focusText: this.window.getSelection().focusNode.data,
+							focusNode: this.window.getSelection().focusNode,
+							selectedText,
+						},
+						() => {
+							this.openContextMenu(e);
+						},
+					);
+				} else if (lastVerse && this.main.contains(target) && primaryButton) {
+					// treat the event as a click and allow the whole verse to be highlighted
+					// console.log('counts as a click not a text selection formatted');
+					this.selectedWholeVerse(lastVerse, false, e.clientX, e.clientY);
+				}
+			} else if (!isFormatted) {
+				const verseNode = getPlainParentVerseWithoutNumber(target);
+				const lastVerse = verseNode ? verseNode.attributes.verseid.value : '';
+				// console.log('last plain verse', lastVerse);
+				// third check may not be required, if micro optimization is needed then look into removing contains
+				if (
+					primaryButton &&
+					this.window.getSelection().toString() &&
+					this.main.contains(target) &&
+					lastVerse
+				) {
+					typeof e.persist === 'function' && e.persist();
+					const selectedText = this.window.getSelection().toString();
 
-				this.setState(
-					{
-						wholeVerseIsSelected: false,
-						lastVerse,
-						anchorOffset: window.getSelection().anchorOffset,
-						anchorText: window.getSelection().anchorNode.data,
-						anchorNode: window.getSelection().anchorNode,
-						focusOffset: window.getSelection().focusOffset,
-						focusText: window.getSelection().focusNode.data,
-						focusNode: window.getSelection().focusNode,
-						selectedText,
-					},
-					() => {
-						this.openContextMenu(e);
-					},
-				);
-			} else if (lastVerse && this.main.contains(target) && primaryButton) {
-				// treat the event as a click and allow the whole verse to be highlighted
-				// console.log('counts as a click not a text selection for plain');
-				this.selectedWholeVerse(lastVerse, true, e.clientX, e.clientY);
+					this.setState(
+						{
+							wholeVerseIsSelected: false,
+							lastVerse,
+							anchorOffset: this.window.getSelection().anchorOffset,
+							anchorText: this.window.getSelection().anchorNode.data,
+							anchorNode: this.window.getSelection().anchorNode,
+							focusOffset: this.window.getSelection().focusOffset,
+							focusText: this.window.getSelection().focusNode.data,
+							focusNode: this.window.getSelection().focusNode,
+							selectedText,
+						},
+						() => {
+							this.openContextMenu(e);
+						},
+					);
+				} else if (lastVerse && this.main.contains(target) && primaryButton) {
+					// treat the event as a click and allow the whole verse to be highlighted
+					// console.log('counts as a click not a text selection for plain');
+					this.selectedWholeVerse(lastVerse, true, e.clientX, e.clientY);
+				}
+			} else {
+				this.openContextMenu(e);
 			}
-		} else {
-			this.openContextMenu(e);
 		}
 	};
 
@@ -636,7 +640,7 @@ class Text extends React.PureComponent {
 		/* eslint-disable react/no-danger */
 		if (plainText.length === 0 && !formattedSource.main) {
 			// Need to have a way to know if this is being run on the server or not
-			// if (window && !window.navigator.onLine) {
+			// if (this.window && !this.window.navigator.onLine) {
 			// 	textComponents = [
 			// 		<h5 key={'no_connection'}>
 			// 			We are having trouble contacting the server. Please check your
@@ -1436,22 +1440,24 @@ class Text extends React.PureComponent {
 
 	addFacebookLike = () => {
 		// 	console.log('testing adding a like');
-		const fb = window.FB;
-		// 	fb.ui({
-		// 		method: 'share_open_graph',
-		// 		action_type: 'og.likes',
-		// 		action_properties: JSON.stringify({
-		// 			object: 'http://is.bible.build/',
-		// 		}),
-		// 	}, (res) => console.log('like res', res));
+		if (typeof this.window !== 'undefined') {
+			const fb = this.window.FB;
+			// 	fb.ui({
+			// 		method: 'share_open_graph',
+			// 		action_type: 'og.likes',
+			// 		action_properties: JSON.stringify({
+			// 			object: 'http://is.bible.build/',
+			// 		}),
+			// 	}, (res) => console.log('like res', res));
 
-		fb.api(
-			`${process.env.FB_APP_ID}?metadata=1`,
-			{
-				access_token: process.env.FB_ACCESS,
-			},
-			(res) => res,
-		); // console.log('bible is object res', res));
+			fb.api(
+				`${process.env.FB_APP_ID}?metadata=1`,
+				{
+					access_token: process.env.FB_ACCESS,
+				},
+				(res) => res,
+			); // console.log('bible is object res', res));
+		}
 		this.closeContextMenu();
 	};
 
@@ -1468,27 +1474,31 @@ class Text extends React.PureComponent {
 	};
 
 	openContextMenu = (e) => {
-		const rightEdge = window.innerWidth - 250;
-		const bottomEdge = window.innerHeight - 297;
-		const x = rightEdge < e.clientX ? rightEdge : e.clientX;
-		const y = bottomEdge < e.clientY ? bottomEdge : e.clientY;
+		if (typeof this.window !== 'undefined') {
+			const rightEdge = this.window.innerWidth - 250;
+			const bottomEdge = this.window.innerHeight - 297;
+			const x = rightEdge < e.clientX ? rightEdge : e.clientX;
+			const y = bottomEdge < e.clientY ? bottomEdge : e.clientY;
 
-		// Using setTimeout 0 so that the check for the selection happens in the next frame and not this one
-		// That allows the function that updates the selection to run before this one does
-		if (this.timer) {
-			clearTimeout(this.timer);
-		}
-		setTimeout(() => {
-			// console.log('Selection after 50ms', window.getSelection().toString());
-			if (!window.getSelection().toString()) {
-				this.closeContextMenu();
-			} else {
-				this.setState({
-					coords: { x, y },
-					contextMenuState: true,
-				});
+			// Using setTimeout 0 so that the check for the selection happens in the next frame and not this one
+			// That allows the function that updates the selection to run before this one does
+			if (this.timer) {
+				clearTimeout(this.timer);
 			}
-		}, 0);
+			setTimeout(() => {
+				if (
+					typeof this.window !== 'undefined' &&
+					!this.window.getSelection().toString()
+				) {
+					this.closeContextMenu();
+				} else {
+					this.setState({
+						coords: { x, y },
+						contextMenuState: true,
+					});
+				}
+			}, 0);
+		}
 	};
 
 	closeFootnote = () => this.setState({ footnoteState: false });
@@ -1502,72 +1512,76 @@ class Text extends React.PureComponent {
 
 	selectedWholeVerse = (verse, isPlain, clientX, clientY) => {
 		// console.log('verse: ', verse, '\nisPlain: ', isPlain);
-		const rightEdge =
-			window.innerWidth < 500
-				? window.innerWidth - 295
-				: window.innerWidth - 250;
-		const bottomEdge =
-			window.innerHeight < 900
-				? window.innerHeight - 317
-				: window.innerHeight - 297;
-		const x = rightEdge < clientX ? rightEdge : clientX;
-		const y = bottomEdge < clientY ? bottomEdge : clientY;
+		if (typeof this.window !== 'undefined') {
+			const rightEdge =
+				this.window.innerWidth < 500
+					? this.window.innerWidth - 295
+					: this.window.innerWidth - 250;
+			const bottomEdge =
+				this.window.innerHeight < 900
+					? this.window.innerHeight - 317
+					: this.window.innerHeight - 297;
+			const x = rightEdge < clientX ? rightEdge : clientX;
+			const y = bottomEdge < clientY ? bottomEdge : clientY;
 
-		if (isPlain) {
-			// console.log('text array', this.props.text);
-			// console.log('stuff to compare plain', verse, this.state.activeVerseInfo.verse);
-			// const verseObject = this.props.text.find((v) => v.verse_start === parseInt(verse, 10) || v.verse_start_alt === verse);
-			// console.log('verseObject', verseObject);
-			this.setState((currentState) => ({
-				coords: { x, y },
-				wholeVerseIsSelected: !(
-					currentState.wholeVerseIsSelected &&
-					currentState.activeVerseInfo.verse === verse
-				),
-				contextMenuState: currentState.activeVerseInfo.verse !== verse,
-				activeVerseInfo: {
-					verse: currentState.activeVerseInfo.verse !== verse ? verse : 0,
-					isPlain,
-				},
-			}));
-		} else {
-			// is formatted
-			// Adding the highlight here since it has to be done through dom manipulation... -_-
-			// console.log('stuff to compare format', verse, this.state.activeVerseInfo.verse);
-			// console.log('verseNode', verseNode);
-			// console.log('verseNode.textContent', verseNode.textContent);
-			this.setState((currentState) => ({
-				coords: { x, y },
-				wholeVerseIsSelected: !(
-					currentState.wholeVerseIsSelected &&
-					currentState.activeVerseInfo.verse === verse
-				),
-				contextMenuState: currentState.activeVerseInfo.verse !== verse,
-				activeVerseInfo: {
-					verse: currentState.activeVerseInfo.verse !== verse ? verse : 0,
-					isPlain,
-				},
-			}));
+			if (isPlain) {
+				// console.log('text array', this.props.text);
+				// console.log('stuff to compare plain', verse, this.state.activeVerseInfo.verse);
+				// const verseObject = this.props.text.find((v) => v.verse_start === parseInt(verse, 10) || v.verse_start_alt === verse);
+				// console.log('verseObject', verseObject);
+				this.setState((currentState) => ({
+					coords: { x, y },
+					wholeVerseIsSelected: !(
+						currentState.wholeVerseIsSelected &&
+						currentState.activeVerseInfo.verse === verse
+					),
+					contextMenuState: currentState.activeVerseInfo.verse !== verse,
+					activeVerseInfo: {
+						verse: currentState.activeVerseInfo.verse !== verse ? verse : 0,
+						isPlain,
+					},
+				}));
+			} else {
+				// is formatted
+				// Adding the highlight here since it has to be done through dom manipulation... -_-
+				// console.log('stuff to compare format', verse, this.state.activeVerseInfo.verse);
+				// console.log('verseNode', verseNode);
+				// console.log('verseNode.textContent', verseNode.textContent);
+				this.setState((currentState) => ({
+					coords: { x, y },
+					wholeVerseIsSelected: !(
+						currentState.wholeVerseIsSelected &&
+						currentState.activeVerseInfo.verse === verse
+					),
+					contextMenuState: currentState.activeVerseInfo.verse !== verse,
+					activeVerseInfo: {
+						verse: currentState.activeVerseInfo.verse !== verse ? verse : 0,
+						isPlain,
+					},
+				}));
+			}
 		}
 	};
 
 	shareHighlightToFacebook = () => {
-		const FB = window.FB;
-		const { activeBookName: book, activeChapter: chapter } = this.props;
-		const { firstVerse: v1, lastVerse: v2, selectedText: sl } = this.state;
-		const verseRange =
-			v1 === v2
-				? `${book} ${chapter}:${v1}\n${sl}`
-				: `${book} ${chapter}:${v1}-${v2}\n"${sl}"`;
+		if (typeof this.window !== 'undefined') {
+			const FB = this.window.FB;
+			const { activeBookName: book, activeChapter: chapter } = this.props;
+			const { firstVerse: v1, lastVerse: v2, selectedText: sl } = this.state;
+			const verseRange =
+				v1 === v2
+					? `${book} ${chapter}:${v1}\n${sl}`
+					: `${book} ${chapter}:${v1}-${v2}\n"${sl}"`;
 
-		FB.ui(
-			{
-				method: 'share',
-				quote: verseRange,
-				href: 'http://is.bible.build/',
-			},
-			(res) => res,
-		);
+			FB.ui(
+				{
+					method: 'share',
+					quote: verseRange,
+					href: 'http://is.bible.build/',
+				},
+				(res) => res,
+			);
+		}
 		this.closeContextMenu();
 	};
 
@@ -1661,7 +1675,8 @@ class Text extends React.PureComponent {
 				)}
 				className={getClassNameForTextContainer(isScrollingDown, subFooterOpen)}
 			>
-				<Link
+				<PrefetchLink
+					withData
 					as={getPreviousChapterUrl(
 						books,
 						activeChapter,
@@ -1696,7 +1711,7 @@ class Text extends React.PureComponent {
 							<SvgWrapper className="prev-arrow-svg" svgid="arrow_left" />
 						) : null}
 					</div>
-				</Link>
+				</PrefetchLink>
 				<div className={'main-wrapper'}>
 					<main
 						ref={this.setMainRef}
@@ -1720,12 +1735,14 @@ class Text extends React.PureComponent {
 						{this.getTextComponents}
 						{verseNumber ? (
 							<div className={'read-chapter-container'}>
-								<Link
+								<PrefetchLink
+									prefetch
+									withData
 									href={`/bible/${activeTextId.toLowerCase()}/${activeBookId.toLowerCase()}/${activeChapter}`}
 									as={`/bible/${activeTextId.toLowerCase()}/${activeBookId.toLowerCase()}/${activeChapter}`}
 								>
 									<button className={'read-chapter'}>Read Full Chapter</button>
-								</Link>
+								</PrefetchLink>
 							</div>
 						) : null}
 						<Information
@@ -1737,7 +1754,7 @@ class Text extends React.PureComponent {
 						/>
 					</main>
 				</div>
-				<Link
+				<PrefetchLink
 					as={getNextChapterUrl(
 						books,
 						activeChapter,
@@ -1754,6 +1771,7 @@ class Text extends React.PureComponent {
 						verseNumber,
 						text,
 					)}
+					withData
 					prefetch
 				>
 					<div
@@ -1772,7 +1790,7 @@ class Text extends React.PureComponent {
 							<SvgWrapper className="next-arrow-svg" svgid="arrow_right" />
 						) : null}
 					</div>
-				</Link>
+				</PrefetchLink>
 				{contextMenuState ? (
 					<ContextPortal
 						handleAddBookmark={this.handleAddBookmark}
