@@ -859,7 +859,6 @@ class HomePage extends React.PureComponent {
 			userAgent,
 			textDirection,
 			loadingAudio,
-			loadingCopyright,
 			loadingNewChapterText,
 		} = this.props.homepage;
 
@@ -990,7 +989,6 @@ class HomePage extends React.PureComponent {
 						formattedSource={formattedSource}
 						isScrollingDown={isScrollingDown}
 						audioPlayerState={audioPlayerState}
-						loadingCopyright={loadingCopyright}
 						userAuthenticated={userAuthenticated}
 						informationActive={isInformationModalActive}
 						loadingNewChapterText={loadingNewChapterText}
