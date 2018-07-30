@@ -139,10 +139,10 @@ app
 		server.get('/bible/:bibleId/:bookId/:chapter/:verse', (req, res, nextP) => {
 			const actualPage = '/app';
 			// console.log(req.originalUrl.includes('/static'))
-			console.log(
-				'Getting bible, book, chapter, and verse for route',
-				`${req.protocol}://${req.get('host')}${req.originalUrl}`,
-			);
+			// console.log(
+			// 	'Getting bible, book, chapter, and verse for route',
+			// 	`${req.protocol}://${req.get('host')}${req.originalUrl}`,
+			// );
 			// Params may not actually be passed using this method
 			const queryParams = {
 				bibleId: req.params.bibleId,
