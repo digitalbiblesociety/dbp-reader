@@ -1,8 +1,15 @@
 import { fromJS } from 'immutable';
+import url from './hrefLinkOrAsLink';
 
-export default (books, chapter, bookId, textId, verseNumber, chapterText) => {
-	const baseUrl = '/bible';
-
+export default ({
+	books,
+	chapter,
+	bookId,
+	textId,
+	verseNumber,
+	text: chapterText,
+	isHref,
+}) => {
 	if (verseNumber && chapterText) {
 		const prevVerse = parseInt(verseNumber, 10) - 1 || 1;
 		const lastVerse = chapterText.length;
@@ -11,21 +18,26 @@ export default (books, chapter, bookId, textId, verseNumber, chapterText) => {
 		if (prevVerse <= lastVerse && prevVerse > 0) {
 			// Verse was valid
 
-			return `${baseUrl}/${textId}/${bookId}/${chapter}/${prevVerse}`;
+			return url({ textId, bookId, chapter, nextVerse: prevVerse, isHref });
+			// return `${baseUrl}/${textId}/${bookId}/${chapter}/${prevVerse}`;
 		} else if (prevVerse < 0) {
 			// Verse was below valid range
 
-			return `${baseUrl}/${textId}/${bookId}/${chapter}/1`;
+			return url({ textId, bookId, chapter, nextVerse: '1', isHref });
+			// return `${baseUrl}/${textId}/${bookId}/${chapter}/1`;
 		} else if (prevVerse > lastVerse) {
 			// Verse was above valid range
 
-			return `${baseUrl}/${textId}/${bookId}/${chapter}/${lastVerse}`;
+			return url({ textId, bookId, chapter, nextVerse: lastVerse, isHref });
+			// return `${baseUrl}/${textId}/${bookId}/${chapter}/${lastVerse}`;
 		}
-		return `${baseUrl}/${textId}/${bookId}/${chapter}`;
+		return url({ textId, bookId, chapter, isHref });
+		// return `${baseUrl}/${textId}/${bookId}/${chapter}`;
 	}
 
 	if (bookId === books[0].book_id && chapter - 1 === 0) {
-		return `${baseUrl}/${textId}/${bookId}/${chapter}`;
+		return url({ textId, bookId, chapter, isHref });
+		// return `${baseUrl}/${textId}/${bookId}/${chapter}`;
 	}
 
 	let activeBookIndex;
@@ -48,9 +60,15 @@ export default (books, chapter, bookId, textId, verseNumber, chapterText) => {
 
 	if (chapter - 1 === 0) {
 		// Goes to the last chapter in the previous book
-		return `${baseUrl}/${textId}/${previousBook
-			.get('book_id')
-			.toLowerCase()}/${previousBook.getIn(['chapters', -1])}`;
+		return url({
+			textId,
+			bookId: previousBook.get('book_id').toLowerCase(),
+			chapter: previousBook.getIn(['chapters', -1]),
+			isHref,
+		});
+		// return `${baseUrl}/${textId}/${previousBook
+		// 	.get('book_id')
+		// 	.toLowerCase()}/${previousBook.getIn(['chapters', -1])}`;
 	}
 	// console.log('going back');
 
@@ -61,5 +79,6 @@ export default (books, chapter, bookId, textId, verseNumber, chapterText) => {
 	// console.log('chapterIndex', chapterIndex);
 	// console.log('activeBook.get()', activeBook.get('chapters'));
 
-	return `${baseUrl}/${textId}/${bookId}/${chapterIndex}`;
+	return url({ textId, bookId, chapter: chapterIndex, isHref });
+	// return `${baseUrl}/${textId}/${bookId}/${chapterIndex}`;
 };

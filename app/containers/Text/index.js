@@ -1598,14 +1598,9 @@ class Text extends React.PureComponent {
 			loadingCopyright,
 			userSettings,
 			verseNumber,
-			copyrights,
-			activeFilesets,
-			audioFilesetId,
 			activeTextId,
 			activeBookId,
 			books,
-			plainTextFilesetId,
-			formattedTextFilesetId,
 			menuIsOpen,
 			isLargeBp,
 			isAudioPlayerBp,
@@ -1677,22 +1672,24 @@ class Text extends React.PureComponent {
 			>
 				<PrefetchLink
 					withData
-					as={getPreviousChapterUrl(
+					as={getPreviousChapterUrl({
 						books,
-						activeChapter,
-						activeBookId.toLowerCase(),
-						activeTextId.toLowerCase(),
+						chapter: activeChapter,
+						bookId: activeBookId.toLowerCase(),
+						textId: activeTextId.toLowerCase(),
 						verseNumber,
 						text,
-					)}
-					href={getPreviousChapterUrl(
+						isHref: false,
+					})}
+					href={getPreviousChapterUrl({
 						books,
-						activeChapter,
-						activeBookId.toLowerCase(),
-						activeTextId.toLowerCase(),
+						chapter: activeChapter,
+						bookId: activeBookId.toLowerCase(),
+						textId: activeTextId.toLowerCase(),
 						verseNumber,
 						text,
-					)}
+						isHref: true,
+					})}
 					prefetch
 				>
 					<div
@@ -1738,39 +1735,35 @@ class Text extends React.PureComponent {
 								<PrefetchLink
 									prefetch
 									withData
-									href={`/bible/${activeTextId.toLowerCase()}/${activeBookId.toLowerCase()}/${activeChapter}`}
+									href={`/app?bibleId=${activeTextId.toLowerCase()}&bookId=${activeBookId.toLowerCase()}&chapter=${activeChapter}`}
 									as={`/bible/${activeTextId.toLowerCase()}/${activeBookId.toLowerCase()}/${activeChapter}`}
 								>
 									<button className={'read-chapter'}>Read Full Chapter</button>
 								</PrefetchLink>
 							</div>
 						) : null}
-						<Information
-							copyrights={copyrights}
-							activeFilesets={activeFilesets}
-							audioFilesetId={audioFilesetId}
-							plainTextFilesetId={plainTextFilesetId}
-							formattedTextFilesetId={formattedTextFilesetId}
-						/>
+						<Information />
 					</main>
 				</div>
 				<PrefetchLink
-					as={getNextChapterUrl(
+					as={getNextChapterUrl({
 						books,
-						activeChapter,
-						activeBookId.toLowerCase(),
-						activeTextId.toLowerCase(),
+						chapter: activeChapter,
+						bookId: activeBookId.toLowerCase(),
+						textId: activeTextId.toLowerCase(),
 						verseNumber,
 						text,
-					)}
-					href={getNextChapterUrl(
+						isHref: false,
+					})}
+					href={getNextChapterUrl({
 						books,
-						activeChapter,
-						activeBookId.toLowerCase(),
-						activeTextId.toLowerCase(),
+						chapter: activeChapter,
+						bookId: activeBookId.toLowerCase(),
+						textId: activeTextId.toLowerCase(),
 						verseNumber,
 						text,
-					)}
+						isHref: true,
+					})}
 					withData
 					prefetch
 				>
@@ -1824,8 +1817,6 @@ Text.propTypes = {
 	userNotes: PropTypes.array,
 	bookmarks: PropTypes.array,
 	highlights: PropTypes.array,
-	activeFilesets: PropTypes.array,
-	copyrights: PropTypes.object,
 	userSettings: PropTypes.object,
 	formattedSource: PropTypes.object,
 	addBookmark: PropTypes.func,
@@ -1857,9 +1848,6 @@ Text.propTypes = {
 	audioSource: PropTypes.string,
 	activeBookName: PropTypes.string,
 	textDirection: PropTypes.string,
-	audioFilesetId: PropTypes.string,
-	plainTextFilesetId: PropTypes.string,
-	formattedTextFilesetId: PropTypes.string,
 };
 
 export default Text;

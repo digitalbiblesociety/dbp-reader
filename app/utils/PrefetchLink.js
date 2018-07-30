@@ -1,9 +1,13 @@
 // import React from 'react';
 import Link from 'next/link';
+import PropTypes from 'prop-types';
 import { resolve, parse } from 'url';
 import Router from 'next/router';
 
 export default class PrefetchLink extends Link {
+	static propTypes = {
+		withData: PropTypes.bool,
+	};
 	async prefetch() {
 		if (typeof window === 'undefined') {
 			return;

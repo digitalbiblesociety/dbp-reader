@@ -1,8 +1,15 @@
 import { fromJS } from 'immutable';
+import url from './hrefLinkOrAsLink';
 
-export default (books, chapter, bookId, textId, verseNumber, chapterText) => {
-	const baseUrl = '/bible';
-
+export default ({
+	books,
+	chapter,
+	bookId,
+	textId,
+	verseNumber,
+	text: chapterText,
+	isHref,
+}) => {
 	if (verseNumber && chapterText) {
 		const nextVerse = parseInt(verseNumber, 10) + 1 || 1;
 		const lastVerse = chapterText.length;
@@ -10,17 +17,21 @@ export default (books, chapter, bookId, textId, verseNumber, chapterText) => {
 		if (nextVerse <= lastVerse && nextVerse > 0) {
 			// The next verse is within a valid range
 
-			return `${baseUrl}/${textId}/${bookId}/${chapter}/${nextVerse}`;
+			return url({ textId, bookId, chapter, nextVerse, isHref });
+			// return `${baseUrl}/${textId}/${bookId}/${chapter}/${nextVerse}`;
 		} else if (nextVerse < 0) {
 			// The next verse is below 0 and thus invalid
 
-			return `${baseUrl}/${textId}/${bookId}/${chapter}/1`;
+			return url({ textId, bookId, chapter, nextVerse: '1', isHref });
+			// return `${baseUrl}/${textId}/${bookId}/${chapter}/1`;
 		} else if (nextVerse > lastVerse) {
 			// Next verse is above the last verse in the chapter and thus is invalid
 
-			return `${baseUrl}/${textId}/${bookId}/${chapter}/${lastVerse}`;
+			return url({ textId, bookId, chapter, nextVerse: lastVerse, isHref });
+			// return `${baseUrl}/${textId}/${bookId}/${chapter}/${lastVerse}`;
 		}
-		return `${baseUrl}/${textId}/${bookId}/${chapter}/${verseNumber}`;
+		return url({ textId, bookId, chapter, nextVerse: verseNumber, isHref });
+		// return `${baseUrl}/${textId}/${bookId}/${chapter}/${verseNumber}`;
 	}
 
 	let activeBookIndex;
@@ -43,14 +54,20 @@ export default (books, chapter, bookId, textId, verseNumber, chapterText) => {
 
 	// If the next book in line doesn't exist and we are already at the last chapter just return
 	if (!nextBook.size && chapter === maxChapter) {
-		return `${baseUrl}/${textId}/${bookId}/${chapter}`;
+		return url({ textId, bookId, chapter });
+		// return `${baseUrl}/${textId}/${bookId}/${chapter}`;
 	}
 
 	if (chapter === maxChapter) {
 		// Need to get the first chapter of the next book
-		return `${baseUrl}/${textId}/${nextBook
-			.get('book_id')
-			.toLowerCase()}/${nextBook.getIn(['chapters', 0])}`;
+		return url({
+			textId,
+			bookId: nextBook.get('book_id').toLowerCase(),
+			chapter: nextBook.getIn(['chapters', 0]),
+		});
+		// return `${baseUrl}/${textId}/${nextBook
+		// 	.get('book_id')
+		// 	.toLowerCase()}/${nextBook.getIn(['chapters', 0])}`;
 	}
 	const chapterIndex = activeBook
 		.get('chapters')
@@ -60,8 +77,13 @@ export default (books, chapter, bookId, textId, verseNumber, chapterText) => {
 			? chapterIndex + 1
 			: chapterIndex;
 
-	return `${baseUrl}/${textId}/${bookId}/${activeBook.getIn([
-		'chapters',
-		nextChapterIndex,
-	])}`;
+	return url({
+		textId,
+		bookId,
+		chapter: activeBook.getIn(['chapters', nextChapterIndex]),
+	});
+	// return `${baseUrl}/${textId}/${bookId}/${activeBook.getIn([
+	// 	'chapters',
+	// 	nextChapterIndex,
+	// ])}`;
 };
