@@ -841,16 +841,12 @@ class HomePage extends React.PureComponent {
 			activeBookId,
 			activeTextId,
 			activeChapter,
-			activeFilesets,
-			audioFilesetId,
 			activeTextName,
 			activeBookName,
 			activeNotesView,
 			autoPlayEnabled,
 			audioPlayerState,
 			books,
-			copyrights,
-			formattedTextFilesetId,
 			highlights,
 			invalidBibleId,
 			isProfileActive,
@@ -860,16 +856,10 @@ class HomePage extends React.PureComponent {
 			isVersionSelectionActive,
 			isChapterSelectionActive,
 			isInformationModalActive,
-			// nextAudioSource,
-			// prevAudioSource,
-			plainTextFilesetId,
 			userAgent,
 			textDirection,
 			loadingAudio,
-			loadingCopyright,
 			loadingNewChapterText,
-			// chapterText,
-			// chapterText: updatedText,
 		} = this.props.homepage;
 
 		const {
@@ -985,7 +975,6 @@ class HomePage extends React.PureComponent {
 						bibleId={activeTextId}
 						menuIsOpen={isMenuOpen}
 						highlights={highlights}
-						copyrights={copyrights}
 						audioSource={audioSource}
 						activeTextId={activeTextId}
 						activeBookId={activeBookId}
@@ -995,19 +984,14 @@ class HomePage extends React.PureComponent {
 						textDirection={textDirection}
 						subFooterOpen={subFooterOpen}
 						invalidBibleId={invalidBibleId}
-						audioFilesetId={audioFilesetId}
 						activeBookName={activeBookName}
-						activeFilesets={activeFilesets}
 						notesActive={isNotesModalActive}
 						formattedSource={formattedSource}
 						isScrollingDown={isScrollingDown}
 						audioPlayerState={audioPlayerState}
-						loadingCopyright={loadingCopyright}
 						userAuthenticated={userAuthenticated}
-						plainTextFilesetId={plainTextFilesetId}
 						informationActive={isInformationModalActive}
 						loadingNewChapterText={loadingNewChapterText}
-						formattedTextFilesetId={formattedTextFilesetId}
 						isLargeBp={this.isLargeBp()}
 						isMobileBp={this.isMobileSized()}
 						addBookmark={this.addBookmark}

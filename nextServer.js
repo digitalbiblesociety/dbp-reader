@@ -3,8 +3,8 @@ const next = require('next');
 const compression = require('compression');
 const LRUCache = require('lru-cache');
 const port = process.env.PORT || 3000;
-// const dev = process.env.NODE_ENV !== 'production';
-const dev = false;
+const dev = process.env.NODE_ENV !== 'production';
+// const dev = false;
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
@@ -19,6 +19,8 @@ app
 		const server = express();
 
 		server.use(compression());
+
+		server.get('/', (req, res) => res.redirect('/bible/engesv/mat/1'));
 
 		const sitemapOptions = {
 			root: `${__dirname}/static/sitemaps/`,
@@ -138,7 +140,7 @@ app
 			const actualPage = '/app';
 			// console.log(req.originalUrl.includes('/static'))
 			// console.log(
-			// 	'Getting bible and book and chapter and verse for route',
+			// 	'Getting bible, book, chapter, and verse for route',
 			// 	`${req.protocol}://${req.get('host')}${req.originalUrl}`,
 			// );
 			// Params may not actually be passed using this method

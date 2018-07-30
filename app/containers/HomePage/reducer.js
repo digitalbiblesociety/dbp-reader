@@ -11,6 +11,7 @@ import { fromJS } from 'immutable';
 import { USER_LOGGED_IN } from '../Profile/constants';
 import {
 	ACTIVE_TEXT_ID,
+	// CHANGE_VERSE,
 	LOAD_AUDIO,
 	LOAD_BOOKS,
 	LOAD_HIGHLIGHTS,
@@ -488,6 +489,8 @@ function homePageReducer(state = initialState, action) {
 			return state
 				.set('loadingCopyright', false)
 				.set('copyrights', action.copyrights);
+		// case CHANGE_VERSE:
+		// 	return state.set('verseNumber', )
 		default:
 			return state;
 	}

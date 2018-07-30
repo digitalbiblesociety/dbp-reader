@@ -69,7 +69,19 @@ class AppContainer extends React.Component {
 				overrideCache(url.href, url.data);
 			});
 		}
+		/* eslint-disable no-underscore-dangle */
+		if (this.reduxStore && !window.__NEXT_REDUX_STORE__) {
+			window.__NEXT_REDUX_STORE__ = this.reduxStore;
+		}
+		/* eslint-enable no-underscore-dangle */
 	}
+
+	// componentWillReceiveProps(nextProps) {
+	// 	if (nextProps.match.params.verse !== this.props.match.params.verse) {
+	// 		console.log('nextProps.match.params.verse', nextProps.match.params.verse);
+	// 		console.log('this.props.match.params.verse', this.props.match.params.verse);
+	// 	}
+	// }
 	/*
 		{
 		// Minimum to render <Text />
@@ -251,20 +263,15 @@ class AppContainer extends React.Component {
 
 		if (isFromServer) {
 			store = configureStore({}, {}, initialState);
+			this.reduxStore = store;
 		} else {
 			// console.log('Was not from server');
 			/* eslint-disable no-underscore-dangle */
-			// if (!window.__NEXT_REDUX_STORE__) {
-			// 	store = configureStore({}, {}, initialState);
-			// 	window.__NEXT_REDUX_STORE__ = configureStore({}, {}, initialState);
-			// }
-			// window.__NEXT_REDUX_STORE__.dispatch((state) => {
-			// 	if (state.isMap) {
-			// 		return state.mergeWith(fromJS(initialState));
-			// 	}
-			// 	return { ...state, ...initialState };
-			// });
-			// store = window.__NEXT_REDUX_STORE__;
+			if (!window.__NEXT_REDUX_STORE__) {
+				window.__NEXT_REDUX_STORE__ = configureStore({}, {}, initialState);
+			}
+
+			store = window.__NEXT_REDUX_STORE__;
 			/* eslint-enable no-underscore-dangle */
 		}
 
@@ -322,6 +329,8 @@ AppContainer.getInitialProps = async (context) => {
 
 	if (!context.req) {
 		isFromServer = false;
+		// console.log('from client with query', context.query);
+
 		// This is from the client so local and session storage should be available now
 		userId =
 			localStorage.getItem('bible_is_user_id') ||

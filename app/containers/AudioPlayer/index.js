@@ -6,13 +6,14 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import Link from 'next/link';
+// import Link from 'next/link';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { FormattedMessage } from 'react-intl';
 import isEqual from 'lodash/isEqual';
 import injectReducer from '../../utils/injectReducer';
+import PrefetchLink from '../../utils/PrefetchLink';
 // import closeEventHoc from 'components/CloseEventHoc';
 import SvgWrapper from '../../components/SvgWrapper';
 import SpeedControl from '../../components/SpeedControl';
@@ -494,23 +495,26 @@ export class AudioPlayer extends React.Component {
 	}
 
 	nextIcon = (
-		<Link
-			as={getNextChapterUrl(
-				this.props.books,
-				this.props.activeChapter,
-				this.props.activeBookId.toLowerCase(),
-				this.props.activeTextId.toLowerCase(),
-				this.props.verseNumber,
-				this.props.text,
-			)}
-			href={getNextChapterUrl(
-				this.props.books,
-				this.props.activeChapter,
-				this.props.activeBookId.toLowerCase(),
-				this.props.activeTextId.toLowerCase(),
-				this.props.verseNumber,
-				this.props.text,
-			)}
+		<PrefetchLink
+			as={getNextChapterUrl({
+				books: this.props.books,
+				chapter: this.props.activeChapter,
+				bookId: this.props.activeBookId.toLowerCase(),
+				textId: this.props.activeTextId.toLowerCase(),
+				verseNumber: this.props.verseNumber,
+				text: this.props.text,
+				isHref: false,
+			})}
+			href={getNextChapterUrl({
+				books: this.props.books,
+				chapter: this.props.activeChapter,
+				bookId: this.props.activeBookId.toLowerCase(),
+				textId: this.props.activeTextId.toLowerCase(),
+				verseNumber: this.props.verseNumber,
+				text: this.props.text,
+				isHref: true,
+			})}
+			withData
 			prefetch
 		>
 			<div
@@ -522,27 +526,30 @@ export class AudioPlayer extends React.Component {
 				<SvgWrapper className="svgitem icon" fill="#fff" svgid="next" />
 				<FormattedMessage {...messages.next} />
 			</div>
-		</Link>
+		</PrefetchLink>
 	);
 
 	prevIcon = (
-		<Link
-			as={getPreviousChapterUrl(
-				this.props.books,
-				this.props.activeChapter,
-				this.props.activeBookId.toLowerCase(),
-				this.props.activeTextId.toLowerCase(),
-				this.props.verseNumber,
-				this.props.text,
-			)}
-			href={getPreviousChapterUrl(
-				this.props.books,
-				this.props.activeChapter,
-				this.props.activeBookId.toLowerCase(),
-				this.props.activeTextId.toLowerCase(),
-				this.props.verseNumber,
-				this.props.text,
-			)}
+		<PrefetchLink
+			as={getPreviousChapterUrl({
+				books: this.props.books,
+				chapter: this.props.activeChapter,
+				bookId: this.props.activeBookId.toLowerCase(),
+				textId: this.props.activeTextId.toLowerCase(),
+				verseNumber: this.props.verseNumber,
+				text: this.props.text,
+				isHref: false,
+			})}
+			href={getPreviousChapterUrl({
+				books: this.props.books,
+				chapter: this.props.activeChapter,
+				bookId: this.props.activeBookId.toLowerCase(),
+				textId: this.props.activeTextId.toLowerCase(),
+				verseNumber: this.props.verseNumber,
+				text: this.props.text,
+				isHref: true,
+			})}
+			withData
 			prefetch
 		>
 			<div
@@ -554,7 +561,7 @@ export class AudioPlayer extends React.Component {
 				<SvgWrapper className="svgitem icon" fill="#fff" svgid="previous" />
 				<FormattedMessage {...messages.prev} />
 			</div>
-		</Link>
+		</PrefetchLink>
 	);
 
 	pauseIcon = (

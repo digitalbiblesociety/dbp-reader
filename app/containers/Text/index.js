@@ -44,7 +44,7 @@ import createHighlights from './highlightPlainText';
 import createFormattedHighlights from './highlightFormattedText';
 import { applyNotes, applyBookmarks } from './formattedTextUtils';
 // const dynamicCreateHighlights = dynamic(import('./highlightPlainText'), { ssr: false });
-// import differenceObject from 'utils/deepDifferenceObject';
+// import differenceObject from '../../utils/deepDifferenceObject';
 // import some from 'lodash/some';
 // import { addClickToNotes } from './htmlToReact';
 /* Disabling the jsx-a11y linting because we need to capture the selected text
@@ -93,13 +93,18 @@ class Text extends React.PureComponent {
 		if (!isEqual(nextProps.text, this.props.text)) {
 			this.setState({ activeVerseInfo: { verse: 0 } });
 		}
+		if (nextProps.verseNumber !== this.props.verseNumber) {
+			this.setState({ loadingNextPage: false });
+		}
 	}
 
 	componentDidUpdate(prevProps, prevState) {
 		// console.log(this.format, this.formatHighlight);
 		// if (Object.keys(differenceObject(this.state, prevState)).length || Object.keys(differenceObject(this.props, prevProps)).length) {
-		// 	console.log('component did update props difference: \n', differenceObject(prevProps, this.props));
-		// 	console.log('component did update state difference: \n', differenceObject(this.state, prevState));
+		// 	console.log('component did update new props difference: ', differenceObject(this.props, prevProps));
+		// 	console.log('component did update new state difference: ', differenceObject(this.state, prevState));
+		// 	console.log('component did update old props difference: ', differenceObject(prevProps, this.props));
+		// 	console.log('component did update old state difference: ', differenceObject(prevState, this.state));
 		// }
 		// console.log('updating---------------------------------------------');
 		// if (this.main) {
@@ -859,6 +864,8 @@ class Text extends React.PureComponent {
 			);
 		}
 		// console.log('text components that are about to be mounted', textComponents);
+		// console.log('verseNumber in getComponents', verseNumber);
+
 		// Using parseInt to determine whether or not the verseNumber is a real number or if it is a series of characters
 		if (verseNumber && Array.isArray(textComponents)) {
 			if (readersMode) {
@@ -1386,7 +1393,6 @@ class Text extends React.PureComponent {
 					highlightObject.highlightStart = highlightStart;
 					highlightObject.highlightedWords = highlightedWords;
 					if (color === 'none') {
-						// Todo: Test this with q texts
 						const highs = this.props.highlights;
 						const space = highlightStart + highlightedWords;
 						// // console.log('space', space);
@@ -1595,17 +1601,11 @@ class Text extends React.PureComponent {
 			text,
 			loadingNewChapterText,
 			loadingAudio,
-			loadingCopyright,
 			userSettings,
 			verseNumber,
-			copyrights,
-			activeFilesets,
-			audioFilesetId,
 			activeTextId,
 			activeBookId,
 			books,
-			plainTextFilesetId,
-			formattedTextFilesetId,
 			menuIsOpen,
 			isLargeBp,
 			isAudioPlayerBp,
@@ -1616,6 +1616,7 @@ class Text extends React.PureComponent {
 			subFooterOpen,
 			textDirection,
 		} = this.props;
+		// console.log('Text component re-rendered!!!_______', verseNumber);
 
 		const {
 			coords,
@@ -1637,12 +1638,7 @@ class Text extends React.PureComponent {
 		// console.log('chapterAlt', chapterAlt);
 		// const justifiedClass = userSettings.getIn(['toggleOptions', 'justifiedText', 'active']) ? 'justify' : '';
 
-		if (
-			loadingNewChapterText ||
-			loadingAudio ||
-			loadingCopyright ||
-			this.state.loadingNextPage
-		) {
+		if (loadingNewChapterText || loadingAudio || this.state.loadingNextPage) {
 			return (
 				<div
 					style={getInlineStyleForTextContainer(
@@ -1677,22 +1673,24 @@ class Text extends React.PureComponent {
 			>
 				<PrefetchLink
 					withData
-					as={getPreviousChapterUrl(
+					as={getPreviousChapterUrl({
 						books,
-						activeChapter,
-						activeBookId.toLowerCase(),
-						activeTextId.toLowerCase(),
+						chapter: activeChapter,
+						bookId: activeBookId.toLowerCase(),
+						textId: activeTextId.toLowerCase(),
 						verseNumber,
 						text,
-					)}
-					href={getPreviousChapterUrl(
+						isHref: false,
+					})}
+					href={getPreviousChapterUrl({
 						books,
-						activeChapter,
-						activeBookId.toLowerCase(),
-						activeTextId.toLowerCase(),
+						chapter: activeChapter,
+						bookId: activeBookId.toLowerCase(),
+						textId: activeTextId.toLowerCase(),
 						verseNumber,
 						text,
-					)}
+						isHref: true,
+					})}
 					prefetch
 				>
 					<div
@@ -1738,39 +1736,35 @@ class Text extends React.PureComponent {
 								<PrefetchLink
 									prefetch
 									withData
-									href={`/bible/${activeTextId.toLowerCase()}/${activeBookId.toLowerCase()}/${activeChapter}`}
+									href={`/app?bibleId=${activeTextId.toLowerCase()}&bookId=${activeBookId.toLowerCase()}&chapter=${activeChapter}`}
 									as={`/bible/${activeTextId.toLowerCase()}/${activeBookId.toLowerCase()}/${activeChapter}`}
 								>
 									<button className={'read-chapter'}>Read Full Chapter</button>
 								</PrefetchLink>
 							</div>
 						) : null}
-						<Information
-							copyrights={copyrights}
-							activeFilesets={activeFilesets}
-							audioFilesetId={audioFilesetId}
-							plainTextFilesetId={plainTextFilesetId}
-							formattedTextFilesetId={formattedTextFilesetId}
-						/>
+						<Information />
 					</main>
 				</div>
 				<PrefetchLink
-					as={getNextChapterUrl(
+					as={getNextChapterUrl({
 						books,
-						activeChapter,
-						activeBookId.toLowerCase(),
-						activeTextId.toLowerCase(),
+						chapter: activeChapter,
+						bookId: activeBookId.toLowerCase(),
+						textId: activeTextId.toLowerCase(),
 						verseNumber,
 						text,
-					)}
-					href={getNextChapterUrl(
+						isHref: false,
+					})}
+					href={getNextChapterUrl({
 						books,
-						activeChapter,
-						activeBookId.toLowerCase(),
-						activeTextId.toLowerCase(),
+						chapter: activeChapter,
+						bookId: activeBookId.toLowerCase(),
+						textId: activeTextId.toLowerCase(),
 						verseNumber,
 						text,
-					)}
+						isHref: true,
+					})}
 					withData
 					prefetch
 				>
@@ -1824,8 +1818,6 @@ Text.propTypes = {
 	userNotes: PropTypes.array,
 	bookmarks: PropTypes.array,
 	highlights: PropTypes.array,
-	activeFilesets: PropTypes.array,
-	copyrights: PropTypes.object,
 	userSettings: PropTypes.object,
 	formattedSource: PropTypes.object,
 	addBookmark: PropTypes.func,
@@ -1846,7 +1838,6 @@ Text.propTypes = {
 	isScrollingDown: PropTypes.bool,
 	isAudioPlayerBp: PropTypes.bool,
 	audioPlayerState: PropTypes.bool,
-	loadingCopyright: PropTypes.bool,
 	userAuthenticated: PropTypes.bool,
 	loadingNewChapterText: PropTypes.bool,
 	userId: PropTypes.string,
@@ -1857,9 +1848,6 @@ Text.propTypes = {
 	audioSource: PropTypes.string,
 	activeBookName: PropTypes.string,
 	textDirection: PropTypes.string,
-	audioFilesetId: PropTypes.string,
-	plainTextFilesetId: PropTypes.string,
-	formattedTextFilesetId: PropTypes.string,
 };
 
 export default Text;
