@@ -6,10 +6,11 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-// import SvgWrapper from 'components/SvgWrapper';
-// import CloseMenuFunctions from 'utils/closeMenuFunctions';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 import { FormattedMessage } from 'react-intl';
 import get from 'lodash/get';
+import { selectCopyrights } from './selectors';
 import ImageComponent from '../ImageComponent';
 import messages from './messages';
 import SvgWrapper from '../SvgWrapper';
@@ -216,4 +217,15 @@ Information.propTypes = {
 	// activeFilesets: PropTypes.array,
 };
 
-export default Information;
+const mapStateToProps = createStructuredSelector({
+	copyrights: selectCopyrights(),
+});
+
+const mapDispatchToProps = (dispatch) => ({
+	dispatch,
+});
+
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps(),
+)(Information);
