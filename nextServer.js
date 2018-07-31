@@ -4,6 +4,7 @@ const compression = require('compression');
 const LRUCache = require('lru-cache');
 const port = process.env.PORT || 3000;
 const dev = process.env.NODE_ENV !== 'production';
+const manifestJson = require('./static/manifest');
 // const dev = false;
 const app = next({ dev });
 const handle = app.getRequestHandler();
@@ -32,6 +33,12 @@ app
 			res.status(200).sendFile('sitemap-index.xml', sitemapOptions),
 		);
 
+		// const manifestOptions = { root: `${__dirname}/static/`, headers: { 'Content-Type': 'application/json;charset=UTF-8' } };
+
+		server.get('/manifest.json', (req, res) =>
+			res.status(200).json(manifestJson),
+		);
+
 		server.get('/dev-sitemap*', (req, res) =>
 			res.status(200).sendFile(req.originalUrl, sitemapOptions),
 		);
@@ -42,11 +49,6 @@ app
 		server.get('/favicon.ico', (req, res) =>
 			res.status(200).sendFile('favicon.ico', faviconOptions),
 		);
-
-		server.get('/_next*', (req, res) => {
-			// console.log('caught _next request');
-			handle(req, res);
-		});
 
 		server.get('/reset/password/:token', (req, res) => {
 			const actualPage = '/app';
