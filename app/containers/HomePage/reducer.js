@@ -276,6 +276,15 @@ const initialState = fromJS({
 		// localStorage.getItem('bible_is_user_id') ||
 		// sessionStorage.getItem('bible_is_user_id') ||
 		'',
+	match: {
+		params: {
+			bibleId: 'engesv',
+			bookId: 'mat',
+			chapter: '1',
+			verse: '',
+			token: '',
+		},
+	},
 	audioFilesetId: '',
 	plainTextFilesetId: '',
 	formattedTextFilesetId: '',

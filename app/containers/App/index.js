@@ -20,7 +20,7 @@ import HomePage from '../HomePage';
 export default function App({ appProps }) {
 	return (
 		<div>
-			<HomePage match={appProps.match} />
+			<HomePage match={appProps.match} isFromServer={appProps.isFromServer} />
 		</div>
 	);
 }

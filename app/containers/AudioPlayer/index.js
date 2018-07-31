@@ -598,6 +598,9 @@ export class AudioPlayer extends React.Component {
 			// isScrollingDown,
 		} = this.props;
 		const { autoPlayChecked, currentSpeed } = this.state;
+		// console.log('____________________________\nAudio Player component rendered!');
+		// console.log('____________________________\n', source);
+		// console.log('____________________________\n', this.props.audioPaths);
 
 		return (
 			<GenericErrorBoundary affectedArea="AudioPlayer">

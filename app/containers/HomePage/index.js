@@ -20,7 +20,6 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { TransitionGroup } from 'react-transition-group';
-import isEqual from 'lodash/isEqual';
 import get from 'lodash/get';
 // import AnimateHeight from 'react-animate-height';
 // import { fromJS } from 'immutable';
@@ -125,13 +124,31 @@ class HomePage extends React.PureComponent {
 			userAuthenticated,
 			userId,
 		} = this.props.homepage;
+		// const match = this.props.match;
 		// May want to use replace here at some point
+		// this.props.dispatch({
+		// 	type: 'getaudio',
+		// 	filesets: activeFilesets,
+		// 	bookId: activeBookId,
+		// 	chapter: activeChapter,
+		// });
+
+		// Might want to move this to getInitialProps, but that would increase
+		// the page load speed by at least a few seconds
+		// if (!this.props.isFromServer) {
+
+		// console.log('Dispatching action to get bibles');
+		const params = this.props.homepage.match.params;
 		this.props.dispatch({
-			type: 'getaudio',
-			filesets: activeFilesets,
-			bookId: activeBookId,
-			chapter: activeChapter,
+			type: 'getbible',
+			bibleId: params.bibleId,
+			bookId: params.bookId,
+			chapter: params.chapter,
+			authenticated: this.props.homepage.userAuthenticated,
+			userId: this.props.homepage.userId,
+			verse: params.verse,
 		});
+		// }
 
 		this.getCopyrights({ filesetIds: activeFilesets });
 
@@ -218,7 +235,7 @@ class HomePage extends React.PureComponent {
 			}
 		}
 
-		if (this.props.match.params.token) {
+		if (this.props.homepage.match.params.token) {
 			// Open Profile
 			this.toggleProfile();
 			// Give profile the token - done in render
@@ -416,96 +433,12 @@ class HomePage extends React.PureComponent {
 			document.firstElementChild.clientWidth < 551;
 		// console.log('props in did mount home', this.props);
 	}
-	// Component updates when the state and props haven't changed 2 of 5 times
-	// If there is a significant slow down we may need to do some deep equality checks on the state
-	// Need to fix how many times this gets called. The main issue is all the state that is managed by this one thing
-	componentWillReceiveProps(nextProps) {
-		// Deals with updating page based on the url params
+	componentWillReceiveProps() {
 		// Should probably try to batch process any state updates at the end of this function
 		// console.log('Received props --------------------------------------');
 
+		// Closing the footer if an props changed since that means the user is interacting with other parts of the page
 		this.setState({ subFooterOpen: false });
-		// next props
-		const nextMatch = nextProps.match || {
-			params: {
-				token: '',
-				verse: '',
-				chapter: 1,
-				bookId: 'MAT',
-				bibleId: 'ENGESV',
-			},
-		};
-		const { params: nextParams } = nextMatch;
-
-		// Deals with updating the interface if a user is authenticated or added highlights
-		const {
-			activeTextId,
-			activeBookId,
-			activeChapter,
-			userAuthenticated,
-			userId,
-			// highlights,
-		} = nextProps.homepage;
-		// console.log('nextHighlights', highlights);
-		// console.log('prevHighlights', this.props.homepage.highlights);
-		// Need to get a users highlights if they just sign in or reset the highlights if they just signed out
-		if (userAuthenticated !== this.props.userAuthenticated) {
-			this.props.dispatch(
-				getHighlights({
-					bible: activeTextId,
-					book: activeBookId,
-					chapter: activeChapter,
-					userAuthenticated,
-					userId,
-				}),
-			);
-			if (userId) {
-				// console.log('getting the notes', userId);
-				this.props.dispatch(
-					getNotes({
-						userId,
-						params: {
-							bible_id: activeTextId,
-							book_id: activeBookId,
-							chapter: activeChapter,
-							limit: 150,
-							page: 1,
-						},
-					}),
-				);
-				this.props.dispatch(
-					getBookmarksForChapter({
-						userId,
-						params: {
-							bible_id: activeTextId,
-							book_id: activeBookId,
-							chapter: activeChapter,
-							limit: 150,
-							page: 1,
-						},
-					}),
-				);
-			}
-		}
-		// Below code is for when the same version is selected but the audio type is changed
-		if (
-			!isEqual(
-				nextProps.homepage.activeFilesets,
-				this.props.homepage.activeFilesets,
-			) &&
-			nextProps.homepage.activeTextId === this.props.homepage.activeTextId
-		) {
-			// do something
-			// console.log('this.props.homepage.activeFilesets', this.props.homepage.activeFilesets);
-			//
-			// console.log('filesets changed', nextProps.homepage.activeFilesets);
-			this.props.dispatch({
-				type: 'getaudio',
-				filesets: nextProps.homepage.activeFilesets,
-				bookId: nextParams.bookId,
-				chapter: nextParams.chapter,
-			});
-		}
 	}
 
 	componentWillUnmount() {
@@ -894,8 +827,8 @@ class HomePage extends React.PureComponent {
 		// }
 		// console.log('text', updatedText);
 		// console.log('Homepage re-rendered bc reasons');
-		const token = this.props.match.params.token || '';
-		const verse = this.props.match.params.verse || '';
+		const token = this.props.homepage.match.params.token || '';
+		const verse = this.props.homepage.match.params.verse || '';
 		// const token = '';
 		// const verse = '';
 
@@ -1061,8 +994,9 @@ HomePage.propTypes = {
 	userSettings: PropTypes.object,
 	formattedSource: PropTypes.object,
 	history: PropTypes.object,
-	match: PropTypes.object,
+	// match: PropTypes.object,
 	// userNotes: PropTypes.object,
+	// isFromServer: PropTypes.bool,
 	userAuthenticated: PropTypes.bool,
 	userId: PropTypes.string,
 	// text: PropTypes.object,

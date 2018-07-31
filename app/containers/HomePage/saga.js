@@ -311,6 +311,8 @@ export function* getBibleFromUrl({
 	userId,
 	verse,
 }) {
+	// console.log('Get bible from url was called');
+
 	// This function needs to return the data listed below
 	// Books
 	// Active or first chapter text
@@ -579,6 +581,8 @@ export function* getChapterFromUrl({
 		// 		previous: true,
 		// 	});
 		// }
+		// console.log('Chapter is calling getAudio');
+
 		yield fork(getChapterAudio, { filesets, bookId, chapter });
 		// }
 		yield fork(getBookMetadata, { bibleId });
@@ -816,21 +820,16 @@ export function* getChapterAudio({
 	// prevChapter,
 	// nextChapter,
 }) {
-	// console.log('{ filesets, bookId: currentBook, chapter: currentChapter, previous = false, next = false, prevBookId, nextBookId, prevChapter, nextChapter }', { filesets, bookId: currentBook, chapter: currentChapter, previous, next, prevBookId, nextBookId, prevChapter, nextChapter });
 	// console.trace()
-	// if (previous) {
-	// 	bookId = prevBookId;
-	// 	chapter = prevChapter;
-	// } else if (next) {
-	// 	bookId = nextBookId;
-	// 	chapter = nextChapter;
-	// }
+	// console.log('bookId', bookId);
+	// console.log('chapter', chapter);
+	// console.log('filesets', filesets);
+
 	// Send a loadaudio action for each fail in production so that there isn't a link loaded
 	// This handles the case where a user already has a link but getting the next one fails
 	// console.log('getting audio', filesets, bookId, chapter);
 	// Parse filesets |▰╭╮▰|
 	// TODO: Need to handle when there are multiple filesets for the same audio type
-	// Todo: Sort the list by the audio type where drama comes first
 	// console.log('filesets', filesets);
 	const filteredFilesets = filesets.reduce((a, file) => {
 		const newFile = { ...a };

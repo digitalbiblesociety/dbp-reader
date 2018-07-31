@@ -7,48 +7,17 @@
 
 // Needed for redux-saga es6 generator support
 import 'babel-polyfill';
-// Import all the third party stuff
 import React from 'react';
 import PropTypes from 'prop-types';
-// import ReactDOM from 'react-dom';
-// import { fromJS } from 'immutable';
 import { Provider } from 'react-redux';
-// import { ConnectedRouter } from 'react-router-redux';
-// import createHistory from 'history/createBrowserHistory';
 import 'rc-slider/assets/index.css';
 import 'react-accessible-accordion/dist/minimal-example.css';
-// import 'sanitize.css/sanitize.css';
 // import fetch from 'isomorphic-fetch';
 import Head from 'next/head';
 import cachedFetch, { overrideCache } from '../app/utils/cachedFetch';
-// Load the favicon, the manifest.json file and the .htaccess file
-/* eslint-disable import/no-unresolved, import/extensions */
-// import '../static/apple-icon-72x72.png';
-// import '../static/apple-icon-76x76.png';
-// import '../static/apple-icon-114x114.png';
-// import '../static/apple-icon-120x120.png';
-// import '../static/apple-icon-144x144.png';
-// import '../static/apple-icon-152x152.png';
-// import '../static/apple-icon-180x180.png';
-// import '../static/android-icon-192x192.png';
-// import '../static/ms-icon-144x144.png';
-// import '../static/favicon-32x32.png';
-// import '../static/favicon-96x96.png';
-// import '../static/favicon-16x16.png';
-// import '../static/favicon.ico';
-// import '../static/manifest.json';
-// import '../static/.htaccess';
-
-/* eslint-enable import/no-unresolved, import/extensions */
-// Import Language Provider
 import LanguageProvider from '../app/containers/LanguageProvider';
-// import territoryCodes from '../app/utils/territoryCodes.json';
-// import homeReducer from '../app/containers/HomePage/reducer';
-// import textReducer from '../app/containers/TextSelection/reducer';
-// import { fromJS } from 'immutable'
-// Import root app
-import App from '../app/containers/App/index';
-
+// import App from '../app/containers/App/index';
+import HomePage from '../app/containers/HomePage';
 import configureStore from '../app/configureStore';
 
 // Import i18n messages
@@ -56,11 +25,11 @@ import { translationMessages } from '../app/i18n';
 
 // Import CSS reset and Global Styles
 import '../static/app.scss';
+// Need to figure out how to get the site to load this file from any url
+import '../static/manifest.json';
 // import '../app/styles/variables.scss';
 // import '../app/styles/global.scss';
 // import '../app/styles/components/navbar.scss';
-
-// const MOUNT_NODE = document.getElementById('app');
 
 class AppContainer extends React.Component {
 	componentDidMount() {
@@ -69,6 +38,7 @@ class AppContainer extends React.Component {
 				overrideCache(url.href, url.data);
 			});
 		}
+
 		/* eslint-disable no-underscore-dangle */
 		if (this.reduxStore && !window.__NEXT_REDUX_STORE__) {
 			window.__NEXT_REDUX_STORE__ = this.reduxStore;
@@ -129,6 +99,7 @@ class AppContainer extends React.Component {
 			userId,
 			isAuthenticated,
 			userProfile,
+			match,
 			isFromServer,
 		} = this.props;
 		// Create redux store with history
@@ -139,6 +110,7 @@ class AppContainer extends React.Component {
 			homepage: {
 				userProfile,
 				books,
+				match,
 				textDirection,
 				activeTextName,
 				activeChapter,
@@ -312,7 +284,7 @@ class AppContainer extends React.Component {
 								| Bible.is
 							</title>
 						</Head>
-						<App appProps={this.props} />
+						<HomePage />
 					</div>
 				</LanguageProvider>
 			</Provider>
