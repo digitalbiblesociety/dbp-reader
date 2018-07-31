@@ -19,10 +19,10 @@ const createDeepEqualSelector = createSelectorCreator(defaultMemoize, is);
 const selectHomePageDomain = (state) => state.get('homepage');
 const selectHomepageText = (state) => state.getIn(['homepage', 'chapterText']);
 const selectProfilePageDomain = (state) => state.get('profile');
-const selectFormattedTextSource = (state, props) => ({
-	source: state.getIn(['homepage', 'formattedSource']),
-	props,
-});
+const selectFormattedTextSource = (state) =>
+	state.getIn(['homepage', 'formattedSource']);
+const selectRouteParams = (state) =>
+	state.getIn(['homepage', 'match', 'params']);
 const selectCrossReferenceState = (state) =>
 	state.getIn([
 		'homepage',
@@ -202,8 +202,8 @@ const selectAuthenticationStatus = () =>
 // I will likely want to put all manipulations to the formatted text into this selector
 const selectFormattedSource = () =>
 	createDeepEqualSelector(
-		[selectFormattedTextSource, selectCrossReferenceState],
-		({ source, props }, hasCrossReferences) => {
+		[selectFormattedTextSource, selectCrossReferenceState, selectRouteParams],
+		(source, hasCrossReferences, params) => {
 			// Todo: Get rid of all dom manipulation in this selector because it is really gross
 			// Todo: run all of the parsing in this function once the source is obtained
 			// Todo: Keep the selection of the single verse and the footnotes here
@@ -212,7 +212,7 @@ const selectFormattedSource = () =>
 			if (!source) {
 				return { main: '', footnotes: {} };
 			}
-			const { verse, bookId, chapter } = props.match.params;
+			const { verse, bookId, chapter } = params;
 
 			// Getting the verse for when user selected 1 verse
 			// start <span class="verse${verseNumber}
@@ -244,7 +244,7 @@ const selectFormattedSource = () =>
 				  )
 				: {};
 
-			if (props.match.params.verse) {
+			if (params.verse) {
 				// const parser = new DOMParser();
 				const serializer = new XMLSerializer();
 				// const xmlDoc = parser.parseFromString(sourceWithoutNewlines, 'text/xml');

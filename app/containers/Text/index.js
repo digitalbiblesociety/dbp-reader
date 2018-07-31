@@ -1616,7 +1616,7 @@ class Text extends React.PureComponent {
 			subFooterOpen,
 			textDirection,
 		} = this.props;
-		// console.log('Text component re-rendered!!!_______', verseNumber);
+		// console.log('____________________________\nText component rendered!');
 
 		const {
 			coords,
