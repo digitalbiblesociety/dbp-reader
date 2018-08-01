@@ -16,12 +16,11 @@ import 'react-accessible-accordion/dist/minimal-example.css';
 import Head from 'next/head';
 import cachedFetch, { overrideCache } from '../app/utils/cachedFetch';
 import LanguageProvider from '../app/containers/LanguageProvider';
+import { translationMessages } from '../app/i18n';
 // import App from '../app/containers/App/index';
 import HomePage from '../app/containers/HomePage';
 import configureStore from '../app/configureStore';
-
-// Import i18n messages
-import { translationMessages } from '../app/i18n';
+import getinitialChapterData from '../app/utils/getInitialChapterData';
 
 // Import CSS reset and Global Styles
 import '../static/app.scss';
@@ -87,6 +86,7 @@ class AppContainer extends React.Component {
 			textDirection,
 			activeChapter,
 			chapterText,
+			formattedText,
 			activeBookName,
 			activeBookId,
 			verseNumber,
@@ -113,6 +113,7 @@ class AppContainer extends React.Component {
 				match,
 				textDirection,
 				activeTextName,
+				isFromServer,
 				activeChapter,
 				activeBookName,
 				verseNumber,
@@ -122,6 +123,7 @@ class AppContainer extends React.Component {
 				activeBookId,
 				testaments,
 				userId,
+				formattedSource: formattedText || '',
 				activeFilesets: filesets,
 				userAuthenticated: isAuthenticated,
 				chapterText: chapterText || [],
@@ -196,7 +198,6 @@ class AppContainer extends React.Component {
 				audioSource: '',
 				invalidBibleId: false,
 				hasAudio: false,
-				formattedSource: '',
 				hasTextInDatabase: true,
 				filesetTypes: {},
 				firstLoad: true,
@@ -347,6 +348,14 @@ AppContainer.getInitialProps = async (context) => {
 	const singleBibleJson = singleBibleRes;
 	const bible = singleBibleJson.data;
 
+	console.log('Before init func');
+	const textData = await getinitialChapterData({
+		filesets: bible.filesets['dbp-dev'],
+		bookId,
+		chapter,
+	});
+	console.log('After init func');
+	// todo: replace with getInintChaptData utility function
 	// Get text for chapter
 	const textRes = await cachedFetch(textUrl);
 	const textJson = textRes;
@@ -378,6 +387,7 @@ AppContainer.getInitialProps = async (context) => {
 		// isServer,
 		chapterText,
 		testaments,
+		formattedText: textData.formattedText,
 		books: bible.books,
 		activeChapter: parseInt(chapter, 10),
 		activeBookName,
@@ -427,6 +437,7 @@ AppContainer.propTypes = {
 	activeBookId: PropTypes.string,
 	defaultLanguageIso: PropTypes.string,
 	defaultLanguageName: PropTypes.string,
+	formattedText: PropTypes.string,
 	match: PropTypes.object,
 	userId: PropTypes.string,
 	isAuthenticated: PropTypes.bool,

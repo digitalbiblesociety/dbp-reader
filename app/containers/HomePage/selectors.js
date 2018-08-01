@@ -19,6 +19,7 @@ const createDeepEqualSelector = createSelectorCreator(defaultMemoize, is);
 const selectHomePageDomain = (state) => state.get('homepage');
 const selectHomepageText = (state) => state.getIn(['homepage', 'chapterText']);
 const selectProfilePageDomain = (state) => state.get('profile');
+const selectServerState = (state) => state.getIn(['homepage', 'isFromServer']);
 const selectFormattedTextSource = (state) =>
 	state.getIn(['homepage', 'formattedSource']);
 const selectRouteParams = (state) =>
@@ -202,8 +203,13 @@ const selectAuthenticationStatus = () =>
 // I will likely want to put all manipulations to the formatted text into this selector
 const selectFormattedSource = () =>
 	createDeepEqualSelector(
-		[selectFormattedTextSource, selectCrossReferenceState, selectRouteParams],
-		(source, hasCrossReferences, params) => {
+		[
+			selectFormattedTextSource,
+			selectCrossReferenceState,
+			selectRouteParams,
+			selectServerState,
+		],
+		(source, hasCrossReferences, params, isFromServer) => {
 			// Todo: Get rid of all dom manipulation in this selector because it is really gross
 			// Todo: run all of the parsing in this function once the source is obtained
 			// Todo: Keep the selection of the single verse and the footnotes here
@@ -229,45 +235,52 @@ const selectFormattedSource = () =>
 			// const updatedSource = withNotes || source;
 			// console.log('Updated source: ', updatedSource);
 			// console.log('source matched in selector', source.match(/[\n\r]/g, ''));
+			// Todo: Refactor to either not use DOMParser and XMLSerializer or don't load the formatted text in the source
 			const sourceWithoutNewlines = source.replace(/[\n\r]/g, '');
-			const parser = new DOMParser();
-			const xmlDoc = parser.parseFromString(sourceWithoutNewlines, 'text/xml');
-			const footnotes = hasCrossReferences
-				? [...xmlDoc.querySelectorAll('.ft, .xt')].reduce(
-						(a, n) => ({
-							...a,
-							[n.parentElement.parentElement.attributes.id.value.slice(
-								4,
-							)]: n.textContent,
-						}),
-						{},
-				  )
-				: {};
+			let footnotes = {};
+			if (!isFromServer) {
+				const parser = new DOMParser();
+				const xmlDoc = parser.parseFromString(
+					sourceWithoutNewlines,
+					'text/xml',
+				);
+				footnotes = hasCrossReferences
+					? [...xmlDoc.querySelectorAll('.ft, .xt')].reduce(
+							(a, n) => ({
+								...a,
+								[n.parentElement.parentElement.attributes.id.value.slice(
+									4,
+								)]: n.textContent,
+							}),
+							{},
+					  )
+					: {};
+				if (params.verse) {
+					// const parser = new DOMParser();
+					const serializer = new XMLSerializer();
+					// const xmlDoc = parser.parseFromString(sourceWithoutNewlines, 'text/xml');
+					const verseClassName = `${bookId.toUpperCase()}${chapter}_${verse}`;
+					// console.log('verseClassName', verseClassName);
+					// console.log('xmlDoc', xmlDoc);
+					const verseNumber = xmlDoc.getElementsByClassName(`verse${verse}`)[0];
+					// console.log(verseNumber);
+					const verseString = xmlDoc.getElementsByClassName(verseClassName)[0];
+					// console.log('verse string', verseString);
+					const newXML = xmlDoc.createElement('div');
+					if (verseNumber && verseString) {
+						newXML.appendChild(verseNumber);
+						newXML.appendChild(verseString);
+					}
 
-			if (params.verse) {
-				// const parser = new DOMParser();
-				const serializer = new XMLSerializer();
-				// const xmlDoc = parser.parseFromString(sourceWithoutNewlines, 'text/xml');
-				const verseClassName = `${bookId.toUpperCase()}${chapter}_${verse}`;
-				// console.log('verseClassName', verseClassName);
-				// console.log('xmlDoc', xmlDoc);
-				const verseNumber = xmlDoc.getElementsByClassName(`verse${verse}`)[0];
-				// console.log(verseNumber);
-				const verseString = xmlDoc.getElementsByClassName(verseClassName)[0];
-				// console.log('verse string', verseString);
-				const newXML = xmlDoc.createElement('div');
-				if (verseNumber && verseString) {
-					newXML.appendChild(verseNumber);
-					newXML.appendChild(verseString);
+					return {
+						main: newXML
+							? serializer.serializeToString(newXML)
+							: 'This chapter does not have a verse matching the url',
+						footnotes,
+					};
 				}
-
-				return {
-					main: newXML
-						? serializer.serializeToString(newXML)
-						: 'This book does not have a verse matching the url',
-					footnotes,
-				};
 			}
+
 			const chapterStart = sourceWithoutNewlines.indexOf('<div class="chapter');
 			const chapterEnd = sourceWithoutNewlines.indexOf(
 				'<div class="footnotes">',
