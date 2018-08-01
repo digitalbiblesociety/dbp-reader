@@ -496,6 +496,7 @@ function homePageReducer(state = initialState, action) {
 		case GET_COPYRIGHTS:
 			return state.set('loadingCopyright', true);
 		case 'loadcopyright':
+			// console.log('Loading copyrights, this is a test to see if all of these cases are being run or if something is happening out of order');
 			return state
 				.set('loadingCopyright', false)
 				.set('copyrights', action.copyrights);

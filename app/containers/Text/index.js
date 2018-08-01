@@ -1640,7 +1640,12 @@ class Text extends React.PureComponent {
 		]);
 		const chapterAlt = text[0] && text[0].chapter_alt;
 
-		if (loadingNewChapterText || loadingAudio || this.state.loadingNextPage) {
+		if (
+			loadingNewChapterText ||
+			loadingAudio ||
+			this.state.loadingNextPage ||
+			!books.length
+		) {
 			return (
 				<div
 					className={getClassNameForTextContainer(

@@ -47,7 +47,9 @@ export default async ({ filesets, bookId: lowerCaseBookId, chapter }) => {
 				return json;
 			})
 			.catch((e) => {
-				console.log('Error in request for plain fileset: ', e.message); // eslint-disable-line no-console
+				if (process.env.NODE_ENV === 'development') {
+					console.error('Error in request for plain fileset: ', e.message); // eslint-disable-line no-console
+				}
 				return { data: [] };
 			});
 
@@ -66,7 +68,7 @@ export default async ({ filesets, bookId: lowerCaseBookId, chapter }) => {
 			})
 			.catch((reason) => {
 				if (process.env.NODE_ENV === 'development') {
-					console.log('Reason race threw: ', reason.message); // eslint-disable-line no-console
+					console.error('Reason race threw: ', reason.message); // eslint-disable-line no-console
 				}
 			});
 	}

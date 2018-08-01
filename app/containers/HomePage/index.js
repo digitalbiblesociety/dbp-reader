@@ -592,6 +592,8 @@ class HomePage extends React.PureComponent {
 			isMenuOpen,
 		} = this.props;
 
+		// console.log('Homepage props', this.props);
+
 		const { isScrollingDown, footerDistance: distance } = this.state;
 
 		const { userNotes, bookmarks, text: updatedText } = this.props.textData;
