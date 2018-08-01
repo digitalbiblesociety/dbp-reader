@@ -64,6 +64,7 @@ export default ({
 			textId,
 			bookId: nextBook.get('book_id').toLowerCase(),
 			chapter: nextBook.getIn(['chapters', 0]),
+			isHref,
 		});
 		// return `${baseUrl}/${textId}/${nextBook
 		// 	.get('book_id')
@@ -81,6 +82,7 @@ export default ({
 		textId,
 		bookId,
 		chapter: activeBook.getIn(['chapters', nextChapterIndex]),
+		isHref,
 	});
 	// return `${baseUrl}/${textId}/${bookId}/${activeBook.getIn([
 	// 	'chapters',

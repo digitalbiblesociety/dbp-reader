@@ -84,6 +84,8 @@ class HomePage extends React.PureComponent {
 	};
 	// eslint-disable-line react/prefer-stateless-function
 	componentDidMount() {
+		// console.log('Homepage mounted______________________');
+
 		const {
 			activeFilesets,
 			activeBookId,
@@ -332,6 +334,10 @@ class HomePage extends React.PureComponent {
 		// Should move these to being tracked in state or move them to media queries
 		this.window = window;
 		this.document = document;
+	}
+
+	componentWillReceiveProps() {
+		// console.log('Homepage received props ______________________');
 	}
 
 	componentWillUnmount() {

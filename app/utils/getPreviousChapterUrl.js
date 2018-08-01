@@ -31,7 +31,7 @@ export default ({
 			return url({ textId, bookId, chapter, nextVerse: lastVerse, isHref });
 			// return `${baseUrl}/${textId}/${bookId}/${chapter}/${lastVerse}`;
 		}
-		return url({ textId, bookId, chapter, isHref });
+		return url({ textId, bookId, chapter, nextVerse: verseNumber, isHref });
 		// return `${baseUrl}/${textId}/${bookId}/${chapter}`;
 	}
 

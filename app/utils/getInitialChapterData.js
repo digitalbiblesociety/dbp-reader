@@ -33,6 +33,7 @@ export default async ({ filesets, bookId: lowerCaseBookId, chapter }) => {
 		return text || '';
 	});
 
+	let plainTextJson = JSON.stringify({});
 	// start promise for plain text
 	const plainPromises = plainFilesetIds.map(async (id) => {
 		const url = `${
@@ -40,7 +41,15 @@ export default async ({ filesets, bookId: lowerCaseBookId, chapter }) => {
 		}/bibles/filesets/${id}/${bookId}/${chapter}?key=${
 			process.env.DBP_API_KEY
 		}&v=4`;
-		const res = await request(url); // .catch((e) => console.log('Error in request for plain fileset: '));
+		const res = await request(url)
+			.then((json) => {
+				plainTextJson = JSON.stringify(json);
+				return json;
+			})
+			.catch((e) => {
+				console.log('Error in request for plain fileset: ', e.message); // eslint-disable-line no-console
+				return { data: [] };
+			});
 
 		return res ? res.data : [];
 	});
@@ -63,7 +72,8 @@ export default async ({ filesets, bookId: lowerCaseBookId, chapter }) => {
 	}
 	/* eslint-enable */
 	const formattedText = await Promise.all(formattedPromises);
+	// console.log('Got through all requests in get initial');
 
 	// Return a default object in the case that none of the api calls work
-	return { plainText, formattedText: formattedText[0] };
+	return { plainText, formattedText: formattedText[0] || '', plainTextJson };
 };

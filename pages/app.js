@@ -10,11 +10,13 @@ import 'babel-polyfill';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Provider } from 'react-redux';
+// import dynamic from 'next/dynamic';
 import 'rc-slider/assets/index.css';
 import 'react-accessible-accordion/dist/minimal-example.css';
 // import fetch from 'isomorphic-fetch';
 import Head from 'next/head';
 import cachedFetch, { overrideCache } from '../app/utils/cachedFetch';
+// import fetch from 'isomorphic-fetch';
 import LanguageProvider from '../app/containers/LanguageProvider';
 import { translationMessages } from '../app/i18n';
 // import App from '../app/containers/App/index';
@@ -24,48 +26,52 @@ import getinitialChapterData from '../app/utils/getInitialChapterData';
 
 // Import CSS reset and Global Styles
 import '../static/app.scss';
-// import '../static/variables.scss';
-// import '../static/global.scss';
-// import '../static/darktheme.scss';
-// import '../static/lighttheme.scss';
-// import '../static/defaulttheme.scss';
-// import '../static/formatted_text.scss';
-// import '../static/search.scss';
-// import '../static/chapterselection.scss';
-// import '../static/settings.scss';
-// import '../static/navbar.scss';
-// import '../static/typography.scss';
-// import '../static/textselector.scss';
-// import '../static/menubar.scss';
-// import '../static/text.scss';
-// import '../static/animations.scss';
-// import '../static/audioplayer.scss';
-// import '../static/footer.scss';
-// import '../static/profile.scss';
-// import '../static/privacypolicy.scss';
-// import '../static/accountsettings.scss';
-// import '../static/notes.scss';
-// import '../static/copywrite.scss';
-// import '../static/contextmenu.scss';
-// import '../static/custompopup.scss';
-// import '../static/custom-components.scss';
-// import '../static/footnotePortal.scss';
-// import '../static/notfound.scss';
-
 // Need to figure out how to get the site to load this file from any url
 import '../static/manifest.json';
-// import '../app/styles/variables.scss';
-// import '../app/styles/global.scss';
-// import '../app/styles/components/navbar.scss';
 
 class AppContainer extends React.Component {
 	componentDidMount() {
 		if (this.props.isFromServer) {
+			// console.log('Using cached url');
+			// console.log('this.props.fetchedUrls', this.props.fetchedUrls);
 			this.props.fetchedUrls.forEach((url) => {
 				overrideCache(url.href, url.data);
 			});
 		}
-
+		// After launch see if I can get Reactotron working with SSR and redux
+		// Todo: Set up a function to init all of the plugins that rely on the browser
+		// if (process.env.NODE_ENV !== 'production') {
+		// 	const Reactotron = async () => {
+		// 		const r = await import('reactotron-react-js');
+		// 		const redux = await import('reactotron-redux');
+		// 		const sauce = await import('reactotron-apisauce');
+		// 		const saga = await import('reactotron-redux-saga');
+		// 		// const track = await import('reactotron-react.js');
+		//
+		// 		console.log('r', r);
+		// 		console.log('redux', redux);
+		// 		console.log('sauce', sauce);
+		// 		console.log('saga', saga);
+		//
+		// 		// console.log('track', track);
+		//
+		// 		return { reactotron: r.default, redux: redux.reactotronRedux, sauce, saga, track: r.trackGlobalErrors };
+		// 	}
+		// 	// console.log('Reactotron', Reactotron)
+		// 	Reactotron().then(({ reactotron, redux, sauce, saga, track }) => {
+		// 		// console.log('in promise r', r.default);
+		// 		// console.log('Object.Keys(r.default', Object.keys(r.default));
+		// 		reactotron
+		// 			.configure({ name: 'Bible.is', secure: false })
+		// 			.use(sauce())
+		// 			.use(redux())
+		// 			.use(track())
+		// 			.use(saga())
+		// 			.connect();
+		//
+		// 		console.tron = reactotron;
+		// 	});
+		// }
 		/* eslint-disable no-underscore-dangle */
 		if (this.reduxStore && !window.__NEXT_REDUX_STORE__) {
 			window.__NEXT_REDUX_STORE__ = this.reduxStore;
@@ -327,6 +333,8 @@ AppContainer.getInitialProps = async (context) => {
 	const userProfile = {};
 	let userId = '';
 	let isAuthenticated = false;
+	// console.log('context.isVirtualCall', context.isVirtualCall);
+	// console.log('context.pathname', context.pathname);
 
 	if (!context.req) {
 		isFromServer = false;
@@ -376,18 +384,28 @@ AppContainer.getInitialProps = async (context) => {
 	const singleBibleJson = singleBibleRes;
 	const bible = singleBibleJson.data;
 
-	console.log('Before init func');
-	const textData = await getinitialChapterData({
-		filesets: bible.filesets['dbp-dev'],
-		bookId,
-		chapter,
-	});
-	console.log('After init func');
+	// console.log('bible.name', bible.name);
+	// console.log('bible.abbr', bible.abbr);
+	let textData = { plainText: [], formattedText: '', plainTextJson: {} };
+	try {
+		console.log('Before init func');
+		textData = await getinitialChapterData({
+			filesets: bible.filesets['dbp-dev'],
+			bookId,
+			chapter,
+		}).catch((err) => {
+			console.log(`Error caught in get initial: ${err.message}`); // eslint-disable-line no-console
+			return { formattedText: '', plainText: [] };
+		});
+	} catch (err) {
+		console.log(`Error caught in get initial by try catch: ${err.message}`); // eslint-disable-line no-console
+	}
+	// console.log('After init func', Object.keys(textData));
 	// todo: replace with getInintChaptData utility function
 	// Get text for chapter
-	const textRes = await cachedFetch(textUrl);
-	const textJson = textRes;
-	const chapterText = textJson.data;
+	// const textRes = await fetch(textUrl);
+	const textJson = textData.plainTextJson;
+	const chapterText = textData.plainText;
 	// console.log('chapterText', chapterText);
 	// Need to try the other bible id if there wasn't any chapter text
 	if (!chapterText) {

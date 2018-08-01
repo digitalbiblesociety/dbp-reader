@@ -9,6 +9,7 @@ export default class PrefetchLink extends Link {
 		withData: PropTypes.bool,
 	};
 	async prefetch() {
+		console.log('Prefetch did not run because request came from server');
 		if (typeof window === 'undefined') {
 			return;
 		}
