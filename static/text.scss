@@ -39,7 +39,7 @@
 	.main-wrapper {
 		overflow: hidden;
 		margin: 0 auto;
-		padding: 15px 15px 45px 15px;
+		padding: 15px 15px 15px 15px;
 		height: 100%;
 
 		@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
@@ -243,6 +243,10 @@
 		main {
 			padding-bottom: 75px;
 			z-index: 0;
+		}
+
+		.main-wrapper {
+			padding-bottom: 45px;
 		}
 	}
 }

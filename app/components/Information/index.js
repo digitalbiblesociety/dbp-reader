@@ -202,19 +202,28 @@ class Information extends React.PureComponent {
 						</div>
 					</div>
 				) : null}
+				<div className={'ministry-statement'}>
+					<FormattedMessage {...messages.circleC} />&nbsp;
+					<a rel={'noopener'} target={'_blank'} href={'http://www.bible.is'}>
+						<FormattedMessage {...messages.bibleIsText} />
+					</a>
+					<FormattedMessage {...messages.ministrySlogan} />&nbsp;
+					<a
+						rel={'noopener'}
+						target={'_blank'}
+						href={'https://www.faithcomesbyhearing.com'}
+					>
+						<FormattedMessage {...messages.faithComesByHearing} />
+					</a>
+					&nbsp;<FormattedMessage {...messages.circleR} />
+				</div>
 			</section>
 		);
 	}
 }
 
 Information.propTypes = {
-	// toggleInformationModal: PropTypes.func,
-	// getCopyrights: PropTypes.func,
 	copyrights: PropTypes.object,
-	// audioFilesetId: PropTypes.string,
-	// plainTextFilesetId: PropTypes.string,
-	// formattedTextFilesetId: PropTypes.string,
-	// activeFilesets: PropTypes.array,
 };
 
 const mapStateToProps = createStructuredSelector({

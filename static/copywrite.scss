@@ -146,4 +146,24 @@
 			}
 		}
 	}
+
+	.ministry-statement {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 16px;
+		font-size: 12px;
+		margin-top: 15px;
+
+		a {
+			@include css4 {
+				color: var(--notebook-title-date-color);
+			}
+
+			&:hover {
+				cursor: pointer;
+				opacity: 0.85;
+			}
+		}
+	}
 }
