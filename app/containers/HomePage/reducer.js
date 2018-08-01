@@ -264,6 +264,7 @@ const initialState = fromJS({
 	isInformationModalActive: false,
 	autoPlayEnabled: false,
 	loadingBooks: false,
+	isFromServer: true,
 	invalidBibleId: false,
 	hasAudio: false,
 	hasTextInDatabase: true,

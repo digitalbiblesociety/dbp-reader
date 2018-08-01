@@ -146,22 +146,24 @@
 			}
 		}
 	}
-}
 
-//@media only screen and (min-width: 500px) and (max-width: $large-bp) {
-//	.information {
-//		margin-bottom: 155px;
-//	}
-//
-//	@media only screen and (max-width: $audio-player-bp) {
-//		.information {
-//			margin-bottom: 180px;
-//		}
-//	}
-//}
-//
-//@media only screen and (max-width: 499px) {
-//	.information {
-//		margin-bottom: 230px;
-//	}
-//}
+	.ministry-statement {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 16px;
+		font-size: 12px;
+		margin-top: 15px;
+
+		a {
+			@include css4 {
+				color: var(--notebook-title-date-color);
+			}
+
+			&:hover {
+				cursor: pointer;
+				opacity: 0.85;
+			}
+		}
+	}
+}
