@@ -130,7 +130,7 @@ export const calcDistance = (last, first, plainText) => {
 	for (let i = first + 1; i <= last; i += 1) {
 		// Adds the length of each verse number
 		stringDiff += i.toFixed(0);
-		// Adds 1 character for formatted and 2 for plain text to account for spaces in verse numbers
+		// Adds characters for text to account for spaces in verse numbers
 		stringDiff += plainText ? '11' : '11';
 		// console.log(i);
 	}

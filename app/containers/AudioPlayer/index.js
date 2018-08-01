@@ -444,7 +444,6 @@ export class AudioPlayer extends React.Component {
 			hasAudio,
 			audioPlayerState,
 			isScrollingDown,
-			subFooterOpen,
 		} = this.props;
 
 		let classNames = '';
@@ -459,10 +458,6 @@ export class AudioPlayer extends React.Component {
 			classNames += ' scrolled-down';
 		}
 
-		if (subFooterOpen && !isScrollingDown) {
-			classNames += ' sub-footer-open';
-		}
-
 		return classNames;
 	}
 
@@ -472,7 +467,6 @@ export class AudioPlayer extends React.Component {
 			hasAudio,
 			audioPlayerState,
 			isScrollingDown,
-			subFooterOpen,
 		} = this.props;
 
 		let classNames = '';
@@ -485,10 +479,6 @@ export class AudioPlayer extends React.Component {
 
 		if (isScrollingDown) {
 			classNames += ' scrolled-down';
-		}
-
-		if (subFooterOpen && !isScrollingDown) {
-			classNames += ' sub-footer-open';
 		}
 
 		return classNames;
@@ -751,7 +741,6 @@ AudioPlayer.propTypes = {
 	autoPlay: PropTypes.bool,
 	isScrollingDown: PropTypes.bool,
 	audioPlayerState: PropTypes.bool.isRequired,
-	subFooterOpen: PropTypes.bool,
 	books: PropTypes.array,
 	text: PropTypes.array,
 	activeBookId: PropTypes.string,

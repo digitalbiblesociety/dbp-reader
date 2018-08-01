@@ -24,6 +24,34 @@ import getinitialChapterData from '../app/utils/getInitialChapterData';
 
 // Import CSS reset and Global Styles
 import '../static/app.scss';
+// import '../static/variables.scss';
+// import '../static/global.scss';
+// import '../static/darktheme.scss';
+// import '../static/lighttheme.scss';
+// import '../static/defaulttheme.scss';
+// import '../static/formatted_text.scss';
+// import '../static/search.scss';
+// import '../static/chapterselection.scss';
+// import '../static/settings.scss';
+// import '../static/navbar.scss';
+// import '../static/typography.scss';
+// import '../static/textselector.scss';
+// import '../static/menubar.scss';
+// import '../static/text.scss';
+// import '../static/animations.scss';
+// import '../static/audioplayer.scss';
+// import '../static/footer.scss';
+// import '../static/profile.scss';
+// import '../static/privacypolicy.scss';
+// import '../static/accountsettings.scss';
+// import '../static/notes.scss';
+// import '../static/copywrite.scss';
+// import '../static/contextmenu.scss';
+// import '../static/custompopup.scss';
+// import '../static/custom-components.scss';
+// import '../static/footnotePortal.scss';
+// import '../static/notfound.scss';
+
 // Need to figure out how to get the site to load this file from any url
 import '../static/manifest.json';
 // import '../app/styles/variables.scss';

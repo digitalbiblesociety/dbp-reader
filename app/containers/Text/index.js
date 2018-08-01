@@ -35,7 +35,6 @@ import {
 	calcDistance,
 	getClassNameForMain,
 	getClassNameForTextContainer,
-	getInlineStyleForTextContainer,
 	getReference,
 	isEndOfBible,
 	isStartOfBible,
@@ -1607,12 +1606,9 @@ class Text extends React.PureComponent {
 			activeBookId,
 			books,
 			menuIsOpen,
-			isLargeBp,
-			isAudioPlayerBp,
-			isMobileBp,
 			isScrollingDown,
-			audioSource,
-			audioPlayerState,
+			// audioSource,
+			// audioPlayerState,
 			subFooterOpen,
 			textDirection,
 		} = this.props;
@@ -1635,20 +1631,10 @@ class Text extends React.PureComponent {
 			'active',
 		]);
 		const chapterAlt = text[0] && text[0].chapter_alt;
-		// console.log('chapterAlt', chapterAlt);
-		// const justifiedClass = userSettings.getIn(['toggleOptions', 'justifiedText', 'active']) ? 'justify' : '';
 
 		if (loadingNewChapterText || loadingAudio || this.state.loadingNextPage) {
 			return (
 				<div
-					style={getInlineStyleForTextContainer(
-						isLargeBp,
-						isAudioPlayerBp,
-						isMobileBp,
-						isScrollingDown,
-						audioSource,
-						audioPlayerState,
-					)}
 					className={getClassNameForTextContainer(
 						isScrollingDown,
 						subFooterOpen,
@@ -1661,14 +1647,6 @@ class Text extends React.PureComponent {
 
 		return (
 			<div
-				style={getInlineStyleForTextContainer(
-					isLargeBp,
-					isAudioPlayerBp,
-					isMobileBp,
-					isScrollingDown,
-					audioSource,
-					audioPlayerState,
-				)}
 				className={getClassNameForTextContainer(isScrollingDown, subFooterOpen)}
 			>
 				<PrefetchLink
@@ -1828,16 +1806,13 @@ Text.propTypes = {
 	setActiveNotesView: PropTypes.func,
 	activeChapter: PropTypes.number,
 	// distance: PropTypes.number,
-	isLargeBp: PropTypes.bool,
 	menuIsOpen: PropTypes.bool,
-	isMobileBp: PropTypes.bool,
 	notesActive: PropTypes.bool,
 	loadingAudio: PropTypes.bool,
 	subFooterOpen: PropTypes.bool,
 	invalidBibleId: PropTypes.bool,
 	isScrollingDown: PropTypes.bool,
-	isAudioPlayerBp: PropTypes.bool,
-	audioPlayerState: PropTypes.bool,
+	// audioPlayerState: PropTypes.bool,
 	userAuthenticated: PropTypes.bool,
 	loadingNewChapterText: PropTypes.bool,
 	userId: PropTypes.string,

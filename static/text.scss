@@ -1,13 +1,13 @@
 .text-container {
 	display: flex;
 	max-width: 1000px;
-	//height: calc(100vh - 190px);
+	height: calc(100vh - 135px);
 	//max-height: calc(100vh - 190px);
 	//margin: 54px auto 108px auto;
 	margin: 0 auto;
-	margin-top: 15px;
+	//margin-top: 15px;
 	//padding: 54px 10px 116px 10px;
-	padding: 10px;
+	padding: 0 10px;
 	padding-top: 56px;
 	align-items: center;
 
@@ -26,8 +26,8 @@
 	}
 
 	&.scrolled-down {
-		//padding-top: 10px;
-		//padding-bottom: 86px;
+		padding-top: 10px;
+		padding-bottom: 86px;
 		// may need padding instead of margin
 		//margin-top: 0;
 		//margin-bottom: 25px;
@@ -39,7 +39,7 @@
 	.main-wrapper {
 		overflow: hidden;
 		margin: 0 auto;
-		padding: 15px 15px 15px 15px;
+		padding: 15px 15px 45px 15px;
 		height: 100%;
 
 		@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
@@ -238,52 +238,14 @@
 	color: #000;
 	outline: none;
 }
-
 @media only screen and (max-width: $audio-player-bp) {
 	.text-container {
-		padding-top: 36px;
-		//height: calc(100vh - 220px);
-		//max-height: calc(100vh - 220px);
-
 		main {
-			//padding-bottom: 75px;
-			//z-index: 0;
-		}
-
-		.info-button {
-			//bottom: 166px;
-			//z-index: 5;
+			padding-bottom: 75px;
+			z-index: 0;
 		}
 	}
 }
-
-@media only screen and (min-width: 500px) and (max-width: $large-bp) {
-	.text-container {
-		padding-top: 36px;
-		//height: calc(100vh - 215px);
-		//max-height: calc(100vh - 215px);
-		//&.sub-footer-open {
-		//	margin-bottom: 190px;
-		//}
-	}
-	@media only screen and (max-width: $audio-player-bp) {
-		.text-container {
-			margin-top: 0;
-			//&.sub-footer-open {
-			//	margin-bottom: 45px;
-			//}
-		}
-	}
-}
-//
-//@media only screen and (max-width: 499px) {
-//	.text-container {
-//		&.sub-footer-open {
-//			margin-bottom: 45px;
-//		}
-//	}
-//}
-
 // Style that I like but that isn't in the comps
 //@keyframes thicken {
 //	0%   { transform: scale(1.00); fill:rgba(158, 30, 53, 0.253); }

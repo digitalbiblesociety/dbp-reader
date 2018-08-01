@@ -5,12 +5,12 @@
 		border-bottom: 1px solid var(--menu-border-color);
 		border-top: 1px solid var(--menu-border-color);
 	}
-	//position: fixed;
+	position: fixed;
 	width: 100%;
-	//bottom: 56px;
+	bottom: 56px;
 	//height: 56px;
 	//flex: 1;
-	z-index: 2;
+	z-index: 1;
 	transition: transform 200ms ease-in-out;
 	//transform: translateY(0);
 
@@ -20,10 +20,6 @@
 	&.closed {
 		border: none;
 	}
-
-	//&.sub-footer-open {
-	//	bottom: 110px;
-	//}
 }
 // General Audio Player Styles
 .audio-player-container .svgitem {
@@ -134,13 +130,13 @@
 
 // Gripper Styles
 .audioplayer-handle {
-	//position: fixed;
-	//bottom: 106px;
-	position: relative;
-	overflow: hidden;
+	position: fixed;
+	bottom: 106px;
+	//position: relative;
+	//overflow: hidden;
 	height: 25px;
 	width: 100%;
-	z-index: 3;
+	z-index: 1;
 	@include css4 {
 		background: var(--audio-player-gripper-background-color);
 		outline: 1px solid var(--menu-border-color);
@@ -148,10 +144,6 @@
 
 	transition: transform 200ms ease-in-out;
 	//transform: translateY(0);
-
-	//&.sub-footer-open {
-	//	bottom: 160px;
-	//}
 
 	&.scrolled-down {
 		transform: translateY(56px);
@@ -163,11 +155,10 @@
 
 	&:before {
 		content: '';
-
 		filter: blur(15px);
 		position: absolute;
 		width: 100%;
-		height: 15px;
+		height: 25px;
 		top: 0;
 		left: 0;
 		@include css4 {
@@ -185,21 +176,12 @@
 	}
 
 	&.closed {
-		//bottom: 56px;
+		bottom: 56px;
 
 		@include css4 {
 			border-bottom: 1px solid var(--menu-border-color);
 		}
 	}
-
-	//&.closed.sub-footer-open {
-	//	bottom: 110px;
-	//
-	//	@include css4 {
-	//		border-bottom: 1px solid var(--menu-border-color);
-	//	}
-	//}
-	//background: rgba(0,0,0,0.5);
 }
 .audio-gripper {
 	display: block;
@@ -365,7 +347,6 @@
 	}
 }
 
-// Elipsis TODO: update styles to make the element match the wireframe
 .elipsis {
 	display: block;
 	position: absolute;
@@ -422,54 +403,6 @@
 		}
 	}
 	.audioplayer-handle {
-		//bottom: 139px;
+		bottom: 139px;
 	}
 }
-
-//@media only screen and (min-width: 500px) and (max-width: $large-bp) {
-//	.audioplayer-handle {
-//		&.sub-footer-open {
-//			bottom: 246px;
-//		}
-//
-//		&.closed.sub-footer-open {
-//			bottom: 194px;
-//		}
-//	}
-//
-//	.audio-player-background {
-//		&.sub-footer-open {
-//			bottom: 194px;
-//		}
-//	}
-//
-//	@media only screen and (max-width: $audio-player-bp) {
-//		.audioplayer-handle {
-//			&.sub-footer-open {
-//				bottom: 279px;
-//			}
-//
-//			&.closed.sub-footer-open {
-//				bottom: 194px;
-//			}
-//		}
-//	}
-//}
-
-//@media only screen and (max-width: 499px) {
-//	.audioplayer-handle {
-//		&.sub-footer-open {
-//			bottom: 331px;
-//		}
-//
-//		&.closed.sub-footer-open {
-//			bottom: 248px;
-//		}
-//	}
-//
-//	.audio-player-background {
-//		&.sub-footer-open {
-//			bottom: 248px;
-//		}
-//	}
-//}
