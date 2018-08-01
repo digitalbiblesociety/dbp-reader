@@ -42,8 +42,9 @@ import {
 import createHighlights from './highlightPlainText';
 import createFormattedHighlights from './highlightFormattedText';
 import { applyNotes, applyBookmarks } from './formattedTextUtils';
+// const PrefetchLink = Link;
 // const dynamicCreateHighlights = dynamic(import('./highlightPlainText'), { ssr: false });
-// import differenceObject from '../../utils/deepDifferenceObject';
+import differenceObject from '../../utils/deepDifferenceObject';
 // import some from 'lodash/some';
 // import { addClickToNotes } from './htmlToReact';
 /* Disabling the jsx-a11y linting because we need to capture the selected text
@@ -86,6 +87,10 @@ class Text extends React.PureComponent {
 	}
 
 	componentWillReceiveProps(nextProps) {
+		if (Object.keys(differenceObject(this.props, nextProps)).length) {
+			// console.log('component did update new props difference: ', differenceObject(this.props, nextProps));
+			// console.log('component did update old props difference: ', differenceObject(nextProps, this.props));
+		}
 		if (nextProps.formattedSource.main !== this.props.formattedSource.main) {
 			this.setState({ footnoteState: false, activeVerseInfo: { verse: 0 } });
 		}
@@ -93,6 +98,9 @@ class Text extends React.PureComponent {
 			this.setState({ activeVerseInfo: { verse: 0 } });
 		}
 		if (nextProps.verseNumber !== this.props.verseNumber) {
+			this.setState({ loadingNextPage: false });
+		}
+		if (nextProps.activeChapter !== this.props.activeChapter) {
 			this.setState({ loadingNextPage: false });
 		}
 	}
@@ -1632,7 +1640,12 @@ class Text extends React.PureComponent {
 		]);
 		const chapterAlt = text[0] && text[0].chapter_alt;
 
-		if (loadingNewChapterText || loadingAudio || this.state.loadingNextPage) {
+		if (
+			loadingNewChapterText ||
+			loadingAudio ||
+			this.state.loadingNextPage ||
+			!books.length
+		) {
 			return (
 				<div
 					className={getClassNameForTextContainer(
@@ -1650,6 +1663,7 @@ class Text extends React.PureComponent {
 				className={getClassNameForTextContainer(isScrollingDown, subFooterOpen)}
 			>
 				<PrefetchLink
+					prefetch
 					withData
 					as={getPreviousChapterUrl({
 						books,
@@ -1669,7 +1683,6 @@ class Text extends React.PureComponent {
 						text,
 						isHref: true,
 					})}
-					prefetch
 				>
 					<div
 						onClick={

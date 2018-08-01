@@ -7,11 +7,13 @@ export default async function cachedFetch(url, options) {
 	// We don't cache anything when server-side rendering.
 	// That way if users refresh the page they always get fresh data.
 	if (typeof window === 'undefined') {
+		// console.log('Using fetch without a catch statement');
+
 		return fetch(url, options).then((response) => response.json());
 	}
 
 	let cachedResponse = lscache.get(url);
-
+	// console.log('cachedResponse', cachedResponse);
 	// If there is no cached response,
 	// do the actual call and store the response
 	if (cachedResponse === null) {

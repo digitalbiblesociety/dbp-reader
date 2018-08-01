@@ -10,6 +10,9 @@ export default ({
 	text: chapterText,
 	isHref,
 }) => {
+	if (!books.length || !chapterText.length) {
+		return url({ textId, bookId, chapter, isHref, nextVerse: verseNumber });
+	}
 	if (verseNumber && chapterText) {
 		const nextVerse = parseInt(verseNumber, 10) + 1 || 1;
 		const lastVerse = chapterText.length;
@@ -48,8 +51,10 @@ export default ({
 		}
 	});
 
-	const nextBook = fromJS(books[nextBookIndex]);
-	const activeBook = fromJS(books[activeBookIndex]);
+	const nextBook =
+		fromJS(books[nextBookIndex]) || fromJS({ chapters: [], book_id: '' });
+	const activeBook =
+		fromJS(books[activeBookIndex]) || fromJS({ chapters: [], book_id: '' });
 	const maxChapter = activeBook.getIn(['chapters', -1]);
 
 	// If the next book in line doesn't exist and we are already at the last chapter just return
@@ -64,6 +69,7 @@ export default ({
 			textId,
 			bookId: nextBook.get('book_id').toLowerCase(),
 			chapter: nextBook.getIn(['chapters', 0]),
+			isHref,
 		});
 		// return `${baseUrl}/${textId}/${nextBook
 		// 	.get('book_id')
@@ -81,6 +87,7 @@ export default ({
 		textId,
 		bookId,
 		chapter: activeBook.getIn(['chapters', nextChapterIndex]),
+		isHref,
 	});
 	// return `${baseUrl}/${textId}/${bookId}/${activeBook.getIn([
 	// 	'chapters',
