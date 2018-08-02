@@ -30,6 +30,10 @@ import '../static/manifest.json';
 import { setChapterTextLoadingState } from '../app/containers/HomePage/actions';
 
 class AppContainer extends React.Component {
+	componentWillMount() {
+		// console.log('Component will mount for app', this.props);
+		// console.log('Component will mount for app redux store available at mounting', this.props.dispatch);
+	}
 	componentDidMount() {
 		// If the page was served from the server then I need to cache the data for this route
 		if (this.props.isFromServer) {
@@ -39,8 +43,14 @@ class AppContainer extends React.Component {
 				overrideCache(url.href, url.data);
 			});
 		}
-
-		// console.log('Component did mount for app', Router);
+		// Todo: Store all local variables needed
+		localStorage.setItem('bible_is_2_book_id', this.props.match.params.bookId);
+		localStorage.setItem('bible_is_3_chapter', this.props.match.params.chapter);
+		localStorage.setItem(
+			'bible_is_1_bible_id',
+			this.props.match.params.bibleId,
+		);
+		sessionStorage.setItem('bible_is_audio_player_state', true);
 
 		this.props.dispatch(setChapterTextLoadingState({ state: false }));
 
@@ -79,6 +89,101 @@ class AppContainer extends React.Component {
 		// 	});
 		// }
 		// console.log('this.props.dispatch in didMount', this.props.dispatch);
+
+		const userId =
+			localStorage.getItem('bible_is_user_id') ||
+			sessionStorage.getItem('bible_is_user_id');
+		const isAuthenticated = !!(
+			localStorage.getItem('bible_is_user_id') ||
+			sessionStorage.getItem('bible_is_user_id')
+		);
+		const userProfile = {};
+		userProfile.email = sessionStorage.getItem('bible_is_12345') || '';
+		userProfile.nickname = sessionStorage.getItem('bible_is_123456') || '';
+		userProfile.name = sessionStorage.getItem('bible_is_1234567') || '';
+		userProfile.avatar = sessionStorage.getItem('bible_is_12345678') || '';
+		const userSettings = {
+			activeTheme: sessionStorage.getItem('bible_is_theme') || 'red',
+			activeFontType: sessionStorage.getItem('bible_is_font_family') || 'sans',
+			activeFontSize:
+				parseInt(sessionStorage.getItem('bible_is_font_size'), 10) || 42,
+			toggleOptions: {
+				readersMode: {
+					name: "READER'S MODE",
+					active: JSON.parse(
+						localStorage.getItem(
+							'userSettings_toggleOptions_readersMode_active',
+						),
+					),
+					available: true,
+				},
+				crossReferences: {
+					name: 'CROSS REFERENCE',
+					active: localStorage.getItem(
+						'userSettings_toggleOptions_crossReferences_active',
+					)
+						? JSON.parse(
+								localStorage.getItem(
+									'userSettings_toggleOptions_crossReferences_active',
+								),
+						  )
+						: true,
+					available: true,
+				},
+				redLetter: {
+					name: 'RED LETTER',
+					active: localStorage.getItem('bible_is_words_of_jesus')
+						? JSON.parse(localStorage.getItem('bible_is_words_of_jesus'))
+						: true,
+					available: true,
+				},
+				justifiedText: {
+					name: 'JUSTIFIED TEXT',
+					active: JSON.parse(
+						localStorage.getItem(
+							'userSettings_toggleOptions_justifiedText_active',
+						),
+					),
+					available: true,
+				},
+				oneVersePerLine: {
+					name: 'ONE VERSE PER LINE',
+					active: JSON.parse(
+						localStorage.getItem(
+							'userSettings_toggleOptions_oneVersePerLine_active',
+						),
+					),
+					available: true,
+				},
+				verticalScrolling: {
+					name: 'VERTICAL SCROLLING',
+					active: false,
+					available: false,
+				},
+			},
+			autoPlayEnabled: sessionStorage.getItem('bible_is_autoplay')
+				? JSON.parse(sessionStorage.getItem('bible_is_autoplay'))
+				: false,
+		};
+
+		this.props.dispatch({
+			type: 'GET_INITIAL_ROUTE_STATE_HOMEPAGE',
+			homepage: {
+				userSettings,
+				userProfile,
+				userId,
+				userAuthenticated: isAuthenticated,
+			},
+		});
+
+		this.props.dispatch({
+			type: 'GET_INITIAL_ROUTE_STATE_PROFILE',
+			profile: {
+				userProfile,
+				userId,
+				userAuthenticated: isAuthenticated,
+			},
+		});
 	}
 
 	componentWillUnmount() {
@@ -138,9 +243,11 @@ class AppContainer extends React.Component {
 }
 
 AppContainer.getInitialProps = async (context) => {
+	// console.log('Get initial props started running');
 	const { bibleId, bookId, chapter, verse, token } = context.query;
 	let isFromServer = true;
 	const userProfile = {};
+	let userSettings = {};
 	let userId = '';
 	let isAuthenticated = false;
 	// console.log('context.isVirtualCall', context.isVirtualCall);
@@ -163,6 +270,69 @@ AppContainer.getInitialProps = async (context) => {
 		userProfile.nickname = sessionStorage.getItem('bible_is_123456');
 		userProfile.name = sessionStorage.getItem('bible_is_1234567');
 		userProfile.avatar = sessionStorage.getItem('bible_is_12345678');
+		userSettings = {
+			activeTheme: sessionStorage.getItem('bible_is_theme') || 'red',
+			activeFontType: sessionStorage.getItem('bible_is_font_family') || 'sans',
+			activeFontSize:
+				parseInt(sessionStorage.getItem('bible_is_font_size'), 10) || 42,
+			toggleOptions: {
+				readersMode: {
+					name: "READER'S MODE",
+					active: JSON.parse(
+						localStorage.getItem(
+							'userSettings_toggleOptions_readersMode_active',
+						),
+					),
+					available: true,
+				},
+				crossReferences: {
+					name: 'CROSS REFERENCE',
+					active: localStorage.getItem(
+						'userSettings_toggleOptions_crossReferences_active',
+					)
+						? JSON.parse(
+								localStorage.getItem(
+									'userSettings_toggleOptions_crossReferences_active',
+								),
+						  )
+						: true,
+					available: true,
+				},
+				redLetter: {
+					name: 'RED LETTER',
+					active: localStorage.getItem('bible_is_words_of_jesus')
+						? JSON.parse(localStorage.getItem('bible_is_words_of_jesus'))
+						: true,
+					available: true,
+				},
+				justifiedText: {
+					name: 'JUSTIFIED TEXT',
+					active: JSON.parse(
+						localStorage.getItem(
+							'userSettings_toggleOptions_justifiedText_active',
+						),
+					),
+					available: true,
+				},
+				oneVersePerLine: {
+					name: 'ONE VERSE PER LINE',
+					active: JSON.parse(
+						localStorage.getItem(
+							'userSettings_toggleOptions_oneVersePerLine_active',
+						),
+					),
+					available: true,
+				},
+				verticalScrolling: {
+					name: 'VERTICAL SCROLLING',
+					active: false,
+					available: false,
+				},
+			},
+			autoPlayEnabled: sessionStorage.getItem('bible_is_autoplay')
+				? JSON.parse(sessionStorage.getItem('bible_is_autoplay'))
+				: false,
+		};
 	}
 
 	// The function is being run on the server so fetching data here will not conflict with the Sagas
@@ -262,6 +432,7 @@ AppContainer.getInitialProps = async (context) => {
 			userProfile,
 			chapterText,
 			testaments,
+			userSettings,
 			formattedSource: textData.formattedText,
 			activeFilesets: bible.filesets['dbp-dev'],
 			books: bible.books,
@@ -290,7 +461,7 @@ AppContainer.getInitialProps = async (context) => {
 			},
 		},
 	});
-
+	// console.log('Got the initial state!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
 	return {
 		// isServer,
 		chapterText,

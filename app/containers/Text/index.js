@@ -77,6 +77,7 @@ class Text extends React.PureComponent {
 			this.setEventHandlersForFootnotes(this.formatHighlight);
 			this.setEventHandlersForFormattedVerses(this.formatHighlight);
 		}
+		// console.log('props at time component first mounted', this.props);
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -888,7 +889,7 @@ class Text extends React.PureComponent {
 				(c) => c.key === (parseInt(verseNumber, 10) ? verseNumber : '1'),
 			);
 		}
-
+		// console.log('Text components', textComponents)
 		return textComponents;
 	}
 
@@ -1625,7 +1626,17 @@ class Text extends React.PureComponent {
 			textDirection,
 			chapterTextLoadingState,
 		} = this.props;
-		// console.log('____________________________\nText component rendered!', chapterTextLoadingState);
+		// console.log('____________________________\nText component rendered!', text);
+		// console.log('condition for spinner', loadingNewChapterText ||
+		// 	loadingAudio ||
+		// 	this.state.loadingNextPage ||
+		// 	!books.length ||
+		// 	chapterTextLoadingState)
+		// console.log('loadingNewChapterText', loadingNewChapterText)
+		// console.log('loadingAudio', loadingAudio)
+		// console.log('!books.length', !books.length)
+		// console.log('chapterTextLoadingState', chapterTextLoadingState)
+		// console.log('this.state.loadingNextPage', this.state.loadingNextPage)
 
 		const {
 			coords,
@@ -1652,6 +1663,7 @@ class Text extends React.PureComponent {
 			!books.length ||
 			chapterTextLoadingState
 		) {
+			// console.log('Rendering the spinner');
 			return (
 				<div
 					className={getClassNameForTextContainer(

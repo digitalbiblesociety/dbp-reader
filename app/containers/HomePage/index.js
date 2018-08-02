@@ -191,24 +191,18 @@ class HomePage extends React.PureComponent {
 			// Open Password Reset Verified because there is a token - done in Profile/index
 		}
 
-		const activeTheme = get(this, [
-			'props',
-			'homepage',
-			'userSettings',
-			'activeTheme',
-		]);
-		const activeFontFamily = get(this, [
-			'props',
-			'homepage',
-			'userSettings',
-			'activeFontType',
-		]);
-		const activeFontSize = get(this, [
-			'props',
-			'homepage',
-			'userSettings',
-			'activeFontSize',
-		]);
+		const activeTheme =
+			localStorage.getItem('bible_is_theme') ||
+			sessionStorage.getItem('bible_is_theme') ||
+			'red';
+		const activeFontFamily =
+			localStorage.getItem('bible_is_font_family') ||
+			sessionStorage.getItem('bible_is_font_family') ||
+			'sans';
+		const activeFontSize =
+			localStorage.getItem('bible_is_font_size') ||
+			sessionStorage.getItem('bible_is_font_size') ||
+			42;
 		const redLetter = get(this, [
 			'props',
 			'homepage',
@@ -227,7 +221,7 @@ class HomePage extends React.PureComponent {
 
 		if (
 			activeTheme !==
-			this.props.userSettings.getIn(['toggleOptions', 'redLetter', 'active'])
+			get(this, ['props', 'homepage', 'userSettings', 'activeTheme'])
 		) {
 			applyTheme(activeTheme);
 		}
