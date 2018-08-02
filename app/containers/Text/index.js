@@ -6,7 +6,6 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-// import Link from 'next/link';
 import isEqual from 'lodash/isEqual';
 import PrefetchLink from '../../utils/PrefetchLink';
 import Information from '../../components/Information';
@@ -27,7 +26,6 @@ import {
 	getPlainParentVerseWithoutNumber,
 	getClosestParent,
 	getOffsetNeededForPsalms,
-	// getTextInSelectedNodes,
 } from '../../utils/highlightingUtils';
 import getPreviousChapterUrl from '../../utils/getPreviousChapterUrl';
 import getNextChapterUrl from '../../utils/getNextChapterUrl';
@@ -42,17 +40,12 @@ import {
 import createHighlights from './highlightPlainText';
 import createFormattedHighlights from './highlightFormattedText';
 import { applyNotes, applyBookmarks } from './formattedTextUtils';
-// const PrefetchLink = Link;
-// const dynamicCreateHighlights = dynamic(import('./highlightPlainText'), { ssr: false });
 import differenceObject from '../../utils/deepDifferenceObject';
-// import some from 'lodash/some';
-// import { addClickToNotes } from './htmlToReact';
+
 /* Disabling the jsx-a11y linting because we need to capture the selected text
 	 and the most straight forward way of doing so is with the onMouseUp event */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-// Todo: Fix issue with this component being rendered so many times...
 class Text extends React.PureComponent {
-	// eslint-disable-line react/prefer-stateless-function
 	state = {
 		contextMenuState: false,
 		footnoteState: false,
@@ -92,16 +85,27 @@ class Text extends React.PureComponent {
 			// console.log('component did update old props difference: ', differenceObject(nextProps, this.props));
 		}
 		if (nextProps.formattedSource.main !== this.props.formattedSource.main) {
-			this.setState({ footnoteState: false, activeVerseInfo: { verse: 0 } });
+			this.setState({
+				footnoteState: false,
+				activeVerseInfo: { verse: 0 },
+				loadingNextPage: false,
+			});
+			this.props.setTextLoadingState({ state: false });
 		}
 		if (!isEqual(nextProps.text, this.props.text)) {
-			this.setState({ activeVerseInfo: { verse: 0 } });
+			this.setState({ activeVerseInfo: { verse: 0 }, loadingNextPage: false });
+			this.props.setTextLoadingState({ state: false });
 		}
+		// if (nextProps.text !== this.props.text || nextProps.formattedSource.main !== this.props.formattedSource.main || nextProps.audioSource !== this.props.audioSource) {
+		// 	this.props.setTextLoadingState({ state: false });
+		// }
 		if (nextProps.verseNumber !== this.props.verseNumber) {
 			this.setState({ loadingNextPage: false });
+			this.props.setTextLoadingState({ state: false });
 		}
 		if (nextProps.activeChapter !== this.props.activeChapter) {
 			this.setState({ loadingNextPage: false });
+			this.props.setTextLoadingState({ state: false });
 		}
 	}
 
@@ -1619,8 +1623,9 @@ class Text extends React.PureComponent {
 			// audioPlayerState,
 			subFooterOpen,
 			textDirection,
+			chapterTextLoadingState,
 		} = this.props;
-		// console.log('____________________________\nText component rendered!');
+		// console.log('____________________________\nText component rendered!', chapterTextLoadingState);
 
 		const {
 			coords,
@@ -1644,7 +1649,8 @@ class Text extends React.PureComponent {
 			loadingNewChapterText ||
 			loadingAudio ||
 			this.state.loadingNextPage ||
-			!books.length
+			!books.length ||
+			chapterTextLoadingState
 		) {
 			return (
 				<div
@@ -1817,6 +1823,7 @@ Text.propTypes = {
 	deleteHighlights: PropTypes.func,
 	toggleNotesModal: PropTypes.func,
 	setActiveNotesView: PropTypes.func,
+	setTextLoadingState: PropTypes.func,
 	activeChapter: PropTypes.number,
 	// distance: PropTypes.number,
 	menuIsOpen: PropTypes.bool,
@@ -1825,6 +1832,7 @@ Text.propTypes = {
 	subFooterOpen: PropTypes.bool,
 	invalidBibleId: PropTypes.bool,
 	isScrollingDown: PropTypes.bool,
+	chapterTextLoadingState: PropTypes.bool,
 	// audioPlayerState: PropTypes.bool,
 	userAuthenticated: PropTypes.bool,
 	loadingNewChapterText: PropTypes.bool,

@@ -63,6 +63,7 @@ import {
 	setActiveBookName,
 	setActiveNotesView,
 	setAudioPlayerState,
+	setChapterTextLoadingState,
 	initApplication,
 } from './actions';
 import makeSelectHomePage, {
@@ -85,7 +86,6 @@ class HomePage extends React.PureComponent {
 	// eslint-disable-line react/prefer-stateless-function
 	componentDidMount() {
 		// console.log('Homepage mounted______________________');
-
 		const {
 			activeFilesets,
 			activeBookId,
@@ -359,6 +359,9 @@ class HomePage extends React.PureComponent {
 	setActiveChapter = (chapter) =>
 		this.props.dispatch(setActiveChapter(chapter));
 
+	setTextLoadingState = (props) =>
+		this.props.dispatch(setChapterTextLoadingState(props));
+
 	setActiveTextId = (props) => this.props.dispatch(setActiveTextId(props));
 
 	setActiveNotesView = (view) => this.props.dispatch(setActiveNotesView(view));
@@ -581,6 +584,7 @@ class HomePage extends React.PureComponent {
 			textDirection,
 			loadingAudio,
 			loadingNewChapterText,
+			chapterTextLoadingState,
 		} = this.props.homepage;
 
 		const {
@@ -691,6 +695,7 @@ class HomePage extends React.PureComponent {
 					userAuthenticated={userAuthenticated}
 					informationActive={isInformationModalActive}
 					loadingNewChapterText={loadingNewChapterText}
+					chapterTextLoadingState={chapterTextLoadingState}
 					addBookmark={this.addBookmark}
 					addHighlight={this.addHighlight}
 					setActiveNote={this.setActiveNote}
@@ -698,22 +703,23 @@ class HomePage extends React.PureComponent {
 					toggleNotesModal={this.toggleNotesModal}
 					deleteHighlights={this.deleteHighlights}
 					setActiveNotesView={this.setActiveNotesView}
+					setTextLoadingState={this.setTextLoadingState}
 					toggleInformationModal={this.toggleInformationModal}
 				/>
 				<AudioPlayer
-					audioPaths={audioPaths}
-					autoPlay={autoPlayEnabled}
-					audioPlayerState={audioPlayerState}
-					audioSource={audioSource}
-					isScrollingDown={isScrollingDown}
 					books={books}
 					text={updatedText}
 					verseNumber={verse}
+					audioPaths={audioPaths}
+					audioSource={audioSource}
+					autoPlay={autoPlayEnabled}
 					activeTextId={activeTextId}
 					activeBookId={activeBookId}
 					activeChapter={activeChapter}
-					setAudioPlayerState={this.setAudioPlayerState}
+					isScrollingDown={isScrollingDown}
+					audioPlayerState={audioPlayerState}
 					toggleAutoPlay={this.toggleAutoPlay}
+					setAudioPlayerState={this.setAudioPlayerState}
 				/>
 				<Footer
 					profileActive={isProfileActive}

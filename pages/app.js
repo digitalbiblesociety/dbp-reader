@@ -18,6 +18,7 @@ import { connect } from 'react-redux';
 import 'rc-slider/assets/index.css';
 import 'react-accessible-accordion/dist/minimal-example.css';
 import Head from 'next/head';
+import Router from 'next/router';
 import cachedFetch, { overrideCache } from '../app/utils/cachedFetch';
 import HomePage from '../app/containers/HomePage';
 import getinitialChapterData from '../app/utils/getInitialChapterData';
@@ -26,6 +27,7 @@ import getinitialChapterData from '../app/utils/getInitialChapterData';
 import '../static/app.scss';
 // Need to figure out how to get the site to load this file from any url
 import '../static/manifest.json';
+import { setChapterTextLoadingState } from '../app/containers/HomePage/actions';
 
 class AppContainer extends React.Component {
 	componentDidMount() {
@@ -37,6 +39,12 @@ class AppContainer extends React.Component {
 				overrideCache(url.href, url.data);
 			});
 		}
+
+		// console.log('Component did mount for app', Router);
+
+		this.props.dispatch(setChapterTextLoadingState({ state: false }));
+
+		Router.router.events.on('routeChangeStart', this.handleRouteChange);
 		// After launch see if I can get Reactotron working with SSR and redux
 		// if (process.env.NODE_ENV !== 'production') {
 		// 	const Reactotron = async () => {
@@ -72,6 +80,17 @@ class AppContainer extends React.Component {
 		// }
 		// console.log('this.props.dispatch in didMount', this.props.dispatch);
 	}
+
+	componentWillUnmount() {
+		Router.router.events.off('routeChangeStart', this.handleRouteChange);
+	}
+
+	handleRouteChange = () => {
+		// console.log('Router change start fired');
+		this.props.dispatch(setChapterTextLoadingState({ state: true }));
+	};
+
+	routerWasUpdated = false;
 
 	render() {
 		const { activeChapter, chapterText, activeBookName } = this.props;
@@ -312,6 +331,7 @@ AppContainer.getInitialProps = async (context) => {
 };
 
 AppContainer.propTypes = {
+	dispatch: PropTypes.func,
 	isFromServer: PropTypes.bool,
 	activeChapter: PropTypes.number,
 	chapterText: PropTypes.array,
