@@ -193,13 +193,16 @@ class HomePage extends React.PureComponent {
 
 		const activeTheme =
 			localStorage.getItem('bible_is_theme') ||
-			sessionStorage.getItem('bible_is_theme');
+			sessionStorage.getItem('bible_is_theme') ||
+			'red';
 		const activeFontFamily =
 			localStorage.getItem('bible_is_font_family') ||
-			sessionStorage.getItem('bible_is_font_family');
+			sessionStorage.getItem('bible_is_font_family') ||
+			'sans';
 		const activeFontSize =
 			localStorage.getItem('bible_is_font_size') ||
-			sessionStorage.getItem('bible_is_font_size');
+			sessionStorage.getItem('bible_is_font_size') ||
+			42;
 		const redLetter = get(this, [
 			'props',
 			'homepage',

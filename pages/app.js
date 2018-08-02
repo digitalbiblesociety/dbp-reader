@@ -30,6 +30,10 @@ import '../static/manifest.json';
 import { setChapterTextLoadingState } from '../app/containers/HomePage/actions';
 
 class AppContainer extends React.Component {
+	componentWillMount() {
+		// console.log('Component will mount for app', this.props);
+		// console.log('Component will mount for app redux store available at mounting', this.props.dispatch);
+	}
 	componentDidMount() {
 		// If the page was served from the server then I need to cache the data for this route
 		if (this.props.isFromServer) {
@@ -47,15 +51,6 @@ class AppContainer extends React.Component {
 			this.props.match.params.bibleId,
 		);
 		sessionStorage.setItem('bible_is_audio_player_state', true);
-		// localStorage.setItem('userSettings_toggleOptions_readersMode_active', asdf)
-		// localStorage.setItem('userSettings_toggleOptions_crossReferences_active', asdf)
-		// localStorage.setItem('userSettings_toggleOptions_justifiedText_active', asdf)
-		// localStorage.setItem('userSettings_toggleOptions_oneVersePerLine_active', asdf)
-		// sessionStorage.setItem(
-		// 	'bible_is_autoplay',
-		// 	!state.get('autoPlayEnabled'),
-		// );
-		// sessionStorage.setItem('bible_is_audio_player_state', action.state);
 
 		this.props.dispatch(setChapterTextLoadingState({ state: false }));
 
@@ -248,6 +243,7 @@ class AppContainer extends React.Component {
 }
 
 AppContainer.getInitialProps = async (context) => {
+	// console.log('Get initial props started running');
 	const { bibleId, bookId, chapter, verse, token } = context.query;
 	let isFromServer = true;
 	const userProfile = {};
@@ -465,7 +461,7 @@ AppContainer.getInitialProps = async (context) => {
 			},
 		},
 	});
-
+	// console.log('Got the initial state!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
 	return {
 		// isServer,
 		chapterText,

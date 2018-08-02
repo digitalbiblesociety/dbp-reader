@@ -252,7 +252,7 @@ const initialState = fromJS({
 		},
 	},
 	activeChapter: 1,
-	chapterTextLoadingState: true,
+	chapterTextLoadingState: false,
 	userAuthenticated:
 		// !!localStorage.getItem('bible_is_user_id') ||
 		// !!sessionStorage.getItem('bible_is_user_id') ||
@@ -272,9 +272,9 @@ const initialState = fromJS({
 	hasTextInDatabase: true,
 	firstLoad: true,
 	audioPlayerState: true,
-	loadingNewChapterText: true,
+	loadingNewChapterText: false,
 	loadingCopyright: true,
-	loadingAudio: true,
+	loadingAudio: false,
 	userId:
 		// localStorage.getItem('bible_is_user_id') ||
 		// sessionStorage.getItem('bible_is_user_id') ||
