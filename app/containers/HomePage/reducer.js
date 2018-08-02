@@ -502,6 +502,9 @@ function homePageReducer(state = initialState, action) {
 				.set('copyrights', action.copyrights);
 		// case CHANGE_VERSE:
 		// 	return state.set('verseNumber', )
+		case 'GET_INITIAL_ROUTE_STATE_HOMEPAGE':
+			console.log('merging homepage state');
+			return state.merge(action.homepage);
 		default:
 			return state;
 	}

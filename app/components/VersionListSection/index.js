@@ -34,24 +34,28 @@ function VersionListSection({ items }) {
 									as={`/bible${item.path}`}
 									key={`${item.key}_drama`}
 								>
-									<span
+									<a
+										role={'button'}
+										tabIndex={0}
 										className="version-item-button"
 										onClick={() => item.clickHandler('audio_drama')}
 									>
 										Dramatized Version
-									</span>
+									</a>
 								</Link>
 								<Link
 									href={item.path}
 									as={`/bible${item.path}`}
 									key={`${item.key}_plain`}
 								>
-									<span
+									<a
+										role={'button'}
+										tabIndex={0}
 										className="version-item-button"
 										onClick={() => item.clickHandler('audio')}
 									>
 										Non-Dramatized Version
-									</span>
+									</a>
 								</Link>
 							</AccordionItemBody>
 						</AccordionItem>
@@ -61,13 +65,15 @@ function VersionListSection({ items }) {
 					<AccordionItem className={'accordion-title-style'} key={item.key}>
 						<AccordionItemTitle>
 							<Link href={item.path} as={`/bible${item.path}`} key={item.key}>
-								<h4
+								<a
+									role={'button'}
+									tabIndex={0}
 									title={item.title}
-									className={item.className}
+									className={`${item.className} top-level-title`}
 									onClick={() => item.clickHandler('')}
 								>
 									{item.text}
-								</h4>
+								</a>
 							</Link>
 						</AccordionItemTitle>
 						<AccordionItemBody />

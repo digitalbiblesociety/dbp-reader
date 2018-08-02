@@ -5,23 +5,21 @@
  * code.
  */
 
+/*
+* Todos
+* todo: Replace all tabIndex 0 values with what they should actually be
+* todo: Set up a function to init all of the plugins that rely on the browser
+* */
 // Needed for redux-saga es6 generator support
 import 'babel-polyfill';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-// import dynamic from 'next/dynamic';
 import 'rc-slider/assets/index.css';
 import 'react-accessible-accordion/dist/minimal-example.css';
-// import fetch from 'isomorphic-fetch';
 import Head from 'next/head';
 import cachedFetch, { overrideCache } from '../app/utils/cachedFetch';
-// import fetch from 'isomorphic-fetch';
-// import LanguageProvider from '../app/containers/LanguageProvider';
-// import { translationMessages } from '../app/i18n';
-// import App from '../app/containers/App/index';
 import HomePage from '../app/containers/HomePage';
-// import configureStore from '../app/configureStore';
 import getinitialChapterData from '../app/utils/getInitialChapterData';
 
 // Import CSS reset and Global Styles
@@ -31,6 +29,7 @@ import '../static/manifest.json';
 
 class AppContainer extends React.Component {
 	componentDidMount() {
+		// If the page was served from the server then I need to cache the data for this route
 		if (this.props.isFromServer) {
 			// console.log('Using cached url');
 			// console.log('this.props.fetchedUrls', this.props.fetchedUrls);
@@ -39,7 +38,6 @@ class AppContainer extends React.Component {
 			});
 		}
 		// After launch see if I can get Reactotron working with SSR and redux
-		// Todo: Set up a function to init all of the plugins that rely on the browser
 		// if (process.env.NODE_ENV !== 'production') {
 		// 	const Reactotron = async () => {
 		// 		const r = await import('reactotron-react-js');
@@ -72,217 +70,12 @@ class AppContainer extends React.Component {
 		// 		console.tron = reactotron;
 		// 	});
 		// }
-		/* eslint-disable no-underscore-dangle */
-		// if (this.reduxStore && !window.__NEXT_REDUX_STORE__) {
-		// 	window.__NEXT_REDUX_STORE__ = this.reduxStore;
-		// }
-		/* eslint-enable no-underscore-dangle */
 		// console.log('this.props.dispatch in didMount', this.props.dispatch);
 	}
 
-	// componentWillReceiveProps(nextProps) {
-	// 	if (nextProps.match.params.verse !== this.props.match.params.verse) {
-	// 		console.log('nextProps.match.params.verse', nextProps.match.params.verse);
-	// 		console.log('this.props.match.params.verse', this.props.match.params.verse);
-	// 	}
-	// }
-	/*
-		{
-		// Minimum to render <Text />
-			books,
-			textDirection,
-			activeChapter,
-			text,
-			loadingNewChapterText,
-			loadingAudio,
-			loadingCopyright,
-			activeBookName,
-			verseNumber,
-		// Minimum to render <TextSelector />
-			activeIsoCode,
-			activeCountryName,
-			activeLanguageName,
-			loadingVersions,
-			loadingLanguages,
-			loadingCountries,
-			countryLanguages,
-			languages,
-			countries,
-			bibles,
-		// Minimum to render <ChapterSelector />
-			activeTextId,
-			loadingBooks,
-		}
-
-	*/
 	render() {
-		const {
-			// books,
-			// textDirection,
-			activeChapter,
-			chapterText,
-			// formattedText,
-			activeBookName,
-			// activeBookId,
-			// verseNumber,
-			// testaments,
-			// filesets,
-			// activeTextId,
-			// activeTextName,
-			// defaultLanguageName,
-			// defaultLanguageIso,
-			// userId,
-			// isAuthenticated,
-			// userProfile,
-			// match,
-			// isFromServer,
-		} = this.props;
+		const { activeChapter, chapterText, activeBookName } = this.props;
 		// console.log('this.props.dispatch in render', this.props);
-
-		// Create redux store with history
-		// Probably need to figure out a way to persist this after it is loaded for the first time
-		// If from server then create a new store
-		// If from client then use the old store
-		// const initialState = {
-		// 	homepage: {
-		// 		userProfile,
-		// 		books,
-		// 		match,
-		// 		textDirection,
-		// 		activeTextName,
-		// 		isFromServer,
-		// 		activeChapter,
-		// 		activeBookName,
-		// 		verseNumber,
-		// 		activeTextId,
-		// 		defaultLanguageName,
-		// 		defaultLanguageIso,
-		// 		activeBookId,
-		// 		testaments,
-		// 		userId,
-		// 		formattedSource: formattedText || '',
-		// 		activeFilesets: filesets,
-		// 		userAuthenticated: isAuthenticated,
-		// 		chapterText: chapterText || [],
-		// 		loadingNewChapterText: false,
-		// 		loadingAudio: false,
-		// 		loadingCopyright: false,
-		// 		loadingBooks: false,
-		// 		note: {},
-		// 		audioObjects: [],
-		// 		audioFilesetId: '',
-		// 		plainTextFilesetId: '',
-		// 		formattedTextFilesetId: '',
-		// 		highlights: [],
-		// 		copyrights: {
-		// 			newTestament: {
-		// 				audio: {},
-		// 				text: {},
-		// 			},
-		// 			oldTestament: {
-		// 				audio: {},
-		// 				text: {},
-		// 			},
-		// 		},
-		// 		isChapterSelectionActive: false,
-		// 		isProfileActive: false,
-		// 		isSettingsModalActive: false,
-		// 		isSearchModalActive: false,
-		// 		isNotesModalActive: false,
-		// 		isVersionSelectionActive: false,
-		// 		isInformationModalActive: false,
-		// 		activeNotesView: 'notes',
-		// 		userSettings: {
-		// 			activeTheme: 'red',
-		// 			activeFontType: 'sans',
-		// 			activeFontSize: 42,
-		// 			toggleOptions: {
-		// 				readersMode: {
-		// 					name: "READER'S MODE",
-		// 					active: false,
-		// 					available: true,
-		// 				},
-		// 				crossReferences: {
-		// 					name: 'CROSS REFERENCE',
-		// 					active: true,
-		// 					available: true,
-		// 				},
-		// 				redLetter: {
-		// 					name: 'RED LETTER',
-		// 					active: true,
-		// 					available: true,
-		// 				},
-		// 				justifiedText: {
-		// 					name: 'JUSTIFIED TEXT',
-		// 					active: true,
-		// 					available: true,
-		// 				},
-		// 				oneVersePerLine: {
-		// 					name: 'ONE VERSE PER LINE',
-		// 					active: false,
-		// 					available: true,
-		// 				},
-		// 				verticalScrolling: {
-		// 					name: 'VERTICAL SCROLLING',
-		// 					active: false,
-		// 					available: false,
-		// 				},
-		// 			},
-		// 		},
-		// 		autoPlayEnabled: false,
-		// 		selectedText: '',
-		// 		selectedBookName: '',
-		// 		audioSource: '',
-		// 		invalidBibleId: false,
-		// 		hasAudio: false,
-		// 		hasTextInDatabase: true,
-		// 		filesetTypes: {},
-		// 		firstLoad: true,
-		// 		previousAudioPaths: [],
-		// 		previousAudioFilesetId: '',
-		// 		previousAudioSource: '',
-		// 		nextAudioPaths: [],
-		// 		nextAudioFilesetId: '',
-		// 		nextAudioSource: '',
-		// 		activeVerse: '',
-		// 		audioPaths: [],
-		// 		audioPlayerState: true,
-		// 	},
-		// 	profile: {
-		// 		activeOption: 'login',
-		// 		userAuthenticated: isAuthenticated,
-		// 		userId,
-		// 		loginErrorMessage: '',
-		// 		socialLoginLink: '',
-		// 		signupErrorMessage: '',
-		// 		activeDriver: '',
-		// 		userProfile: {
-		// 			...userProfile,
-		// 			verified: false,
-		// 			accounts: [],
-		// 		},
-		// 		errorMessageViewed: true,
-		// 		passwordResetError: '',
-		// 		passwordResetMessage: '',
-		// 		deleteUserError: false,
-		// 		deleteUserMessage: '',
-		// 	},
-		// };
-		// let store;
-		//
-		// if (isFromServer) {
-		// 	store = configureStore({}, {}, initialState);
-		// 	this.reduxStore = store;
-		// } else {
-		// 	// console.log('Was not from server');
-		// 	/* eslint-disable no-underscore-dangle */
-		// 	if (!window.__NEXT_REDUX_STORE__) {
-		// 		window.__NEXT_REDUX_STORE__ = configureStore({}, {}, initialState);
-		// 	}
-		//
-		// 	store = window.__NEXT_REDUX_STORE__;
-		// 	/* eslint-enable no-underscore-dangle */
-		// }
 
 		return (
 			<div>
@@ -326,8 +119,6 @@ class AppContainer extends React.Component {
 }
 
 AppContainer.getInitialProps = async (context) => {
-	// console.log('context.reduxStore.getState()', context.reduxStore.getState());
-
 	const { bibleId, bookId, chapter, verse, token } = context.query;
 	let isFromServer = true;
 	const userProfile = {};
@@ -406,7 +197,6 @@ AppContainer.getInitialProps = async (context) => {
 		}
 	}
 	// console.log('After init func', Object.keys(textData));
-	// todo: replace with getInintChaptData utility function
 	// Get text for chapter
 	// const textRes = await fetch(textUrl);
 	const textJson = textData.plainTextJson;
@@ -434,19 +224,21 @@ AppContainer.getInitialProps = async (context) => {
 		{},
 	);
 
-	context.reduxStore.replaceReducer((state, action) => {
-		if (action.type === 'GET_INITIAL_ROUTE_STATE_APP') {
-			// console.log('Merging the state with the state from initial props', state);
-			// console.log('state.get homepage', state.get('homepage'))
-			return state
-				.set('homepage', state.get('homepage').merge(action.homepage))
-				.set('profile', state.get('profile').merge(action.profile));
-		}
-		return state;
+	context.reduxStore.dispatch({
+		type: 'GET_INITIAL_ROUTE_STATE_PROFILE',
+		profile: {
+			userId: userId || '',
+			userAuthenticated: isAuthenticated || false,
+			userProfile: {
+				...userProfile,
+				verified: false,
+				accounts: [],
+			},
+		},
 	});
 
 	context.reduxStore.dispatch({
-		type: 'GET_INITIAL_ROUTE_STATE_APP',
+		type: 'GET_INITIAL_ROUTE_STATE_HOMEPAGE',
 		homepage: {
 			userProfile,
 			chapterText,
@@ -476,15 +268,6 @@ AppContainer.getInitialProps = async (context) => {
 					verse,
 					token,
 				},
-			},
-		},
-		profile: {
-			userId: userId || '',
-			userAuthenticated: isAuthenticated || false,
-			userProfile: {
-				...userProfile,
-				verified: false,
-				accounts: [],
 			},
 		},
 	});

@@ -116,6 +116,8 @@ function profileReducer(state = initialState, action) {
 			return state
 				.set('deleteUserError', true)
 				.set('deleteUserMessage', action.message);
+		case 'GET_INITIAL_ROUTE_STATE_PROFILE':
+			return state.merge(action.profile);
 		default:
 			return state;
 	}
