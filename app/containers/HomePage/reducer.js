@@ -21,6 +21,7 @@ import {
 	SET_ACTIVE_NOTES_VIEW,
 	SET_SELECTED_BOOK_NAME,
 	SET_AUDIO_PLAYER_STATE,
+	SET_CHAPTER_TEXT_LOADING_STATE,
 	TOGGLE_PROFILE,
 	TOGGLE_AUTOPLAY,
 	TOGGLE_NOTES_MODAL,
@@ -251,6 +252,7 @@ const initialState = fromJS({
 		},
 	},
 	activeChapter: 1,
+	chapterTextLoadingState: true,
 	userAuthenticated:
 		// !!localStorage.getItem('bible_is_user_id') ||
 		// !!sessionStorage.getItem('bible_is_user_id') ||
@@ -503,8 +505,10 @@ function homePageReducer(state = initialState, action) {
 		// case CHANGE_VERSE:
 		// 	return state.set('verseNumber', )
 		case 'GET_INITIAL_ROUTE_STATE_HOMEPAGE':
-			console.log('merging homepage state');
 			return state.merge(action.homepage);
+		case SET_CHAPTER_TEXT_LOADING_STATE:
+			console.log(action);
+			return state.set('chapterTextLoadingState', action.state);
 		default:
 			return state;
 	}

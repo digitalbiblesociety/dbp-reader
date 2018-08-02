@@ -3,10 +3,12 @@
  * HomePage actions
  *
  * todo: Remove boilerplate by creating a function to create actions
+ * Automatically pass through all props so these files are basically useless... -_-
  */
 
 import {
 	ACTIVE_TEXT_ID,
+	SET_CHAPTER_TEXT_LOADING_STATE,
 	ADD_HIGHLIGHTS,
 	GET_BOOKS,
 	GET_AUDIO,
@@ -41,6 +43,11 @@ import {
 	DELETE_HIGHLIGHTS,
 	CREATE_USER_WITH_SOCIAL_ACCOUNT,
 } from './constants';
+
+export const setChapterTextLoadingState = (props) => ({
+	type: SET_CHAPTER_TEXT_LOADING_STATE,
+	...props,
+});
 
 export const setUA = () => ({
 	type: SET_USER_AGENT,

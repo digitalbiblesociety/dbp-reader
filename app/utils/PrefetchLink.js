@@ -1,16 +1,19 @@
 // import React from 'react';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { resolve, parse } from 'url';
 import Router from 'next/router';
+// import { setChapterTextLoadingState } from '../containers/HomePage/actions';
 
-export default class PrefetchLink extends Link {
+class PrefetchLink extends Link {
 	static propTypes = {
 		withData: PropTypes.bool,
 	};
+
 	async prefetch() {
-		console.log('Prefetch did not run because request came from server');
 		if (typeof window === 'undefined') {
+			// console.log('Prefetch did not run because request came from server');
 			return;
 		}
 
@@ -25,3 +28,5 @@ export default class PrefetchLink extends Link {
 		}
 	}
 }
+
+export default connect()(PrefetchLink);
