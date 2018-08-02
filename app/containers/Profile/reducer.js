@@ -70,11 +70,13 @@ function profileReducer(state = initialState, action) {
 			return state.set('activeOption', action.option);
 		case USER_LOGGED_IN:
 			// console.log('Logged in and reducer fired', action);
+			if (typeof window !== 'undefined') {
+				sessionStorage.setItem('bible_is_12345', action.userProfile.email);
+				sessionStorage.setItem('bible_is_123456', action.userProfile.nickname);
+				sessionStorage.setItem('bible_is_1234567', action.userProfile.name);
+				sessionStorage.setItem('bible_is_12345678', action.userProfile.avatar);
+			}
 
-			sessionStorage.setItem('bible_is_12345', action.userProfile.email);
-			sessionStorage.setItem('bible_is_123456', action.userProfile.nickname);
-			sessionStorage.setItem('bible_is_1234567', action.userProfile.name);
-			sessionStorage.setItem('bible_is_12345678', action.userProfile.avatar);
 			return state
 				.set('userId', action.userId)
 				.set('userProfile', action.userProfile)
@@ -117,6 +119,8 @@ function profileReducer(state = initialState, action) {
 				.set('deleteUserError', true)
 				.set('deleteUserMessage', action.message);
 		case 'GET_INITIAL_ROUTE_STATE_PROFILE':
+			// console.log('action.profile', action.profile);
+
 			return state.merge(action.profile);
 		default:
 			return state;
