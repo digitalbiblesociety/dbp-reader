@@ -248,7 +248,8 @@
 			& .accordion__title {
 				cursor: pointer;
 
-				h4 {
+				h4,
+				a.top-level-title {
 					display: inline-block;
 					padding: 0 20px 0 35px;
 				}
