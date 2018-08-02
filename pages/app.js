@@ -326,8 +326,6 @@ class AppContainer extends React.Component {
 }
 
 AppContainer.getInitialProps = async (context) => {
-	// console.log('context.reduxStore.getState()', context.reduxStore.getState());
-
 	const { bibleId, bookId, chapter, verse, token } = context.query;
 	let isFromServer = true;
 	const userProfile = {};
@@ -406,7 +404,6 @@ AppContainer.getInitialProps = async (context) => {
 		}
 	}
 	// console.log('After init func', Object.keys(textData));
-	// todo: replace with getInintChaptData utility function
 	// Get text for chapter
 	// const textRes = await fetch(textUrl);
 	const textJson = textData.plainTextJson;
@@ -434,19 +431,21 @@ AppContainer.getInitialProps = async (context) => {
 		{},
 	);
 
-	context.reduxStore.replaceReducer((state, action) => {
-		if (action.type === 'GET_INITIAL_ROUTE_STATE_APP') {
-			// console.log('Merging the state with the state from initial props', state);
-			// console.log('state.get homepage', state.get('homepage'))
-			return state
-				.set('homepage', state.get('homepage').merge(action.homepage))
-				.set('profile', state.get('profile').merge(action.profile));
-		}
-		return state;
+	context.reduxStore.dispatch({
+		type: 'GET_INITIAL_ROUTE_STATE_PROFILE',
+		profile: {
+			userId: userId || '',
+			userAuthenticated: isAuthenticated || false,
+			userProfile: {
+				...userProfile,
+				verified: false,
+				accounts: [],
+			},
+		},
 	});
 
 	context.reduxStore.dispatch({
-		type: 'GET_INITIAL_ROUTE_STATE_APP',
+		type: 'GET_INITIAL_ROUTE_STATE_HOMEPAGE',
 		homepage: {
 			userProfile,
 			chapterText,
@@ -476,15 +475,6 @@ AppContainer.getInitialProps = async (context) => {
 					verse,
 					token,
 				},
-			},
-		},
-		profile: {
-			userId: userId || '',
-			userAuthenticated: isAuthenticated || false,
-			userProfile: {
-				...userProfile,
-				verified: false,
-				accounts: [],
 			},
 		},
 	});
