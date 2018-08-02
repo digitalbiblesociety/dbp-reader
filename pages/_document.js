@@ -5,7 +5,6 @@ export default class MyDocument extends Document {
 		return (
 			<html>
 				<Head>
-					<meta charSet="utf-8" />
 					<link rel="stylesheet" href="/_next/static/style.css" />
 					{/*<link rel="stylesheet" href="../.next/static/style.css" />*/}
 					<meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -27,9 +26,23 @@ export default class MyDocument extends Document {
 					<link
 						rel="preload"
 						as="style"
-						href="https://fonts.googleapis.com/css?family=Raleway|Alegreya|Roboto+Slab|Roboto:400,500"
+						href="https://fonts.googleapis.com/css?family=Roboto:400,500"
 					/>
-					<title>Bible.is</title>
+					<link
+						rel="preload"
+						as="style"
+						href="https://fonts.googleapis.com/css?family=Roboto+Slab"
+					/>
+					<link
+						rel="preload"
+						as="style"
+						href="https://fonts.googleapis.com/css?family=Raleway"
+					/>
+					<link
+						rel="preload"
+						as="style"
+						href="https://fonts.googleapis.com/css?family=Alegreya"
+					/>
 					<meta
 						name="google-site-verification"
 						content="frHSU18EKPDnEoKj--plFdubfj_GB7hXesy-3N1o57s"
