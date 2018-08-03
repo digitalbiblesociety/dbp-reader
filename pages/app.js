@@ -30,6 +30,7 @@ import '../static/manifest.json';
 import { setChapterTextLoadingState } from '../app/containers/HomePage/actions';
 
 class AppContainer extends React.Component {
+	static displayName = 'Main app';
 	componentWillMount() {
 		// console.log('Component will mount for app', this.props);
 		// console.log('Component will mount for app redux store available at mounting', this.props.dispatch);
@@ -166,24 +167,41 @@ class AppContainer extends React.Component {
 				: false,
 		};
 
-		this.props.dispatch({
-			type: 'GET_INITIAL_ROUTE_STATE_HOMEPAGE',
-			homepage: {
-				userSettings,
-				userProfile,
-				userId,
-				userAuthenticated: isAuthenticated,
-			},
-		});
-
-		this.props.dispatch({
-			type: 'GET_INITIAL_ROUTE_STATE_PROFILE',
-			profile: {
-				userProfile,
-				userId,
-				userAuthenticated: isAuthenticated,
-			},
-		});
+		if (userId && isAuthenticated) {
+			this.props.dispatch({
+				type: 'GET_INITIAL_ROUTE_STATE_HOMEPAGE',
+				homepage: {
+					userSettings,
+					userProfile,
+					userId,
+					userAuthenticated: isAuthenticated,
+				},
+			});
+			this.props.dispatch({
+				type: 'GET_INITIAL_ROUTE_STATE_PROFILE',
+				profile: {
+					userProfile,
+					userId,
+					userAuthenticated: isAuthenticated,
+				},
+			});
+		} else {
+			this.props.dispatch({
+				type: 'GET_INITIAL_ROUTE_STATE_HOMEPAGE',
+				homepage: {
+					userSettings,
+					userId,
+					userAuthenticated: isAuthenticated,
+				},
+			});
+			this.props.dispatch({
+				type: 'GET_INITIAL_ROUTE_STATE_PROFILE',
+				profile: {
+					userId,
+					userAuthenticated: isAuthenticated,
+				},
+			});
+		}
 	}
 
 	componentWillUnmount() {
@@ -361,7 +379,12 @@ AppContainer.getInitialProps = async (context) => {
 	// const texts = bibleJson.data;
 
 	// Get active bible data
-	const singleBibleRes = await cachedFetch(singleBibleUrl);
+	const singleBibleRes = await cachedFetch(singleBibleUrl).catch((e) => {
+		if (process.env.NODE_ENV === 'development') {
+			console.log('Error in get initial props single bible: ', e.message); // eslint-disable-line no-console
+		}
+		return { data: {} };
+	});
 	const singleBibleJson = singleBibleRes;
 	const bible = singleBibleJson.data;
 
@@ -404,7 +427,12 @@ AppContainer.getInitialProps = async (context) => {
 
 	const activeBookName = activeBook ? activeBook.name : '';
 
-	const bookMetaRes = await cachedFetch(bookMetaDataUrl);
+	const bookMetaRes = await cachedFetch(bookMetaDataUrl).catch((e) => {
+		if (process.env.NODE_ENV === 'development') {
+			console.log('Error in get initial props single bible: ', e.message); // eslint-disable-line no-console
+		}
+		return { data: [] };
+	});
 	const bookMetaJson = bookMetaRes;
 	// console.log('bookMetaJson', bookMetaJson);
 
