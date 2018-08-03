@@ -26,7 +26,11 @@ export default async ({ filesets, bookId: lowerCaseBookId, chapter }) => {
 		}&key=${
 			process.env.DBP_API_KEY
 		}&v=4&book_id=${bookId}&chapter_id=${chapter}&type=text_format`;
-		const res = await request(url); // .catch((e) => console.log('Error in request for formatted fileset: '));
+		const res = await request(url).catch((e) => {
+			if (process.env.NODE_ENV === 'development') {
+				console.log('Error in request for formatted fileset: ', e.message); // eslint-disable-line no-console
+			}
+		});
 		const path = res.data[0].path;
 		const text = await fetch(path).then((textRes) => textRes.text()); // .catch((e) => console.log('Error fetching formatted text: '));
 
