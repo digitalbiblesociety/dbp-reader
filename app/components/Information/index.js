@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { FormattedMessage } from 'react-intl';
 import get from 'lodash/get';
+import AnimateHeight from 'react-animate-height';
 import { selectCopyrights } from './selectors';
 import ImageComponent from '../ImageComponent';
 import messages from './messages';
@@ -18,6 +19,7 @@ import SvgWrapper from '../SvgWrapper';
 class Information extends React.PureComponent {
 	state = {
 		opened: false,
+		height: 0,
 	};
 	// eslint-disable-line react/prefer-stateless-function
 	setRef = (node) => {
@@ -97,7 +99,10 @@ class Information extends React.PureComponent {
 	// )))
 	// }
 	toggleCopyright = () => {
-		this.setState((currentState) => ({ opened: !currentState.opened }));
+		this.setState((currentState) => ({
+			opened: !currentState.opened,
+			height: !currentState.height ? 350 : 0,
+		}));
 	};
 
 	render() {
@@ -120,7 +125,7 @@ class Information extends React.PureComponent {
 						svgid={'arrow_down'}
 					/>
 				</button>
-				{this.state.opened ? (
+				<AnimateHeight height={this.state.height} duration={1000}>
 					<div className="copyrights-section">
 						<div className={'ot-copyright'}>
 							{/* <div className={'cp-header'}><h1>Old Testament</h1></div> */}
@@ -201,7 +206,7 @@ class Information extends React.PureComponent {
 							) : null}
 						</div>
 					</div>
-				) : null}
+				</AnimateHeight>
 				<div className={'ministry-statement'}>
 					<FormattedMessage {...messages.circleC} />&nbsp;
 					<a rel={'noopener'} target={'_blank'} href={'http://www.bible.is'}>
