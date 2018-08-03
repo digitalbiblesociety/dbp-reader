@@ -38,7 +38,7 @@ function PopupMessage({ styles, message, x, y }) {
 	// 	return ReactDOM.createPortal(component, parentComponent);
 	// }
 
-	return ReactDOM.createPortal(component, document.getElementById('app'));
+	return ReactDOM.createPortal(component, document.getElementById('__next'));
 }
 
 PopupMessage.propTypes = {
