@@ -85,6 +85,10 @@ function profileReducer(state = initialState, action) {
 			// Need to remove the user's id from storage when they log out
 			localStorage.removeItem('bible_is_user_id');
 			sessionStorage.removeItem('bible_is_user_id');
+			sessionStorage.removeItem('bible_is_12345');
+			sessionStorage.removeItem('bible_is_123456');
+			sessionStorage.removeItem('bible_is_1234567');
+			sessionStorage.removeItem('bible_is_12345678');
 			return state.set('userId', '').set('userAuthenticated', false);
 		case SIGNUP_ERROR:
 			return state
@@ -113,6 +117,11 @@ function profileReducer(state = initialState, action) {
 				.set('loginErrorMessage', '');
 		case DELETE_USER_SUCCESS:
 			localStorage.removeItem('bible_is_user_id');
+			sessionStorage.removeItem('bible_is_user_id');
+			sessionStorage.removeItem('bible_is_12345');
+			sessionStorage.removeItem('bible_is_123456');
+			sessionStorage.removeItem('bible_is_1234567');
+			sessionStorage.removeItem('bible_is_12345678');
 			return state.set('userAuthenticated', false).set('userId', '');
 		case DELETE_USER_ERROR:
 			return state

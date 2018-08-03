@@ -130,7 +130,17 @@ export class Profile extends React.PureComponent {
 	updateEmail = (props) => this.props.dispatch(updateEmail(props));
 	updateUserInformation = (props) =>
 		this.props.dispatch(updateUserInformation(props));
-	logout = () => this.props.dispatch(logout());
+	logout = () => {
+		/* eslint-disable no-undef */
+		if (typeof gapi !== 'undefined' && typeof auth2 !== 'undefined') {
+			auth2.signOut();
+		}
+		if (typeof FB !== 'undefined') {
+			FB.logout();
+		}
+		/* eslint-enable no-undef */
+		this.props.dispatch(logout());
+	};
 
 	openPopup = (coords) => {
 		// console.log('opening popup');
