@@ -11,15 +11,15 @@ import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import { FormattedMessage } from 'react-intl';
 // import isEqual from 'lodash/isEqual';
-import PleaseSignInMessage from 'components/PleaseSignInMessage';
-import SvgWrapper from 'components/SvgWrapper';
-import EditNote from 'components/EditNote';
-import MyNotes from 'components/MyNotes';
-import injectSaga from 'utils/injectSaga';
-import injectReducer from 'utils/injectReducer';
-import GenericErrorBoundary from 'components/GenericErrorBoundary';
-import CloseMenuFunctions from 'utils/closeMenuFunctions';
-import { setActiveNote, deleteHighlights } from 'containers/HomePage/actions';
+import PleaseSignInMessage from '../../components/PleaseSignInMessage';
+import SvgWrapper from '../../components/SvgWrapper';
+import EditNote from '../../components/EditNote';
+import MyNotes from '../../components/MyNotes';
+import injectSaga from '../../utils/injectSaga';
+import injectReducer from '../../utils/injectReducer';
+import GenericErrorBoundary from '../../components/GenericErrorBoundary';
+import CloseMenuFunctions from '../../utils/closeMenuFunctions';
+import { setActiveNote, deleteHighlights } from '../HomePage/actions';
 import {
 	setActiveChild,
 	setPageSize,

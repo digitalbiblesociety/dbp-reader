@@ -1,9 +1,14 @@
 .text-container {
 	display: flex;
 	max-width: 1000px;
-	height: calc(100vh - 135px);
+	//height: calc(100vh - 190px);
+	//max-height: calc(100vh - 190px);
+	//margin: 54px auto 108px auto;
 	margin: 0 auto;
-	padding: 0 10px;
+	margin-top: 15px;
+	//padding: 54px 10px 116px 10px;
+	padding: 10px;
+	padding-top: 56px;
 	align-items: center;
 
 	@include css4 {
@@ -11,7 +16,7 @@
 		color: var(--application-text-container-color);
 		font-size: var(--application-base-font-size);
 	}
-	transition: 200ms ease-in-out;
+	transition: height 50ms ease-in, height 50ms ease-out;
 
 	.active-verse {
 		// Setting to gray because it won't obscure the font and it will work regardless of the app's background color
@@ -21,15 +26,20 @@
 	}
 
 	&.scrolled-down {
-		padding-top: 10px;
-		transform: translateY(-54px);
-		height: calc(100vh - 25px);
+		//padding-top: 10px;
+		//padding-bottom: 86px;
+		// may need padding instead of margin
+		//margin-top: 0;
+		//margin-bottom: 25px;
+
+		//transform: translateY(-54px);
+		//height: calc(100vh - 25px);
 	}
 
 	.main-wrapper {
 		overflow: hidden;
 		margin: 0 auto;
-		padding: 15px 15px 45px 15px;
+		padding: 15px 15px 15px 15px;
 		height: 100%;
 
 		@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
@@ -231,17 +241,48 @@
 
 @media only screen and (max-width: $audio-player-bp) {
 	.text-container {
+		padding-top: 36px;
+		//height: calc(100vh - 220px);
+		//max-height: calc(100vh - 220px);
+
 		main {
-			padding-bottom: 75px;
-			z-index: 0;
+			//padding-bottom: 75px;
+			//z-index: 0;
 		}
 
 		.info-button {
-			bottom: 166px;
-			z-index: 5;
+			//bottom: 166px;
+			//z-index: 5;
 		}
 	}
 }
+
+@media only screen and (min-width: 500px) and (max-width: $large-bp) {
+	.text-container {
+		padding-top: 36px;
+		//height: calc(100vh - 215px);
+		//max-height: calc(100vh - 215px);
+		//&.sub-footer-open {
+		//	margin-bottom: 190px;
+		//}
+	}
+	@media only screen and (max-width: $audio-player-bp) {
+		.text-container {
+			margin-top: 0;
+			//&.sub-footer-open {
+			//	margin-bottom: 45px;
+			//}
+		}
+	}
+}
+//
+//@media only screen and (max-width: 499px) {
+//	.text-container {
+//		&.sub-footer-open {
+//			margin-bottom: 45px;
+//		}
+//	}
+//}
 
 // Style that I like but that isn't in the comps
 //@keyframes thicken {

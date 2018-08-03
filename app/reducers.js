@@ -6,9 +6,11 @@ import { combineReducers } from 'redux-immutable';
 import { fromJS } from 'immutable';
 import { LOCATION_CHANGE } from 'react-router-redux';
 
-import languageProviderReducer from 'containers/LanguageProvider/reducer';
-import errorReducer from 'containers/App/errorReducer';
-import profileReducer from 'containers/Profile/reducer';
+import languageProviderReducer from './containers/LanguageProvider/reducer';
+import errorReducer from './containers/App/errorReducer';
+import profileReducer from './containers/Profile/reducer';
+// import textSelectionReducer from './containers/TextSelection/reducer';
+import homepageReducer from './containers/HomePage/reducer';
 
 /*
  * routeReducer
@@ -28,13 +30,13 @@ const routeInitialState = fromJS({
  */
 function routeReducer(state = routeInitialState, action) {
 	switch (action.type) {
-    /* istanbul ignore next */
-	case LOCATION_CHANGE:
-		return state.merge({
-			location: action.payload,
-		});
-	default:
-		return state;
+		/* istanbul ignore next */
+		case LOCATION_CHANGE:
+			return state.merge({
+				location: action.payload,
+			});
+		default:
+			return state;
 	}
 }
 
@@ -47,6 +49,8 @@ export default function createReducer(injectedReducers) {
 		errors: errorReducer,
 		profile: profileReducer,
 		language: languageProviderReducer,
+		homepage: homepageReducer,
+		// textselection: textSelectionReducer,
 		...injectedReducers,
 	});
 }

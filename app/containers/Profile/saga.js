@@ -1,9 +1,10 @@
 import { takeLatest, call, take, cancel, put } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
-import request from 'utils/request';
+import request from '../../utils/request';
 import {
 	// GET_USER_DATA,
 	// LOAD_USER_DATA,
+	CHANGE_PICTURE,
 	LOGIN_ERROR,
 	USER_LOGGED_IN,
 	SEND_LOGIN_FORM,
@@ -20,6 +21,7 @@ import {
 	RESET_PASSWORD_ERROR,
 	UPDATE_USER_INFORMATION,
 	DELETE_USER_SUCCESS,
+	DELETE_USER_ERROR,
 } from './constants';
 
 export function* sendSignUpForm({
@@ -59,6 +61,10 @@ export function* sendSignUpForm({
 				userProfile: response.user,
 			});
 			sessionStorage.setItem('bible_is_user_id', response.user.id);
+			sessionStorage.setItem('bible_is_12345', response.user.email);
+			sessionStorage.setItem('bible_is_123456', response.user.nickname);
+			sessionStorage.setItem('bible_is_1234567', response.user.name);
+			sessionStorage.setItem('bible_is_12345678', response.user.avatar);
 		} else if (response.error) {
 			// console.log('res error', response);
 			const message = Object.values(response.error.message).reduce(
@@ -191,34 +197,71 @@ export function* updateUserInformation({ userId, profile }) {
 	}
 }
 
-// export function* updatePassword({ userId, password }) {
-// 	// console.log('in update password with ', userId, password);
-// 	const requestUrl = `${process.env.BASE_API_ROUTE}/users/${userId}?key=${process.env.DBP_API_KEY}&v=4&pretty`;
-// 	const formData = new FormData();
-//
-// 	formData.append('password', password);
-//
-// 	const options = {
-// 		method: 'PUT',
-// 		body: formData,
-// 	};
-//
-// 	try {
-// 		const response = yield call(request, requestUrl, options);
-// 		// console.log('update password response', response);
-// 		yield put({ type: 'UPDATE_EMAIL_SUCCESS', response });
-// 	} catch (err) {
-// 		if (process.env.NODE_ENV === 'development') {
-// 			console.error(err); // eslint-disable-line no-console
-// 		} else if (process.env.NODE_ENV === 'production') {
-// 			// const options = {
-// 			// 	header: 'POST',
-// 			// 	body: formData,
-// 			// };
-// 			// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
-// 		}
-// 	}
-// }
+// Route: /users/{id}
+// Method: POST
+// Extra Header: _method: PUT
+// Content Type: form-data
+export function* changePicture({ userId, avatar }) {
+	// console.log('userId, avatar', userId, avatar);
+	// console.log('avatar.source', avatar.source);
+
+	const requestUrl = `${process.env.BASE_API_ROUTE}/users/${userId}?key=${
+		process.env.DBP_API_KEY
+	}&v=4`;
+	const requestData = new FormData();
+	// const reader = new FileReader();
+	// let avatarBase64;
+	//
+	// reader.addEventListener(
+	// 	'load',
+	// 	() => {
+	// 		console.log('Read the avatar', reader.result);
+	//
+	// 		avatarBase64 = reader.result;
+	// 	},
+	// 	false,
+	// );
+	//
+	// reader.addEventListener('loadend', () => {
+	// 	console.log('avatarBase64', avatarBase64);
+	// });
+	//
+	// if (avatar) {
+	// 	console.log('Started reading avatar');
+	//
+	// 	yield reader.readAsDataURL(avatar);
+	// }
+
+	// yield setTimeout(() => {}, 500);
+
+	requestData.append('avatar', avatar);
+	requestData.append('_method', 'PUT');
+
+	const requestOptions = {
+		method: 'POST',
+		_method: 'PUT',
+		body: requestData,
+		// headers: {
+		// 	'Content-Type': 'application/x-www-form-urlencoded',
+		// },
+	};
+
+	try {
+		const response = yield call(request, requestUrl, requestOptions);
+
+		// console.log('response');
+		if (response.success) {
+			// console.log('picture was saved successfully');
+		} else {
+			// console.log('picture was not saved', response);
+		}
+	} catch (err) {
+		if (process.env.NODE_ENV === 'development') {
+			// console.warn('Error saving picture: ', err);
+		}
+	}
+}
+
 export function* sendResetPassword({ password, userAccessToken }) {
 	const requestUrl = `${process.env.BASE_API_ROUTE}/users/password/reset?key=${
 		process.env.DBP_API_KEY
@@ -252,6 +295,10 @@ export function* sendResetPassword({ password, userAccessToken }) {
 			userProfile: response,
 		});
 		// sessionStorage.setItem('bible_is_user_id', response.id);
+		sessionStorage.setItem('bible_is_12345', response.user.email);
+		sessionStorage.setItem('bible_is_123456', response.user.nickname);
+		sessionStorage.setItem('bible_is_1234567', response.user.name);
+		sessionStorage.setItem('bible_is_12345678', response.user.avatar);
 	} catch (err) {
 		// console.log('in catch');
 
@@ -343,6 +390,10 @@ export function* deleteUser({ userId }) {
 			// };
 			// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
 		}
+		yield put({
+			type: DELETE_USER_ERROR,
+			message: 'There was an error deleting your account.',
+		});
 	}
 }
 
@@ -408,8 +459,10 @@ export default function* defaultSaga() {
 		SOCIAL_MEDIA_LOGIN,
 		socialMediaLogin,
 	);
+	const changePictureSaga = yield takeLatest(CHANGE_PICTURE, changePicture);
 
 	yield take(LOCATION_CHANGE);
+	yield cancel(changePictureSaga);
 	yield cancel(sendSignUpFormSaga);
 	yield cancel(sendLoginFormSaga);
 	yield cancel(sendResetPasswordSaga);

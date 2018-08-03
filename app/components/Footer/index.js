@@ -6,9 +6,10 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import SvgWrapper from 'components/SvgWrapper';
+import SvgWrapper from '../SvgWrapper';
+// import { FormattedMessage } from 'react-intl';
+// import messages from './messages';
 // import styled from 'styled-components';
-// Todo: Use a transition to animate the closing and opening of the footer
 const Footer = ({
 	settingsActive,
 	profileActive,
@@ -35,7 +36,7 @@ const Footer = ({
 				onClick={() => !profileActive && toggleProfile()}
 			>
 				<SvgWrapper className={'icon'} fill="#fff" svgid="profile" />
-				<h4 className={'title-text'}>Profile</h4>
+				<span className={'title-text'}>Profile</span>
 			</span>
 			<span
 				title={'Search'}
@@ -45,7 +46,7 @@ const Footer = ({
 				onClick={() => !searchActive && toggleSearch()}
 			>
 				<SvgWrapper className={'icon'} fill="#fff" svgid="search" />
-				<h4 className={'title-text'}>Search</h4>
+				<span className={'title-text'}>Search</span>
 			</span>
 			<span
 				title={'Notebook'}
@@ -60,7 +61,7 @@ const Footer = ({
 				}}
 			>
 				<SvgWrapper className={'icon'} fill="#fff" svgid="notebook" />
-				<h4 className={'title-text'}>Notebook</h4>
+				<span className={'title-text'}>Notebook</span>
 			</span>
 			<span
 				title={'Settings'}
@@ -70,7 +71,7 @@ const Footer = ({
 				onClick={() => !settingsActive && toggleSettingsModal()}
 			>
 				<SvgWrapper className={'icon'} fill="#fff" svgid="text_options" />
-				<h4 className={'title-text'}>Options</h4>
+				<span className={'title-text'}>Options</span>
 			</span>
 		</div>
 	</div>

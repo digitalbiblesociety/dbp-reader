@@ -20,6 +20,8 @@ html {
 	width: 100%;
 }
 body {
+	// Fallback to support IE
+	overflow: hidden;
 	font-family: 'Noto Sans', Helvetica, sans serif;
 	@include css4 {
 		color: var(--default-text-color);
@@ -35,7 +37,7 @@ a {
 	text-decoration: none;
 	color: inherit;
 }
-//aside                  {position:absolute;top:0;right:0;}
+//aside {position:absolute;top:0;right:0;}
 header {
 	@include css4 {
 		outline: 1px solid var(--menu-border-color);
@@ -48,8 +50,10 @@ main {
 	-webkit-overflow-scrolling: touch;
 }
 #app {
-	max-width: 100vw;
-	width: 100%;
+	max-width: calc(100vw);
+	width: calc(100%);
+
+	overflow: hidden;
 	@include css4 {
 		background-color: var(--default-background-color);
 	}
@@ -57,11 +61,45 @@ main {
 #app > div {
 	height: 100vh;
 	width: 100%;
+	padding-right: 20px;
+	//display: flex;
+	box-sizing: content-box;
+	//flex-direction: column;
+	// I change this to scroll programatically
+	overflow-y: auto;
+	overflow-x: hidden;
 }
-aside {
+html #app aside {
+	z-index: 2;
 	@include css4 {
 		outline: 1px solid var(--menu-border-color);
 		border-bottom: 1px solid var(--menu-border-color);
+	}
+}
+
+.homepage {
+	overflow: hidden;
+	width: 100vw;
+	transition: flex 50ms, height 50ms, min-height 50ms;
+}
+
+.sub-footer {
+	overflow: hidden;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	pointer-events: none;
+	height: min-content;
+	//align-items: center;
+	//position: absolute;
+	//top: -40px;
+	//flex: 0;
+	transition: height 50ms ease, min-height 50ms ease;
+	width: 100vw;
+	//align-content: stretch;
+
+	@include css4 {
+		background: var(--default-header-background-color);
 	}
 }
 
@@ -96,6 +134,7 @@ aside {
 }
 // Remove default styling on em tags since I use those for highlighting
 em {
+	// Have both unset and inherit because of IE not supporting unset
 	font-style: inherit;
 	font-style: unset;
 }
@@ -122,7 +161,7 @@ img.loaded {
 	overflow: hidden;
 	cursor: pointer;
 } // Took out fill:currentColor;
-//.icon:hover            {opacity: 0.65;}
+//.icon:hover {opacity: 0.65;}
 li {
 	list-style: none;
 }

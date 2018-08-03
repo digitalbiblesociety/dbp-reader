@@ -1,23 +1,27 @@
 import 'whatwg-fetch';
 import { takeLatest, call, all, put, fork } from 'redux-saga/effects';
-import request from 'utils/request';
 import some from 'lodash/some';
 // import reduce from 'lodash/reduce';
 import get from 'lodash/get';
 // import uniqBy from 'lodash/uniqBy';
 import uniqWith from 'lodash/uniqWith';
+import request from '../../utils/request';
 import {
 	getNotesForChapter,
 	getBookmarksForChapter,
 	getUserHighlights,
-} from 'containers/Notes/saga';
-import { LOGIN_ERROR, USER_LOGGED_IN } from 'containers/Profile/constants';
+} from '../../containers/Notes/saga';
+import {
+	USER_LOGGED_IN,
+	OAUTH_ERROR,
+} from '../../containers/Profile/constants';
+// import { LOGIN_ERROR, USER_LOGGED_IN } from 'containers/Profile/constants';
 import {
 	getCountries,
 	getLanguages,
 	getTexts,
-} from 'containers/TextSelection/saga';
-import { ADD_BOOKMARK } from 'containers/Notes/constants';
+} from '../../containers/TextSelection/saga';
+import { ADD_BOOKMARK } from '../../containers/Notes/constants';
 // import filter from 'lodash/filter';
 import {
 	ADD_HIGHLIGHTS,
@@ -35,6 +39,7 @@ import {
 	codes,
 	// sortBySetSize,
 } from './sagaUtils';
+
 // import { fromJS } from 'immutable';
 // import unionWith from 'lodash/unionWith';
 // import { ADD_HIGHLIGHTS, LOAD_HIGHLIGHTS, GET_CHAPTER_TEXT, GET_HIGHLIGHTS, GET_BOOKS, GET_AUDIO, INIT_APPLICATION } from './constants';
@@ -306,6 +311,8 @@ export function* getBibleFromUrl({
 	userId,
 	verse,
 }) {
+	// console.log('Get bible from url was called');
+
 	// This function needs to return the data listed below
 	// Books
 	// Active or first chapter text
@@ -322,6 +329,8 @@ export function* getBibleFromUrl({
 	try {
 		const response = yield call(request, requestUrl);
 		// let filesets;
+		// console.log('response in getbible call', response);
+
 		// if (!response.data.filesets) {
 		// 	const bibleUrl = `${process.env.BASE_API_ROUTE}/bibles?bucket=${process.env.DBP_BUCKET_ID}&key=${process.env.DBP_API_KEY}&v=4&language_code=${response.data.iso}`;
 		// 	const allBibles = yield call(request, bibleUrl);
@@ -333,6 +342,8 @@ export function* getBibleFromUrl({
 		if (response.data && Object.keys(response.data).length) {
 			// Creating new objects for each set of data needed to ensure I don't forget something
 			// I probably will want to use 'yield all' for getting the audio and text so they can be run async
+			// console.log('reponses', response);
+			// console.log('bibleId', bibleId);
 			const bible = response.data;
 			const books = bible.books; // Need to ensure that I have the books here
 			const textDirection =
@@ -450,12 +461,12 @@ export function* getBibleFromUrl({
 				userId,
 				verse,
 			});
-			// console.log('chapter data', chapterData);
+			// console.log('chapter data', bible);
 			// still need to include to active book name so that iteration happens here
 			yield put({
 				type: 'loadbible',
 				filesets,
-				name: bible.vname || bible.name,
+				name: bible.vname ? bible.vname : bible.name,
 				iso: bible.iso,
 				textDirection,
 				languageName: bible.language,
@@ -480,6 +491,7 @@ export function* getBibleFromUrl({
 		yield put({ type: 'loadbibleerror' });
 	}
 }
+
 export function* getChapterFromUrl({
 	filesets,
 	bibleId: oldBibleId,
@@ -569,6 +581,8 @@ export function* getChapterFromUrl({
 		// 		previous: true,
 		// 	});
 		// }
+		// console.log('Chapter is calling getAudio');
+
 		yield fork(getChapterAudio, { filesets, bookId, chapter });
 		// }
 		yield fork(getBookMetadata, { bibleId });
@@ -585,20 +599,24 @@ export function* getChapterFromUrl({
 				// console.log('before fork');
 				// yield fork(getCopyrightSaga, { filesetId });
 				// console.log('after fork');
-				const reqUrl = `${
-					process.env.BASE_API_ROUTE
-				}/bibles/filesets/${filesetId}?bucket=${
-					process.env.DBP_BUCKET_ID
-				}&key=${
-					process.env.DBP_API_KEY
-				}&v=4&book_id=${bookId}&chapter_id=${chapter}&type=text_format`; // hard coded since this only ever needs to get formatted text
-				// console.log(reqUrl);
-				const formattedChapterObject = yield call(request, reqUrl);
-				const path = get(formattedChapterObject.data, [0, 'path']);
-				// console.log('response for formatted text', formattedChapterObject);
-				formattedText = yield path ? fetch(path).then((res) => res.text()) : '';
+				if (filesetId) {
+					const reqUrl = `${
+						process.env.BASE_API_ROUTE
+					}/bibles/filesets/${filesetId}?bucket=${
+						process.env.DBP_BUCKET_ID
+					}&key=${
+						process.env.DBP_API_KEY
+					}&v=4&book_id=${bookId}&chapter_id=${chapter}&type=text_format`; // hard coded since this only ever needs to get formatted text
+					// console.log(reqUrl);
+					const formattedChapterObject = yield call(request, reqUrl);
+					const path = get(formattedChapterObject.data, [0, 'path']);
+					// console.log('response for formatted text', formattedChapterObject);
+					formattedText = yield path
+						? fetch(path).then((res) => res.text())
+						: '';
 
-				formattedTextFilesetId = formattedText ? filesetId : '';
+					formattedTextFilesetId = filesetId;
+				}
 				// console.log(formattedText);
 			} catch (error) {
 				if (process.env.NODE_ENV === 'development') {
@@ -645,7 +663,7 @@ export function* getChapterFromUrl({
 
 				plainText = results.plainText;
 				plainTextFilesetId = results.plainTextFilesetId;
-			} else {
+			} else if (filesetId) {
 				const reqUrl = `${
 					process.env.BASE_API_ROUTE
 				}/bibles/filesets/${filesetId}/${bookId}/${chapter}?key=${
@@ -802,15 +820,11 @@ export function* getChapterAudio({
 	// prevChapter,
 	// nextChapter,
 }) {
-	// console.log('{ filesets, bookId: currentBook, chapter: currentChapter, previous = false, next = false, prevBookId, nextBookId, prevChapter, nextChapter }', { filesets, bookId: currentBook, chapter: currentChapter, previous, next, prevBookId, nextBookId, prevChapter, nextChapter });
 	// console.trace()
-	// if (previous) {
-	// 	bookId = prevBookId;
-	// 	chapter = prevChapter;
-	// } else if (next) {
-	// 	bookId = nextBookId;
-	// 	chapter = nextChapter;
-	// }
+	// console.log('bookId', bookId);
+	// console.log('chapter', chapter);
+	// console.log('filesets', filesets);
+
 	// Send a loadaudio action for each fail in production so that there isn't a link loaded
 	// This handles the case where a user already has a link but getting the next one fails
 	// console.log('getting audio', filesets, bookId, chapter);
@@ -846,21 +860,29 @@ export function* getChapterAudio({
 	const partialNtAudio = [];
 	const partialNtOtAudio = [];
 
-	Object.entries(filteredFilesets).forEach((fileset) => {
-		if (fileset[1].size === 'C') {
-			completeAudio.push({ id: fileset[0], data: fileset[1] });
-		} else if (fileset[1].size === 'NT') {
-			ntAudio.push({ id: fileset[0], data: fileset[1] });
-		} else if (fileset[1].size === 'OT') {
-			otAudio.push({ id: fileset[0], data: fileset[1] });
-		} else if (fileset[1].size === 'OTP') {
-			partialOtAudio.push({ id: fileset[0], data: fileset[1] });
-		} else if (fileset[1].size === 'NTP') {
-			partialNtAudio.push({ id: fileset[0], data: fileset[1] });
-		} else if (fileset[1].size === 'NTPOTP') {
-			partialNtOtAudio.push({ id: fileset[0], data: fileset[1] });
-		}
-	});
+	Object.entries(filteredFilesets)
+		.sort((a, b) => {
+			if (a[1].type === 'audio_drama') return 1;
+			if (b[1].type === 'audio_drama') return 1;
+			if (a[1].type > b[1].type) return 1;
+			if (a[1].type < b[1].type) return -1;
+			return 0;
+		})
+		.forEach((fileset) => {
+			if (fileset[1].size === 'C') {
+				completeAudio.push({ id: fileset[0], data: fileset[1] });
+			} else if (fileset[1].size === 'NT') {
+				ntAudio.push({ id: fileset[0], data: fileset[1] });
+			} else if (fileset[1].size === 'OT') {
+				otAudio.push({ id: fileset[0], data: fileset[1] });
+			} else if (fileset[1].size === 'OTP') {
+				partialOtAudio.push({ id: fileset[0], data: fileset[1] });
+			} else if (fileset[1].size === 'NTP') {
+				partialNtAudio.push({ id: fileset[0], data: fileset[1] });
+			} else if (fileset[1].size === 'NTPOTP') {
+				partialNtOtAudio.push({ id: fileset[0], data: fileset[1] });
+			}
+		});
 	// console.log('audio arrays', '\n', completeAudio, '\n', ntAudio, '\n', otAudio, '\n', partialAudio);
 	const otLength = otAudio.length;
 	const ntLength = ntAudio.length;
@@ -892,6 +914,7 @@ export function* getChapterAudio({
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Caught in getChapterAudio complete audio', error); // eslint-disable-line no-console
+				yield put({ type: 'loadaudio', audioPaths: [''] });
 			} else if (process.env.NODE_ENV === 'production') {
 				// const options = {
 				// 	header: 'POST',
@@ -904,6 +927,8 @@ export function* getChapterAudio({
 		return;
 	} else if (ntLength && !otLength) {
 		try {
+			// console.log('ntAudio', ntAudio);
+
 			const reqUrl = `${process.env.BASE_API_ROUTE}/bibles/filesets/${get(
 				ntAudio,
 				[0, 'id'],
@@ -926,6 +951,7 @@ export function* getChapterAudio({
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Caught in getChapterAudio nt audio', error); // eslint-disable-line no-console
+				yield put({ type: 'loadaudio', audioPaths: [''] });
 			} else if (process.env.NODE_ENV === 'production') {
 				// const options = {
 				// 	header: 'POST',
@@ -960,6 +986,7 @@ export function* getChapterAudio({
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Caught in getChapterAudio ot audio', error); // eslint-disable-line no-console
+				yield put({ type: 'loadaudio', audioPaths: [''] });
 			} else if (process.env.NODE_ENV === 'production') {
 				// const options = {
 				// 	header: 'POST',
@@ -993,6 +1020,7 @@ export function* getChapterAudio({
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Caught in getChapterAudio nt audio', error); // eslint-disable-line no-console
+				yield put({ type: 'loadaudio', audioPaths: [''] });
 			} else if (process.env.NODE_ENV === 'production') {
 				// const options = {
 				// 	header: 'POST',
@@ -1021,6 +1049,7 @@ export function* getChapterAudio({
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Caught in getChapterAudio ot audio', error); // eslint-disable-line no-console
+				yield put({ type: 'loadaudio', audioPaths: [''] });
 			} else if (process.env.NODE_ENV === 'production') {
 				// const options = {
 				// 	header: 'POST',
@@ -1072,6 +1101,7 @@ export function* getChapterAudio({
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Caught in getChapterAudio partial audio', error); // eslint-disable-line no-console
+				yield put({ type: 'loadaudio', audioPaths: [''] });
 			} else if (process.env.NODE_ENV === 'production') {
 				// const options = {
 				// 	header: 'POST',
@@ -1114,6 +1144,7 @@ export function* getChapterAudio({
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Caught in getChapterAudio partial audio', error); // eslint-disable-line no-console
+				yield put({ type: 'loadaudio', audioPaths: [''] });
 			} else if (process.env.NODE_ENV === 'production') {
 				// const options = {
 				// 	header: 'POST',
@@ -1160,6 +1191,7 @@ export function* getChapterAudio({
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Caught in getChapterAudio partial audio', error); // eslint-disable-line no-console
+				yield put({ type: 'loadaudio', audioPaths: [''] });
 			} else if (process.env.NODE_ENV === 'production') {
 				// const options = {
 				// 	header: 'POST',
@@ -1201,12 +1233,13 @@ export function* getCopyrightSaga({ filesetIds }) {
 			testament: cp.size || cp.set_size_code,
 			type: cp.type || cp.set_type_code,
 			organizations: cp.copyright.organizations.map((org) => {
-				const icon = org.logos.find((l) => l.icon);
+				// Getting landscape instead of icons
+				const icon = org.logos.find((l) => !l.icon);
 				if (org.translations.length) {
 					return {
 						name: org.translations[0].name,
 						logo: icon || (org.logos && org.logos[0]),
-						isIcon: icon === undefined ? 0 : 1,
+						isIcon: icon === undefined ? 1 : 0,
 						url: org.url_website,
 					};
 				}
@@ -1302,14 +1335,33 @@ export function* createSocialUser({
 	avatar,
 	provider,
 }) {
-	// otherwise create a new account with this information
+	// console.log('{ email, name, nickname, id, avatar, provider }', { email, name, nickname, id, avatar, provider });
+
+	/*
+		There is a problem when I need to link a provider to an account, I do not have a way to get only that users user_id via the api
+			I either need to be able to link the account by only providing the email, or have a way to get the user_id that is associated with an email
+		Case 1: User does not have account
+			User tries to sign in with provider
+			Action: Create a new account with the provided information, link this provider to the account created with the email
+		Case 2: User has account - not linked to provider
+			User tries to sign in with provider to their existing account
+			Action: Try to sign user in, sign in fails, get user id using their email, use user id to link this provider and social_id to their account
+			based on the email + id
+		Case 3: User has account - linked to provider
+			User tries to sign in with provider to their existing account
+			Action: Try to sign user in, sign in fails, get user id using their email, use user id to sign them into their account based on the email + id
+		Case 4: User has account made with provider but no password and tries to sign in using their password - May not need to handle here
+			User tries to sign in with provider to their existing account
+			Action: Sign user in without password because they have been verified by the provider
+	* */
+
+	// Case 3: Create a new account with this information
 	const requestUrl = `${process.env.BASE_API_ROUTE}/users?key=${
 		process.env.DBP_API_KEY
 	}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}`;
 	const data = new FormData();
 
 	data.append('email', email);
-	// data.append('password', password);
 	data.append('name', name);
 	data.append('nickname', nickname);
 	data.append('subscribed', '0');
@@ -1324,37 +1376,44 @@ export function* createSocialUser({
 	};
 
 	try {
+		// console.log('Sending first request');
 		const response = yield call(request, requestUrl, options);
 
 		if (response.success) {
-			// console.log('res', response);
-
+			// Case 1: Success!
 			yield put({
 				type: USER_LOGGED_IN,
 				userId: response.user.id,
 				userProfile: response.user,
 			});
+			// console.log('setting user information in first call', response);
 			sessionStorage.setItem('bible_is_user_id', response.user.id);
+			sessionStorage.setItem('bible_is_12345', response.user.email);
+			sessionStorage.setItem('bible_is_123456', response.user.nickname);
+			sessionStorage.setItem('bible_is_1234567', response.user.name);
+			sessionStorage.setItem('bible_is_12345678', response.user.avatar);
+			// If I remember correctly the account is linked automatically - should check
+			// with Jon to see if this is actually the case
 		} else if (response.error) {
-			// console.log('res error', response);
+			// Case 1: Fail, find which case is now applicable
 			if (process.env.NODE_ENV === 'development') {
-				console.warn(response.error); // eslint-disable-line no-console
+				// Log the specific error if in development
+				console.warn('There was a case 1 error: ', response.error); // eslint-disable-line no-console
 			}
-			// console.log('response.error.message.email', response.error.message.email[0] === 'The email has already been taken.');
-
+			// Check for Case 3
+			// Probably not the safest because if the message is ever different then this will fail silently
+			// Discuss this request with Jon and see if there could be a better response
 			if (
 				response.error.message &&
 				response.error.message.email &&
 				response.error.message.email[0] === 'The email has already been taken.'
 			) {
-				// console.log('response.error.message.email', response.error.message.email);
-
+				// Case 3: User has account - Linked to provider
 				const r = `${process.env.BASE_API_ROUTE}/users/login?key=${
 					process.env.DBP_API_KEY
 				}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}`;
 				const fd = new FormData();
 
-				// fd.append('password', password);
 				fd.append('email', email);
 				fd.append('social_provider_id', provider);
 				fd.append('social_provider_user_id', id);
@@ -1365,39 +1424,83 @@ export function* createSocialUser({
 				};
 
 				try {
+					// Case 3: Sending sign in request
 					const res = yield call(request, r, op);
 					// console.log('res', res);
 
 					if (res.error) {
-						yield put({ type: LOGIN_ERROR, message: res.error.message });
+						// Case 3: Fail! May want to check for the link between account and provider here.
+						// Now Case 2 is active
+						// Case 2: User has account - Not linked to provider
+						// This causes issues because I do not have a way to obtain the
+						// user id in order to link the provider to this account
+						// I could solve this by sending a call to the /users route and then
+						// finding the email but that would expose all of the users to the
+						// front end and would be a terrible idea
+						// console.log('Need to get the user id');
+						// const getUserReq = `${process.env.BASE_API_ROUTE}/users?key=${
+						// 	process.env.DBP_API_KEY
+						// 	}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}`;
+						// console.log('Sending second request');
+						try {
+							yield put({
+								type: OAUTH_ERROR,
+								message: response.error.message.email[0],
+							});
+							// Below sends call to get the user id and then another call to sign in
+							// const getUserRes = yield call(request, getUserReq);
+							// console.log('doing something that had an error ', res.error);
+							// console.log('email: ', email);
+							// console.log('getUserRes.find(u => u.email === email)', getUserRes.data.find(u => u.email === email));
+							// console.log('id, provider', id, provider);
+							// const case2Req = `${process.env.BASE_API_ROUTE}/accounts?key=${
+							// 	 process.env.DBP_API_KEY
+							// 	 }&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}&user_id=${getUserRes.data.find((u) => u.email === email).id}`;
+							// const case2Fd = new FormData();
+							// case2Fd.append('email', email);
+							// case2Fd.append('social_provider_id', provider);
+							// case2Fd.append('social_provider_user_id', id);
+							// const case2Opt = {
+							// 	 method: 'POST',
+							// 	 body: case2Fd,
+							// };
+							// const case2Res = yield call(request, case2Req, case2Opt);
+							// console.log('case2Res', case2Res);
+						} catch (err) {
+							if (process.env.NODE_ENV === 'development') {
+								console.error('There was a case 3 error: ', err); // eslint-disable-line no-console
+							}
+						}
+						// Link account to the user that has a matching email
 					} else {
+						// Case 3: Success!
 						yield put({
 							type: USER_LOGGED_IN,
 							userId: res.id,
 							userProfile: res,
 						});
+						// console.log('setting user information in second call', res);
 						// May add an else that will save the id to the session so it is persisted through a page refresh
 						sessionStorage.setItem('bible_is_user_id', res.id);
+						sessionStorage.setItem('bible_is_12345', res.email);
+						sessionStorage.setItem('bible_is_123456', res.nickname);
+						sessionStorage.setItem('bible_is_1234567', res.name);
+						sessionStorage.setItem('bible_is_12345678', res.avatar);
 					}
 				} catch (err) {
 					if (process.env.NODE_ENV === 'development') {
-						console.error(err); // eslint-disable-line no-console
-					} else if (process.env.NODE_ENV === 'production') {
-						// const options = {
-						// 	header: 'POST',
-						// 	body: formData,
-						// };
-						// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
+						console.error('There was a case 2 error: ', err); // eslint-disable-line no-console
 					}
 				}
 			}
+
 			// const message = Object.values(response.error.message).reduce((acc, cur) => acc.concat(cur), '');
 			// yield put({ type: SIGNUP_ERROR, message });
 			// yield put('user-login-failed', response.error.message);
 		}
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
-			console.error(err); // eslint-disable-line no-console
+			console.error('There was a top level error: ', err); // eslint-disable-line no-console
 		} else if (process.env.NODE_ENV === 'production') {
 			// const options = {
 			// 	header: 'POST',

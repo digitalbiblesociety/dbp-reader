@@ -1,13 +1,13 @@
 /**
-*
-* PasswordResetVerified
-*
-*/
+ *
+ * PasswordResetVerified
+ *
+ */
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import PopupMessage from 'components/PopupMessage';
 import { FormattedMessage } from 'react-intl';
+import PopupMessage from '../PopupMessage';
 import messages from './messages';
 
 class PasswordResetVerified extends React.PureComponent {
@@ -15,15 +15,15 @@ class PasswordResetVerified extends React.PureComponent {
 		firstPass: '',
 		secondPass: '',
 		validPassword: true,
-	}
+	};
 
 	handleFirstChange = (e) => {
 		this.setState({ firstPass: e.target.value });
-	}
+	};
 
 	handleSecondChange = (e) => {
 		this.setState({ secondPass: e.target.value });
-	}
+	};
 
 	handlePasswordSubmit = (e) => {
 		e.preventDefault();
@@ -33,12 +33,15 @@ class PasswordResetVerified extends React.PureComponent {
 			// Send password reset
 			this.props.sendPasswordReset(e, { password: this.state.firstPass });
 		} else {
-			const client = e.target.childNodes[1].getBoundingClientRect() || { x: 0, y: 0 };
+			const client = e.target.childNodes[1].getBoundingClientRect() || {
+				x: 0,
+				y: 0,
+			};
 
 			this.props.openPopup({ x: client.x, y: client.y });
 		}
 		this.setState({ validPassword });
-	}
+	};
 
 	get signupError() {
 		const { passwordErrorType } = this.state;
@@ -46,13 +49,25 @@ class PasswordResetVerified extends React.PureComponent {
 
 		if (passwordErrorType) {
 			if (passwordErrorType === 'confirm') {
-				errors.push(<p key={'passwordError1'} className={'signup-error-message'}><FormattedMessage {...messages.passwordError1} /></p>);
+				errors.push(
+					<p key={'passwordError1'} className={'signup-error-message'}>
+						<FormattedMessage {...messages.passwordError1} />
+					</p>,
+				);
 			}
 			if (passwordErrorType === 'length') {
-				errors.push(<p key={'passwordError2'} className={'signup-error-message'}><FormattedMessage {...messages.passwordError2} /></p>);
+				errors.push(
+					<p key={'passwordError2'} className={'signup-error-message'}>
+						<FormattedMessage {...messages.passwordError2} />
+					</p>,
+				);
 			}
 			if (passwordErrorType === 'password') {
-				errors.push(<p key={'passwordError3'} className={'signup-error-message'}><FormattedMessage {...messages.passwordError3} /></p>);
+				errors.push(
+					<p key={'passwordError3'} className={'signup-error-message'}>
+						<FormattedMessage {...messages.passwordError3} />
+					</p>,
+				);
 			}
 			// if (passwordErrorType === 'upperNumSym') {
 			// 	errors.push(<p key={'passwordError4'} className={'signup-error-message'}><FormattedMessage {...messages.passwordError4} /></p>);
@@ -92,28 +107,68 @@ class PasswordResetVerified extends React.PureComponent {
 		}
 
 		return validPassword;
-	}
+	};
 
 	render() {
 		const { validPassword } = this.state;
 		const { popupOpen, popupCoords } = this.props;
 		return (
 			<div className={'forgot-password password-verified'}>
-				<h1 className={'title'}><FormattedMessage {...messages.title} /></h1>
+				<h1 className={'title'}>
+					<FormattedMessage {...messages.title} />
+				</h1>
 				<form onSubmit={this.handlePasswordSubmit}>
-					<input required className={validPassword ? 'first-password' : 'first-password error'} type={'password'} autoComplete={'new-password'} placeholder={'Enter Password'} onChange={this.handleFirstChange} value={this.state.firstPass} />
-					<input required className={validPassword ? 'second-password' : 'second-password error'} type={'password'} autoComplete={'new-password'} placeholder={'Re-Enter Password'} onChange={this.handleSecondChange} value={this.state.secondPass} />
+					<input
+						required
+						className={
+							validPassword ? 'first-password' : 'first-password error'
+						}
+						type={'password'}
+						autoComplete={'new-password'}
+						placeholder={'Enter Password'}
+						onChange={this.handleFirstChange}
+						value={this.state.firstPass}
+					/>
+					<input
+						required
+						className={
+							validPassword ? 'second-password' : 'second-password error'
+						}
+						type={'password'}
+						autoComplete={'new-password'}
+						placeholder={'Re-Enter Password'}
+						onChange={this.handleSecondChange}
+						value={this.state.secondPass}
+					/>
 					{this.signupError}
 					<div className={'sign-up-button'}>
-						<button className={'text'} type={'submit'}><FormattedMessage {...messages.changePassword} /></button>
+						<button className={'text'} type={'submit'}>
+							<FormattedMessage {...messages.changePassword} />
+						</button>
 					</div>
 				</form>
 				<section className={'message'}>
-					<p className={'disclaimer'}><FormattedMessage {...messages.unableToResetPart1} /><a className={'link'} href={'https://support.bible.is/contact'} target={'_blank'}>&nbsp;contact us&nbsp;</a><FormattedMessage {...messages.unableToResetPart2} /></p>
+					<p className={'disclaimer'}>
+						<FormattedMessage {...messages.unableToResetPart1} />
+						<a
+							className={'link'}
+							href={'https://support.bible.is/contact'}
+							target={'_blank'}
+						>
+							&nbsp;contact us&nbsp;
+						</a>
+						<FormattedMessage {...messages.unableToResetPart2} />
+					</p>
 				</section>
-				{
-					popupOpen ? <PopupMessage x={popupCoords.x} y={popupCoords.y} message={'Your request is being processed, please try logging in again.'} /> : null
-				}
+				{popupOpen ? (
+					<PopupMessage
+						x={popupCoords.x}
+						y={popupCoords.y}
+						message={
+							'Your request is being processed, please try logging in again.'
+						}
+					/>
+				) : null}
 			</div>
 		);
 	}

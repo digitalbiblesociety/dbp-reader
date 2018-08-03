@@ -1,24 +1,48 @@
 /**
-*
-* IconsInText
-*
-*/
+ *
+ * IconsInText
+ *
+ */
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import SvgWrapper from 'components/SvgWrapper';
+import SvgWrapper from '../SvgWrapper';
 // import styled from 'styled-components';
 
 function IconsInText({ noteData, bookmarkData, clickHandler }) {
 	if (noteData.hasNote && bookmarkData.hasBookmark) {
 		return [
-			<SvgWrapper key={'bookmark_icon'} onClick={() => clickHandler(bookmarkData.index, true)} className={'icon note-in-verse'} svgid={'bookmark_in_verse'} />,
-			<SvgWrapper key={'note_icon'} onClick={() => clickHandler(noteData.index, false)} className={'icon note-in-verse'} svgid={'note_in_verse'} />,
+			<SvgWrapper
+				key={'bookmark_icon'}
+				onClick={() => clickHandler(bookmarkData.index, true)}
+				className={'icon note-in-verse'}
+				svgid={'bookmark_in_verse'}
+			/>,
+			<SvgWrapper
+				key={'note_icon'}
+				onClick={() => clickHandler(noteData.index, false)}
+				className={'icon note-in-verse'}
+				svgid={'note_in_verse'}
+			/>,
 		];
 	} else if (noteData.hasNote) {
-		return <SvgWrapper key={'note_icon'} onClick={() => clickHandler(noteData.index, false)} className={'icon note-in-verse'} svgid={'note_in_verse'} />;
+		return (
+			<SvgWrapper
+				key={'note_icon'}
+				onClick={() => clickHandler(noteData.index, false)}
+				className={'icon note-in-verse'}
+				svgid={'note_in_verse'}
+			/>
+		);
 	} else if (bookmarkData.hasBookmark) {
-		return <SvgWrapper key={'bookmark_icon'} onClick={() => clickHandler(bookmarkData.index, true)} className={'icon note-in-verse'} svgid={'bookmark_in_verse'} />;
+		return (
+			<SvgWrapper
+				key={'bookmark_icon'}
+				onClick={() => clickHandler(bookmarkData.index, true)}
+				className={'icon note-in-verse'}
+				svgid={'bookmark_in_verse'}
+			/>
+		);
 	}
 
 	return null;

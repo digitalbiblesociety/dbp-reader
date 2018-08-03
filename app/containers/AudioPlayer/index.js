@@ -6,22 +6,26 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+// import Link from 'next/link';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { FormattedMessage } from 'react-intl';
 import isEqual from 'lodash/isEqual';
-import injectReducer from 'utils/injectReducer';
+import injectReducer from '../../utils/injectReducer';
+import PrefetchLink from '../../utils/PrefetchLink';
 // import closeEventHoc from 'components/CloseEventHoc';
-import SvgWrapper from 'components/SvgWrapper';
-import SpeedControl from 'components/SpeedControl';
-import AudioProgressBar from 'components/AudioProgressBar';
-import VolumeSlider from 'components/VolumeSlider';
-// import AudioPlayerMenu from 'components/AudioPlayerMenu';
-import GenericErrorBoundary from 'components/GenericErrorBoundary';
+import SvgWrapper from '../../components/SvgWrapper';
+import SpeedControl from '../../components/SpeedControl';
+import AudioProgressBar from '../../components/AudioProgressBar';
+import VolumeSlider from '../../components/VolumeSlider';
+// import AudioPlayerMenu from '../../components/AudioPlayerMenu';
+import GenericErrorBoundary from '../../components/GenericErrorBoundary';
 import makeSelectAudioPlayer, { selectHasAudio } from './selectors';
 import reducer from './reducer';
 import messages from './messages';
+import getNextChapterUrl from '../../utils/getNextChapterUrl';
+import getPreviousChapterUrl from '../../utils/getPreviousChapterUrl';
 /* eslint-disable jsx-a11y/media-has-caption */
 /* disabled the above eslint config options because you can't add tracks to audio elements */
 
@@ -55,6 +59,7 @@ export class AudioPlayer extends React.Component {
 		// If auto play is enabled I need to start the player
 		if (this.props.autoPlay) {
 			// console.log('component mounted and auto play was true');
+			// Checking User Agent because the canplay event fails silently on mobile apple devices
 			if (
 				navigator &&
 				navigator.userAgent &&
@@ -365,23 +370,23 @@ export class AudioPlayer extends React.Component {
 		}
 	};
 
-	skipBackward = () => {
-		this.setCurrentTime(0);
-		this.pauseAudio();
-		this.props.skipBackward();
-		this.setState({
-			playing: false,
-		});
-	};
-
-	skipForward = () => {
-		this.setCurrentTime(0);
-		this.pauseAudio();
-		this.props.skipForward();
-		this.setState({
-			playing: false,
-		});
-	};
+	// skipBackward = () => {
+	// 	this.setCurrentTime(0);
+	// 	this.pauseAudio();
+	// 	this.props.skipBackward();
+	// 	this.setState({
+	// 		playing: false,
+	// 	});
+	// };
+	//
+	// skipForward = () => {
+	// 	this.setCurrentTime(0);
+	// 	this.pauseAudio();
+	// 	this.props.skipForward();
+	// 	this.setState({
+	// 		playing: false,
+	// 	});
+	// };
 
 	toggleAudioPlayer = () => {
 		if (this.props.audioSource && this.props.hasAudio) {
@@ -433,30 +438,120 @@ export class AudioPlayer extends React.Component {
 		return <SvgWrapper className={'icon'} fill="#fff" svgid="playback_2x" />;
 	}
 
+	get classNamesForHandle() {
+		const {
+			audioSource: source,
+			hasAudio,
+			audioPlayerState,
+			isScrollingDown,
+		} = this.props;
+
+		let classNames = '';
+
+		if (audioPlayerState && hasAudio && source !== '') {
+			classNames += 'audioplayer-handle';
+		} else {
+			classNames += 'audioplayer-handle closed';
+		}
+
+		if (isScrollingDown) {
+			classNames += ' scrolled-down';
+		}
+
+		return classNames;
+	}
+
+	get classNamesForBackground() {
+		const {
+			audioSource: source,
+			hasAudio,
+			audioPlayerState,
+			isScrollingDown,
+		} = this.props;
+
+		let classNames = '';
+
+		if (audioPlayerState && hasAudio && source !== '') {
+			classNames += 'audio-player-background';
+		} else {
+			classNames += 'audio-player-background closed';
+		}
+
+		if (isScrollingDown) {
+			classNames += ' scrolled-down';
+		}
+
+		return classNames;
+	}
+
 	nextIcon = (
-		<div
-			role={'button'}
-			tabIndex={0}
-			onClick={this.skipForward}
-			className={'icon-wrap'}
-			title={messages.nextTitle.defaultMessage}
+		<PrefetchLink
+			as={getNextChapterUrl({
+				books: this.props.books,
+				chapter: this.props.activeChapter,
+				bookId: this.props.activeBookId.toLowerCase(),
+				textId: this.props.activeTextId.toLowerCase(),
+				verseNumber: this.props.verseNumber,
+				text: this.props.text,
+				isHref: false,
+			})}
+			href={getNextChapterUrl({
+				books: this.props.books,
+				chapter: this.props.activeChapter,
+				bookId: this.props.activeBookId.toLowerCase(),
+				textId: this.props.activeTextId.toLowerCase(),
+				verseNumber: this.props.verseNumber,
+				text: this.props.text,
+				isHref: true,
+			})}
+			withData
+			prefetch
 		>
-			<SvgWrapper className="svgitem icon" fill="#fff" svgid="next" />
-			<FormattedMessage {...messages.next} />
-		</div>
+			<div
+				role={'button'}
+				tabIndex={0}
+				className={'icon-wrap'}
+				title={messages.nextTitle.defaultMessage}
+			>
+				<SvgWrapper className="svgitem icon" fill="#fff" svgid="next" />
+				<FormattedMessage {...messages.next} />
+			</div>
+		</PrefetchLink>
 	);
 
 	prevIcon = (
-		<div
-			onClick={this.skipBackward}
-			role={'button'}
-			tabIndex={0}
-			className={'icon-wrap'}
-			title={messages.prevTitle.defaultMessage}
+		<PrefetchLink
+			as={getPreviousChapterUrl({
+				books: this.props.books,
+				chapter: this.props.activeChapter,
+				bookId: this.props.activeBookId.toLowerCase(),
+				textId: this.props.activeTextId.toLowerCase(),
+				verseNumber: this.props.verseNumber,
+				text: this.props.text,
+				isHref: false,
+			})}
+			href={getPreviousChapterUrl({
+				books: this.props.books,
+				chapter: this.props.activeChapter,
+				bookId: this.props.activeBookId.toLowerCase(),
+				textId: this.props.activeTextId.toLowerCase(),
+				verseNumber: this.props.verseNumber,
+				text: this.props.text,
+				isHref: true,
+			})}
+			withData
+			prefetch
 		>
-			<SvgWrapper className="svgitem icon" fill="#fff" svgid="previous" />
-			<FormattedMessage {...messages.prev} />
-		</div>
+			<div
+				role={'button'}
+				tabIndex={0}
+				className={'icon-wrap'}
+				title={messages.prevTitle.defaultMessage}
+			>
+				<SvgWrapper className="svgitem icon" fill="#fff" svgid="previous" />
+				<FormattedMessage {...messages.prev} />
+			</div>
+		</PrefetchLink>
 	);
 
 	pauseIcon = (
@@ -490,9 +585,12 @@ export class AudioPlayer extends React.Component {
 			audioSource: source,
 			hasAudio,
 			audioPlayerState,
-			isScrollingDown,
+			// isScrollingDown,
 		} = this.props;
 		const { autoPlayChecked, currentSpeed } = this.state;
+		// console.log('____________________________\nAudio Player component rendered!');
+		// console.log('____________________________\n', source);
+		// console.log('____________________________\n', this.props.audioPaths);
 
 		return (
 			<GenericErrorBoundary affectedArea="AudioPlayer">
@@ -500,13 +598,7 @@ export class AudioPlayer extends React.Component {
 					role={'button'}
 					tabIndex={0}
 					name={'Audio player toggle'}
-					className={
-						audioPlayerState && hasAudio && source !== ''
-							? `audioplayer-handle${isScrollingDown ? ' scrolled-down' : ''}`
-							: `audioplayer-handle closed${
-									isScrollingDown ? ' scrolled-down' : ''
-							  }`
-					}
+					className={this.classNamesForHandle}
 					onClick={(e) => {
 						e.stopPropagation();
 						this.toggleAudioPlayer();
@@ -525,15 +617,7 @@ export class AudioPlayer extends React.Component {
 				<div
 					role="button"
 					tabIndex={0}
-					className={
-						audioPlayerState && hasAudio && source !== ''
-							? `audio-player-background${
-									isScrollingDown ? ' scrolled-down' : ''
-							  }`
-							: `audio-player-background closed${
-									isScrollingDown ? ' scrolled-down' : ''
-							  }`
-					}
+					className={this.classNamesForBackground}
 					ref={this.setAudioPlayerRef}
 					onClick={this.handleBackgroundClick}
 				>
@@ -649,14 +733,20 @@ export class AudioPlayer extends React.Component {
 AudioPlayer.propTypes = {
 	audioSource: PropTypes.string,
 	audioPaths: PropTypes.array,
-	skipBackward: PropTypes.func.isRequired,
-	skipForward: PropTypes.func.isRequired,
+	// skipBackward: PropTypes.func.isRequired,
+	// skipForward: PropTypes.func.isRequired,
 	setAudioPlayerState: PropTypes.func.isRequired,
 	toggleAutoPlay: PropTypes.func,
 	hasAudio: PropTypes.bool,
 	autoPlay: PropTypes.bool,
 	isScrollingDown: PropTypes.bool,
 	audioPlayerState: PropTypes.bool.isRequired,
+	books: PropTypes.array,
+	text: PropTypes.array,
+	activeBookId: PropTypes.string,
+	activeTextId: PropTypes.string,
+	verseNumber: PropTypes.string,
+	activeChapter: PropTypes.number,
 	// prevAudioSource: PropTypes.string,
 	// nextAudioSource: PropTypes.string,
 };

@@ -12,16 +12,13 @@ import { compose } from 'redux';
 import { FormattedMessage } from 'react-intl';
 // import injectSaga from 'utils/injectSaga';
 // import injectReducer from 'utils/injectReducer';
-import CountryList from 'components/CountryList';
-import LanguageList from 'components/LanguageList';
-import VersionList from 'components/VersionList';
-import SvgWrapper from 'components/SvgWrapper';
-import GenericErrorBoundary from 'components/GenericErrorBoundary';
-import CloseMenuFunctions from 'utils/closeMenuFunctions';
-import {
-	setActiveTextId,
-	toggleVersionSelection,
-} from 'containers/HomePage/actions';
+import CountryList from '../../components/CountryList';
+import LanguageList from '../../components/LanguageList';
+import VersionList from '../../components/VersionList';
+import SvgWrapper from '../../components/SvgWrapper';
+import GenericErrorBoundary from '../../components/GenericErrorBoundary';
+import CloseMenuFunctions from '../../utils/closeMenuFunctions';
+import { setActiveTextId, toggleVersionSelection } from '../HomePage/actions';
 import {
 	setVersionListState,
 	setLanguageListState,
@@ -29,6 +26,8 @@ import {
 	setCountryListState,
 	getTexts,
 	getCountry,
+	getCountries,
+	getLanguages,
 	setCountryName,
 } from './actions';
 import makeSelectTextSelection, {
@@ -48,20 +47,34 @@ export class TextSelection extends React.PureComponent {
 	};
 
 	componentDidMount() {
+		// Should probably initialize this somewhere else since this will be mounted only once
 		this.props.dispatch(
 			setActiveIsoCode({
 				iso: this.props.homepageData.initialIsoCode,
 				name: this.props.homepageData.initialLanguageName,
 			}),
 		);
-		this.closeMenuController = new CloseMenuFunctions(
-			this.ref,
-			this.toggleVersionSelection,
-		);
-		this.closeMenuController.onMenuMount();
+		if (this.props.active) {
+			this.closeMenuController = new CloseMenuFunctions(
+				this.ref,
+				this.toggleVersionSelection,
+			);
+			this.closeMenuController.onMenuMount();
+		}
 	}
 
 	componentWillReceiveProps(nextProps) {
+		if (this.props.active && !nextProps.active && this.closeMenuController) {
+			this.closeMenuController.onMenuUnmount();
+			// Might want to add !this.closeMenuController to the if below
+		} else if (nextProps.active && !this.props.active) {
+			this.closeMenuController = new CloseMenuFunctions(
+				this.ref,
+				this.toggleVersionSelection,
+			);
+			this.closeMenuController.onMenuMount();
+		}
+
 		if (
 			nextProps.textselection.activeIsoCode !==
 			this.props.textselection.activeIsoCode
@@ -91,7 +104,9 @@ export class TextSelection extends React.PureComponent {
 	}
 
 	componentWillUnmount() {
-		this.closeMenuController.onMenuUnmount();
+		if (this.closeMenuController) {
+			this.closeMenuController.onMenuUnmount();
+		}
 	}
 
 	setRef = (node) => {
@@ -110,73 +125,9 @@ export class TextSelection extends React.PureComponent {
 
 	getCountry = (props) => this.props.dispatch(getCountry(props));
 
-	getActiveTab() {
-		const {
-			activeIsoCode,
-			languageListActive,
-			versionListActive,
-			activeLanguageName,
-			countryListActive,
-			activeCountryName,
-			countryLanguages,
-			loadingCountries,
-			loadingLanguages,
-			loadingVersions,
-		} = this.props.textselection;
-		const { activeTextName, activeTextId } = this.props.homepageData;
-		const { bibles, languages, countries } = this.props;
-		const { filterText } = this.state;
+	getCountries = () => this.props.dispatch(getCountries());
 
-		if (languageListActive) {
-			return (
-				<LanguageList
-					languages={languages}
-					filterText={filterText}
-					active={languageListActive}
-					activeIsoCode={activeIsoCode}
-					countryLanguages={countryLanguages}
-					loadingLanguages={loadingLanguages}
-					countryListActive={countryListActive}
-					activeLanguageName={activeLanguageName}
-					setActiveIsoCode={this.setActiveIsoCode}
-					toggleVersionList={this.toggleVersionList}
-					toggleLanguageList={this.toggleLanguageList}
-					setCountryListState={this.setCountryListState}
-				/>
-			);
-		} else if (countryListActive) {
-			return (
-				<CountryList
-					countries={countries}
-					filterText={filterText}
-					active={countryListActive}
-					loadingCountries={loadingCountries}
-					activeCountryName={activeCountryName}
-					setCountryName={this.setCountryName}
-					getCountry={this.getCountry}
-					toggleVersionList={this.toggleVersionList}
-					toggleLanguageList={this.toggleLanguageList}
-					setCountryListState={this.setCountryListState}
-				/>
-			);
-		}
-		return (
-			<VersionList
-				bibles={bibles}
-				filterText={filterText}
-				active={versionListActive}
-				activeIsoCode={activeIsoCode}
-				activeTextId={activeTextId}
-				activeTextName={activeTextName}
-				loadingVersions={loadingVersions}
-				setActiveText={this.setActiveTextId}
-				toggleVersionList={this.toggleVersionList}
-				toggleLanguageList={this.toggleLanguageList}
-				setCountryListState={this.setCountryListState}
-				toggleTextSelection={this.toggleVersionSelection}
-			/>
-		);
-	}
+	getLanguages = () => this.props.dispatch(getLanguages());
 
 	stopClickProp = (e) => e.stopPropagation();
 
@@ -212,16 +163,27 @@ export class TextSelection extends React.PureComponent {
 			countryListActive,
 			languageListActive,
 			versionListActive,
+			activeIsoCode,
+			activeLanguageName,
+			activeCountryName,
+			countryLanguages,
+			loadingVersions,
+			loadingCountries,
+			loadingLanguages,
+			finishedLoadingCountries,
 		} = this.props.textselection;
+		const { activeTextName, activeTextId } = this.props.homepageData;
+		const { bibles, active, languages, countries } = this.props;
 		const { filterText } = this.state;
 
 		return (
 			<GenericErrorBoundary affectedArea="TextSelection">
 				<aside
+					style={{ display: active ? 'flex' : 'none' }}
 					ref={this.setRef}
 					onTouchEnd={this.stopTouchProp}
 					onClick={this.stopClickProp}
-					className="text-selection-dropdown"
+					className={'text-selection-dropdown'}
 				>
 					<div className={'search-input-bar'}>
 						<SvgWrapper className={'icon'} svgid={'search'} />
@@ -254,7 +216,49 @@ export class TextSelection extends React.PureComponent {
 							<FormattedMessage {...messages.version} />
 						</span>
 					</div>
-					{this.getActiveTab(filterText)}
+					<CountryList
+						countries={countries}
+						filterText={filterText}
+						active={countryListActive}
+						loadingCountries={loadingCountries}
+						activeCountryName={activeCountryName}
+						finishedLoadingCountries={finishedLoadingCountries}
+						setCountryName={this.setCountryName}
+						getCountry={this.getCountry}
+						getCountries={this.getCountries}
+						toggleVersionList={this.toggleVersionList}
+						toggleLanguageList={this.toggleLanguageList}
+						setCountryListState={this.setCountryListState}
+					/>
+					<LanguageList
+						languages={languages}
+						filterText={filterText}
+						active={languageListActive}
+						activeIsoCode={activeIsoCode}
+						countryLanguages={countryLanguages}
+						loadingLanguages={loadingLanguages}
+						countryListActive={countryListActive}
+						activeLanguageName={activeLanguageName}
+						getLanguages={this.getLanguages}
+						setActiveIsoCode={this.setActiveIsoCode}
+						toggleVersionList={this.toggleVersionList}
+						toggleLanguageList={this.toggleLanguageList}
+						setCountryListState={this.setCountryListState}
+					/>
+					<VersionList
+						bibles={bibles}
+						filterText={filterText}
+						active={versionListActive}
+						activeIsoCode={activeIsoCode}
+						activeTextId={activeTextId}
+						activeTextName={activeTextName}
+						loadingVersions={loadingVersions}
+						setActiveText={this.setActiveTextId}
+						toggleVersionList={this.toggleVersionList}
+						toggleLanguageList={this.toggleLanguageList}
+						setCountryListState={this.setCountryListState}
+						toggleTextSelection={this.toggleVersionSelection}
+					/>
 				</aside>
 			</GenericErrorBoundary>
 		);
@@ -268,6 +272,7 @@ TextSelection.propTypes = {
 	countries: PropTypes.object,
 	textselection: PropTypes.object,
 	homepageData: PropTypes.object,
+	active: PropTypes.bool,
 	// getAudio: PropTypes.func,
 	// setActiveText: PropTypes.func,
 	// toggleVersionSelection: PropTypes.func,

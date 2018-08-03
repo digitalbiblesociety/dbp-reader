@@ -16,7 +16,8 @@ import {
 
 const initialState = fromJS({
 	searchResults: [],
-	lastFiveSearches: JSON.parse(localStorage.getItem('bible_is_last_searches')) || [],
+	// lastFiveSearches: JSON.parse(localStorage.getItem('bible_is_last_searches')) || [],
+	lastFiveSearches: [],
 	trySearchOptions: [
 		{ id: 1, searchText: 'Jesus' },
 		{ id: 2, searchText: 'love' },
@@ -28,35 +29,58 @@ const initialState = fromJS({
 
 function searchContainerReducer(state = initialState, action) {
 	switch (action.type) {
-	case GET_SEARCH_RESULTS:
-		if (state.get('lastFiveSearches').includes(action.searchText.toLowerCase())) {
+		case GET_SEARCH_RESULTS:
+			if (
+				state.get('lastFiveSearches').includes(action.searchText.toLowerCase())
+			) {
+				return (
+					state
+						// .set('lastFiveSearches', state.get('lastFiveSearches'))
+						.set('loadingResults', true)
+				);
+			}
+			localStorage.setItem(
+				'bible_is_last_searches',
+				state.get('lastFiveSearches').size > 9
+					? JSON.stringify(
+							state
+								.get('lastFiveSearches')
+								.push(action.searchText.toLowerCase())
+								.shift(),
+					  )
+					: JSON.stringify(
+							state
+								.get('lastFiveSearches')
+								.push(action.searchText.toLowerCase()),
+					  ),
+			);
 			return state
-				// .set('lastFiveSearches', state.get('lastFiveSearches'))
+				.set(
+					'lastFiveSearches',
+					state.get('lastFiveSearches').size > 9
+						? state
+								.get('lastFiveSearches')
+								.push(action.searchText.toLowerCase())
+								.shift()
+						: state
+								.get('lastFiveSearches')
+								.push(action.searchText.toLowerCase()),
+				)
 				.set('loadingResults', true);
-		}
-		localStorage.setItem('bible_is_last_searches', state.get('lastFiveSearches').size > 9 ? JSON.stringify(state.get('lastFiveSearches').push(action.searchText.toLowerCase()).shift()) : JSON.stringify(state.get('lastFiveSearches').push(action.searchText.toLowerCase())));
-		return state
-			.set('lastFiveSearches', state.get('lastFiveSearches').size > 9 ? state.get('lastFiveSearches').push(action.searchText.toLowerCase()).shift() : state.get('lastFiveSearches').push(action.searchText.toLowerCase()))
-			.set('loadingResults', true);
-	case LOAD_SEARCH_RESULTS:
-		return state
-			.set('loadingResults', false)
-			.set('searchResults', fromJS(action.searchResults));
-	case SEARCH_ERROR:
-		return state
-			.set('showError', true)
-			.set('loadingResults', false);
-	case VIEW_ERROR:
-		return state
-			.set('showError', false);
-	case STOP_LOADING:
-		return state
-			.set('loadingResults', false);
-	case START_LOADING:
-		return state
-			.set('loadingResults', true);
-	default:
-		return state;
+		case LOAD_SEARCH_RESULTS:
+			return state
+				.set('loadingResults', false)
+				.set('searchResults', fromJS(action.searchResults));
+		case SEARCH_ERROR:
+			return state.set('showError', true).set('loadingResults', false);
+		case VIEW_ERROR:
+			return state.set('showError', false);
+		case STOP_LOADING:
+			return state.set('loadingResults', false);
+		case START_LOADING:
+			return state.set('loadingResults', true);
+		default:
+			return state;
 	}
 }
 

@@ -1,8 +1,8 @@
 import { takeLatest, call, fork, put } from 'redux-saga/effects';
-import territoryCodes from 'utils/territoryCodes.json';
-// import languageList from 'utils/languagesWithResources.json';
-import request from 'utils/request';
 import { fromJS } from 'immutable';
+import territoryCodes from '../../utils/territoryCodes.json';
+// import languageList from 'utils/languagesWithResources.json';
+import request from '../../utils/request';
 import {
 	GET_COUNTRIES,
 	GET_COUNTRY,
@@ -12,6 +12,7 @@ import {
 	ERROR_GETTING_VERSIONS,
 	CLEAR_ERROR_GETTING_VERSIONS,
 	CLEAR_ERROR_GETTING_LANGUAGES,
+	LOAD_COUNTRIES_ERROR,
 } from './constants';
 import { loadTexts, loadCountries, setLanguages } from './actions';
 
@@ -67,6 +68,7 @@ export function* getCountries() {
 			// };
 			// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
 		}
+		yield put({ type: LOAD_COUNTRIES_ERROR });
 	}
 }
 
@@ -231,12 +233,14 @@ export function* getLanguageAltNames() {
 							? l.alt_names[l.iso][0]
 							: l.name,
 						alt_names: Array.from(altSet),
+						englishName: l.alt_names.eng ? l.alt_names.eng[0] : l.name,
 					};
 				}
 				return {
 					...l,
 					alt_names: [],
 					vernacular_name: l.name,
+					englishName: l.name,
 				};
 			})
 			.sort(sortLanguagesByVname);

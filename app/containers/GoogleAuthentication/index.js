@@ -8,12 +8,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import SvgWrapper from 'components/SvgWrapper';
-import PopupMessage from 'components/PopupMessage';
+import SvgWrapper from '../../components/SvgWrapper';
+import PopupMessage from '../../components/PopupMessage';
 import { createUserWithSocialAccount } from '../HomePage/actions';
 
-export class GoogleAuthentication extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
-	state = { popupOpen: false, popupCoords: { x: 0, y: 0 } }
+export class GoogleAuthentication extends React.PureComponent {
+	static displayName = 'Google Authentication';
+	// eslint-disable-line react/prefer-stateless-function
+	state = { popupOpen: false, popupCoords: { x: 0, y: 0 } };
 	handleSocialLogin = () => {
 		// console.log('social login google clicked', auth2);
 		// const { socialMediaLogin } = this.props;
@@ -42,7 +44,9 @@ export class GoogleAuthentication extends React.PureComponent { // eslint-disabl
 						email: prof.getEmail(),
 						id: prof.getId(),
 					};
-					this.props.dispatch(createUserWithSocialAccount({ ...user, provider: 'google' }));
+					this.props.dispatch(
+						createUserWithSocialAccount({ ...user, provider: 'google' }),
+					);
 					// console.log('google user not signed in', user);
 
 					// console.log('auth2.currentUser.get().getBasicProfile()');
@@ -58,23 +62,40 @@ export class GoogleAuthentication extends React.PureComponent { // eslint-disabl
 					id: prof.getId(),
 				};
 				// console.log('google user', user);
-				this.props.dispatch(createUserWithSocialAccount({ ...user, provider: 'google' }));
+				this.props.dispatch(
+					createUserWithSocialAccount({ ...user, provider: 'google' }),
+				);
 			}
 		}
-	}
+	};
 	openPopup = (e) => {
 		const coords = { x: e.clientX, y: e.clientY };
 		this.setState({ popupOpen: true, popupCoords: coords });
 		setTimeout(() => this.setState({ popupOpen: false }), 1250);
-	}
+	};
 	render() {
 		return (
-			<div role={'button'} tabIndex={0} onClick={this.handleSocialLogin} className="google">
-				<SvgWrapper style={{ backgroundColor: 'white' }} className="svg" height="26px" width="26px" svgid="google" />
+			<div
+				role={'button'}
+				tabIndex={0}
+				onClick={this.handleSocialLogin}
+				className="google"
+			>
+				<SvgWrapper
+					style={{ backgroundColor: 'white' }}
+					className="svg"
+					height="26px"
+					width="26px"
+					svgid="google"
+				/>
 				Sign in with Google
-				{
-					this.state.popupOpen ? <PopupMessage y={this.state.popupCoords.y} x={this.state.popupCoords.x} message={'This functionality is currently unavailable.'} /> : null
-				}
+				{this.state.popupOpen ? (
+					<PopupMessage
+						y={this.state.popupCoords.y}
+						x={this.state.popupCoords.x}
+						message={'This functionality is currently unavailable.'}
+					/>
+				) : null}
 			</div>
 		);
 	}
@@ -93,8 +114,9 @@ function mapDispatchToProps(dispatch) {
 	};
 }
 
-const withConnect = connect(null, mapDispatchToProps);
+const withConnect = connect(
+	null,
+	mapDispatchToProps,
+);
 
-export default compose(
-	withConnect,
-)(GoogleAuthentication);
+export default compose(withConnect)(GoogleAuthentication);

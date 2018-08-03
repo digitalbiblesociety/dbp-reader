@@ -10,13 +10,13 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import injectReducer from 'utils/injectReducer';
-import SettingsToggle from 'components/SettingsToggle/index';
-import SvgWrapper from 'components/SvgWrapper';
-import GenericErrorBoundary from 'components/GenericErrorBoundary';
-import CloseMenuFunctions from 'utils/closeMenuFunctions';
 import Slider from 'rc-slider/lib/Slider';
-import { toggleSettingsOption } from 'containers/HomePage/actions';
+import injectReducer from '../../utils/injectReducer';
+import SettingsToggle from '../../components/SettingsToggle/index';
+import SvgWrapper from '../../components/SvgWrapper';
+import GenericErrorBoundary from '../../components/GenericErrorBoundary';
+import CloseMenuFunctions from '../../utils/closeMenuFunctions';
+import { toggleSettingsOption } from '../HomePage/actions';
 import {
 	applyTheme,
 	applyFontFamily,

@@ -1,0 +1,104 @@
+.footer-background {
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	align-items: center;
+	z-index: 2;
+	height: 56px;
+	position: fixed;
+	bottom: 0;
+	//left: 0;
+	width: 100%;
+	@include css4 {
+		background: var(--default-header-background-color);
+	}
+	transition: transform 200ms ease-in-out;
+
+	&.closed {
+		transform: translateY(100%);
+	}
+}
+.footer-content {
+	@include css4 {
+		color: var(--default-text-color);
+	}
+	display: flex;
+	height: 56px;
+	justify-content: space-between;
+	align-items: center;
+}
+.footer-content .item {
+	//margin-top:5px;
+	cursor: pointer;
+	height: 56px;
+	width: 25%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+
+	&.active {
+		@include css4 {
+			background-color: var(--menu-hover-state-background-color);
+		}
+	}
+
+	&:hover {
+		@include css4 {
+			background-color: var(--menu-hover-state-background-color);
+		}
+	}
+
+	&:after {
+		width: 1px;
+		height: 50px;
+		position: absolute;
+		right: 0;
+		top: 2px;
+		content: '';
+		@include css4 {
+			background-color: var(--before-after-border-color);
+		}
+	}
+
+	&:last-of-type {
+		&:after {
+			all: unset;
+		}
+	}
+}
+.footer-content .item:hover {
+	opacity: 0.65;
+}
+.footer-content .item .title-text {
+	text-align: center;
+}
+
+@media only screen and (min-width: $small-bp) {
+	// Shrink padding to 5px
+	.footer-content {
+		width: 291px;
+		min-width: 291px;
+		max-width: 404px;
+	}
+	.footer-content .item .title-text {
+		font-size: 12px;
+	}
+}
+
+@media only screen and (min-width: $medium-bp) {
+	// padding left and right are 15px
+	.footer-content {
+		min-width: 405px;
+		width: 405px;
+		max-width: 405px;
+	}
+
+	.footer-content .item .title-text {
+		font-size: inherit;
+	}
+}
+
+@media only screen and (min-width: $large-bp) {
+}

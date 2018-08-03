@@ -4,6 +4,7 @@
  *
  */
 
+export const CHANGE_PICTURE = 'app/Profile/CHANGE_PICTURE';
 export const SELECT_ACCOUNT_OPTION = 'app/Profile/SELECT_ACCOUNT_OPTION';
 export const SEND_PASSWORD_RESET = 'app/Profile/SEND_PASSWORD_RESET';
 export const USER_LOGGED_IN = 'app/Profile/USER_LOGGED_IN';
@@ -27,3 +28,6 @@ export const CLEAR_ERROR_MESSAGE = 'app/Profile/CLEAR_ERROR_MESSAGE';
 export const RESET_PASSWORD_ERROR = 'app/Profile/RESET_PASSWORD_ERROR';
 export const RESET_PASSWORD_SUCCESS = 'app/Profile/RESET_PASSWORD_SUCCESS';
 export const DELETE_USER_SUCCESS = 'app/Profile/DELETE_USER_SUCCESS';
+export const DELETE_USER_ERROR = 'app/Profile/DELETE_USER_ERROR';
+export const OAUTH_ERROR = 'app/Profile/OAUTH_ERROR';
+export const READ_OAUTH_ERROR = 'app/Profile/READ_OAUTH_ERROR';

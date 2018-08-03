@@ -8,11 +8,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import matchSorter from 'match-sorter';
 // import { Link } from 'react-router-dom';
-import SvgWrapper from 'components/SvgWrapper';
-import Pagination from 'components/Pagination';
-import PageSizeSelector from 'components/PageSizeSelector';
-import MyHighlights from 'components/MyHighlights';
-import MyBookmarks from 'components/MyBookmarks';
+import SvgWrapper from '../SvgWrapper';
+import Pagination from '../Pagination';
+import PageSizeSelector from '../PageSizeSelector';
+import MyHighlights from '../MyHighlights';
+import MyBookmarks from '../MyBookmarks';
 import ColorPicker from '../ColorPicker';
 // import styled from 'styled-components';
 class MyNotes extends React.PureComponent {

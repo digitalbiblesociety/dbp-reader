@@ -13,81 +13,83 @@ import {
 	setActiveChapter,
 	setActiveBookName,
 	toggleChapterSelection,
-} from 'containers/HomePage/actions';
-import BooksTable from 'components/BooksTable';
-// import SvgWrapper from 'components/SvgWrapper';
-import injectSaga from 'utils/injectSaga';
-import injectReducer from 'utils/injectReducer';
-import GenericErrorBoundary from 'components/GenericErrorBoundary';
-import CloseMenuFunctions from 'utils/closeMenuFunctions';
-import {
-	selectActiveBookName,
-	selectActiveChapter,
-} from './selectors';
+} from '../HomePage/actions';
+import BooksTable from '../../components/BooksTable';
+// import SvgWrapper from '../../components/SvgWrapper';
+import injectSaga from '../../utils/injectSaga';
+import injectReducer from '../../utils/injectReducer';
+import GenericErrorBoundary from '../../components/GenericErrorBoundary';
+import CloseMenuFunctions from '../../utils/closeMenuFunctions';
+import { selectActiveBookName, selectActiveChapter } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 // import messages from './messages';
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 
-export class ChapterSelection extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+export class ChapterSelection extends React.PureComponent {
+	// eslint-disable-line react/prefer-stateless-function
 	componentDidMount() {
-		this.closeMenuController = new CloseMenuFunctions(this.aside, this.toggleChapterSelection);
-		this.closeMenuController.onMenuMount();
+		// Need to only register this handler if the menu is in its active state
+		if (this.props.active) {
+			this.closeMenuController = new CloseMenuFunctions(
+				this.aside,
+				this.toggleChapterSelection,
+			);
+			this.closeMenuController.onMenuMount();
+		}
+	}
+
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.active && !this.props.active) {
+			this.closeMenuController = new CloseMenuFunctions(
+				this.aside,
+				this.toggleChapterSelection,
+			);
+			this.closeMenuController.onMenuMount();
+		} else if (!nextProps.active && this.props.active) {
+			this.closeMenuController.onMenuUnmount();
+		}
 	}
 
 	componentWillUnmount() {
-		this.closeMenuController.onMenuUnmount();
+		if (this.closeMenuController) {
+			this.closeMenuController.onMenuUnmount();
+		}
 	}
 
 	setAsideRef = (el) => {
 		this.aside = el;
-	}
+	};
 
-	setActiveChapter = (props) => this.props.dispatch(setActiveChapter(props))
+	setActiveChapter = (props) => this.props.dispatch(setActiveChapter(props));
 
-	setActiveBookName = (props) => this.props.dispatch(setActiveBookName(props))
+	setActiveBookName = (props) => this.props.dispatch(setActiveBookName(props));
 
-	stopClickProp = (e) => e.stopPropagation()
+	stopClickProp = (e) => e.stopPropagation();
 
-	stopTouchProp = (e) => e.stopPropagation()
+	stopTouchProp = (e) => e.stopPropagation();
 
-	toggleChapterSelection = (props) => this.props.dispatch(toggleChapterSelection(props))
-
-	// handleClickOutside = (event) => {
-	// 	const bounds = this.aside.getBoundingClientRect();
-	// 	const insideWidth = event.x >= bounds.x && event.x <= bounds.x + bounds.width;
-	// 	const insideHeight = event.y >= bounds.y && event.y <= bounds.y + bounds.height;
-	//
-	// 	if (this.aside && !(insideWidth && insideHeight)) {
-	// 		this.toggleChapterSelection();
-	// 		document.removeEventListener('click', this.handleClickOutside);
-	// 	}
-	// }
-
-	handleChapterToggle = () => {
-		document.removeEventListener('click', this.handleClickOutside);
-
-		this.toggleChapterSelection();
-	}
+	toggleChapterSelection = (props) =>
+		this.props.dispatch(toggleChapterSelection(props));
 
 	render() {
-		const {
-			activeBookName,
-		} = this.props;
+		const { activeBookName, active } = this.props;
 
 		return (
 			<GenericErrorBoundary affectedArea="ChapterSelection">
-				<aside ref={this.setAsideRef} onTouchEnd={this.stopTouchProp} onClick={this.stopClickProp} className="chapter-text-dropdown">
-					{
-						activeBookName ? (
-							<BooksTable
-								setActiveChapter={this.setActiveChapter}
-								closeBookTable={this.toggleChapterSelection}
-								setActiveBookName={this.setActiveBookName}
-								initialBookName={activeBookName}
-							/>
-						) : 'There was an error retrieving this resource. We apologize for the inconvenience. An admin has been notified. '
-					}
+				<aside
+					style={{ display: active ? 'flex' : 'none' }}
+					ref={this.setAsideRef}
+					onTouchEnd={this.stopTouchProp}
+					onClick={this.stopClickProp}
+					className="chapter-text-dropdown"
+				>
+					<BooksTable
+						setActiveChapter={this.setActiveChapter}
+						closeBookTable={this.toggleChapterSelection}
+						setActiveBookName={this.setActiveBookName}
+						initialBookName={activeBookName}
+					/>
 				</aside>
 			</GenericErrorBoundary>
 		);
@@ -96,6 +98,7 @@ export class ChapterSelection extends React.PureComponent { // eslint-disable-li
 
 ChapterSelection.propTypes = {
 	dispatch: PropTypes.func.isRequired,
+	active: PropTypes.bool,
 	activeBookName: PropTypes.string.isRequired,
 };
 
@@ -110,7 +113,10 @@ function mapDispatchToProps(dispatch) {
 	};
 }
 
-const withConnect = connect(mapStateToProps, mapDispatchToProps);
+const withConnect = connect(
+	mapStateToProps,
+	mapDispatchToProps,
+);
 
 const withReducer = injectReducer({ key: 'chapterSelection', reducer });
 const withSaga = injectSaga({ key: 'chapterSelection', saga });

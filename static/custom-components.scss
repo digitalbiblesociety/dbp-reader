@@ -1,0 +1,21 @@
+.default-checkbox__div {
+	padding: 15px;
+	width: 100%;
+	max-width: 320px;
+
+	label {
+		display: block;
+		overflow-y: auto;
+		overflow-x: hidden;
+	}
+
+	[type='checkbox']:not(:checked) + label:before,
+	[type='checkbox']:checked + label:before {
+		top: 10px;
+	}
+
+	[type='checkbox']:not(:checked) + label:after,
+	[type='checkbox']:checked + label:after {
+		top: 13px;
+	}
+}

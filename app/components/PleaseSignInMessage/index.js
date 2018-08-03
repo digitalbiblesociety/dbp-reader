@@ -7,9 +7,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-// import { compose } from 'redux';
-import { toggleProfile } from 'containers/HomePage/actions';
 import { FormattedMessage } from 'react-intl';
+// import { compose } from 'redux';
+import { toggleProfile } from '../../containers/HomePage/actions';
 import messages from './messages';
 
 function PleaseSignInMessage({ dispatch, message }) {

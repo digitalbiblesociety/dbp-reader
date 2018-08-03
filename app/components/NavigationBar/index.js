@@ -6,11 +6,12 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+// import '../../styles/components/navbar.scss';
 // import Logo from 'components/Logo';
 // import LocaleToggle from 'containers/LocaleToggle';
-import ChapterSelection from 'containers/ChapterSelection';
-import TextSelection from 'containers/TextSelection';
-import SvgWrapper from 'components/SvgWrapper';
+import ChapterSelection from '../../containers/ChapterSelection';
+import TextSelection from '../../containers/TextSelection';
+import SvgWrapper from '../SvgWrapper';
 // import styled from 'styled-components';
 // import { FormattedMessage } from 'react-intl';
 // import messages from './messages';
@@ -34,6 +35,7 @@ class NavigationBar extends React.PureComponent {
 		// may need to wrap each of these in a container div to fix the hover issues
 		return (
 			<div
+				id={'navigation-bar'}
 				className={isScrollingDown ? 'nav-background closed' : 'nav-background'}
 			>
 				<div className="nav-container">
@@ -79,7 +81,8 @@ class NavigationBar extends React.PureComponent {
 								  }${activeTextName}`
 								: 'No Version Selected'}
 						</h1>
-						{isVersionSelectionActive ? <TextSelection /> : null}
+						<TextSelection active={isVersionSelectionActive} />
+						{/* {isVersionSelectionActive ? <TextSelection /> : null} */}
 					</span>
 					<span
 						role="button"
@@ -105,7 +108,8 @@ class NavigationBar extends React.PureComponent {
 								? `${activeBookName} ${activeChapter}`
 								: 'No Book Selected'}
 						</h1>
-						{isChapterSelectionActive ? <ChapterSelection /> : null}
+						<ChapterSelection active={isChapterSelectionActive} />
+						{/* {isChapterSelectionActive ? <ChapterSelection /> : null} */}
 					</span>
 				</div>
 			</div>

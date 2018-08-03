@@ -1,0 +1,38 @@
+.footnote-portal-container {
+	display: block;
+	position: absolute;
+	z-index: 4;
+	min-height: 50px;
+	max-height: 195px;
+	max-height: max-content;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.5), inset 0 0 30px #eee;
+	width: 300px;
+	max-width: 300px;
+	padding: 10px;
+	background-color: #fff;
+	color: #000;
+
+	span {
+		width: 25px;
+		height: 25px;
+		cursor: pointer;
+		&:hover {
+			opacity: 0.65;
+		}
+		font-size: 1.3em;
+		float: right;
+		text-align: center;
+		line-height: 1.3em;
+	}
+
+	p {
+		display: block;
+		max-height: 165px;
+		overflow-y: scroll;
+		overflow-x: hidden;
+		-webkit-overflow-scrolling: touch;
+		padding: 0 5px;
+		margin-right: 5px;
+		margin-top: 5px;
+	}
+}

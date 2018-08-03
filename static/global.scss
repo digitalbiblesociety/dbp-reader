@@ -1,0 +1,519 @@
+*,
+*::after,
+*::before {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-size: 100%;
+	all: unset;
+}
+body,
+html {
+	height: 100%;
+	min-height: calc(100% - 0);
+	width: 100%;
+}
+body {
+	// Fallback to support IE
+	overflow: hidden;
+	font-family: 'Noto Sans', Helvetica, sans serif;
+	@include css4 {
+		color: var(--default-text-color);
+		font-family: var(--application-font-family);
+		font-size: var(--application-menu-font-size);
+	}
+	margin: 0 auto;
+}
+div:focus {
+	outline: none;
+}
+a {
+	text-decoration: none;
+	color: inherit;
+}
+//aside {position:absolute;top:0;right:0;}
+header {
+	@include css4 {
+		outline: 1px solid var(--menu-border-color);
+	}
+}
+main {
+	overflow-x: hidden;
+	overflow-y: auto;
+	max-height: 100%;
+	-webkit-overflow-scrolling: touch;
+}
+#__next {
+	max-width: calc(100vw);
+	width: calc(100%);
+	@include css4 {
+		background-color: var(--default-background-color);
+	}
+}
+#__next > div {
+	height: 100vh;
+	width: 100%;
+}
+html #__next aside {
+	z-index: 11;
+	@include css4 {
+		outline: 1px solid var(--menu-border-color);
+		border-bottom: 1px solid var(--menu-border-color);
+	}
+}
+
+#old-browser-banner {
+	position: absolute;
+	top: 0;
+	left: 0;
+	padding: 10px;
+	width: 100%;
+	height: 40px;
+	font-size: 16px;
+	color: #000000;
+	background-color: #f2ac22;
+
+	a {
+		color: blue;
+		text-decoration: underline;
+
+		&:hover {
+			color: #6ec3e2;
+		}
+	}
+
+	.close-button {
+		float: right;
+		cursor: pointer;
+
+		&:hover {
+			color: #6ec3e2;
+		}
+	}
+}
+// Remove default styling on em tags since I use those for highlighting
+em {
+	// Have both unset and inherit because of IE not supporting unset
+	font-style: inherit;
+	font-style: unset;
+}
+
+// images
+img {
+	max-width: 100%;
+	height: auto;
+}
+img[data-src] {
+	filter: blur(15px);
+}
+img.loaded {
+	transition: all 0.5s linear;
+	filter: blur(0);
+}
+
+// Icons Style Applied to All SVG Sprites
+.icon {
+	width: 26px;
+	height: 26px;
+	vertical-align: -0.15em;
+	fill: currentColor;
+	overflow: hidden;
+	cursor: pointer;
+} // Took out fill:currentColor;
+//.icon:hover {opacity: 0.65;}
+li {
+	list-style: none;
+}
+.shadow {
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24) !important;
+}
+
+// Google and Facebook color
+body .google {
+	background-color: $login-google-color;
+	font-family: 'Roboto Medium', Roboto !important;
+}
+body .facebook {
+	background-color: $login-facebook-color;
+	font-family: -apple-system, BlinkMacSystemFont, 'San Fransisco', Roboto,
+		'Segoe UI' !important;
+}
+body .twitter {
+	background-color: $login-twitter-color;
+	font-family: 'Helvetica Neue', 'San Fransisco', Roboto !important;
+}
+
+// Change Highlighting Color
+::selection {
+	@include css4 {
+		background-color: var(--application-text-selection-color);
+		color: var(--default-text-color);
+	}
+}
+
+::-moz-selection {
+	@include css4 {
+		background-color: var(--application-text-selection-color);
+		color: var(--default-text-color);
+	}
+}
+
+// Input Box Styles
+input {
+	width: 100%;
+	max-width: 320px;
+	min-height: 30px;
+	margin: 10px auto;
+	position: relative;
+	border: none;
+	font-size: 16px;
+
+	@include css4 {
+		border-bottom: 1px solid var(--default-text-color);
+		background-color: var(--menu-body-background-color);
+		caret-color: var(--application-text-caret-color);
+
+		&::-webkit-input-placeholder {
+			color: var(--default-text-color);
+			font-size: 16px;
+			opacity: 0.3;
+		}
+		&::-moz-placeholder {
+			color: var(--default-text-color);
+			font-size: 16px;
+		}
+		&:-ms-input-placeholder {
+			color: var(--default-text-color);
+			font-size: 16px;
+		}
+	}
+
+	&:focus {
+		background-image: none;
+		outline: none;
+		&::-webkit-input-placeholder {
+			color: transparent;
+		}
+		&::-moz-placeholder {
+			color: transparent;
+		}
+		&:-ms-input-placeholder {
+			color: transparent;
+		}
+	}
+}
+
+//.input-icon {@include css4{background-color:var(--menu-body-background-color);};width:30px;height:30px;}
+
+// Custom Checkboxes
+// Removes the normal checkbox
+[type='checkbox']:not(:checked),
+[type='checkbox']:checked {
+	display: none;
+}
+// The label style
+[type='checkbox']:not(:checked) + label,
+[type='checkbox']:checked + label {
+	position: relative;
+	padding-left: 1.9em;
+	cursor: pointer;
+}
+// The checkbox
+[type='checkbox']:not(:checked) + label:before,
+[type='checkbox']:checked + label:before {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 16px;
+	height: 16px;
+	background: transparent;
+	border-radius: 3px;
+	@include css4 {
+		border: 2px solid var(--default-text-color);
+	}
+}
+[type='checkbox']:checked + label:before {
+	//background-color:#6FBC8F;
+	//position:absolute;
+	//background: url('./check.svg');
+	//height: 26px;
+	//width: 26px;
+	//left:0;
+	//top:0;
+	//background-repeat: no-repeat;
+	border: none;
+}
+// The checkmark
+//[type="checkbox"]:not(:checked) + label:after,
+//[type="checkbox"]:checked + label:after {
+//  content:'\002713';
+//  position:absolute;
+//  top:.25em;
+//  left:.275em;
+//  font-size:1em;
+//  line-height:0.8;
+//  color:#fff;
+//  transition: all .2s;
+//}
+// Small scaling for the transition between checked and unchecked
+[type='checkbox']:not(:checked) + label:after {
+	opacity: 0;
+	transform: scale(0);
+}
+[type='checkbox']:checked + label:after {
+	opacity: 1;
+	transform: scale(1);
+}
+// I saw this was supposed to help with accessibility so I put it in
+[type='checkbox']:checked:focus + label:before,
+[type='checkbox']:not(:checked):focus + label:before {
+	border: 2px dotted blue;
+}
+// Hover style for checkbox - Russel probably wont like it
+label:hover:before {
+	border: 2px solid #4778d9;
+}
+
+// Remove blue outline for divs that have event handlers
+div:focus {
+	outline: none;
+}
+span:focus {
+	outline: none;
+}
+
+// font sizes
+h2 {
+	@include css4 {
+		font-size: calc(var(--application-menu-font-size) * 1.4);
+	}
+}
+
+// GRID
+section {
+	position: relative;
+}
+.row {
+	margin: 0 auto;
+	max-width: 1200px;
+	width: 100%;
+}
+// not sure why the below was there, if things look weird I can fix it
+//main:after,
+//.row:before, .row:after {content:" ";display:table;clear:both}
+
+.row .row {
+	margin: 0 -1rem;
+	max-width: none;
+	width: auto;
+}
+.row .row.collapse {
+	margin: 0;
+}
+.collapse > .columns {
+	padding-left: 0;
+	padding-right: 0;
+}
+.collapse .row {
+	margin-left: 0;
+	margin-right: 0;
+}
+
+.columns {
+	padding-left: 1.1rem;
+	padding-right: 1.1rem;
+	width: 100%;
+	float: left;
+}
+.centered {
+	margin-left: auto;
+	margin-right: auto;
+	float: none;
+}
+.centered:last-child {
+	float: none;
+}
+.clearfix:after {
+	content: '';
+	display: table;
+	clear: both;
+}
+.hidden {
+	border: 0;
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute;
+	width: 1px;
+}
+//.disabled               {opacity:.5}
+
+.visuallyhidden,
+.hide {
+	display: none;
+}
+
+@media only screen and (max-width: 400px) {
+	.x-small-hide {
+		display: none;
+	}
+}
+
+@media only screen {
+	.small-hide {
+		display: none;
+	}
+	.small-show {
+		display: block;
+	}
+	.small-1 {
+		width: 8.33333%;
+	}
+	.small-2 {
+		width: 16.66667%;
+	}
+	.small-3 {
+		width: 25%;
+	}
+	.small-4 {
+		width: 33.33333%;
+	}
+	.small-5 {
+		width: 41.66667%;
+	}
+	.small-6 {
+		width: 50%;
+	}
+	.small-7 {
+		width: 58.33333%;
+	}
+	.small-8 {
+		width: 66.66667%;
+	}
+	.small-9 {
+		width: 75%;
+	}
+	.small-10 {
+		width: 83.33333%;
+	}
+	.small-11 {
+		width: 91.66667%;
+	}
+	.small-12 {
+		width: 100%;
+	}
+}
+
+@media only screen and (min-width: 600px) {
+	.small-show {
+		display: none;
+	}
+	.small-hide {
+		display: inherit;
+	}
+	.medium-hide {
+		display: none;
+	}
+	.medium-1 {
+		width: 8.33333%;
+	}
+	.medium-2 {
+		width: 16.66667%;
+	}
+	.medium-3 {
+		width: 25%;
+	}
+	.medium-4 {
+		width: 33.33333%;
+	}
+	.medium-5 {
+		width: 41.66667%;
+	}
+	.medium-6 {
+		width: 50%;
+	}
+	.medium-7 {
+		width: 58.33333%;
+	}
+	.medium-8 {
+		width: 66.66667%;
+	}
+	.medium-9 {
+		width: 75%;
+	}
+	.medium-10 {
+		width: 83.33333%;
+	}
+	.medium-11 {
+		width: 91.66667%;
+	}
+	.medium-12 {
+		width: 100%;
+	}
+}
+
+@media only screen and (min-width: 960px) {
+	.small-show {
+		display: none;
+	}
+	.small-hide {
+		display: inherit;
+	}
+	.medium-hide {
+		display: block;
+	}
+	.large-hide {
+		display: none;
+	}
+	.large-1 {
+		width: 8.33333%;
+	}
+	.large-2 {
+		width: 16.66667%;
+	}
+	.large-3 {
+		width: 25%;
+	}
+	.large-4 {
+		width: 33.33333%;
+	}
+	.large-5 {
+		width: 41.66667%;
+	}
+	.large-6 {
+		width: 50%;
+	}
+	.large-7 {
+		width: 58.33333%;
+	}
+	.large-8 {
+		width: 66.66667%;
+	}
+	.large-9 {
+		width: 75%;
+	}
+	.large-10 {
+		width: 83.33333%;
+	}
+	.large-11 {
+		width: 91.66667%;
+	}
+	.large-12 {
+		width: 100%;
+	}
+}
+
+// rc-slider overrides
+.rc-slider-dot {
+	background-color: transparent;
+	border: none;
+}

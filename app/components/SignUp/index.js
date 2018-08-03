@@ -1,20 +1,20 @@
 /**
-*
-* SignUp
-*
-*/
+ *
+ * SignUp
+ *
+ */
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import FacebookAuthentication from 'containers/FacebookAuthentication';
-import GoogleAuthentication from 'containers/GoogleAuthentication';
-import Checkbox from 'components/Checkbox';
-import checkEmail from 'utils/checkEmailForValidity';
-import messages from 'components/PasswordResetVerified/messages';
+import { FormattedMessage } from 'react-intl';
+import FacebookAuthentication from '../../containers/FacebookAuthentication';
+import GoogleAuthentication from '../../containers/GoogleAuthentication';
+import Checkbox from '../Checkbox';
+import checkEmail from '../../utils/checkEmailForValidity';
+import messages from '../PasswordResetVerified/messages';
 // import messages from './messages';
 // import SvgWrapper from 'components/SvgWrapper';
 // import styled from 'styled-components';
-import { FormattedMessage } from 'react-intl';
 
 class SignUp extends React.PureComponent {
 	state = {
@@ -29,7 +29,7 @@ class SignUp extends React.PureComponent {
 		wasSignupSent: false,
 		showSignupError: false,
 		wantsUpdates: false,
-	}
+	};
 
 	componentWillReceiveProps() {
 		// if (nextProps.socialLoginLink && nextProps.socialLoginLink !== this.props.socialLoginLink) {
@@ -60,31 +60,31 @@ class SignUp extends React.PureComponent {
 	handlePasswordChange = (e) => {
 		this.setState({ password: e.target.value });
 		this.viewError();
-	}
+	};
 
 	handleFirstName = (e) => {
 		this.setState({ firstName: e.target.value });
 		this.viewError();
-	}
+	};
 
 	handleLastName = (e) => {
 		this.setState({ lastName: e.target.value });
 		this.viewError();
-	}
+	};
 
 	handleEmailChange = (e) => {
 		const email = e.target.value;
 
 		this.setState({ email });
 		this.viewError();
-	}
+	};
 
 	handleConfirmPassword = (e) => {
 		const value = e.target.value;
 
 		this.setState({ confirmPassword: value });
 		this.viewError();
-	}
+	};
 
 	handleSignup = (e) => {
 		e.preventDefault();
@@ -113,13 +113,13 @@ class SignUp extends React.PureComponent {
 		}
 		this.setState({ validPassword, validEmail });
 		this.viewError();
-	}
+	};
 
 	handleEmailUpdatesChange = (e) => {
 		this.setState({ wantsUpdates: e.target.checked });
-	}
+	};
 
-	checkValidEmail = () => checkEmail(this.state.email)
+	checkValidEmail = () => checkEmail(this.state.email);
 
 	checkValidPassword = () => {
 		const { confirmPassword, password } = this.state;
@@ -149,7 +149,7 @@ class SignUp extends React.PureComponent {
 		}
 
 		return validPassword;
-	}
+	};
 
 	get signupError() {
 		const { validEmail, passwordErrorType } = this.state;
@@ -157,22 +157,42 @@ class SignUp extends React.PureComponent {
 
 		if (passwordErrorType) {
 			if (passwordErrorType === 'confirm') {
-				errors.push(<p key={'passwordError1'} className={'signup-error-message'}><FormattedMessage {...messages.passwordError1} /></p>);
+				errors.push(
+					<p key={'passwordError1'} className={'signup-error-message'}>
+						<FormattedMessage {...messages.passwordError1} />
+					</p>,
+				);
 			}
 			if (passwordErrorType === 'length') {
-				errors.push(<p key={'passwordError2'} className={'signup-error-message'}><FormattedMessage {...messages.passwordError2} /></p>);
+				errors.push(
+					<p key={'passwordError2'} className={'signup-error-message'}>
+						<FormattedMessage {...messages.passwordError2} />
+					</p>,
+				);
 			}
 			if (passwordErrorType === 'password') {
-				errors.push(<p key={'passwordError3'} className={'signup-error-message'}><FormattedMessage {...messages.passwordError3} /></p>);
+				errors.push(
+					<p key={'passwordError3'} className={'signup-error-message'}>
+						<FormattedMessage {...messages.passwordError3} />
+					</p>,
+				);
 			}
 			// } else if (passwordErrorType === 'upperNumSym') {
 			// 	errors.push(<p key={'passwordError4'} className={'signup-error-message'}><FormattedMessage {...messages.passwordError4} /></p>);
 			// }
 		}
 
-		errors.push(<p key={'passwordError4'} className={'signup-error-message'}><FormattedMessage {...messages.passwordError4} /></p>);
+		errors.push(
+			<p key={'passwordError4'} className={'signup-error-message'}>
+				<FormattedMessage {...messages.passwordError4} />
+			</p>,
+		);
 		if (!validEmail) {
-			errors.push(<p key={'emailError'} className={'signup-error-message'}><FormattedMessage {...messages.emailError} /></p>);
+			errors.push(
+				<p key={'emailError'} className={'signup-error-message'}>
+					<FormattedMessage {...messages.emailError} />
+				</p>,
+			);
 		}
 
 		return <div className={'errors-div'}>{errors}</div>;
@@ -182,13 +202,54 @@ class SignUp extends React.PureComponent {
 		const { validEmail, validPassword } = this.state;
 		return (
 			<form onSubmit={this.handleSignup}>
-				<input required autoComplete={'email'} onChange={this.handleEmailChange} className={validEmail ? 'email' : 'email error'} placeholder="E-mail" value={this.state.email} />
-				<input required autoComplete={'given-name'} onChange={this.handleFirstName} className={'name-inputs'} placeholder="Given Name" value={this.state.firstName} />
-				<input required autoComplete={'family-name'} onChange={this.handleLastName} className={'name-inputs'} placeholder="Family Name" value={this.state.lastName} />
-				<input required autoComplete="new-password" type="password" onChange={this.handlePasswordChange} className={validPassword ? 'first-password' : 'first-password error'} placeholder="Password" value={this.state.password} />
-				<input required autoComplete="new-password" type="password" onChange={this.handleConfirmPassword} className={validPassword ? 'second-password' : 'second-password error'} placeholder="Confirm Password" value={this.state.confirmPassword} />
+				<input
+					required
+					autoComplete={'email'}
+					onChange={this.handleEmailChange}
+					className={validEmail ? 'email' : 'email error'}
+					placeholder="E-mail"
+					value={this.state.email}
+				/>
+				<input
+					required
+					autoComplete={'given-name'}
+					onChange={this.handleFirstName}
+					className={'name-inputs'}
+					placeholder="Given Name"
+					value={this.state.firstName}
+				/>
+				<input
+					required
+					autoComplete={'family-name'}
+					onChange={this.handleLastName}
+					className={'name-inputs'}
+					placeholder="Family Name"
+					value={this.state.lastName}
+				/>
+				<input
+					required
+					autoComplete="new-password"
+					type="password"
+					onChange={this.handlePasswordChange}
+					className={validPassword ? 'first-password' : 'first-password error'}
+					placeholder="Password"
+					value={this.state.password}
+				/>
+				<input
+					required
+					autoComplete="new-password"
+					type="password"
+					onChange={this.handleConfirmPassword}
+					className={
+						validPassword ? 'second-password' : 'second-password error'
+					}
+					placeholder="Confirm Password"
+					value={this.state.confirmPassword}
+				/>
 				<div className="sign-up-button">
-					<button type="submit" className="text">Submit</button>
+					<button type="submit" className="text">
+						Submit
+					</button>
 				</div>
 			</form>
 		);
@@ -201,7 +262,7 @@ class SignUp extends React.PureComponent {
 		if (this.state.showSignupError) {
 			this.setState({ showSignupError: false });
 		}
-	}
+	};
 
 	render() {
 		const {
@@ -209,27 +270,60 @@ class SignUp extends React.PureComponent {
 			socialLoginLink,
 			socialMediaLogin,
 			activeDriver,
+			oauthError,
+			readOauthError,
+			oauthErrorMessage,
 		} = this.props;
 		const { showSignupError } = this.state;
 
 		return (
 			<React.Fragment>
 				<section className="message">
-					<p>Signing up lets you create Bookmarks, Highlights and Notes, and access them wherever you use Bible.is!</p>
-					<p className={'disclaimer'}><span>By creating an account, you agree to the Bible.is</span>&nbsp;<a className="link" target={'_blank'} href="http://www.bible.is/privacy">Privacy Policy</a>&nbsp;&&nbsp;<a className="link" target={'_blank'} href="http://www.bible.is/terms">Terms of Use</a>.</p>
+					<p>
+						Signing up lets you create Bookmarks, Highlights and Notes, and
+						access them wherever you use Bible.is!
+					</p>
+					<p className={'disclaimer'}>
+						<span>By creating an account, you agree to the Bible.is</span>&nbsp;<a
+							className="link"
+							target={'_blank'}
+							href="http://www.bible.is/privacy"
+						>
+							Privacy Policy
+						</a>&nbsp;&&nbsp;<a
+							className="link"
+							target={'_blank'}
+							href="http://www.bible.is/terms"
+						>
+							Terms of Use
+						</a>.
+					</p>
 				</section>
 				{this.signupForm}
-				{
-					showSignupError ? this.signupError : null
-				}
-				{
-					!errorMessageViewed ? (
-						<div className="signup-error-message">This email is already registered with an account. Please try a different email or sign in.</div>
-					) : null
-				}
-				<Checkbox updater={this.handleEmailUpdatesChange} label={'I would like to receive email updates from Bible.is!'} />
-				<FacebookAuthentication activeDriver={activeDriver} socialMediaLogin={socialMediaLogin} socialLoginLink={socialLoginLink} />
-				<GoogleAuthentication activeDriver={activeDriver} socialMediaLogin={socialMediaLogin} socialLoginLink={socialLoginLink} />
+				{showSignupError ? this.signupError : null}
+				{!errorMessageViewed ? (
+					<div className="signup-error-message">
+						This email is already registered with an account. Please try a
+						different email or sign in.
+					</div>
+				) : null}
+				<Checkbox
+					updater={this.handleEmailUpdatesChange}
+					label={'I would like to receive email updates from Bible.is!'}
+				/>
+				<FacebookAuthentication
+					oauthError={oauthError}
+					oauthErrorMessage={oauthErrorMessage}
+					activeDriver={activeDriver}
+					readOauthError={readOauthError}
+					socialMediaLogin={socialMediaLogin}
+					socialLoginLink={socialLoginLink}
+				/>
+				<GoogleAuthentication
+					activeDriver={activeDriver}
+					socialMediaLogin={socialMediaLogin}
+					socialLoginLink={socialLoginLink}
+				/>
 			</React.Fragment>
 		);
 	}
@@ -239,8 +333,11 @@ SignUp.propTypes = {
 	sendSignupForm: PropTypes.func,
 	socialMediaLogin: PropTypes.func,
 	viewErrorMessage: PropTypes.func,
+	readOauthError: PropTypes.func,
 	// errorMessage: PropTypes.string,
 	activeDriver: PropTypes.string,
+	oauthError: PropTypes.bool,
+	oauthErrorMessage: PropTypes.string,
 	socialLoginLink: PropTypes.string,
 	errorMessageViewed: PropTypes.bool,
 };

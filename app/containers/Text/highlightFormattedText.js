@@ -1,5 +1,9 @@
 // Optional third arg for testing purposes
-const createFormattedHighlights = (highlights, formattedTextString, DomCreator) => {
+const createFormattedHighlights = (
+	highlights,
+	formattedTextString,
+	DomCreator,
+) => {
 	/* NOTES
 	* 1. Need to subtract 1 from any addition of highlight_start + highlighted_words, this is because the result is the length not the index
 	* */
@@ -14,29 +18,39 @@ const createFormattedHighlights = (highlights, formattedTextString, DomCreator) 
 	// Step 1: Create copy of highlight objects and sort them
 	// Step 2: Create a dom based on the formatted text string
 	// Step 3: Get all of the elements with data-id (These are all verse elements with the exception of the first one)
-		// Step 4: Iterate over every verse In order from least to greatest
-			// Step 5: For each verse find all the highlights starting in that verse
-				// Apply each highlight in the verse from shortest to longest
-				// Each time a highlight is applied reduce its highlighted_words field by the number of characters highlighted
-				// If highlighted_words is 0 then remove the highlight from the array
-			// Step 6: At the start of a new verse check for any highlights left over from the previous verse
-				// If highlighted_words is above 0 and the verse ended
-					// Update the verse number to be the next verse
-			// Step 7: Set the innerHTML of the verse element with the new html that contains the highlights for that verse
-		// Step 8: Create a new formatted text string out of the new dom that was created
+	// Step 4: Iterate over every verse In order from least to greatest
+	// Step 5: For each verse find all the highlights starting in that verse
+	// Apply each highlight in the verse from shortest to longest
+	// Each time a highlight is applied reduce its highlighted_words field by the number of characters highlighted
+	// If highlighted_words is 0 then remove the highlight from the array
+	// Step 6: At the start of a new verse check for any highlights left over from the previous verse
+	// If highlighted_words is above 0 and the verse ended
+	// Update the verse number to be the next verse
+	// Step 7: Set the innerHTML of the verse element with the new html that contains the highlights for that verse
+	// Step 8: Create a new formatted text string out of the new dom that was created
 	// Step 9: Return new formatted text string
 
 	// Doing a deep copy of the highlights since I am going to be mutating it.
 	// Sort the highlights
-	const sortedHighlights = JSON.parse(JSON.stringify(highlights))
-		.sort((a, b) => {
+	const sortedHighlights = JSON.parse(JSON.stringify(highlights)).sort(
+		(a, b) => {
 			if (a.verse_start < b.verse_start) return -1;
 			if (a.verse_start > b.verse_start) return 1;
 			if (a.verse_start === b.verse_start) {
 				if (a.highlight_start === b.highlight_start) {
 					// if a was smaller than b then a needs to come first
-					if (a.highlight_start + a.highlighted_words < b.highlight_start + b.highlighted_words) return -1;
-					if (a.highlight_start + a.highlighted_words > b.highlight_start + b.highlighted_words) return 1;
+					if (
+						a.highlight_start + a.highlighted_words <
+						b.highlight_start + b.highlighted_words
+					) {
+						return -1;
+					}
+					if (
+						a.highlight_start + a.highlighted_words >
+						b.highlight_start + b.highlighted_words
+					) {
+						return 1;
+					}
 					// I want the newest (highest id) - Not sure this is helping anything...
 					if (a.id > b.id) return 1;
 					if (a.id < b.id) return -1;
@@ -45,11 +59,13 @@ const createFormattedHighlights = (highlights, formattedTextString, DomCreator) 
 				if (a.highlight_start > b.highlight_start) return 1;
 			}
 			return 0;
-		});
+		},
+	);
 	// console.log('sortedHighlights', sortedHighlights);
 	try {
 		// Set the env for testing purposes
 		const env = process.env.NODE_ENV;
+
 		// Instantiate the string -> html parser
 		const parser = env === 'test' ? () => {} : new DOMParser();
 		// console.log('XMLSerializer', typeof XMLSerializer);
@@ -57,9 +73,13 @@ const createFormattedHighlights = (highlights, formattedTextString, DomCreator) 
 		const serializer = env === 'test' ? () => {} : new XMLSerializer();
 		// const serializer = () => {};
 		// Instantiate jsDOM for creating a mock dom (needed for testing)
-		const jsDOM = env === 'test' ? new DomCreator(formattedTextString) : undefined;
+		const jsDOM =
+			env === 'test' ? new DomCreator(formattedTextString) : undefined;
 		// Set the xml document based on whether this is live or a test
-		const xmlDoc = env === 'test' ? jsDOM.window.document : parser.parseFromString(formattedTextString, 'text/xml');
+		const xmlDoc =
+			env === 'test'
+				? jsDOM.window.document
+				: parser.parseFromString(formattedTextString, 'text/xml');
 
 		// Used this before getting all the data ids
 		// const arrayOfVerses = [...xmlDoc.getElementsByClassName('v')];
@@ -81,9 +101,14 @@ const createFormattedHighlights = (highlights, formattedTextString, DomCreator) 
 				Emphasis node: <add>was</add>
 				Highlight node: <em class="text-highlighted" style="...">and they called him Abel</em>
 			*/
-			const children = verseElement.childNodes.length ? [...verseElement.childNodes] : [verseElement];
+			const children = verseElement.childNodes.length
+				? [...verseElement.childNodes]
+				: [verseElement];
 			// Parse the verse data-id to get the verse number
-			const verseNumber = parseInt(verseElement.attributes['data-id'].value.split('_')[1], 10);
+			const verseNumber = parseInt(
+				verseElement.attributes['data-id'].value.split('_')[1],
+				10,
+			);
 			const newChildren = [];
 			// console.log('New Verse ------------------------------------------------------------------------', verseNumber);
 
@@ -92,7 +117,8 @@ const createFormattedHighlights = (highlights, formattedTextString, DomCreator) 
 				// Clone each node because it has to be removed and then added again to preserve the original html and add the highlight
 				const verse = originalVerse.cloneNode(true);
 				// Check if this child node is a note
-				const isNote = (!!verse.attributes && verse.attributes.class.value === 'note');
+				const isNote =
+					!!verse.attributes && verse.attributes.class.value === 'note';
 				// Remove the child since I already cloned it
 				verseElement.removeChild(originalVerse);
 				// Verse already started -> need to treat it like a new verse
@@ -101,14 +127,32 @@ const createFormattedHighlights = (highlights, formattedTextString, DomCreator) 
 				// Filter: -> Gets all of the highlights that start in this verse and all the previous highlights that have left over characters
 				// Map: -> Updates the previous highlights to contain the new verse number and also to start out at 0
 				const highlightsStartingInVerse = previousHighlightArray
-					.filter((h) => h.verse_start === verseNumber || (h.verse_start < verseNumber && h.highlighted_words > 0))
-					.map((h) => h.verse_start !== verseNumber || (h.verse_start === verseNumber && sameVerse) ? { ...h, verse_start: verseNumber } : h)
+					.filter(
+						(h) =>
+							h.verse_start === verseNumber ||
+							(h.verse_start < verseNumber && h.highlighted_words > 0),
+					)
+					.map(
+						(h) =>
+							h.verse_start !== verseNumber ||
+							(h.verse_start === verseNumber && sameVerse)
+								? { ...h, verse_start: verseNumber }
+								: h,
+					)
 					.sort((a, b) => {
 						// I want the highlight that starts first to be applied first
 						if (a.highlight_start === b.highlight_start) {
 							// I need the highlight that ends first to be applied first
-							if (a.highlight_start + a.highlighted_words < b.highlight_start + b.highlighted_words) return -1;
-							if (a.highlight_start + a.highlighted_words > b.highlight_start + b.highlighted_words) return 1;
+							if (
+								a.highlight_start + a.highlighted_words <
+								b.highlight_start + b.highlighted_words
+							)
+								return -1;
+							if (
+								a.highlight_start + a.highlighted_words >
+								b.highlight_start + b.highlighted_words
+							)
+								return 1;
 							// I want the newest highlight to be before the older highlight
 							if (a.id > b.id) return 1;
 							if (a.id < b.id) return -1;
@@ -149,16 +193,24 @@ const createFormattedHighlights = (highlights, formattedTextString, DomCreator) 
 									// If there was an object it means that this highlight needs to be updated
 									const newH = { ...h };
 									// For each update add the value to the appropriate key in the new highlight
-									Object.entries(newData.highlightsToUpdate[h.id]).forEach((entry) => {
-										newH[entry[0]] = entry[1];
-									});
+									Object.entries(newData.highlightsToUpdate[h.id]).forEach(
+										(entry) => {
+											newH[entry[0]] = entry[1];
+										},
+									);
 									// console.log('newH', newH);
 									return newH;
 								}
 								// Return the initial highlight
 								return h;
 							})
-							.reduce((a, h) => h.verse_start === verseNumber && h.highlighted_words <= 0 ? a : [...a, h], []);
+							.reduce(
+								(a, h) =>
+									h.verse_start === verseNumber && h.highlighted_words <= 0
+										? a
+										: [...a, h],
+								[],
+							);
 						// console.log('previousHighlightArray', previousHighlightArray[0]);
 					} catch (e) {
 						if (process.env.NODE_ENV === 'development') {
@@ -174,7 +226,9 @@ const createFormattedHighlights = (highlights, formattedTextString, DomCreator) 
 				if (env === 'test') {
 					verseTextHtml = verseText.join('');
 				} else {
-					verseTextHtml = parser.parseFromString(verseText.join(''), 'text/html').getElementsByTagName('body')[0].innerHTML;
+					verseTextHtml = parser
+						.parseFromString(verseText.join(''), 'text/html')
+						.getElementsByTagName('body')[0].innerHTML;
 
 					try {
 						xmlDoc.createElement('span').innerHTML = verseTextHtml;
@@ -208,7 +262,9 @@ const createFormattedHighlights = (highlights, formattedTextString, DomCreator) 
 			});
 		});
 
-		return env === 'test' ? xmlDoc.querySelectorAll('body')[0].innerHTML : serializer.serializeToString(xmlDoc);
+		return env === 'test'
+			? xmlDoc.querySelectorAll('body')[0].innerHTML
+			: serializer.serializeToString(xmlDoc);
 	} catch (error) {
 		if (process.env.NODE_ENV === 'development') {
 			console.warn('Failed applying highlight to formatted text', error); // eslint-disable-line no-console
@@ -234,19 +290,24 @@ function handleNewVerse({ highlightsStartingInVerse, verseText }) {
 	highlightsStartingInVerse.forEach((h, i) => {
 		const nextHighlight = highlightsStartingInVerse[i + 1];
 		/* COMMONLY USED VALUES */
-		const backgroundStyle = `style="background:linear-gradient(rgba(${h.highlighted_color ? h.highlighted_color : 'inherit'}),rgba(${h.highlighted_color ? h.highlighted_color : 'inherit'}))"`;
+		const backgroundStyle = `style="background:linear-gradient(rgba(${
+			h.highlighted_color ? h.highlighted_color : 'inherit'
+		}),rgba(${h.highlighted_color ? h.highlighted_color : 'inherit'}))"`;
 		const highlightLength = h.highlight_start + (h.highlighted_words - 1);
 
 		/* HIGHLIGHT STARTS IN A LATER SECTION OF THIS VERSE */
 		if (h.highlight_start >= verseLength) {
 			// Reducing the start of the highlight by the length of the section since it cannot start here
 
-			highlightsToUpdate[h.id] = { highlight_start: h.highlight_start - (verseLength) };
+			highlightsToUpdate[h.id] = {
+				highlight_start: h.highlight_start - verseLength,
+			};
 		} else if (
 			nextHighlight &&
 			h.highlight_start < nextHighlight.highlight_start &&
 			highlightLength > nextHighlight.highlight_start &&
-			highlightLength < nextHighlight.highlight_start + (nextHighlight.highlighted_words - 1)
+			highlightLength <
+				nextHighlight.highlight_start + (nextHighlight.highlighted_words - 1)
 		) {
 			/* HIGHLIGHT STOPS IN MIDDLE OF NEXT HIGHLIGHT */
 			// if two highlights overlap and neither is contained completely in the other
@@ -254,43 +315,79 @@ function handleNewVerse({ highlightsStartingInVerse, verseText }) {
 			// console.log('Highlight stopping in middle of next one');
 
 			// Start the first highlight
-			verseText.splice(h.highlight_start, 1, `<em class="text-highlighted" ${backgroundStyle}>${verseText[h.highlight_start]}`);
+			verseText.splice(
+				h.highlight_start,
+				1,
+				`<em class="text-highlighted" ${backgroundStyle}>${
+					verseText[h.highlight_start]
+				}`,
+			);
 			// close the first highlight on the character before where the second highlight starts
-			verseText.splice(nextHighlight.highlight_start - 1, 1, `${verseText[nextHighlight.highlight_start - 1]}</em>`);
+			verseText.splice(
+				nextHighlight.highlight_start - 1,
+				1,
+				`${verseText[nextHighlight.highlight_start - 1]}</em>`,
+			);
 			// start the first highlight again where the second starts
-			verseText.splice(nextHighlight.highlight_start, 1, `<em class="text-highlighted" ${backgroundStyle}>${verseText[nextHighlight.highlight_start]}`);
+			verseText.splice(
+				nextHighlight.highlight_start,
+				1,
+				`<em class="text-highlighted" ${backgroundStyle}>${
+					verseText[nextHighlight.highlight_start]
+				}`,
+			);
 			// close the first highlight where it ends
 			/* SETS THE CLOSING TAG AND HANDLES UPDATING THE HIGHLIGHT OBJECT */
 			if (verseLength < highlightLength) {
 				// The highlight extends past this verse and into the next one
-				verseText.splice(verseLength - 1, 1, `${verseText[verseLength - 1]}</em>`);
+				verseText.splice(
+					verseLength - 1,
+					1,
+					`${verseText[verseLength - 1]}</em>`,
+				);
 				// Setting the new value for highlighted_words and start
 				// Sets start to 0 because this highlight needs to resume in the beginning of the next verse
 				// console.log('verseLength', verseLength);
 
 				highlightsToUpdate[h.id] = {
-					highlighted_words: h.highlighted_words - (verseLength - h.highlight_start),
+					highlighted_words:
+						h.highlighted_words - (verseLength - h.highlight_start),
 					highlight_start: 0,
 				};
 				// console.log('highlightsToUpdate', highlightsToUpdate);
 			} else {
 				// The highlight has to be contained within this verse
-				verseText.splice(highlightLength, 1, `${verseText[highlightLength]}</em>`);
+				verseText.splice(
+					highlightLength,
+					1,
+					`${verseText[highlightLength]}</em>`,
+				);
 				// Setting the new value for highlighted_words
 				highlightsToUpdate[h.id] = { highlighted_words: 0 };
 			}
 		} else {
 			/* SETS THE OPENING TAG FOR THE HIGHLIGHT (BASE CASE) */
-			verseText.splice(h.highlight_start, 1, `<em class="text-highlighted" ${backgroundStyle}>${verseText[h.highlight_start]}`);
+			verseText.splice(
+				h.highlight_start,
+				1,
+				`<em class="text-highlighted" ${backgroundStyle}>${
+					verseText[h.highlight_start]
+				}`,
+			);
 			/* SETS THE CLOSING TAG AND HANDLES UPDATING THE HIGHLIGHT OBJECT */
 			if (verseLength <= highlightLength) {
 				// The highlight extends past this verse and into the next one
-				verseText.splice(verseLength - 1, 1, `${verseText[verseLength - 1]}</em>`);
+				verseText.splice(
+					verseLength - 1,
+					1,
+					`${verseText[verseLength - 1]}</em>`,
+				);
 				// console.log('verseLength', verseLength);
-// Setting the new value for highlighted_words and start
+				// Setting the new value for highlighted_words and start
 				// Sets start to 0 because this highlight needs to resume in the beginning of the next verse
 				highlightsToUpdate[h.id] = {
-					highlighted_words: h.highlighted_words - (verseLength - h.highlight_start),
+					highlighted_words:
+						h.highlighted_words - (verseLength - h.highlight_start),
 					highlight_start: 0,
 				};
 				// console.log('highlightsToUpdate', highlightsToUpdate);
@@ -298,7 +395,11 @@ function handleNewVerse({ highlightsStartingInVerse, verseText }) {
 				// The highlight has to be contained within this verse
 				// console.log('verseLength', verseLength);
 				// console.log('highlightLength', highlightLength);
-				verseText.splice(highlightLength, 1, `${verseText[highlightLength]}</em>`);
+				verseText.splice(
+					highlightLength,
+					1,
+					`${verseText[highlightLength]}</em>`,
+				);
 				// Setting the new value for highlighted_words
 				highlightsToUpdate[h.id] = { highlighted_words: 0 };
 			}

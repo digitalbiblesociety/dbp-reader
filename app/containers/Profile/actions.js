@@ -1,13 +1,15 @@
 /*
  *
  * Profile actions
- * TODO: Add factory function for actions to reduce boilerplate
+ *
  */
 
 import {
+	CHANGE_PICTURE,
 	SELECT_ACCOUNT_OPTION,
 	LOAD_USER_DATA,
 	GET_USER_DATA,
+	USER_LOGGED_IN,
 	SEND_LOGIN_FORM,
 	SEND_SIGNUP_FORM,
 	SOCIAL_MEDIA_LOGIN,
@@ -19,8 +21,24 @@ import {
 	LOG_OUT,
 	ERROR_MESSAGE_VIEWED,
 	CLEAR_ERROR_MESSAGE,
+	READ_OAUTH_ERROR,
 	SEND_PASSWORD_RESET,
 } from './constants';
+
+export const setUserLoginStatus = (props) => ({
+	type: USER_LOGGED_IN,
+	...props,
+});
+
+export const readOauthError = (props) => ({
+	type: READ_OAUTH_ERROR,
+	...props,
+});
+
+export const changePicture = (props) => ({
+	type: CHANGE_PICTURE,
+	...props,
+});
 
 export const sendPasswordReset = (props) => ({
 	type: SEND_PASSWORD_RESET,
