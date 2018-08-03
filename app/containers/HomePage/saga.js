@@ -1335,6 +1335,8 @@ export function* createSocialUser({
 	avatar,
 	provider,
 }) {
+	// console.log('{ email, name, nickname, id, avatar, provider }', { email, name, nickname, id, avatar, provider });
+
 	/*
 		There is a problem when I need to link a provider to an account, I do not have a way to get only that users user_id via the api
 			I either need to be able to link the account by only providing the email, or have a way to get the user_id that is associated with an email
@@ -1360,7 +1362,6 @@ export function* createSocialUser({
 	const data = new FormData();
 
 	data.append('email', email);
-	// data.append('password', password);
 	data.append('name', name);
 	data.append('nickname', nickname);
 	data.append('subscribed', '0');
@@ -1375,6 +1376,7 @@ export function* createSocialUser({
 	};
 
 	try {
+		// console.log('Sending first request');
 		const response = yield call(request, requestUrl, options);
 
 		if (response.success) {
@@ -1384,7 +1386,12 @@ export function* createSocialUser({
 				userId: response.user.id,
 				userProfile: response.user,
 			});
+			// console.log('setting user information in first call', response);
 			sessionStorage.setItem('bible_is_user_id', response.user.id);
+			sessionStorage.setItem('bible_is_12345', response.user.email);
+			sessionStorage.setItem('bible_is_123456', response.user.nickname);
+			sessionStorage.setItem('bible_is_1234567', response.user.name);
+			sessionStorage.setItem('bible_is_12345678', response.user.avatar);
 			// If I remember correctly the account is linked automatically - should check
 			// with Jon to see if this is actually the case
 		} else if (response.error) {
@@ -1434,7 +1441,7 @@ export function* createSocialUser({
 						// const getUserReq = `${process.env.BASE_API_ROUTE}/users?key=${
 						// 	process.env.DBP_API_KEY
 						// 	}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}`;
-
+						// console.log('Sending second request');
 						try {
 							yield put({
 								type: OAUTH_ERROR,
@@ -1472,8 +1479,13 @@ export function* createSocialUser({
 							userId: res.id,
 							userProfile: res,
 						});
+						// console.log('setting user information in second call', res);
 						// May add an else that will save the id to the session so it is persisted through a page refresh
 						sessionStorage.setItem('bible_is_user_id', res.id);
+						sessionStorage.setItem('bible_is_12345', res.email);
+						sessionStorage.setItem('bible_is_123456', res.nickname);
+						sessionStorage.setItem('bible_is_1234567', res.name);
+						sessionStorage.setItem('bible_is_12345678', res.avatar);
 					}
 				} catch (err) {
 					if (process.env.NODE_ENV === 'development') {

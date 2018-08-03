@@ -61,6 +61,10 @@ export function* sendSignUpForm({
 				userProfile: response.user,
 			});
 			sessionStorage.setItem('bible_is_user_id', response.user.id);
+			sessionStorage.setItem('bible_is_12345', response.user.email);
+			sessionStorage.setItem('bible_is_123456', response.user.nickname);
+			sessionStorage.setItem('bible_is_1234567', response.user.name);
+			sessionStorage.setItem('bible_is_12345678', response.user.avatar);
 		} else if (response.error) {
 			// console.log('res error', response);
 			const message = Object.values(response.error.message).reduce(
@@ -291,6 +295,10 @@ export function* sendResetPassword({ password, userAccessToken }) {
 			userProfile: response,
 		});
 		// sessionStorage.setItem('bible_is_user_id', response.id);
+		sessionStorage.setItem('bible_is_12345', response.user.email);
+		sessionStorage.setItem('bible_is_123456', response.user.nickname);
+		sessionStorage.setItem('bible_is_1234567', response.user.name);
+		sessionStorage.setItem('bible_is_12345678', response.user.avatar);
 	} catch (err) {
 		// console.log('in catch');
 

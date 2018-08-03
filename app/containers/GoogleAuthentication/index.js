@@ -13,6 +13,7 @@ import PopupMessage from '../../components/PopupMessage';
 import { createUserWithSocialAccount } from '../HomePage/actions';
 
 export class GoogleAuthentication extends React.PureComponent {
+	static displayName = 'Google Authentication';
 	// eslint-disable-line react/prefer-stateless-function
 	state = { popupOpen: false, popupCoords: { x: 0, y: 0 } };
 	handleSocialLogin = () => {
