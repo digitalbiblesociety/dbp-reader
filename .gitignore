@@ -17,6 +17,7 @@ next-server
 env-config.js
 sitemaps/
 # Cruft
+temp.txt
 .DS_Store
 npm-debug.log
 .idea
