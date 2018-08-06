@@ -225,7 +225,8 @@ class AppContainer extends React.Component {
 		} = this.props;
 		// console.log('this.props.dispatch in render', this.props);
 		// const descriptionText = chapterText.map((v) => v.verse_text).join(' ');
-		const descriptionText = `${chapterText[0].verse_text}....`;
+		const descriptionText =
+			chapterText && chapterText[0] ? `${chapterText[0].verse_text}....` : '';
 
 		return (
 			<div>
@@ -448,55 +449,57 @@ AppContainer.getInitialProps = async (context) => {
 		{},
 	);
 
-	context.reduxStore.dispatch({
-		type: 'GET_INITIAL_ROUTE_STATE_PROFILE',
-		profile: {
-			userId: userId || '',
-			userAuthenticated: isAuthenticated || false,
-			userProfile: {
-				...userProfile,
-				verified: false,
-				accounts: [],
-			},
-		},
-	});
-
-	context.reduxStore.dispatch({
-		type: 'GET_INITIAL_ROUTE_STATE_HOMEPAGE',
-		homepage: {
-			userProfile,
-			chapterText,
-			testaments,
-			userSettings,
-			formattedSource: textData.formattedText,
-			activeFilesets: bible.filesets['dbp-dev'],
-			books: bible.books,
-			activeChapter: parseInt(chapter, 10),
-			activeBookName,
-			verseNumber: verse,
-			activeTextId: bible.abbr,
-			activeIsoCode: bible.iso,
-			activeLanguageName: bible.language,
-			textDirection: bible.alphabet.direction,
-			defaultLanguageIso: bible.iso || 'eng',
-			defaultLanguageName: bible.language || 'English',
-			activeTextName: bible.vname || bible.name,
-			activeBookId: bookId.toUpperCase(),
-			userId,
-			userAuthenticated: isAuthenticated || false,
-			isFromServer,
-			match: {
-				params: {
-					bibleId,
-					bookId,
-					chapter,
-					verse,
-					token,
+	if (context.reduxStore) {
+		context.reduxStore.dispatch({
+			type: 'GET_INITIAL_ROUTE_STATE_PROFILE',
+			profile: {
+				userId: userId || '',
+				userAuthenticated: isAuthenticated || false,
+				userProfile: {
+					...userProfile,
+					verified: false,
+					accounts: [],
 				},
 			},
-		},
-	});
-	// console.log('Got the initial state!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+		});
+		context.reduxStore.dispatch({
+			type: 'GET_INITIAL_ROUTE_STATE_HOMEPAGE',
+			homepage: {
+				userProfile,
+				chapterText,
+				testaments,
+				userSettings,
+				formattedSource: textData.formattedText,
+				activeFilesets: bible.filesets['dbp-dev'],
+				books: bible.books,
+				activeChapter: parseInt(chapter, 10),
+				activeBookName,
+				verseNumber: verse,
+				activeTextId: bible.abbr,
+				activeIsoCode: bible.iso,
+				activeLanguageName: bible.language,
+				textDirection: bible.alphabet.direction,
+				defaultLanguageIso: bible.iso || 'eng',
+				defaultLanguageName: bible.language || 'English',
+				activeTextName: bible.vname || bible.name,
+				activeBookId: bookId.toUpperCase(),
+				userId,
+				userAuthenticated: isAuthenticated || false,
+				isFromServer,
+				match: {
+					params: {
+						bibleId,
+						bookId,
+						chapter,
+						verse,
+						token,
+					},
+				},
+			},
+		});
+		// console.log('Got the initial state!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+	}
+
 	return {
 		// isServer,
 		chapterText,
