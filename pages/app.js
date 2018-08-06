@@ -9,6 +9,7 @@
 * Todos
 * todo: Replace all tabIndex 0 values with what they should actually be
 * todo: Set up a function to init all of the plugins that rely on the browser
+* todo: Update site url to match the live site domain name
 * */
 // Needed for redux-saga es6 generator support
 import 'babel-polyfill';
@@ -216,35 +217,39 @@ class AppContainer extends React.Component {
 	routerWasUpdated = false;
 
 	render() {
-		const { activeChapter, chapterText, activeBookName } = this.props;
+		const {
+			activeChapter,
+			chapterText,
+			activeBookName,
+			routeLocation,
+		} = this.props;
 		// console.log('this.props.dispatch in render', this.props);
+		// const descriptionText = chapterText.map((v) => v.verse_text).join(' ');
+		const descriptionText = `${chapterText[0].verse_text}....`;
 
 		return (
 			<div>
 				<Head>
-					<meta
-						name={'description'}
-						content={chapterText.map((v) => v.verse_text).join(' ')}
-					/>
+					<meta name={'description'} content={descriptionText} />
 					<meta
 						property={'og:title'}
 						content={`${activeBookName} ${activeChapter}${
 							this.props.match.params.verse
 								? `:${this.props.match.params.verse}`
 								: ''
-						}`}
+						} | Bible.is`}
 					/>
-					<meta property={'og:url'} content="contextLocation" />
+					{/* may need to replace contextLocation with the actual url */}
 					<meta
-						property={'og:description'}
-						content={chapterText.map((v) => v.verse_text).join(' ')}
+						property={'og:url'}
+						content={`https://is.bible.build/${routeLocation}`}
 					/>
-					<meta property={'og:type'} content={'website'} />
-					<meta property={'og:site_name'} content={'Bible.is'} />
+					<meta property={'og:description'} content={descriptionText} />
 					<meta
-						property={'og:image'}
-						content={'/static/apple-icon-180x180.png'}
+						name={'twitter:title'}
+						content={`${activeBookName} ${activeChapter}`}
 					/>
+					<meta name={'twitter:description'} content={descriptionText} />
 					<title>
 						{`${activeBookName} ${activeChapter}${
 							this.props.match.params.verse
@@ -262,6 +267,8 @@ class AppContainer extends React.Component {
 
 AppContainer.getInitialProps = async (context) => {
 	// console.log('Get initial props started running');
+	const routeLocation = context.asPath;
+
 	const { bibleId, bookId, chapter, verse, token } = context.query;
 	let isFromServer = true;
 	const userProfile = {};
@@ -512,6 +519,7 @@ AppContainer.getInitialProps = async (context) => {
 		userId: userId || '',
 		isAuthenticated: isAuthenticated || false,
 		isFromServer,
+		routeLocation,
 		match: {
 			params: {
 				bibleId,
@@ -535,6 +543,7 @@ AppContainer.propTypes = {
 	activeChapter: PropTypes.number,
 	chapterText: PropTypes.array,
 	activeBookName: PropTypes.string,
+	routeLocation: PropTypes.string,
 	match: PropTypes.object,
 	fetchedUrls: PropTypes.array,
 	// books: PropTypes.array,
