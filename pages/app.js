@@ -224,7 +224,8 @@ class AppContainer extends React.Component {
 			routeLocation,
 		} = this.props;
 		// console.log('this.props.dispatch in render', this.props);
-		const descriptionText = chapterText.map((v) => v.verse_text).join(' ');
+		// const descriptionText = chapterText.map((v) => v.verse_text).join(' ');
+		const descriptionText = `${chapterText[0].verse_text}....`;
 
 		return (
 			<div>
