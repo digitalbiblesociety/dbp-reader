@@ -18,7 +18,7 @@ import BooksTable from '../../components/BooksTable';
 // import SvgWrapper from '../../components/SvgWrapper';
 import injectSaga from '../../utils/injectSaga';
 import injectReducer from '../../utils/injectReducer';
-import GenericErrorBoundary from '../../components/GenericErrorBoundary';
+// import GenericErrorBoundary from '../../components/GenericErrorBoundary';
 import CloseMenuFunctions from '../../utils/closeMenuFunctions';
 import { selectActiveBookName, selectActiveChapter } from './selectors';
 import reducer from './reducer';
@@ -76,22 +76,20 @@ export class ChapterSelection extends React.PureComponent {
 		const { activeBookName, active } = this.props;
 
 		return (
-			<GenericErrorBoundary affectedArea="ChapterSelection">
-				<aside
-					style={{ display: active ? 'flex' : 'none' }}
-					ref={this.setAsideRef}
-					onTouchEnd={this.stopTouchProp}
-					onClick={this.stopClickProp}
-					className="chapter-text-dropdown"
-				>
-					<BooksTable
-						setActiveChapter={this.setActiveChapter}
-						closeBookTable={this.toggleChapterSelection}
-						setActiveBookName={this.setActiveBookName}
-						initialBookName={activeBookName}
-					/>
-				</aside>
-			</GenericErrorBoundary>
+			<div
+				style={{ display: active ? 'flex' : 'none' }}
+				ref={this.setAsideRef}
+				onTouchEnd={this.stopTouchProp}
+				onClick={this.stopClickProp}
+				className="chapter-text-dropdown"
+			>
+				<BooksTable
+					setActiveChapter={this.setActiveChapter}
+					closeBookTable={this.toggleChapterSelection}
+					setActiveBookName={this.setActiveBookName}
+					initialBookName={activeBookName}
+				/>
+			</div>
 		);
 	}
 }

@@ -52,8 +52,6 @@ class SpeedControl extends React.PureComponent {
 							className={
 								currentSpeed === option ? 'speed-item active' : 'speed-item'
 							}
-							role="button"
-							tabIndex={0}
 							onClick={() => setSpeed(option)}
 						>
 							{option}
