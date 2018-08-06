@@ -67,14 +67,15 @@ export class Profile extends React.PureComponent {
 		userProfile.nickname = sessionStorage.getItem('bible_is_123456');
 		userProfile.name = sessionStorage.getItem('bible_is_1234567');
 		userProfile.avatar = sessionStorage.getItem('bible_is_12345678');
-
-		this.props.dispatch(
-			setUserLoginStatus({
-				userProfile,
-				userId,
-				userAuthenticated,
-			}),
-		);
+		if (userId && userAuthenticated) {
+			this.props.dispatch(
+				setUserLoginStatus({
+					userProfile,
+					userId,
+					userAuthenticated,
+				}),
+			);
+		}
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -197,6 +198,7 @@ export class Profile extends React.PureComponent {
 		} = this.props.profile;
 		const { popupOpen, popupCoords } = this.state;
 		// console.log('passwordResetMessage', passwordResetMessage);
+		// console.log('userAuthenticated', userAuthenticated);
 
 		return userAuthenticated ? (
 			<AccountSettings

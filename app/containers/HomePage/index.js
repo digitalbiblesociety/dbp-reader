@@ -144,22 +144,19 @@ class HomePage extends React.PureComponent {
 		} else {
 			// console.log('localStorage.getItem(user_id)', localStorage.getItem('bible_is_user_id'));
 			// console.log('sessionStorage.getItem(user_id)', sessionStorage.getItem('bible_is_user_id'));
-			const sessionId =
-				localStorage.getItem('bible_is_user_id') ||
-				sessionStorage.getItem('bible_is_user_id');
 			this.props.dispatch(
 				getHighlights({
 					bible: activeTextId,
 					book: activeBookId,
 					chapter: activeChapter,
-					userAuthenticated: !!sessionId,
-					userId: sessionId,
+					userAuthenticated: !!userId,
+					userId,
 				}),
 			);
-			if (sessionId) {
+			if (userId) {
 				this.props.dispatch(
 					getNotes({
-						userId: sessionId,
+						userId,
 						params: {
 							bible_id: activeTextId,
 							book_id: activeBookId,
@@ -171,7 +168,7 @@ class HomePage extends React.PureComponent {
 				);
 				this.props.dispatch(
 					getBookmarksForChapter({
-						userId: sessionId,
+						userId,
 						params: {
 							bible_id: activeTextId,
 							book_id: activeBookId,
