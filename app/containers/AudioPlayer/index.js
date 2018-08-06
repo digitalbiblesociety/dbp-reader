@@ -575,8 +575,8 @@ export class AudioPlayer extends React.Component {
 		} = this.props;
 		const { autoPlayChecked, currentSpeed } = this.state;
 		// console.log('____________________________\nAudio Player component rendered!');
-		// console.log('____________________________\n', source);
-		// console.log('____________________________\n', this.props.audioPaths);
+		// console.log('_______________ ', this.props.activeBookId, this.props.activeChapter, this.props.activeTextId, this.props.text, this.props.verseNumber, this.props.books);
+		// console.log('____________________________\n', this.props.activeChapter);
 
 		return (
 			<GenericErrorBoundary affectedArea="AudioPlayer">

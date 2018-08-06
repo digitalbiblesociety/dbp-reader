@@ -10,6 +10,7 @@
 * todo: Replace all tabIndex 0 values with what they should actually be
 * todo: Set up a function to init all of the plugins that rely on the browser
 * todo: Update site url to match the live site domain name
+* todo: Use cookies instead of session and local storage for all user settings (involves user approval before it can be utilized)
 * */
 // Needed for redux-saga es6 generator support
 import 'babel-polyfill';
@@ -45,7 +46,6 @@ class AppContainer extends React.Component {
 				overrideCache(url.href, url.data);
 			});
 		}
-		// Todo: Store all local variables needed
 		localStorage.setItem('bible_is_2_book_id', this.props.match.params.bookId);
 		localStorage.setItem('bible_is_3_chapter', this.props.match.params.chapter);
 		localStorage.setItem(
@@ -94,7 +94,8 @@ class AppContainer extends React.Component {
 
 		const userId =
 			localStorage.getItem('bible_is_user_id') ||
-			sessionStorage.getItem('bible_is_user_id');
+			sessionStorage.getItem('bible_is_user_id') ||
+			'';
 		const isAuthenticated = !!(
 			localStorage.getItem('bible_is_user_id') ||
 			sessionStorage.getItem('bible_is_user_id')
@@ -167,6 +168,9 @@ class AppContainer extends React.Component {
 				? JSON.parse(sessionStorage.getItem('bible_is_autoplay'))
 				: false,
 		};
+		// console.log('user profile', userProfile);
+		// console.log('userId', userId);
+		// console.log('isAuthenticated', isAuthenticated);
 
 		if (userId && isAuthenticated) {
 			this.props.dispatch({
@@ -209,8 +213,8 @@ class AppContainer extends React.Component {
 		Router.router.events.off('routeChangeStart', this.handleRouteChange);
 	}
 
-	handleRouteChange = () => {
-		// console.log('Router change start fired');
+	handleRouteChange = (url) => {
+		console.log('Router change start fired', url);
 		this.props.dispatch(setChapterTextLoadingState({ state: true }));
 	};
 
@@ -225,6 +229,7 @@ class AppContainer extends React.Component {
 		} = this.props;
 		// console.log('this.props.dispatch in render', this.props);
 		// const descriptionText = chapterText.map((v) => v.verse_text).join(' ');
+		// Defaulting description text to an empty string since no metadata is better than inaccurate metadata
 		const descriptionText =
 			chapterText && chapterText[0] ? `${chapterText[0].verse_text}....` : '';
 
@@ -269,10 +274,10 @@ class AppContainer extends React.Component {
 AppContainer.getInitialProps = async (context) => {
 	// console.log('Get initial props started running');
 	const routeLocation = context.asPath;
-
 	const { bibleId, bookId, chapter, verse, token } = context.query;
-	let isFromServer = true;
 	const userProfile = {};
+
+	let isFromServer = true;
 	let userSettings = {};
 	let userId = '';
 	let isAuthenticated = false;
@@ -292,10 +297,10 @@ AppContainer.getInitialProps = async (context) => {
 			localStorage.getItem('bible_is_user_id') ||
 			sessionStorage.getItem('bible_is_user_id')
 		);
-		userProfile.email = sessionStorage.getItem('bible_is_12345');
-		userProfile.nickname = sessionStorage.getItem('bible_is_123456');
-		userProfile.name = sessionStorage.getItem('bible_is_1234567');
-		userProfile.avatar = sessionStorage.getItem('bible_is_12345678');
+		userProfile.email = sessionStorage.getItem('bible_is_12345') || '';
+		userProfile.nickname = sessionStorage.getItem('bible_is_123456') || '';
+		userProfile.name = sessionStorage.getItem('bible_is_1234567') || '';
+		userProfile.avatar = sessionStorage.getItem('bible_is_12345678') || '';
 		userSettings = {
 			activeTheme: sessionStorage.getItem('bible_is_theme') || 'red',
 			activeFontType: sessionStorage.getItem('bible_is_font_family') || 'sans',
@@ -398,38 +403,56 @@ AppContainer.getInitialProps = async (context) => {
 
 	// console.log('bible.name', bible.name);
 	// console.log('bible.abbr', bible.abbr);
-	let textData = { plainText: [], formattedText: '', plainTextJson: {} };
+	let initData = {
+		plainText: [],
+		formattedText: '',
+		plainTextJson: {},
+		audioPaths: [''],
+	};
 	try {
 		// console.log('Before init func');
-		textData = await getinitialChapterData({
-			filesets: bible.filesets['dbp-dev'],
+		initData = await getinitialChapterData({
+			filesets: bible.filesets ? bible.filesets['dbp-dev'] : [],
 			bookId,
 			chapter,
 		}).catch((err) => {
 			if (process.env.NODE_ENV === 'development') {
-				console.error(`Error caught in get initial: ${err.message}`); // eslint-disable-line no-console
+				console.error(
+					`Error caught in get initial chapter data in promise: ${err.message}`,
+				); // eslint-disable-line no-console
 			}
-			return { formattedText: '', plainText: [] };
+			return {
+				formattedText: '',
+				plainText: [],
+				plainTextJson: {},
+				audioPaths: [''],
+			};
 		});
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
-			console.error(`Error caught in get initial by try catch: ${err.message}`); // eslint-disable-line no-console
+			console.error(
+				`Error caught in get initial chapter data by try catch: ${err.message}`,
+			); // eslint-disable-line no-console
 		}
 	}
-	// console.log('After init func', Object.keys(textData));
+	// console.log('After init func', Object.keys(initData));
+	// console.log('initData.audioPaths', initData.audioPaths);
+
 	// Get text for chapter
 	// const textRes = await fetch(textUrl);
-	const textJson = textData.plainTextJson;
-	const chapterText = textData.plainText;
+	const textJson = initData.plainTextJson;
+	const chapterText = initData.plainText;
 	// console.log('chapterText', chapterText);
 	// Need to try the other bible id if there wasn't any chapter text
 	if (!chapterText) {
 		// next id
 	}
 
-	const activeBook = bible.books.find(
-		(book) => book.book_id.toLowerCase() === bookId.toLowerCase(),
-	);
+	const activeBook = bible.books
+		? bible.books.find(
+				(book) => book.book_id.toLowerCase() === bookId.toLowerCase(),
+		  )
+		: undefined;
 	// console.log('activeBook', activeBook);
 	// console.log('bible.books', bible.books);
 
@@ -466,23 +489,24 @@ AppContainer.getInitialProps = async (context) => {
 			type: 'GET_INITIAL_ROUTE_STATE_HOMEPAGE',
 			homepage: {
 				userProfile,
+				audioPaths: initData.audioPaths,
 				chapterText,
 				testaments,
 				userSettings,
-				formattedSource: textData.formattedText,
-				activeFilesets: bible.filesets['dbp-dev'],
-				books: bible.books,
-				activeChapter: parseInt(chapter, 10),
+				formattedSource: initData.formattedText,
+				activeFilesets: bible.filesets ? bible.filesets['dbp-dev'] : [],
+				books: bible.books || [],
+				activeChapter: parseInt(chapter, 10) || 1,
 				activeBookName,
 				verseNumber: verse,
-				activeTextId: bible.abbr,
-				activeIsoCode: bible.iso,
-				activeLanguageName: bible.language,
-				textDirection: bible.alphabet.direction,
+				activeTextId: bible.abbr || '',
+				activeIsoCode: bible.iso || '',
+				activeLanguageName: bible.language || '',
+				textDirection: bible.alphabet ? bible.alphabet.direction : 'ltr',
 				defaultLanguageIso: bible.iso || 'eng',
 				defaultLanguageName: bible.language || 'English',
 				activeTextName: bible.vname || bible.name,
-				activeBookId: bookId.toUpperCase(),
+				activeBookId: bookId.toUpperCase() || '',
 				userId,
 				userAuthenticated: isAuthenticated || false,
 				isFromServer,
@@ -504,7 +528,7 @@ AppContainer.getInitialProps = async (context) => {
 		// isServer,
 		chapterText,
 		testaments,
-		formattedText: textData.formattedText,
+		formattedText: initData.formattedText,
 		books: bible.books,
 		activeChapter: parseInt(chapter, 10),
 		activeBookName,
@@ -512,8 +536,8 @@ AppContainer.getInitialProps = async (context) => {
 		activeTextId: bible.abbr,
 		activeIsoCode: bible.iso,
 		activeLanguageName: bible.language,
-		textDirection: bible.alphabet.direction,
-		filesets: bible.filesets['dbp-dev'],
+		textDirection: bible.alphabet ? bible.alphabet.direction : 'ltr',
+		activeFilesets: bible.filesets ? bible.filesets['dbp-dev'] : [],
 		defaultLanguageIso: bible.iso || 'eng',
 		defaultLanguageName: bible.language || 'English',
 		activeTextName: bible.vname || bible.name,
