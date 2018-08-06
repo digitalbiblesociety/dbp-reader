@@ -20,7 +20,7 @@ import SpeedControl from '../../components/SpeedControl';
 import AudioProgressBar from '../../components/AudioProgressBar';
 import VolumeSlider from '../../components/VolumeSlider';
 // import AudioPlayerMenu from '../../components/AudioPlayerMenu';
-import GenericErrorBoundary from '../../components/GenericErrorBoundary';
+// import GenericErrorBoundary from '../../components/GenericErrorBoundary';
 import makeSelectAudioPlayer, { selectHasAudio } from './selectors';
 import reducer from './reducer';
 import messages from './messages';
@@ -579,7 +579,7 @@ export class AudioPlayer extends React.Component {
 		// console.log('____________________________\n', this.props.activeChapter);
 
 		return (
-			<GenericErrorBoundary affectedArea="AudioPlayer">
+			<React.Fragment>
 				<div
 					className={this.classNamesForHandle}
 					onClick={(e) => {
@@ -706,7 +706,7 @@ export class AudioPlayer extends React.Component {
 						src={source || '_'}
 					/>
 				</div>
-			</GenericErrorBoundary>
+			</React.Fragment>
 		);
 	}
 }

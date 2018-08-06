@@ -15,7 +15,6 @@ import SignUp from '../../components/SignUp';
 import Login from '../../components/Login';
 import PasswordReset from '../../components/PasswordReset';
 import AccountSettings from '../../components/AccountSettings';
-import GenericErrorBoundary from '../../components/GenericErrorBoundary';
 import SvgWrapper from '../../components/SvgWrapper';
 import PasswordResetVerified from '../../components/PasswordResetVerified';
 import CloseMenuFunctions from '../../utils/closeMenuFunctions';
@@ -279,35 +278,33 @@ export class Profile extends React.PureComponent {
 		// console.log('userAccessToken', userAccessToken);
 
 		return (
-			<GenericErrorBoundary affectedArea="Profile">
-				<aside ref={this.setRef} className="profile">
-					<header>
-						<h1>Profile</h1>
-						<SvgWrapper
-							className={'icon'}
-							svgid={'profile'}
-							onClick={toggleProfile}
+			<aside ref={this.setRef} className="profile">
+				<header>
+					<h1>Profile</h1>
+					<SvgWrapper
+						className={'icon'}
+						svgid={'profile'}
+						onClick={toggleProfile}
+					/>
+					<SvgWrapper
+						className={'icon'}
+						svgid={'arrow_left'}
+						onClick={toggleProfile}
+					/>
+				</header>
+				<div className="profile-content">
+					{userAccessToken ? (
+						<PasswordResetVerified
+							sendPasswordReset={this.sendPasswordReset}
+							popupOpen={popupOpen}
+							popupCoords={popupCoords}
+							openPopup={this.openPopup}
 						/>
-						<SvgWrapper
-							className={'icon'}
-							svgid={'arrow_left'}
-							onClick={toggleProfile}
-						/>
-					</header>
-					<div className="profile-content">
-						{userAccessToken ? (
-							<PasswordResetVerified
-								sendPasswordReset={this.sendPasswordReset}
-								popupOpen={popupOpen}
-								popupCoords={popupCoords}
-								openPopup={this.openPopup}
-							/>
-						) : (
-							this.accountOptions
-						)}
-					</div>
-				</aside>
-			</GenericErrorBoundary>
+					) : (
+						this.accountOptions
+					)}
+				</div>
+			</aside>
 		);
 	}
 }
