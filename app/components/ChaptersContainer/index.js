@@ -21,7 +21,7 @@ function ChaptersContainer({
 }) {
 	if (bookName || bookNameShort) {
 		return (
-			<div
+			<span
 				className={`chapter-container${
 					selectedBookName === (bookName || bookNameShort)
 						? ' active-book-chapters'
@@ -34,12 +34,7 @@ function ChaptersContainer({
 						as={`/bible/${activeTextId.toLowerCase()}/${bookId.toLowerCase()}/${chapter}`}
 						key={chapter}
 					>
-						<a
-							role={'button'}
-							tabIndex={0}
-							className={'chapter-box'}
-							onClick={() => handleChapterClick()}
-						>
+						<a className={'chapter-box'} onClick={() => handleChapterClick()}>
 							<span
 								className={
 									activeChapter === chapter &&
@@ -53,7 +48,7 @@ function ChaptersContainer({
 						</a>
 					</Link>
 				))}
-			</div>
+			</span>
 		);
 	}
 

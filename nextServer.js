@@ -200,7 +200,7 @@ app
 		});
 
 		process.on('SIGINT', () => {
-			server.close((err) => {
+			app.close((err) => {
 				if (err) {
 					console.error(err); // eslint-disable-line no-console
 					process.exit(1);

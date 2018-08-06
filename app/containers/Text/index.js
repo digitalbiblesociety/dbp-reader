@@ -432,7 +432,9 @@ class Text extends React.PureComponent {
 				}
 			} else if (!isFormatted) {
 				const verseNode = getPlainParentVerseWithoutNumber(target);
-				const firstVerse = verseNode ? verseNode.attributes.verseid.value : '';
+				const firstVerse = verseNode
+					? verseNode.attributes['data-verseid'].value
+					: '';
 				// console.log('first plain verse', firstVerse);
 				// third check may not be required, if micro optimization is needed then look into removing contains
 				if (primaryButton && this.main.contains(target) && firstVerse) {
@@ -522,7 +524,9 @@ class Text extends React.PureComponent {
 				}
 			} else if (!isFormatted) {
 				const verseNode = getPlainParentVerseWithoutNumber(target);
-				const lastVerse = verseNode ? verseNode.attributes.verseid.value : '';
+				const lastVerse = verseNode
+					? verseNode.attributes['data-verseid'].value
+					: '';
 				// console.log('last plain verse', lastVerse);
 				// third check may not be required, if micro optimization is needed then look into removing contains
 				if (
@@ -696,7 +700,7 @@ class Text extends React.PureComponent {
 									onMouseUp={this.handleMouseUp}
 									onMouseDown={this.getFirstVerse}
 									onClick={this.handleHighlightClick}
-									verseid={verse.verse_start}
+									data-verseid={verse.verse_start}
 									key={verse.verse_start}
 									dangerouslySetInnerHTML={{ __html: verse.verse_text }}
 								/>,
@@ -712,7 +716,7 @@ class Text extends React.PureComponent {
 									onMouseUp={this.handleMouseUp}
 									onMouseDown={this.getFirstVerse}
 									onClick={this.handleHighlightClick}
-									verseid={verse.verse_start}
+									data-verseid={verse.verse_start}
 									key={verse.verse_start}
 								>
 									{verse.verse_text}
@@ -733,11 +737,11 @@ class Text extends React.PureComponent {
 							onMouseUp={this.handleMouseUp}
 							onMouseDown={this.getFirstVerse}
 							onClick={this.handleHighlightClick}
-							verseid={verse.verse_start}
+							data-verseid={verse.verse_start}
 							key={verse.verse_start}
 						>
 							<br />
-							<sup verseid={verse.verse_start}>
+							<sup data-verseid={verse.verse_start}>
 								&nbsp;{verse.verse_start_alt || verse.verse_start}&nbsp;
 							</sup>
 							<IconsInText
@@ -749,7 +753,7 @@ class Text extends React.PureComponent {
 								noteData={{ hasNote: verse.hasNote, index: verse.noteIndex }}
 							/>
 							<span
-								verseid={verse.verse_start}
+								data-verseid={verse.verse_start}
 								dangerouslySetInnerHTML={{ __html: verse.verse_text }}
 							/>
 						</span>
@@ -758,11 +762,11 @@ class Text extends React.PureComponent {
 							onMouseUp={this.handleMouseUp}
 							onMouseDown={this.getFirstVerse}
 							onClick={this.handleHighlightClick}
-							verseid={verse.verse_start}
+							data-verseid={verse.verse_start}
 							key={verse.verse_start}
 						>
 							<br />
-							<sup verseid={verse.verse_start}>
+							<sup data-verseid={verse.verse_start}>
 								&nbsp;{verse.verse_start_alt || verse.verse_start}&nbsp;
 							</sup>
 							<IconsInText
@@ -773,7 +777,7 @@ class Text extends React.PureComponent {
 								}}
 								noteData={{ hasNote: verse.hasNote, index: verse.noteIndex }}
 							/>
-							<span verseid={verse.verse_start}>{verse.verse_text}</span>
+							<span data-verseid={verse.verse_start}>{verse.verse_text}</span>
 						</span>
 					),
 			);
@@ -811,10 +815,10 @@ class Text extends React.PureComponent {
 									? 'align-left active-verse'
 									: 'align-left'
 							}
-							verseid={verse.verse_start}
+							data-verseid={verse.verse_start}
 							key={verse.verse_start}
 						>
-							<sup verseid={verse.verse_start}>
+							<sup data-verseid={verse.verse_start}>
 								&nbsp;{verse.verse_start_alt || verse.verse_start}&nbsp;
 							</sup>
 							<IconsInText
@@ -826,7 +830,7 @@ class Text extends React.PureComponent {
 								noteData={{ hasNote: verse.hasNote, index: verse.noteIndex }}
 							/>
 							<span
-								verseid={verse.verse_start}
+								data-verseid={verse.verse_start}
 								dangerouslySetInnerHTML={{ __html: verse.verse_text }}
 							/>
 						</span>
@@ -842,10 +846,10 @@ class Text extends React.PureComponent {
 									? 'align-left active-verse'
 									: 'align-left'
 							}
-							verseid={verse.verse_start}
+							data-verseid={verse.verse_start}
 							key={verse.verse_start}
 						>
-							<sup verseid={verse.verse_start}>
+							<sup data-verseid={verse.verse_start}>
 								&nbsp;{verse.verse_start_alt || verse.verse_start}&nbsp;
 							</sup>
 							<IconsInText
@@ -856,7 +860,7 @@ class Text extends React.PureComponent {
 								}}
 								noteData={{ hasNote: verse.hasNote, index: verse.noteIndex }}
 							/>
-							<span verseid={verse.verse_start}>{verse.verse_text}</span>
+							<span data-verseid={verse.verse_start}>{verse.verse_text}</span>
 						</span>
 					),
 			);
@@ -1286,8 +1290,8 @@ class Text extends React.PureComponent {
 					} else {
 						// take the offset that matches the first(lowest) verse between the two
 						// console.log('parent verse is not the same for both elements');
-						const aVerseNumber = aParent.attributes.verseid.value;
-						const eVerseNumber = eParent.attributes.verseid.value;
+						const aVerseNumber = aParent.attributes['data-verseid'].value;
+						const eVerseNumber = eParent.attributes['data-verseid'].value;
 						// console.log('aVerseNumber', aVerseNumber);
 						// console.log('eVerseNumber', eVerseNumber);
 

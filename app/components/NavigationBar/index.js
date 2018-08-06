@@ -57,12 +57,7 @@ class NavigationBar extends React.PureComponent {
 							/>
 						) : null}
 					</a>
-					<span
-						role="button"
-						tabIndex={0}
-						onClick={toggleVersionSelection}
-						className="version"
-					>
+					<div onClick={toggleVersionSelection} className="version">
 						<SvgWrapper
 							className="svg icon"
 							fill="#fff"
@@ -83,13 +78,8 @@ class NavigationBar extends React.PureComponent {
 						</h1>
 						<TextSelection active={isVersionSelectionActive} />
 						{/* {isVersionSelectionActive ? <TextSelection /> : null} */}
-					</span>
-					<span
-						role="button"
-						tabIndex={0}
-						onClick={toggleChapterSelection}
-						className="book-chapter"
-					>
+					</div>
+					<div onClick={toggleChapterSelection} className="book-chapter">
 						<SvgWrapper
 							className="svg icon"
 							fill="#fff"
@@ -110,7 +100,7 @@ class NavigationBar extends React.PureComponent {
 						</h1>
 						<ChapterSelection active={isChapterSelectionActive} />
 						{/* {isChapterSelectionActive ? <ChapterSelection /> : null} */}
-					</span>
+					</div>
 				</div>
 			</div>
 		);

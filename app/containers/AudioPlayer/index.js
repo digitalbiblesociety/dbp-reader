@@ -507,12 +507,7 @@ export class AudioPlayer extends React.Component {
 			withData
 			prefetch
 		>
-			<div
-				role={'button'}
-				tabIndex={0}
-				className={'icon-wrap'}
-				title={messages.nextTitle.defaultMessage}
-			>
+			<div className={'icon-wrap'} title={messages.nextTitle.defaultMessage}>
 				<SvgWrapper className="svgitem icon" fill="#fff" svgid="next" />
 				<FormattedMessage {...messages.next} />
 			</div>
@@ -542,12 +537,7 @@ export class AudioPlayer extends React.Component {
 			withData
 			prefetch
 		>
-			<div
-				role={'button'}
-				tabIndex={0}
-				className={'icon-wrap'}
-				title={messages.prevTitle.defaultMessage}
-			>
+			<div className={'icon-wrap'} title={messages.prevTitle.defaultMessage}>
 				<SvgWrapper className="svgitem icon" fill="#fff" svgid="previous" />
 				<FormattedMessage {...messages.prev} />
 			</div>
@@ -557,8 +547,6 @@ export class AudioPlayer extends React.Component {
 	pauseIcon = (
 		<div
 			onClick={this.pauseAudio}
-			role={'button'}
-			tabIndex={0}
 			className={'icon-wrap'}
 			title={messages.pauseTitle.defaultMessage}
 		>
@@ -570,8 +558,6 @@ export class AudioPlayer extends React.Component {
 	playIcon = (
 		<div
 			onClick={this.playAudio}
-			role={'button'}
-			tabIndex={0}
 			className={'icon-wrap'}
 			title={messages.playTitle.defaultMessage}
 		>
@@ -595,9 +581,6 @@ export class AudioPlayer extends React.Component {
 		return (
 			<GenericErrorBoundary affectedArea="AudioPlayer">
 				<div
-					role={'button'}
-					tabIndex={0}
-					name={'Audio player toggle'}
 					className={this.classNamesForHandle}
 					onClick={(e) => {
 						e.stopPropagation();
@@ -615,8 +598,6 @@ export class AudioPlayer extends React.Component {
 					/>
 				</div>
 				<div
-					role="button"
-					tabIndex={0}
 					className={this.classNamesForBackground}
 					ref={this.setAudioPlayerRef}
 					onClick={this.handleBackgroundClick}
@@ -655,8 +636,6 @@ export class AudioPlayer extends React.Component {
 						<div id="volume-wrap" className={'icon-wrap'}>
 							<div
 								title={messages.volumeTitle.defaultMessage}
-								role="button"
-								tabIndex="0"
 								className={
 									this.state.volumeSliderState ? 'item active' : 'item'
 								}
@@ -690,8 +669,6 @@ export class AudioPlayer extends React.Component {
 						<div id="speed-wrap" className={'icon-wrap'}>
 							<div
 								title={messages.speedTitle.defaultMessage}
-								role="button"
-								tabIndex="0"
 								className={
 									this.state.speedControlState ? 'item active' : 'item'
 								}
@@ -723,7 +700,11 @@ export class AudioPlayer extends React.Component {
 							/>
 						</div>
 					</div>
-					<audio ref={this.handleRef} className="audio-player" src={source} />
+					<audio
+						ref={this.handleRef}
+						className="audio-player"
+						src={source || '_'}
+					/>
 				</div>
 			</GenericErrorBoundary>
 		);
