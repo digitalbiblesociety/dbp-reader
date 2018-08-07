@@ -452,6 +452,9 @@ export function* getBookmarksForChapter({ userId, params = {} }) {
 	// response.per_page = perPage
 	// pages = totalPages
 	// notes = response.data
+	// console.log('Getting bookmarks for the chapter!!!!!!!!!!!!!!!!!!!!!!!!');
+	// console.log('userId', userId);
+	// console.log('params', params);
 	const requestUrl = `${
 		process.env.BASE_API_ROUTE
 	}/users/${userId}/bookmarks?key=${
@@ -571,6 +574,10 @@ export default function* notesSaga() {
 		GET_BOOKMARKS_FOR_CHAPTER,
 		getBookmarksForChapter,
 	);
+	// const getBookmarksForChapterSagaAfterAdd = yield takeLatest(
+	// 	ADD_BOOKMARK_SUCCESS,
+	// 	getBookmarksForChapter,
+	// );
 	const getUserBookmarksSaga = yield takeLatest(
 		GET_USER_BOOKMARK_DATA,
 		getUserBookmarks,
@@ -582,6 +589,7 @@ export default function* notesSaga() {
 	yield cancel(getChapterSaga);
 	yield cancel(updateNoteSaga);
 	yield cancel(deleteNoteSaga);
+	// yield cancel(getBookmarksForChapterSagaAfterAdd);
 	// yield cancel(setPageSize);
 	// yield cancel(setActivePage);
 	yield cancel(getNotebookSaga);

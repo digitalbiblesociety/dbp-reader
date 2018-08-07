@@ -14,7 +14,7 @@ import PleaseSignInMessage from '../../components/PleaseSignInMessage';
 import SvgWrapper from '../../components/SvgWrapper';
 import EditNote from '../../components/EditNote';
 import MyNotes from '../../components/MyNotes';
-import injectSaga from '../../utils/injectSaga';
+// import injectSaga from '../../utils/injectSaga';
 import injectReducer from '../../utils/injectReducer';
 import CloseMenuFunctions from '../../utils/closeMenuFunctions';
 import { setActiveNote, deleteHighlights } from '../HomePage/actions';
@@ -50,7 +50,7 @@ import makeSelectNotes, {
 	selectActiveBookName,
 } from './selectors';
 import reducer from './reducer';
-import saga from './saga';
+// import saga from './saga';
 import messages from './messages';
 
 export class Notes extends React.PureComponent {
@@ -436,10 +436,10 @@ const withConnect = connect(
 );
 
 const withReducer = injectReducer({ key: 'notes', reducer });
-const withSaga = injectSaga({ key: 'notes', saga });
+// const withSaga = injectSaga({ key: 'notes', saga });
 
 export default compose(
 	withReducer,
-	withSaga,
+	// withSaga,
 	withConnect,
 )(Notes);

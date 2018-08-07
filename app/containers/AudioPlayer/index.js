@@ -710,7 +710,7 @@ export class AudioPlayer extends React.Component {
 							</div>
 							<SpeedControl
 								active={this.state.speedControlState}
-								options={[0.75, 1, 1.25, 1.5, 1.75]}
+								options={[0.75, 1, 1.25, 1.5, 2]}
 								onCloseFunction={this.closeModals}
 								setSpeed={this.updatePlayerSpeed}
 								currentSpeed={currentSpeed}

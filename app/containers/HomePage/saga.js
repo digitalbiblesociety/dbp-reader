@@ -31,6 +31,8 @@ import {
 	GET_COPYRIGHTS,
 	INIT_APPLICATION,
 	DELETE_HIGHLIGHTS,
+	ADD_BOOKMARK_SUCCESS,
+	ADD_BOOKMARK_FAILURE,
 	CREATE_USER_WITH_SOCIAL_ACCOUNT,
 } from './constants';
 import {
@@ -126,7 +128,7 @@ export function* getIpAddress() {
 }
 
 export function* addBookmark(props) {
-	// console.log('adding bookmark with props: ', props);
+	console.log('adding bookmark with props: ', props);
 	const requestUrl = `${process.env.BASE_API_ROUTE}/users/${
 		props.data.user_id
 	}/bookmarks?key=${process.env.DBP_API_KEY}&v=4&pretty&project_id=${
@@ -147,7 +149,7 @@ export function* addBookmark(props) {
 	try {
 		const response = yield call(request, requestUrl, options);
 		// console.log('user bookmark response', response);  // eslint-disable-line no-console
-		if (response.success) {
+		if (response) {
 			// do stuff
 			// console.log('Success message: ', response.success);
 			yield fork(getBookmarksForChapter, {
@@ -160,8 +162,20 @@ export function* addBookmark(props) {
 					page: 1,
 				},
 			});
+			yield put({
+				type: ADD_BOOKMARK_SUCCESS,
+				userId: props.data.user_id,
+				params: {
+					bible_id: props.data.bible_id,
+					book_id: props.data.book_id,
+					chapter: props.data.chapter,
+					limit: 150,
+					page: 1,
+				},
+			});
 		} else {
-			// console.log('Other message that wasn\'t a success: ', response);
+			yield put({ type: ADD_BOOKMARK_FAILURE });
+			// console.log('Other message that was not a success: ', response);
 		}
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
@@ -173,6 +187,7 @@ export function* addBookmark(props) {
 			// };
 			// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
 		}
+		yield put({ type: ADD_BOOKMARK_FAILURE });
 	}
 }
 

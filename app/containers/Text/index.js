@@ -993,12 +993,12 @@ class Text extends React.PureComponent {
 				title: '',
 				bookmark: 1,
 				reference: getReference(
-					verseStart,
+					verseStart || verseEnd,
 					verseEnd,
 					this.props.activeBookName,
 					this.props.activeChapter,
 				),
-				verse_start: verseStart,
+				verse_start: verseStart || verseEnd,
 				verse_end: verseEnd,
 			});
 		}

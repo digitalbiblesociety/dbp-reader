@@ -68,7 +68,7 @@ const applyNotes = (source, notes) => {
 const applyBookmarks = (source, bookmarks) => {
 	const serializer = new XMLSerializer();
 	const parser = new DOMParser();
-
+	// console.log('bookmarks in apply func', bookmarks);
 	if (!source || !bookmarks.length) {
 		return source;
 	}

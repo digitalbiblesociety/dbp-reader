@@ -154,7 +154,7 @@ export class SearchContainer extends React.PureComponent {
 				b.chapters.includes(chapter),
 		);
 		// console.log('handling redirect', books);
-
+		// Todo: Use next router for the programatic navigation here
 		if (bookObject) {
 			// console.log('url to be pushed...', `/${bibleId}/${bookObject.book_id.toLowerCase()}/${chapter}${firstVerse ? `/${firstVerse}` : ''}`);
 			this.props.toggleSearchModal();
