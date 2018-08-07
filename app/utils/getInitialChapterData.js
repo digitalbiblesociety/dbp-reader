@@ -1,4 +1,5 @@
 import fetch from 'isomorphic-fetch';
+import getAudio from './getAudioAsyncCall';
 import request from './request';
 
 export default async ({ filesets, bookId: lowerCaseBookId, chapter }) => {
@@ -76,10 +77,30 @@ export default async ({ filesets, bookId: lowerCaseBookId, chapter }) => {
 				}
 			});
 	}
-	/* eslint-enable */
 	const formattedText = await Promise.all(formattedPromises);
 	// console.log('Got through all requests in get initial');
+	// console.log('waiting on audio');
 
+	const audioReturn = await getAudio(filesets, lowerCaseBookId, chapter)
+		.then((data) => data)
+		.catch((err) => {
+			if (process.env.NODE_ENV === 'development') {
+				console.error(
+					`Error in getInitialChapterData -> getAudio catch statement: ${
+						err.status
+					}:${err.message}`,
+				);
+			}
+			return { type: 'loadaudio', audioPaths: [''] };
+		});
+	/* eslint-enable */
+	// console.log('audio loaded');
+	// console.log('audioReturn', audioReturn);
 	// Return a default object in the case that none of the api calls work
-	return { plainText, formattedText: formattedText[0] || '', plainTextJson };
+	return {
+		plainText,
+		formattedText: formattedText[0] || '',
+		plainTextJson,
+		audioPaths: audioReturn.audioPaths,
+	};
 };

@@ -199,14 +199,15 @@ app
 			console.log(`> Ready on http://localhost:${port}`); // eslint-disable-line no-console
 		});
 
-		process.on('SIGINT', () => {
-			app.close((err) => {
-				if (err) {
-					console.error(err); // eslint-disable-line no-console
-					process.exit(1);
-				}
-			});
-		});
+		// This code was causing the server to hang forever when in development, need to tweak it to enable a graceful shutdown
+		// process.on('SIGINT', () => {
+		// 	app.close((err) => {
+		// 		if (err) {
+		// 			console.error(err); // eslint-disable-line no-console
+		// 			process.exit(1);
+		// 		}
+		// 	});
+		// });
 	})
 	.catch((ex) => {
 		/* eslint-disable no-console */

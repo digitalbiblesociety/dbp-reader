@@ -6,6 +6,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+// import NotFoundPage from '../../containers/NotFoundPage';
 // import styled from 'styled-components';
 
 // const Container = styled.div`
@@ -33,9 +34,6 @@ class GenericErrorBoundary extends React.Component {
 			if (process.env.NODE_ENV === 'development') {
 				return (
 					<div>
-						<h2>{`Something went wrong in the ${
-							this.props.affectedArea
-						} component. Please try refreshing the page, if that does not work send an email to Jesse and tell him what the error message was so he can fix it.`}</h2>
 						<details style={{ whiteSpace: 'pre-wrap' }}>
 							{this.state.error && this.state.error.toString()}
 							<br />
@@ -54,7 +52,7 @@ class GenericErrorBoundary extends React.Component {
 
 GenericErrorBoundary.propTypes = {
 	children: PropTypes.node,
-	affectedArea: PropTypes.string,
+	// affectedArea: PropTypes.string,
 };
 
 export default GenericErrorBoundary;

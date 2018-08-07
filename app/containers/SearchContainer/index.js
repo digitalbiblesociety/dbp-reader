@@ -7,13 +7,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-// import XRegExp from 'xregexp';
-// import { Link } from 'react-router-dom';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import injectSaga from '../../utils/injectSaga';
 import injectReducer from '../../utils/injectReducer';
-import GenericErrorBoundary from '../../components/GenericErrorBoundary';
 import SvgWrapper from '../../components/SvgWrapper';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import CloseMenuFunctions from '../../utils/closeMenuFunctions';
@@ -302,28 +299,26 @@ export class SearchContainer extends React.PureComponent {
 		// Need a good method of telling whether there are no results because a user hasn't searched
 		// or if it was because this was the first visit to the tab
 		return (
-			<GenericErrorBoundary affectedArea="Search">
-				<aside className={'search-wrapper'}>
-					<aside ref={this.setRef} className="search">
-						<header>
-							<SvgWrapper className={'icon'} svgid={'search'} />
-							<input
-								onChange={this.handleSearchInputChange}
-								onKeyPress={this.handleSearchInputEnter}
-								value={filterText}
-								className={'input-class'}
-								placeholder={'Search'}
-							/>
-							<SvgWrapper
-								onClick={this.handleSearchModalToggle}
-								className={'icon'}
-								svgid={'arrow_left'}
-							/>
-						</header>
-						{loadingResults ? <LoadingSpinner /> : this.formattedResults}
-					</aside>
+			<aside className={'search-wrapper'}>
+				<aside ref={this.setRef} className="search">
+					<header>
+						<SvgWrapper className={'icon'} svgid={'search'} />
+						<input
+							onChange={this.handleSearchInputChange}
+							onKeyPress={this.handleSearchInputEnter}
+							value={filterText}
+							className={'input-class'}
+							placeholder={'Search'}
+						/>
+						<SvgWrapper
+							onClick={this.handleSearchModalToggle}
+							className={'icon'}
+							svgid={'arrow_left'}
+						/>
+					</header>
+					{loadingResults ? <LoadingSpinner /> : this.formattedResults}
 				</aside>
-			</GenericErrorBoundary>
+			</aside>
 		);
 	}
 }
