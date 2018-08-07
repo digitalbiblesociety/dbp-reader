@@ -627,7 +627,6 @@ class HomePage extends React.PureComponent {
 			formattedSource,
 			userId,
 			userAuthenticated,
-			history,
 			isMenuOpen,
 		} = this.props;
 
@@ -696,7 +695,6 @@ class HomePage extends React.PureComponent {
 						>
 							<SearchContainer
 								bibleId={activeTextId}
-								history={history}
 								books={books}
 								toggleSearchModal={this.toggleSearchModal}
 							/>
@@ -778,7 +776,6 @@ HomePage.propTypes = {
 	homepage: PropTypes.object.isRequired,
 	userSettings: PropTypes.object,
 	formattedSource: PropTypes.object,
-	history: PropTypes.object,
 	userAuthenticated: PropTypes.bool,
 	userId: PropTypes.string,
 	textData: PropTypes.object,

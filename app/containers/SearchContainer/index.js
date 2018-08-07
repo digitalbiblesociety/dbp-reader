@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
+import Router from 'next/router';
 import injectSaga from '../../utils/injectSaga';
 import injectReducer from '../../utils/injectReducer';
 import SvgWrapper from '../../components/SvgWrapper';
@@ -156,10 +157,12 @@ export class SearchContainer extends React.PureComponent {
 		// console.log('handling redirect', books);
 		// Todo: Use next router for the programatic navigation here
 		if (bookObject) {
-			// console.log('url to be pushed...', `/${bibleId}/${bookObject.book_id.toLowerCase()}/${chapter}${firstVerse ? `/${firstVerse}` : ''}`);
-			this.props.toggleSearchModal();
-			this.props.history.push(
-				`/${bibleId.toLowerCase()}/${bookObject.book_id.toLowerCase()}/${chapter}${
+			// console.log('url to be pushed...', `/bible/${bibleId}/${bookObject.book_id.toLowerCase()}/${chapter}${firstVerse ? `/${firstVerse}` : ''}`);
+			// this.props.toggleSearchModal();
+			// console.log('Router', Router);
+			// console.log('Router.router', Router.router);
+			Router.push(
+				`/bible/${bibleId.toLowerCase()}/${bookObject.book_id.toLowerCase()}/${chapter}${
 					firstVerse ? `/${firstVerse}` : ''
 				}`,
 			);
@@ -327,7 +330,6 @@ SearchContainer.propTypes = {
 	dispatch: PropTypes.func.isRequired,
 	toggleSearchModal: PropTypes.func.isRequired,
 	bibleId: PropTypes.string,
-	history: PropTypes.object,
 	searchResults: PropTypes.object,
 	searchcontainer: PropTypes.object,
 	loadingResults: PropTypes.bool,
