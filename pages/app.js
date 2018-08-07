@@ -56,41 +56,8 @@ class AppContainer extends React.Component {
 
 		this.props.dispatch(setChapterTextLoadingState({ state: false }));
 
+		// Intercept all route changes to ensure that the loading spinner starts
 		Router.router.events.on('routeChangeStart', this.handleRouteChange);
-		// After launch see if I can get Reactotron working with SSR and redux
-		// if (process.env.NODE_ENV !== 'production') {
-		// 	const Reactotron = async () => {
-		// 		const r = await import('reactotron-react-js');
-		// 		const redux = await import('reactotron-redux');
-		// 		const sauce = await import('reactotron-apisauce');
-		// 		const saga = await import('reactotron-redux-saga');
-		// 		// const track = await import('reactotron-react.js');
-		//
-		// 		console.log('r', r);
-		// 		console.log('redux', redux);
-		// 		console.log('sauce', sauce);
-		// 		console.log('saga', saga);
-		//
-		// 		// console.log('track', track);
-		//
-		// 		return { reactotron: r.default, redux: redux.reactotronRedux, sauce, saga, track: r.trackGlobalErrors };
-		// 	}
-		// 	// console.log('Reactotron', Reactotron)
-		// 	Reactotron().then(({ reactotron, redux, sauce, saga, track }) => {
-		// 		// console.log('in promise r', r.default);
-		// 		// console.log('Object.Keys(r.default', Object.keys(r.default));
-		// 		reactotron
-		// 			.configure({ name: 'Bible.is', secure: false })
-		// 			.use(sauce())
-		// 			.use(redux())
-		// 			.use(track())
-		// 			.use(saga())
-		// 			.connect();
-		//
-		// 		console.tron = reactotron;
-		// 	});
-		// }
-		// console.log('this.props.dispatch in didMount', this.props.dispatch);
 
 		const userId =
 			localStorage.getItem('bible_is_user_id') ||
@@ -213,8 +180,12 @@ class AppContainer extends React.Component {
 		Router.router.events.off('routeChangeStart', this.handleRouteChange);
 	}
 
-	handleRouteChange = (url) => {
-		console.log('Router change start fired', url);
+	handleRouteChange = (/* url */) => {
+		// console.log('Router change start fired', url);
+		// Pause audio
+		// Start loading spinner for text
+		// Close any open menus
+		// Remove current audio source - (may fix item 1)
 		this.props.dispatch(setChapterTextLoadingState({ state: true }));
 	};
 
@@ -281,8 +252,6 @@ AppContainer.getInitialProps = async (context) => {
 	let userSettings = {};
 	let userId = '';
 	let isAuthenticated = false;
-	// console.log('context.isVirtualCall', context.isVirtualCall);
-	// console.log('context.pathname', context.pathname);
 
 	if (!context.req) {
 		// console.log('context in browser', context);
@@ -400,6 +369,16 @@ AppContainer.getInitialProps = async (context) => {
 	});
 	const singleBibleJson = singleBibleRes;
 	const bible = singleBibleJson.data;
+	// console.log('filesets in app file before filter function', bible.filesets);
+	// Filter out gideon bibles because the api will never be fixed in this area... -_- :( :'( ;'(
+	const filesets =
+		bible.filesets && bible.filesets['dbp-dev']
+			? bible.filesets['dbp-dev'].filter(
+					(file) =>
+						!file.id.includes('GID') && bible.filesets['dbp-dev'].length > 1,
+			  )
+			: [];
+	// console.log('filesets in app file', filesets);
 
 	// console.log('bible.name', bible.name);
 	// console.log('bible.abbr', bible.abbr);
@@ -411,15 +390,16 @@ AppContainer.getInitialProps = async (context) => {
 	};
 	try {
 		// console.log('Before init func');
+		/* eslint-disable no-console */
 		initData = await getinitialChapterData({
-			filesets: bible.filesets ? bible.filesets['dbp-dev'] : [],
+			filesets,
 			bookId,
 			chapter,
 		}).catch((err) => {
 			if (process.env.NODE_ENV === 'development') {
 				console.error(
 					`Error caught in get initial chapter data in promise: ${err.message}`,
-				); // eslint-disable-line no-console
+				);
 			}
 			return {
 				formattedText: '',
@@ -432,9 +412,10 @@ AppContainer.getInitialProps = async (context) => {
 		if (process.env.NODE_ENV === 'development') {
 			console.error(
 				`Error caught in get initial chapter data by try catch: ${err.message}`,
-			); // eslint-disable-line no-console
+			);
 		}
 	}
+	/* eslint-enable no-console */
 	// console.log('After init func', Object.keys(initData));
 	// console.log('initData.audioPaths', initData.audioPaths);
 
@@ -490,11 +471,12 @@ AppContainer.getInitialProps = async (context) => {
 			homepage: {
 				userProfile,
 				audioPaths: initData.audioPaths,
+				audioSource: initData.audioPaths[0],
 				chapterText,
 				testaments,
 				userSettings,
 				formattedSource: initData.formattedText,
-				activeFilesets: bible.filesets ? bible.filesets['dbp-dev'] : [],
+				activeFilesets: filesets,
 				books: bible.books || [],
 				activeChapter: parseInt(chapter, 10) || 1,
 				activeBookName,
@@ -537,7 +519,7 @@ AppContainer.getInitialProps = async (context) => {
 		activeIsoCode: bible.iso,
 		activeLanguageName: bible.language,
 		textDirection: bible.alphabet ? bible.alphabet.direction : 'ltr',
-		activeFilesets: bible.filesets ? bible.filesets['dbp-dev'] : [],
+		activeFilesets: filesets,
 		defaultLanguageIso: bible.iso || 'eng',
 		defaultLanguageName: bible.language || 'English',
 		activeTextName: bible.vname || bible.name,

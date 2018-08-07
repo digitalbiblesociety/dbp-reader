@@ -2,6 +2,8 @@ import get from 'lodash/get';
 import request from './request';
 
 export default async (filesets, bookId, chapter) => {
+	// console.log('Started get audio call');
+	// console.log('filesets', filesets);
 	const filteredFilesets = filesets.reduce((a, file) => {
 		const newFile = { ...a };
 
@@ -53,7 +55,7 @@ export default async (filesets, bookId, chapter) => {
 				partialNtOtAudio.push({ id: fileset[0], data: fileset[1] });
 			}
 		});
-	// console.log('audio arrays', '\n', completeAudio, '\n', ntAudio, '\n', otAudio, '\n', partialAudio);
+	// console.log('audio arrays', '\n', completeAudio, '\n', ntAudio, '\n', otAudio, '\n', partialNtAudio, '\n', partialNtOtAudio, '\n', partialOtAudio);
 	const otLength = otAudio.length;
 	const ntLength = ntAudio.length;
 
