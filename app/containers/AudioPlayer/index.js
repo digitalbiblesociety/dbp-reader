@@ -7,6 +7,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 // import Link from 'next/link';
+import Router from 'next/router';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
@@ -81,6 +82,8 @@ export class AudioPlayer extends React.Component {
 		this.audioRef.addEventListener('seeked', this.seekedEventListener);
 		this.audioRef.addEventListener('ended', this.endedEventListener);
 		this.audioRef.addEventListener('playing', this.playingEventListener);
+
+		Router.router.events.on('routeChangeStart', this.handleRouteChange);
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -187,6 +190,8 @@ export class AudioPlayer extends React.Component {
 		this.audioRef.removeEventListener('seeked', this.seekedEventListener);
 		this.audioRef.removeEventListener('ended', this.endedEventListener);
 		this.audioRef.removeEventListener('playing', this.playingEventListener);
+
+		Router.router.events.off('routeChangeStart', this.handleRouteChange);
 	}
 
 	setCurrentTime = (time) => {
@@ -236,6 +241,10 @@ export class AudioPlayer extends React.Component {
 	handleRef = (el) => {
 		// alert('Audio ref changed');
 		this.audioRef = el;
+	};
+
+	handleRouteChange = () => {
+		this.pauseAudio();
 	};
 
 	handleBackgroundClick = () => {
