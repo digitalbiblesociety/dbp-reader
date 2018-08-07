@@ -185,8 +185,6 @@ class BooksTable extends React.PureComponent {
 													? (el) => this.handleRef(el, 'button')
 													: null
 											}
-											tabIndex="0"
-											role="button"
 											key={(book.get('name') || book.get('name_short')).concat(
 												book.get('book_id'),
 											)}
@@ -237,8 +235,6 @@ class BooksTable extends React.PureComponent {
 												? (el) => this.handleRef(el, 'button')
 												: null
 										}
-										tabIndex="0"
-										role="button"
 										key={(book.get('name') || book.get('name_short')).concat(
 											book.get('book_id'),
 										)}
@@ -289,8 +285,6 @@ class BooksTable extends React.PureComponent {
 												? (el) => this.handleRef(el, 'button')
 												: null
 										}
-										tabIndex="0"
-										role="button"
 										key={(book.get('name') || book.get('name_short')).concat(
 											book.get('book_id'),
 										)}

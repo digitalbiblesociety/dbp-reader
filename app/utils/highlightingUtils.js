@@ -21,7 +21,7 @@ const getFormattedParentVerseNumber = (node, verseNumber) => {
 	let counter = 0;
 	let newNode = node;
 
-	while ((getFormattedElementVerseId(newNode) !== verseNumber)) {
+	while (getFormattedElementVerseId(newNode) !== verseNumber) {
 		newNode = newNode.parentNode;
 		// console.log('new node', newNode);
 		// console.log('new node attributes', newNode.attributes);
@@ -78,7 +78,13 @@ const getPlainParentVerse = (node, verseNumber) => {
 	let counter = 0;
 	let newNode = node;
 
-	while (!(newNode.attributes && newNode.attributes.verseid && newNode.attributes.verseid.value !== verseNumber)) {
+	while (
+		!(
+			newNode.attributes &&
+			newNode.attributes['data-verseid'] &&
+			newNode.attributes['data-verseid'].value !== verseNumber
+		)
+	) {
 		// console.log('newNode', newNode);
 		newNode = newNode.parentNode;
 		if (counter >= 10) break;
@@ -97,7 +103,13 @@ const getPlainParentVerseWithoutNumber = (node) => {
 	let counter = 0;
 	let newNode = node;
 
-	while (!(newNode.attributes && newNode.attributes.verseid && newNode.attributes.verseid.value)) {
+	while (
+		!(
+			newNode.attributes &&
+			newNode.attributes['data-verseid'] &&
+			newNode.attributes['data-verseid'].value
+		)
+	) {
 		// console.log('newNode', newNode);
 		newNode = newNode.parentNode;
 		if (counter >= 10) break;
@@ -117,8 +129,17 @@ const getFormattedElementVerseId = (node) => {
 };
 
 // Get the sibling that is closest to the beginning
-const getClosestParent = ({ refNode, verse, chapter, book, aParent, eParent }) => {
-	const verseNodes = [...refNode.querySelectorAll(`[data-id=${book}${chapter}_${verse}]`)];
+const getClosestParent = ({
+	refNode,
+	verse,
+	chapter,
+	book,
+	aParent,
+	eParent,
+}) => {
+	const verseNodes = [
+		...refNode.querySelectorAll(`[data-id=${book}${chapter}_${verse}]`),
+	];
 	const eIndex = verseNodes.indexOf(eParent);
 	const aIndex = verseNodes.indexOf(aParent);
 
@@ -132,15 +153,27 @@ const getClosestParent = ({ refNode, verse, chapter, book, aParent, eParent }) =
 };
 
 const getOffsetNeededForPsalms = ({ refNode, book, chapter, verse, node }) => {
-	const verseNodes = [...refNode.querySelectorAll(`[data-id=${book}${chapter}_${verse}]`)];
+	const verseNodes = [
+		...refNode.querySelectorAll(`[data-id=${book}${chapter}_${verse}]`),
+	];
 	// console.log('verseNodes.reduce((a, node) => a.concat(node.textContent))', verseNodes.reduce((a, n) => a.concat(n.textContent)));
 
 	const previous = verseNodes.slice(0, verseNodes.indexOf(node));
 
-	return previous.reduce((a, c) => a + c.textContent.replace(/[\n\r*✝]/, '').length, 0);
+	return previous.reduce(
+		(a, c) => a + c.textContent.replace(/[\n\r*✝]/, '').length,
+		0,
+	);
 };
 
-const getTextInSelectedNodes = ({ refNode, book, chapter, firstVerse, node, lastVerse }) => {
+const getTextInSelectedNodes = ({
+	refNode,
+	book,
+	chapter,
+	firstVerse,
+	node,
+	lastVerse,
+}) => {
 	if (!refNode || !node) {
 		return '';
 	}
@@ -149,12 +182,19 @@ const getTextInSelectedNodes = ({ refNode, book, chapter, firstVerse, node, last
 	let currentVerse = firstVerse;
 
 	while (currentVerse <= lastVerse) {
-		[...refNode.querySelectorAll(`[data-id=${book}${chapter}_${currentVerse}]`)].forEach((v) => verseNodes.push(v));
+		[
+			...refNode.querySelectorAll(
+				`[data-id=${book}${chapter}_${currentVerse}]`,
+			),
+		].forEach((v) => verseNodes.push(v));
 		currentVerse += 1;
 	}
 	// console.log('verseNodes', verseNodes);
 
-	return verseNodes.reduce((a, c) => a + c.textContent.replace(/[\n\r*✝]/, '').length, 0);
+	return verseNodes.reduce(
+		(a, c) => a + c.textContent.replace(/[\n\r*✝]/, '').length,
+		0,
+	);
 };
 
 export {

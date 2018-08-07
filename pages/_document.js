@@ -19,9 +19,30 @@ export default class MyDocument extends Document {
 						content="fu_40NhKpBp1VNYa0-zreXkuzeebDvQQA1KNDXeYYwo"
 					/>
 					<meta name="mobile-web-app-capable" content="yes" />
-					<meta name="apple-mobile-web-app-title" content="Bible Is" />
+					<meta name="apple-mobile-web-app-title" content="Bible.is" />
 					<meta name="apple-mobile-web-app-capable" content="yes" />
+					<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+					<meta name="author" content="Faith Comes By Hearing" />
 					<meta name="theme-color" content="#941B2F" />
+					<meta property={'og:type'} content={'book'} />
+					<meta property={'og:site_name'} content={'Bible.is Online'} />
+					<meta
+						property={'og:image'}
+						content={'/static/apple-icon-180x180.png'}
+					/>
+					<meta name={'twitter:card'} content={'summary'} />
+					<meta name={'twitter:site'} content={'@bibleis'} />
+					<meta name={'twitter:creator'} content={'@audiobible'} />
+					<meta
+						name={'twitter:image'}
+						content={'/static/apple-icon-180x180.png'}
+					/>
+
+					<meta name="twitter:app:id:iphone" content="" />
+
+					<meta name="twitter:app:id:ipad" content="" />
+
+					<meta name="twitter:app:id:googleplay" content="" />
 					<link rel="apple-touch-icon" href="/static/favicon-96x96.png" />
 					<link
 						rel="preload"

@@ -7,6 +7,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 // import Link from 'next/link';
+import Router from 'next/router';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
@@ -20,7 +21,7 @@ import SpeedControl from '../../components/SpeedControl';
 import AudioProgressBar from '../../components/AudioProgressBar';
 import VolumeSlider from '../../components/VolumeSlider';
 // import AudioPlayerMenu from '../../components/AudioPlayerMenu';
-import GenericErrorBoundary from '../../components/GenericErrorBoundary';
+// import GenericErrorBoundary from '../../components/GenericErrorBoundary';
 import makeSelectAudioPlayer, { selectHasAudio } from './selectors';
 import reducer from './reducer';
 import messages from './messages';
@@ -81,6 +82,8 @@ export class AudioPlayer extends React.Component {
 		this.audioRef.addEventListener('seeked', this.seekedEventListener);
 		this.audioRef.addEventListener('ended', this.endedEventListener);
 		this.audioRef.addEventListener('playing', this.playingEventListener);
+
+		Router.router.events.on('routeChangeStart', this.handleRouteChange);
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -187,6 +190,8 @@ export class AudioPlayer extends React.Component {
 		this.audioRef.removeEventListener('seeked', this.seekedEventListener);
 		this.audioRef.removeEventListener('ended', this.endedEventListener);
 		this.audioRef.removeEventListener('playing', this.playingEventListener);
+
+		Router.router.events.off('routeChangeStart', this.handleRouteChange);
 	}
 
 	setCurrentTime = (time) => {
@@ -236,6 +241,10 @@ export class AudioPlayer extends React.Component {
 	handleRef = (el) => {
 		// alert('Audio ref changed');
 		this.audioRef = el;
+	};
+
+	handleRouteChange = () => {
+		this.pauseAudio();
 	};
 
 	handleBackgroundClick = () => {
@@ -485,80 +494,30 @@ export class AudioPlayer extends React.Component {
 	}
 
 	nextIcon = (
-		<PrefetchLink
-			as={getNextChapterUrl({
-				books: this.props.books,
-				chapter: this.props.activeChapter,
-				bookId: this.props.activeBookId.toLowerCase(),
-				textId: this.props.activeTextId.toLowerCase(),
-				verseNumber: this.props.verseNumber,
-				text: this.props.text,
-				isHref: false,
-			})}
-			href={getNextChapterUrl({
-				books: this.props.books,
-				chapter: this.props.activeChapter,
-				bookId: this.props.activeBookId.toLowerCase(),
-				textId: this.props.activeTextId.toLowerCase(),
-				verseNumber: this.props.verseNumber,
-				text: this.props.text,
-				isHref: true,
-			})}
-			withData
-			prefetch
+		<div
+			onClick={this.pauseAudio}
+			className={'icon-wrap'}
+			title={messages.nextTitle.defaultMessage}
 		>
-			<div
-				role={'button'}
-				tabIndex={0}
-				className={'icon-wrap'}
-				title={messages.nextTitle.defaultMessage}
-			>
-				<SvgWrapper className="svgitem icon" fill="#fff" svgid="next" />
-				<FormattedMessage {...messages.next} />
-			</div>
-		</PrefetchLink>
+			<SvgWrapper className="svgitem icon" fill="#fff" svgid="next" />
+			<FormattedMessage {...messages.next} />
+		</div>
 	);
 
 	prevIcon = (
-		<PrefetchLink
-			as={getPreviousChapterUrl({
-				books: this.props.books,
-				chapter: this.props.activeChapter,
-				bookId: this.props.activeBookId.toLowerCase(),
-				textId: this.props.activeTextId.toLowerCase(),
-				verseNumber: this.props.verseNumber,
-				text: this.props.text,
-				isHref: false,
-			})}
-			href={getPreviousChapterUrl({
-				books: this.props.books,
-				chapter: this.props.activeChapter,
-				bookId: this.props.activeBookId.toLowerCase(),
-				textId: this.props.activeTextId.toLowerCase(),
-				verseNumber: this.props.verseNumber,
-				text: this.props.text,
-				isHref: true,
-			})}
-			withData
-			prefetch
+		<div
+			onClick={this.pauseAudio}
+			className={'icon-wrap'}
+			title={messages.prevTitle.defaultMessage}
 		>
-			<div
-				role={'button'}
-				tabIndex={0}
-				className={'icon-wrap'}
-				title={messages.prevTitle.defaultMessage}
-			>
-				<SvgWrapper className="svgitem icon" fill="#fff" svgid="previous" />
-				<FormattedMessage {...messages.prev} />
-			</div>
-		</PrefetchLink>
+			<SvgWrapper className="svgitem icon" fill="#fff" svgid="previous" />
+			<FormattedMessage {...messages.prev} />
+		</div>
 	);
 
 	pauseIcon = (
 		<div
 			onClick={this.pauseAudio}
-			role={'button'}
-			tabIndex={0}
 			className={'icon-wrap'}
 			title={messages.pauseTitle.defaultMessage}
 		>
@@ -570,8 +529,6 @@ export class AudioPlayer extends React.Component {
 	playIcon = (
 		<div
 			onClick={this.playAudio}
-			role={'button'}
-			tabIndex={0}
 			className={'icon-wrap'}
 			title={messages.playTitle.defaultMessage}
 		>
@@ -589,15 +546,12 @@ export class AudioPlayer extends React.Component {
 		} = this.props;
 		const { autoPlayChecked, currentSpeed } = this.state;
 		// console.log('____________________________\nAudio Player component rendered!');
-		// console.log('____________________________\n', source);
-		// console.log('____________________________\n', this.props.audioPaths);
+		// console.log('_______________ ', this.props.activeBookId, this.props.activeChapter, this.props.activeTextId, this.props.text.length, this.props.verseNumber, this.props.books.length);
+		// console.log('____________________________\n', this.props.activeChapter);
 
 		return (
-			<GenericErrorBoundary affectedArea="AudioPlayer">
+			<React.Fragment>
 				<div
-					role={'button'}
-					tabIndex={0}
-					name={'Audio player toggle'}
 					className={this.classNamesForHandle}
 					onClick={(e) => {
 						e.stopPropagation();
@@ -615,8 +569,6 @@ export class AudioPlayer extends React.Component {
 					/>
 				</div>
 				<div
-					role="button"
-					tabIndex={0}
 					className={this.classNamesForBackground}
 					ref={this.setAudioPlayerRef}
 					onClick={this.handleBackgroundClick}
@@ -628,9 +580,55 @@ export class AudioPlayer extends React.Component {
 								: 'audio-player-container closed'
 						}
 					>
-						{this.prevIcon}
+						<PrefetchLink
+							as={getPreviousChapterUrl({
+								books: this.props.books,
+								chapter: this.props.activeChapter,
+								bookId: this.props.activeBookId.toLowerCase(),
+								textId: this.props.activeTextId.toLowerCase(),
+								verseNumber: this.props.verseNumber,
+								text: this.props.text,
+								isHref: false,
+							})}
+							href={getPreviousChapterUrl({
+								books: this.props.books,
+								chapter: this.props.activeChapter,
+								bookId: this.props.activeBookId.toLowerCase(),
+								textId: this.props.activeTextId.toLowerCase(),
+								verseNumber: this.props.verseNumber,
+								text: this.props.text,
+								isHref: true,
+							})}
+							withData
+							prefetch
+						>
+							{this.prevIcon}
+						</PrefetchLink>
 						{this.state.playing ? this.pauseIcon : this.playIcon}
-						{this.nextIcon}
+						<PrefetchLink
+							as={getNextChapterUrl({
+								books: this.props.books,
+								chapter: this.props.activeChapter,
+								bookId: this.props.activeBookId.toLowerCase(),
+								textId: this.props.activeTextId.toLowerCase(),
+								verseNumber: this.props.verseNumber,
+								text: this.props.text,
+								isHref: false,
+							})}
+							href={getNextChapterUrl({
+								books: this.props.books,
+								chapter: this.props.activeChapter,
+								bookId: this.props.activeBookId.toLowerCase(),
+								textId: this.props.activeTextId.toLowerCase(),
+								verseNumber: this.props.verseNumber,
+								text: this.props.text,
+								isHref: true,
+							})}
+							withData
+							prefetch
+						>
+							{this.nextIcon}
+						</PrefetchLink>
 						<AudioProgressBar
 							setCurrentTime={this.setCurrentTime}
 							duration={this.state.duration}
@@ -655,8 +653,6 @@ export class AudioPlayer extends React.Component {
 						<div id="volume-wrap" className={'icon-wrap'}>
 							<div
 								title={messages.volumeTitle.defaultMessage}
-								role="button"
-								tabIndex="0"
 								className={
 									this.state.volumeSliderState ? 'item active' : 'item'
 								}
@@ -690,8 +686,6 @@ export class AudioPlayer extends React.Component {
 						<div id="speed-wrap" className={'icon-wrap'}>
 							<div
 								title={messages.speedTitle.defaultMessage}
-								role="button"
-								tabIndex="0"
 								className={
 									this.state.speedControlState ? 'item active' : 'item'
 								}
@@ -723,9 +717,13 @@ export class AudioPlayer extends React.Component {
 							/>
 						</div>
 					</div>
-					<audio ref={this.handleRef} className="audio-player" src={source} />
+					<audio
+						ref={this.handleRef}
+						className="audio-player"
+						src={source || '_'}
+					/>
 				</div>
-			</GenericErrorBoundary>
+			</React.Fragment>
 		);
 	}
 }

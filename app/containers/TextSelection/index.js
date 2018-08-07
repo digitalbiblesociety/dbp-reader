@@ -10,13 +10,10 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { FormattedMessage } from 'react-intl';
-// import injectSaga from 'utils/injectSaga';
-// import injectReducer from 'utils/injectReducer';
 import CountryList from '../../components/CountryList';
 import LanguageList from '../../components/LanguageList';
 import VersionList from '../../components/VersionList';
 import SvgWrapper from '../../components/SvgWrapper';
-import GenericErrorBoundary from '../../components/GenericErrorBoundary';
 import CloseMenuFunctions from '../../utils/closeMenuFunctions';
 import { setActiveTextId, toggleVersionSelection } from '../HomePage/actions';
 import {
@@ -36,8 +33,6 @@ import makeSelectTextSelection, {
 	selectCountries,
 	selectHomepageData,
 } from './selectors';
-// import reducer from './reducer';
-// import saga from './saga';
 import messages from './messages';
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 export class TextSelection extends React.PureComponent {
@@ -177,90 +172,86 @@ export class TextSelection extends React.PureComponent {
 		const { filterText } = this.state;
 
 		return (
-			<GenericErrorBoundary affectedArea="TextSelection">
-				<aside
-					style={{ display: active ? 'flex' : 'none' }}
-					ref={this.setRef}
-					onTouchEnd={this.stopTouchProp}
-					onClick={this.stopClickProp}
-					className={'text-selection-dropdown'}
-				>
-					<div className={'search-input-bar'}>
-						<SvgWrapper className={'icon'} svgid={'search'} />
-						<input
-							onChange={this.handleSearchInputChange}
-							value={filterText}
-							className={'input-class'}
-							placeholder={messages[this.inputPlaceholder].defaultMessage}
-						/>
-					</div>
-					<div className={'tab-options'}>
-						<span
-							onClick={countryListActive ? () => {} : this.setCountryListState}
-							className={countryListActive ? 'tab-option active' : 'tab-option'}
-						>
-							<FormattedMessage {...messages.country} />
-						</span>
-						<span
-							onClick={languageListActive ? () => {} : this.toggleLanguageList}
-							className={
-								languageListActive ? 'tab-option active' : 'tab-option'
-							}
-						>
-							<FormattedMessage {...messages.language} />
-						</span>
-						<span
-							onClick={versionListActive ? () => {} : this.toggleVersionList}
-							className={versionListActive ? 'tab-option active' : 'tab-option'}
-						>
-							<FormattedMessage {...messages.version} />
-						</span>
-					</div>
-					<CountryList
-						countries={countries}
-						filterText={filterText}
-						active={countryListActive}
-						loadingCountries={loadingCountries}
-						activeCountryName={activeCountryName}
-						finishedLoadingCountries={finishedLoadingCountries}
-						setCountryName={this.setCountryName}
-						getCountry={this.getCountry}
-						getCountries={this.getCountries}
-						toggleVersionList={this.toggleVersionList}
-						toggleLanguageList={this.toggleLanguageList}
-						setCountryListState={this.setCountryListState}
+			<aside
+				style={{ display: active ? 'flex' : 'none' }}
+				ref={this.setRef}
+				onTouchEnd={this.stopTouchProp}
+				onClick={this.stopClickProp}
+				className={'text-selection-dropdown'}
+			>
+				<div className={'search-input-bar'}>
+					<SvgWrapper className={'icon'} svgid={'search'} />
+					<input
+						onChange={this.handleSearchInputChange}
+						value={filterText}
+						className={'input-class'}
+						placeholder={messages[this.inputPlaceholder].defaultMessage}
 					/>
-					<LanguageList
-						languages={languages}
-						filterText={filterText}
-						active={languageListActive}
-						activeIsoCode={activeIsoCode}
-						countryLanguages={countryLanguages}
-						loadingLanguages={loadingLanguages}
-						countryListActive={countryListActive}
-						activeLanguageName={activeLanguageName}
-						getLanguages={this.getLanguages}
-						setActiveIsoCode={this.setActiveIsoCode}
-						toggleVersionList={this.toggleVersionList}
-						toggleLanguageList={this.toggleLanguageList}
-						setCountryListState={this.setCountryListState}
-					/>
-					<VersionList
-						bibles={bibles}
-						filterText={filterText}
-						active={versionListActive}
-						activeIsoCode={activeIsoCode}
-						activeTextId={activeTextId}
-						activeTextName={activeTextName}
-						loadingVersions={loadingVersions}
-						setActiveText={this.setActiveTextId}
-						toggleVersionList={this.toggleVersionList}
-						toggleLanguageList={this.toggleLanguageList}
-						setCountryListState={this.setCountryListState}
-						toggleTextSelection={this.toggleVersionSelection}
-					/>
-				</aside>
-			</GenericErrorBoundary>
+				</div>
+				<div className={'tab-options'}>
+					<span
+						onClick={countryListActive ? () => {} : this.setCountryListState}
+						className={countryListActive ? 'tab-option active' : 'tab-option'}
+					>
+						<FormattedMessage {...messages.country} />
+					</span>
+					<span
+						onClick={languageListActive ? () => {} : this.toggleLanguageList}
+						className={languageListActive ? 'tab-option active' : 'tab-option'}
+					>
+						<FormattedMessage {...messages.language} />
+					</span>
+					<span
+						onClick={versionListActive ? () => {} : this.toggleVersionList}
+						className={versionListActive ? 'tab-option active' : 'tab-option'}
+					>
+						<FormattedMessage {...messages.version} />
+					</span>
+				</div>
+				<CountryList
+					countries={countries}
+					filterText={filterText}
+					active={countryListActive}
+					loadingCountries={loadingCountries}
+					activeCountryName={activeCountryName}
+					finishedLoadingCountries={finishedLoadingCountries}
+					setCountryName={this.setCountryName}
+					getCountry={this.getCountry}
+					getCountries={this.getCountries}
+					toggleVersionList={this.toggleVersionList}
+					toggleLanguageList={this.toggleLanguageList}
+					setCountryListState={this.setCountryListState}
+				/>
+				<LanguageList
+					languages={languages}
+					filterText={filterText}
+					active={languageListActive}
+					activeIsoCode={activeIsoCode}
+					countryLanguages={countryLanguages}
+					loadingLanguages={loadingLanguages}
+					countryListActive={countryListActive}
+					activeLanguageName={activeLanguageName}
+					getLanguages={this.getLanguages}
+					setActiveIsoCode={this.setActiveIsoCode}
+					toggleVersionList={this.toggleVersionList}
+					toggleLanguageList={this.toggleLanguageList}
+					setCountryListState={this.setCountryListState}
+				/>
+				<VersionList
+					bibles={bibles}
+					filterText={filterText}
+					active={versionListActive}
+					activeIsoCode={activeIsoCode}
+					activeTextId={activeTextId}
+					activeTextName={activeTextName}
+					loadingVersions={loadingVersions}
+					setActiveText={this.setActiveTextId}
+					toggleVersionList={this.toggleVersionList}
+					toggleLanguageList={this.toggleLanguageList}
+					setCountryListState={this.setCountryListState}
+					toggleTextSelection={this.toggleVersionSelection}
+				/>
+			</aside>
 		);
 	}
 }
