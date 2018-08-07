@@ -42,7 +42,13 @@ import {
 	TOGGLE_AUTOPLAY,
 	DELETE_HIGHLIGHTS,
 	CREATE_USER_WITH_SOCIAL_ACCOUNT,
+	RESET_BOOKMARK_STATE,
 } from './constants';
+
+export const resetBookmarkState = (props) => ({
+	type: RESET_BOOKMARK_STATE,
+	...props,
+});
 
 export const setChapterTextLoadingState = (props) => ({
 	type: SET_CHAPTER_TEXT_LOADING_STATE,

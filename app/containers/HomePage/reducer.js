@@ -41,6 +41,9 @@ import {
 	GET_BOOKS,
 	GET_CHAPTER_TEXT,
 	GET_COPYRIGHTS,
+	ADD_BOOKMARK_SUCCESS,
+	RESET_BOOKMARK_STATE,
+	ADD_BOOKMARK_FAILURE,
 } from './constants';
 
 // const newBibleState = fromJS({
@@ -332,6 +335,14 @@ function homePageReducer(state = initialState, action) {
 			return state.set('loadingNewChapterText', true).set('loadingBooks', true);
 		case SET_USER_AGENT:
 			return state.set('userAgent', 'ms');
+		case ADD_BOOKMARK_FAILURE:
+			return state.set('addBookmarkFailure', true);
+		case ADD_BOOKMARK_SUCCESS:
+			return state.set('addBookmarkSuccess', true);
+		case RESET_BOOKMARK_STATE:
+			return state
+				.set('addBookmarkFailure', false)
+				.set('addBookmarkSuccess', false);
 		case LOAD_BOOKS:
 			// Setting the active book name based on whether a name was introduced via
 			// the bookId in the url, this was the best I could come up with

@@ -7,7 +7,7 @@
  * component (SFC), hot reloading does not currently support SFCs. If hot
  * reloading is not a necessity for you then you can refactor it and remove
  * the linting exception.
- * todo: look into making scroll event passive
+ *
  */
 
 import React from 'react';
@@ -37,6 +37,7 @@ import {
 	toggleWordsOfJesus,
 } from '../Settings/themes';
 import notesReducer from '../Notes/reducer';
+import notesSaga from '../Notes/saga';
 import textReducer from '../TextSelection/reducer';
 import textSaga from '../TextSelection/saga';
 import { getBookmarksForChapter, addBookmark } from '../Notes/actions';
@@ -65,6 +66,7 @@ import {
 	setActiveNotesView,
 	setAudioPlayerState,
 	setChapterTextLoadingState,
+	resetBookmarkState,
 	initApplication,
 } from './actions';
 import makeSelectHomePage, {
@@ -107,6 +109,7 @@ class HomePage extends React.PureComponent {
 		});
 		this.getCopyrights({ filesetIds: activeFilesets });
 		if (userId && userAuthenticated) {
+			// console.log('user is now authenticated')
 			this.props.dispatch(
 				getHighlights({
 					bible: activeTextId,
@@ -116,70 +119,30 @@ class HomePage extends React.PureComponent {
 					userId,
 				}),
 			);
-			if (userId) {
-				this.props.dispatch(
-					getNotes({
-						userId,
-						params: {
-							bible_id: activeTextId,
-							book_id: activeBookId,
-							chapter: activeChapter,
-							limit: 150,
-							page: 1,
-						},
-					}),
-				);
-				this.props.dispatch(
-					getBookmarksForChapter({
-						userId,
-						params: {
-							bible_id: activeTextId,
-							book_id: activeBookId,
-							chapter: activeChapter,
-							limit: 150,
-							page: 1,
-						},
-					}),
-				);
-			}
-		} else {
-			// console.log('localStorage.getItem(user_id)', localStorage.getItem('bible_is_user_id'));
-			// console.log('sessionStorage.getItem(user_id)', sessionStorage.getItem('bible_is_user_id'));
 			this.props.dispatch(
-				getHighlights({
-					bible: activeTextId,
-					book: activeBookId,
-					chapter: activeChapter,
-					userAuthenticated: !!userId,
+				getNotes({
 					userId,
+					params: {
+						bible_id: activeTextId,
+						book_id: activeBookId,
+						chapter: activeChapter,
+						limit: 150,
+						page: 1,
+					},
 				}),
 			);
-			if (userId) {
-				this.props.dispatch(
-					getNotes({
-						userId,
-						params: {
-							bible_id: activeTextId,
-							book_id: activeBookId,
-							chapter: activeChapter,
-							limit: 150,
-							page: 1,
-						},
-					}),
-				);
-				this.props.dispatch(
-					getBookmarksForChapter({
-						userId,
-						params: {
-							bible_id: activeTextId,
-							book_id: activeBookId,
-							chapter: activeChapter,
-							limit: 150,
-							page: 1,
-						},
-					}),
-				);
-			}
+			this.props.dispatch(
+				getBookmarksForChapter({
+					userId,
+					params: {
+						bible_id: activeTextId,
+						book_id: activeBookId,
+						chapter: activeChapter,
+						limit: 150,
+						page: 1,
+					},
+				}),
+			);
 		}
 
 		if (this.props.homepage.match.params.token) {
@@ -328,8 +291,88 @@ class HomePage extends React.PureComponent {
 		this.document = document;
 	}
 
-	componentWillReceiveProps() {
+	componentWillReceiveProps(nextProps) {
 		// console.log('Homepage received props ______________________');
+		// Based on nextProps so that requests have the latest chapter information
+		const {
+			userId,
+			userAuthenticated,
+			activeTextId,
+			activeBookId,
+			activeChapter,
+			addBookmarkSuccess,
+		} = nextProps.homepage;
+		const {
+			addBookmarkSuccess: addBookmarkSuccessProps,
+			userId: userIdProps,
+			userAuthenticated: userAuthenticatedProps,
+			activeTextId: activeTextIdProps,
+			activeBookId: activeBookIdProps,
+			activeChapter: activeChapterProps,
+		} = this.props.homepage;
+
+		// If there is an authenticated user then send these calls
+		if (
+			userId &&
+			userAuthenticated &&
+			(userId !== userIdProps ||
+				userAuthenticated !== userAuthenticatedProps ||
+				activeTextId !== activeTextIdProps ||
+				activeBookId !== activeBookIdProps ||
+				activeChapter !== activeChapterProps)
+		) {
+			// Should move all of these into the same call to reduce the number of renders in the text component
+			this.props.dispatch(
+				getHighlights({
+					bible: activeTextId,
+					book: activeBookId,
+					chapter: activeChapter,
+					userAuthenticated,
+					userId,
+				}),
+			);
+			this.props.dispatch(
+				getNotes({
+					userId,
+					params: {
+						bible_id: activeTextId,
+						book_id: activeBookId,
+						chapter: activeChapter,
+						limit: 150,
+						page: 1,
+					},
+				}),
+			);
+			// console.log('Dispatched get bookmarks for chapter');
+			this.props.dispatch(
+				getBookmarksForChapter({
+					userId,
+					params: {
+						bible_id: activeTextId,
+						book_id: activeBookId,
+						chapter: activeChapter,
+						limit: 150,
+						page: 1,
+					},
+				}),
+			);
+		}
+		// console.log('addBookmarkSuccess', addBookmarkSuccess, 'addBookmarkSuccessProps', addBookmarkSuccessProps);
+		if (addBookmarkSuccess !== addBookmarkSuccessProps && addBookmarkSuccess) {
+			this.props.dispatch(
+				getBookmarksForChapter({
+					userId,
+					params: {
+						bible_id: activeTextId,
+						book_id: activeBookId,
+						chapter: activeChapter,
+						limit: 150,
+						page: 1,
+					},
+				}),
+			);
+			this.props.dispatch(resetBookmarkState());
+		}
 	}
 
 	componentWillUnmount() {
@@ -584,7 +627,6 @@ class HomePage extends React.PureComponent {
 			formattedSource,
 			userId,
 			userAuthenticated,
-			history,
 			isMenuOpen,
 		} = this.props;
 
@@ -653,7 +695,6 @@ class HomePage extends React.PureComponent {
 						>
 							<SearchContainer
 								bibleId={activeTextId}
-								history={history}
 								books={books}
 								toggleSearchModal={this.toggleSearchModal}
 							/>
@@ -735,7 +776,6 @@ HomePage.propTypes = {
 	homepage: PropTypes.object.isRequired,
 	userSettings: PropTypes.object,
 	formattedSource: PropTypes.object,
-	history: PropTypes.object,
 	userAuthenticated: PropTypes.bool,
 	userId: PropTypes.string,
 	textData: PropTypes.object,
@@ -771,6 +811,7 @@ const withTextReducer = injectReducer({
 	reducer: textReducer,
 });
 const withTextSaga = injectSaga({ key: 'textSelection', saga: textSaga });
+const withNotesSaga = injectSaga({ key: 'notes', saga: notesSaga });
 const withNotesReducer = injectReducer({ key: 'notes', reducer: notesReducer });
 
 export default compose(
@@ -778,6 +819,7 @@ export default compose(
 	withTextReducer,
 	withNotesReducer,
 	withSaga,
+	withNotesSaga,
 	withTextSaga,
 	withConnect,
 )(HomePage);

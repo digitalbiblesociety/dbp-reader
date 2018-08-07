@@ -144,6 +144,7 @@ const selectUserNotes = () =>
 				}
 			});
 			filteredBookmarks.forEach((n, ni) => {
+				// console.log('Top level for each for bookmarks');
 				let iToSet = 0;
 				// console.log('text,n', text,n);
 
@@ -156,9 +157,9 @@ const selectUserNotes = () =>
 					}
 					return parseInt(t.get('verse_start'), 10) === n.get('verse_start');
 				});
-				// console.log('bookmark verse', verse);
 				// console.log(iToSet);
 				if (verse) {
+					// console.log('bookmark verse', verse);
 					newText = newText.size
 						? newText.setIn([iToSet, 'hasBookmark'], true)
 						: text.setIn([iToSet, 'hasBookmark'], true);
@@ -167,6 +168,9 @@ const selectUserNotes = () =>
 						: text.setIn([iToSet, 'bookmarkIndex'], ni);
 				}
 			});
+			// console.log('filteredBookmarks', filteredBookmarks);
+			// console.log('filteredNotes', filteredNotes);
+
 			// console.log(filteredNotes);
 			// console.log('newText', newText);
 			// console.log(text);
