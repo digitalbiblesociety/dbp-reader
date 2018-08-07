@@ -67,6 +67,7 @@ export class Notes extends React.PureComponent {
 		this.closeMenuController.onMenuMount();
 		// console.log('Notes mounted');
 		// document.addEventListener('click', this.handleClickOutside);
+		this.props.dispatch(getChapterForNote({ note: this.props.note }));
 	}
 
 	componentWillUnmount() {

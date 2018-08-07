@@ -128,7 +128,7 @@ export function* getIpAddress() {
 }
 
 export function* addBookmark(props) {
-	console.log('adding bookmark with props: ', props);
+	// console.log('adding bookmark with props: ', props);
 	const requestUrl = `${process.env.BASE_API_ROUTE}/users/${
 		props.data.user_id
 	}/bookmarks?key=${process.env.DBP_API_KEY}&v=4&pretty&project_id=${
