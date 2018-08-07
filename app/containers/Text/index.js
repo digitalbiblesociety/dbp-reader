@@ -375,12 +375,15 @@ class Text extends React.PureComponent {
 			return;
 		}
 		const { firstVerse, lastVerse } = this.state;
-		const { activeBookId, activeChapter } = this.props;
+		const { activeBookId, activeChapter, bibleId } = this.props;
+		// Sometimes if a user selects a single verse either the last or first verse will not be set
+		// In that case I default to them both being the same verse
 		const note = {
-			verse_start: firstVerse,
-			verse_end: lastVerse,
+			verse_start: firstVerse || lastVerse,
+			verse_end: lastVerse || firstVerse,
 			book_id: activeBookId,
 			chapter: activeChapter,
+			bible_id: bibleId,
 			bookmark: bookmark ? 1 : 0,
 		};
 
@@ -993,12 +996,12 @@ class Text extends React.PureComponent {
 				title: '',
 				bookmark: 1,
 				reference: getReference(
-					verseStart,
+					verseStart || verseEnd,
 					verseEnd,
 					this.props.activeBookName,
 					this.props.activeChapter,
 				),
-				verse_start: verseStart,
+				verse_start: verseStart || verseEnd,
 				verse_end: verseEnd,
 			});
 		}

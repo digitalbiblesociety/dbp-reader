@@ -51,9 +51,9 @@ class EditNote extends React.PureComponent {
 	componentWillUnmount() {
 		// Dispatch api call to save the user note and hope nothing hiccups
 		// This will not fire if the user closes the tab or the browser
-		if (this.state.textarea) {
-			this.handleSave();
-		}
+		// if (this.state.textarea) {
+		// 	this.handleSave();
+		// }
 	}
 
 	getReference = (verseStart, verseEnd, chapter) =>
@@ -239,6 +239,7 @@ class EditNote extends React.PureComponent {
 		const end = note.get('verse_end');
 		const chapter = note.get('chapter');
 		const verses = start === end || !end ? start : `${start}-${end}`;
+		// console.log('note.get(\'book_id\')', note.get('book_id'));
 
 		if (book && chapter && start) {
 			return `${vernacularNamesObject[book]} ${chapter}:${verses}`;
@@ -263,6 +264,8 @@ class EditNote extends React.PureComponent {
 			errorSavingNote,
 		} = this.props;
 		const { savingNote, popupOpen, coords } = this.state;
+		// console.log('note', note);
+
 		// console.log('activebookname', activeBookName);
 		// const {
 		// 	selectedBookName,

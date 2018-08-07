@@ -244,37 +244,37 @@ input {
 	}
 }
 [type='checkbox']:checked + label:before {
-	//background-color:#6FBC8F;
-	//position:absolute;
 	//background: url('./check.svg');
-	//height: 26px;
-	//width: 26px;
-	//left:0;
-	//top:0;
+	background-color: #6fbc8f;
+	position: absolute;
+	height: 16px;
+	width: 16px;
+	left: 0;
+	top: 0;
 	//background-repeat: no-repeat;
 	border: none;
 }
 // The checkmark
 //[type="checkbox"]:not(:checked) + label:after,
-//[type="checkbox"]:checked + label:after {
-//  content:'\002713';
-//  position:absolute;
-//  top:.25em;
-//  left:.275em;
-//  font-size:1em;
-//  line-height:0.8;
-//  color:#fff;
-//  transition: all .2s;
-//}
-// Small scaling for the transition between checked and unchecked
-[type='checkbox']:not(:checked) + label:after {
-	opacity: 0;
-	transform: scale(0);
-}
 [type='checkbox']:checked + label:after {
-	opacity: 1;
-	transform: scale(1);
+	content: '\002713';
+	position: absolute;
+	top: 0.25em;
+	left: 0.275em;
+	font-size: 0.9em;
+	line-height: 0.8;
+	color: #fff;
+	//transition: all .2s;
 }
+// Small scaling for the transition between checked and unchecked
+//[type='checkbox']:not(:checked) + label:after {
+//	opacity: 0;
+//	transform: scale(0);
+//}
+//[type='checkbox']:checked + label:after {
+//	opacity: 1;
+//	transform: scale(1);
+//}
 // I saw this was supposed to help with accessibility so I put it in
 [type='checkbox']:checked:focus + label:before,
 [type='checkbox']:not(:checked):focus + label:before {

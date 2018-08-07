@@ -1,4 +1,5 @@
 import Document, { Head, Main, NextScript } from 'next/document';
+// Importing the check here so that it is available to the css
 /* eslint-disable */
 export default class MyDocument extends Document {
 	render() {

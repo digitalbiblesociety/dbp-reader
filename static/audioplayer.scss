@@ -209,13 +209,15 @@
 		[type='checkbox']:not(:checked) + label:after,
 		[type='checkbox']:checked + label:after {
 			position: absolute;
+			font-size: 1em;
 			top: calc(-20px + 0.35em);
-			left: calc(16px + 0.45em);
+			left: calc(14px + 0.45em);
 		}
 		[type='checkbox']:not(:checked) + label,
 		[type='checkbox']:checked + label {
 			padding-left: 0;
 			top: 12px;
+			font-size: 1em;
 		}
 	}
 }
