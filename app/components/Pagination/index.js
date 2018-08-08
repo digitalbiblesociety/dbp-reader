@@ -1,8 +1,8 @@
 /**
-*
-* Pagination
-*
-*/
+ *
+ * Pagination
+ *
+ */
 
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -21,28 +21,32 @@ const Pagination = ({ totalPages, activePage, onChangePage }) => {
 	let visiblePages = pageRange;
 
 	if (checkMax && !checkMin) {
-		visiblePages = rangeLength > 10 ?
-			pageRange.slice(maxPage - 9, maxPage) :
-			pageRange;
+		visiblePages =
+			rangeLength > 10 ? pageRange.slice(maxPage - 9, maxPage) : pageRange;
 	} else if (checkMin && !checkMax) {
-		visiblePages = rangeLength > 10 ?
-			pageRange.slice(minPage, minPage + 9) :
-			pageRange;
+		visiblePages =
+			rangeLength > 10 ? pageRange.slice(minPage, minPage + 9) : pageRange;
 	} else {
-		visiblePages = rangeLength > 10 ?
-			pageRange.slice(minPage, maxPage) :
-			pageRange;
+		visiblePages =
+			rangeLength > 10 ? pageRange.slice(minPage, maxPage) : pageRange;
 	}
 
 	return (
-		<div className="item-list">
-			{
-				visiblePages.map((page) => (
-					<div key={page} className={activePage === page ? 'item active' : 'item'}>
-						<span role="button" tabIndex={0} onClick={() => onChangePage(page)}>{page}</span>
-					</div>
-				))
+		<div
+			className={
+				visiblePages.length > 7 ? 'item-list item-list-full' : 'item-list'
 			}
+		>
+			{visiblePages.map((page) => (
+				<div
+					key={page}
+					className={activePage === page ? 'item active' : 'item'}
+				>
+					<span role="button" tabIndex={0} onClick={() => onChangePage(page)}>
+						{page}
+					</span>
+				</div>
+			))}
 		</div>
 	);
 };
