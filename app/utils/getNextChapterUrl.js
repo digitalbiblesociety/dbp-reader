@@ -10,9 +10,6 @@ export default ({
 	text: chapterText,
 	isHref,
 }) => {
-	if (!books.length || !chapterText.length) {
-		return url({ textId, bookId, chapter, isHref, nextVerse: verseNumber });
-	}
 	if (verseNumber && chapterText) {
 		const nextVerse = parseInt(verseNumber, 10) + 1 || 1;
 		const lastVerse = chapterText.length;

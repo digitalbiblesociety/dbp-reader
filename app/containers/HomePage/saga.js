@@ -481,7 +481,7 @@ export function* getBibleFromUrl({
 			yield put({
 				type: 'loadbible',
 				filesets,
-				name: bible.vname ? bible.vname : bible.name,
+				name: bible.vname ? bible.vname : bible.name || bible.abbr,
 				iso: bible.iso,
 				textDirection,
 				languageName: bible.language,

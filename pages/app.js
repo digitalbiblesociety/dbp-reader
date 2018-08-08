@@ -505,7 +505,10 @@ AppContainer.getInitialProps = async (context) => {
 		});
 		// console.log('Got the initial state!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
 	}
-
+	if (!isFromServer) {
+		// console.log('The func ran on the client');
+		// console.log('initData.formattedText', initData.formattedText);
+	}
 	return {
 		// isServer,
 		chapterText,

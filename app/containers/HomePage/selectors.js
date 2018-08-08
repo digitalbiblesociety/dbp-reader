@@ -219,6 +219,7 @@ const selectFormattedSource = () =>
 			// Todo: Keep the selection of the single verse and the footnotes here
 			// Pushing update with the formatted text working but not the footnotes
 			// const source = substate.get('formattedSource');
+			// console.log('source in selector', source);
 			if (!source) {
 				return { main: '', footnotes: {} };
 			}
