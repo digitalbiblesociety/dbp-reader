@@ -578,10 +578,14 @@
 	cursor: pointer;
 	display: flex;
 	align-items: center;
-	justify-content: space-between;
+	justify-content: flex-start;
 	height: 50px;
 	width: calc(100% - 120px);
 	margin: 0 15px;
+
+	.item {
+		margin-left: 15px;
+	}
 }
 .pagination .item-list .item:hover {
 	@include css4 {
