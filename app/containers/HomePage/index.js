@@ -96,16 +96,16 @@ class HomePage extends React.PureComponent {
 			userAuthenticated,
 			userId,
 		} = this.props.homepage;
-		const params = this.props.homepage.match.params;
-		this.props.dispatch({
-			type: 'getbible',
-			bibleId: params.bibleId,
-			bookId: params.bookId,
-			chapter: params.chapter,
-			authenticated: this.props.homepage.userAuthenticated,
-			userId: this.props.homepage.userId,
-			verse: params.verse,
-		});
+		// const params = this.props.homepage.match.params;
+		// this.props.dispatch({
+		// 	type: 'getbible',
+		// 	bibleId: params.bibleId,
+		// 	bookId: params.bookId,
+		// 	chapter: params.chapter,
+		// 	authenticated: this.props.homepage.userAuthenticated,
+		// 	userId: this.props.homepage.userId,
+		// 	verse: params.verse,
+		// });
 		this.getCopyrights({ filesetIds: activeFilesets });
 		if (userId && userAuthenticated) {
 			// console.log('user is now authenticated')

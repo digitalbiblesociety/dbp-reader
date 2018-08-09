@@ -476,6 +476,7 @@ AppContainer.getInitialProps = async (context) => {
 				userProfile,
 				audioPaths: initData.audioPaths,
 				audioSource: initData.audioPaths[0],
+				hasAudio: !!initData.audioPaths.length,
 				chapterText,
 				testaments,
 				userSettings,

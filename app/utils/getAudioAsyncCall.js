@@ -2,6 +2,7 @@ import get from 'lodash/get';
 import request from './request';
 
 export default async (filesets, bookId, chapter) => {
+	// console.log('getting the audio', filesets, bookId, chapter);
 	const audioReturnObject = { type: 'loadaudio', audioPaths: [''] };
 
 	const filteredFilesets = filesets.reduce((a, file) => {
@@ -73,10 +74,12 @@ export default async (filesets, bookId, chapter) => {
 			audioReturnObject.audioFilesetId = get(completeAudio, [0, 'id']);
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
+				/* eslint-disable no-console */
 				console.error(
 					'Caught in getChapterAudio complete audio',
 					error.message,
-				); // eslint-disable-line no-console
+				);
+				/* eslint-enable no-console */
 			}
 		}
 	} else if (ntLength && !otLength) {
