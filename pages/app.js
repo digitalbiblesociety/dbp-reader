@@ -38,6 +38,10 @@ class AppContainer extends React.Component {
 		// console.log('Component will mount for app redux store available at mounting', this.props.dispatch);
 	}
 	componentDidMount() {
+		// console.log('session storage autoplay item', sessionStorage.getItem('bible_is_autoplay'));
+		// console.log('autoplay value in app didmount', sessionStorage.getItem('bible_is_autoplay')
+		// 	? JSON.parse(sessionStorage.getItem('bible_is_autoplay'))
+		// 	: false);
 		// If the page was served from the server then I need to cache the data for this route
 		if (this.props.isFromServer) {
 			// console.log('Using cached url');
@@ -249,6 +253,8 @@ AppContainer.getInitialProps = async (context) => {
 	const userProfile = {};
 
 	let isFromServer = true;
+	// console.log('all state', context.reduxStore.getState().get('homepage'))
+	// let userSettings = context.reduxStore.getState().getIn(['homepage', 'userSettings']).toJS();
 	let userSettings = {};
 	let userId = '';
 	let isAuthenticated = false;

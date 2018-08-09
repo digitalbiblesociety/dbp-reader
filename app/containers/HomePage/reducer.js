@@ -325,10 +325,13 @@ function homePageReducer(state = initialState, action) {
 			if (typeof window !== 'undefined') {
 				sessionStorage.setItem(
 					'bible_is_autoplay',
-					!state.get('autoPlayEnabled'),
+					!state.getIn(['userSettings', 'autoPlayEnabled']),
 				);
 			}
-			return state.set('autoPlayEnabled', !state.get('autoPlayEnabled'));
+			return state.setIn(
+				['userSettings', 'autoPlayEnabled'],
+				!state.getIn(['userSettings', 'autoPlayEnabled']),
+			);
 		case GET_CHAPTER_TEXT:
 			return state.set('loadingNewChapterText', true);
 		case GET_BOOKS:

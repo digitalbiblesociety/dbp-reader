@@ -705,7 +705,7 @@ class HomePage extends React.PureComponent {
 			activeTextName,
 			activeBookName,
 			activeNotesView,
-			autoPlayEnabled,
+			// autoPlayEnabled,
 			audioPlayerState,
 			books,
 			highlights,
@@ -732,7 +732,9 @@ class HomePage extends React.PureComponent {
 			isMenuOpen,
 		} = this.props;
 
-		// console.log('Homepage props', this.props);
+		const autoPlayEnabled = userSettings.get('autoPlayEnabled');
+
+		// console.log('Homepage props', autoPlayEnabled);
 
 		const { isScrollingDown, footerDistance: distance } = this.state;
 

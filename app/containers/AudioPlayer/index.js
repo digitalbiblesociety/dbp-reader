@@ -37,6 +37,7 @@ export class AudioPlayer extends React.Component {
 		// need to get next and prev audio tracks if I want to enable continuous playing
 		this.state = {
 			playing: false,
+			loadingNextChapter: false,
 			speedControlState: false,
 			volumeSliderState: false,
 			elipsisState: false,
@@ -110,7 +111,11 @@ export class AudioPlayer extends React.Component {
 				} else {
 					this.audioRef.addEventListener('canplay', this.autoPlayListener);
 				}
+				this.setState({ autoPlayChecked: nextProps.autoPlay });
 			}
+			// if (this.props.autoPlay !== nextProps.autoPlay) {
+			// 	this.setState({ autoPlayChecked: nextProps.autoPlay });
+			// }
 		}
 
 		if (!nextProps.autoPlay) {
@@ -264,7 +269,9 @@ export class AudioPlayer extends React.Component {
 		// alert('auto play listener fired');
 		// can accept event as a parameter
 		// console.log('can play fired and was true');
-		this.playAudio();
+		if (!this.state.loadingNextChapter) {
+			this.playAudio();
+		}
 	};
 
 	durationChangeEventListener = (e) => {
@@ -388,14 +395,29 @@ export class AudioPlayer extends React.Component {
 	// 	});
 	// };
 	//
-	// skipForward = () => {
-	// 	this.setCurrentTime(0);
-	// 	this.pauseAudio();
-	// 	this.props.skipForward();
-	// 	this.setState({
-	// 		playing: false,
-	// 	});
-	// };
+	skipForward = () => {
+		this.setCurrentTime(0);
+		this.pauseAudio();
+		this.setState(
+			{
+				playing: false,
+				loadingNextChapter: true,
+			},
+			() => {
+				Router.push(
+					getNextChapterUrl({
+						books: this.props.books,
+						chapter: this.props.activeChapter,
+						bookId: this.props.activeBookId.toLowerCase(),
+						textId: this.props.activeTextId.toLowerCase(),
+						verseNumber: this.props.verseNumber,
+						text: this.props.text,
+						isHref: false,
+					}),
+				);
+			},
+		);
+	};
 
 	toggleAudioPlayer = () => {
 		if (this.props.audioSource && this.props.hasAudio) {
