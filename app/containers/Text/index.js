@@ -646,6 +646,8 @@ class Text extends React.PureComponent {
 			JSON.stringify(initialFormattedSourceFromProps),
 		);
 
+		// Need to move this to selector and use regex
+		// Possible for verse but not for footnotes
 		if (dommountedsostuffworks) {
 			if (verseNumber) {
 				const parser = new DOMParser();
@@ -1734,7 +1736,7 @@ class Text extends React.PureComponent {
 			textDirection,
 			chapterTextLoadingState,
 		} = this.props;
-		// console.log('____________________________\nText component rendered!', text);
+		// console.log('____________________________\nText component rendered!', verseNumber);
 		// console.log('condition for spinner', loadingNewChapterText ||
 		// 	loadingAudio ||
 		// 	this.state.loadingNextPage ||

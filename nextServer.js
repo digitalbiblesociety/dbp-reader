@@ -164,7 +164,8 @@ app
 			};
 			if (
 				queryParams.verse !== 'style.css' &&
-				!req.originalUrl.includes('/static')
+				!req.originalUrl.includes('/static') &&
+				!queryParams.verse
 			) {
 				renderAndCache(req, res, actualPage, queryParams);
 			} else {

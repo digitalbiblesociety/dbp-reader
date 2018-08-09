@@ -13,7 +13,7 @@ export default ({
 	// if (!books.length || !chapterText.length) {
 	// 	return url({ textId, bookId, chapter, isHref, nextVerse: verseNumber });
 	// }
-	if (verseNumber && chapterText) {
+	if (verseNumber && chapterText.length) {
 		const prevVerse = parseInt(verseNumber, 10) - 1 || 1;
 		const lastVerse = chapterText.length;
 		// Is it past the max verses for the chapter?
@@ -36,6 +36,26 @@ export default ({
 		}
 		return url({ textId, bookId, chapter, nextVerse: verseNumber, isHref });
 		// return `${baseUrl}/${textId}/${bookId}/${chapter}`;
+	} else if (verseNumber) {
+		const nextVerse = parseInt(verseNumber, 10) - 1 || 1;
+
+		if (nextVerse && nextVerse > 0) {
+			// The next verse is within a valid range
+
+			return url({ textId, bookId, chapter, nextVerse, isHref });
+			// return `${baseUrl}/${textId}/${bookId}/${chapter}/${nextVerse}`;
+		} else if (nextVerse < 0) {
+			// The next verse is below 0 and thus invalid
+
+			return url({ textId, bookId, chapter, nextVerse: '1', isHref });
+			// return `${baseUrl}/${textId}/${bookId}/${chapter}/1`;
+			// Need to find a way to do this for formatted text
+			// } else if (nextVerse > lastVerse) {
+			// Next verse is above the last verse in the chapter and thus is invalid
+			// 	return url({ textId, bookId, chapter, nextVerse: lastVerse, isHref });
+		}
+		// Worst case just go back to the same verse (In hindsight this may not be the best...)
+		return url({ textId, bookId, chapter, nextVerse: verseNumber, isHref });
 	}
 
 	if (bookId === books[0].book_id && chapter - 1 === 0) {
