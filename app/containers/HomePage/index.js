@@ -96,16 +96,16 @@ class HomePage extends React.PureComponent {
 			userAuthenticated,
 			userId,
 		} = this.props.homepage;
-		const params = this.props.homepage.match.params;
-		this.props.dispatch({
-			type: 'getbible',
-			bibleId: params.bibleId,
-			bookId: params.bookId,
-			chapter: params.chapter,
-			authenticated: this.props.homepage.userAuthenticated,
-			userId: this.props.homepage.userId,
-			verse: params.verse,
-		});
+		// const params = this.props.homepage.match.params;
+		// this.props.dispatch({
+		// 	type: 'getbible',
+		// 	bibleId: params.bibleId,
+		// 	bookId: params.bookId,
+		// 	chapter: params.chapter,
+		// 	authenticated: this.props.homepage.userAuthenticated,
+		// 	userId: this.props.homepage.userId,
+		// 	verse: params.verse,
+		// });
 		this.getCopyrights({ filesetIds: activeFilesets });
 		if (userId && userAuthenticated) {
 			// console.log('user is now authenticated')
@@ -572,7 +572,7 @@ class HomePage extends React.PureComponent {
 	};
 
 	addBookmark = (data) => this.props.dispatch(addBookmark({ ...data }));
-
+	fo;
 	addHighlight = (props) =>
 		this.props.dispatch(
 			addHighlight({
@@ -705,7 +705,7 @@ class HomePage extends React.PureComponent {
 			activeTextName,
 			activeBookName,
 			activeNotesView,
-			autoPlayEnabled,
+			// autoPlayEnabled,
 			audioPlayerState,
 			books,
 			highlights,
@@ -732,7 +732,9 @@ class HomePage extends React.PureComponent {
 			isMenuOpen,
 		} = this.props;
 
-		// console.log('Homepage props', this.props);
+		const autoPlayEnabled = userSettings.get('autoPlayEnabled');
+
+		// console.log('Homepage props', autoPlayEnabled);
 
 		const { isScrollingDown, footerDistance: distance } = this.state;
 
