@@ -370,14 +370,14 @@ class Text extends React.PureComponent {
 	};
 	// Use selected text only when marking highlights
 	setActiveNote = ({ coords, existingNote, bookmark }) => {
+		// console.log('this.state', this.state);
 		if (!this.props.userAuthenticated || !this.props.userId) {
 			this.openPopup({ x: coords.x, y: coords.y });
 			return;
 		}
 		const { firstVerse, lastVerse } = this.state;
 		const { activeBookId, activeChapter, bibleId } = this.props;
-		// Sometimes if a user selects a single verse either the last or first verse will not be set
-		// In that case I default to them both being the same verse
+
 		const note = {
 			verse_start: firstVerse || lastVerse,
 			verse_end: lastVerse || firstVerse,
@@ -1561,6 +1561,7 @@ class Text extends React.PureComponent {
 						currentState.activeVerseInfo.verse === verse
 					),
 					contextMenuState: currentState.activeVerseInfo.verse !== verse,
+					lastVerse: currentState.firstVerse,
 					activeVerseInfo: {
 						verse: currentState.activeVerseInfo.verse !== verse ? verse : 0,
 						isPlain,
@@ -1579,6 +1580,7 @@ class Text extends React.PureComponent {
 						currentState.activeVerseInfo.verse === verse
 					),
 					contextMenuState: currentState.activeVerseInfo.verse !== verse,
+					lastVerse: currentState.firstVerse,
 					activeVerseInfo: {
 						verse: currentState.activeVerseInfo.verse !== verse ? verse : 0,
 						isPlain,

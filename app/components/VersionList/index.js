@@ -188,7 +188,8 @@ class VersionList extends React.PureComponent {
 				// console.log('filetered sets', filesets.filter((f) => (f.get('type') === audioType || f.get('type') === 'text_plain' || f.get('type') === 'text_format')));
 				setActiveText({
 					textId: bible.get('abbr'),
-					textName: bible.get('name'),
+					textName:
+						bible.get('vname') || bible.get('name') || bible.get('abbr'),
 					filesets: filesets.filter(
 						(f) =>
 							f.get('type') === audioType ||
@@ -200,7 +201,8 @@ class VersionList extends React.PureComponent {
 			} else {
 				setActiveText({
 					textId: bible.get('abbr'),
-					textName: bible.get('name'),
+					textName:
+						bible.get('vname') || bible.get('name') || bible.get('abbr'),
 					filesets,
 				});
 				toggleTextSelection();

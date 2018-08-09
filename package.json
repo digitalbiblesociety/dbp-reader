@@ -27,6 +27,7 @@
 		"build:dll": "node ./internals/scripts/dependencies.js",
 		"build:sitemap": "node internals/webpack/routesGenerator.js",
 		"start": "cross-env NODE_ENV=development node nextServer",
+		"start:dev": "cross-env NODE_ENV=development node nextServer",
 		"start:prerender": "node server/prerenderIndex.js",
 		"start:tunnel": "cross-env NODE_ENV=development ENABLE_TUNNEL=true node server",
 		"start:production": "next build && npm run start:prod",
