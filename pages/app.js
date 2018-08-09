@@ -17,8 +17,6 @@ import 'babel-polyfill';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import 'rc-slider/assets/index.css';
-import 'react-accessible-accordion/dist/minimal-example.css';
 import Head from 'next/head';
 import Router from 'next/router';
 import cachedFetch, { overrideCache } from '../app/utils/cachedFetch';
