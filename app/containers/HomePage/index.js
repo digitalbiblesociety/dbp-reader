@@ -572,7 +572,7 @@ class HomePage extends React.PureComponent {
 	};
 
 	addBookmark = (data) => this.props.dispatch(addBookmark({ ...data }));
-
+	fo;
 	addHighlight = (props) =>
 		this.props.dispatch(
 			addHighlight({

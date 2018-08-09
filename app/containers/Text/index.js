@@ -59,6 +59,8 @@ class Text extends React.PureComponent {
 		activeVerseInfo: { verse: 0 },
 		loadingNextPage: false,
 		wholeVerseIsSelected: false,
+		dommountedsostuffworks: false,
+		footnotes: {},
 	};
 
 	componentDidMount() {
@@ -78,6 +80,8 @@ class Text extends React.PureComponent {
 			this.setEventHandlersForFormattedVerses(this.formatHighlight);
 		}
 		// console.log('props at time component first mounted', this.props);
+		this.dommountedsostuffworks();
+		this.getFootnotesOnFirstRender();
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -86,12 +90,41 @@ class Text extends React.PureComponent {
 			// console.log('component did update old props difference: ', differenceObject(nextProps, this.props));
 		}
 		if (nextProps.formattedSource.main !== this.props.formattedSource.main) {
-			this.setState({
-				footnoteState: false,
-				activeVerseInfo: { verse: 0 },
-				loadingNextPage: false,
-			});
-			this.props.setTextLoadingState({ state: false });
+			let footnotes = {};
+			// Safety check since I use browser apis
+			if (
+				typeof window !== 'undefined' &&
+				nextProps.formattedSource.footnoteSource
+			) {
+				// console.log('formatted source changed, updating footnotes', nextProps.formattedSource.footnoteSource);
+				const parser = new DOMParser();
+				const xmlDoc = parser.parseFromString(
+					nextProps.formattedSource.footnoteSource,
+					'text/xml',
+				);
+				// console.log('all fts', xmlDoc.querySelectorAll('.ft, .xt'));
+				footnotes =
+					[...xmlDoc.querySelectorAll('.ft, .xt')].reduce(
+						(a, n) => ({
+							...a,
+							[n.parentElement.parentElement.attributes.id.value.slice(
+								4,
+							)]: n.textContent,
+						}),
+						{},
+					) || {};
+			}
+			this.setState(
+				{
+					footnoteState: false,
+					activeVerseInfo: { verse: 0 },
+					loadingNextPage: false,
+					footnotes,
+				},
+				() => {
+					this.props.setTextLoadingState({ state: false });
+				},
+			);
 		}
 		if (!isEqual(nextProps.text, this.props.text)) {
 			this.setState({ activeVerseInfo: { verse: 0 }, loadingNextPage: false });
@@ -110,6 +143,7 @@ class Text extends React.PureComponent {
 		}
 	}
 
+	// I am using this function because it means that the component finished updating and that the dom is available
 	componentDidUpdate(prevProps, prevState) {
 		// console.log(this.format, this.formatHighlight);
 		// if (Object.keys(differenceObject(this.state, prevState)).length || Object.keys(differenceObject(this.props, prevProps)).length) {
@@ -390,6 +424,30 @@ class Text extends React.PureComponent {
 		this.props.setActiveNote({ note: existingNote || note });
 	};
 
+	getFootnotesOnFirstRender = () => {
+		// console.log('getFootnotesOnFirstRender', this.props.formattedSource.footnoteSource);
+		const parser = new DOMParser();
+		const xmlDoc = parser.parseFromString(
+			this.props.formattedSource.footnoteSource,
+			'text/xml',
+		);
+		// console.log('all fts', xmlDoc.querySelectorAll('.ft, .xt'));
+		const footnotes =
+			[...xmlDoc.querySelectorAll('.ft, .xt')].reduce(
+				(a, n) => ({
+					...a,
+					[n.parentElement.parentElement.attributes.id.value.slice(
+						4,
+					)]: n.textContent,
+				}),
+				{},
+			) || {};
+		this.setState({
+			footnoteState: false,
+			footnotes,
+		});
+	};
+
 	getFirstVerse = (e) => {
 		// alert('mousedown fired');
 		e.stopPropagation();
@@ -568,11 +626,12 @@ class Text extends React.PureComponent {
 		}
 	};
 
-	get getTextComponents() {
+	getTextComponents(dommountedsostuffworks) {
 		const {
 			text: initialText,
 			userSettings,
-			formattedSource: initialFormattedSource,
+			formattedSource: initialFormattedSourceFromProps,
+			// formattedSource: initialFormattedSource,
 			highlights,
 			activeChapter,
 			activeBookName,
@@ -581,7 +640,44 @@ class Text extends React.PureComponent {
 			bookmarks,
 			audioSource,
 			invalidBibleId,
+			activeBookId,
 		} = this.props;
+		const initialFormattedSource = JSON.parse(
+			JSON.stringify(initialFormattedSourceFromProps),
+		);
+
+		if (dommountedsostuffworks) {
+			if (verseNumber) {
+				const parser = new DOMParser();
+				const serializer = new XMLSerializer();
+				// Create temp xml doc from source
+				const xmlDocText = parser.parseFromString(
+					initialFormattedSource.main,
+					'text/xml',
+				);
+				// Find the verse node by its classname
+				const verseClassName = `${activeBookId.toUpperCase()}${activeChapter}_${verseNumber}`;
+				const verseNumberElement = xmlDocText.getElementsByClassName(
+					`verse${verseNumber}`,
+				)[0];
+				// Get the inner text of the verse
+				const verseString = xmlDocText.getElementsByClassName(
+					verseClassName,
+				)[0];
+				// Create a new container for the verse
+				const newXML = xmlDocText.createElement('div');
+				// Add the verse to the new container
+				if (verseNumberElement && verseString) {
+					newXML.appendChild(verseNumberElement);
+					newXML.appendChild(verseString);
+				}
+				// Use the new text as the formatted source
+				initialFormattedSource.main = newXML
+					? serializer.serializeToString(newXML)
+					: 'This chapter does not have a verse matching the url';
+				// console.log('Creating new source for verse', initialFormattedSource);
+			}
+		}
 
 		const chapterAlt = initialText[0] && initialText[0].chapter_alt;
 		const verseIsActive =
@@ -619,7 +715,6 @@ class Text extends React.PureComponent {
 			'active',
 		]);
 		// console.log(initialText);
-		// todo figure out a way to memoize or cache the highlighted version of the text to improve performance - Not a huge issue because even with cpu at 6x throttling this part still worked fine
 		// Need to connect to the api and get the highlights object for this chapter
 		// based on whether the highlights object has any data decide whether to
 		// run this function or not
@@ -956,6 +1051,7 @@ class Text extends React.PureComponent {
 			this.closeContextMenu();
 		}
 	};
+
 	handleAddBookmark = () => {
 		// console.log('Props available in bookmarks', this.props);
 		// console.log('State available in bookmarks', this.state);
@@ -1009,6 +1105,9 @@ class Text extends React.PureComponent {
 
 	// Probably need to stop doing this here
 	callSetStateNotInUpdate = () => this.setState({ handlersAreSet: true });
+
+	dommountedsostuffworks = () =>
+		this.setState({ dommountedsostuffworks: true });
 
 	openPopup = (coords) => {
 		this.setState({ popupOpen: true, popupCoords: coords });
@@ -1491,7 +1590,7 @@ class Text extends React.PureComponent {
 			footnoteState: true,
 			contextMenuState: false,
 			footnotePortal: {
-				message: this.props.formattedSource.footnotes[id],
+				message: this.state.footnotes[id],
 				closeFootnote: this.closeFootnote,
 				coords,
 			},
@@ -1748,7 +1847,7 @@ class Text extends React.PureComponent {
 								</h1>
 							</div>
 						)}
-						{this.getTextComponents}
+						{this.getTextComponents(this.state.dommountedsostuffworks)}
 						{verseNumber ? (
 							<div className={'read-chapter-container'}>
 								<PrefetchLink

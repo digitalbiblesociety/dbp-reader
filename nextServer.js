@@ -21,6 +21,7 @@ function getCacheKey(req) {
 async function renderAndCache(req, res, pagePath, queryParams) {
 	if (dev) {
 		app.render(req, res, pagePath, queryParams);
+		return;
 	}
 	const key = getCacheKey(req);
 
