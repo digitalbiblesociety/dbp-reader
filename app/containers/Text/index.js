@@ -90,36 +90,11 @@ class Text extends React.PureComponent {
 			// console.log('component did update old props difference: ', differenceObject(nextProps, this.props));
 		}
 		if (nextProps.formattedSource.main !== this.props.formattedSource.main) {
-			let footnotes = {};
-			// Safety check since I use browser apis
-			if (
-				typeof window !== 'undefined' &&
-				nextProps.formattedSource.footnoteSource
-			) {
-				// console.log('formatted source changed, updating footnotes', nextProps.formattedSource.footnoteSource);
-				const parser = new DOMParser();
-				const xmlDoc = parser.parseFromString(
-					nextProps.formattedSource.footnoteSource,
-					'text/xml',
-				);
-				// console.log('all fts', xmlDoc.querySelectorAll('.ft, .xt'));
-				footnotes =
-					[...xmlDoc.querySelectorAll('.ft, .xt')].reduce(
-						(a, n) => ({
-							...a,
-							[n.parentElement.parentElement.attributes.id.value.slice(
-								4,
-							)]: n.textContent,
-						}),
-						{},
-					) || {};
-			}
 			this.setState(
 				{
 					footnoteState: false,
 					activeVerseInfo: { verse: 0 },
 					loadingNextPage: false,
-					footnotes,
 				},
 				() => {
 					this.props.setTextLoadingState({ state: false });
@@ -213,6 +188,43 @@ class Text extends React.PureComponent {
 				);
 			}
 		}
+		// console.log(!!this.props.formattedSource.main);
+		// console.log(this.props.formattedSource.main !== prevProps.formattedSource.main);
+		// console.log('(this.format || this.formatHighlight)', !!(this.format || this.formatHighlight));
+		//
+		// console.log('condition for if', !!this.props.formattedSource.main &&
+		// 	prevProps.formattedSource.main !== this.props.formattedSource.main &&
+		// 	!!(this.format || this.formatHighlight));
+		//
+		if (
+			this.props.formattedSource.footnoteSource &&
+			this.props.formattedSource.footnoteSource !==
+				prevProps.formattedSource.footnoteSource
+		) {
+			// console.log('this.props.formatted', this.props.formattedSource.footnoteSource);
+			// Safety check since I use browser apis
+			if (this.props.formattedSource.footnoteSource) {
+				// console.log('formatted source changed, updating footnotes', this.props.formattedSource.footnoteSource);
+				const parser = new DOMParser();
+				const xmlDoc = parser.parseFromString(
+					this.props.formattedSource.footnoteSource,
+					'text/xml',
+				);
+				// console.log('all fts', xmlDoc.querySelectorAll('.ft, .xt'));
+				const footnotes =
+					[...xmlDoc.querySelectorAll('.ft, .xt')].reduce(
+						(a, n) => ({
+							...a,
+							[n.parentElement.parentElement.attributes.id.value.slice(
+								4,
+							)]: n.textContent,
+						}),
+						{},
+					) || {};
+				// console.log('generated new footnotes', footnotes);
+				this.callSetStateNotInUpdate(footnotes);
+			}
+		}
 		// Logic below ensures that the proper event handlers are set on each footnote
 		if (
 			this.props.formattedSource.main &&
@@ -268,22 +280,22 @@ class Text extends React.PureComponent {
 		// This handles setting the events on a page refresh or navigation via url
 		if (
 			this.format &&
-			!this.state.handlersAreSet &&
+			// !this.state.handlersAreSet &&
 			!this.props.loadingNewChapterText
 		) {
-			// console.log('setting event listeners on format fourth');
+			// console.log('setting event listeners on format fourth', this.state.footnotes);
 			this.setEventHandlersForFootnotes(this.format);
 			this.setEventHandlersForFormattedVerses(this.format);
-			this.callSetStateNotInUpdate();
+			// this.callSetStateNotInUpdate();
 		} else if (
 			this.formatHighlight &&
-			!this.state.handlersAreSet &&
+			// !this.state.handlersAreSet &&
 			!this.props.loadingNewChapterText
 		) {
 			// console.log('setting event listeners on formatHighlight fourth ');
 			this.setEventHandlersForFootnotes(this.formatHighlight);
 			this.setEventHandlersForFormattedVerses(this.formatHighlight);
-			this.callSetStateNotInUpdate();
+			// this.callSetStateNotInUpdate();
 		}
 	}
 
@@ -1106,7 +1118,7 @@ class Text extends React.PureComponent {
 	};
 
 	// Probably need to stop doing this here
-	callSetStateNotInUpdate = () => this.setState({ handlersAreSet: true });
+	callSetStateNotInUpdate = (footnotes) => this.setState({ footnotes });
 
 	dommountedsostuffworks = () =>
 		this.setState({ dommountedsostuffworks: true });
