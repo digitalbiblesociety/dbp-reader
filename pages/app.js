@@ -17,8 +17,6 @@ import 'babel-polyfill';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import 'rc-slider/assets/index.css';
-import 'react-accessible-accordion/dist/minimal-example.css';
 import Head from 'next/head';
 import Router from 'next/router';
 import cachedFetch, { overrideCache } from '../app/utils/cachedFetch';
@@ -38,6 +36,10 @@ class AppContainer extends React.Component {
 		// console.log('Component will mount for app redux store available at mounting', this.props.dispatch);
 	}
 	componentDidMount() {
+		// console.log('session storage autoplay item', sessionStorage.getItem('bible_is_autoplay'));
+		// console.log('autoplay value in app didmount', sessionStorage.getItem('bible_is_autoplay')
+		// 	? JSON.parse(sessionStorage.getItem('bible_is_autoplay'))
+		// 	: false);
 		// If the page was served from the server then I need to cache the data for this route
 		if (this.props.isFromServer) {
 			// console.log('Using cached url');
@@ -249,6 +251,8 @@ AppContainer.getInitialProps = async (context) => {
 	const userProfile = {};
 
 	let isFromServer = true;
+	// console.log('all state', context.reduxStore.getState().get('homepage'))
+	// let userSettings = context.reduxStore.getState().getIn(['homepage', 'userSettings']).toJS();
 	let userSettings = {};
 	let userId = '';
 	let isAuthenticated = false;
@@ -472,6 +476,7 @@ AppContainer.getInitialProps = async (context) => {
 				userProfile,
 				audioPaths: initData.audioPaths,
 				audioSource: initData.audioPaths[0],
+				hasAudio: !!initData.audioPaths.length,
 				chapterText,
 				testaments,
 				userSettings,
@@ -505,7 +510,10 @@ AppContainer.getInitialProps = async (context) => {
 		});
 		// console.log('Got the initial state!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
 	}
-
+	if (!isFromServer) {
+		// console.log('The func ran on the client');
+		// console.log('initData.formattedText', initData.formattedText);
+	}
 	return {
 		// isServer,
 		chapterText,

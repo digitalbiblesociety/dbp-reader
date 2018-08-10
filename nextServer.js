@@ -19,6 +19,10 @@ function getCacheKey(req) {
 }
 
 async function renderAndCache(req, res, pagePath, queryParams) {
+	if (dev) {
+		app.render(req, res, pagePath, queryParams);
+		return;
+	}
 	const key = getCacheKey(req);
 
 	if (ssrCache.has(key)) {
@@ -160,7 +164,8 @@ app
 			};
 			if (
 				queryParams.verse !== 'style.css' &&
-				!req.originalUrl.includes('/static')
+				!req.originalUrl.includes('/static') &&
+				!queryParams.verse
 			) {
 				renderAndCache(req, res, actualPage, queryParams);
 			} else {

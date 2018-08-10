@@ -27,6 +27,7 @@
 		"build:dll": "node ./internals/scripts/dependencies.js",
 		"build:sitemap": "node internals/webpack/routesGenerator.js",
 		"start": "cross-env NODE_ENV=development node nextServer",
+		"start:dev": "cross-env NODE_ENV=development node nextServer",
 		"start:prerender": "node server/prerenderIndex.js",
 		"start:tunnel": "cross-env NODE_ENV=development ENABLE_TUNNEL=true node server",
 		"start:production": "next build && npm run start:prod",
@@ -293,7 +294,7 @@
 		"image-webpack-loader": "2.0.0",
 		"imports-loader": "0.7.1",
 		"jest-cli": "20.0.4",
-		"jsdom": "^11.9.0",
+		"jsdom": "11.12.0",
 		"lint-staged": "3.5.1",
 		"lodash": "^4.17.10",
 		"ngrok": "2.2.9",
@@ -321,7 +322,6 @@
 		"url-loader": "0.5.8",
 		"webpack": "3.5.5",
 		"webpack-dev-middleware": "1.11.0",
-		"webpack-hot-middleware": "2.18.0",
-		"xmldom": "^0.1.27"
+		"webpack-hot-middleware": "2.18.0"
 	}
 }

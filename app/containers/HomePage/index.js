@@ -57,7 +57,6 @@ import {
 	toggleChapterSelection,
 	toggleVersionSelection,
 	toggleFirstLoadForTextSelection,
-	toggleInformationModal,
 	setUA,
 	setActiveNote,
 	setActiveTextId,
@@ -97,16 +96,16 @@ class HomePage extends React.PureComponent {
 			userAuthenticated,
 			userId,
 		} = this.props.homepage;
-		const params = this.props.homepage.match.params;
-		this.props.dispatch({
-			type: 'getbible',
-			bibleId: params.bibleId,
-			bookId: params.bookId,
-			chapter: params.chapter,
-			authenticated: this.props.homepage.userAuthenticated,
-			userId: this.props.homepage.userId,
-			verse: params.verse,
-		});
+		// const params = this.props.homepage.match.params;
+		// this.props.dispatch({
+		// 	type: 'getbible',
+		// 	bibleId: params.bibleId,
+		// 	bookId: params.bookId,
+		// 	chapter: params.chapter,
+		// 	authenticated: this.props.homepage.userAuthenticated,
+		// 	userId: this.props.homepage.userId,
+		// 	verse: params.verse,
+		// });
 		this.getCopyrights({ filesetIds: activeFilesets });
 		if (userId && userAuthenticated) {
 			// console.log('user is now authenticated')
@@ -473,6 +472,27 @@ class HomePage extends React.PureComponent {
 		}
 	};
 
+	handleMenuTimer = (menu) => {
+		if (menu === 'profile') {
+			this.props.dispatch(toggleProfile());
+		}
+		if (menu === 'notes') {
+			this.props.dispatch(toggleNotesModal());
+		}
+		if (menu === 'settings') {
+			this.props.dispatch(toggleSettingsModal());
+		}
+		if (menu === 'search') {
+			this.props.dispatch(toggleSearchModal());
+		}
+		if (menu === 'chapter') {
+			this.props.dispatch(toggleChapterSelection());
+		}
+		if (menu === 'version') {
+			this.props.dispatch(toggleVersionSelection());
+		}
+	};
+
 	updateScrollDirection = () => {
 		this.main = document.getElementsByTagName('main')[0];
 
@@ -552,7 +572,7 @@ class HomePage extends React.PureComponent {
 	};
 
 	addBookmark = (data) => this.props.dispatch(addBookmark({ ...data }));
-
+	fo;
 	addHighlight = (props) =>
 		this.props.dispatch(
 			addHighlight({
@@ -577,21 +597,103 @@ class HomePage extends React.PureComponent {
 		this.props.homepage.firstLoad &&
 		this.props.dispatch(toggleFirstLoadForTextSelection());
 
-	toggleProfile = () => this.props.dispatch(toggleProfile());
+	toggleAutoPlay = () => {
+		this.props.dispatch(toggleAutoPlay());
+	};
 
-	toggleNotesModal = () => this.props.dispatch(toggleNotesModal());
+	toggleProfile = () => {
+		if (this.isMenuOpen('profile')) {
+			clearTimeout(this.menuTimer);
+			this.menuTimer = setTimeout(this.handleMenuTimer, 700, 'profile');
+		} else {
+			this.props.dispatch(toggleProfile());
+		}
+	};
 
-	toggleAutoPlay = () => this.props.dispatch(toggleAutoPlay());
+	toggleNotesModal = () => {
+		if (this.isMenuOpen('notes')) {
+			clearTimeout(this.menuTimer);
+			this.menuTimer = setTimeout(this.handleMenuTimer, 700, 'notes');
+		} else {
+			this.props.dispatch(toggleNotesModal());
+		}
+	};
 
-	toggleSettingsModal = () => this.props.dispatch(toggleSettingsModal());
+	toggleSettingsModal = () => {
+		if (this.isMenuOpen('settings')) {
+			clearTimeout(this.menuTimer);
+			this.menuTimer = setTimeout(this.handleMenuTimer, 700, 'settings');
+		} else {
+			this.props.dispatch(toggleSettingsModal());
+		}
+	};
 
-	toggleSearchModal = () => this.props.dispatch(toggleSearchModal());
+	toggleSearchModal = () => {
+		if (this.isMenuOpen('search')) {
+			clearTimeout(this.menuTimer);
+			this.menuTimer = setTimeout(this.handleMenuTimer, 700, 'search');
+		} else {
+			this.props.dispatch(toggleSearchModal());
+		}
+	};
 
-	toggleChapterSelection = () => this.props.dispatch(toggleChapterSelection());
+	toggleChapterSelection = () => {
+		// if (this.isMenuOpen('chapter')) {
+		// 	clearTimeout(this.menuTimer);
+		// 	this.menuTimer = setTimeout(this.handleMenuTimer, 600, 'chapter');
+		// } else {
+		this.props.dispatch(toggleChapterSelection());
+		// }
+	};
 
-	toggleVersionSelection = () => this.props.dispatch(toggleVersionSelection());
+	toggleVersionSelection = () => {
+		// if (this.isMenuOpen('version')) {
+		// 	clearTimeout(this.menuTimer);
+		// 	this.menuTimer = setTimeout(this.handleMenuTimer, 600, 'version');
+		// } else {
+		this.props.dispatch(toggleVersionSelection());
+		// }
+	};
 
-	toggleInformationModal = () => this.props.dispatch(toggleInformationModal());
+	// Checks if a menu other than the one given is open, otherwise returns whether any menus are open
+	isMenuOpen = (menuName) => {
+		const {
+			isChapterSelectionActive,
+			isProfileActive,
+			isSettingsModalActive,
+			isSearchModalActive,
+			isNotesModalActive,
+			isVersionSelectionActive,
+		} = this.props.homepage;
+
+		const openMap = {
+			profile: isProfileActive,
+			notes: isNotesModalActive,
+			settings: isSettingsModalActive,
+			search: isSearchModalActive,
+			chapter: isChapterSelectionActive,
+			version: isVersionSelectionActive,
+		};
+
+		if (menuName) {
+			// console.log('menu other than self is open', Object.entries(openMap).filter(ent => ent[0] !== menuName).some(ent => ent[1]));
+			// console.log('map entries', Object.entries(openMap).forEach(ent => console.log('ent[0]', ent[0], 'ent[1]', ent[1])));
+			return Object.entries(openMap)
+				.filter((ent) => ent[0] !== menuName)
+				.some((ent) => ent[1]);
+		} else if (
+			isChapterSelectionActive ||
+			isProfileActive ||
+			isSearchModalActive ||
+			isSettingsModalActive ||
+			isNotesModalActive ||
+			isVersionSelectionActive
+		) {
+			return true;
+		}
+
+		return false;
+	};
 
 	render() {
 		const {
@@ -603,7 +705,7 @@ class HomePage extends React.PureComponent {
 			activeTextName,
 			activeBookName,
 			activeNotesView,
-			autoPlayEnabled,
+			// autoPlayEnabled,
 			audioPlayerState,
 			books,
 			highlights,
@@ -630,7 +732,9 @@ class HomePage extends React.PureComponent {
 			isMenuOpen,
 		} = this.props;
 
-		// console.log('Homepage props', this.props);
+		const autoPlayEnabled = userSettings.get('autoPlayEnabled');
+
+		// console.log('Homepage props', autoPlayEnabled);
 
 		const { isScrollingDown, footerDistance: distance } = this.state;
 

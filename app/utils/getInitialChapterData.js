@@ -21,6 +21,7 @@ export default async ({ filesets, bookId: lowerCaseBookId, chapter }) => {
 	// const hasFormattedText = !!formattedFilesetIds.length;
 
 	// start promise for formatted text
+	// console.log('chapter in get init', chapter)
 	const formattedPromises = formattedFilesetIds.map(async (id) => {
 		const url = `${process.env.BASE_API_ROUTE}/bibles/filesets/${id}?bucket=${
 			process.env.DBP_BUCKET_ID
@@ -32,8 +33,11 @@ export default async ({ filesets, bookId: lowerCaseBookId, chapter }) => {
 				console.log('Error in request for formatted fileset: ', e.message); // eslint-disable-line no-console
 			}
 		});
-		const path = res.data[0].path;
-		const text = await fetch(path).then((textRes) => textRes.text()); // .catch((e) => console.log('Error fetching formatted text: '));
+		const path = res && res.data && res.data[0] && res.data[0].path;
+		let text = '';
+		if (path) {
+			text = await fetch(path).then((textRes) => textRes.text()); // .catch((e) => console.log('Error fetching formatted text: '));
+		}
 
 		return text || '';
 	});

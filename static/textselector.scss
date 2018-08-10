@@ -189,6 +189,7 @@
 
 	.language-error-message {
 		width: 320px;
+		max-width: 291px;
 		padding: 15px;
 		text-transform: capitalize;
 	}
@@ -315,6 +316,7 @@
 	.country-error-message {
 		text-transform: capitalize;
 		width: 320px;
+		max-width: 291px;
 		padding: 15px;
 	}
 }

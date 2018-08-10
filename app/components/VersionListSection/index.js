@@ -25,7 +25,9 @@ function VersionListSection({ items }) {
 						<AccordionItem className={'accordion-title-style'} key={item.key}>
 							<AccordionItemTitle>
 								<h4 title={item.title} className={item.className}>
-									{item.text}
+									{item.altText
+										? `${item.text} ( ${item.altText} )`
+										: item.text}
 								</h4>
 							</AccordionItemTitle>
 							<AccordionItemBody className={'accordion-body-style'}>
@@ -72,7 +74,9 @@ function VersionListSection({ items }) {
 									className={`${item.className} top-level-title`}
 									onClick={() => item.clickHandler('')}
 								>
-									{item.text}
+									{item.altText
+										? `${item.text} ( ${item.altText} )`
+										: item.text}
 								</a>
 							</Link>
 						</AccordionItemTitle>
