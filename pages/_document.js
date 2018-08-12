@@ -11,6 +11,9 @@ export default class MyDocument extends Document {
 					<meta name="viewport" content="width=device-width, initial-scale=1" />
 					<link rel="manifest" href="/static/manifest.json" />
 					<link rel="icon" type="image/x-icon" href="/static/favicon.ico" />
+					{process.env.NODE_ENV === 'development' ? (
+						<script src={'http://localhost:8097'} />
+					) : null}
 					<meta
 						name="msvalidate.01"
 						content="ECDC0FFC6CCBA2520B05CD8B4F535D3C"
