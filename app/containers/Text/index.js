@@ -60,6 +60,7 @@ class Text extends React.PureComponent {
 		loadingNextPage: false,
 		wholeVerseIsSelected: false,
 		dommountedsostuffworks: false,
+		formattedVerse: false,
 		footnotes: {},
 	};
 
@@ -659,10 +660,11 @@ class Text extends React.PureComponent {
 		const initialFormattedSource = JSON.parse(
 			JSON.stringify(initialFormattedSourceFromProps),
 		);
+		let formattedVerse = false;
 
 		// Need to move this to selector and use regex
 		// Possible for verse but not for footnotes
-		if (dommountedsostuffworks) {
+		if (dommountedsostuffworks && initialFormattedSource.main) {
 			if (verseNumber) {
 				const parser = new DOMParser();
 				const serializer = new XMLSerializer();
@@ -691,6 +693,8 @@ class Text extends React.PureComponent {
 				initialFormattedSource.main = newXML
 					? serializer.serializeToString(newXML)
 					: 'This chapter does not have a verse matching the url';
+				formattedVerse = true;
+				// console.log('setting the state for the verse being done')
 				// console.log('Creating new source for verse', initialFormattedSource);
 			}
 		}
@@ -895,7 +899,10 @@ class Text extends React.PureComponent {
 						</span>
 					),
 			);
-		} else if (formattedSource.main) {
+		} else if (
+			formattedSource.main &&
+			(!verseNumber || (verseNumber && formattedVerse))
+		) {
 			// Need to run a function to highlight the formatted text if this option is selected
 			if (!Array.isArray(formattedText)) {
 				textComponents = (
@@ -1123,7 +1130,7 @@ class Text extends React.PureComponent {
 	callSetStateNotInUpdate = (footnotes) => this.setState({ footnotes });
 
 	dommountedsostuffworks = () =>
-		this.setState({ dommountedsostuffworks: true });
+		this.setState({ dommountedsostuffworks: true, formattedVerse: true });
 
 	openPopup = (coords) => {
 		this.setState({ popupOpen: true, popupCoords: coords });
@@ -1767,6 +1774,7 @@ class Text extends React.PureComponent {
 			contextMenuState,
 			footnoteState,
 			footnotePortal,
+			formattedVerse,
 		} = this.state;
 		const readersMode = userSettings.getIn([
 			'toggleOptions',
@@ -1779,13 +1787,13 @@ class Text extends React.PureComponent {
 			'active',
 		]);
 		const chapterAlt = text[0] && text[0].chapter_alt;
-
 		if (
 			loadingNewChapterText ||
 			loadingAudio ||
 			this.state.loadingNextPage ||
 			!books.length ||
-			chapterTextLoadingState
+			chapterTextLoadingState ||
+			(!formattedVerse && formattedSource.main)
 		) {
 			// console.log('Rendering the spinner');
 			return (

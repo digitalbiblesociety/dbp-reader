@@ -21,11 +21,6 @@ import Router from 'next/router';
 import cachedFetch, { overrideCache } from '../app/utils/cachedFetch';
 import HomePage from '../app/containers/HomePage';
 import getinitialChapterData from '../app/utils/getInitialChapterData';
-
-// Import CSS reset and Global Styles
-import '../static/app.scss';
-// Need to figure out how to get the site to load this file from any url
-import '../static/manifest.json';
 import { setChapterTextLoadingState } from '../app/containers/HomePage/actions';
 
 class AppContainer extends React.Component {
