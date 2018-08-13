@@ -42,7 +42,7 @@ export class AudioPlayer extends React.Component {
 			volumeSliderState: false,
 			elipsisState: false,
 			volume: 1,
-			duration: 100,
+			duration: 0,
 			currentTime: 0,
 			currentSpeed: 1,
 			autoPlayChecked: this.props.autoPlay,
@@ -97,28 +97,24 @@ export class AudioPlayer extends React.Component {
 					this.props.setAudioPlayerState(false),
 				);
 			}
-			if (nextProps.autoPlay) {
-				// console.log('source changed and auto play is true');
-				if (
-					navigator &&
-					navigator.userAgent &&
-					/iPhone|iPod|iPad/i.test(navigator.userAgent)
-				) {
-					this.audioRef.addEventListener(
-						'loadedmetadata',
-						this.autoPlayListener,
-					);
-				} else {
-					this.audioRef.addEventListener('canplay', this.autoPlayListener);
-				}
-				this.setState({ autoPlayChecked: nextProps.autoPlay });
-			}
 			// if (this.props.autoPlay !== nextProps.autoPlay) {
 			// 	this.setState({ autoPlayChecked: nextProps.autoPlay });
 			// }
 		}
 
-		if (!nextProps.autoPlay) {
+		if (nextProps.autoPlay) {
+			// console.log('source changed and auto play is true');
+			if (
+				navigator &&
+				navigator.userAgent &&
+				/iPhone|iPod|iPad/i.test(navigator.userAgent)
+			) {
+				this.audioRef.addEventListener('loadedmetadata', this.autoPlayListener);
+			} else {
+				this.audioRef.addEventListener('canplay', this.autoPlayListener);
+			}
+			this.setState({ autoPlayChecked: nextProps.autoPlay });
+		} else if (!nextProps.autoPlay) {
 			// console.log('auto play is now false');
 			if (
 				navigator &&
@@ -266,9 +262,9 @@ export class AudioPlayer extends React.Component {
 	};
 
 	autoPlayListener = () => {
-		// alert('auto play listener fired');
+		// console.log('auto play listener fired');
 		// can accept event as a parameter
-		// console.log('can play fired and was true');
+		// console.log('!this.state.loadingNextChapter', !this.state.loadingNextChapter);
 		if (!this.state.loadingNextChapter) {
 			this.playAudio();
 		}
@@ -396,6 +392,7 @@ export class AudioPlayer extends React.Component {
 	// };
 	//
 	skipForward = () => {
+		// console.log('skipping forward');
 		this.setCurrentTime(0);
 		this.pauseAudio();
 		this.setState(
