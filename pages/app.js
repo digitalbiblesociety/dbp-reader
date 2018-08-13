@@ -45,6 +45,7 @@ class AppContainer extends React.Component {
 			// console.log('Using cached url');
 			// console.log('this.props.fetchedUrls', this.props.fetchedUrls);
 			this.props.fetchedUrls.forEach((url) => {
+				// logCache(url.href);
 				overrideCache(url.href, url.data);
 			});
 		}
@@ -249,6 +250,7 @@ AppContainer.getInitialProps = async (context) => {
 	const routeLocation = context.asPath;
 	const { bibleId, bookId, chapter, verse, token } = context.query;
 	const userProfile = {};
+	// console.log('context.query', context.query);
 
 	let isFromServer = true;
 	// console.log('all state', context.reduxStore.getState().get('homepage'))
@@ -379,7 +381,9 @@ AppContainer.getInitialProps = async (context) => {
 		bible.filesets && bible.filesets['dbp-dev']
 			? bible.filesets['dbp-dev'].filter(
 					(file) =>
-						!file.id.includes('GID') && bible.filesets['dbp-dev'].length > 1,
+						(!file.id.includes('GID') &&
+							bible.filesets['dbp-dev'].length > 1) ||
+						bible.filesets['dbp-dev'].length === 1,
 			  )
 			: [];
 	// console.log('filesets in app file', filesets);
