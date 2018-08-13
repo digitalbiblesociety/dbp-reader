@@ -13,7 +13,6 @@
 * todo: Use cookies instead of session and local storage for all user settings (involves user approval before it can be utilized)
 * */
 // Needed for redux-saga es6 generator support
-import 'babel-polyfill';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -478,8 +477,8 @@ AppContainer.getInitialProps = async (context) => {
 			type: 'GET_INITIAL_ROUTE_STATE_HOMEPAGE',
 			homepage: {
 				userProfile,
-				audioPaths: initData.audioPaths,
-				audioSource: initData.audioPaths[0],
+				audioPaths: initData.audioPaths.slice(1),
+				audioSource: initData.audioPaths[0] || '',
 				hasAudio: !!initData.audioPaths.length,
 				chapterText,
 				testaments,
