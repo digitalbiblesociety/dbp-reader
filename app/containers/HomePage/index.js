@@ -86,6 +86,7 @@ class HomePage extends React.PureComponent {
 		heightDifference: 0,
 	};
 	// eslint-disable-line react/prefer-stateless-function
+	// Todo: Move all of this to app.js
 	componentDidMount() {
 		// console.log('Homepage mounted______________________');
 		const {
