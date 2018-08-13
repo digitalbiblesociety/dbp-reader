@@ -1,9 +1,14 @@
 import lscache from 'lscache';
 import fetch from 'isomorphic-fetch';
 
-const TTL_MINUTES = 5;
+// Set a default expiry for 5 minutes
+const TTL_MINUTES = 1000 * 60 * 5;
 // Todo: add catch and look for any bad responses in each request
 export default async function cachedFetch(url, options, expires) {
+	// On the first load we flush any expired values
+	lscache.flushExpired();
+	// Makes the expiry time unit milliseconds
+	lscache.setExpiryMilliseconds(1);
 	// We don't cache anything when server-side rendering.
 	// That way if users refresh the page they always get fresh data.
 	if (typeof window === 'undefined') {
