@@ -153,6 +153,9 @@ app
 			const actualPage = '/app';
 			// Params may not actually be passed using this method
 			// console.log(req.originalUrl.includes('/static'))
+			// console.log('Caught the chapter request ----------');
+			//
+			// console.log(`${req.protocol}://${req.get('host')}${req.originalUrl}`);
 			// console.log(
 			// 	'Getting bible and book and chapter for route',
 			// 	`${req.protocol}://${req.get('host')}${req.originalUrl}`,
@@ -165,7 +168,8 @@ app
 			if (
 				queryParams.verse !== 'style.css' &&
 				!req.originalUrl.includes('/static') &&
-				!queryParams.verse
+				!queryParams.verse &&
+				!isNaN(parseInt(req.params.chapter, 10))
 			) {
 				renderAndCache(req, res, actualPage, queryParams);
 			} else {
@@ -176,10 +180,8 @@ app
 		server.get('/bible/:bibleId/:bookId/:chapter/:verse', (req, res, nextP) => {
 			const actualPage = '/app';
 			// console.log(req.originalUrl.includes('/static'))
-			// console.log(
-			// 	'Getting bible, book, chapter, and verse for route',
-			// 	`${req.protocol}://${req.get('host')}${req.originalUrl}`,
-			// );
+			// console.log('Caught the verse request ---------------')
+			// console.log(`${req.protocol}://${req.get('host')}${req.originalUrl}`);
 			// Params may not actually be passed using this method
 			const queryParams = {
 				bibleId: req.params.bibleId,
@@ -189,7 +191,9 @@ app
 			};
 			if (
 				queryParams.verse !== 'style.css' &&
-				!req.originalUrl.includes('/static')
+				!req.originalUrl.includes('/static') &&
+				!isNaN(parseInt(req.params.verse, 10)) &&
+				!isNaN(parseInt(req.params.chapter, 10))
 			) {
 				renderAndCache(req, res, actualPage, queryParams);
 			} else {
