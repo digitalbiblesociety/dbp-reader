@@ -35,17 +35,11 @@ export default class MyDocument extends Document {
 					<meta name="theme-color" content="#941B2F" />
 					<meta property={'og:type'} content={'book'} />
 					<meta property={'og:site_name'} content={'Bible.is Online'} />
-					<meta
-						property={'og:image'}
-						content={'/static/apple-icon-180x180.png'}
-					/>
+					<meta property={'og:image'} content={'/static/icon-180x180.png'} />
 					<meta name={'twitter:card'} content={'summary'} />
 					<meta name={'twitter:site'} content={'@bibleis'} />
 					<meta name={'twitter:creator'} content={'@audiobible'} />
-					<meta
-						name={'twitter:image'}
-						content={'/static/apple-icon-180x180.png'}
-					/>
+					<meta name={'twitter:image'} content={'/static/icon-180x180.png'} />
 
 					<meta name="twitter:app:id:iphone" content="" />
 
