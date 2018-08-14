@@ -14,8 +14,8 @@ export default class MyDocument extends Document {
 					<link rel="stylesheet" href="/_next/static/style.css" />
 					{/*<link rel="stylesheet" href="../.next/static/style.css" />*/}
 					<meta name="viewport" content="width=device-width, initial-scale=1" />
-					<link rel="manifest" href="/static/manifest.json" />
 					<link rel="icon" type="image/x-icon" href="/static/favicon.ico" />
+
 					{process.env.NODE_ENV === 'development' ? (
 						<script src={'http://localhost:8097'} />
 					) : null}
@@ -35,18 +35,47 @@ export default class MyDocument extends Document {
 					<meta name="theme-color" content="#941B2F" />
 					<meta property={'og:type'} content={'book'} />
 					<meta property={'og:site_name'} content={'Bible.is Online'} />
-					<meta property={'og:image'} content={'/static/icon-180x180.png'} />
+
 					<meta name={'twitter:card'} content={'summary'} />
 					<meta name={'twitter:site'} content={'@bibleis'} />
 					<meta name={'twitter:creator'} content={'@audiobible'} />
-					<meta name={'twitter:image'} content={'/static/icon-180x180.png'} />
+
+					<link
+						rel="manifest"
+						href="https://devis.bible.build/static/manifest.json"
+					/>
+					<link
+						rel="manifest"
+						href="https://is.bible.build/static/manifest.json"
+					/>
+					<link
+						rel="apple-touch-icon"
+						href="https://devis.bible.build/static/favicon-96x96.png"
+					/>
+					<link
+						rel="apple-touch-icon"
+						href="https://is.bible.build/static/favicon-96x96.png"
+					/>
+					<meta
+						property={'og:image'}
+						content={'https://devis.bible.build/static/icon-180x180.png'}
+					/>
+					<meta
+						property={'og:image'}
+						content={'https://is.bible.build/static/icon-180x180.png'}
+					/>
+					<meta
+						name={'twitter:image'}
+						content={'https://devis.bible.build/static/icon-180x180.png'}
+					/>
+					<meta
+						name={'twitter:image'}
+						content={'https://is.bible.build/static/icon-180x180.png'}
+					/>
 
 					<meta name="twitter:app:id:iphone" content="" />
-
 					<meta name="twitter:app:id:ipad" content="" />
-
 					<meta name="twitter:app:id:googleplay" content="" />
-					<link rel="apple-touch-icon" href="/static/favicon-96x96.png" />
 
 					<meta
 						name="google-site-verification"
