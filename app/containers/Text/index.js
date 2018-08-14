@@ -443,15 +443,17 @@ class Text extends React.PureComponent {
 		);
 		// console.log('all fts', xmlDoc.querySelectorAll('.ft, .xt'));
 		const footnotes =
-			[...xmlDoc.querySelectorAll('.ft, .xt')].reduce(
-				(a, n) => ({
-					...a,
-					[n.parentElement.parentElement.attributes.id.value.slice(
-						4,
-					)]: n.textContent,
-				}),
-				{},
-			) || {};
+			[...xmlDoc.querySelectorAll('.ft, .xt')].reduce((a, n) => {
+				if (n.parentElement.parentElement.attributes.id) {
+					return {
+						...a,
+						[n.parentElement.parentElement.attributes.id.value.slice(
+							4,
+						)]: n.textContent,
+					};
+				}
+				return a;
+			}, {}) || {};
 		this.setState({
 			footnoteState: false,
 			footnotes,

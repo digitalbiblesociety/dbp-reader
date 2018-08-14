@@ -12,11 +12,10 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
+// import Router from 'next/router';
 import LanguageProvider from '../app/containers/LanguageProvider';
 import { translationMessages } from '../app/i18n';
-// import GenericErrorBoundary from '../app/components/GenericErrorBoundary';
 import SvgWrapper from '../app/components/SvgWrapper';
-
 import messages from '../app/containers/NotFoundPage/messages';
 import '../static/app.scss';
 import configureStore from '../app/configureStore';
@@ -24,7 +23,20 @@ import configureStore from '../app/configureStore';
 export default class Error extends React.Component {
 	static getInitialProps({ res, err }) {
 		const statusCode = res ? res.statusCode : err ? err.statusCode : null; // eslint-disable-line
-
+		// if (res) {
+		// 	console.log('re-wrote head');
+		// 	if (req.originalUrl !== '/error') {
+		// 		res.writeHead(302, {
+		// 			Location: '/error',
+		// 		});
+		// 		res.end();
+		// 	}
+		// } else {
+		// 	console.log('redirect with Router');
+		// 	if (window.location.pathname !== '/error') {
+		// 		Router.push('/error');
+		// 	}
+		// }
 		return { statusCode };
 	}
 	render() {
