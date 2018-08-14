@@ -45,12 +45,14 @@ import differenceObject from '../../utils/deepDifferenceObject';
 /* Disabling the jsx-a11y linting because we need to capture the selected text
 	 and the most straight forward way of doing so is with the onMouseUp event */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+// Todo: Set selected text when user clicks a verse
 class Text extends React.PureComponent {
 	state = {
 		contextMenuState: false,
 		footnoteState: false,
 		coords: {},
 		selectedText: '',
+		userSelectedText: '',
 		firstVerse: 0,
 		lastVerse: 0,
 		highlightActive: this.props.highlights || false,
@@ -60,6 +62,7 @@ class Text extends React.PureComponent {
 		loadingNextPage: false,
 		wholeVerseIsSelected: false,
 		dommountedsostuffworks: false,
+		formattedVerse: false,
 		footnotes: {},
 	};
 
@@ -188,14 +191,7 @@ class Text extends React.PureComponent {
 				);
 			}
 		}
-		// console.log(!!this.props.formattedSource.main);
-		// console.log(this.props.formattedSource.main !== prevProps.formattedSource.main);
-		// console.log('(this.format || this.formatHighlight)', !!(this.format || this.formatHighlight));
-		//
-		// console.log('condition for if', !!this.props.formattedSource.main &&
-		// 	prevProps.formattedSource.main !== this.props.formattedSource.main &&
-		// 	!!(this.format || this.formatHighlight));
-		//
+
 		if (
 			this.props.formattedSource.footnoteSource &&
 			this.props.formattedSource.footnoteSource !==
@@ -587,6 +583,7 @@ class Text extends React.PureComponent {
 							focusText: this.window.getSelection().focusNode.data,
 							focusNode: this.window.getSelection().focusNode,
 							selectedText,
+							userSelectedText: selectedText,
 						},
 						() => {
 							this.openContextMenu(e);
@@ -595,7 +592,8 @@ class Text extends React.PureComponent {
 				} else if (lastVerse && this.main.contains(target) && primaryButton) {
 					// treat the event as a click and allow the whole verse to be highlighted
 					// console.log('counts as a click not a text selection formatted');
-					this.selectedWholeVerse(lastVerse, false, e.clientX, e.clientY);
+					// Todo: Need to find a way to get the text content for the formatted verse so I can use it when sharing
+					this.selectedWholeVerse(lastVerse, false, e.clientX, e.clientY, '');
 				}
 			} else if (!isFormatted) {
 				const verseNode = getPlainParentVerseWithoutNumber(target);
@@ -624,6 +622,7 @@ class Text extends React.PureComponent {
 							focusText: this.window.getSelection().focusNode.data,
 							focusNode: this.window.getSelection().focusNode,
 							selectedText,
+							userSelectedText: selectedText,
 						},
 						() => {
 							this.openContextMenu(e);
@@ -632,7 +631,15 @@ class Text extends React.PureComponent {
 				} else if (lastVerse && this.main.contains(target) && primaryButton) {
 					// treat the event as a click and allow the whole verse to be highlighted
 					// console.log('counts as a click not a text selection for plain');
-					this.selectedWholeVerse(lastVerse, true, e.clientX, e.clientY);
+					this.selectedWholeVerse(
+						lastVerse,
+						true,
+						e.clientX,
+						e.clientY,
+						this.props.text
+							.filter((v) => v.verse_start === parseInt(lastVerse, 10))
+							.map((v) => v.verse_text)[0] || '',
+					);
 				}
 			} else {
 				this.openContextMenu(e);
@@ -659,10 +666,11 @@ class Text extends React.PureComponent {
 		const initialFormattedSource = JSON.parse(
 			JSON.stringify(initialFormattedSourceFromProps),
 		);
+		let formattedVerse = false;
 
 		// Need to move this to selector and use regex
 		// Possible for verse but not for footnotes
-		if (dommountedsostuffworks) {
+		if (dommountedsostuffworks && initialFormattedSource.main) {
 			if (verseNumber) {
 				const parser = new DOMParser();
 				const serializer = new XMLSerializer();
@@ -691,6 +699,8 @@ class Text extends React.PureComponent {
 				initialFormattedSource.main = newXML
 					? serializer.serializeToString(newXML)
 					: 'This chapter does not have a verse matching the url';
+				formattedVerse = true;
+				// console.log('setting the state for the verse being done')
 				// console.log('Creating new source for verse', initialFormattedSource);
 			}
 		}
@@ -895,7 +905,10 @@ class Text extends React.PureComponent {
 						</span>
 					),
 			);
-		} else if (formattedSource.main) {
+		} else if (
+			formattedSource.main &&
+			(!verseNumber || (verseNumber && formattedVerse))
+		) {
 			// Need to run a function to highlight the formatted text if this option is selected
 			if (!Array.isArray(formattedText)) {
 				textComponents = (
@@ -1017,6 +1030,7 @@ class Text extends React.PureComponent {
 		}
 	};
 
+	// This is a noop to trick iOS devices
 	handleHighlightClick = () => {
 		// Unless there is a click event the mouseup and mousedown events won't fire for mobile devices
 		// Left this blank since I actually don't need to do anything with it
@@ -1123,7 +1137,7 @@ class Text extends React.PureComponent {
 	callSetStateNotInUpdate = (footnotes) => this.setState({ footnotes });
 
 	dommountedsostuffworks = () =>
-		this.setState({ dommountedsostuffworks: true });
+		this.setState({ dommountedsostuffworks: true, formattedVerse: true });
 
 	openPopup = (coords) => {
 		this.setState({ popupOpen: true, popupCoords: coords });
@@ -1650,7 +1664,7 @@ class Text extends React.PureComponent {
 		});
 	};
 
-	selectedWholeVerse = (verse, isPlain, clientX, clientY) => {
+	selectedWholeVerse = (verse, isPlain, clientX, clientY, userSelectedText) => {
 		// console.log('verse: ', verse, '\nisPlain: ', isPlain);
 		if (typeof this.window !== 'undefined') {
 			const rightEdge =
@@ -1681,6 +1695,7 @@ class Text extends React.PureComponent {
 						verse: currentState.activeVerseInfo.verse !== verse ? verse : 0,
 						isPlain,
 					},
+					userSelectedText,
 				}));
 			} else {
 				// is formatted
@@ -1700,6 +1715,7 @@ class Text extends React.PureComponent {
 						verse: currentState.activeVerseInfo.verse !== verse ? verse : 0,
 						isPlain,
 					},
+					userSelectedText,
 				}));
 			}
 		}
@@ -1767,6 +1783,8 @@ class Text extends React.PureComponent {
 			contextMenuState,
 			footnoteState,
 			footnotePortal,
+			formattedVerse,
+			userSelectedText,
 		} = this.state;
 		const readersMode = userSettings.getIn([
 			'toggleOptions',
@@ -1779,13 +1797,13 @@ class Text extends React.PureComponent {
 			'active',
 		]);
 		const chapterAlt = text[0] && text[0].chapter_alt;
-
 		if (
 			loadingNewChapterText ||
 			loadingAudio ||
 			this.state.loadingNextPage ||
 			!books.length ||
-			chapterTextLoadingState
+			chapterTextLoadingState ||
+			(!formattedVerse && formattedSource.main)
 		) {
 			// console.log('Rendering the spinner');
 			return (
@@ -1930,6 +1948,7 @@ class Text extends React.PureComponent {
 						toggleNotesModal={toggleNotesModal}
 						notesActive={notesActive}
 						coordinates={coords}
+						selectedText={userSelectedText}
 					/>
 				) : null}
 				{footnoteState ? <FootnotePortal {...footnotePortal} /> : null}

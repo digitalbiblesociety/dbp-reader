@@ -30,20 +30,18 @@ class MyBookmarks extends React.PureComponent {
 					href={`/bible/${listItem.bible_id}/${listItem.book_id}/${
 						listItem.chapter
 					}/${listItem.verse_start}`}
-					onClick={toggleNotesModal}
-					role="button"
-					tabIndex={0}
-					className="list-item"
 				>
-					<div className="title-text">
-						<h4 className="title">
-							<span className="date">
-								{getFormattedNoteDate(listItem.created_at)}
-							</span>{' '}
-							| {getNoteReference(listItem)}
-						</h4>
-						<p className="text">{listItem.bible_id}</p>
-					</div>
+					<a onClick={toggleNotesModal} className="list-item">
+						<div className="title-text">
+							<h4 className="title">
+								<span className="date">
+									{getFormattedNoteDate(listItem.created_at)}
+								</span>{' '}
+								| {getNoteReference(listItem)}
+							</h4>
+							<p className="text">{listItem.bible_id}</p>
+						</div>
+					</a>
 				</Link>
 				<div
 					onClick={() => deleteNote({ noteId: listItem.id, isBookmark: true })}

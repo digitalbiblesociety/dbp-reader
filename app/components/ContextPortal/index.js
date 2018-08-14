@@ -164,7 +164,10 @@ class ContextPortal extends React.PureComponent {
 			// notesActive,
 			closeContextMenu,
 			// setActiveNotesView,
+			selectedText,
 		} = this.props;
+
+		// console.log('selectedText', selectedText);
 
 		const component = (
 			<div
@@ -222,9 +225,7 @@ class ContextPortal extends React.PureComponent {
 						className={'menu-item normal'}
 						onShareWindowClose={closeContextMenu}
 						subject={document.title}
-						body={`"${window
-							.getSelection()
-							.toString()}"\n\nTo listen to the audio click here: ${
+						body={`"${selectedText}"\n\nTo listen to the audio click here: ${
 							window.location.href
 						}`}
 						url={window.location.href}
@@ -237,7 +238,7 @@ class ContextPortal extends React.PureComponent {
 					<FacebookShareButton
 						onShareWindowClose={closeContextMenu}
 						className="menu-item social facebook fb-share-button"
-						quote={`"${window.getSelection().toString()}"`}
+						quote={`"${selectedText}"`}
 						url={window.location.href}
 					>
 						<SvgWrapper className={'icon'} svgid="facebook" />
@@ -335,6 +336,7 @@ class ContextPortal extends React.PureComponent {
 
 ContextPortal.propTypes = {
 	// parentNode: PropTypes.object,
+	selectedText: PropTypes.string,
 	coordinates: PropTypes.object,
 	notesActive: PropTypes.bool,
 	addHighlight: PropTypes.func,

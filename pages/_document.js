@@ -1,5 +1,9 @@
 import 'babel-polyfill';
 import Document, { Head, Main, NextScript } from 'next/document';
+// Import CSS reset and Global Styles
+// import '../static/app.scss';
+// Need to figure out how to get the site to load this file from any url
+// import '../static/manifest.json';``
 // Importing the check here so that it is available to the css
 /* eslint-disable */
 export default class MyDocument extends Document {
@@ -31,17 +35,11 @@ export default class MyDocument extends Document {
 					<meta name="theme-color" content="#941B2F" />
 					<meta property={'og:type'} content={'book'} />
 					<meta property={'og:site_name'} content={'Bible.is Online'} />
-					<meta
-						property={'og:image'}
-						content={'/static/apple-icon-180x180.png'}
-					/>
+					<meta property={'og:image'} content={'/static/icon-180x180.png'} />
 					<meta name={'twitter:card'} content={'summary'} />
 					<meta name={'twitter:site'} content={'@bibleis'} />
 					<meta name={'twitter:creator'} content={'@audiobible'} />
-					<meta
-						name={'twitter:image'}
-						content={'/static/apple-icon-180x180.png'}
-					/>
+					<meta name={'twitter:image'} content={'/static/icon-180x180.png'} />
 
 					<meta name="twitter:app:id:iphone" content="" />
 
@@ -49,26 +47,7 @@ export default class MyDocument extends Document {
 
 					<meta name="twitter:app:id:googleplay" content="" />
 					<link rel="apple-touch-icon" href="/static/favicon-96x96.png" />
-					<link
-						rel="preload"
-						as="style"
-						href="https://fonts.googleapis.com/css?family=Roboto:400,500"
-					/>
-					<link
-						rel="preload"
-						as="style"
-						href="https://fonts.googleapis.com/css?family=Roboto+Slab"
-					/>
-					<link
-						rel="preload"
-						as="style"
-						href="https://fonts.googleapis.com/css?family=Raleway"
-					/>
-					<link
-						rel="preload"
-						as="style"
-						href="https://fonts.googleapis.com/css?family=Alegreya"
-					/>
+
 					<meta
 						name="google-site-verification"
 						content="frHSU18EKPDnEoKj--plFdubfj_GB7hXesy-3N1o57s"
@@ -128,6 +107,26 @@ export default class MyDocument extends Document {
 					}
 					})();`,
 						}}
+					/>
+					<link
+						rel="preload"
+						as="style"
+						href="https://fonts.googleapis.com/css?family=Roboto:400,500"
+					/>
+					<link
+						rel="preload"
+						as="style"
+						href="https://fonts.googleapis.com/css?family=Roboto+Slab"
+					/>
+					<link
+						rel="preload"
+						as="style"
+						href="https://fonts.googleapis.com/css?family=Raleway"
+					/>
+					<link
+						rel="preload"
+						as="style"
+						href="https://fonts.googleapis.com/css?family=Alegreya"
 					/>
 				</Head>
 				<body>
