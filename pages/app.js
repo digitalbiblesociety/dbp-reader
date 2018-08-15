@@ -13,6 +13,7 @@
 * todo: Use cookies instead of session and local storage for all user settings (involves user approval before it can be utilized)
 * */
 // Needed for redux-saga es6 generator support
+import 'babel-polyfill';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -21,7 +22,11 @@ import Router from 'next/router';
 import cachedFetch, { overrideCache } from '../app/utils/cachedFetch';
 import HomePage from '../app/containers/HomePage';
 import getinitialChapterData from '../app/utils/getInitialChapterData';
-import { setChapterTextLoadingState } from '../app/containers/HomePage/actions';
+import {
+	setChapterTextLoadingState,
+	setUA,
+} from '../app/containers/HomePage/actions';
+import svg4everybody from '../app/utils/svgPolyfill';
 
 class AppContainer extends React.Component {
 	static displayName = 'Main app';
@@ -170,6 +175,32 @@ class AppContainer extends React.Component {
 					userAuthenticated: isAuthenticated,
 				},
 			});
+		}
+
+		const browserObject = {
+			agent: '',
+			majorVersion: '',
+			version: '',
+		};
+		if (/msie [0-9]{1}/i.test(navigator.userAgent)) {
+			browserObject.agent = 'msie';
+			browserObject.majorVersion = parseInt(
+				/MSIE ([0-9]{1})/i.exec(navigator.userAgent)[1],
+				10,
+			);
+			browserObject.version = /MSIE ([0-9.]+)/i.exec(navigator.userAgent)[1];
+		} else if (/Trident\/[7]{1}/i.test(navigator.userAgent)) {
+			browserObject.agent = 'msie';
+			browserObject.majorVersion = 11;
+			browserObject.version = '11';
+		}
+		if (browserObject.agent === 'msie') {
+			this.props.dispatch(setUA());
+			// console.log('svg4everybody', svg4everybody);
+			if (typeof svg4everybody === 'function') {
+				// console.log('svg for everybody return value', svg4everybody);
+				svg4everybody();
+			}
 		}
 	}
 

@@ -201,6 +201,7 @@ class Text extends React.PureComponent {
 			// Safety check since I use browser apis
 			if (this.props.formattedSource.footnoteSource) {
 				// console.log('formatted source changed, updating footnotes', this.props.formattedSource.footnoteSource);
+				// console.log('dom parser', DOMParser);
 				const parser = new DOMParser();
 				const xmlDoc = parser.parseFromString(
 					this.props.formattedSource.footnoteSource,
@@ -436,10 +437,11 @@ class Text extends React.PureComponent {
 
 	getFootnotesOnFirstRender = () => {
 		// console.log('getFootnotesOnFirstRender', this.props.formattedSource.footnoteSource);
+		// console.log('dom parser', DOMParser);
 		const parser = new DOMParser();
 		const xmlDoc = parser.parseFromString(
 			this.props.formattedSource.footnoteSource,
-			'text/xml',
+			'text/html',
 		);
 		// console.log('all fts', xmlDoc.querySelectorAll('.ft, .xt'));
 		const footnotes =
@@ -674,6 +676,7 @@ class Text extends React.PureComponent {
 		// Possible for verse but not for footnotes
 		if (dommountedsostuffworks && initialFormattedSource.main) {
 			if (verseNumber) {
+				// console.log('dom parser', DOMParser);
 				const parser = new DOMParser();
 				const serializer = new XMLSerializer();
 				// Create temp xml doc from source
