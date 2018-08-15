@@ -1,4 +1,3 @@
-import 'babel-polyfill';
 import Document, { Head, Main, NextScript } from 'next/document';
 // Import CSS reset and Global Styles
 // import '../static/app.scss';
@@ -7,11 +6,47 @@ import Document, { Head, Main, NextScript } from 'next/document';
 // Importing the check here so that it is available to the css
 /* eslint-disable */
 export default class MyDocument extends Document {
+	// static getInitialProps = async ({ req }) => {
+	// 	// console.log(Object.keys(req.headers));
+	// 	// console.log(Object.keys(req.header));
+	// 	// console.log(req.header.userAgent);
+	// 	// console.log(req.headers['user-agent']);
+	// 	const browserObject = {
+	// 		agent: '',
+	// 		majorVersion: '',
+	// 		version: '',
+	// 	};
+	//
+	// 	if (req.headers['user-agent']) {
+	// 		if (/msie [0-9]{1}/i.test(req.headers['user-agent'])) {
+	// 			browserObject.agent = 'msie';
+	// 			browserObject.majorVersion = parseInt(
+	// 				/MSIE ([0-9]{1})/i.exec(req.headers['user-agent'])[1],
+	// 				10,
+	// 			);
+	// 			browserObject.version = /MSIE ([0-9.]+)/i.exec(req.headers['user-agent'])[1];
+	// 		} else if (/Trident\/[7]{1}/i.test(req.headers['user-agent'])) {
+	// 			browserObject.agent = 'msie';
+	// 			browserObject.majorVersion = 11;
+	// 			browserObject.version = '11';
+	// 		}
+	// 	}
+	// 	return { isIE: browserObject.agent === 'msie' };
+	// }
 	render() {
+		// const { isIE } = this.props;
+		// console.log('this is ie', isIE);
+
 		return (
 			<html>
 				<Head>
+					<script
+						src="https://cdn.polyfill.io/v2/polyfill.min.js"
+						defer
+						async
+					/>
 					<link rel="stylesheet" href="/_next/static/style.css" />
+					<meta httpEquiv={'X-UA-Compatible'} content={'IE=edge'} />
 					{/*<link rel="stylesheet" href="../.next/static/style.css" />*/}
 					<meta name="viewport" content="width=device-width, initial-scale=1" />
 					<link rel="icon" type="image/x-icon" href="/static/favicon.ico" />
@@ -85,6 +120,8 @@ export default class MyDocument extends Document {
 					<script src="https://apis.google.com/js/platform.js" async defer />
 					<script
 						type="application/javascript"
+						defer
+						async
 						dangerouslySetInnerHTML={{
 							__html: `(window.onload = function() {
 						var browserObject = {
@@ -132,7 +169,10 @@ export default class MyDocument extends Document {
 						bannerDiv.appendChild(middleMessage);
 						bannerDiv.appendChild(fireFoxLink);
 						bannerDiv.appendChild(closeButton);
-						document.getElementsByTagName('body')[0].appendChild(bannerDiv);
+						var body = document.getElementsByTagName('body')[0];
+						if (body) {
+							body.appendChild(bannerDiv);
+						}
 					}
 					})();`,
 						}}

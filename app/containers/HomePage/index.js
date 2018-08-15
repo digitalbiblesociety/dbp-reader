@@ -29,7 +29,7 @@ import Footer from '../../components/Footer';
 import SearchContainer from '../SearchContainer';
 import GenericErrorBoundary from '../../components/GenericErrorBoundary';
 import FadeTransition from '../../components/FadeTransition';
-import svg4everybody from '../../utils/svgPolyfill';
+// import svg4everybody from '../../utils/svgPolyfill';
 import {
 	applyTheme,
 	applyFontFamily,
@@ -57,7 +57,7 @@ import {
 	toggleChapterSelection,
 	toggleVersionSelection,
 	toggleFirstLoadForTextSelection,
-	setUA,
+	// setUA,
 	setActiveNote,
 	setActiveTextId,
 	setActiveChapter,
@@ -97,6 +97,7 @@ class HomePage extends React.PureComponent {
 			userAuthenticated,
 			userId,
 		} = this.props.homepage;
+		// console.log(svg4everybody);
 		// const params = this.props.homepage.match.params;
 		// this.props.dispatch({
 		// 	type: 'getbible',
@@ -258,27 +259,31 @@ class HomePage extends React.PureComponent {
 			}
 		}
 
-		const browserObject = {
-			agent: '',
-			majorVersion: '',
-			version: '',
-		};
-		if (/msie [0-9]{1}/i.test(navigator.userAgent)) {
-			browserObject.agent = 'msie';
-			browserObject.majorVersion = parseInt(
-				/MSIE ([0-9]{1})/i.exec(navigator.userAgent)[1],
-				10,
-			);
-			browserObject.version = /MSIE ([0-9.]+)/i.exec(navigator.userAgent)[1];
-		} else if (/Trident\/[7]{1}/i.test(navigator.userAgent)) {
-			browserObject.agent = 'msie';
-			browserObject.majorVersion = 11;
-			browserObject.version = '11';
-		}
-		if (browserObject.agent === 'msie') {
-			this.props.dispatch(setUA());
-			svg4everybody();
-		}
+		// const browserObject = {
+		// 	agent: '',
+		// 	majorVersion: '',
+		// 	version: '',
+		// };
+		// if (/msie [0-9]{1}/i.test(navigator.userAgent)) {
+		// 	browserObject.agent = 'msie';
+		// 	browserObject.majorVersion = parseInt(
+		// 		/MSIE ([0-9]{1})/i.exec(navigator.userAgent)[1],
+		// 		10,
+		// 	);
+		// 	browserObject.version = /MSIE ([0-9.]+)/i.exec(navigator.userAgent)[1];
+		// } else if (/Trident\/[7]{1}/i.test(navigator.userAgent)) {
+		// 	browserObject.agent = 'msie';
+		// 	browserObject.majorVersion = 11;
+		// 	browserObject.version = '11';
+		// }
+		// if (browserObject.agent === 'msie') {
+		// 	this.props.dispatch(setUA());
+		// 	// console.log('svg4everybody', svg4everybody);
+		// 	if (typeof svg4everybody === 'function') {
+		// 		// console.log('svg for everybody return value', svg4everybody);
+		// 		svg4everybody();
+		// 	}
+		// }
 
 		if (window && document && document.firstElementChild) {
 			// Main can be unset in this instance
