@@ -478,7 +478,9 @@ class HomePage extends React.PureComponent {
 		}
 	};
 
-	handleMenuTimer = (menu) => {
+	menuTicking = false;
+
+	handleMenuClose = (menu) => {
 		if (menu === 'profile') {
 			this.props.dispatch(toggleProfile());
 		}
@@ -497,6 +499,8 @@ class HomePage extends React.PureComponent {
 		if (menu === 'version') {
 			this.props.dispatch(toggleVersionSelection());
 		}
+
+		this.menuTicking = false;
 	};
 
 	updateScrollDirection = () => {
@@ -609,8 +613,12 @@ class HomePage extends React.PureComponent {
 
 	toggleProfile = () => {
 		if (this.isMenuOpen('profile')) {
-			clearTimeout(this.menuTimer);
-			this.menuTimer = setTimeout(this.handleMenuTimer, 700, 'profile');
+			// clearTimeout(this.menuTimer);
+			// this.menuTimer = setTimeout(this.handleMenuTimer, 500, 'profile');
+			if (!this.menuTicking) {
+				this.menuTicking = true;
+				requestAnimationFrame(this.handleMenuClose);
+			}
 		} else {
 			this.props.dispatch(toggleProfile());
 		}
@@ -618,8 +626,12 @@ class HomePage extends React.PureComponent {
 
 	toggleNotesModal = () => {
 		if (this.isMenuOpen('notes')) {
-			clearTimeout(this.menuTimer);
-			this.menuTimer = setTimeout(this.handleMenuTimer, 700, 'notes');
+			// clearTimeout(this.menuTimer);
+			// this.menuTimer = setTimeout(this.handleMenuTimer, 500, 'notes');
+			if (!this.menuTicking) {
+				this.menuTicking = true;
+				requestAnimationFrame(this.handleMenuClose);
+			}
 		} else {
 			this.props.dispatch(toggleNotesModal());
 		}
@@ -627,8 +639,12 @@ class HomePage extends React.PureComponent {
 
 	toggleSettingsModal = () => {
 		if (this.isMenuOpen('settings')) {
-			clearTimeout(this.menuTimer);
-			this.menuTimer = setTimeout(this.handleMenuTimer, 700, 'settings');
+			// clearTimeout(this.menuTimer);
+			// this.menuTimer = setTimeout(this.handleMenuTimer, 500, 'settings');
+			if (!this.menuTicking) {
+				this.menuTicking = true;
+				requestAnimationFrame(this.handleMenuClose);
+			}
 		} else {
 			this.props.dispatch(toggleSettingsModal());
 		}
@@ -636,8 +652,12 @@ class HomePage extends React.PureComponent {
 
 	toggleSearchModal = () => {
 		if (this.isMenuOpen('search')) {
-			clearTimeout(this.menuTimer);
-			this.menuTimer = setTimeout(this.handleMenuTimer, 700, 'search');
+			// clearTimeout(this.menuTimer);
+			// this.menuTimer = setTimeout(this.handleMenuTimer, 500, 'search');
+			if (!this.menuTicking) {
+				this.menuTicking = true;
+				requestAnimationFrame(this.handleMenuClose);
+			}
 		} else {
 			this.props.dispatch(toggleSearchModal());
 		}
