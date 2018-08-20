@@ -207,17 +207,34 @@ class Text extends React.PureComponent {
 					this.props.formattedSource.footnoteSource,
 					'text/xml',
 				);
-				// console.log('all fts', xmlDoc.querySelectorAll('.ft, .xt'));
+
+				// console.log('in component did update function', [...xmlDoc.querySelectorAll('.footnote')].reduce((a, c) => a.concat(c.textContent), ''))
 				const footnotes =
-					[...xmlDoc.querySelectorAll('.ft, .xt')].reduce((a, n) => {
-						if (n.parentElement.parentElement.attributes.id) {
+					[...xmlDoc.querySelectorAll('.footnote')].reduce((a, n) => {
+						let node = n;
+						let safeGuard = 0;
+						// console.log('node before while loop', node);
+						while ((node && !node.attributes.id) || safeGuard >= 10) {
+							// console.log('node in while loop', node);
+							node = node.parentElement;
+							safeGuard += 1;
+						}
+						// console.log('sliced id', node.attributes.id.value.slice(4));
+						// console.log('text content', node.textContent);
+						if (node && node.attributes.id) {
 							return {
 								...a,
-								[n.parentElement.parentElement.attributes.id.value.slice(
-									4,
-								)]: n.textContent,
+								[node.attributes.id.value.slice(4)]: node.textContent,
 							};
 						}
+						// if (n.parentElement.parentElement.attributes.id) {
+						// 	return {
+						// 		...a,
+						// 		[n.parentElement.parentElement.attributes.id.value.slice(
+						// 			4,
+						// 		)]: n.textContent,
+						// 	};
+						// }
 						return a;
 					}, {}) || {};
 				// console.log('generated new footnotes', footnotes);
@@ -443,15 +460,23 @@ class Text extends React.PureComponent {
 			this.props.formattedSource.footnoteSource,
 			'text/html',
 		);
-		// console.log('all fts', xmlDoc.querySelectorAll('.ft, .xt'));
+		// console.log('in first render function', [...xmlDoc.querySelectorAll('.footnote')].reduce((a, c) => a.concat(c.textContent), ''))
 		const footnotes =
-			[...xmlDoc.querySelectorAll('.ft, .xt')].reduce((a, n) => {
-				if (n.parentElement.parentElement.attributes.id) {
+			[...xmlDoc.querySelectorAll('.footnote')].reduce((a, n) => {
+				let node = n;
+				let safeGuard = 0;
+				// console.log('node before while loop', node);
+				while ((node && !node.attributes.id) || safeGuard >= 10) {
+					// console.log('node in while loop', node);
+					node = node.parentElement;
+					safeGuard += 1;
+				}
+				// console.log('sliced id', node.attributes.id.value.slice(4));
+				// console.log('text content', node.textContent);
+				if (node && node.attributes.id) {
 					return {
 						...a,
-						[n.parentElement.parentElement.attributes.id.value.slice(
-							4,
-						)]: n.textContent,
+						[node.attributes.id.value.slice(4)]: node.textContent,
 					};
 				}
 				return a;
