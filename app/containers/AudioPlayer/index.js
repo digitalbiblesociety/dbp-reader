@@ -85,6 +85,9 @@ export class AudioPlayer extends React.Component {
 		this.audioRef.addEventListener('playing', this.playingEventListener);
 
 		Router.router.events.on('routeChangeStart', this.handleRouteChange);
+		if (this.props.audioSource) {
+			this.audioRef.load();
+		}
 	}
 
 	componentWillReceiveProps(nextProps) {
