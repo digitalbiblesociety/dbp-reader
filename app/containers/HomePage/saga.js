@@ -1,4 +1,4 @@
-import 'whatwg-fetch';
+import fetch from 'isomorphic-fetch';
 import { takeLatest, call, all, put, fork } from 'redux-saga/effects';
 import some from 'lodash/some';
 // import reduce from 'lodash/reduce';
