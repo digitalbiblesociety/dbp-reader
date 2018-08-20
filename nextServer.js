@@ -12,7 +12,7 @@ const handle = app.getRequestHandler();
 
 const ssrCache = new LRUCache({
 	max: 100,
-	maxAge: 1000 * 60 * 60,
+	maxAge: 1000 * 60 * 5,
 });
 
 function getCacheKey(req) {
