@@ -248,6 +248,7 @@ export class AudioPlayer extends React.Component {
 	};
 
 	handleRouteChange = () => {
+		this.setCurrentTime(0);
 		this.pauseAudio();
 	};
 
