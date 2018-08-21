@@ -1,5 +1,5 @@
 {
-	"name": "Bible.is",
+	"name": "Bible.is Online",
 	"short_name": "Bible.is",
 	"theme_color": "#941B2F",
 	"background_color": "#fafafa",
@@ -84,5 +84,5 @@
 			"density": "4.0"
 		}
 	],
-	"splash_pages": null
+	"splash_pages": "/bible/engesv/mat/1"
 }
