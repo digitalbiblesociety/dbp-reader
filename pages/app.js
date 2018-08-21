@@ -247,7 +247,7 @@ class AppContainer extends React.Component {
 					{/* may need to replace contextLocation with the actual url */}
 					<meta
 						property={'og:url'}
-						content={`https://is.bible.build/${routeLocation}`}
+						content={`https://listen.dbp4.org/${routeLocation}`}
 					/>
 					<meta property={'og:description'} content={descriptionText} />
 					<meta

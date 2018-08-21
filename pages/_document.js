@@ -77,35 +77,19 @@ export default class MyDocument extends Document {
 
 					<link
 						rel="manifest"
-						href="https://devis.bible.build/static/manifest.json"
-					/>
-					<link
-						rel="manifest"
-						href="https://is.bible.build/static/manifest.json"
+						href="https://listen.dbp4.org/static/manifest.json"
 					/>
 					<link
 						rel="apple-touch-icon"
-						href="https://devis.bible.build/static/favicon-96x96.png"
-					/>
-					<link
-						rel="apple-touch-icon"
-						href="https://is.bible.build/static/favicon-96x96.png"
+						href="https://listen.dbp4.org/static/favicon-96x96.png"
 					/>
 					<meta
 						property={'og:image'}
-						content={'https://devis.bible.build/static/icon-180x180.png'}
-					/>
-					<meta
-						property={'og:image'}
-						content={'https://is.bible.build/static/icon-180x180.png'}
+						content={'https://listen.dbp4.org/static/icon-96x96.png'}
 					/>
 					<meta
 						name={'twitter:image'}
-						content={'https://devis.bible.build/static/icon-180x180.png'}
-					/>
-					<meta
-						name={'twitter:image'}
-						content={'https://is.bible.build/static/icon-180x180.png'}
+						content={'https://listen.dbp4.org/static/icon-96x96.png'}
 					/>
 
 					<meta name="twitter:app:id:iphone" content="" />
@@ -120,8 +104,6 @@ export default class MyDocument extends Document {
 					<script src="https://apis.google.com/js/platform.js" async defer />
 					<script
 						type="application/javascript"
-						defer
-						async
 						dangerouslySetInnerHTML={{
 							__html: `(window.onload = function() {
 						var browserObject = {

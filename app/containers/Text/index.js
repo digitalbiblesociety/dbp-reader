@@ -621,8 +621,22 @@ class Text extends React.PureComponent {
 				} else if (lastVerse && this.main.contains(target) && primaryButton) {
 					// treat the event as a click and allow the whole verse to be highlighted
 					// console.log('counts as a click not a text selection formatted');
-					// Todo: Need to find a way to get the text content for the formatted verse so I can use it when sharing
-					this.selectedWholeVerse(lastVerse, false, e.clientX, e.clientY, '');
+					const verseText =
+						[
+							...document.querySelectorAll(
+								`[data-id=${this.props.activeBookId}${
+									this.props.activeChapter
+								}_${lastVerse}]`,
+							),
+						].reduce((a, c) => a.concat(' ', c.textContent), '') || '';
+
+					this.selectedWholeVerse(
+						lastVerse,
+						false,
+						e.clientX,
+						e.clientY,
+						verseText,
+					);
 				}
 			} else if (!isFormatted) {
 				const verseNode = getPlainParentVerseWithoutNumber(target);
