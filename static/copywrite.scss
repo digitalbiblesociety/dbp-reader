@@ -108,13 +108,14 @@
 				}
 
 				img.image-landscape {
-					width: 100px;
+					width: 150px;
 					height: auto;
-					max-height: 50px;
+					//max-height: 50px;
+					min-height: 1px;
 				}
 				img.fcbh-copyright-logo {
 					width: 150px;
-					max-height: 75px;
+					//max-height: 75px;
 				}
 				img {
 					margin: 10px 0;
