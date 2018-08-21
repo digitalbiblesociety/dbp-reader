@@ -47,7 +47,8 @@
 		"test": "cross-env NODE_ENV=test jest",
 		"test:coverage": "cross-env NODE_ENV=test jest --coverage",
 		"test:watch": "cross-env NODE_ENV=test jest --watchAll",
-		"coveralls": "cat ./coverage/lcov.info | coveralls"
+		"coveralls": "cat ./coverage/lcov.info | coveralls",
+		"fetch-latest-site": "git checkout .; git pull origin master; npm install; npm run build:next; pm2 reload ecosystem.config.js --env production --update-env --only bible.is.prod;"
 	},
 	"lint-staged": {
 		"*.{js,json,scss,md}": [
