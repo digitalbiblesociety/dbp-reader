@@ -287,11 +287,12 @@ class HomePage extends React.PureComponent {
 
 		if (window && document && document.firstElementChild) {
 			// Main can be unset in this instance
-			this.main = document.getElementsByTagName('main')[0];
-			window.addEventListener('scroll', this.handleScrolling, true);
+			if (this.isMobileSized) {
+				this.main = document.getElementsByTagName('main')[0];
+				window.addEventListener('scroll', this.handleScrolling, true);
+			}
 		}
 
-		// Should move these to being tracked in state or move them to media queries
 		this.window = window;
 		this.document = document;
 	}
