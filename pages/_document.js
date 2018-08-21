@@ -51,7 +51,6 @@ export default class MyDocument extends Document {
 					{/*<link rel="stylesheet" href="../.next/static/style.css" />*/}
 					<meta name="viewport" content="width=device-width, initial-scale=1" />
 					<link rel="icon" type="image/x-icon" href="/static/favicon.ico" />
-
 					{process.env.NODE_ENV === 'development' ? (
 						<script src={'http://localhost:8097'} />
 					) : null}
@@ -69,7 +68,7 @@ export default class MyDocument extends Document {
 					<meta name="apple-mobile-web-app-status-bar-style" content="black" />
 					<meta name="author" content="Faith Comes By Hearing" />
 					<meta name="theme-color" content="#941B2F" />
-					<meta property={'og:type'} content={'book'} />
+					<meta property={'og:type'} content={'article'} />
 					<meta property={'og:site_name'} content={'Bible.is Online'} />
 
 					<meta name={'twitter:card'} content={'summary'} />
@@ -86,8 +85,10 @@ export default class MyDocument extends Document {
 					/>
 					<meta
 						property={'og:image'}
-						content={'https://listen.dbp4.org/static/icon-96x96.png'}
+						content={'https://listen.dbp4.org/static/icon-310x310.png'}
 					/>
+					<meta property={'og:image:width'} content={310} />
+					<meta property={'og:image:height'} content={310} />
 					<meta
 						name={'twitter:image'}
 						content={'https://listen.dbp4.org/static/icon-96x96.png'}

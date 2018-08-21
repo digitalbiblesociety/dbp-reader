@@ -244,6 +244,12 @@ class AppContainer extends React.Component {
 								: ''
 						} | Bible.is`}
 					/>
+					<meta
+						property={'og:image'}
+						content={'https://listen.dbp4.org/static/icon-310x310.png'}
+					/>
+					<meta property={'og:image:width'} content={310} />
+					<meta property={'og:image:height'} content={310} />
 					{/* may need to replace contextLocation with the actual url */}
 					<meta
 						property={'og:url'}
