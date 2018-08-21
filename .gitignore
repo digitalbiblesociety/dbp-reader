@@ -15,7 +15,7 @@ app/utils/ENGKJV
 reduxStoreShape.js
 next-server
 env-config.js
-sitemaps/
+static/sitemaps/*
 # Cruft
 temp.txt
 .DS_Store
