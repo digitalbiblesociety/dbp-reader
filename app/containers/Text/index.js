@@ -45,12 +45,14 @@ import differenceObject from '../../utils/deepDifferenceObject';
 /* Disabling the jsx-a11y linting because we need to capture the selected text
 	 and the most straight forward way of doing so is with the onMouseUp event */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+// Todo: Set selected text when user clicks a verse
 class Text extends React.PureComponent {
 	state = {
 		contextMenuState: false,
 		footnoteState: false,
 		coords: {},
 		selectedText: '',
+		userSelectedText: '',
 		firstVerse: 0,
 		lastVerse: 0,
 		highlightActive: this.props.highlights || false,
@@ -59,6 +61,9 @@ class Text extends React.PureComponent {
 		activeVerseInfo: { verse: 0 },
 		loadingNextPage: false,
 		wholeVerseIsSelected: false,
+		dommountedsostuffworks: false,
+		formattedVerse: false,
+		footnotes: {},
 	};
 
 	componentDidMount() {
@@ -78,6 +83,8 @@ class Text extends React.PureComponent {
 			this.setEventHandlersForFormattedVerses(this.formatHighlight);
 		}
 		// console.log('props at time component first mounted', this.props);
+		this.dommountedsostuffworks();
+		this.getFootnotesOnFirstRender();
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -86,12 +93,16 @@ class Text extends React.PureComponent {
 			// console.log('component did update old props difference: ', differenceObject(nextProps, this.props));
 		}
 		if (nextProps.formattedSource.main !== this.props.formattedSource.main) {
-			this.setState({
-				footnoteState: false,
-				activeVerseInfo: { verse: 0 },
-				loadingNextPage: false,
-			});
-			this.props.setTextLoadingState({ state: false });
+			this.setState(
+				{
+					footnoteState: false,
+					activeVerseInfo: { verse: 0 },
+					loadingNextPage: false,
+				},
+				() => {
+					this.props.setTextLoadingState({ state: false });
+				},
+			);
 		}
 		if (!isEqual(nextProps.text, this.props.text)) {
 			this.setState({ activeVerseInfo: { verse: 0 }, loadingNextPage: false });
@@ -110,6 +121,7 @@ class Text extends React.PureComponent {
 		}
 	}
 
+	// I am using this function because it means that the component finished updating and that the dom is available
 	componentDidUpdate(prevProps, prevState) {
 		// console.log(this.format, this.formatHighlight);
 		// if (Object.keys(differenceObject(this.state, prevState)).length || Object.keys(differenceObject(this.props, prevProps)).length) {
@@ -179,6 +191,56 @@ class Text extends React.PureComponent {
 				);
 			}
 		}
+
+		if (
+			this.props.formattedSource.footnoteSource &&
+			this.props.formattedSource.footnoteSource !==
+				prevProps.formattedSource.footnoteSource
+		) {
+			// console.log('this.props.formatted', this.props.formattedSource.footnoteSource);
+			// Safety check since I use browser apis
+			if (this.props.formattedSource.footnoteSource) {
+				// console.log('formatted source changed, updating footnotes', this.props.formattedSource.footnoteSource);
+				// console.log('dom parser', DOMParser);
+				const parser = new DOMParser();
+				const xmlDoc = parser.parseFromString(
+					this.props.formattedSource.footnoteSource,
+					'text/xml',
+				);
+
+				// console.log('in component did update function', [...xmlDoc.querySelectorAll('.footnote')].reduce((a, c) => a.concat(c.textContent), ''))
+				const footnotes =
+					[...xmlDoc.querySelectorAll('.footnote')].reduce((a, n) => {
+						let node = n;
+						let safeGuard = 0;
+						// console.log('node before while loop', node);
+						while ((node && !node.attributes.id) || safeGuard >= 10) {
+							// console.log('node in while loop', node);
+							node = node.parentElement;
+							safeGuard += 1;
+						}
+						// console.log('sliced id', node.attributes.id.value.slice(4));
+						// console.log('text content', node.textContent);
+						if (node && node.attributes.id) {
+							return {
+								...a,
+								[node.attributes.id.value.slice(4)]: node.textContent,
+							};
+						}
+						// if (n.parentElement.parentElement.attributes.id) {
+						// 	return {
+						// 		...a,
+						// 		[n.parentElement.parentElement.attributes.id.value.slice(
+						// 			4,
+						// 		)]: n.textContent,
+						// 	};
+						// }
+						return a;
+					}, {}) || {};
+				// console.log('generated new footnotes', footnotes);
+				this.callSetStateNotInUpdate(footnotes);
+			}
+		}
 		// Logic below ensures that the proper event handlers are set on each footnote
 		if (
 			this.props.formattedSource.main &&
@@ -234,22 +296,22 @@ class Text extends React.PureComponent {
 		// This handles setting the events on a page refresh or navigation via url
 		if (
 			this.format &&
-			!this.state.handlersAreSet &&
+			// !this.state.handlersAreSet &&
 			!this.props.loadingNewChapterText
 		) {
-			// console.log('setting event listeners on format fourth');
+			// console.log('setting event listeners on format fourth', this.state.footnotes);
 			this.setEventHandlersForFootnotes(this.format);
 			this.setEventHandlersForFormattedVerses(this.format);
-			this.callSetStateNotInUpdate();
+			// this.callSetStateNotInUpdate();
 		} else if (
 			this.formatHighlight &&
-			!this.state.handlersAreSet &&
+			// !this.state.handlersAreSet &&
 			!this.props.loadingNewChapterText
 		) {
 			// console.log('setting event listeners on formatHighlight fourth ');
 			this.setEventHandlersForFootnotes(this.formatHighlight);
 			this.setEventHandlersForFormattedVerses(this.formatHighlight);
-			this.callSetStateNotInUpdate();
+			// this.callSetStateNotInUpdate();
 		}
 	}
 
@@ -370,14 +432,14 @@ class Text extends React.PureComponent {
 	};
 	// Use selected text only when marking highlights
 	setActiveNote = ({ coords, existingNote, bookmark }) => {
+		// console.log('this.state', this.state);
 		if (!this.props.userAuthenticated || !this.props.userId) {
 			this.openPopup({ x: coords.x, y: coords.y });
 			return;
 		}
 		const { firstVerse, lastVerse } = this.state;
 		const { activeBookId, activeChapter, bibleId } = this.props;
-		// Sometimes if a user selects a single verse either the last or first verse will not be set
-		// In that case I default to them both being the same verse
+
 		const note = {
 			verse_start: firstVerse || lastVerse,
 			verse_end: lastVerse || firstVerse,
@@ -388,6 +450,41 @@ class Text extends React.PureComponent {
 		};
 
 		this.props.setActiveNote({ note: existingNote || note });
+	};
+
+	getFootnotesOnFirstRender = () => {
+		// console.log('getFootnotesOnFirstRender', this.props.formattedSource.footnoteSource);
+		// console.log('dom parser', DOMParser);
+		const parser = new DOMParser();
+		const xmlDoc = parser.parseFromString(
+			this.props.formattedSource.footnoteSource,
+			'text/html',
+		);
+		// console.log('in first render function', [...xmlDoc.querySelectorAll('.footnote')].reduce((a, c) => a.concat(c.textContent), ''))
+		const footnotes =
+			[...xmlDoc.querySelectorAll('.footnote')].reduce((a, n) => {
+				let node = n;
+				let safeGuard = 0;
+				// console.log('node before while loop', node);
+				while ((node && !node.attributes.id) || safeGuard >= 10) {
+					// console.log('node in while loop', node);
+					node = node.parentElement;
+					safeGuard += 1;
+				}
+				// console.log('sliced id', node.attributes.id.value.slice(4));
+				// console.log('text content', node.textContent);
+				if (node && node.attributes.id) {
+					return {
+						...a,
+						[node.attributes.id.value.slice(4)]: node.textContent,
+					};
+				}
+				return a;
+			}, {}) || {};
+		this.setState({
+			footnoteState: false,
+			footnotes,
+		});
 	};
 
 	getFirstVerse = (e) => {
@@ -515,6 +612,7 @@ class Text extends React.PureComponent {
 							focusText: this.window.getSelection().focusNode.data,
 							focusNode: this.window.getSelection().focusNode,
 							selectedText,
+							userSelectedText: selectedText,
 						},
 						() => {
 							this.openContextMenu(e);
@@ -523,7 +621,8 @@ class Text extends React.PureComponent {
 				} else if (lastVerse && this.main.contains(target) && primaryButton) {
 					// treat the event as a click and allow the whole verse to be highlighted
 					// console.log('counts as a click not a text selection formatted');
-					this.selectedWholeVerse(lastVerse, false, e.clientX, e.clientY);
+					// Todo: Need to find a way to get the text content for the formatted verse so I can use it when sharing
+					this.selectedWholeVerse(lastVerse, false, e.clientX, e.clientY, '');
 				}
 			} else if (!isFormatted) {
 				const verseNode = getPlainParentVerseWithoutNumber(target);
@@ -552,6 +651,7 @@ class Text extends React.PureComponent {
 							focusText: this.window.getSelection().focusNode.data,
 							focusNode: this.window.getSelection().focusNode,
 							selectedText,
+							userSelectedText: selectedText,
 						},
 						() => {
 							this.openContextMenu(e);
@@ -560,7 +660,15 @@ class Text extends React.PureComponent {
 				} else if (lastVerse && this.main.contains(target) && primaryButton) {
 					// treat the event as a click and allow the whole verse to be highlighted
 					// console.log('counts as a click not a text selection for plain');
-					this.selectedWholeVerse(lastVerse, true, e.clientX, e.clientY);
+					this.selectedWholeVerse(
+						lastVerse,
+						true,
+						e.clientX,
+						e.clientY,
+						this.props.text
+							.filter((v) => v.verse_start === parseInt(lastVerse, 10))
+							.map((v) => v.verse_text)[0] || '',
+					);
 				}
 			} else {
 				this.openContextMenu(e);
@@ -568,11 +676,12 @@ class Text extends React.PureComponent {
 		}
 	};
 
-	get getTextComponents() {
+	getTextComponents(dommountedsostuffworks) {
 		const {
 			text: initialText,
 			userSettings,
-			formattedSource: initialFormattedSource,
+			formattedSource: initialFormattedSourceFromProps,
+			// formattedSource: initialFormattedSource,
 			highlights,
 			activeChapter,
 			activeBookName,
@@ -581,7 +690,50 @@ class Text extends React.PureComponent {
 			bookmarks,
 			audioSource,
 			invalidBibleId,
+			activeBookId,
 		} = this.props;
+		const initialFormattedSource = JSON.parse(
+			JSON.stringify(initialFormattedSourceFromProps),
+		);
+		let formattedVerse = false;
+
+		// Need to move this to selector and use regex
+		// Possible for verse but not for footnotes
+		if (dommountedsostuffworks && initialFormattedSource.main) {
+			if (verseNumber) {
+				// console.log('dom parser', DOMParser);
+				const parser = new DOMParser();
+				const serializer = new XMLSerializer();
+				// Create temp xml doc from source
+				const xmlDocText = parser.parseFromString(
+					initialFormattedSource.main,
+					'text/xml',
+				);
+				// Find the verse node by its classname
+				const verseClassName = `${activeBookId.toUpperCase()}${activeChapter}_${verseNumber}`;
+				const verseNumberElement = xmlDocText.getElementsByClassName(
+					`verse${verseNumber}`,
+				)[0];
+				// Get the inner text of the verse
+				const verseString = xmlDocText.getElementsByClassName(
+					verseClassName,
+				)[0];
+				// Create a new container for the verse
+				const newXML = xmlDocText.createElement('div');
+				// Add the verse to the new container
+				if (verseNumberElement && verseString) {
+					newXML.appendChild(verseNumberElement);
+					newXML.appendChild(verseString);
+				}
+				// Use the new text as the formatted source
+				initialFormattedSource.main = newXML
+					? serializer.serializeToString(newXML)
+					: 'This chapter does not have a verse matching the url';
+				formattedVerse = true;
+				// console.log('setting the state for the verse being done')
+				// console.log('Creating new source for verse', initialFormattedSource);
+			}
+		}
 
 		const chapterAlt = initialText[0] && initialText[0].chapter_alt;
 		const verseIsActive =
@@ -619,7 +771,6 @@ class Text extends React.PureComponent {
 			'active',
 		]);
 		// console.log(initialText);
-		// todo figure out a way to memoize or cache the highlighted version of the text to improve performance - Not a huge issue because even with cpu at 6x throttling this part still worked fine
 		// Need to connect to the api and get the highlights object for this chapter
 		// based on whether the highlights object has any data decide whether to
 		// run this function or not
@@ -784,7 +935,10 @@ class Text extends React.PureComponent {
 						</span>
 					),
 			);
-		} else if (formattedSource.main) {
+		} else if (
+			formattedSource.main &&
+			(!verseNumber || (verseNumber && formattedVerse))
+		) {
 			// Need to run a function to highlight the formatted text if this option is selected
 			if (!Array.isArray(formattedText)) {
 				textComponents = (
@@ -906,6 +1060,7 @@ class Text extends React.PureComponent {
 		}
 	};
 
+	// This is a noop to trick iOS devices
 	handleHighlightClick = () => {
 		// Unless there is a click event the mouseup and mousedown events won't fire for mobile devices
 		// Left this blank since I actually don't need to do anything with it
@@ -956,6 +1111,7 @@ class Text extends React.PureComponent {
 			this.closeContextMenu();
 		}
 	};
+
 	handleAddBookmark = () => {
 		// console.log('Props available in bookmarks', this.props);
 		// console.log('State available in bookmarks', this.state);
@@ -1008,7 +1164,10 @@ class Text extends React.PureComponent {
 	};
 
 	// Probably need to stop doing this here
-	callSetStateNotInUpdate = () => this.setState({ handlersAreSet: true });
+	callSetStateNotInUpdate = (footnotes) => this.setState({ footnotes });
+
+	dommountedsostuffworks = () =>
+		this.setState({ dommountedsostuffworks: true, formattedVerse: true });
 
 	openPopup = (coords) => {
 		this.setState({ popupOpen: true, popupCoords: coords });
@@ -1491,7 +1650,7 @@ class Text extends React.PureComponent {
 			footnoteState: true,
 			contextMenuState: false,
 			footnotePortal: {
-				message: this.props.formattedSource.footnotes[id],
+				message: this.state.footnotes[id],
 				closeFootnote: this.closeFootnote,
 				coords,
 			},
@@ -1535,7 +1694,7 @@ class Text extends React.PureComponent {
 		});
 	};
 
-	selectedWholeVerse = (verse, isPlain, clientX, clientY) => {
+	selectedWholeVerse = (verse, isPlain, clientX, clientY, userSelectedText) => {
 		// console.log('verse: ', verse, '\nisPlain: ', isPlain);
 		if (typeof this.window !== 'undefined') {
 			const rightEdge =
@@ -1561,10 +1720,12 @@ class Text extends React.PureComponent {
 						currentState.activeVerseInfo.verse === verse
 					),
 					contextMenuState: currentState.activeVerseInfo.verse !== verse,
+					lastVerse: currentState.firstVerse,
 					activeVerseInfo: {
 						verse: currentState.activeVerseInfo.verse !== verse ? verse : 0,
 						isPlain,
 					},
+					userSelectedText,
 				}));
 			} else {
 				// is formatted
@@ -1579,10 +1740,12 @@ class Text extends React.PureComponent {
 						currentState.activeVerseInfo.verse === verse
 					),
 					contextMenuState: currentState.activeVerseInfo.verse !== verse,
+					lastVerse: currentState.firstVerse,
 					activeVerseInfo: {
 						verse: currentState.activeVerseInfo.verse !== verse ? verse : 0,
 						isPlain,
 					},
+					userSelectedText,
 				}));
 			}
 		}
@@ -1633,7 +1796,7 @@ class Text extends React.PureComponent {
 			textDirection,
 			chapterTextLoadingState,
 		} = this.props;
-		// console.log('____________________________\nText component rendered!', text);
+		// console.log('____________________________\nText component rendered!', verseNumber);
 		// console.log('condition for spinner', loadingNewChapterText ||
 		// 	loadingAudio ||
 		// 	this.state.loadingNextPage ||
@@ -1650,6 +1813,8 @@ class Text extends React.PureComponent {
 			contextMenuState,
 			footnoteState,
 			footnotePortal,
+			formattedVerse,
+			userSelectedText,
 		} = this.state;
 		const readersMode = userSettings.getIn([
 			'toggleOptions',
@@ -1662,13 +1827,13 @@ class Text extends React.PureComponent {
 			'active',
 		]);
 		const chapterAlt = text[0] && text[0].chapter_alt;
-
 		if (
 			loadingNewChapterText ||
 			loadingAudio ||
 			this.state.loadingNextPage ||
 			!books.length ||
-			chapterTextLoadingState
+			chapterTextLoadingState ||
+			(!formattedVerse && formattedSource.main)
 		) {
 			// console.log('Rendering the spinner');
 			return (
@@ -1746,7 +1911,7 @@ class Text extends React.PureComponent {
 								</h1>
 							</div>
 						)}
-						{this.getTextComponents}
+						{this.getTextComponents(this.state.dommountedsostuffworks)}
 						{verseNumber ? (
 							<div className={'read-chapter-container'}>
 								<PrefetchLink
@@ -1813,6 +1978,7 @@ class Text extends React.PureComponent {
 						toggleNotesModal={toggleNotesModal}
 						notesActive={notesActive}
 						coordinates={coords}
+						selectedText={userSelectedText}
 					/>
 				) : null}
 				{footnoteState ? <FootnotePortal {...footnotePortal} /> : null}

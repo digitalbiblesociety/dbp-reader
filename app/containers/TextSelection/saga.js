@@ -1,7 +1,7 @@
 import { takeLatest, call, fork, put } from 'redux-saga/effects';
 import { fromJS } from 'immutable';
+import cachedFetch from '../../utils/cachedFetch';
 import territoryCodes from '../../utils/territoryCodes.json';
-// import languageList from 'utils/languagesWithResources.json';
 import request from '../../utils/request';
 import {
 	GET_COUNTRIES,
@@ -16,6 +16,8 @@ import {
 } from './constants';
 import { loadTexts, loadCountries, setLanguages } from './actions';
 
+const oneDay = 1000 * 60 * 60 * 24;
+
 export function* getCountries() {
 	const requestUrl = `${process.env.BASE_API_ROUTE}/countries?key=${
 		process.env.DBP_API_KEY
@@ -24,7 +26,8 @@ export function* getCountries() {
 	}&has_filesets=true&include_languages=true`;
 
 	try {
-		const response = yield call(request, requestUrl);
+		const response = yield call(cachedFetch, requestUrl, {}, oneDay);
+		// console.log('countries response', response);
 		const countriesObject = response.data.reduce((acc, country) => {
 			const tempObj = acc;
 			if (typeof country.name !== 'string') {
@@ -36,14 +39,11 @@ export function* getCountries() {
 			}
 			return tempObj;
 		}, {});
-		// const countriesObject = response.data.filter((country) => !territoryCodes[country.codes.iso_a2]);
-
 		countriesObject.ANY = {
 			name: 'ANY',
 			languages: { ANY: 'ANY' },
 			codes: { iso_a2: 'ANY' },
 		};
-
 		const countries = fromJS(countriesObject)
 			.filter((c) => c.get('name'))
 			.sort((a, b) => {
@@ -61,12 +61,6 @@ export function* getCountries() {
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error(err); // eslint-disable-line no-console
-		} else if (process.env.NODE_ENV === 'production') {
-			// const options = {
-			// 	header: 'POST',
-			// 	body: formData,
-			// };
-			// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
 		}
 		yield put({ type: LOAD_COUNTRIES_ERROR });
 	}
@@ -163,46 +157,17 @@ export function* getLanguages() {
 	}&v=4&bucket_id=${process.env.DBP_BUCKET_ID}&has_filesets=true`;
 
 	try {
-		const response = yield call(request, requestUrl);
-		// const languages = response.data.filter((language) => languageList[language.iso_code]);
-		// console.log(response.data.filter((l) => l.name === 'Ma\'di South' || l.iso === 'snm'));
-		// Temporary fix until the api returns the list pre-sorted
-		// const languages = response.data.filter((language) => language.bibles > 0).sort((a, b) => a.name > b.name);
+		const response = yield call(cachedFetch, requestUrl, {}, oneDay);
 		const languages = response.data;
 		languages.unshift({ name: 'ANY', iso: 'ANY', alt_names: [] });
 
-		/* Update to languages call to sort them client side */
-		// const sortedLanguages = Object.entries(languages)
-		// 	.sort((a, b) => {
-		// 		if (a[1][0] > b[1][0]) return 1;
-		// 		if (a[1][0] < b[1][0]) return -1;
-		// 		return 0;
-		// 	});
-		/* May need something like the code below instead
-			.map(l => ({ ...l, name: { [l.iso]: [l.name] } }))
-			.sort((a, b) => {
-					if (a.name[a.iso][0] > b.name[b.iso][0]) return 1
-					if (a.name[a.iso][0] < b.name[b.iso][0]) return -1
-					return 0
-			})
-		* */
-		// yield put(setLanguages({ languages: sortedLanguages });
-		// console.log('languages', languages);
 		yield put(setLanguages({ languages }));
 		yield put({ type: CLEAR_ERROR_GETTING_LANGUAGES });
 		yield fork(getLanguageAltNames);
-		// yield put(setLanguages({ languages: response.data }));
 	} catch (error) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error(error); // eslint-disable-line no-console
-		} else if (process.env.NODE_ENV === 'production') {
-			// const options = {
-			// 	header: 'POST',
-			// 	body: formData,
-			// };
-			// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
 		}
-
 		yield put({ type: ERROR_GETTING_LANGUAGES });
 	}
 }
@@ -220,7 +185,7 @@ export function* getLanguageAltNames() {
 		process.env.DBP_BUCKET_ID
 	}&has_filesets=true&include_alt_names=true`;
 	try {
-		const response = yield call(request, requestUrl);
+		const response = yield call(cachedFetch, requestUrl, {}, oneDay);
 		const languages = response.data
 			.map((l) => {
 				if (l.alt_names) {

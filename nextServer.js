@@ -1,3 +1,4 @@
+require('babel-polyfill');
 const express = require('express');
 const next = require('next');
 const compression = require('compression');
@@ -11,7 +12,7 @@ const handle = app.getRequestHandler();
 
 const ssrCache = new LRUCache({
 	max: 100,
-	maxAge: 1000 * 60 * 60,
+	maxAge: 1000 * 60 * 5,
 });
 
 function getCacheKey(req) {
@@ -19,6 +20,10 @@ function getCacheKey(req) {
 }
 
 async function renderAndCache(req, res, pagePath, queryParams) {
+	if (dev) {
+		app.render(req, res, pagePath, queryParams);
+		return;
+	}
 	const key = getCacheKey(req);
 
 	if (ssrCache.has(key)) {
@@ -97,23 +102,51 @@ app
 		server.get('/privacy-policy', (req, res) => handle(req, res));
 		server.get('/about-page', (req, res) => handle(req, res));
 
-		server.get('/bible/:bibleId', (req, res, nextP) => {
+		server.get('/bible/:bibleId/:bookId/:chapter', (req, res, nextP) => {
 			const actualPage = '/app';
+			// Params may not actually be passed using this method
 			// console.log(req.originalUrl.includes('/static'))
+			// console.log('Caught the chapter request ----------');
+			//
+			// console.log(`${req.protocol}://${req.get('host')}${req.originalUrl}`);
 			// console.log(
-			// 	'Getting bible and book for route',
+			// 	'Getting bible and book and chapter for route',
 			// 	`${req.protocol}://${req.get('host')}${req.originalUrl}`,
 			// );
+			const queryParams = {
+				bibleId: req.params.bibleId,
+				bookId: req.params.bookId,
+				chapter: req.params.chapter,
+			};
+			if (
+				queryParams.verse !== 'style.css' &&
+				!req.originalUrl.includes('/static') &&
+				!queryParams.verse &&
+				!isNaN(parseInt(req.params.chapter, 10))
+			) {
+				renderAndCache(req, res, actualPage, queryParams);
+			} else {
+				nextP();
+			}
+		});
+
+		server.get('/bible/:bibleId/:bookId/:chapter/:verse', (req, res, nextP) => {
+			const actualPage = '/app';
+			// console.log(req.originalUrl.includes('/static'))
+			// console.log('Caught the verse request ---------------')
+			// console.log(`${req.protocol}://${req.get('host')}${req.originalUrl}`);
 			// Params may not actually be passed using this method
 			const queryParams = {
 				bibleId: req.params.bibleId,
-				bookId: 'mat',
-				chapter: '1',
+				bookId: req.params.bookId,
+				chapter: req.params.chapter,
+				verse: req.params.verse,
 			};
-
 			if (
 				queryParams.verse !== 'style.css' &&
-				!req.originalUrl.includes('/static')
+				!req.originalUrl.includes('/static') &&
+				!isNaN(parseInt(req.params.verse, 10)) &&
+				!isNaN(parseInt(req.params.chapter, 10))
 			) {
 				renderAndCache(req, res, actualPage, queryParams);
 			} else {
@@ -145,43 +178,20 @@ app
 			}
 		});
 
-		server.get('/bible/:bibleId/:bookId/:chapter', (req, res, nextP) => {
+		server.get('/bible/:bibleId', (req, res, nextP) => {
 			const actualPage = '/app';
-			// Params may not actually be passed using this method
 			// console.log(req.originalUrl.includes('/static'))
 			// console.log(
-			// 	'Getting bible and book and chapter for route',
+			// 	'Getting bible and book for route',
 			// 	`${req.protocol}://${req.get('host')}${req.originalUrl}`,
 			// );
+			// Params may not actually be passed using this method
 			const queryParams = {
 				bibleId: req.params.bibleId,
-				bookId: req.params.bookId,
-				chapter: req.params.chapter,
+				bookId: 'mat',
+				chapter: '1',
 			};
-			if (
-				queryParams.verse !== 'style.css' &&
-				!req.originalUrl.includes('/static')
-			) {
-				renderAndCache(req, res, actualPage, queryParams);
-			} else {
-				nextP();
-			}
-		});
 
-		server.get('/bible/:bibleId/:bookId/:chapter/:verse', (req, res, nextP) => {
-			const actualPage = '/app';
-			// console.log(req.originalUrl.includes('/static'))
-			// console.log(
-			// 	'Getting bible, book, chapter, and verse for route',
-			// 	`${req.protocol}://${req.get('host')}${req.originalUrl}`,
-			// );
-			// Params may not actually be passed using this method
-			const queryParams = {
-				bibleId: req.params.bibleId,
-				bookId: req.params.bookId,
-				chapter: req.params.chapter,
-				verse: req.params.verse,
-			};
 			if (
 				queryParams.verse !== 'style.css' &&
 				!req.originalUrl.includes('/static')

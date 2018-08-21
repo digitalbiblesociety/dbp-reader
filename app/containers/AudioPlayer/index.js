@@ -37,11 +37,12 @@ export class AudioPlayer extends React.Component {
 		// need to get next and prev audio tracks if I want to enable continuous playing
 		this.state = {
 			playing: false,
+			loadingNextChapter: false,
 			speedControlState: false,
 			volumeSliderState: false,
 			elipsisState: false,
 			volume: 1,
-			duration: 100,
+			duration: 0,
 			currentTime: 0,
 			currentSpeed: 1,
 			autoPlayChecked: this.props.autoPlay,
@@ -84,6 +85,9 @@ export class AudioPlayer extends React.Component {
 		this.audioRef.addEventListener('playing', this.playingEventListener);
 
 		Router.router.events.on('routeChangeStart', this.handleRouteChange);
+		if (this.props.audioSource) {
+			this.audioRef.load();
+		}
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -96,24 +100,24 @@ export class AudioPlayer extends React.Component {
 					this.props.setAudioPlayerState(false),
 				);
 			}
-			if (nextProps.autoPlay) {
-				// console.log('source changed and auto play is true');
-				if (
-					navigator &&
-					navigator.userAgent &&
-					/iPhone|iPod|iPad/i.test(navigator.userAgent)
-				) {
-					this.audioRef.addEventListener(
-						'loadedmetadata',
-						this.autoPlayListener,
-					);
-				} else {
-					this.audioRef.addEventListener('canplay', this.autoPlayListener);
-				}
-			}
+			// if (this.props.autoPlay !== nextProps.autoPlay) {
+			// 	this.setState({ autoPlayChecked: nextProps.autoPlay });
+			// }
 		}
 
-		if (!nextProps.autoPlay) {
+		if (nextProps.autoPlay) {
+			// console.log('source changed and auto play is true');
+			if (
+				navigator &&
+				navigator.userAgent &&
+				/iPhone|iPod|iPad/i.test(navigator.userAgent)
+			) {
+				this.audioRef.addEventListener('loadedmetadata', this.autoPlayListener);
+			} else {
+				this.audioRef.addEventListener('canplay', this.autoPlayListener);
+			}
+			this.setState({ autoPlayChecked: nextProps.autoPlay });
+		} else if (!nextProps.autoPlay) {
 			// console.log('auto play is now false');
 			if (
 				navigator &&
@@ -244,6 +248,7 @@ export class AudioPlayer extends React.Component {
 	};
 
 	handleRouteChange = () => {
+		this.setCurrentTime(0);
 		this.pauseAudio();
 	};
 
@@ -261,10 +266,12 @@ export class AudioPlayer extends React.Component {
 	};
 
 	autoPlayListener = () => {
-		// alert('auto play listener fired');
+		// console.log('auto play listener fired');
 		// can accept event as a parameter
-		// console.log('can play fired and was true');
-		this.playAudio();
+		// console.log('!this.state.loadingNextChapter', !this.state.loadingNextChapter);
+		if (!this.state.loadingNextChapter) {
+			this.playAudio();
+		}
 	};
 
 	durationChangeEventListener = (e) => {
@@ -388,14 +395,30 @@ export class AudioPlayer extends React.Component {
 	// 	});
 	// };
 	//
-	// skipForward = () => {
-	// 	this.setCurrentTime(0);
-	// 	this.pauseAudio();
-	// 	this.props.skipForward();
-	// 	this.setState({
-	// 		playing: false,
-	// 	});
-	// };
+	skipForward = () => {
+		// console.log('skipping forward');
+		this.setCurrentTime(0);
+		this.pauseAudio();
+		this.setState(
+			{
+				playing: false,
+				loadingNextChapter: true,
+			},
+			() => {
+				Router.push(
+					getNextChapterUrl({
+						books: this.props.books,
+						chapter: this.props.activeChapter,
+						bookId: this.props.activeBookId.toLowerCase(),
+						textId: this.props.activeTextId.toLowerCase(),
+						verseNumber: this.props.verseNumber,
+						text: this.props.text,
+						isHref: false,
+					}),
+				);
+			},
+		);
+	};
 
 	toggleAudioPlayer = () => {
 		if (this.props.audioSource && this.props.hasAudio) {

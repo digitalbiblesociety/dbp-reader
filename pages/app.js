@@ -17,19 +17,16 @@ import 'babel-polyfill';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import 'rc-slider/assets/index.css';
-import 'react-accessible-accordion/dist/minimal-example.css';
 import Head from 'next/head';
 import Router from 'next/router';
 import cachedFetch, { overrideCache } from '../app/utils/cachedFetch';
 import HomePage from '../app/containers/HomePage';
 import getinitialChapterData from '../app/utils/getInitialChapterData';
-
-// Import CSS reset and Global Styles
-import '../static/app.scss';
-// Need to figure out how to get the site to load this file from any url
-import '../static/manifest.json';
-import { setChapterTextLoadingState } from '../app/containers/HomePage/actions';
+import {
+	setChapterTextLoadingState,
+	setUA,
+} from '../app/containers/HomePage/actions';
+import svg4everybody from '../app/utils/svgPolyfill';
 
 class AppContainer extends React.Component {
 	static displayName = 'Main app';
@@ -38,11 +35,16 @@ class AppContainer extends React.Component {
 		// console.log('Component will mount for app redux store available at mounting', this.props.dispatch);
 	}
 	componentDidMount() {
+		// console.log('session storage autoplay item', sessionStorage.getItem('bible_is_autoplay'));
+		// console.log('autoplay value in app didmount', sessionStorage.getItem('bible_is_autoplay')
+		// 	? JSON.parse(sessionStorage.getItem('bible_is_autoplay'))
+		// 	: false);
 		// If the page was served from the server then I need to cache the data for this route
 		if (this.props.isFromServer) {
 			// console.log('Using cached url');
 			// console.log('this.props.fetchedUrls', this.props.fetchedUrls);
 			this.props.fetchedUrls.forEach((url) => {
+				// logCache(url.href);
 				overrideCache(url.href, url.data);
 			});
 		}
@@ -174,6 +176,32 @@ class AppContainer extends React.Component {
 				},
 			});
 		}
+
+		const browserObject = {
+			agent: '',
+			majorVersion: '',
+			version: '',
+		};
+		if (/msie [0-9]{1}/i.test(navigator.userAgent)) {
+			browserObject.agent = 'msie';
+			browserObject.majorVersion = parseInt(
+				/MSIE ([0-9]{1})/i.exec(navigator.userAgent)[1],
+				10,
+			);
+			browserObject.version = /MSIE ([0-9.]+)/i.exec(navigator.userAgent)[1];
+		} else if (/Trident\/[7]{1}/i.test(navigator.userAgent)) {
+			browserObject.agent = 'msie';
+			browserObject.majorVersion = 11;
+			browserObject.version = '11';
+		}
+		if (browserObject.agent === 'msie') {
+			this.props.dispatch(setUA());
+			// console.log('svg4everybody', svg4everybody);
+			if (typeof svg4everybody === 'function') {
+				// console.log('svg for everybody return value', svg4everybody);
+				svg4everybody();
+			}
+		}
 	}
 
 	componentWillUnmount() {
@@ -247,8 +275,11 @@ AppContainer.getInitialProps = async (context) => {
 	const routeLocation = context.asPath;
 	const { bibleId, bookId, chapter, verse, token } = context.query;
 	const userProfile = {};
+	// console.log('context.query', context.query);
 
 	let isFromServer = true;
+	// console.log('all state', context.reduxStore.getState().get('homepage'))
+	// let userSettings = context.reduxStore.getState().getIn(['homepage', 'userSettings']).toJS();
 	let userSettings = {};
 	let userId = '';
 	let isAuthenticated = false;
@@ -375,7 +406,9 @@ AppContainer.getInitialProps = async (context) => {
 		bible.filesets && bible.filesets['dbp-dev']
 			? bible.filesets['dbp-dev'].filter(
 					(file) =>
-						!file.id.includes('GID') && bible.filesets['dbp-dev'].length > 1,
+						(!file.id.includes('GID') &&
+							bible.filesets['dbp-dev'].length > 1) ||
+						bible.filesets['dbp-dev'].length === 1,
 			  )
 			: [];
 	// console.log('filesets in app file', filesets);
@@ -470,8 +503,9 @@ AppContainer.getInitialProps = async (context) => {
 			type: 'GET_INITIAL_ROUTE_STATE_HOMEPAGE',
 			homepage: {
 				userProfile,
-				audioPaths: initData.audioPaths,
-				audioSource: initData.audioPaths[0],
+				audioPaths: initData.audioPaths.slice(1),
+				audioSource: initData.audioPaths[0] || '',
+				hasAudio: !!initData.audioPaths.length,
 				chapterText,
 				testaments,
 				userSettings,
@@ -505,7 +539,10 @@ AppContainer.getInitialProps = async (context) => {
 		});
 		// console.log('Got the initial state!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
 	}
-
+	if (!isFromServer) {
+		// console.log('The func ran on the client');
+		// console.log('initData.formattedText', initData.formattedText);
+	}
 	return {
 		// isServer,
 		chapterText,

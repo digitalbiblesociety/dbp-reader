@@ -55,7 +55,7 @@ class LanguageList extends React.PureComponent {
 
 		const renderARow = ({ index, style, key }) => {
 			const language = filteredLanguages[index];
-			// const language = filteredLanguages.get(index);
+			// Use code below if there needs to be an intermediary state
 			// key={language.get('iso')}
 			// if (isScrolling) {
 			// 	return <div key={key} style={style}>scrolling...</div>;
@@ -90,6 +90,10 @@ class LanguageList extends React.PureComponent {
 							: language.vernacular_name ||
 							  language.englishName ||
 							  language.name}
+						{language.vernacular_name &&
+						language.vernacular_name !== (language.englishName || language.name)
+							? ` - ( ${language.englishName || language.name} )`
+							: null}
 					</h4>
 				</div>
 			);
@@ -114,12 +118,12 @@ class LanguageList extends React.PureComponent {
 		return filteredLanguages.length ? (
 			<List
 				id={'list-element'}
-				estimatedRowSize={28 * filteredLanguages.length}
+				estimatedRowSize={34 * filteredLanguages.length}
 				height={height}
 				rowRenderer={renderARow}
 				rowCount={filteredLanguages.length}
 				overscanRowCount={2}
-				rowHeight={28}
+				rowHeight={34}
 				scrollToIndex={getActiveIndex()}
 				width={width}
 				scrollToAlignment={'start'}

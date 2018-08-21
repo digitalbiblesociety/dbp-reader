@@ -38,7 +38,7 @@ export class GoogleAuthentication extends React.PureComponent {
 				auth2.signIn().then(() => {
 					const prof = auth2.currentUser.get().getBasicProfile();
 					const user = {
-						name: prof.getName(),
+						name: prof.getFamilyName(),
 						nickname: prof.getGivenName(),
 						avatar: prof.getImageUrl(),
 						email: prof.getEmail(),
@@ -55,7 +55,7 @@ export class GoogleAuthentication extends React.PureComponent {
 			} else {
 				const prof = auth2.currentUser.get().getBasicProfile();
 				const user = {
-					name: prof.getName(),
+					name: prof.getFamilyName(),
 					nickname: prof.getGivenName(),
 					avatar: prof.getImageUrl(),
 					email: prof.getEmail(),

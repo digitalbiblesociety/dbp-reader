@@ -65,7 +65,7 @@ class NavigationBar extends React.PureComponent {
 							opacity=".5"
 						/>
 						<h1
-							title={activeTextName || 'No Version Selected'}
+							title={activeTextName || `${activeTextId} Version`}
 							className={'version-text'}
 						>
 							{activeTextName
@@ -74,7 +74,7 @@ class NavigationBar extends React.PureComponent {
 											? `${activeTextId.slice(3)} - `
 											: ''
 								  }${activeTextName}`
-								: 'No Version Selected'}
+								: `${activeTextId} Version`}
 						</h1>
 						<TextSelection active={isVersionSelectionActive} />
 						{/* {isVersionSelectionActive ? <TextSelection /> : null} */}

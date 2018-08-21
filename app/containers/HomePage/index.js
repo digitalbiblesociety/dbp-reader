@@ -29,7 +29,7 @@ import Footer from '../../components/Footer';
 import SearchContainer from '../SearchContainer';
 import GenericErrorBoundary from '../../components/GenericErrorBoundary';
 import FadeTransition from '../../components/FadeTransition';
-import svg4everybody from '../../utils/svgPolyfill';
+// import svg4everybody from '../../utils/svgPolyfill';
 import {
 	applyTheme,
 	applyFontFamily,
@@ -57,8 +57,7 @@ import {
 	toggleChapterSelection,
 	toggleVersionSelection,
 	toggleFirstLoadForTextSelection,
-	toggleInformationModal,
-	setUA,
+	// setUA,
 	setActiveNote,
 	setActiveTextId,
 	setActiveChapter,
@@ -87,6 +86,7 @@ class HomePage extends React.PureComponent {
 		heightDifference: 0,
 	};
 	// eslint-disable-line react/prefer-stateless-function
+	// Todo: Move all of this to app.js
 	componentDidMount() {
 		// console.log('Homepage mounted______________________');
 		const {
@@ -97,16 +97,17 @@ class HomePage extends React.PureComponent {
 			userAuthenticated,
 			userId,
 		} = this.props.homepage;
-		const params = this.props.homepage.match.params;
-		this.props.dispatch({
-			type: 'getbible',
-			bibleId: params.bibleId,
-			bookId: params.bookId,
-			chapter: params.chapter,
-			authenticated: this.props.homepage.userAuthenticated,
-			userId: this.props.homepage.userId,
-			verse: params.verse,
-		});
+		// console.log(svg4everybody);
+		// const params = this.props.homepage.match.params;
+		// this.props.dispatch({
+		// 	type: 'getbible',
+		// 	bibleId: params.bibleId,
+		// 	bookId: params.bookId,
+		// 	chapter: params.chapter,
+		// 	authenticated: this.props.homepage.userAuthenticated,
+		// 	userId: this.props.homepage.userId,
+		// 	verse: params.verse,
+		// });
 		this.getCopyrights({ filesetIds: activeFilesets });
 		if (userId && userAuthenticated) {
 			// console.log('user is now authenticated')
@@ -258,27 +259,31 @@ class HomePage extends React.PureComponent {
 			}
 		}
 
-		const browserObject = {
-			agent: '',
-			majorVersion: '',
-			version: '',
-		};
-		if (/msie [0-9]{1}/i.test(navigator.userAgent)) {
-			browserObject.agent = 'msie';
-			browserObject.majorVersion = parseInt(
-				/MSIE ([0-9]{1})/i.exec(navigator.userAgent)[1],
-				10,
-			);
-			browserObject.version = /MSIE ([0-9.]+)/i.exec(navigator.userAgent)[1];
-		} else if (/Trident\/[7]{1}/i.test(navigator.userAgent)) {
-			browserObject.agent = 'msie';
-			browserObject.majorVersion = 11;
-			browserObject.version = '11';
-		}
-		if (browserObject.agent === 'msie') {
-			this.props.dispatch(setUA());
-			svg4everybody();
-		}
+		// const browserObject = {
+		// 	agent: '',
+		// 	majorVersion: '',
+		// 	version: '',
+		// };
+		// if (/msie [0-9]{1}/i.test(navigator.userAgent)) {
+		// 	browserObject.agent = 'msie';
+		// 	browserObject.majorVersion = parseInt(
+		// 		/MSIE ([0-9]{1})/i.exec(navigator.userAgent)[1],
+		// 		10,
+		// 	);
+		// 	browserObject.version = /MSIE ([0-9.]+)/i.exec(navigator.userAgent)[1];
+		// } else if (/Trident\/[7]{1}/i.test(navigator.userAgent)) {
+		// 	browserObject.agent = 'msie';
+		// 	browserObject.majorVersion = 11;
+		// 	browserObject.version = '11';
+		// }
+		// if (browserObject.agent === 'msie') {
+		// 	this.props.dispatch(setUA());
+		// 	// console.log('svg4everybody', svg4everybody);
+		// 	if (typeof svg4everybody === 'function') {
+		// 		// console.log('svg for everybody return value', svg4everybody);
+		// 		svg4everybody();
+		// 	}
+		// }
 
 		if (window && document && document.firstElementChild) {
 			// Main can be unset in this instance
@@ -473,6 +478,30 @@ class HomePage extends React.PureComponent {
 		}
 	};
 
+	// menuTicking = false;
+
+	handleMenuTimer = (menu) => {
+		if (menu === 'profile') {
+			this.props.dispatch(toggleProfile());
+		}
+		if (menu === 'notes') {
+			this.props.dispatch(toggleNotesModal());
+		}
+		if (menu === 'settings') {
+			this.props.dispatch(toggleSettingsModal());
+		}
+		if (menu === 'search') {
+			this.props.dispatch(toggleSearchModal());
+		}
+		if (menu === 'chapter') {
+			this.props.dispatch(toggleChapterSelection());
+		}
+		if (menu === 'version') {
+			this.props.dispatch(toggleVersionSelection());
+		}
+		// this.menuTicking = false;
+	};
+
 	updateScrollDirection = () => {
 		this.main = document.getElementsByTagName('main')[0];
 
@@ -552,7 +581,7 @@ class HomePage extends React.PureComponent {
 	};
 
 	addBookmark = (data) => this.props.dispatch(addBookmark({ ...data }));
-
+	fo;
 	addHighlight = (props) =>
 		this.props.dispatch(
 			addHighlight({
@@ -577,21 +606,119 @@ class HomePage extends React.PureComponent {
 		this.props.homepage.firstLoad &&
 		this.props.dispatch(toggleFirstLoadForTextSelection());
 
-	toggleProfile = () => this.props.dispatch(toggleProfile());
+	toggleAutoPlay = () => {
+		this.props.dispatch(toggleAutoPlay());
+	};
 
-	toggleNotesModal = () => this.props.dispatch(toggleNotesModal());
+	toggleProfile = () => {
+		if (this.isMenuOpen('profile')) {
+			clearTimeout(this.menuTimer);
+			this.menuTimer = setTimeout(this.handleMenuTimer, 700, 'profile');
+			// if (!this.menuTicking) {
+			// 	this.menuTicking = true;
+			// 	requestAnimationFrame(this.handleMenuClose);
+			// }
+		} else {
+			this.props.dispatch(toggleProfile());
+		}
+	};
 
-	toggleAutoPlay = () => this.props.dispatch(toggleAutoPlay());
+	toggleNotesModal = () => {
+		if (this.isMenuOpen('notes')) {
+			clearTimeout(this.menuTimer);
+			this.menuTimer = setTimeout(this.handleMenuTimer, 700, 'notes');
+			// if (!this.menuTicking) {
+			// 	this.menuTicking = true;
+			// 	requestAnimationFrame(this.handleMenuClose);
+			// }
+		} else {
+			this.props.dispatch(toggleNotesModal());
+		}
+	};
 
-	toggleSettingsModal = () => this.props.dispatch(toggleSettingsModal());
+	toggleSettingsModal = () => {
+		if (this.isMenuOpen('settings')) {
+			clearTimeout(this.menuTimer);
+			this.menuTimer = setTimeout(this.handleMenuTimer, 700, 'settings');
+			// if (!this.menuTicking) {
+			// 	this.menuTicking = true;
+			// 	requestAnimationFrame(this.handleMenuClose);
+			// }
+		} else {
+			this.props.dispatch(toggleSettingsModal());
+		}
+	};
 
-	toggleSearchModal = () => this.props.dispatch(toggleSearchModal());
+	toggleSearchModal = () => {
+		if (this.isMenuOpen('search')) {
+			clearTimeout(this.menuTimer);
+			this.menuTimer = setTimeout(this.handleMenuTimer, 700, 'search');
+			// if (!this.menuTicking) {
+			// 	this.menuTicking = true;
+			// 	requestAnimationFrame(this.handleMenuClose);
+			// }
+		} else {
+			this.props.dispatch(toggleSearchModal());
+		}
+	};
 
-	toggleChapterSelection = () => this.props.dispatch(toggleChapterSelection());
+	toggleChapterSelection = () => {
+		// if (this.isMenuOpen('chapter')) {
+		// 	clearTimeout(this.menuTimer);
+		// 	this.menuTimer = setTimeout(this.handleMenuTimer, 600, 'chapter');
+		// } else {
+		this.props.dispatch(toggleChapterSelection());
+		// }
+	};
 
-	toggleVersionSelection = () => this.props.dispatch(toggleVersionSelection());
+	toggleVersionSelection = () => {
+		// if (this.isMenuOpen('version')) {
+		// 	clearTimeout(this.menuTimer);
+		// 	this.menuTimer = setTimeout(this.handleMenuTimer, 600, 'version');
+		// } else {
+		this.props.dispatch(toggleVersionSelection());
+		// }
+	};
 
-	toggleInformationModal = () => this.props.dispatch(toggleInformationModal());
+	// Checks if a menu other than the one given is open, otherwise returns whether any menus are open
+	isMenuOpen = (menuName) => {
+		const {
+			isChapterSelectionActive,
+			isProfileActive,
+			isSettingsModalActive,
+			isSearchModalActive,
+			isNotesModalActive,
+			isVersionSelectionActive,
+		} = this.props.homepage;
+
+		const openMap = {
+			profile: isProfileActive,
+			notes: isNotesModalActive,
+			settings: isSettingsModalActive,
+			search: isSearchModalActive,
+			chapter: isChapterSelectionActive,
+			version: isVersionSelectionActive,
+		};
+
+		if (menuName) {
+			// console.log('menu other than self is open', Object.entries(openMap).filter(ent => ent[0] !== menuName).some(ent => ent[1]));
+			// console.log('map entries', Object.entries(openMap).forEach(ent => console.log('ent[0]', ent[0], 'ent[1]', ent[1])));
+			return Object.entries(openMap)
+				.filter((ent) => ent[0] !== menuName)
+				.some((ent) => ent[1]);
+		} else if (
+			isChapterSelectionActive ||
+			isProfileActive ||
+			isSearchModalActive ||
+			isSettingsModalActive ||
+			isNotesModalActive ||
+			isVersionSelectionActive
+		) {
+			return true;
+		}
+
+		return false;
+	};
 
 	render() {
 		const {
@@ -603,7 +730,7 @@ class HomePage extends React.PureComponent {
 			activeTextName,
 			activeBookName,
 			activeNotesView,
-			autoPlayEnabled,
+			// autoPlayEnabled,
 			audioPlayerState,
 			books,
 			highlights,
@@ -630,7 +757,9 @@ class HomePage extends React.PureComponent {
 			isMenuOpen,
 		} = this.props;
 
-		// console.log('Homepage props', this.props);
+		const autoPlayEnabled = userSettings.get('autoPlayEnabled');
+
+		// console.log('Homepage props', autoPlayEnabled);
 
 		const { isScrollingDown, footerDistance: distance } = this.state;
 

@@ -325,10 +325,13 @@ function homePageReducer(state = initialState, action) {
 			if (typeof window !== 'undefined') {
 				sessionStorage.setItem(
 					'bible_is_autoplay',
-					!state.get('autoPlayEnabled'),
+					!state.getIn(['userSettings', 'autoPlayEnabled']),
 				);
 			}
-			return state.set('autoPlayEnabled', !state.get('autoPlayEnabled'));
+			return state.setIn(
+				['userSettings', 'autoPlayEnabled'],
+				!state.getIn(['userSettings', 'autoPlayEnabled']),
+			);
 		case GET_CHAPTER_TEXT:
 			return state.set('loadingNewChapterText', true);
 		case GET_BOOKS:
@@ -493,11 +496,6 @@ function homePageReducer(state = initialState, action) {
 				.set('formattedSource', fromJS(action.formattedText));
 		case 'loadaudio':
 			// console.log('loading audio with', action);
-			if (action.previous) {
-				return state.set('previousAudioSource', action.audioPaths[0]);
-			} else if (action.next) {
-				return state.set('nextAudioSource', action.audioPaths[0]);
-			}
 			return (
 				state
 					.set('audioPaths', action.audioPaths.slice(1))

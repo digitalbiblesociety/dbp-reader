@@ -46,21 +46,19 @@ class MyHighlights extends React.PureComponent {
 						className={'highlight-item'}
 					>
 						<Link
-							onClick={toggleNotesModal}
 							as={`/bible/${highlight.bible_id}/${highlight.book_id}/${
 								highlight.chapter
 							}/${highlight.verse_start}`}
 							href={`/bible/${highlight.bible_id}/${highlight.book_id}/${
 								highlight.chapter
 							}/${highlight.verse_start}`}
-							role="button"
-							tabIndex={0}
-							className="list-item"
 						>
-							<div className="title-text">
-								<h4 className="title">{getReference(highlight)}</h4>
-								<h4 className={'text'}>{highlight.bible_id}</h4>
-							</div>
+							<a onClick={toggleNotesModal} className="list-item">
+								<div className="title-text">
+									<h4 className="title">{getReference(highlight)}</h4>
+									<h4 className={'text'}>{highlight.bible_id}</h4>
+								</div>
+							</a>
 						</Link>
 						<div
 							className={'edit-color'}
