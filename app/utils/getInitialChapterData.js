@@ -29,7 +29,7 @@ export default async ({ filesets, bookId: lowerCaseBookId, chapter }) => {
 			// Gets one id for each fileset type
 			idsForBookMetadata[set.type] = set.id;
 		});
-	console.log('idsForBookMetadata', idsForBookMetadata);
+	// console.log('idsForBookMetadata', idsForBookMetadata);
 
 	// const hasPlainText = !!plainFilesetIds.length;
 	// const hasFormattedText = !!formattedFilesetIds.length;
@@ -135,7 +135,7 @@ export default async ({ filesets, bookId: lowerCaseBookId, chapter }) => {
 		'book_id',
 	);
 	// console.log('waiting on audio');
-	console.log('bookMetaData', bookMetaData.length);
+	// console.log('bookMetaData', bookMetaData.length);
 
 	/* eslint-enable */
 	// console.log('audio loaded');
