@@ -520,3 +520,8 @@ section {
 	background-color: transparent;
 	border: none;
 }
+
+// Feedback button overrides
+body .atlwdg-trigger.atlwdg-RIGHT {
+	top: 54px;
+}

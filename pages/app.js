@@ -6,11 +6,12 @@
  */
 
 /*
-* Todos
+* Todo: Items that need to be done before production
 * todo: Replace all tabIndex 0 values with what they should actually be
 * todo: Set up a function to init all of the plugins that rely on the browser
 * todo: Update site url to match the live site domain name
 * todo: Use cookies instead of session and local storage for all user settings (involves user approval before it can be utilized)
+* todo: Remove the script for providing feedback
 * */
 // Needed for redux-saga es6 generator support
 import 'babel-polyfill';
