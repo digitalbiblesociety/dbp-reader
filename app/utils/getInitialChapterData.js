@@ -1,25 +1,55 @@
 import fetch from 'isomorphic-fetch';
+import removeDuplicates from '../utils/removeDuplicateObjects';
 import getAudio from './getAudioAsyncCall';
 import request from './request';
 
 export default async ({ filesets, bookId: lowerCaseBookId, chapter }) => {
 	// Gather all initial data
 	const bookId = lowerCaseBookId.toUpperCase();
+	const setTypes = {
+		audio_drama: true,
+		audio: true,
+		text_plain: true,
+		text_format: true,
+	};
 	const formattedFilesetIds = [];
 	const plainFilesetIds = [];
+	const idsForBookMetadata = {};
 
 	// Separate filesets by type
-	filesets.forEach((set) => {
-		if (set.type === 'text_format') {
-			formattedFilesetIds.push(set.id);
-		} else if (set.type === 'text_plain') {
-			plainFilesetIds.push(set.id);
-		}
-	});
+	filesets
+		.filter((set) => set.id.slice(-4) !== 'DA16' && setTypes[set.type])
+		.forEach((set) => {
+			if (set.type === 'text_format') {
+				formattedFilesetIds.push(set.id);
+			} else if (set.type === 'text_plain') {
+				plainFilesetIds.push(set.id);
+			}
+
+			// Gets one id for each fileset type
+			idsForBookMetadata[set.type] = set.id;
+		});
+	console.log('idsForBookMetadata', idsForBookMetadata);
 
 	// const hasPlainText = !!plainFilesetIds.length;
 	// const hasFormattedText = !!formattedFilesetIds.length;
+	const bookMetaPromises = Object.values(idsForBookMetadata).map(async (id) => {
+		// console.log('id', id);
+		const url = `${
+			process.env.BASE_API_ROUTE
+		}/bibles/filesets/${id}/books?v=4&key=${process.env.DBP_API_KEY}&bucket=${
+			process.env.DBP_BUCKET_ID
+		}`;
+		const res = await request(url).catch((e) => {
+			if (process.env.NODE_ENV === 'development') {
+				console.log('Error in request for formatted fileset: ', e.message); // eslint-disable-line no-console
+			}
+			return [];
+		});
+		// console.log('res', res);
 
+		return res.data || [];
+	});
 	// start promise for formatted text
 	// console.log('chapter in get init', chapter)
 	const formattedPromises = formattedFilesetIds.map(async (id) => {
@@ -82,9 +112,7 @@ export default async ({ filesets, bookId: lowerCaseBookId, chapter }) => {
 			});
 	}
 	const formattedText = await Promise.all(formattedPromises);
-	// console.log('Got through all requests in get initial');
-	// console.log('waiting on audio');
-
+	const bookMetaResponse = await Promise.all(bookMetaPromises);
 	const audioReturn = await getAudio(filesets, lowerCaseBookId, chapter)
 		.then((data) => data)
 		.catch((err) => {
@@ -97,14 +125,27 @@ export default async ({ filesets, bookId: lowerCaseBookId, chapter }) => {
 			}
 			return { type: 'loadaudio', audioPaths: [''] };
 		});
+	// console.log('bookMetaResponse', bookMetaResponse);
+	// console.log('Got through all requests in get initial');
+	// console.log('book res length', bookMetaResponse.length);
+	// console.log('book res reduced length', bookMetaResponse.reduce((a, c) => [...a, ...c], []).length);
+
+	const bookMetaData = removeDuplicates(
+		bookMetaResponse.reduce((a, c) => [...a, ...c], []),
+		'book_id',
+	);
+	// console.log('waiting on audio');
+	console.log('bookMetaData', bookMetaData.length);
+
 	/* eslint-enable */
 	// console.log('audio loaded');
 	// console.log('audioReturn', audioReturn);
 	// Return a default object in the case that none of the api calls work
 	return {
 		plainText,
-		formattedText: formattedText[0] || '',
+		bookMetaData,
 		plainTextJson,
 		audioPaths: audioReturn.audioPaths,
+		formattedText: formattedText[0] || '',
 	};
 };

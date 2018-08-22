@@ -1845,7 +1845,6 @@ class Text extends React.PureComponent {
 			loadingNewChapterText ||
 			loadingAudio ||
 			this.state.loadingNextPage ||
-			!books.length ||
 			chapterTextLoadingState ||
 			(!formattedVerse && formattedSource.main)
 		) {

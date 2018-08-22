@@ -58,7 +58,7 @@ export default ({
 		return url({ textId, bookId, chapter, nextVerse: verseNumber, isHref });
 	}
 
-	if (bookId === books[0].book_id && chapter - 1 === 0) {
+	if (books[0] && bookId === books[0].book_id && chapter - 1 === 0) {
 		return url({ textId, bookId, chapter, isHref });
 		// return `${baseUrl}/${textId}/${bookId}/${chapter}`;
 	}

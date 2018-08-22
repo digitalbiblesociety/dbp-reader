@@ -373,8 +373,6 @@ AppContainer.getInitialProps = async (context) => {
 		};
 	}
 
-	// The function is being run on the server so fetching data here will not conflict with the Sagas
-
 	const singleBibleUrl = `${
 		process.env.BASE_API_ROUTE
 	}/bibles/${bibleId}?bucket=${process.env.DBP_BUCKET_ID}&key=${
@@ -386,18 +384,15 @@ AppContainer.getInitialProps = async (context) => {
 	}/bibles/filesets/${bibleId}/${bookId}/${chapter}?key=${
 		process.env.DBP_API_KEY
 	}&v=4`;
-
-	const bookMetaDataUrl = `${
-		process.env.BASE_API_ROUTE
-	}/bibles/${bibleId}/book?key=${process.env.DBP_API_KEY}&v=4&iso=eng&bucket=${
-		process.env.DBP_BUCKET_ID
-	}`;
-
+	// const bookMetaDataUrl = `${
+	// 	process.env.BASE_API_ROUTE
+	// }/bibles/${bibleId}/book?key=${process.env.DBP_API_KEY}&v=4&iso=eng&bucket=${
+	// 	process.env.DBP_BUCKET_ID
+	// }`;
 	// Get all bibles
 	// const bibleRes = await fetch(biblesUrl);
 	// const bibleJson = await bibleRes.json();
 	// const texts = bibleJson.data;
-
 	// Get active bible data
 	const singleBibleRes = await cachedFetch(singleBibleUrl).catch((e) => {
 		if (process.env.NODE_ENV === 'development') {
@@ -406,6 +401,7 @@ AppContainer.getInitialProps = async (context) => {
 		return { data: {} };
 	});
 	const singleBibleJson = singleBibleRes;
+	// console.log('single bible', singleBibleJson);
 	const bible = singleBibleJson.data;
 	// console.log('filesets in app file before filter function', bible.filesets);
 	// Filter out gideon bibles because the api will never be fixed in this area... -_- :( :'( ;'(
@@ -419,7 +415,6 @@ AppContainer.getInitialProps = async (context) => {
 			  )
 			: [];
 	// console.log('filesets in app file', filesets);
-
 	// console.log('bible.name', bible.name);
 	// console.log('bible.abbr', bible.abbr);
 	let initData = {
@@ -427,6 +422,7 @@ AppContainer.getInitialProps = async (context) => {
 		formattedText: '',
 		plainTextJson: {},
 		audioPaths: [''],
+		bookMetaData: [],
 	};
 	try {
 		// console.log('Before init func');
@@ -446,6 +442,7 @@ AppContainer.getInitialProps = async (context) => {
 				plainText: [],
 				plainTextJson: {},
 				audioPaths: [''],
+				bookMetaData: [],
 			};
 		});
 	} catch (err) {
@@ -458,7 +455,6 @@ AppContainer.getInitialProps = async (context) => {
 	/* eslint-enable no-console */
 	// console.log('After init func', Object.keys(initData));
 	// console.log('initData.audioPaths', initData.audioPaths);
-
 	// Get text for chapter
 	// const textRes = await fetch(textUrl);
 	const textJson = initData.plainTextJson;
@@ -469,27 +465,34 @@ AppContainer.getInitialProps = async (context) => {
 		// next id
 	}
 
-	const activeBook = bible.books
-		? bible.books.find(
-				(book) => book.book_id.toLowerCase() === bookId.toLowerCase(),
-		  )
-		: undefined;
+	let activeBook = { chapters: [] };
+
+	if (initData.bookMetaData) {
+		const urlBook = initData.bookMetaData.find(
+			(book) => book.book_id.toLowerCase() === bookId.toLowerCase(),
+		);
+		if (urlBook) {
+			activeBook = urlBook;
+		} else {
+			activeBook = initData.bookMetaData[0];
+		}
+	} else {
+		activeBook = undefined;
+	}
 	// console.log('activeBook', activeBook);
 	// console.log('bible.books', bible.books);
 
 	const activeBookName = activeBook ? activeBook.name : '';
-
-	const bookMetaRes = await cachedFetch(bookMetaDataUrl).catch((e) => {
-		if (process.env.NODE_ENV === 'development') {
-			console.log('Error in get initial props single bible: ', e.message); // eslint-disable-line no-console
-		}
-		return { data: [] };
-	});
-	const bookMetaJson = bookMetaRes;
-	// console.log('bookMetaJson', bookMetaJson);
-
-	const testaments = bookMetaJson.data.reduce(
-		(a, c) => ({ ...a, [c.id]: c.book_testament }),
+	// const bookMetaRes = await cachedFetch(bookMetaDataUrl).catch((e) => {
+	// 	if (process.env.NODE_ENV === 'development') {
+	// 		console.log('Error in get initial props single bible: ', e.message); // eslint-disable-line no-console
+	// 	}
+	// 	return { data: [] };
+	// });
+	// const bookMetaJson = bookMetaRes;
+	// console.log('initData.bookMetaData', initData.bookMetaData.map(d => ({ [d.book_id]: d.name })));
+	const testaments = initData.bookMetaData.reduce(
+		(a, c) => ({ ...a, [c.book_id]: c.testament }),
 		{},
 	);
 
@@ -518,17 +521,17 @@ AppContainer.getInitialProps = async (context) => {
 				userSettings,
 				formattedSource: initData.formattedText,
 				activeFilesets: filesets,
-				books: bible.books || [],
+				books: initData.bookMetaData || [],
 				activeChapter: parseInt(chapter, 10) || 1,
 				activeBookName,
 				verseNumber: verse,
 				activeTextId: bible.abbr || '',
 				activeIsoCode: bible.iso || '',
-				activeLanguageName: bible.language || '',
-				textDirection: bible.alphabet ? bible.alphabet.direction : 'ltr',
 				defaultLanguageIso: bible.iso || 'eng',
-				defaultLanguageName: bible.language || 'English',
+				activeLanguageName: bible.language || '',
 				activeTextName: bible.vname || bible.name,
+				defaultLanguageName: bible.language || 'English',
+				textDirection: bible.alphabet ? bible.alphabet.direction : 'ltr',
 				activeBookId: bookId.toUpperCase() || '',
 				userId,
 				userAuthenticated: isAuthenticated || false,
@@ -555,7 +558,7 @@ AppContainer.getInitialProps = async (context) => {
 		chapterText,
 		testaments,
 		formattedText: initData.formattedText,
-		books: bible.books,
+		books: initData.bookMetaData || [],
 		activeChapter: parseInt(chapter, 10),
 		activeBookName,
 		verseNumber: verse,
@@ -583,7 +586,6 @@ AppContainer.getInitialProps = async (context) => {
 			},
 		},
 		fetchedUrls: [
-			{ href: bookMetaDataUrl, data: bookMetaJson },
 			{ href: singleBibleUrl, data: singleBibleJson },
 			{ href: textUrl, data: textJson },
 		],
