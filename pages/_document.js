@@ -4,6 +4,29 @@ import Document, { Head, Main, NextScript } from 'next/document';
 // Need to figure out how to get the site to load this file from any url
 // import '../static/manifest.json';``
 // Importing the check here so that it is available to the css
+/* Add this if the fonts are loading to slow
+*
+* <link
+	rel="preload"
+	as="style"
+	href="https://fonts.googleapis.com/css?family=Roboto:400,500"
+/>
+<link
+	rel="preload"
+	as="style"
+	href="https://fonts.googleapis.com/css?family=Roboto+Slab"
+/>
+<link
+	rel="preload"
+	as="style"
+	href="https://fonts.googleapis.com/css?family=Raleway"
+/>
+<link
+	rel="preload"
+	as="style"
+	href="https://fonts.googleapis.com/css?family=Alegreya"
+/>
+* */
 /* eslint-disable */
 export default class MyDocument extends Document {
 	// static getInitialProps = async ({ req }) => {
@@ -165,26 +188,6 @@ export default class MyDocument extends Document {
 					}
 					})();`,
 						}}
-					/>
-					<link
-						rel="preload"
-						as="style"
-						href="https://fonts.googleapis.com/css?family=Roboto:400,500"
-					/>
-					<link
-						rel="preload"
-						as="style"
-						href="https://fonts.googleapis.com/css?family=Roboto+Slab"
-					/>
-					<link
-						rel="preload"
-						as="style"
-						href="https://fonts.googleapis.com/css?family=Raleway"
-					/>
-					<link
-						rel="preload"
-						as="style"
-						href="https://fonts.googleapis.com/css?family=Alegreya"
 					/>
 				</Head>
 				<body>
