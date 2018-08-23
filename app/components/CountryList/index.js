@@ -56,6 +56,7 @@ class CountryList extends React.PureComponent {
 					style={style}
 					role="button"
 					tabIndex={0}
+					title={country.get('name')}
 					onClick={() => {
 						setCountryName({
 							name: country.get('name'),
@@ -103,12 +104,12 @@ class CountryList extends React.PureComponent {
 		return filteredCountries.size ? (
 			<List
 				id={'list-element'}
-				estimatedRowSize={28 * filteredCountries.size}
+				estimatedRowSize={32 * filteredCountries.size}
 				height={height}
 				rowRenderer={renderARow}
 				rowCount={filteredCountries.size}
-				overscanRowCount={10}
-				rowHeight={28}
+				overscanRowCount={2}
+				rowHeight={32}
 				scrollToIndex={getActiveIndex()}
 				width={width}
 				scrollToAlignment={'start'}

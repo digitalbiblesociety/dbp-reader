@@ -57,9 +57,9 @@ const selectUserNotes = () =>
 			const userId = home.get('userId');
 			const profAuth = profile.get('userAuthenticated');
 			const profUser = profile.get('userId');
-			console.log('bookId', bookId);
-			console.log('chapter', chapter);
-			console.log('chapterText', text);
+			// console.log('bookId', bookId);
+			// console.log('chapter', chapter);
+			// console.log('chapterText', text);
 
 			// May not need to filter because I am requesting only the notes/bookmarks for this chapter
 			const filteredNotes = notes
@@ -178,8 +178,8 @@ const selectUserNotes = () =>
 			// console.log('filteredNotes', filteredNotes);
 
 			// console.log(filteredNotes);
-			console.log('newText', newText);
-			console.log('text', text);
+			// console.log('newText', newText);
+			// console.log('text', text);
 			return {
 				text: newText.size ? newText.toJS() : text.toJS(),
 				userNotes,

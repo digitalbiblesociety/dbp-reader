@@ -459,22 +459,20 @@ AppContainer.getInitialProps = async (context) => {
 	// const textRes = await fetch(textUrl);
 	const textJson = initData.plainTextJson;
 	const chapterText = initData.plainText;
-	// console.log('chapterText', chapterText);
-	// Need to try the other bible id if there wasn't any chapter text
-	if (!chapterText) {
-		// next id
-	}
 
 	let activeBook = { chapters: [] };
+	const bookData = initData.bookMetaData.length
+		? initData.bookMetaData
+		: bible.books;
 
-	if (initData.bookMetaData) {
-		const urlBook = initData.bookMetaData.find(
+	if (bookData) {
+		const urlBook = bookData.find(
 			(book) => book.book_id.toLowerCase() === bookId.toLowerCase(),
 		);
 		if (urlBook) {
 			activeBook = urlBook;
 		} else {
-			activeBook = initData.bookMetaData[0];
+			activeBook = bookData[0];
 		}
 	} else {
 		activeBook = undefined;
@@ -490,8 +488,8 @@ AppContainer.getInitialProps = async (context) => {
 	// 	return { data: [] };
 	// });
 	// const bookMetaJson = bookMetaRes;
-	// console.log('initData.bookMetaData', initData.bookMetaData.map(d => ({ [d.book_id]: d.name })));
-	const testaments = initData.bookMetaData.reduce(
+	// console.log('bookData', bookData.map(d => ({ [d.book_id]: d.name })));
+	const testaments = bookData.reduce(
 		(a, c) => ({ ...a, [c.book_id]: c.testament }),
 		{},
 	);
@@ -521,7 +519,7 @@ AppContainer.getInitialProps = async (context) => {
 				userSettings,
 				formattedSource: initData.formattedText,
 				activeFilesets: filesets,
-				books: initData.bookMetaData || [],
+				books: bookData || [],
 				activeChapter: parseInt(chapter, 10) || 1,
 				activeBookName,
 				verseNumber: verse,
@@ -558,7 +556,7 @@ AppContainer.getInitialProps = async (context) => {
 		chapterText,
 		testaments,
 		formattedText: initData.formattedText,
-		books: initData.bookMetaData || [],
+		books: bookData || [],
 		activeChapter: parseInt(chapter, 10),
 		activeBookName,
 		verseNumber: verse,
