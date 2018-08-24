@@ -124,6 +124,10 @@ export default class MyDocument extends Document {
 						name="google-site-verification"
 						content="frHSU18EKPDnEoKj--plFdubfj_GB7hXesy-3N1o57s"
 					/>
+					<meta
+						name="google-site-verification"
+						content="gzdnp1LbqRScZ41YUGH3f4jjsD7Cuaazq9NAo0AQXjA"
+					/>
 					<meta property="fb:app_id" content="173528326559718" />
 					<script src="https://apis.google.com/js/platform.js" async defer />
 					<script
