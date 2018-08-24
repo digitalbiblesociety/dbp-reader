@@ -1243,29 +1243,30 @@ export function* getCopyrightSaga({ filesetIds }) {
 		// 	.map((res) => ({ size: res.size, organizations: res.copyright.organizations, copyright: res.copyright.copyright }));
 		// Todo: Once the api is updated remove the set_size_code and set_type_code usages below
 		// Takes the response and turns it into an array that is more easily used and that doesn't contain unnecessary fields
-		const copyrights = response.map((cp) => ({
-			message: cp.copyright.copyright,
-			testament: cp.size || cp.set_size_code,
-			type: cp.type || cp.set_type_code,
-			organizations: cp.copyright.organizations.map((org) => {
-				// Getting landscape instead of icons
-				const icon = org.logos.find((l) => !l.icon);
-				if (org.translations.length) {
+		const copyrights =
+			response.map((cp) => ({
+				message: cp.copyright.copyright,
+				testament: cp.size || cp.set_size_code,
+				type: cp.type || cp.set_type_code,
+				organizations: cp.copyright.organizations.map((org) => {
+					// Getting landscape instead of icons
+					const icon = org.logos.find((l) => !l.icon);
+					if (org.translations.length) {
+						return {
+							name: org.translations[0].name,
+							logo: icon || (org.logos && org.logos[0]),
+							isIcon: icon === undefined ? 1 : 0,
+							url: org.url_website,
+						};
+					}
 					return {
-						name: org.translations[0].name,
-						logo: icon || (org.logos && org.logos[0]),
-						isIcon: icon === undefined ? 1 : 0,
-						url: org.url_website,
+						name: '',
+						logo: '',
+						isIcon: 0,
+						url: '',
 					};
-				}
-				return {
-					name: '',
-					logo: '',
-					isIcon: 0,
-					url: '',
-				};
-			}),
-		}));
+				}),
+			})) || [];
 		// console.log('copyright response', copyrights);
 
 		const cText = copyrights.filter(

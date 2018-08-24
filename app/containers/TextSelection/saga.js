@@ -111,8 +111,8 @@ export function* getTexts({ languageISO }) {
 				text.language &&
 				text.iso &&
 				text.abbr &&
-				(text.filesets['dbp-dev'] &&
-					text.filesets['dbp-dev'].find(
+				(text.filesets[process.env.DBP_BUCKET_ID] &&
+					text.filesets[process.env.DBP_BUCKET_ID].find(
 						(f) =>
 							f.type === 'audio' ||
 							f.type === 'audio_drama' ||
@@ -123,7 +123,7 @@ export function* getTexts({ languageISO }) {
 		const mappedTexts = texts.map((text) => ({
 			...text,
 			filesets:
-				text.filesets['dbp-dev'].filter(
+				text.filesets[process.env.DBP_BUCKET_ID].filter(
 					(f) =>
 						f.type === 'audio' ||
 						f.type === 'audio_drama' ||
