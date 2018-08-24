@@ -35,6 +35,12 @@ A minimalist bible study application with a focus on flexibility, accessibility,
 portability. It is in many ways the spiritual successor to the bible browser and the
 [inScript projects](https://github.com/digitalbiblesociety/).
 
+## Solutions to Potential Issues
+
+If you feel that there are resources being cached an not updated, use the script below
+to manually clear the cache of resources.
+`Object.keys(localStorage).filter(key => key.slice(0, 7) === 'lscache').forEach(key => localStorage.removeItem(key))`
+
 ## Goals
 
 - ** Accessibility **
