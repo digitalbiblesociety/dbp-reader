@@ -406,12 +406,12 @@ AppContainer.getInitialProps = async (context) => {
 	// console.log('filesets in app file before filter function', bible.filesets);
 	// Filter out gideon bibles because the api will never be fixed in this area... -_- :( :'( ;'(
 	const filesets =
-		bible.filesets && bible.filesets['dbp-dev']
-			? bible.filesets['dbp-dev'].filter(
+		bible.filesets && bible.filesets[process.env.DBP_BUCKET_ID]
+			? bible.filesets[process.env.DBP_BUCKET_ID].filter(
 					(file) =>
 						(!file.id.includes('GID') &&
-							bible.filesets['dbp-dev'].length > 1) ||
-						bible.filesets['dbp-dev'].length === 1,
+							bible.filesets[process.env.DBP_BUCKET_ID].length > 1) ||
+						bible.filesets[process.env.DBP_BUCKET_ID].length === 1,
 			  )
 			: [];
 	// console.log('filesets in app file', filesets);
