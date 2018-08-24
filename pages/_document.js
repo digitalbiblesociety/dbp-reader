@@ -4,6 +4,29 @@ import Document, { Head, Main, NextScript } from 'next/document';
 // Need to figure out how to get the site to load this file from any url
 // import '../static/manifest.json';``
 // Importing the check here so that it is available to the css
+/* Add this if the fonts are loading to slow
+*
+* <link
+	rel="preload"
+	as="style"
+	href="https://fonts.googleapis.com/css?family=Roboto:400,500"
+/>
+<link
+	rel="preload"
+	as="style"
+	href="https://fonts.googleapis.com/css?family=Roboto+Slab"
+/>
+<link
+	rel="preload"
+	as="style"
+	href="https://fonts.googleapis.com/css?family=Raleway"
+/>
+<link
+	rel="preload"
+	as="style"
+	href="https://fonts.googleapis.com/css?family=Alegreya"
+/>
+* */
 /* eslint-disable */
 export default class MyDocument extends Document {
 	// static getInitialProps = async ({ req }) => {
@@ -100,6 +123,10 @@ export default class MyDocument extends Document {
 						name="google-site-verification"
 						content="frHSU18EKPDnEoKj--plFdubfj_GB7hXesy-3N1o57s"
 					/>
+					<meta
+						name="google-site-verification"
+						content="gzdnp1LbqRScZ41YUGH3f4jjsD7Cuaazq9NAo0AQXjA"
+					/>
 					<meta property="fb:app_id" content="173528326559718" />
 					<script src="https://apis.google.com/js/platform.js" async defer />
 					<script
@@ -163,40 +190,6 @@ export default class MyDocument extends Document {
 						}
 					}
 					})();`,
-						}}
-					/>
-					<link
-						rel="preload"
-						as="style"
-						href="https://fonts.googleapis.com/css?family=Roboto:400,500"
-					/>
-					<link
-						rel="preload"
-						as="style"
-						href="https://fonts.googleapis.com/css?family=Roboto+Slab"
-					/>
-					<link
-						rel="preload"
-						as="style"
-						href="https://fonts.googleapis.com/css?family=Raleway"
-					/>
-					<link
-						rel="preload"
-						as="style"
-						href="https://fonts.googleapis.com/css?family=Alegreya"
-					/>
-					<meta
-						name="google-site-verification"
-						content="frHSU18EKPDnEoKj--plFdubfj_GB7hXesy-3N1o57s"
-					/>
-					<meta property="fb:app_id" content="173528326559718" />
-					<script src="https://apis.google.com/js/platform.js" async defer />
-					<script
-						async
-						defer
-						dangerouslySetInnerHTML={{
-							__html:
-								'(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({"gtm.start": new Date().getTime(),event:"gtm.js"});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!="dataLayer"?"&l="+l:"";j.async=true;j.src="https://www.googletagmanager.com/gtm.js?id="+i+dl;f.parentNode.insertBefore(j,f);})(window,document,"script","dataLayer","GTM-N3RF6RC");',
 						}}
 					/>
 				</Head>

@@ -66,6 +66,8 @@ const paper = {
 	'--application-transparent-gray': 'rgba(0,0,0,.8)',
 	'--application-text-selection-color': '#6EC3E2',
 	'--application-text-container-color': '#000000',
+	'--default-language-name-background-color-transparent':
+		'rgba(255, 255, 255, 0)',
 };
 
 const dark = {
@@ -133,6 +135,7 @@ const dark = {
 	'--application-transparent-gray': 'rgba(0,0,0,0.8)',
 	'--application-text-selection-color': 'rgb(216, 182, 185)',
 	'--application-text-container-color': '#FFFFFF',
+	'--default-language-name-background-color-transparent': 'rgba(0, 0, 0, 0)',
 };
 
 const red = {
@@ -203,6 +206,7 @@ const red = {
 	'--application-transparent-gray': 'rgba(0,0,0,.8)',
 	'--application-text-selection-color': 'rgb(216, 182, 185)',
 	'--application-text-container-color': '#000000',
+	'--default-language-name-background-color-transparent': 'rgba(0, 0, 0, 0)',
 };
 
 const themes = {
@@ -227,7 +231,10 @@ const sizes = {
 
 export const toggleWordsOfJesus = (state) => {
 	// console.log('toggle words', state);
-	document.documentElement.style.setProperty('--application-words-of-jesus', state ? '#A00' : 'inherit');
+	document.documentElement.style.setProperty(
+		'--application-words-of-jesus',
+		state ? '#A00' : 'inherit',
+	);
 	// document.documentElement.style.setProperty('--application-words-of-jesus', '#000');
 	// console.log(document.documentElement.style.getPropertyValue('--application-words-of-jesus'));
 	// console.log('after toggle');
@@ -235,12 +242,18 @@ export const toggleWordsOfJesus = (state) => {
 };
 
 export const applyFontFamily = (fontFamily) => {
-	document.documentElement.style.setProperty('--application-font-family', fonts[fontFamily]);
+	document.documentElement.style.setProperty(
+		'--application-font-family',
+		fonts[fontFamily],
+	);
 	sessionStorage.setItem('bible_is_font_family', fontFamily);
 };
 
 export const applyFontSize = (fontSize) => {
-	document.documentElement.style.setProperty('--application-base-font-size', sizes[fontSize]);
+	document.documentElement.style.setProperty(
+		'--application-base-font-size',
+		sizes[fontSize],
+	);
 	sessionStorage.setItem('bible_is_font_size', fontSize);
 };
 

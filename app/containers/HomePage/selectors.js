@@ -57,8 +57,10 @@ const selectUserNotes = () =>
 			const userId = home.get('userId');
 			const profAuth = profile.get('userAuthenticated');
 			const profUser = profile.get('userId');
-			// console.log(bookId);
-			// console.log(chapter);
+			// console.log('bookId', bookId);
+			// console.log('chapter', chapter);
+			// console.log('chapterText', text);
+
 			// May not need to filter because I am requesting only the notes/bookmarks for this chapter
 			const filteredNotes = notes
 				.get('userNotes')
@@ -81,6 +83,8 @@ const selectUserNotes = () =>
 			// console.log('filteredBookmarks', filteredBookmarks);
 			// console.log('filteredNotes', filteredNotes);
 			// console.log(home);
+			// console.log(home.get('formattedSource').slice(0, 5) !== '<?xml')
+
 			if (
 				!text ||
 				(home.get('formattedSource') &&
@@ -95,7 +99,8 @@ const selectUserNotes = () =>
 						'toggleOptions',
 						'oneVersePerLine',
 						'active',
-					]))
+					]) &&
+					home.get('formattedSource').slice(0, 5) !== '<?xml')
 			) {
 				return {
 					text: [],
@@ -174,7 +179,7 @@ const selectUserNotes = () =>
 
 			// console.log(filteredNotes);
 			// console.log('newText', newText);
-			// console.log(text);
+			// console.log('text', text);
 			return {
 				text: newText.size ? newText.toJS() : text.toJS(),
 				userNotes,
