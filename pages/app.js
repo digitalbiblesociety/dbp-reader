@@ -453,7 +453,7 @@ AppContainer.getInitialProps = async (context) => {
 		}
 	}
 	/* eslint-enable no-console */
-	// console.log('After init func', Object.keys(initData));
+	// console.log('After init func', Object.keys(initData.bookMetaData.reduce((a, c) => ({ ...a, [c.book_id]: true }), {})));
 	// console.log('initData.audioPaths', initData.audioPaths);
 	// Get text for chapter
 	// const textRes = await fetch(textUrl);

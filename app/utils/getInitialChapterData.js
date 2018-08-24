@@ -4,6 +4,7 @@ import getAudio from './getAudioAsyncCall';
 import request from './request';
 
 export default async ({ filesets, bookId: lowerCaseBookId, chapter }) => {
+	// console.log('filesets, lowerCaseBookId, chapter', filesets, lowerCaseBookId, chapter);
 	// Gather all initial data
 	const bookId = lowerCaseBookId.toUpperCase();
 	const setTypes = {
@@ -33,23 +34,26 @@ export default async ({ filesets, bookId: lowerCaseBookId, chapter }) => {
 
 	// const hasPlainText = !!plainFilesetIds.length;
 	// const hasFormattedText = !!formattedFilesetIds.length;
-	const bookMetaPromises = Object.values(idsForBookMetadata).map(async (id) => {
-		// console.log('id', id);
-		const url = `${
-			process.env.BASE_API_ROUTE
-		}/bibles/filesets/${id}/books?v=4&key=${process.env.DBP_API_KEY}&bucket=${
-			process.env.DBP_BUCKET_ID
-		}`;
-		const res = await request(url).catch((e) => {
-			if (process.env.NODE_ENV === 'development') {
-				console.log('Error in request for formatted fileset: ', e.message); // eslint-disable-line no-console
-			}
-			return [];
-		});
-		// console.log('res', res);
+	const bookMetaPromises = Object.entries(idsForBookMetadata).map(
+		async (id) => {
+			// console.log('id', id);
+			const url = `${process.env.BASE_API_ROUTE}/bibles/filesets/${
+				id[1]
+			}/books?v=4&key=${process.env.DBP_API_KEY}&bucket=${
+				process.env.DBP_BUCKET_ID
+			}&fileset_type=${id[0]}`;
+			const res = await request(url).catch((e) => {
+				if (process.env.NODE_ENV === 'development') {
+					console.log('Error in request for formatted fileset: ', e.message); // eslint-disable-line no-console
+				}
+				return [];
+			});
+			// console.log('url', url);
+			// console.log('res', res.data ? res.data.length : res.length);
 
-		return res.data || [];
-	});
+			return res.data || [];
+		},
+	);
 	// start promise for formatted text
 	// console.log('chapter in get init', chapter)
 	const formattedPromises = formattedFilesetIds.map(async (id) => {
@@ -66,7 +70,13 @@ export default async ({ filesets, bookId: lowerCaseBookId, chapter }) => {
 		const path = res && res.data && res.data[0] && res.data[0].path;
 		let text = '';
 		if (path) {
-			text = await fetch(path).then((textRes) => textRes.text()); // .catch((e) => console.log('Error fetching formatted text: '));
+			text = await fetch(path)
+				.then((textRes) => textRes.text())
+				.catch((e) => {
+					if (process.env.NODE_ENV === 'development') {
+						console.log('Error fetching formatted text: ', e.message); // eslint-disable-line no-console
+					}
+				});
 		}
 
 		return text || '';
