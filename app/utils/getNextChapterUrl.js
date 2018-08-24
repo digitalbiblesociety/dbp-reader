@@ -74,9 +74,9 @@ export default ({
 	});
 
 	const nextBook =
-		fromJS(books[nextBookIndex]) || fromJS({ chapters: [], book_id: '' });
+		fromJS(books[nextBookIndex]) || fromJS({ chapters: [1], book_id: '' });
 	const activeBook =
-		fromJS(books[activeBookIndex]) || fromJS({ chapters: [], book_id: '' });
+		fromJS(books[activeBookIndex]) || fromJS({ chapters: [1], book_id: '' });
 	const maxChapter = activeBook.getIn(['chapters', -1]);
 
 	// If the next book in line doesn't exist and we are already at the last chapter just return

@@ -233,9 +233,10 @@ $variables: (
 	--application-text-caret-color: #fff,
 	--application-transparent-gray: rgba(0, 0, 0, 0.8),
 	--application-text-selection-color: rgb(216, 182, 185),
-	--application-text-container-color: #000000
+	--application-text-container-color: #000000,
+	--default-language-name-background-color-transparent: rgba(0, 0, 0, 0),
 );
- // --text-selection-background: #1b1f24,
+// --text-selection-background: #1b1f24,
 // --text-selection-accordion-title-background: #2c3036,
 // --text-selection-accordion-body-background: #000000,
 // --text-selection-tab-option-active-background: #fdf9f3,

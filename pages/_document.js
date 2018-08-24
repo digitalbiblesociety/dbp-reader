@@ -4,6 +4,29 @@ import Document, { Head, Main, NextScript } from 'next/document';
 // Need to figure out how to get the site to load this file from any url
 // import '../static/manifest.json';``
 // Importing the check here so that it is available to the css
+/* Add this if the fonts are loading to slow
+*
+* <link
+	rel="preload"
+	as="style"
+	href="https://fonts.googleapis.com/css?family=Roboto:400,500"
+/>
+<link
+	rel="preload"
+	as="style"
+	href="https://fonts.googleapis.com/css?family=Roboto+Slab"
+/>
+<link
+	rel="preload"
+	as="style"
+	href="https://fonts.googleapis.com/css?family=Raleway"
+/>
+<link
+	rel="preload"
+	as="style"
+	href="https://fonts.googleapis.com/css?family=Alegreya"
+/>
+* */
 /* eslint-disable */
 export default class MyDocument extends Document {
 	// static getInitialProps = async ({ req }) => {
@@ -37,7 +60,6 @@ export default class MyDocument extends Document {
 		// const { isIE } = this.props;
 		// console.log('this is ie', isIE);
 		// For enabling user feedback add the script below
-		// <script async defer type="text/javascript" src="https://fcbhjira.atlassian.net/s/d41d8cd98f00b204e9800998ecf8427e-T/-30xhtk/b/6/a44af77267a987a660377e5c46e0fb64/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?locale=en-UK&collectorId=267e7e86" />
 		return (
 			<html>
 				<Head>
@@ -51,7 +73,6 @@ export default class MyDocument extends Document {
 					{/*<link rel="stylesheet" href="../.next/static/style.css" />*/}
 					<meta name="viewport" content="width=device-width, initial-scale=1" />
 					<link rel="icon" type="image/x-icon" href="/static/favicon.ico" />
-
 					{process.env.NODE_ENV === 'development' ? (
 						<script src={'http://localhost:8097'} />
 					) : null}
@@ -69,7 +90,7 @@ export default class MyDocument extends Document {
 					<meta name="apple-mobile-web-app-status-bar-style" content="black" />
 					<meta name="author" content="Faith Comes By Hearing" />
 					<meta name="theme-color" content="#941B2F" />
-					<meta property={'og:type'} content={'book'} />
+					<meta property={'og:type'} content={'article'} />
 					<meta property={'og:site_name'} content={'Bible.is Online'} />
 
 					<meta name={'twitter:card'} content={'summary'} />
@@ -86,8 +107,10 @@ export default class MyDocument extends Document {
 					/>
 					<meta
 						property={'og:image'}
-						content={'https://listen.dbp4.org/static/icon-96x96.png'}
+						content={'https://listen.dbp4.org/static/icon-310x310.png'}
 					/>
+					<meta property={'og:image:width'} content={310} />
+					<meta property={'og:image:height'} content={310} />
 					<meta
 						name={'twitter:image'}
 						content={'https://listen.dbp4.org/static/icon-96x96.png'}
@@ -101,8 +124,18 @@ export default class MyDocument extends Document {
 						name="google-site-verification"
 						content="frHSU18EKPDnEoKj--plFdubfj_GB7hXesy-3N1o57s"
 					/>
+					<meta
+						name="google-site-verification"
+						content="gzdnp1LbqRScZ41YUGH3f4jjsD7Cuaazq9NAo0AQXjA"
+					/>
 					<meta property="fb:app_id" content="173528326559718" />
 					<script src="https://apis.google.com/js/platform.js" async defer />
+					<script
+						async
+						defer
+						type="text/javascript"
+						src="https://fcbhjira.atlassian.net/s/d41d8cd98f00b204e9800998ecf8427e-T/l24at6/b/0/a44af77267a987a660377e5c46e0fb64/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?locale=en-UK&collectorId=2338db8d"
+					/>
 					<script
 						type="application/javascript"
 						dangerouslySetInnerHTML={{
@@ -159,26 +192,6 @@ export default class MyDocument extends Document {
 					}
 					})();`,
 						}}
-					/>
-					<link
-						rel="preload"
-						as="style"
-						href="https://fonts.googleapis.com/css?family=Roboto:400,500"
-					/>
-					<link
-						rel="preload"
-						as="style"
-						href="https://fonts.googleapis.com/css?family=Roboto+Slab"
-					/>
-					<link
-						rel="preload"
-						as="style"
-						href="https://fonts.googleapis.com/css?family=Raleway"
-					/>
-					<link
-						rel="preload"
-						as="style"
-						href="https://fonts.googleapis.com/css?family=Alegreya"
 					/>
 				</Head>
 				<body>

@@ -703,9 +703,10 @@ class Text extends React.PureComponent {
 			userNotes,
 			bookmarks,
 			audioSource,
-			invalidBibleId,
+			// invalidBibleId,
 			activeBookId,
 		} = this.props;
+		// console.log('initialText', initialText);
 		const initialFormattedSource = JSON.parse(
 			JSON.stringify(initialFormattedSourceFromProps),
 		);
@@ -826,6 +827,7 @@ class Text extends React.PureComponent {
 
 		// Todo: Should handle each mode for formatted text and plain text in a separate component
 		// Handle exception thrown when there isn't plain text but readers mode is selected
+		// console.log('plainText', plainText);
 		/* eslint-disable react/no-danger */
 		if (plainText.length === 0 && !formattedSource.main) {
 			// Need to have a way to know if this is being run on the server or not
@@ -837,14 +839,7 @@ class Text extends React.PureComponent {
 			// 		</h5>,
 			// 	];
 			// }
-			if (invalidBibleId) {
-				// THis appears too often
-				textComponents = [
-					<h5 key={'no_text'}>
-						Text is not currently available for this version.
-					</h5>,
-				];
-			} else if (audioSource) {
+			if (audioSource) {
 				textComponents = [
 					<AudioOnlyMessage
 						key={'no_text'}
@@ -1845,7 +1840,6 @@ class Text extends React.PureComponent {
 			loadingNewChapterText ||
 			loadingAudio ||
 			this.state.loadingNextPage ||
-			!books.length ||
 			chapterTextLoadingState ||
 			(!formattedVerse && formattedSource.main)
 		) {
@@ -2029,7 +2023,7 @@ Text.propTypes = {
 	notesActive: PropTypes.bool,
 	loadingAudio: PropTypes.bool,
 	subFooterOpen: PropTypes.bool,
-	invalidBibleId: PropTypes.bool,
+	// invalidBibleId: PropTypes.bool,
 	isScrollingDown: PropTypes.bool,
 	chapterTextLoadingState: PropTypes.bool,
 	// audioPlayerState: PropTypes.bool,

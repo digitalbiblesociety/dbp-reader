@@ -6,11 +6,12 @@
  */
 
 /*
-* Todos
+* Todo: Items that need to be done before production
 * todo: Replace all tabIndex 0 values with what they should actually be
 * todo: Set up a function to init all of the plugins that rely on the browser
 * todo: Update site url to match the live site domain name
 * todo: Use cookies instead of session and local storage for all user settings (involves user approval before it can be utilized)
+* todo: Remove the script for providing feedback
 * */
 // Needed for redux-saga es6 generator support
 import 'babel-polyfill';
@@ -244,6 +245,12 @@ class AppContainer extends React.Component {
 								: ''
 						} | Bible.is`}
 					/>
+					<meta
+						property={'og:image'}
+						content={'https://listen.dbp4.org/static/icon-310x310.png'}
+					/>
+					<meta property={'og:image:width'} content={310} />
+					<meta property={'og:image:height'} content={310} />
 					{/* may need to replace contextLocation with the actual url */}
 					<meta
 						property={'og:url'}
@@ -366,8 +373,6 @@ AppContainer.getInitialProps = async (context) => {
 		};
 	}
 
-	// The function is being run on the server so fetching data here will not conflict with the Sagas
-
 	const singleBibleUrl = `${
 		process.env.BASE_API_ROUTE
 	}/bibles/${bibleId}?bucket=${process.env.DBP_BUCKET_ID}&key=${
@@ -379,18 +384,15 @@ AppContainer.getInitialProps = async (context) => {
 	}/bibles/filesets/${bibleId}/${bookId}/${chapter}?key=${
 		process.env.DBP_API_KEY
 	}&v=4`;
-
-	const bookMetaDataUrl = `${
-		process.env.BASE_API_ROUTE
-	}/bibles/${bibleId}/book?key=${process.env.DBP_API_KEY}&v=4&iso=eng&bucket=${
-		process.env.DBP_BUCKET_ID
-	}`;
-
+	// const bookMetaDataUrl = `${
+	// 	process.env.BASE_API_ROUTE
+	// }/bibles/${bibleId}/book?key=${process.env.DBP_API_KEY}&v=4&iso=eng&bucket=${
+	// 	process.env.DBP_BUCKET_ID
+	// }`;
 	// Get all bibles
 	// const bibleRes = await fetch(biblesUrl);
 	// const bibleJson = await bibleRes.json();
 	// const texts = bibleJson.data;
-
 	// Get active bible data
 	const singleBibleRes = await cachedFetch(singleBibleUrl).catch((e) => {
 		if (process.env.NODE_ENV === 'development') {
@@ -399,6 +401,7 @@ AppContainer.getInitialProps = async (context) => {
 		return { data: {} };
 	});
 	const singleBibleJson = singleBibleRes;
+	// console.log('single bible', singleBibleJson);
 	const bible = singleBibleJson.data;
 	// console.log('filesets in app file before filter function', bible.filesets);
 	// Filter out gideon bibles because the api will never be fixed in this area... -_- :( :'( ;'(
@@ -412,7 +415,6 @@ AppContainer.getInitialProps = async (context) => {
 			  )
 			: [];
 	// console.log('filesets in app file', filesets);
-
 	// console.log('bible.name', bible.name);
 	// console.log('bible.abbr', bible.abbr);
 	let initData = {
@@ -420,6 +422,7 @@ AppContainer.getInitialProps = async (context) => {
 		formattedText: '',
 		plainTextJson: {},
 		audioPaths: [''],
+		bookMetaData: [],
 	};
 	try {
 		// console.log('Before init func');
@@ -439,6 +442,7 @@ AppContainer.getInitialProps = async (context) => {
 				plainText: [],
 				plainTextJson: {},
 				audioPaths: [''],
+				bookMetaData: [],
 			};
 		});
 	} catch (err) {
@@ -451,38 +455,42 @@ AppContainer.getInitialProps = async (context) => {
 	/* eslint-enable no-console */
 	// console.log('After init func', Object.keys(initData));
 	// console.log('initData.audioPaths', initData.audioPaths);
-
 	// Get text for chapter
 	// const textRes = await fetch(textUrl);
 	const textJson = initData.plainTextJson;
 	const chapterText = initData.plainText;
-	// console.log('chapterText', chapterText);
-	// Need to try the other bible id if there wasn't any chapter text
-	if (!chapterText) {
-		// next id
-	}
 
-	const activeBook = bible.books
-		? bible.books.find(
-				(book) => book.book_id.toLowerCase() === bookId.toLowerCase(),
-		  )
-		: undefined;
+	let activeBook = { chapters: [] };
+	const bookData = initData.bookMetaData.length
+		? initData.bookMetaData
+		: bible.books;
+
+	if (bookData) {
+		const urlBook = bookData.find(
+			(book) => book.book_id.toLowerCase() === bookId.toLowerCase(),
+		);
+		if (urlBook) {
+			activeBook = urlBook;
+		} else {
+			activeBook = bookData[0];
+		}
+	} else {
+		activeBook = undefined;
+	}
 	// console.log('activeBook', activeBook);
 	// console.log('bible.books', bible.books);
 
 	const activeBookName = activeBook ? activeBook.name : '';
-
-	const bookMetaRes = await cachedFetch(bookMetaDataUrl).catch((e) => {
-		if (process.env.NODE_ENV === 'development') {
-			console.log('Error in get initial props single bible: ', e.message); // eslint-disable-line no-console
-		}
-		return { data: [] };
-	});
-	const bookMetaJson = bookMetaRes;
-	// console.log('bookMetaJson', bookMetaJson);
-
-	const testaments = bookMetaJson.data.reduce(
-		(a, c) => ({ ...a, [c.id]: c.book_testament }),
+	// const bookMetaRes = await cachedFetch(bookMetaDataUrl).catch((e) => {
+	// 	if (process.env.NODE_ENV === 'development') {
+	// 		console.log('Error in get initial props single bible: ', e.message); // eslint-disable-line no-console
+	// 	}
+	// 	return { data: [] };
+	// });
+	// const bookMetaJson = bookMetaRes;
+	// console.log('bookData', bookData.map(d => ({ [d.book_id]: d.name })));
+	const testaments = bookData.reduce(
+		(a, c) => ({ ...a, [c.book_id]: c.testament }),
 		{},
 	);
 
@@ -511,17 +519,17 @@ AppContainer.getInitialProps = async (context) => {
 				userSettings,
 				formattedSource: initData.formattedText,
 				activeFilesets: filesets,
-				books: bible.books || [],
+				books: bookData || [],
 				activeChapter: parseInt(chapter, 10) || 1,
 				activeBookName,
 				verseNumber: verse,
 				activeTextId: bible.abbr || '',
 				activeIsoCode: bible.iso || '',
-				activeLanguageName: bible.language || '',
-				textDirection: bible.alphabet ? bible.alphabet.direction : 'ltr',
 				defaultLanguageIso: bible.iso || 'eng',
-				defaultLanguageName: bible.language || 'English',
+				activeLanguageName: bible.language || '',
 				activeTextName: bible.vname || bible.name,
+				defaultLanguageName: bible.language || 'English',
+				textDirection: bible.alphabet ? bible.alphabet.direction : 'ltr',
 				activeBookId: bookId.toUpperCase() || '',
 				userId,
 				userAuthenticated: isAuthenticated || false,
@@ -548,7 +556,7 @@ AppContainer.getInitialProps = async (context) => {
 		chapterText,
 		testaments,
 		formattedText: initData.formattedText,
-		books: bible.books,
+		books: bookData || [],
 		activeChapter: parseInt(chapter, 10),
 		activeBookName,
 		verseNumber: verse,
@@ -576,7 +584,6 @@ AppContainer.getInitialProps = async (context) => {
 			},
 		},
 		fetchedUrls: [
-			{ href: bookMetaDataUrl, data: bookMetaJson },
 			{ href: singleBibleUrl, data: singleBibleJson },
 			{ href: textUrl, data: textJson },
 		],
