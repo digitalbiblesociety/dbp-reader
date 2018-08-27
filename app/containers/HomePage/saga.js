@@ -1232,7 +1232,7 @@ export function* getCopyrightSaga({ filesetIds }) {
 		reqUrls.push(
 			`${process.env.BASE_API_ROUTE}/bibles/filesets/${set.id}/copyright?key=${
 				process.env.DBP_API_KEY
-			}&v=4`,
+			}&v=4&bucket=${process.env.DBP_BUCKET_ID}`,
 		),
 	);
 
