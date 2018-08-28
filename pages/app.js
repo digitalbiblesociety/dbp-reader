@@ -28,6 +28,8 @@ import {
 	setUA,
 } from '../app/containers/HomePage/actions';
 import svg4everybody from '../app/utils/svgPolyfill';
+// import request from '../app/utils/request';
+import removeDuplicates from '../app/utils/removeDuplicateObjects';
 
 class AppContainer extends React.Component {
 	static displayName = 'Main app';
@@ -279,6 +281,7 @@ class AppContainer extends React.Component {
 
 AppContainer.getInitialProps = async (context) => {
 	// console.log('Get initial props started running');
+	const { req, res: serverRes } = context;
 	const routeLocation = context.asPath;
 	const { bibleId, bookId, chapter, verse, token } = context.query;
 	const userProfile = {};
@@ -291,7 +294,7 @@ AppContainer.getInitialProps = async (context) => {
 	let userId = '';
 	let isAuthenticated = false;
 
-	if (!context.req) {
+	if (!req) {
 		// console.log('context in browser', context);
 		isFromServer = false;
 		// console.log('from client with query', context.query);
@@ -417,12 +420,139 @@ AppContainer.getInitialProps = async (context) => {
 	// console.log('filesets in app file', filesets);
 	// console.log('bible.name', bible.name);
 	// console.log('bible.abbr', bible.abbr);
+	const setTypes = {
+		audio_drama: true,
+		audio: true,
+		text_plain: true,
+		text_format: true,
+	};
+	const formattedFilesetIds = [];
+	const plainFilesetIds = [];
+	const idsForBookMetadata = {};
+	const bookCachePairs = [];
+	// Separate filesets by type
+	filesets
+		.filter((set) => set.id.slice(-4) !== 'DA16' && setTypes[set.type])
+		.forEach((set) => {
+			if (set.type === 'text_format') {
+				formattedFilesetIds.push(set.id);
+			} else if (set.type === 'text_plain') {
+				plainFilesetIds.push(set.id);
+			}
+
+			// Gets one id for each fileset type
+			idsForBookMetadata[set.type] = set.id;
+		});
+
+	const bookMetaPromises = Object.entries(idsForBookMetadata).map(
+		async (id) => {
+			// console.log('id', id);
+			const url = `${process.env.BASE_API_ROUTE}/bibles/filesets/${
+				id[1]
+			}/books?v=4&key=${process.env.DBP_API_KEY}&bucket=${
+				process.env.DBP_BUCKET_ID
+			}&fileset_type=${id[0]}`;
+			const res = await cachedFetch(url); // .catch((e) => {
+			// 	if (process.env.NODE_ENV === 'development') {
+			// 		console.log('Error in request for formatted fileset: ', e.message); // eslint-disable-line no-console
+			// 	}
+			// 	return [];
+			// });
+			bookCachePairs.push({ href: url, data: res });
+			// console.log('url', url);
+			// console.log('res', res.data ? res.data.length : res.length);
+
+			return res.data || [];
+		},
+	);
+	const bookMetaResponse = await Promise.all(bookMetaPromises);
+	const bookMetaData = removeDuplicates(
+		bookMetaResponse.reduce((a, c) => [...a, ...c], []),
+		'book_id',
+	);
+	// console.log('bookMetaData.length', bookMetaData.length);
+	/*
+    if (res) {
+      res.writeHead(302, {
+        Location: 'http://example.com'
+      })
+      res.end()
+    } else {
+      Router.push('http://example.com')
+    }
+	*/
+	// Redirect to the new url if conditions are met
+	if (bookMetaData && bookMetaData.length) {
+		const foundBook = bookMetaData.find(
+			(book) => book.book_id === bookId.toUpperCase(),
+		);
+		const foundChapter = foundBook
+			? foundBook.chapters.find((c) => c === parseInt(chapter, 10))
+			: undefined;
+		let reqPort = '';
+		if (
+			process.env.NODE_ENV === 'development' &&
+			req &&
+			req.hostname === 'localhost'
+		) {
+			reqPort = ':3000';
+		}
+		// If the book wasn't found and chapter wasn't found
+		// Go to the first book and first chapter
+		if (!foundBook && !foundChapter) {
+			// console.log('url', `${req.protocol}://${req.hostname}${reqPort}/bible/${bibleId}/${bookMetaData[0].book_id}/${bookMetaData[0].chapters[0]}`);
+			if (serverRes) {
+				// console.log('redirecting 1');
+				serverRes.writeHead(302, {
+					Location: `${req.protocol}://${
+						req.hostname
+					}${reqPort}/bible/${bibleId}/${bookMetaData[0].book_id}/${
+						bookMetaData[0].chapters[0]
+					}`,
+				});
+				serverRes.end();
+			} else {
+				// console.log('window 1');
+				Router.push(
+					`${window.location.origin}/bible/${bibleId}/${
+						bookMetaData[0].book_id
+					}/${bookMetaData[0].chapters[0]}`,
+				);
+			}
+		} else if (foundBook) {
+			// if the book was found
+			// check for the chapter
+			if (!foundChapter) {
+				// if the chapter was not found
+				// go to the book and the first chapter for that book
+				if (serverRes) {
+					// console.log('redirecting 2');
+					serverRes.writeHead(302, {
+						Location: `${req.protocol}://${
+							req.hostname
+						}${reqPort}/bible/${bibleId}/${foundBook.book_id}/${
+							foundBook.chapters[0]
+						}`,
+					});
+					serverRes.end();
+				} else {
+					// console.log('window 2');
+					Router.push(
+						`${window.location.origin}/bible/${bibleId}/${foundBook.book_id}/${
+							foundBook.chapters[0]
+						}`,
+					);
+				}
+			}
+		}
+	}
+	// dont change book or chapter
+
 	let initData = {
 		plainText: [],
 		formattedText: '',
 		plainTextJson: {},
 		audioPaths: [''],
-		bookMetaData: [],
 	};
 	try {
 		// console.log('Before init func');
@@ -431,6 +561,8 @@ AppContainer.getInitialProps = async (context) => {
 			filesets,
 			bookId,
 			chapter,
+			plainFilesetIds,
+			formattedFilesetIds,
 		}).catch((err) => {
 			if (process.env.NODE_ENV === 'development') {
 				console.error(
@@ -442,7 +574,6 @@ AppContainer.getInitialProps = async (context) => {
 				plainText: [],
 				plainTextJson: {},
 				audioPaths: [''],
-				bookMetaData: [],
 			};
 		});
 	} catch (err) {
@@ -453,7 +584,7 @@ AppContainer.getInitialProps = async (context) => {
 		}
 	}
 	/* eslint-enable no-console */
-	// console.log('After init func', Object.keys(initData.bookMetaData.reduce((a, c) => ({ ...a, [c.book_id]: true }), {})));
+	// console.log('After init func', Object.keys(bookMetaData.reduce((a, c) => ({ ...a, [c.book_id]: true }), {})));
 	// console.log('initData.audioPaths', initData.audioPaths);
 	// Get text for chapter
 	// const textRes = await fetch(textUrl);
@@ -461,9 +592,7 @@ AppContainer.getInitialProps = async (context) => {
 	const chapterText = initData.plainText;
 
 	let activeBook = { chapters: [] };
-	const bookData = initData.bookMetaData.length
-		? initData.bookMetaData
-		: bible.books;
+	const bookData = bookMetaData.length ? bookMetaData : bible.books;
 
 	if (bookData) {
 		const urlBook = bookData.find(
@@ -586,6 +715,7 @@ AppContainer.getInitialProps = async (context) => {
 		fetchedUrls: [
 			{ href: singleBibleUrl, data: singleBibleJson },
 			{ href: textUrl, data: textJson },
+			...bookCachePairs,
 		],
 	};
 };
