@@ -51,7 +51,8 @@ export default defineMessages({
 	},
 	autoplayTitle: {
 		id: 'app.containers.audioplayer.autoplayTitle',
-		defaultMessage: 'Autoplay Toggle',
+		defaultMessage:
+			'Automatically continue playing audio when chapter changes.',
 	},
 	volumeTitle: {
 		id: 'app.containers.audioplayer.volumeTitle',
