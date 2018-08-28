@@ -64,7 +64,7 @@ class PasswordReset extends React.PureComponent {
 					<div className="disclaimer">
 						If you are unable to reset your password, please
 						<Link href="/contact-form" as="/contact-form">
-							<a className="link">contact us</a>
+							<a className="link">&nbsp;contact us&nbsp;</a>
 						</Link>
 						for support.
 					</div>
