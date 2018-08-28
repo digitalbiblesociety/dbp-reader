@@ -489,14 +489,7 @@ AppContainer.getInitialProps = async (context) => {
 		const foundChapter = foundBook
 			? foundBook.chapters.find((c) => c === parseInt(chapter, 10))
 			: undefined;
-		let reqPort = '';
-		if (
-			process.env.NODE_ENV === 'development' &&
-			req &&
-			req.hostname === 'localhost'
-		) {
-			reqPort = ':3000';
-		}
+
 		// If the book wasn't found and chapter wasn't found
 		// Go to the first book and first chapter
 		if (!foundBook && !foundChapter) {
@@ -504,11 +497,9 @@ AppContainer.getInitialProps = async (context) => {
 			if (serverRes) {
 				// console.log('redirecting 1');
 				serverRes.writeHead(302, {
-					Location: `${req.protocol}://${
-						req.hostname
-					}${reqPort}/bible/${bibleId}/${bookMetaData[0].book_id}/${
-						bookMetaData[0].chapters[0]
-					}`,
+					Location: `${req.protocol}://${req.get('host')}/bible/${bibleId}/${
+						bookMetaData[0].book_id
+					}/${bookMetaData[0].chapters[0]}`,
 				});
 				serverRes.end();
 			} else {
@@ -528,11 +519,9 @@ AppContainer.getInitialProps = async (context) => {
 				if (serverRes) {
 					// console.log('redirecting 2');
 					serverRes.writeHead(302, {
-						Location: `${req.protocol}://${
-							req.hostname
-						}${reqPort}/bible/${bibleId}/${foundBook.book_id}/${
-							foundBook.chapters[0]
-						}`,
+						Location: `${req.protocol}://${req.get('host')}/bible/${bibleId}/${
+							foundBook.book_id
+						}/${foundBook.chapters[0]}`,
 					});
 					serverRes.end();
 				} else {
