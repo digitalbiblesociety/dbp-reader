@@ -70,8 +70,12 @@ class Login extends React.PureComponent {
 	};
 
 	get signInComponent() {
-		const { errorMessageViewed, selectAccountOption } = this.props;
-
+		const {
+			errorMessageViewed,
+			selectAccountOption,
+			errorMessage,
+		} = this.props;
+		console.log('errorMessage', errorMessage);
 		return (
 			<React.Fragment>
 				<form onSubmit={this.handleSendingLogin}>
@@ -126,7 +130,8 @@ class Login extends React.PureComponent {
 						<div className="login-error-message">
 							<SvgWrapper className={'icon'} svgid={'warning'} />
 							<span className={'error-text'}>
-								Username or Password is incorrect. Please try again.
+								{errorMessage ||
+									'Username or Password is incorrect. Please try again.'}
 							</span>
 						</div>
 					) : null}
@@ -194,6 +199,7 @@ Login.propTypes = {
 	socialLoginLink: PropTypes.string,
 	oauthError: PropTypes.bool,
 	oauthErrorMessage: PropTypes.string,
+	errorMessage: PropTypes.string,
 	// errorMessage: PropTypes.string,
 	activeDriver: PropTypes.string,
 	errorMessageViewed: PropTypes.bool,

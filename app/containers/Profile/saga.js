@@ -88,6 +88,8 @@ export function* sendSignUpForm({
 }
 
 export function* sendLoginForm({ password, email, stay }) {
+	// console.log('password, email, stay', password, email, stay);
+
 	const requestUrl = `${process.env.BASE_API_ROUTE}/users/login?key=${
 		process.env.DBP_API_KEY
 	}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}`;
@@ -105,8 +107,9 @@ export function* sendLoginForm({ password, email, stay }) {
 	try {
 		const response = yield call(request, requestUrl, options);
 		// console.log('response for login', response);
-
+		// console.log('response', response);
 		if (response.error) {
+			// console.log('response.error', response.error);
 			yield put({ type: LOGIN_ERROR, message: response.error.message });
 		} else {
 			yield put({

@@ -6,7 +6,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import PopupMessage from '../PopupMessage';
 import checkEmail from '../../utils/checkEmailForValidity';
 // import styled from 'styled-components';
@@ -63,9 +63,8 @@ class PasswordReset extends React.PureComponent {
 					</form>
 					<div className="disclaimer">
 						If you are unable to reset your password, please
-						<Link className="link" to="/contact-form">
-							{' '}
-							contact us{' '}
+						<Link href="/contact-form" as="/contact-form">
+							<a className="link">contact us</a>
 						</Link>
 						for support.
 					</div>
