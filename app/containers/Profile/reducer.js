@@ -54,6 +54,7 @@ const initialState = fromJS({
 	passwordResetMessage: '',
 	deleteUserError: false,
 	deleteUserMessage: '',
+	passwordWasReset: false,
 });
 
 function profileReducer(state = initialState, action) {

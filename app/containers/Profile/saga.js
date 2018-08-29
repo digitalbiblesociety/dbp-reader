@@ -265,18 +265,26 @@ export function* changePicture({ userId, avatar }) {
 	}
 }
 
-export function* sendResetPassword({ password, userAccessToken }) {
+export function* sendResetPassword({ password, userAccessToken, email }) {
+	// console.log('{ password, userAccessToken, email }', { password, userAccessToken, email });
 	const requestUrl = `${process.env.BASE_API_ROUTE}/users/password/reset?key=${
 		process.env.DBP_API_KEY
-	}&v=4&project_id=${process.env.NOTES_PROJECT_ID}`;
+	}&v=4&project_id=${
+		process.env.NODE_ENV === 'development'
+			? process.env.DEVELOPMENT_PROJECT_ID
+			: process.env.NOTES_PROJECT_ID
+	}`;
 	const formData = new FormData();
-	// formData.append('email', email);
-	formData.append('project_id', process.env.NOTES_PROJECT_ID);
+	formData.append('email', email);
+	formData.append(
+		'project_id',
+		process.env.NODE_ENV === 'development'
+			? process.env.DEVELOPMENT_PROJECT_ID
+			: process.env.NOTES_PROJECT_ID,
+	);
 	formData.append('new_password', password);
-	formData.append('new_password_confirmed', password);
-	// formData.append('user_id', userId);
+	formData.append('new_password_confirmation', password);
 	formData.append('token_id', userAccessToken);
-	// console.log('appended form data');
 
 	const options = {
 		body: formData,
@@ -319,7 +327,11 @@ export function* sendResetPassword({ password, userAccessToken }) {
 export function* resetPassword({ email }) {
 	const requestUrl = `${process.env.BASE_API_ROUTE}/users/password/email?key=${
 		process.env.DBP_API_KEY
-	}&v=4&project_id=${process.env.NOTES_PROJECT_ID}`;
+	}&v=4&project_id=${
+		process.env.NODE_ENV === 'development'
+			? process.env.DEVELOPMENT_PROJECT_ID
+			: process.env.NOTES_PROJECT_ID
+	}`;
 	const resetPath =
 		process.env.NODE_ENV === 'development'
 			? 'http://localhost:3000/reset/password'
@@ -330,7 +342,12 @@ export function* resetPassword({ email }) {
 
 	const formData = new FormData();
 	formData.append('email', email);
-	formData.append('project_id', process.env.NOTES_PROJECT_ID);
+	formData.append(
+		'project_id',
+		process.env.NODE_ENV === 'development'
+			? process.env.DEVELOPMENT_PROJECT_ID
+			: process.env.NOTES_PROJECT_ID,
+	);
 	formData.append('iso', browserLanguage);
 	formData.append('reset_path', resetPath);
 

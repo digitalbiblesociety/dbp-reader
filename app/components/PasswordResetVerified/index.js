@@ -12,6 +12,7 @@ import messages from './messages';
 
 class PasswordResetVerified extends React.PureComponent {
 	state = {
+		email: '',
 		firstPass: '',
 		secondPass: '',
 		validPassword: true,
@@ -19,6 +20,10 @@ class PasswordResetVerified extends React.PureComponent {
 
 	handleFirstChange = (e) => {
 		this.setState({ firstPass: e.target.value });
+	};
+
+	handleEmailChange = (e) => {
+		this.setState({ email: e.target.value });
 	};
 
 	handleSecondChange = (e) => {
@@ -31,7 +36,10 @@ class PasswordResetVerified extends React.PureComponent {
 
 		if (validPassword) {
 			// Send password reset
-			this.props.sendPasswordReset(e, { password: this.state.firstPass });
+			this.props.sendPasswordReset(e, {
+				password: this.state.firstPass,
+				email: this.state.email,
+			});
 		} else {
 			const client = e.target.childNodes[1].getBoundingClientRect() || {
 				x: 0,
@@ -118,6 +126,14 @@ class PasswordResetVerified extends React.PureComponent {
 					<FormattedMessage {...messages.title} />
 				</h1>
 				<form onSubmit={this.handlePasswordSubmit}>
+					<input
+						required
+						className={'first-password'}
+						autoComplete={'email'}
+						placeholder={'Enter Email'}
+						onChange={this.handleEmailChange}
+						value={this.state.email}
+					/>
 					<input
 						required
 						className={

@@ -46,6 +46,7 @@ export class Profile extends React.PureComponent {
 	// eslint-disable-line react/prefer-stateless-function
 	state = {
 		popupOpen: false,
+		clearAccessToken: false,
 	};
 
 	componentDidMount() {
@@ -80,6 +81,14 @@ export class Profile extends React.PureComponent {
 	componentWillReceiveProps(nextProps) {
 		if (this.props.profile.activeOption !== nextProps.profile.activeOption) {
 			this.props.dispatch(clearErrorMessage());
+		}
+		if (
+			!this.props.profile.userAuthenticated &&
+			nextProps.profile.userAuthenticated &&
+			this.props.userAccessToken &&
+			nextProps.userAccessToken
+		) {
+			this.setState({ clearAccessToken: true });
 		}
 	}
 
@@ -274,7 +283,7 @@ export class Profile extends React.PureComponent {
 
 	render() {
 		const { toggleProfile, userAccessToken } = this.props;
-		const { popupOpen, popupCoords } = this.state;
+		const { popupOpen, popupCoords, clearAccessToken } = this.state;
 		// console.log('userAccessToken', userAccessToken);
 
 		return (
@@ -293,7 +302,7 @@ export class Profile extends React.PureComponent {
 					/>
 				</header>
 				<div className="profile-content">
-					{userAccessToken ? (
+					{userAccessToken && !clearAccessToken ? (
 						<PasswordResetVerified
 							sendPasswordReset={this.sendPasswordReset}
 							popupOpen={popupOpen}

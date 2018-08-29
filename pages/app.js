@@ -283,7 +283,13 @@ AppContainer.getInitialProps = async (context) => {
 	// console.log('Get initial props started running');
 	const { req, res: serverRes } = context;
 	const routeLocation = context.asPath;
-	const { bibleId, bookId, chapter, verse, token } = context.query;
+	const {
+		bibleId = 'ENGESV',
+		bookId = 'GEN',
+		chapter = 7,
+		verse,
+		token,
+	} = context.query;
 	const userProfile = {};
 	// console.log('context.query', context.query);
 
@@ -396,6 +402,7 @@ AppContainer.getInitialProps = async (context) => {
 	// const bibleRes = await fetch(biblesUrl);
 	// const bibleJson = await bibleRes.json();
 	// const texts = bibleJson.data;
+	// console.log(singleBibleUrl)
 	// Get active bible data
 	const singleBibleRes = await cachedFetch(singleBibleUrl).catch((e) => {
 		if (process.env.NODE_ENV === 'development') {
@@ -403,6 +410,7 @@ AppContainer.getInitialProps = async (context) => {
 		}
 		return { data: {} };
 	});
+	// console.log(singleBibleRes)
 	const singleBibleJson = singleBibleRes;
 	// console.log('single bible', singleBibleJson);
 	const bible = singleBibleJson.data;
