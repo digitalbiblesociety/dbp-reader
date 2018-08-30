@@ -129,10 +129,12 @@ class AccountSettings extends React.PureComponent {
 					{/* <label htmlFor={'fileInput'} className={'change-picture'}> */}
 					{/* Change Picture */}
 					{/* </label> */}
-					{profile.nickname ? (
+					{profile.nickname && profile.nickname !== 'undefined' ? (
 						<h3 className="name">{profile.nickname}</h3>
 					) : null}
-					{profile.name ? <span className="name">{profile.name}</span> : null}
+					{profile.name && profile.name !== 'undefined' ? (
+						<span className="name">{profile.name}</span>
+					) : null}
 				</section>
 				<div className="email-section">
 					<span className="title">e-mail</span>
