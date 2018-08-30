@@ -414,6 +414,12 @@ AppContainer.getInitialProps = async (context) => {
 	const singleBibleJson = singleBibleRes;
 	// console.log('single bible', singleBibleJson);
 	const bible = singleBibleJson.data;
+	const setTypes = {
+		audio_drama: true,
+		audio: true,
+		text_plain: true,
+		text_format: true,
+	};
 	// console.log('filesets in app file before filter function', bible.filesets);
 	// Filter out gideon bibles because the api will never be fixed in this area... -_- :( :'( ;'(
 	const filesets =
@@ -421,6 +427,9 @@ AppContainer.getInitialProps = async (context) => {
 			? bible.filesets[process.env.DBP_BUCKET_ID].filter(
 					(file) =>
 						(!file.id.includes('GID') &&
+							file.id.slice(-4) !== 'DA16' &&
+							setTypes[file.type] &&
+							file.size !== 'S' &&
 							bible.filesets[process.env.DBP_BUCKET_ID].length > 1) ||
 						bible.filesets[process.env.DBP_BUCKET_ID].length === 1,
 			  )
@@ -428,29 +437,23 @@ AppContainer.getInitialProps = async (context) => {
 	// console.log('filesets in app file', filesets);
 	// console.log('bible.name', bible.name);
 	// console.log('bible.abbr', bible.abbr);
-	const setTypes = {
-		audio_drama: true,
-		audio: true,
-		text_plain: true,
-		text_format: true,
-	};
+
 	const formattedFilesetIds = [];
 	const plainFilesetIds = [];
 	const idsForBookMetadata = {};
 	const bookCachePairs = [];
 	// Separate filesets by type
-	filesets
-		.filter((set) => set.id.slice(-4) !== 'DA16' && setTypes[set.type])
-		.forEach((set) => {
-			if (set.type === 'text_format') {
-				formattedFilesetIds.push(set.id);
-			} else if (set.type === 'text_plain') {
-				plainFilesetIds.push(set.id);
-			}
+	filesets.forEach((set) => {
+		if (set.type === 'text_format') {
+			formattedFilesetIds.push(set.id);
+		} else if (set.type === 'text_plain') {
+			plainFilesetIds.push(set.id);
+		}
 
-			// Gets one id for each fileset type
-			idsForBookMetadata[set.type] = set.id;
-		});
+		// Gets one id for each fileset type
+		idsForBookMetadata[set.type] = set.id;
+	});
+	// console.log(idsForBookMetadata);
 
 	const bookMetaPromises = Object.entries(idsForBookMetadata).map(
 		async (id) => {
@@ -460,12 +463,14 @@ AppContainer.getInitialProps = async (context) => {
 			}/books?v=4&key=${process.env.DBP_API_KEY}&bucket=${
 				process.env.DBP_BUCKET_ID
 			}&fileset_type=${id[0]}`;
+			// console.log('url', url);
 			const res = await cachedFetch(url); // .catch((e) => {
 			// 	if (process.env.NODE_ENV === 'development') {
 			// 		console.log('Error in request for formatted fileset: ', e.message); // eslint-disable-line no-console
 			// 	}
 			// 	return [];
 			// });
+			// console.log('res', res);
 			bookCachePairs.push({ href: url, data: res });
 			// console.log('url', url);
 			// console.log('res', res.data ? res.data.length : res.length);
