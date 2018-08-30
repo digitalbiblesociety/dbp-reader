@@ -7,7 +7,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import ImageComponent from '../ImageComponent';
+// import ImageComponent from '../ImageComponent';
 import SvgWrapper from '../SvgWrapper';
 import PopupMessage from '../PopupMessage';
 import messages from './messages';
@@ -108,18 +108,18 @@ class AccountSettings extends React.PureComponent {
 					<FormattedMessage {...messages.logout} />
 				</div>
 				<section className="personal-info">
-					{profile.avatar && profile.avatar !== 'null' ? (
-						<ImageComponent
-							classes="profile-picture"
-							alt="Profile Picture"
-							src={profile.avatar}
-						/>
-					) : (
-						<SvgWrapper
-							className={'avatar-placeholder'}
-							svgid={'avatar_placeholder'}
-						/>
-					)}
+					{/* {profile.avatar && profile.avatar !== 'null' ? ( */}
+					{/* <ImageComponent */}
+					{/* classes="profile-picture" */}
+					{/* alt="Profile Picture" */}
+					{/* src={profile.avatar} */}
+					{/* /> */}
+					{/* ) : ( */}
+					<SvgWrapper
+						className={'avatar-placeholder'}
+						svgid={'avatar_placeholder'}
+					/>
+					{/* }) */}
 					{/* <input */}
 					{/* id={'fileInput'} */}
 					{/* className={'change-picture-input'} */}
@@ -129,8 +129,10 @@ class AccountSettings extends React.PureComponent {
 					{/* <label htmlFor={'fileInput'} className={'change-picture'}> */}
 					{/* Change Picture */}
 					{/* </label> */}
-					<h3 className="name">{profile.nickname}</h3>
-					<span className="name">{profile.name}</span>
+					{profile.nickname ? (
+						<h3 className="name">{profile.nickname}</h3>
+					) : null}
+					{profile.name ? <span className="name">{profile.name}</span> : null}
 				</section>
 				<div className="email-section">
 					<span className="title">e-mail</span>
