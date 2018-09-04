@@ -134,6 +134,10 @@ export function* sendLoginForm({ password, email, stay }) {
 			// };
 			// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
 		}
+		yield put({
+			type: LOGIN_ERROR,
+			message: 'Invalid credentials, please try again.',
+		});
 	}
 }
 

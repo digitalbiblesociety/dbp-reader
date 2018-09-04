@@ -45,7 +45,7 @@ class Login extends React.PureComponent {
 
 	handleSendingLogin = (e) => {
 		e.preventDefault();
-
+		// console.log('Sending the login')
 		this.props.sendLoginForm({
 			email: this.state.email,
 			password: this.state.password,
@@ -126,7 +126,7 @@ class Login extends React.PureComponent {
 						<div className="login-error-message">
 							<SvgWrapper className={'icon'} svgid={'warning'} />
 							<span className={'error-text'}>
-								{`${errorMessage} ( Click Below )` ||
+								{`${errorMessage} ( Click Below to Reset )` ||
 									'Username or Password is incorrect. Please try again.'}
 							</span>
 						</div>

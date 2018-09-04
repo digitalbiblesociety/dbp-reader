@@ -869,6 +869,13 @@ class Text extends React.PureComponent {
 									data-verseid={verse.verse_start}
 									key={verse.verse_start}
 									dangerouslySetInnerHTML={{ __html: verse.verse_text }}
+									className={
+										verseIsActive &&
+										(parseInt(activeVerse, 10) === verse.verse_start ||
+											activeVerse === verse.verse_start_alt)
+											? 'active-verse'
+											: ''
+									}
 								/>,
 								<span
 									key={`${verse.verse_end}spaces`}
@@ -884,6 +891,13 @@ class Text extends React.PureComponent {
 									onClick={this.handleHighlightClick}
 									data-verseid={verse.verse_start}
 									key={verse.verse_start}
+									className={
+										verseIsActive &&
+										(parseInt(activeVerse, 10) === verse.verse_start ||
+											activeVerse === verse.verse_start_alt)
+											? 'active-verse'
+											: ''
+									}
 								>
 									{verse.verse_text}
 								</span>,
@@ -905,6 +919,13 @@ class Text extends React.PureComponent {
 							onClick={this.handleHighlightClick}
 							data-verseid={verse.verse_start}
 							key={verse.verse_start}
+							className={
+								verseIsActive &&
+								(parseInt(activeVerse, 10) === verse.verse_start ||
+									activeVerse === verse.verse_start_alt)
+									? 'active-verse'
+									: ''
+							}
 						>
 							<br />
 							<sup data-verseid={verse.verse_start}>
@@ -930,6 +951,13 @@ class Text extends React.PureComponent {
 							onClick={this.handleHighlightClick}
 							data-verseid={verse.verse_start}
 							key={verse.verse_start}
+							className={
+								verseIsActive &&
+								(parseInt(activeVerse, 10) === verse.verse_start ||
+									activeVerse === verse.verse_start_alt)
+									? 'active-verse'
+									: ''
+							}
 						>
 							<br />
 							<sup data-verseid={verse.verse_start}>
