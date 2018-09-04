@@ -8,7 +8,7 @@
 
 import { fromJS } from 'immutable';
 // import esvDefaultFilesets from 'utils/defaultFilesetsForESV.json';
-import { USER_LOGGED_IN } from '../Profile/constants';
+import { USER_LOGGED_IN, LOG_OUT } from '../Profile/constants';
 import {
 	ACTIVE_TEXT_ID,
 	// CHANGE_VERSE,
@@ -45,94 +45,6 @@ import {
 	RESET_BOOKMARK_STATE,
 	ADD_BOOKMARK_FAILURE,
 } from './constants';
-
-// const newBibleState = fromJS({
-// 	books: [],
-// 	note: {},
-// 	chapterText: [],
-// 	audioObjects: [],
-// 	activeFilesets: [],
-// 	audioFilesetId: '',
-// 	plainTextFilesetId: '',
-// 	formattedTextFilesetId: '',
-// 	highlights: [],
-// 	copyrights: {
-// 		newTestament: {
-// 			audio: {
-// 				// message: 'Copyright is either loading or does not exist.',
-// 				// organizations: [
-// 				// 	{
-// 				// 		logo: {
-// 				// 			url: '',
-// 				// 		},
-// 				// 		name: 'name1',
-// 				// 	},
-// 				// ],
-// 			},
-// 			text: {
-// 				// message: 'Copyright is either loading or does not exist.',
-// 				// organizations: [
-// 				// 	{
-// 				// 		logo: {
-// 				// 			url: '',
-// 				// 		},
-// 				// 		name: 'name2',
-// 				// 	},
-// 				// ],
-// 			},
-// 		},
-// 		oldTestament: {
-// 			audio: {
-// 				// message: 'Copyright is either loading or does not exist.',
-// 				// organizations: [
-// 				// 	{
-// 				// 		logo: {
-// 				// 			url: '',
-// 				// 		},
-// 				// 		name: 'name3',
-// 				// 	},
-// 				// ],
-// 			},
-// 			text: {
-// 				// message: 'Copyright is either loading or does not exist.',
-// 				// organizations: [
-// 				// 	{
-// 				// 		logo: {
-// 				// 			url: '',
-// 				// 		},
-// 				// 		name: 'name4',
-// 				// 	},
-// 				// ],
-// 			},
-// 		},
-// 	},
-// 	activeChapter: 1,
-// 	activeBookName: '',
-// 	activeTextName: '',
-// 	activeVerse: '',
-// 	activeNotesView: 'notes',
-// 	activeTextId: '',
-// 	activeBookId: '',
-// 	loadingBooks: false,
-// 	selectedText: '',
-// 	selectedBookName: '',
-// 	audioSource: '',
-// 	invalidBibleId: false,
-// 	hasAudio: false,
-// 	formattedSource: '',
-// 	hasTextInDatabase: true,
-// 	filesetTypes: {},
-// 	testaments: {},
-// 	previousAudioPaths: [],
-// 	previousAudioFilesetId: '',
-// 	previousAudioSource: '',
-// 	nextAudioPaths: [],
-// 	nextAudioFilesetId: '',
-// 	nextAudioSource: '',
-// 	audioPaths: [],
-// 	loadingNewChapterText: true,
-// 	loadingCopyright: true,
-// });
 
 const initialState = fromJS({
 	books: [],
@@ -317,6 +229,9 @@ function homePageReducer(state = initialState, action) {
 	switch (action.type) {
 		case USER_LOGGED_IN:
 			return state.set('userId', action.userId).set('userAuthenticated', true);
+		case LOG_OUT:
+			// console.log('In the logout for homepage');
+			return state.set('userId', '').set('userAuthenticated', false);
 		case 'book_metadata':
 			return state.set('testaments', action.testaments);
 		case TOGGLE_FIRST_LOAD_TEXT_SELECTION:

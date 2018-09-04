@@ -703,6 +703,7 @@ class Text extends React.PureComponent {
 			userNotes,
 			bookmarks,
 			audioSource,
+			userAuthenticated,
 			// invalidBibleId,
 			activeBookId,
 		} = this.props;
@@ -794,6 +795,7 @@ class Text extends React.PureComponent {
 
 		if (
 			highlights.length &&
+			userAuthenticated &&
 			(!oneVersePerLine && !readersMode && formattedSource.main) &&
 			this.createFormattedHighlights
 		) {
@@ -809,6 +811,7 @@ class Text extends React.PureComponent {
 			);
 		} else if (
 			highlights.length &&
+			userAuthenticated &&
 			initialText.length &&
 			this.createHighlights
 		) {
