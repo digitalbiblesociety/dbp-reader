@@ -7,11 +7,16 @@ const checkStatus = (res) => {
 	if (res.status >= 200 && res.status < 300) {
 		return res;
 	}
-
 	if (res.status === 428) {
 		return {
 			json: () => ({
 				error: { message: 'You need to reset your password.', code: 428 },
+			}),
+		};
+	} else if (res.status === 401) {
+		return {
+			json: () => ({
+				error: { message: 'Invalid credentials, please try again', code: 401 },
 			}),
 		};
 	}
