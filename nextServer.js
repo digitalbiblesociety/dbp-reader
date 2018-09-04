@@ -1,5 +1,5 @@
 if (process.env.NODE_ENV === 'production') {
-	require('./newrelic');
+	require('newrelic'); // eslint-disable-line
 }
 require('babel-polyfill');
 const express = require('express');
