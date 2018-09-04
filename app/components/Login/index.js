@@ -126,7 +126,7 @@ class Login extends React.PureComponent {
 						<div className="login-error-message">
 							<SvgWrapper className={'icon'} svgid={'warning'} />
 							<span className={'error-text'}>
-								{errorMessage ||
+								{`${errorMessage} ( Click Below )` ||
 									'Username or Password is incorrect. Please try again.'}
 							</span>
 						</div>
@@ -141,7 +141,7 @@ class Login extends React.PureComponent {
 								this.toggleSignInForm(false);
 							}}
 						>
-							Forgot your password?
+							Reset your password.
 						</span>
 					</section>
 				</form>

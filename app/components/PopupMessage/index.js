@@ -18,18 +18,22 @@ function PopupMessage({ styles, message, x, y }) {
 			style={{ top: y - 50, left: x - 87.5, ...styles }}
 			className={'custom-popup'}
 		>
-			<p>
-				{message} If you believe this to be an error please{' '}
-				<a
-					className={'logo'}
-					href={'https://support.bible.is/contact'}
-					title={'https://support.bible.is/contact'}
-					target={'_blank'}
-					rel={'noopener'}
-				>
-					contact support
-				</a>.
-			</p>
+			{message ? (
+				<p>{message}</p>
+			) : (
+				<p>
+					If you believe this to be an error please{' '}
+					<a
+						className={'logo'}
+						href={'https://support.bible.is/contact'}
+						title={'https://support.bible.is/contact'}
+						target={'_blank'}
+						rel={'noopener'}
+					>
+						contact support
+					</a>.
+				</p>
+			)}
 		</div>
 	);
 	// console.log(parentComponent);
