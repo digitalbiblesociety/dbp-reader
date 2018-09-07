@@ -1378,8 +1378,8 @@ export function* createSocialUser({
 	const data = new FormData();
 
 	data.append('email', email);
-	data.append('name', name);
-	data.append('nickname', nickname);
+	data.append('name', name || '');
+	data.append('nickname', nickname || '');
 	data.append('subscribed', '0');
 	data.append('avatar', avatar);
 	data.append('project_id', process.env.NOTES_PROJECT_ID);

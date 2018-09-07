@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import SvgWrapper from '../SvgWrapper';
 import FacebookAuthentication from '../../containers/FacebookAuthentication';
 import GoogleAuthentication from '../../containers/GoogleAuthentication';
-import checkEmailForValidity from '../../utils/checkEmailForValidity';
+// import checkEmailForValidity from '../../utils/checkEmailForValidity';
 // import styled from 'styled-components';
 // import { FormattedMessage } from 'react-intl';
 // import messages from './messages';
@@ -45,16 +45,12 @@ class Login extends React.PureComponent {
 
 	handleSendingLogin = (e) => {
 		e.preventDefault();
-		if (
-			this.state.password.length > 7 &&
-			checkEmailForValidity(this.state.email)
-		) {
-			this.props.sendLoginForm({
-				email: this.state.email,
-				password: this.state.password,
-				stay: this.state.staySignedIn,
-			});
-		}
+		// console.log('Sending the login')
+		this.props.sendLoginForm({
+			email: this.state.email,
+			password: this.state.password,
+			stay: this.state.staySignedIn,
+		});
 	};
 
 	handleStayLoggedInChange = (e) => {
@@ -130,7 +126,7 @@ class Login extends React.PureComponent {
 						<div className="login-error-message">
 							<SvgWrapper className={'icon'} svgid={'warning'} />
 							<span className={'error-text'}>
-								{errorMessage ||
+								{`${errorMessage} ( Click Below to Reset )` ||
 									'Username or Password is incorrect. Please try again.'}
 							</span>
 						</div>
@@ -145,7 +141,7 @@ class Login extends React.PureComponent {
 								this.toggleSignInForm(false);
 							}}
 						>
-							Forgot your password?
+							Reset your password.
 						</span>
 					</section>
 				</form>
