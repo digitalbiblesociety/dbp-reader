@@ -48,7 +48,8 @@
 		"test:coverage": "cross-env NODE_ENV=test jest --coverage",
 		"test:watch": "cross-env NODE_ENV=test jest --watchAll",
 		"coveralls": "cat ./coverage/lcov.info | coveralls",
-		"fetch-latest-site": "git checkout .; git pull origin master; npm install; npm run build:next; pm2 reload ecosystem.config.js --env production --update-env --only bible.is.prod;"
+		"fetch-latest-site": "git checkout .; git pull origin master; npm install; npm run build:next; pm2 reload ecosystem.config.js --env production --update-env --only bible.is.prod;",
+		"fetch-latest-dev": "git checkout .; git pull origin development; npm install; npm run build:next; pm2 reload ecosystem.config.js --env production --update-env --only bible.is.prod"
 	},
 	"lint-staged": {
 		"*.{js,json,scss,md}": [
@@ -226,7 +227,7 @@
 		"next": "^6.1.1",
 		"next-redux-saga": "^3.0.0-beta.1",
 		"next-redux-wrapper": "^2.0.0",
-		"pm2": "^3.0.3",
+		"pm2": "^3.0.4",
 		"prop-types": "15.5.10",
 		"rc-slider": "^8.5.0",
 		"react": "^16.2.0",
