@@ -37,9 +37,12 @@
 	}
 
 	.main-wrapper {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
 		overflow: hidden;
 		margin: 0 auto;
-		padding: 0px 15px;
+		padding: 0 15px;
 		height: 100%;
 
 		@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
@@ -112,6 +115,28 @@
 			-moz-user-select: none;
 			-ms-user-select: none;
 			user-select: none;
+		}
+
+		@media (min-width: 30rem) {
+			.single-formatted-verse {
+				@include css4 {
+					font-size: calc(
+						var(--application-base-font-size) + ((1vw - 0.25em) * 1.1111)
+					);
+				}
+				//font-size: calc(1rem + ((1vw - 0.3rem) * 1.1111));
+				/* Where: * 1.1111 = 100 * font_Size_Difference / viewport_Width_Difference */
+			}
+		}
+		/* Prevent font scaling beyond this breakpoint */
+		@media (min-width: 1000px) {
+			.single-formatted-verse {
+				@include css4 {
+					font-size: calc(
+						var(--application-base-font-size) + ((0.45em) * 1.1111)
+					);
+				}
+			}
 		}
 	}
 
@@ -212,32 +237,39 @@
 .read-chapter-container {
 	display: flex;
 	justify-content: center;
+	align-items: center;
+	margin: 15px 0;
+
+	.read-chapter {
+		height: 40px;
+		border-radius: 6px;
+		width: 130px;
+		max-width: 150px;
+		text-align: center;
+		background-color: #fffff5;
+		box-shadow: 1px 1px 1px 1px #b1a77a;
+		cursor: pointer;
+		font-size: 12px;
+		white-space: nowrap;
+
+		span {
+			@include css4 {
+				color: var(--read-full-chapter);
+			}
+		}
+	}
+	.read-chapter:active {
+		box-shadow: none;
+		color: #000;
+	}
+
+	.read-chapter:focus {
+		border: 1px solid #b1a77a;
+		color: #000;
+		outline: none;
+	}
 }
 
-.read-chapter {
-	height: 35px;
-	border-radius: 6px;
-	width: 130px;
-	max-width: 150px;
-	text-align: center;
-	background-color: #fffff5;
-	box-shadow: 1px 1px 1px 1px #b1a77a;
-	cursor: pointer;
-	font-size: 11px;
-	white-space: nowrap;
-	padding: 5px;
-}
-
-.read-chapter:active {
-	box-shadow: none;
-	color: #000;
-}
-
-.read-chapter:focus {
-	border: 1px solid #b1a77a;
-	color: #000;
-	outline: none;
-}
 @media only screen and (max-width: $audio-player-bp) {
 	.text-container {
 		main {

@@ -40,6 +40,7 @@ import {
 import createHighlights from './highlightPlainText';
 import createFormattedHighlights from './highlightFormattedText';
 import { applyNotes, applyBookmarks } from './formattedTextUtils';
+import ReadFullChapter from '../../components/ReadFullChapter';
 import differenceObject from '../../utils/deepDifferenceObject';
 
 /* Disabling the jsx-a11y linting because we need to capture the selected text
@@ -736,6 +737,7 @@ class Text extends React.PureComponent {
 				)[0];
 				// Create a new container for the verse
 				const newXML = xmlDocText.createElement('div');
+				newXML.className = 'single-formatted-verse';
 				// Add the verse to the new container
 				if (verseNumberElement && verseString) {
 					newXML.appendChild(verseNumberElement);
@@ -1952,16 +1954,11 @@ class Text extends React.PureComponent {
 						)}
 						{this.getTextComponents(this.state.dommountedsostuffworks)}
 						{verseNumber ? (
-							<div className={'read-chapter-container'}>
-								<PrefetchLink
-									prefetch
-									withData
-									href={`/app?bibleId=${activeTextId.toLowerCase()}&bookId=${activeBookId.toLowerCase()}&chapter=${activeChapter}`}
-									as={`/bible/${activeTextId.toLowerCase()}/${activeBookId.toLowerCase()}/${activeChapter}`}
-								>
-									<button className={'read-chapter'}>Read Full Chapter</button>
-								</PrefetchLink>
-							</div>
+							<ReadFullChapter
+								activeTextId={activeTextId}
+								activeBookId={activeBookId}
+								activeChapter={activeChapter}
+							/>
 						) : null}
 						<Information />
 					</main>

@@ -68,6 +68,7 @@ const paper = {
 	'--application-text-container-color': '#000000',
 	'--default-language-name-background-color-transparent':
 		'rgba(255, 255, 255, 0)',
+	'--read-full-chapter': 'rgba(0, 0, 0, 100)',
 };
 
 const dark = {
@@ -136,6 +137,7 @@ const dark = {
 	'--application-text-selection-color': 'rgb(216, 182, 185)',
 	'--application-text-container-color': '#FFFFFF',
 	'--default-language-name-background-color-transparent': 'rgba(0, 0, 0, 0)',
+	'--read-full-chapter': 'rgba(0, 0, 0, 100)',
 };
 
 const red = {
@@ -207,6 +209,7 @@ const red = {
 	'--application-text-selection-color': 'rgb(216, 182, 185)',
 	'--application-text-container-color': '#000000',
 	'--default-language-name-background-color-transparent': 'rgba(0, 0, 0, 0)',
+	'--read-full-chapter': 'rgba(0, 0, 0, 100)',
 };
 
 const themes = {
