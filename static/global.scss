@@ -515,13 +515,20 @@ section {
 	}
 }
 
-// rc-slider overrides
+// rc-slider Overrides
 .rc-slider-dot {
 	background-color: transparent;
 	border: none;
 }
 
-// Feedback button overrides
+// Feedback Button Overrides
 body .atlwdg-trigger.atlwdg-RIGHT {
 	top: 54px;
+}
+
+// Formatted Text Overrides
+body #__next main .v-num {
+	@include css4 {
+		color: var(--default-text-color);
+	}
 }
