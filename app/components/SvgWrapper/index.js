@@ -25,7 +25,10 @@ bottom script after #svgdefs targeting IE/Edge < 13 and U3 0.8 (UCWeb 11 or more
 			}
 		});
 	}
-})(document); */
+})(document);
+	http://bibleis-prod.s3.amazonaws.com/app.scss
+	xlinkHref={`${process.env.CDN_STATIC_FILES}/svglist.svg#${svgid}`}
+*/
 
 function SvgWrapper({ svgid, ...props }) {
 	return (

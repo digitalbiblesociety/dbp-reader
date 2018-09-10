@@ -68,7 +68,11 @@ export default class MyDocument extends Document {
 						defer
 						async
 					/>
-					<link rel="stylesheet" href="/_next/static/style.css" />
+					{/* <link rel="stylesheet" href="/_next/static/style.css" /> */}
+					<link
+						rel="stylesheet"
+						href={`${process.env.CDN_STATIC_FILES}/style.css`}
+					/>
 					<meta httpEquiv={'X-UA-Compatible'} content={'IE=edge'} />
 					<meta name="viewport" content="width=device-width, initial-scale=1" />
 					{process.env.NODE_ENV === 'production' ? (
@@ -106,7 +110,7 @@ export default class MyDocument extends Document {
 
 					<link
 						rel="manifest"
-						href="https://listen.dbp4.org/static/manifest.json"
+						href={`${process.env.CDN_STATIC_FILES}/manifest.json`}
 					/>
 					<link
 						rel="apple-touch-icon"
