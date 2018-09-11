@@ -117,17 +117,17 @@ export default class MyDocument extends Document {
 					/>
 					<link
 						rel="apple-touch-icon"
-						href="https://listen.dbp4.org/static/favicon-96x96.png"
+						href={`${process.env.CDN_STATIC_FILES}/favicon-96x96.png`}
 					/>
 					<meta
 						property={'og:image'}
-						content={'https://listen.dbp4.org/static/icon-310x310.png'}
+						content={`${process.env.CDN_STATIC_FILES}/icon-310x310.png`}
 					/>
 					<meta property={'og:image:width'} content={310} />
 					<meta property={'og:image:height'} content={310} />
 					<meta
 						name={'twitter:image'}
-						content={'https://listen.dbp4.org/static/icon-96x96.png'}
+						content={`${process.env.CDN_STATIC_FILES}/icon-96x96.png`}
 					/>
 
 					<meta name="twitter:app:id:iphone" content="" />
@@ -212,12 +212,14 @@ export default class MyDocument extends Document {
 					<Main />
 					<NextScript />
 					<noscript>
-						<iframe
-							src="https://www.googletagmanager.com/ns.html?id=GTM-N3RF6RC"
-							height="0"
-							width="0"
-							style={{ display: 'none', visibility: 'hidden' }}
-						/>
+						{process.env.NODE_ENV === 'production' ? (
+							<iframe
+								src="https://www.googletagmanager.com/ns.html?id=GTM-N3RF6RC"
+								height="0"
+								width="0"
+								style={{ display: 'none', visibility: 'hidden' }}
+							/>
+						) : null}
 					</noscript>
 				</body>
 			</html>
