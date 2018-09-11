@@ -101,7 +101,7 @@ class Information extends React.PureComponent {
 	toggleCopyright = () => {
 		this.setState((currentState) => ({
 			opened: !currentState.opened,
-			height: !currentState.height ? 525 : 0,
+			height: !currentState.height ? 520 : 0,
 		}));
 	};
 
