@@ -420,6 +420,18 @@ AppContainer.getInitialProps = async (context) => {
 		text_plain: true,
 		text_format: true,
 	};
+	const activeFilesetId =
+		bible.filesets && bible.filesets[process.env.DBP_BUCKET_ID]
+			? bible.filesets[process.env.DBP_BUCKET_ID]
+					.filter(
+						(f) =>
+							!f.id.includes('GID') &&
+							f.id.slice(-4 !== 'DA16') &&
+							(f.type === 'text_plain' || f.type === 'text_format'),
+					)
+					.reduce((a, c) => c.id, '')
+			: '';
+	console.log('activeFilesetId', activeFilesetId);
 	// console.log('filesets in app file before filter function', bible.filesets);
 	// Filter out gideon bibles because the api will never be fixed in this area... -_- :( :'( ;'(
 	const filesets =
@@ -642,6 +654,7 @@ AppContainer.getInitialProps = async (context) => {
 			type: 'GET_INITIAL_ROUTE_STATE_HOMEPAGE',
 			homepage: {
 				userProfile,
+				activeFilesetId,
 				audioPaths: initData.audioPaths.slice(1),
 				audioSource: initData.audioPaths[0] || '',
 				hasAudio: !!initData.audioPaths.length,
@@ -731,27 +744,6 @@ AppContainer.propTypes = {
 	routeLocation: PropTypes.string,
 	match: PropTypes.object,
 	fetchedUrls: PropTypes.array,
-	// books: PropTypes.array,
-	// filesets: PropTypes.array,
-	// testaments: PropTypes.object,
-	// textDirection: PropTypes.string,
-	// verseNumber: PropTypes.string,
-	// activeTextId: PropTypes.string,
-	// activeTextName: PropTypes.string,
-	// activeBookId: PropTypes.string,
-	// defaultLanguageIso: PropTypes.string,
-	// defaultLanguageName: PropTypes.string,
-	// formattedText: PropTypes.string,
-	// userId: PropTypes.string,
-	// isAuthenticated: PropTypes.bool,
-	// userProfile: PropTypes.object,
-	// activeIsoCode: PropTypes.string,
-	// activeCountryName: PropTypes.string,
-	// activeLanguageName: PropTypes.string,
-	// countryLanguages: PropTypes.array,
-	// languages: PropTypes.array,
-	// countries: PropTypes.object,
-	// texts: PropTypes.array,
 };
 
 export default connect()(AppContainer);

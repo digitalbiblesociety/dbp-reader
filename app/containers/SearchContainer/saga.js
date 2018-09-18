@@ -6,6 +6,7 @@ import {
 	SEARCH_ERROR,
 } from './constants';
 
+// Todo: Switch to using fileset id for the search
 export function* getSearchResults({ bibleId, searchText }) {
 	const searchString = searchText.trim().replace(' ', '+');
 	// console.log('Search string', searchString);

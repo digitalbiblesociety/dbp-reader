@@ -76,7 +76,7 @@ export class SearchContainer extends React.PureComponent {
 				this.handleReferenceRedirect({ ...refObject, searchText });
 			} else {
 				this.getSearchResults({
-					bibleId: this.props.bibleId,
+					bibleId: this.props.activeFilesetId || this.props.bibleId,
 					searchText: e.target.value,
 				});
 				this.setState({ firstSearch: false });
@@ -87,7 +87,7 @@ export class SearchContainer extends React.PureComponent {
 	handleSearchInputChange = (e) => {
 		// console.log('is a reference changed', this.checkInputForReference(e.target.value));
 		const val = e.target.value;
-		const { bibleId, loadingResults } = this.props;
+		const { bibleId, activeFilesetId, loadingResults } = this.props;
 		const refObject = this.checkInputForReference(e.target.value);
 
 		this.setState({ filterText: val, firstSearch: !val });
@@ -110,7 +110,10 @@ export class SearchContainer extends React.PureComponent {
 			if (refObject.isReference) {
 				this.handleReferenceRedirect({ ...refObject, searchText: val });
 			} else {
-				this.getSearchResults({ bibleId, searchText: val });
+				this.getSearchResults({
+					bibleId: activeFilesetId || bibleId,
+					searchText: val,
+				});
 				this.setState({ firstSearch: false });
 			}
 		}, 1500);
@@ -135,7 +138,7 @@ export class SearchContainer extends React.PureComponent {
 			this.handleReferenceRedirect({ ...refObject, searchText: filterText });
 		} else {
 			this.getSearchResults({
-				bibleId: this.props.bibleId,
+				bibleId: this.props.activeFilesetId || this.props.bibleId,
 				searchText: filterText,
 			});
 		}
@@ -145,6 +148,7 @@ export class SearchContainer extends React.PureComponent {
 
 	handleReferenceRedirect = ({ book, chapter, firstVerse, searchText }) => {
 		const books = this.props.books;
+		const activeFilesetId = this.props.activeFilesetId;
 		const bibleId = this.props.bibleId;
 		const lBook = book.toLowerCase();
 		const bookObject = books.find(
@@ -168,7 +172,7 @@ export class SearchContainer extends React.PureComponent {
 			);
 		} else {
 			this.getSearchResults({
-				bibleId,
+				bibleId: activeFilesetId || bibleId,
 				searchText,
 			});
 		}
@@ -228,7 +232,7 @@ export class SearchContainer extends React.PureComponent {
 			lastFiveSearches,
 			loadingResults,
 		} = this.props.searchcontainer;
-		const { bibleId, searchResults } = this.props;
+		const { bibleId, activeFilesetId, searchResults } = this.props;
 		// console.log('selectedRes', searchResults);
 		const { firstSearch } = this.state;
 
@@ -278,7 +282,7 @@ export class SearchContainer extends React.PureComponent {
 								.get('results')
 								.map((r) => (
 									<SearchResult
-										bibleId={bibleId}
+										bibleId={activeFilesetId || bibleId}
 										key={`${r.get('book_id')}${r.get('chapter')}${r.get(
 											'verse_start',
 										)}`}
@@ -334,6 +338,7 @@ SearchContainer.propTypes = {
 	searchcontainer: PropTypes.object,
 	loadingResults: PropTypes.bool,
 	books: PropTypes.array,
+	activeFilesetId: PropTypes.string,
 };
 
 const mapStateToProps = createStructuredSelector({

@@ -731,6 +731,7 @@ class HomePage extends React.PureComponent {
 			activeTextName,
 			activeBookName,
 			activeNotesView,
+			activeFilesetId,
 			// autoPlayEnabled,
 			audioPlayerState,
 			books,
@@ -825,6 +826,7 @@ class HomePage extends React.PureComponent {
 						>
 							<SearchContainer
 								bibleId={activeTextId}
+								activeFilesetId={activeFilesetId}
 								books={books}
 								toggleSearchModal={this.toggleSearchModal}
 							/>

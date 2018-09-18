@@ -203,6 +203,7 @@ const initialState = fromJS({
 			token: '',
 		},
 	},
+	activeFilesetId: '',
 	audioFilesetId: '',
 	plainTextFilesetId: '',
 	formattedTextFilesetId: '',
