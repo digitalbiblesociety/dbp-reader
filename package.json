@@ -214,6 +214,7 @@
 		"fontfaceobserver": "2.0.9",
 		"harmony-reflect": "^1.6.0",
 		"history": "4.6.3",
+		"hls.js": "^0.11.0",
 		"hoist-non-react-statics": "2.1.1",
 		"immutable": "3.8.1",
 		"intl": "1.2.5",
@@ -226,7 +227,6 @@
 		"match-sorter": "^2.2.1",
 		"minimist": "1.2.0",
 		"newrelic": "^4.8.1",
-		"sass": "^1.13.2",
 		"next": "^6.1.1",
 		"next-redux-saga": "^3.0.0-beta.1",
 		"next-redux-wrapper": "^2.0.0",
@@ -254,6 +254,7 @@
 		"redux-saga": "0.15.3",
 		"reselect": "3.0.1",
 		"sanitize.css": "4.1.0",
+		"sass": "^1.13.2",
 		"warning": "3.0.0",
 		"whatwg-fetch": "2.0.3"
 	},
