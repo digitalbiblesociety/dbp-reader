@@ -97,8 +97,9 @@ class VideoPlayer extends React.PureComponent {
 		);
 
 		if (isFullScreen) {
-			if (document.exitFullscreen) document.exitFullscreen();
-			else if (document.mozCancelFullScreen) {
+			if (document.exitFullscreen) {
+				document.exitFullscreen();
+			} else if (document.mozCancelFullScreen) {
 				document.mozCancelFullScreen();
 			} else if (document.webkitCancelFullScreen) {
 				document.webkitCancelFullScreen();
@@ -106,8 +107,9 @@ class VideoPlayer extends React.PureComponent {
 				document.msExitFullscreen();
 			}
 		} else if (this.videoRef) {
-			if (this.videoRef.requestFullscreen) this.videoRef.requestFullscreen();
-			else if (this.videoRef.mozRequestFullScreen) {
+			if (this.videoRef.requestFullscreen) {
+				this.videoRef.requestFullscreen();
+			} else if (this.videoRef.mozRequestFullScreen) {
 				this.videoRef.mozRequestFullScreen();
 			} else if (this.videoRef.webkitRequestFullScreen) {
 				this.videoRef.webkitRequestFullScreen();

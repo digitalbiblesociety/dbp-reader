@@ -532,3 +532,8 @@ body #__next main .v-num {
 		color: var(--default-text-color);
 	}
 }
+
+// Override Chrome Full Screen Video Controls
+video::-internal-media-controls-overlay-enclosure {
+	display: none;
+}
