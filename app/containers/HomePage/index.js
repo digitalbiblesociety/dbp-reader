@@ -21,6 +21,7 @@ import injectSaga from '../../utils/injectSaga';
 import injectReducer from '../../utils/injectReducer';
 import Settings from '../Settings';
 import AudioPlayer from '../AudioPlayer';
+import VideoPlayer from '../VideoPlayer';
 import Profile from '../Profile';
 import Notes from '../Notes';
 import Text from '../Text';
@@ -784,6 +785,7 @@ class HomePage extends React.PureComponent {
 					toggleChapterSelection={this.toggleChapterSelection}
 					toggleVersionSelection={this.toggleVersionSelection}
 				/>
+				<VideoPlayer />
 				<TransitionGroup>
 					{isSettingsModalActive ? (
 						<FadeTransition

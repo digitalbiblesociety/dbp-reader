@@ -431,7 +431,7 @@ AppContainer.getInitialProps = async (context) => {
 					)
 					.reduce((a, c) => c.id, '')
 			: '';
-	console.log('activeFilesetId', activeFilesetId);
+	// console.log('activeFilesetId', activeFilesetId);
 	// console.log('filesets in app file before filter function', bible.filesets);
 	// Filter out gideon bibles because the api will never be fixed in this area... -_- :( :'( ;'(
 	const filesets =
