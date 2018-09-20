@@ -12,7 +12,16 @@ class VideoPlayer extends React.PureComponent {
 		playerOpen: true,
 		volume: 1,
 		paused: true,
-		volumeSliderState: true,
+		volumeSliderState: false,
+		elipsisOpen: true,
+		playlist: [
+			{ title: 'Mark 2', duration: '05:00', poster: '' },
+			{ title: 'Mark 3', duration: '05:00', poster: '' },
+			{ title: 'Mark 4', duration: '05:00', poster: '' },
+			{ title: 'Mark 5', duration: '05:00', poster: '' },
+			{ title: 'Mark 6', duration: '05:00', poster: '' },
+			{ title: 'Mark 7', duration: '05:00', poster: '' },
+		],
 		source:
 			'https://s3-us-west-2.amazonaws.com/dbp-vid/hls/FALTBL/FALTBLN2DA/Mark_1-1-20R_1FALTBL/FALTBLN2DA/Mark_1-1-20R_1.m3u8',
 	};
@@ -137,7 +146,14 @@ class VideoPlayer extends React.PureComponent {
 		}
 	};
 
+	toggleElipsis = () => {
+		this.setState((currentState) => ({
+			elipsisOpen: !currentState.elipsisOpen,
+		}));
+	};
+
 	updateVolume = (volume) => {
+		this.videoRef.volume = volume;
 		this.setState({ volume });
 	};
 
@@ -163,7 +179,14 @@ class VideoPlayer extends React.PureComponent {
 	}
 
 	render() {
-		const { playerOpen, volume, paused, volumeSliderState } = this.state;
+		const {
+			playerOpen,
+			playlist,
+			volume,
+			paused,
+			volumeSliderState,
+			elipsisOpen,
+		} = this.state;
 		/* eslint-disable jsx-a11y/media-has-caption */
 		if (playerOpen) {
 			return (
@@ -201,13 +224,11 @@ class VideoPlayer extends React.PureComponent {
 										updateVolume={this.updateVolume}
 										volume={volume}
 										railStyle={{
-											height: '135px',
 											width: '2px',
 											backgroundColor: '#000',
 										}}
 										trackStyle={{
 											backgroundColor: 'rgba(98, 177, 130, 1)',
-											height: '115px',
 											width: '2px',
 										}}
 										handleStyle={{
@@ -233,6 +254,7 @@ class VideoPlayer extends React.PureComponent {
 							<div className={'right-controls'}>
 								<SvgWrapper
 									fill={'#fff'}
+									onClick={this.toggleElipsis}
 									className={'video-elipsis'}
 									svgid={'elipsis'}
 								/>
@@ -244,9 +266,48 @@ class VideoPlayer extends React.PureComponent {
 								/>
 							</div>
 						</div>
+						<div
+							className={
+								elipsisOpen
+									? 'video-elipsis-container active'
+									: 'video-elipsis-container'
+							}
+						>
+							<div className={'video-elipsis-menu'}>
+								<div className={'video-elipsis-header'}>
+									<SvgWrapper
+										className={'gospel-films'}
+										svgid={'gospel_films'}
+									/>
+									<span className={'title-text'}>Gospel Films</span>
+									<SvgWrapper
+										className={'close-arrow'}
+										fill={'#fff'}
+										svgid={'arrow_down'}
+									/>
+								</div>
+								<div className={'video-thumbnail-list'}>
+									{playlist.map((video) => (
+										<div className={'video-thumbnail'}>
+											<img
+												className={'thumbnail-poster'}
+												src={video.poster}
+												alt={`There was no video for: ${video.title}`}
+											/>
+											<div className={'thumbnail-metadata'}>
+												<span className={'thumbnail-title'}>{video.title}</span>
+												<span className={'thumbnail-duration'}>
+													{video.duration}
+												</span>
+											</div>
+										</div>
+									))}
+								</div>
+							</div>
+						</div>
 					</div>
 					<div onClick={this.closePlayer} className={'black-bar'}>
-						<SvgWrapper className={'gospel-films'} svgid={'arrow_up'} />
+						<SvgWrapper className={'up-arrow'} svgid={'arrow_up'} />
 					</div>
 				</div>
 			);

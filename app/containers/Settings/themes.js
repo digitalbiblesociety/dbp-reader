@@ -69,7 +69,7 @@ const paper = {
 	'--default-language-name-background-color-transparent':
 		'rgba(255, 255, 255, 0)',
 	'--read-full-chapter': 'rgba(0, 0, 0, 100)',
-	'--video-player-background-color': 'rgba(25, 25, 25, 0.95)',
+	'--video-player-background-color': 'rgba(0, 0, 0, 1)',
 	'--video-player-black-bar-color': 'rgba(0, 0, 0, 1)',
 	'--video-player-films-svg-color': 'rgba(255, 255, 255, 1)',
 };
@@ -141,7 +141,7 @@ const dark = {
 	'--application-text-container-color': '#FFFFFF',
 	'--default-language-name-background-color-transparent': 'rgba(0, 0, 0, 0)',
 	'--read-full-chapter': 'rgba(0, 0, 0, 100)',
-	'--video-player-background-color': 'rgba(25, 25, 25, 0.95)',
+	'--video-player-background-color': 'rgba(0, 0, 0, 1)',
 	'--video-player-black-bar-color': 'rgba(0, 0, 0, 1)',
 	'--video-player-films-svg-color': 'rgba(255, 255, 255, 1)',
 };
@@ -216,7 +216,7 @@ const red = {
 	'--application-text-container-color': '#000000',
 	'--default-language-name-background-color-transparent': 'rgba(0, 0, 0, 0)',
 	'--read-full-chapter': 'rgba(0, 0, 0, 100)',
-	'--video-player-background-color': 'rgba(25, 25, 25, 0.95)',
+	'--video-player-background-color': 'rgba(0, 0, 0, 1)',
 	'--video-player-black-bar-color': 'rgba(0, 0, 0, 1)',
 	'--video-player-films-svg-color': 'rgba(255, 255, 255, 1)',
 };
