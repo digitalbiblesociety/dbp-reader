@@ -5,13 +5,16 @@ import { createStructuredSelector } from 'reselect';
 import Hls from 'hls.js';
 import SvgWrapper from '../../components/SvgWrapper';
 import makeSelectHomePage from '../HomePage/selectors';
+import VolumeSlider from '../../components/VolumeSlider';
 
 class VideoPlayer extends React.PureComponent {
 	state = {
 		playerOpen: true,
 		volume: 1,
 		paused: true,
-		source: 'https://video-dev.github.io/streams/x36xhzz/x36xhzz.m3u8',
+		volumeSliderState: true,
+		source:
+			'https://s3-us-west-2.amazonaws.com/dbp-vid/hls/FALTBL/FALTBLN2DA/Mark_1-1-20R_1FALTBL/FALTBLN2DA/Mark_1-1-20R_1.m3u8',
 	};
 
 	componentDidMount() {
@@ -33,11 +36,23 @@ class VideoPlayer extends React.PureComponent {
 		return <SvgWrapper className={'icon'} fill="#fff" svgid="volume_max" />;
 	}
 
+	handleVideoClick = () => {
+		const { paused } = this.state;
+
+		if (paused) {
+			this.playVideo();
+		} else {
+			this.pauseVideo();
+		}
+	};
+
 	initVideoStream = () => {
+		const { source } = this.state;
+
 		this.hls = new Hls();
 		this.hls.on(Hls.Events.ERROR, (event, data) => {
 			if (data.fatal) {
-				console.log('There was a fatal hls error');
+				console.log('There was a fatal hls error', event, data);
 				switch (data.type) {
 					case Hls.ErrorTypes.NETWORK_ERROR:
 						this.hls.startLoad();
@@ -51,10 +66,13 @@ class VideoPlayer extends React.PureComponent {
 				}
 			}
 		});
-		// this.hls.loadSource(
-		// 	'https://video-dev.github.io/streams/x36xhzz/x36xhzz.m3u8',
-		// );
-		// this.hls.attachMedia(this.videoRef);
+		this.hls.loadSource(source);
+		this.hls.attachMedia(this.videoRef);
+		this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
+			// this.videoRef.play();
+			// this.videoRef.pause();
+			// this.setState({ paused: true })
+		});
 	};
 
 	playVideo = () => {
@@ -119,6 +137,18 @@ class VideoPlayer extends React.PureComponent {
 		}
 	};
 
+	updateVolume = (volume) => {
+		this.setState({ volume });
+	};
+
+	closeModals = () => {
+		this.setState({ volumeSliderState: false });
+	};
+
+	openVolumeSlider = () => {
+		this.setState({ volumeSliderState: true });
+	};
+
 	get playButton() {
 		const { paused } = this.state;
 
@@ -128,13 +158,12 @@ class VideoPlayer extends React.PureComponent {
 				className={paused ? 'play-video show-play' : 'play-video hide-play'}
 				fill={'#fff'}
 				svgid={'play_video'}
-				viewBox={'0 0 40 40'}
 			/>
 		);
 	}
 
 	render() {
-		const { playerOpen, volume, paused } = this.state;
+		const { playerOpen, volume, paused, volumeSliderState } = this.state;
 		/* eslint-disable jsx-a11y/media-has-caption */
 		if (playerOpen) {
 			return (
@@ -149,10 +178,52 @@ class VideoPlayer extends React.PureComponent {
 						>
 							{this.playButton}
 						</div>
-						<video ref={this.setVideoRef} />
+						<video ref={this.setVideoRef} onClick={this.handleVideoClick} />
 						<div className={paused ? 'controls hide-controls' : 'controls'}>
 							<div className={'left-controls'}>
-								{this.getVolumeSvg(volume)}
+								<div
+									className={'video-volume-container'}
+									onTouchEnd={(e) => {
+										e.preventDefault();
+										if (!volumeSliderState) {
+											this.openVolumeSlider();
+										}
+									}}
+									onClick={() => {
+										if (!volumeSliderState) {
+											this.openVolumeSlider();
+										}
+									}}
+								>
+									<VolumeSlider
+										active={volumeSliderState}
+										onCloseFunction={this.closeModals}
+										updateVolume={this.updateVolume}
+										volume={volume}
+										railStyle={{
+											height: '135px',
+											width: '2px',
+											backgroundColor: '#000',
+										}}
+										trackStyle={{
+											backgroundColor: 'rgba(98, 177, 130, 1)',
+											height: '115px',
+											width: '2px',
+										}}
+										handleStyle={{
+											width: '12.5px',
+											height: '12.5px',
+											backgroundColor: 'rgba(98, 177, 130, 1)',
+											borderColor: 'rgba(98, 177, 130, 1)',
+											left: '5px',
+										}}
+										sliderContainerClassName={'video-slider-container'}
+										activeClassNames={'video-volume-slider-container active'}
+										inactiveClassNames={'video-volume-slider-container'}
+										vertical
+									/>
+									{this.getVolumeSvg(volume)}
+								</div>
 								<SvgWrapper
 									onClick={this.pauseVideo}
 									fill={'#fff'}

@@ -44,8 +44,45 @@ class VolumeSlider extends React.PureComponent {
 		this.props.updateVolume(value / 100 || 0);
 	};
 
+	get activeClassName() {
+		return this.props.activeClassNames || 'volume-slider-container active';
+	}
+
+	get inactiveClassName() {
+		return this.props.inactiveClassNames || 'volume-slider-container';
+	}
+
+	get railStyle() {
+		return this.props.railStyle || { backgroundColor: '#111', height: '2px' };
+	}
+
+	get trackStyle() {
+		return (
+			this.props.trackStyle || {
+				backgroundColor: 'rgb(98,177,130)',
+				height: '2px',
+			}
+		);
+	}
+
+	get handleStyle() {
+		return (
+			this.props.handleStyle || {
+				border: 'none',
+				backgroundColor: 'rgb(98,177,130)',
+				top: '4px',
+			}
+		);
+	}
+
 	render() {
-		const { volume, active } = this.props;
+		const {
+			volume,
+			active,
+			vertical,
+			sliderClassName,
+			sliderContainerClassName,
+		} = this.props;
 		// const {
 		// 	stateVolume,
 		// } = this.state;
@@ -53,22 +90,17 @@ class VolumeSlider extends React.PureComponent {
 		return (
 			<div
 				ref={this.setRef}
-				className={
-					active ? 'volume-slider-container active' : 'volume-slider-container'
-				}
+				className={active ? this.activeClassName : this.inactiveClassName}
 			>
-				<div className="volume-slider">
+				<div className={sliderContainerClassName || 'volume-slider'}>
 					<Slider
-						className="slider"
+						className={sliderClassName || 'slider'}
 						onChange={this.handleChange}
-						handleStyle={{
-							border: 'none',
-							backgroundColor: 'rgb(98,177,130)',
-							top: '4px',
-						}}
-						railStyle={{ backgroundColor: '#111', height: '2px' }}
-						trackStyle={{ backgroundColor: 'rgb(98,177,130)', height: '2px' }}
+						handleStyle={this.handleStyle}
+						railStyle={this.railStyle}
+						trackStyle={this.trackStyle}
 						defaultValue={volume * 100}
+						vertical={vertical}
 						min={0}
 						max={100}
 					/>
@@ -80,9 +112,17 @@ class VolumeSlider extends React.PureComponent {
 
 VolumeSlider.propTypes = {
 	updateVolume: PropTypes.func.isRequired,
-	volume: PropTypes.number.isRequired,
 	onCloseFunction: PropTypes.func,
+	volume: PropTypes.number.isRequired,
 	active: PropTypes.bool,
+	vertical: PropTypes.bool,
+	railStyle: PropTypes.object,
+	trackStyle: PropTypes.object,
+	handleStyle: PropTypes.object,
+	activeClassNames: PropTypes.string,
+	inactiveClassNames: PropTypes.string,
+	sliderClassName: PropTypes.string,
+	sliderContainerClassName: PropTypes.string,
 };
 
 export default VolumeSlider;
