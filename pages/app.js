@@ -632,10 +632,9 @@ AppContainer.getInitialProps = async (context) => {
 	// });
 	// const bookMetaJson = bookMetaRes;
 	// console.log('bookData', bookData.map(d => ({ [d.book_id]: d.name })));
-	const testaments = bookData.reduce(
-		(a, c) => ({ ...a, [c.book_id]: c.testament }),
-		{},
-	);
+	const testaments = bookData
+		? bookData.reduce((a, c) => ({ ...a, [c.book_id]: c.testament }), {})
+		: [];
 
 	if (context.reduxStore) {
 		context.reduxStore.dispatch({

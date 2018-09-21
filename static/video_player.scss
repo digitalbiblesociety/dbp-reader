@@ -6,6 +6,10 @@
 	width: 100%;
 	height: 84px;
 
+	&.closed {
+		display: none;
+	}
+
 	&:hover {
 		cursor: pointer;
 	}
@@ -35,10 +39,15 @@
 }
 
 .video-player-container {
+	display: none;
 	padding-top: 54px;
 	width: 100%;
 	position: relative;
 	max-height: 620px;
+
+	&.active {
+		display: block;
+	}
 
 	@include css4 {
 		background-color: var(--video-player-background-color);
@@ -61,6 +70,7 @@
 			max-height: 478px;
 			max-width: 850px;
 			z-index: 2;
+			pointer-events: none;
 			background-color: rgba(100, 100, 100, 0.35);
 
 			&.show-play {
@@ -75,8 +85,7 @@
 				position: absolute;
 				top: calc(50% - 45px);
 				left: calc(50% - 40px);
-				height: 123px;
-				width: 110px;
+
 				z-index: 3;
 
 				&:hover {
@@ -90,6 +99,12 @@
 				&.hide-play {
 					display: none;
 				}
+			}
+
+			.play-video-title {
+				position: absolute;
+				top: calc(50% - 100px);
+				left: calc(50% - 40px);
 			}
 		}
 
@@ -224,20 +239,17 @@
 			.video-elipsis-menu {
 				width: 250px;
 				height: 445px;
-				overflow-x: hidden;
-				overflow-y: scroll;
 				position: absolute;
 				right: 0;
 				bottom: 35px;
-				background-color: #777;
 
 				.video-elipsis-header {
 					display: flex;
 					align-items: center;
 					justify-content: space-between;
-					padding: 10px;
+					padding: 10px 20px;
 					height: 35px;
-					background-color: #2c3036;
+					background-color: #1b1f24;
 
 					.gospel-films {
 						height: 25px;
@@ -261,38 +273,72 @@
 				.video-thumbnail-list {
 					max-height: 410px;
 					height: 410px;
+					z-index: 4;
 					overflow-x: hidden;
 					overflow-y: scroll;
 
 					.video-thumbnail {
 						height: 141px;
 						width: 250px;
-						background-color: rgba(12, 120, 35, 0.85);
 						position: relative;
 						border-bottom: solid 1px black;
+
+						&:active {
+							opacity: 0.9;
+						}
+
+						&:hover {
+							cursor: pointer;
+						}
 
 						.thumbnail-poster {
 							min-height: 100%;
 							min-width: 100%;
-							background-color: rgba(12, 50, 180, 0.45);
 						}
 
 						.thumbnail-metadata {
 							height: 25px;
 							position: absolute;
-							bottom: 0;
+							bottom: -1px;
 							width: 100%;
 							display: flex;
 							align-items: center;
 							justify-content: space-between;
-							padding: 5px;
-							background-color: rgba(100, 100, 100, 0.35);
+							padding: 5px 20px;
+							background-color: rgba(44, 48, 54, 0.5);
+
+							&:before {
+								content: '';
+								width: 100%;
+								height: 100%;
+								position: absolute;
+								z-index: 5;
+								top: 0;
+								left: 0;
+								right: 0;
+								bottom: 0;
+								background-color: rgba(0, 0, 0, 0.4);
+							}
 
 							.thumbnail-title {
+								color: #fff;
+								z-index: 6;
 							}
 
 							.thumbnail-duration {
+								color: #fff;
+								z-index: 6;
 							}
+						}
+
+						.thumbnail-play-button {
+							position: absolute;
+							width: 26px;
+							height: 26px;
+							z-index: 6;
+							fill: #fff;
+							left: calc(50% - 13px);
+							top: calc(50% - 26px);
 						}
 					}
 				}
@@ -304,5 +350,11 @@
 		padding-top: 0;
 		margin-top: 0;
 		height: 30px;
+	}
+}
+
+@media only screen and (max-width: 850px) {
+	.video-elipsis-menu {
+		top: 0;
 	}
 }
