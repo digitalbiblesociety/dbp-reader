@@ -358,7 +358,7 @@ section {
 	position: absolute;
 	width: 1px;
 }
-//.disabled               {opacity:.5}
+//.disabled {opacity:.5}
 
 .visuallyhidden,
 .hide {
@@ -534,6 +534,6 @@ body #__next main .v-num {
 }
 
 // Override Chrome Full Screen Video Controls
-video::-internal-media-controls-overlay-enclosure {
-	display: none;
-}
+//video::-internal-media-controls-overlay-enclosure {
+//	display: none;
+//}

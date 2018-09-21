@@ -5,14 +5,14 @@ import { createStructuredSelector } from 'reselect';
 import Hls from 'hls.js';
 import SvgWrapper from '../../components/SvgWrapper';
 import makeSelectHomePage from '../HomePage/selectors';
-import VolumeSlider from '../../components/VolumeSlider';
+import VideoControls from '../../components/VideoControls';
+import VideoList from '../../components/VideoList';
 
 class VideoPlayer extends React.PureComponent {
 	state = {
 		playerOpen: true,
 		volume: 1,
 		paused: true,
-		volumeSliderState: false,
 		elipsisOpen: false,
 		playlist: [
 			{
@@ -82,17 +82,6 @@ class VideoPlayer extends React.PureComponent {
 		this.videoRef = el;
 	};
 
-	getVolumeSvg(volume) {
-		if (volume <= 0.25) {
-			return <SvgWrapper className={'icon'} fill="#fff" svgid="volume_low" />;
-		} else if (volume <= 0.5) {
-			return <SvgWrapper className={'icon'} fill="#fff" svgid="volume_1" />;
-		} else if (volume <= 0.75) {
-			return <SvgWrapper className={'icon'} fill="#fff" svgid="volume_2" />;
-		}
-		return <SvgWrapper className={'icon'} fill="#fff" svgid="volume_max" />;
-	}
-
 	handleVideoClick = () => {
 		const { paused } = this.state;
 
@@ -142,9 +131,6 @@ class VideoPlayer extends React.PureComponent {
 		this.hls.loadSource(currentVideo.source);
 		this.hls.attachMedia(this.videoRef);
 		this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
-			// this.videoRef.play();
-			// this.videoRef.pause();
-			// this.setState({ paused: true })
 			// console.log('Adding poster for video');
 			this.videoRef.poster = currentVideo.poster;
 		});
@@ -226,14 +212,6 @@ class VideoPlayer extends React.PureComponent {
 		this.setState({ volume });
 	};
 
-	closeVolumeSlider = () => {
-		this.setState({ volumeSliderState: false });
-	};
-
-	openVolumeSlider = () => {
-		this.setState({ volumeSliderState: true });
-	};
-
 	get playButton() {
 		const { paused } = this.state;
 
@@ -253,12 +231,10 @@ class VideoPlayer extends React.PureComponent {
 			playlist,
 			volume,
 			paused,
-			volumeSliderState,
 			elipsisOpen,
 			currentVideo,
 		} = this.state;
 		/* eslint-disable jsx-a11y/media-has-caption */
-		// if (playerOpen) {
 		return [
 			<div
 				key={'video-player-container'}
@@ -284,115 +260,20 @@ class VideoPlayer extends React.PureComponent {
 						onClick={this.handleVideoClick}
 						poster={currentVideo.poster}
 					/>
-					<div className={paused ? 'controls hide-controls' : 'controls'}>
-						<div className={'left-controls'}>
-							<div
-								className={'video-volume-container'}
-								onTouchEnd={(e) => {
-									e.preventDefault();
-									if (!volumeSliderState) {
-										this.openVolumeSlider();
-									}
-								}}
-								onClick={() => {
-									if (!volumeSliderState) {
-										this.openVolumeSlider();
-									}
-								}}
-							>
-								<VolumeSlider
-									active={volumeSliderState}
-									onCloseFunction={this.closeVolumeSlider}
-									updateVolume={this.updateVolume}
-									volume={volume}
-									railStyle={{
-										width: '2px',
-										backgroundColor: '#000',
-									}}
-									trackStyle={{
-										backgroundColor: 'rgba(98, 177, 130, 1)',
-										width: '2px',
-									}}
-									handleStyle={{
-										width: '12.5px',
-										height: '12.5px',
-										backgroundColor: 'rgba(98, 177, 130, 1)',
-										borderColor: 'rgba(98, 177, 130, 1)',
-										left: '5px',
-									}}
-									sliderContainerClassName={'video-slider-container'}
-									activeClassNames={'video-volume-slider-container active'}
-									inactiveClassNames={'video-volume-slider-container'}
-									vertical
-								/>
-								{this.getVolumeSvg(volume)}
-							</div>
-							<SvgWrapper
-								onClick={this.pauseVideo}
-								fill={'#fff'}
-								svgid={'pause'}
-							/>
-						</div>
-						<div className={'right-controls'}>
-							<SvgWrapper
-								fill={'#fff'}
-								onClick={this.toggleElipsis}
-								className={'video-elipsis'}
-								svgid={'elipsis'}
-							/>
-							<SvgWrapper
-								fill={'#fff'}
-								className={'video-fullscreen'}
-								onClick={this.toggleFullScreen}
-								svgid={'fullscreen'}
-							/>
-						</div>
-					</div>
-					<div
-						className={
-							elipsisOpen
-								? 'video-elipsis-container active'
-								: 'video-elipsis-container'
-						}
-					>
-						<div className={'video-elipsis-menu'}>
-							<div className={'video-elipsis-header'}>
-								<SvgWrapper className={'gospel-films'} svgid={'gospel_films'} />
-								<span className={'title-text'}>Gospel Films</span>
-								<SvgWrapper
-									className={'close-arrow'}
-									fill={'#fff'}
-									onClick={this.toggleElipsis}
-									svgid={'arrow_down'}
-								/>
-							</div>
-							<div className={'video-thumbnail-list'}>
-								{playlist.map((video) => (
-									<div
-										className={'video-thumbnail'}
-										key={`${video.title}_${video.duration}`}
-										onClick={() => this.handleThumbnailClick(video)}
-									>
-										<img
-											className={'thumbnail-poster'}
-											src={video.poster}
-											alt={`There was no video for: ${video.title}`}
-										/>
-										<div className={'thumbnail-metadata'}>
-											<span className={'thumbnail-title'}>{video.title}</span>
-											<span className={'thumbnail-duration'}>
-												{video.duration}
-											</span>
-										</div>
-										<SvgWrapper
-											className={'thumbnail-play-button'}
-											svgid={'play'}
-										/>
-									</div>
-								))}
-							</div>
-						</div>
-					</div>
+					<VideoControls
+						paused={paused}
+						pauseVideo={this.pauseVideo}
+						toggleElipsis={this.toggleElipsis}
+						toggleFullScreen={this.toggleFullScreen}
+						updateVolume={this.updateVolume}
+						volume={volume}
+					/>
+					<VideoList
+						elipsisOpen={elipsisOpen}
+						toggleElipsis={this.toggleElipsis}
+						handleThumbnailClick={this.handleThumbnailClick}
+						playlist={playlist}
+					/>
 				</div>
 				<div onClick={this.closePlayer} className={'black-bar'}>
 					<SvgWrapper className={'up-arrow'} svgid={'arrow_up'} />
@@ -407,12 +288,6 @@ class VideoPlayer extends React.PureComponent {
 			</div>,
 		];
 		/* eslint-enable jsx-a11y/media-has-caption */
-		// }
-		// return (
-		// 	<div onClick={this.openPlayer} className={'black-bar'}>
-		// 		<SvgWrapper className={'gospel-films'} svgid={'gospel_films'} />
-		// 	</div>
-		// );
 	}
 }
 
