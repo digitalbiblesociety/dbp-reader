@@ -240,6 +240,7 @@ class VideoPlayer extends React.PureComponent {
 				className={paused ? 'play-video show-play' : 'play-video hide-play'}
 				fill={'#fff'}
 				svgid={'play_video'}
+				viewBox={'0 0 90 40'}
 			/>
 		);
 	}
@@ -277,6 +278,7 @@ class VideoPlayer extends React.PureComponent {
 					</div>
 					<video ref={this.setVideoRef} onClick={this.handleVideoClick} />
 					<VideoProgessBar
+						paused={paused}
 						currentTime={currentTime}
 						duration={currentVideo.duration}
 						setCurrentTime={this.setCurrentTime}
