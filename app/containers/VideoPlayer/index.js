@@ -80,17 +80,26 @@ class VideoPlayer extends React.PureComponent {
 		this.initVideoStream();
 	}
 
+	componentWillUnmount() {
+		this.audioRef.removeEventListener(
+			'timeupdate',
+			this.timeUpdateEventListener,
+		);
+		this.audioRef.removeEventListener('seeking', this.seekingEventListener);
+		this.audioRef.removeEventListener('seeked', this.seekedEventListener);
+	}
+
 	setVideoRef = (el) => {
 		this.videoRef = el;
 	};
 
 	setCurrentTime = (time) => {
 		if (this.hls.media) {
-			console.log('Setting hls media time');
+			// console.log('Setting hls media time');
 			this.hls.media.currentTime = time;
 			this.setState({ currentTime: time });
 		} else {
-			console.log('Setting video ref time');
+			// console.log('Setting video ref time');
 			this.videoRef.currentTime = time;
 			this.setState({ currentTime: time });
 		}
@@ -147,11 +156,37 @@ class VideoPlayer extends React.PureComponent {
 		if (this.hls.media && typeof this.hls.media.poster !== 'undefined') {
 			this.hls.media.poster = currentVideo.poster;
 		}
+		this.hls.media.addEventListener('timeupdate', this.timeUpdateEventListener);
+		this.hls.media.addEventListener('seeking', this.seekingEventListener);
+		this.hls.media.addEventListener('seeked', this.seekedEventListener);
 		this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
 			// console.log('Adding poster for video');
 			if (this.videoRef && typeof this.videoRef.poster !== 'undefined') {
 				this.videoRef.poster = currentVideo.poster;
 			}
+		});
+	};
+
+	timeUpdateEventListener = (e) => {
+		// alert(`time at update: ${e.target.currentTime}`)
+		this.setState({
+			currentTime: e.target.currentTime,
+		});
+	};
+
+	seekingEventListener = (e) => {
+		// console.log('player is seeking', e.target.currentTime);
+		// alert(`time in seeking: ${e.target.currentTime}`)
+		this.setState({
+			currentTime: e.target.currentTime,
+		});
+	};
+
+	seekedEventListener = (e) => {
+		// console.log('player is done seeking', e.target.currentTime);
+		// alert(`time in seeked: ${e.target.currentTime}`)
+		this.setState({
+			currentTime: e.target.currentTime,
 		});
 	};
 
