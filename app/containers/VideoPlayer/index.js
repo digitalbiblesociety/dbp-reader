@@ -7,6 +7,7 @@ import SvgWrapper from '../../components/SvgWrapper';
 import makeSelectHomePage from '../HomePage/selectors';
 import VideoControls from '../../components/VideoControls';
 import VideoList from '../../components/VideoList';
+import VideoProgessBar from '../../components/VideoProgressBar';
 
 class VideoPlayer extends React.PureComponent {
 	state = {
@@ -14,11 +15,12 @@ class VideoPlayer extends React.PureComponent {
 		volume: 1,
 		paused: true,
 		elipsisOpen: false,
+		currentTime: 0,
 		playlist: [
 			{
 				title: 'Mark 2',
 				id: 2,
-				duration: '05:00',
+				duration: 300,
 				poster: '/static/example_poster_image.png',
 				source:
 					'https://s3-us-west-2.amazonaws.com/dbp-vid/hls/FALTBL/FALTBLN2DA/Mark_1-1-20R_1FALTBL/FALTBLN2DA/Mark_1-1-20R_1.m3u8',
@@ -26,7 +28,7 @@ class VideoPlayer extends React.PureComponent {
 			{
 				title: 'Mark 3',
 				id: 3,
-				duration: '05:00',
+				duration: 300,
 				poster: '/static/example_poster_image.png',
 				source:
 					'https://s3-us-west-2.amazonaws.com/dbp-vid/hls/FALTBL/FALTBLN2DA/Mark_1-1-20R_1FALTBL/FALTBLN2DA/Mark_1-1-20R_1.m3u8',
@@ -34,7 +36,7 @@ class VideoPlayer extends React.PureComponent {
 			{
 				title: 'Mark 4',
 				id: 4,
-				duration: '05:00',
+				duration: 300,
 				poster: '/static/example_poster_image.png',
 				source:
 					'https://s3-us-west-2.amazonaws.com/dbp-vid/hls/FALTBL/FALTBLN2DA/Mark_1-1-20R_1FALTBL/FALTBLN2DA/Mark_1-1-20R_1.m3u8',
@@ -42,7 +44,7 @@ class VideoPlayer extends React.PureComponent {
 			{
 				title: 'Mark 5',
 				id: 5,
-				duration: '05:00',
+				duration: 300,
 				poster: '/static/example_poster_image.png',
 				source:
 					'https://s3-us-west-2.amazonaws.com/dbp-vid/hls/FALTBL/FALTBLN2DA/Mark_1-1-20R_1FALTBL/FALTBLN2DA/Mark_1-1-20R_1.m3u8',
@@ -50,7 +52,7 @@ class VideoPlayer extends React.PureComponent {
 			{
 				title: 'Mark 6',
 				id: 6,
-				duration: '05:00',
+				duration: 300,
 				poster: '/static/example_poster_image.png',
 				source:
 					'https://s3-us-west-2.amazonaws.com/dbp-vid/hls/FALTBL/FALTBLN2DA/Mark_1-1-20R_1FALTBL/FALTBLN2DA/Mark_1-1-20R_1.m3u8',
@@ -58,7 +60,7 @@ class VideoPlayer extends React.PureComponent {
 			{
 				title: 'Mark 7',
 				id: 7,
-				duration: '05:00',
+				duration: 300,
 				poster: '/static/example_poster_image.png',
 				source:
 					'https://s3-us-west-2.amazonaws.com/dbp-vid/hls/FALTBL/FALTBLN2DA/Mark_1-1-20R_1FALTBL/FALTBLN2DA/Mark_1-1-20R_1.m3u8',
@@ -67,7 +69,7 @@ class VideoPlayer extends React.PureComponent {
 		currentVideo: {
 			title: 'Mark 1',
 			id: 1,
-			duration: '05:00',
+			duration: 300,
 			poster: '/static/example_poster_image.png',
 			source:
 				'https://s3-us-west-2.amazonaws.com/dbp-vid/hls/FALTBL/FALTBLN2DA/Mark_1-1-20R_1FALTBL/FALTBLN2DA/Mark_1-1-20R_1.m3u8',
@@ -80,6 +82,18 @@ class VideoPlayer extends React.PureComponent {
 
 	setVideoRef = (el) => {
 		this.videoRef = el;
+	};
+
+	setCurrentTime = (time) => {
+		if (this.hls.media) {
+			console.log('Setting hls media time');
+			this.hls.media.currentTime = time;
+			this.setState({ currentTime: time });
+		} else {
+			console.log('Setting video ref time');
+			this.videoRef.currentTime = time;
+			this.setState({ currentTime: time });
+		}
 	};
 
 	handleVideoClick = () => {
@@ -130,9 +144,14 @@ class VideoPlayer extends React.PureComponent {
 		});
 		this.hls.loadSource(currentVideo.source);
 		this.hls.attachMedia(this.videoRef);
+		if (this.hls.media && typeof this.hls.media.poster !== 'undefined') {
+			this.hls.media.poster = currentVideo.poster;
+		}
 		this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
 			// console.log('Adding poster for video');
-			this.videoRef.poster = currentVideo.poster;
+			if (this.videoRef && typeof this.videoRef.poster !== 'undefined') {
+				this.videoRef.poster = currentVideo.poster;
+			}
 		});
 	};
 
@@ -158,7 +177,7 @@ class VideoPlayer extends React.PureComponent {
 
 	pauseVideo = () => {
 		this.videoRef.pause();
-		this.setState({ paused: true });
+		this.setState({ paused: true, elipsisOpen: false });
 	};
 
 	closePlayer = () => {
@@ -233,6 +252,7 @@ class VideoPlayer extends React.PureComponent {
 			paused,
 			elipsisOpen,
 			currentVideo,
+			currentTime,
 		} = this.state;
 		/* eslint-disable jsx-a11y/media-has-caption */
 		return [
@@ -255,10 +275,11 @@ class VideoPlayer extends React.PureComponent {
 						<span className={'play-video-title'}>{currentVideo.title}</span>
 						{this.playButton}
 					</div>
-					<video
-						ref={this.setVideoRef}
-						onClick={this.handleVideoClick}
-						poster={currentVideo.poster}
+					<video ref={this.setVideoRef} onClick={this.handleVideoClick} />
+					<VideoProgessBar
+						currentTime={currentTime}
+						duration={currentVideo.duration}
+						setCurrentTime={this.setCurrentTime}
 					/>
 					<VideoControls
 						paused={paused}

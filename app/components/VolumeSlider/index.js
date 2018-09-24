@@ -8,6 +8,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Slider from 'rc-slider/lib/Slider';
 import CloseMenuFunctions from '../../utils/closeMenuFunctions';
+import Colors from '../../utils/javascriptColors';
 // import styled from 'styled-components';
 // rc-slider Slider component doesn't accept classes for styles other than classname
 class VolumeSlider extends React.PureComponent {
@@ -59,7 +60,7 @@ class VolumeSlider extends React.PureComponent {
 	get trackStyle() {
 		return (
 			this.props.trackStyle || {
-				backgroundColor: 'rgb(98,177,130)',
+				backgroundColor: Colors.sliderGreen,
 				height: '2px',
 			}
 		);
@@ -69,7 +70,7 @@ class VolumeSlider extends React.PureComponent {
 		return (
 			this.props.handleStyle || {
 				border: 'none',
-				backgroundColor: 'rgb(98,177,130)',
+				backgroundColor: Colors.sliderGreen,
 				top: '4px',
 			}
 		);

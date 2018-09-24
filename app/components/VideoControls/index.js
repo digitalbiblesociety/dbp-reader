@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import SvgWrapper from '../../components/SvgWrapper';
 import VolumeSlider from '../../components/VolumeSlider';
+import Colors from '../../utils/javascriptColors';
 
 class VideoControls extends React.PureComponent {
 	state = {
@@ -56,7 +57,7 @@ class VideoControls extends React.PureComponent {
 						}}
 					>
 						<VolumeSlider
-							active={volumeSliderState}
+							active={volumeSliderState && !paused}
 							onCloseFunction={this.closeVolumeSlider}
 							updateVolume={updateVolume}
 							volume={volume}
@@ -65,14 +66,14 @@ class VideoControls extends React.PureComponent {
 								backgroundColor: '#000',
 							}}
 							trackStyle={{
-								backgroundColor: 'rgba(98, 177, 130, 1)',
+								backgroundColor: Colors.sliderGreen,
 								width: '2px',
 							}}
 							handleStyle={{
 								width: '12.5px',
 								height: '12.5px',
-								backgroundColor: 'rgba(98, 177, 130, 1)',
-								borderColor: 'rgba(98, 177, 130, 1)',
+								backgroundColor: Colors.sliderGreen,
+								borderColor: Colors.sliderGreen,
 								left: '5px',
 							}}
 							sliderContainerClassName={'video-slider-container'}
