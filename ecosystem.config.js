@@ -3,7 +3,6 @@ module.exports = {
 		{
 			name: 'bible.is.prod',
 			script: './nextServer.js',
-			instances: 2,
 			env: {
 				NODE_ENV: 'development',
 				PORT: 3000,
