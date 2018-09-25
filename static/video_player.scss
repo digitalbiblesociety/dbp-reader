@@ -39,14 +39,19 @@
 }
 
 .video-player-container {
-	display: none;
-	padding-top: 54px;
+	display: block;
+	padding-top: 0;
 	width: 100%;
 	position: relative;
-	max-height: 620px;
+	max-height: 0;
+	overflow: hidden;
+	transition: height 700ms ease-in-out, max-height 700ms ease-in-out,
+		padding 700ms ease-in-out;
 
 	&.active {
 		display: block;
+		padding-top: 54px;
+		max-height: 620px;
 	}
 
 	@include css4 {

@@ -750,6 +750,7 @@ class HomePage extends React.PureComponent {
 			loadingAudio,
 			loadingNewChapterText,
 			chapterTextLoadingState,
+			videoPlayerOpen,
 		} = this.props.homepage;
 
 		const {
@@ -759,6 +760,7 @@ class HomePage extends React.PureComponent {
 			userAuthenticated,
 			isMenuOpen,
 		} = this.props;
+		console.log('video player is open', videoPlayerOpen);
 
 		const autoPlayEnabled = userSettings.get('autoPlayEnabled');
 
@@ -836,6 +838,7 @@ class HomePage extends React.PureComponent {
 					) : null}
 				</TransitionGroup>
 				<Text
+					hasVideo
 					books={books}
 					userId={userId}
 					text={updatedText}
@@ -857,6 +860,7 @@ class HomePage extends React.PureComponent {
 					activeBookName={activeBookName}
 					notesActive={isNotesModalActive}
 					formattedSource={formattedSource}
+					videoPlayerOpen={videoPlayerOpen}
 					isScrollingDown={isScrollingDown}
 					audioPlayerState={audioPlayerState}
 					userAuthenticated={userAuthenticated}
@@ -884,6 +888,7 @@ class HomePage extends React.PureComponent {
 					activeBookId={activeBookId}
 					activeChapter={activeChapter}
 					isScrollingDown={isScrollingDown}
+					videoPlayerOpen={videoPlayerOpen}
 					audioPlayerState={audioPlayerState}
 					toggleAutoPlay={this.toggleAutoPlay}
 					setAudioPlayerState={this.setAudioPlayerState}

@@ -2,21 +2,33 @@
 	display: flex;
 	max-width: 1000px;
 	height: calc(100vh - 130px);
+	margin: 0 auto;
 	//max-height: calc(100vh - 190px);
 	//margin: 54px auto 108px auto;
-	margin: 0 auto;
 	//margin-top: 15px;
 	//padding: 54px 10px 116px 10px;
-	padding: 0 10px;
-	padding-top: 54px;
+	padding: 54px 10px 0 10px;
 	align-items: center;
+	transition: height 700ms ease-in-out, padding 700ms linear;
+
+	&.has-video {
+		padding-top: 0;
+		height: calc(100vh - 185px);
+	}
+
+	&.video-player-open {
+		//padding-bottom: 478px;
+		padding-top: 0;
+		// TODO: Not a permanent solution, should look at using flex sizes for this and the video player
+		height: calc(100vh - 665px);
+		// height: calc(100vh - 185px - 480px);
+	}
 
 	@include css4 {
 		color: #000000; // fallback for IE
 		color: var(--application-text-container-color);
 		font-size: var(--application-base-font-size);
 	}
-	transition: height 50ms ease-in, height 50ms ease-out;
 
 	.active-verse {
 		// Setting to gray because it won't obscure the font and it will work regardless of the app's background color

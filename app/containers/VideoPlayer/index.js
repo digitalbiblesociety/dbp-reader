@@ -1,17 +1,19 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import Hls from 'hls.js';
-import SvgWrapper from '../../components/SvgWrapper';
 import makeSelectHomePage from '../HomePage/selectors';
+import { openVideoPlayer, closeVideoPlayer } from './actions';
+import SvgWrapper from '../../components/SvgWrapper';
 import VideoControls from '../../components/VideoControls';
 import VideoList from '../../components/VideoList';
 import VideoProgessBar from '../../components/VideoProgressBar';
 
 class VideoPlayer extends React.PureComponent {
 	state = {
-		playerOpen: true,
+		playerOpen: false,
 		volume: 1,
 		paused: true,
 		elipsisOpen: false,
@@ -81,12 +83,12 @@ class VideoPlayer extends React.PureComponent {
 	}
 
 	componentWillUnmount() {
-		this.audioRef.removeEventListener(
+		this.hls.media.removeEventListener(
 			'timeupdate',
 			this.timeUpdateEventListener,
 		);
-		this.audioRef.removeEventListener('seeking', this.seekingEventListener);
-		this.audioRef.removeEventListener('seeked', this.seekedEventListener);
+		this.hls.media.removeEventListener('seeking', this.seekingEventListener);
+		this.hls.media.removeEventListener('seeked', this.seekedEventListener);
 	}
 
 	setVideoRef = (el) => {
@@ -168,23 +170,18 @@ class VideoPlayer extends React.PureComponent {
 	};
 
 	timeUpdateEventListener = (e) => {
-		// alert(`time at update: ${e.target.currentTime}`)
 		this.setState({
 			currentTime: e.target.currentTime,
 		});
 	};
 
 	seekingEventListener = (e) => {
-		// console.log('player is seeking', e.target.currentTime);
-		// alert(`time in seeking: ${e.target.currentTime}`)
 		this.setState({
 			currentTime: e.target.currentTime,
 		});
 	};
 
 	seekedEventListener = (e) => {
-		// console.log('player is done seeking', e.target.currentTime);
-		// alert(`time in seeked: ${e.target.currentTime}`)
 		this.setState({
 			currentTime: e.target.currentTime,
 		});
@@ -216,11 +213,13 @@ class VideoPlayer extends React.PureComponent {
 	};
 
 	closePlayer = () => {
-		this.setState({ playerOpen: false });
+		this.setState({ playerOpen: false, paused: true });
+		this.props.dispatch(closeVideoPlayer());
 	};
 
 	openPlayer = () => {
 		this.setState({ playerOpen: true });
+		this.props.dispatch(openVideoPlayer());
 	};
 
 	toggleFullScreen = () => {
@@ -348,6 +347,10 @@ class VideoPlayer extends React.PureComponent {
 		/* eslint-enable jsx-a11y/media-has-caption */
 	}
 }
+
+VideoPlayer.propTypes = {
+	dispatch: PropTypes.func.isRequired,
+};
 
 const mapDispatchToProps = (dispatch) => ({
 	dispatch,

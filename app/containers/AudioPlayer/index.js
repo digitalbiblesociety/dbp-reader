@@ -475,12 +475,13 @@ export class AudioPlayer extends React.Component {
 			audioSource: source,
 			hasAudio,
 			audioPlayerState,
+			videoPlayerOpen,
 			isScrollingDown,
 		} = this.props;
 
 		let classNames = '';
 
-		if (audioPlayerState && hasAudio && source !== '') {
+		if (audioPlayerState && hasAudio && !videoPlayerOpen && source !== '') {
 			classNames += 'audioplayer-handle';
 		} else {
 			classNames += 'audioplayer-handle closed';
@@ -498,12 +499,13 @@ export class AudioPlayer extends React.Component {
 			audioSource: source,
 			hasAudio,
 			audioPlayerState,
+			videoPlayerOpen,
 			isScrollingDown,
 		} = this.props;
 
 		let classNames = '';
 
-		if (audioPlayerState && hasAudio && source !== '') {
+		if (audioPlayerState && hasAudio && !videoPlayerOpen && source !== '') {
 			classNames += 'audio-player-background';
 		} else {
 			classNames += 'audio-player-background closed';
@@ -565,6 +567,7 @@ export class AudioPlayer extends React.Component {
 			audioSource: source,
 			hasAudio,
 			audioPlayerState,
+			videoPlayerOpen,
 			// isScrollingDown,
 		} = this.props;
 		const { autoPlayChecked, currentSpeed } = this.state;
@@ -585,7 +588,9 @@ export class AudioPlayer extends React.Component {
 						width="26px"
 						height="26px"
 						className={
-							audioPlayerState ? 'audio-gripper' : 'audio-gripper closed'
+							!videoPlayerOpen && audioPlayerState
+								? 'audio-gripper'
+								: 'audio-gripper closed'
 						}
 						style={{ cursor: source ? 'pointer' : 'inherit' }}
 						svgid="arrow_down"
@@ -598,7 +603,7 @@ export class AudioPlayer extends React.Component {
 				>
 					<div
 						className={
-							audioPlayerState && hasAudio && source !== ''
+							audioPlayerState && !videoPlayerOpen && hasAudio && source !== ''
 								? 'audio-player-container'
 								: 'audio-player-container closed'
 						}
@@ -760,6 +765,7 @@ AudioPlayer.propTypes = {
 	toggleAutoPlay: PropTypes.func,
 	hasAudio: PropTypes.bool,
 	autoPlay: PropTypes.bool,
+	videoPlayerOpen: PropTypes.bool,
 	isScrollingDown: PropTypes.bool,
 	audioPlayerState: PropTypes.bool.isRequired,
 	books: PropTypes.array,

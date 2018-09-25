@@ -31,14 +31,24 @@ export const getClassNameForMain = (
 		: `chapter ${justifiedClass} ${isRtl}${menuOpenClass}`;
 };
 
-export const getClassNameForTextContainer = (
+export const getClassNameForTextContainer = ({
 	isScrollingDown,
 	subFooterOpen,
-) => {
+	videoPlayerOpen,
+	hasVideo,
+}) => {
 	let classNames = 'text-container';
 
 	if (isScrollingDown) {
 		classNames += ' scrolled-down';
+	}
+
+	if (videoPlayerOpen) {
+		classNames += ' video-player-open';
+	}
+
+	if (hasVideo) {
+		classNames += ' has-video';
 	}
 
 	if (subFooterOpen && !isScrollingDown) {

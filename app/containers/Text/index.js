@@ -1837,6 +1837,8 @@ class Text extends React.PureComponent {
 			subFooterOpen,
 			textDirection,
 			chapterTextLoadingState,
+			videoPlayerOpen,
+			hasVideo,
 		} = this.props;
 		// console.log('____________________________\nText component rendered!', verseNumber);
 		// console.log('condition for spinner', loadingNewChapterText ||
@@ -1879,10 +1881,12 @@ class Text extends React.PureComponent {
 			// console.log('Rendering the spinner');
 			return (
 				<div
-					className={getClassNameForTextContainer(
+					className={getClassNameForTextContainer({
 						isScrollingDown,
+						videoPlayerOpen,
 						subFooterOpen,
-					)}
+						hasVideo,
+					})}
 				>
 					<LoadingSpinner />
 				</div>
@@ -1891,7 +1895,12 @@ class Text extends React.PureComponent {
 
 		return (
 			<div
-				className={getClassNameForTextContainer(isScrollingDown, subFooterOpen)}
+				className={getClassNameForTextContainer({
+					isScrollingDown,
+					videoPlayerOpen,
+					subFooterOpen,
+					hasVideo,
+				})}
 			>
 				<PrefetchLink
 					prefetch
@@ -2047,12 +2056,14 @@ Text.propTypes = {
 	setTextLoadingState: PropTypes.func,
 	activeChapter: PropTypes.number,
 	// distance: PropTypes.number,
+	hasVideo: PropTypes.bool,
 	menuIsOpen: PropTypes.bool,
 	notesActive: PropTypes.bool,
 	loadingAudio: PropTypes.bool,
 	subFooterOpen: PropTypes.bool,
 	// invalidBibleId: PropTypes.bool,
 	isScrollingDown: PropTypes.bool,
+	videoPlayerOpen: PropTypes.bool,
 	chapterTextLoadingState: PropTypes.bool,
 	// audioPlayerState: PropTypes.bool,
 	userAuthenticated: PropTypes.bool,

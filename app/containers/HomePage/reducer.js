@@ -10,6 +10,10 @@ import { fromJS } from 'immutable';
 // import esvDefaultFilesets from 'utils/defaultFilesetsForESV.json';
 import { USER_LOGGED_IN, LOG_OUT } from '../Profile/constants';
 import {
+	CLOSE_VIDEO_PLAYER,
+	OPEN_VIDEO_PLAYER,
+} from '../VideoPlayer/constants';
+import {
 	ACTIVE_TEXT_ID,
 	// CHANGE_VERSE,
 	LOAD_AUDIO,
@@ -41,8 +45,8 @@ import {
 	GET_BOOKS,
 	GET_CHAPTER_TEXT,
 	GET_COPYRIGHTS,
-	ADD_BOOKMARK_SUCCESS,
 	RESET_BOOKMARK_STATE,
+	ADD_BOOKMARK_SUCCESS,
 	ADD_BOOKMARK_FAILURE,
 } from './constants';
 
@@ -168,6 +172,7 @@ const initialState = fromJS({
 	},
 	activeChapter: 1,
 	chapterTextLoadingState: false,
+	videoPlayerOpen: false,
 	userAuthenticated:
 		// !!localStorage.getItem('bible_is_user_id') ||
 		// !!sessionStorage.getItem('bible_is_user_id') ||
@@ -228,6 +233,10 @@ const initialState = fromJS({
 
 function homePageReducer(state = initialState, action) {
 	switch (action.type) {
+		case OPEN_VIDEO_PLAYER:
+			return state.set('videoPlayerOpen', true);
+		case CLOSE_VIDEO_PLAYER:
+			return state.set('videoPlayerOpen', false);
 		case USER_LOGGED_IN:
 			return state.set('userId', action.userId).set('userAuthenticated', true);
 		case LOG_OUT:
