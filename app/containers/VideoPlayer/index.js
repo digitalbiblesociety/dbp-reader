@@ -5,7 +5,7 @@ import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import Hls from 'hls.js';
 import makeSelectHomePage from '../HomePage/selectors';
-import { openVideoPlayer, closeVideoPlayer } from './actions';
+// import { openVideoPlayer, closeVideoPlayer } from './actions';
 import SvgWrapper from '../../components/SvgWrapper';
 import VideoControls from '../../components/VideoControls';
 import VideoList from '../../components/VideoList';
@@ -213,13 +213,13 @@ class VideoPlayer extends React.PureComponent {
 	};
 
 	closePlayer = () => {
-		this.setState({ playerOpen: false, paused: true });
-		this.props.dispatch(closeVideoPlayer());
+		// this.setState({ playerOpen: false, paused: true });
+		// this.props.dispatch(closeVideoPlayer());
 	};
 
 	openPlayer = () => {
-		this.setState({ playerOpen: true });
-		this.props.dispatch(openVideoPlayer());
+		// this.setState({ playerOpen: true });
+		// this.props.dispatch(openVideoPlayer());
 	};
 
 	toggleFullScreen = () => {
