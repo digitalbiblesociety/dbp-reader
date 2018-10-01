@@ -74,27 +74,14 @@ class VideoPlayer extends React.PureComponent {
 	}
 
 	getVideos = async ({ filesetId, bookId }) => {
-		// const urlForBible = `https://api.dbp4.org/bibles/FALTBL?key=${process.env.DBP_API_KEY}&v=4&bucket_id=dbp-vid`;
-
-		// try {
-		// 	const res = await request(urlForBible);
-
-		// 	if (res.data) {
-
-		// 	}
-		// } catch (err) {
-		// 	if (process.env.NODE_ENV === 'development') {
-		// 		console.log('Error getting bible with video content', err);
-		// 	}
-		// }
-		console.log('filesetId, bookId', filesetId, bookId);
+		// console.log('filesetId, bookId', filesetId, bookId);
 		const requestUrl = `https://api.dbp4.org/bibles/filesets/${filesetId}?key=${
 			process.env.DBP_API_KEY
 		}&v=4&type=video_stream&bucket=dbp-vid&book_id=${bookId}`;
 
 		try {
 			const response = await request(requestUrl);
-			console.log('all the vids', response);
+			// console.log('all the vids', response);
 
 			if (response.data) {
 				const playlist = response.data.map((video) => ({
@@ -164,7 +151,7 @@ class VideoPlayer extends React.PureComponent {
 	initVideoStream = () => {
 		const { currentVideo } = this.state;
 		if (currentVideo.source) {
-			console.log('loading source');
+			// console.log('loading source');
 			this.hls.loadSource(currentVideo.source);
 			this.hls.attachMedia(this.videoRef);
 			if (this.hls.media && typeof this.hls.media.poster !== 'undefined') {
@@ -178,7 +165,7 @@ class VideoPlayer extends React.PureComponent {
 			this.hls.media.addEventListener('seeked', this.seekedEventListener);
 			this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
 				// console.log('Adding poster for video');
-				console.log('manifest was parsed');
+				// console.log('manifest was parsed');
 				if (this.videoRef && typeof this.videoRef.poster !== 'undefined') {
 					this.videoRef.poster = currentVideo.poster;
 				}
@@ -210,11 +197,11 @@ class VideoPlayer extends React.PureComponent {
 		const { currentVideo } = this.state;
 		if (currentVideo.source) {
 			if (this.hls.media) {
-				console.log('playing from hls media');
+				// console.log('playing from hls media');
 				this.hls.media.play();
 				this.setState({ paused: false });
 			} else {
-				console.log('loading source in else');
+				// console.log('loading source in else');
 				this.hls.loadSource(currentVideo.source);
 				this.hls.attachMedia(this.videoRef);
 				this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
@@ -307,8 +294,8 @@ class VideoPlayer extends React.PureComponent {
 			currentVideo,
 			currentTime,
 		} = this.state;
-		console.log('playlist', playlist);
-		console.log('currentVideo', currentVideo);
+		// console.log('playlist', playlist);
+		// console.log('currentVideo', currentVideo);
 		/* eslint-disable jsx-a11y/media-has-caption */
 		return [
 			<div
