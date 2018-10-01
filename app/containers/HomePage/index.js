@@ -760,7 +760,6 @@ class HomePage extends React.PureComponent {
 			userAuthenticated,
 			isMenuOpen,
 		} = this.props;
-		console.log('video player is open', videoPlayerOpen);
 
 		const autoPlayEnabled = userSettings.get('autoPlayEnabled');
 

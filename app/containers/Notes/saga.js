@@ -481,7 +481,7 @@ export function* getBookmarksForChapter({ userId, params = {} }) {
 		// console.log('get bookmarks response', response);
 		yield put({
 			type: LOAD_BOOKMARKS_FOR_CHAPTER,
-			listData: response.data,
+			listData: response.data || [],
 		});
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
