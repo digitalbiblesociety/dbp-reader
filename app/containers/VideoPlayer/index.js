@@ -25,7 +25,7 @@ class VideoPlayer extends React.PureComponent {
 				duration: 300,
 				poster: '/static/example_poster_image.png',
 				source:
-					'https://s3-us-west-2.amazonaws.com/dbp-vid/hls/FALTBL/FALTBLN2DA/Mark_1-1-20R_1FALTBL/FALTBLN2DA/Mark_1-1-20R_1.m3u8',
+					'https://s3-us-west-2.amazonaws.com/dbp-vid/hls/video/BOXWYI/BOXWYIN2DA/Buamu_MRK_1-1-8_R_stream.m3u8',
 			},
 			{
 				title: 'Mark 3',
@@ -74,7 +74,7 @@ class VideoPlayer extends React.PureComponent {
 			duration: 300,
 			poster: '/static/example_poster_image.png',
 			source:
-				'https://s3-us-west-2.amazonaws.com/dbp-vid/hls/FALTBL/FALTBLN2DA/Mark_1-1-20R_1FALTBL/FALTBLN2DA/Mark_1-1-20R_1.m3u8',
+				'https://s3-us-west-2.amazonaws.com/dbp-vid/hls/video/BOXWYI/BOXWYIN2DA/Buamu_MRK_1-1-8_R_stream.m3u8',
 		},
 	};
 
