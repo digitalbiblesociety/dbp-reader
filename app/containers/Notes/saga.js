@@ -26,10 +26,15 @@ import {
 } from './constants';
 
 export function* getChapterForNote({ note }) {
-	const chapter = note.chapter;
-	const bibleId = note.bible_id;
-	const bookId = note.book_id;
+	const chapter =
+		typeof note.get === 'function' ? note.get('chapter') : note.chapter;
+	const bibleId =
+		typeof note.get === 'function' ? note.get('bible_id') : note.bible_id;
+	const bookId =
+		typeof note.get === 'function' ? note.get('book_id') : note.book_id;
 	// Need to not use the bible id here
+	// console.log('bibleId', bibleId);
+	// console.log('note', note);
 	// const reqUrl = `${process.env.BASE_API_ROUTE}/bibles/${bibleId}/${bookId}/${chapter}?bucket=${process.env.DBP_BUCKET_ID}&key=${process.env.DBP_API_KEY}&v=4&book_id=${bookId}&chapter_id=${chapter}`;
 	const bibleUrl = `${process.env.BASE_API_ROUTE}/bibles/${bibleId}?bucket=${
 		process.env.DBP_BUCKET_ID
@@ -502,6 +507,8 @@ export function* getUserBookmarks({ userId, params = {} }) {
 	// response.per_page = perPage
 	// pages = totalPages
 	// notes = response.data
+	// console.log('userId', userId);
+	// console.log('params', params);
 	const requestUrl = `${
 		process.env.BASE_API_ROUTE
 	}/users/${userId}/bookmarks?key=${
@@ -525,7 +532,7 @@ export function* getUserBookmarks({ userId, params = {} }) {
 		// 	pages: response.total,
 		// };
 		// console.log('get note response current page, last page and per page', response.current_page, response.last_page, response.per_page);
-
+		// console.log('response', response);
 		yield put({
 			type: LOAD_USER_BOOKMARK_DATA,
 			listData: response.data,
