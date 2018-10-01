@@ -232,7 +232,7 @@ export class SearchContainer extends React.PureComponent {
 			lastFiveSearches,
 			loadingResults,
 		} = this.props.searchcontainer;
-		const { bibleId, activeFilesetId, searchResults } = this.props;
+		const { bibleId, searchResults } = this.props;
 		// console.log('selectedRes', searchResults);
 		const { firstSearch } = this.state;
 
@@ -282,7 +282,7 @@ export class SearchContainer extends React.PureComponent {
 								.get('results')
 								.map((r) => (
 									<SearchResult
-										bibleId={activeFilesetId || bibleId}
+										bibleId={bibleId}
 										key={`${r.get('book_id')}${r.get('chapter')}${r.get(
 											'verse_start',
 										)}`}
