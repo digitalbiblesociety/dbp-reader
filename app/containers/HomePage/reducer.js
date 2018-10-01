@@ -172,7 +172,7 @@ const initialState = fromJS({
 	},
 	activeChapter: 1,
 	chapterTextLoadingState: false,
-	videoPlayerOpen: false,
+	videoPlayerOpen: true,
 	userAuthenticated:
 		// !!localStorage.getItem('bible_is_user_id') ||
 		// !!sessionStorage.getItem('bible_is_user_id') ||

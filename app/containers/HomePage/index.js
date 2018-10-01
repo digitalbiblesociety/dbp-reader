@@ -729,8 +729,9 @@ class HomePage extends React.PureComponent {
 			activeBookId,
 			activeTextId,
 			activeChapter,
-			activeTextName,
 			activeBookName,
+			activeFilesets,
+			activeTextName,
 			activeNotesView,
 			activeFilesetId,
 			// autoPlayEnabled,
@@ -786,7 +787,11 @@ class HomePage extends React.PureComponent {
 					toggleChapterSelection={this.toggleChapterSelection}
 					toggleVersionSelection={this.toggleVersionSelection}
 				/>
-				<VideoPlayer />
+				<VideoPlayer
+					activeTextId={activeTextId}
+					filesets={activeFilesets}
+					bookId={activeBookId}
+				/>
 				<TransitionGroup>
 					{isSettingsModalActive ? (
 						<FadeTransition

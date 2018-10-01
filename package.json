@@ -49,7 +49,8 @@
 		"test:watch": "cross-env NODE_ENV=test jest --watchAll",
 		"coveralls": "cat ./coverage/lcov.info | coveralls",
 		"build:sass": "sass ./static/app.scss ./cdn/style.css && aws s3 sync ./cdn s3://bibleis-prod/",
-		"fetch-latest-site": "git checkout .; git pull origin master; npm install; npm run build:next; npm run build:sass; pm2 reload ecosystem.config.js --env production --update-env --only bible.is.prod;",
+		"reload:pm2": "pm2 reload ecosystem.config.js --env production --update-env --only bible.is.prod;",
+		"fetch-latest-site": "git checkout .; git pull origin master; npm install; npm run build:next; pm2 reload ecosystem.config.js --env production --update-env --only bible.is.prod;",
 		"fetch-latest-dev": "git checkout .; git pull origin development; npm install; npm run build:next; npm run build:sass; pm2 reload ecosystem.config.js --env development --update-env --only bible.is.dev;"
 	},
 	"lint-staged": {

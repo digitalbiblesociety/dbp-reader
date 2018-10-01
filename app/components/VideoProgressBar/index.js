@@ -4,7 +4,7 @@ import Slider from 'rc-slider';
 import getFormattedTimeString from '../../utils/getFormattedTimeString';
 import Colors from '../../utils/javascriptColors';
 
-class VideoProgessBar extends React.PureComponent {
+class VideoProgressBar extends React.PureComponent {
 	handleChange = (time) => {
 		// Default to 0 to keep an error from being thrown
 		this.props.setCurrentTime(this.props.duration * (time / 100) || 0);
@@ -58,7 +58,7 @@ class VideoProgessBar extends React.PureComponent {
 	}
 }
 
-VideoProgessBar.propTypes = {
+VideoProgressBar.propTypes = {
 	currentTime: PropTypes.number,
 	// buffer: PropTypes.number,
 	duration: PropTypes.number,
@@ -66,4 +66,4 @@ VideoProgessBar.propTypes = {
 	paused: PropTypes.bool,
 };
 
-export default VideoProgessBar;
+export default VideoProgressBar;

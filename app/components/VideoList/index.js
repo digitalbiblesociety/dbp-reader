@@ -34,7 +34,7 @@ class VideoList extends React.PureComponent {
 						{playlist.map((video) => (
 							<div
 								className={'video-thumbnail'}
-								key={`${video.title}_${video.duration}`}
+								key={`${video.id}`}
 								onClick={() => handleThumbnailClick(video)}
 							>
 								<img

@@ -4,83 +4,65 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import Hls from 'hls.js';
-import makeSelectHomePage from '../HomePage/selectors';
-// import { openVideoPlayer, closeVideoPlayer } from './actions';
+// import makeSelectHomePage from '../HomePage/selectors';
+// import { openVideoPlayer, closeVideoPlayer, getVideoList } from './actions';
+import { openVideoPlayer, closeVideoPlayer } from './actions';
+// import { selectVideoList } from './selectors';
 import SvgWrapper from '../../components/SvgWrapper';
 import VideoControls from '../../components/VideoControls';
 import VideoList from '../../components/VideoList';
-import VideoProgessBar from '../../components/VideoProgressBar';
+import VideoProgressBar from '../../components/VideoProgressBar';
+// import injectReducer from '../../utils/injectReducer';
+// import injectSaga from '../../utils/injectSaga';
+// import reducer from './reducer';
+// import saga from './sagas';
+import request from '../../utils/request';
 
 class VideoPlayer extends React.PureComponent {
 	state = {
-		playerOpen: false,
+		playerOpen: true,
 		volume: 1,
 		paused: true,
 		elipsisOpen: false,
 		currentTime: 0,
-		playlist: [
-			{
-				title: 'Mark 2',
-				id: 2,
-				duration: 300,
-				poster: '/static/example_poster_image.png',
-				source:
-					'https://s3-us-west-2.amazonaws.com/dbp-vid/hls/video/BOXWYI/BOXWYIN2DA/Buamu_MRK_1-1-8_R_stream.m3u8',
-			},
-			{
-				title: 'Mark 3',
-				id: 3,
-				duration: 300,
-				poster: '/static/example_poster_image.png',
-				source:
-					'https://s3-us-west-2.amazonaws.com/dbp-vid/hls/FALTBL/FALTBLN2DA/Mark_1-1-20R_1FALTBL/FALTBLN2DA/Mark_1-1-20R_1.m3u8',
-			},
-			{
-				title: 'Mark 4',
-				id: 4,
-				duration: 300,
-				poster: '/static/example_poster_image.png',
-				source:
-					'https://s3-us-west-2.amazonaws.com/dbp-vid/hls/FALTBL/FALTBLN2DA/Mark_1-1-20R_1FALTBL/FALTBLN2DA/Mark_1-1-20R_1.m3u8',
-			},
-			{
-				title: 'Mark 5',
-				id: 5,
-				duration: 300,
-				poster: '/static/example_poster_image.png',
-				source:
-					'https://s3-us-west-2.amazonaws.com/dbp-vid/hls/FALTBL/FALTBLN2DA/Mark_1-1-20R_1FALTBL/FALTBLN2DA/Mark_1-1-20R_1.m3u8',
-			},
-			{
-				title: 'Mark 6',
-				id: 6,
-				duration: 300,
-				poster: '/static/example_poster_image.png',
-				source:
-					'https://s3-us-west-2.amazonaws.com/dbp-vid/hls/FALTBL/FALTBLN2DA/Mark_1-1-20R_1FALTBL/FALTBLN2DA/Mark_1-1-20R_1.m3u8',
-			},
-			{
-				title: 'Mark 7',
-				id: 7,
-				duration: 300,
-				poster: '/static/example_poster_image.png',
-				source:
-					'https://s3-us-west-2.amazonaws.com/dbp-vid/hls/FALTBL/FALTBLN2DA/Mark_1-1-20R_1FALTBL/FALTBLN2DA/Mark_1-1-20R_1.m3u8',
-			},
-		],
-		currentVideo: {
-			title: 'Mark 1',
-			id: 1,
-			duration: 300,
-			poster: '/static/example_poster_image.png',
-			source:
-				'https://s3-us-west-2.amazonaws.com/dbp-vid/hls/video/BOXWYI/BOXWYIN2DA/Buamu_MRK_1-1-8_R_stream.m3u8',
-		},
+		playlist: [],
+		currentVideo: {},
 	};
 
 	componentDidMount() {
-		this.initVideoStream();
+		this.hls = new Hls();
+		this.hls.on(Hls.Events.ERROR, (event, data) => {
+			if (data.fatal) {
+				// console.log('There was a fatal hls error', event, data);
+				switch (data.type) {
+					case Hls.ErrorTypes.NETWORK_ERROR:
+						this.hls.startLoad();
+						break;
+					case Hls.ErrorTypes.MEDIA_ERROR:
+						this.hls.recoverMediaError();
+						break;
+					default:
+						this.hls.destroy();
+						break;
+				}
+			}
+		});
+		// console.log('this.props', this.props);
+		// this.props.dispatch(getVideoList());
+		const filesetId = this.props.filesets.filter(
+			(f) => f.type === 'video_stream',
+		)[0];
+		// console.log('filesetid', filesetId);
+		this.getVideos({
+			filesetId: filesetId ? filesetId.id : 'FALTBLP2DV',
+			bookId: this.props.bookId || 'MRK',
+		});
 	}
+
+	// componentWillReceiveProps(nextProps) {
+	// 	if (((nextProps.videoList.length && !this.props.videoList.length) || nextProps.videoList.length !== this.props.videoList.length) && nextProps.videoList.length) {
+	// 	}
+	// }
 
 	componentWillUnmount() {
 		this.hls.media.removeEventListener(
@@ -90,6 +72,52 @@ class VideoPlayer extends React.PureComponent {
 		this.hls.media.removeEventListener('seeking', this.seekingEventListener);
 		this.hls.media.removeEventListener('seeked', this.seekedEventListener);
 	}
+
+	getVideos = async ({ filesetId, bookId }) => {
+		// const urlForBible = `https://api.dbp4.org/bibles/FALTBL?key=${process.env.DBP_API_KEY}&v=4&bucket_id=dbp-vid`;
+
+		// try {
+		// 	const res = await request(urlForBible);
+
+		// 	if (res.data) {
+
+		// 	}
+		// } catch (err) {
+		// 	if (process.env.NODE_ENV === 'development') {
+		// 		console.log('Error getting bible with video content', err);
+		// 	}
+		// }
+		console.log('filesetId, bookId', filesetId, bookId);
+		const requestUrl = `https://api.dbp4.org/bibles/filesets/${filesetId}?key=${
+			process.env.DBP_API_KEY
+		}&v=4&type=video_stream&bucket=dbp-vid&book_id=${bookId}`;
+
+		try {
+			const response = await request(requestUrl);
+			console.log('all the vids', response);
+
+			if (response.data) {
+				const playlist = response.data.map((video) => ({
+					title: `${video.book_name} ${video.chapter_start}`,
+					id: `${video.book_id}_${video.chapter_start}_${video.verse_start}`,
+					source: video.path,
+					duration: video.duration || 300,
+				}));
+
+				this.setState({
+					playlist: playlist.slice(1),
+					currentVideo: playlist[0],
+				});
+				this.initVideoStream();
+			} else {
+				this.setState({ playlist: [], currentVideo: {} });
+			}
+		} catch (err) {
+			if (process.env.NODE_ENV === 'development') {
+				console.log('Error getting video playlist', err); // eslint-disable-line no-console
+			}
+		}
+	};
 
 	setVideoRef = (el) => {
 		this.videoRef = el;
@@ -135,38 +163,27 @@ class VideoPlayer extends React.PureComponent {
 
 	initVideoStream = () => {
 		const { currentVideo } = this.state;
-
-		this.hls = new Hls();
-		this.hls.on(Hls.Events.ERROR, (event, data) => {
-			if (data.fatal) {
-				// console.log('There was a fatal hls error', event, data);
-				switch (data.type) {
-					case Hls.ErrorTypes.NETWORK_ERROR:
-						this.hls.startLoad();
-						break;
-					case Hls.ErrorTypes.MEDIA_ERROR:
-						this.hls.recoverMediaError();
-						break;
-					default:
-						this.hls.destroy();
-						break;
+		if (currentVideo.source) {
+			console.log('loading source');
+			this.hls.loadSource(currentVideo.source);
+			this.hls.attachMedia(this.videoRef);
+			if (this.hls.media && typeof this.hls.media.poster !== 'undefined') {
+				this.hls.media.poster = currentVideo.poster;
+			}
+			this.hls.media.addEventListener(
+				'timeupdate',
+				this.timeUpdateEventListener,
+			);
+			this.hls.media.addEventListener('seeking', this.seekingEventListener);
+			this.hls.media.addEventListener('seeked', this.seekedEventListener);
+			this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
+				// console.log('Adding poster for video');
+				console.log('manifest was parsed');
+				if (this.videoRef && typeof this.videoRef.poster !== 'undefined') {
+					this.videoRef.poster = currentVideo.poster;
 				}
-			}
-		});
-		this.hls.loadSource(currentVideo.source);
-		this.hls.attachMedia(this.videoRef);
-		if (this.hls.media && typeof this.hls.media.poster !== 'undefined') {
-			this.hls.media.poster = currentVideo.poster;
+			});
 		}
-		this.hls.media.addEventListener('timeupdate', this.timeUpdateEventListener);
-		this.hls.media.addEventListener('seeking', this.seekingEventListener);
-		this.hls.media.addEventListener('seeked', this.seekedEventListener);
-		this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
-			// console.log('Adding poster for video');
-			if (this.videoRef && typeof this.videoRef.poster !== 'undefined') {
-				this.videoRef.poster = currentVideo.poster;
-			}
-		});
 	};
 
 	timeUpdateEventListener = (e) => {
@@ -191,19 +208,20 @@ class VideoPlayer extends React.PureComponent {
 
 	playVideo = () => {
 		const { currentVideo } = this.state;
-
-		if (this.hls.media) {
-			// console.log('playing from hls media');
-			this.hls.media.play();
-			this.setState({ paused: false });
-		} else {
-			// console.log('playing without hls media');
-			this.hls.loadSource(currentVideo.source);
-			this.hls.attachMedia(this.videoRef);
-			this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
-				this.videoRef.play();
+		if (currentVideo.source) {
+			if (this.hls.media) {
+				console.log('playing from hls media');
+				this.hls.media.play();
 				this.setState({ paused: false });
-			});
+			} else {
+				console.log('loading source in else');
+				this.hls.loadSource(currentVideo.source);
+				this.hls.attachMedia(this.videoRef);
+				this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
+					this.videoRef.play();
+					this.setState({ paused: false });
+				});
+			}
 		}
 	};
 
@@ -213,13 +231,13 @@ class VideoPlayer extends React.PureComponent {
 	};
 
 	closePlayer = () => {
-		// this.setState({ playerOpen: false, paused: true });
-		// this.props.dispatch(closeVideoPlayer());
+		this.setState({ playerOpen: false, paused: true });
+		this.props.dispatch(closeVideoPlayer());
 	};
 
 	openPlayer = () => {
-		// this.setState({ playerOpen: true });
-		// this.props.dispatch(openVideoPlayer());
+		this.setState({ playerOpen: true });
+		this.props.dispatch(openVideoPlayer());
 	};
 
 	toggleFullScreen = () => {
@@ -289,6 +307,8 @@ class VideoPlayer extends React.PureComponent {
 			currentVideo,
 			currentTime,
 		} = this.state;
+		console.log('playlist', playlist);
+		console.log('currentVideo', currentVideo);
 		/* eslint-disable jsx-a11y/media-has-caption */
 		return [
 			<div
@@ -307,14 +327,16 @@ class VideoPlayer extends React.PureComponent {
 								: 'play-video-container hide-play'
 						}
 					>
-						<span className={'play-video-title'}>{currentVideo.title}</span>
+						<span className={'play-video-title'}>
+							{currentVideo.title || 'Loading'}
+						</span>
 						{this.playButton}
 					</div>
 					<video ref={this.setVideoRef} onClick={this.handleVideoClick} />
-					<VideoProgessBar
+					<VideoProgressBar
 						paused={paused}
 						currentTime={currentTime}
-						duration={currentVideo.duration}
+						duration={currentVideo.duration || 300}
 						setCurrentTime={this.setCurrentTime}
 					/>
 					<VideoControls
@@ -350,6 +372,9 @@ class VideoPlayer extends React.PureComponent {
 
 VideoPlayer.propTypes = {
 	dispatch: PropTypes.func.isRequired,
+	filesets: PropTypes.array.isRequired,
+	bookId: PropTypes.string.isRequired,
+	// videoList: PropTypes.array.isRequired,
 };
 
 const mapDispatchToProps = (dispatch) => ({
@@ -357,7 +382,8 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const mapStateToProps = createStructuredSelector({
-	homepage: makeSelectHomePage(),
+	// homepage: makeSelectHomePage(),
+	// videoList: selectVideoList(),
 });
 
 const withConnect = connect(
@@ -365,4 +391,8 @@ const withConnect = connect(
 	mapDispatchToProps,
 );
 
+// const withReducer = injectReducer({ key: 'videoPlayer', reducer });
+// const withSaga = injectSaga({ key: 'videoPlayer', saga})
+
 export default compose(withConnect)(VideoPlayer);
+// export default compose(withConnect, withReducer, withSaga)(VideoPlayer);

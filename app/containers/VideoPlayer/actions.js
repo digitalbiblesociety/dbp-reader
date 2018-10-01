@@ -1,4 +1,8 @@
-import { OPEN_VIDEO_PLAYER, CLOSE_VIDEO_PLAYER } from './constants';
+import {
+	OPEN_VIDEO_PLAYER,
+	CLOSE_VIDEO_PLAYER,
+	GET_VIDEO_LIST,
+} from './constants';
 
 export const openVideoPlayer = (props) => ({
 	...props,
@@ -8,4 +12,9 @@ export const openVideoPlayer = (props) => ({
 export const closeVideoPlayer = (props) => ({
 	...props,
 	type: CLOSE_VIDEO_PLAYER,
+});
+
+export const getVideoList = (props) => ({
+	...props,
+	type: GET_VIDEO_LIST,
 });

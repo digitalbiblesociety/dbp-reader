@@ -419,14 +419,48 @@ export function* getBibleFromUrl({
 			if (!activeBook) {
 				activeBook = books.find((b) => b.book_id === activeBookId);
 			}
-			const filesets = response.data.filesets[process.env.DBP_BUCKET_ID].filter(
-				(f) =>
-					(f.type === 'audio' ||
-						f.type === 'audio_drama' ||
-						f.type === 'text_plain' ||
-						f.type === 'text_format') &&
-					f.id.slice(-4) !== 'DA16',
-			);
+			let filesets = [];
+			if (
+				response.data &&
+				response.data.filesets[process.env.DBP_BUCKET_ID] &&
+				response.data.filesets['dbp-vid']
+			) {
+				filesets = [
+					...response.data.filesets['dbp-vid'],
+					...response.data.filesets[process.env.DBP_BUCKET_ID],
+				].filter(
+					(f) =>
+						(f.type === 'audio' ||
+							f.type === 'audio_drama' ||
+							f.type === 'text_plain' ||
+							f.type === 'text_format' ||
+							f.type === 'video_stream') &&
+						f.id.slice(-4) !== 'DA16',
+				);
+			} else if (
+				response.data &&
+				response.data.filesets[process.env.DBP_BUCKET_ID]
+			) {
+				filesets = response.data.filesets[process.env.DBP_BUCKET_ID].filter(
+					(f) =>
+						(f.type === 'audio' ||
+							f.type === 'audio_drama' ||
+							f.type === 'text_plain' ||
+							f.type === 'text_format' ||
+							f.type === 'video_stream') &&
+						f.id.slice(-4) !== 'DA16',
+				);
+			}
+			// console.log('filesets in homepage call', filesets);
+			// const filesets = response.data.filesets[process.env.DBP_BUCKET_ID].filter(
+			// 	(f) =>
+			// 		(f.type === 'audio' ||
+			// 			f.type === 'audio_drama' ||
+			// 			f.type === 'text_plain' ||
+			// 			f.type === 'text_format' ||
+			// 			f.type === 'video_stream') &&
+			// 		f.id.slice(-4) !== 'DA16',
+			// );
 			// console.log('responseesponse.data', response.data);
 			yield fork(getCopyrightSaga, { filesetIds: filesets });
 			// calling a generator that will handle the api requests for getting text

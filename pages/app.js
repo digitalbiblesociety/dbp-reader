@@ -419,6 +419,7 @@ AppContainer.getInitialProps = async (context) => {
 		audio: true,
 		text_plain: true,
 		text_format: true,
+		video_stream: true,
 	};
 	const activeFilesetId =
 		bible.filesets && bible.filesets[process.env.DBP_BUCKET_ID]
@@ -434,18 +435,50 @@ AppContainer.getInitialProps = async (context) => {
 	// console.log('activeFilesetId', activeFilesetId);
 	// console.log('filesets in app file before filter function', bible.filesets);
 	// Filter out gideon bibles because the api will never be fixed in this area... -_- :( :'( ;'(
-	const filesets =
-		bible.filesets && bible.filesets[process.env.DBP_BUCKET_ID]
-			? bible.filesets[process.env.DBP_BUCKET_ID].filter(
-					(file) =>
-						(!file.id.includes('GID') &&
-							file.id.slice(-4) !== 'DA16' &&
-							setTypes[file.type] &&
-							file.size !== 'S' &&
-							bible.filesets[process.env.DBP_BUCKET_ID].length > 1) ||
-						bible.filesets[process.env.DBP_BUCKET_ID].length === 1,
-			  )
-			: [];
+	let filesets = [];
+	// console.log('bible', bible);
+	if (
+		bible.filesets &&
+		bible.filesets[process.env.DBP_BUCKET_ID] &&
+		bible.filesets['dbp-vid']
+	) {
+		// console.log('inside if with dbp-vid',  [...bible.filesets[process.env.DBP_BUCKET_ID], ...bible.filesets['dbp-vid']])
+		filesets = [
+			...bible.filesets[process.env.DBP_BUCKET_ID],
+			...bible.filesets['dbp-vid'],
+		].filter(
+			(file) =>
+				(!file.id.includes('GID') &&
+					file.id.slice(-4) !== 'DA16' &&
+					setTypes[file.type] &&
+					file.size !== 'S' &&
+					bible.filesets[process.env.DBP_BUCKET_ID].length > 1) ||
+				bible.filesets[process.env.DBP_BUCKET_ID].length === 1,
+		);
+	} else if (bible.filesets && bible.filesets[process.env.DBP_BUCKET_ID]) {
+		filesets = bible.filesets[process.env.DBP_BUCKET_ID].filter(
+			(file) =>
+				(!file.id.includes('GID') &&
+					file.id.slice(-4) !== 'DA16' &&
+					setTypes[file.type] &&
+					file.size !== 'S' &&
+					bible.filesets[process.env.DBP_BUCKET_ID].length > 1) ||
+				bible.filesets[process.env.DBP_BUCKET_ID].length === 1,
+		);
+	}
+	// console.log('filesets in app call', filesets);
+	// const filesets =
+	// 	bible.filesets && bible.filesets[process.env.DBP_BUCKET_ID]
+	// 		? bible.filesets[process.env.DBP_BUCKET_ID].filter(
+	// 				(file) =>
+	// 					(!file.id.includes('GID') &&
+	// 						file.id.slice(-4) !== 'DA16' &&
+	// 						setTypes[file.type] &&
+	// 						file.size !== 'S' &&
+	// 						bible.filesets[process.env.DBP_BUCKET_ID].length > 1) ||
+	// 					bible.filesets[process.env.DBP_BUCKET_ID].length === 1,
+	// 		  )
+	// 		: [];
 	// console.log('filesets in app file', filesets);
 	// console.log('bible.name', bible.name);
 	// console.log('bible.abbr', bible.abbr);
