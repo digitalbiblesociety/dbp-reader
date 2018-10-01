@@ -79,8 +79,9 @@ export const getNotes = (props) => ({
 	...props,
 });
 
-export const toggleAutoPlay = () => ({
+export const toggleAutoPlay = (props) => ({
 	type: TOGGLE_AUTOPLAY,
+	...props,
 });
 
 export const addHighlight = (props) => ({

@@ -608,8 +608,8 @@ class HomePage extends React.PureComponent {
 		this.props.homepage.firstLoad &&
 		this.props.dispatch(toggleFirstLoadForTextSelection());
 
-	toggleAutoPlay = () => {
-		this.props.dispatch(toggleAutoPlay());
+	toggleAutoPlay = (props) => {
+		this.props.dispatch(toggleAutoPlay(props));
 	};
 
 	toggleProfile = () => {

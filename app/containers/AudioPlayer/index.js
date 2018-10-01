@@ -428,7 +428,7 @@ export class AudioPlayer extends React.Component {
 
 	handleAutoPlayChange = (e) => {
 		this.setState({ autoPlayChecked: e.target.checked });
-		this.props.toggleAutoPlay();
+		this.props.toggleAutoPlay({ state: e.target.checked });
 	};
 	// Simpler to close all modals than to try and figure out which one to close
 	closeModals = ({ speed, volume }) => {

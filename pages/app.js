@@ -136,9 +136,9 @@ class AppContainer extends React.Component {
 					available: false,
 				},
 			},
-			autoPlayEnabled: sessionStorage.getItem('bible_is_autoplay')
-				? JSON.parse(sessionStorage.getItem('bible_is_autoplay'))
-				: false,
+			autoPlayEnabled: !!JSON.parse(
+				sessionStorage.getItem('bible_is_autoplay'),
+			),
 		};
 		// console.log('user profile', userProfile);
 		// console.log('userId', userId);
