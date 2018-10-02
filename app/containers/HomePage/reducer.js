@@ -12,6 +12,7 @@ import { USER_LOGGED_IN, LOG_OUT } from '../Profile/constants';
 import {
 	CLOSE_VIDEO_PLAYER,
 	OPEN_VIDEO_PLAYER,
+	SET_HAS_VIDEO,
 } from '../VideoPlayer/constants';
 import {
 	ACTIVE_TEXT_ID,
@@ -172,7 +173,7 @@ const initialState = fromJS({
 	},
 	activeChapter: 1,
 	chapterTextLoadingState: false,
-	videoPlayerOpen: true,
+	videoPlayerOpen: false,
 	userAuthenticated:
 		// !!localStorage.getItem('bible_is_user_id') ||
 		// !!sessionStorage.getItem('bible_is_user_id') ||
@@ -189,6 +190,7 @@ const initialState = fromJS({
 	isFromServer: true,
 	invalidBibleId: false,
 	hasAudio: false,
+	hasVideo: false,
 	hasTextInDatabase: true,
 	firstLoad: true,
 	audioPlayerState: true,
@@ -233,10 +235,13 @@ const initialState = fromJS({
 
 function homePageReducer(state = initialState, action) {
 	switch (action.type) {
+		// Video player actions
 		case OPEN_VIDEO_PLAYER:
 			return state.set('videoPlayerOpen', true);
 		case CLOSE_VIDEO_PLAYER:
 			return state.set('videoPlayerOpen', false);
+		case SET_HAS_VIDEO:
+			return state.set('hasVideo', action.state);
 		case USER_LOGGED_IN:
 			return state.set('userId', action.userId).set('userAuthenticated', true);
 		case LOG_OUT:

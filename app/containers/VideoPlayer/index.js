@@ -4,23 +4,24 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import Hls from 'hls.js';
-// import makeSelectHomePage from '../HomePage/selectors';
-// import { openVideoPlayer, closeVideoPlayer, getVideoList } from './actions';
-import { openVideoPlayer, closeVideoPlayer } from './actions';
-// import { selectVideoList } from './selectors';
+import { openVideoPlayer, closeVideoPlayer, setHasVideo } from './actions';
 import SvgWrapper from '../../components/SvgWrapper';
 import VideoControls from '../../components/VideoControls';
 import VideoList from '../../components/VideoList';
 import VideoProgressBar from '../../components/VideoProgressBar';
+import deepDifferenceObject from '../../utils/deepDifferenceObject';
+import request from '../../utils/request';
+import { selectHasVideo } from './selectors';
+// import makeSelectHomePage from '../HomePage/selectors';
+// import { openVideoPlayer, closeVideoPlayer, getVideoList } from './actions';
 // import injectReducer from '../../utils/injectReducer';
 // import injectSaga from '../../utils/injectSaga';
 // import reducer from './reducer';
 // import saga from './sagas';
-import request from '../../utils/request';
 
 class VideoPlayer extends React.PureComponent {
 	state = {
-		playerOpen: true,
+		playerOpen: false,
 		volume: 1,
 		paused: true,
 		elipsisOpen: false,
@@ -30,66 +31,84 @@ class VideoPlayer extends React.PureComponent {
 	};
 
 	componentDidMount() {
-		this.hls = new Hls();
-		this.hls.on(Hls.Events.ERROR, (event, data) => {
-			if (data.fatal) {
-				// console.log('There was a fatal hls error', event, data);
-				switch (data.type) {
-					case Hls.ErrorTypes.NETWORK_ERROR:
-						this.hls.startLoad();
-						break;
-					case Hls.ErrorTypes.MEDIA_ERROR:
-						this.hls.recoverMediaError();
-						break;
-					default:
-						this.hls.destroy();
-						break;
-				}
-			}
+		const { fileset } = this.props;
+		this.initHls();
+		this.checkForBooks({
+			filesetId: fileset ? fileset.id : '',
+			bookId: this.props.bookId || '',
+			chapter: this.props.chapter,
 		});
-		// console.log('this.props', this.props);
-		// this.props.dispatch(getVideoList());
-		const filesetId = this.props.filesets.filter(
-			(f) => f.type === 'video_stream',
-		)[0];
-		// console.log('filesetid', filesetId);
-		this.getVideos({
-			filesetId: filesetId ? filesetId.id : 'FALTBLP2DV',
-			bookId: this.props.bookId || 'MRK',
-		});
+		if (this.videoRef) {
+			this.getVideos({
+				filesetId: fileset ? fileset.id : '',
+				bookId: this.props.bookId || '',
+				chapter: this.props.chapter,
+			});
+		}
 	}
 
-	// componentWillReceiveProps(nextProps) {
-	// 	if (((nextProps.videoList.length && !this.props.videoList.length) || nextProps.videoList.length !== this.props.videoList.length) && nextProps.videoList.length) {
-	// 	}
-	// }
+	componentWillReceiveProps(nextProps) {
+		const { fileset } = nextProps;
+		if (
+			nextProps.bookId !== this.props.bookId ||
+			nextProps.chapter !== this.props.chapter ||
+			!deepDifferenceObject(nextProps.fileset, this.props.fileset)
+		) {
+			this.checkForBooks({
+				filesetId: fileset ? fileset.id : '',
+				bookId: this.props.bookId || '',
+				chapter: this.props.chapter,
+			});
+			this.getVideos({
+				filesetId: fileset ? fileset.id : '',
+				bookId: this.props.bookId || '',
+				chapter: this.props.chapter,
+			});
+		} else if (nextProps.hasVideo !== this.props.hasVideo) {
+			this.getVideos({
+				filesetId: fileset ? fileset.id : '',
+				bookId: this.props.bookId || '',
+				chapter: this.props.chapter,
+			});
+		}
+	}
 
 	componentWillUnmount() {
-		this.hls.media.removeEventListener(
-			'timeupdate',
-			this.timeUpdateEventListener,
-		);
-		this.hls.media.removeEventListener('seeking', this.seekingEventListener);
-		this.hls.media.removeEventListener('seeked', this.seekedEventListener);
+		if (this.hls) {
+			this.hls.media.removeEventListener(
+				'timeupdate',
+				this.timeUpdateEventListener,
+			);
+			this.hls.media.removeEventListener('seeking', this.seekingEventListener);
+			this.hls.media.removeEventListener('seeked', this.seekedEventListener);
+		}
 	}
 
-	getVideos = async ({ filesetId, bookId }) => {
+	getVideos = async ({ filesetId, bookId, chapter }) => {
 		// console.log('filesetId, bookId', filesetId, bookId);
-		const requestUrl = `https://api.dbp4.org/bibles/filesets/${filesetId}?key=${
+		if (!filesetId) return;
+		const requestUrl = `${
+			process.env.BASE_API_ROUTE
+		}/bibles/filesets/${filesetId}?key=${
 			process.env.DBP_API_KEY
-		}&v=4&type=video_stream&bucket=dbp-vid&book_id=${bookId}`;
+		}&v=4&type=video_stream&bucket=dbp-vid&book_id=${bookId}&chapter_id=${chapter}`;
 
 		try {
 			const response = await request(requestUrl);
 			// console.log('all the vids', response);
 
 			if (response.data) {
-				const playlist = response.data.map((video) => ({
-					title: `${video.book_name} ${video.chapter_start}`,
-					id: `${video.book_id}_${video.chapter_start}_${video.verse_start}`,
-					source: video.path,
-					duration: video.duration || 300,
-				}));
+				const playlist = response.data
+					.filter(
+						(video) =>
+							video.book_id === bookId && video.chapter_start === chapter,
+					)
+					.map((video) => ({
+						title: `${video.book_name} ${video.chapter_start}`,
+						id: `${video.book_id}_${video.chapter_start}_${video.verse_start}`,
+						source: video.path,
+						duration: video.duration || 300,
+					}));
 
 				this.setState({
 					playlist: playlist.slice(1),
@@ -122,6 +141,36 @@ class VideoPlayer extends React.PureComponent {
 		}
 	};
 
+	checkForBooks = async ({ filesetId, bookId, chapter }) => {
+		console.log('running check for books', filesetId, bookId, chapter);
+		if (!filesetId) return;
+		const reqUrl = `${
+			process.env.BASE_API_ROUTE
+		}/bibles/filesets/${filesetId}/books?key=${
+			process.env.DBP_API_KEY
+		}&bucket=dbp-vid&fileset_type=video_stream&v=4`;
+
+		try {
+			const res = await request(reqUrl);
+			console.log('res', res);
+
+			if (res.data) {
+				const hasVideo = !!res.data.filter(
+					(stream) =>
+						stream.book_id === bookId && stream.chapters.includes(chapter),
+				).length;
+				console.log('has video', hasVideo);
+				this.props.dispatch(setHasVideo({ state: hasVideo }));
+			} else {
+				this.props.dispatch(setHasVideo({ state: false }));
+			}
+		} catch (err) {
+			if (process.env.NODE_ENV === 'development') {
+				console.log('Error checking for context', err); // eslint-disable-line no-console
+			}
+		}
+	};
+
 	handleVideoClick = () => {
 		const { paused } = this.state;
 
@@ -148,8 +197,31 @@ class VideoPlayer extends React.PureComponent {
 		);
 	};
 
+	initHls = () => {
+		this.hls = new Hls();
+		this.hls.on(Hls.Events.ERROR, (event, data) => {
+			if (data.fatal) {
+				// console.log('There was a fatal hls error', event, data);
+				switch (data.type) {
+					case Hls.ErrorTypes.NETWORK_ERROR:
+						this.hls.startLoad();
+						break;
+					case Hls.ErrorTypes.MEDIA_ERROR:
+						this.hls.recoverMediaError();
+						break;
+					default:
+						this.hls.destroy();
+						break;
+				}
+			}
+		});
+	};
+
 	initVideoStream = () => {
 		const { currentVideo } = this.state;
+		if (!this.hls) {
+			this.initHls();
+		}
 		if (currentVideo.source) {
 			// console.log('loading source');
 			this.hls.loadSource(currentVideo.source);
@@ -294,8 +366,14 @@ class VideoPlayer extends React.PureComponent {
 			currentVideo,
 			currentTime,
 		} = this.state;
-		// console.log('playlist', playlist);
-		// console.log('currentVideo', currentVideo);
+		const { hasVideo } = this.props;
+		console.log('playlist', playlist);
+		console.log('currentVideo', currentVideo);
+		console.log('hasVideo', hasVideo);
+		// Don't bother rendering anything if there is no video for the chapter
+		if (!hasVideo) {
+			return null;
+		}
 		/* eslint-disable jsx-a11y/media-has-caption */
 		return [
 			<div
@@ -359,8 +437,10 @@ class VideoPlayer extends React.PureComponent {
 
 VideoPlayer.propTypes = {
 	dispatch: PropTypes.func.isRequired,
-	filesets: PropTypes.array.isRequired,
+	fileset: PropTypes.object.isRequired,
 	bookId: PropTypes.string.isRequired,
+	chapter: PropTypes.number.isRequired,
+	hasVideo: PropTypes.bool.isRequired,
 	// videoList: PropTypes.array.isRequired,
 };
 
@@ -371,6 +451,7 @@ const mapDispatchToProps = (dispatch) => ({
 const mapStateToProps = createStructuredSelector({
 	// homepage: makeSelectHomePage(),
 	// videoList: selectVideoList(),
+	hasVideo: selectHasVideo(),
 });
 
 const withConnect = connect(

@@ -46,7 +46,7 @@
 	max-height: 0;
 	overflow: hidden;
 	transition: height 700ms ease-in-out, max-height 700ms ease-in-out,
-		padding 700ms ease-in-out;
+		padding 1200ms ease-in-out;
 
 	&.active {
 		display: block;

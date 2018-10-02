@@ -260,32 +260,6 @@ class HomePage extends React.PureComponent {
 			}
 		}
 
-		// const browserObject = {
-		// 	agent: '',
-		// 	majorVersion: '',
-		// 	version: '',
-		// };
-		// if (/msie [0-9]{1}/i.test(navigator.userAgent)) {
-		// 	browserObject.agent = 'msie';
-		// 	browserObject.majorVersion = parseInt(
-		// 		/MSIE ([0-9]{1})/i.exec(navigator.userAgent)[1],
-		// 		10,
-		// 	);
-		// 	browserObject.version = /MSIE ([0-9.]+)/i.exec(navigator.userAgent)[1];
-		// } else if (/Trident\/[7]{1}/i.test(navigator.userAgent)) {
-		// 	browserObject.agent = 'msie';
-		// 	browserObject.majorVersion = 11;
-		// 	browserObject.version = '11';
-		// }
-		// if (browserObject.agent === 'msie') {
-		// 	this.props.dispatch(setUA());
-		// 	// console.log('svg4everybody', svg4everybody);
-		// 	if (typeof svg4everybody === 'function') {
-		// 		// console.log('svg for everybody return value', svg4everybody);
-		// 		svg4everybody();
-		// 	}
-		// }
-
 		if (window && document && document.firstElementChild) {
 			// Main can be unset in this instance
 			if (this.isMobileSized) {
@@ -583,7 +557,7 @@ class HomePage extends React.PureComponent {
 	};
 
 	addBookmark = (data) => this.props.dispatch(addBookmark({ ...data }));
-	fo;
+
 	addHighlight = (props) =>
 		this.props.dispatch(
 			addHighlight({
@@ -752,6 +726,7 @@ class HomePage extends React.PureComponent {
 			loadingNewChapterText,
 			chapterTextLoadingState,
 			videoPlayerOpen,
+			hasVideo,
 		} = this.props.homepage;
 
 		const {
@@ -763,8 +738,7 @@ class HomePage extends React.PureComponent {
 		} = this.props;
 
 		const autoPlayEnabled = userSettings.get('autoPlayEnabled');
-
-		// console.log('Homepage props', autoPlayEnabled);
+		console.log('has video', hasVideo);
 
 		const { isScrollingDown, footerDistance: distance } = this.state;
 
@@ -788,9 +762,9 @@ class HomePage extends React.PureComponent {
 					toggleVersionSelection={this.toggleVersionSelection}
 				/>
 				<VideoPlayer
-					activeTextId={activeTextId}
-					filesets={activeFilesets}
+					fileset={activeFilesets.filter((f) => f.type === 'video_stream')[0]}
 					bookId={activeBookId}
+					chapter={activeChapter}
 				/>
 				<TransitionGroup>
 					{isSettingsModalActive ? (
@@ -842,10 +816,10 @@ class HomePage extends React.PureComponent {
 					) : null}
 				</TransitionGroup>
 				<Text
-					hasVideo
 					books={books}
 					userId={userId}
 					text={updatedText}
+					hasVideo={hasVideo}
 					distance={distance}
 					verseNumber={verse}
 					userNotes={userNotes}
