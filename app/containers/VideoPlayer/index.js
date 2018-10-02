@@ -49,32 +49,37 @@ class VideoPlayer extends React.PureComponent {
 
 	componentWillReceiveProps(nextProps) {
 		const { fileset } = nextProps;
+
 		if (
 			nextProps.bookId !== this.props.bookId ||
 			nextProps.chapter !== this.props.chapter ||
-			!deepDifferenceObject(nextProps.fileset, this.props.fileset)
+			Object.keys(deepDifferenceObject(nextProps.fileset, this.props.fileset))
+				.length
 		) {
 			this.checkForBooks({
 				filesetId: fileset ? fileset.id : '',
-				bookId: this.props.bookId || '',
-				chapter: this.props.chapter,
+				bookId: nextProps.bookId || '',
+				chapter: nextProps.chapter,
 			});
 			this.getVideos({
 				filesetId: fileset ? fileset.id : '',
-				bookId: this.props.bookId || '',
-				chapter: this.props.chapter,
+				bookId: nextProps.bookId || '',
+				chapter: nextProps.chapter,
 			});
-		} else if (nextProps.hasVideo !== this.props.hasVideo) {
+		} else if (
+			nextProps.hasVideo !== this.props.hasVideo &&
+			nextProps.hasVideo
+		) {
 			this.getVideos({
 				filesetId: fileset ? fileset.id : '',
-				bookId: this.props.bookId || '',
-				chapter: this.props.chapter,
+				bookId: nextProps.bookId || '',
+				chapter: nextProps.chapter,
 			});
 		}
 	}
 
 	componentWillUnmount() {
-		if (this.hls) {
+		if (this.hls && this.hls.media) {
 			this.hls.media.removeEventListener(
 				'timeupdate',
 				this.timeUpdateEventListener,
@@ -115,8 +120,14 @@ class VideoPlayer extends React.PureComponent {
 					currentVideo: playlist[0],
 				});
 				this.initVideoStream();
+				if (!this.props.hasVideo) {
+					this.props.dispatch(setHasVideo({ state: true }));
+				}
 			} else {
 				this.setState({ playlist: [], currentVideo: {} });
+				if (this.props.hasVideo) {
+					this.props.dispatch(setHasVideo({ state: false }));
+				}
 			}
 		} catch (err) {
 			if (process.env.NODE_ENV === 'development') {
@@ -224,7 +235,7 @@ class VideoPlayer extends React.PureComponent {
 		}
 		if (currentVideo.source) {
 			// console.log('loading source');
-			this.hls.loadSource(currentVideo.source);
+			// this.hls.loadSource(currentVideo.source);
 			this.hls.attachMedia(this.videoRef);
 			if (this.hls.media && typeof this.hls.media.poster !== 'undefined') {
 				this.hls.media.poster = currentVideo.poster;
