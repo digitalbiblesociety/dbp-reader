@@ -36,6 +36,7 @@ export const getClassNameForTextContainer = ({
 	subFooterOpen,
 	videoPlayerOpen,
 	hasVideo,
+	audioPlayerState,
 }) => {
 	let classNames = 'text-container';
 
@@ -43,7 +44,7 @@ export const getClassNameForTextContainer = ({
 		classNames += ' scrolled-down';
 	}
 
-	if (videoPlayerOpen) {
+	if (videoPlayerOpen && hasVideo) {
 		classNames += ' video-player-open';
 	}
 
@@ -53,6 +54,10 @@ export const getClassNameForTextContainer = ({
 
 	if (subFooterOpen && !isScrollingDown) {
 		classNames += ' sub-footer-open';
+	}
+
+	if (!audioPlayerState) {
+		classNames += ' audio-player-closed';
 	}
 
 	return classNames;

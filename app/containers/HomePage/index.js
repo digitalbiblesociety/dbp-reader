@@ -98,17 +98,7 @@ class HomePage extends React.PureComponent {
 			userAuthenticated,
 			userId,
 		} = this.props.homepage;
-		// console.log(svg4everybody);
-		// const params = this.props.homepage.match.params;
-		// this.props.dispatch({
-		// 	type: 'getbible',
-		// 	bibleId: params.bibleId,
-		// 	bookId: params.bookId,
-		// 	chapter: params.chapter,
-		// 	authenticated: this.props.homepage.userAuthenticated,
-		// 	userId: this.props.homepage.userId,
-		// 	verse: params.verse,
-		// });
+
 		this.getCopyrights({ filesetIds: activeFilesets });
 		if (userId && userAuthenticated) {
 			// console.log('user is now authenticated')
@@ -761,11 +751,59 @@ class HomePage extends React.PureComponent {
 					toggleChapterSelection={this.toggleChapterSelection}
 					toggleVersionSelection={this.toggleVersionSelection}
 				/>
-				<VideoPlayer
-					fileset={activeFilesets.filter((f) => f.type === 'video_stream')[0]}
-					bookId={activeBookId}
-					chapter={activeChapter}
-				/>
+				<div
+					className={
+						videoPlayerOpen || !audioPlayerState
+							? 'content-container audio-closed'
+							: 'content-container'
+					}
+				>
+					<VideoPlayer
+						fileset={activeFilesets.filter((f) => f.type === 'video_stream')[0]}
+						bookId={activeBookId}
+						chapter={activeChapter}
+					/>
+					<Text
+						books={books}
+						userId={userId}
+						text={updatedText}
+						hasVideo={hasVideo}
+						distance={distance}
+						verseNumber={verse}
+						userNotes={userNotes}
+						bookmarks={bookmarks}
+						bibleId={activeTextId}
+						menuIsOpen={isMenuOpen}
+						highlights={highlights}
+						audioSource={audioSource}
+						activeTextId={activeTextId}
+						activeBookId={activeBookId}
+						loadingAudio={loadingAudio}
+						userSettings={userSettings}
+						activeChapter={activeChapter}
+						textDirection={textDirection}
+						invalidBibleId={invalidBibleId}
+						activeBookName={activeBookName}
+						notesActive={isNotesModalActive}
+						formattedSource={formattedSource}
+						videoPlayerOpen={videoPlayerOpen}
+						isScrollingDown={isScrollingDown}
+						audioPlayerState={audioPlayerState}
+						userAuthenticated={userAuthenticated}
+						informationActive={isInformationModalActive}
+						loadingNewChapterText={loadingNewChapterText}
+						chapterTextLoadingState={chapterTextLoadingState}
+						addBookmark={this.addBookmark}
+						addHighlight={this.addHighlight}
+						setActiveNote={this.setActiveNote}
+						getCopyrights={this.getCopyrights}
+						toggleNotesModal={this.toggleNotesModal}
+						deleteHighlights={this.deleteHighlights}
+						setActiveNotesView={this.setActiveNotesView}
+						setTextLoadingState={this.setTextLoadingState}
+						toggleInformationModal={this.toggleInformationModal}
+					/>
+				</div>
 				<TransitionGroup>
 					{isSettingsModalActive ? (
 						<FadeTransition
@@ -815,46 +853,6 @@ class HomePage extends React.PureComponent {
 						</FadeTransition>
 					) : null}
 				</TransitionGroup>
-				<Text
-					books={books}
-					userId={userId}
-					text={updatedText}
-					hasVideo={hasVideo}
-					distance={distance}
-					verseNumber={verse}
-					userNotes={userNotes}
-					bookmarks={bookmarks}
-					bibleId={activeTextId}
-					menuIsOpen={isMenuOpen}
-					highlights={highlights}
-					audioSource={audioSource}
-					activeTextId={activeTextId}
-					activeBookId={activeBookId}
-					loadingAudio={loadingAudio}
-					userSettings={userSettings}
-					activeChapter={activeChapter}
-					textDirection={textDirection}
-					invalidBibleId={invalidBibleId}
-					activeBookName={activeBookName}
-					notesActive={isNotesModalActive}
-					formattedSource={formattedSource}
-					videoPlayerOpen={videoPlayerOpen}
-					isScrollingDown={isScrollingDown}
-					audioPlayerState={audioPlayerState}
-					userAuthenticated={userAuthenticated}
-					informationActive={isInformationModalActive}
-					loadingNewChapterText={loadingNewChapterText}
-					chapterTextLoadingState={chapterTextLoadingState}
-					addBookmark={this.addBookmark}
-					addHighlight={this.addHighlight}
-					setActiveNote={this.setActiveNote}
-					getCopyrights={this.getCopyrights}
-					toggleNotesModal={this.toggleNotesModal}
-					deleteHighlights={this.deleteHighlights}
-					setActiveNotesView={this.setActiveNotesView}
-					setTextLoadingState={this.setTextLoadingState}
-					toggleInformationModal={this.toggleInformationModal}
-				/>
 				<AudioPlayer
 					books={books}
 					text={updatedText}

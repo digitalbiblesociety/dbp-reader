@@ -1,26 +1,19 @@
 .text-container {
 	display: flex;
-	max-width: 1000px;
-	height: calc(100vh - 130px);
-	margin: 0 auto;
-	//max-height: calc(100vh - 190px);
-	//margin: 54px auto 108px auto;
-	//margin-top: 15px;
-	//padding: 54px 10px 116px 10px;
-	padding: 54px 10px 0 10px;
-	align-items: center;
-	transition: height 700ms ease-in-out, padding 700ms linear;
+	flex: 1;
+	transition: height 700ms ease-in-out, padding 200ms linear,
+		flex 700ms ease-in-out;
 
 	&.has-video {
 		padding-top: 0;
-		height: calc(100vh - 185px);
+		// height: calc(100vh - 185px);
 	}
 
 	&.video-player-open {
 		//padding-bottom: 478px;
 		padding-top: 0;
 		// TODO: Not a permanent solution, should look at using flex sizes for this and the video player
-		height: calc(100vh - 665px);
+		// height: calc(100vh - 585px);
 		// height: calc(100vh - 185px - 480px);
 	}
 
@@ -282,18 +275,6 @@
 	}
 }
 
-@media only screen and (max-width: $audio-player-bp) {
-	.text-container {
-		main {
-			padding-bottom: 75px;
-			z-index: 0;
-		}
-
-		.main-wrapper {
-			padding-bottom: 45px;
-		}
-	}
-}
 // Style that I like but that isn't in the comps
 //@keyframes thicken {
 //	0%   { transform: scale(1.00); fill:rgba(158, 30, 53, 0.253); }

@@ -72,6 +72,35 @@ html #__next aside {
 	}
 }
 
+/* Styles for parent container to video and text elements */
+.content-container {
+	display: flex;
+	flex-direction: column;
+	max-width: 1000px;
+	height: calc(100vh - 130px);
+	margin: 0 auto;
+	padding: 54px 10px 0 10px;
+	align-items: center;
+
+	&.audio-closed {
+		height: calc(100vh - 81px);
+	}
+}
+
+@media only screen and (max-width: $audio-player-bp) {
+	.text-container {
+		main {
+			// padding-bottom: 75px;
+			z-index: 0;
+		}
+
+		// .main-wrapper {
+		// 	padding-bottom: 45px;
+		// }
+	}
+}
+
+/* Additional styles */
 #old-browser-banner {
 	position: absolute;
 	top: 0;

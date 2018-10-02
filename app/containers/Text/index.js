@@ -125,6 +125,7 @@ class Text extends React.PureComponent {
 	// I am using this function because it means that the component finished updating and that the dom is available
 	componentDidUpdate(prevProps, prevState) {
 		// console.log(this.format, this.formatHighlight);
+		// Use these logs to help reduce unused renders
 		// if (Object.keys(differenceObject(this.state, prevState)).length || Object.keys(differenceObject(this.props, prevProps)).length) {
 		// 	console.log('component did update new props difference: ', differenceObject(this.props, prevProps));
 		// 	console.log('component did update new state difference: ', differenceObject(this.state, prevState));
@@ -1833,7 +1834,7 @@ class Text extends React.PureComponent {
 			menuIsOpen,
 			isScrollingDown,
 			// audioSource,
-			// audioPlayerState,
+			audioPlayerState,
 			subFooterOpen,
 			textDirection,
 			chapterTextLoadingState,
@@ -1895,11 +1896,13 @@ class Text extends React.PureComponent {
 
 		return (
 			<div
+				id="text-container-parent"
 				className={getClassNameForTextContainer({
 					isScrollingDown,
 					videoPlayerOpen,
 					subFooterOpen,
 					hasVideo,
+					audioPlayerState,
 				})}
 			>
 				<PrefetchLink
@@ -2065,7 +2068,7 @@ Text.propTypes = {
 	isScrollingDown: PropTypes.bool,
 	videoPlayerOpen: PropTypes.bool,
 	chapterTextLoadingState: PropTypes.bool,
-	// audioPlayerState: PropTypes.bool,
+	audioPlayerState: PropTypes.bool,
 	userAuthenticated: PropTypes.bool,
 	loadingNewChapterText: PropTypes.bool,
 	userId: PropTypes.string,
