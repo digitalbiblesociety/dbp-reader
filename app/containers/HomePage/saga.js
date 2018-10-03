@@ -1342,6 +1342,20 @@ export function* getCopyrightSaga({ filesetIds }) {
 			  )[0]
 			: {};
 
+		const cVideo = copyrights.filter(
+			(c) => c.testament === 'C' && c.type === 'video_stream',
+		)[0];
+		const ntVideo = !cVideo
+			? copyrights.filter(
+					(c) => ntCodes[c.testament] && c.type === 'video_stream',
+			  )[0]
+			: {};
+		const otVideo = !cVideo
+			? copyrights.filter(
+					(c) => otCodes[c.testament] && c.type === 'video_stream',
+			  )[0]
+			: {};
+
 		// console.log('cText', cText);
 		// console.log('ntText', ntText);
 		// console.log('otText', otText);
@@ -1362,10 +1376,12 @@ export function* getCopyrightSaga({ filesetIds }) {
 			newTestament: {
 				audio: cAudio || ntAudio,
 				text: cText || ntText,
+				video: cVideo || ntVideo,
 			},
 			oldTestament: {
 				audio: !(cAudio || ntAudio) && (cAudio || otAudio),
 				text: !(cAudio || ntAudio) && (cText || otText),
+				video: !(cVideo || ntVideo) && (cVideo || otVideo),
 			},
 		};
 		// console.log('copyrights', copyrightObject);

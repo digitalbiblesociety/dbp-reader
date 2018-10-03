@@ -728,7 +728,7 @@ class HomePage extends React.PureComponent {
 		} = this.props;
 
 		const autoPlayEnabled = userSettings.get('autoPlayEnabled');
-		console.log('has video', hasVideo);
+		// console.log('has video', hasVideo);
 
 		const { isScrollingDown, footerDistance: distance } = this.state;
 

@@ -3,6 +3,7 @@ const codes = {
 	audio_drama: true,
 	text_plain: true,
 	text_format: true,
+	video_stream: true,
 	NT: true,
 	OT: true,
 	C: true,
