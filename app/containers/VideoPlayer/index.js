@@ -153,7 +153,7 @@ class VideoPlayer extends React.PureComponent {
 	};
 
 	checkForBooks = async ({ filesetId, bookId, chapter }) => {
-		console.log('running check for books', filesetId, bookId, chapter);
+		// console.log('running check for books', filesetId, bookId, chapter);
 		if (!filesetId) return;
 		const reqUrl = `${
 			process.env.BASE_API_ROUTE
@@ -163,14 +163,14 @@ class VideoPlayer extends React.PureComponent {
 
 		try {
 			const res = await request(reqUrl);
-			console.log('res', res);
+			// console.log('res', res);
 
 			if (res.data) {
 				const hasVideo = !!res.data.filter(
 					(stream) =>
 						stream.book_id === bookId && stream.chapters.includes(chapter),
 				).length;
-				console.log('has video', hasVideo);
+				// console.log('has video', hasVideo);
 				this.props.dispatch(setHasVideo({ state: hasVideo }));
 			} else {
 				this.props.dispatch(setHasVideo({ state: false }));
@@ -230,29 +230,35 @@ class VideoPlayer extends React.PureComponent {
 
 	initVideoStream = () => {
 		const { currentVideo } = this.state;
-		if (!this.hls) {
-			this.initHls();
-		}
-		if (currentVideo.source) {
-			// console.log('loading source');
-			// this.hls.loadSource(currentVideo.source);
-			this.hls.attachMedia(this.videoRef);
-			if (this.hls.media && typeof this.hls.media.poster !== 'undefined') {
-				this.hls.media.poster = currentVideo.poster;
-			}
-			this.hls.media.addEventListener(
-				'timeupdate',
-				this.timeUpdateEventListener,
-			);
-			this.hls.media.addEventListener('seeking', this.seekingEventListener);
-			this.hls.media.addEventListener('seeked', this.seekedEventListener);
-			this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
-				// console.log('Adding poster for video');
-				// console.log('manifest was parsed');
-				if (this.videoRef && typeof this.videoRef.poster !== 'undefined') {
-					this.videoRef.poster = currentVideo.poster;
+		this.initHls();
+		try {
+			if (this.videoRef) {
+				if (currentVideo.source) {
+					// console.log('loading source');
+					this.hls.attachMedia(this.videoRef);
+					this.hls.loadSource(currentVideo.source);
+					// if (this.hls.media && typeof this.hls.media.poster !== 'undefined') {
+					// 	this.hls.media.poster = currentVideo.poster;
+					// }
+					this.hls.media.addEventListener(
+						'timeupdate',
+						this.timeUpdateEventListener,
+					);
+					this.hls.media.addEventListener('seeking', this.seekingEventListener);
+					this.hls.media.addEventListener('seeked', this.seekedEventListener);
+					this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
+						// console.log('Adding poster for video');
+						// console.log('manifest was parsed');
+						if (this.videoRef && typeof this.videoRef.poster !== 'undefined') {
+							this.videoRef.poster = currentVideo.poster;
+						}
+					});
 				}
-			});
+			}
+		} catch (err) {
+			if (process.env.NODE_ENV === 'development') {
+				console.log('initVideoStream', err); // eslint-disable-line no-console
+			}
 		}
 	};
 
@@ -278,19 +284,25 @@ class VideoPlayer extends React.PureComponent {
 
 	playVideo = () => {
 		const { currentVideo } = this.state;
-		if (currentVideo.source) {
-			if (this.hls.media) {
-				// console.log('playing from hls media');
-				this.hls.media.play();
-				this.setState({ paused: false });
-			} else {
-				// console.log('loading source in else');
-				this.hls.loadSource(currentVideo.source);
-				this.hls.attachMedia(this.videoRef);
-				this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
-					this.videoRef.play();
+		try {
+			if (currentVideo.source) {
+				if (this.hls.media) {
+					// console.log('playing from hls media');
+					this.hls.media.play();
 					this.setState({ paused: false });
-				});
+				} else {
+					// console.log('loading source in else');
+					this.hls.loadSource(currentVideo.source);
+					this.hls.attachMedia(this.videoRef);
+					this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
+						this.videoRef.play();
+						this.setState({ paused: false });
+					});
+				}
+			}
+		} catch (err) {
+			if (process.env.NODE_ENV === 'development') {
+				console.log('caught in playVideo'); // eslint-disable-line no-console
 			}
 		}
 	};
@@ -378,9 +390,9 @@ class VideoPlayer extends React.PureComponent {
 			currentTime,
 		} = this.state;
 		const { hasVideo } = this.props;
-		console.log('playlist', playlist);
-		console.log('currentVideo', currentVideo);
-		console.log('hasVideo', hasVideo);
+		// console.log('playlist', playlist);
+		// console.log('currentVideo', currentVideo);
+		// console.log('hasVideo', hasVideo);
 		// Don't bother rendering anything if there is no video for the chapter
 		if (!hasVideo) {
 			return null;
