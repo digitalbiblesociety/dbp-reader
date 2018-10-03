@@ -9,8 +9,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { FormattedMessage } from 'react-intl';
-import get from 'lodash/get';
+// import get from 'lodash/get';
 import AnimateHeight from 'react-animate-height';
+import CopyrightSection from '../CopyrightSection';
 import { selectCopyrights } from './selectors';
 import ImageComponent from '../ImageComponent';
 import messages from './messages';
@@ -127,84 +128,8 @@ class Information extends React.PureComponent {
 				</button>
 				<AnimateHeight height={this.state.height} duration={1000}>
 					<div className="copyrights-section">
-						<div className={'ot-copyright'}>
-							{/* <div className={'cp-header'}><h1>Old Testament</h1></div> */}
-							{get(copyrights, ['oldTestament', 'audio', 'organizations']) ||
-							get(copyrights, ['oldTestament', 'audio', 'message']) ? (
-								<div className={'cp-section'}>
-									{get(copyrights, ['oldTestament', 'audio', 'organizations'])
-										? this.getAudioCopyright(
-												get(copyrights, [
-													'oldTestament',
-													'audio',
-													'organizations',
-												]),
-												'old_testament',
-										  )
-										: null}
-									{get(copyrights, ['oldTestament', 'audio', 'message']) ? (
-										<p>{copyrights.oldTestament.audio.message}</p>
-									) : null}
-								</div>
-							) : null}
-							{get(copyrights, ['oldTestament', 'text', 'organizations']) ||
-							get(copyrights, ['oldTestament', 'text', 'message']) ? (
-								<div className={'cp-section'}>
-									{get(copyrights, ['oldTestament', 'text', 'organizations'])
-										? this.getTextCopyright(
-												get(copyrights, [
-													'oldTestament',
-													'text',
-													'organizations',
-												]),
-												'old_testament',
-										  )
-										: null}
-									{get(copyrights, ['oldTestament', 'text', 'message']) ? (
-										<p>{copyrights.oldTestament.text.message}</p>
-									) : null}
-								</div>
-							) : null}
-						</div>
-						<div className={'nt-copyright'}>
-							{/* <div className={'cp-header'}><h1>New Testament</h1></div> */}
-							{get(copyrights, ['newTestament', 'audio', 'organizations']) ||
-							get(copyrights, ['newTestament', 'audio', 'message']) ? (
-								<div className={'cp-section'}>
-									{get(copyrights, ['newTestament', 'audio', 'organizations'])
-										? this.getAudioCopyright(
-												get(copyrights, [
-													'newTestament',
-													'audio',
-													'organizations',
-												]),
-												'new_testament',
-										  )
-										: null}
-									{get(copyrights, ['newTestament', 'audio', 'message']) ? (
-										<p>{copyrights.newTestament.audio.message}</p>
-									) : null}
-								</div>
-							) : null}
-							{get(copyrights, ['newTestament', 'text', 'organizations']) ||
-							get(copyrights, ['newTestament', 'text', 'message']) ? (
-								<div className={'cp-section'}>
-									{get(copyrights, ['newTestament', 'text', 'organizations'])
-										? this.getTextCopyright(
-												get(copyrights, [
-													'newTestament',
-													'text',
-													'organizations',
-												]),
-												'new_testament',
-										  )
-										: null}
-									{get(copyrights, ['newTestament', 'text', 'message']) ? (
-										<p>{copyrights.newTestament.text.message}</p>
-									) : null}
-								</div>
-							) : null}
-						</div>
+						<CopyrightSection copyrights={copyrights} prefix={'old'} />
+						<CopyrightSection copyrights={copyrights} prefix={'new'} />
 					</div>
 				</AnimateHeight>
 				<div className={'ministry-statement'}>
