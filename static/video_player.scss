@@ -51,6 +51,7 @@
 	&.active {
 		display: block;
 		max-height: 620px;
+		min-height: 175px;
 	}
 
 	@include css4 {
