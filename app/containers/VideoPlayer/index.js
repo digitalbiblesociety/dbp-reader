@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import Hls from 'hls.js';
+import Router from 'next/router';
 import { openVideoPlayer, closeVideoPlayer, setHasVideo } from './actions';
 import SvgWrapper from '../../components/SvgWrapper';
 import VideoControls from '../../components/VideoControls';
@@ -45,6 +46,8 @@ class VideoPlayer extends React.PureComponent {
 				chapter: this.props.chapter,
 			});
 		}
+
+		Router.router.events.on('routeChangeStart', this.handleRouteChange);
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -61,11 +64,11 @@ class VideoPlayer extends React.PureComponent {
 				bookId: nextProps.bookId || '',
 				chapter: nextProps.chapter,
 			});
-			this.getVideos({
-				filesetId: fileset ? fileset.id : '',
-				bookId: nextProps.bookId || '',
-				chapter: nextProps.chapter,
-			});
+			// this.getVideos({
+			// 	filesetId: fileset ? fileset.id : '',
+			// 	bookId: nextProps.bookId || '',
+			// 	chapter: nextProps.chapter,
+			// });
 		} else if (
 			nextProps.hasVideo !== this.props.hasVideo &&
 			nextProps.hasVideo
@@ -86,7 +89,12 @@ class VideoPlayer extends React.PureComponent {
 			);
 			this.hls.media.removeEventListener('seeking', this.seekingEventListener);
 			this.hls.media.removeEventListener('seeked', this.seekedEventListener);
+			this.hls.detachMedia();
+			this.hls.stopLoad();
+			this.hls.destroy();
 		}
+
+		Router.router.events.off('routeChangeStart', this.handleRouteChange);
 	}
 
 	getVideos = async ({ filesetId, bookId, chapter }) => {
@@ -182,6 +190,12 @@ class VideoPlayer extends React.PureComponent {
 		}
 	};
 
+	handleRouteChange = () => {
+		if (this.hls) {
+			this.hls.destroy();
+		}
+	};
+
 	handleVideoClick = () => {
 		const { paused } = this.state;
 
@@ -209,6 +223,9 @@ class VideoPlayer extends React.PureComponent {
 	};
 
 	initHls = () => {
+		if (this.hls) {
+			this.hls.destroy();
+		}
 		this.hls = new Hls();
 		this.hls.on(Hls.Events.ERROR, (event, data) => {
 			if (data.fatal) {
@@ -236,7 +253,9 @@ class VideoPlayer extends React.PureComponent {
 				if (currentVideo.source) {
 					// console.log('loading source');
 					this.hls.attachMedia(this.videoRef);
-					this.hls.loadSource(currentVideo.source);
+					this.hls.loadSource(
+						`${currentVideo.source}?key=${process.env.DBP_API_KEY}&v=4`,
+					);
 					// if (this.hls.media && typeof this.hls.media.poster !== 'undefined') {
 					// 	this.hls.media.poster = currentVideo.poster;
 					// }
@@ -292,7 +311,9 @@ class VideoPlayer extends React.PureComponent {
 					this.setState({ paused: false });
 				} else {
 					// console.log('loading source in else');
-					this.hls.loadSource(currentVideo.source);
+					this.hls.loadSource(
+						`${currentVideo.source}?key=${process.env.DBP_API_KEY}&v=4`,
+					);
 					this.hls.attachMedia(this.videoRef);
 					this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
 						this.videoRef.play();
