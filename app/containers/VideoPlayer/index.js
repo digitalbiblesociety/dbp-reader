@@ -59,16 +59,19 @@ class VideoPlayer extends React.PureComponent {
 			Object.keys(deepDifferenceObject(nextProps.fileset, this.props.fileset))
 				.length
 		) {
-			this.checkForBooks({
-				filesetId: fileset ? fileset.id : '',
-				bookId: nextProps.bookId || '',
-				chapter: nextProps.chapter,
-			});
-			// this.getVideos({
-			// 	filesetId: fileset ? fileset.id : '',
-			// 	bookId: nextProps.bookId || '',
-			// 	chapter: nextProps.chapter,
-			// });
+			if (nextProps.hasVideo) {
+				this.getVideos({
+					filesetId: fileset ? fileset.id : '',
+					bookId: nextProps.bookId || '',
+					chapter: nextProps.chapter,
+				});
+			} else {
+				this.checkForBooks({
+					filesetId: fileset ? fileset.id : '',
+					bookId: nextProps.bookId || '',
+					chapter: nextProps.chapter,
+				});
+			}
 		} else if (
 			nextProps.hasVideo !== this.props.hasVideo &&
 			nextProps.hasVideo
@@ -274,10 +277,11 @@ class VideoPlayer extends React.PureComponent {
 						// this.hls.media.volume = 0;
 						if (this.state.playerOpen) {
 							this.hls.media.play();
+							this.setState({ paused: false });
 						}
 						// setTimeout(() => this.hls.media.pause(), 1500);
 						// console.log('Adding poster for video');
-						console.log('init manifest was parsed');
+						// console.log('init manifest was parsed');
 						// if (this.videoRef && typeof this.videoRef.poster !== 'undefined') {
 						// 	this.videoRef.poster = currentVideo.poster;
 						// }
@@ -349,6 +353,7 @@ class VideoPlayer extends React.PureComponent {
 
 	closePlayer = () => {
 		this.setState({ playerOpen: false, paused: true });
+		this.pauseVideo();
 		this.props.dispatch(closeVideoPlayer());
 	};
 
