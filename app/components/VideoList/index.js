@@ -37,13 +37,12 @@ class VideoList extends React.PureComponent {
 								key={`${video.id}`}
 								onClick={() => handleThumbnailClick(video)}
 							>
-								<img
+								<div
 									className={'thumbnail-poster'}
-									src={video.poster}
-									alt={`There was no video for: ${video.title}`}
+									alt={`There was no thumbnail for: ${video.title}`}
 								/>
 								<div className={'thumbnail-metadata'}>
-									<span className={'thumbnail-title'}>{video.title}</span>
+									<span className={'thumbnail-title'}>{`${video.title}`}</span>
 									<span className={'thumbnail-duration'}>{video.duration}</span>
 								</div>
 								<SvgWrapper

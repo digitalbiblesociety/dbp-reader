@@ -171,9 +171,11 @@ const initialState = fromJS({
 			text: {},
 		},
 	},
+	hasAudio: false,
+	hasVideo: false,
+	videoPlayerOpen: false,
 	activeChapter: 1,
 	chapterTextLoadingState: false,
-	videoPlayerOpen: false,
 	userAuthenticated:
 		// !!localStorage.getItem('bible_is_user_id') ||
 		// !!sessionStorage.getItem('bible_is_user_id') ||
@@ -189,8 +191,6 @@ const initialState = fromJS({
 	loadingBooks: false,
 	isFromServer: true,
 	invalidBibleId: false,
-	hasAudio: false,
-	hasVideo: false,
 	hasTextInDatabase: true,
 	firstLoad: true,
 	audioPlayerState: true,

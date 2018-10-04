@@ -117,7 +117,9 @@ class VideoPlayer extends React.PureComponent {
 							video.book_id === bookId && video.chapter_start === chapter,
 					)
 					.map((video) => ({
-						title: `${video.book_name} ${video.chapter_start}`,
+						title: `${video.book_name} ${video.chapter_start}:${
+							video.verse_start
+						}-${video.verse_end}`,
 						id: `${video.book_id}_${video.chapter_start}_${video.verse_start}`,
 						source: video.path,
 						duration: video.duration || 300,
@@ -207,6 +209,7 @@ class VideoPlayer extends React.PureComponent {
 	};
 
 	handleThumbnailClick = (video) => {
+		// console.log('called handle with: ', video, '\nand state: ', this.state);
 		this.setState(
 			(state) => ({
 				playlist: state.playlist
@@ -216,7 +219,9 @@ class VideoPlayer extends React.PureComponent {
 				currentVideo: video,
 			}),
 			() => {
+				// console.log('new curprent video', this.state.currentVideo);
 				// console.log('The current video ref', this.videoRef);
+
 				this.playVideo();
 			},
 		);
@@ -266,11 +271,16 @@ class VideoPlayer extends React.PureComponent {
 					this.hls.media.addEventListener('seeking', this.seekingEventListener);
 					this.hls.media.addEventListener('seeked', this.seekedEventListener);
 					this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
-						// console.log('Adding poster for video');
-						// console.log('manifest was parsed');
-						if (this.videoRef && typeof this.videoRef.poster !== 'undefined') {
-							this.videoRef.poster = currentVideo.poster;
+						// this.hls.media.volume = 0;
+						if (this.state.playerOpen) {
+							this.hls.media.play();
 						}
+						// setTimeout(() => this.hls.media.pause(), 1500);
+						// console.log('Adding poster for video');
+						console.log('init manifest was parsed');
+						// if (this.videoRef && typeof this.videoRef.poster !== 'undefined') {
+						// 	this.videoRef.poster = currentVideo.poster;
+						// }
 					});
 				}
 			}
@@ -305,25 +315,29 @@ class VideoPlayer extends React.PureComponent {
 		const { currentVideo } = this.state;
 		try {
 			if (currentVideo.source) {
-				if (this.hls.media) {
+				// console.log(this.hls.url);
+				// console.log(currentVideo.source);
+				if (
+					this.hls.media &&
+					this.hls.url ===
+						`${currentVideo.source}?key=${process.env.DBP_API_KEY}&v=4`
+				) {
 					// console.log('playing from hls media');
 					this.hls.media.play();
 					this.setState({ paused: false });
 				} else {
 					// console.log('loading source in else');
+					this.hls.stopLoad();
+					this.hls.detachMedia();
+					this.hls.attachMedia(this.videoRef);
 					this.hls.loadSource(
 						`${currentVideo.source}?key=${process.env.DBP_API_KEY}&v=4`,
 					);
-					this.hls.attachMedia(this.videoRef);
-					this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
-						this.videoRef.play();
-						this.setState({ paused: false });
-					});
 				}
 			}
 		} catch (err) {
 			if (process.env.NODE_ENV === 'development') {
-				console.log('caught in playVideo'); // eslint-disable-line no-console
+				console.log('caught in playVideo', err); // eslint-disable-line no-console
 			}
 		}
 	};
