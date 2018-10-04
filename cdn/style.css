@@ -180,6 +180,26 @@ html #__next aside {
   border-bottom: 1px solid var(--menu-border-color);
 }
 
+/* Styles for parent container to video and text elements */
+.content-container {
+  display: flex;
+  flex-direction: column;
+  max-width: 1000px;
+  height: calc(100vh - 130px);
+  margin: 0 auto;
+  padding: 54px 10px 0 10px;
+  align-items: center;
+}
+.content-container.audio-closed {
+  height: calc(100vh - 81px);
+}
+
+@media only screen and (max-width: 550px) {
+  .text-container main {
+    z-index: 0;
+  }
+}
+/* Additional styles */
 #old-browser-banner {
   position: absolute;
   top: 0;
@@ -2367,12 +2387,8 @@ text-align: justify;
 
 .text-container {
   display: flex;
-  max-width: 1000px;
-  height: calc(100vh - 130px);
-  margin: 0 auto;
-  padding: 54px 10px 0 10px;
-  align-items: center;
-  transition: height 700ms ease-in-out, padding 700ms linear;
+  flex: 1;
+  transition: height 700ms ease-in-out, padding 200ms linear, flex 700ms ease-in-out;
   color: #000000;
   color: #000000;
   color: #000000;
@@ -2381,11 +2397,9 @@ text-align: justify;
 }
 .text-container.has-video {
   padding-top: 0;
-  height: calc(100vh - 185px);
 }
 .text-container.video-player-open {
   padding-top: 0;
-  height: calc(100vh - 665px);
 }
 .text-container .active-verse {
   background-color: #d8b6b9;
@@ -2584,15 +2598,6 @@ text-align: justify;
   outline: none;
 }
 
-@media only screen and (max-width: 550px) {
-  .text-container main {
-    padding-bottom: 75px;
-    z-index: 0;
-  }
-  .text-container .main-wrapper {
-    padding-bottom: 45px;
-  }
-}
 .fade-enter {
   opacity: 0.01;
 }
@@ -5074,9 +5079,8 @@ text-align: justify;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-top: 54px;
-  width: 100%;
-  height: 84px;
+  width: 100vw;
+  height: 30px;
   background-color: black;
   background-color: var(--video-player-black-bar-color);
 }
@@ -5102,35 +5106,36 @@ text-align: justify;
 
 .video-player-container {
   display: block;
+  flex: 1;
   padding-top: 0;
-  width: 100%;
+  width: 100vw;
   position: relative;
   max-height: 0;
   overflow: hidden;
-  transition: height 700ms ease-in-out, max-height 700ms ease-in-out, padding 700ms ease-in-out;
+  transition: height 700ms ease-in-out, max-height 700ms ease-in-out, padding 1200ms ease-in-out;
   background-color: black;
   background-color: var(--video-player-background-color);
 }
 .video-player-container.active {
   display: block;
-  padding-top: 54px;
   max-height: 620px;
+  min-height: 175px;
 }
 .video-player-container .video-player {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   margin: auto;
   width: 100%;
   max-width: 850px;
+  height: calc(100% - 30px);
 }
 .video-player-container .video-player .play-video-container {
   position: absolute;
   margin: auto;
   width: 100%;
   height: 100%;
-  max-height: 478px;
   max-width: 850px;
   z-index: 2;
   pointer-events: none;
@@ -5169,10 +5174,14 @@ text-align: justify;
 }
 .video-player-container .video-player video {
   height: 100%;
+  z-index: 1;
   width: 100%;
 }
 .video-player-container .video-player:hover .controls {
   display: flex;
+}
+.video-player-container .video-player:hover .video-elipsis-container.active {
+  display: block;
 }
 .video-player-container .video-player .controls {
   display: none;
@@ -5257,20 +5266,22 @@ text-align: justify;
 }
 .video-player-container .video-player .video-elipsis-container {
   display: none;
-  position: relative;
+  position: absolute;
   max-width: 850px;
   width: 100%;
+  height: 100%;
   margin: auto;
-}
-.video-player-container .video-player .video-elipsis-container.active {
-  display: block;
 }
 .video-player-container .video-player .video-elipsis-container .video-elipsis-menu {
   width: 250px;
-  height: 445px;
   position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: calc(100% - 64px);
   right: 0;
-  bottom: 35px;
+  bottom: 64px;
+  z-index: 2;
 }
 .video-player-container .video-player .video-elipsis-container .video-elipsis-menu .video-elipsis-header {
   display: flex;
@@ -5296,8 +5307,10 @@ text-align: justify;
   width: 70%;
 }
 .video-player-container .video-player .video-elipsis-container .video-elipsis-menu .video-thumbnail-list {
-  max-height: 410px;
-  height: 410px;
+  max-height: calc(100% - 35px);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
   z-index: 4;
   overflow-x: hidden;
   overflow-y: scroll;
@@ -5307,6 +5320,7 @@ text-align: justify;
   width: 250px;
   position: relative;
   border-bottom: solid 1px black;
+  background-color: rgba(196, 73, 120, 0.85);
 }
 .video-player-container .video-player .video-elipsis-container .video-elipsis-menu .video-thumbnail-list .video-thumbnail:active {
   opacity: 0.9;
@@ -5317,6 +5331,7 @@ text-align: justify;
 .video-player-container .video-player .video-elipsis-container .video-elipsis-menu .video-thumbnail-list .video-thumbnail .thumbnail-poster {
   min-height: 100%;
   min-width: 100%;
+  padding: 5;
 }
 .video-player-container .video-player .video-elipsis-container .video-elipsis-menu .video-thumbnail-list .video-thumbnail .thumbnail-metadata {
   height: 25px;
@@ -5362,7 +5377,7 @@ text-align: justify;
   display: block;
 }
 .video-player-container .video-player .progress-slider {
-  display: none;
+  display: block;
   width: 100%;
   position: absolute;
   bottom: 69px;
@@ -5372,7 +5387,7 @@ text-align: justify;
   padding: 0;
 }
 .video-player-container .video-player .progress-slider.hide-progress-slider {
-  display: none;
+  display: block;
 }
 .video-player-container .video-player .progress-slider:before {
   left: calc(50% - 55px);
@@ -5412,6 +5427,14 @@ text-align: justify;
 }
 .video-player-container .video-player .progress-slider .rc-slider .rc-slider-track {
   border-radius: 0;
+  z-index: 2;
+}
+.video-player-container .video-player .progress-slider .progress-bar-buffer {
+  height: 2px;
+  background-color: #555;
+  position: absolute;
+  z-index: 1;
+  bottom: -4px;
 }
 .video-player-container .black-bar {
   padding-top: 0;
@@ -5419,11 +5442,6 @@ text-align: justify;
   height: 30px;
 }
 
-@media only screen and (max-width: 850px) {
-  .video-elipsis-menu {
-    top: 0;
-  }
-}
 @media only screen and (max-width: 810px) {
   .play-video-container {
     bottom: 0;
