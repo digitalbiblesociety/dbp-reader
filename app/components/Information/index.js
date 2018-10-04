@@ -100,9 +100,24 @@ class Information extends React.PureComponent {
 	// )))
 	// }
 	toggleCopyright = () => {
+		let hasVideo;
+		if (
+			this.props.copyrights.newTestament &&
+			this.props.copyrights.newTestament.video
+		) {
+			hasVideo = true;
+		} else if (
+			this.props.copyrights.oldTestament &&
+			this.props.copyrights.oldTestament.video
+		) {
+			hasVideo = true;
+		}
+
+		const height = hasVideo ? 625 : 515;
+
 		this.setState((currentState) => ({
 			opened: !currentState.opened,
-			height: !currentState.height ? 515 : 0,
+			height: !currentState.height ? height : 0,
 		}));
 	};
 

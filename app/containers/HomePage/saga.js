@@ -1259,6 +1259,9 @@ export function* getCopyrightSaga({ filesetIds }) {
 		filesetIds.filter((f) => codes[f.type] && codes[f.size]),
 		(a, b) => a.type === b.type && a.size === b.size,
 	);
+	const videoFileset = filesetIds.filter(
+		(f) => f.type === 'video_stream' && codes[f.size],
+	)[0];
 	const reqUrls = [];
 
 	// Todo: Need a type param to add on to the end of this call so that I will get the copyright type that I need
@@ -1272,35 +1275,79 @@ export function* getCopyrightSaga({ filesetIds }) {
 
 	try {
 		const response = yield all(reqUrls.map((url) => call(request, url)));
+		const vidRes = [];
+		if (videoFileset) {
+			const r = yield call(
+				request,
+				`${process.env.BASE_API_ROUTE}/bibles/filesets/${
+					videoFileset.id
+				}/copyright?key=${process.env.DBP_API_KEY}&v=4&bucket=dbp-vid`,
+			);
+			vidRes.push(r);
+		}
 		// console.log(response);
 		// const copyrightArray = response
 		// 	.map((res) => ({ size: res.size, organizations: res.copyright.organizations, copyright: res.copyright.copyright }));
 		// Todo: Once the api is updated remove the set_size_code and set_type_code usages below
 		// Takes the response and turns it into an array that is more easily used and that doesn't contain unnecessary fields
 		const copyrights =
-			response.map((cp) => ({
-				message: cp.copyright.copyright,
-				testament: cp.size || cp.set_size_code,
-				type: cp.type || cp.set_type_code,
-				organizations: cp.copyright.organizations.map((org) => {
-					// Getting landscape instead of icons
-					const icon = org.logos.find((l) => !l.icon);
-					if (org.translations.length) {
-						return {
-							name: org.translations[0].name,
-							logo: icon || (org.logos && org.logos[0]),
-							isIcon: icon === undefined ? 1 : 0,
-							url: org.url_website,
-						};
-					}
-					return {
-						name: '',
-						logo: '',
-						isIcon: 0,
-						url: '',
-					};
-				}),
-			})) || [];
+			response.map(
+				(cp) =>
+					Object.keys(cp).length
+						? {
+								message: cp.copyright.copyright,
+								testament: cp.size || cp.set_size_code,
+								type: cp.type || cp.set_type_code,
+								organizations: cp.copyright.organizations.map((org) => {
+									// Getting landscape instead of icons
+									const icon = org.logos.find((l) => !l.icon);
+									if (org.translations.length) {
+										return {
+											name: org.translations[0].name,
+											logo: icon || (org.logos && org.logos[0]),
+											isIcon: icon === undefined ? 1 : 0,
+											url: org.url_website,
+										};
+									}
+									return {
+										name: '',
+										logo: '',
+										isIcon: 0,
+										url: '',
+									};
+								}),
+						  }
+						: {},
+			) || [];
+		const videoCopyright =
+			vidRes.map(
+				(cp) =>
+					Object.keys(cp).length
+						? {
+								message: cp.copyright.copyright,
+								testament: cp.size || cp.set_size_code,
+								type: cp.type || cp.set_type_code,
+								organizations: cp.copyright.organizations.map((org) => {
+									// Getting landscape instead of icons
+									const icon = org.logos.find((l) => !l.icon);
+									if (org.translations.length) {
+										return {
+											name: org.translations[0].name,
+											logo: icon || (org.logos && org.logos[0]),
+											isIcon: icon === undefined ? 1 : 0,
+											url: org.url_website,
+										};
+									}
+									return {
+										name: '',
+										logo: '',
+										isIcon: 0,
+										url: '',
+									};
+								}),
+						  }
+						: {},
+			) || [];
 		// console.log('copyright response', copyrights);
 
 		const cText = copyrights.filter(
@@ -1342,27 +1389,31 @@ export function* getCopyrightSaga({ filesetIds }) {
 			  )[0]
 			: {};
 
-		const cVideo = copyrights.filter(
+		const cVideo = videoCopyright.filter(
 			(c) => c.testament === 'C' && c.type === 'video_stream',
 		)[0];
 		const ntVideo = !cVideo
-			? copyrights.filter(
+			? videoCopyright.filter(
 					(c) => ntCodes[c.testament] && c.type === 'video_stream',
 			  )[0]
 			: {};
 		const otVideo = !cVideo
-			? copyrights.filter(
+			? videoCopyright.filter(
 					(c) => otCodes[c.testament] && c.type === 'video_stream',
 			  )[0]
 			: {};
 
-		// console.log('cText', cText);
-		// console.log('ntText', ntText);
-		// console.log('otText', otText);
-		//
-		// console.log('cAudio', cAudio);
-		// console.log('ntAudio', ntAudio);
-		// console.log('otAudio', otAudio);
+		// console.log('cText:  ', cText);
+		// console.log('ntText:  ', ntText);
+		// console.log('otText:  ', otText);
+
+		// console.log('cAudio:  ', cAudio);
+		// console.log('ntAudio:  ', ntAudio);
+		// console.log('otAudio:  ', otAudio);
+
+		// console.log('cVideo:  ', cVideo);
+		// console.log('ntVideo:  ', ntVideo);
+		// console.log('otVideo:  ', otVideo);
 		// One audio || audio_drama for C
 		// One text_plain || text_format for C
 		// or
