@@ -19,9 +19,11 @@ class VideoProgressBar extends React.PureComponent {
 	}
 
 	render() {
-		const { paused, currentTime, duration } = this.props;
+		const { paused, currentTime, duration, bufferLength } = this.props;
 		const timePercent = (currentTime / duration) * 100;
-
+		// console.log('buffer percentage', (bufferLength / duration) * 100);
+		// console.log('time percent', timePercent);
+		// console.log('buffer distance', bufferLength);
 		return (
 			<div
 				className={
@@ -30,6 +32,10 @@ class VideoProgressBar extends React.PureComponent {
 				data-value-dur={this.timeLeft}
 				data-value-cur={this.timePassed}
 			>
+				<div
+					className={'progress-bar-buffer'}
+					style={{ width: `${(bufferLength / duration) * 100}%` }}
+				/>
 				<Slider
 					onChange={this.handleChange}
 					handleStyle={{
@@ -60,7 +66,7 @@ class VideoProgressBar extends React.PureComponent {
 
 VideoProgressBar.propTypes = {
 	currentTime: PropTypes.number,
-	// buffer: PropTypes.number,
+	bufferLength: PropTypes.number,
 	duration: PropTypes.number,
 	setCurrentTime: PropTypes.func,
 	paused: PropTypes.bool,

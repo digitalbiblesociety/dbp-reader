@@ -382,7 +382,7 @@
 		}
 
 		.progress-slider {
-			display: none;
+			display: block;
 			width: 100%;
 			position: absolute;
 			bottom: 69px;
@@ -392,7 +392,7 @@
 			padding: 0;
 
 			&.hide-progress-slider {
-				display: none;
+				display: block;
 			}
 
 			&:before {
@@ -442,7 +442,16 @@
 
 				.rc-slider-track {
 					border-radius: 0;
+					z-index: 2;
 				}
+			}
+
+			.progress-bar-buffer {
+				height: 2px;
+				background-color: #555;
+				position: absolute;
+				z-index: 1;
+				bottom: -4px;
 			}
 		}
 	}

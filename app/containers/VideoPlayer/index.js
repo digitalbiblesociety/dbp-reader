@@ -5,6 +5,7 @@ import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import Hls from 'hls.js';
 import Router from 'next/router';
+// import { BufferHelper } from 'hls.js/src/utils/buffer-helper';
 import { openVideoPlayer, closeVideoPlayer, setHasVideo } from './actions';
 import SvgWrapper from '../../components/SvgWrapper';
 import VideoControls from '../../components/VideoControls';
@@ -23,10 +24,11 @@ import { selectHasVideo } from './selectors';
 class VideoPlayer extends React.PureComponent {
 	state = {
 		playerOpen: false,
-		volume: 1,
 		paused: true,
 		elipsisOpen: false,
+		volume: 1,
 		currentTime: 0,
+		bufferLength: 0,
 		playlist: [],
 		currentVideo: {},
 	};
@@ -153,6 +155,23 @@ class VideoPlayer extends React.PureComponent {
 		this.videoRef = el;
 	};
 
+	setBuffer = () => {
+		// Can accept current time as the first parameter
+		if (this.hls && this.hls.media) {
+			const buf = this.hls.media.buffered;
+			if (buf && buf.length) {
+				// console.log('buffer start', buf.start(0));
+				// console.log('buffer end', buf.end(0));
+				this.setState({ bufferLength: buf.end(buf.length - 1) });
+			}
+		}
+		// Iterate over buffers to find the latest buffer
+		// Use the latest buffer to indicate how far the buffer has loaded
+		// const info = BufferHelper.bufferInfo(this.hls.media, pos, 1);
+		// console.log('Find buffer info', info);
+		// this.setState({ bufferLength: info.len });
+	};
+
 	setCurrentTime = (time) => {
 		if (this.hls.media) {
 			// console.log('Setting hls media time');
@@ -276,15 +295,14 @@ class VideoPlayer extends React.PureComponent {
 					this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
 						// this.hls.media.volume = 0;
 						if (this.state.playerOpen) {
+							// console.log('manifest parsed for init hls');
 							this.hls.media.play();
 							this.setState({ paused: false });
 						}
-						// setTimeout(() => this.hls.media.pause(), 1500);
-						// console.log('Adding poster for video');
-						// console.log('init manifest was parsed');
-						// if (this.videoRef && typeof this.videoRef.poster !== 'undefined') {
-						// 	this.videoRef.poster = currentVideo.poster;
-						// }
+					});
+					this.hls.on(Hls.Events.BUFFER_APPENDING, () => {
+						// console.log('buffer was APPENDING', this.hls.media.buffered);
+						this.setBuffer();
 					});
 				}
 			}
@@ -296,18 +314,21 @@ class VideoPlayer extends React.PureComponent {
 	};
 
 	timeUpdateEventListener = (e) => {
+		// console.log('timeUpdateEventListener buffer', this.findBuffer(e.target.currentTime));
 		this.setState({
 			currentTime: e.target.currentTime,
 		});
 	};
 
 	seekingEventListener = (e) => {
+		// console.log('seekingEventListener buffer', this.hls.media.buffered);
 		this.setState({
 			currentTime: e.target.currentTime,
 		});
 	};
 
 	seekedEventListener = (e) => {
+		// console.log('seekedEventListener buffer', this.hls.media.buffered);
 		this.setState({
 			currentTime: e.target.currentTime,
 		});
@@ -319,18 +340,17 @@ class VideoPlayer extends React.PureComponent {
 		const { currentVideo } = this.state;
 		try {
 			if (currentVideo.source) {
-				// console.log(this.hls.url);
-				// console.log(currentVideo.source);
+				// console.log('current === hls.url', this.hls.url === `${currentVideo.source}?key=${process.env.DBP_API_KEY}&v=4`);
 				if (
 					this.hls.media &&
 					this.hls.url ===
 						`${currentVideo.source}?key=${process.env.DBP_API_KEY}&v=4`
 				) {
-					// console.log('playing from hls media');
+					// console.log('playing from old hls media');
 					this.hls.media.play();
 					this.setState({ paused: false });
 				} else {
-					// console.log('loading source in else');
+					// console.log('loading source in else with new hls');
 					this.hls.stopLoad();
 					this.hls.detachMedia();
 					this.hls.attachMedia(this.videoRef);
@@ -428,6 +448,7 @@ class VideoPlayer extends React.PureComponent {
 			elipsisOpen,
 			currentVideo,
 			currentTime,
+			bufferLength,
 		} = this.state;
 		const { hasVideo } = this.props;
 		// console.log('playlist', playlist);
@@ -466,6 +487,7 @@ class VideoPlayer extends React.PureComponent {
 						currentTime={currentTime}
 						duration={currentVideo.duration || 300}
 						setCurrentTime={this.setCurrentTime}
+						bufferLength={bufferLength}
 					/>
 					<VideoControls
 						paused={paused}
