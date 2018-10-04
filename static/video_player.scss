@@ -432,6 +432,7 @@
 					height: 0 !important;
 					width: 0 !important;
 					border: none !important;
+					z-index: 2;
 					margin-left: -0.75px;
 					margin-top: -3.5px;
 				}
@@ -446,12 +447,20 @@
 				}
 			}
 
+			&:hover {
+				.progress-bar-buffer {
+					height: 4px;
+					bottom: -6px;
+				}
+			}
+
 			.progress-bar-buffer {
 				height: 2px;
 				background-color: #555;
 				position: absolute;
 				z-index: 1;
 				bottom: -4px;
+				left: 0;
 			}
 		}
 	}
