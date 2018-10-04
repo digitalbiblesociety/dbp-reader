@@ -382,7 +382,7 @@
 		}
 
 		.progress-slider {
-			display: block;
+			display: none;
 			width: 100%;
 			position: absolute;
 			bottom: 69px;
@@ -392,7 +392,7 @@
 			padding: 0;
 
 			&.hide-progress-slider {
-				display: block;
+				display: none;
 			}
 
 			&:before {
