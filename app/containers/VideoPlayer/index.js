@@ -450,12 +450,12 @@ class VideoPlayer extends React.PureComponent {
 			currentTime,
 			bufferLength,
 		} = this.state;
-		const { hasVideo } = this.props;
+		const { hasVideo, fileset } = this.props;
 		// console.log('playlist', playlist);
 		// console.log('currentVideo', currentVideo);
 		// console.log('hasVideo', hasVideo);
 		// Don't bother rendering anything if there is no video for the chapter
-		if (!hasVideo) {
+		if (!hasVideo || !fileset) {
 			return null;
 		}
 		/* eslint-disable jsx-a11y/media-has-caption */
@@ -522,7 +522,7 @@ class VideoPlayer extends React.PureComponent {
 
 VideoPlayer.propTypes = {
 	dispatch: PropTypes.func.isRequired,
-	fileset: PropTypes.object.isRequired,
+	fileset: PropTypes.object,
 	bookId: PropTypes.string.isRequired,
 	chapter: PropTypes.number.isRequired,
 	hasVideo: PropTypes.bool.isRequired,

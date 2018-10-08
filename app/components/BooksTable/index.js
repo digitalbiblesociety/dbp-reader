@@ -334,7 +334,7 @@ BooksTable.propTypes = {
 	// setActiveBookName: PropTypes.func, // Set book in parent component
 	books: PropTypes.object,
 	audioObjects: PropTypes.array,
-	userId: PropTypes.string,
+	userId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 	activeTextId: PropTypes.string, // parent components active text id
 	activeBookName: PropTypes.string, // parent components active book name
 	initialBookName: PropTypes.string,
