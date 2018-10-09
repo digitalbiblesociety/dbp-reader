@@ -30,7 +30,9 @@ class VideoPlayer extends React.PureComponent {
 		currentTime: 0,
 		bufferLength: 0,
 		playlist: [],
+		videos: [],
 		currentVideo: {},
+		poster: '',
 	};
 
 	componentDidMount() {
@@ -105,34 +107,45 @@ class VideoPlayer extends React.PureComponent {
 	getVideos = async ({ filesetId, bookId, chapter }) => {
 		// console.log('filesetId, bookId', filesetId, bookId);
 		if (!filesetId) return;
+		// const requestUrl = `${
+		// 	process.env.BASE_API_ROUTE
+		// }/bibles/filesets/${filesetId}?key=${
+		// 	process.env.DBP_API_KEY
+		// }&v=4&type=video_stream&bucket=dbp-vid&book_id=${bookId}&chapter_id=${chapter}`;
 		const requestUrl = `${
 			process.env.BASE_API_ROUTE
 		}/bibles/filesets/${filesetId}?key=${
 			process.env.DBP_API_KEY
-		}&v=4&type=video_stream&bucket=dbp-vid&book_id=${bookId}&chapter_id=${chapter}`;
+		}&v=4&type=video_stream&bucket=dbp-vid&book_id=${bookId}`;
 
 		try {
 			const response = await request(requestUrl);
 			// console.log('all the vids', response);
 
 			if (response.data) {
-				const playlist = response.data
-					.filter(
-						(video) =>
-							video.book_id === bookId && video.chapter_start === chapter,
-					)
-					.map((video) => ({
-						title: `${video.book_name} ${video.chapter_start}:${
-							video.verse_start
-						}-${video.verse_end}`,
-						id: `${video.book_id}_${video.chapter_start}_${video.verse_start}`,
-						source: video.path,
-						duration: video.duration || 300,
-					}));
+				const videos = response.data.map((video, index) => ({
+					title: `${video.book_name} ${video.chapter_start}:${
+						video.verse_start
+					}-${video.verse_end}`,
+					id: `${video.book_id}_${video.chapter_start}_${video.verse_start}`,
+					chapterStart: video.chapter_start,
+					bookId: video.book_id,
+					source: video.path,
+					duration: video.duration || 300,
+					thumbnail: `${'mark' ||
+						video.book_name}_${video.book_id.toLowerCase()}_${index}.jpg`,
+				}));
+				const playlist = videos.filter(
+					(video) => video.bookId === bookId && video.chapterStart === chapter,
+				);
+				// console.log('videos', videos);
+				// console.log('playlist', playlist);
 
 				this.setState({
+					videos,
 					playlist: playlist.slice(1),
 					currentVideo: playlist[0],
+					poster: playlist[0] ? playlist[0].thumbnail : '',
 				});
 				this.initVideoStream();
 				if (!this.props.hasVideo) {
@@ -232,13 +245,21 @@ class VideoPlayer extends React.PureComponent {
 
 	handleThumbnailClick = (video) => {
 		// console.log('called handle with: ', video, '\nand state: ', this.state);
+		const { bookId, chapter } = this.props;
+		// console.log('bookId, chapter', bookId, chapter);
+
 		this.setState(
 			(state) => ({
-				playlist: state.playlist
-					.filter((v) => v.id !== video.id)
-					.concat([state.currentVideo])
+				playlist: state.videos
+					.filter(
+						(v) =>
+							v.id !== video.id &&
+							v.bookId === bookId &&
+							v.chapterStart === chapter,
+					)
 					.sort(this.sortPlaylist),
 				currentVideo: video,
+				poster: video.thumbnail,
 			}),
 			() => {
 				// console.log('new curprent video', this.state.currentVideo);
@@ -455,7 +476,7 @@ class VideoPlayer extends React.PureComponent {
 		// console.log('currentVideo', currentVideo);
 		// console.log('hasVideo', hasVideo);
 		// Don't bother rendering anything if there is no video for the chapter
-		if (!hasVideo || !fileset) {
+		if (!hasVideo || !fileset || !currentVideo) {
 			return null;
 		}
 		/* eslint-disable jsx-a11y/media-has-caption */
@@ -481,7 +502,11 @@ class VideoPlayer extends React.PureComponent {
 						</span>
 						{this.playButton}
 					</div>
-					<video ref={this.setVideoRef} onClick={this.handleVideoClick} />
+					<video
+						ref={this.setVideoRef}
+						onClick={this.handleVideoClick}
+						poster={`${process.env.CDN_STATIC_FILES}/${currentVideo.thumbnail}`}
+					/>
 					<VideoProgressBar
 						paused={paused}
 						currentTime={currentTime}

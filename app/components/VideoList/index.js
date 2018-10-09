@@ -37,8 +37,9 @@ class VideoList extends React.PureComponent {
 								key={`${video.id}`}
 								onClick={() => handleThumbnailClick(video)}
 							>
-								<div
+								<img
 									className={'thumbnail-poster'}
+									src={`${process.env.CDN_STATIC_FILES}/${video.thumbnail}`}
 									alt={`There was no thumbnail for: ${video.title}`}
 								/>
 								<div className={'thumbnail-metadata'}>
