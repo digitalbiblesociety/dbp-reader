@@ -9,6 +9,7 @@ const imageClasses = {
 			? 'image-icon fcbh-copyright-logo'
 			: 'image-landscape fcbh-copyright-logo',
 	text: (isIcon) => (isIcon ? 'image-icon' : 'image-landscape'),
+	video: (isIcon) => (isIcon ? 'image-icon' : 'image-landscape'),
 };
 
 const CopyrightStatement = ({ organizations, testament, type }) =>

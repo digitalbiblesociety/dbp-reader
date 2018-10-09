@@ -2071,7 +2071,7 @@ Text.propTypes = {
 	audioPlayerState: PropTypes.bool,
 	userAuthenticated: PropTypes.bool,
 	loadingNewChapterText: PropTypes.bool,
-	userId: PropTypes.string,
+	userId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 	bibleId: PropTypes.string,
 	verseNumber: PropTypes.string,
 	activeTextId: PropTypes.string,

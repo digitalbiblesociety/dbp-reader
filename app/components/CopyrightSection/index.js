@@ -3,6 +3,14 @@ import PropTypes from 'prop-types';
 import get from 'lodash/get';
 import CopyrightStatement from '../CopyrightStatement';
 
+const copyrightMessage = (message) =>
+	message
+		.split('\n')
+		.map((m) => [
+			<span key={`${m}_cpmessage`}>{m}</span>,
+			<br key={`${m}_cplinebreak`} />,
+		]);
+
 const CopyrightSection = ({ prefix, copyrights }) => (
 	<div className={prefix === 'old' ? 'ot-copyright' : 'nt-copyright'}>
 		{get(copyrights, [`${prefix}Testament`, 'audio', 'organizations']) ||
@@ -20,7 +28,9 @@ const CopyrightSection = ({ prefix, copyrights }) => (
 					/>
 				) : null}
 				{get(copyrights, [`${prefix}Testament`, 'audio', 'message']) ? (
-					<p>{copyrights[`${prefix}Testament`].audio.message}</p>
+					<p>
+						{copyrightMessage(copyrights[`${prefix}Testament`].audio.message)}
+					</p>
 				) : null}
 			</div>
 		) : null}
@@ -39,7 +49,30 @@ const CopyrightSection = ({ prefix, copyrights }) => (
 					/>
 				) : null}
 				{get(copyrights, [`${prefix}Testament`, 'text', 'message']) ? (
-					<p>{copyrights[`${prefix}Testament`].text.message}</p>
+					<p>
+						{copyrightMessage(copyrights[`${prefix}Testament`].text.message)}
+					</p>
+				) : null}
+			</div>
+		) : null}
+		{get(copyrights, [`${prefix}Testament`, 'video', 'organizations']) ||
+		get(copyrights, [`${prefix}Testament`, 'video', 'message']) ? (
+			<div className={'cp-section'}>
+				{get(copyrights, [`${prefix}Testament`, 'video', 'organizations']) ? (
+					<CopyrightStatement
+						organizations={get(copyrights, [
+							`${prefix}Testament`,
+							'video',
+							'organizations',
+						])}
+						testament={`${prefix}_testament`}
+						type={'video'}
+					/>
+				) : null}
+				{get(copyrights, [`${prefix}Testament`, 'video', 'message']) ? (
+					<p>
+						{copyrightMessage(copyrights[`${prefix}Testament`].video.message)}
+					</p>
 				) : null}
 			</div>
 		) : null}

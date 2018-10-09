@@ -5,11 +5,13 @@ import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import Hls from 'hls.js';
 import Router from 'next/router';
+// import { BufferHelper } from 'hls.js/src/utils/buffer-helper';
 import { openVideoPlayer, closeVideoPlayer, setHasVideo } from './actions';
 import SvgWrapper from '../../components/SvgWrapper';
 import VideoControls from '../../components/VideoControls';
 import VideoList from '../../components/VideoList';
 import VideoProgressBar from '../../components/VideoProgressBar';
+import VideoOverlay from '../../components/VideoOverlay';
 import deepDifferenceObject from '../../utils/deepDifferenceObject';
 import request from '../../utils/request';
 import { selectHasVideo } from './selectors';
@@ -22,13 +24,16 @@ import { selectHasVideo } from './selectors';
 
 class VideoPlayer extends React.PureComponent {
 	state = {
-		playerOpen: false,
-		volume: 1,
+		playerOpen: true,
 		paused: true,
 		elipsisOpen: false,
+		volume: 1,
 		currentTime: 0,
+		bufferLength: 0,
 		playlist: [],
+		videos: [],
 		currentVideo: {},
+		poster: '',
 	};
 
 	componentDidMount() {
@@ -103,34 +108,45 @@ class VideoPlayer extends React.PureComponent {
 	getVideos = async ({ filesetId, bookId, chapter }) => {
 		// console.log('filesetId, bookId', filesetId, bookId);
 		if (!filesetId) return;
+		// const requestUrl = `${
+		// 	process.env.BASE_API_ROUTE
+		// }/bibles/filesets/${filesetId}?key=${
+		// 	process.env.DBP_API_KEY
+		// }&v=4&type=video_stream&bucket=dbp-vid&book_id=${bookId}&chapter_id=${chapter}`;
 		const requestUrl = `${
 			process.env.BASE_API_ROUTE
 		}/bibles/filesets/${filesetId}?key=${
 			process.env.DBP_API_KEY
-		}&v=4&type=video_stream&bucket=dbp-vid&book_id=${bookId}&chapter_id=${chapter}`;
+		}&v=4&type=video_stream&bucket=dbp-vid&book_id=${bookId}`;
 
 		try {
 			const response = await request(requestUrl);
 			// console.log('all the vids', response);
 
 			if (response.data) {
-				const playlist = response.data
-					.filter(
-						(video) =>
-							video.book_id === bookId && video.chapter_start === chapter,
-					)
-					.map((video) => ({
-						title: `${video.book_name} ${video.chapter_start}:${
-							video.verse_start
-						}-${video.verse_end}`,
-						id: `${video.book_id}_${video.chapter_start}_${video.verse_start}`,
-						source: video.path,
-						duration: video.duration || 300,
-					}));
+				const videos = response.data.map((video, index) => ({
+					title: `${video.book_name} ${video.chapter_start}:${
+						video.verse_start
+					}-${video.verse_end}`,
+					id: `${video.book_id}_${video.chapter_start}_${video.verse_start}`,
+					chapterStart: video.chapter_start,
+					bookId: video.book_id,
+					source: video.path,
+					duration: video.duration || 300,
+					thumbnail: `${'mark' ||
+						video.book_name}_${video.book_id.toLowerCase()}_${index}.jpg`,
+				}));
+				const playlist = videos.filter(
+					(video) => video.bookId === bookId && video.chapterStart === chapter,
+				);
+				// console.log('videos', videos);
+				// console.log('playlist', playlist);
 
 				this.setState({
+					videos,
 					playlist: playlist.slice(1),
 					currentVideo: playlist[0],
+					poster: playlist[0] ? playlist[0].thumbnail : '',
 				});
 				this.initVideoStream();
 				if (!this.props.hasVideo) {
@@ -151,6 +167,23 @@ class VideoPlayer extends React.PureComponent {
 
 	setVideoRef = (el) => {
 		this.videoRef = el;
+	};
+
+	setBuffer = () => {
+		// Can accept current time as the first parameter
+		if (this.hls && this.hls.media) {
+			const buf = this.hls.media.buffered;
+			if (buf && buf.length) {
+				// console.log('buffer start', buf.start(0));
+				// console.log('buffer end', buf.end(0));
+				this.setState({ bufferLength: buf.end(buf.length - 1) });
+			}
+		}
+		// Iterate over buffers to find the latest buffer
+		// Use the latest buffer to indicate how far the buffer has loaded
+		// const info = BufferHelper.bufferInfo(this.hls.media, pos, 1);
+		// console.log('Find buffer info', info);
+		// this.setState({ bufferLength: info.len });
 	};
 
 	setCurrentTime = (time) => {
@@ -213,13 +246,21 @@ class VideoPlayer extends React.PureComponent {
 
 	handleThumbnailClick = (video) => {
 		// console.log('called handle with: ', video, '\nand state: ', this.state);
+		const { bookId, chapter } = this.props;
+		// console.log('bookId, chapter', bookId, chapter);
+
 		this.setState(
 			(state) => ({
-				playlist: state.playlist
-					.filter((v) => v.id !== video.id)
-					.concat([state.currentVideo])
+				playlist: state.videos
+					.filter(
+						(v) =>
+							v.id !== video.id &&
+							v.bookId === bookId &&
+							v.chapterStart === chapter,
+					)
 					.sort(this.sortPlaylist),
 				currentVideo: video,
+				poster: video.thumbnail,
 			}),
 			() => {
 				// console.log('new curprent video', this.state.currentVideo);
@@ -276,15 +317,14 @@ class VideoPlayer extends React.PureComponent {
 					this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
 						// this.hls.media.volume = 0;
 						if (this.state.playerOpen) {
+							// console.log('manifest parsed for init hls');
 							this.hls.media.play();
 							this.setState({ paused: false });
 						}
-						// setTimeout(() => this.hls.media.pause(), 1500);
-						// console.log('Adding poster for video');
-						// console.log('init manifest was parsed');
-						// if (this.videoRef && typeof this.videoRef.poster !== 'undefined') {
-						// 	this.videoRef.poster = currentVideo.poster;
-						// }
+					});
+					this.hls.on(Hls.Events.BUFFER_APPENDING, () => {
+						// console.log('buffer was APPENDING', this.hls.media.buffered);
+						this.setBuffer();
 					});
 				}
 			}
@@ -296,18 +336,21 @@ class VideoPlayer extends React.PureComponent {
 	};
 
 	timeUpdateEventListener = (e) => {
+		// console.log('timeUpdateEventListener buffer', this.findBuffer(e.target.currentTime));
 		this.setState({
 			currentTime: e.target.currentTime,
 		});
 	};
 
 	seekingEventListener = (e) => {
+		// console.log('seekingEventListener buffer', this.hls.media.buffered);
 		this.setState({
 			currentTime: e.target.currentTime,
 		});
 	};
 
 	seekedEventListener = (e) => {
+		// console.log('seekedEventListener buffer', this.hls.media.buffered);
 		this.setState({
 			currentTime: e.target.currentTime,
 		});
@@ -319,18 +362,17 @@ class VideoPlayer extends React.PureComponent {
 		const { currentVideo } = this.state;
 		try {
 			if (currentVideo.source) {
-				// console.log(this.hls.url);
-				// console.log(currentVideo.source);
+				// console.log('current === hls.url', this.hls.url === `${currentVideo.source}?key=${process.env.DBP_API_KEY}&v=4`);
 				if (
 					this.hls.media &&
 					this.hls.url ===
 						`${currentVideo.source}?key=${process.env.DBP_API_KEY}&v=4`
 				) {
-					// console.log('playing from hls media');
+					// console.log('playing from old hls media');
 					this.hls.media.play();
 					this.setState({ paused: false });
 				} else {
-					// console.log('loading source in else');
+					// console.log('loading source in else with new hls');
 					this.hls.stopLoad();
 					this.hls.detachMedia();
 					this.hls.attachMedia(this.videoRef);
@@ -419,6 +461,50 @@ class VideoPlayer extends React.PureComponent {
 		);
 	}
 
+	get previousVideo() {
+		const { playlist, currentVideo } = this.state;
+		let previousVideo;
+		playlist.forEach((video) => {
+			if (video.id < currentVideo.id) {
+				previousVideo = video;
+			}
+		});
+		// console.log('previous video', previousVideo);
+
+		return previousVideo;
+	}
+
+	get nextVideo() {
+		const { playlist, currentVideo } = this.state;
+		let nextVideo;
+		let foundNext = false;
+		playlist.forEach((video) => {
+			if (video.id > currentVideo.id && !foundNext) {
+				nextVideo = video;
+				foundNext = true;
+			}
+		});
+		// console.log('next video', nextVideo);
+
+		return nextVideo;
+	}
+
+	previousFunction = (e) => {
+		e.stopPropagation();
+		if (this.previousVideo) {
+			this.handleThumbnailClick(this.previousVideo);
+		}
+		// console.log('clicked the previous function');
+	};
+
+	nextFunction = (e) => {
+		e.stopPropagation();
+		if (this.nextVideo) {
+			this.handleThumbnailClick(this.nextVideo);
+		}
+		// console.log('clicked the next function');
+	};
+
 	render() {
 		const {
 			playerOpen,
@@ -428,13 +514,14 @@ class VideoPlayer extends React.PureComponent {
 			elipsisOpen,
 			currentVideo,
 			currentTime,
+			bufferLength,
 		} = this.state;
-		const { hasVideo } = this.props;
+		const { hasVideo, fileset } = this.props;
 		// console.log('playlist', playlist);
 		// console.log('currentVideo', currentVideo);
 		// console.log('hasVideo', hasVideo);
 		// Don't bother rendering anything if there is no video for the chapter
-		if (!hasVideo) {
+		if (!hasVideo || !fileset || !currentVideo) {
 			return null;
 		}
 		/* eslint-disable jsx-a11y/media-has-caption */
@@ -448,7 +535,16 @@ class VideoPlayer extends React.PureComponent {
 				}
 			>
 				<div className={'video-player'}>
-					<div
+					<VideoOverlay
+						paused={paused}
+						currentVideo={currentVideo}
+						playFunction={this.playVideo}
+						previousVideo={this.previousVideo}
+						nextVideo={this.nextVideo}
+						previousFunction={this.previousFunction}
+						nextFunction={this.nextFunction}
+					/>
+					{/* <div
 						className={
 							paused
 								? 'play-video-container show-play'
@@ -459,13 +555,18 @@ class VideoPlayer extends React.PureComponent {
 							{currentVideo.title || 'Loading'}
 						</span>
 						{this.playButton}
-					</div>
-					<video ref={this.setVideoRef} onClick={this.handleVideoClick} />
+					</div> */}
+					<video
+						ref={this.setVideoRef}
+						onClick={this.handleVideoClick}
+						poster={`${process.env.CDN_STATIC_FILES}/${currentVideo.thumbnail}`}
+					/>
 					<VideoProgressBar
 						paused={paused}
 						currentTime={currentTime}
 						duration={currentVideo.duration || 300}
 						setCurrentTime={this.setCurrentTime}
+						bufferLength={bufferLength}
 					/>
 					<VideoControls
 						paused={paused}
@@ -500,7 +601,7 @@ class VideoPlayer extends React.PureComponent {
 
 VideoPlayer.propTypes = {
 	dispatch: PropTypes.func.isRequired,
-	fileset: PropTypes.object.isRequired,
+	fileset: PropTypes.object,
 	bookId: PropTypes.string.isRequired,
 	chapter: PropTypes.number.isRequired,
 	hasVideo: PropTypes.bool.isRequired,

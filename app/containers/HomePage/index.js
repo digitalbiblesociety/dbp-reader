@@ -892,7 +892,7 @@ HomePage.propTypes = {
 	userSettings: PropTypes.object,
 	formattedSource: PropTypes.object,
 	userAuthenticated: PropTypes.bool,
-	userId: PropTypes.string,
+	userId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 	textData: PropTypes.object,
 	isMenuOpen: PropTypes.bool,
 };

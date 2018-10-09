@@ -187,7 +187,7 @@ AccountSettings.propTypes = {
 	changePicture: PropTypes.func,
 	// updateUserInformation: PropTypes.func,
 	profile: PropTypes.object,
-	userId: PropTypes.string,
+	userId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
 export default AccountSettings;
