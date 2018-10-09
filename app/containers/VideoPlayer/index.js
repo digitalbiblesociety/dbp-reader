@@ -11,6 +11,7 @@ import SvgWrapper from '../../components/SvgWrapper';
 import VideoControls from '../../components/VideoControls';
 import VideoList from '../../components/VideoList';
 import VideoProgressBar from '../../components/VideoProgressBar';
+import VideoOverlay from '../../components/VideoOverlay';
 import deepDifferenceObject from '../../utils/deepDifferenceObject';
 import request from '../../utils/request';
 import { selectHasVideo } from './selectors';
@@ -23,7 +24,7 @@ import { selectHasVideo } from './selectors';
 
 class VideoPlayer extends React.PureComponent {
 	state = {
-		playerOpen: false,
+		playerOpen: true,
 		paused: true,
 		elipsisOpen: false,
 		volume: 1,
@@ -460,6 +461,50 @@ class VideoPlayer extends React.PureComponent {
 		);
 	}
 
+	get previousVideo() {
+		const { playlist, currentVideo } = this.state;
+		let previousVideo;
+		playlist.forEach((video) => {
+			if (video.id < currentVideo.id) {
+				previousVideo = video;
+			}
+		});
+		// console.log('previous video', previousVideo);
+
+		return previousVideo;
+	}
+
+	get nextVideo() {
+		const { playlist, currentVideo } = this.state;
+		let nextVideo;
+		let foundNext = false;
+		playlist.forEach((video) => {
+			if (video.id > currentVideo.id && !foundNext) {
+				nextVideo = video;
+				foundNext = true;
+			}
+		});
+		// console.log('next video', nextVideo);
+
+		return nextVideo;
+	}
+
+	previousFunction = (e) => {
+		e.stopPropagation();
+		if (this.previousVideo) {
+			this.handleThumbnailClick(this.previousVideo);
+		}
+		// console.log('clicked the previous function');
+	};
+
+	nextFunction = (e) => {
+		e.stopPropagation();
+		if (this.nextVideo) {
+			this.handleThumbnailClick(this.nextVideo);
+		}
+		// console.log('clicked the next function');
+	};
+
 	render() {
 		const {
 			playerOpen,
@@ -490,7 +535,16 @@ class VideoPlayer extends React.PureComponent {
 				}
 			>
 				<div className={'video-player'}>
-					<div
+					<VideoOverlay
+						paused={paused}
+						currentVideo={currentVideo}
+						playFunction={this.playVideo}
+						previousVideo={this.previousVideo}
+						nextVideo={this.nextVideo}
+						previousFunction={this.previousFunction}
+						nextFunction={this.nextFunction}
+					/>
+					{/* <div
 						className={
 							paused
 								? 'play-video-container show-play'
@@ -501,7 +555,7 @@ class VideoPlayer extends React.PureComponent {
 							{currentVideo.title || 'Loading'}
 						</span>
 						{this.playButton}
-					</div>
+					</div> */}
 					<video
 						ref={this.setVideoRef}
 						onClick={this.handleVideoClick}

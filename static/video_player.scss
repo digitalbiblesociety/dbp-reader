@@ -50,6 +50,7 @@
 	overflow: hidden;
 	transition: height 700ms ease-in-out, max-height 700ms ease-in-out,
 		padding 1200ms ease-in-out;
+	z-index: 2;
 
 	&.active {
 		display: block;
@@ -77,15 +78,14 @@
 			width: 100%;
 			height: 100%;
 			max-width: 850px;
-			z-index: 2;
 			pointer-events: none;
 			background-color: rgba(100, 100, 100, 0.35);
 
-			&.show-play {
+			&.show-control-icon {
 				display: block;
 			}
 
-			&.hide-play {
+			&.hide-control-icon {
 				display: none;
 			}
 
@@ -100,16 +100,17 @@
 				align-items: center;
 				justify-content: center;
 				z-index: 3;
+				pointer-events: all;
 
 				&:hover {
 					cursor: pointer;
 				}
 
-				&.show-play {
+				&.show-control-icon {
 					display: block;
 				}
 
-				&.hide-play {
+				&.hide-control-icon {
 					display: none;
 				}
 			}
@@ -118,6 +119,76 @@
 				position: absolute;
 				top: calc(50% - 75px);
 				left: calc(50% - 30px);
+				z-index: 4;
+				font-weight: bold;
+			}
+
+			.next-video {
+				position: absolute;
+				top: calc(50% - 65px);
+				//margin: auto;
+				left: calc(60%);
+				width: 150px;
+				height: 150px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				z-index: 3;
+				pointer-events: all;
+
+				&:hover {
+					cursor: pointer;
+				}
+
+				&.show-control-icon {
+					display: block;
+				}
+
+				&.hide-control-icon {
+					display: none;
+				}
+			}
+
+			.next-video-title {
+				position: absolute;
+				top: calc(50% - 75px);
+				left: calc(60%);
+				z-index: 4;
+				font-weight: bold;
+			}
+
+			.previous-video {
+				position: absolute;
+				top: calc(50% - 65px);
+				//margin: auto;
+				left: calc(35%);
+				width: 150px;
+				height: 150px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				z-index: 3;
+				pointer-events: all;
+
+				&:hover {
+					cursor: pointer;
+				}
+
+				&.show-control-icon {
+					display: block;
+				}
+
+				&.hide-control-icon {
+					display: none;
+				}
+			}
+
+			.previous-video-title {
+				position: absolute;
+				top: calc(50% - 75px);
+				left: calc(30%);
+				z-index: 4;
+				font-weight: bold;
 			}
 		}
 
