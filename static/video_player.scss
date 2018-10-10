@@ -55,7 +55,7 @@
 	&.active {
 		display: block;
 		max-height: 620px;
-		min-height: 175px;
+		// min-height: 175px;
 	}
 
 	@include css4 {
@@ -555,6 +555,14 @@
 // 		}
 // 	}
 // }
+
+@media only screen and (max-height: 620px) {
+	.video-player-container {
+		&.active {
+			min-height: 220px;
+		}
+	}
+}
 
 @media only screen and (max-width: 810px) {
 	.play-video-container {

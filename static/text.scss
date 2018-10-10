@@ -3,6 +3,7 @@
 	flex: 1;
 	transition: height 700ms ease-in-out, padding 200ms linear,
 		flex 700ms ease-in-out;
+	max-height: 100%;
 
 	&.has-video {
 		padding-top: 0;
