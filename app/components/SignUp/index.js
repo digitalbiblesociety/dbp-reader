@@ -309,7 +309,9 @@ class SignUp extends React.PureComponent {
 				) : null}
 				<Checkbox
 					updater={this.handleEmailUpdatesChange}
-					label={'I would like to receive email updates from Bible.is!'}
+					label={
+						'I would like to receive email updates from Faith Comes By Hearing, parent ministry of Bible.is.'
+					}
 				/>
 				<FacebookAuthentication
 					oauthError={oauthError}
