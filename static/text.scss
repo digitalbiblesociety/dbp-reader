@@ -3,7 +3,10 @@
 	flex: 1;
 	transition: height 700ms ease-in-out, padding 200ms linear,
 		flex 700ms ease-in-out;
-	max-height: 100%;
+
+	@supports (-moz-appearance: none) {
+		max-height: 100%;
+	}
 
 	&.has-video {
 		padding-top: 0;
@@ -13,7 +16,6 @@
 	&.video-player-open {
 		//padding-bottom: 478px;
 		padding-top: 0;
-		// TODO: Not a permanent solution, should look at using flex sizes for this and the video player
 		// height: calc(100vh - 585px);
 		// height: calc(100vh - 185px - 480px);
 	}
