@@ -40,7 +40,10 @@
 .video-player-container {
 	display: flex;
 	flex-direction: column;
-	flex: 1 0 auto;
+	align-items: center;
+	// justify-content: center;
+	// flex: 1 0 auto;
+	flex: 1;
 	padding-top: 0;
 	width: 100vw;
 	position: relative;
@@ -80,7 +83,8 @@
 		align-items: center;
 		justify-content: flex-start;
 		position: relative;
-		margin: 0 auto;
+		// margin: 0 auto;
+		margin: auto;
 		width: 100%;
 		max-width: 752.58px;
 		// flex-basis: 1;
@@ -104,8 +108,9 @@
 			position: absolute;
 			margin: auto;
 			width: 100%;
-			height: calc(100% - 30px);
+			height: calc(100%);
 			max-width: 752.58px;
+			z-index: 2;
 			pointer-events: none;
 			background-color: rgba(100, 100, 100, 0.35);
 
