@@ -153,7 +153,7 @@ class VideoPlayer extends React.PureComponent {
 					currentVideo: playlist[0],
 					poster: playlist[0] ? playlist[0].thumbnail : '',
 				});
-				this.initVideoStream();
+				this.initVideoStream({ thumbnailClick: false });
 				if (!this.props.hasVideo) {
 					this.props.dispatch(setHasVideo({ state: true }));
 				}
