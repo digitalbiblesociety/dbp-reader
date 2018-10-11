@@ -38,10 +38,11 @@
 }
 
 .video-player-container {
-	display: block;
-	// display: flex;
-	// align-items: center;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 	// justify-content: center;
+	// flex: 1 0 auto;
 	flex: 1;
 	padding-top: 0;
 	width: 100vw;
@@ -51,11 +52,25 @@
 	transition: height 700ms ease-in-out, max-height 700ms ease-in-out,
 		padding 1200ms ease-in-out;
 	z-index: 2;
+	@supports not (-moz-appearance: none) {
+		/* Add non-firefox CSS code here */
+		// flex: 1;
+		// display: block;
+		flex: 1;
+		// flex-basis: 1;
+		// flex-grow: 1;
+		// flex-shrink: 1;
+	}
 
 	&.active {
-		display: block;
-		max-height: 620px;
-		min-height: 175px;
+		// display: block;
+		max-height: 508px;
+		@supports not (-moz-appearance: none) {
+			/* Add non-firefox CSS code here */
+			// display: block;
+			max-height: 620px;
+		}
+		// min-height: 175px;
 	}
 
 	@include css4 {
@@ -67,17 +82,35 @@
 		flex-direction: column;
 		align-items: center;
 		justify-content: flex-start;
+		position: relative;
+		// margin: 0 auto;
 		margin: auto;
 		width: 100%;
-		max-width: 850px;
-		height: calc(100% - 30px);
+		max-width: 752.58px;
+		// flex-basis: 1;
+		// flex-grow: 1;
+		max-height: calc(100% - 30px);
+		// flex: 1 1 auto;
+		@supports not (-moz-appearance: none) {
+			/* Add non-firefox CSS code here */
+			margin: auto;
+		}
+
+		video {
+			// height: 100%;
+			flex: 1;
+			height: 100%;
+			z-index: 1;
+			width: 100%;
+		}
 
 		.play-video-container {
 			position: absolute;
 			margin: auto;
 			width: 100%;
-			height: 100%;
-			max-width: 850px;
+			height: calc(100%);
+			max-width: 752.58px;
+			z-index: 2;
 			pointer-events: none;
 			background-color: rgba(100, 100, 100, 0.35);
 
@@ -192,12 +225,6 @@
 			}
 		}
 
-		video {
-			height: 100%;
-			z-index: 1;
-			width: 100%;
-		}
-
 		&:hover {
 			.controls {
 				display: flex;
@@ -217,10 +244,10 @@
 			align-items: center;
 			position: absolute;
 			margin: auto;
-			bottom: 30px;
+			bottom: 0;
 			z-index: 2;
 			width: 100%;
-			max-width: 850px;
+			max-width: 752.58px;
 			height: 35px;
 			padding: 5px 10px;
 			background-color: rgba(0, 0, 0, 0.3);
@@ -321,7 +348,7 @@
 		.video-elipsis-container {
 			display: none;
 			position: absolute;
-			max-width: 850px;
+			max-width: 752.58px;
 			width: 100%;
 			height: 100%;
 			margin: auto;
@@ -456,9 +483,9 @@
 			display: none;
 			width: 100%;
 			position: absolute;
-			bottom: 69px;
+			bottom: 39px;
 			margin: auto;
-			max-width: 850px;
+			max-width: 752.58px;
 			z-index: 3;
 			padding: 0;
 
@@ -555,6 +582,14 @@
 // 		}
 // 	}
 // }
+
+@media only screen and (max-height: 620px) {
+	.video-player-container {
+		&.active {
+			min-height: 220px;
+		}
+	}
+}
 
 @media only screen and (max-width: 810px) {
 	.play-video-container {
