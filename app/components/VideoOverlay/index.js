@@ -74,7 +74,7 @@ const VideoOverlay = ({
 		{previousVideo && paused
 			? [
 					<span key={'previous_button_text'} className={'previous-video-title'}>
-						{previousVideo.title || 'Loading'}
+						{previousVideo.reference || 'Loading'}
 					</span>,
 					<PreviousButton
 						key={'previous_button_svg'}
@@ -84,13 +84,13 @@ const VideoOverlay = ({
 			  ]
 			: null}
 		<span className={'play-video-title'}>
-			{currentVideo.title || 'Loading'}
+			{currentVideo.reference || 'Loading'}
 		</span>
 		<PlayButton paused={paused} playFunction={playFunction} />
 		{nextVideo && paused
 			? [
 					<span key={'next_button_text'} className={'next-video-title'}>
-						{nextVideo.title || 'Loading'}
+						{nextVideo.reference || 'Loading'}
 					</span>,
 					<NextButton
 						key={'next_button_svg'}
