@@ -318,8 +318,8 @@ class VideoPlayer extends React.PureComponent {
 						// this.hls.media.volume = 0;
 						if (this.state.playerOpen) {
 							// console.log('manifest parsed for init hls');
-							this.hls.media.play();
-							this.setState({ paused: false });
+							// this.hls.media.play();
+							// this.setState({ paused: false });
 						}
 					});
 					this.hls.on(Hls.Events.BUFFER_APPENDING, () => {
