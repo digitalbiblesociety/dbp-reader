@@ -133,6 +133,11 @@ class VideoPlayer extends React.PureComponent {
 					bookId: video.book_id,
 					source: video.path,
 					duration: video.duration || 300,
+					reference: `${video.chapter_start}:${
+						video.verse_end
+							? `${video.verse_start}-${video.verse_end}`
+							: video.verse_start
+					}`,
 					thumbnail: `${'mark' ||
 						video.book_name}_${video.book_id.toLowerCase()}_${index}.jpg`,
 				}));
@@ -148,7 +153,7 @@ class VideoPlayer extends React.PureComponent {
 					currentVideo: playlist[0],
 					poster: playlist[0] ? playlist[0].thumbnail : '',
 				});
-				this.initVideoStream();
+				this.initVideoStream({ thumbnailClick: false });
 				if (!this.props.hasVideo) {
 					this.props.dispatch(setHasVideo({ state: true }));
 				}
@@ -261,17 +266,19 @@ class VideoPlayer extends React.PureComponent {
 					.sort(this.sortPlaylist),
 				currentVideo: video,
 				poster: video.thumbnail,
+				paused: true,
 			}),
 			() => {
 				// console.log('new curprent video', this.state.currentVideo);
 				// console.log('The current video ref', this.videoRef);
 
-				this.playVideo();
+				this.playVideo({ thumbnailClick: true });
 			},
 		);
 	};
 
 	initHls = () => {
+		// Not really sure I need to do this, but it seems like I do
 		if (this.hls) {
 			this.hls.destroy();
 		}
@@ -294,17 +301,20 @@ class VideoPlayer extends React.PureComponent {
 		});
 	};
 
-	initVideoStream = () => {
+	initVideoStream = ({ thumbnailClick }) => {
 		const { currentVideo } = this.state;
 		this.initHls();
 		try {
 			if (this.videoRef) {
 				if (currentVideo.source) {
-					// console.log('loading source');
+					// console.log('currentVideo.source', currentVideo.source);
+					// console.log('this.hls.url after new init', this.hls.url);
+
 					this.hls.attachMedia(this.videoRef);
 					this.hls.loadSource(
 						`${currentVideo.source}?key=${process.env.DBP_API_KEY}&v=4`,
 					);
+
 					// if (this.hls.media && typeof this.hls.media.poster !== 'undefined') {
 					// 	this.hls.media.poster = currentVideo.poster;
 					// }
@@ -316,10 +326,10 @@ class VideoPlayer extends React.PureComponent {
 					this.hls.media.addEventListener('seeked', this.seekedEventListener);
 					this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
 						// this.hls.media.volume = 0;
-						if (this.state.playerOpen) {
+						if (this.state.playerOpen && thumbnailClick) {
 							// console.log('manifest parsed for init hls');
-							// this.hls.media.play();
-							// this.setState({ paused: false });
+							this.hls.media.play();
+							this.setState({ paused: false });
 						}
 					});
 					this.hls.on(Hls.Events.BUFFER_APPENDING, () => {
@@ -356,13 +366,29 @@ class VideoPlayer extends React.PureComponent {
 		});
 	};
 
-	sortPlaylist = (a, b) => a.id > b.id;
+	sortPlaylist = (a, b) => {
+		// if vids are from the same chapter
+		if (a.chapterStart === b.chapterStart) {
+			return a.verse_start > b.verse_start;
+		} else if (a.chapterStart > b.chapterStart) {
+			// vids are from different chapters and a is after b
+			return false;
+		} else if (a.chapterStart < b.chapterStart) {
+			// a is before b
+			return true;
+		}
+		// Last resort is to just sort by the ids, this breaks because mrk_10_12 will be listed before mrk_10_2
+		return a.id > b.id;
+	};
 
-	playVideo = () => {
+	playVideo = ({ thumbnailClick }) => {
 		const { currentVideo } = this.state;
 		try {
+			// if the current video has a source (initial load may be an empty object)
 			if (currentVideo.source) {
 				// console.log('current === hls.url', this.hls.url === `${currentVideo.source}?key=${process.env.DBP_API_KEY}&v=4`);
+				// if there is already an hls stream and that streams url is equal to this videos source then play the video
+				// console.log('this.hls.url in play video', this.hls.url);
 				if (
 					this.hls.media &&
 					this.hls.url ===
@@ -371,14 +397,15 @@ class VideoPlayer extends React.PureComponent {
 					// console.log('playing from old hls media');
 					this.hls.media.play();
 					this.setState({ paused: false });
+					// if the sourcees didn't match then this is a new video and the hls stream needs to be updated
 				} else {
 					// console.log('loading source in else with new hls');
+					// Stop the current player from loading anymore video
 					this.hls.stopLoad();
-					this.hls.detachMedia();
-					this.hls.attachMedia(this.videoRef);
-					this.hls.loadSource(
-						`${currentVideo.source}?key=${process.env.DBP_API_KEY}&v=4`,
-					);
+					// Remove the old hls stream
+					this.hls.destroy();
+					// Init a new hls stream
+					this.initVideoStream({ thumbnailClick });
 				}
 			}
 		} catch (err) {

@@ -476,12 +476,18 @@ export class AudioPlayer extends React.Component {
 			hasAudio,
 			audioPlayerState,
 			videoPlayerOpen,
+			hasVideo,
 			isScrollingDown,
 		} = this.props;
 
 		let classNames = '';
 
-		if (audioPlayerState && hasAudio && !videoPlayerOpen && source !== '') {
+		if (
+			audioPlayerState &&
+			hasAudio &&
+			(!videoPlayerOpen || !hasVideo) &&
+			source !== ''
+		) {
 			classNames += 'audioplayer-handle';
 		} else {
 			classNames += 'audioplayer-handle closed';
@@ -501,11 +507,17 @@ export class AudioPlayer extends React.Component {
 			audioPlayerState,
 			videoPlayerOpen,
 			isScrollingDown,
+			hasVideo,
 		} = this.props;
 
 		let classNames = '';
 
-		if (audioPlayerState && hasAudio && !videoPlayerOpen && source !== '') {
+		if (
+			audioPlayerState &&
+			hasAudio &&
+			(!videoPlayerOpen || !hasVideo) &&
+			source !== ''
+		) {
 			classNames += 'audio-player-background';
 		} else {
 			classNames += 'audio-player-background closed';
@@ -568,6 +580,7 @@ export class AudioPlayer extends React.Component {
 			hasAudio,
 			audioPlayerState,
 			videoPlayerOpen,
+			hasVideo,
 			// isScrollingDown,
 		} = this.props;
 		const { autoPlayChecked, currentSpeed } = this.state;
@@ -588,7 +601,7 @@ export class AudioPlayer extends React.Component {
 						width="26px"
 						height="26px"
 						className={
-							!videoPlayerOpen && audioPlayerState
+							(!videoPlayerOpen || !hasVideo) && audioPlayerState
 								? 'audio-gripper'
 								: 'audio-gripper closed'
 						}
@@ -603,7 +616,10 @@ export class AudioPlayer extends React.Component {
 				>
 					<div
 						className={
-							audioPlayerState && !videoPlayerOpen && hasAudio && source !== ''
+							audioPlayerState &&
+							(!videoPlayerOpen || !hasVideo) &&
+							hasAudio &&
+							source !== ''
 								? 'audio-player-container'
 								: 'audio-player-container closed'
 						}
@@ -764,6 +780,7 @@ AudioPlayer.propTypes = {
 	setAudioPlayerState: PropTypes.func.isRequired,
 	toggleAutoPlay: PropTypes.func,
 	hasAudio: PropTypes.bool,
+	hasVideo: PropTypes.bool,
 	autoPlay: PropTypes.bool,
 	videoPlayerOpen: PropTypes.bool,
 	isScrollingDown: PropTypes.bool,

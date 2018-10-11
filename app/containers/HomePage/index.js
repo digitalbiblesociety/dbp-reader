@@ -855,6 +855,7 @@ class HomePage extends React.PureComponent {
 				</TransitionGroup>
 				<AudioPlayer
 					books={books}
+					hasVideo={hasVideo}
 					text={updatedText}
 					verseNumber={verse}
 					audioPaths={audioPaths}

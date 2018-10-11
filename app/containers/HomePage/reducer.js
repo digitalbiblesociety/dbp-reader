@@ -173,7 +173,7 @@ const initialState = fromJS({
 	},
 	hasAudio: false,
 	hasVideo: false,
-	videoPlayerOpen: false,
+	videoPlayerOpen: true,
 	activeChapter: 1,
 	chapterTextLoadingState: false,
 	userAuthenticated:
