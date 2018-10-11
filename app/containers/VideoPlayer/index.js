@@ -318,7 +318,7 @@ class VideoPlayer extends React.PureComponent {
 						// this.hls.media.volume = 0;
 						if (this.state.playerOpen) {
 							// console.log('manifest parsed for init hls');
-							// this.hls.media.play();
+							this.hls.media.play();
 							this.setState({ paused: false });
 						}
 					});
@@ -369,7 +369,7 @@ class VideoPlayer extends React.PureComponent {
 						`${currentVideo.source}?key=${process.env.DBP_API_KEY}&v=4`
 				) {
 					// console.log('playing from old hls media');
-					// this.hls.media.play();
+					this.hls.media.play();
 					this.setState({ paused: false });
 				} else {
 					// console.log('loading source in else with new hls');
