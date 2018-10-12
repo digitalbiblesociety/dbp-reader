@@ -32,29 +32,33 @@ class VideoList extends React.PureComponent {
 						/>
 					</div>
 					<div className={'video-thumbnail-list'}>
-						{playlist.map((video) => (
-							<div
-								className={'video-thumbnail'}
-								key={`${video.id}`}
-								onClick={() => handleThumbnailClick(video)}
-							>
-								<img
-									className={'thumbnail-poster'}
-									src={`${process.env.CDN_STATIC_FILES}/${video.thumbnail}`}
-									alt={`There was no thumbnail for: ${video.title}`}
-								/>
-								<div className={'thumbnail-metadata'}>
-									<span className={'thumbnail-title'}>{`${video.title}`}</span>
-									<span className={'thumbnail-duration'}>
-										{getFormattedTimeString(video.duration)}
-									</span>
+						<div className={'scroll-container'}>
+							{playlist.map((video) => (
+								<div
+									className={'video-thumbnail'}
+									key={`${video.id}`}
+									onClick={() => handleThumbnailClick(video)}
+								>
+									<img
+										className={'thumbnail-poster'}
+										src={`${process.env.CDN_STATIC_FILES}/${video.thumbnail}`}
+										alt={`There was no thumbnail for: ${video.title}`}
+									/>
+									<div className={'thumbnail-metadata'}>
+										<span className={'thumbnail-title'}>{`${
+											video.title
+										}`}</span>
+										<span className={'thumbnail-duration'}>
+											{getFormattedTimeString(video.duration)}
+										</span>
+									</div>
+									<SvgWrapper
+										className={'thumbnail-play-button'}
+										svgid={'play'}
+									/>
 								</div>
-								<SvgWrapper
-									className={'thumbnail-play-button'}
-									svgid={'play'}
-								/>
-							</div>
-						))}
+							))}
+						</div>
 					</div>
 				</div>
 			</div>
