@@ -147,11 +147,17 @@ class VideoPlayer extends React.PureComponent {
 				// console.log('videos', videos);
 				// console.log('playlist', playlist);
 
+				// this.setState({
+				// 	videos,
+				// 	playlist: playlist.slice(1),
+				// 	currentVideo: playlist[0],
+				// 	poster: playlist[0] ? playlist[0].thumbnail : '',
+				// });
 				this.setState({
 					videos,
-					playlist: playlist.slice(1),
-					currentVideo: playlist[0],
-					poster: playlist[0] ? playlist[0].thumbnail : '',
+					playlist: [...playlist.slice(0, 1), ...playlist.slice(2)],
+					currentVideo: playlist[1],
+					poster: playlist[1] ? playlist[1].thumbnail : '',
 				});
 				this.initVideoStream({ thumbnailClick: false });
 				if (!this.props.hasVideo) {
@@ -566,23 +572,12 @@ class VideoPlayer extends React.PureComponent {
 						paused={paused}
 						currentVideo={currentVideo}
 						playFunction={this.playVideo}
+						pauseFunction={this.pauseVideo}
 						previousVideo={this.previousVideo}
 						nextVideo={this.nextVideo}
 						previousFunction={this.previousFunction}
 						nextFunction={this.nextFunction}
 					/>
-					{/* <div
-						className={
-							paused
-								? 'play-video-container show-play'
-								: 'play-video-container hide-play'
-						}
-					>
-						<span className={'play-video-title'}>
-							{currentVideo.title || 'Loading'}
-						</span>
-						{this.playButton}
-					</div> */}
 					<video
 						ref={this.setVideoRef}
 						onClick={this.handleVideoClick}
@@ -590,6 +585,7 @@ class VideoPlayer extends React.PureComponent {
 					/>
 					<VideoProgressBar
 						paused={paused}
+						elipsisOpen={elipsisOpen}
 						currentTime={currentTime}
 						duration={currentVideo.duration || 300}
 						setCurrentTime={this.setCurrentTime}
@@ -598,6 +594,7 @@ class VideoPlayer extends React.PureComponent {
 					<VideoControls
 						paused={paused}
 						pauseVideo={this.pauseVideo}
+						elipsisOpen={elipsisOpen}
 						toggleElipsis={this.toggleElipsis}
 						toggleFullScreen={this.toggleFullScreen}
 						updateVolume={this.updateVolume}

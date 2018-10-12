@@ -101,6 +101,17 @@
 			width: 100%;
 		}
 
+		&:hover {
+			.play-video-container {
+				&.show-control-icon {
+					display: flex;
+				}
+				&.hide-control-icon {
+					display: flex;
+				}
+			}
+		}
+
 		.play-video-container {
 			position: absolute;
 			margin: auto;
@@ -110,22 +121,29 @@
 			z-index: 2;
 			pointer-events: none;
 			background-color: rgba(100, 100, 100, 0.35);
+			justify-content: center;
+			align-items: center;
 
 			&.show-control-icon {
-				display: block;
+				display: flex;
 			}
 
 			&.hide-control-icon {
 				display: none;
 			}
 
+			.control-button-container {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				flex-direction: column;
+				margin: 0 10px;
+				// margin-right: 25px;
+			}
+
 			.play-video {
-				position: absolute;
-				top: calc(50% - 75px);
-				//margin: auto;
-				left: calc(50% - 75px);
-				width: 150px;
-				height: 150px;
+				width: 75px;
+				height: 75px;
 				display: flex;
 				align-items: center;
 				justify-content: center;
@@ -146,78 +164,8 @@
 			}
 
 			.play-video-title {
-				position: absolute;
-				top: calc(50% - 75px);
-				left: calc(50% - 30px);
 				z-index: 4;
-				font-weight: bold;
-			}
-
-			.next-video {
-				position: absolute;
-				top: calc(50% - 65px);
-				//margin: auto;
-				left: calc(60%);
-				width: 150px;
-				height: 150px;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				z-index: 3;
-				pointer-events: all;
-
-				&:hover {
-					cursor: pointer;
-				}
-
-				&.show-control-icon {
-					display: block;
-				}
-
-				&.hide-control-icon {
-					display: none;
-				}
-			}
-
-			.next-video-title {
-				position: absolute;
-				top: calc(50% - 75px);
-				left: calc(60%);
-				z-index: 4;
-				font-weight: bold;
-			}
-
-			.previous-video {
-				position: absolute;
-				top: calc(50% - 65px);
-				//margin: auto;
-				left: calc(35%);
-				width: 150px;
-				height: 150px;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				z-index: 3;
-				pointer-events: all;
-
-				&:hover {
-					cursor: pointer;
-				}
-
-				&.show-control-icon {
-					display: block;
-				}
-
-				&.hide-control-icon {
-					display: none;
-				}
-			}
-
-			.previous-video-title {
-				position: absolute;
-				top: calc(50% - 75px);
-				left: calc(30%);
-				z-index: 4;
+				margin-bottom: 10px;
 				font-weight: bold;
 			}
 		}
@@ -225,12 +173,6 @@
 		&:hover {
 			.controls {
 				display: flex;
-			}
-
-			.video-elipsis-container {
-				&.active {
-					display: block;
-				}
 			}
 		}
 
@@ -251,6 +193,10 @@
 
 			&.hide-controls {
 				display: none;
+			}
+
+			&.open-controls {
+				display: flex;
 			}
 
 			.left-controls {
@@ -343,15 +289,15 @@
 		}
 
 		.video-elipsis-container {
-			display: none;
+			display: block;
 			position: absolute;
 			max-width: 752.58px;
 			width: 100%;
 			height: 100%;
 			margin: auto;
 
-			&.active {
-				// display: block;
+			&.closed {
+				display: none;
 			}
 
 			.video-elipsis-menu {
@@ -360,9 +306,9 @@
 				display: flex;
 				flex-direction: column;
 				justify-content: flex-end;
-				height: calc(100% - 64px);
+				height: calc(100% - 34px);
 				right: 0;
-				bottom: 64px;
+				bottom: 34px;
 				z-index: 2;
 
 				.video-elipsis-header {
@@ -394,13 +340,20 @@
 
 				.video-thumbnail-list {
 					max-height: calc(100% - 35px);
+					height: calc(100% - 35px);
 					// height: 410px;
 					display: flex;
 					flex-direction: column;
 					justify-content: flex-end;
 					z-index: 4;
-					overflow-x: hidden;
-					overflow-y: scroll;
+					// overflow-x: hidden;
+					overflow-y: auto;
+
+					.scroll-container {
+						width: 100%;
+						height: 100%;
+						overflow-y: auto;
+					}
 
 					.video-thumbnail {
 						height: 141px;
@@ -488,6 +441,10 @@
 
 			&.hide-progress-slider {
 				display: none;
+			}
+
+			&.open-progress-slider {
+				display: block;
 			}
 
 			&:before {

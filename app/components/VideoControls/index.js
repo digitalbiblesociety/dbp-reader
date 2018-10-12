@@ -27,6 +27,20 @@ class VideoControls extends React.PureComponent {
 	openVolumeSlider = () => {
 		this.setState({ volumeSliderState: true });
 	};
+	get containerClassNames() {
+		const { paused, elipsisOpen } = this.props;
+		let classNames = 'controls';
+
+		if (paused && !elipsisOpen) {
+			classNames += ' hide-controls';
+		}
+
+		if (elipsisOpen) {
+			classNames += ' open-controls';
+		}
+
+		return classNames;
+	}
 
 	render() {
 		const {
@@ -40,7 +54,7 @@ class VideoControls extends React.PureComponent {
 		const { volumeSliderState } = this.state;
 
 		return (
-			<div className={paused ? 'controls hide-controls' : 'controls'}>
+			<div className={this.containerClassNames}>
 				<div className={'left-controls'}>
 					<div
 						className={'video-volume-container'}
@@ -106,6 +120,7 @@ class VideoControls extends React.PureComponent {
 
 VideoControls.propTypes = {
 	paused: PropTypes.bool,
+	elipsisOpen: PropTypes.bool,
 	volume: PropTypes.number,
 	pauseVideo: PropTypes.func,
 	updateVolume: PropTypes.func,

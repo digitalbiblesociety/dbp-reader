@@ -18,17 +18,30 @@ class VideoProgressBar extends React.PureComponent {
 		return getFormattedTimeString(this.props.currentTime);
 	}
 
+	get containerClassNames() {
+		const { paused, elipsisOpen } = this.props;
+		let classNames = 'progress-slider';
+
+		if (paused && !elipsisOpen) {
+			classNames += ' hide-progress-slider';
+		}
+
+		if (elipsisOpen) {
+			classNames += ' open-progress-slider';
+		}
+
+		return classNames;
+	}
+
 	render() {
-		const { paused, currentTime, duration, bufferLength } = this.props;
+		const { currentTime, duration, bufferLength } = this.props;
 		const timePercent = (currentTime / duration) * 100;
 		// console.log('buffer percentage', (bufferLength / duration) * 100);
 		// console.log('time percent', timePercent);
 		// console.log('buffer distance', bufferLength);
 		return (
 			<div
-				className={
-					paused ? 'progress-slider hide-progress-slider' : 'progress-slider'
-				}
+				className={this.containerClassNames}
 				data-value-dur={this.timeLeft}
 				data-value-cur={this.timePassed}
 			>
@@ -70,6 +83,7 @@ VideoProgressBar.propTypes = {
 	duration: PropTypes.number,
 	setCurrentTime: PropTypes.func,
 	paused: PropTypes.bool,
+	elipsisOpen: PropTypes.bool,
 };
 
 export default VideoProgressBar;
