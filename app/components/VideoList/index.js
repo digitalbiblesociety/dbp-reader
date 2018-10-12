@@ -15,8 +15,8 @@ class VideoList extends React.PureComponent {
 		return (
 			<div
 				className={
-					elipsisOpen
-						? 'video-elipsis-container active'
+					!elipsisOpen
+						? 'video-elipsis-container closed'
 						: 'video-elipsis-container'
 				}
 			>

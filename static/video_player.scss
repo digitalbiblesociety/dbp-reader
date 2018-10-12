@@ -101,6 +101,17 @@
 			width: 100%;
 		}
 
+		&:hover {
+			.play-video-container {
+				&.show-control-icon {
+					display: block;
+				}
+				&.hide-control-icon {
+					display: block;
+				}
+			}
+		}
+
 		.play-video-container {
 			position: absolute;
 			margin: auto;
@@ -226,12 +237,6 @@
 			.controls {
 				display: flex;
 			}
-
-			.video-elipsis-container {
-				&.active {
-					display: block;
-				}
-			}
 		}
 
 		.controls {
@@ -251,6 +256,10 @@
 
 			&.hide-controls {
 				display: none;
+			}
+
+			&.open-controls {
+				display: flex;
 			}
 
 			.left-controls {
@@ -343,15 +352,15 @@
 		}
 
 		.video-elipsis-container {
-			display: none;
+			display: block;
 			position: absolute;
 			max-width: 752.58px;
 			width: 100%;
 			height: 100%;
 			margin: auto;
 
-			&.active {
-				// display: block;
+			&.closed {
+				display: none;
 			}
 
 			.video-elipsis-menu {
@@ -488,6 +497,10 @@
 
 			&.hide-progress-slider {
 				display: none;
+			}
+
+			&.open-progress-slider {
+				display: block;
 			}
 
 			&:before {

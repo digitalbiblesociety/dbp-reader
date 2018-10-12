@@ -2,12 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import SvgWrapper from '../../components/SvgWrapper';
 
-const PlayButton = ({ paused, playFunction }) => (
+const PlayButton = ({ playFunction }) => (
 	<SvgWrapper
 		onClick={playFunction}
-		className={
-			paused ? 'play-video show-control-icon' : 'play-video hide-control-icon'
-		}
+		className={'play-video'}
 		fill={'#fff'}
 		svgid={'play_video'}
 		viewBox={'0 0 90 40'}
@@ -15,16 +13,27 @@ const PlayButton = ({ paused, playFunction }) => (
 );
 
 PlayButton.propTypes = {
-	paused: PropTypes.bool,
 	playFunction: PropTypes.func,
 };
 
-const NextButton = ({ paused, nextFunction }) => (
+const PauseButton = ({ pauseFunction }) => (
+	<SvgWrapper
+		onClick={pauseFunction}
+		className={'play-video'}
+		fill={'#fff'}
+		svgid={'pause'}
+		viewBox={'0 0 90 40'}
+	/>
+);
+
+PauseButton.propTypes = {
+	pauseFunction: PropTypes.func,
+};
+
+const NextButton = ({ nextFunction }) => (
 	<SvgWrapper
 		onClick={nextFunction}
-		className={
-			paused ? 'next-video show-control-icon' : 'next-video hide-control-icon'
-		}
+		className={'next-video'}
 		fill={'#fff'}
 		svgid={'next'}
 		viewBox={'0 0 90 40'}
@@ -32,18 +41,13 @@ const NextButton = ({ paused, nextFunction }) => (
 );
 
 NextButton.propTypes = {
-	paused: PropTypes.bool,
 	nextFunction: PropTypes.func,
 };
 
-const PreviousButton = ({ paused, previousFunction }) => (
+const PreviousButton = ({ previousFunction }) => (
 	<SvgWrapper
 		onClick={previousFunction}
-		className={
-			paused
-				? 'previous-video show-control-icon'
-				: 'previous-video hide-control-icon'
-		}
+		className={'previous-video'}
 		fill={'#fff'}
 		svgid={'previous'}
 		viewBox={'0 0 90 40'}
@@ -51,7 +55,6 @@ const PreviousButton = ({ paused, previousFunction }) => (
 );
 
 PreviousButton.propTypes = {
-	paused: PropTypes.bool,
 	previousFunction: PropTypes.func,
 };
 
@@ -61,6 +64,7 @@ const VideoOverlay = ({
 	previousVideo,
 	nextVideo,
 	playFunction,
+	pauseFunction,
 	previousFunction,
 	nextFunction,
 }) => (
@@ -71,14 +75,13 @@ const VideoOverlay = ({
 				: 'play-video-container hide-control-icon'
 		}
 	>
-		{previousVideo && paused
+		{previousVideo
 			? [
 					<span key={'previous_button_text'} className={'previous-video-title'}>
 						{previousVideo.reference || 'Loading'}
 					</span>,
 					<PreviousButton
 						key={'previous_button_svg'}
-						paused={paused}
 						previousFunction={previousFunction}
 					/>,
 			  ]
@@ -86,17 +89,14 @@ const VideoOverlay = ({
 		<span className={'play-video-title'}>
 			{currentVideo.reference || 'Loading'}
 		</span>
-		<PlayButton paused={paused} playFunction={playFunction} />
-		{nextVideo && paused
+		{paused ? <PlayButton playFunction={playFunction} /> : null}
+		{paused ? null : <PauseButton pauseFunction={pauseFunction} />}
+		{nextVideo
 			? [
 					<span key={'next_button_text'} className={'next-video-title'}>
 						{nextVideo.reference || 'Loading'}
 					</span>,
-					<NextButton
-						key={'next_button_svg'}
-						paused={paused}
-						nextFunction={nextFunction}
-					/>,
+					<NextButton key={'next_button_svg'} nextFunction={nextFunction} />,
 			  ]
 			: null}
 	</div>
@@ -108,6 +108,7 @@ VideoOverlay.propTypes = {
 	nextVideo: PropTypes.object,
 	previousVideo: PropTypes.object,
 	playFunction: PropTypes.func,
+	pauseFunction: PropTypes.func,
 	nextFunction: PropTypes.func,
 	previousFunction: PropTypes.func,
 };
