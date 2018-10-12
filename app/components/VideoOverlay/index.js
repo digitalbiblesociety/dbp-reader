@@ -2,61 +2,43 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import SvgWrapper from '../../components/SvgWrapper';
 
-const PlayButton = ({ playFunction }) => (
-	<SvgWrapper
-		onClick={playFunction}
-		className={'play-video'}
-		fill={'#fff'}
-		svgid={'play_video'}
-		viewBox={'0 0 90 40'}
-	/>
+const SvgButton = ({ id, clickHandler, videoObject }) => (
+	<div className={'control-button-container'}>
+		<span className={'play-video-title'}>
+			{videoObject.reference || 'Loading'}
+		</span>
+		<SvgWrapper
+			onClick={clickHandler}
+			className={'play-video'}
+			fill={'#fff'}
+			svgid={id}
+		/>
+	</div>
 );
 
-PlayButton.propTypes = {
-	playFunction: PropTypes.func,
+SvgButton.propTypes = {
+	id: PropTypes.string,
+	clickHandler: PropTypes.func,
+	videoObject: PropTypes.object,
 };
 
-const PauseButton = ({ pauseFunction }) => (
-	<SvgWrapper
-		onClick={pauseFunction}
-		className={'play-video'}
-		fill={'#fff'}
-		svgid={'pause'}
-		viewBox={'0 0 90 40'}
-	/>
-);
-
-PauseButton.propTypes = {
-	pauseFunction: PropTypes.func,
-};
-
-const NextButton = ({ nextFunction }) => (
-	<SvgWrapper
-		onClick={nextFunction}
-		className={'next-video'}
-		fill={'#fff'}
-		svgid={'next'}
-		viewBox={'0 0 90 40'}
-	/>
-);
-
-NextButton.propTypes = {
-	nextFunction: PropTypes.func,
-};
-
-const PreviousButton = ({ previousFunction }) => (
-	<SvgWrapper
-		onClick={previousFunction}
-		className={'previous-video'}
-		fill={'#fff'}
-		svgid={'previous'}
-		viewBox={'0 0 90 40'}
-	/>
-);
-
-PreviousButton.propTypes = {
-	previousFunction: PropTypes.func,
-};
+// const PlayButton = ({ playFunction, currentVideo }) => (
+//   <div className={'control-button-container'}>
+//     <span className={'play-video-title'}>
+//       {currentVideo.reference || 'Loading'}
+//     </span>
+//     <SvgWrapper
+//       onClick={playFunction}
+//       className={'play-video'}
+//       fill={'#fff'}
+//       svgid={'play'}
+//     />
+//   </div>
+// );
+// PlayButton.propTypes = {
+//   playFunction: PropTypes.func,
+//   currentVideo: PropTypes.object,
+// };
 
 const VideoOverlay = ({
 	paused,
@@ -75,30 +57,34 @@ const VideoOverlay = ({
 				: 'play-video-container hide-control-icon'
 		}
 	>
-		{previousVideo
-			? [
-					<span key={'previous_button_text'} className={'previous-video-title'}>
-						{previousVideo.reference || 'Loading'}
-					</span>,
-					<PreviousButton
-						key={'previous_button_svg'}
-						previousFunction={previousFunction}
-					/>,
-			  ]
-			: null}
-		<span className={'play-video-title'}>
-			{currentVideo.reference || 'Loading'}
-		</span>
-		{paused ? <PlayButton playFunction={playFunction} /> : null}
-		{paused ? null : <PauseButton pauseFunction={pauseFunction} />}
-		{nextVideo
-			? [
-					<span key={'next_button_text'} className={'next-video-title'}>
-						{nextVideo.reference || 'Loading'}
-					</span>,
-					<NextButton key={'next_button_svg'} nextFunction={nextFunction} />,
-			  ]
-			: null}
+		{previousVideo ? (
+			<SvgButton
+				id={'previous_video'}
+				clickHandler={previousFunction}
+				videoObject={previousVideo}
+			/>
+		) : null}
+		{paused ? (
+			<SvgButton
+				id={'play_video'}
+				clickHandler={playFunction}
+				videoObject={currentVideo}
+			/>
+		) : null}
+		{paused ? null : (
+			<SvgButton
+				id={'pause_video'}
+				videoObject={currentVideo}
+				clickHandler={pauseFunction}
+			/>
+		)}
+		{nextVideo ? (
+			<SvgButton
+				id={'next_video'}
+				clickHandler={nextFunction}
+				videoObject={nextVideo}
+			/>
+		) : null}
 	</div>
 );
 

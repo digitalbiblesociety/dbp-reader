@@ -147,11 +147,17 @@ class VideoPlayer extends React.PureComponent {
 				// console.log('videos', videos);
 				// console.log('playlist', playlist);
 
+				// this.setState({
+				// 	videos,
+				// 	playlist: playlist.slice(1),
+				// 	currentVideo: playlist[0],
+				// 	poster: playlist[0] ? playlist[0].thumbnail : '',
+				// });
 				this.setState({
 					videos,
-					playlist: playlist.slice(1),
-					currentVideo: playlist[0],
-					poster: playlist[0] ? playlist[0].thumbnail : '',
+					playlist: [...playlist.slice(0, 1), ...playlist.slice(2)],
+					currentVideo: playlist[1],
+					poster: playlist[1] ? playlist[1].thumbnail : '',
 				});
 				this.initVideoStream({ thumbnailClick: false });
 				if (!this.props.hasVideo) {
