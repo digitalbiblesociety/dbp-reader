@@ -30,7 +30,6 @@ import Footer from '../../components/Footer';
 import SearchContainer from '../SearchContainer';
 import GenericErrorBoundary from '../../components/GenericErrorBoundary';
 import FadeTransition from '../../components/FadeTransition';
-// import svg4everybody from '../../utils/svgPolyfill';
 import {
 	applyTheme,
 	applyFontFamily,
@@ -762,6 +761,9 @@ class HomePage extends React.PureComponent {
 						fileset={activeFilesets.filter((f) => f.type === 'video_stream')[0]}
 						bookId={activeBookId}
 						chapter={activeChapter}
+						books={books}
+						text={updatedText}
+						textId={activeTextId}
 					/>
 					<Text
 						books={books}

@@ -119,7 +119,7 @@
 			height: 100%;
 			max-width: 752.58px;
 			z-index: 2;
-			pointer-events: none;
+			pointer-events: visibleFill;
 			background-color: rgba(100, 100, 100, 0.35);
 			justify-content: center;
 			align-items: center;
@@ -148,7 +148,7 @@
 				align-items: center;
 				justify-content: center;
 				z-index: 3;
-				pointer-events: all;
+				pointer-events: visiblePainted;
 
 				&:hover {
 					cursor: pointer;
