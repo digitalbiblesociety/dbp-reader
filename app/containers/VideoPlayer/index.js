@@ -549,7 +549,15 @@ class VideoPlayer extends React.PureComponent {
 			currentTime,
 			bufferLength,
 		} = this.state;
-		const { hasVideo, fileset } = this.props;
+		const {
+			hasVideo,
+			fileset,
+			books,
+			bookId,
+			chapter,
+			textId,
+			text,
+		} = this.props;
 		// console.log('playlist', playlist);
 		// console.log('currentVideo', currentVideo);
 		// console.log('hasVideo', hasVideo);
@@ -577,6 +585,11 @@ class VideoPlayer extends React.PureComponent {
 						nextVideo={this.nextVideo}
 						previousFunction={this.previousFunction}
 						nextFunction={this.nextFunction}
+						books={books}
+						bookId={bookId}
+						chapter={chapter}
+						textId={textId}
+						text={text}
 					/>
 					<video
 						ref={this.setVideoRef}
@@ -629,6 +642,9 @@ VideoPlayer.propTypes = {
 	bookId: PropTypes.string.isRequired,
 	chapter: PropTypes.number.isRequired,
 	hasVideo: PropTypes.bool.isRequired,
+	books: PropTypes.array,
+	textId: PropTypes.string,
+	text: PropTypes.array,
 	// videoList: PropTypes.array.isRequired,
 };
 

@@ -9,9 +9,21 @@ export default ({
 	verseNumber,
 	text: chapterText,
 	isHref,
+	// vid,
 }) => {
 	// if (!books.length || !chapterText.length) {
 	// 	return url({ textId, bookId, chapter, isHref, nextVerse: verseNumber });
+	// }
+	// if (vid) {
+	//   console.log('previous chapter', {
+	//     books,
+	//     chapter,
+	//     bookId,
+	//     textId,
+	//     verseNumber,
+	//     text: chapterText,
+	//     isHref,
+	//   });
 	// }
 	if (verseNumber && chapterText.length) {
 		const prevVerse = parseInt(verseNumber, 10) - 1 || 1;
@@ -77,14 +89,30 @@ export default ({
 			}
 		}
 	});
+	// if (vid) {
+	//   console.log('previousBookIndex', previousBookIndex);
+	// }
 
 	const previousBook =
 		fromJS(books[previousBookIndex]) || fromJS({ chapters: [], book_id: '' });
 	const activeBook =
 		fromJS(books[activeBookIndex]) || fromJS({ chapters: [], book_id: '' });
-
+	// if (vid) {
+	//   console.log('previousBook', previousBook, 'activeBook', activeBook);
+	// }
 	if (chapter - 1 === 0) {
 		// Goes to the last chapter in the previous book
+		// if (vid) {
+		//   console.log(
+		//     'at second to last return',
+		//     url({
+		//       textId,
+		//       bookId: previousBook.get('book_id').toLowerCase(),
+		//       chapter: previousBook.getIn(['chapters', -1]),
+		//       isHref,
+		//     }),
+		//   );
+		// }
 		return url({
 			textId,
 			bookId: previousBook.get('book_id').toLowerCase(),
@@ -103,7 +131,9 @@ export default ({
 		.findIndex((c) => c === chapter || c > chapter);
 	// console.log('chapterIndex', chapterIndex);
 	// console.log('activeBook.get()', activeBook.get('chapters'));
-
+	// if (vid) {
+	//   console.log('bottom return');
+	// }
 	return url({ textId, bookId, chapter: chapterIndex, isHref });
 	// return `${baseUrl}/${textId}/${bookId}/${chapterIndex}`;
 };

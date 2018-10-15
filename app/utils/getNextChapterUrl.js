@@ -9,7 +9,23 @@ export default ({
 	verseNumber,
 	text: chapterText,
 	isHref,
+	// vid,
 }) => {
+	// if (vid) {
+	//   console.log(
+	//     'next chapter url',
+	//     JSON.stringify({
+	//       books,
+	//       chapter,
+	//       bookId,
+	//       textId,
+	//       verseNumber,
+	//       text: chapterText,
+	//       isHref,
+	//       vid,
+	//     }),
+	//   );
+	// }
 	// console.log('verse number', verseNumber);
 	if (verseNumber && chapterText.length) {
 		const nextVerse = parseInt(verseNumber, 10) + 1 || 1;

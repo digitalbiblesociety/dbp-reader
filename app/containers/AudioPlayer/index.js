@@ -13,8 +13,9 @@ import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { FormattedMessage } from 'react-intl';
 import isEqual from 'lodash/isEqual';
+import Link from 'next/link';
 import injectReducer from '../../utils/injectReducer';
-import PrefetchLink from '../../utils/PrefetchLink';
+// import PrefetchLink from '../../utils/PrefetchLink';
 // import closeEventHoc from 'components/CloseEventHoc';
 import SvgWrapper from '../../components/SvgWrapper';
 import SpeedControl from '../../components/SpeedControl';
@@ -624,8 +625,7 @@ export class AudioPlayer extends React.Component {
 								: 'audio-player-container closed'
 						}
 					>
-						<PrefetchLink
-							as={getPreviousChapterUrl({
+						{/* as={getPreviousChapterUrl({
 								books: this.props.books,
 								chapter: this.props.activeChapter,
 								bookId: this.props.activeBookId.toLowerCase(),
@@ -644,12 +644,31 @@ export class AudioPlayer extends React.Component {
 								isHref: true,
 							})}
 							withData
-							prefetch
+							prefetch */}
+						<Link
+							as={getPreviousChapterUrl({
+								books: this.props.books,
+								chapter: this.props.activeChapter,
+								bookId: this.props.activeBookId.toLowerCase(),
+								textId: this.props.activeTextId.toLowerCase(),
+								verseNumber: this.props.verseNumber,
+								text: this.props.text,
+								isHref: false,
+							})}
+							href={getPreviousChapterUrl({
+								books: this.props.books,
+								chapter: this.props.activeChapter,
+								bookId: this.props.activeBookId.toLowerCase(),
+								textId: this.props.activeTextId.toLowerCase(),
+								verseNumber: this.props.verseNumber,
+								text: this.props.text,
+								isHref: true,
+							})}
 						>
 							{this.prevIcon}
-						</PrefetchLink>
+						</Link>
 						{this.state.playing ? this.pauseIcon : this.playIcon}
-						<PrefetchLink
+						<Link
 							as={getNextChapterUrl({
 								books: this.props.books,
 								chapter: this.props.activeChapter,
@@ -668,11 +687,9 @@ export class AudioPlayer extends React.Component {
 								text: this.props.text,
 								isHref: true,
 							})}
-							withData
-							prefetch
 						>
 							{this.nextIcon}
-						</PrefetchLink>
+						</Link>
 						<AudioProgressBar
 							setCurrentTime={this.setCurrentTime}
 							duration={this.state.duration}
