@@ -517,6 +517,7 @@ export function* getBibleFromUrl({
 				filesets,
 				name: bible.vname ? bible.vname : bible.name || bible.abbr,
 				iso: bible.iso,
+				languageCode: bible.language_id,
 				textDirection,
 				languageName: bible.language,
 				books,
