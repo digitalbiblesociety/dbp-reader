@@ -159,7 +159,7 @@ export function* getLanguages() {
 	try {
 		const response = yield call(cachedFetch, requestUrl, {}, oneDay);
 		const languages = response.data;
-		languages.unshift({ name: 'ANY', iso: 'ANY', alt_names: [] });
+		// languages.unshift({ name: 'ANY', iso: 'ANY', alt_names: [] });
 
 		yield put(setLanguages({ languages }));
 		yield put({ type: CLEAR_ERROR_GETTING_LANGUAGES });
