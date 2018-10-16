@@ -158,7 +158,8 @@ export function* getLanguages() {
 
 	try {
 		const response = yield call(cachedFetch, requestUrl, {}, oneDay);
-		const languages = response.data;
+		// Sometimes the api returns an array and sometimes an object with the data key
+		const languages = response.data || response;
 		// languages.unshift({ name: 'ANY', iso: 'ANY', alt_names: [] });
 
 		yield put(setLanguages({ languages }));
@@ -209,7 +210,7 @@ export function* getLanguageAltNames() {
 				};
 			})
 			.sort(sortLanguagesByVname);
-		languages.unshift({ name: 'ANY', iso: 'ANY', alt_names: [] });
+		// languages.unshift({ name: 'ANY', iso: 'ANY', alt_names: [] });
 		// console.log('Done getting the alt names');
 		yield put(setLanguages({ languages }));
 	} catch (err) {

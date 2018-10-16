@@ -219,6 +219,7 @@ const initialState = fromJS({
 	activeNotesView: 'notes',
 	activeTextId: '',
 	defaultLanguageIso: 'eng',
+	defaultLanguageCode: 6414,
 	defaultLanguageName: 'English',
 	activeBookId: '',
 	selectedText: '',
@@ -381,6 +382,7 @@ function homePageReducer(state = initialState, action) {
 				.set('activeTextName', fromJS(action.name))
 				.set('defaultLanguageIso', fromJS(action.iso))
 				.set('defaultLanguageName', fromJS(action.languageName))
+				.set('defaultLanguageCode', fromJS(action.languageCode))
 				.set('activeBookName', fromJS(action.activeBookName))
 				.set('invalidBibleId', false)
 				.set('audioPlayerState', action.chapterData.hasAudio)

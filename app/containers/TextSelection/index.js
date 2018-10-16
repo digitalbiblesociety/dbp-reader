@@ -47,6 +47,7 @@ export class TextSelection extends React.PureComponent {
 			setActiveIsoCode({
 				iso: this.props.homepageData.initialIsoCode,
 				name: this.props.homepageData.initialLanguageName,
+				languageCode: this.props.homepageData.initialLanguageCode,
 			}),
 		);
 		if (this.props.active) {
@@ -72,7 +73,9 @@ export class TextSelection extends React.PureComponent {
 
 		if (
 			nextProps.textselection.activeIsoCode !==
-			this.props.textselection.activeIsoCode
+				this.props.textselection.activeIsoCode ||
+			nextProps.textselection.activeLanguageCode !==
+				this.props.textselection.activeLanguageCode
 		) {
 			this.props.dispatch(
 				getTexts({ languageISO: nextProps.textselection.activeIsoCode }),
@@ -110,8 +113,8 @@ export class TextSelection extends React.PureComponent {
 
 	setCountryListState = () => this.props.dispatch(setCountryListState());
 
-	setActiveIsoCode = ({ iso, name }) =>
-		this.props.dispatch(setActiveIsoCode({ iso, name }));
+	setActiveIsoCode = ({ iso, name, languageCode }) =>
+		this.props.dispatch(setActiveIsoCode({ iso, name, languageCode }));
 
 	setActiveTextId = (props) => this.props.dispatch(setActiveTextId(props));
 

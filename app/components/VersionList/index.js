@@ -34,6 +34,7 @@ class VersionList extends React.PureComponent {
 	get filteredVersionList() {
 		const {
 			bibles,
+			activeLanguageCode,
 			activeIsoCode,
 			activeTextId,
 			// activeBookId,
@@ -48,8 +49,7 @@ class VersionList extends React.PureComponent {
 					this.filterFunction(bible, filterText, activeIsoCode),
 			  )
 			: bibles.filter(
-					(bible) =>
-						activeIsoCode === 'ANY' ? true : bible.get('iso') === activeIsoCode,
+					(bible) => bible.get('activeLanguageCode') === activeLanguageCode,
 			  );
 		// Change the way I figure out if a resource has text or audio
 		// path, key, types, className, text, clickHandler
@@ -250,6 +250,7 @@ VersionList.propTypes = {
 	// setCountryListState: PropTypes.func,
 	// activeBookId: PropTypes.string,
 	activeIsoCode: PropTypes.string,
+	activeLanguageCode: PropTypes.number,
 	activeTextId: PropTypes.string,
 	filterText: PropTypes.string,
 	// activeChapter: PropTypes.number,

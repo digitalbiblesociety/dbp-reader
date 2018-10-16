@@ -9,49 +9,51 @@ const selectHomepageDomain = (state) => state.get('homepage');
 /**
  * Other specific selectors
  */
-const selectHomepageData = () => createSelector(
-	selectHomepageDomain,
-	(homepage) => ({
+const selectHomepageData = () =>
+	createSelector(selectHomepageDomain, (homepage) => ({
 		activeBookName: homepage.get('activeBookName'),
 		activeTextId: homepage.get('activeTextId'),
 		initialIsoCode: homepage.get('defaultLanguageIso'),
 		initialLanguageName: homepage.get('defaultLanguageName'),
-	})
-);
+		initialLanguageCode: homepage.get('defaultLanguageCode'),
+	}));
 
-const selectCountries = () => createSelector(
-	selectTextSelectionDomain,
-	(substate) => substate.get('countries')
-);
+const selectCountries = () =>
+	createSelector(selectTextSelectionDomain, (substate) =>
+		substate.get('countries'),
+	);
 
-const selectTexts = () => createSelector(
-	selectTextSelectionDomain,
-	(substate) => substate.get('texts')
-);
+const selectTexts = () =>
+	createSelector(selectTextSelectionDomain, (substate) =>
+		substate.get('texts'),
+	);
 
-const selectLanguages = () => createSelector(
-	selectTextSelectionDomain,
-	(substate) => {
+const selectLanguages = () =>
+	createSelector(selectTextSelectionDomain, (substate) => {
 		const countryMap = substate.get('countries');
 		const languages = substate.get('languages');
 		const activeCountry = substate.get('activeCountryName');
-		const activeCountryLanguages = countryMap.getIn([activeCountry, 'languages']);
+		const activeCountryLanguages = countryMap.getIn([
+			activeCountry,
+			'languages',
+		]);
 
 		if (activeCountryLanguages && activeCountry !== 'ANY') {
-			return languages.filter((language) => activeCountryLanguages.includes(language.get('iso'))).toJS();
+			return languages
+				.filter((language) =>
+					activeCountryLanguages.includes(language.get('iso')),
+				)
+				.toJS();
 		}
 		return languages.toJS();
-	}
-);
+	});
 
 /**
  * Default selector used by TextSelection
  */
 
-const makeSelectTextSelection = () => createSelector(
-	selectTextSelectionDomain,
-	(substate) => substate.toJS()
-);
+const makeSelectTextSelection = () =>
+	createSelector(selectTextSelectionDomain, (substate) => substate.toJS());
 
 export default makeSelectTextSelection;
 export {
