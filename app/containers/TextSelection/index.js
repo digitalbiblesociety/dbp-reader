@@ -47,7 +47,7 @@ export class TextSelection extends React.PureComponent {
 			setActiveIsoCode({
 				iso: this.props.homepageData.initialIsoCode,
 				name: this.props.homepageData.initialLanguageName,
-				languageCode: this.props.homepageData.initialLanguageCode,
+				languageCode: this.props.textselection.activeLanguageCode,
 			}),
 		);
 		if (this.props.active) {
@@ -78,14 +78,20 @@ export class TextSelection extends React.PureComponent {
 				this.props.textselection.activeLanguageCode
 		) {
 			this.props.dispatch(
-				getTexts({ languageISO: nextProps.textselection.activeIsoCode }),
+				getTexts({
+					languageISO: nextProps.textselection.activeIsoCode,
+					languageCode: nextProps.textselection.activeLanguageCode,
+				}),
 			);
 		} else if (
 			nextProps.homepageData.initialIsoCode !==
 			this.props.homepageData.initialIsoCode
 		) {
 			this.props.dispatch(
-				getTexts({ languageISO: nextProps.homepageData.initialIsoCode }),
+				getTexts({
+					languageISO: nextProps.homepageData.initialIsoCode,
+					languageCode: nextProps.homepageData.defaultLanguageCode,
+				}),
 			);
 		}
 
@@ -164,6 +170,7 @@ export class TextSelection extends React.PureComponent {
 			activeIsoCode,
 			activeLanguageName,
 			activeCountryName,
+			activeLanguageCode,
 			countryLanguages,
 			loadingVersions,
 			loadingCountries,
@@ -230,6 +237,7 @@ export class TextSelection extends React.PureComponent {
 					filterText={filterText}
 					active={languageListActive}
 					activeIsoCode={activeIsoCode}
+					languageCode={activeLanguageCode}
 					countryLanguages={countryLanguages}
 					loadingLanguages={loadingLanguages}
 					countryListActive={countryListActive}
@@ -246,6 +254,7 @@ export class TextSelection extends React.PureComponent {
 					active={versionListActive}
 					activeIsoCode={activeIsoCode}
 					activeTextId={activeTextId}
+					languageCode={activeLanguageCode}
 					activeTextName={activeTextName}
 					loadingVersions={loadingVersions}
 					setActiveText={this.setActiveTextId}

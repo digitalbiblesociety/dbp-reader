@@ -24,7 +24,7 @@ class LanguageList extends React.PureComponent {
 			languages,
 			// activeLanguageName,
 			activeIsoCode,
-			activeLanguageCode,
+			languageCode,
 			filterText,
 		} = this.props;
 		// const { filterText } = this.state;
@@ -83,7 +83,7 @@ class LanguageList extends React.PureComponent {
 				>
 					<h4
 						className={
-							language.id === activeLanguageCode ? 'active-language-name' : ''
+							language.id === languageCode ? 'active-language-name' : ''
 						}
 					>
 						{language.alt_names && language.alt_names.includes(filterText)
@@ -340,7 +340,7 @@ LanguageList.propTypes = {
 	loadingLanguages: PropTypes.bool,
 	// activeLanguageName: PropTypes.string,
 	activeIsoCode: PropTypes.string,
-	activeLanguageCode: PropTypes.number,
+	languageCode: PropTypes.number,
 };
 
 export default LanguageList;

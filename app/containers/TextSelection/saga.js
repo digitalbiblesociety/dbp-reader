@@ -86,19 +86,20 @@ export function* getCountry() {
 	}
 }
 
-export function* getTexts({ languageISO }) {
+export function* getTexts({ languageCode }) {
 	let requestUrl = '';
+	// console.log('active language code', languageCode);
 
-	if (languageISO === 'ANY') {
-		requestUrl = `${process.env.BASE_API_ROUTE}/bibles?&bucket_id=${
-			process.env.DBP_BUCKET_ID
-		}&key=${process.env.DBP_API_KEY}&v=4`;
-	} else {
-		requestUrl = `${process.env.BASE_API_ROUTE}/bibles?&bucket_id=${
-			process.env.DBP_BUCKET_ID
-		}&key=${process.env.DBP_API_KEY}&language_code=${languageISO}&v=4`;
-	}
-
+	// if (languageISO === 'ANY') {
+	//   requestUrl = `${process.env.BASE_API_ROUTE}/bibles?&bucket_id=${
+	//     process.env.DBP_BUCKET_ID
+	//   }&key=${process.env.DBP_API_KEY}&v=4`;
+	// } else {
+	requestUrl = `${process.env.BASE_API_ROUTE}/bibles?&bucket_id=${
+		process.env.DBP_BUCKET_ID
+	}&key=${process.env.DBP_API_KEY}&language_code=${languageCode}&v=4`;
+	// }
+	// https://api.dbp4.org/bibles?&bucket_id=$dbp-prod&key=1234&language_code=8076&v=4
 	try {
 		const response = yield call(request, requestUrl);
 		// Some texts may have plain text in the database but no filesets
@@ -187,7 +188,8 @@ export function* getLanguageAltNames() {
 	}&has_filesets=true&include_alt_names=true`;
 	try {
 		const response = yield call(cachedFetch, requestUrl, {}, oneDay);
-		const languages = response.data
+		const languageData = response.data || response;
+		const languages = languageData
 			.map((l) => {
 				if (l.alt_names) {
 					const altSet = new Set(
