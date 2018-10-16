@@ -5,6 +5,7 @@ import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import Hls from 'hls.js';
 import Router from 'next/router';
+import cachedFetch, { overrideCache } from '../../utils/cachedFetch';
 // import { BufferHelper } from 'hls.js/src/utils/buffer-helper';
 import { openVideoPlayer, closeVideoPlayer, setHasVideo } from './actions';
 import SvgWrapper from '../../components/SvgWrapper';
@@ -13,7 +14,7 @@ import VideoList from '../../components/VideoList';
 import VideoProgressBar from '../../components/VideoProgressBar';
 import VideoOverlay from '../../components/VideoOverlay';
 import deepDifferenceObject from '../../utils/deepDifferenceObject';
-import request from '../../utils/request';
+// import request from '../../utils/request';
 import { selectHasVideo } from './selectors';
 // import makeSelectHomePage from '../HomePage/selectors';
 // import { openVideoPlayer, closeVideoPlayer, getVideoList } from './actions';
@@ -120,10 +121,14 @@ class VideoPlayer extends React.PureComponent {
 		}&v=4&type=video_stream&bucket=dbp-vid&book_id=${bookId}`;
 
 		try {
-			const response = await request(requestUrl);
+			// Profile to see how much time the caching actually saves
+			// const response = await request(requestUrl);
+			const response = await cachedFetch(requestUrl);
 			// console.log('all the vids', response);
 
 			if (response.data) {
+				overrideCache(requestUrl, response);
+
 				const videos = response.data.map((video, index) => ({
 					title: `${video.book_name} ${video.chapter_start}:${
 						video.verse_start
@@ -155,9 +160,9 @@ class VideoPlayer extends React.PureComponent {
 				// });
 				this.setState({
 					videos,
-					playlist: [...playlist.slice(0, 1), ...playlist.slice(2)],
-					currentVideo: playlist[1],
-					poster: playlist[1] ? playlist[1].thumbnail : '',
+					playlist: playlist.slice(1),
+					currentVideo: playlist[0],
+					poster: playlist[0] ? playlist[0].thumbnail : '',
 				});
 				this.initVideoStream({ thumbnailClick: false });
 				if (!this.props.hasVideo) {
@@ -219,10 +224,13 @@ class VideoPlayer extends React.PureComponent {
 		}&bucket=dbp-vid&fileset_type=video_stream&v=4`;
 
 		try {
-			const res = await request(reqUrl);
+			// const res = await request(reqUrl);
+			const res = await cachedFetch(reqUrl);
 			// console.log('res', res);
 
 			if (res.data) {
+				overrideCache(reqUrl, res);
+
 				const hasVideo = !!res.data.filter(
 					(stream) =>
 						stream.book_id === bookId && stream.chapters.includes(chapter),
