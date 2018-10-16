@@ -32,7 +32,7 @@ function SearchResult({ result: r, bibleId }) {
 						'chapter',
 					)}/${r.get('verse_start')}`}
 				>
-					{`${r.get('chapter_alt')}:${r.get('verse_start_alt')}`}
+					<a>{`${r.get('chapter_alt')}:${r.get('verse_start_alt')}`}</a>
 				</Link>
 			</h4>
 			<p>{r.get('verse_text')}</p>

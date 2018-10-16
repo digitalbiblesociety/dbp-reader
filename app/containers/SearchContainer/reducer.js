@@ -70,6 +70,7 @@ function searchContainerReducer(state = initialState, action) {
 		case LOAD_SEARCH_RESULTS:
 			return state
 				.set('loadingResults', false)
+				.set('showError', false)
 				.set('searchResults', fromJS(action.searchResults));
 		case SEARCH_ERROR:
 			return state.set('showError', true).set('loadingResults', false);
