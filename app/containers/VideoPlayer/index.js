@@ -579,6 +579,7 @@ class VideoPlayer extends React.PureComponent {
 					<VideoOverlay
 						paused={paused}
 						currentVideo={currentVideo}
+						closePlayer={this.closePlayer}
 						playFunction={this.playVideo}
 						pauseFunction={this.pauseVideo}
 						previousVideo={this.previousVideo}
