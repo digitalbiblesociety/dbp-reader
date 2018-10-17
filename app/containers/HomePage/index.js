@@ -40,6 +40,7 @@ import notesReducer from '../Notes/reducer';
 import notesSaga from '../Notes/saga';
 import textReducer from '../TextSelection/reducer';
 import textSaga from '../TextSelection/saga';
+import { setActiveIsoCode } from '../TextSelection/actions';
 import { getBookmarksForChapter, addBookmark } from '../Notes/actions';
 import {
 	addHighlight,
@@ -187,9 +188,22 @@ class HomePage extends React.PureComponent {
 		}
 		/* eslint-disable no-undef */
 		if (this.props.homepage.firstLoad) {
+			// console.log('homepage running with defaults', {
+			//   iso: this.props.homepage.initialIsoCode,
+			//   languageCode: this.props.homepage.defaultLanguageCode,
+			//   name: this.props.homepage.initialLanguageName,
+			// });
+			this.props.dispatch(
+				setActiveIsoCode({
+					iso: this.props.homepage.initialIsoCode,
+					languageCode: this.props.homepage.defaultLanguageCode,
+					name: this.props.homepage.initialLanguageName,
+				}),
+			);
 			this.props.dispatch(
 				initApplication({
 					languageISO: this.props.homepage.defaultLanguageIso,
+					languageCode: this.props.homepage.defaultLanguageCode,
 				}),
 			);
 			this.toggleFirstLoadForTextSelection();

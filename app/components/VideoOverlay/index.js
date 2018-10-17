@@ -125,10 +125,12 @@ class VideoOverlay extends React.PureComponent {
 	handleNextClick = () => {
 		// console.log('clicked the new chapter href', this.nextChapterHref);
 		// console.log('clicked the new chapter as', this.nextChapterAs);
+		this.props.closePlayer();
 		Router.replace(this.nextChapterAs);
 	};
 	handlePreviousClick = () => {
 		// console.log('clicked the new chapter', this.previousChapterAs);
+		this.props.closePlayer();
 		Router.replace(this.previousChapterAs);
 	};
 	get nextChapterAs() {
@@ -259,6 +261,7 @@ VideoOverlay.propTypes = {
 	nextVideo: PropTypes.object,
 	previousVideo: PropTypes.object,
 	playFunction: PropTypes.func,
+	closePlayer: PropTypes.func,
 	pauseFunction: PropTypes.func,
 	nextFunction: PropTypes.func,
 	previousFunction: PropTypes.func,

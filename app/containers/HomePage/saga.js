@@ -93,6 +93,7 @@ export function* getCountriesAndLanguages() {
 
 export function* initApplication(props) {
 	const languageISO = props.languageISO;
+	const languageCode = props.languageCode;
 	// Set a timeout for 24 hours so that if the user does not refresh the page
 	// within that time the languages and countries will be re-fetched
 	const timeoutDuration = 1000 * 60 * 60 * 24;
@@ -102,10 +103,11 @@ export function* initApplication(props) {
 	}, timeoutDuration);
 
 	// yield fork(getIpAddress);
+	// console.log('running init', languageCode);
 	// Forking each of these sagas here on the init of the application so that they all run in parallel
 	yield fork(getCountries);
 	yield fork(getLanguages);
-	yield fork(getTexts, { languageISO });
+	yield fork(getTexts, { languageISO, languageCode });
 }
 
 // Need to send another call for the bibles once this is done
@@ -517,6 +519,7 @@ export function* getBibleFromUrl({
 				filesets,
 				name: bible.vname ? bible.vname : bible.name || bible.abbr,
 				iso: bible.iso,
+				languageCode: bible.language_id,
 				textDirection,
 				languageName: bible.language,
 				books,

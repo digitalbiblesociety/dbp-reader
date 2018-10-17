@@ -37,6 +37,7 @@ const initialState = fromJS({
 	activeCountryName: 'ANY',
 	initialBookId: 'GEN',
 	activeIsoCode: 'eng',
+	activeLanguageCode: 6414,
 	// activeIsoCode: (window && window.navigator.language) || 'eng',
 	loadingCountries: false,
 	loadingLanguages: false,
@@ -97,7 +98,8 @@ function textSelectionReducer(state = initialState, action) {
 		case SET_ISO_CODE:
 			return state
 				.set('activeLanguageName', action.name)
-				.set('activeIsoCode', action.iso);
+				.set('activeIsoCode', action.iso)
+				.set('activeLanguageCode', action.languageCode);
 		default:
 			return state;
 	}

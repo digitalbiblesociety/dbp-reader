@@ -43,12 +43,18 @@ export class TextSelection extends React.PureComponent {
 
 	componentDidMount() {
 		// Should probably initialize this somewhere else since this will be mounted only once
-		this.props.dispatch(
-			setActiveIsoCode({
-				iso: this.props.homepageData.initialIsoCode,
-				name: this.props.homepageData.initialLanguageName,
-			}),
-		);
+		// console.log(
+		//   'setting iso code in did mount',
+		//   this.props.textselection.activeLanguageCode,
+		//   this.props.homepageData.defaultLanguageCode,
+		// );
+		// this.props.dispatch(
+		//   setActiveIsoCode({
+		//     iso: this.props.homepageData.initialIsoCode,
+		//     name: this.props.homepageData.initialLanguageName,
+		//     languageCode: this.props.homepageData.defaultLanguageCode,
+		//   }),
+		// );
 		if (this.props.active) {
 			this.closeMenuController = new CloseMenuFunctions(
 				this.ref,
@@ -72,17 +78,33 @@ export class TextSelection extends React.PureComponent {
 
 		if (
 			nextProps.textselection.activeIsoCode !==
-			this.props.textselection.activeIsoCode
+				this.props.textselection.activeIsoCode ||
+			nextProps.textselection.activeLanguageCode !==
+				this.props.textselection.activeLanguageCode
 		) {
+			// console.log(
+			//   'getting texts in receive props for textselection: ',
+			//   nextProps.textselection.activeLanguageCode,
+			// );
 			this.props.dispatch(
-				getTexts({ languageISO: nextProps.textselection.activeIsoCode }),
+				getTexts({
+					languageISO: nextProps.textselection.activeIsoCode,
+					languageCode: nextProps.textselection.activeLanguageCode,
+				}),
 			);
 		} else if (
 			nextProps.homepageData.initialIsoCode !==
 			this.props.homepageData.initialIsoCode
 		) {
+			// console.log(
+			//   'getting texts in receive props for homepageData: ',
+			//   nextProps.homepageData.defaultLanguageCode,
+			// );
 			this.props.dispatch(
-				getTexts({ languageISO: nextProps.homepageData.initialIsoCode }),
+				getTexts({
+					languageISO: nextProps.homepageData.initialIsoCode,
+					languageCode: nextProps.homepageData.defaultLanguageCode,
+				}),
 			);
 		}
 
@@ -110,8 +132,8 @@ export class TextSelection extends React.PureComponent {
 
 	setCountryListState = () => this.props.dispatch(setCountryListState());
 
-	setActiveIsoCode = ({ iso, name }) =>
-		this.props.dispatch(setActiveIsoCode({ iso, name }));
+	setActiveIsoCode = ({ iso, name, languageCode }) =>
+		this.props.dispatch(setActiveIsoCode({ iso, name, languageCode }));
 
 	setActiveTextId = (props) => this.props.dispatch(setActiveTextId(props));
 
@@ -161,6 +183,7 @@ export class TextSelection extends React.PureComponent {
 			activeIsoCode,
 			activeLanguageName,
 			activeCountryName,
+			activeLanguageCode,
 			countryLanguages,
 			loadingVersions,
 			loadingCountries,
@@ -227,6 +250,7 @@ export class TextSelection extends React.PureComponent {
 					filterText={filterText}
 					active={languageListActive}
 					activeIsoCode={activeIsoCode}
+					languageCode={activeLanguageCode}
 					countryLanguages={countryLanguages}
 					loadingLanguages={loadingLanguages}
 					countryListActive={countryListActive}
@@ -243,6 +267,7 @@ export class TextSelection extends React.PureComponent {
 					active={versionListActive}
 					activeIsoCode={activeIsoCode}
 					activeTextId={activeTextId}
+					languageCode={activeLanguageCode}
 					activeTextName={activeTextName}
 					loadingVersions={loadingVersions}
 					setActiveText={this.setActiveTextId}

@@ -23,7 +23,8 @@ class LanguageList extends React.PureComponent {
 		const {
 			languages,
 			// activeLanguageName,
-			activeIsoCode,
+			// activeIsoCode,
+			languageCode,
 			filterText,
 		} = this.props;
 		// const { filterText } = this.state;
@@ -82,7 +83,7 @@ class LanguageList extends React.PureComponent {
 				>
 					<h4
 						className={
-							language.iso === activeIsoCode ? 'active-language-name' : ''
+							language.id === languageCode ? 'active-language-name' : ''
 						}
 					>
 						{language.alt_names && language.alt_names.includes(filterText)
@@ -101,9 +102,15 @@ class LanguageList extends React.PureComponent {
 
 		const getActiveIndex = () => {
 			let activeIndex = 0;
+			// console.log(
+			//   'searching for the active index for language list',
+			//   languageCode,
+			// );
 
 			filteredLanguages.forEach((l, i) => {
-				if (l.iso === activeIsoCode) {
+				// if (l.iso === activeIsoCode) {
+				if (l.id === languageCode) {
+					// console.log('active index for language list');
 					activeIndex = i;
 				}
 			});
@@ -259,7 +266,11 @@ class LanguageList extends React.PureComponent {
 		} = this.props;
 		// console.log('new language', language);
 		if (language) {
-			setActiveIsoCode({ iso: language.iso, name: language.name });
+			setActiveIsoCode({
+				iso: language.iso,
+				name: language.name,
+				languageCode: language.id,
+			});
 			// console.log('Toggling languageList');
 			toggleLanguageList();
 			// this.setState({ filterText: '' });
@@ -334,7 +345,8 @@ LanguageList.propTypes = {
 	active: PropTypes.bool,
 	loadingLanguages: PropTypes.bool,
 	// activeLanguageName: PropTypes.string,
-	activeIsoCode: PropTypes.string,
+	// activeIsoCode: PropTypes.string,
+	languageCode: PropTypes.number,
 };
 
 export default LanguageList;

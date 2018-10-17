@@ -35,9 +35,9 @@ export const loadCountries = ({ countries }) => ({
 	countries,
 });
 
-export const getTexts = ({ languageISO }) => ({
+export const getTexts = (props) => ({
 	type: GET_DPB_TEXTS,
-	languageISO,
+	...props,
 });
 
 export const getLanguages = () => ({
@@ -70,10 +70,9 @@ export const setVersionListState = () => ({
 	type: SET_VERSION_LIST_STATE,
 });
 
-export const setActiveIsoCode = ({ iso, name }) => ({
+export const setActiveIsoCode = (props) => ({
 	type: SET_ISO_CODE,
-	iso,
-	name,
+	...props,
 });
 
 export const setLanguages = ({ languages }) => ({
