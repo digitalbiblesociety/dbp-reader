@@ -23,7 +23,7 @@ class LanguageList extends React.PureComponent {
 		const {
 			languages,
 			// activeLanguageName,
-			activeIsoCode,
+			// activeIsoCode,
 			languageCode,
 			filterText,
 		} = this.props;
@@ -102,9 +102,15 @@ class LanguageList extends React.PureComponent {
 
 		const getActiveIndex = () => {
 			let activeIndex = 0;
+			// console.log(
+			//   'searching for the active index for language list',
+			//   languageCode,
+			// );
 
 			filteredLanguages.forEach((l, i) => {
-				if (l.iso === activeIsoCode) {
+				// if (l.iso === activeIsoCode) {
+				if (l.id === languageCode) {
+					// console.log('active index for language list');
 					activeIndex = i;
 				}
 			});
@@ -339,7 +345,7 @@ LanguageList.propTypes = {
 	active: PropTypes.bool,
 	loadingLanguages: PropTypes.bool,
 	// activeLanguageName: PropTypes.string,
-	activeIsoCode: PropTypes.string,
+	// activeIsoCode: PropTypes.string,
 	languageCode: PropTypes.number,
 };
 

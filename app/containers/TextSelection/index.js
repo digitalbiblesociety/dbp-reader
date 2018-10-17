@@ -43,13 +43,18 @@ export class TextSelection extends React.PureComponent {
 
 	componentDidMount() {
 		// Should probably initialize this somewhere else since this will be mounted only once
-		this.props.dispatch(
-			setActiveIsoCode({
-				iso: this.props.homepageData.initialIsoCode,
-				name: this.props.homepageData.initialLanguageName,
-				languageCode: this.props.textselection.activeLanguageCode,
-			}),
-		);
+		// console.log(
+		//   'setting iso code in did mount',
+		//   this.props.textselection.activeLanguageCode,
+		//   this.props.homepageData.defaultLanguageCode,
+		// );
+		// this.props.dispatch(
+		//   setActiveIsoCode({
+		//     iso: this.props.homepageData.initialIsoCode,
+		//     name: this.props.homepageData.initialLanguageName,
+		//     languageCode: this.props.homepageData.defaultLanguageCode,
+		//   }),
+		// );
 		if (this.props.active) {
 			this.closeMenuController = new CloseMenuFunctions(
 				this.ref,
@@ -77,6 +82,10 @@ export class TextSelection extends React.PureComponent {
 			nextProps.textselection.activeLanguageCode !==
 				this.props.textselection.activeLanguageCode
 		) {
+			// console.log(
+			//   'getting texts in receive props for textselection: ',
+			//   nextProps.textselection.activeLanguageCode,
+			// );
 			this.props.dispatch(
 				getTexts({
 					languageISO: nextProps.textselection.activeIsoCode,
@@ -87,6 +96,10 @@ export class TextSelection extends React.PureComponent {
 			nextProps.homepageData.initialIsoCode !==
 			this.props.homepageData.initialIsoCode
 		) {
+			// console.log(
+			//   'getting texts in receive props for homepageData: ',
+			//   nextProps.homepageData.defaultLanguageCode,
+			// );
 			this.props.dispatch(
 				getTexts({
 					languageISO: nextProps.homepageData.initialIsoCode,
