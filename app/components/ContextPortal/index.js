@@ -16,6 +16,7 @@ import {
 	FacebookShareCount,
 } from 'react-share';
 import SvgWrapper from '../SvgWrapper';
+import GooglePlusShare from '../GooglePlusShare';
 import HighlightColors from '../HighlightColors';
 import CloseMenuFunctions from '../../utils/closeMenuFunctions';
 import PopupMessage from '../PopupMessage';
@@ -243,13 +244,14 @@ class ContextPortal extends React.PureComponent {
 					>
 						<SvgWrapper className={'icon'} svgid="facebook" />
 					</FacebookShareButton>
-					<GooglePlusShareButton
+					{/* <GooglePlusShareButton
 						onShareWindowClose={closeContextMenu}
 						className={'menu-item social google'}
 						url={window.location.href}
 					>
 						<SvgWrapper className={'icon'} svgid="google" />
-					</GooglePlusShareButton>
+					</GooglePlusShareButton> */}
+					<GooglePlusShare quote={selectedText} />
 					<TwitterShareButton
 						onShareWindowClose={closeContextMenu}
 						className={'menu-item social twitter'}
