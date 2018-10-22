@@ -86,6 +86,10 @@ class Text extends React.PureComponent {
 		// console.log('props at time component first mounted', this.props);
 		this.dommountedsostuffworks();
 		this.getFootnotesOnFirstRender();
+
+		if (this.mainWrapper) {
+			this.mainWrapper.focus();
+		}
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -1816,6 +1820,10 @@ class Text extends React.PureComponent {
 		this.closeContextMenu();
 	};
 
+	mainWrapperRef = (el) => {
+		this.mainWrapper = el;
+	};
+
 	render() {
 		const {
 			activeChapter,
@@ -1944,7 +1952,7 @@ class Text extends React.PureComponent {
 						) : null}
 					</div>
 				</PrefetchLink>
-				<div className={'main-wrapper'}>
+				<div ref={this.mainWrapperRef} className={'main-wrapper'}>
 					<main
 						ref={this.setMainRef}
 						className={getClassNameForMain(
