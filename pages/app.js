@@ -233,7 +233,7 @@ class AppContainer extends React.Component {
 		// const descriptionText = chapterText.map((v) => v.verse_text).join(' ');
 		// Defaulting description text to an empty string since no metadata is better than inaccurate metadata
 		const descriptionText =
-			chapterText && chapterText[0] ? `${chapterText[0].verse_text}....` : '';
+			chapterText && chapterText[0] ? `${chapterText[0].verse_text}...` : '';
 
 		return (
 			<div>
@@ -284,15 +284,16 @@ AppContainer.getInitialProps = async (context) => {
 	const { req, res: serverRes } = context;
 	const routeLocation = context.asPath;
 	const {
-		bibleId = 'ENGESV',
 		bookId = 'GEN',
 		chapter = 7,
+		bibleId = 'ENGESV',
 		verse,
 		token,
 	} = context.query;
 	const userProfile = {};
 	// console.log('context.query', context.query);
 
+	let hasVideo = false;
 	let isFromServer = true;
 	// console.log('all state', context.reduxStore.getState().get('homepage'))
 	// let userSettings = context.reduxStore.getState().getIn(['homepage', 'userSettings']).toJS();
@@ -393,16 +394,7 @@ AppContainer.getInitialProps = async (context) => {
 	}/bibles/filesets/${bibleId}/${bookId}/${chapter}?key=${
 		process.env.DBP_API_KEY
 	}&v=4`;
-	// const bookMetaDataUrl = `${
-	// 	process.env.BASE_API_ROUTE
-	// }/bibles/${bibleId}/book?key=${process.env.DBP_API_KEY}&v=4&iso=eng&bucket=${
-	// 	process.env.DBP_BUCKET_ID
-	// }`;
-	// Get all bibles
-	// const bibleRes = await fetch(biblesUrl);
-	// const bibleJson = await bibleRes.json();
-	// const texts = bibleJson.data;
-	// console.log(singleBibleUrl)
+
 	// Get active bible data
 	const singleBibleRes = await cachedFetch(singleBibleUrl).catch((e) => {
 		if (process.env.NODE_ENV === 'development') {
@@ -410,10 +402,18 @@ AppContainer.getInitialProps = async (context) => {
 		}
 		return { data: {} };
 	});
-	// console.log(singleBibleRes)
+	// console.log(
+	//   'singleBibleRes.data.filesets["dbp-prod"]',
+	//   singleBibleRes.data.filesets['dbp-prod'],
+	// );
+	// console.log(
+	//   'singleBibleRes.data.filesets["dbp-vid"]',
+	//   singleBibleRes.data.filesets['dbp-vid'],
+	// );
 	const singleBibleJson = singleBibleRes;
 	// console.log('single bible', singleBibleJson);
 	const bible = singleBibleJson.data;
+	// Acceptable fileset types that the site is capable of ingesting and displaying
 	const setTypes = {
 		audio_drama: true,
 		audio: true,
@@ -442,6 +442,7 @@ AppContainer.getInitialProps = async (context) => {
 		bible.filesets[process.env.DBP_BUCKET_ID] &&
 		bible.filesets['dbp-vid']
 	) {
+		hasVideo = true;
 		// console.log('inside if with dbp-vid',  [...bible.filesets[process.env.DBP_BUCKET_ID], ...bible.filesets['dbp-vid']])
 		filesets = [
 			...bible.filesets[process.env.DBP_BUCKET_ID],
@@ -551,22 +552,34 @@ AppContainer.getInitialProps = async (context) => {
 		// If the book wasn't found and chapter wasn't found
 		// Go to the first book and first chapter
 		if (!foundBook && !foundChapter) {
+			// Logs the url that will be redirected to
 			// console.log('url', `${req.protocol}://${req.hostname}${reqPort}/bible/${bibleId}/${bookMetaData[0].book_id}/${bookMetaData[0].chapters[0]}`);
 			if (serverRes) {
 				// console.log('redirecting 1');
-				serverRes.writeHead(302, {
-					Location: `${req.protocol}://${req.get('host')}/bible/${bibleId}/${
-						bookMetaData[0].book_id
-					}/${bookMetaData[0].chapters[0]}`,
-				});
+				// If there wasn't a book then we need to redirect to mark for video resources and matthew for other resources
+				hasVideo
+					? serverRes.writeHead(302, {
+							Location: `${req.protocol}://${req.get(
+								'host',
+							)}/bible/${bibleId}/mrk/1`,
+					  })
+					: serverRes.writeHead(302, {
+							Location: `${req.protocol}://${req.get(
+								'host',
+							)}/bible/${bibleId}/${bookMetaData[0].book_id}/${
+								bookMetaData[0].chapters[0]
+							}`,
+					  });
 				serverRes.end();
 			} else {
 				// console.log('window 1');
-				Router.push(
-					`${window.location.origin}/bible/${bibleId}/${
-						bookMetaData[0].book_id
-					}/${bookMetaData[0].chapters[0]}`,
-				);
+				hasVideo
+					? Router.push(`${window.location.origin}/bible/${bibleId}/mrk/1`)
+					: Router.push(
+							`${window.location.origin}/bible/${bibleId}/${
+								bookMetaData[0].book_id
+							}/${bookMetaData[0].chapters[0]}`,
+					  );
 			}
 		} else if (foundBook) {
 			// if the book was found
