@@ -43,6 +43,7 @@ class VersionList extends React.PureComponent {
 			filterText,
 		} = this.props;
 		// const { filterText } = this.state;
+		// console.log('bibles', bibles);
 
 		const filteredBibles = filterText
 			? bibles.filter((bible) =>
@@ -56,14 +57,21 @@ class VersionList extends React.PureComponent {
 			(acc, bible) => [
 				...acc,
 				{
-					path: `/${bible.get('abbr').toLowerCase()}/mat/1`,
+					path: `/${bible.get('abbr').toLowerCase()}/${
+						bible
+							.get('filesets')
+							.filter((set) => set.get('type') === 'video_stream').size
+							? 'mrk'
+							: 'mat'
+					}/1`,
 					key: `${bible.get('abbr')}${bible.get('date')}`,
 					clickHandler: (audioType) =>
 						this.handleVersionListClick(bible, audioType),
 					className: bible.get('abbr') === activeTextId ? 'active-version' : '',
 					title: bible.get('name'),
 					text: bible.get('vname') || bible.get('name'),
-					altText: bible.get('vname') ? bible.get('name') : '',
+					altText:
+						bible.get('vname') !== bible.get('name') ? bible.get('name') : '',
 					types: bible
 						.get('filesets')
 						.reduce((a, c) => ({ ...a, [c.get('type')]: true }), {}),

@@ -62,8 +62,10 @@ class VideoPlayer extends React.PureComponent {
 		if (
 			nextProps.bookId !== this.props.bookId ||
 			nextProps.chapter !== this.props.chapter ||
-			Object.keys(deepDifferenceObject(nextProps.fileset, this.props.fileset))
-				.length
+			(nextProps.fileset &&
+				this.props.fileset &&
+				Object.keys(deepDifferenceObject(nextProps.fileset, this.props.fileset))
+					.length)
 		) {
 			if (nextProps.hasVideo) {
 				this.getVideos({

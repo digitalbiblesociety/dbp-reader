@@ -17,6 +17,7 @@ import {
 import Link from 'next/link';
 
 function VersionListSection({ items }) {
+	// console.log('items', items);
 	return (
 		<Accordion>
 			{items.map((item) => {

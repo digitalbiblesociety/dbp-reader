@@ -99,12 +99,29 @@ export function* getTexts({ languageCode }) {
 		process.env.DBP_BUCKET_ID
 	}&key=${process.env.DBP_API_KEY}&language_code=${languageCode}&v=4`;
 	// }
+	const videoRequestUrl = `${
+		process.env.BASE_API_ROUTE
+	}/bibles?&bucket_id=dbp-vid&key=${
+		process.env.DBP_API_KEY
+	}&language_code=${languageCode}&v=4`;
+	// }
 	// https://api.dbp4.org/bibles?&bucket_id=$dbp-prod&key=1234&language_code=8076&v=4
 	try {
 		const response = yield call(request, requestUrl);
+		const videoRes = yield call(request, videoRequestUrl);
+		// console.log('getting bibles for the selector', response.data);
+		// console.log('video response', videoRes);
 		// Some texts may have plain text in the database but no filesets
 		// This filters out all texts that don't have a fileset
 		// console.log('response', response);
+		const videos = videoRes.data.filter(
+			(video) =>
+				video.name &&
+				video.abbr &&
+				video.language &&
+				video.language_id &&
+				video.iso,
+		);
 		/* I am getting a strange response for certain texts that are in the dbp-dev bucket. However I only get the response when I have the bucket specified. So far it is only occurring for the Melpa and Mende bibles.  If you are still working tonight I can send you more details, otherwise I can just leave it until Monday. */
 		const texts = response.data.filter(
 			(text) =>
@@ -121,16 +138,33 @@ export function* getTexts({ languageCode }) {
 							f.type === 'text_format',
 					)),
 		);
+		// console.log('videos', videos);
+		// console.log('texts', texts);
+		// Create map of videos for constant time lookup when iterating through the texts
+		const videosMap = videos.reduce((a, c) => ({ ...a, [c.abbr]: c }), {});
+		// console.log('videos map', videosMap);
+		// Find any overlapping bibles between the videos and texts
+		// Combine the filesets for only those overlapping bibles
 		const mappedTexts = texts.map((text) => ({
 			...text,
-			filesets:
-				text.filesets[process.env.DBP_BUCKET_ID].filter(
-					(f) =>
-						f.type === 'audio' ||
-						f.type === 'audio_drama' ||
-						f.type === 'text_plain' ||
-						f.type === 'text_format',
-				) || [],
+			filesets: videosMap[text.abbr]
+				? [
+						...text.filesets[process.env.DBP_BUCKET_ID].filter(
+							(f) =>
+								f.type === 'audio' ||
+								f.type === 'audio_drama' ||
+								f.type === 'text_plain' ||
+								f.type === 'text_format',
+						),
+						...videosMap[text.abbr].filesets['dbp-vid'],
+				  ] || []
+				: text.filesets[process.env.DBP_BUCKET_ID].filter(
+						(f) =>
+							f.type === 'audio' ||
+							f.type === 'audio_drama' ||
+							f.type === 'text_plain' ||
+							f.type === 'text_format',
+				  ) || [],
 		}));
 		// console.log(texts);
 		// console.log('mappedTexts', mappedTexts);
