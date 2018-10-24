@@ -714,6 +714,7 @@ class Text extends React.PureComponent {
 			activeBookId,
 		} = this.props;
 		// console.log('initialText', initialText);
+		console.log('highlights', highlights);
 		const initialFormattedSource = JSON.parse(
 			JSON.stringify(initialFormattedSourceFromProps),
 		);
@@ -1227,7 +1228,7 @@ class Text extends React.PureComponent {
 	addHighlight = ({ color, popupCoords }) => {
 		let highlightObject = {};
 		// console.log('this.state.wholeVerseIsSelected', this.state.wholeVerseIsSelected);
-
+		console.log('add highlight function', this.props.activeTextId);
 		// Getting the data for the tests
 		// console.log(JSON.stringify(this.props));
 		// console.log(JSON.stringify(this.state));
@@ -1273,6 +1274,7 @@ class Text extends React.PureComponent {
 							t.verse_start_alt === verse,
 					).verse_text.length;
 					highlightObject = {
+						bible: this.props.activeTextId,
 						book: this.props.activeBookId,
 						chapter: this.props.activeChapter,
 						verseStart: verse,
@@ -1310,6 +1312,7 @@ class Text extends React.PureComponent {
 						.replace(/[\r\n*✝]/g, '').length;
 					// console.log('highlightedWords', highlightedWords);
 					highlightObject = {
+						bible: this.props.activeTextId,
 						book: this.props.activeBookId,
 						chapter: this.props.activeChapter,
 						verseStart: verse,
@@ -1326,7 +1329,7 @@ class Text extends React.PureComponent {
 				}
 
 				if (highlightObject) {
-					// console.log('highlightObject', highlightObject);
+					console.log('highlightObject', highlightObject);
 
 					this.props.addHighlight(highlightObject);
 				}
@@ -1635,8 +1638,24 @@ class Text extends React.PureComponent {
 						// should add a confirmation or something here
 						this.props.deleteHighlights({ ids: highsToDelete });
 					} else {
-						// console.log('Tried to add the highlight anyway... -_-');
+						console.log('active text', this.props.activeTextId);
+						console.log('Tried to add the highlight anyway... -_-', {
+							bible: this.props.activeTextId,
+							book: this.props.activeBookId,
+							chapter: this.props.activeChapter,
+							verseStart: firstVerse,
+							color,
+							highlightStart,
+							highlightedWords,
+							reference: getReference(
+								firstVerse,
+								lastVerse,
+								this.props.activeBookName,
+								this.props.activeChapter,
+							),
+						});
 						this.props.addHighlight({
+							bible: this.props.activeTextId,
 							book: this.props.activeBookId,
 							chapter: this.props.activeChapter,
 							verseStart: firstVerse,

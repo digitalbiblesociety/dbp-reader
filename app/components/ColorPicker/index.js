@@ -20,7 +20,7 @@ function ColorPicker({ handlePickedColor }) {
 					role={'button'}
 					tabIndex={-1}
 					className={'yellow'}
-					onClick={() => handlePickedColor({ color: '252,230,0,.5' })}
+					onClick={() => handlePickedColor({ color: 'rgba(252,230,0,.5)' })}
 				/>
 			</span>
 			<span className={'color-group'}>
@@ -30,7 +30,7 @@ function ColorPicker({ handlePickedColor }) {
 					role={'button'}
 					tabIndex={-2}
 					className={'green'}
-					onClick={() => handlePickedColor({ color: '84,185,72,.5' })}
+					onClick={() => handlePickedColor({ color: 'rgba(84,185,72,.5)' })}
 				/>
 			</span>
 			<span className={'color-group'}>
@@ -40,7 +40,7 @@ function ColorPicker({ handlePickedColor }) {
 					role={'button'}
 					tabIndex={-3}
 					className={'pink'}
-					onClick={() => handlePickedColor({ color: '208,105,169,.5' })}
+					onClick={() => handlePickedColor({ color: 'rgba(208,105,169,.5)' })}
 				/>
 			</span>
 			<span className={'color-group'}>
@@ -50,7 +50,7 @@ function ColorPicker({ handlePickedColor }) {
 					role={'button'}
 					tabIndex={-4}
 					className={'purple'}
-					onClick={() => handlePickedColor({ color: '137,103,172,.5' })}
+					onClick={() => handlePickedColor({ color: 'rgba(137,103,172,.5)' })}
 				/>
 			</span>
 			<span className={'color-group'}>
@@ -60,7 +60,7 @@ function ColorPicker({ handlePickedColor }) {
 					role={'button'}
 					tabIndex={-5}
 					className={'blue'}
-					onClick={() => handlePickedColor({ color: '80,165,220,.5' })}
+					onClick={() => handlePickedColor({ color: 'rgba(80,165,220,.5)' })}
 				/>
 			</span>
 		</div>

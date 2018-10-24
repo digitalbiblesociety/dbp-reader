@@ -146,13 +146,15 @@ const createFormattedHighlights = (
 							if (
 								a.highlight_start + a.highlighted_words <
 								b.highlight_start + b.highlighted_words
-							)
+							) {
 								return -1;
+							}
 							if (
 								a.highlight_start + a.highlighted_words >
 								b.highlight_start + b.highlighted_words
-							)
+							) {
 								return 1;
+							}
 							// I want the newest highlight to be before the older highlight
 							if (a.id > b.id) return 1;
 							if (a.id < b.id) return -1;
@@ -290,9 +292,9 @@ function handleNewVerse({ highlightsStartingInVerse, verseText }) {
 	highlightsStartingInVerse.forEach((h, i) => {
 		const nextHighlight = highlightsStartingInVerse[i + 1];
 		/* COMMONLY USED VALUES */
-		const backgroundStyle = `style="background:linear-gradient(rgba(${
+		const backgroundStyle = `style="background:linear-gradient(${
 			h.highlighted_color ? h.highlighted_color : 'inherit'
-		}),rgba(${h.highlighted_color ? h.highlighted_color : 'inherit'}))"`;
+		},${h.highlighted_color ? h.highlighted_color : 'inherit'})"`;
 		const highlightLength = h.highlight_start + (h.highlighted_words - 1);
 
 		/* HIGHLIGHT STARTS IN A LATER SECTION OF THIS VERSE */

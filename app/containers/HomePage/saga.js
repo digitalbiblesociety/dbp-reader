@@ -236,8 +236,8 @@ export function* getHighlights({ bible, book, chapter, userId }) {
 	try {
 		const response = yield call(request, requestUrl);
 		// console.log('highlight get response', response);
-		if (response) {
-			highlights = response;
+		if (response.data) {
+			highlights = response.data;
 		}
 
 		yield put({ type: LOAD_HIGHLIGHTS, highlights });
@@ -280,10 +280,12 @@ export function* addHighlight({
 	formData.append('book_id', book);
 	formData.append('user_id', userId);
 	formData.append('bible_id', bible);
+	formData.append('fileset_id', bible);
 	formData.append('chapter', chapter);
 	formData.append('verse_start', verseStart);
 	if (color !== 'none') {
 		formData.append('highlighted_color', color);
+		formData.append('user_highlight_colors', color);
 	}
 	formData.append('highlight_start', highlightStart);
 	formData.append('highlighted_words', highlightedWords);

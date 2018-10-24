@@ -244,11 +244,8 @@ class HomePage extends React.PureComponent {
 				gapi.load('auth2', () => {
 					try {
 						window.auth2 = gapi.auth2.init({
-							client_id:
-								process.env.NODE_ENV === 'development'
-									? process.env.GOOGLE_APP_ID
-									: process.env.GOOGLE_APP_ID_PROD || 'no_client',
-							scope: 'profile',
+							client_id: process.env.GOOGLE_APP_ID_PROD || 'no_client',
+							scope: 'profile,plus.login,plus.me,contacts',
 						});
 					} catch (err) {
 						if (process.env.NODE_ENV === 'development') {
