@@ -38,7 +38,7 @@ function HighlightColors({ addHighlight }) {
 					onClick={(e) =>
 						addHighlight({
 							popupCoords: { x: e.clientX, y: e.clientY },
-							color: '252,230,0,.5',
+							color: 'rgba(252,230,0,.5)',
 						})
 					}
 				/>
@@ -54,7 +54,7 @@ function HighlightColors({ addHighlight }) {
 					onClick={(e) =>
 						addHighlight({
 							popupCoords: { x: e.clientX, y: e.clientY },
-							color: '84,185,72,.5',
+							color: 'rgba(84,185,72,.5)',
 						})
 					}
 				/>
@@ -70,7 +70,7 @@ function HighlightColors({ addHighlight }) {
 					onClick={(e) =>
 						addHighlight({
 							popupCoords: { x: e.clientX, y: e.clientY },
-							color: '208,105,169,.5',
+							color: 'rgba(208,105,169,.5)',
 						})
 					}
 				/>
@@ -86,7 +86,7 @@ function HighlightColors({ addHighlight }) {
 					onClick={(e) =>
 						addHighlight({
 							popupCoords: { x: e.clientX, y: e.clientY },
-							color: '137,103,172,.5',
+							color: 'rgba(137,103,172,.5)',
 						})
 					}
 				/>
@@ -102,7 +102,7 @@ function HighlightColors({ addHighlight }) {
 					onClick={(e) =>
 						addHighlight({
 							popupCoords: { x: e.clientX, y: e.clientY },
-							color: '80,165,220,.5',
+							color: 'rgba(80,165,220,.5)',
 						})
 					}
 				/>
