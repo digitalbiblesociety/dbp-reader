@@ -1,3 +1,5 @@
+const replaceCharsRegex = new RegExp(/[\r\n※†*✝]/g);
+
 const preorderTraverse = (node, array) => {
 	if (!node) {
 		return array;
@@ -161,7 +163,7 @@ const getOffsetNeededForPsalms = ({ refNode, book, chapter, verse, node }) => {
 	const previous = verseNodes.slice(0, verseNodes.indexOf(node));
 
 	return previous.reduce(
-		(a, c) => a + c.textContent.replace(/[\n\r*✝]/, '').length,
+		(a, c) => a + c.textContent.replace(replaceCharsRegex, '').length,
 		0,
 	);
 };
@@ -192,7 +194,7 @@ const getTextInSelectedNodes = ({
 	// console.log('verseNodes', verseNodes);
 
 	return verseNodes.reduce(
-		(a, c) => a + c.textContent.replace(/[\n\r*✝]/, '').length,
+		(a, c) => a + c.textContent.replace(replaceCharsRegex, '').length,
 		0,
 	);
 };
@@ -208,4 +210,5 @@ export {
 	preorderTraverse,
 	getClosestParent,
 	getOffsetNeededForPsalms,
+	replaceCharsRegex,
 };

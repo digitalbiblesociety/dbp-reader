@@ -558,7 +558,7 @@ body .atlwdg-trigger.atlwdg-RIGHT {
 // Formatted Text Overrides
 body #__next main .v-num {
 	@include css4 {
-		color: var(--default-text-color);
+		color: var(--default-verse-number-color);
 	}
 }
 

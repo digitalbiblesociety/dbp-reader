@@ -26,6 +26,7 @@ import {
 	getPlainParentVerseWithoutNumber,
 	getClosestParent,
 	getOffsetNeededForPsalms,
+	replaceCharsRegex,
 } from '../../utils/highlightingUtils';
 import getPreviousChapterUrl from '../../utils/getPreviousChapterUrl';
 import getNextChapterUrl from '../../utils/getNextChapterUrl';
@@ -696,6 +697,7 @@ class Text extends React.PureComponent {
 		}
 	};
 
+	// This function runs far, far too often
 	getTextComponents(dommountedsostuffworks) {
 		const {
 			text: initialText,
@@ -714,7 +716,7 @@ class Text extends React.PureComponent {
 			activeBookId,
 		} = this.props;
 		// console.log('initialText', initialText);
-		console.log('highlights', highlights);
+		// console.log('highlights', highlights);
 		const initialFormattedSource = JSON.parse(
 			JSON.stringify(initialFormattedSourceFromProps),
 		);
@@ -1227,8 +1229,11 @@ class Text extends React.PureComponent {
 
 	addHighlight = ({ color, popupCoords }) => {
 		let highlightObject = {};
-		// console.log('this.state.wholeVerseIsSelected', this.state.wholeVerseIsSelected);
-		console.log('add highlight function', this.props.activeTextId);
+		console.log(
+			'this.state.wholeVerseIsSelected',
+			this.state.wholeVerseIsSelected,
+		);
+		console.log('this.state.selectedText:', `~${this.state.selectedText}~`);
 		// Getting the data for the tests
 		// console.log(JSON.stringify(this.props));
 		// console.log(JSON.stringify(this.state));
@@ -1306,11 +1311,20 @@ class Text extends React.PureComponent {
 						: [];
 					// console.log('verseElements', verseElements);
 					// console.log('verseElements.reduce((a, c) => a.concat(c.textContent), \'\')', verseElements.reduce((a, c) => a.concat(c.textContent), ''));
+					console.log(
+						'verse that I am getting length for::',
+						`~${verseElements
+							.reduce((a, c) => a.concat(c.textContent), '')
+							.replace(replaceCharsRegex, '')}~`,
+					);
 
 					const highlightedWords = verseElements
 						.reduce((a, c) => a.concat(c.textContent), '')
-						.replace(/[\r\n*✝]/g, '').length;
-					// console.log('highlightedWords', highlightedWords);
+						.replace(replaceCharsRegex, '').length;
+					console.log(
+						'highlightedWords for whole verse click',
+						highlightedWords,
+					);
 					highlightObject = {
 						bible: this.props.activeTextId,
 						book: this.props.activeBookId,
@@ -1329,8 +1343,7 @@ class Text extends React.PureComponent {
 				}
 
 				if (highlightObject) {
-					console.log('highlightObject', highlightObject);
-
+					// console.log('highlightObject for single click', highlightObject);
 					this.props.addHighlight(highlightObject);
 				}
 
@@ -1575,7 +1588,11 @@ class Text extends React.PureComponent {
 					// need to remove all line breaks and note characters
 
 					highlightedWords =
-						selectedText.replace(/[\r\n*✝]/g, '').length - dist;
+						selectedText.replace(replaceCharsRegex, '').length - dist;
+					console.log('anchorText:', anchorText);
+					console.log('anchorOffset:', anchorOffset);
+					console.log('highlightStart:', highlightStart);
+					console.log('highlightedWords:', highlightedWords);
 				} else {
 					node = getPlainParentVerse(node, firstVerse);
 					// taking off the first 2 spaces and the verse number from the string
@@ -1638,22 +1655,24 @@ class Text extends React.PureComponent {
 						// should add a confirmation or something here
 						this.props.deleteHighlights({ ids: highsToDelete });
 					} else {
-						console.log('active text', this.props.activeTextId);
-						console.log('Tried to add the highlight anyway... -_-', {
-							bible: this.props.activeTextId,
-							book: this.props.activeBookId,
-							chapter: this.props.activeChapter,
-							verseStart: firstVerse,
-							color,
-							highlightStart,
-							highlightedWords,
-							reference: getReference(
-								firstVerse,
-								lastVerse,
-								this.props.activeBookName,
-								this.props.activeChapter,
-							),
-						});
+						// console.log(
+						//   'Tried to add the highlight anyway... -_- selected with cursor',
+						//   {
+						//     bible: this.props.activeTextId,
+						//     book: this.props.activeBookId,
+						//     chapter: this.props.activeChapter,
+						//     verseStart: firstVerse,
+						//     color,
+						//     highlightStart,
+						//     highlightedWords,
+						//     reference: getReference(
+						//       firstVerse,
+						//       lastVerse,
+						//       this.props.activeBookName,
+						//       this.props.activeChapter,
+						//     ),
+						//   },
+						// );
 						this.props.addHighlight({
 							bible: this.props.activeTextId,
 							book: this.props.activeBookId,
