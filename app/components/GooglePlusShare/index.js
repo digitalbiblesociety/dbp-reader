@@ -12,6 +12,7 @@ class GooglePlusShare extends React.PureComponent {
 				contenturl: window.location.href,
 				contentdeeplinkid: '/bible',
 				clientid: process.env.GOOGLE_APP_ID_PROD,
+				clientsecret: process.env.GOOGLE_SECRET_PROD,
 				cookiepolicy: 'single_host_origin',
 				prefilltext: `"${this.props.quote}" - ${document.title}`,
 				calltoactionlabel: 'VISIT',
@@ -21,6 +22,7 @@ class GooglePlusShare extends React.PureComponent {
 
 			// console.log('window.location.href', window.location.href);
 			gapi.interactivepost.render('sharePost', options);
+			// gapi.plus.render('sharePost', options);
 			/* eslint-enable no-undef */
 		}
 	}

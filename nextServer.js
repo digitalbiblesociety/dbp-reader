@@ -1,7 +1,7 @@
 if (process.env.NODE_ENV === 'production') {
 	require('newrelic'); // eslint-disable-line
 }
-require('babel-polyfill');
+require('@babel/polyfill');
 const express = require('express');
 const next = require('next');
 const compression = require('compression');

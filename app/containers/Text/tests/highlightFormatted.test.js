@@ -1097,4 +1097,66 @@ describe('highlightFormattedText', () => {
 			expectedResult,
 		);
 	});
+	it('Case: 30 Should apply a highlight across a paragraph where start of verse is in first p tag and end of verse is in second p tag', () => {
+		const highlights = [
+			{
+				bible_id: 'ENGNAB',
+				reference: 'Matthew 2:6',
+				chapter: 2,
+				book_id: 'MAT',
+				highlighted_color: '80,165,220,.25',
+				highlight_start: 0,
+				verse_start: 6,
+				id: 651,
+				highlighted_words: 155, // 35 + 48 + 34 + 38
+			},
+		];
+		const sampleText =
+			'<div class="chapter section ENGNAB_70_MAT_2 ENGNAB ENG MAT latin" dir="ltr" data-id="ENGNAB_70_MAT_2" data-nextid="MAT3" data-previd="MAT1" lang="ENG"> <div class="c"> Matthew 2</div> <h3 class="s">The Visit of the Magi. <span class="note" id="note-24"><a href="#footnote-24" class="key">※</a></span></h3><p><span class="verse1 v-num v-1">1&nbsp;</span><span class="v MAT2_1" data-id="MAT2_1">When Jesus was born in Bethlehem of Herod, <span class="note" id="note-25"><a href="#footnote-25" class="key">※</a></span> behold, magi from the east arrived in Jerusalem,</span> <span class="verse2 v-num v-2">2&nbsp;</span><span class="v MAT2_2" data-id="MAT2_2">saying, Judea, in the days of King “Where is the newborn king of the Jews? We saw his star <span class="note" id="note-26"><a href="#footnote-26" class="key">※</a></span> at its rising and have come to do him homage.” <span class="note" id="note-27"><a href="#footnote-27" class="key">†</a></span></span> <span class="verse3 v-num v-3">3&nbsp;</span><span class="v MAT2_3" data-id="MAT2_3">When King Herod heard this, he was greatly troubled, and all Jerusalem with him.</span> <span class="verse4 v-num v-4">4&nbsp;</span><span class="v MAT2_4" data-id="MAT2_4">Assembling all the chief priests and the scribes of the people, he inquired of them where the Messiah was to be born. <span class="note" id="note-28"><a href="#footnote-28" class="key">※</a></span></span> <span class="verse5 v-num v-5">5&nbsp;</span><span class="v MAT2_5" data-id="MAT2_5"><span class="note" id="note-29"><a href="#footnote-29" class="key">†</a></span> They said to him, “In Bethlehem of Judea, for thus it has been written through the prophet:</span> </p><div class="q"><span class="verse6 v-num v-6">6&nbsp;</span><span class="v MAT2_6" data-id="MAT2_6">‘And you, Bethlehem, land of Judah,</span> </div><div class="q MAT2_6" data-id="MAT2_6">are by no means least among the rulers of Judah;</div><div class="q MAT2_6" data-id="MAT2_6">since from you shall come a ruler,</div><div class="q MAT2_6" data-id="MAT2_6">who is to shepherd my people Israel.’”</div><p><span class="verse7 v-num v-7">7&nbsp;</span><span class="v MAT2_7" data-id="MAT2_7">Then Herod called the magi secretly and ascertained from them the time of the star’s appearance.</span> <span class="verse8 v-num v-8">8&nbsp;</span><span class="v MAT2_8" data-id="MAT2_8">He sent them to Bethlehem and said, “Go and search diligently for the child. When you have found him, bring me word, that I too may go and do him homage.”</span></p></div>';
+		// Need to update the expected result!!!
+		// console.log('highlights', highlights)
+		const expectedResult = `<div class="chapter section ENGNAB_70_MAT_2 ENGNAB ENG MAT latin" dir="ltr" data-id="ENGNAB_70_MAT_2" data-nextid="MAT3" data-previd="MAT1" lang="ENG"> <div class="c"> Matthew 2</div> <h3 class="s">The Visit of the Magi. <span class="note" id="note-24"><a href="#footnote-24" class="key">※</a></span></h3><p><span class="verse1 v-num v-1">1&nbsp;</span><span class="v MAT2_1" data-id="MAT2_1"><span>When Jesus was born in Bethlehem of Herod, </span><span class="note" id="note-25"><a href="#footnote-25" class="key">※</a></span><span> behold, magi from the east arrived in Jerusalem,</span></span> <span class="verse2 v-num v-2">2&nbsp;</span><span class="v MAT2_2" data-id="MAT2_2"><span>saying, Judea, in the days of King “Where is the newborn king of the Jews? We saw his star </span><span class="note" id="note-26"><a href="#footnote-26" class="key">※</a></span><span> at its rising and have come to do him homage.” </span><span class="note" id="note-27"><a href="#footnote-27" class="key">†</a></span></span> <span class="verse3 v-num v-3">3&nbsp;</span><span class="v MAT2_3" data-id="MAT2_3"><span>When King Herod heard this, he was greatly troubled, and all Jerusalem with him.</span></span> <span class="verse4 v-num v-4">4&nbsp;</span><span class="v MAT2_4" data-id="MAT2_4"><span>Assembling all the chief priests and the scribes of the people, he inquired of them where the Messiah was to be born. </span><span class="note" id="note-28"><a href="#footnote-28" class="key">※</a></span></span> <span class="verse5 v-num v-5">5&nbsp;</span><span class="v MAT2_5" data-id="MAT2_5"><span class="note" id="note-29"><a href="#footnote-29" class="key">†</a></span><span> They said to him, “In Bethlehem of Judea, for thus it has been written through the prophet:</span></span> </p><div class="q"><span class="verse6 v-num v-6">6&nbsp;</span><span class="v MAT2_6" data-id="MAT2_6"><span><em ${getStartingEmAttributes(
+			highlights[0].highlighted_color,
+		)}>‘And you, Bethlehem, land of Judah,</em></span></span> </div><div class="q MAT2_6" data-id="MAT2_6"><span><em ${getStartingEmAttributes(
+			highlights[0].highlighted_color,
+		)}>are by no means least among the rulers of Judah;</em></span></div><div class="q MAT2_6" data-id="MAT2_6"><span><em ${getStartingEmAttributes(
+			highlights[0].highlighted_color,
+		)}>since from you shall come a ruler,</em></span></div><div class="q MAT2_6" data-id="MAT2_6"><span><em ${getStartingEmAttributes(
+			highlights[0].highlighted_color,
+		)}>who is to shepherd my people Israel.’”</em></span></div><p><span class="verse7 v-num v-7">7&nbsp;</span><span class="v MAT2_7" data-id="MAT2_7"><span>Then Herod called the magi secretly and ascertained from them the time of the star’s appearance.</span></span> <span class="verse8 v-num v-8">8&nbsp;</span><span class="v MAT2_8" data-id="MAT2_8"><span>He sent them to Bethlehem and said, “Go and search diligently for the child. When you have found him, bring me word, that I too may go and do him homage.”</span></span></p></div>`;
+
+		expect(highlightFormattedText(highlights, sampleText, JSDOM)).toEqual(
+			expectedResult,
+		);
+	});
+	it('Case: 31 needs a description', () => {
+		const highlights = [
+			{
+				bible_id: 'ENGNAB',
+				reference: 'Matthew 4:4',
+				chapter: 4,
+				book_id: 'MAT',
+				highlighted_color: '80,165,220,.25',
+				highlight_start: 0,
+				verse_start: 4,
+				id: 652,
+				highlighted_words: 127, // 35 + 48 + 34 + 38
+			},
+		];
+		const sampleText =
+			'<div class="chapter section ENGNAB_70_MAT_4 ENGNAB ENG MAT latin" dir="ltr" data-id="ENGNAB_70_MAT_4" data-nextid="MAT5" data-previd="MAT3" lang="ENG"><p><span class="verse3 v-num v-3">3&nbsp;</span><span class="v MAT4_3" data-id="MAT4_3">The tempter approached and said to him, “If you are the Son of God, command that these stones become loaves of bread.”</span><span class="verse4 v-num v-4">4&nbsp;</span><span class="v MAT4_4" data-id="MAT4_4"><span class="note" id="note-71"><a href="#footnote-71" class="key">※</a></span>He said in reply, “It is written: <span class="note" id="note-72"><a href="#footnote-72" class="key">†</a></span></span></p><div class="q MAT4_4" data-id="MAT4_4">‘One does not live by bread alone,</div><div class="q MAT4_4" data-id="MAT4_4">but by every word that comes forth from the mouth of God.’”</div><p><span class="verse5 v-num v-5">5&nbsp;</span><span class="v MAT4_5" data-id="MAT4_5"><span class="note" id="note-73"><a href="#footnote-73" class="key">※</a></span> Then the devil took him to the holy city, and made him stand on the parapet of the temple,</span></p></div>';
+		// Need to update the expected result!!!
+		// console.log('highlights', highlights)
+		const expectedResult = `<div class="chapter section ENGNAB_70_MAT_4 ENGNAB ENG MAT latin" dir="ltr" data-id="ENGNAB_70_MAT_4" data-nextid="MAT5" data-previd="MAT3" lang="ENG"><p><span class="verse3 v-num v-3">3&nbsp;</span><span class="v MAT4_3" data-id="MAT4_3"><span>The tempter approached and said to him, “If you are the Son of God, command that these stones become loaves of bread.”</span></span><span class="verse4 v-num v-4">4&nbsp;</span><span class="v MAT4_4" data-id="MAT4_4"><span class="note" id="note-71"><a href="#footnote-71" class="key">※</a></span><span><em ${getStartingEmAttributes(
+			highlights[0].highlighted_color,
+		)}>He said in reply, “It is written: </em></span><span class="note" id="note-72"><a href="#footnote-72" class="key">†</a></span></span></p><div class="q MAT4_4" data-id="MAT4_4"><span><em ${getStartingEmAttributes(
+			highlights[0].highlighted_color,
+		)}>‘One does not live by bread alone,</em></span></div><div class="q MAT4_4" data-id="MAT4_4"><span><em ${getStartingEmAttributes(
+			highlights[0].highlighted_color,
+		)}>but by every word that comes forth from the mouth of God.’”</em></span></div><p><span class="verse5 v-num v-5">5&nbsp;</span><span class="v MAT4_5" data-id="MAT4_5"><span class="note" id="note-73"><a href="#footnote-73" class="key">※</a></span><span> Then the devil took him to the holy city, and made him stand on the parapet of the temple,</span></span></p></div>`;
+
+		expect(highlightFormattedText(highlights, sampleText, JSDOM)).toEqual(
+			expectedResult,
+		);
+	});
 });

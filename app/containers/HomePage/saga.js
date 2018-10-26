@@ -223,7 +223,7 @@ export function* getHighlights({ bible, book, chapter, userId }) {
 	const requestUrl = `${process.env.BASE_API_ROUTE}/users/${userId ||
 		'no_user_id'}/highlights?key=${process.env.DBP_API_KEY}&v=4&project_id=${
 		process.env.NOTES_PROJECT_ID
-	}&bible_id=${bible}&book_id=${book}&chapter=${chapter}`;
+	}&bible_id=${bible}&book_id=${book}&chapter=${chapter}&limit=1000`;
 	let highlights = [];
 
 	// const options = {
@@ -236,8 +236,8 @@ export function* getHighlights({ bible, book, chapter, userId }) {
 	try {
 		const response = yield call(request, requestUrl);
 		// console.log('highlight get response', response);
-		if (response) {
-			highlights = response;
+		if (response.data) {
+			highlights = response.data;
 		}
 
 		yield put({ type: LOAD_HIGHLIGHTS, highlights });
@@ -271,7 +271,7 @@ export function* addHighlight({
 		process.env.DBP_API_KEY
 	}&v=4&bible_id=${bible}&book_id=${book}&chapter=${chapter}&project_id=${
 		process.env.NOTES_PROJECT_ID
-	}`;
+	}&limit=1000`;
 	const formData = new FormData();
 	// console.log('data for highlight { bible, book, chapter, userId, verseStart, highlightStart, highlightedWords, color }', { bible, book, chapter, userId, verseStart, highlightStart, highlightedWords, color });
 	if (!userId || color === 'none') {
@@ -280,10 +280,12 @@ export function* addHighlight({
 	formData.append('book_id', book);
 	formData.append('user_id', userId);
 	formData.append('bible_id', bible);
+	formData.append('fileset_id', bible);
 	formData.append('chapter', chapter);
 	formData.append('verse_start', verseStart);
 	if (color !== 'none') {
 		formData.append('highlighted_color', color);
+		// formData.append('user_highlight_colors', color);
 	}
 	formData.append('highlight_start', highlightStart);
 	formData.append('highlighted_words', highlightedWords);
