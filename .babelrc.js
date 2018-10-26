@@ -1,7 +1,7 @@
 const env = require('./env-config.js');
 
 module.exports = {
-	presets: ['next/babel'],
+	presets: ['next/babel', '@babel/preset-env', '@babel/preset-react'],
 	// presets: ['next/babel', '@babel/preset-env', 'stage-0'],
 	plugins: [['transform-define', env], '@babel/plugin-transform-runtime'],
 	// env: {
