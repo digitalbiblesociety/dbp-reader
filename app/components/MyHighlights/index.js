@@ -21,10 +21,7 @@ class MyHighlights extends React.PureComponent {
 
 	highlightIcon(color) {
 		return (
-			<span
-				className={'color-icon'}
-				style={{ backgroundColor: `rgba(${color})` }}
-			/>
+			<span className={'color-icon'} style={{ backgroundColor: `${color}` }} />
 		);
 	}
 
