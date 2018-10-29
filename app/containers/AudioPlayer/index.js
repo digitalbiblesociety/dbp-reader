@@ -56,6 +56,10 @@ export class AudioPlayer extends React.Component {
 	}
 
 	componentDidMount() {
+		// this.setState({
+		//   volume: JSON.parse(localStorage.getItem('bible_is_volume')),
+		//   currentSpeed: JSON.parse(localStorage.getItem('bible_is_playbackRate')),
+		// });
 		if (this.props.audioPaths.length) {
 			this.props.audioPaths.forEach((path) => this.preLoadPath(path));
 		}
@@ -92,6 +96,14 @@ export class AudioPlayer extends React.Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
+		console.log('local storage stuff', {
+			volume: JSON.parse(localStorage.getItem('bible_is_volume')),
+			currentSpeed: JSON.parse(localStorage.getItem('bible_is_playbackRate')),
+		});
+		this.setState({
+			volume: JSON.parse(localStorage.getItem('bible_is_volume')),
+			currentSpeed: JSON.parse(localStorage.getItem('bible_is_playbackRate')),
+		});
 		if (nextProps.audioSource !== this.props.audioSource) {
 			// this.pauseAudio();
 			if (nextProps.audioSource) {
@@ -107,6 +119,11 @@ export class AudioPlayer extends React.Component {
 		}
 
 		if (nextProps.autoPlay) {
+			// console.log(
+			//   'state volume compared to player volume',
+			//   this.state.volume,
+			//   this.audioRef.volume,
+			// );
 			// console.log('source changed and auto play is true');
 			if (
 				navigator &&
@@ -154,6 +171,7 @@ export class AudioPlayer extends React.Component {
 	componentDidUpdate() {
 		if (this.audioRef) {
 			this.audioRef.playbackRate = this.state.currentSpeed;
+			this.audioRef.volume = this.state.volume;
 		}
 	}
 
@@ -406,6 +424,14 @@ export class AudioPlayer extends React.Component {
 				loadingNextChapter: true,
 			},
 			() => {
+				localStorage.setItem(
+					'bible_is_volume',
+					JSON.stringify(this.state.volume),
+				);
+				localStorage.setItem(
+					'bible_is_playbackRate',
+					JSON.stringify(this.state.currentSpeed),
+				);
 				Router.push(
 					getNextChapterUrl({
 						books: this.props.books,
