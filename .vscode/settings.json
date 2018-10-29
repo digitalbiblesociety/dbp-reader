@@ -1,1 +1,9 @@
-{}
+{
+	"files.exclude": {
+		"app/styles": true,
+		"app/styles/*": true
+	},
+	"search.exclude": {
+		"app/styles": false
+	}
+}
