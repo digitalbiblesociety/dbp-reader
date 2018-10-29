@@ -31,7 +31,7 @@ import svg4everybody from '../app/utils/svgPolyfill';
 import removeDuplicates from '../app/utils/removeDuplicateObjects';
 
 class AppContainer extends React.Component {
-	static displayName = 'Main app';
+	static displayName = 'Main app'; // eslint-disable-line no-undef
 	componentWillMount() {
 		// console.log('Component will mount for app', this.props);
 		// console.log('Component will mount for app redux store available at mounting', this.props.dispatch);
@@ -209,8 +209,9 @@ class AppContainer extends React.Component {
 	componentWillUnmount() {
 		Router.router.events.off('routeChangeStart', this.handleRouteChange);
 	}
-
+	/* eslint-disable no-undef */
 	handleRouteChange = (/* url */) => {
+		/* eslint-enable no-undef */
 		// console.log('Router change start fired', url);
 		// Pause audio
 		// Start loading spinner for text
@@ -219,7 +220,7 @@ class AppContainer extends React.Component {
 		this.props.dispatch(setChapterTextLoadingState({ state: true }));
 	};
 
-	routerWasUpdated = false;
+	routerWasUpdated = false; // eslint-disable-line no-undef
 
 	render() {
 		const {
@@ -655,7 +656,8 @@ AppContainer.getInitialProps = async (context) => {
 
 	if (bookData) {
 		const urlBook = bookData.find(
-			(book) => book.book_id.toLowerCase() === bookId.toLowerCase(),
+			(book) =>
+				book.book_id && book.book_id.toLowerCase() === bookId.toLowerCase(),
 		);
 		if (urlBook) {
 			activeBook = urlBook;
