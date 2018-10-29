@@ -6,6 +6,16 @@ const parseJSON = (res) => res.json();
 const checkStatus = (res) => {
 	if (res.status >= 200 && res.status < 300) {
 		return res;
+		// return {
+		//   json: async () => {
+		//     const j = await res.json();
+
+		//     return {
+		//       ...j,
+		//       success: true,
+		//     };
+		//   },
+		// };
 	}
 	if (res.status === 428) {
 		return {
