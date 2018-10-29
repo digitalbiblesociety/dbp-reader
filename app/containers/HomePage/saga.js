@@ -301,7 +301,7 @@ export function* addHighlight({
 		const response = yield call(request, requestUrl, options);
 		// console.log('add highlight response', response);
 		// Need to get the highlights here because they are not being returned
-		if (response.success) {
+		if (response.meta.success) {
 			yield call(getHighlights, { bible, book, chapter, userId });
 		} else if (response.error) {
 			if (process.env.NODE_ENV === 'development') {
