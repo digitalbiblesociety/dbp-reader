@@ -36,10 +36,18 @@ export function* sendSignUpForm({
 	}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}`;
 	const data = new FormData();
 
+	// console.log('user data for signup form', {
+	// 	password,
+	// 	email,
+	// 	firstName,
+	// 	lastName,
+	// 	wantsUpdates,
+	// });
+
 	data.append('email', email);
 	data.append('password', password);
 	data.append('name', lastName);
-	data.append('nickname', firstName);
+	data.append('first_name', firstName);
 	data.append('subscribed', wantsUpdates ? '1' : '0');
 	data.append('avatar', '');
 	data.append('project_id', process.env.NOTES_PROJECT_ID);
@@ -52,19 +60,19 @@ export function* sendSignUpForm({
 	try {
 		const response = yield call(request, requestUrl, options);
 
-		if (response.success) {
+		if (response.data) {
 			// console.log('res', response);
 
 			yield put({
 				type: USER_LOGGED_IN,
-				userId: response.user.id,
-				userProfile: response.user,
+				userId: response.data.id,
+				userProfile: response.data,
 			});
-			sessionStorage.setItem('bible_is_user_id', response.user.id || '');
-			sessionStorage.setItem('bible_is_12345', response.user.email || '');
-			sessionStorage.setItem('bible_is_123456', response.user.nickname || '');
-			sessionStorage.setItem('bible_is_1234567', response.user.name || '');
-			sessionStorage.setItem('bible_is_12345678', response.user.avatar || '');
+			sessionStorage.setItem('bible_is_user_id', response.data.id || '');
+			sessionStorage.setItem('bible_is_12345', response.data.email || '');
+			sessionStorage.setItem('bible_is_123456', response.data.first_name || '');
+			sessionStorage.setItem('bible_is_1234567', response.data.name || '');
+			sessionStorage.setItem('bible_is_12345678', response.data.avatar || '');
 		} else if (response.error) {
 			// console.log('res error', response);
 			const message = Object.values(response.error.message).reduce(
@@ -114,14 +122,14 @@ export function* sendLoginForm({ password, email, stay }) {
 		} else {
 			yield put({
 				type: USER_LOGGED_IN,
-				userId: response.id,
-				userProfile: response,
+				userId: response.data.id,
+				userProfile: response.data,
 			});
 			// May add an else that will save the id to the session so it is persisted through a page refresh
 			if (stay) {
-				localStorage.setItem('bible_is_user_id', response.id);
+				localStorage.setItem('bible_is_user_id', response.data.id);
 			} else {
-				sessionStorage.setItem('bible_is_user_id', response.id);
+				sessionStorage.setItem('bible_is_user_id', response.data.id);
 			}
 		}
 	} catch (err) {
@@ -306,14 +314,14 @@ export function* sendResetPassword({ password, userAccessToken, email }) {
 		// console.log('response in reset password', response);
 		yield put({
 			type: USER_LOGGED_IN,
-			userId: response.id,
-			userProfile: response,
+			userId: response.data.id,
+			userProfile: response.data,
 		});
-		// sessionStorage.setItem('bible_is_user_id', response.id);
-		sessionStorage.setItem('bible_is_12345', response.user.email || '');
-		sessionStorage.setItem('bible_is_123456', response.user.nickname || '');
-		sessionStorage.setItem('bible_is_1234567', response.user.name || '');
-		sessionStorage.setItem('bible_is_12345678', response.user.avatar || '');
+		// sessionStorage.setItem('bible_is_user_id', response.data.id);
+		sessionStorage.setItem('bible_is_12345', response.data.email || '');
+		sessionStorage.setItem('bible_is_123456', response.data.nickname || '');
+		sessionStorage.setItem('bible_is_1234567', response.data.name || '');
+		sessionStorage.setItem('bible_is_12345678', response.data.avatar || '');
 	} catch (err) {
 		// console.log('in catch');
 
