@@ -28,6 +28,7 @@ and [Faith Comes by Hearing](https://faithcomesbyhearing.com).
   ```
 
 - Now navigate to localhost:3000 to see the development site
+- When making changes to the css you need to make sure that you run aws s3 sync ./cdn s3://your_app_name/ and make sure that the app name here matches the one you use in the aws env variable.
 
 ## Description
 
