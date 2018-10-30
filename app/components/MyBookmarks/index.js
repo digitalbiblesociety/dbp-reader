@@ -26,10 +26,10 @@ class MyBookmarks extends React.PureComponent {
 				<Link
 					as={`/bible/${listItem.bible_id}/${listItem.book_id}/${
 						listItem.chapter
-					}/${listItem.verse_start}`}
+					}/${listItem.verse}`}
 					href={`/bible/${listItem.bible_id}/${listItem.book_id}/${
 						listItem.chapter
-					}/${listItem.verse_start}`}
+					}/${listItem.verse}`}
 				>
 					<a onClick={toggleNotesModal} className="list-item">
 						<div className="title-text">
@@ -37,7 +37,7 @@ class MyBookmarks extends React.PureComponent {
 								<span className="date">
 									{getFormattedNoteDate(listItem.created_at)}
 								</span>{' '}
-								| {getNoteReference(listItem)}
+								| {getNoteReference(listItem, true)}
 							</h4>
 							<p className="text">{listItem.bible_id}</p>
 						</div>

@@ -124,7 +124,7 @@ export function* getIpAddress() {
 		}
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
-			console.log('err', err); // eslint-disable-line no-console
+			console.error('err', err); // eslint-disable-line no-console
 		}
 	}
 }
@@ -150,7 +150,7 @@ export function* addBookmark(props) {
 	// console.log('adding bookmark', addBookmark);
 	try {
 		const response = yield call(request, requestUrl, options);
-		// console.log('user bookmark response', response);  // eslint-disable-line no-console
+		// console.log('Add user bookmark response', response); // eslint-disable-line no-console
 		if (response) {
 			// do stuff
 			// console.log('Success message: ', response.success);
@@ -301,7 +301,7 @@ export function* addHighlight({
 		const response = yield call(request, requestUrl, options);
 		// console.log('add highlight response', response);
 		// Need to get the highlights here because they are not being returned
-		if (response.success) {
+		if (response.meta.success) {
 			yield call(getHighlights, { bible, book, chapter, userId });
 		} else if (response.error) {
 			if (process.env.NODE_ENV === 'development') {
@@ -1274,7 +1274,7 @@ export function* getCopyrightSaga({ filesetIds }) {
 		reqUrls.push(
 			`${process.env.BASE_API_ROUTE}/bibles/filesets/${set.id}/copyright?key=${
 				process.env.DBP_API_KEY
-			}&v=4&bucket=${process.env.DBP_BUCKET_ID}`,
+			}&v=4&bucket=${process.env.DBP_BUCKET_ID}&type=${set.type}`,
 		),
 	);
 
@@ -1286,7 +1286,9 @@ export function* getCopyrightSaga({ filesetIds }) {
 				request,
 				`${process.env.BASE_API_ROUTE}/bibles/filesets/${
 					videoFileset.id
-				}/copyright?key=${process.env.DBP_API_KEY}&v=4&bucket=dbp-vid`,
+				}/copyright?key=${process.env.DBP_API_KEY}&v=4&bucket=dbp-vid&type=${
+					videoFileset.type
+				}`,
 			);
 			vidRes.push(r);
 		}

@@ -384,9 +384,9 @@ export function* getNotesForNotebook({ userId, params = {} }) {
 		yield put({
 			type: LOAD_NOTEBOOK_DATA,
 			listData: response.data,
-			activePage: parseInt(response.current_page, 10),
-			totalPages: parseInt(response.last_page, 10),
-			pageSize: parseInt(response.per_page, 10),
+			activePage: parseInt(response.meta.pagination.current_page, 10),
+			totalPages: parseInt(response.meta.pagination.last_page, 10),
+			pageSize: parseInt(response.meta.pagination.per_page, 10),
 		});
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
@@ -419,7 +419,7 @@ export function* addNote({ userId, data }) {
 	try {
 		const response = yield call(request, requestUrl, options);
 		// console.log('add user note response', response);
-		if (response.success || !response.error) {
+		if (response.meta.success || !response.meta.error) {
 			yield put({ type: ADD_NOTE_SUCCESS, response });
 			yield fork(getNotesForChapter, {
 				userId: data.user_id,
@@ -483,7 +483,7 @@ export function* getBookmarksForChapter({ userId, params = {} }) {
 		// };
 		// console.log('get note response current page, last page and per page', response.current_page, response.last_page, response.per_page);
 
-		// console.log('get bookmarks response', response);
+		// console.log('get bookmarks for chapter response', response);
 		yield put({
 			type: LOAD_BOOKMARKS_FOR_CHAPTER,
 			listData: response.data || [],
@@ -507,6 +507,7 @@ export function* getUserBookmarks({ userId, params = {} }) {
 	// response.per_page = perPage
 	// pages = totalPages
 	// notes = response.data
+	// console.log('Getting bookmarks for the NOTEBOOK!!!!!!!!!!!!!!!!!!!!!!!!');
 	// console.log('userId', userId);
 	// console.log('params', params);
 	const requestUrl = `${
@@ -532,13 +533,13 @@ export function* getUserBookmarks({ userId, params = {} }) {
 		// 	pages: response.total,
 		// };
 		// console.log('get note response current page, last page and per page', response.current_page, response.last_page, response.per_page);
-		// console.log('response', response);
+		// console.log('response for user bookmarks', response);
 		yield put({
 			type: LOAD_USER_BOOKMARK_DATA,
 			listData: response.data,
-			activePage: parseInt(response.current_page, 10),
-			totalPages: parseInt(response.last_page, 10),
-			pageSize: parseInt(response.per_page, 10),
+			activePage: parseInt(response.meta.pagination.current_page, 10),
+			totalPages: parseInt(response.meta.pagination.last_page, 10),
+			pageSize: parseInt(response.meta.pagination.per_page, 10),
 		});
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {

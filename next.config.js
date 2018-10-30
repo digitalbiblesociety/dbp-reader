@@ -5,14 +5,10 @@ const promisify = require('util').promisify;
 const execPromise = promisify(childProcess.exec);
 const isProd = process.env.NODE_ENV === 'production';
 
-const commonsChunkConfig = require('@zeit/next-css/commons-chunk-config');
+// const commonsChunkConfig = require('@zeit/next-css/commons-chunk-config');
 if (isProd) {
 	module.exports = withSass(
 		withCss({
-			webpack(config) {
-				// config.module.rules.push({ test: /\.svg$/, loader: ['file-loader'] });
-				return commonsChunkConfig(config, /\.(sass|scss|css)$/);
-			},
 			generateBuildId: async () => {
 				let hash = '';
 				await execPromise('git rev-parse HEAD').then((res) => {
@@ -23,12 +19,5 @@ if (isProd) {
 		}),
 	);
 } else {
-	module.exports = withSass(
-		withCss({
-			webpack(config) {
-				// config.module.rules.push({ test: /\.svg$/, loader: ['file-loader'] });
-				return commonsChunkConfig(config, /\.(sass|scss|css)$/);
-			},
-		}),
-	);
+	module.exports = withSass(withCss());
 }

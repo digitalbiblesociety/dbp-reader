@@ -93,12 +93,12 @@ const applyBookmarks = (source, bookmarks) => {
 
 	bookmarks.forEach((bookmark) => {
 		if (
-			bookmark.verse_start >= getVerseNum(verses[0]) &&
-			bookmark.verse_end <= getVerseNum(verses[lastV]) &&
-			!versesWithBookmarks[bookmark.verse_start]
+			bookmark.verse >= getVerseNum(verses[0]) &&
+			bookmark.verse <= getVerseNum(verses[lastV]) &&
+			!versesWithBookmarks[bookmark.verse]
 		) {
 			const verseElement = verses.filter(
-				(v) => getVerseNum(v) === bookmark.verse_start,
+				(v) => getVerseNum(v) === bookmark.verse,
 			)[0];
 			const svg = xmlDoc.createElement('svg');
 			const use = xmlDoc.createElement('use');
@@ -113,7 +113,7 @@ const applyBookmarks = (source, bookmarks) => {
 			// verseElement.prepend ? verseElement.prepend(svg) : verseElement.appendChild(svg);
 			verseElement.appendChild(svg);
 			// console.log('verseElement after', verseElement);
-			versesWithBookmarks[bookmark.verse_start] = true;
+			versesWithBookmarks[bookmark.verse] = true;
 			// console.log('svg', svg);
 			// console.log('svg', svg.onclick);
 			// console.log('icon', icon);
