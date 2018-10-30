@@ -143,7 +143,7 @@ class MyNotes extends React.PureComponent {
 		return matchSorter(pageData, filterText, {
 			keys: [
 				(item) =>
-					item.tags.find((tag) => tag.type === 'reference')
+					item.tags && item.tags.find((tag) => tag.type === 'reference')
 						? item.tags.find((tag) => tag.type === 'reference').value
 						: item.notes,
 				'notes',
