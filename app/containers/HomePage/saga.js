@@ -124,7 +124,7 @@ export function* getIpAddress() {
 		}
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
-			console.log('err', err); // eslint-disable-line no-console
+			console.error('err', err); // eslint-disable-line no-console
 		}
 	}
 }
@@ -150,7 +150,7 @@ export function* addBookmark(props) {
 	// console.log('adding bookmark', addBookmark);
 	try {
 		const response = yield call(request, requestUrl, options);
-		// console.log('user bookmark response', response);  // eslint-disable-line no-console
+		// console.log('Add user bookmark response', response); // eslint-disable-line no-console
 		if (response) {
 			// do stuff
 			// console.log('Success message: ', response.success);

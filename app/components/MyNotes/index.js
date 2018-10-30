@@ -29,6 +29,7 @@ class MyNotes extends React.PureComponent {
 		// } else if (this.props.sectionType === 'bookmarks') {
 		// } else if (this.props.sectionType === 'highlights') {
 		// }
+		// console.log('getting notes bookmarks and highlights!!!!!!');
 		this.props.getNotes({
 			limit: this.props.pageSize,
 			page: this.props.activePage,
@@ -100,7 +101,7 @@ class MyNotes extends React.PureComponent {
 		}
 	}
 
-	getNoteReference = (listItem) => {
+	getNoteReference = (listItem, isBookmark) => {
 		// Uses the title if it is there
 		if (listItem.tags && listItem.tags.find((tag) => tag.type === 'title')) {
 			return listItem.tags.find((tag) => tag.type === 'title').value;
@@ -112,11 +113,17 @@ class MyNotes extends React.PureComponent {
 		) {
 			return listItem.tags.find((tag) => tag.type === 'reference').value;
 		}
-		// As a last resort it tries to generate a sort of reference
-		const verseRef =
-			listItem.verse_end && !(listItem.verse_end === listItem.verse_start)
-				? `${listItem.verse_start}-${listItem.verse_end}`
-				: listItem.verse_start;
+		let verseRef = '';
+		if (isBookmark) {
+			// As a last resort it tries to generate a sort of reference
+			verseRef = `${listItem.verse}`;
+		} else {
+			// As a last resort it tries to generate a sort of reference
+			verseRef =
+				listItem.verse_end && !(listItem.verse_end === listItem.verse_start)
+					? `${listItem.verse_start}-${listItem.verse_end}`
+					: listItem.verse_start;
+		}
 		const { vernacularNamesObject } = this.props;
 
 		return `${vernacularNamesObject[listItem.book_id]} ${
@@ -336,7 +343,7 @@ class MyNotes extends React.PureComponent {
 					) : null}
 					{sectionType === 'bookmarks' ? (
 						<MyBookmarks
-							bookmarks={filteredPageData.filter((n) => n.bookmark)}
+							bookmarks={filteredPageData}
 							deleteNote={deleteBookmark}
 							toggleNotesModal={toggleNotesModal}
 							getFormattedNoteDate={this.getFormattedNoteDate}
