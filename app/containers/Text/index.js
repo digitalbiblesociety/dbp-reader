@@ -939,7 +939,9 @@ class Text extends React.PureComponent {
 						>
 							<br />
 							<sup data-verseid={verse.verse_start}>
-								&nbsp;{verse.verse_start_alt || verse.verse_start}&nbsp;
+								&nbsp;
+								{verse.verse_start_alt || verse.verse_start}
+								&nbsp;
 							</sup>
 							<IconsInText
 								clickHandler={this.handleNoteClick}
@@ -971,7 +973,9 @@ class Text extends React.PureComponent {
 						>
 							<br />
 							<sup data-verseid={verse.verse_start}>
-								&nbsp;{verse.verse_start_alt || verse.verse_start}&nbsp;
+								&nbsp;
+								{verse.verse_start_alt || verse.verse_start}
+								&nbsp;
 							</sup>
 							<IconsInText
 								clickHandler={this.handleNoteClick}
@@ -1026,7 +1030,9 @@ class Text extends React.PureComponent {
 							key={verse.verse_start}
 						>
 							<sup data-verseid={verse.verse_start}>
-								&nbsp;{verse.verse_start_alt || verse.verse_start}&nbsp;
+								&nbsp;
+								{verse.verse_start_alt || verse.verse_start}
+								&nbsp;
 							</sup>
 							<IconsInText
 								clickHandler={this.handleNoteClick}
@@ -1057,7 +1063,9 @@ class Text extends React.PureComponent {
 							key={verse.verse_start}
 						>
 							<sup data-verseid={verse.verse_start}>
-								&nbsp;{verse.verse_start_alt || verse.verse_start}&nbsp;
+								&nbsp;
+								{verse.verse_start_alt || verse.verse_start}
+								&nbsp;
 							</sup>
 							<IconsInText
 								clickHandler={this.handleNoteClick}
@@ -1198,9 +1206,6 @@ class Text extends React.PureComponent {
 				chapter: activeChapter,
 				user_id: userId,
 				bible_id: bibleId,
-				notes: "''",
-				title: '',
-				bookmark: 1,
 				reference: getReference(
 					verseStart || verseEnd,
 					verseEnd,
@@ -1229,11 +1234,11 @@ class Text extends React.PureComponent {
 
 	addHighlight = ({ color, popupCoords }) => {
 		let highlightObject = {};
-		console.log(
-			'this.state.wholeVerseIsSelected',
-			this.state.wholeVerseIsSelected,
-		);
-		console.log('this.state.selectedText:', `~${this.state.selectedText}~`);
+		// console.log(
+		// 	'this.state.wholeVerseIsSelected',
+		// 	this.state.wholeVerseIsSelected,
+		// );
+		// console.log('this.state.selectedText:', `~${this.state.selectedText}~`);
 		// Getting the data for the tests
 		// console.log(JSON.stringify(this.props));
 		// console.log(JSON.stringify(this.state));
@@ -1311,20 +1316,20 @@ class Text extends React.PureComponent {
 						: [];
 					// console.log('verseElements', verseElements);
 					// console.log('verseElements.reduce((a, c) => a.concat(c.textContent), \'\')', verseElements.reduce((a, c) => a.concat(c.textContent), ''));
-					console.log(
-						'verse that I am getting length for::',
-						`~${verseElements
-							.reduce((a, c) => a.concat(c.textContent), '')
-							.replace(replaceCharsRegex, '')}~`,
-					);
+					// console.log(
+					// 	'verse that I am getting length for::',
+					// 	`~${verseElements
+					// 		.reduce((a, c) => a.concat(c.textContent), '')
+					// 		.replace(replaceCharsRegex, '')}~`,
+					// );
 
 					const highlightedWords = verseElements
 						.reduce((a, c) => a.concat(c.textContent), '')
 						.replace(replaceCharsRegex, '').length;
-					console.log(
-						'highlightedWords for whole verse click',
-						highlightedWords,
-					);
+					// console.log(
+					// 	'highlightedWords for whole verse click',
+					// 	highlightedWords,
+					// );
 					highlightObject = {
 						bible: this.props.activeTextId,
 						book: this.props.activeBookId,
@@ -1589,10 +1594,10 @@ class Text extends React.PureComponent {
 
 					highlightedWords =
 						selectedText.replace(replaceCharsRegex, '').length - dist;
-					console.log('anchorText:', anchorText);
-					console.log('anchorOffset:', anchorOffset);
-					console.log('highlightStart:', highlightStart);
-					console.log('highlightedWords:', highlightedWords);
+					// console.log('anchorText:', anchorText);
+					// console.log('anchorOffset:', anchorOffset);
+					// console.log('highlightStart:', highlightStart);
+					// console.log('highlightedWords:', highlightedWords);
 				} else {
 					node = getPlainParentVerse(node, firstVerse);
 					// taking off the first 2 spaces and the verse number from the string
