@@ -48,7 +48,7 @@
 		"coveralls": "cat ./coverage/lcov.info | coveralls",
 		"build:sass": "sass ./static/app.scss ./cdn/style.css; aws s3 sync ./cdn s3://bibleis-prod/",
 		"reload:pm2": "pm2 reload ecosystem.config.js --env production --update-env --only bible.is.prod;",
-		"fetch-latest-site": "git checkout .; rm package-lock.json; git pull origin master; npm install; BUILD_ID=$(git rev-parse HEAD) npm run build:next; pm2 reload ecosystem.config.js --env production --update-env --only bible.is.prod;",
+		"fetch-latest-site": "git checkout .; rm package-lock.json; git pull origin master; npm install; BUILD_ID=$(git rev-parse HEAD) NODE_ENV=production npm run build:next; pm2 reload ecosystem.config.js --env production --update-env --only bible.is.prod;",
 		"fetch-latest-dev": "git checkout .; rm package-lock.json; git pull origin development; npm install; npm run build:next; pm2 reload ecosystem.config.js --only bible.is.dev;"
 	},
 	"lint-staged": {
