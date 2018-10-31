@@ -29,6 +29,7 @@ import {
 import svg4everybody from '../app/utils/svgPolyfill';
 // import request from '../app/utils/request';
 import removeDuplicates from '../app/utils/removeDuplicateObjects';
+import parseCookie from '../app/utils/parseCookie';
 
 class AppContainer extends React.Component {
 	static displayName = 'Main app'; // eslint-disable-line no-undef
@@ -139,9 +140,6 @@ class AppContainer extends React.Component {
 				sessionStorage.getItem('bible_is_autoplay'),
 			),
 		};
-		// console.log('user profile', userProfile);
-		// console.log('userId', userId);
-		// console.log('isAuthenticated', isAuthenticated);
 
 		if (userId && isAuthenticated) {
 			this.props.dispatch({
@@ -292,6 +290,20 @@ AppContainer.getInitialProps = async (context) => {
 	} = context.query;
 	const userProfile = {};
 	// console.log('context.query', context.query);
+
+	if (req) {
+		// Get all cookies that the page needs
+		console.log(
+			'cookie in get initial props: server!',
+			parseCookie(req.headers.cookie),
+		);
+	} else {
+		// Get all cookies that the page needs
+		console.log(
+			'cookie in get initial props: client!',
+			parseCookie(document.cookie),
+		);
+	}
 
 	let hasVideo = false;
 	let isFromServer = true;
@@ -738,10 +750,7 @@ AppContainer.getInitialProps = async (context) => {
 		});
 		// console.log('Got the initial state!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
 	}
-	if (!isFromServer) {
-		// console.log('The func ran on the client');
-		// console.log('initData.formattedText', initData.formattedText);
-	}
+
 	return {
 		// isServer,
 		chapterText,

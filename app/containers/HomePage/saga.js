@@ -1511,11 +1511,10 @@ export function* createSocialUser({
 				userProfile: response.user,
 			});
 			// console.log('setting user information in first call', response);
-			sessionStorage.setItem('bible_is_user_id', response.user.id);
-			sessionStorage.setItem('bible_is_12345', response.user.email);
-			sessionStorage.setItem('bible_is_123456', response.user.nickname);
-			sessionStorage.setItem('bible_is_1234567', response.user.name);
-			sessionStorage.setItem('bible_is_12345678', response.user.avatar);
+			document.cookie = `bible_is_user_id=${response.user.id}`;
+			document.cookie = `bible_is_name=${response.user.name}`;
+			document.cookie = `bible_is_email=${response.user.email}`;
+			document.cookie = `bible_is_first_name=${response.user.first_name}`;
 			// If I remember correctly the account is linked automatically - should check
 			// with Jon to see if this is actually the case
 		} else if (response.error) {
@@ -1603,13 +1602,11 @@ export function* createSocialUser({
 							userId: res.id,
 							userProfile: res,
 						});
-						// console.log('setting user information in second call', res);
 						// May add an else that will save the id to the session so it is persisted through a page refresh
-						sessionStorage.setItem('bible_is_user_id', res.id);
-						sessionStorage.setItem('bible_is_12345', res.email);
-						sessionStorage.setItem('bible_is_123456', res.nickname);
-						sessionStorage.setItem('bible_is_1234567', res.name);
-						sessionStorage.setItem('bible_is_12345678', res.avatar);
+						document.cookie = `bible_is_user_id=${response.data.id}`;
+						document.cookie = `bible_is_name=${response.data.name}`;
+						document.cookie = `bible_is_email=${response.data.email}`;
+						document.cookie = `bible_is_first_name=${response.data.first_name}`;
 					}
 				} catch (err) {
 					if (process.env.NODE_ENV === 'development') {

@@ -65,66 +65,6 @@ const initialState = fromJS({
 	userProfile: {},
 	testaments: {},
 	userSettings: {
-		// 	activeTheme: sessionStorage.getItem('bible_is_theme') || 'red',
-		// 	activeFontType: sessionStorage.getItem('bible_is_font_family') || 'sans',
-		// 	activeFontSize:
-		// 		parseInt(sessionStorage.getItem('bible_is_font_size'), 10) || 42,
-		// 	toggleOptions: {
-		// 		readersMode: {
-		// 			name: "READER'S MODE",
-		// 			active: JSON.parse(
-		// 				localStorage.getItem('userSettings_toggleOptions_readersMode_active'),
-		// 			),
-		// 			available: true,
-		// 		},
-		// 		crossReferences: {
-		// 			name: 'CROSS REFERENCE',
-		// 			active: localStorage.getItem(
-		// 				'userSettings_toggleOptions_crossReferences_active',
-		// 			)
-		// 				? JSON.parse(
-		// 						localStorage.getItem(
-		// 							'userSettings_toggleOptions_crossReferences_active',
-		// 						),
-		// 				  )
-		// 				: true,
-		// 			available: true,
-		// 		},
-		// 		redLetter: {
-		// 			name: 'RED LETTER',
-		// 			active: localStorage.getItem('bible_is_words_of_jesus')
-		// 				? JSON.parse(localStorage.getItem('bible_is_words_of_jesus'))
-		// 				: true,
-		// 			available: true,
-		// 		},
-		// 		justifiedText: {
-		// 			name: 'JUSTIFIED TEXT',
-		// 			active: JSON.parse(
-		// 				localStorage.getItem(
-		// 					'userSettings_toggleOptions_justifiedText_active',
-		// 				),
-		// 			),
-		// 			available: true,
-		// 		},
-		// 		oneVersePerLine: {
-		// 			name: 'ONE VERSE PER LINE',
-		// 			active: JSON.parse(
-		// 				localStorage.getItem(
-		// 					'userSettings_toggleOptions_oneVersePerLine_active',
-		// 				),
-		// 			),
-		// 			available: true,
-		// 		},
-		// 		verticalScrolling: {
-		// 			name: 'VERTICAL SCROLLING',
-		// 			active: false,
-		// 			available: false,
-		// 		},
-		// 	},
-		// },
-		// autoPlayEnabled: sessionStorage.getItem('bible_is_autoplay')
-		// 	? JSON.parse(sessionStorage.getItem('bible_is_autoplay'))
-		// 	: false,
 		activeTheme: 'red',
 		activeFontType: 'sans',
 		activeFontSize: 42,
@@ -176,10 +116,7 @@ const initialState = fromJS({
 	videoPlayerOpen: true,
 	activeChapter: 1,
 	chapterTextLoadingState: false,
-	userAuthenticated:
-		// !!localStorage.getItem('bible_is_user_id') ||
-		// !!sessionStorage.getItem('bible_is_user_id') ||
-		false,
+	userAuthenticated: false,
 	isChapterSelectionActive: false,
 	isProfileActive: false,
 	isSettingsModalActive: false,
@@ -197,10 +134,7 @@ const initialState = fromJS({
 	loadingNewChapterText: false,
 	loadingCopyright: true,
 	loadingAudio: false,
-	userId:
-		// localStorage.getItem('bible_is_user_id') ||
-		// sessionStorage.getItem('bible_is_user_id') ||
-		'',
+	userId: '',
 	match: {
 		params: {
 			bibleId: 'engesv',
@@ -254,8 +188,7 @@ function homePageReducer(state = initialState, action) {
 			return state.set('firstLoad', false);
 		case TOGGLE_AUTOPLAY:
 			if (typeof window !== 'undefined') {
-				sessionStorage.setItem('bible_is_autoplay', action.state);
-				localStorage.setItem('bible_is_autoplay', action.state);
+				document.cookie = `bible_is_autoplay=${action.state}`;
 			}
 			return state.setIn(['userSettings', 'autoPlayEnabled'], action.state);
 		case GET_CHAPTER_TEXT:
@@ -331,7 +264,7 @@ function homePageReducer(state = initialState, action) {
 				.set('activeTextId', action.textId);
 		case SET_AUDIO_PLAYER_STATE:
 			if (typeof window !== 'undefined') {
-				sessionStorage.setItem('bible_is_audio_player_state', action.state);
+				document.cookie = `bible_is_audio_open=${action.state}`;
 			}
 			return state.set('audioPlayerState', action.state);
 		case LOAD_HIGHLIGHTS:
@@ -346,19 +279,22 @@ function homePageReducer(state = initialState, action) {
 			return state.setIn(['userSettings', 'activeFontSize'], action.size);
 		case TOGGLE_SETTINGS_OPTION:
 			if (typeof window !== 'undefined') {
-				// console.log('Setting text setting', action.exclusivePath.join('_'), !state.getIn(action.path));
 				// Exclusive path is the path to the setting that cannot be active at the same time as this one
+				// action.exclusivePath is the path of the option that cannot have the same state as the one currently being set
 				if (action.exclusivePath) {
-					localStorage.setItem(action.exclusivePath.join('_'), false);
-					localStorage.setItem(
-						action.path.join('_'),
-						!state.getIn(action.path),
-					);
+					document.cookie = `bible_is_${action.exclusivePath.join('_')}=false`;
+					document.cookie = `bible_is_${action.path.join('_')}=${!state.getIn(
+						action.path,
+					)}`;
+
 					return state
 						.setIn(action.exclusivePath, false)
 						.setIn(action.path, !state.getIn(action.path));
 				}
-				localStorage.setItem(action.path.join('_'), !state.getIn(action.path));
+
+				document.cookie = `bible_is_${action.path.join('_')}=${!state.getIn(
+					action.path,
+				)}`;
 
 				return state.setIn(action.path, !state.getIn(action.path));
 			}
