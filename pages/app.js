@@ -51,6 +51,7 @@ class AppContainer extends React.Component {
 				overrideCache(url.href, url.data);
 			});
 		}
+		// Setting book, chapter, bible for page navigation I guess...
 		localStorage.setItem('bible_is_2_book_id', this.props.match.params.bookId);
 		localStorage.setItem('bible_is_3_chapter', this.props.match.params.chapter);
 		localStorage.setItem(
@@ -64,118 +65,42 @@ class AppContainer extends React.Component {
 		// Intercept all route changes to ensure that the loading spinner starts
 		Router.router.events.on('routeChangeStart', this.handleRouteChange);
 
-		const userId =
-			localStorage.getItem('bible_is_user_id') ||
-			sessionStorage.getItem('bible_is_user_id') ||
-			'';
-		const isAuthenticated = !!(
-			localStorage.getItem('bible_is_user_id') ||
-			sessionStorage.getItem('bible_is_user_id')
-		);
-		const userProfile = {};
-		userProfile.email = sessionStorage.getItem('bible_is_12345') || '';
-		userProfile.nickname = sessionStorage.getItem('bible_is_123456') || '';
-		userProfile.name = sessionStorage.getItem('bible_is_1234567') || '';
-		userProfile.avatar = sessionStorage.getItem('bible_is_12345678') || '';
-		const userSettings = {
-			activeTheme: sessionStorage.getItem('bible_is_theme') || 'red',
-			activeFontType: sessionStorage.getItem('bible_is_font_family') || 'sans',
-			activeFontSize:
-				parseInt(sessionStorage.getItem('bible_is_font_size'), 10) || 42,
-			toggleOptions: {
-				readersMode: {
-					name: "READER'S MODE",
-					active: JSON.parse(
-						localStorage.getItem(
-							'userSettings_toggleOptions_readersMode_active',
-						),
-					),
-					available: true,
-				},
-				crossReferences: {
-					name: 'CROSS REFERENCE',
-					active: localStorage.getItem(
-						'userSettings_toggleOptions_crossReferences_active',
-					)
-						? JSON.parse(
-								localStorage.getItem(
-									'userSettings_toggleOptions_crossReferences_active',
-								),
-						  )
-						: true,
-					available: true,
-				},
-				redLetter: {
-					name: 'RED LETTER',
-					active: localStorage.getItem('bible_is_words_of_jesus')
-						? JSON.parse(localStorage.getItem('bible_is_words_of_jesus'))
-						: true,
-					available: true,
-				},
-				justifiedText: {
-					name: 'JUSTIFIED TEXT',
-					active: JSON.parse(
-						localStorage.getItem(
-							'userSettings_toggleOptions_justifiedText_active',
-						),
-					),
-					available: true,
-				},
-				oneVersePerLine: {
-					name: 'ONE VERSE PER LINE',
-					active: JSON.parse(
-						localStorage.getItem(
-							'userSettings_toggleOptions_oneVersePerLine_active',
-						),
-					),
-					available: true,
-				},
-				verticalScrolling: {
-					name: 'VERTICAL SCROLLING',
-					active: false,
-					available: false,
-				},
-			},
-			autoPlayEnabled: !!JSON.parse(
-				sessionStorage.getItem('bible_is_autoplay'),
-			),
-		};
-
-		if (userId && isAuthenticated) {
-			this.props.dispatch({
-				type: 'GET_INITIAL_ROUTE_STATE_HOMEPAGE',
-				homepage: {
-					userSettings,
-					userProfile,
-					userId,
-					userAuthenticated: isAuthenticated,
-				},
-			});
-			this.props.dispatch({
-				type: 'GET_INITIAL_ROUTE_STATE_PROFILE',
-				profile: {
-					userProfile,
-					userId,
-					userAuthenticated: isAuthenticated,
-				},
-			});
-		} else {
-			this.props.dispatch({
-				type: 'GET_INITIAL_ROUTE_STATE_HOMEPAGE',
-				homepage: {
-					userSettings,
-					userId,
-					userAuthenticated: isAuthenticated,
-				},
-			});
-			this.props.dispatch({
-				type: 'GET_INITIAL_ROUTE_STATE_PROFILE',
-				profile: {
-					userId,
-					userAuthenticated: isAuthenticated,
-				},
-			});
-		}
+		// Probably don't need to do this because all of the state can be obtained in getInitialProps now
+		// if (userId && isAuthenticated) {
+		//   this.props.dispatch({
+		//     type: 'GET_INITIAL_ROUTE_STATE_HOMEPAGE',
+		//     homepage: {
+		//       userSettings,
+		//       userProfile,
+		//       userId,
+		//       userAuthenticated: isAuthenticated,
+		//     },
+		//   });
+		//   this.props.dispatch({
+		//     type: 'GET_INITIAL_ROUTE_STATE_PROFILE',
+		//     profile: {
+		//       userProfile,
+		//       userId,
+		//       userAuthenticated: isAuthenticated,
+		//     },
+		//   });
+		// } else {
+		//   this.props.dispatch({
+		//     type: 'GET_INITIAL_ROUTE_STATE_HOMEPAGE',
+		//     homepage: {
+		//       userSettings,
+		//       userId,
+		//       userAuthenticated: isAuthenticated,
+		//     },
+		//   });
+		//   this.props.dispatch({
+		//     type: 'GET_INITIAL_ROUTE_STATE_PROFILE',
+		//     profile: {
+		//       userId,
+		//       userAuthenticated: isAuthenticated,
+		//     },
+		//   });
+		// }
 
 		const browserObject = {
 			agent: '',
@@ -196,9 +121,7 @@ class AppContainer extends React.Component {
 		}
 		if (browserObject.agent === 'msie') {
 			this.props.dispatch(setUA());
-			// console.log('svg4everybody', svg4everybody);
 			if (typeof svg4everybody === 'function') {
-				// console.log('svg for everybody return value', svg4everybody);
 				svg4everybody();
 			}
 		}
@@ -210,7 +133,6 @@ class AppContainer extends React.Component {
 	/* eslint-disable no-undef */
 	handleRouteChange = (/* url */) => {
 		/* eslint-enable no-undef */
-		// console.log('Router change start fired', url);
 		// Pause audio
 		// Start loading spinner for text
 		// Close any open menus
@@ -226,9 +148,9 @@ class AppContainer extends React.Component {
 			chapterText,
 			activeBookName,
 			routeLocation,
+			initialPlaybackRate,
+			initialVolume,
 		} = this.props;
-		// console.log('this.props.dispatch in render', this.props);
-		// const descriptionText = chapterText.map((v) => v.verse_text).join(' ');
 		// Defaulting description text to an empty string since no metadata is better than inaccurate metadata
 		const descriptionText =
 			chapterText && chapterText[0] ? `${chapterText[0].verse_text}...` : '';
@@ -251,7 +173,6 @@ class AppContainer extends React.Component {
 					/>
 					<meta property={'og:image:width'} content={310} />
 					<meta property={'og:image:height'} content={310} />
-					{/* may need to replace contextLocation with the actual url */}
 					<meta
 						property={'og:url'}
 						content={`https://listen.dbp4.org/${routeLocation}`}
@@ -271,14 +192,16 @@ class AppContainer extends React.Component {
 						| Bible.is
 					</title>
 				</Head>
-				<HomePage />
+				<HomePage
+					initialPlaybackRate={initialPlaybackRate}
+					initialVolume={initialVolume}
+				/>
 			</div>
 		);
 	}
 }
 
 AppContainer.getInitialProps = async (context) => {
-	// console.log('Get initial props started running');
 	const { req, res: serverRes } = context;
 	const routeLocation = context.asPath;
 	const {
@@ -289,7 +212,13 @@ AppContainer.getInitialProps = async (context) => {
 		token,
 	} = context.query;
 	const userProfile = {};
-	// console.log('context.query', context.query);
+	let hasVideo = false;
+	let isFromServer = true;
+	let userSettings = {};
+	let userId = '';
+	let isAuthenticated = false;
+	let initialVolume = 1;
+	let initialPlaybackRate = 1;
 
 	if (req) {
 		// Get all cookies that the page needs
@@ -297,90 +226,51 @@ AppContainer.getInitialProps = async (context) => {
 			'cookie in get initial props: server!',
 			parseCookie(req.headers.cookie),
 		);
-	} else {
-		// Get all cookies that the page needs
-		console.log(
-			'cookie in get initial props: client!',
-			parseCookie(document.cookie),
-		);
-	}
+		const cookieData = parseCookie(req.headers.cookie);
 
-	let hasVideo = false;
-	let isFromServer = true;
-	// console.log('all state', context.reduxStore.getState().get('homepage'))
-	// let userSettings = context.reduxStore.getState().getIn(['homepage', 'userSettings']).toJS();
-	let userSettings = {};
-	let userId = '';
-	let isAuthenticated = false;
+		// Authentication Information
+		userId = cookieData.bible_is_user_id || '';
+		isAuthenticated = !!cookieData.bible_is_user_id;
 
-	if (!req) {
-		// console.log('context in browser', context);
-		isFromServer = false;
-		// console.log('from client with query', context.query);
+		// Audio Player
+		initialVolume = cookieData.bible_is_volume || 1;
+		initialPlaybackRate = cookieData.bible_is_playbackrate || 1;
 
-		// This is from the client so local and session storage should be available now
-		userId =
-			localStorage.getItem('bible_is_user_id') ||
-			sessionStorage.getItem('bible_is_user_id');
-		isAuthenticated = !!(
-			localStorage.getItem('bible_is_user_id') ||
-			sessionStorage.getItem('bible_is_user_id')
-		);
-		userProfile.email = sessionStorage.getItem('bible_is_12345') || '';
-		userProfile.nickname = sessionStorage.getItem('bible_is_123456') || '';
-		userProfile.name = sessionStorage.getItem('bible_is_1234567') || '';
-		userProfile.avatar = sessionStorage.getItem('bible_is_12345678') || '';
+		// User Profile
+		userProfile.email = cookieData.bible_is_email || '';
+		userProfile.nickname = cookieData.bible_is_nickname || '';
+		userProfile.name = cookieData.bible_is_name || '';
+		userProfile.avatar = '';
+
+		// User Settings
 		userSettings = {
-			activeTheme: sessionStorage.getItem('bible_is_theme') || 'red',
-			activeFontType: sessionStorage.getItem('bible_is_font_family') || 'sans',
-			activeFontSize:
-				parseInt(sessionStorage.getItem('bible_is_font_size'), 10) || 42,
+			activeTheme: cookieData.bible_is_theme || 'red',
+			activeFontType: cookieData.bible_is_font_family || 'sans',
+			activeFontSize: cookieData.bible_is_font_size || 42,
 			toggleOptions: {
 				readersMode: {
 					name: "READER'S MODE",
-					active: JSON.parse(
-						localStorage.getItem(
-							'userSettings_toggleOptions_readersMode_active',
-						),
-					),
+					active: !!cookieData.bible_is_userSettings_toggleOptions_readersMode_active,
 					available: true,
 				},
 				crossReferences: {
 					name: 'CROSS REFERENCE',
-					active: localStorage.getItem(
-						'userSettings_toggleOptions_crossReferences_active',
-					)
-						? JSON.parse(
-								localStorage.getItem(
-									'userSettings_toggleOptions_crossReferences_active',
-								),
-						  )
-						: true,
+					active: !!cookieData.bible_is_userSettings_toggleOptions_crossReferences_active,
 					available: true,
 				},
 				redLetter: {
 					name: 'RED LETTER',
-					active: localStorage.getItem('bible_is_words_of_jesus')
-						? JSON.parse(localStorage.getItem('bible_is_words_of_jesus'))
-						: true,
+					active: !!cookieData.bible_is_words_of_jesus,
 					available: true,
 				},
 				justifiedText: {
 					name: 'JUSTIFIED TEXT',
-					active: JSON.parse(
-						localStorage.getItem(
-							'userSettings_toggleOptions_justifiedText_active',
-						),
-					),
+					active: !!cookieData.bible_is_userSettings_toggleOptions_justifiedText_active,
 					available: true,
 				},
 				oneVersePerLine: {
 					name: 'ONE VERSE PER LINE',
-					active: JSON.parse(
-						localStorage.getItem(
-							'userSettings_toggleOptions_oneVersePerLine_active',
-						),
-					),
+					active: !!cookieData.bible_is_userSettings_toggleOptions_oneVersePerLine_active,
 					available: true,
 				},
 				verticalScrolling: {
@@ -389,9 +279,70 @@ AppContainer.getInitialProps = async (context) => {
 					available: false,
 				},
 			},
-			autoPlayEnabled: sessionStorage.getItem('bible_is_autoplay')
-				? JSON.parse(sessionStorage.getItem('bible_is_autoplay'))
-				: false,
+			autoPlayEnabled: !!cookieData.bible_is_autoplay,
+		};
+
+		isFromServer = false;
+	} else {
+		// Get all cookies that the page needs
+		console.log(
+			'cookie in get initial props: client!',
+			parseCookie(document.cookie),
+		);
+		const cookieData = parseCookie(document.cookie);
+
+		// Authentication Information
+		userId = cookieData.bible_is_user_id || '';
+		isAuthenticated = !!cookieData.bible_is_user_id;
+
+		// Audio Player
+		initialVolume = cookieData.bible_is_volume || 1;
+		initialPlaybackRate = cookieData.bible_is_playbackrate || 1;
+
+		// User Profile
+		userProfile.email = cookieData.bible_is_email || '';
+		userProfile.nickname = cookieData.bible_is_nickname || '';
+		userProfile.name = cookieData.bible_is_name || '';
+		userProfile.avatar = '';
+
+		// User Settings
+		userSettings = {
+			activeTheme: cookieData.bible_is_theme || 'red',
+			activeFontType: cookieData.bible_is_font_family || 'sans',
+			activeFontSize: cookieData.bible_is_font_size || 42,
+			toggleOptions: {
+				readersMode: {
+					name: "READER'S MODE",
+					active: !!cookieData.bible_is_userSettings_toggleOptions_readersMode_active,
+					available: true,
+				},
+				crossReferences: {
+					name: 'CROSS REFERENCE',
+					active: !!cookieData.bible_is_userSettings_toggleOptions_crossReferences_active,
+					available: true,
+				},
+				redLetter: {
+					name: 'RED LETTER',
+					active: !!cookieData.bible_is_words_of_jesus,
+					available: true,
+				},
+				justifiedText: {
+					name: 'JUSTIFIED TEXT',
+					active: !!cookieData.bible_is_userSettings_toggleOptions_justifiedText_active,
+					available: true,
+				},
+				oneVersePerLine: {
+					name: 'ONE VERSE PER LINE',
+					active: !!cookieData.bible_is_userSettings_toggleOptions_oneVersePerLine_active,
+					available: true,
+				},
+				verticalScrolling: {
+					name: 'VERTICAL SCROLLING',
+					active: false,
+					available: false,
+				},
+			},
+			autoPlayEnabled: !!cookieData.bible_is_autoplay,
 		};
 	}
 
@@ -410,20 +361,12 @@ AppContainer.getInitialProps = async (context) => {
 	// Get active bible data
 	const singleBibleRes = await cachedFetch(singleBibleUrl).catch((e) => {
 		if (process.env.NODE_ENV === 'development') {
-			console.log('Error in get initial props single bible: ', e.message); // eslint-disable-line no-console
+			console.error('Error in get initial props single bible: ', e.message); // eslint-disable-line no-console
 		}
 		return { data: {} };
 	});
-	// console.log(
-	//   'singleBibleRes.data.filesets["dbp-prod"]',
-	//   singleBibleRes.data.filesets['dbp-prod'],
-	// );
-	// console.log(
-	//   'singleBibleRes.data.filesets["dbp-vid"]',
-	//   singleBibleRes.data.filesets['dbp-vid'],
-	// );
+
 	const singleBibleJson = singleBibleRes;
-	// console.log('single bible', singleBibleJson);
 	const bible = singleBibleJson.data;
 	// Acceptable fileset types that the site is capable of ingesting and displaying
 	const setTypes = {
@@ -444,18 +387,17 @@ AppContainer.getInitialProps = async (context) => {
 					)
 					.reduce((a, c) => c.id, '')
 			: '';
-	// console.log('activeFilesetId', activeFilesetId);
-	// console.log('filesets in app file before filter function', bible.filesets);
+
 	// Filter out gideon bibles because the api will never be fixed in this area... -_- :( :'( ;'(
+	// Todo: Revisit this to see if it is still needed!
 	let filesets = [];
-	// console.log('bible', bible);
+
 	if (
 		bible.filesets &&
 		bible.filesets[process.env.DBP_BUCKET_ID] &&
 		bible.filesets['dbp-vid']
 	) {
 		hasVideo = true;
-		// console.log('inside if with dbp-vid',  [...bible.filesets[process.env.DBP_BUCKET_ID], ...bible.filesets['dbp-vid']])
 		filesets = [
 			...bible.filesets[process.env.DBP_BUCKET_ID],
 			...bible.filesets['dbp-vid'],
@@ -479,22 +421,6 @@ AppContainer.getInitialProps = async (context) => {
 				bible.filesets[process.env.DBP_BUCKET_ID].length === 1,
 		);
 	}
-	// console.log('filesets in app call', filesets);
-	// const filesets =
-	// 	bible.filesets && bible.filesets[process.env.DBP_BUCKET_ID]
-	// 		? bible.filesets[process.env.DBP_BUCKET_ID].filter(
-	// 				(file) =>
-	// 					(!file.id.includes('GID') &&
-	// 						file.id.slice(-4) !== 'DA16' &&
-	// 						setTypes[file.type] &&
-	// 						file.size !== 'S' &&
-	// 						bible.filesets[process.env.DBP_BUCKET_ID].length > 1) ||
-	// 					bible.filesets[process.env.DBP_BUCKET_ID].length === 1,
-	// 		  )
-	// 		: [];
-	// console.log('filesets in app file', filesets);
-	// console.log('bible.name', bible.name);
-	// console.log('bible.abbr', bible.abbr);
 
 	const formattedFilesetIds = [];
 	const plainFilesetIds = [];
@@ -511,27 +437,16 @@ AppContainer.getInitialProps = async (context) => {
 		// Gets one id for each fileset type
 		idsForBookMetadata[set.type] = set.id;
 	});
-	// console.log(idsForBookMetadata);
 
 	const bookMetaPromises = Object.entries(idsForBookMetadata).map(
 		async (id) => {
-			// console.log('id', id);
 			const url = `${process.env.BASE_API_ROUTE}/bibles/filesets/${
 				id[1]
 			}/books?v=4&key=${process.env.DBP_API_KEY}&bucket=${
 				process.env.DBP_BUCKET_ID
 			}&fileset_type=${id[0]}`;
-			// console.log('url', url);
-			const res = await cachedFetch(url); // .catch((e) => {
-			// 	if (process.env.NODE_ENV === 'development') {
-			// 		console.log('Error in request for formatted fileset: ', e.message); // eslint-disable-line no-console
-			// 	}
-			// 	return [];
-			// });
-			// console.log('res', res);
+			const res = await cachedFetch(url);
 			bookCachePairs.push({ href: url, data: res });
-			// console.log('url', url);
-			// console.log('res', res.data ? res.data.length : res.length);
 
 			return res.data || [];
 		},
@@ -541,17 +456,7 @@ AppContainer.getInitialProps = async (context) => {
 		bookMetaResponse.reduce((a, c) => [...a, ...c], []),
 		'book_id',
 	);
-	// console.log('bookMetaData.length', bookMetaData.length);
-	/*
-    if (res) {
-      res.writeHead(302, {
-        Location: 'http://example.com'
-      })
-      res.end()
-    } else {
-      Router.push('http://example.com')
-    }
-	*/
+
 	// Redirect to the new url if conditions are met
 	if (bookMetaData && bookMetaData.length) {
 		const foundBook = bookMetaData.find(
@@ -565,9 +470,7 @@ AppContainer.getInitialProps = async (context) => {
 		// Go to the first book and first chapter
 		if (!foundBook && !foundChapter) {
 			// Logs the url that will be redirected to
-			// console.log('url', `${req.protocol}://${req.hostname}${reqPort}/bible/${bibleId}/${bookMetaData[0].book_id}/${bookMetaData[0].chapters[0]}`);
 			if (serverRes) {
-				// console.log('redirecting 1');
 				// If there wasn't a book then we need to redirect to mark for video resources and matthew for other resources
 				hasVideo
 					? serverRes.writeHead(302, {
@@ -584,7 +487,6 @@ AppContainer.getInitialProps = async (context) => {
 					  });
 				serverRes.end();
 			} else {
-				// console.log('window 1');
 				hasVideo
 					? Router.push(`${window.location.origin}/bible/${bibleId}/mrk/1`)
 					: Router.push(
@@ -600,7 +502,6 @@ AppContainer.getInitialProps = async (context) => {
 				// if the chapter was not found
 				// go to the book and the first chapter for that book
 				if (serverRes) {
-					// console.log('redirecting 2');
 					serverRes.writeHead(302, {
 						Location: `${req.protocol}://${req.get('host')}/bible/${bibleId}/${
 							foundBook.book_id
@@ -608,7 +509,6 @@ AppContainer.getInitialProps = async (context) => {
 					});
 					serverRes.end();
 				} else {
-					// console.log('window 2');
 					Router.push(
 						`${window.location.origin}/bible/${bibleId}/${foundBook.book_id}/${
 							foundBook.chapters[0]
@@ -627,7 +527,6 @@ AppContainer.getInitialProps = async (context) => {
 		audioPaths: [''],
 	};
 	try {
-		// console.log('Before init func');
 		/* eslint-disable no-console */
 		initData = await getinitialChapterData({
 			filesets,
@@ -656,10 +555,7 @@ AppContainer.getInitialProps = async (context) => {
 		}
 	}
 	/* eslint-enable no-console */
-	// console.log('After init func', Object.keys(bookMetaData.reduce((a, c) => ({ ...a, [c.book_id]: true }), {})));
-	// console.log('initData.audioPaths', initData.audioPaths);
 	// Get text for chapter
-	// const textRes = await fetch(textUrl);
 	const textJson = initData.plainTextJson;
 	const chapterText = initData.plainText;
 
@@ -679,22 +575,16 @@ AppContainer.getInitialProps = async (context) => {
 	} else {
 		activeBook = undefined;
 	}
-	// console.log('activeBook', activeBook);
-	// console.log('bible.books', bible.books);
 
 	const activeBookName = activeBook ? activeBook.name : '';
-	// const bookMetaRes = await cachedFetch(bookMetaDataUrl).catch((e) => {
-	// 	if (process.env.NODE_ENV === 'development') {
-	// 		console.log('Error in get initial props single bible: ', e.message); // eslint-disable-line no-console
-	// 	}
-	// 	return { data: [] };
-	// });
-	// const bookMetaJson = bookMetaRes;
-	// console.log('bookData', bookData.map(d => ({ [d.book_id]: d.name })));
 	const testaments = bookData
 		? bookData.reduce((a, c) => ({ ...a, [c.book_id]: c.testament }), {})
 		: [];
-
+	console.log('user profile', userProfile);
+	console.log('initial volume', initialVolume);
+	console.log('initial playback', initialPlaybackRate);
+	console.log('user id', userId);
+	console.log('user settings', userSettings);
 	if (context.reduxStore) {
 		context.reduxStore.dispatch({
 			type: 'GET_INITIAL_ROUTE_STATE_PROFILE',
@@ -748,11 +638,11 @@ AppContainer.getInitialProps = async (context) => {
 				},
 			},
 		});
-		// console.log('Got the initial state!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
 	}
 
 	return {
-		// isServer,
+		initialVolume,
+		initialPlaybackRate,
 		chapterText,
 		testaments,
 		formattedText: initData.formattedText,
@@ -793,14 +683,16 @@ AppContainer.getInitialProps = async (context) => {
 };
 
 AppContainer.propTypes = {
-	dispatch: PropTypes.func,
-	isFromServer: PropTypes.bool,
-	activeChapter: PropTypes.number,
-	chapterText: PropTypes.array,
-	activeBookName: PropTypes.string,
-	routeLocation: PropTypes.string,
 	match: PropTypes.object,
+	dispatch: PropTypes.func,
+	chapterText: PropTypes.array,
 	fetchedUrls: PropTypes.array,
+	isFromServer: PropTypes.bool,
+	routeLocation: PropTypes.string,
+	activeBookName: PropTypes.string,
+	activeChapter: PropTypes.number,
+	initialVolume: PropTypes.number,
+	initialPlaybackRate: PropTypes.number,
 };
 
 export default connect()(AppContainer);

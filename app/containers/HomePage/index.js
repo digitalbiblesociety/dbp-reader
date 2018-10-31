@@ -144,6 +144,7 @@ class HomePage extends React.PureComponent {
 			// Open Password Reset Verified because there is a token - done in Profile/index
 		}
 
+		// Make sure the correct theme is applied - get theme from cookie
 		const activeTheme =
 			localStorage.getItem('bible_is_theme') ||
 			sessionStorage.getItem('bible_is_theme') ||
@@ -708,7 +709,6 @@ class HomePage extends React.PureComponent {
 			activeTextName,
 			activeNotesView,
 			activeFilesetId,
-			// autoPlayEnabled,
 			audioPlayerState,
 			books,
 			highlights,
@@ -735,13 +735,12 @@ class HomePage extends React.PureComponent {
 			userId,
 			userAuthenticated,
 			isMenuOpen,
+			initialVolume,
+			initialPlaybackRate,
 		} = this.props;
 
 		const autoPlayEnabled = userSettings.get('autoPlayEnabled');
-		// console.log('has video', hasVideo);
-
 		const { isScrollingDown, footerDistance: distance } = this.state;
-
 		const { userNotes, bookmarks, text: updatedText } = this.props.textData;
 		const token = this.props.homepage.match.params.token || '';
 		const verse = this.props.homepage.match.params.verse || '';
@@ -877,10 +876,12 @@ class HomePage extends React.PureComponent {
 					activeTextId={activeTextId}
 					activeBookId={activeBookId}
 					activeChapter={activeChapter}
+					initialVolume={initialVolume}
 					isScrollingDown={isScrollingDown}
 					videoPlayerOpen={videoPlayerOpen}
 					audioPlayerState={audioPlayerState}
 					toggleAutoPlay={this.toggleAutoPlay}
+					initialPlaybackRate={initialPlaybackRate}
 					setAudioPlayerState={this.setAudioPlayerState}
 				/>
 				<Footer
@@ -909,6 +910,8 @@ HomePage.propTypes = {
 	userId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 	textData: PropTypes.object,
 	isMenuOpen: PropTypes.bool,
+	initialVolume: PropTypes.number,
+	initialPlaybackRate: PropTypes.number,
 };
 
 const mapStateToProps = createStructuredSelector({

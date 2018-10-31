@@ -6,7 +6,6 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-// import Link from 'next/link';
 import Router from 'next/router';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -15,14 +14,10 @@ import { FormattedMessage } from 'react-intl';
 import isEqual from 'lodash/isEqual';
 import Link from 'next/link';
 import injectReducer from '../../utils/injectReducer';
-// import PrefetchLink from '../../utils/PrefetchLink';
-// import closeEventHoc from 'components/CloseEventHoc';
 import SvgWrapper from '../../components/SvgWrapper';
 import SpeedControl from '../../components/SpeedControl';
 import AudioProgressBar from '../../components/AudioProgressBar';
 import VolumeSlider from '../../components/VolumeSlider';
-// import AudioPlayerMenu from '../../components/AudioPlayerMenu';
-// import GenericErrorBoundary from '../../components/GenericErrorBoundary';
 import makeSelectAudioPlayer, { selectHasAudio } from './selectors';
 import reducer from './reducer';
 import messages from './messages';
@@ -42,30 +37,25 @@ export class AudioPlayer extends React.Component {
 			speedControlState: false,
 			volumeSliderState: false,
 			elipsisState: false,
-			volume: 1,
+			volume: props.initialVolume || 1,
 			duration: 0,
 			currentTime: 0,
-			currentSpeed: 1,
-			autoPlayChecked: this.props.autoPlay,
+			currentSpeed: props.initialPlaybackRate || 1,
+			autoPlayChecked: props.autoPlay,
 			nextTrack: {
 				index: 0,
-				path: this.props.audioPaths[0],
-				last: this.props.audioPaths.length === 0,
+				path: props.audioPaths[0],
+				last: props.audioPaths.length === 0,
 			},
 		};
 	}
 
 	componentDidMount() {
-		// this.setState({
-		//   volume: JSON.parse(localStorage.getItem('bible_is_volume')),
-		//   currentSpeed: JSON.parse(localStorage.getItem('bible_is_playbackRate')),
-		// });
 		if (this.props.audioPaths.length) {
 			this.props.audioPaths.forEach((path) => this.preLoadPath(path));
 		}
 		// If auto play is enabled I need to start the player
 		if (this.props.autoPlay) {
-			// console.log('component mounted and auto play was true');
 			// Checking User Agent because the canplay event fails silently on mobile apple devices
 			if (
 				navigator &&
@@ -96,28 +86,7 @@ export class AudioPlayer extends React.Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		// console.log('local storage stuff', {
-		// 	volume: JSON.parse(localStorage.getItem('bible_is_volume')),
-		// 	currentSpeed: JSON.parse(localStorage.getItem('bible_is_playbackRate')),
-		// });
-		const lVolume = JSON.parse(localStorage.getItem('bible_is_volume'));
-		const lSpeed = JSON.parse(localStorage.getItem('bible_is_playbackRate'));
-		if (this.state.volume !== lVolume && this.state.currentSpeed !== lSpeed) {
-			// console.log('setting both speed and audio');
-			this.setState({
-				volume: lVolume,
-				currentSpeed: lSpeed,
-			});
-		} else if (this.state.volume !== lVolume) {
-			// console.log('setting audio');
-			this.setState({ volume: lVolume });
-		} else if (this.state.currentSpeed !== lSpeed) {
-			// console.log('setting speed');
-			this.setState({ currentSpeed: lSpeed });
-		}
-
 		if (nextProps.audioSource !== this.props.audioSource) {
-			// this.pauseAudio();
 			if (nextProps.audioSource) {
 				this.setState({ playing: false });
 			} else if (this.props.audioPlayerState && !nextProps.audioSource) {
@@ -136,7 +105,6 @@ export class AudioPlayer extends React.Component {
 			//   this.state.volume,
 			//   this.audioRef.volume,
 			// );
-			// console.log('source changed and auto play is true');
 			if (
 				navigator &&
 				navigator.userAgent &&
@@ -148,7 +116,6 @@ export class AudioPlayer extends React.Component {
 			}
 			this.setState({ autoPlayChecked: nextProps.autoPlay });
 		} else if (!nextProps.autoPlay) {
-			// console.log('auto play is now false');
 			if (
 				navigator &&
 				navigator.userAgent &&
@@ -168,8 +135,6 @@ export class AudioPlayer extends React.Component {
 			nextProps.audioPaths.length
 		) {
 			nextProps.audioPaths.forEach((path) => this.preLoadPath(path));
-			// console.log('prev audio paths', this.props.audioPaths);
-			// console.log('next audio paths', nextProps.audioPaths);
 			this.setState({
 				nextTrack: {
 					index: 0,
@@ -181,37 +146,17 @@ export class AudioPlayer extends React.Component {
 	}
 
 	componentDidUpdate() {
+		// Ensure that the player volume and state volume stay in sync
 		if (this.audioRef) {
 			if (this.audioRef.volume !== this.state.volume) {
-				// console.log(
-				//   'the volume in update',
-				//   this.audioRef.volume,
-				//   this.state.volume,
-				// );
 				this.audioRef.volume = this.state.volume;
 			}
+			// Ensure that the player playback rate and state playback rate stay in sync
 			if (this.audioRef.playbackRate !== this.state.currentSpeed) {
-				// console.log(
-				//   'did update the speed',
-				//   this.audioRef.playbackRate,
-				//   this.state.currentSpeed,
-				// );
 				this.audioRef.playbackRate = this.state.currentSpeed;
 			}
 		}
 	}
-
-	// shouldComponentUpdate(nextProps, nextState) {
-	// 	if (nextState.volume !== this.state.volume || nextState.currentTime !== this.state.currentTime) {
-	// 		console.log('audio player should not update');
-	// 		return false;
-	// 	}
-	// 	if (!isEqual(nextProps, this.props) || !isEqual(nextState, this.state)) {
-	// 		console.log('audio player should update');
-	// 		return true;
-	// 	}
-	// 	return false;
-	// }
 
 	componentWillUnmount() {
 		// Removing all the event listeners in the case that this component is unmounted
@@ -244,15 +189,12 @@ export class AudioPlayer extends React.Component {
 	}
 
 	setCurrentTime = (time) => {
-		// alert(`value in set time function: ${time}`);
 		this.setState(
 			{
 				currentTime: time,
 			},
 			() => {
-				// alert(`Setting current time is: ${this.audioRef.currentTime}`);
 				this.audioRef.currentTime = time;
-				// alert(`new time is: ${this.audioRef.currentTime}`);
 			},
 		);
 	};
@@ -288,7 +230,6 @@ export class AudioPlayer extends React.Component {
 	}
 
 	handleRef = (el) => {
-		// alert('Audio ref changed');
 		this.audioRef = el;
 	};
 
@@ -305,8 +246,8 @@ export class AudioPlayer extends React.Component {
 
 	updateVolume = (volume) => {
 		if (volume !== this.state.volume) {
+			document.cookie = `bible_is_volume=${volume}`;
 			this.audioRef.volume = volume;
-			localStorage.setItem('bible_is_volume', JSON.stringify(volume));
 			this.setState({
 				volume,
 			});
@@ -314,24 +255,9 @@ export class AudioPlayer extends React.Component {
 	};
 
 	autoPlayListener = () => {
-		// console.log('auto play listener fired');
 		// can accept event as a parameter
-		// console.log(
-		//   '!this.state.loadingNextChapter',
-		//   !this.state.loadingNextChapter,
-		// );
-		// console.log('this.props.audioPlayerState', this.props.audioPlayerState);
-		// console.log('!this.props.videoPlayerOpen', !this.props.videoPlayerOpen);
+		// If the chapter is loaded and the player is open
 		if (!this.state.loadingNextChapter && this.props.audioPlayerState) {
-			// const lSpeed = JSON.parse(localStorage.getItem('bible_is_playbackRate'));
-			// const lVolume = JSON.parse(localStorage.getItem('bible_is_volume'));
-			// if (lSpeed !== this.state.currentSpeed || lVolume !== this.state.volume) {
-			//   this.audioRef.playbackRate = lSpeed;
-			//   this.audioRef.volume = lVolume;
-			// } else {
-			//   this.audioRef.playbackRate = this.state.currentSpeed;
-			//   this.audioRef.volume = this.state.volume;
-			// }
 			this.playAudio();
 		}
 	};
@@ -343,35 +269,26 @@ export class AudioPlayer extends React.Component {
 	};
 
 	timeUpdateEventListener = (e) => {
-		// alert(`time at update: ${e.target.currentTime}`)
 		this.setState({
 			currentTime: e.target.currentTime,
 		});
 	};
 
 	seekingEventListener = (e) => {
-		// console.log('player is seeking', e.target.currentTime);
-		// alert(`time in seeking: ${e.target.currentTime}`)
 		this.setState({
 			currentTime: e.target.currentTime,
 		});
 	};
 
 	seekedEventListener = (e) => {
-		// console.log('player is done seeking', e.target.currentTime);
-		// alert(`time in seeked: ${e.target.currentTime}`)
 		this.setState({
 			currentTime: e.target.currentTime,
 		});
 	};
 
 	endedEventListener = () => {
-		// console.log('ended and autoplay was ', this.props.autoPlay);
 		if (!this.state.nextTrack.last && this.props.audioPaths.length) {
-			// console.log('tracks in state', this.state.nextTrack);
-			// console.log('src before', this.audioRef.src);
 			this.audioRef.src = this.state.nextTrack.path;
-			// console.log('src after', this.audioRef.src);
 			this.setState(
 				(prevState) => ({
 					nextTrack: {
@@ -385,7 +302,6 @@ export class AudioPlayer extends React.Component {
 				() => this.playAudio(),
 			);
 		} else {
-			// console.log('in else for ended event listener');
 			if (this.props.autoPlay) {
 				this.skipForward();
 			}
@@ -394,16 +310,11 @@ export class AudioPlayer extends React.Component {
 	};
 
 	preLoadPath = (path) => {
-		// console.log('loading path', path);
 		const audio = new Audio();
-
-		// audio.addEventListener('loadedmetadata', () => console.log('can play through'), false);
 		audio.src = path;
 	};
 
 	playingEventListener = (e) => {
-		// console.log('playing status', e.target.paused);
-		// console.log('playing ended', e.target.ended);
 		if (this.state.playing && e.target.paused) {
 			this.setState({
 				playing: false,
@@ -423,25 +334,19 @@ export class AudioPlayer extends React.Component {
 	};
 
 	playAudio = () => {
-		// alert(`audio ref\n ${this.audioRef}`);
-		// alert(`time in play: ${this.audioRef.currentTime}`);
-		// alert(`Current time in state: ${this.state.currentTime}\nCurrent time in audio: ${this.audioRef.currentTime}`);
 		this.audioRef.play().then(() => {
-			// alert('audio should be playing now');
-			// alert(`time in play callback: ${this.audioRef.currentTime}`);
-			// alert(`Current time in state: ${this.state.currentTime}\nCurrent time in audio: ${this.audioRef.currentTime}`);
 			if (this.state.currentTime !== this.audioRef.currentTime) {
 				this.audioRef.currentTime = this.state.currentTime;
 			}
 			this.setState({
 				playing: true,
 			});
-		}); // .catch((e) => alert(`There was a problem playing the audio: \n${e}`));
+		});
 	};
 
 	updatePlayerSpeed = (rate) => {
 		if (this.state.currentSpeed !== rate) {
-			localStorage.setItem('bible_is_playbackRate', JSON.stringify(rate));
+			document.cookie = `bible_is_playbackrate${JSON.stringify(rate)}`;
 			this.audioRef.playbackRate = rate;
 			this.setState({
 				currentSpeed: rate,
@@ -457,7 +362,7 @@ export class AudioPlayer extends React.Component {
 	// 		playing: false,
 	// 	});
 	// };
-	//
+
 	skipForward = () => {
 		// console.log('skipping forward');
 		this.setCurrentTime(0);
@@ -468,14 +373,6 @@ export class AudioPlayer extends React.Component {
 				loadingNextChapter: true,
 			},
 			() => {
-				localStorage.setItem(
-					'bible_is_volume',
-					JSON.stringify(this.state.volume),
-				);
-				localStorage.setItem(
-					'bible_is_playbackRate',
-					JSON.stringify(this.state.currentSpeed),
-				);
 				Router.push(
 					getNextChapterUrl({
 						books: this.props.books,
@@ -878,6 +775,8 @@ AudioPlayer.propTypes = {
 	activeTextId: PropTypes.string,
 	verseNumber: PropTypes.string,
 	activeChapter: PropTypes.number,
+	initialPlaybackRate: PropTypes.number,
+	initialVolume: PropTypes.number,
 	// prevAudioSource: PropTypes.string,
 	// nextAudioSource: PropTypes.string,
 };
