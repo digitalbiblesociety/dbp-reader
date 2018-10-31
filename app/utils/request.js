@@ -35,7 +35,7 @@ const checkStatus = (res) => {
 	error.response = res;
 	throw error;
 };
-
+// put cookie here
 const request = (url, options) =>
 	fetch(url, options)
 		.then(checkStatus)
