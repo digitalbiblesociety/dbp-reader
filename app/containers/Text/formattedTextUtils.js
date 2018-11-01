@@ -86,7 +86,6 @@ const applyBookmarks = (source, bookmarks) => {
 	// Check if the note is in the range of verses
 	// Then find the verse element
 	// Append the note icon as a svg with the appropriate event handlers
-	// console.log(verses);
 	// console.log(verses[6]);
 	// console.log(verses[lastV]);
 	const versesWithBookmarks = {};

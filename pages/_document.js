@@ -5,8 +5,7 @@ import Document, { Head, Main, NextScript } from 'next/document';
 // import '../static/manifest.json';``
 // Importing the check here so that it is available to the css
 /* Add this if the fonts are loading to slow
-*
-* <link
+<link
 	rel="preload"
 	as="style"
 	href="https://fonts.googleapis.com/css?family=Roboto:400,500"
@@ -26,40 +25,20 @@ import Document, { Head, Main, NextScript } from 'next/document';
 	as="style"
 	href="https://fonts.googleapis.com/css?family=Alegreya"
 />
-* */
+*/
 /* eslint-disable */
 export default class MyDocument extends Document {
+	// Look at applying the theme here - (low priority at this time)
 	// static getInitialProps = async ({ req }) => {
-	// 	// console.log(Object.keys(req.headers));
-	// 	// console.log(Object.keys(req.header));
-	// 	// console.log(req.header.userAgent);
-	// 	// console.log(req.headers['user-agent']);
-	// 	const browserObject = {
-	// 		agent: '',
-	// 		majorVersion: '',
-	// 		version: '',
-	// 	};
-	//
-	// 	if (req.headers['user-agent']) {
-	// 		if (/msie [0-9]{1}/i.test(req.headers['user-agent'])) {
-	// 			browserObject.agent = 'msie';
-	// 			browserObject.majorVersion = parseInt(
-	// 				/MSIE ([0-9]{1})/i.exec(req.headers['user-agent'])[1],
-	// 				10,
-	// 			);
-	// 			browserObject.version = /MSIE ([0-9.]+)/i.exec(req.headers['user-agent'])[1];
-	// 		} else if (/Trident\/[7]{1}/i.test(req.headers['user-agent'])) {
-	// 			browserObject.agent = 'msie';
-	// 			browserObject.majorVersion = 11;
-	// 			browserObject.version = '11';
-	// 		}
-	// 	}
-	// 	return { isIE: browserObject.agent === 'msie' };
-	// }
+	//   if (req && req.headers) {
+	//     console.log('req cookie', req.headers.cookie);
+	//   } else if (typeof document !== 'undefined') {
+	//     console.log('doc cookie', document.cookie);
+	//   }
+	//   return {};
+	// };
 	render() {
-		// const { isIE } = this.props;
-		// console.log('this is ie', isIE);
-		// For enabling user feedback add the script below
+		// console.log('document is rendering...');
 		return (
 			<html>
 				<Head>

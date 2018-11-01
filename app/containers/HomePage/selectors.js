@@ -158,10 +158,10 @@ const selectUserNotes = () =>
 					// console.log('t',t);
 					// console.log('n',n);
 
-					if (parseInt(t.get('verse_start'), 10) === n.get('verse_start')) {
+					if (parseInt(t.get('verse_start'), 10) === n.get('verse')) {
 						iToSet = i;
 					}
-					return parseInt(t.get('verse_start'), 10) === n.get('verse_start');
+					return parseInt(t.get('verse_start'), 10) === n.get('verse');
 				});
 				// console.log(iToSet);
 				if (verse) {

@@ -239,12 +239,51 @@ AppContainer.getInitialProps = async (context) => {
 	const userProfile = {};
 	let hasVideo = false;
 	let isFromServer = true;
-	let userSettings = {};
+	let userSettings = {
+		activeTheme: 'red',
+		activeFontType: 'sans',
+		activeFontSize: 42,
+		toggleOptions: {
+			readersMode: {
+				name: "READER'S MODE",
+				active: false,
+				available: true,
+			},
+			crossReferences: {
+				name: 'CROSS REFERENCE',
+				active: true,
+				available: true,
+			},
+			redLetter: {
+				name: 'RED LETTER',
+				active: true,
+				available: true,
+			},
+			justifiedText: {
+				name: 'JUSTIFIED TEXT',
+				active: false,
+				available: true,
+			},
+			oneVersePerLine: {
+				name: 'ONE VERSE PER LINE',
+				active: false,
+				available: true,
+			},
+			verticalScrolling: {
+				name: 'VERTICAL SCROLLING',
+				active: false,
+				available: false,
+			},
+		},
+		autoPlayEnabled: false,
+	};
 	let userId = '';
 	let isAuthenticated = false;
 	let initialVolume = 1;
 	let initialPlaybackRate = 1;
-
+	// console.log(
+	//   'getting initial props, this should run on the server before the html is sent to the page...',
+	// );
 	if (req && req.headers.cookie) {
 		// Get all cookies that the page needs
 		// console.log(
@@ -320,6 +359,7 @@ AppContainer.getInitialProps = async (context) => {
 
 		isFromServer = false;
 	} else if (typeof document !== 'undefined' && document.cookie) {
+		// console.log('req was not defined but document was');
 		// Get all cookies that the page needs
 		// console.log(
 		//   'cookie in get initial props: client!',
@@ -391,6 +431,8 @@ AppContainer.getInitialProps = async (context) => {
 			},
 			autoPlayEnabled: !!cookieData.bible_is_autoplay,
 		};
+	} else {
+		// console.log('no cookie was available at this time');
 	}
 
 	const singleBibleUrl = `${
