@@ -245,25 +245,78 @@ export function* deleteNote({
 	isBookmark,
 }) {
 	// console.log('deleting note or in delete note');
-	const requestUrl = `${
-		process.env.BASE_API_ROUTE
-	}/users/${userId}/notes/${noteId}?key=${
-		process.env.DBP_API_KEY
-	}&v=4&pretty&note_id=${noteId}&project_id=${process.env.NOTES_PROJECT_ID}`;
-	const options = {
-		method: 'DELETE',
-	};
-	// console.log('deleting note for userid and noteid', userId, noteId);
-	try {
-		const response = yield call(request, requestUrl, options);
+	if (isBookmark) {
+		const requestUrl = `${
+			process.env.BASE_API_ROUTE
+		}/users/${userId}/bookmarks/${noteId}?key=${
+			process.env.DBP_API_KEY
+		}&v=4&pretty&note_id=${noteId}&project_id=${process.env.NOTES_PROJECT_ID}`;
+		const options = {
+			method: 'DELETE',
+		};
+		// console.log('deleting note for userid and noteid', userId, noteId);
+		try {
+			const response = yield call(request, requestUrl, options);
 
-		if (response.success) {
-			if (isBookmark) {
-				yield fork(getUserBookmarks, {
+			yield fork(getUserBookmarks, {
+				userId,
+				params: { limit: pageSize, page: activePage },
+			});
+			yield fork(getBookmarksForChapter, {
+				userId,
+				params: {
+					bible_id: bibleId,
+					book_id: bookId,
+					chapter,
+					limit: 150,
+					page: 1,
+				},
+			});
+		} catch (err) {
+			if (process.env.NODE_ENV === 'development') {
+				console.error(err); // eslint-disable-line no-console
+			}
+			yield put({
+				type: ADD_NOTE_FAILED,
+				message: 'An error has occurred. Please try again later.',
+			});
+		}
+	} else {
+		const requestUrl = `${
+			process.env.BASE_API_ROUTE
+		}/users/${userId}/notes/${noteId}?key=${
+			process.env.DBP_API_KEY
+		}&v=4&pretty&note_id=${noteId}&project_id=${process.env.NOTES_PROJECT_ID}`;
+		const options = {
+			method: 'DELETE',
+		};
+		// console.log('deleting note for userid and noteid', userId, noteId);
+		try {
+			const response = yield call(request, requestUrl, options);
+
+			if (response.success) {
+				if (isBookmark) {
+					yield fork(getUserBookmarks, {
+						userId,
+						params: { limit: pageSize, page: activePage },
+					});
+					yield fork(getBookmarksForChapter, {
+						userId,
+						params: {
+							bible_id: bibleId,
+							book_id: bookId,
+							chapter,
+							limit: 150,
+							page: 1,
+						},
+					});
+				}
+				// console.log('successfully deleted note!', response);
+				yield fork(getNotesForNotebook, {
 					userId,
 					params: { limit: pageSize, page: activePage },
 				});
-				yield fork(getBookmarksForChapter, {
+				yield fork(getNotesForChapter, {
 					userId,
 					params: {
 						bible_id: bibleId,
@@ -274,36 +327,21 @@ export function* deleteNote({
 					},
 				});
 			}
-			// console.log('successfully deleted note!', response);
-			yield fork(getNotesForNotebook, {
-				userId,
-				params: { limit: pageSize, page: activePage },
-			});
-			yield fork(getNotesForChapter, {
-				userId,
-				params: {
-					bible_id: bibleId,
-					book_id: bookId,
-					chapter,
-					limit: 150,
-					page: 1,
-				},
+		} catch (err) {
+			if (process.env.NODE_ENV === 'development') {
+				console.error(err); // eslint-disable-line no-console
+			} else if (process.env.NODE_ENV === 'production') {
+				// const options = {
+				// 	 header: 'POST',
+				// 	 body: formData,
+				// };
+				// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
+			}
+			yield put({
+				type: ADD_NOTE_FAILED,
+				message: 'An error has occurred. Please try again later.',
 			});
 		}
-	} catch (err) {
-		if (process.env.NODE_ENV === 'development') {
-			console.error(err); // eslint-disable-line no-console
-		} else if (process.env.NODE_ENV === 'production') {
-			// const options = {
-			// 	 header: 'POST',
-			// 	 body: formData,
-			// };
-			// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
-		}
-		yield put({
-			type: ADD_NOTE_FAILED,
-			message: 'An error has occurred. Please try again later.',
-		});
 	}
 }
 // Probably need a getBookmarks function
@@ -337,7 +375,7 @@ export function* getNotesForChapter({ userId, params = {} }) {
 		// console.log('got chapter notes get note response', response);
 		yield put({
 			type: LOAD_USER_NOTES,
-			listData: response.data,
+			listData: response.data || [],
 		});
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
@@ -380,14 +418,15 @@ export function* getNotesForNotebook({ userId, params = {} }) {
 		// };
 		// console.log('get note response current page, last page and per page', response.current_page, response.last_page, response.per_page);
 		// console.log('got the notebook notes response', response);
-
-		yield put({
-			type: LOAD_NOTEBOOK_DATA,
-			listData: response.data,
-			activePage: parseInt(response.meta.pagination.current_page, 10),
-			totalPages: parseInt(response.meta.pagination.last_page, 10),
-			pageSize: parseInt(response.meta.pagination.per_page, 10),
-		});
+		if (response.data && response.meta) {
+			yield put({
+				type: LOAD_NOTEBOOK_DATA,
+				listData: response.data,
+				activePage: parseInt(response.meta.pagination.current_page, 10),
+				totalPages: parseInt(response.meta.pagination.last_page, 10),
+				pageSize: parseInt(response.meta.pagination.per_page, 10),
+			});
+		}
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error(err); // eslint-disable-line no-console
@@ -484,10 +523,12 @@ export function* getBookmarksForChapter({ userId, params = {} }) {
 		// console.log('get note response current page, last page and per page', response.current_page, response.last_page, response.per_page);
 
 		// console.log('get bookmarks for chapter response', response);
-		yield put({
-			type: LOAD_BOOKMARKS_FOR_CHAPTER,
-			listData: response.data || [],
-		});
+		if (response.data) {
+			yield put({
+				type: LOAD_BOOKMARKS_FOR_CHAPTER,
+				listData: response.data || [],
+			});
+		}
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error('Error getting the notes', err); // eslint-disable-line no-console
@@ -534,13 +575,15 @@ export function* getUserBookmarks({ userId, params = {} }) {
 		// };
 		// console.log('get note response current page, last page and per page', response.current_page, response.last_page, response.per_page);
 		// console.log('response for user bookmarks', response);
-		yield put({
-			type: LOAD_USER_BOOKMARK_DATA,
-			listData: response.data,
-			activePage: parseInt(response.meta.pagination.current_page, 10),
-			totalPages: parseInt(response.meta.pagination.last_page, 10),
-			pageSize: parseInt(response.meta.pagination.per_page, 10),
-		});
+		if (response.data && response.meta) {
+			yield put({
+				type: LOAD_USER_BOOKMARK_DATA,
+				listData: response.data,
+				activePage: parseInt(response.meta.pagination.current_page, 10),
+				totalPages: parseInt(response.meta.pagination.last_page, 10),
+				pageSize: parseInt(response.meta.pagination.per_page, 10),
+			});
+		}
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error(err); // eslint-disable-line no-console
