@@ -88,11 +88,9 @@ class LanguageList extends React.PureComponent {
 					>
 						{language.alt_names && language.alt_names.includes(filterText)
 							? filterText
-							: language.vernacular_name ||
-							  language.englishName ||
-							  language.name}
-						{language.vernacular_name &&
-						language.vernacular_name !== (language.englishName || language.name)
+							: language.autonym || language.englishName || language.name}
+						{language.autonym &&
+						language.autonym !== (language.englishName || language.name)
 							? ` - ( ${language.englishName || language.name} )`
 							: null}
 					</h4>
