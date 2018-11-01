@@ -40,7 +40,11 @@ import {
 class AppContainer extends React.Component {
 	static displayName = 'Main app'; // eslint-disable-line no-undef
 	componentWillMount() {
-		if (typeof document !== 'undefined' && this.props.userSettings) {
+		if (
+			typeof document !== 'undefined' &&
+			this.props.userSettings &&
+			this.props.userSettings.toggleOptions
+		) {
 			const activeTheme = this.props.userSettings.activeTheme;
 			const activeFontType = this.props.userSettings.activeFontType;
 			const activeFontSize = this.props.userSettings.activeFontSize;
@@ -241,7 +245,7 @@ AppContainer.getInitialProps = async (context) => {
 	let initialVolume = 1;
 	let initialPlaybackRate = 1;
 
-	if (req) {
+	if (req && req.headers.cookie) {
 		// Get all cookies that the page needs
 		// console.log(
 		//   'cookie in get initial props: server!',
@@ -315,7 +319,7 @@ AppContainer.getInitialProps = async (context) => {
 		};
 
 		isFromServer = false;
-	} else {
+	} else if (typeof document !== 'undefined' && document.cookie) {
 		// Get all cookies that the page needs
 		// console.log(
 		//   'cookie in get initial props: client!',
