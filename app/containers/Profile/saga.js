@@ -68,11 +68,10 @@ export function* sendSignUpForm({
 				userId: response.data.id,
 				userProfile: response.data,
 			});
-			sessionStorage.setItem('bible_is_user_id', response.data.id || '');
-			sessionStorage.setItem('bible_is_12345', response.data.email || '');
-			sessionStorage.setItem('bible_is_123456', response.data.first_name || '');
-			sessionStorage.setItem('bible_is_1234567', response.data.name || '');
-			sessionStorage.setItem('bible_is_12345678', response.data.avatar || '');
+			document.cookie = `bible_is_user_id=${response.data.id}`;
+			document.cookie = `bible_is_name=${response.data.name}`;
+			document.cookie = `bible_is_email=${response.data.email}`;
+			document.cookie = `bible_is_first_name=${response.data.first_name}`;
 		} else if (response.error) {
 			// console.log('res error', response);
 			const message = Object.values(response.error.message).reduce(
@@ -96,13 +95,10 @@ export function* sendSignUpForm({
 }
 
 export function* sendLoginForm({ password, email, stay }) {
-	// console.log('password, email, stay', password, email, stay);
-
 	const requestUrl = `${process.env.BASE_API_ROUTE}/users/login?key=${
 		process.env.DBP_API_KEY
 	}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}`;
 	const formData = new FormData();
-	// console.log('login data', { password, email, stay });
 
 	formData.append('password', password);
 	formData.append('email', email);
@@ -114,10 +110,7 @@ export function* sendLoginForm({ password, email, stay }) {
 
 	try {
 		const response = yield call(request, requestUrl, options);
-		// console.log('response for login', response);
-		// console.log('response', response);
 		if (response.error) {
-			// console.log('response.error', response.error);
 			yield put({ type: LOGIN_ERROR, message: response.error.message });
 		} else {
 			yield put({
@@ -125,11 +118,15 @@ export function* sendLoginForm({ password, email, stay }) {
 				userId: response.id,
 				userProfile: response,
 			});
-			// May add an else that will save the id to the session so it is persisted through a page refresh
+
+			document.cookie = `bible_is_user_id=${response.id}`;
+			document.cookie = `bible_is_email=${response.email}`;
+			document.cookie = `bible_is_name=${response.name}`;
+			document.cookie = `bible_is_first_name=${response.nickname}`;
+
+			// May need to do something with the stay signed in variable
 			if (stay) {
-				localStorage.setItem('bible_is_user_id', response.id);
-			} else {
-				sessionStorage.setItem('bible_is_user_id', response.id);
+				//   localStorage.setItem('bible_is_user_id', response.id);
 			}
 		}
 	} catch (err) {
@@ -317,11 +314,9 @@ export function* sendResetPassword({ password, userAccessToken, email }) {
 			userId: response.id,
 			userProfile: response,
 		});
-		// sessionStorage.setItem('bible_is_user_id', response.id);
-		sessionStorage.setItem('bible_is_12345', response.email || '');
-		sessionStorage.setItem('bible_is_123456', response.nickname || '');
-		sessionStorage.setItem('bible_is_1234567', response.name || '');
-		sessionStorage.setItem('bible_is_12345678', response.avatar || '');
+		document.cookie = `bible_is_email=${response.email}`;
+		document.cookie = `bible_is_name=${response.name}`;
+		document.cookie = `bible_is_first_name=${response.first_name}`;
 	} catch (err) {
 		// console.log('in catch');
 

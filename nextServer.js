@@ -116,11 +116,18 @@ app
 			// 	'Getting bible and book and chapter for route',
 			// 	`${req.protocol}://${req.get('host')}${req.originalUrl}`,
 			// );
+			// console.log('cookie: ', req && req.headers && req.headers.cookie);
 			const queryParams = {
 				bibleId: req.params.bibleId,
 				bookId: req.params.bookId,
 				chapter: req.params.chapter,
 			};
+			// res.setHeader('SET-COOKIE', [
+			//   'mySpecialTest=the stuff inside the cookie',
+			//   'type=ninja',
+			//   'language=javascript',
+			// ]);
+
 			if (
 				queryParams.verse !== 'style.css' &&
 				!req.originalUrl.includes('/static') &&
