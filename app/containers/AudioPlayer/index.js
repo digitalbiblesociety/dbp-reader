@@ -346,7 +346,7 @@ export class AudioPlayer extends React.Component {
 
 	updatePlayerSpeed = (rate) => {
 		if (this.state.currentSpeed !== rate) {
-			document.cookie = `bible_is_playbackrate${JSON.stringify(rate)}`;
+			document.cookie = `bible_is_playbackrate=${JSON.stringify(rate)}`;
 			this.audioRef.playbackRate = rate;
 			this.setState({
 				currentSpeed: rate,
@@ -420,6 +420,7 @@ export class AudioPlayer extends React.Component {
 	get currentSpeedSvg() {
 		const { currentSpeed } = this.state;
 
+		// If speed came from cookie it is stored as a string since there is not a parse float
 		if (currentSpeed === 0.75) {
 			return (
 				<SvgWrapper className={'icon'} fill="#fff" svgid="playback_0.75x" />
@@ -775,8 +776,11 @@ AudioPlayer.propTypes = {
 	activeTextId: PropTypes.string,
 	verseNumber: PropTypes.string,
 	activeChapter: PropTypes.number,
-	initialPlaybackRate: PropTypes.number,
-	initialVolume: PropTypes.number,
+	initialPlaybackRate: PropTypes.oneOfType([
+		PropTypes.number,
+		PropTypes.string,
+	]),
+	initialVolume: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 	// prevAudioSource: PropTypes.string,
 	// nextAudioSource: PropTypes.string,
 };

@@ -67,7 +67,7 @@ SpeedControl.propTypes = {
 	options: PropTypes.array,
 	setSpeed: PropTypes.func,
 	active: PropTypes.bool,
-	currentSpeed: PropTypes.number,
+	currentSpeed: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 	onCloseFunction: PropTypes.func,
 };
 

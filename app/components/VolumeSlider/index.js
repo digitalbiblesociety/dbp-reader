@@ -114,7 +114,7 @@ class VolumeSlider extends React.PureComponent {
 VolumeSlider.propTypes = {
 	updateVolume: PropTypes.func.isRequired,
 	onCloseFunction: PropTypes.func,
-	volume: PropTypes.number.isRequired,
+	volume: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 	active: PropTypes.bool,
 	vertical: PropTypes.bool,
 	railStyle: PropTypes.object,

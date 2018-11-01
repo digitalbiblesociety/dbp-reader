@@ -7,9 +7,9 @@ const parseCookieValue = (value) => {
 	if (value === 'false' || value === 'true') {
 		return JSON.parse(value);
 	}
-	// If the value is a number return an integer
-	if (!isNaN(parseInt(value, 10))) {
-		return parseInt(value, 10);
+	// If the value is a number return an integer - (Do not want this for volume or playback rate)
+	if (!isNaN(parseFloat(value, 10))) {
+		return parseFloat(value, 10);
 	}
 	// Return the value since it is a string of information
 	return value;
@@ -17,14 +17,15 @@ const parseCookieValue = (value) => {
 
 const parseCookie = (cookie) =>
 	cookie
-		.split(';')
+		.split('; ')
 		.filter((c) => c.includes('bible_is'))
-		.map((c) => {
+		.reduce((a, c) => {
 			const ca = c.split('=');
 			return {
-				key: ca[0],
-				value: parseCookieValue(ca[1]),
+				...a,
+				[ca[0]]: parseCookieValue(ca[1]),
 			};
-		});
+		}, {});
 
+export { parseCookie, parseCookieValue };
 export default parseCookie;

@@ -30,35 +30,56 @@ import svg4everybody from '../app/utils/svgPolyfill';
 // import request from '../app/utils/request';
 import removeDuplicates from '../app/utils/removeDuplicateObjects';
 import parseCookie from '../app/utils/parseCookie';
+import {
+	applyTheme,
+	applyFontFamily,
+	applyFontSize,
+	toggleWordsOfJesus,
+} from '../app/containers/Settings/themes';
 
 class AppContainer extends React.Component {
 	static displayName = 'Main app'; // eslint-disable-line no-undef
 	componentWillMount() {
-		// console.log('Component will mount for app', this.props);
-		// console.log('Component will mount for app redux store available at mounting', this.props.dispatch);
+		if (typeof document !== 'undefined' && this.props.userSettings) {
+			const activeTheme = this.props.userSettings.activeTheme;
+			const activeFontType = this.props.userSettings.activeFontType;
+			const activeFontSize = this.props.userSettings.activeFontSize;
+			const redLetter = this.props.userSettings.toggleOptions.redLetter.active;
+			// Apply theme data to site
+			toggleWordsOfJesus(redLetter);
+			applyTheme(activeTheme);
+			applyFontFamily(activeFontType);
+			applyFontSize(activeFontSize);
+		}
 	}
 	componentDidMount() {
-		// console.log('session storage autoplay item', sessionStorage.getItem('bible_is_autoplay'));
-		// console.log('autoplay value in app didmount', sessionStorage.getItem('bible_is_autoplay')
-		// 	? JSON.parse(sessionStorage.getItem('bible_is_autoplay'))
-		// 	: false);
 		// If the page was served from the server then I need to cache the data for this route
 		if (this.props.isFromServer) {
-			// console.log('Using cached url');
-			// console.log('this.props.fetchedUrls', this.props.fetchedUrls);
 			this.props.fetchedUrls.forEach((url) => {
-				// logCache(url.href);
 				overrideCache(url.href, url.data);
 			});
 		}
 		// Setting book, chapter, bible for page navigation I guess...
-		localStorage.setItem('bible_is_2_book_id', this.props.match.params.bookId);
-		localStorage.setItem('bible_is_3_chapter', this.props.match.params.chapter);
-		localStorage.setItem(
-			'bible_is_1_bible_id',
-			this.props.match.params.bibleId,
-		);
-		sessionStorage.setItem('bible_is_audio_player_state', true);
+		// localStorage.setItem('bible_is_2_book_id', this.props.match.params.bookId);
+		// localStorage.setItem('bible_is_3_chapter', this.props.match.params.chapter);
+		// localStorage.setItem(
+		// 	'bible_is_1_bible_id',
+		// 	this.props.match.params.bibleId,
+		// );
+		// sessionStorage.setItem('bible_is_audio_player_state', true);
+
+		// Get theme data from cookie (passed from getInitialProps)
+		// if (this.props.userSettings) {
+		//   const activeTheme = this.props.userSettings.activeTheme;
+		//   const activeFontFamily = this.props.userSettings.activeFontFamily;
+		//   const activeFontSize = this.props.userSettings.activeFontSize;
+		//   const redLetter = this.props.userSettings.toggleOptions.redLetter.active;
+		//   // Apply theme data to site
+		//   toggleWordsOfJesus(redLetter);
+		//   applyTheme(activeTheme);
+		//   applyFontFamily(activeFontFamily);
+		//   applyFontSize(activeFontSize);
+		// }
 
 		this.props.dispatch(setChapterTextLoadingState({ state: false }));
 
@@ -222,10 +243,10 @@ AppContainer.getInitialProps = async (context) => {
 
 	if (req) {
 		// Get all cookies that the page needs
-		console.log(
-			'cookie in get initial props: server!',
-			parseCookie(req.headers.cookie),
-		);
+		// console.log(
+		//   'cookie in get initial props: server!',
+		//   parseCookie(req.headers.cookie),
+		// );
 		const cookieData = parseCookie(req.headers.cookie);
 
 		// Authentication Information
@@ -233,7 +254,8 @@ AppContainer.getInitialProps = async (context) => {
 		isAuthenticated = !!cookieData.bible_is_user_id;
 
 		// Audio Player
-		initialVolume = cookieData.bible_is_volume || 1;
+		initialVolume =
+			cookieData.bible_is_volume === 0 ? 0 : cookieData.bible_is_volume || 1;
 		initialPlaybackRate = cookieData.bible_is_playbackrate || 1;
 
 		// User Profile
@@ -250,27 +272,37 @@ AppContainer.getInitialProps = async (context) => {
 			toggleOptions: {
 				readersMode: {
 					name: "READER'S MODE",
-					active: !!cookieData.bible_is_userSettings_toggleOptions_readersMode_active,
+					active: cookieData.bible_is_userSettings_toggleOptions_readersMode_active
+						? !!cookieData.bible_is_userSettings_toggleOptions_readersMode_active
+						: false,
 					available: true,
 				},
 				crossReferences: {
 					name: 'CROSS REFERENCE',
-					active: !!cookieData.bible_is_userSettings_toggleOptions_crossReferences_active,
+					active: cookieData.bible_is_userSettings_toggleOptions_crossReferences_active
+						? !!cookieData.bible_is_userSettings_toggleOptions_crossReferences_active
+						: true,
 					available: true,
 				},
 				redLetter: {
 					name: 'RED LETTER',
-					active: !!cookieData.bible_is_words_of_jesus,
+					active: cookieData.bible_is_words_of_jesus
+						? !!cookieData.bible_is_words_of_jesus
+						: true,
 					available: true,
 				},
 				justifiedText: {
 					name: 'JUSTIFIED TEXT',
-					active: !!cookieData.bible_is_userSettings_toggleOptions_justifiedText_active,
+					active: cookieData.bible_is_userSettings_toggleOptions_justifiedText_active
+						? !!cookieData.bible_is_userSettings_toggleOptions_justifiedText_active
+						: false,
 					available: true,
 				},
 				oneVersePerLine: {
 					name: 'ONE VERSE PER LINE',
-					active: !!cookieData.bible_is_userSettings_toggleOptions_oneVersePerLine_active,
+					active: cookieData.bible_is_userSettings_toggleOptions_oneVersePerLine_active
+						? !!cookieData.bible_is_userSettings_toggleOptions_oneVersePerLine_active
+						: false,
 					available: true,
 				},
 				verticalScrolling: {
@@ -285,10 +317,10 @@ AppContainer.getInitialProps = async (context) => {
 		isFromServer = false;
 	} else {
 		// Get all cookies that the page needs
-		console.log(
-			'cookie in get initial props: client!',
-			parseCookie(document.cookie),
-		);
+		// console.log(
+		//   'cookie in get initial props: client!',
+		//   parseCookie(document.cookie),
+		// );
 		const cookieData = parseCookie(document.cookie);
 
 		// Authentication Information
@@ -296,7 +328,8 @@ AppContainer.getInitialProps = async (context) => {
 		isAuthenticated = !!cookieData.bible_is_user_id;
 
 		// Audio Player
-		initialVolume = cookieData.bible_is_volume || 1;
+		initialVolume =
+			cookieData.bible_is_volume === 0 ? 0 : cookieData.bible_is_volume || 1;
 		initialPlaybackRate = cookieData.bible_is_playbackrate || 1;
 
 		// User Profile
@@ -313,27 +346,37 @@ AppContainer.getInitialProps = async (context) => {
 			toggleOptions: {
 				readersMode: {
 					name: "READER'S MODE",
-					active: !!cookieData.bible_is_userSettings_toggleOptions_readersMode_active,
+					active: cookieData.bible_is_userSettings_toggleOptions_readersMode_active
+						? !!cookieData.bible_is_userSettings_toggleOptions_readersMode_active
+						: false,
 					available: true,
 				},
 				crossReferences: {
 					name: 'CROSS REFERENCE',
-					active: !!cookieData.bible_is_userSettings_toggleOptions_crossReferences_active,
+					active: cookieData.bible_is_userSettings_toggleOptions_crossReferences_active
+						? !!cookieData.bible_is_userSettings_toggleOptions_crossReferences_active
+						: true,
 					available: true,
 				},
 				redLetter: {
 					name: 'RED LETTER',
-					active: !!cookieData.bible_is_words_of_jesus,
+					active: cookieData.bible_is_words_of_jesus
+						? !!cookieData.bible_is_words_of_jesus
+						: true,
 					available: true,
 				},
 				justifiedText: {
 					name: 'JUSTIFIED TEXT',
-					active: !!cookieData.bible_is_userSettings_toggleOptions_justifiedText_active,
+					active: cookieData.bible_is_userSettings_toggleOptions_justifiedText_active
+						? !!cookieData.bible_is_userSettings_toggleOptions_justifiedText_active
+						: false,
 					available: true,
 				},
 				oneVersePerLine: {
 					name: 'ONE VERSE PER LINE',
-					active: !!cookieData.bible_is_userSettings_toggleOptions_oneVersePerLine_active,
+					active: cookieData.bible_is_userSettings_toggleOptions_oneVersePerLine_active
+						? !!cookieData.bible_is_userSettings_toggleOptions_oneVersePerLine_active
+						: false,
 					available: true,
 				},
 				verticalScrolling: {
@@ -580,11 +623,11 @@ AppContainer.getInitialProps = async (context) => {
 	const testaments = bookData
 		? bookData.reduce((a, c) => ({ ...a, [c.book_id]: c.testament }), {})
 		: [];
-	console.log('user profile', userProfile);
-	console.log('initial volume', initialVolume);
-	console.log('initial playback', initialPlaybackRate);
-	console.log('user id', userId);
-	console.log('user settings', userSettings);
+	// console.log('user profile', userProfile);
+	// console.log('initial volume', initialVolume);
+	// console.log('initial playback', initialPlaybackRate);
+	// console.log('user id', userId);
+	// console.log('user settings', userSettings);
 	if (context.reduxStore) {
 		context.reduxStore.dispatch({
 			type: 'GET_INITIAL_ROUTE_STATE_PROFILE',
@@ -665,6 +708,7 @@ AppContainer.getInitialProps = async (context) => {
 		isAuthenticated: isAuthenticated || false,
 		isFromServer,
 		routeLocation,
+		userSettings,
 		match: {
 			params: {
 				bibleId,
@@ -683,16 +727,20 @@ AppContainer.getInitialProps = async (context) => {
 };
 
 AppContainer.propTypes = {
-	match: PropTypes.object,
 	dispatch: PropTypes.func,
+	match: PropTypes.object,
+	userSettings: PropTypes.object,
 	chapterText: PropTypes.array,
 	fetchedUrls: PropTypes.array,
 	isFromServer: PropTypes.bool,
 	routeLocation: PropTypes.string,
 	activeBookName: PropTypes.string,
 	activeChapter: PropTypes.number,
-	initialVolume: PropTypes.number,
-	initialPlaybackRate: PropTypes.number,
+	initialVolume: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+	initialPlaybackRate: PropTypes.oneOfType([
+		PropTypes.number,
+		PropTypes.string,
+	]),
 };
 
 export default connect()(AppContainer);

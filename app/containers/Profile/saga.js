@@ -95,13 +95,10 @@ export function* sendSignUpForm({
 }
 
 export function* sendLoginForm({ password, email, stay }) {
-	// console.log('password, email, stay', password, email, stay);
-
 	const requestUrl = `${process.env.BASE_API_ROUTE}/users/login?key=${
 		process.env.DBP_API_KEY
 	}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}`;
 	const formData = new FormData();
-	// console.log('login data', { password, email, stay });
 
 	formData.append('password', password);
 	formData.append('email', email);
@@ -113,10 +110,7 @@ export function* sendLoginForm({ password, email, stay }) {
 
 	try {
 		const response = yield call(request, requestUrl, options);
-		// console.log('response for login', response);
-		// console.log('response', response);
 		if (response.error) {
-			// console.log('response.error', response.error);
 			yield put({ type: LOGIN_ERROR, message: response.error.message });
 		} else {
 			yield put({
@@ -126,11 +120,14 @@ export function* sendLoginForm({ password, email, stay }) {
 			});
 
 			document.cookie = `bible_is_user_id=${response.id}`;
+			document.cookie = `bible_is_email=${response.email}`;
+			document.cookie = `bible_is_name=${response.name}`;
+			document.cookie = `bible_is_first_name=${response.nickname}`;
 
 			// May need to do something with the stay signed in variable
-			// if (stay) {
-			//   localStorage.setItem('bible_is_user_id', response.id);
-			// }
+			if (stay) {
+				//   localStorage.setItem('bible_is_user_id', response.id);
+			}
 		}
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {

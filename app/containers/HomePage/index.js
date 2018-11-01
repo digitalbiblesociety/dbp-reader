@@ -16,7 +16,6 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { TransitionGroup } from 'react-transition-group';
-import get from 'lodash/get';
 import injectSaga from '../../utils/injectSaga';
 import injectReducer from '../../utils/injectReducer';
 import Settings from '../Settings';
@@ -30,12 +29,6 @@ import Footer from '../../components/Footer';
 import SearchContainer from '../SearchContainer';
 import GenericErrorBoundary from '../../components/GenericErrorBoundary';
 import FadeTransition from '../../components/FadeTransition';
-import {
-	applyTheme,
-	applyFontFamily,
-	applyFontSize,
-	toggleWordsOfJesus,
-} from '../Settings/themes';
 import notesReducer from '../Notes/reducer';
 import notesSaga from '../Notes/saga';
 import textReducer from '../TextSelection/reducer';
@@ -144,56 +137,8 @@ class HomePage extends React.PureComponent {
 			// Open Password Reset Verified because there is a token - done in Profile/index
 		}
 
-		// Make sure the correct theme is applied - get theme from cookie
-		const activeTheme =
-			localStorage.getItem('bible_is_theme') ||
-			sessionStorage.getItem('bible_is_theme') ||
-			'red';
-		const activeFontFamily =
-			localStorage.getItem('bible_is_font_family') ||
-			sessionStorage.getItem('bible_is_font_family') ||
-			'sans';
-		const activeFontSize =
-			localStorage.getItem('bible_is_font_size') ||
-			sessionStorage.getItem('bible_is_font_size') ||
-			42;
-		const redLetter = get(this, [
-			'props',
-			'homepage',
-			'userSettings',
-			'toggleOptions',
-			'redLetter',
-			'active',
-		]);
-
-		if (
-			redLetter !==
-			this.props.userSettings.getIn(['toggleOptions', 'redLetter', 'active'])
-		) {
-			toggleWordsOfJesus(redLetter);
-		}
-
-		if (
-			activeTheme !==
-			get(this, ['props', 'homepage', 'userSettings', 'activeTheme'])
-		) {
-			applyTheme(activeTheme);
-		}
-
-		if (activeFontFamily !== this.props.userSettings.get('activeFontType')) {
-			applyFontFamily(activeFontFamily);
-		}
-
-		if (activeFontSize !== this.props.userSettings.get('activeFontSize')) {
-			applyFontSize(activeFontSize);
-		}
 		/* eslint-disable no-undef */
 		if (this.props.homepage.firstLoad) {
-			// console.log('homepage running with defaults', {
-			//   iso: this.props.homepage.initialIsoCode,
-			//   languageCode: this.props.homepage.defaultLanguageCode,
-			//   name: this.props.homepage.initialLanguageName,
-			// });
 			this.props.dispatch(
 				setActiveIsoCode({
 					iso: this.props.homepage.initialIsoCode,
@@ -910,8 +855,11 @@ HomePage.propTypes = {
 	userId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 	textData: PropTypes.object,
 	isMenuOpen: PropTypes.bool,
-	initialVolume: PropTypes.number,
-	initialPlaybackRate: PropTypes.number,
+	initialVolume: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+	initialPlaybackRate: PropTypes.oneOfType([
+		PropTypes.number,
+		PropTypes.string,
+	]),
 };
 
 const mapStateToProps = createStructuredSelector({
