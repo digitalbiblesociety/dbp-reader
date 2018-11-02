@@ -225,17 +225,17 @@ export function* getLanguageAltNames() {
 		const languageData = response.data || response;
 		const languages = languageData
 			.map((l) => {
-				if (l.alt_names) {
+				if (l.translations) {
 					const altSet = new Set(
-						Object.values(l.alt_names).reduce((a, c) => [...a, ...c], []),
+						Object.values(l.translations).reduce((a, c) => [...a, c], []),
 					);
 					return {
 						...l,
-						vernacular_name: l.alt_names[l.iso]
-							? l.alt_names[l.iso][0]
+						vernacular_name: l.translations[l.iso]
+							? l.translations[l.iso][0]
 							: l.name,
 						alt_names: Array.from(altSet),
-						englishName: l.alt_names.eng ? l.alt_names.eng[0] : l.name,
+						englishName: l.translations.eng ? l.translations.eng[0] : l.name,
 					};
 				}
 				return {
