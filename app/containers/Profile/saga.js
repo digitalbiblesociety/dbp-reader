@@ -405,17 +405,10 @@ export function* deleteUser({ userId }) {
 	try {
 		const response = yield call(request, requestUrl, options);
 
-		// console.log(response);
 		yield put({ type: DELETE_USER_SUCCESS, response });
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error(err); // eslint-disable-line no-console
-		} else if (process.env.NODE_ENV === 'production') {
-			// const options = {
-			// 	header: 'POST',
-			// 	body: formData,
-			// };
-			// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
 		}
 		yield put({
 			type: DELETE_USER_ERROR,

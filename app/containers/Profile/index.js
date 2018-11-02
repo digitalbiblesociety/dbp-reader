@@ -37,6 +37,7 @@ import {
 	sendPasswordReset,
 	readOauthError,
 } from './actions';
+import { cleanNotebook } from '../Notes/actions';
 import makeSelectProfile from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -126,11 +127,12 @@ export class Profile extends React.PureComponent {
 			}),
 		);
 		this.props.resetPasswordSent();
-		// const client = e.target.childNodes[1].getBoundingClientRect() || { x: 0, y: 0 };
-		// const coords = { x: client.x, y: client.y };
-		// this.openPopup(coords);
 	};
-	deleteUser = (props) => this.props.dispatch(deleteUser(props));
+	deleteUser = (props) => {
+		this.props.dispatch(deleteUser(props));
+		this.props.dispatch(cleanNotebook());
+		this.props.dispatch(logout());
+	};
 	readOauthError = (props) => this.props.dispatch(readOauthError(props));
 	sendLoginForm = (props) => this.props.dispatch(sendLoginForm(props));
 	selectAccountOption = (option) =>
@@ -141,6 +143,7 @@ export class Profile extends React.PureComponent {
 		this.props.dispatch(updateUserInformation(props));
 	logout = () => {
 		this.props.dispatch(logout());
+		this.props.dispatch(cleanNotebook());
 		/* eslint-disable no-undef */
 		if (typeof gapi !== 'undefined' && typeof auth2 !== 'undefined') {
 			auth2.signOut();

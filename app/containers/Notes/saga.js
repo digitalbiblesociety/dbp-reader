@@ -256,7 +256,8 @@ export function* deleteNote({
 		};
 		// console.log('deleting note for userid and noteid', userId, noteId);
 		try {
-			const response = yield call(request, requestUrl, options);
+			// Do not need the response since it will throw an error if the request was unsuccessful
+			yield call(request, requestUrl, options);
 
 			yield fork(getUserBookmarks, {
 				userId,
@@ -458,7 +459,10 @@ export function* addNote({ userId, data }) {
 	try {
 		const response = yield call(request, requestUrl, options);
 		// console.log('add user note response', response);
-		if (response.meta.success || !response.meta.error) {
+		if (
+			(response.meta && response.meta.success) ||
+			(response.meta && !response.meta.error)
+		) {
 			yield put({ type: ADD_NOTE_SUCCESS, response });
 			yield fork(getNotesForChapter, {
 				userId: data.user_id,

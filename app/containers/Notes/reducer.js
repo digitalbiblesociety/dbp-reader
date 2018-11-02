@@ -21,6 +21,7 @@ import {
 	READ_SAVED_NOTE,
 	ADD_NOTE_FAILED,
 	CLEAR_NOTES_ERROR_MESSAGE,
+	CLEAN_NOTEBOOK,
 } from './constants';
 // Should cache some of this in local storage for faster reloads
 const initialState = fromJS({
@@ -50,71 +51,73 @@ const initialState = fromJS({
 
 function notesReducer(state = initialState, action) {
 	switch (action.type) {
-	case LOAD_USER_HIGHLIGHTS:
-		return state
-			.set('totalPagesHighlight', action.totalPages)
-			.set('userHighlights', fromJS(action.highlights));
-	case CLEAR_NOTES_ERROR_MESSAGE:
-		return state
-			.set('errorSavingNote', false)
-			.set('notesErrorMessage', '');
-	case READ_SAVED_NOTE:
-		return state.set('savedTheNote', false);
-	case ADD_NOTE_SUCCESS:
-		return state.set('savedTheNote', true);
-	case ADD_NOTE_FAILED:
-		return state
-			.set('errorSavingNote', true)
-			.set('notesErrorMessage', action.message)
-			.set('savedTheNote', false);
-	case LOAD_BOOKMARKS_FOR_CHAPTER:
-		return state.set('chapterBookmarks', fromJS(action.listData));
-	case LOAD_USER_BOOKMARK_DATA:
-		return state
-			.set('totalPagesBookmark', action.totalPages)
-			.set('bookmarkList', fromJS(action.listData));
-	case LOAD_CHAPTER_FOR_NOTE:
-		return state.set('chapterForNote', action.text);
-	case SET_ACTIVE_CHILD:
-		return state.set('activeChild', action.child);
-	case SET_ACTIVE_PAGE_DATA:
-		// console.log('Setting page data', action);
-		if (action.params.sectionType === 'notes') {
-			return state.set('activePage', action.params.page);
-		} else if (action.params.sectionType === 'highlights') {
-			return state.set('activePageHighlight', action.params.page);
-		}
-		return state.set('activePageBookmark', action.params.page);
-	case SET_PAGE_SIZE:
-		// console.log('Setting page size', action);
-		if (action.params.sectionType === 'notes') {
+		case CLEAN_NOTEBOOK:
+			return state
+				.set('listData', [])
+				.set('userNotes', [])
+				.set('userHighlights', [])
+				.set('bookmarkList', [])
+				.set('chapterBookmarks', []);
+		case LOAD_USER_HIGHLIGHTS:
+			return state
+				.set('totalPagesHighlight', action.totalPages)
+				.set('userHighlights', fromJS(action.highlights));
+		case CLEAR_NOTES_ERROR_MESSAGE:
+			return state.set('errorSavingNote', false).set('notesErrorMessage', '');
+		case READ_SAVED_NOTE:
+			return state.set('savedTheNote', false);
+		case ADD_NOTE_SUCCESS:
+			return state.set('savedTheNote', true);
+		case ADD_NOTE_FAILED:
+			return state
+				.set('errorSavingNote', true)
+				.set('notesErrorMessage', action.message)
+				.set('savedTheNote', false);
+		case LOAD_BOOKMARKS_FOR_CHAPTER:
+			return state.set('chapterBookmarks', fromJS(action.listData));
+		case LOAD_USER_BOOKMARK_DATA:
+			return state
+				.set('totalPagesBookmark', action.totalPages)
+				.set('bookmarkList', fromJS(action.listData));
+		case LOAD_CHAPTER_FOR_NOTE:
+			return state.set('chapterForNote', action.text);
+		case SET_ACTIVE_CHILD:
+			return state.set('activeChild', action.child);
+		case SET_ACTIVE_PAGE_DATA:
+			// console.log('Setting page data', action);
+			if (action.params.sectionType === 'notes') {
+				return state.set('activePage', action.params.page);
+			} else if (action.params.sectionType === 'highlights') {
+				return state.set('activePageHighlight', action.params.page);
+			}
+			return state.set('activePageBookmark', action.params.page);
+		case SET_PAGE_SIZE:
+			// console.log('Setting page size', action);
+			if (action.params.sectionType === 'notes') {
+				return state.set('activePage', 1).set('pageSize', action.params.limit);
+			} else if (action.params.sectionType === 'highlights') {
+				return state
+					.set('activePageHighlight', 1)
+					.set('pageSizeHighlight', action.params.limit);
+			}
 			return state
 				.set('activePage', 1)
-				.set('pageSize', action.params.limit);
-		} else if (action.params.sectionType === 'highlights') {
+				.set('pageSizeBookmark', action.params.limit);
+		// Todo: Move this to local state
+		case TOGGLE_VERSE_TEXT:
+			return state.set('isVerseTextVisible', !state.get('isVerseTextVisible'));
+		// Todo: Move this to local state
+		case TOGGLE_PAGE_SELECTOR:
+			return state.set('pageSelectorState', !state.get('pageSelectorState'));
+		case LOAD_USER_NOTES:
+			return state.set('userNotes', fromJS(action.listData));
+		case LOAD_NOTEBOOK_DATA:
+			// console.log('Loading notebook data with active page: ', action.activePage);
 			return state
-				.set('activePageHighlight', 1)
-				.set('pageSizeHighlight', action.params.limit);
-		}
-		return state
-			.set('activePage', 1)
-			.set('pageSizeBookmark', action.params.limit);
-		// Todo: Move this to local state
-	case TOGGLE_VERSE_TEXT:
-		return state.set('isVerseTextVisible', !state.get('isVerseTextVisible'));
-		// Todo: Move this to local state
-	case TOGGLE_PAGE_SELECTOR:
-		return state.set('pageSelectorState', !state.get('pageSelectorState'));
-	case LOAD_USER_NOTES:
-		return state
-			.set('userNotes', fromJS(action.listData));
-	case LOAD_NOTEBOOK_DATA:
-		// console.log('Loading notebook data with active page: ', action.activePage);
-		return state
-			.set('totalPages', action.totalPages)
-			.set('listData', fromJS(action.listData));
-	default:
-		return state;
+				.set('totalPages', action.totalPages)
+				.set('listData', fromJS(action.listData));
+		default:
+			return state;
 	}
 }
 

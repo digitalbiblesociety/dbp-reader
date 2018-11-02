@@ -181,6 +181,7 @@ function homePageReducer(state = initialState, action) {
 			return state.set('userId', action.userId).set('userAuthenticated', true);
 		case LOG_OUT:
 			// console.log('In the logout for homepage');
+			document.cookie = 'bible_is_user_id=';
 			return state.set('userId', '').set('userAuthenticated', false);
 		case 'book_metadata':
 			return state.set('testaments', action.testaments);

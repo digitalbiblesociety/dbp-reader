@@ -7,6 +7,7 @@
 
 export const SET_PAGE_SIZE = 'app/Notes/SET_PAGE_SIZE';
 export const GET_USER_HIGHLIGHTS = 'app/Notes/GET_USER_HIGHLIGHTS';
+export const CLEAN_NOTEBOOK = 'app/Notes/CLEAN_NOTEBOOK';
 export const LOAD_USER_HIGHLIGHTS = 'app/Notes/LOAD_USER_HIGHLIGHTS';
 export const CLEAR_NOTES_ERROR_MESSAGE = 'app/Notes/CLEAR_NOTES_ERROR_MESSAGE';
 export const ADD_NOTE_FAILED = 'app/Notes/ADD_NOTE_FAILED';
@@ -26,7 +27,8 @@ export const GET_USER_NOTEBOOK_DATA = 'app/Notes/GET_USER_NOTEBOOK_DATA';
 export const GET_USER_BOOKMARK_DATA = 'app/Notes/GET_USER_BOOKMARK_DATA';
 export const LOAD_USER_BOOKMARK_DATA = 'app/Notes/LOAD_USER_BOOKMARK_DATA';
 export const GET_BOOKMARKS_FOR_CHAPTER = 'app/Notes/GET_BOOKMARKS_FOR_CHAPTER';
-export const LOAD_BOOKMARKS_FOR_CHAPTER = 'app/Notes/LOAD_BOOKMARKS_FOR_CHAPTER';
+export const LOAD_BOOKMARKS_FOR_CHAPTER =
+	'app/Notes/LOAD_BOOKMARKS_FOR_CHAPTER';
 export const ADD_NOTE = 'app/Profile/ADD_NOTE';
 export const ADD_NOTE_SUCCESS = 'app/Notes/ADD_NOTE_SUCCESS';
 export const ADD_HIGHLIGHT = 'app/Profile/ADD_HIGHLIGHT';

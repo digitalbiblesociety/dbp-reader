@@ -5,6 +5,7 @@
  */
 
 import {
+	CLEAN_NOTEBOOK,
 	UPDATE_HIGHLIGHT,
 	TOGGLE_VERSE_TEXT,
 	TOGGLE_ADD_VERSE_MENU,
@@ -26,6 +27,10 @@ import {
 	CLEAR_NOTES_ERROR_MESSAGE,
 	GET_USER_HIGHLIGHTS,
 } from './constants';
+
+export const cleanNotebook = () => ({
+	type: CLEAN_NOTEBOOK,
+});
 
 export const getUserHighlights = (props) => ({
 	type: GET_USER_HIGHLIGHTS,
