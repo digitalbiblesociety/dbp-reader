@@ -189,7 +189,9 @@ export function* getTexts({ languageCode }) {
 export function* getLanguages() {
 	const requestUrl = `${process.env.BASE_API_ROUTE}/languages?key=${
 		process.env.DBP_API_KEY
-	}&v=4&bucket_id=${process.env.DBP_BUCKET_ID}&has_filesets=true`;
+	}&v=4&bucket_id=${
+		process.env.DBP_BUCKET_ID
+	}&has_filesets=true&bucket_id=dbp-prod,dbp-vid`;
 
 	try {
 		const response = yield call(cachedFetch, requestUrl, {}, oneDay);
@@ -219,7 +221,7 @@ export function* getLanguageAltNames() {
 		process.env.DBP_API_KEY
 	}&v=4&bucket_id=${
 		process.env.DBP_BUCKET_ID
-	}&has_filesets=true&include_alt_names=true`;
+	}&has_filesets=true&include_alt_names=true&bucket_id=dbp-prod,dbp-vid`;
 	try {
 		const response = yield call(cachedFetch, requestUrl, {}, oneDay);
 		const languageData = response.data || response;
