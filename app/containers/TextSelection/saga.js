@@ -231,17 +231,15 @@ export function* getLanguageAltNames() {
 					);
 					return {
 						...l,
-						vernacular_name: l.translations[l.iso]
-							? l.translations[l.iso][0]
-							: l.name,
+						vernacular_name: l.autonym,
 						alt_names: Array.from(altSet),
-						englishName: l.translations.eng ? l.translations.eng[0] : l.name,
+						englishName: l.name,
 					};
 				}
 				return {
 					...l,
 					alt_names: [],
-					vernacular_name: l.name,
+					vernacular_name: l.autonym,
 					englishName: l.name,
 				};
 			})
