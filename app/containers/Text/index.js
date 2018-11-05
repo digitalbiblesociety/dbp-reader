@@ -7,7 +7,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
-import PrefetchLink from '../../utils/PrefetchLink';
+// import PrefetchLink from '../../utils/PrefetchLink';
+import Link from 'next/link';
 import Information from '../../components/Information';
 import SvgWrapper from '../../components/SvgWrapper';
 import ContextPortal from '../../components/ContextPortal';
@@ -1956,9 +1957,7 @@ class Text extends React.PureComponent {
 					audioPlayerState,
 				})}
 			>
-				<PrefetchLink
-					prefetch
-					withData
+				<Link
 					as={getPreviousChapterUrl({
 						books,
 						chapter: activeChapter,
@@ -1994,7 +1993,7 @@ class Text extends React.PureComponent {
 							<SvgWrapper className="prev-arrow-svg" svgid="arrow_left" />
 						) : null}
 					</div>
-				</PrefetchLink>
+				</Link>
 				<div ref={this.mainWrapperRef} className={'main-wrapper'}>
 					<main
 						ref={this.setMainRef}
@@ -2026,7 +2025,7 @@ class Text extends React.PureComponent {
 						<Information />
 					</main>
 				</div>
-				<PrefetchLink
+				<Link
 					as={getNextChapterUrl({
 						books,
 						chapter: activeChapter,
@@ -2045,8 +2044,6 @@ class Text extends React.PureComponent {
 						text,
 						isHref: true,
 					})}
-					withData
-					prefetch
 				>
 					<div
 						onClick={
@@ -2064,7 +2061,7 @@ class Text extends React.PureComponent {
 							<SvgWrapper className="next-arrow-svg" svgid="arrow_right" />
 						) : null}
 					</div>
-				</PrefetchLink>
+				</Link>
 				{contextMenuState ? (
 					<ContextPortal
 						handleAddBookmark={this.handleAddBookmark}
