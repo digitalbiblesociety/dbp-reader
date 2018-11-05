@@ -71,7 +71,9 @@ class VersionList extends React.PureComponent {
 					title: bible.get('name'),
 					text: bible.get('vname') || bible.get('name'),
 					altText:
-						bible.get('vname') !== bible.get('name') ? bible.get('name') : '',
+						bible.get('vname') && bible.get('vname') !== bible.get('name')
+							? bible.get('name')
+							: '',
 					types: bible
 						.get('filesets')
 						.reduce((a, c) => ({ ...a, [c.get('type')]: true }), {}),
