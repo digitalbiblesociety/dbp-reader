@@ -173,7 +173,7 @@ export function* getUserHighlights({ userId, params }) {
 		yield put({
 			type: LOAD_USER_HIGHLIGHTS,
 			highlights: response.data,
-			totalPages: parseInt(response.last_page, 10),
+			totalPages: parseInt(response.total_pages, 10),
 		});
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
@@ -371,7 +371,7 @@ export function* getNotesForChapter({ userId, params = {} }) {
 		// 	pageSize: response.per_page,
 		// 	pages: response.total,
 		// };
-		// console.log('get note response current page, last page and per page', response.current_page, response.last_page, response.per_page);
+		// console.log('get note response current page, last page and per page', response.current_page, response.total_pages, response.per_page);
 
 		// console.log('got chapter notes get note response', response);
 		yield put({
@@ -417,14 +417,14 @@ export function* getNotesForNotebook({ userId, params = {} }) {
 		// 	pageSize: response.per_page,
 		// 	pages: response.total,
 		// };
-		// console.log('get note response current page, last page and per page', response.current_page, response.last_page, response.per_page);
+		// console.log('get note response current page, last page and per page', response.current_page, response.total_pages, response.per_page);
 		// console.log('got the notebook notes response', response);
 		if (response.data && response.meta) {
 			yield put({
 				type: LOAD_NOTEBOOK_DATA,
 				listData: response.data,
 				activePage: parseInt(response.meta.pagination.current_page, 10),
-				totalPages: parseInt(response.meta.pagination.last_page, 10),
+				totalPages: parseInt(response.meta.pagination.total_pages, 10),
 				pageSize: parseInt(response.meta.pagination.per_page, 10),
 			});
 		}
@@ -524,7 +524,7 @@ export function* getBookmarksForChapter({ userId, params = {} }) {
 		// 	pageSize: response.per_page,
 		// 	pages: response.total,
 		// };
-		// console.log('get note response current page, last page and per page', response.current_page, response.last_page, response.per_page);
+		// console.log('get note response current page, last page and per page', response.current_page, response.total_pages, response.per_page);
 
 		// console.log('get bookmarks for chapter response', response);
 		if (response.data) {
@@ -577,14 +577,14 @@ export function* getUserBookmarks({ userId, params = {} }) {
 		// 	pageSize: response.per_page,
 		// 	pages: response.total,
 		// };
-		// console.log('get note response current page, last page and per page', response.current_page, response.last_page, response.per_page);
+		// console.log('get note response current page, last page and per page', response.current_page, response.total_pages, response.per_page);
 		// console.log('response for user bookmarks', response);
 		if (response.data && response.meta) {
 			yield put({
 				type: LOAD_USER_BOOKMARK_DATA,
 				listData: response.data,
 				activePage: parseInt(response.meta.pagination.current_page, 10),
-				totalPages: parseInt(response.meta.pagination.last_page, 10),
+				totalPages: parseInt(response.meta.pagination.total_pages, 10),
 				pageSize: parseInt(response.meta.pagination.per_page, 10),
 			});
 		}
