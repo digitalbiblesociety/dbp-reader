@@ -177,15 +177,22 @@ class MyNotes extends React.PureComponent {
 
 	handleSearchChange = (e) => this.setState({ filterText: e.target.value });
 
-	handlePageClick = (page) =>
+	handlePageClick = (page) => {
+		const sectionType = this.props.sectionType;
+		// Default limit to notes
+		let limit = this.props.pageSize;
+		// If the section was note in notes then find the appropriate section page size
+		if (sectionType === 'bookmarks') {
+			limit = this.props.pageSizeBookmark;
+		} else if (sectionType === 'highlights') {
+			limit = this.props.pageSizeHighlight;
+		}
 		this.props.setActivePage({
-			sectionType: this.props.sectionType,
-			limit:
-				this.props.sectionType === 'notes'
-					? this.props.pageSize
-					: this.props.pageSizeBookmark,
+			sectionType,
+			limit,
 			page,
 		});
+	};
 
 	handleClick = (listItem) => {
 		if (this.props.sectionType === 'notes') {

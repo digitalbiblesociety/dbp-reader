@@ -108,7 +108,12 @@ export class Notes extends React.PureComponent {
 	toggleAddVerseMenu = () => this.props.dispatch(toggleAddVerseMenu());
 	togglePageSelector = () => this.props.dispatch(togglePageSelector());
 	addHighlight = (data) =>
-		this.props.dispatch(addHighlight({ userId: this.props.userId, data }));
+		this.props.dispatch(
+			addHighlight({
+				userId: this.props.userId,
+				data: { ...data, user_id: this.props.userId },
+			}),
+		);
 	updateHighlight = (props) =>
 		this.props.dispatch(
 			updateHighlight({

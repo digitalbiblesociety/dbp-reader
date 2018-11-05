@@ -162,7 +162,7 @@ export function* getUserHighlights({ userId, params }) {
 		process.env.BASE_API_ROUTE
 	}/users/${userId}/highlights?key=${
 		process.env.DBP_API_KEY
-	}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}&paginate=${
+	}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}&limit=${
 		params.limit
 	}&page=${params.page}`;
 	// const updatedUrl = params.reduce((a, c) => a.concat(c), requestUrl);
@@ -170,20 +170,18 @@ export function* getUserHighlights({ userId, params }) {
 		const response = yield call(request, requestUrl);
 		// console.log('highlight response', response);
 		// console.log('update user note response', response);
-		yield put({
-			type: LOAD_USER_HIGHLIGHTS,
-			highlights: response.data,
-			totalPages: parseInt(response.total_pages, 10),
-		});
+		if (response.data && response.meta) {
+			yield put({
+				type: LOAD_USER_HIGHLIGHTS,
+				highlights: response.data,
+				activePage: response.meta.pagination.current_page,
+				totalPages: response.meta.pagination.total_pages,
+				pageSize: response.meta.pagination.per_page,
+			});
+		}
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error('Error getting user highlights', err); // eslint-disable-line no-console
-		} else if (process.env.NODE_ENV === 'production') {
-			// const options = {
-			// 	header: 'POST',
-			// 	body: formData,
-			// };
-			// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
 		}
 	}
 }
@@ -201,31 +199,18 @@ export function* updateNote({ userId, data, noteId }) {
 		(acc, item) => acc.concat('&', item[0], '=', item[1]),
 		requestUrl,
 	);
-	// formData.append('project_id', process.env.NOTES_PROJECT_ID);
 
 	const options = {
-		// body: formData,
 		method: 'PUT',
 	};
-	// console.log('updating note with', data, '\nfor this id', userId);
 	try {
 		const response = yield call(request, urlWithData, options);
-		// console.log('update user note response', response);
 		if (response.success) {
 			yield put({ type: ADD_NOTE_SUCCESS, response });
-			// console.log('Response', response);
-			// console.log(data);
-			// console.log(noteId);
 		}
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error(err); // eslint-disable-line no-console
-		} else if (process.env.NODE_ENV === 'production') {
-			// const options = {
-			// 	header: 'POST',
-			// 	body: formData,
-			// };
-			// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
 		}
 		yield put({
 			type: ADD_NOTE_FAILED,
@@ -331,12 +316,6 @@ export function* deleteNote({
 		} catch (err) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error(err); // eslint-disable-line no-console
-			} else if (process.env.NODE_ENV === 'production') {
-				// const options = {
-				// 	 header: 'POST',
-				// 	 body: formData,
-				// };
-				// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
 			}
 			yield put({
 				type: ADD_NOTE_FAILED,
@@ -348,10 +327,6 @@ export function* deleteNote({
 // Probably need a getBookmarks function
 export function* getNotesForChapter({ userId, params = {} }) {
 	// Need to adjust how I paginate the notes here and in other places as well
-	// response.current_page = activePage
-	// response.per_page = perPage
-	// pages = totalPages
-	// notes = response.data
 	const requestUrl = `${process.env.BASE_API_ROUTE}/users/${userId}/notes?key=${
 		process.env.DBP_API_KEY
 	}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}`;
@@ -359,21 +334,10 @@ export function* getNotesForChapter({ userId, params = {} }) {
 		(acc, param) => acc.concat(`&${param[0]}=${param[1]}`),
 		requestUrl,
 	);
-	// console.log('params given to get note saga', params);
-	// console.log('with params', urlWithParams);
-	// console.log('Getting notes for chapter');
-	// console.trace();
+
 	try {
 		const response = yield call(request, urlWithParams);
-		// const noteData = {
-		// 	notes: response.data,
-		// 	page: response.current_page,
-		// 	pageSize: response.per_page,
-		// 	pages: response.total,
-		// };
-		// console.log('get note response current page, last page and per page', response.current_page, response.total_pages, response.per_page);
 
-		// console.log('got chapter notes get note response', response);
 		yield put({
 			type: LOAD_USER_NOTES,
 			listData: response.data || [],
@@ -381,22 +345,12 @@ export function* getNotesForChapter({ userId, params = {} }) {
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error('Error getting the notes', err); // eslint-disable-line no-console
-		} else if (process.env.NODE_ENV === 'production') {
-			// const options = {
-			// 	header: 'POST',
-			// 	body: formData,
-			// };
-			// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
 		}
 	}
 }
 
 export function* getNotesForNotebook({ userId, params = {} }) {
 	// Need to adjust how I paginate the notes here and in other places as well
-	// response.current_page = activePage
-	// response.per_page = perPage
-	// pages = totalPages
-	// notes = response.data
 	const requestUrl = `${process.env.BASE_API_ROUTE}/users/${userId}/notes?key=${
 		process.env.DBP_API_KEY
 	}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}`;
@@ -404,39 +358,22 @@ export function* getNotesForNotebook({ userId, params = {} }) {
 		(acc, param) => acc.concat(`&${param[0]}=${param[1]}`),
 		requestUrl,
 	);
-	// console.log('params given to get note saga', params);
-	// // console.log('with params', urlWithParams);
-	// console.trace();
-	// console.log('Getting notes for notebook');
 
 	try {
 		const response = yield call(request, urlWithParams);
-		// const noteData = {
-		// 	notes: response.data,
-		// 	page: response.current_page,
-		// 	pageSize: response.per_page,
-		// 	pages: response.total,
-		// };
-		// console.log('get note response current page, last page and per page', response.current_page, response.total_pages, response.per_page);
-		// console.log('got the notebook notes response', response);
+
 		if (response.data && response.meta) {
 			yield put({
 				type: LOAD_NOTEBOOK_DATA,
 				listData: response.data,
-				activePage: parseInt(response.meta.pagination.current_page, 10),
-				totalPages: parseInt(response.meta.pagination.total_pages, 10),
-				pageSize: parseInt(response.meta.pagination.per_page, 10),
+				activePage: response.meta.pagination.current_page,
+				totalPages: response.meta.pagination.total_pages,
+				pageSize: response.meta.pagination.per_page,
 			});
 		}
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error(err); // eslint-disable-line no-console
-		} else if (process.env.NODE_ENV === 'production') {
-			// const options = {
-			// 	header: 'POST',
-			// 	body: formData,
-			// };
-			// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
 		}
 	}
 }
@@ -449,16 +386,15 @@ export function* addNote({ userId, data }) {
 	const formData = new FormData();
 
 	Object.entries(data).forEach((item) => formData.set(item[0], item[1]));
-	// formData.append('project_id', process.env.NOTES_PROJECT_ID);
 
 	const options = {
 		body: formData,
 		method: 'POST',
 	};
-	// console.log('Adding note for userid', userId, '\nwith data', data);
+
 	try {
 		const response = yield call(request, requestUrl, options);
-		// console.log('add user note response', response);
+
 		if (
 			(response.meta && response.meta.success) ||
 			(response.meta && !response.meta.error)
@@ -480,12 +416,6 @@ export function* addNote({ userId, data }) {
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error(err); // eslint-disable-line no-console
-		} else if (process.env.NODE_ENV === 'production') {
-			// const options = {
-			// 	header: 'POST',
-			// 	body: formData,
-			// };
-			// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
 		}
 		yield put({
 			type: ADD_NOTE_FAILED,
@@ -495,14 +425,6 @@ export function* addNote({ userId, data }) {
 }
 
 export function* getBookmarksForChapter({ userId, params = {} }) {
-	// Need to adjust how I paginate the notes here and in other places as well
-	// response.current_page = activePage
-	// response.per_page = perPage
-	// pages = totalPages
-	// notes = response.data
-	// console.log('Getting bookmarks for the chapter!!!!!!!!!!!!!!!!!!!!!!!!');
-	// console.log('userId', userId);
-	// console.log('params', params);
 	const requestUrl = `${
 		process.env.BASE_API_ROUTE
 	}/users/${userId}/bookmarks?key=${
@@ -512,21 +434,10 @@ export function* getBookmarksForChapter({ userId, params = {} }) {
 		(acc, param) => acc.concat(`&${param[0]}=${param[1]}`),
 		requestUrl,
 	);
-	// console.log('params given to get note saga', params);
-	// console.log('with params', urlWithParams);
-	// console.log('Getting bookmarks for chapter');
-	// console.trace();
+
 	try {
 		const response = yield call(request, urlWithParams);
-		// const noteData = {
-		// 	notes: response.data,
-		// 	page: response.current_page,
-		// 	pageSize: response.per_page,
-		// 	pages: response.total,
-		// };
-		// console.log('get note response current page, last page and per page', response.current_page, response.total_pages, response.per_page);
 
-		// console.log('get bookmarks for chapter response', response);
 		if (response.data) {
 			yield put({
 				type: LOAD_BOOKMARKS_FOR_CHAPTER,
@@ -536,25 +447,11 @@ export function* getBookmarksForChapter({ userId, params = {} }) {
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error('Error getting the notes', err); // eslint-disable-line no-console
-		} else if (process.env.NODE_ENV === 'production') {
-			// const options = {
-			// 	header: 'POST',
-			// 	body: formData,
-			// };
-			// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
 		}
 	}
 }
 
 export function* getUserBookmarks({ userId, params = {} }) {
-	// Need to adjust how I paginate the notes here and in other places as well
-	// response.current_page = activePage
-	// response.per_page = perPage
-	// pages = totalPages
-	// notes = response.data
-	// console.log('Getting bookmarks for the NOTEBOOK!!!!!!!!!!!!!!!!!!!!!!!!');
-	// console.log('userId', userId);
-	// console.log('params', params);
 	const requestUrl = `${
 		process.env.BASE_API_ROUTE
 	}/users/${userId}/bookmarks?key=${
@@ -564,39 +461,22 @@ export function* getUserBookmarks({ userId, params = {} }) {
 		(acc, param) => acc.concat(`&${param[0]}=${param[1]}`),
 		requestUrl,
 	);
-	// console.log('params given to get note saga', params);
-	// // console.log('with params', urlWithParams);
-	// console.trace();
-	// console.log('Getting bookmarks for notebook');
 
 	try {
 		const response = yield call(request, urlWithParams);
-		// const noteData = {
-		// 	notes: response.data,
-		// 	page: response.current_page,
-		// 	pageSize: response.per_page,
-		// 	pages: response.total,
-		// };
-		// console.log('get note response current page, last page and per page', response.current_page, response.total_pages, response.per_page);
-		// console.log('response for user bookmarks', response);
+
 		if (response.data && response.meta) {
 			yield put({
 				type: LOAD_USER_BOOKMARK_DATA,
 				listData: response.data,
-				activePage: parseInt(response.meta.pagination.current_page, 10),
-				totalPages: parseInt(response.meta.pagination.total_pages, 10),
-				pageSize: parseInt(response.meta.pagination.per_page, 10),
+				activePage: response.meta.pagination.current_page,
+				totalPages: response.meta.pagination.total_pages,
+				pageSize: response.meta.pagination.per_page,
 			});
 		}
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error(err); // eslint-disable-line no-console
-		} else if (process.env.NODE_ENV === 'production') {
-			// const options = {
-			// 	header: 'POST',
-			// 	body: formData,
-			// };
-			// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
 		}
 	}
 }
@@ -623,30 +503,21 @@ export default function* notesSaga() {
 		GET_USER_HIGHLIGHTS,
 		getUserHighlights,
 	);
-	// const setPageSize = yield takeLatest(SET_PAGE_SIZE, getNotesForNotebook);
-	// const setActivePage = yield takeLatest(SET_ACTIVE_PAGE_DATA, getNotesForNotebook);
 	const getBookmarksForChapterSaga = yield takeLatest(
 		GET_BOOKMARKS_FOR_CHAPTER,
 		getBookmarksForChapter,
 	);
-	// const getBookmarksForChapterSagaAfterAdd = yield takeLatest(
-	// 	ADD_BOOKMARK_SUCCESS,
-	// 	getBookmarksForChapter,
-	// );
 	const getUserBookmarksSaga = yield takeLatest(
 		GET_USER_BOOKMARK_DATA,
 		getUserBookmarks,
 	);
-	// console.log('Loaded notes saga');
+
 	yield take(LOCATION_CHANGE);
 	yield cancel(addNoteSaga);
 	yield cancel(getNotesSaga);
 	yield cancel(getChapterSaga);
 	yield cancel(updateNoteSaga);
 	yield cancel(deleteNoteSaga);
-	// yield cancel(getBookmarksForChapterSagaAfterAdd);
-	// yield cancel(setPageSize);
-	// yield cancel(setActivePage);
 	yield cancel(getNotebookSaga);
 	yield cancel(updateHighlightSaga);
 	yield cancel(getUserBookmarksSaga);
