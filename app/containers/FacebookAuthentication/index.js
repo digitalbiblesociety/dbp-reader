@@ -56,7 +56,7 @@ export class FacebookAuthentication extends React.PureComponent {
 		// 	socialMediaLogin({ driver: 'facebook' });
 		// }
 		/* eslint-disable no-undef */
-		if (FB) {
+		if (typeof FB !== 'undefined') {
 			FB.getLoginStatus((getLoginResponse) => {
 				// console.log('fb login status', getLoginResponse);
 				// console.log('getLoginResponse.authResponse.accessToken', getLoginResponse.authResponse.accessToken);

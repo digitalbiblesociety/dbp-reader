@@ -186,7 +186,7 @@ class HomePage extends React.PureComponent {
 
 		try {
 			// May need to create a script and append it to the dom then wait for it to finish loading
-			if (!this.props.userId) {
+			if (!this.props.userId && typeof gapi !== 'undefined') {
 				gapi.load('auth2', () => {
 					try {
 						window.auth2 = gapi.auth2.init({
@@ -206,16 +206,16 @@ class HomePage extends React.PureComponent {
 			}
 		}
 
-		if (window && document && document.firstElementChild) {
-			// Main can be unset in this instance
-			if (this.isMobileSized) {
-				this.main = document.getElementsByTagName('main')[0];
-				window.addEventListener('scroll', this.handleScrolling, true);
-			}
-		}
+		// if (window && document && document.firstElementChild) {
+		// 	// Main can be unset in this instance
+		// 	if (this.isMobileSized) {
+		// 		this.main = document.getElementsByTagName('main')[0];
+		// 		window.addEventListener('scroll', this.handleScrolling, true);
+		// 	}
+		// }
 
-		this.window = window;
-		this.document = document;
+		// this.window = window;
+		// this.document = document;
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -306,7 +306,7 @@ class HomePage extends React.PureComponent {
 		// Even though for this function to fire the user has to refresh
 		// the entire page it is good practice to remove any lingering
 		// event listeners
-		window.removeEventListener('scroll', this.handleScrolling, true);
+		// window.removeEventListener('scroll', this.handleScrolling, true);
 	}
 
 	getBooks = (props) => this.props.dispatch(getBooks(props));
@@ -334,71 +334,71 @@ class HomePage extends React.PureComponent {
 		this.props.dispatch(setAudioPlayerState(state));
 
 	// May need more than one to determine the different audio player heights
-	get isMobileSized() {
-		return (
-			this.window &&
-			this.document &&
-			this.document.firstElementChild &&
-			this.document.firstElementChild.clientWidth < 500
-		);
-	}
+	// get isMobileSized() {
+	// 	return (
+	// 		this.window &&
+	// 		this.document &&
+	// 		this.document.firstElementChild &&
+	// 		this.document.firstElementChild.clientWidth < 500
+	// 	);
+	// }
 
 	// Height of the entire scroll container including the invisible portions
-	get mainHeight() {
-		return Math.max(
-			this.main.offsetHeight,
-			this.main.clientHeight,
-			this.main.scrollHeight,
-		);
-	}
+	// get mainHeight() {
+	// 	return Math.max(
+	// 		this.main.offsetHeight,
+	// 		this.main.clientHeight,
+	// 		this.main.scrollHeight,
+	// 	);
+	// }
 	// Height of the visible portion of the scroll container
-	get mainPhysicalHeight() {
-		return Math.max(this.main.offsetHeight, this.main.clientHeight);
-	}
+	// get mainPhysicalHeight() {
+	// 	return Math.max(this.main.offsetHeight, this.main.clientHeight);
+	// }
 
 	// The current scroll position
-	get scrollTop() {
-		return this.main.scrollTop;
-	}
+	// get scrollTop() {
+	// 	return this.main.scrollTop;
+	// }
 
 	// If the scroll event would result in a value above or below the actual size of the container
-	get outOfBounds() {
-		return (
-			this.scrollTop + this.mainPhysicalHeight >= this.mainHeight ||
-			this.scrollTop < 5
-		);
-	}
+	// get outOfBounds() {
+	// 	return (
+	// 		this.scrollTop + this.mainPhysicalHeight >= this.mainHeight ||
+	// 		this.scrollTop < 5
+	// 	);
+	// }
 
-	get isAtTop() {
-		return this.scrollTop < 5;
-	}
+	// get isAtTop() {
+	// 	return this.scrollTop < 5;
+	// }
 
-	get isAtBottom() {
-		return this.scrollTop + this.mainPhysicalHeight >= this.mainHeight;
-	}
+	// get isAtBottom() {
+	// 	return this.scrollTop + this.mainPhysicalHeight >= this.mainHeight;
+	// }
 
-	handleHeightRef = (el) => {
-		this.heightRef = el;
-	};
+	// handleHeightRef = (el) => {
+	// 	this.heightRef = el;
+	// };
 
-	handleScrolling = () => {
-		// Only hides the header/footer if all of the menus are closed
-		if (
-			!this.scrollTicking &&
-			!this.props.homepage.isProfileActive &&
-			!this.props.homepage.isNotesModalActive &&
-			!this.props.homepage.isSearchModalActive &&
-			!this.props.homepage.isSettingsModalActive &&
-			!this.props.homepage.isVersionSelectionActive &&
-			!this.props.homepage.isChapterSelectionActive &&
-			!this.props.homepage.isInformationModalActive
-		) {
-			// console.log('scroll scrollticking');
-			// Using this value to determine when the animation frame completed
-			this.scrollTicking = true;
-			requestAnimationFrame(this.updateScrollDirection);
-		}
-	};
+	// handleScrolling = () => {
+	// 	// Only hides the header/footer if all of the menus are closed
+	// 	if (
+	// 		!this.scrollTicking &&
+	// 		!this.props.homepage.isProfileActive &&
+	// 		!this.props.homepage.isNotesModalActive &&
+	// 		!this.props.homepage.isSearchModalActive &&
+	// 		!this.props.homepage.isSettingsModalActive &&
+	// 		!this.props.homepage.isVersionSelectionActive &&
+	// 		!this.props.homepage.isChapterSelectionActive &&
+	// 		!this.props.homepage.isInformationModalActive
+	// 	) {
+	// 		// console.log('scroll scrollticking');
+	// 		// Using this value to determine when the animation frame completed
+	// 		this.scrollTicking = true;
+	// 		requestAnimationFrame(this.updateScrollDirection);
+	// 	}
+	// };
 
 	// menuTicking = false;
 
@@ -424,77 +424,77 @@ class HomePage extends React.PureComponent {
 		// this.menuTicking = false;
 	};
 
-	updateScrollDirection = () => {
-		this.main = document.getElementsByTagName('main')[0];
+	// updateScrollDirection = () => {
+	// 	this.main = document.getElementsByTagName('main')[0];
 
-		const resizeHeight = 0;
-		if (!this.outOfBounds) {
-			// Previous state was not scrolling down but new state is
-			if (
-				this.scrollTop >= this.previousScrollTop &&
-				!this.state.isScrollingDown
-			) {
-				this.setState(
-					{
-						isScrollingDown: !!this.isMobileSized,
-					},
-					() => {
-						this.previousScrollTop = this.scrollTop;
-						this.scrollTicking = false;
-					},
-				);
-				// New state is scrolling up and old state is scrolling down
-			} else if (
-				this.scrollTop < this.previousScrollTop &&
-				this.state.isScrollingDown
-			) {
-				this.setState(
-					{
-						isScrollingDown: false,
-					},
-					() => {
-						this.previousScrollTop = this.scrollTop;
-						this.scrollTicking = false;
-					},
-				);
-			} else if (
-				this.scrollTop + this.mainPhysicalHeight >=
-				this.mainHeight - resizeHeight
-			) {
-				this.setState(
-					{
-						isScrollingDown: false,
-					},
-					() => {
-						this.previousScrollTop = this.scrollTop;
-						this.scrollTicking = false;
-					},
-				);
-			} else {
-				this.previousScrollTop = this.scrollTop;
-				this.scrollTicking = false;
-			}
-		} else if (this.isAtTop || this.isAtBottom) {
-			this.setState(
-				{
-					isScrollingDown: false,
-				},
-				() => {
-					this.previousScrollTop = this.scrollTop;
-					this.scrollTicking = false;
-				},
-			);
-		} else {
-			this.previousScrollTop = this.scrollTop;
-			this.scrollTicking = false;
-		}
-	};
+	// 	const resizeHeight = 0;
+	// 	if (!this.outOfBounds) {
+	// 		// Previous state was not scrolling down but new state is
+	// 		if (
+	// 			this.scrollTop >= this.previousScrollTop &&
+	// 			!this.state.isScrollingDown
+	// 		) {
+	// 			this.setState(
+	// 				{
+	// 					isScrollingDown: !!this.isMobileSized,
+	// 				},
+	// 				() => {
+	// 					this.previousScrollTop = this.scrollTop;
+	// 					this.scrollTicking = false;
+	// 				},
+	// 			);
+	// 			// New state is scrolling up and old state is scrolling down
+	// 		} else if (
+	// 			this.scrollTop < this.previousScrollTop &&
+	// 			this.state.isScrollingDown
+	// 		) {
+	// 			this.setState(
+	// 				{
+	// 					isScrollingDown: false,
+	// 				},
+	// 				() => {
+	// 					this.previousScrollTop = this.scrollTop;
+	// 					this.scrollTicking = false;
+	// 				},
+	// 			);
+	// 		} else if (
+	// 			this.scrollTop + this.mainPhysicalHeight >=
+	// 			this.mainHeight - resizeHeight
+	// 		) {
+	// 			this.setState(
+	// 				{
+	// 					isScrollingDown: false,
+	// 				},
+	// 				() => {
+	// 					this.previousScrollTop = this.scrollTop;
+	// 					this.scrollTicking = false;
+	// 				},
+	// 			);
+	// 		} else {
+	// 			this.previousScrollTop = this.scrollTop;
+	// 			this.scrollTicking = false;
+	// 		}
+	// 	} else if (this.isAtTop || this.isAtBottom) {
+	// 		this.setState(
+	// 			{
+	// 				isScrollingDown: false,
+	// 			},
+	// 			() => {
+	// 				this.previousScrollTop = this.scrollTop;
+	// 				this.scrollTicking = false;
+	// 			},
+	// 		);
+	// 	} else {
+	// 		this.previousScrollTop = this.scrollTop;
+	// 		this.scrollTicking = false;
+	// 	}
+	// };
 
 	// This may be buggy if the function got called before the
 	// dom was mounted but I have yet to experience any bugs
-	previousScrollTop = this.main ? this.main.scrollTop : 0;
+	// previousScrollTop = this.main ? this.main.scrollTop : 0;
 
-	scrollTicking = false;
+	// scrollTicking = false;
 
 	resetPasswordSent = () => {
 		// We might still want this to try and provide a slightly better user experience

@@ -33,7 +33,7 @@ export class GoogleAuthentication extends React.PureComponent {
 		// // 	socialMediaLogin({ driver: 'google' });
 		// // }
 		/* eslint-disable no-undef */
-		if (auth2) {
+		if (typeof auth2 !== 'undefined') {
 			if (!auth2.isSignedIn.get()) {
 				auth2.signIn().then(() => {
 					const prof = auth2.currentUser.get().getBasicProfile();
