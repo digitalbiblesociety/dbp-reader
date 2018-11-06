@@ -86,9 +86,10 @@ export class AudioPlayer extends React.Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
+		// console.log('new props', nextProps.audioSource !== this.props.audioSource);
 		if (nextProps.audioSource !== this.props.audioSource) {
 			if (nextProps.audioSource) {
-				this.setState({ playing: false });
+				this.setState({ playing: false, loadingNextChapter: false });
 			} else if (this.props.audioPlayerState && !nextProps.audioSource) {
 				this.setState({ playing: false }, () =>
 					this.props.setAudioPlayerState(false),
@@ -236,6 +237,7 @@ export class AudioPlayer extends React.Component {
 	handleRouteChange = () => {
 		this.setCurrentTime(0);
 		this.pauseAudio();
+		this.setState({ loadingNextChapter: true });
 	};
 
 	handleBackgroundClick = () => {
@@ -364,7 +366,6 @@ export class AudioPlayer extends React.Component {
 	// };
 
 	skipForward = () => {
-		// console.log('skipping forward');
 		this.setCurrentTime(0);
 		this.pauseAudio();
 		this.setState(
@@ -593,26 +594,6 @@ export class AudioPlayer extends React.Component {
 								: 'audio-player-container closed'
 						}
 					>
-						{/* as={getPreviousChapterUrl({
-								books: this.props.books,
-								chapter: this.props.activeChapter,
-								bookId: this.props.activeBookId.toLowerCase(),
-								textId: this.props.activeTextId.toLowerCase(),
-								verseNumber: this.props.verseNumber,
-								text: this.props.text,
-								isHref: false,
-							})}
-							href={getPreviousChapterUrl({
-								books: this.props.books,
-								chapter: this.props.activeChapter,
-								bookId: this.props.activeBookId.toLowerCase(),
-								textId: this.props.activeTextId.toLowerCase(),
-								verseNumber: this.props.verseNumber,
-								text: this.props.text,
-								isHref: true,
-							})}
-							withData
-							prefetch */}
 						<Link
 							as={getPreviousChapterUrl({
 								books: this.props.books,

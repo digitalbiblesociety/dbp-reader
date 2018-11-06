@@ -828,6 +828,7 @@ class HomePage extends React.PureComponent {
 					toggleAutoPlay={this.toggleAutoPlay}
 					initialPlaybackRate={initialPlaybackRate}
 					setAudioPlayerState={this.setAudioPlayerState}
+					loadingNewChapterText={loadingNewChapterText}
 				/>
 				<Footer
 					profileActive={isProfileActive}

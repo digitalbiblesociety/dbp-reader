@@ -405,7 +405,7 @@ Notes.propTypes = {
 	notes: PropTypes.object,
 	vernacularNamesObject: PropTypes.object,
 	// highlights: PropTypes.array,
-	userId: PropTypes.string,
+	userId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 	openView: PropTypes.string,
 	notePassage: PropTypes.string,
 	selectedText: PropTypes.string,

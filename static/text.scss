@@ -60,7 +60,7 @@
 	}
 
 	main {
-		padding-right: 32px;
+		padding-right: 35px;
 		width: 100%;
 		max-height: 100%;
 		box-sizing: content-box;
@@ -280,10 +280,21 @@
 
 // Style that I like but that isn't in the comps
 //@keyframes thicken {
+//	0%   { transform: scale(1.00); fill:rgba(158, 30, 53, 0.053); }
+//	0%   { transform: scale(1.00); fill:rgba(158, 30, 53, 0.153); }
+//	0%   { transform: scale(1.00); fill:rgba(158, 30, 53, 0.203); }
+//	0%   { transform: scale(1.00); fill:rgba(158, 30, 53, 0.223); }
 //	0%   { transform: scale(1.00); fill:rgba(158, 30, 53, 0.253); }
-//	25%  { transform: scale(1.10); fill:rgba(158, 30, 53, 0.453); }
-//	50%  { transform: scale(1.15); fill:rgba(158, 30, 53, 0.653); }
-//	75%  { transform: scale(1.20); fill:rgba(158, 30, 53, 0.853); }
+//	0%   { transform: scale(1.00); fill:rgba(158, 30, 53, 0.283); }
+//	0%   { transform: scale(1.00); fill:rgba(158, 30, 53, 0.303); }
+//	25%  { transform: scale(1.10); fill:rgba(158, 30, 53, 0.353); }
+//	50%  { transform: scale(1.15); fill:rgba(158, 30, 53, 0.453); }
+//	75%  { transform: scale(1.20); fill:rgba(158, 30, 53, 0.553); }
+//	100% { transform: scale(1.25); fill:rgba(158, 30, 53, 0.600); }
+//	0%   { transform: scale(1.00); fill:rgba(158, 30, 53, 0.753); }
+//	25%  { transform: scale(1.10); fill:rgba(158, 30, 53, 0.853); }
+//	50%  { transform: scale(1.15); fill:rgba(158, 30, 53, 0.903); }
+//	75%  { transform: scale(1.20); fill:rgba(158, 30, 53, 0.953); }
 //	100% { transform: scale(1.25); fill:rgba(158, 30, 53, 1.000); }
 //}
 //@keyframes thicken {

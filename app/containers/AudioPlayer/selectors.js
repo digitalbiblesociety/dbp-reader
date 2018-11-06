@@ -9,22 +9,15 @@ const selectHomepageDomain = (state) => state.get('homepage');
 /**
  * Other specific selectors
  */
-const selectHasAudio = () => createSelector(
-	selectHomepageDomain,
-	(home) => home.get('hasAudio')
-);
+const selectHasAudio = () =>
+	createSelector(selectHomepageDomain, (home) => home.get('hasAudio'));
 
 /**
  * Default selector used by AudioPlayer
  */
 
-const makeSelectAudioPlayer = () => createSelector(
-	selectAudioPlayerDomain,
-	(substate) => substate.toJS()
-);
+const makeSelectAudioPlayer = () =>
+	createSelector(selectAudioPlayerDomain, (substate) => substate.toJS());
 
 export default makeSelectAudioPlayer;
-export {
-	selectAudioPlayerDomain,
-	selectHasAudio,
-};
+export { selectAudioPlayerDomain, selectHasAudio };
