@@ -1459,7 +1459,14 @@ export function* createSocialUser({
 	avatar,
 	provider,
 }) {
-	// console.log('{ email, name, nickname, id, avatar, provider }', { email, name, nickname, id, avatar, provider });
+	// console.log('{ email, name, nickname, id, avatar, provider }', {
+	//   email,
+	//   name,
+	//   nickname,
+	//   id,
+	//   avatar,
+	//   provider,
+	// });
 
 	/*
 		There is a problem when I need to link a provider to an account, I do not have a way to get only that users user_id via the api
@@ -1487,7 +1494,7 @@ export function* createSocialUser({
 
 	data.append('email', email);
 	data.append('name', name || '');
-	data.append('nickname', nickname || '');
+	data.append('first_name', nickname || '');
 	data.append('subscribed', '0');
 	data.append('avatar', avatar);
 	data.append('project_id', process.env.NOTES_PROJECT_ID);
@@ -1507,14 +1514,14 @@ export function* createSocialUser({
 			// Case 1: Success!
 			yield put({
 				type: USER_LOGGED_IN,
-				userId: response.user.id,
-				userProfile: response.user,
+				userId: response.data.id,
+				userProfile: response.data,
 			});
 			// console.log('setting user information in first call', response);
-			document.cookie = `bible_is_user_id=${response.user.id}`;
-			document.cookie = `bible_is_name=${response.user.name}`;
-			document.cookie = `bible_is_email=${response.user.email}`;
-			document.cookie = `bible_is_first_name=${response.user.first_name}`;
+			document.cookie = `bible_is_user_id=${response.data.id}`;
+			document.cookie = `bible_is_name=${response.data.name}`;
+			document.cookie = `bible_is_email=${response.data.email}`;
+			document.cookie = `bible_is_first_name=${response.data.first_name}`;
 			// If I remember correctly the account is linked automatically - should check
 			// with Jon to see if this is actually the case
 		} else if (response.error) {
@@ -1591,7 +1598,7 @@ export function* createSocialUser({
 							// console.log('case2Res', case2Res);
 						} catch (err) {
 							if (process.env.NODE_ENV === 'development') {
-								console.error('There was a case 3 error: ', err); // eslint-disable-line no-console
+								console.warn('There was a case 3 error: ', err); // eslint-disable-line no-console
 							}
 						}
 						// Link account to the user that has a matching email
@@ -1610,7 +1617,7 @@ export function* createSocialUser({
 					}
 				} catch (err) {
 					if (process.env.NODE_ENV === 'development') {
-						console.error('There was a case 2 error: ', err); // eslint-disable-line no-console
+						console.warn('There was a case 2 error: ', err); // eslint-disable-line no-console
 					}
 				}
 			}

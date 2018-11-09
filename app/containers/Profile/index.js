@@ -150,8 +150,9 @@ export class Profile extends React.PureComponent {
 		}
 		if (typeof FB !== 'undefined') {
 			// Find the fb access code
-			FB.getLoginStatus((loginResponse) => {
-				FB.logout(loginResponse.authResponse.accessToken);
+			FB.getLoginStatus(() => {
+				// FB.logout(loginResponse.authResponse.accessToken);
+				FB.logout(() => {});
 			});
 		}
 		/* eslint-enable no-undef */

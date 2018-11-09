@@ -36,6 +36,7 @@ export function* getChapterForNote({ note }) {
 	// console.log('bibleId', bibleId);
 	// console.log('note', note);
 	// const reqUrl = `${process.env.BASE_API_ROUTE}/bibles/${bibleId}/${bookId}/${chapter}?bucket=${process.env.DBP_BUCKET_ID}&key=${process.env.DBP_API_KEY}&v=4&book_id=${bookId}&chapter_id=${chapter}`;
+	// TODO: The bibleId here is undefined a lot of the time
 	const bibleUrl = `${process.env.BASE_API_ROUTE}/bibles/${bibleId}?bucket=${
 		process.env.DBP_BUCKET_ID
 	}&key=${process.env.DBP_API_KEY}&v=4`;

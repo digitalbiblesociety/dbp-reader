@@ -6,8 +6,8 @@ import SvgWrapper from '../SvgWrapper';
 class GooglePlusShare extends React.PureComponent {
 	componentDidMount() {
 		/* eslint-disable no-undef */
-		if (gapi) {
-			// console.log('google api has been initialized', gapi);
+		if (typeof gapi !== 'undefined') {
+			// console.log('googundefined
 			const options = {
 				contenturl: window.location.href,
 				contentdeeplinkid: '/bible',

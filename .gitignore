@@ -20,6 +20,17 @@ static/sitemaps/*
 cdn
 cdn/
 cdn/*
+
+# Https stuff for localhost
+rootCA.key
+rootCA.pem
+rootCA.srl
+server.crt
+server.csr
+server.csr.cnf
+server.key
+v3.ext
+
 # Cruft
 temp.txt
 .DS_Store
