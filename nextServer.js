@@ -5,19 +5,20 @@ require('@babel/polyfill');
 const express = require('express');
 const next = require('next');
 const compression = require('compression');
-const fs = require('fs');
-const path = require('path');
-const https = require('https');
+// const fs = require('fs');
+// const path = require('path');
+// const https = require('https');
 const LRUCache = require('lru-cache');
-const port =
-	process.env.NODE_ENV === 'development' ? 443 : process.env.PORT || 3000;
+// const port =
+// 	process.env.NODE_ENV === 'development' ? 443 : process.env.PORT || 3000;
+const port = process.env.PORT || 3000;
 const dev = process.env.NODE_ENV === 'development';
 const manifestJson = require('./static/manifest');
 // const dev = false;
-const certOptions = {
-	key: fs.readFileSync(path.resolve('./server.key')),
-	cert: fs.readFileSync(path.resolve('./server.crt')),
-};
+// const certOptions = {
+// 	key: fs.readFileSync(path.resolve('./server.key')),
+// 	cert: fs.readFileSync(path.resolve('./server.crt')),
+// };
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
@@ -222,15 +223,18 @@ app
 
 		server.get('*', (req, res) => handle(req, res));
 
-		if (process.env.NODE_ENV === 'development') {
-			https.createServer(certOptions, server).listen(443);
-		} else {
-			server.listen(port, (err) => {
-				if (err) throw err;
-				console.log(`> Ready on http://localhost:${port}`); // eslint-disable-line no-console
-			});
-		}
-
+		// if (process.env.NODE_ENV === 'development') {
+		// 	https.createServer(certOptions, server).listen(443);
+		// } else {
+		// 	server.listen(port, (err) => {
+		// 		if (err) throw err;
+		// 		console.log(`> Ready on http://localhost:${port}`); // eslint-disable-line no-console
+		// 	});
+		// }
+		server.listen(port, (err) => {
+			if (err) throw err;
+			console.log(`> Ready on http://localhost:${port}`); // eslint-disable-line no-console
+		});
 		// This code was causing the server to hang forever when in development, need to tweak it to enable a graceful shutdown
 		// process.on('SIGINT', () => {
 		// 	app.close((err) => {
