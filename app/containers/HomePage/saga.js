@@ -1510,7 +1510,7 @@ export function* createSocialUser({
 		// console.log('Sending first request');
 		const response = yield call(request, requestUrl, options);
 
-		if (response.success) {
+		if (response) {
 			// Case 1: Success!
 			yield put({
 				type: USER_LOGGED_IN,
@@ -1610,10 +1610,10 @@ export function* createSocialUser({
 							userProfile: res,
 						});
 						// May add an else that will save the id to the session so it is persisted through a page refresh
-						document.cookie = `bible_is_user_id=${response.data.id}`;
-						document.cookie = `bible_is_name=${response.data.name}`;
-						document.cookie = `bible_is_email=${response.data.email}`;
-						document.cookie = `bible_is_first_name=${response.data.first_name}`;
+						document.cookie = `bible_is_user_id=${res.id}`;
+						document.cookie = `bible_is_name=${res.name}`;
+						document.cookie = `bible_is_email=${res.email}`;
+						document.cookie = `bible_is_first_name=${res.first_name}`;
 					}
 				} catch (err) {
 					if (process.env.NODE_ENV === 'development') {
