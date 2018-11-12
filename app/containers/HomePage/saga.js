@@ -1582,6 +1582,13 @@ export function* createSocialUser({
 							if (typeof gapi !== 'undefined' && typeof auth2 !== 'undefined') {
 								auth2.signOut();
 							}
+							if (typeof FB !== 'undefined') {
+								// Find the fb access code
+								FB.getLoginStatus(() => {
+									// FB.logout(loginResponse.authResponse.accessToken);
+									FB.logout(() => {});
+								});
+							}
 						} catch (err) {
 							if (process.env.NODE_ENV === 'development') {
 								console.warn('There was a case 3 error: ', err); // eslint-disable-line no-console
