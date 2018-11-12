@@ -95,7 +95,7 @@ export function* sendSignUpForm({
 }
 
 export function* sendLoginForm({ password, email, stay }) {
-	const requestUrl = `${process.env.BASE_API_ROUTE}/users/login?key=${
+	const requestUrl = `${process.env.BASE_API_ROUTE}/login?key=${
 		process.env.DBP_API_KEY
 	}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}`;
 	const formData = new FormData();
@@ -426,12 +426,12 @@ export function* socialMediaLogin({ driver }) {
 	// 	accessToken,
 	// } = res;
 	// console.log('Driver supplied to social media login', driver);
-	let requestUrl = `${process.env.BASE_API_ROUTE}/users/login/${driver}?key=${
+	let requestUrl = `${process.env.BASE_API_ROUTE}/login/${driver}?key=${
 		process.env.DBP_API_KEY
 	}&v=4&project_id=${process.env.NOTES_PROJECT_ID}`;
 
 	if (process.env.NODE_ENV === 'development') {
-		requestUrl = `${process.env.BASE_API_ROUTE}/users/login/${driver}?key=${
+		requestUrl = `${process.env.BASE_API_ROUTE}/login/${driver}?key=${
 			process.env.DBP_API_KEY
 		}&v=4&project_id=${process.env.NOTES_PROJECT_ID}&alt_url=${process.env
 			.NODE_ENV === 'development'}`;

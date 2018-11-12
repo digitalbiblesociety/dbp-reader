@@ -1539,7 +1539,7 @@ export function* createSocialUser({
 				response.error.message.email[0] === 'The email has already been taken.'
 			) {
 				// Case 3: User has account - Linked to provider
-				const r = `${process.env.BASE_API_ROUTE}/users/login?key=${
+				const r = `${process.env.BASE_API_ROUTE}/login?key=${
 					process.env.DBP_API_KEY
 				}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}`;
 				const fd = new FormData();
