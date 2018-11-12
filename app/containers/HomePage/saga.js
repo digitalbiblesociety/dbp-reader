@@ -1510,7 +1510,7 @@ export function* createSocialUser({
 		// console.log('Sending first request');
 		const response = yield call(request, requestUrl, options);
 
-		if (response) {
+		if (response.data) {
 			// Case 1: Success!
 			yield put({
 				type: USER_LOGGED_IN,
@@ -1577,25 +1577,11 @@ export function* createSocialUser({
 								type: OAUTH_ERROR,
 								message: response.error.message.email[0],
 							});
-							// Below sends call to get the user id and then another call to sign in
-							// const getUserRes = yield call(request, getUserReq);
-							// console.log('doing something that had an error ', res.error);
-							// console.log('email: ', email);
-							// console.log('getUserRes.find(u => u.email === email)', getUserRes.data.find(u => u.email === email));
-							// console.log('id, provider', id, provider);
-							// const case2Req = `${process.env.BASE_API_ROUTE}/accounts?key=${
-							// 	 process.env.DBP_API_KEY
-							// 	 }&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}&user_id=${getUserRes.data.find((u) => u.email === email).id}`;
-							// const case2Fd = new FormData();
-							// case2Fd.append('email', email);
-							// case2Fd.append('social_provider_id', provider);
-							// case2Fd.append('social_provider_user_id', id);
-							// const case2Opt = {
-							// 	 method: 'POST',
-							// 	 body: case2Fd,
-							// };
-							// const case2Res = yield call(request, case2Req, case2Opt);
-							// console.log('case2Res', case2Res);
+							// need to sign user out of gmail since the login attempt failed
+							// this lets the user try again with a different email
+							if (typeof gapi !== 'undefined' && typeof auth2 !== 'undefined') {
+								auth2.signOut();
+							}
 						} catch (err) {
 							if (process.env.NODE_ENV === 'development') {
 								console.warn('There was a case 3 error: ', err); // eslint-disable-line no-console
@@ -1609,7 +1595,6 @@ export function* createSocialUser({
 							userId: res.id,
 							userProfile: res,
 						});
-						// May add an else that will save the id to the session so it is persisted through a page refresh
 						document.cookie = `bible_is_user_id=${res.id}`;
 						document.cookie = `bible_is_name=${res.name}`;
 						document.cookie = `bible_is_email=${res.email}`;
