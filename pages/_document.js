@@ -25,6 +25,10 @@ import Document, { Head, Main, NextScript } from 'next/document';
 	as="style"
 	href="https://fonts.googleapis.com/css?family=Alegreya"
 />
+
+Polyfill Scripts
+	<script src="https://cdn.polyfill.io/v2/polyfill.min.js" />
+	<script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Intl.~locale.en" />
 */
 /* eslint-disable */
 export default class MyDocument extends Document {

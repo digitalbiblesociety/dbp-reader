@@ -1,4 +1,5 @@
-if (process.env.NODE_ENV === 'production') {
+// Has the test variable for if I run the project locally without newrelic
+if (process.env.NODE_ENV === 'production' && process.env.TEST !== 'test') {
 	require('newrelic'); // eslint-disable-line
 }
 require('@babel/polyfill');
