@@ -3,7 +3,11 @@ module.exports = {
 		{
 			name: 'bible.is.prod',
 			script: './nextServer.js',
-			instances: 'max',
+			instances: 1,
+			env: {
+				NODE_ENV: 'production',
+				PORT: 3000,
+			},
 			env_production: {
 				NODE_ENV: 'production',
 				PORT: 3000,
@@ -12,7 +16,7 @@ module.exports = {
 		{
 			name: 'bible.is.dev',
 			script: './nextServer.js',
-			instances: 'max',
+			instances: 1,
 			env: {
 				NODE_ENV: 'development',
 				PORT: 3001,

@@ -46,8 +46,17 @@ export default class MyDocument extends Document {
 		return (
 			<html>
 				<Head>
-					<script src="https://cdn.polyfill.io/v2/polyfill.min.js" />
-					<script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Intl.~locale.en" />
+					<script
+						src="https://cdn.polyfill.io/v2/polyfill.min.js"
+						noModule="nomodule"
+						defer
+						async
+					/>
+					<script
+						src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Intl.~locale.en"
+						defer
+						async
+					/>
 					{process.env.NODE_ENV === 'production' ? (
 						<link
 							rel="stylesheet"
