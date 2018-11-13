@@ -95,13 +95,13 @@ export function* getTexts({ languageCode }) {
 	//     process.env.DBP_BUCKET_ID
 	//   }&key=${process.env.DBP_API_KEY}&v=4`;
 	// } else {
-	requestUrl = `${process.env.BASE_API_ROUTE}/bibles?&bucket_id=${
+	requestUrl = `${process.env.BASE_API_ROUTE}/bibles?bucket_id=${
 		process.env.DBP_BUCKET_ID
 	}&key=${process.env.DBP_API_KEY}&language_code=${languageCode}&v=4`;
 	// }
 	const videoRequestUrl = `${
 		process.env.BASE_API_ROUTE
-	}/bibles?&bucket_id=dbp-vid&key=${
+	}/bibles?bucket_id=dbp-vid&key=${
 		process.env.DBP_API_KEY
 	}&language_code=${languageCode}&v=4`;
 	// }
