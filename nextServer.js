@@ -10,6 +10,7 @@ const compression = require('compression');
 // const path = require('path');
 // const https = require('https');
 const LRUCache = require('lru-cache');
+const fetch = require('isomorphic-fetch');
 // const port =
 // 	process.env.NODE_ENV === 'development' ? 443 : process.env.PORT || 3000;
 const port = process.env.PORT || 3000;
@@ -80,6 +81,22 @@ app
 		server.get('/sitemap.xml', (req, res) =>
 			res.status(200).sendFile('sitemap-index.xml', sitemapOptions),
 		);
+
+		server.get('/status', async (req, res) => {
+			const ok = await fetch(
+				`${process.env.BASE_API_ROUTE}/bibles?v=4&bucket_id=${
+					process.env.DBP_BUCKET_ID
+				}&key=${process.env.DBP_API_KEY}&language_code=6414`,
+			)
+				.then((r) => r.status >= 200 && r.status < 300)
+				.catch(() => false);
+
+			if (ok) {
+				res.sendStatus(200);
+			} else {
+				res.sendStatus(500);
+			}
+		});
 
 		// const manifestOptions = { root: `${__dirname}/static/`, headers: { 'Content-Type': 'application/json;charset=UTF-8' } };
 
