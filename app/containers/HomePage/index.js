@@ -27,7 +27,6 @@ import Text from '../Text';
 import NavigationBar from '../../components/NavigationBar';
 import Footer from '../../components/Footer';
 import SearchContainer from '../SearchContainer';
-import GenericErrorBoundary from '../../components/GenericErrorBoundary';
 import FadeTransition from '../../components/FadeTransition';
 import notesReducer from '../Notes/reducer';
 import notesSaga from '../Notes/saga';
