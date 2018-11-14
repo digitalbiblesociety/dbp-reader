@@ -71,6 +71,8 @@
 
 		&.rtl {
 			direction: rtl;
+			padding-right: 0;
+			// padding-left: 35px;
 
 			.drop-caps {
 				float: right;
