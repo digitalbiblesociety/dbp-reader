@@ -1,5 +1,6 @@
 import fetch from 'isomorphic-fetch';
 import forge from 'node-forge';
+// TODO: Add textRequest
 
 const parseJSON = (res) => res.json();
 

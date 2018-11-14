@@ -1518,10 +1518,12 @@ export function* createSocialUser({
 				userProfile: response.data,
 			});
 			// console.log('setting user information in first call', response);
-			document.cookie = `bible_is_user_id=${response.data.id}`;
-			document.cookie = `bible_is_name=${response.data.name}`;
-			document.cookie = `bible_is_email=${response.data.email}`;
-			document.cookie = `bible_is_first_name=${response.data.first_name}`;
+			document.cookie = `bible_is_user_id=${response.data.id};path=/`;
+			document.cookie = `bible_is_name=${response.data.name};path=/`;
+			document.cookie = `bible_is_email=${response.data.email};path=/`;
+			document.cookie = `bible_is_first_name=${
+				response.data.first_name
+			};path=/`;
 			// If I remember correctly the account is linked automatically - should check
 			// with Jon to see if this is actually the case
 		} else if (response.error) {
@@ -1602,10 +1604,10 @@ export function* createSocialUser({
 							userId: res.id,
 							userProfile: res,
 						});
-						document.cookie = `bible_is_user_id=${res.id}`;
-						document.cookie = `bible_is_name=${res.name}`;
-						document.cookie = `bible_is_email=${res.email}`;
-						document.cookie = `bible_is_first_name=${res.first_name}`;
+						document.cookie = `bible_is_user_id=${res.id};path=/`;
+						document.cookie = `bible_is_name=${res.name};path=/`;
+						document.cookie = `bible_is_email=${res.email};path=/`;
+						document.cookie = `bible_is_first_name=${res.first_name};path=/`;
 					}
 				} catch (err) {
 					if (process.env.NODE_ENV === 'development') {

@@ -68,10 +68,12 @@ export function* sendSignUpForm({
 				userId: response.data.id,
 				userProfile: response.data,
 			});
-			document.cookie = `bible_is_user_id=${response.data.id}`;
-			document.cookie = `bible_is_name=${response.data.name}`;
-			document.cookie = `bible_is_email=${response.data.email}`;
-			document.cookie = `bible_is_first_name=${response.data.first_name}`;
+			document.cookie = `bible_is_user_id=${response.data.id};path=/`;
+			document.cookie = `bible_is_name=${response.data.name};path=/`;
+			document.cookie = `bible_is_email=${response.data.email};path=/`;
+			document.cookie = `bible_is_first_name=${
+				response.data.first_name
+			};path=/`;
 		} else if (response.error) {
 			// console.log('res error', response);
 			const message = Object.values(response.error.message).reduce(
@@ -119,10 +121,10 @@ export function* sendLoginForm({ password, email, stay }) {
 				userProfile: response,
 			});
 
-			document.cookie = `bible_is_user_id=${response.id}`;
-			document.cookie = `bible_is_email=${response.email}`;
-			document.cookie = `bible_is_name=${response.name}`;
-			document.cookie = `bible_is_first_name=${response.nickname}`;
+			document.cookie = `bible_is_user_id=${response.id};path=/`;
+			document.cookie = `bible_is_email=${response.email};path=/`;
+			document.cookie = `bible_is_name=${response.name};path=/`;
+			document.cookie = `bible_is_first_name=${response.nickname};path=/`;
 
 			// May need to do something with the stay signed in variable
 			if (stay) {
@@ -314,9 +316,9 @@ export function* sendResetPassword({ password, userAccessToken, email }) {
 			userId: response.id,
 			userProfile: response,
 		});
-		document.cookie = `bible_is_email=${response.email}`;
-		document.cookie = `bible_is_name=${response.name}`;
-		document.cookie = `bible_is_first_name=${response.first_name}`;
+		document.cookie = `bible_is_email=${response.email};path=/`;
+		document.cookie = `bible_is_name=${response.name};path=/`;
+		document.cookie = `bible_is_first_name=${response.first_name};path=/`;
 	} catch (err) {
 		// console.log('in catch');
 

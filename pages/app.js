@@ -287,8 +287,9 @@ AppContainer.getInitialProps = async (context) => {
 	if (req && req.headers.cookie) {
 		// Get all cookies that the page needs
 		// console.log(
-		//   'cookie in get initial props: server!',
-		//   parseCookie(req.headers.cookie),
+		//   '\ncookie in get initial props: server!',
+		// 	parseCookie(req.headers.cookie).bible_is_autoplay,
+		// 	'\n'
 		// );
 		const cookieData = parseCookie(req.headers.cookie);
 
@@ -363,7 +364,7 @@ AppContainer.getInitialProps = async (context) => {
 		// Get all cookies that the page needs
 		// console.log(
 		//   'cookie in get initial props: client!',
-		//   parseCookie(document.cookie),
+		//   parseCookie(document.cookie).bible_is_autoplay,
 		// );
 		const cookieData = parseCookie(document.cookie);
 

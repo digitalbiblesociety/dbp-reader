@@ -1,6 +1,6 @@
 import get from 'lodash/get';
 import request from './request';
-
+// TODO: Rewrite handling of audio calls to intelligently
 export default async (filesets, bookId, chapter) => {
 	// console.log('getting the audio', filesets, bookId, chapter);
 	const audioReturnObject = { type: 'loadaudio', audioPaths: [''] };

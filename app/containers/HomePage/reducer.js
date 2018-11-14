@@ -181,7 +181,7 @@ function homePageReducer(state = initialState, action) {
 			return state.set('userId', action.userId).set('userAuthenticated', true);
 		case LOG_OUT:
 			// console.log('In the logout for homepage');
-			document.cookie = 'bible_is_user_id=';
+			document.cookie = 'bible_is_user_id=;path=/';
 			return state.set('userId', '').set('userAuthenticated', false);
 		case 'book_metadata':
 			return state.set('testaments', action.testaments);
@@ -189,7 +189,7 @@ function homePageReducer(state = initialState, action) {
 			return state.set('firstLoad', false);
 		case TOGGLE_AUTOPLAY:
 			if (typeof window !== 'undefined') {
-				document.cookie = `bible_is_autoplay=${action.state}`;
+				document.cookie = `bible_is_autoplay=${action.state};path=/`;
 			}
 			return state.setIn(['userSettings', 'autoPlayEnabled'], action.state);
 		case GET_CHAPTER_TEXT:
@@ -265,7 +265,7 @@ function homePageReducer(state = initialState, action) {
 				.set('activeTextId', action.textId);
 		case SET_AUDIO_PLAYER_STATE:
 			if (typeof window !== 'undefined') {
-				document.cookie = `bible_is_audio_open=${action.state}`;
+				document.cookie = `bible_is_audio_open=${action.state};path=/`;
 			}
 			return state.set('audioPlayerState', action.state);
 		case LOAD_HIGHLIGHTS:
@@ -283,10 +283,12 @@ function homePageReducer(state = initialState, action) {
 				// Exclusive path is the path to the setting that cannot be active at the same time as this one
 				// action.exclusivePath is the path of the option that cannot have the same state as the one currently being set
 				if (action.exclusivePath) {
-					document.cookie = `bible_is_${action.exclusivePath.join('_')}=false`;
+					document.cookie = `bible_is_${action.exclusivePath.join(
+						'_',
+					)}=false;path=/`;
 					document.cookie = `bible_is_${action.path.join('_')}=${!state.getIn(
 						action.path,
-					)}`;
+					)};path=/`;
 
 					return state
 						.setIn(action.exclusivePath, false)
@@ -295,7 +297,7 @@ function homePageReducer(state = initialState, action) {
 
 				document.cookie = `bible_is_${action.path.join('_')}=${!state.getIn(
 					action.path,
-				)}`;
+				)};path=/`;
 
 				return state.setIn(action.path, !state.getIn(action.path));
 			}

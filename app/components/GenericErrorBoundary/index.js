@@ -34,11 +34,12 @@ class GenericErrorBoundary extends React.Component {
 			if (process.env.NODE_ENV === 'development') {
 				return (
 					<div>
-						<details style={{ whiteSpace: 'pre-wrap' }}>
+						<section style={{ whiteSpace: 'pre-wrap', color: 'black' }}>
 							{this.state.error && this.state.error.toString()}
 							<br />
 							{this.state.errorInfo.componentStack}
-						</details>
+							{JSON.stringify(this.state.errorInfo)}
+						</section>
 					</div>
 				);
 			} else if (window && window.location) {

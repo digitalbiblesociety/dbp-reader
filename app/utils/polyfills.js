@@ -4,6 +4,11 @@ import entries from 'core-js/fn/object/entries';
 import values from 'core-js/fn/object/values';
 import aIncludes from 'core-js/fn/array/includes';
 import includes from 'core-js/library/fn/string/includes';
+import find from 'core-js/fn/array/find';
+
+if (!Array.find) {
+	Array.find = find;
+}
 if (!Object.values) {
 	Object.values = values;
 }

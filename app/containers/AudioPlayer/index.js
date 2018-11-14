@@ -248,7 +248,7 @@ export class AudioPlayer extends React.Component {
 
 	updateVolume = (volume) => {
 		if (volume !== this.state.volume) {
-			document.cookie = `bible_is_volume=${volume}`;
+			document.cookie = `bible_is_volume=${volume};path=/`;
 			this.audioRef.volume = volume;
 			this.setState({
 				volume,
@@ -348,7 +348,7 @@ export class AudioPlayer extends React.Component {
 
 	updatePlayerSpeed = (rate) => {
 		if (this.state.currentSpeed !== rate) {
-			document.cookie = `bible_is_playbackrate=${JSON.stringify(rate)}`;
+			document.cookie = `bible_is_playbackrate=${JSON.stringify(rate)};path=/`;
 			this.audioRef.playbackRate = rate;
 			this.setState({
 				currentSpeed: rate,
