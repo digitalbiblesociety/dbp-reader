@@ -336,14 +336,33 @@ export class AudioPlayer extends React.Component {
 	};
 
 	playAudio = () => {
-		this.audioRef.play().then(() => {
+		const playPromise = this.audioRef.play();
+		// All modern browsers return a promise
+		// This is only because IE doesn't return a promise
+		if (playPromise) {
+			playPromise
+				.then(() => {
+					if (this.state.currentTime !== this.audioRef.currentTime) {
+						this.audioRef.currentTime = this.state.currentTime;
+					}
+					this.setState({
+						playing: true,
+					});
+				})
+				.catch((err) => {
+					if (process.env.NODE_ENV !== 'production') {
+						console.error('Error with playing audio: ', err);
+					}
+				});
+		} else {
+			// This is so IE will still show the svg for the pause button and such
 			if (this.state.currentTime !== this.audioRef.currentTime) {
 				this.audioRef.currentTime = this.state.currentTime;
 			}
 			this.setState({
 				playing: true,
 			});
-		});
+		}
 	};
 
 	updatePlayerSpeed = (rate) => {
