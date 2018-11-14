@@ -32,24 +32,11 @@ class VersionList extends React.PureComponent {
 	// }
 
 	get filteredVersionList() {
-		const {
-			bibles,
-			languageCode,
-			activeIsoCode,
-			activeTextId,
-			// activeBookId,
-			// activeChapter,
-			versionsError,
-			filterText,
-		} = this.props;
-		// const { filterText } = this.state;
-		// console.log('bibles', bibles);
+		const { bibles, activeTextId, versionsError, filterText } = this.props;
 
 		const filteredBibles = filterText
-			? bibles.filter((bible) =>
-					this.filterFunction(bible, filterText, activeIsoCode),
-			  )
-			: bibles.filter((bible) => bible.get('language_id') === languageCode);
+			? bibles.filter(this.filterFunction)
+			: bibles;
 		// Change the way I figure out if a resource has text or audio
 		// path, key, types, className, text, clickHandler
 		// console.log('filtered bibles', filteredBibles.get(0).get('filesets').valueSeq());
@@ -150,24 +137,20 @@ class VersionList extends React.PureComponent {
 		);
 	}
 
-	filterFunction = (bible, filterText, iso) => {
-		const lowerCaseText = filterText.toLowerCase();
-		const language = bible.get('language') || '';
+	filterFunction = (bible) => {
+		const lowerCaseText = this.props.filterText.toLowerCase();
 		const abbr = bible.get('abbr') || '';
 		const name = bible.get('name') || '';
 		const vname = bible.get('vname') || '';
+		const date = bible.get('date') || '';
 
-		if (!(bible.get('iso') === iso) && iso !== 'ANY') {
-			return false;
-		}
-
-		if (language.toLowerCase().includes(lowerCaseText)) {
-			return true;
-		} else if (abbr.toLowerCase().includes(lowerCaseText)) {
+		if (vname.toLowerCase().includes(lowerCaseText)) {
 			return true;
 		} else if (name.toLowerCase().includes(lowerCaseText)) {
 			return true;
-		} else if (vname.toLowerCase().includes(lowerCaseText)) {
+		} else if (abbr.toLowerCase().includes(lowerCaseText)) {
+			return true;
+		} else if (date.includes(lowerCaseText)) {
 			return true;
 		}
 		return false;
@@ -177,7 +160,6 @@ class VersionList extends React.PureComponent {
 		const {
 			// setCountryListState,
 			// toggleLanguageList,
-			// toggleVersionList,
 			toggleTextSelection,
 			setActiveText,
 			// active,
@@ -252,16 +234,9 @@ class VersionList extends React.PureComponent {
 VersionList.propTypes = {
 	bibles: PropTypes.object,
 	setActiveText: PropTypes.func,
-	// toggleVersionList: PropTypes.func,
-	// toggleLanguageList: PropTypes.func,
 	toggleTextSelection: PropTypes.func,
-	// setCountryListState: PropTypes.func,
-	// activeBookId: PropTypes.string,
-	activeIsoCode: PropTypes.string,
-	languageCode: PropTypes.number,
 	activeTextId: PropTypes.string,
 	filterText: PropTypes.string,
-	// activeChapter: PropTypes.number,
 	active: PropTypes.bool,
 	versionsError: PropTypes.bool,
 	loadingVersions: PropTypes.bool,

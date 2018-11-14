@@ -42,19 +42,6 @@ export class TextSelection extends React.PureComponent {
 	};
 
 	componentDidMount() {
-		// Should probably initialize this somewhere else since this will be mounted only once
-		// console.log(
-		//   'setting iso code in did mount',
-		//   this.props.textselection.activeLanguageCode,
-		//   this.props.homepageData.defaultLanguageCode,
-		// );
-		// this.props.dispatch(
-		//   setActiveIsoCode({
-		//     iso: this.props.homepageData.initialIsoCode,
-		//     name: this.props.homepageData.initialLanguageName,
-		//     languageCode: this.props.homepageData.defaultLanguageCode,
-		//   }),
-		// );
 		if (this.props.active) {
 			this.closeMenuController = new CloseMenuFunctions(
 				this.ref,
@@ -190,7 +177,7 @@ export class TextSelection extends React.PureComponent {
 			loadingLanguages,
 			finishedLoadingCountries,
 		} = this.props.textselection;
-		const { activeTextName, activeTextId } = this.props.homepageData;
+		const { activeTextId } = this.props.homepageData;
 		const { bibles, active, languages, countries } = this.props;
 		const { filterText } = this.state;
 
@@ -265,15 +252,9 @@ export class TextSelection extends React.PureComponent {
 					bibles={bibles}
 					filterText={filterText}
 					active={versionListActive}
-					activeIsoCode={activeIsoCode}
 					activeTextId={activeTextId}
-					languageCode={activeLanguageCode}
-					activeTextName={activeTextName}
 					loadingVersions={loadingVersions}
 					setActiveText={this.setActiveTextId}
-					toggleVersionList={this.toggleVersionList}
-					toggleLanguageList={this.toggleLanguageList}
-					setCountryListState={this.setCountryListState}
 					toggleTextSelection={this.toggleVersionSelection}
 				/>
 			</aside>
@@ -289,9 +270,6 @@ TextSelection.propTypes = {
 	textselection: PropTypes.object,
 	homepageData: PropTypes.object,
 	active: PropTypes.bool,
-	// getAudio: PropTypes.func,
-	// setActiveText: PropTypes.func,
-	// toggleVersionSelection: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
