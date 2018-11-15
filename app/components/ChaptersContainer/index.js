@@ -30,7 +30,7 @@ function ChaptersContainer({
 			>
 				{chapters.map((chapter) => (
 					<Link
-						href={`/${activeTextId.toLowerCase()}/${bookId.toLowerCase()}/${chapter}`}
+						href={`/app?bibleId=${activeTextId.toLowerCase()}&bookId=${bookId.toLowerCase()}&chapter=${chapter}`}
 						as={`/bible/${activeTextId.toLowerCase()}/${bookId.toLowerCase()}/${chapter}`}
 						key={chapter}
 					>

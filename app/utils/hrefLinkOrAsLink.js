@@ -5,9 +5,9 @@ export default ({ textId, bookId, chapter, nextVerse, isHref }) => {
 	if (isHref) {
 		if (nextVerse) {
 			// console.log('Next href has verse');
-			return `${baseUrl}&bibleId=${textId}&bookId=${bookId}&chapter=${chapter}&verse=${nextVerse}`;
+			return `${baseUrl}bibleId=${textId}&bookId=${bookId}&chapter=${chapter}&verse=${nextVerse}`;
 		}
-		return `${baseUrl}&bibleId=${textId}&bookId=${bookId}&chapter=${chapter}`;
+		return `${baseUrl}bibleId=${textId}&bookId=${bookId}&chapter=${chapter}`;
 	}
 	if (nextVerse) {
 		// console.log('Next link has verse');

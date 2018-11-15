@@ -401,6 +401,15 @@ export class AudioPlayer extends React.Component {
 						textId: this.props.activeTextId.toLowerCase(),
 						verseNumber: this.props.verseNumber,
 						text: this.props.text,
+						isHref: true,
+					}),
+					getNextChapterUrl({
+						books: this.props.books,
+						chapter: this.props.activeChapter,
+						bookId: this.props.activeBookId.toLowerCase(),
+						textId: this.props.activeTextId.toLowerCase(),
+						verseNumber: this.props.verseNumber,
+						text: this.props.text,
 						isHref: false,
 					}),
 				);
