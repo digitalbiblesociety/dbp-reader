@@ -11,6 +11,8 @@ const checkStatus = (res) => {
 	//     `${process.env.API_KEY}${process.env.NOTES_PROJECT}${new Date()}`,
 	//   ),
 	// );
+	console.log('status', res.status);
+	console.log('statusText', res.statusText);
 	if (res.status >= 200 && res.status < 300) {
 		return res;
 		// return {
@@ -23,6 +25,10 @@ const checkStatus = (res) => {
 		//     };
 		//   },
 		// };
+	}
+	if (res.status >= 300 && res.status < 400) {
+		console.log('301', res);
+		return res;
 	}
 	if (res.status === 428) {
 		return {
@@ -43,7 +49,7 @@ const checkStatus = (res) => {
 	throw error;
 };
 // put cookie here
-const request = (url, options) =>
+const request = (url, options = {}) =>
 	fetch(url, {
 		...options,
 		Authorization: forge.md.sha256.create(

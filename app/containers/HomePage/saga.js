@@ -5,6 +5,7 @@ import some from 'lodash/some';
 import get from 'lodash/get';
 // import uniqBy from 'lodash/uniqBy';
 import uniqWith from 'lodash/uniqWith';
+import Router from 'next/router';
 import request from '../../utils/request';
 import {
 	getNotesForChapter,
@@ -1450,7 +1451,7 @@ export function* getCopyrightSaga({ filesetIds }) {
 		}
 	}
 }
-
+/*
 export function* createSocialUser({
 	email,
 	name,
@@ -1468,23 +1469,21 @@ export function* createSocialUser({
 	//   provider,
 	// });
 
-	/*
-		There is a problem when I need to link a provider to an account, I do not have a way to get only that users user_id via the api
-			I either need to be able to link the account by only providing the email, or have a way to get the user_id that is associated with an email
-		Case 1: User does not have account
-			User tries to sign in with provider
-			Action: Create a new account with the provided information, link this provider to the account created with the email
-		Case 2: User has account - not linked to provider
-			User tries to sign in with provider to their existing account
-			Action: Try to sign user in, sign in fails, get user id using their email, use user id to link this provider and social_id to their account
-			based on the email + id
-		Case 3: User has account - linked to provider
-			User tries to sign in with provider to their existing account
-			Action: Try to sign user in, sign in fails, get user id using their email, use user id to sign them into their account based on the email + id
-		Case 4: User has account made with provider but no password and tries to sign in using their password - May not need to handle here
-			User tries to sign in with provider to their existing account
-			Action: Sign user in without password because they have been verified by the provider
-	* */
+	// There is a problem when I need to link a provider to an account, I do not have a way to get only that users user_id via the api
+	// 	I either need to be able to link the account by only providing the email, or have a way to get the user_id that is associated with an email
+	// Case 1: User does not have account
+	// 	User tries to sign in with provider
+	// 	Action: Create a new account with the provided information, link this provider to the account created with the email
+	// Case 2: User has account - not linked to provider
+	// 	User tries to sign in with provider to their existing account
+	// 	Action: Try to sign user in, sign in fails, get user id using their email, use user id to link this provider and social_id to their account
+	// 	based on the email + id
+	// Case 3: User has account - linked to provider
+	// 	User tries to sign in with provider to their existing account
+	// 	Action: Try to sign user in, sign in fails, get user id using their email, use user id to sign them into their account based on the email + id
+	// Case 4: User has account made with provider but no password and tries to sign in using their password - May not need to handle here
+	// 	User tries to sign in with provider to their existing account
+	// 	Action: Sign user in without password because they have been verified by the provider
 
 	// Case 3: Create a new account with this information
 	const requestUrl = `${process.env.BASE_API_ROUTE}/users?key=${
@@ -1632,6 +1631,32 @@ export function* createSocialUser({
 		}
 	}
 	// }
+}
+*/
+
+export function* createSocialUser({
+	email,
+	name,
+	nickname,
+	id,
+	avatar,
+	provider,
+}) {
+	const reqUrl = `${
+		process.env.BASE_API_ROUTE
+	}/login/${provider}?v=4&project_id=${process.env.NOTES_PROJECT_ID}&key=${
+		process.env.DBP_API_KEY
+	}`;
+
+	try {
+		const response = yield call(request, reqUrl);
+		console.log('create social response', response);
+		if (response.data.redirect_url) {
+			Router.push(response.data.redirect_url);
+		}
+	} catch (err) {
+		console.log('create social error', err);
+	}
 }
 
 // Individual exports for testing
