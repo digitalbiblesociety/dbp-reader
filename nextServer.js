@@ -26,7 +26,8 @@ const handle = app.getRequestHandler();
 
 const ssrCache = new LRUCache({
 	max: 100,
-	maxAge: 1000 * 60 * 5,
+	maxAge:
+		process.env.NODE_ENV === 'production' ? 1000 * 60 * 60 * 24 : 1000 * 60 * 5,
 });
 
 function getCacheKey(req) {
