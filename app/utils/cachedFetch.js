@@ -2,7 +2,8 @@ import lscache from 'lscache';
 import fetch from 'isomorphic-fetch';
 
 // Set a default expiry for 5 minutes
-const TTL_MINUTES = 1000 * 60 * 5;
+const TTL_MINUTES =
+	process.env.NODE_ENV === 'development' ? 1000 * 60 * 5 : 1000 * 60 * 24;
 // Todo: add catch and look for any bad responses in each request
 export default async function cachedFetch(url, options, expires) {
 	// On the first load we flush any expired values

@@ -32,7 +32,9 @@ export class GoogleAuthentication extends React.PureComponent {
 		// // 	// console.log('sending social driver google');
 		// // 	socialMediaLogin({ driver: 'google' });
 		// // }
+		this.props.dispatch(createUserWithSocialAccount({ provider: 'google' }));
 		/* eslint-disable no-undef */
+		/*
 		if (typeof auth2 !== 'undefined') {
 			if (!auth2.isSignedIn.get()) {
 				auth2.signIn().then(() => {
@@ -67,6 +69,7 @@ export class GoogleAuthentication extends React.PureComponent {
 				);
 			}
 		}
+		*/
 	};
 	openPopup = (e) => {
 		const coords = { x: e.clientX, y: e.clientY };

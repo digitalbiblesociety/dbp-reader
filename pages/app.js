@@ -552,7 +552,7 @@ AppContainer.getInitialProps = async (context) => {
 			}&fileset_type=${id[0]}`;
 			const res = await cachedFetch(url);
 			bookCachePairs.push({ href: url, data: res });
-
+			console.log('book meta url', url);
 			return res.data || [];
 		},
 	);

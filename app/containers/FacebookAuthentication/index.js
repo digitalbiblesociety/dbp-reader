@@ -55,8 +55,10 @@ export class FacebookAuthentication extends React.PureComponent {
 		// 	// console.log('sending social driver for facebook');
 		// 	socialMediaLogin({ driver: 'facebook' });
 		// }
+		this.props.dispatch(createUserWithSocialAccount({ provider: 'facebook' }));
 		/* eslint-disable no-undef */
 		if (typeof FB !== 'undefined') {
+			/*
 			FB.getLoginStatus((getLoginResponse) => {
 				// console.log('fb login status', getLoginResponse);
 				// console.log('getLoginResponse.authResponse.accessToken', getLoginResponse.authResponse.accessToken);
@@ -148,6 +150,7 @@ export class FacebookAuthentication extends React.PureComponent {
 				}
 				// statusChangeCallback(response);
 			});
+			*/
 		}
 		/* eslint-enable */
 	};
