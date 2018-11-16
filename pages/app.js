@@ -745,6 +745,11 @@ AppContainer.getInitialProps = async (context) => {
     });
   }
 
+  document.cookie = `bible_is_ref_bible_id=${bibleId}`;
+  document.cookie = `bible_is_ref_book_id=${bookId}`;
+  document.cookie = `bible_is_ref_chapter=${chapter}`;
+  document.cookie = `bible_is_ref_verse=${verse}`;
+
   return {
     initialVolume,
     initialPlaybackRate,

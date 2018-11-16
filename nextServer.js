@@ -35,6 +35,19 @@ function getCacheKey(req) {
   return `${req.url}`;
 }
 
+function parseServerCookie(cookie) {
+  return cookie
+    .split('; ')
+    .filter((c) => c.includes('bible_is_ref'))
+    .reduce((a, c) => {
+      const ca = c.split('=');
+      return {
+        ...a,
+        [ca[0]]: ca[1],
+      };
+    }, {});
+}
+
 async function renderAndCache(req, res, pagePath, queryParams) {
   if (dev) {
     app.render(req, res, pagePath, queryParams);
@@ -76,6 +89,11 @@ app
       // console.log('request on server', req.originalUrl);
       // console.log('query', req.query.code);
       // console.log('cookie', req.headers.cookie);
+      let cookie;
+
+      if (req.headers.cookie) {
+        cookie = parseServerCookie(req.headers.cookie);
+      }
 
       if (req.query.code && req.headers.cookie) {
         // Facebook sent a id code
@@ -90,24 +108,25 @@ app
         //   'date',
         //   new Date(new Date().getTime() + mins).toUTCString(),
         // );
-        console.log(
-          'before fetch',
-          req.headers.cookie
-            .split('; ')
-            .find((c) => c.split('=')[0] === 'bible_is_provider')
-            .split('=')[1],
-        );
-        console.log(
-          'request url',
-          `${process.env.BASE_API_ROUTE}/login/${
-            req.headers.cookie
-              .split('; ')
-              .find((c) => c.split('=')[0] === 'bible_is_provider')
-              .split('=')[1]
-          }/callback?v=4&project_id=${process.env.NOTES_PROJECT_ID}&key=${
-            process.env.DBP_API_KEY
-          }&alt_url=true&code=${req.query.code}`,
-        );
+        // console.log(
+        //   'before fetch',
+        //   req.headers.cookie
+        //     .split('; ')
+        //     .find((c) => c.split('=')[0] === 'bible_is_provider')
+        //     .split('=')[1],
+        // );
+        // console.log('code ----', req.query.code);
+        // console.log(
+        // 	'request url',
+        // 	`${process.env.BASE_API_ROUTE}/login/${
+        // 		req.headers.cookie
+        // 			.split('; ')
+        // 			.find((c) => c.split('=')[0] === 'bible_is_provider')
+        // 			.split('=')[1]
+        // 	}/callback?v=4&project_id=${process.env.NOTES_PROJECT_ID}&key=${
+        // 		process.env.DBP_API_KEY
+        // 	}&alt_url=true&code=${req.query.code}`,
+        // );
 
         const user = await fetch(
           `${process.env.BASE_API_ROUTE}/login/${
@@ -130,10 +149,9 @@ app
 
         console.log('user on server', user);
 
-        // Authentication Information
+        // Authentication Information - Set cookies that need this data
         // userId = user.data.id || '';
         // isAuthenticated = !!user.data.id;
-
         // User Profile
         // userProfile.email = user.data.email || '';
         // userProfile.nickname = user.data.nickname || '';
@@ -142,7 +160,17 @@ app
       }
       // TODO: Figure out a way to fix this for languages other than english
       // Probably need to use a cookie to grab the last known location and send the user there
-      res.redirect('/bible/engesv/mat/1');
+      if (cookie) {
+        res.redirect(
+          `/bible/${cookie.bible_is_ref_bible_id ||
+            'engesv'}/${cookie.bible_is_ref_book_id ||
+            'mat'}/${cookie.bible_is_ref_chapter || '1'}${
+            cookie.bible_is_ref_verse ? `/${cookie.bible_is_ref_verse}` : ''
+          }`,
+        );
+      } else {
+        res.redirect('/bible/engesv/mat/1');
+      }
     });
 
     const sitemapOptions = {
