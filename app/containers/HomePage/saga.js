@@ -12,10 +12,10 @@ import {
 	getBookmarksForChapter,
 	getUserHighlights,
 } from '../../containers/Notes/saga';
-import {
-	USER_LOGGED_IN,
-	OAUTH_ERROR,
-} from '../../containers/Profile/constants';
+// import {
+// 	USER_LOGGED_IN,
+// 	OAUTH_ERROR,
+// } from '../../containers/Profile/constants';
 // import { LOGIN_ERROR, USER_LOGGED_IN } from 'containers/Profile/constants';
 import {
 	getCountries,
@@ -1649,11 +1649,11 @@ export function* createSocialUser({
 		process.env.BASE_API_ROUTE
 	}/login/${provider}?v=4&project_id=${process.env.NOTES_PROJECT_ID}&key=${
 		process.env.DBP_API_KEY
-	}&alt_url=true`;
+	}${process.env.IS_DEV ? '&alt_url=true' : ''}`;
 
 	try {
 		const response = yield call(request, reqUrl);
-		console.log('create social response', response);
+		// console.log('create social response', response);
 		if (response.data.redirect_url) {
 			// only let provider cookie be set for 15 minutes
 			const mins = 1000 * 60 * 15;
@@ -1663,16 +1663,16 @@ export function* createSocialUser({
 				new Date().getTime() + mins,
 			).toUTCString()}; path=/`;
 			// console.log('uri: ', response.data.redirect_url);
-			console.log(
-				`bible_is_provider=${response.data.provider_id}; expires=${new Date(
-					new Date().getTime() + mins,
-				).toUTCString()}; path=/`,
-			);
-			console.log('doc cookie', document.cookie);
+			// console.log(
+			// 	`bible_is_provider=${response.data.provider_id}; expires=${new Date(
+			// 		new Date().getTime() + mins,
+			// 	).toUTCString()}; path=/`,
+			// );
+			// console.log('doc cookie', document.cookie);
 			Router.replace(response.data.redirect_url);
 		}
 	} catch (err) {
-		console.log('create social error', err);
+		console.log('create social error', err); // eslint-disable-line no-console
 	}
 }
 

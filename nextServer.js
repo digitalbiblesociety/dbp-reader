@@ -99,12 +99,15 @@ app
 				// Facebook sent a id code
 				// Only save code for 1 minute, that is just enough time to get the user
 				const mins = 1000 * 60;
+				// TODO: May not need to set this cookie since I have the code here
+				// I think I only need this if I do yet another redirect/api call, but
+				// I don't want to do that
 				res.setHeader('SET-COOKIE', [
 					`bible_is_cb_code=${req.query.code}; expires=${new Date(
 						new Date().getTime() + mins,
 					).toUTCString()}; path=/`,
 				]);
-				// TODO: find betterr way to get the provider
+				// TODO: find better way to get the provider
 				// console.log(
 				//   'date',
 				//   new Date(new Date().getTime() + mins).toUTCString(),
@@ -116,18 +119,18 @@ app
 				//     .find((c) => c.split('=')[0] === 'bible_is_provider')
 				//     .split('=')[1],
 				// );
-				console.log('code ----', req.query.code);
-				console.log(
-					'request url',
-					`${process.env.BASE_API_ROUTE}/login/${
-						req.headers.cookie
-							.split('; ')
-							.find((c) => c.split('=')[0] === 'bible_is_provider')
-							.split('=')[1]
-					}/callback?v=4&project_id=${process.env.NOTES_PROJECT_ID}&key=${
-						process.env.DBP_API_KEY
-					}&code=${req.query.code}`,
-				);
+				// console.log('code ----', req.query.code);
+				// console.log(
+				//   'request url',
+				//   `${process.env.BASE_API_ROUTE}/login/${
+				//     req.headers.cookie
+				//       .split('; ')
+				//       .find((c) => c.split('=')[0] === 'bible_is_provider')
+				//       .split('=')[1]
+				//   }/callback?v=4&project_id=${process.env.NOTES_PROJECT_ID}&key=${
+				//     process.env.DBP_API_KEY
+				//   }&code=${req.query.code}`,
+				// );
 				const provider = req.headers.cookie
 					.split('; ')
 					.find((c) => c.split('=')[0] === 'bible_is_provider');
@@ -137,18 +140,52 @@ app
 						provider ? provider.split('=')[1] : 'google'
 					}/callback?v=4&project_id=${process.env.NOTES_PROJECT_ID}&key=${
 						process.env.DBP_API_KEY
-					}&code=${req.query.code}`,
+					}${process.env.IS_DEV ? '&alt_url=true' : ''}&code=${req.query.code}`,
 				)
-					.then((body) => {
-						console.log('in fetch');
-						return body.json();
-					})
+					.then((body) => body.json())
 					.catch((err) => {
-						console.log('Error getting oauth user', err);
+						console.log('Error getting oauth user', err); // eslint-disable-line no-console
 						res.redirect('/bible/engesv/mat/1');
 					});
 
-				console.log('user on server', user);
+				// TODO: Determine exactly how the api returns here to only use one of the if statements
+				if (user && user.data) {
+					res.setHeader('SET-COOKIE', [
+						`bible_is_user_id=${user.data.id}; path=/`,
+					]);
+					res.setHeader('SET-COOKIE', [
+						`bible_is_user_authenticated=${true}; path=/`,
+					]);
+					res.setHeader('SET-COOKIE', [
+						`bible_is_email=${user.data.email}; path=/`,
+					]);
+					res.setHeader('SET-COOKIE', [
+						`bible_is_nickname=${user.data.nickname}; path=/`,
+					]);
+					res.setHeader('SET-COOKIE', [
+						`bible_is_name=${user.data.first_name}; path=/`,
+					]);
+					res.setHeader('SET-COOKIE', [
+						`bible_is_avatar=${user.data.avatar}; path=/`,
+					]);
+				} else if (user && !user.error) {
+					res.setHeader('SET-COOKIE', [`bible_is_user_id=${user.id}; path=/`]);
+					res.setHeader('SET-COOKIE', [
+						`bible_is_user_authenticated=${true}; path=/`,
+					]);
+					res.setHeader('SET-COOKIE', [`bible_is_email=${user.email}; path=/`]);
+					res.setHeader('SET-COOKIE', [
+						`bible_is_nickname=${user.nickname}; path=/`,
+					]);
+					res.setHeader('SET-COOKIE', [
+						`bible_is_name=${user.first_name}; path=/`,
+					]);
+					res.setHeader('SET-COOKIE', [
+						`bible_is_avatar=${user.avatar}; path=/`,
+					]);
+				}
+
+				// console.log('user on server', user);
 
 				// Authentication Information - Set cookies that need this data
 				// userId = user.data.id || '';
@@ -162,6 +199,14 @@ app
 			// TODO: Figure out a way to fix this for languages other than english
 			// Probably need to use a cookie to grab the last known location and send the user there
 			if (cookie) {
+				// console.log(
+				//   'cookie redirect',
+				//   `/bible/${cookie.bible_is_ref_bible_id ||
+				//     'engesv'}/${cookie.bible_is_ref_book_id ||
+				//     'mat'}/${cookie.bible_is_ref_chapter || '1'}${
+				//     cookie.bible_is_ref_verse ? `/${cookie.bible_is_ref_verse}` : ''
+				//   }`,
+				// );
 				res.redirect(
 					`/bible/${cookie.bible_is_ref_bible_id ||
 						'engesv'}/${cookie.bible_is_ref_book_id ||

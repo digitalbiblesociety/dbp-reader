@@ -281,16 +281,16 @@ AppContainer.getInitialProps = async (context) => {
 	let isAuthenticated = false;
 	let initialVolume = 1;
 	let initialPlaybackRate = 1;
-	console.log(
-		'getting initial props, this should run on the server before the html is sent to the page...',
-	);
+	// console.log(
+	// 	'getting initial props, this should run on the server before the html is sent to the page...',
+	// );
 	if (req && req.headers.cookie) {
 		// Get all cookies that the page needs
-		console.log(
-			'\ncookie in get initial props: server!',
-			parseCookie(req.headers.cookie),
-			'\n',
-		);
+		// console.log(
+		// 	'\ncookie in get initial props: server!',
+		// 	parseCookie(req.headers.cookie),
+		// 	'\n',
+		// );
 		const cookieData = parseCookie(req.headers.cookie);
 
 		// Authentication Information
@@ -360,9 +360,9 @@ AppContainer.getInitialProps = async (context) => {
 
 		// Handle oauth code if there is one
 		if (cookieData.bible_is_cb_code && cookieData.bible_is_provider) {
-			console.log('cb code');
+			// console.log('cb code');
 
-			const user = await fetch(
+			await fetch(
 				`${process.env.BASE_API_ROUTE}/login/${
 					cookieData.bible_is_provider
 				}/callback?v=4&project_id=${process.env.NOTES_PROJECT_ID}&key=${
@@ -370,17 +370,17 @@ AppContainer.getInitialProps = async (context) => {
 				}&alt_url=true&code=${cookieData.bible_is_cb_code}`,
 			).then((body) => body.json());
 
-			console.log('user', user);
+			// console.log('user', user);
 		}
 
 		isFromServer = false;
 	} else if (typeof document !== 'undefined' && document.cookie) {
 		// console.log('req was not defined but document was');
 		// Get all cookies that the page needs
-		console.log(
-			'cookie in get initial props: client!',
-			parseCookie(document.cookie).bible_is_cb_code,
-		);
+		// console.log(
+		// 	'cookie in get initial props: client!',
+		// 	parseCookie(document.cookie).bible_is_cb_code,
+		// );
 		const cookieData = parseCookie(document.cookie);
 
 		// Authentication Information
@@ -552,7 +552,7 @@ AppContainer.getInitialProps = async (context) => {
 			}&fileset_type=${id[0]}`;
 			const res = await cachedFetch(url);
 			bookCachePairs.push({ href: url, data: res });
-			console.log('book meta url', url);
+			// console.log('book meta url', url);
 			return res.data || [];
 		},
 	);
