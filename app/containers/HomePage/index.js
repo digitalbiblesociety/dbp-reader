@@ -533,12 +533,13 @@ class HomePage extends React.PureComponent {
 
 	toggleProfile = () => {
 		if (this.isMenuOpen('profile')) {
-			clearTimeout(this.menuTimer);
-			this.menuTimer = setTimeout(this.handleMenuTimer, 700, 'profile');
+			// clearTimeout(this.menuTimer);
+			// this.menuTimer = setTimeout(this.handleMenuTimer, 700, 'profile');
 			// if (!this.menuTicking) {
 			// 	this.menuTicking = true;
 			// 	requestAnimationFrame(this.handleMenuClose);
 			// }
+			this.props.dispatch(toggleProfile());
 		} else {
 			this.props.dispatch(toggleProfile());
 		}
@@ -546,12 +547,13 @@ class HomePage extends React.PureComponent {
 
 	toggleNotesModal = () => {
 		if (this.isMenuOpen('notes')) {
-			clearTimeout(this.menuTimer);
-			this.menuTimer = setTimeout(this.handleMenuTimer, 700, 'notes');
+			// clearTimeout(this.menuTimer);
+			// this.menuTimer = setTimeout(this.handleMenuTimer, 700, 'notes');
 			// if (!this.menuTicking) {
 			// 	this.menuTicking = true;
 			// 	requestAnimationFrame(this.handleMenuClose);
 			// }
+			this.props.dispatch(toggleNotesModal());
 		} else {
 			this.props.dispatch(toggleNotesModal());
 		}
@@ -559,12 +561,13 @@ class HomePage extends React.PureComponent {
 
 	toggleSettingsModal = () => {
 		if (this.isMenuOpen('settings')) {
-			clearTimeout(this.menuTimer);
-			this.menuTimer = setTimeout(this.handleMenuTimer, 700, 'settings');
+			// clearTimeout(this.menuTimer);
+			// this.menuTimer = setTimeout(this.handleMenuTimer, 700, 'settings');
 			// if (!this.menuTicking) {
 			// 	this.menuTicking = true;
 			// 	requestAnimationFrame(this.handleMenuClose);
 			// }
+			this.props.dispatch(toggleSettingsModal());
 		} else {
 			this.props.dispatch(toggleSettingsModal());
 		}
@@ -572,12 +575,13 @@ class HomePage extends React.PureComponent {
 
 	toggleSearchModal = () => {
 		if (this.isMenuOpen('search')) {
-			clearTimeout(this.menuTimer);
-			this.menuTimer = setTimeout(this.handleMenuTimer, 700, 'search');
+			// clearTimeout(this.menuTimer);
+			// this.menuTimer = setTimeout(this.handleMenuTimer, 700, 'search');
 			// if (!this.menuTicking) {
 			// 	this.menuTicking = true;
 			// 	requestAnimationFrame(this.handleMenuClose);
 			// }
+			this.props.dispatch(toggleSearchModal());
 		} else {
 			this.props.dispatch(toggleSearchModal());
 		}
