@@ -94,6 +94,12 @@ app
 			if (req.headers.cookie) {
 				cookie = parseServerCookie(req.headers.cookie);
 			}
+			if (process.env.IS_DEV) {
+				console.log('logs for development testing');
+				console.log(req.headers['X-Dbp-User-Id']);
+				console.log(req.headers['X-Dbp-User-Email']);
+				console.log(req.headers['X-Dbp-User-Name']);
+			}
 
 			if (req.query.code && req.headers.cookie) {
 				// Facebook sent a id code

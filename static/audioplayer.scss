@@ -38,13 +38,16 @@
 	height: 50px;
 	max-width: 1000px;
 	margin: auto;
+	overflow: hidden;
 	//:nth-child(3) {
 	//  margin-right:18px;
 	//};
 	font-size: 12px;
+	transition: height 400ms ease-out, height 200ms ease-in;
 
 	&.closed {
-		display: none;
+		// display: none;
+		height: 0;
 	}
 }
 .audio-player-container .item {
@@ -142,7 +145,7 @@
 		outline: 1px solid var(--menu-border-color);
 	}
 
-	transition: transform 200ms ease-in-out;
+	transition: transform 300ms ease-out, transform 200ms ease-in;
 	//transform: translateY(0);
 
 	&.scrolled-down {
@@ -176,7 +179,8 @@
 	}
 
 	&.closed {
-		bottom: 56px;
+		// bottom: 56px;
+		transform: translateY(50px);
 
 		@include css4 {
 			border-bottom: 1px solid var(--menu-border-color);
@@ -390,5 +394,8 @@
 	}
 	.audioplayer-handle {
 		bottom: 139px;
+		&.closed {
+			transform: translateY(83px);
+		}
 	}
 }

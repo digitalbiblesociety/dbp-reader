@@ -571,6 +571,7 @@ class VideoPlayer extends React.PureComponent {
 		// console.log('playlist', playlist);
 		// console.log('currentVideo', currentVideo);
 		// console.log('hasVideo', hasVideo);
+		// console.log(!hasVideo, !fileset, !currentVideo);
 		// Don't bother rendering anything if there is no video for the chapter
 		if (!hasVideo || !fileset || !currentVideo) {
 			return null;

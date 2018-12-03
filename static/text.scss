@@ -20,6 +20,16 @@
 		// height: calc(100vh - 185px - 480px);
 	}
 
+	&.audio-player-open {
+		padding-bottom: 50px;
+	}
+
+	@media only screen and (max-width: $audio-player-bp) {
+		&.audio-player-open {
+			padding-bottom: 83px;
+		}
+	}
+
 	@include css4 {
 		color: #000000; // fallback for IE
 		color: var(--application-text-container-color);
