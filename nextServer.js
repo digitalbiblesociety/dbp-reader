@@ -7,21 +7,12 @@ require('dotenv').config();
 const express = require('express');
 const next = require('next');
 const compression = require('compression');
-// const fs = require('fs');
-// const path = require('path');
-// const https = require('https');
 const LRUCache = require('lru-cache');
 const fetch = require('isomorphic-fetch');
-// const port =
-// 	process.env.NODE_ENV === 'development' ? 443 : process.env.PORT || 3000;
+const crypto = require('crypto');
 const port = process.env.PORT || 3000;
 const dev = process.env.NODE_ENV === 'development';
 const manifestJson = require('./static/manifest');
-// const dev = false;
-// const certOptions = {
-// 	key: fs.readFileSync(path.resolve('./server.key')),
-// 	cert: fs.readFileSync(path.resolve('./server.crt')),
-// };
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
@@ -85,10 +76,9 @@ app
 
 		server.use(compression());
 
+		// TODO: Ask api team for the redirect for oauth be to /oauth instead of just /
+		// Then I can move all of the extra logic out of this route which is really gross
 		server.get('/', async (req, res) => {
-			// console.log('request on server', req.originalUrl);
-			// console.log('query', req.query.code);
-			// console.log('cookie', req.headers.cookie);
 			let cookie;
 
 			if (req.headers.cookie) {
@@ -96,12 +86,39 @@ app
 			}
 			if (process.env.IS_DEV) {
 				console.log('logs for development testing');
-				console.log(req.headers['X-Dbp-User-Id']);
-				console.log(req.headers['X-Dbp-User-Email']);
-				console.log(req.headers['X-Dbp-User-Name']);
+				console.log(req.query.code);
 			}
 
 			if (req.query.code && req.headers.cookie) {
+				// Get encrypted string of user data
+				const encryptedData = req.query.code;
+				// Decrypt user data
+				const secret = crypto
+					.createHash('sha-256')
+					.update(
+						`${process.env.DBP_API_KEY}${process.env.NOTES_PROJECT_ID}`,
+						'utf8',
+					)
+					.digest();
+
+				// Might need an initialization vector
+				const decipher = crypto.createDecipheriv('aes-128-cbc', secret, null);
+				// May need to turn encryptedData into a buffer
+				decipher.update(encryptedData, 'base64');
+
+				const userString = decipher.final('ascii');
+				console.log('userString', userString);
+				const userObject = userString.split(',').reduce((a, c, i) => {
+					if (i === 0) {
+						return { ...a, userId: c };
+					} else if (i === 1) {
+						return { ...a, email: c };
+					} else if (i === 2) {
+						return { ...a, name: c };
+					}
+					return a;
+				}, {});
+				console.log('user object', userObject);
 				// Facebook sent a id code
 				// Only save code for 1 minute, that is just enough time to get the user
 				const mins = 1000 * 60;
@@ -113,94 +130,24 @@ app
 						new Date().getTime() + mins,
 					).toUTCString()}; path=/`,
 				]);
-				// TODO: find better way to get the provider
-				// console.log(
-				//   'date',
-				//   new Date(new Date().getTime() + mins).toUTCString(),
-				// );
-				// console.log(
-				//   'before fetch',
-				//   req.headers.cookie
-				//     .split('; ')
-				//     .find((c) => c.split('=')[0] === 'bible_is_provider')
-				//     .split('=')[1],
-				// );
-				// console.log('code ----', req.query.code);
-				// console.log(
-				//   'request url',
-				//   `${process.env.BASE_API_ROUTE}/login/${
-				//     req.headers.cookie
-				//       .split('; ')
-				//       .find((c) => c.split('=')[0] === 'bible_is_provider')
-				//       .split('=')[1]
-				//   }/callback?v=4&project_id=${process.env.NOTES_PROJECT_ID}&key=${
-				//     process.env.DBP_API_KEY
-				//   }&code=${req.query.code}`,
-				// );
-				const provider = req.headers.cookie
-					.split('; ')
-					.find((c) => c.split('=')[0] === 'bible_is_provider');
-
-				const user = await fetch(
-					`${process.env.BASE_API_ROUTE}/login/${
-						provider ? provider.split('=')[1] : 'google'
-					}/callback?v=4&project_id=${process.env.NOTES_PROJECT_ID}&key=${
-						process.env.DBP_API_KEY
-					}${process.env.IS_DEV ? '&alt_url=true' : ''}&code=${req.query.code}`,
-				)
-					.then((body) => body.json())
-					.catch((err) => {
-						console.log('Error getting oauth user', err); // eslint-disable-line no-console
-						res.redirect('/bible/engesv/mat/1');
-					});
-
 				// TODO: Determine exactly how the api returns here to only use one of the if statements
-				if (user && user.data) {
+				if (userObject) {
 					res.setHeader('SET-COOKIE', [
-						`bible_is_user_id=${user.data.id}; path=/`,
+						`bible_is_user_id=${userObject.id}; path=/`,
 					]);
 					res.setHeader('SET-COOKIE', [
 						`bible_is_user_authenticated=${true}; path=/`,
 					]);
 					res.setHeader('SET-COOKIE', [
-						`bible_is_email=${user.data.email}; path=/`,
+						`bible_is_email=${userObject.email}; path=/`,
 					]);
 					res.setHeader('SET-COOKIE', [
-						`bible_is_nickname=${user.data.nickname}; path=/`,
+						`bible_is_nickname=${userObject.name}; path=/`,
 					]);
 					res.setHeader('SET-COOKIE', [
-						`bible_is_name=${user.data.first_name}; path=/`,
-					]);
-					res.setHeader('SET-COOKIE', [
-						`bible_is_avatar=${user.data.avatar}; path=/`,
-					]);
-				} else if (user && !user.error) {
-					res.setHeader('SET-COOKIE', [`bible_is_user_id=${user.id}; path=/`]);
-					res.setHeader('SET-COOKIE', [
-						`bible_is_user_authenticated=${true}; path=/`,
-					]);
-					res.setHeader('SET-COOKIE', [`bible_is_email=${user.email}; path=/`]);
-					res.setHeader('SET-COOKIE', [
-						`bible_is_nickname=${user.nickname}; path=/`,
-					]);
-					res.setHeader('SET-COOKIE', [
-						`bible_is_name=${user.first_name}; path=/`,
-					]);
-					res.setHeader('SET-COOKIE', [
-						`bible_is_avatar=${user.avatar}; path=/`,
+						`bible_is_name=${userObject.name}; path=/`,
 					]);
 				}
-
-				// console.log('user on server', user);
-
-				// Authentication Information - Set cookies that need this data
-				// userId = user.data.id || '';
-				// isAuthenticated = !!user.data.id;
-				// User Profile
-				// userProfile.email = user.data.email || '';
-				// userProfile.nickname = user.data.nickname || '';
-				// userProfile.name = user.data.first_name || '';
-				// userProfile.avatar = '';
 			}
 			// TODO: Figure out a way to fix this for languages other than english
 			// Probably need to use a cookie to grab the last known location and send the user there
@@ -251,8 +198,6 @@ app
 			}
 		});
 
-		// const manifestOptions = { root: `${__dirname}/static/`, headers: { 'Content-Type': 'application/json;charset=UTF-8' } };
-
 		server.get('/manifest.json', (req, res) =>
 			res.status(200).json(manifestJson),
 		);
@@ -287,28 +232,16 @@ app
 
 		server.get('/bible/:bibleId/:bookId/:chapter', (req, res, nextP) => {
 			const actualPage = '/app';
-			// Params may not actually be passed using this method
-			// console.log(req.originalUrl.includes('/static'))
-			// console.log('Caught the chapter request ----------');
-			//
 			// console.log(`${req.protocol}://${req.get('host')}${req.originalUrl}`);
 			// console.log(
 			// 	'Getting bible and book and chapter for route',
 			// 	`${req.protocol}://${req.get('host')}${req.originalUrl}`,
 			// );
-			// console.log('req stuff', req.originalUrl);
-			// console.log('req route', req.route);
-			// console.log('cookie: ', req && req.headers && req.headers.cookie);
 			const queryParams = {
 				bibleId: req.params.bibleId,
 				bookId: req.params.bookId,
 				chapter: req.params.chapter,
 			};
-			// res.setHeader('SET-COOKIE', [
-			//   'mySpecialTest=the stuff inside the cookie',
-			//   'type=ninja',
-			//   'language=javascript',
-			// ]);
 
 			if (
 				queryParams.verse !== 'style.css' &&
@@ -324,8 +257,6 @@ app
 
 		server.get('/bible/:bibleId/:bookId/:chapter/:verse', (req, res, nextP) => {
 			const actualPage = '/app';
-			// console.log(req.originalUrl.includes('/static'))
-			// console.log('Caught the verse request ---------------')
 			// console.log(`${req.protocol}://${req.get('host')}${req.originalUrl}`);
 			// Params may not actually be passed using this method
 			const queryParams = {

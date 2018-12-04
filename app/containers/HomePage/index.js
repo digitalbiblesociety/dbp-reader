@@ -1,13 +1,6 @@
 /*
  * HomePage
  *
- * This is the first thing users see of our App, at the '/' route
- *
- * NOTE: while this component should technically be a stateless functional
- * component (SFC), hot reloading does not currently support SFCs. If hot
- * reloading is not a necessity for you then you can refactor it and remove
- * the linting exception.
- *
  */
 
 import React from 'react';
@@ -626,8 +619,6 @@ class HomePage extends React.PureComponent {
 		};
 
 		if (menuName) {
-			// console.log('menu other than self is open', Object.entries(openMap).filter(ent => ent[0] !== menuName).some(ent => ent[1]));
-			// console.log('map entries', Object.entries(openMap).forEach(ent => console.log('ent[0]', ent[0], 'ent[1]', ent[1])));
 			return Object.entries(openMap)
 				.filter((ent) => ent[0] !== menuName)
 				.some((ent) => ent[1]);
