@@ -90,23 +90,42 @@ app
 			}
 
 			if (req.query.code && req.headers.cookie) {
+				// TODO: Put decryption process into try catch for safety
 				// Get encrypted string of user data
 				const encryptedData = req.query.code;
+				const iv = new Buffer.alloc(16);
+				const date = new Date();
+				const day = date.getDate().toString();
+				const month = (date.getMonth() + 1).toString();
+				const dateString = `${date
+					.getFullYear()
+					.toString()
+					.slice(2)}-${month.length === 1 ? `0${month}` : month}-${
+					day.length === 1 ? `0${day}` : day
+				}`;
 				// Decrypt user data
 				const secret = crypto
-					.createHash('sha-256')
-					.update(
-						`${process.env.DBP_API_KEY}${process.env.NOTES_PROJECT_ID}`,
-						'utf8',
-					)
-					.digest();
-
+								.createHash('sha256')
+								.update(
+												`${dateString}-${process.env.NOTES_PROJECT_ID}`,
+												'utf8',
+								)
+								.digest('hex')
+								.slice(0, 32);
+				console.log('secret', secret);
 				// Might need an initialization vector
-				const decipher = crypto.createDecipheriv('aes-128-cbc', secret, null);
+				const decipher = crypto.createDecipheriv('aes-256-cbc', secret, iv);
 				// May need to turn encryptedData into a buffer
-				decipher.update(encryptedData, 'base64');
+				console.log('encrypted', encryptedData);
+				console.log('dechiper before', decipher);
 
-				const userString = decipher.final('ascii');
+				decipher.update(encryptedData, 'hex', 'utf8');
+
+				console.log('buff', new Buffer.from(encryptedData, 'base64'));
+				console.log('decipher after', decipher);
+
+				const userString = decipher.final('utf8');
+
 				console.log('userString', userString);
 				const userObject = userString.split(',').reduce((a, c, i) => {
 					if (i === 0) {
@@ -131,23 +150,23 @@ app
 					).toUTCString()}; path=/`,
 				]);
 				// TODO: Determine exactly how the api returns here to only use one of the if statements
-				if (userObject) {
-					res.setHeader('SET-COOKIE', [
-						`bible_is_user_id=${userObject.id}; path=/`,
-					]);
-					res.setHeader('SET-COOKIE', [
-						`bible_is_user_authenticated=${true}; path=/`,
-					]);
-					res.setHeader('SET-COOKIE', [
-						`bible_is_email=${userObject.email}; path=/`,
-					]);
-					res.setHeader('SET-COOKIE', [
-						`bible_is_nickname=${userObject.name}; path=/`,
-					]);
-					res.setHeader('SET-COOKIE', [
-						`bible_is_name=${userObject.name}; path=/`,
-					]);
-				}
+				// if (userObject) {
+				// 	res.setHeader('SET-COOKIE', [
+				// 		`bible_is_user_id=${userObject.id}; path=/`,
+				// 	]);
+				// 	res.setHeader('SET-COOKIE', [
+				// 		`bible_is_user_authenticated=${true}; path=/`,
+				// 	]);
+				// 	res.setHeader('SET-COOKIE', [
+				// 		`bible_is_email=${userObject.email}; path=/`,
+				// 	]);
+				// 	res.setHeader('SET-COOKIE', [
+				// 		`bible_is_nickname=${userObject.name}; path=/`,
+				// 	]);
+				// 	res.setHeader('SET-COOKIE', [
+				// 		`bible_is_name=${userObject.name}; path=/`,
+				// 	]);
+				// }
 			}
 			// TODO: Figure out a way to fix this for languages other than english
 			// Probably need to use a cookie to grab the last known location and send the user there
