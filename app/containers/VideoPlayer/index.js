@@ -6,7 +6,6 @@ import { createStructuredSelector } from 'reselect';
 import Hls from 'hls.js';
 import Router from 'next/router';
 import cachedFetch, { overrideCache } from '../../utils/cachedFetch';
-// import { BufferHelper } from 'hls.js/src/utils/buffer-helper';
 import { openVideoPlayer, closeVideoPlayer, setHasVideo } from './actions';
 import SvgWrapper from '../../components/SvgWrapper';
 import VideoControls from '../../components/VideoControls';
@@ -14,14 +13,7 @@ import VideoList from '../../components/VideoList';
 import VideoProgressBar from '../../components/VideoProgressBar';
 import VideoOverlay from '../../components/VideoOverlay';
 import deepDifferenceObject from '../../utils/deepDifferenceObject';
-// import request from '../../utils/request';
 import { selectHasVideo } from './selectors';
-// import makeSelectHomePage from '../HomePage/selectors';
-// import { openVideoPlayer, closeVideoPlayer, getVideoList } from './actions';
-// import injectReducer from '../../utils/injectReducer';
-// import injectSaga from '../../utils/injectSaga';
-// import reducer from './reducer';
-// import saga from './sagas';
 
 class VideoPlayer extends React.PureComponent {
 	state = {
@@ -108,14 +100,9 @@ class VideoPlayer extends React.PureComponent {
 		Router.router.events.off('routeChangeStart', this.handleRouteChange);
 	}
 
+	// If there ended up being video for the selected chapter get the actual stream
 	getVideos = async ({ filesetId, bookId, chapter }) => {
-		// console.log('filesetId, bookId', filesetId, bookId);
 		if (!filesetId) return;
-		// const requestUrl = `${
-		// 	process.env.BASE_API_ROUTE
-		// }/bibles/filesets/${filesetId}?key=${
-		// 	process.env.DBP_API_KEY
-		// }&v=4&type=video_stream&bucket=dbp-vid&book_id=${bookId}&chapter_id=${chapter}`;
 		const requestUrl = `${
 			process.env.BASE_API_ROUTE
 		}/bibles/filesets/${filesetId}?key=${
@@ -123,10 +110,9 @@ class VideoPlayer extends React.PureComponent {
 		}&v=4&type=video_stream&bucket=dbp-vid&book_id=${bookId}`;
 
 		try {
-			// Profile to see how much time the caching actually saves
+			// TODO: Profile to see how much time the caching actually saves here
 			// const response = await request(requestUrl);
 			const response = await cachedFetch(requestUrl);
-			// console.log('all the vids', response);
 
 			if (response.data) {
 				overrideCache(requestUrl, response);
@@ -151,15 +137,6 @@ class VideoPlayer extends React.PureComponent {
 				const playlist = videos.filter(
 					(video) => video.bookId === bookId && video.chapterStart === chapter,
 				);
-				// console.log('videos', videos);
-				// console.log('playlist', playlist);
-
-				// this.setState({
-				// 	videos,
-				// 	playlist: playlist.slice(1),
-				// 	currentVideo: playlist[0],
-				// 	poster: playlist[0] ? playlist[0].thumbnail : '',
-				// });
 				this.setState({
 					videos,
 					playlist: playlist.slice(1),
@@ -192,32 +169,23 @@ class VideoPlayer extends React.PureComponent {
 		if (this.hls && this.hls.media) {
 			const buf = this.hls.media.buffered;
 			if (buf && buf.length) {
-				// console.log('buffer start', buf.start(0));
-				// console.log('buffer end', buf.end(0));
 				this.setState({ bufferLength: buf.end(buf.length - 1) });
 			}
 		}
-		// Iterate over buffers to find the latest buffer
-		// Use the latest buffer to indicate how far the buffer has loaded
-		// const info = BufferHelper.bufferInfo(this.hls.media, pos, 1);
-		// console.log('Find buffer info', info);
-		// this.setState({ bufferLength: info.len });
 	};
 
 	setCurrentTime = (time) => {
 		if (this.hls.media) {
-			// console.log('Setting hls media time');
 			this.hls.media.currentTime = time;
 			this.setState({ currentTime: time });
 		} else {
-			// console.log('Setting video ref time');
 			this.videoRef.currentTime = time;
 			this.setState({ currentTime: time });
 		}
 	};
 
+	// Checks to see if we have video content for the selected chapter
 	checkForBooks = async ({ filesetId, bookId, chapter }) => {
-		// console.log('running check for books', filesetId, bookId, chapter);
 		if (!filesetId) return;
 		const reqUrl = `${
 			process.env.BASE_API_ROUTE
@@ -226,9 +194,8 @@ class VideoPlayer extends React.PureComponent {
 		}&bucket=dbp-vid&fileset_type=video_stream&v=4`;
 
 		try {
-			// const res = await request(reqUrl);
+			// TODO: Profile to see if caching helps here
 			const res = await cachedFetch(reqUrl);
-			// console.log('res', res);
 
 			if (res.data) {
 				overrideCache(reqUrl, res);
@@ -237,7 +204,7 @@ class VideoPlayer extends React.PureComponent {
 					(stream) =>
 						stream.book_id === bookId && stream.chapters.includes(chapter),
 				).length;
-				// console.log('has video', hasVideo);
+
 				this.props.dispatch(setHasVideo({ state: hasVideo }));
 			} else {
 				this.props.dispatch(setHasVideo({ state: false }));
@@ -266,9 +233,7 @@ class VideoPlayer extends React.PureComponent {
 	};
 
 	handleThumbnailClick = (video) => {
-		// console.log('called handle with: ', video, '\nand state: ', this.state);
 		const { bookId, chapter } = this.props;
-		// console.log('bookId, chapter', bookId, chapter);
 
 		this.setState(
 			(state) => ({
@@ -285,23 +250,19 @@ class VideoPlayer extends React.PureComponent {
 				paused: true,
 			}),
 			() => {
-				// console.log('new curprent video', this.state.currentVideo);
-				// console.log('The current video ref', this.videoRef);
-
 				this.playVideo({ thumbnailClick: true });
 			},
 		);
 	};
 
 	initHls = () => {
-		// Not really sure I need to do this, but it seems like I do
+		// Destroying the old hls stream so that there aren't artifacts leftover in the new stream
 		if (this.hls) {
 			this.hls.destroy();
 		}
 		this.hls = new Hls();
 		this.hls.on(Hls.Events.ERROR, (event, data) => {
 			if (data.fatal) {
-				// console.log('There was a fatal hls error', event, data);
 				switch (data.type) {
 					case Hls.ErrorTypes.NETWORK_ERROR:
 						this.hls.startLoad();
@@ -319,21 +280,17 @@ class VideoPlayer extends React.PureComponent {
 
 	initVideoStream = ({ thumbnailClick }) => {
 		const { currentVideo } = this.state;
+		// Create the hls stream first
 		this.initHls();
 		try {
+			// Check for the video element
 			if (this.videoRef) {
+				// Make sure that there is a valid source
 				if (currentVideo.source) {
-					// console.log('currentVideo.source', currentVideo.source);
-					// console.log('this.hls.url after new init', this.hls.url);
-
 					this.hls.attachMedia(this.videoRef);
 					this.hls.loadSource(
 						`${currentVideo.source}?key=${process.env.DBP_API_KEY}&v=4`,
 					);
-
-					// if (this.hls.media && typeof this.hls.media.poster !== 'undefined') {
-					// 	this.hls.media.poster = currentVideo.poster;
-					// }
 					this.hls.media.addEventListener(
 						'timeupdate',
 						this.timeUpdateEventListener,
@@ -341,15 +298,12 @@ class VideoPlayer extends React.PureComponent {
 					this.hls.media.addEventListener('seeking', this.seekingEventListener);
 					this.hls.media.addEventListener('seeked', this.seekedEventListener);
 					this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
-						// this.hls.media.volume = 0;
 						if (this.state.playerOpen && thumbnailClick) {
-							// console.log('manifest parsed for init hls');
 							this.hls.media.play();
 							this.setState({ paused: false });
 						}
 					});
 					this.hls.on(Hls.Events.BUFFER_APPENDING, () => {
-						// console.log('buffer was APPENDING', this.hls.media.buffered);
 						this.setBuffer();
 					});
 				}
@@ -362,38 +316,35 @@ class VideoPlayer extends React.PureComponent {
 	};
 
 	timeUpdateEventListener = (e) => {
-		// console.log('timeUpdateEventListener buffer', this.findBuffer(e.target.currentTime));
 		this.setState({
 			currentTime: e.target.currentTime,
 		});
 	};
 
 	seekingEventListener = (e) => {
-		// console.log('seekingEventListener buffer', this.hls.media.buffered);
 		this.setState({
 			currentTime: e.target.currentTime,
 		});
 	};
 
 	seekedEventListener = (e) => {
-		// console.log('seekedEventListener buffer', this.hls.media.buffered);
 		this.setState({
 			currentTime: e.target.currentTime,
 		});
 	};
 
 	sortPlaylist = (a, b) => {
-		// if vids are from the same chapter
+		// if videos are from the same chapter
 		if (a.chapterStart === b.chapterStart) {
 			return a.verse_start > b.verse_start;
 		} else if (a.chapterStart > b.chapterStart) {
-			// vids are from different chapters and a is after b
+			// videos are from different chapters and a is after b
 			return false;
 		} else if (a.chapterStart < b.chapterStart) {
 			// a is before b
 			return true;
 		}
-		// Last resort is to just sort by the ids, this breaks because mrk_10_12 will be listed before mrk_10_2
+		// Last resort is to just sort by the ids, this breaks in some cases i.e. mrk_10_12 < mrk_10_2
 		return a.id > b.id;
 	};
 
@@ -402,20 +353,16 @@ class VideoPlayer extends React.PureComponent {
 		try {
 			// if the current video has a source (initial load may be an empty object)
 			if (currentVideo.source) {
-				// console.log('current === hls.url', this.hls.url === `${currentVideo.source}?key=${process.env.DBP_API_KEY}&v=4`);
 				// if there is already an hls stream and that streams url is equal to this videos source then play the video
-				// console.log('this.hls.url in play video', this.hls.url);
 				if (
 					this.hls.media &&
 					this.hls.url ===
 						`${currentVideo.source}?key=${process.env.DBP_API_KEY}&v=4`
 				) {
-					// console.log('playing from old hls media');
 					this.hls.media.play();
 					this.setState({ paused: false });
-					// if the sourcees didn't match then this is a new video and the hls stream needs to be updated
+					// if the sources didn't match then this is a new video and the hls stream needs to be updated
 				} else {
-					// console.log('loading source in else with new hls');
 					// Stop the current player from loading anymore video
 					this.hls.stopLoad();
 					// Remove the old hls stream
@@ -507,13 +454,12 @@ class VideoPlayer extends React.PureComponent {
 	get previousVideo() {
 		const { playlist, currentVideo } = this.state;
 		let previousVideo;
+		// Need to find the video directly before the current one
 		playlist.forEach((video) => {
 			if (video.id < currentVideo.id) {
 				previousVideo = video;
 			}
 		});
-		// console.log('previous video', previousVideo);
-
 		return previousVideo;
 	}
 
@@ -521,13 +467,13 @@ class VideoPlayer extends React.PureComponent {
 		const { playlist, currentVideo } = this.state;
 		let nextVideo;
 		let foundNext = false;
+		// Need to find the video immediately after the current one
 		playlist.forEach((video) => {
 			if (video.id > currentVideo.id && !foundNext) {
 				nextVideo = video;
 				foundNext = true;
 			}
 		});
-		// console.log('next video', nextVideo);
 
 		return nextVideo;
 	}
@@ -537,7 +483,6 @@ class VideoPlayer extends React.PureComponent {
 		if (this.previousVideo) {
 			this.handleThumbnailClick(this.previousVideo);
 		}
-		// console.log('clicked the previous function');
 	};
 
 	nextFunction = (e) => {
@@ -545,7 +490,6 @@ class VideoPlayer extends React.PureComponent {
 		if (this.nextVideo) {
 			this.handleThumbnailClick(this.nextVideo);
 		}
-		// console.log('clicked the next function');
 	};
 
 	render() {
@@ -568,11 +512,7 @@ class VideoPlayer extends React.PureComponent {
 			textId,
 			text,
 		} = this.props;
-		// console.log('playlist', playlist);
-		// console.log('currentVideo', currentVideo);
-		// console.log('hasVideo', hasVideo);
-		// console.log(!hasVideo, !fileset, !currentVideo);
-		// Don't bother rendering anything if there is no video for the chapter
+		// Don't render anything if there is no video for the chapter
 		if (!hasVideo || !fileset || !currentVideo) {
 			return null;
 		}
@@ -657,7 +597,6 @@ VideoPlayer.propTypes = {
 	books: PropTypes.array,
 	textId: PropTypes.string,
 	text: PropTypes.array,
-	// videoList: PropTypes.array.isRequired,
 };
 
 const mapDispatchToProps = (dispatch) => ({
@@ -665,8 +604,6 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const mapStateToProps = createStructuredSelector({
-	// homepage: makeSelectHomePage(),
-	// videoList: selectVideoList(),
 	hasVideo: selectHasVideo(),
 });
 
@@ -675,8 +612,4 @@ const withConnect = connect(
 	mapDispatchToProps,
 );
 
-// const withReducer = injectReducer({ key: 'videoPlayer', reducer });
-// const withSaga = injectSaga({ key: 'videoPlayer', saga})
-
 export default compose(withConnect)(VideoPlayer);
-// export default compose(withConnect, withReducer, withSaga)(VideoPlayer);
