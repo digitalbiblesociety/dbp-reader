@@ -24,8 +24,6 @@ export const getClassNameForMain = (
 	const isRtl = textDirection === 'rtl' ? 'rtl' : '';
 	const menuOpenClass = menuIsOpen ? ' menu-is-open' : '';
 
-	// formattedSource.main && !readersMode && !oneVersePerLine ? '' : `chapter ${justifiedClass}`
-
 	return formattedSource.main && !readersMode && !oneVersePerLine
 		? `${isRtl}${menuOpenClass}`
 		: `chapter ${justifiedClass} ${isRtl}${menuOpenClass}`;
@@ -136,8 +134,8 @@ export const isEndOfBible = (books, activeBookId, activeChapter) => {
 };
 
 // Because the system captures the verse numbers this needs to be used
-export const calcDistance = (last, first, plainText) => {
-	// l: lastVerse, f: firstVerse, p: isPlainText
+// Can accept plainText boolean as third arg if needed
+export const calcDistance = (last, first /* plainText */) => {
 	// If the last verse is equal to the first verse then I don't need a diff
 	if (last === first) return 0;
 	let stringDiff = '';
@@ -146,13 +144,10 @@ export const calcDistance = (last, first, plainText) => {
 		// Adds the length of each verse number
 		stringDiff += i.toFixed(0);
 		// Adds characters for text to account for spaces in verse numbers
-		stringDiff += plainText ? '11' : '11';
-		// console.log(i);
+		stringDiff += '11';
 	}
-	// console.log('string diff', stringDiff);
 	// Gets the total length of the distance needed
 	return stringDiff.length;
-	// return l - f;
 };
 
 export const getReference = (

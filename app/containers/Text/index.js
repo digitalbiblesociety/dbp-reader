@@ -1,13 +1,14 @@
 /**
  *
  * Text
- *
+ * TODO: Split this up into components and isolate the different parts that do not need to be together
+ * TODO: Find way to highlight and un-highlight verses without directly manipulating the dom by adding/removing classnames
+ * TODO: Paramaterize addHighlight so it can be more easily tested and can be re-used
  */
 
 import React from 'react';
 import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
-// import PrefetchLink from '../../utils/PrefetchLink';
 import Link from 'next/link';
 import Information from '../../components/Information';
 import SvgWrapper from '../../components/SvgWrapper';
@@ -43,7 +44,8 @@ import createHighlights from './highlightPlainText';
 import createFormattedHighlights from './highlightFormattedText';
 import { applyNotes, applyBookmarks } from './formattedTextUtils';
 import ReadFullChapter from '../../components/ReadFullChapter';
-import differenceObject from '../../utils/deepDifferenceObject';
+// Import below is needed for figuring out what needs to change to reduces render cycles
+// import differenceObject from '../../utils/deepDifferenceObject';
 
 /* Disabling the jsx-a11y linting because we need to capture the selected text
 	 and the most straight forward way of doing so is with the onMouseUp event */
@@ -64,7 +66,7 @@ class Text extends React.PureComponent {
 		activeVerseInfo: { verse: 0 },
 		loadingNextPage: false,
 		wholeVerseIsSelected: false,
-		dommountedsostuffworks: false,
+		domMethodsAvailable: false,
 		formattedVerse: false,
 		footnotes: {},
 	};
@@ -77,16 +79,13 @@ class Text extends React.PureComponent {
 		this.window = window;
 
 		if (this.format) {
-			// console.log('setting event listeners on format');
 			this.setEventHandlersForFootnotes(this.format);
 			this.setEventHandlersForFormattedVerses(this.format);
 		} else if (this.formatHighlight) {
-			// console.log('setting event listeners on formatHighlight');
 			this.setEventHandlersForFootnotes(this.formatHighlight);
 			this.setEventHandlersForFormattedVerses(this.formatHighlight);
 		}
-		// console.log('props at time component first mounted', this.props);
-		this.dommountedsostuffworks();
+		this.domMethodsAvailable();
 		this.getFootnotesOnFirstRender();
 
 		if (this.mainWrapper) {
@@ -95,10 +94,6 @@ class Text extends React.PureComponent {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		if (Object.keys(differenceObject(this.props, nextProps)).length) {
-			// console.log('component did update new props difference: ', differenceObject(this.props, nextProps));
-			// console.log('component did update old props difference: ', differenceObject(nextProps, this.props));
-		}
 		if (nextProps.formattedSource.main !== this.props.formattedSource.main) {
 			this.setState(
 				{
@@ -115,9 +110,6 @@ class Text extends React.PureComponent {
 			this.setState({ activeVerseInfo: { verse: 0 }, loadingNextPage: false });
 			this.props.setTextLoadingState({ state: false });
 		}
-		// if (nextProps.text !== this.props.text || nextProps.formattedSource.main !== this.props.formattedSource.main || nextProps.audioSource !== this.props.audioSource) {
-		// 	this.props.setTextLoadingState({ state: false });
-		// }
 		if (nextProps.verseNumber !== this.props.verseNumber) {
 			this.setState({ loadingNextPage: false });
 			this.props.setTextLoadingState({ state: false });
@@ -130,8 +122,7 @@ class Text extends React.PureComponent {
 
 	// I am using this function because it means that the component finished updating and that the dom is available
 	componentDidUpdate(prevProps, prevState) {
-		// console.log(this.format, this.formatHighlight);
-		// Use these logs to help reduce unused renders
+		// TODO: Use these logs to help reduce useless updates renders
 		// if (Object.keys(differenceObject(this.state, prevState)).length || Object.keys(differenceObject(this.props, prevProps)).length) {
 		// 	console.log('component did update new props difference: ', differenceObject(this.props, prevProps));
 		// 	console.log('component did update new state difference: ', differenceObject(this.state, prevState));
@@ -139,10 +130,6 @@ class Text extends React.PureComponent {
 		// 	console.log('component did update old state difference: ', differenceObject(prevState, this.state));
 		// }
 		// console.log('updating---------------------------------------------');
-		// if (this.main) {
-		// 	this.main.removeEventListener('scroll', this.handleScrollOnMain, true);
-		// 	this.main.addEventListener('scroll', this.handleScrollOnMain, true);
-		// }
 
 		if (
 			this.main &&
@@ -175,9 +162,10 @@ class Text extends React.PureComponent {
 				),
 			];
 			if (prevVerseNodes.length) {
+				// Slicing the classname since the last 13 characters are the highlighted classname that needs to be removed
 				prevVerseNodes.forEach(
 					(n) => (n.className = n.className.slice(0, -13)), // eslint-disable-line no-param-reassign
-				); // eslint-disable-line no-param-reassign
+				);
 			}
 		} else if (
 			this.main &&
@@ -205,47 +193,31 @@ class Text extends React.PureComponent {
 			this.props.formattedSource.footnoteSource !==
 				prevProps.formattedSource.footnoteSource
 		) {
-			// console.log('this.props.formatted', this.props.formattedSource.footnoteSource);
-			// Safety check since I use browser apis
+			// Safety check since I use browser apis and the first render is on the server
 			if (this.props.formattedSource.footnoteSource) {
-				// console.log('formatted source changed, updating footnotes', this.props.formattedSource.footnoteSource);
-				// console.log('dom parser', DOMParser);
 				const parser = new DOMParser();
 				const xmlDoc = parser.parseFromString(
 					this.props.formattedSource.footnoteSource,
 					'text/xml',
 				);
-
-				// console.log('in component did update function', [...xmlDoc.querySelectorAll('.footnote')].reduce((a, c) => a.concat(c.textContent), ''))
+				// Parses the footnotes and creates the object used to render the footnote popups
 				const footnotes =
 					[...xmlDoc.querySelectorAll('.footnote')].reduce((a, n) => {
 						let node = n;
 						let safeGuard = 0;
-						// console.log('node before while loop', node);
 						while ((node && !node.attributes.id) || safeGuard >= 10) {
-							// console.log('node in while loop', node);
 							node = node.parentElement;
 							safeGuard += 1;
 						}
-						// console.log('sliced id', node.attributes.id.value.slice(4));
-						// console.log('text content', node.textContent);
 						if (node && node.attributes.id) {
 							return {
 								...a,
 								[node.attributes.id.value.slice(4)]: node.textContent,
 							};
 						}
-						// if (n.parentElement.parentElement.attributes.id) {
-						// 	return {
-						// 		...a,
-						// 		[n.parentElement.parentElement.attributes.id.value.slice(
-						// 			4,
-						// 		)]: n.textContent,
-						// 	};
-						// }
 						return a;
 					}, {}) || {};
-				// console.log('generated new footnotes', footnotes);
+
 				this.callSetStateNotInUpdate(footnotes);
 			}
 		}
@@ -256,11 +228,9 @@ class Text extends React.PureComponent {
 			(this.format || this.formatHighlight)
 		) {
 			if (this.format) {
-				// console.log('setting event listeners on format first');
 				this.setEventHandlersForFootnotes(this.format);
 				this.setEventHandlersForFormattedVerses(this.format);
 			} else if (this.formatHighlight) {
-				// console.log('setting event listeners on formatHighlight first');
 				this.setEventHandlersForFootnotes(this.formatHighlight);
 				this.setEventHandlersForFormattedVerses(this.formatHighlight);
 			}
@@ -268,7 +238,6 @@ class Text extends React.PureComponent {
 			!isEqual(this.props.highlights, prevProps.highlights) &&
 			this.formatHighlight
 		) {
-			// console.log('setting event listeners on formatHighlight because highlights changed second');
 			this.setEventHandlersForFootnotes(this.formatHighlight);
 			this.setEventHandlersForFormattedVerses(this.formatHighlight);
 		} else if (
@@ -291,72 +260,53 @@ class Text extends React.PureComponent {
 		) {
 			// Need to set event handlers again here because they are removed once the plain text is rendered
 			if (this.format) {
-				// console.log('setting event listeners on format third');
 				this.setEventHandlersForFootnotes(this.format);
 				this.setEventHandlersForFormattedVerses(this.format);
 			} else if (this.formatHighlight) {
-				// console.log('setting event listeners on formatHighlight third');
 				this.setEventHandlersForFootnotes(this.formatHighlight);
 				this.setEventHandlersForFormattedVerses(this.formatHighlight);
 			}
 		}
 
 		// This handles setting the events on a page refresh or navigation via url
-		if (
-			this.format &&
-			// !this.state.handlersAreSet &&
-			!this.props.loadingNewChapterText
-		) {
-			// console.log('setting event listeners on format fourth', this.state.footnotes);
+		if (this.format && !this.props.loadingNewChapterText) {
 			this.setEventHandlersForFootnotes(this.format);
 			this.setEventHandlersForFormattedVerses(this.format);
-			// this.callSetStateNotInUpdate();
-		} else if (
-			this.formatHighlight &&
-			// !this.state.handlersAreSet &&
-			!this.props.loadingNewChapterText
-		) {
-			// console.log('setting event listeners on formatHighlight fourth ');
+		} else if (this.formatHighlight && !this.props.loadingNewChapterText) {
 			this.setEventHandlersForFootnotes(this.formatHighlight);
 			this.setEventHandlersForFormattedVerses(this.formatHighlight);
-			// this.callSetStateNotInUpdate();
 		}
 	}
 
 	setEventHandlersForFormattedVerses = (ref) => {
 		// Set mousedown and mouseup events on verse elements
 		try {
-			const verses = [...ref.querySelectorAll('[data-id]')].slice(1); // [...ref.getElementsByClassName('v')];
+			// Sets a "click" event on every formatted verse
+			const verses = [...ref.querySelectorAll('[data-id]')].slice(1);
 
 			verses.forEach((verse) => {
-				// console.log('setting events on this verse', verse);
 				/* eslint-disable no-param-reassign, no-unused-expressions, jsx-a11y/no-static-element-interactions */
 				verse.onmousedown = (e) => {
 					e.stopPropagation();
-					// console.log('mousedown event');
 					this.getFirstVerse(e);
 				};
 				verse.onmouseup = (e) => {
 					e.stopPropagation();
-					// console.log('mouseup event');
-
 					this.handleMouseUp(e);
 				};
-				// Noop to get the mouse events to fire on iOS
+				// No-op to get the mouse events to fire on iOS
 				verse.onclick = () => {};
 			});
 		} catch (err) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Error adding event handlers to formatted verses: ', err); // eslint-disable-line no-console
 			}
-			// if Production then log error to service
 		}
 
 		// Set click events on bookmark icons
 		try {
 			const elements = [...ref.getElementsByClassName('bookmark-in-verse')];
-			// It might not work 100% of the time to use i here, but I think it
-			// will work most of the time
+
 			elements.forEach((el, i) => {
 				el.onclick = (e) => {
 					e.stopPropagation();
@@ -368,15 +318,12 @@ class Text extends React.PureComponent {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Error adding event handlers to formatted verses: ', err); // eslint-disable-line no-console
 			}
-			// if Production then log error to service
 		}
 
 		// Set click events on note icons
 		try {
 			const elements = [...ref.getElementsByClassName('note-in-verse')];
 
-			// It might not work 100% of the time to use i here, but I think it
-			// will work most of the time
 			elements.forEach((el, i) => {
 				el.onclick = (e) => {
 					e.stopPropagation();
@@ -388,7 +335,6 @@ class Text extends React.PureComponent {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Error adding event handlers to formatted verses: ', err); // eslint-disable-line no-console
 			}
-			// if Production then log error to service
 		}
 	};
 
@@ -396,9 +342,6 @@ class Text extends React.PureComponent {
 		const notes = [...ref.getElementsByClassName('note')];
 
 		notes.forEach((note) => {
-			// console.log('setting a click handler for: ', note.attributes);
-			/* eslint-disable no-param-reassign */
-			// May need to change this and change the regex if we do infinite scrolling
 			if (
 				note.childNodes &&
 				note.childNodes[0] &&
@@ -407,13 +350,8 @@ class Text extends React.PureComponent {
 				note.childNodes[0].removeAttribute('href');
 			}
 
-			// note.ontouchend = (e) => {
-			//
-			// }
-
 			note.onclick = (e) => {
 				e.stopPropagation();
-				// console.log('clicked note');
 				if (typeof this.window !== 'undefined') {
 					const rightEdge = this.window.innerWidth - 300;
 					const x = rightEdge < e.clientX ? rightEdge : e.clientX;
@@ -440,7 +378,6 @@ class Text extends React.PureComponent {
 	};
 	// Use selected text only when marking highlights
 	setActiveNote = ({ coords, existingNote, bookmark }) => {
-		// console.log('this.state', this.state);
 		if (!this.props.userAuthenticated || !this.props.userId) {
 			this.openPopup({ x: coords.x, y: coords.y });
 			return;
@@ -461,26 +398,20 @@ class Text extends React.PureComponent {
 	};
 
 	getFootnotesOnFirstRender = () => {
-		// console.log('getFootnotesOnFirstRender', this.props.formattedSource.footnoteSource);
-		// console.log('dom parser', DOMParser);
 		const parser = new DOMParser();
 		const xmlDoc = parser.parseFromString(
 			this.props.formattedSource.footnoteSource,
 			'text/html',
 		);
-		// console.log('in first render function', [...xmlDoc.querySelectorAll('.footnote')].reduce((a, c) => a.concat(c.textContent), ''))
+
 		const footnotes =
 			[...xmlDoc.querySelectorAll('.footnote')].reduce((a, n) => {
 				let node = n;
 				let safeGuard = 0;
-				// console.log('node before while loop', node);
 				while ((node && !node.attributes.id) || safeGuard >= 10) {
-					// console.log('node in while loop', node);
 					node = node.parentElement;
 					safeGuard += 1;
 				}
-				// console.log('sliced id', node.attributes.id.value.slice(4));
-				// console.log('text content', node.textContent);
 				if (node && node.attributes.id) {
 					return {
 						...a,
@@ -489,6 +420,7 @@ class Text extends React.PureComponent {
 				}
 				return a;
 			}, {}) || {};
+
 		this.setState({
 			footnoteState: false,
 			footnotes,
@@ -496,9 +428,8 @@ class Text extends React.PureComponent {
 	};
 
 	getFirstVerse = (e) => {
-		// alert('mousedown fired');
 		e.stopPropagation();
-		// console.log('getting first verse');
+
 		const target = e.target;
 		const isFormatted =
 			!!this.props.formattedSource.main &&
@@ -531,7 +462,6 @@ class Text extends React.PureComponent {
 				const firstVerse = verseNode
 					? verseNode.attributes['data-id'].value.split('_')[1]
 					: '';
-				// console.log('first formatted verse', firstVerse);
 				// third check may not be required, if micro optimization is needed then look into removing contains
 				if (primaryButton && this.main.contains(target) && firstVerse) {
 					this.setState({
@@ -543,7 +473,6 @@ class Text extends React.PureComponent {
 				const firstVerse = verseNode
 					? verseNode.attributes['data-verseid'].value
 					: '';
-				// console.log('first plain verse', firstVerse);
 				// third check may not be required, if micro optimization is needed then look into removing contains
 				if (primaryButton && this.main.contains(target) && firstVerse) {
 					this.setState({
@@ -560,7 +489,6 @@ class Text extends React.PureComponent {
 
 	getLastVerse = (e) => {
 		const target = e.target;
-		// const parent = e.target.parentElement;
 		const isFormatted =
 			!!this.props.formattedSource.main &&
 			(!this.props.userSettings.getIn([
@@ -583,14 +511,8 @@ class Text extends React.PureComponent {
 					'oneVersePerLine',
 					'available',
 				]));
-		// console.log('is formatted', isFormatted);
-		// May need to get the parent using the same functions as for highlighting
-		// console.log('Get last verse target', target);
-		// console.log('Get last verse parent', parent);
-		// console.log('Get last verse event', e);
-		// console.log('Selection in last verse event', this.window.getSelection());
 		const primaryButton = e.button === 0;
-		// console.log(this.window.getSelection().toString());
+
 		if (typeof this.window !== 'undefined') {
 			// if formatted iterate up the dom looking for data-id
 			if (isFormatted) {
@@ -598,7 +520,6 @@ class Text extends React.PureComponent {
 				const lastVerse = verseNode
 					? verseNode.attributes['data-id'].value.split('_')[1]
 					: '';
-				// console.log('last formatted verse', lastVerse);
 				// third check may not be required, if micro optimization is needed then look into removing contains
 				if (
 					primaryButton &&
@@ -628,7 +549,6 @@ class Text extends React.PureComponent {
 					);
 				} else if (lastVerse && this.main.contains(target) && primaryButton) {
 					// treat the event as a click and allow the whole verse to be highlighted
-					// console.log('counts as a click not a text selection formatted');
 					const verseText =
 						[
 							...document.querySelectorAll(
@@ -651,7 +571,6 @@ class Text extends React.PureComponent {
 				const lastVerse = verseNode
 					? verseNode.attributes['data-verseid'].value
 					: '';
-				// console.log('last plain verse', lastVerse);
 				// third check may not be required, if micro optimization is needed then look into removing contains
 				if (
 					primaryButton &&
@@ -681,7 +600,6 @@ class Text extends React.PureComponent {
 					);
 				} else if (lastVerse && this.main.contains(target) && primaryButton) {
 					// treat the event as a click and allow the whole verse to be highlighted
-					// console.log('counts as a click not a text selection for plain');
 					this.selectedWholeVerse(
 						lastVerse,
 						true,
@@ -698,13 +616,11 @@ class Text extends React.PureComponent {
 		}
 	};
 
-	// This function runs far, far too often
-	getTextComponents(dommountedsostuffworks) {
+	getTextComponents(domMethodsAvailable) {
 		const {
 			text: initialText,
 			userSettings,
 			formattedSource: initialFormattedSourceFromProps,
-			// formattedSource: initialFormattedSource,
 			highlights,
 			activeChapter,
 			activeBookName,
@@ -713,11 +629,9 @@ class Text extends React.PureComponent {
 			bookmarks,
 			audioSource,
 			userAuthenticated,
-			// invalidBibleId,
 			activeBookId,
 		} = this.props;
-		// console.log('initialText', initialText);
-		// console.log('highlights', highlights);
+
 		const initialFormattedSource = JSON.parse(
 			JSON.stringify(initialFormattedSourceFromProps),
 		);
@@ -725,9 +639,8 @@ class Text extends React.PureComponent {
 
 		// Need to move this to selector and use regex
 		// Possible for verse but not for footnotes
-		if (dommountedsostuffworks && initialFormattedSource.main) {
+		if (domMethodsAvailable && initialFormattedSource.main) {
 			if (verseNumber) {
-				// console.log('dom parser', DOMParser);
 				const parser = new DOMParser();
 				const serializer = new XMLSerializer();
 				// Create temp xml doc from source
@@ -757,8 +670,6 @@ class Text extends React.PureComponent {
 					? serializer.serializeToString(newXML)
 					: 'This chapter does not have a verse matching the url';
 				formattedVerse = true;
-				// console.log('setting the state for the verse being done')
-				// console.log('Creating new source for verse', initialFormattedSource);
 			}
 		}
 
@@ -797,7 +708,6 @@ class Text extends React.PureComponent {
 			'justifiedText',
 			'active',
 		]);
-		// console.log(initialText);
 		// Need to connect to the api and get the highlights object for this chapter
 		// based on whether the highlights object has any data decide whether to
 		// run this function or not
@@ -841,7 +751,6 @@ class Text extends React.PureComponent {
 
 		// Todo: Should handle each mode for formatted text and plain text in a separate component
 		// Handle exception thrown when there isn't plain text but readers mode is selected
-		// console.log('plainText', plainText);
 		/* eslint-disable react/no-danger */
 		if (plainText.length === 0 && !formattedSource.main) {
 			// Need to have a way to know if this is being run on the server or not
@@ -1095,9 +1004,6 @@ class Text extends React.PureComponent {
 				</span>,
 			);
 		}
-		// console.log('text components that are about to be mounted', textComponents);
-		// console.log('verseNumber in getComponents', verseNumber);
-
 		// Using parseInt to determine whether or not the verseNumber is a real number or if it is a series of characters
 		if (verseNumber && Array.isArray(textComponents)) {
 			if (readersMode) {
@@ -1109,7 +1015,7 @@ class Text extends React.PureComponent {
 				(c) => c.key === (parseInt(verseNumber, 10) ? verseNumber : '1'),
 			);
 		}
-		// console.log('Text components', textComponents)
+
 		return textComponents;
 	}
 
@@ -1119,18 +1025,14 @@ class Text extends React.PureComponent {
 		}
 	};
 
-	// This is a noop to trick iOS devices
+	// This is a no-op to trick iOS devices
 	handleHighlightClick = () => {
 		// Unless there is a click event the mouseup and mousedown events won't fire for mobile devices
 		// Left this blank since I actually don't need to do anything with it
 	};
 
 	handleMouseUp = (e) => {
-		// alert(`mouse up fired: ${e.button}: ${e.changedTouches}`);
 		e.stopPropagation();
-		// alert('handling mouseup');
-		// alert(e.button);
-		// console.log('e.changedTouches', e.changedTouches);
 
 		this.getLastVerse(e);
 		if (
@@ -1149,7 +1051,6 @@ class Text extends React.PureComponent {
 	handleNoteClick = (noteIndex, clickedBookmark) => {
 		const userNotes = this.props.userNotes;
 		const existingNote = userNotes[noteIndex];
-		// console.log('handling note click', noteIndex, clickedBookmark);
 
 		if (!this.props.notesActive) {
 			this.setActiveNote({ existingNote });
@@ -1172,8 +1073,6 @@ class Text extends React.PureComponent {
 	};
 
 	handleAddBookmark = () => {
-		// console.log('Props available in bookmarks', this.props);
-		// console.log('State available in bookmarks', this.state);
 		const {
 			activeBookId,
 			userId,
@@ -1191,17 +1090,6 @@ class Text extends React.PureComponent {
 
 		// Only add the bookmark if there is a userId to add it too
 		if (userAuthenticated && userId) {
-			// console.log('Adding bookmark with: ', {
-			// 	book_id: activeBookId,
-			// 	chapter: activeChapter,
-			// 	userId,
-			// 	bible_id: bibleId,
-			// 	notes: '',
-			// 	title: '',
-			// 	bookmark: 1,
-			// 	verse_start: verseStart,
-			// 	verse_end: verseEnd,
-			// });
 			this.props.addBookmark({
 				book_id: activeBookId,
 				chapter: activeChapter,
@@ -1222,16 +1110,13 @@ class Text extends React.PureComponent {
 	// Probably need to stop doing this here
 	callSetStateNotInUpdate = (footnotes) => this.setState({ footnotes });
 
-	dommountedsostuffworks = () =>
-		this.setState({ dommountedsostuffworks: true, formattedVerse: true });
+	domMethodsAvailable = () =>
+		this.setState({ domMethodsAvailable: true, formattedVerse: true });
 
 	openPopup = (coords) => {
 		this.setState({ popupOpen: true, popupCoords: coords });
 		setTimeout(() => this.setState({ popupOpen: false }), 2500);
 	};
-	// has an issue with highlights in the same verse
-	// This is likely going to be really slow...
-	// highlightPlainText = (props) => createHighlights(props);
 
 	addHighlight = ({ color, popupCoords }) => {
 		let highlightObject = {};
@@ -1714,7 +1599,6 @@ class Text extends React.PureComponent {
 	};
 
 	addFacebookLike = () => {
-		// 	console.log('testing adding a like');
 		if (typeof this.window !== 'undefined') {
 			const fb = this.window.FB;
 			// 	fb.ui({
@@ -1731,7 +1615,7 @@ class Text extends React.PureComponent {
 					access_token: process.env.FB_ACCESS,
 				},
 				(res) => res,
-			); // console.log('bible is object res', res));
+			);
 		}
 		this.closeContextMenu();
 	};
@@ -1786,7 +1670,6 @@ class Text extends React.PureComponent {
 	};
 
 	selectedWholeVerse = (verse, isPlain, clientX, clientY, userSelectedText) => {
-		// console.log('verse: ', verse, '\nisPlain: ', isPlain);
 		if (typeof this.window !== 'undefined') {
 			const rightEdge =
 				this.window.innerWidth < 500
@@ -1800,10 +1683,6 @@ class Text extends React.PureComponent {
 			const y = bottomEdge < clientY ? bottomEdge : clientY;
 
 			if (isPlain) {
-				// console.log('text array', this.props.text);
-				// console.log('stuff to compare plain', verse, this.state.activeVerseInfo.verse);
-				// const verseObject = this.props.text.find((v) => v.verse_start === parseInt(verse, 10) || v.verse_start_alt === verse);
-				// console.log('verseObject', verseObject);
 				this.setState((currentState) => ({
 					coords: { x, y },
 					wholeVerseIsSelected: !(
@@ -1820,10 +1699,6 @@ class Text extends React.PureComponent {
 				}));
 			} else {
 				// is formatted
-				// Adding the highlight here since it has to be done through dom manipulation... -_-
-				// console.log('stuff to compare format', verse, this.state.activeVerseInfo.verse);
-				// console.log('verseNode', verseNode);
-				// console.log('verseNode.textContent', verseNode.textContent);
 				this.setState((currentState) => ({
 					coords: { x, y },
 					wholeVerseIsSelected: !(
@@ -1885,7 +1760,6 @@ class Text extends React.PureComponent {
 			books,
 			menuIsOpen,
 			isScrollingDown,
-			// audioSource,
 			audioPlayerState,
 			subFooterOpen,
 			textDirection,
@@ -1893,17 +1767,6 @@ class Text extends React.PureComponent {
 			videoPlayerOpen,
 			hasVideo,
 		} = this.props;
-		// console.log('____________________________\nText component rendered!', verseNumber);
-		// console.log('condition for spinner', loadingNewChapterText ||
-		// 	loadingAudio ||
-		// 	this.state.loadingNextPage ||
-		// 	!books.length ||
-		// 	chapterTextLoadingState)
-		// console.log('loadingNewChapterText', loadingNewChapterText)
-		// console.log('loadingAudio', loadingAudio)
-		// console.log('!books.length', !books.length)
-		// console.log('chapterTextLoadingState', chapterTextLoadingState)
-		// console.log('this.state.loadingNextPage', this.state.loadingNextPage)
 
 		const {
 			coords,
@@ -1932,7 +1795,6 @@ class Text extends React.PureComponent {
 			chapterTextLoadingState ||
 			(!formattedVerse && formattedSource.main)
 		) {
-			// console.log('Rendering the spinner');
 			return (
 				<div
 					className={getClassNameForTextContainer({
@@ -2015,7 +1877,7 @@ class Text extends React.PureComponent {
 								</h1>
 							</div>
 						)}
-						{this.getTextComponents(this.state.dommountedsostuffworks)}
+						{this.getTextComponents(this.state.domMethodsAvailable)}
 						{verseNumber ? (
 							<ReadFullChapter
 								activeTextId={activeTextId}
@@ -2090,6 +1952,7 @@ class Text extends React.PureComponent {
 		);
 	}
 }
+/* eslint-enable jsx-a11y/no-noninteractive-element-interactions */
 
 Text.propTypes = {
 	text: PropTypes.array,
@@ -2107,13 +1970,11 @@ Text.propTypes = {
 	setActiveNotesView: PropTypes.func,
 	setTextLoadingState: PropTypes.func,
 	activeChapter: PropTypes.number,
-	// distance: PropTypes.number,
 	hasVideo: PropTypes.bool,
 	menuIsOpen: PropTypes.bool,
 	notesActive: PropTypes.bool,
 	loadingAudio: PropTypes.bool,
 	subFooterOpen: PropTypes.bool,
-	// invalidBibleId: PropTypes.bool,
 	isScrollingDown: PropTypes.bool,
 	videoPlayerOpen: PropTypes.bool,
 	chapterTextLoadingState: PropTypes.bool,
