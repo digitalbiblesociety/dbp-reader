@@ -107,7 +107,7 @@ class VideoPlayer extends React.PureComponent {
 			process.env.BASE_API_ROUTE
 		}/bibles/filesets/${filesetId}?key=${
 			process.env.DBP_API_KEY
-		}&v=4&type=video_stream&bucket=dbp-vid&book_id=${bookId}`;
+		}&v=4&type=video_stream&asset_id=dbp-vid&book_id=${bookId}`;
 
 		try {
 			// TODO: Profile to see how much time the caching actually saves here
@@ -191,7 +191,7 @@ class VideoPlayer extends React.PureComponent {
 			process.env.BASE_API_ROUTE
 		}/bibles/filesets/${filesetId}/books?key=${
 			process.env.DBP_API_KEY
-		}&bucket=dbp-vid&fileset_type=video_stream&v=4`;
+		}&asset_id=dbp-vid&fileset_type=video_stream&v=4`;
 
 		try {
 			// TODO: Profile to see if caching helps here
