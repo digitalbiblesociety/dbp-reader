@@ -93,7 +93,7 @@ app
 				// TODO: Put decryption process into try catch for safety
 				// Get encrypted string of user data
 				const encryptedData = req.query.code;
-				const iv = new Buffer.alloc(16);
+				// const iv = new Buffer.alloc(16);
 				const date = new Date();
 				const day = date.getDate().toString();
 				const month = (date.getMonth() + 1).toString();
@@ -105,24 +105,17 @@ app
 				}`;
 				// Decrypt user data
 				const secret = crypto
-								.createHash('sha256')
-								.update(
-												`${dateString}-${process.env.NOTES_PROJECT_ID}`,
-												'utf8',
-								)
-								.digest('hex')
-								.slice(0, 32);
+					.createHash('sha256')
+					.update(`${dateString}-${process.env.NOTES_PROJECT_ID}`, 'utf8')
+					.digest('hex')
+					.slice(0, 32);
 				console.log('secret', secret);
 				// Might need an initialization vector
-				const decipher = crypto.createDecipheriv('aes-256-cbc', secret, iv);
+				const decipher = crypto.createDecipher('aes-128-cbc', secret);
 				// May need to turn encryptedData into a buffer
 				console.log('encrypted', encryptedData);
-				console.log('dechiper before', decipher);
 
 				decipher.update(encryptedData, 'hex', 'utf8');
-
-				console.log('buff', new Buffer.from(encryptedData, 'base64'));
-				console.log('decipher after', decipher);
 
 				const userString = decipher.final('utf8');
 
