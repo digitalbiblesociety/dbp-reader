@@ -106,7 +106,7 @@ app
 				// Decrypt user data
 				const secret = crypto
 					.createHash('sha256')
-					.update(`${dateString}-${process.env.NOTES_PROJECT_ID}`, 'utf8')
+					.update(`${dateString}-${process.env.NOTES_PROJECT_ID}`, 'hex')
 					.digest('hex')
 					.slice(0, 32);
 				console.log('secret', secret);
@@ -115,9 +115,9 @@ app
 				// May need to turn encryptedData into a buffer
 				console.log('encrypted', encryptedData);
 
-				decipher.update(encryptedData, 'hex', 'utf8');
+				decipher.update(encryptedData, 'hex', 'hex');
 
-				const userString = decipher.final('utf8');
+				const userString = decipher.final('hex');
 
 				console.log('userString', userString);
 				const userObject = userString.split(',').reduce((a, c, i) => {
