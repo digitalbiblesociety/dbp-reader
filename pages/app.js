@@ -453,7 +453,7 @@ AppContainer.getInitialProps = async (context) => {
 
 	const singleBibleUrl = `${
 		process.env.BASE_API_ROUTE
-	}/bibles/${bibleId}?bucket=${process.env.DBP_BUCKET_ID}&key=${
+	}/bibles/${bibleId}?asset_id=${process.env.DBP_BUCKET_ID}&key=${
 		process.env.DBP_API_KEY
 	}&v=4`;
 
@@ -547,7 +547,7 @@ AppContainer.getInitialProps = async (context) => {
 		async (id) => {
 			const url = `${process.env.BASE_API_ROUTE}/bibles/filesets/${
 				id[1]
-			}/books?v=4&key=${process.env.DBP_API_KEY}&bucket=${
+			}/books?v=4&key=${process.env.DBP_API_KEY}&asset_id=${
 				process.env.DBP_BUCKET_ID
 			}&fileset_type=${id[0]}`;
 			const res = await cachedFetch(url);

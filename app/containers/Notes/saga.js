@@ -35,9 +35,9 @@ export function* getChapterForNote({ note }) {
 	// Need to not use the bible id here
 	// console.log('bibleId', bibleId);
 	// console.log('note', note);
-	// const reqUrl = `${process.env.BASE_API_ROUTE}/bibles/${bibleId}/${bookId}/${chapter}?bucket=${process.env.DBP_BUCKET_ID}&key=${process.env.DBP_API_KEY}&v=4&book_id=${bookId}&chapter_id=${chapter}`;
+	// const reqUrl = `${process.env.BASE_API_ROUTE}/bibles/${bibleId}/${bookId}/${chapter}?asset_id=${process.env.DBP_BUCKET_ID}&key=${process.env.DBP_API_KEY}&v=4&book_id=${bookId}&chapter_id=${chapter}`;
 	// TODO: The bibleId here is undefined a lot of the time
-	const bibleUrl = `${process.env.BASE_API_ROUTE}/bibles/${bibleId}?bucket=${
+	const bibleUrl = `${process.env.BASE_API_ROUTE}/bibles/${bibleId}?asset_id=${
 		process.env.DBP_BUCKET_ID
 	}&key=${process.env.DBP_API_KEY}&v=4`;
 	// Need to get the bible filesets
@@ -71,13 +71,13 @@ export function* getChapterForNote({ note }) {
 			} else {
 				// Todo: Implement a version for getting the formatted text and parsing it
 				// const format = filesets.find((f) => f.set_type_code === 'text_format');
-				// const res = yield call(request, `${process.env.BASE_API_ROUTE}/bibles/filesets/${format.id}?bucket=${process.env.DBP_BUCKET_ID}&key=${process.env.DBP_API_KEY}&v=4&book_id=${bookId}&chapter_id=${chapter}`);
+				// const res = yield call(request, `${process.env.BASE_API_ROUTE}/bibles/filesets/${format.id}?asset_id=${process.env.DBP_BUCKET_ID}&key=${process.env.DBP_API_KEY}&v=4&book_id=${bookId}&chapter_id=${chapter}`);
 				//
 				// const format = filesets.find((f) => f.type === 'text_format');
 				// // text = res.data;
 				// const res = yield call(
 				// 	request,
-				// 	`${process.env.BASE_API_ROUTE}/bibles/filesets/${format.id}?bucket=${
+				// 	`${process.env.BASE_API_ROUTE}/bibles/filesets/${format.id}?asset_id=${
 				// 		process.env.DBP_BUCKET_ID
 				// 	}&key=${
 				// 		process.env.DBP_API_KEY

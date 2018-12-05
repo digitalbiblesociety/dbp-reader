@@ -63,7 +63,7 @@ export default async (filesets, bookId, chapter) => {
 			const reqUrl = `${process.env.BASE_API_ROUTE}/bibles/filesets/${get(
 				completeAudio,
 				[0, 'id'],
-			)}?bucket=${
+			)}?asset_id=${
 				process.env.DBP_BUCKET_ID
 			}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(
 				completeAudio,
@@ -87,7 +87,7 @@ export default async (filesets, bookId, chapter) => {
 			const reqUrl = `${process.env.BASE_API_ROUTE}/bibles/filesets/${get(
 				ntAudio,
 				[0, 'id'],
-			)}?bucket=${
+			)}?asset_id=${
 				process.env.DBP_BUCKET_ID
 			}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(
 				ntAudio,
@@ -109,7 +109,7 @@ export default async (filesets, bookId, chapter) => {
 			const reqUrl = `${process.env.BASE_API_ROUTE}/bibles/filesets/${get(
 				otAudio,
 				[0, 'id'],
-			)}?bucket=${
+			)}?asset_id=${
 				process.env.DBP_BUCKET_ID
 			}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(
 				otAudio,
@@ -134,7 +134,7 @@ export default async (filesets, bookId, chapter) => {
 			const reqUrl = `${process.env.BASE_API_ROUTE}/bibles/filesets/${get(
 				ntAudio,
 				[0, 'id'],
-			)}?bucket=${
+			)}?asset_id=${
 				process.env.DBP_BUCKET_ID
 			}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(
 				ntAudio,
@@ -151,7 +151,7 @@ export default async (filesets, bookId, chapter) => {
 			const reqUrl = `${process.env.BASE_API_ROUTE}/bibles/filesets/${get(
 				otAudio,
 				[0, 'id'],
-			)}?bucket=${
+			)}?asset_id=${
 				process.env.DBP_BUCKET_ID
 			}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(
 				otAudio,
@@ -179,7 +179,7 @@ export default async (filesets, bookId, chapter) => {
 			const reqUrl = `${process.env.BASE_API_ROUTE}/bibles/filesets/${get(
 				partialOtAudio,
 				[0, 'id'],
-			)}?bucket=${
+			)}?asset_id=${
 				process.env.DBP_BUCKET_ID
 			}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(
 				partialOtAudio,
@@ -208,7 +208,7 @@ export default async (filesets, bookId, chapter) => {
 			const reqUrl = `${process.env.BASE_API_ROUTE}/bibles/filesets/${get(
 				partialNtAudio,
 				[0, 'id'],
-			)}?bucket=${
+			)}?asset_id=${
 				process.env.DBP_BUCKET_ID
 			}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(
 				partialNtAudio,
@@ -241,7 +241,7 @@ export default async (filesets, bookId, chapter) => {
 			const reqUrl = `${process.env.BASE_API_ROUTE}/bibles/filesets/${get(
 				partialNtOtAudio,
 				[0, 'id'],
-			)}?bucket=${
+			)}?asset_id=${
 				process.env.DBP_BUCKET_ID
 			}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(
 				partialNtOtAudio,

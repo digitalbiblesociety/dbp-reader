@@ -21,7 +21,7 @@ const oneDay = 1000 * 60 * 60 * 24;
 export function* getCountries() {
 	const requestUrl = `${process.env.BASE_API_ROUTE}/countries?key=${
 		process.env.DBP_API_KEY
-	}&v=4&bucket_id=${
+	}&v=4&asset_id=${
 		process.env.DBP_BUCKET_ID
 	}&has_filesets=true&include_languages=true`;
 
@@ -67,7 +67,7 @@ export function* getCountries() {
 }
 
 export function* getCountry() {
-	// const requestUrl = `${process.env.BASE_API_ROUTE}/countries?key=${process.env.DBP_API_KEY}&v=4&bucket_id=${process.env.DBP_BUCKET_ID}&has_filesets=true&include_languages=true&iso=${iso}`;
+	// const requestUrl = `${process.env.BASE_API_ROUTE}/countries?key=${process.env.DBP_API_KEY}&v=4&asset_id=${process.env.DBP_BUCKET_ID}&has_filesets=true&include_languages=true&iso=${iso}`;
 
 	try {
 		// const response = yield call(request, requestUrl);
@@ -91,21 +91,21 @@ export function* getTexts({ languageCode }) {
 	// console.log('active language code', languageCode);
 
 	// if (languageISO === 'ANY') {
-	//   requestUrl = `${process.env.BASE_API_ROUTE}/bibles?&bucket_id=${
+	//   requestUrl = `${process.env.BASE_API_ROUTE}/bibles?&asset_id=${
 	//     process.env.DBP_BUCKET_ID
 	//   }&key=${process.env.DBP_API_KEY}&v=4`;
 	// } else {
-	requestUrl = `${process.env.BASE_API_ROUTE}/bibles?bucket_id=${
+	requestUrl = `${process.env.BASE_API_ROUTE}/bibles?asset_id=${
 		process.env.DBP_BUCKET_ID
 	}&key=${process.env.DBP_API_KEY}&language_code=${languageCode}&v=4`;
 	// }
 	const videoRequestUrl = `${
 		process.env.BASE_API_ROUTE
-	}/bibles?bucket_id=dbp-vid&key=${
+	}/bibles?asset_id=dbp-vid&key=${
 		process.env.DBP_API_KEY
 	}&language_code=${languageCode}&v=4`;
 	// }
-	// https://api.dbp4.org/bibles?&bucket_id=$dbp-prod&key=1234&language_code=8076&v=4
+	// https://api.dbp4.org/bibles?&asset_id=$dbp-prod&key=1234&language_code=8076&v=4
 	try {
 		const response = yield call(request, requestUrl);
 		const videoRes = yield call(request, videoRequestUrl);
@@ -122,7 +122,7 @@ export function* getTexts({ languageCode }) {
 				video.language_id &&
 				video.iso,
 		);
-		/* I am getting a strange response for certain texts that are in the dbp-dev bucket. However I only get the response when I have the bucket specified. So far it is only occurring for the Melpa and Mende bibles.  If you are still working tonight I can send you more details, otherwise I can just leave it until Monday. */
+
 		const texts = response.data.filter(
 			(text) =>
 				text.name &&
@@ -189,9 +189,9 @@ export function* getTexts({ languageCode }) {
 export function* getLanguages() {
 	const requestUrl = `${process.env.BASE_API_ROUTE}/languages?key=${
 		process.env.DBP_API_KEY
-	}&v=4&bucket_id=${
+	}&v=4&asset_id=${
 		process.env.DBP_BUCKET_ID
-	}&has_filesets=true&bucket_id=dbp-prod,dbp-vid`;
+	}&has_filesets=true&asset_id=dbp-prod,dbp-vid`;
 
 	try {
 		const response = yield call(cachedFetch, requestUrl, {}, oneDay);
@@ -219,9 +219,9 @@ function sortLanguagesByVname(a, b) {
 export function* getLanguageAltNames() {
 	const requestUrl = `${process.env.BASE_API_ROUTE}/languages?key=${
 		process.env.DBP_API_KEY
-	}&v=4&bucket_id=${
+	}&v=4&asset_id=${
 		process.env.DBP_BUCKET_ID
-	}&has_filesets=true&include_alt_names=true&bucket_id=dbp-prod,dbp-vid`;
+	}&has_filesets=true&include_alt_names=true&asset_id=dbp-prod,dbp-vid`;
 	try {
 		const response = yield call(cachedFetch, requestUrl, {}, oneDay);
 		const languageData = response.data || response;

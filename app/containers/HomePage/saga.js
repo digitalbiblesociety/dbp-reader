@@ -197,7 +197,7 @@ export function* addBookmark(props) {
 export function* getBookMetadata({ bibleId }) {
 	const reqUrl = `${process.env.BASE_API_ROUTE}/bibles/${bibleId}/book?key=${
 		process.env.DBP_API_KEY
-	}&bucket=${process.env.DBP_BUCKET_ID}&v=4`;
+	}&asset_id=${process.env.DBP_BUCKET_ID}&v=4`;
 	try {
 		const response = yield call(request, reqUrl);
 		const testaments = response.data.reduce(
@@ -341,9 +341,11 @@ export function* getBibleFromUrl({
 	// Bible id
 	const bibleId = oldBibleId.toUpperCase();
 	const bookId = oldBookId.toUpperCase();
-	const requestUrl = `${process.env.BASE_API_ROUTE}/bibles/${bibleId}?bucket=${
-		process.env.DBP_BUCKET_ID
-	}&key=${process.env.DBP_API_KEY}&v=4`;
+	const requestUrl = `${
+		process.env.BASE_API_ROUTE
+	}/bibles/${bibleId}?asset_id=${process.env.DBP_BUCKET_ID}&key=${
+		process.env.DBP_API_KEY
+	}&v=4`;
 
 	// Probably need to do stuff here to get the audio and text for this new bible
 	try {
@@ -352,7 +354,7 @@ export function* getBibleFromUrl({
 		// console.log('response in getbible call', response);
 
 		// if (!response.data.filesets) {
-		// 	const bibleUrl = `${process.env.BASE_API_ROUTE}/bibles?bucket=${process.env.DBP_BUCKET_ID}&key=${process.env.DBP_API_KEY}&v=4&language_code=${response.data.iso}`;
+		// 	const bibleUrl = `${process.env.BASE_API_ROUTE}/bibles?asset_id=${process.env.DBP_BUCKET_ID}&key=${process.env.DBP_API_KEY}&v=4&language_code=${response.data.iso}`;
 		// 	const allBibles = yield call(request, bibleUrl);
 		// 	// console.log('all bibles in language', allBibles);
 		// 	const activeBible = allBibles.data.find((bible) => bible.abbr === bibleId) || {};
@@ -657,7 +659,7 @@ export function* getChapterFromUrl({
 				if (filesetId) {
 					const reqUrl = `${
 						process.env.BASE_API_ROUTE
-					}/bibles/filesets/${filesetId}?bucket=${
+					}/bibles/filesets/${filesetId}?asset_id=${
 						process.env.DBP_BUCKET_ID
 					}&key=${
 						process.env.DBP_API_KEY
@@ -951,7 +953,7 @@ export function* getChapterAudio({
 			const reqUrl = `${process.env.BASE_API_ROUTE}/bibles/filesets/${get(
 				completeAudio,
 				[0, 'id'],
-			)}?bucket=${
+			)}?asset_id=${
 				process.env.DBP_BUCKET_ID
 			}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(
 				completeAudio,
@@ -987,7 +989,7 @@ export function* getChapterAudio({
 			const reqUrl = `${process.env.BASE_API_ROUTE}/bibles/filesets/${get(
 				ntAudio,
 				[0, 'id'],
-			)}?bucket=${
+			)}?asset_id=${
 				process.env.DBP_BUCKET_ID
 			}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(
 				ntAudio,
@@ -1021,7 +1023,7 @@ export function* getChapterAudio({
 			const reqUrl = `${process.env.BASE_API_ROUTE}/bibles/filesets/${get(
 				otAudio,
 				[0, 'id'],
-			)}?bucket=${
+			)}?asset_id=${
 				process.env.DBP_BUCKET_ID
 			}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(
 				otAudio,
@@ -1060,7 +1062,7 @@ export function* getChapterAudio({
 			const reqUrl = `${process.env.BASE_API_ROUTE}/bibles/filesets/${get(
 				ntAudio,
 				[0, 'id'],
-			)}?bucket=${
+			)}?asset_id=${
 				process.env.DBP_BUCKET_ID
 			}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(
 				ntAudio,
@@ -1089,7 +1091,7 @@ export function* getChapterAudio({
 			const reqUrl = `${process.env.BASE_API_ROUTE}/bibles/filesets/${get(
 				otAudio,
 				[0, 'id'],
-			)}?bucket=${
+			)}?asset_id=${
 				process.env.DBP_BUCKET_ID
 			}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(
 				otAudio,
@@ -1133,7 +1135,7 @@ export function* getChapterAudio({
 			const reqUrl = `${process.env.BASE_API_ROUTE}/bibles/filesets/${get(
 				partialOtAudio,
 				[0, 'id'],
-			)}?bucket=${
+			)}?asset_id=${
 				process.env.DBP_BUCKET_ID
 			}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(
 				partialOtAudio,
@@ -1176,7 +1178,7 @@ export function* getChapterAudio({
 			const reqUrl = `${process.env.BASE_API_ROUTE}/bibles/filesets/${get(
 				partialNtAudio,
 				[0, 'id'],
-			)}?bucket=${
+			)}?asset_id=${
 				process.env.DBP_BUCKET_ID
 			}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(
 				partialNtAudio,
@@ -1223,7 +1225,7 @@ export function* getChapterAudio({
 			const reqUrl = `${process.env.BASE_API_ROUTE}/bibles/filesets/${get(
 				partialNtOtAudio,
 				[0, 'id'],
-			)}?bucket=${
+			)}?asset_id=${
 				process.env.DBP_BUCKET_ID
 			}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(
 				partialNtOtAudio,
@@ -1275,7 +1277,7 @@ export function* getCopyrightSaga({ filesetIds }) {
 		reqUrls.push(
 			`${process.env.BASE_API_ROUTE}/bibles/filesets/${set.id}/copyright?key=${
 				process.env.DBP_API_KEY
-			}&v=4&bucket=${process.env.DBP_BUCKET_ID}&type=${set.type}`,
+			}&v=4&asset_id=${process.env.DBP_BUCKET_ID}&type=${set.type}`,
 		),
 	);
 
@@ -1287,7 +1289,7 @@ export function* getCopyrightSaga({ filesetIds }) {
 				request,
 				`${process.env.BASE_API_ROUTE}/bibles/filesets/${
 					videoFileset.id
-				}/copyright?key=${process.env.DBP_API_KEY}&v=4&bucket=dbp-vid&type=${
+				}/copyright?key=${process.env.DBP_API_KEY}&v=4&asset_id=dbp-vid&type=${
 					videoFileset.type
 				}`,
 			);

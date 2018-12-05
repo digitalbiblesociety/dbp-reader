@@ -19,7 +19,7 @@ export default async ({
 	// start promise for formatted text
 	// console.log('chapter in get init', chapter)
 	const formattedPromises = formattedFilesetIds.map(async (id) => {
-		const url = `${process.env.BASE_API_ROUTE}/bibles/filesets/${id}?bucket=${
+		const url = `${process.env.BASE_API_ROUTE}/bibles/filesets/${id}?asset_id=${
 			process.env.DBP_BUCKET_ID
 		}&key=${
 			process.env.DBP_API_KEY
