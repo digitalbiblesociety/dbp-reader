@@ -1,8 +1,8 @@
 import get from 'lodash/get';
 import request from './request';
-// TODO: Rewrite handling of audio calls to intelligently
+// TODO: Rewrite handling of audio calls to intelligently determine whether
+// the resource is NT or OT and reduce number of calls
 export default async (filesets, bookId, chapter) => {
-	// console.log('getting the audio', filesets, bookId, chapter);
 	const audioReturnObject = { type: 'loadaudio', audioPaths: [''] };
 
 	const filteredFilesets = filesets.reduce((a, file) => {
@@ -63,12 +63,13 @@ export default async (filesets, bookId, chapter) => {
 			const reqUrl = `${process.env.BASE_API_ROUTE}/bibles/filesets/${get(
 				completeAudio,
 				[0, 'id'],
-			)}?asset_id=${
-				process.env.DBP_BUCKET_ID
-			}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(
-				completeAudio,
-				[0, 'data', 'type'],
-			)}`;
+			)}?asset_id=${process.env.DBP_BUCKET_ID}&key=${
+				process.env.DBP_API_KEY
+			}&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(completeAudio, [
+				0,
+				'data',
+				'type',
+			])}`;
 			const response = await request(reqUrl);
 			audioReturnObject.audioPaths = [get(response, ['data', 0, 'path'])];
 			audioReturnObject.audioFilesetId = get(completeAudio, [0, 'id']);
@@ -87,12 +88,13 @@ export default async (filesets, bookId, chapter) => {
 			const reqUrl = `${process.env.BASE_API_ROUTE}/bibles/filesets/${get(
 				ntAudio,
 				[0, 'id'],
-			)}?asset_id=${
-				process.env.DBP_BUCKET_ID
-			}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(
-				ntAudio,
-				[0, 'data', 'type'],
-			)}`;
+			)}?asset_id=${process.env.DBP_BUCKET_ID}&key=${
+				process.env.DBP_API_KEY
+			}&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(ntAudio, [
+				0,
+				'data',
+				'type',
+			])}`;
 			const response = await request(reqUrl);
 			const audioPaths = [get(response, ['data', 0, 'path'])];
 			ntHasUrl = !!audioPaths[0];
@@ -109,12 +111,13 @@ export default async (filesets, bookId, chapter) => {
 			const reqUrl = `${process.env.BASE_API_ROUTE}/bibles/filesets/${get(
 				otAudio,
 				[0, 'id'],
-			)}?asset_id=${
-				process.env.DBP_BUCKET_ID
-			}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(
-				otAudio,
-				[0, 'data', 'type'],
-			)}`;
+			)}?asset_id=${process.env.DBP_BUCKET_ID}&key=${
+				process.env.DBP_API_KEY
+			}&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(otAudio, [
+				0,
+				'data',
+				'type',
+			])}`;
 			const response = await request(reqUrl);
 			const audioPaths = [get(response, ['data', 0, 'path'])];
 			otHasUrl = !!audioPaths[0];
@@ -134,12 +137,13 @@ export default async (filesets, bookId, chapter) => {
 			const reqUrl = `${process.env.BASE_API_ROUTE}/bibles/filesets/${get(
 				ntAudio,
 				[0, 'id'],
-			)}?asset_id=${
-				process.env.DBP_BUCKET_ID
-			}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(
-				ntAudio,
-				[0, 'data', 'type'],
-			)}`;
+			)}?asset_id=${process.env.DBP_BUCKET_ID}&key=${
+				process.env.DBP_API_KEY
+			}&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(ntAudio, [
+				0,
+				'data',
+				'type',
+			])}`;
 			const response = await request(reqUrl);
 			ntPath = [get(response, ['data', 0, 'path'])];
 		} catch (error) {
@@ -151,12 +155,13 @@ export default async (filesets, bookId, chapter) => {
 			const reqUrl = `${process.env.BASE_API_ROUTE}/bibles/filesets/${get(
 				otAudio,
 				[0, 'id'],
-			)}?asset_id=${
-				process.env.DBP_BUCKET_ID
-			}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(
-				otAudio,
-				[0, 'data', 'type'],
-			)}`;
+			)}?asset_id=${process.env.DBP_BUCKET_ID}&key=${
+				process.env.DBP_API_KEY
+			}&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(otAudio, [
+				0,
+				'data',
+				'type',
+			])}`;
 			const response = await request(reqUrl);
 			otPath = [get(response, ['data', 0, 'path'])];
 		} catch (error) {
@@ -179,12 +184,13 @@ export default async (filesets, bookId, chapter) => {
 			const reqUrl = `${process.env.BASE_API_ROUTE}/bibles/filesets/${get(
 				partialOtAudio,
 				[0, 'id'],
-			)}?asset_id=${
-				process.env.DBP_BUCKET_ID
-			}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(
-				partialOtAudio,
-				[0, 'data', 'type'],
-			)}`;
+			)}?asset_id=${process.env.DBP_BUCKET_ID}&key=${
+				process.env.DBP_API_KEY
+			}&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(partialOtAudio, [
+				0,
+				'data',
+				'type',
+			])}`;
 			const response = await request(reqUrl);
 			const audioPaths = [];
 			if (response.data.length > 1) {
@@ -208,12 +214,13 @@ export default async (filesets, bookId, chapter) => {
 			const reqUrl = `${process.env.BASE_API_ROUTE}/bibles/filesets/${get(
 				partialNtAudio,
 				[0, 'id'],
-			)}?asset_id=${
-				process.env.DBP_BUCKET_ID
-			}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(
-				partialNtAudio,
-				[0, 'data', 'type'],
-			)}`;
+			)}?asset_id=${process.env.DBP_BUCKET_ID}&key=${
+				process.env.DBP_API_KEY
+			}&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(partialNtAudio, [
+				0,
+				'data',
+				'type',
+			])}`;
 			const response = await request(reqUrl);
 			const audioPaths = [];
 			if (response.data.length > 1) {
@@ -241,9 +248,9 @@ export default async (filesets, bookId, chapter) => {
 			const reqUrl = `${process.env.BASE_API_ROUTE}/bibles/filesets/${get(
 				partialNtOtAudio,
 				[0, 'id'],
-			)}?asset_id=${
-				process.env.DBP_BUCKET_ID
-			}&key=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(
+			)}?asset_id=${process.env.DBP_BUCKET_ID}&key=${
+				process.env.DBP_API_KEY
+			}&v=4&book_id=${bookId}&chapter_id=${chapter}&type=${get(
 				partialNtOtAudio,
 				[0, 'data', 'type'],
 			)}`;

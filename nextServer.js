@@ -94,31 +94,33 @@ app
 				// Get encrypted string of user data
 				const encryptedData = req.query.code;
 				// const iv = new Buffer.alloc(16);
-				const date = new Date();
-				const day = date.getDate().toString();
-				const month = (date.getMonth() + 1).toString();
-				const dateString = `${date
-					.getFullYear()
-					.toString()
-					.slice(2)}-${month.length === 1 ? `0${month}` : month}-${
-					day.length === 1 ? `0${day}` : day
-				}`;
+				// const date = new Date();
+				// const day = date.getDate().toString();
+				// const month = (date.getMonth() + 1).toString();
+				// const dateString = `${date
+				// 	.getFullYear()
+				// 	.toString()
+				// 	.slice(2)}-${month.length === 1 ? `0${month}` : month}-${
+				// 	day.length === 1 ? `0${day}` : day
+				// }`;
 				// Decrypt user data
-				const secret = crypto
-					.createHash('sha256')
-					.update(`${dateString}-${process.env.NOTES_PROJECT_ID}`, 'utf8')
-					.digest('hex')
-					.slice(0, 32);
-				console.log('secret', secret);
+				// const secret = crypto
+				// 	.createHash('sha256')
+				// 	.update(`${dateString}-${process.env.NOTES_PROJECT_ID}`, 'utf8')
+				// 	.digest('hex')
+				// 	.slice(0, 32);
+				// console.log('secret', secret);
 				// Might need an initialization vector
-				const decipher = crypto.createDecipher('aes-128-cbc', secret);
+				// const decipher = crypto.createDecipher('aes-256-cbc', secret);
 				// May need to turn encryptedData into a buffer
-				console.log('encrypted', encryptedData);
+				// console.log('encrypted', encryptedData);
 
-				let userString = decipher.update(encryptedData, 'base64', 'ascii');
+				// let userString = decipher.update(encryptedData, 'base64', 'ascii');
 
-				userString += decipher.final('ascii');
-
+				// userString += decipher.final('ascii');
+				const userString = Buffer.from(encryptedData, 'base64').toString(
+					'ascii',
+				);
 				console.log('userString', userString);
 				const userObject = userString.split(',').reduce((a, c, i) => {
 					if (i === 0) {
@@ -172,13 +174,14 @@ app
 				//     cookie.bible_is_ref_verse ? `/${cookie.bible_is_ref_verse}` : ''
 				//   }`,
 				// );
-				res.redirect(
-					`/bible/${cookie.bible_is_ref_bible_id ||
-						'engesv'}/${cookie.bible_is_ref_book_id ||
-						'mat'}/${cookie.bible_is_ref_chapter || '1'}${
-						cookie.bible_is_ref_verse ? `/${cookie.bible_is_ref_verse}` : ''
-					}`,
-				);
+				// res.redirect(
+				//   `/bible/${cookie.bible_is_ref_bible_id ||
+				//     'engesv'}/${cookie.bible_is_ref_book_id ||
+				//     'mat'}/${cookie.bible_is_ref_chapter || '1'}${
+				//     cookie.bible_is_ref_verse ? `/${cookie.bible_is_ref_verse}` : ''
+				//   }`,
+				// );
+				res.redirect('/bible/engesv/mat/1');
 			} else {
 				res.redirect('/bible/engesv/mat/1');
 			}
@@ -196,7 +199,7 @@ app
 
 		server.get('/status', async (req, res) => {
 			const ok = await fetch(
-				`${process.env.BASE_API_ROUTE}/bibles?v=4&bucket_id=${
+				`${process.env.BASE_API_ROUTE}/bibles?v=4&asset_id=${
 					process.env.DBP_BUCKET_ID
 				}&key=${process.env.DBP_API_KEY}&language_code=6414`,
 			)

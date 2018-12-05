@@ -32,31 +32,24 @@ export function* getChapterForNote({ note }) {
 		typeof note.get === 'function' ? note.get('bible_id') : note.bible_id;
 	const bookId =
 		typeof note.get === 'function' ? note.get('book_id') : note.book_id;
-	// Need to not use the bible id here
-	// console.log('bibleId', bibleId);
-	// console.log('note', note);
-	// const reqUrl = `${process.env.BASE_API_ROUTE}/bibles/${bibleId}/${bookId}/${chapter}?asset_id=${process.env.DBP_BUCKET_ID}&key=${process.env.DBP_API_KEY}&v=4&book_id=${bookId}&chapter_id=${chapter}`;
-	// TODO: The bibleId here is undefined a lot of the time
+	// TODO: The bibleId here is undefined a lot of the time, find where it gets passed in and fix the issue
 	const bibleUrl = `${process.env.BASE_API_ROUTE}/bibles/${bibleId}?asset_id=${
 		process.env.DBP_BUCKET_ID
 	}&key=${process.env.DBP_API_KEY}&v=4`;
 	// Need to get the bible filesets
 	try {
 		const response = yield call(request, bibleUrl);
-		// console.log('bibles response', response.data.filesets);
 		const filesets = response.data.filesets[process.env.DBP_BUCKET_ID].filter(
-			(f) =>
-				f.type !== 'app' &&
-				(f.type === 'text_plain' || f.type === 'text_format'),
+			(fileset) =>
+				fileset.type !== 'app' &&
+				(fileset.type === 'text_plain' || fileset.type === 'text_format'),
 		);
 		const hasText = !!filesets.length;
-		const plain = filesets.find((f) => f.type === 'text_plain');
+		const plain = filesets.find((fileset) => fileset.type === 'text_plain');
 		let text = [];
 
 		if (hasText) {
-			// console.log('hasText', hasText);
 			if (plain) {
-				// console.log('has plain', plain);
 				const res = yield call(
 					request,
 					`${process.env.BASE_API_ROUTE}/bibles/filesets/${
@@ -65,38 +58,17 @@ export function* getChapterForNote({ note }) {
 						process.env.DBP_API_KEY
 					}&v=4&book_id=${bookId}&chapter_id=${chapter}`,
 				);
-				// console.log('res', res);
 
 				text = res.data;
-			} else {
-				// Todo: Implement a version for getting the formatted text and parsing it
-				// const format = filesets.find((f) => f.set_type_code === 'text_format');
-				// const res = yield call(request, `${process.env.BASE_API_ROUTE}/bibles/filesets/${format.id}?asset_id=${process.env.DBP_BUCKET_ID}&key=${process.env.DBP_API_KEY}&v=4&book_id=${bookId}&chapter_id=${chapter}`);
-				//
-				// const format = filesets.find((f) => f.type === 'text_format');
-				// // text = res.data;
-				// const res = yield call(
-				// 	request,
-				// 	`${process.env.BASE_API_ROUTE}/bibles/filesets/${format.id}?asset_id=${
-				// 		process.env.DBP_BUCKET_ID
-				// 	}&key=${
-				// 		process.env.DBP_API_KEY
-				// 	}&v=4&book_id=${bookId}&chapter_id=${chapter}&type=text_format`,
-				// );
-				// const path = res.data && res.data[0] ? res.data[0].path : undefined;
-				// const formattedText = yield path
-				// 	? fetch(path).then((b) => b.text())
-				// 	: '';
-				// console.log('formattedText', formattedText);
 			}
 		}
-		// console.log(response);
 
 		yield put({
 			type: LOAD_CHAPTER_FOR_NOTE,
 			text: text.filter(
-				(v) =>
-					v.verse_start <= note.verse_end && v.verse_start >= note.verse_start,
+				(verse) =>
+					verse.verse_start <= note.verse_end &&
+					verse.verse_start >= note.verse_start,
 			),
 		});
 	} catch (err) {
@@ -123,37 +95,20 @@ export function* updateHighlight({
 	}&v=4&pretty&project_id=${
 		process.env.NOTES_PROJECT_ID
 	}&highlighted_color=${color}`;
-	// const formData = new FormData();
-	// Api does not seem to handle the updating of the note when using form-data - currently the api wants x-www-form-urlencoded
-	// Object.entries(data).forEach((item) => formData.set(item[0], item[1]));
-	// const urlWithData = Object.entries(data).reduce((acc, item) => acc.concat('&', item[0], '=', item[1]), requestUrl);
-	// formData.append('project_id', process.env.NOTES_PROJECT_ID);
-
 	const options = {
-		// body: formData,
 		method: 'PUT',
 	};
-	// console.log('updating note with', data, '\nfor this id', userId);
+
 	try {
 		const response = yield call(request, requestUrl, options);
-		// console.log('update user note response', response);
+
 		if (response.success) {
-			// yield put({ type: ADD_NOTE_SUCCESS, response });
-			// console.log('Response', response);
-			// console.log(data);
-			// console.log(noteId);
 			yield fork(getHighlights, { userId, bible, book, chapter });
 			yield fork(getUserHighlights, { userId, params: { limit, page } });
 		}
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error(err); // eslint-disable-line no-console
-		} else if (process.env.NODE_ENV === 'production') {
-			// const options = {
-			// 	header: 'POST',
-			// 	body: formData,
-			// };
-			// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
 		}
 	}
 }
@@ -166,11 +121,10 @@ export function* getUserHighlights({ userId, params }) {
 	}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}&limit=${
 		params.limit
 	}&page=${params.page}`;
-	// const updatedUrl = params.reduce((a, c) => a.concat(c), requestUrl);
+
 	try {
 		const response = yield call(request, requestUrl);
-		// console.log('highlight response', response);
-		// console.log('update user note response', response);
+
 		if (response.data && response.meta) {
 			yield put({
 				type: LOAD_USER_HIGHLIGHTS,
@@ -193,19 +147,17 @@ export function* updateNote({ userId, data, noteId }) {
 	}/users/${userId}/notes/${noteId}?key=${
 		process.env.DBP_API_KEY
 	}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}`;
-	// const formData = new FormData();
-	// Api does not seem to handle the updating of the note when using form-data - currently the api wants x-www-form-urlencoded
-	// Object.entries(data).forEach((item) => formData.set(item[0], item[1]));
 	const urlWithData = Object.entries(data).reduce(
 		(acc, item) => acc.concat('&', item[0], '=', item[1]),
 		requestUrl,
 	);
-
 	const options = {
 		method: 'PUT',
 	};
+
 	try {
 		const response = yield call(request, urlWithData, options);
+
 		if (response.success) {
 			yield put({ type: ADD_NOTE_SUCCESS, response });
 		}
@@ -230,7 +182,6 @@ export function* deleteNote({
 	chapter,
 	isBookmark,
 }) {
-	// console.log('deleting note or in delete note');
 	if (isBookmark) {
 		const requestUrl = `${
 			process.env.BASE_API_ROUTE
@@ -240,7 +191,7 @@ export function* deleteNote({
 		const options = {
 			method: 'DELETE',
 		};
-		// console.log('deleting note for userid and noteid', userId, noteId);
+
 		try {
 			// Do not need the response since it will throw an error if the request was unsuccessful
 			yield call(request, requestUrl, options);
@@ -277,7 +228,7 @@ export function* deleteNote({
 		const options = {
 			method: 'DELETE',
 		};
-		// console.log('deleting note for userid and noteid', userId, noteId);
+
 		try {
 			const response = yield call(request, requestUrl, options);
 
@@ -298,7 +249,6 @@ export function* deleteNote({
 						},
 					});
 				}
-				// console.log('successfully deleted note!', response);
 				yield fork(getNotesForNotebook, {
 					userId,
 					params: { limit: pageSize, page: activePage },
