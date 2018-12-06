@@ -472,7 +472,7 @@ AppContainer.getInitialProps = async (context) => {
 	});
 
 	const singleBibleJson = singleBibleRes;
-	const bible = singleBibleJson.data;
+	const bible = singleBibleJson.data || {};
 	// Acceptable fileset types that the site is capable of ingesting and displaying
 	const setTypes = {
 		audio_drama: true,
@@ -482,7 +482,7 @@ AppContainer.getInitialProps = async (context) => {
 		video_stream: true,
 	};
 	const activeFilesetId =
-		bible.filesets && bible.filesets[process.env.DBP_BUCKET_ID]
+		bible && bible.filesets && bible.filesets[process.env.DBP_BUCKET_ID]
 			? bible.filesets[process.env.DBP_BUCKET_ID]
 					.filter(
 						(f) =>
@@ -498,6 +498,7 @@ AppContainer.getInitialProps = async (context) => {
 	let filesets = [];
 
 	if (
+		bible &&
 		bible.filesets &&
 		bible.filesets[process.env.DBP_BUCKET_ID] &&
 		bible.filesets['dbp-vid']
@@ -515,7 +516,11 @@ AppContainer.getInitialProps = async (context) => {
 					bible.filesets[process.env.DBP_BUCKET_ID].length > 1) ||
 				bible.filesets[process.env.DBP_BUCKET_ID].length === 1,
 		);
-	} else if (bible.filesets && bible.filesets[process.env.DBP_BUCKET_ID]) {
+	} else if (
+		bible &&
+		bible.filesets &&
+		bible.filesets[process.env.DBP_BUCKET_ID]
+	) {
 		filesets = bible.filesets[process.env.DBP_BUCKET_ID].filter(
 			(file) =>
 				(!file.id.includes('GID') &&
@@ -665,7 +670,7 @@ AppContainer.getInitialProps = async (context) => {
 	const chapterText = initData.plainText;
 
 	let activeBook = { chapters: [] };
-	const bookData = bookMetaData.length ? bookMetaData : bible.books;
+	const bookData = bookMetaData.length || !bible ? bookMetaData : bible.books;
 
 	if (bookData) {
 		const urlBook = bookData.find(
