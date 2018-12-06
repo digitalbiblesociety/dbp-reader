@@ -245,6 +245,8 @@ AppContainer.getInitialProps = async (context) => {
 		nickname: userName,
 	};
 
+	console.log('user profile', userProfile);
+
 	let hasVideo = false;
 	let isFromServer = true;
 	let userSettings = {

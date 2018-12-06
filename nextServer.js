@@ -104,8 +104,9 @@ app
 			}
 		});
 
-		server.get('/clean-the-cash', () => {
+		server.get('/clean-the-cash', (req, res) => {
 			ssrCache.reset();
+			res.send('Cleaned the cache');
 		});
 
 		server.get('/oauth', (req, res) => {
