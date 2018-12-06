@@ -9,7 +9,7 @@ const next = require('next');
 const compression = require('compression');
 const LRUCache = require('lru-cache');
 const fetch = require('isomorphic-fetch');
-const crypto = require('crypto');
+// const crypto = require('crypto');
 const port = process.env.PORT || 3000;
 const dev = process.env.NODE_ENV === 'development';
 const manifestJson = require('./static/manifest');
@@ -26,18 +26,18 @@ function getCacheKey(req) {
 	return `${req.url}`;
 }
 
-function parseServerCookie(cookie) {
-	return cookie
-		.split('; ')
-		.filter((c) => c.includes('bible_is_ref'))
-		.reduce((a, c) => {
-			const ca = c.split('=');
-			return {
-				...a,
-				[ca[0]]: ca[1],
-			};
-		}, {});
-}
+// function parseServerCookie(cookie) {
+// 	return cookie
+// 		.split('; ')
+// 		.filter((c) => c.includes('bible_is_ref'))
+// 		.reduce((a, c) => {
+// 			const ca = c.split('=');
+// 			return {
+// 				...a,
+// 				[ca[0]]: ca[1],
+// 			};
+// 		}, {});
+// }
 
 async function renderAndCache(req, res, pagePath, queryParams) {
 	if (dev) {
@@ -79,112 +79,43 @@ app
 		// TODO: Ask api team for the redirect for oauth be to /oauth instead of just /
 		// Then I can move all of the extra logic out of this route which is really gross
 		server.get('/', async (req, res) => {
-			let cookie;
-
-			if (req.headers.cookie) {
-				cookie = parseServerCookie(req.headers.cookie);
-			}
 			if (process.env.IS_DEV) {
 				console.log('logs for development testing');
 				console.log(req.query.code);
 			}
 
-			if (req.query.code && req.headers.cookie) {
+			if (req.query.code) {
 				// TODO: Put decryption process into try catch for safety
 				// Get encrypted string of user data
 				const encryptedData = req.query.code;
-				// const iv = new Buffer.alloc(16);
-				// const date = new Date();
-				// const day = date.getDate().toString();
-				// const month = (date.getMonth() + 1).toString();
-				// const dateString = `${date
-				// 	.getFullYear()
-				// 	.toString()
-				// 	.slice(2)}-${month.length === 1 ? `0${month}` : month}-${
-				// 	day.length === 1 ? `0${day}` : day
-				// }`;
-				// Decrypt user data
-				// const secret = crypto
-				// 	.createHash('sha256')
-				// 	.update(`${dateString}-${process.env.NOTES_PROJECT_ID}`, 'utf8')
-				// 	.digest('hex')
-				// 	.slice(0, 32);
-				// console.log('secret', secret);
-				// Might need an initialization vector
-				// const decipher = crypto.createDecipher('aes-256-cbc', secret);
-				// May need to turn encryptedData into a buffer
-				// console.log('encrypted', encryptedData);
-
-				// let userString = decipher.update(encryptedData, 'base64', 'ascii');
-
-				// userString += decipher.final('ascii');
 				const userString = Buffer.from(encryptedData, 'base64').toString(
 					'ascii',
 				);
 				console.log('userString', userString);
-				const userObject = userString.split(',').reduce((a, c, i) => {
-					if (i === 0) {
-						return { ...a, userId: c };
-					} else if (i === 1) {
-						return { ...a, email: c };
-					} else if (i === 2) {
-						return { ...a, name: c };
-					}
-					return a;
-				}, {});
-				console.log('user object', userObject);
-				// Facebook sent a id code
-				// Only save code for 1 minute, that is just enough time to get the user
-				const mins = 1000 * 60;
-				// TODO: May not need to set this cookie since I have the code here
-				// I think I only need this if I do yet another redirect/api call, but
-				// I don't want to do that
-				res.setHeader('SET-COOKIE', [
-					`bible_is_cb_code=${req.query.code}; expires=${new Date(
-						new Date().getTime() + mins,
-					).toUTCString()}; path=/`,
-				]);
-				// TODO: Determine exactly how the api returns here to only use one of the if statements
-				// if (userObject) {
-				// 	res.setHeader('SET-COOKIE', [
-				// 		`bible_is_user_id=${userObject.id}; path=/`,
-				// 	]);
-				// 	res.setHeader('SET-COOKIE', [
-				// 		`bible_is_user_authenticated=${true}; path=/`,
-				// 	]);
-				// 	res.setHeader('SET-COOKIE', [
-				// 		`bible_is_email=${userObject.email}; path=/`,
-				// 	]);
-				// 	res.setHeader('SET-COOKIE', [
-				// 		`bible_is_nickname=${userObject.name}; path=/`,
-				// 	]);
-				// 	res.setHeader('SET-COOKIE', [
-				// 		`bible_is_name=${userObject.name}; path=/`,
-				// 	]);
-				// }
-			}
-			// TODO: Figure out a way to fix this for languages other than english
-			// Probably need to use a cookie to grab the last known location and send the user there
-			if (cookie) {
-				// console.log(
-				//   'cookie redirect',
-				//   `/bible/${cookie.bible_is_ref_bible_id ||
-				//     'engesv'}/${cookie.bible_is_ref_book_id ||
-				//     'mat'}/${cookie.bible_is_ref_chapter || '1'}${
-				//     cookie.bible_is_ref_verse ? `/${cookie.bible_is_ref_verse}` : ''
-				//   }`,
-				// );
-				// res.redirect(
-				//   `/bible/${cookie.bible_is_ref_bible_id ||
-				//     'engesv'}/${cookie.bible_is_ref_book_id ||
-				//     'mat'}/${cookie.bible_is_ref_chapter || '1'}${
-				//     cookie.bible_is_ref_verse ? `/${cookie.bible_is_ref_verse}` : ''
-				//   }`,
-				// );
-				res.redirect('/bible/engesv/mat/1');
+				const userArray = userString.split(',');
+				console.log('user array', userArray);
+				res.redirect(
+					`/bible/engesv/mat/1?user_id=${userArray[0]}&user_email=${
+						userArray[1]
+					}&user_name=${userArray[2]}`,
+				);
 			} else {
 				res.redirect('/bible/engesv/mat/1');
 			}
+		});
+
+		server.get('/oauth', (req, res) => {
+			const userString = Buffer.from(req.query.code, 'base64').toString(
+				'ascii',
+			);
+			console.log('userString', userString);
+			const userArray = userString.split(',');
+			console.log('user array', userArray);
+			res.redirect(
+				`/bible/engesv/mat/1?user_id=${userArray[0]}&user_email=${
+					userArray[1]
+				}&user_name=${userArray[2]}`,
+			);
 		});
 
 		const sitemapOptions = {
@@ -257,6 +188,13 @@ app
 				bookId: req.params.bookId,
 				chapter: req.params.chapter,
 			};
+			const userParams = {};
+
+			if (req.query.user_id && req.query.user_email && req.query.user_name) {
+				userParams.userId = req.query.user_id;
+				userParams.userEmail = req.query.user_email;
+				userParams.userName = req.query.user_name;
+			}
 
 			if (
 				queryParams.verse !== 'style.css' &&
@@ -264,7 +202,7 @@ app
 				!queryParams.verse &&
 				!isNaN(parseInt(req.params.chapter, 10))
 			) {
-				renderAndCache(req, res, actualPage, queryParams);
+				renderAndCache(req, res, actualPage, { ...queryParams, ...userParams });
 			} else {
 				nextP();
 			}

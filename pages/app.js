@@ -235,8 +235,16 @@ AppContainer.getInitialProps = async (context) => {
 		bibleId = 'ENGESV',
 		verse,
 		token,
+		userId = '',
+		userEmail = '',
+		userName = '',
 	} = context.query;
-	const userProfile = {};
+	const userProfile = {
+		email: userEmail,
+		name: userName,
+		nickname: userName,
+	};
+
 	let hasVideo = false;
 	let isFromServer = true;
 	let userSettings = {
@@ -277,7 +285,6 @@ AppContainer.getInitialProps = async (context) => {
 		},
 		autoPlayEnabled: false,
 	};
-	let userId = '';
 	let isAuthenticated = false;
 	let initialVolume = 1;
 	let initialPlaybackRate = 1;
@@ -294,8 +301,9 @@ AppContainer.getInitialProps = async (context) => {
 		const cookieData = parseCookie(req.headers.cookie);
 
 		// Authentication Information
-		userId = cookieData.bible_is_user_id || '';
-		isAuthenticated = !!cookieData.bible_is_user_id;
+		// userId = cookieData.bible_is_user_id || '';
+		// isAuthenticated = !!cookieData.bible_is_user_id;
+		isAuthenticated = !!userId;
 
 		// Audio Player
 		initialVolume =
@@ -303,9 +311,10 @@ AppContainer.getInitialProps = async (context) => {
 		initialPlaybackRate = cookieData.bible_is_playbackrate || 1;
 
 		// User Profile
-		userProfile.email = cookieData.bible_is_email || '';
-		userProfile.nickname = cookieData.bible_is_nickname || '';
-		userProfile.name = cookieData.bible_is_name || '';
+		userProfile.email = userEmail;
+		userProfile.nickname = userName;
+		userProfile.name = userName;
+		// Avatar is a placeholder for when we actually build the rest of that functionality
 		userProfile.avatar = '';
 
 		// User Settings
@@ -384,8 +393,9 @@ AppContainer.getInitialProps = async (context) => {
 		const cookieData = parseCookie(document.cookie);
 
 		// Authentication Information
-		userId = cookieData.bible_is_user_id || '';
-		isAuthenticated = !!cookieData.bible_is_user_id;
+		// userId = cookieData.bible_is_user_id || '';
+		// isAuthenticated = !!cookieData.bible_is_user_id;
+		isAuthenticated = !!userId;
 
 		// Audio Player
 		initialVolume =
@@ -393,9 +403,10 @@ AppContainer.getInitialProps = async (context) => {
 		initialPlaybackRate = cookieData.bible_is_playbackrate || 1;
 
 		// User Profile
-		userProfile.email = cookieData.bible_is_email || '';
-		userProfile.nickname = cookieData.bible_is_nickname || '';
-		userProfile.name = cookieData.bible_is_name || '';
+		userProfile.email = userEmail;
+		userProfile.nickname = userName;
+		userProfile.name = userName;
+		// Avatar is a placeholder for when we actually build the rest of that functionality
 		userProfile.avatar = '';
 
 		// User Settings
