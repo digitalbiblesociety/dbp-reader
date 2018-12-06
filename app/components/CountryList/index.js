@@ -48,7 +48,7 @@ class CountryList extends React.PureComponent {
 
 		const renderARow = ({ index, style, key }) => {
 			const country = filteredCountries.get(index);
-
+			// console.log('Rendering row', country.get('name'));
 			return (
 				<div
 					className="country-name"
@@ -100,6 +100,10 @@ class CountryList extends React.PureComponent {
 
 			return activeIndex;
 		};
+		// console.log(
+		//   'filtered ----------------------------------------\n\n',
+		//   filteredCountries,
+		// );
 
 		return filteredCountries.size ? (
 			<List
@@ -108,7 +112,7 @@ class CountryList extends React.PureComponent {
 				height={height}
 				rowRenderer={renderARow}
 				rowCount={filteredCountries.size}
-				overscanRowCount={2}
+				overscanRowCount={0}
 				rowHeight={32}
 				scrollToIndex={getActiveIndex()}
 				width={width}
@@ -217,49 +221,6 @@ class CountryList extends React.PureComponent {
 		document && document.getElementById('list-element')
 			? document.getElementById('list-element').scrollTop
 			: 0;
-	// handleListTouch = (e) => {
-	// 	console.log('touch started');
-	//
-	// 	// this.container.addEventListener('touchend', this.handleTouchEnd);
-	// 	// this.container.addEventListener('touchcancel', this.handleTouchEnd);
-	// 	// this.container.addEventListener('touchmove', this.handleTouchMove);
-	// 	const touches = e.targetTouches;
-	// 	let list = {};
-	// 	if (document) {
-	// 		list = document.getElementById('list-element');
-	// 	}
-	//
-	// 	if (list.scrollTop === 0) {
-	// 		this.setState({ listIsAtTop: true }, function startListState() {
-	// 			this.container.addEventListener('touchend', this.handleTouchEnd);
-	// 			this.container.addEventListener('touchcancel', this.handleTouchEnd);
-	// 			this.container.addEventListener('touchmove', this.handleTouchMove);
-	// 		});
-	// 	} else {
-	// 		this.setState({ listIsAtTop: false }, function stopListState() {
-	// 			this.container.removeEventListener('touchend', this.handleTouchEnd);
-	// 			this.container.removeEventListener('touchcancel', this.handleTouchEnd);
-	// 			this.container.removeEventListener('touchmove', this.handleTouchMove);
-	// 		});
-	// 	}
-	// 	console.log('this.container', this.container);
-	//
-	// 	console.log('list', list);
-	//
-	// 	console.log('touches', touches);
-	// 	console.log('this.container.scrollTop', this.container.scrollTop);
-	// 	console.log('this.container.scrollHeight', this.container.scrollHeight);
-	// }
-	//
-	// handleTouchEnd = () => {
-	// 	this.container.removeEventListener('touchend', this.handleTouchEnd);
-	// 	this.container.removeEventListener('touchcancel', this.handleTouchEnd);
-	// 	this.container.removeEventListener('touchmove', this.handleTouchMove);
-	// }
-	//
-	// handleTouchMove = (e) => {
-	// 	console.log('e.targetTouches in move', e.targetTouches);
-	// }
 
 	filterFunction = (country, filterText) => {
 		const lowerCaseText = filterText.toLowerCase();

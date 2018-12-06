@@ -17,7 +17,7 @@ const app = next({ dev });
 const handle = app.getRequestHandler();
 
 const ssrCache = new LRUCache({
-	max: 100,
+	max: 1000,
 	maxAge:
 		process.env.NODE_ENV === 'production' ? 1000 * 60 * 60 * 24 : 1000 * 60 * 5,
 });
@@ -102,6 +102,10 @@ app
 			} else {
 				res.redirect('/bible/engesv/mat/1');
 			}
+		});
+
+		server.get('/clean-the-cash', () => {
+			ssrCache.reset();
 		});
 
 		server.get('/oauth', (req, res) => {
@@ -191,6 +195,7 @@ app
 			const userParams = {};
 
 			if (req.query.user_id && req.query.user_email && req.query.user_name) {
+				console.log('Request query', JSON.stringify(req.query));
 				userParams.userId = req.query.user_id;
 				userParams.userEmail = req.query.user_email;
 				userParams.userName = req.query.user_name;

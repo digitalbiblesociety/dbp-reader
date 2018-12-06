@@ -507,6 +507,7 @@ AppContainer.getInitialProps = async (context) => {
 	// Filter out gideon bibles because the api will never be fixed in this area... -_- :( :'( ;'(
 	// Todo: Revisit this to see if it is still needed!
 	let filesets = [];
+	// console.log('bible', bible);
 
 	if (
 		bible &&
