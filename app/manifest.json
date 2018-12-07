@@ -5,7 +5,7 @@
 	"background_color": "#fafafa",
 	"display": "standalone",
 	"Scope": "/",
-	"start_url": "https://devis.bible.build/bible/engesv/mat/1",
+	"start_url": "https://listen.dbp4.org/bible/engesv/mat/1",
 	"icons": [
 		{
 			"src": "/images/app-icons/icon-72x72.png",
