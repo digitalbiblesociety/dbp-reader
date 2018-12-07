@@ -46,6 +46,19 @@ export default class MyDocument extends Document {
 		return (
 			<html>
 				<Head>
+					{!process.env.IS_DEV && !process.env.NODE_ENV === 'development' ? (
+						<script
+							type="text/javascript"
+							dangerouslySetInnerHTML={{
+								__html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push(
+									{'gtm.start': new Date().getTime(),event:'gtm.js'}
+									);var f=d.getElementsByTagName(s)[0],
+									j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+									'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+									})(window,document,'script','dataLayer','GTM-WG2QTJC');`,
+							}}
+						/>
+					) : null}
 					<script
 						src="https://cdn.polyfill.io/v2/polyfill.min.js"
 						noModule="nomodule"
@@ -193,8 +206,6 @@ export default class MyDocument extends Document {
 					/>
 				</Head>
 				<body>
-					<Main />
-					<NextScript />
 					<noscript>
 						{process.env.NODE_ENV === 'production' ? (
 							<iframe
@@ -205,6 +216,8 @@ export default class MyDocument extends Document {
 							/>
 						) : null}
 					</noscript>
+					<Main />
+					<NextScript />
 				</body>
 			</html>
 		);
