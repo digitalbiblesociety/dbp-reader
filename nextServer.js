@@ -79,10 +79,10 @@ app
 		// TODO: Ask api team for the redirect for oauth be to /oauth instead of just /
 		// Then I can move all of the extra logic out of this route which is really gross
 		server.get('/', async (req, res) => {
-			if (process.env.IS_DEV) {
-				console.log('logs for development testing');
-				console.log(req.query.code);
-			}
+			// if (process.env.IS_DEV) {
+			// 	console.log('logs for development testing');
+			// 	console.log(req.query.code);
+			// }
 
 			if (req.query.code) {
 				// TODO: Put decryption process into try catch for safety
@@ -91,9 +91,9 @@ app
 				const userString = Buffer.from(encryptedData, 'base64').toString(
 					'ascii',
 				);
-				console.log('userString', userString);
+				// console.log('userString', userString);
 				const userArray = userString.split(',');
-				console.log('user array', userArray);
+				// console.log('user array', userArray);
 				res.redirect(
 					`/bible/engesv/mat/1?user_id=${userArray[0]}&user_email=${
 						userArray[1]
@@ -113,9 +113,9 @@ app
 			const userString = Buffer.from(req.query.code, 'base64').toString(
 				'ascii',
 			);
-			console.log('userString', userString);
+			// console.log('userString', userString);
 			const userArray = userString.split(',');
-			console.log('user array', userArray);
+			// console.log('user array', userArray);
 			res.redirect(
 				`/bible/engesv/mat/1?user_id=${userArray[0]}&user_email=${
 					userArray[1]
@@ -196,10 +196,13 @@ app
 			const userParams = {};
 
 			if (req.query.user_id && req.query.user_email && req.query.user_name) {
-				console.log('Request query', JSON.stringify(req.query));
+				// console.log('Request query', JSON.stringify(req.query));
 				userParams.userId = req.query.user_id;
 				userParams.userEmail = req.query.user_email;
 				userParams.userName = req.query.user_name;
+
+				// Remove all the query data so it doesn't appear in the url
+				req.query = {};
 			}
 
 			if (

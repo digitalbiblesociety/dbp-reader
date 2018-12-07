@@ -245,7 +245,7 @@ AppContainer.getInitialProps = async (context) => {
 		nickname: userName,
 	};
 
-	console.log('user profile', userProfile);
+	// console.log('user profile', userProfile);
 
 	let hasVideo = false;
 	let isFromServer = true;
@@ -301,23 +301,51 @@ AppContainer.getInitialProps = async (context) => {
 		// 	'\n',
 		// );
 		const cookieData = parseCookie(req.headers.cookie);
-
 		// Authentication Information
 		// userId = cookieData.bible_is_user_id || '';
 		// isAuthenticated = !!cookieData.bible_is_user_id;
-		isAuthenticated = !!userId;
+		// isAuthenticated = !!userId;
+
+		// User Profile
+		// userProfile.email = userEmail;
+		// userProfile.nickname = userName;
+		// userProfile.name = userName;
+		// // Avatar is a placeholder for when we actually build the rest of that functionality
+		// userProfile.avatar = '';
+		if (userId) {
+			// setUserInfo({ userId, userEmail, userName });
+			// Authentication Information
+			// userId = cookieData.bible_is_user_id || '';
+			// isAuthenticated = !!cookieData.bible_is_user_id;
+			isAuthenticated = !!userId;
+			// User Profile
+			userProfile.email = userEmail;
+			userProfile.nickname = userName;
+			userProfile.name = userName;
+			// Avatar is a placeholder for when we actually build the rest of that functionality
+			userProfile.avatar = '';
+		} else if (!userId) {
+			// Authentication Information
+			// userId = cookieData.bible_is_user_id || '';
+			// isAuthenticated = !!cookieData.bible_is_user_id;
+			// isAuthenticated = !!localStorage.getItem('bible_is_user_id') || '';
+			// // User Profile
+			// userProfile.email = localStorage.getItem('bible_is_user_email') || '';
+			// userProfile.nickname = localStorage.getItem('bible_is_user_name') || '';
+			// userProfile.name = localStorage.getItem('bible_is_user_nickname');
+			isAuthenticated = !!cookieData.user_id || '';
+			// User Profile
+			userProfile.email = cookieData.bible_is_email || '';
+			userProfile.nickname = cookieData.bible_is_name || '';
+			userProfile.name = cookieData.bible_is_name;
+			// Avatar is a placeholder for when we actually build the rest of that functionality
+			userProfile.avatar = '';
+		}
 
 		// Audio Player
 		initialVolume =
 			cookieData.bible_is_volume === 0 ? 0 : cookieData.bible_is_volume || 1;
 		initialPlaybackRate = cookieData.bible_is_playbackrate || 1;
-
-		// User Profile
-		userProfile.email = userEmail;
-		userProfile.nickname = userName;
-		userProfile.name = userName;
-		// Avatar is a placeholder for when we actually build the rest of that functionality
-		userProfile.avatar = '';
 
 		// User Settings
 		userSettings = {
@@ -394,23 +422,40 @@ AppContainer.getInitialProps = async (context) => {
 		// );
 		const cookieData = parseCookie(document.cookie);
 
-		// Authentication Information
-		// userId = cookieData.bible_is_user_id || '';
-		// isAuthenticated = !!cookieData.bible_is_user_id;
-		isAuthenticated = !!userId;
+		if (userId) {
+			setUserInfo({ userId, userEmail, userName });
+			// Authentication Information
+			// userId = cookieData.bible_is_user_id || '';
+			// isAuthenticated = !!cookieData.bible_is_user_id;
+			isAuthenticated = !!userId;
+			// User Profile
+			userProfile.email = userEmail;
+			userProfile.nickname = userName;
+			userProfile.name = userName;
+			// Avatar is a placeholder for when we actually build the rest of that functionality
+			userProfile.avatar = '';
+		} else if (!userId) {
+			// Authentication Information
+			// userId = cookieData.bible_is_user_id || '';
+			// isAuthenticated = !!cookieData.bible_is_user_id;
+			// isAuthenticated = !!localStorage.getItem('bible_is_user_id') || '';
+			// // User Profile
+			// userProfile.email = localStorage.getItem('bible_is_user_email') || '';
+			// userProfile.nickname = localStorage.getItem('bible_is_user_name') || '';
+			// userProfile.name = localStorage.getItem('bible_is_user_nickname');
+			isAuthenticated = !!cookieData.user_id || '';
+			// User Profile
+			userProfile.email = cookieData.bible_is_email || '';
+			userProfile.nickname = cookieData.bible_is_name || '';
+			userProfile.name = cookieData.bible_is_name;
+			// Avatar is a placeholder for when we actually build the rest of that functionality
+			userProfile.avatar = '';
+		}
 
 		// Audio Player
 		initialVolume =
 			cookieData.bible_is_volume === 0 ? 0 : cookieData.bible_is_volume || 1;
 		initialPlaybackRate = cookieData.bible_is_playbackrate || 1;
-
-		// User Profile
-		userProfile.email = userEmail;
-		userProfile.nickname = userName;
-		userProfile.name = userName;
-		// Avatar is a placeholder for when we actually build the rest of that functionality
-		userProfile.avatar = '';
-
 		// User Settings
 		userSettings = {
 			activeTheme: cookieData.bible_is_theme || 'red',
