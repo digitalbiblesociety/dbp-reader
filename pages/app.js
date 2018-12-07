@@ -70,30 +70,21 @@ class AppContainer extends React.Component {
 			!localStorage.getItem('bible_is_user_id')
 		) {
 			localStorage.setItem('bible_is_user_id', this.props.userProfile.userId);
-			localStorage.setItem(
-				'bible_is_user_email',
-				this.props.userProfile.userEmail,
-			);
-			localStorage.setItem(
-				'bible_is_user_name',
-				this.props.userProfile.userName,
-			);
+			localStorage.setItem('bible_is_user_email', this.props.userProfile.email);
+			localStorage.setItem('bible_is_user_name', this.props.userProfile.name);
 			localStorage.setItem(
 				'bible_is_user_nickname',
-				this.props.userProfile.userName,
+				this.props.userProfile.name,
 			);
 			sessionStorage.setItem('bible_is_user_id', this.props.userProfile.userId);
 			sessionStorage.setItem(
 				'bible_is_user_email',
-				this.props.userProfile.userEmail,
+				this.props.userProfile.email,
 			);
-			sessionStorage.setItem(
-				'bible_is_user_name',
-				this.props.userProfile.userName,
-			);
+			sessionStorage.setItem('bible_is_user_name', this.props.userProfile.name);
 			sessionStorage.setItem(
 				'bible_is_user_nickname',
-				this.props.userProfile.userName,
+				this.props.userProfile.name,
 			);
 		}
 
