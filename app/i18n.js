@@ -10,21 +10,14 @@ import arLocaleData from 'react-intl/locale-data/ar';
 import thLocaleData from 'react-intl/locale-data/th';
 import ruLocaleData from 'react-intl/locale-data/ru';
 import esLocaleData from 'react-intl/locale-data/es';
-
-import { DEFAULT_LOCALE } from './containers/App/constants'; // eslint-disable-line
+import { DEFAULT_LOCALE } from './containers/LanguageProvider/constants';
 import enTranslationMessages from './translations/en.json';
 import arTranslationMessages from './translations/ar.json';
 import thTranslationMessages from './translations/th.json';
 import ruTranslationMessages from './translations/ru.json';
 import esTranslationMessages from './translations/es.json';
 
-export const appLocales = [
-	'en',
-	'ar',
-	'th',
-	'ru',
-	'es',
-];
+export const appLocales = ['en', 'ar', 'th', 'ru', 'es'];
 
 addLocaleData(enLocaleData);
 addLocaleData(arLocaleData);
@@ -33,9 +26,10 @@ addLocaleData(ruLocaleData);
 addLocaleData(esLocaleData);
 
 export const formatTranslationMessages = (locale, messages) => {
-	const defaultFormattedMessages = locale !== DEFAULT_LOCALE
-    ? formatTranslationMessages(DEFAULT_LOCALE, enTranslationMessages)
-    : {};
+	const defaultFormattedMessages =
+		locale !== DEFAULT_LOCALE
+			? formatTranslationMessages(DEFAULT_LOCALE, enTranslationMessages)
+			: {};
 	return Object.keys(messages).reduce((formattedMessages, key) => {
 		let message = messages[key];
 		if (!message && locale !== DEFAULT_LOCALE) {

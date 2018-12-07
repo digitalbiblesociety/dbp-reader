@@ -16,11 +16,7 @@ import { FormattedMessage } from 'react-intl';
 import LoadingSpinner from '../LoadingSpinner';
 import VersionListSection from '../VersionListSection';
 import messages from './messages';
-import {
-	getVersionsError,
-	selectActiveChapter,
-	selectActiveBookId,
-} from './selectors';
+import { selectActiveChapter, selectActiveBookId } from './selectors';
 
 class VersionList extends React.PureComponent {
 	// eslint-disable-line react/prefer-stateless-function
@@ -32,7 +28,7 @@ class VersionList extends React.PureComponent {
 	// }
 
 	get filteredVersionList() {
-		const { bibles, activeTextId, versionsError, filterText } = this.props;
+		const { bibles, activeTextId, filterText } = this.props;
 
 		const filteredBibles = filterText
 			? bibles.filter(this.filterFunction)
@@ -119,7 +115,7 @@ class VersionList extends React.PureComponent {
 			textOnlyComponent,
 		];
 
-		if (bibles.size === 0 || versionsError) {
+		if (bibles.size === 0) {
 			return (
 				<span className="version-item-button">
 					There was an error fetching this resource, an Admin has been notified.
@@ -157,26 +153,14 @@ class VersionList extends React.PureComponent {
 	};
 
 	handleVersionListClick = (bible, audioType) => {
-		const {
-			// setCountryListState,
-			// toggleLanguageList,
-			toggleTextSelection,
-			setActiveText,
-			// active,
-		} = this.props;
-
-		// console.log('bible in version click', bible);
+		const { toggleTextSelection, setActiveText } = this.props;
 
 		if (bible) {
 			const filesets = bible
 				.get('filesets')
 				.filter((f) => f.get('type') !== 'app');
-			// console.log('version list', filesets);
-			// console.log('audioType', audioType);
 
 			if (audioType) {
-				// console.log('filesets', filesets);
-				// console.log('filetered sets', filesets.filter((f) => (f.get('type') === audioType || f.get('type') === 'text_plain' || f.get('type') === 'text_format')));
 				setActiveText({
 					textId: bible.get('abbr'),
 					textName:
@@ -201,33 +185,19 @@ class VersionList extends React.PureComponent {
 		}
 	};
 
-	// handleChange = (e) => this.setState({ filterText: e.target.value });
-
 	render() {
-		const {
-			// activeTextName,
-			active,
-			loadingVersions,
-			versionsError,
-		} = this.props;
+		const { active, loadingVersions } = this.props;
 
-		// if (active) {
 		return (
 			<div
 				style={{ display: active ? 'block' : 'none' }}
 				className="text-selection-section"
 			>
 				<div className="version-name-list">
-					{loadingVersions && !versionsError ? (
-						<LoadingSpinner />
-					) : (
-						this.filteredVersionList
-					)}
+					{loadingVersions ? <LoadingSpinner /> : this.filteredVersionList}
 				</div>
 			</div>
 		);
-		// }
-		// return null;
 	}
 }
 
@@ -238,12 +208,10 @@ VersionList.propTypes = {
 	activeTextId: PropTypes.string,
 	filterText: PropTypes.string,
 	active: PropTypes.bool,
-	versionsError: PropTypes.bool,
 	loadingVersions: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
-	versionsError: getVersionsError(),
 	activeBookId: selectActiveBookId(),
 	activeChapter: selectActiveChapter(),
 });

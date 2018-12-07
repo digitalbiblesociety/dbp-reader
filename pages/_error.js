@@ -23,20 +23,7 @@ import configureStore from '../app/configureStore';
 export default class Error extends React.Component {
 	static getInitialProps({ res, err }) {
 		const statusCode = res ? res.statusCode : err ? err.statusCode : null; // eslint-disable-line
-		// if (res) {
-		// 	console.log('re-wrote head');
-		// 	if (req.originalUrl !== '/error') {
-		// 		res.writeHead(302, {
-		// 			Location: '/error',
-		// 		});
-		// 		res.end();
-		// 	}
-		// } else {
-		// 	console.log('redirect with Router');
-		// 	if (window.location.pathname !== '/error') {
-		// 		Router.push('/error');
-		// 	}
-		// }
+
 		return { statusCode };
 	}
 	render() {
