@@ -7,7 +7,6 @@
  */
 
 import { fromJS } from 'immutable';
-// import esvDefaultFilesets from 'utils/defaultFilesetsForESV.json';
 import { USER_LOGGED_IN, LOG_OUT } from '../Profile/constants';
 import {
 	CLOSE_VIDEO_PLAYER,
@@ -16,7 +15,6 @@ import {
 } from '../VideoPlayer/constants';
 import {
 	ACTIVE_TEXT_ID,
-	// CHANGE_VERSE,
 	LOAD_AUDIO,
 	LOAD_BOOKS,
 	LOAD_HIGHLIGHTS,
@@ -180,8 +178,15 @@ function homePageReducer(state = initialState, action) {
 		case USER_LOGGED_IN:
 			return state.set('userId', action.userId).set('userAuthenticated', true);
 		case LOG_OUT:
-			// console.log('In the logout for homepage');
-			document.cookie = 'bible_is_user_id=;path=/';
+			// document.cookie = 'bible_is_user_id=;path=/';
+			localStorage.removeItem('bible_is_user_id');
+			localStorage.removeItem('bible_is_user_email');
+			localStorage.removeItem('bible_is_user_name');
+			localStorage.removeItem('bible_is_user_nickname');
+			sessionStorage.removeItem('bible_is_user_id');
+			sessionStorage.removeItem('bible_is_user_email');
+			sessionStorage.removeItem('bible_is_user_name');
+			sessionStorage.removeItem('bible_is_user_nickname');
 			return state.set('userId', '').set('userAuthenticated', false);
 		case 'book_metadata':
 			return state.set('testaments', action.testaments);

@@ -63,27 +63,39 @@ class AppContainer extends React.Component {
 				overrideCache(url.href, url.data);
 			});
 		}
-		// Setting book, chapter, bible for page navigation I guess...
-		// localStorage.setItem('bible_is_2_book_id', this.props.match.params.bookId);
-		// localStorage.setItem('bible_is_3_chapter', this.props.match.params.chapter);
-		// localStorage.setItem(
-		// 	'bible_is_1_bible_id',
-		// 	this.props.match.params.bibleId,
-		// );
-		// sessionStorage.setItem('bible_is_audio_player_state', true);
+		// console.log('user profile', this.props.userProfile);
 
-		// Get theme data from cookie (passed from getInitialProps)
-		// if (this.props.userSettings) {
-		//   const activeTheme = this.props.userSettings.activeTheme;
-		//   const activeFontFamily = this.props.userSettings.activeFontFamily;
-		//   const activeFontSize = this.props.userSettings.activeFontSize;
-		//   const redLetter = this.props.userSettings.toggleOptions.redLetter.active;
-		//   // Apply theme data to site
-		//   toggleWordsOfJesus(redLetter);
-		//   applyTheme(activeTheme);
-		//   applyFontFamily(activeFontFamily);
-		//   applyFontSize(activeFontSize);
-		// }
+		if (
+			this.props.userProfile.userId &&
+			!localStorage.getItem('bible_is_user_id')
+		) {
+			localStorage.setItem('bible_is_user_id', this.props.userProfile.userId);
+			localStorage.setItem(
+				'bible_is_user_email',
+				this.props.userProfile.userEmail,
+			);
+			localStorage.setItem(
+				'bible_is_user_name',
+				this.props.userProfile.userName,
+			);
+			localStorage.setItem(
+				'bible_is_user_nickname',
+				this.props.userProfile.userName,
+			);
+			sessionStorage.setItem('bible_is_user_id', this.props.userProfile.userId);
+			sessionStorage.setItem(
+				'bible_is_user_email',
+				this.props.userProfile.userEmail,
+			);
+			sessionStorage.setItem(
+				'bible_is_user_name',
+				this.props.userProfile.userName,
+			);
+			sessionStorage.setItem(
+				'bible_is_user_nickname',
+				this.props.userProfile.userName,
+			);
+		}
 
 		this.props.dispatch(setChapterTextLoadingState({ state: false }));
 
@@ -235,7 +247,7 @@ AppContainer.getInitialProps = async (context) => {
 		bibleId = 'ENGESV',
 		verse,
 		token,
-		userId = '',
+		userId: reqUserId,
 		userEmail = '',
 		userName = '',
 	} = context.query;
@@ -244,6 +256,7 @@ AppContainer.getInitialProps = async (context) => {
 		name: userName,
 		nickname: userName,
 	};
+	let userId = reqUserId || '';
 
 	// console.log('user profile', userProfile);
 
@@ -322,17 +335,20 @@ AppContainer.getInitialProps = async (context) => {
 			userProfile.email = userEmail;
 			userProfile.nickname = userName;
 			userProfile.name = userName;
+			userProfile.userId = userId;
 			// Avatar is a placeholder for when we actually build the rest of that functionality
 			userProfile.avatar = '';
 		} else if (!userId) {
 			// Authentication Information
-			// userId = cookieData.bible_is_user_id || '';
-			// isAuthenticated = !!cookieData.bible_is_user_id;
+			userId = cookieData.bible_is_user_id || '';
+			isAuthenticated = !!cookieData.bible_is_user_id;
+			// userId = localStorage.getItem('bible_is_user_id') || '';
 			// isAuthenticated = !!localStorage.getItem('bible_is_user_id') || '';
 			// // User Profile
 			// userProfile.email = localStorage.getItem('bible_is_user_email') || '';
 			// userProfile.nickname = localStorage.getItem('bible_is_user_name') || '';
 			// userProfile.name = localStorage.getItem('bible_is_user_nickname');
+			// userProfile.userId = userId;
 			isAuthenticated = !!cookieData.user_id || '';
 			// User Profile
 			userProfile.email = cookieData.bible_is_email || '';
@@ -432,22 +448,25 @@ AppContainer.getInitialProps = async (context) => {
 			userProfile.email = userEmail;
 			userProfile.nickname = userName;
 			userProfile.name = userName;
+			userProfile.userId = userId;
 			// Avatar is a placeholder for when we actually build the rest of that functionality
 			userProfile.avatar = '';
 		} else if (!userId) {
 			// Authentication Information
 			// userId = cookieData.bible_is_user_id || '';
 			// isAuthenticated = !!cookieData.bible_is_user_id;
-			// isAuthenticated = !!localStorage.getItem('bible_is_user_id') || '';
-			// // User Profile
-			// userProfile.email = localStorage.getItem('bible_is_user_email') || '';
-			// userProfile.nickname = localStorage.getItem('bible_is_user_name') || '';
-			// userProfile.name = localStorage.getItem('bible_is_user_nickname');
-			isAuthenticated = !!cookieData.user_id || '';
+			userId = localStorage.getItem('bible_is_user_id') || '';
+			isAuthenticated = !!localStorage.getItem('bible_is_user_id') || '';
 			// User Profile
-			userProfile.email = cookieData.bible_is_email || '';
-			userProfile.nickname = cookieData.bible_is_name || '';
-			userProfile.name = cookieData.bible_is_name;
+			userProfile.email = localStorage.getItem('bible_is_user_email') || '';
+			userProfile.nickname = localStorage.getItem('bible_is_user_name') || '';
+			userProfile.name = localStorage.getItem('bible_is_user_nickname');
+			userProfile.userId = userId;
+			// isAuthenticated = !!cookieData.user_id || '';
+			// // User Profile
+			// userProfile.email = cookieData.bible_is_email || '';
+			// userProfile.nickname = cookieData.bible_is_name || '';
+			// userProfile.name = cookieData.bible_is_name;
 			// Avatar is a placeholder for when we actually build the rest of that functionality
 			userProfile.avatar = '';
 		}
@@ -863,6 +882,7 @@ AppContainer.propTypes = {
 	dispatch: PropTypes.func,
 	match: PropTypes.object,
 	userSettings: PropTypes.object,
+	userProfile: PropTypes.object,
 	chapterText: PropTypes.array,
 	fetchedUrls: PropTypes.array,
 	isFromServer: PropTypes.bool,

@@ -25,23 +25,13 @@ import {
 
 const initialState = fromJS({
 	activeOption: 'login',
-	userAuthenticated:
-		// !!localStorage.getItem('bible_is_user_id') ||
-		// !!sessionStorage.getItem('bible_is_user_id') ||
-		false,
-	userId:
-		// localStorage.getItem('bible_is_user_id') ||
-		// sessionStorage.getItem('bible_is_user_id') ||
-		'',
+	userAuthenticated: false,
+	userId: '',
 	loginErrorMessage: '',
 	socialLoginLink: '',
 	signupErrorMessage: '',
 	activeDriver: '',
 	userProfile: {
-		// email: sessionStorage.getItem('bible_is_12345') || '',
-		// nickname: sessionStorage.getItem('bible_is_123456') || '',
-		// name: sessionStorage.getItem('bible_is_1234567') || '',
-		// avatar: sessionStorage.getItem('bible_is_12345678') || '',
 		email: '',
 		nickname: '',
 		name: '',
@@ -70,8 +60,6 @@ function profileReducer(state = initialState, action) {
 		case SELECT_ACCOUNT_OPTION:
 			return state.set('activeOption', action.option);
 		case USER_LOGGED_IN:
-			// console.log('Logged in and reducer fired', action);
-			// console.trace();
 			if (typeof window !== 'undefined') {
 				sessionStorage.setItem(
 					'bible_is_12345',
@@ -98,11 +86,13 @@ function profileReducer(state = initialState, action) {
 		case LOG_OUT:
 			// Need to remove the user's id from storage when they log out
 			localStorage.removeItem('bible_is_user_id');
+			localStorage.removeItem('bible_is_user_email');
+			localStorage.removeItem('bible_is_user_name');
+			localStorage.removeItem('bible_is_user_nickname');
 			sessionStorage.removeItem('bible_is_user_id');
-			sessionStorage.removeItem('bible_is_12345');
-			sessionStorage.removeItem('bible_is_123456');
-			sessionStorage.removeItem('bible_is_1234567');
-			sessionStorage.removeItem('bible_is_12345678');
+			sessionStorage.removeItem('bible_is_user_email');
+			sessionStorage.removeItem('bible_is_user_name');
+			sessionStorage.removeItem('bible_is_user_nickname');
 			return state.set('userId', '').set('userAuthenticated', false);
 		case SIGNUP_ERROR:
 			return state
@@ -131,11 +121,13 @@ function profileReducer(state = initialState, action) {
 				.set('loginErrorMessage', '');
 		case DELETE_USER_SUCCESS:
 			localStorage.removeItem('bible_is_user_id');
+			localStorage.removeItem('bible_is_user_email');
+			localStorage.removeItem('bible_is_user_name');
+			localStorage.removeItem('bible_is_user_nickname');
 			sessionStorage.removeItem('bible_is_user_id');
-			sessionStorage.removeItem('bible_is_12345');
-			sessionStorage.removeItem('bible_is_123456');
-			sessionStorage.removeItem('bible_is_1234567');
-			sessionStorage.removeItem('bible_is_12345678');
+			sessionStorage.removeItem('bible_is_user_email');
+			sessionStorage.removeItem('bible_is_user_name');
+			sessionStorage.removeItem('bible_is_user_nickname');
 			return state.set('userAuthenticated', false).set('userId', '');
 		case DELETE_USER_ERROR:
 			return state
@@ -143,7 +135,6 @@ function profileReducer(state = initialState, action) {
 				.set('deleteUserMessage', action.message);
 		case 'GET_INITIAL_ROUTE_STATE_PROFILE':
 			// console.log('action.profile', action.profile);
-
 			return state.merge(action.profile);
 		default:
 			return state;
