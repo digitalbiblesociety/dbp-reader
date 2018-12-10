@@ -8,11 +8,8 @@
 	position: fixed;
 	width: 100%;
 	bottom: 56px;
-	//height: 56px;
-	//flex: 1;
 	z-index: 1;
 	transition: transform 200ms ease-in-out;
-	//transform: translateY(0);
 
 	&.scrolled-down {
 		transform: translateY(56px);
@@ -25,7 +22,6 @@
 .audio-player-container .svgitem {
 	cursor: pointer;
 	margin: 0 auto;
-	//margin-right:18px;
 }
 .audio-player-container {
 	@include css4 {
@@ -38,15 +34,11 @@
 	height: 50px;
 	max-width: 1000px;
 	margin: auto;
-	overflow: hidden;
-	//:nth-child(3) {
-	//  margin-right:18px;
-	//};
 	font-size: 12px;
 	transition: height 400ms ease-out, height 200ms ease-in;
 
 	&.closed {
-		// display: none;
+		overflow: hidden;
 		height: 0;
 	}
 }
@@ -66,7 +58,6 @@
 		border: 1px solid var(--active-color-primary);
 		border-top: 1px solid var(--application-transparent-gray);
 		background-color: var(--application-transparent-gray);
-		//filter: invert(1);
 		color: var(--application-light-color-option);
 	}
 	z-index: 4;
