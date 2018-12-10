@@ -1,0 +1,12 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - npm install
+  build:
+    commands:
+      - BUILD_ID=$(git rev-parse HEAD) NODE_ENV=production npm run build:next
+  post_build:
+    commands:
+      - pm2 restart ecosystem.config.js --update-env --env production --only bible.is.prod
