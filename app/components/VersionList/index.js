@@ -52,7 +52,7 @@ class VersionList extends React.PureComponent {
 						this.handleVersionListClick(bible, audioType),
 					className: bible.get('abbr') === activeTextId ? 'active-version' : '',
 					title: bible.get('name'),
-					text: bible.get('vname') || bible.get('name'),
+					text: bible.get('vname') || bible.get('name') || bible.get('abbr'),
 					altText:
 						bible.get('vname') && bible.get('vname') !== bible.get('name')
 							? bible.get('name')

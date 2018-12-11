@@ -115,17 +115,11 @@ export function* getTexts({ languageCode }) {
 		// This filters out all texts that don't have a fileset
 		// console.log('response', response);
 		const videos = videoRes.data.filter(
-			(video) =>
-				video.name &&
-				video.abbr &&
-				video.language &&
-				video.language_id &&
-				video.iso,
+			(video) => video.abbr && video.language && video.language_id && video.iso,
 		);
 
 		const texts = response.data.filter(
 			(text) =>
-				text.name &&
 				text.language &&
 				text.iso &&
 				text.abbr &&
