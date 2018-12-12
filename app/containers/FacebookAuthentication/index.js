@@ -40,7 +40,7 @@ export class FacebookAuthentication extends React.PureComponent {
 		}
 	}
 
-	handleSocialLogin = (e) => {
+	handleSocialLogin = () => {
 		// console.log('social login facebook clicked', FB);
 		// const { socialMediaLogin } = this.props;
 		// // console.log('Sending facebook driver');
@@ -177,6 +177,7 @@ export class FacebookAuthentication extends React.PureComponent {
 		return (
 			<div
 				role={'button'}
+				id={'facebook-login'}
 				tabIndex={0}
 				onClick={this.handleSocialLogin}
 				className="facebook"

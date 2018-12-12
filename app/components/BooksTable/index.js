@@ -188,6 +188,9 @@ class BooksTable extends React.PureComponent {
 											key={(book.get('name') || book.get('name_short')).concat(
 												book.get('book_id'),
 											)}
+											id={(book.get('name') || book.get('name_short')).concat(
+												book.get('book_id'),
+											)}
 											onClick={(e) =>
 												this.handleBookClick(
 													e,
@@ -238,6 +241,9 @@ class BooksTable extends React.PureComponent {
 										key={(book.get('name') || book.get('name_short')).concat(
 											book.get('book_id'),
 										)}
+										id={(book.get('name') || book.get('name_short')).concat(
+											book.get('book_id'),
+										)}
 										onClick={(e) =>
 											this.handleBookClick(
 												e,
@@ -286,6 +292,9 @@ class BooksTable extends React.PureComponent {
 												: null
 										}
 										key={(book.get('name') || book.get('name_short')).concat(
+											book.get('book_id'),
+										)}
+										id={(book.get('name') || book.get('name_short')).concat(
 											book.get('book_id'),
 										)}
 										onClick={(e) =>

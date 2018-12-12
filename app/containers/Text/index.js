@@ -741,8 +741,12 @@ class Text extends React.PureComponent {
 				...h,
 				highlight_start: parseInt(h.highlight_start, 10),
 			}));
+			const textToPass = initialText.map((v) => ({
+				...v,
+				verse_start: parseInt(v.verse_start, 10),
+			}));
 			// Use function for highlighting the plain plainText
-			plainText = this.createHighlights(highlightsToPass, initialText);
+			plainText = this.createHighlights(highlightsToPass, textToPass);
 		} else {
 			plainText = initialText || [];
 		}

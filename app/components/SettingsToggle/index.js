@@ -1,8 +1,8 @@
 /**
-*
-* SettingsToggle
-*
-*/
+ *
+ * SettingsToggle
+ *
+ */
 
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -10,15 +10,18 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
 /* eslint-disable jsx-a11y/label-has-for */
-function SettingsToggle({ action, name, checked, available }) {
+function SettingsToggle({ action, id, name, checked, available }) {
 	return (
-		<div className={available ? 'checkbox-settings' : 'checkbox-settings disabled'}>
+		<div
+			className={available ? 'checkbox-settings' : 'checkbox-settings disabled'}
+		>
 			<label className={checked ? 'active' : ''}>
 				<FormattedMessage {...messages[name]} />
 				<div className="switch">
 					<input
 						type="checkbox"
 						checked={checked}
+						id={id}
 						onChange={(e) => {
 							if (!available) {
 								e.preventDefault();
@@ -27,7 +30,7 @@ function SettingsToggle({ action, name, checked, available }) {
 							}
 						}}
 					/>
-					<span className="slider"></span>
+					<span className="slider" />
 				</div>
 			</label>
 		</div>
@@ -39,6 +42,7 @@ SettingsToggle.propTypes = {
 	name: PropTypes.string,
 	checked: PropTypes.bool,
 	available: PropTypes.bool,
+	id: PropTypes.string,
 };
 
 export default SettingsToggle;

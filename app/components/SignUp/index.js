@@ -158,38 +158,58 @@ class SignUp extends React.PureComponent {
 		if (passwordErrorType) {
 			if (passwordErrorType === 'confirm') {
 				errors.push(
-					<p key={'passwordError1'} className={'signup-error-message'}>
+					<p
+						id={'password-match-error'}
+						key={'passwordError1'}
+						className={'signup-error-message'}
+					>
 						<FormattedMessage {...messages.passwordError1} />
 					</p>,
 				);
 			}
 			if (passwordErrorType === 'length') {
 				errors.push(
-					<p key={'passwordError2'} className={'signup-error-message'}>
+					<p
+						id={'password-length-error'}
+						key={'passwordError2'}
+						className={'signup-error-message'}
+					>
 						<FormattedMessage {...messages.passwordError2} />
 					</p>,
 				);
 			}
 			if (passwordErrorType === 'password') {
 				errors.push(
-					<p key={'passwordError3'} className={'signup-error-message'}>
+					<p
+						id={'password-type-error'}
+						key={'passwordError3'}
+						className={'signup-error-message'}
+					>
 						<FormattedMessage {...messages.passwordError3} />
 					</p>,
 				);
 			}
 			// } else if (passwordErrorType === 'upperNumSym') {
-			// 	errors.push(<p key={'passwordError4'} className={'signup-error-message'}><FormattedMessage {...messages.passwordError4} /></p>);
+			// 	errors.push(<p id={'passwordError4'} key={'passwordError4'} className={'signup-error-message'}><FormattedMessage {...messages.passwordError4} /></p>);
 			// }
 		}
 
 		errors.push(
-			<p key={'passwordError4'} className={'signup-error-message'}>
+			<p
+				id={'password-number-upper-symbol'}
+				key={'passwordError4'}
+				className={'signup-error-message'}
+			>
 				<FormattedMessage {...messages.passwordError4} />
 			</p>,
 		);
 		if (!validEmail) {
 			errors.push(
-				<p key={'emailError'} className={'signup-error-message'}>
+				<p
+					id={'emailError'}
+					key={'emailError'}
+					className={'signup-error-message'}
+				>
 					<FormattedMessage {...messages.emailError} />
 				</p>,
 			);
@@ -201,7 +221,7 @@ class SignUp extends React.PureComponent {
 	get signupForm() {
 		const { validEmail, validPassword } = this.state;
 		return (
-			<form onSubmit={this.handleSignup}>
+			<form id={'signup-form'} onSubmit={this.handleSignup}>
 				<input
 					required
 					id={'email'}
@@ -214,6 +234,7 @@ class SignUp extends React.PureComponent {
 				/>
 				<input
 					required
+					id={'first-name'}
 					autoComplete={'given-name'}
 					onChange={this.handleFirstName}
 					className={'name-inputs'}
@@ -222,6 +243,7 @@ class SignUp extends React.PureComponent {
 				/>
 				<input
 					required
+					id={'last-name'}
 					autoComplete={'family-name'}
 					onChange={this.handleLastName}
 					className={'name-inputs'}
@@ -251,7 +273,7 @@ class SignUp extends React.PureComponent {
 					value={this.state.confirmPassword}
 				/>
 				<div className="sign-up-button">
-					<button type="submit" className="text">
+					<button id={'submit-button'} type="submit" className="text">
 						Submit
 					</button>
 				</div>

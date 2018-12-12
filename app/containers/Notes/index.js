@@ -261,6 +261,7 @@ export class Notes extends React.PureComponent {
 					<React.Fragment>
 						<div className="top-bar">
 							<div
+								id={'note-list-button'}
 								role={'button'}
 								tabIndex={0}
 								onClick={() => this.setActiveChild('notes')}
@@ -293,6 +294,7 @@ export class Notes extends React.PureComponent {
 								<h1>{<FormattedMessage {...messages.notesHeader} />}</h1>
 							</div>
 							<div
+								id={'highlights-list-button'}
 								role={'button'}
 								tabIndex={0}
 								onClick={() => this.setActiveChild('highlights')}
@@ -313,6 +315,7 @@ export class Notes extends React.PureComponent {
 								<h1>{<FormattedMessage {...messages.highlightsHeader} />}</h1>
 							</div>
 							<div
+								id={'bookmarks-list-button'}
 								role={'button'}
 								tabIndex={0}
 								onClick={() => this.setActiveChild('bookmarks')}

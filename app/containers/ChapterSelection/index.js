@@ -82,6 +82,7 @@ export class ChapterSelection extends React.PureComponent {
 				onTouchEnd={this.stopTouchProp}
 				onClick={this.stopClickProp}
 				className="chapter-text-dropdown"
+				id={'chapter-dropdown-close-button'}
 			>
 				<BooksTable
 					setActiveChapter={this.setActiveChapter}

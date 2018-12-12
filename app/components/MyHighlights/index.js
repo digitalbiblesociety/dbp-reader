@@ -38,6 +38,7 @@ class MyHighlights extends React.PureComponent {
 		return highlights.map((highlight) => (
 			<div
 				key={`${highlight.id}_${highlight.highlighted_color}`}
+				id={`${highlight.id}_${highlight.highlighted_color}`}
 				className={'highlight-item'}
 			>
 				<Link
@@ -56,6 +57,7 @@ class MyHighlights extends React.PureComponent {
 					</a>
 				</Link>
 				<div
+					id={`${highlight.id}_${highlight.highlighted_color}-edit`}
 					className={'edit-color'}
 					tabIndex={0}
 					role={'button'}
@@ -73,6 +75,7 @@ class MyHighlights extends React.PureComponent {
 					<SvgWrapper
 						className={'icon'}
 						svgid={'delete'}
+						id={`${highlight.id}_${highlight.highlighted_color}-delete`}
 						onClick={() => deleteHighlights({ ids: [highlight.id] })}
 					/>
 					<span>Delete</span>

@@ -192,6 +192,7 @@ export class TextSelection extends React.PureComponent {
 				<div className={'search-input-bar'}>
 					<SvgWrapper className={'icon'} svgid={'search'} />
 					<input
+						id={'version-search'}
 						onChange={this.handleSearchInputChange}
 						value={filterText}
 						className={'input-class'}
@@ -200,18 +201,21 @@ export class TextSelection extends React.PureComponent {
 				</div>
 				<div className={'tab-options'}>
 					<span
+						id={'country-tab'}
 						onClick={countryListActive ? () => {} : this.setCountryListState}
 						className={countryListActive ? 'tab-option active' : 'tab-option'}
 					>
 						<FormattedMessage {...messages.country} />
 					</span>
 					<span
+						id={'language-tab'}
 						onClick={languageListActive ? () => {} : this.toggleLanguageList}
 						className={languageListActive ? 'tab-option active' : 'tab-option'}
 					>
 						<FormattedMessage {...messages.language} />
 					</span>
 					<span
+						id={'version-tab'}
 						onClick={versionListActive ? () => {} : this.toggleVersionList}
 						className={versionListActive ? 'tab-option active' : 'tab-option'}
 					>

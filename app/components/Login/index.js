@@ -137,6 +137,7 @@ class Login extends React.PureComponent {
 					<section className="forgot-password">
 						<span
 							role="button"
+							id={'reset-password-button'}
 							tabIndex={0}
 							className="link"
 							onClick={() => {
