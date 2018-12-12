@@ -84,6 +84,7 @@ class Login extends React.PureComponent {
 							svgid="e-mail"
 						/>
 						<input
+							id={'email'}
 							autoComplete={'email'}
 							className={errorMessageViewed ? '' : 'error'}
 							type={'email'}
@@ -101,6 +102,7 @@ class Login extends React.PureComponent {
 							svgid="lock"
 						/>
 						<input
+							id={'password'}
 							autoComplete={'current-password'}
 							className={errorMessageViewed ? '' : 'error'}
 							type="password"

@@ -204,6 +204,7 @@ class SignUp extends React.PureComponent {
 			<form onSubmit={this.handleSignup}>
 				<input
 					required
+					id={'email'}
 					autoComplete={'email'}
 					type={'email'}
 					onChange={this.handleEmailChange}
@@ -229,6 +230,7 @@ class SignUp extends React.PureComponent {
 				/>
 				<input
 					required
+					id={'password'}
 					autoComplete="new-password"
 					type="password"
 					onChange={this.handlePasswordChange}
@@ -238,6 +240,7 @@ class SignUp extends React.PureComponent {
 				/>
 				<input
 					required
+					id={'password_confirm'}
 					autoComplete="new-password"
 					type="password"
 					onChange={this.handleConfirmPassword}
