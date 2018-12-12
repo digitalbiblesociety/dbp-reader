@@ -86,6 +86,7 @@ class Login extends React.PureComponent {
 						<input
 							autoComplete={'email'}
 							className={errorMessageViewed ? '' : 'error'}
+							type={'email'}
 							placeholder="E-mail"
 							onChange={this.handleEmailChange}
 							value={this.state.email}

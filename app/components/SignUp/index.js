@@ -205,6 +205,7 @@ class SignUp extends React.PureComponent {
 				<input
 					required
 					autoComplete={'email'}
+					type={'email'}
 					onChange={this.handleEmailChange}
 					className={validEmail ? 'email' : 'email error'}
 					placeholder="E-mail"
@@ -284,19 +285,24 @@ class SignUp extends React.PureComponent {
 						access them wherever you use Bible.is!
 					</p>
 					<p className={'disclaimer'}>
-						<span>By creating an account, you agree to the Bible.is</span>&nbsp;<a
+						<span>By creating an account, you agree to the Bible.is</span>
+						&nbsp;
+						<a
 							className="link"
 							target={'_blank'}
 							href="http://www.bible.is/privacy"
 						>
 							Privacy Policy
-						</a>&nbsp;&&nbsp;<a
+						</a>
+						&nbsp;&&nbsp;
+						<a
 							className="link"
 							target={'_blank'}
 							href="http://www.bible.is/terms"
 						>
 							Terms of Use
-						</a>.
+						</a>
+						.
 					</p>
 				</section>
 				{this.signupForm}
