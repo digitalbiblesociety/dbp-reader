@@ -88,6 +88,34 @@ class AppContainer extends React.Component {
 				'bible_is_user_nickname',
 				this.props.userProfile.name,
 			);
+		} else {
+			const storedId =
+				localStorage.getItem('bible_is_user_id') ||
+				sessionStorage.getItem('bible_is_user_id') ||
+				'';
+			if (storedId) {
+				this.props.dispatch({
+					type: 'GET_INITIAL_ROUTE_STATE_PROFILE',
+					profile: {
+						userId: storedId,
+						userAuthenticated: !!storedId,
+						userProfile: {
+							email:
+								localStorage.getItem('bible_is_user_email') ||
+								sessionStorage.getItem('bible_is_user_email') ||
+								'',
+							name:
+								localStorage.getItem('bible_is_user_name') ||
+								sessionStorage.getItem('bible_is_user_name') ||
+								'',
+							nickname:
+								localStorage.getItem('bible_is_user_nickname') ||
+								sessionStorage.getItem('bible_is_user_nickname') ||
+								'',
+						},
+					},
+				});
+			}
 		}
 
 		this.props.dispatch(setChapterTextLoadingState({ state: false }));
