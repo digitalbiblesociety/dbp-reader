@@ -5,15 +5,16 @@ and [Faith Comes by Hearing](https://faithcomesbyhearing.com).
 
 ## QuickStart
 
+- This project requires Node v10 and npm v6.
 - If you do not have Node follow the installation instructions here: [Node.js](https://nodejs.org/en/download/).
 - Clone the repo:
   - `git clone https://dbsdevs@bitbucket.org/dbsdevs/dbp_4_reader.git`
 - Once you have successfully installed Node and cloned the repo run the following
   commands in the root folder of the
   project: - `npm install && npm start`
-- Please examine the sample_env.txt file that is located in the root of this project for
+- Create a file named `.env` in the root of your new project, following the pattern found in sample-env.txt add your own environment variables.
   an example of the variables you will need to set in order to run this locally.
-- Create a file named `env-config.js` use the template below but replace "YOUR_VAR_1" with your own env variables:
+- Create a file named `env-config.js` use the template below but replace "YOUR_VAR_1" with your own variables from your .env file:
 
   ```
   require('dotenv').config();
