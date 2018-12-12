@@ -62,20 +62,16 @@ function profileReducer(state = initialState, action) {
 		case USER_LOGGED_IN:
 			if (typeof window !== 'undefined') {
 				sessionStorage.setItem(
-					'bible_is_12345',
+					'bible_is_user_email',
 					action.userProfile.email || '',
 				);
 				sessionStorage.setItem(
-					'bible_is_123456',
+					'bible_is_user_nickname',
 					action.userProfile.nickname || '',
 				);
 				sessionStorage.setItem(
-					'bible_is_1234567',
+					'bible_is_user_name',
 					action.userProfile.name || '',
-				);
-				sessionStorage.setItem(
-					'bible_is_12345678',
-					action.userProfile.avatar || '',
 				);
 			}
 

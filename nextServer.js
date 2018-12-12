@@ -26,19 +26,6 @@ function getCacheKey(req) {
 	return `${req.url}`;
 }
 
-// function parseServerCookie(cookie) {
-// 	return cookie
-// 		.split('; ')
-// 		.filter((c) => c.includes('bible_is_ref'))
-// 		.reduce((a, c) => {
-// 			const ca = c.split('=');
-// 			return {
-// 				...a,
-// 				[ca[0]]: ca[1],
-// 			};
-// 		}, {});
-// }
-
 async function renderAndCache(req, res, pagePath, queryParams) {
 	if (dev) {
 		app.render(req, res, pagePath, queryParams);

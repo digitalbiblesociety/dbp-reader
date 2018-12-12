@@ -65,9 +65,11 @@ class AppContainer extends React.Component {
 		}
 		// console.log('user profile', this.props.userProfile);
 
+		// If undefined gets stored in local storage it cannot be parsed so I have to compare strings
 		if (
 			this.props.userProfile.userId &&
-			!localStorage.getItem('bible_is_user_id')
+			!localStorage.getItem('bible_is_user_id') &&
+			!localStorage.getItem('bible_is_user_id') === 'undefined'
 		) {
 			localStorage.setItem('bible_is_user_id', this.props.userProfile.userId);
 			localStorage.setItem('bible_is_user_email', this.props.userProfile.email);

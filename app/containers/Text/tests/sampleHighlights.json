@@ -1,104 +1,104 @@
 {
-  "data": [
-    {
-      "id": 256,
-      "bible_id": "ENGESV",
-      "book_id": "PSA",
-      "chapter": 18,
-      "verse_start": 1,
-      "highlight_start": 2,
-      "highlighted_words": 4,
-      "highlighted_color": "#85,187,68,.6"
-    },
-    {
-      "id": 257,
-      "bible_id": "ENGESV",
-      "book_id": "PSA",
-      "chapter": 18,
-      "verse_start": 2,
-      "highlight_start": 4,
-      "highlighted_words": 4,
-      "highlighted_color": "#17,170,255,.6"
-    },
-    {
-      "id": 258,
-      "bible_id": "ENGESV",
-      "book_id": "PSA",
-      "chapter": 18,
-      "verse_start": 2,
-      "highlight_start": 3,
-      "highlighted_words": 11,
-      "highlighted_color": "#136,102,170,.6"
-    },
-    {
-      "id": 259,
-      "bible_id": "ENGESV",
-      "book_id": "PSA",
-      "chapter": 18,
-      "verse_start": 3,
-      "highlight_start": 0,
-      "highlighted_words": 156,
-      "highlighted_color": "#221,102,170,.6"
-    },
-    {
-      "id": 260,
-      "bible_id": "ENGESV",
-      "book_id": "PSA",
-      "chapter": 18,
-      "verse_start": 6,
-      "highlight_start": 6,
-      "highlighted_words": 8,
-      "highlighted_color": "#255,221,34,.6"
-    },
-    {
-      "id": 261,
-      "bible_id": "ENGESV",
-      "book_id": "PSA",
-      "chapter": 18,
-      "verse_start": 6,
-      "highlight_start": 30,
-      "highlighted_words": 5,
-      "highlighted_color": "#85,187,68,.6"
-    },
-    {
-      "id": 262,
-      "bible_id": "ENGESV",
-      "book_id": "PSA",
-      "chapter": 18,
-      "verse_start": 8,
-      "highlight_start": 0,
-      "highlighted_words": 174,
-      "highlighted_color": "#17,170,255,.6"
-    },
-    {
-      "id": 263,
-      "bible_id": "ENGESV",
-      "book_id": "PSA",
-      "chapter": 18,
-      "verse_start": 9,
-      "highlight_start": 65,
-      "highlighted_words": 74,
-      "highlighted_color": "#85,187,68,.6"
-    },
-    {
-      "id": 264,
-      "bible_id": "ENGESV",
-      "book_id": "PSA",
-      "chapter": 18,
-      "verse_start": 12,
-      "highlight_start": 0,
-      "highlighted_words": 110,
-      "highlighted_color": "#17,170,255,.6"
-    },
-    {
-      "id": 265,
-      "bible_id": "ENGESV",
-      "book_id": "PSA",
-      "chapter": 18,
-      "verse_start": 13,
-      "highlight_start": 44,
-      "highlighted_words": 9,
-      "highlighted_color": "#85,187,68,.6"
-    }
-  ]
+	"data": [
+		{
+			"id": 256,
+			"bible_id": "ENGESV",
+			"book_id": "PSA",
+			"chapter": 18,
+			"verse_start": 1,
+			"highlight_start": 2,
+			"highlighted_words": 4,
+			"highlighted_color": "rgba(85,187,68,.25)"
+		},
+		{
+			"id": 257,
+			"bible_id": "ENGESV",
+			"book_id": "PSA",
+			"chapter": 18,
+			"verse_start": 2,
+			"highlight_start": 4,
+			"highlighted_words": 4,
+			"highlighted_color": "rgba(17,170,255,.25)"
+		},
+		{
+			"id": 258,
+			"bible_id": "ENGESV",
+			"book_id": "PSA",
+			"chapter": 18,
+			"verse_start": 2,
+			"highlight_start": 3,
+			"highlighted_words": 11,
+			"highlighted_color": "rgba(136,102,170,.25)"
+		},
+		{
+			"id": 259,
+			"bible_id": "ENGESV",
+			"book_id": "PSA",
+			"chapter": 18,
+			"verse_start": 3,
+			"highlight_start": 0,
+			"highlighted_words": 156,
+			"highlighted_color": "rgba(221,102,170,.25)"
+		},
+		{
+			"id": 260,
+			"bible_id": "ENGESV",
+			"book_id": "PSA",
+			"chapter": 18,
+			"verse_start": 6,
+			"highlight_start": 6,
+			"highlighted_words": 8,
+			"highlighted_color": "rgba(255,221,34,.25)"
+		},
+		{
+			"id": 261,
+			"bible_id": "ENGESV",
+			"book_id": "PSA",
+			"chapter": 18,
+			"verse_start": 6,
+			"highlight_start": 30,
+			"highlighted_words": 5,
+			"highlighted_color": "rgba(85,187,68,.25)"
+		},
+		{
+			"id": 262,
+			"bible_id": "ENGESV",
+			"book_id": "PSA",
+			"chapter": 18,
+			"verse_start": 8,
+			"highlight_start": 0,
+			"highlighted_words": 174,
+			"highlighted_color": "rgba(17,170,255,.25)"
+		},
+		{
+			"id": 263,
+			"bible_id": "ENGESV",
+			"book_id": "PSA",
+			"chapter": 18,
+			"verse_start": 9,
+			"highlight_start": 65,
+			"highlighted_words": 74,
+			"highlighted_color": "rgba(85,187,68,.25)"
+		},
+		{
+			"id": 264,
+			"bible_id": "ENGESV",
+			"book_id": "PSA",
+			"chapter": 18,
+			"verse_start": 12,
+			"highlight_start": 0,
+			"highlighted_words": 110,
+			"highlighted_color": "rgba(17,170,255,.25)"
+		},
+		{
+			"id": 265,
+			"bible_id": "ENGESV",
+			"book_id": "PSA",
+			"chapter": 18,
+			"verse_start": 13,
+			"highlight_start": 44,
+			"highlighted_words": 9,
+			"highlighted_color": "rgba(85,187,68,.25)"
+		}
+	]
 }

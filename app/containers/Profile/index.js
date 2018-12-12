@@ -64,10 +64,10 @@ export class Profile extends React.PureComponent {
 			localStorage.getItem('bible_is_user_id') ||
 			sessionStorage.getItem('bible_is_user_id')
 		);
-		userProfile.email = sessionStorage.getItem('bible_is_12345');
-		userProfile.nickname = sessionStorage.getItem('bible_is_123456');
-		userProfile.name = sessionStorage.getItem('bible_is_1234567');
-		userProfile.avatar = sessionStorage.getItem('bible_is_12345678');
+		userProfile.email = sessionStorage.getItem('bible_is_user_email');
+		userProfile.nickname = sessionStorage.getItem('bible_is_user_nickname');
+		userProfile.name = sessionStorage.getItem('bible_is_user_name');
+		userProfile.avatar = '';
 		if (userId && userAuthenticated) {
 			this.props.dispatch(
 				setUserLoginStatus({

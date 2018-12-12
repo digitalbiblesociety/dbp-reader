@@ -68,12 +68,10 @@ export function* sendSignUpForm({
 				userId: response.data.id,
 				userProfile: response.data,
 			});
-			document.cookie = `bible_is_user_id=${response.data.id};path=/`;
-			document.cookie = `bible_is_name=${response.data.name};path=/`;
-			document.cookie = `bible_is_email=${response.data.email};path=/`;
-			document.cookie = `bible_is_first_name=${
-				response.data.first_name
-			};path=/`;
+			sessionStorage.setItem('bible_is_user_id', response.data.id);
+			sessionStorage.setItem('bible_is_user_email', response.data.email);
+			sessionStorage.setItem('bible_is_user_name', response.data.name);
+			sessionStorage.setItem('bible_is_user_nickname', response.data.nickname);
 		} else if (response.error) {
 			// console.log('res error', response);
 			const message = Object.values(response.error.message).reduce(
@@ -121,15 +119,21 @@ export function* sendLoginForm({ password, email, stay }) {
 				userProfile: response,
 			});
 
-			document.cookie = `bible_is_user_id=${response.id};path=/`;
-			document.cookie = `bible_is_email=${response.email};path=/`;
-			document.cookie = `bible_is_name=${response.name};path=/`;
-			document.cookie = `bible_is_first_name=${response.nickname};path=/`;
-
-			// May need to do something with the stay signed in variable
 			if (stay) {
-				//   localStorage.setItem('bible_is_user_id', response.id);
+				localStorage.setItem('bible_is_user_id', response.id);
+				localStorage.setItem('bible_is_user_email', response.email);
+				localStorage.setItem('bible_is_user_name', response.name);
+				localStorage.setItem('bible_is_user_nickname', response.nickname);
+			} else {
+				sessionStorage.setItem('bible_is_user_id', response.id);
+				sessionStorage.setItem('bible_is_user_email', response.email);
+				sessionStorage.setItem('bible_is_user_name', response.name);
+				sessionStorage.setItem('bible_is_user_nickname', response.nickname);
 			}
+			// document.cookie = `bible_is_user_id=${response.id};path=/`;
+			// document.cookie = `bible_is_email=${response.email};path=/`;
+			// document.cookie = `bible_is_name=${response.name};path=/`;
+			// document.cookie = `bible_is_first_name=${response.nickname};path=/`;
 		}
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {

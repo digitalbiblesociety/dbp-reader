@@ -146,7 +146,8 @@ export const calcDistance = (last, first /* plainText */) => {
 		// Adds characters for text to account for spaces in verse numbers
 		stringDiff += '11';
 	}
-	// Gets the total length of the distance needed
+	// Gets the total length of the distance neededk
+
 	return stringDiff.length;
 };
 
