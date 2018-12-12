@@ -42,11 +42,10 @@ export default class MyDocument extends Document {
 	//   return {};
 	// };
 	render() {
-		// console.log('document is rendering...');
 		return (
 			<html>
 				<Head>
-					{!process.env.IS_DEV && !process.env.NODE_ENV === 'development' ? (
+					{process.env.NODE_ENV === 'production' ? (
 						<script
 							type="text/javascript"
 							dangerouslySetInnerHTML={{
