@@ -6,6 +6,7 @@ phases:
   install:
     commands:
       - npm install
+      - npm install pm2 -g
   build:
     commands:
       - BUILD_ID=$(git rev-parse HEAD) NODE_ENV=production npm run build:next
