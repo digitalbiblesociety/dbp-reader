@@ -722,7 +722,7 @@ class Text extends React.PureComponent {
 		) {
 			// Use function for highlighting the formatted formattedText
 			formattedText = this.createFormattedHighlights(
-				highlights,
+				highlights.filter((h) => h.chapter === activeChapter),
 				formattedSource.main,
 			);
 		} else if (
