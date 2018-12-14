@@ -14,6 +14,7 @@ and [Faith Comes by Hearing](https://faithcomesbyhearing.com).
   project: - `npm install && npm start`
 - Create a file named `.env` in the root of your new project, following the pattern found in sample-env.txt add your own environment variables.
   an example of the variables you will need to set in order to run this locally.
+  - You will need to make sure your api key has access to the project and bucket(s) used
 - Create a file named `env-config.js` use the template below but replace "YOUR_VAR_1" with your own variables from your .env file:
 
   ```
@@ -39,8 +40,8 @@ portability. It is in many ways the spiritual successor to the bible browser and
 
 ## Solutions to Potential Issues
 
-If you feel that there are resources being cached an not updated, use the script below
-to manually clear the cache of resources.
+If you feel that there are resources being cached you can use the script below
+in your developer console to manually clear the cache of api calls.
 `Object.keys(localStorage).filter(key => key.slice(0, 7) === 'lscache').forEach(key => localStorage.removeItem(key))`
 
 ## Goals
