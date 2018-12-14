@@ -84,8 +84,10 @@ class Login extends React.PureComponent {
 							svgid="e-mail"
 						/>
 						<input
+							id={'email'}
 							autoComplete={'email'}
 							className={errorMessageViewed ? '' : 'error'}
+							type={'email'}
 							placeholder="E-mail"
 							onChange={this.handleEmailChange}
 							value={this.state.email}
@@ -100,6 +102,7 @@ class Login extends React.PureComponent {
 							svgid="lock"
 						/>
 						<input
+							id={'password'}
 							autoComplete={'current-password'}
 							className={errorMessageViewed ? '' : 'error'}
 							type="password"
@@ -134,6 +137,7 @@ class Login extends React.PureComponent {
 					<section className="forgot-password">
 						<span
 							role="button"
+							id={'reset-password-button'}
 							tabIndex={0}
 							className="link"
 							onClick={() => {

@@ -351,7 +351,9 @@ export class AudioPlayer extends React.Component {
 				})
 				.catch((err) => {
 					if (process.env.NODE_ENV !== 'production') {
+						/* eslint-disable no-console */
 						console.error('Error with playing audio: ', err);
+						/* eslint-enable no-console */
 					}
 				});
 		} else {
@@ -530,6 +532,7 @@ export class AudioPlayer extends React.Component {
 
 	nextIcon = (
 		<div
+			id={'next-chapter-audio'}
 			onClick={this.pauseAudio}
 			className={'icon-wrap'}
 			title={messages.nextTitle.defaultMessage}
@@ -541,6 +544,7 @@ export class AudioPlayer extends React.Component {
 
 	prevIcon = (
 		<div
+			id={'previous-chapter-audio'}
 			onClick={this.pauseAudio}
 			className={'icon-wrap'}
 			title={messages.prevTitle.defaultMessage}
@@ -552,6 +556,7 @@ export class AudioPlayer extends React.Component {
 
 	pauseIcon = (
 		<div
+			id={'pause-audio'}
 			onClick={this.pauseAudio}
 			className={'icon-wrap'}
 			title={messages.pauseTitle.defaultMessage}
@@ -563,6 +568,7 @@ export class AudioPlayer extends React.Component {
 
 	playIcon = (
 		<div
+			id={'play-audio'}
 			onClick={this.playAudio}
 			className={'icon-wrap'}
 			title={messages.playTitle.defaultMessage}
@@ -694,6 +700,7 @@ export class AudioPlayer extends React.Component {
 								className={
 									this.state.volumeSliderState ? 'item active' : 'item'
 								}
+								id={'volume-button'}
 								onTouchEnd={(e) => {
 									e.preventDefault();
 									if (!this.state.volumeSliderState) {
@@ -724,6 +731,7 @@ export class AudioPlayer extends React.Component {
 						<div id="speed-wrap" className={'icon-wrap'}>
 							<div
 								title={messages.speedTitle.defaultMessage}
+								id={'speed-button'}
 								className={
 									this.state.speedControlState ? 'item active' : 'item'
 								}

@@ -30,6 +30,7 @@ const Footer = ({
 		<div className="footer-content">
 			<span
 				title={'Profile'}
+				id={'profile-button'}
 				className={profileActive ? 'item active' : 'item'}
 				role="button"
 				tabIndex={0}
@@ -40,6 +41,7 @@ const Footer = ({
 			</span>
 			<span
 				title={'Search'}
+				id={'search-button'}
 				className={searchActive ? 'item active' : 'item'}
 				role="button"
 				tabIndex={0}
@@ -50,6 +52,7 @@ const Footer = ({
 			</span>
 			<span
 				title={'Notebook'}
+				id={'notebook-button'}
 				className={notebookActive ? 'item active' : 'item'}
 				role="button"
 				tabIndex={0}
@@ -65,6 +68,7 @@ const Footer = ({
 			</span>
 			<span
 				title={'Settings'}
+				id={'settings-button'}
 				className={settingsActive ? 'item active' : 'item'}
 				role="button"
 				tabIndex={0}

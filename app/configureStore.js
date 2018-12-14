@@ -6,6 +6,7 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import { fromJS } from 'immutable';
 import { routerMiddleware } from 'react-router-redux';
 import createSagaMiddleware from 'redux-saga';
+import { persistStore, autoRehydrate } from 'redux-persist-immutable';
 import createReducer from './reducers';
 
 const sagaMiddleware = createSagaMiddleware();
@@ -17,21 +18,9 @@ export default function configureStore(initialState = {}, history) {
 	// 2. routerMiddleware: Syncs the location/URL path to the state
 	const middlewares = [sagaMiddleware, routerMiddleware(history)];
 
-	const enhancers = [applyMiddleware(...middlewares)];
+	const enhancers = [applyMiddleware(...middlewares), autoRehydrate()];
 
-	// If Redux DevTools Extension is installed use it, otherwise use Redux compose
 	/* eslint-disable no-underscore-dangle */
-	/*
-	* If redux devtools stop working then put this code back
-	* process.env.NODE_ENV !== 'production' &&
-		typeof window === 'object' &&
-		window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
-			? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
-					// Prevent recomputing reducers for `replaceReducer`
-					shouldHotReload: false,
-			  })
-			:
-	* */
 	const composeEnhancers =
 		process.env.NODE_ENV !== 'production' &&
 		typeof window === 'object' &&
@@ -48,6 +37,14 @@ export default function configureStore(initialState = {}, history) {
 		fromJS(initialState),
 		composeEnhancers(...enhancers),
 	);
+
+	if (typeof self === 'object') {
+		persistStore(store, {
+			whitelist: ['profile'],
+			blacklist: ['homepage', 'notes', 'textSelection'],
+			keyPrefix: 'Bible.is',
+		});
+	}
 
 	// Extensions
 	store.runSaga = sagaMiddleware.run;

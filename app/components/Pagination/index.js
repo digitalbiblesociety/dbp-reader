@@ -42,7 +42,12 @@ const Pagination = ({ totalPages, activePage, onChangePage }) => {
 					key={page}
 					className={activePage === page ? 'item active' : 'item'}
 				>
-					<span role="button" tabIndex={0} onClick={() => onChangePage(page)}>
+					<span
+						id={`${page}-button`}
+						role="button"
+						tabIndex={0}
+						onClick={() => onChangePage(page)}
+					>
 						{page}
 					</span>
 				</div>

@@ -25,6 +25,9 @@ import notesReducer from '../Notes/reducer';
 import notesSaga from '../Notes/saga';
 import textReducer from '../TextSelection/reducer';
 import textSaga from '../TextSelection/saga';
+import profileSaga from '../Profile/saga';
+import profileReducer from '../Profile/reducer';
+import makeSelectProfile from '../Profile/selectors';
 import { setActiveIsoCode } from '../TextSelection/actions';
 import { getBookmarksForChapter, addBookmark } from '../Notes/actions';
 import {
@@ -80,9 +83,8 @@ class HomePage extends React.PureComponent {
 			activeBookId,
 			activeChapter,
 			activeTextId,
-			userAuthenticated,
-			userId,
 		} = this.props.homepage;
+		const { userAuthenticated, userId } = this.props.profile;
 
 		this.getCopyrights({ filesetIds: activeFilesets });
 		if (userId && userAuthenticated) {
@@ -197,38 +199,28 @@ class HomePage extends React.PureComponent {
 				console.warn('Error initializing google api', err); // eslint-disable-line no-console
 			}
 		}
-
-		// if (window && document && document.firstElementChild) {
-		// 	// Main can be unset in this instance
-		// 	if (this.isMobileSized) {
-		// 		this.main = document.getElementsByTagName('main')[0];
-		// 		window.addEventListener('scroll', this.handleScrolling, true);
-		// 	}
-		// }
-
-		// this.window = window;
-		// this.document = document;
 	}
 
 	componentWillReceiveProps(nextProps) {
 		// console.log('Homepage received props ______________________');
 		// Based on nextProps so that requests have the latest chapter information
 		const {
-			userId,
-			userAuthenticated,
 			activeTextId,
 			activeBookId,
 			activeChapter,
 			addBookmarkSuccess,
 		} = nextProps.homepage;
+		const { userId, userAuthenticated } = nextProps.profile;
 		const {
 			addBookmarkSuccess: addBookmarkSuccessProps,
-			userId: userIdProps,
-			userAuthenticated: userAuthenticatedProps,
 			activeTextId: activeTextIdProps,
 			activeBookId: activeBookIdProps,
 			activeChapter: activeChapterProps,
 		} = this.props.homepage;
+		const {
+			userId: userIdProps,
+			userAuthenticated: userAuthenticatedProps,
+		} = this.props.profile;
 
 		// If there is an authenticated user then send these calls
 		if (
@@ -262,7 +254,7 @@ class HomePage extends React.PureComponent {
 					},
 				}),
 			);
-			// console.log('Dispatched get bookmarks for chapter');
+
 			this.props.dispatch(
 				getBookmarksForChapter({
 					userId,
@@ -276,7 +268,7 @@ class HomePage extends React.PureComponent {
 				}),
 			);
 		}
-		// console.log('addBookmarkSuccess', addBookmarkSuccess, 'addBookmarkSuccessProps', addBookmarkSuccessProps);
+
 		if (addBookmarkSuccess !== addBookmarkSuccessProps && addBookmarkSuccess) {
 			this.props.dispatch(
 				getBookmarksForChapter({
@@ -292,13 +284,6 @@ class HomePage extends React.PureComponent {
 			);
 			this.props.dispatch(resetBookmarkState());
 		}
-	}
-
-	componentWillUnmount() {
-		// Even though for this function to fire the user has to refresh
-		// the entire page it is good practice to remove any lingering
-		// event listeners
-		// window.removeEventListener('scroll', this.handleScrolling, true);
 	}
 
 	getBooks = (props) => this.props.dispatch(getBooks(props));
@@ -325,75 +310,6 @@ class HomePage extends React.PureComponent {
 	setAudioPlayerState = (state) =>
 		this.props.dispatch(setAudioPlayerState(state));
 
-	// May need more than one to determine the different audio player heights
-	// get isMobileSized() {
-	// 	return (
-	// 		this.window &&
-	// 		this.document &&
-	// 		this.document.firstElementChild &&
-	// 		this.document.firstElementChild.clientWidth < 500
-	// 	);
-	// }
-
-	// Height of the entire scroll container including the invisible portions
-	// get mainHeight() {
-	// 	return Math.max(
-	// 		this.main.offsetHeight,
-	// 		this.main.clientHeight,
-	// 		this.main.scrollHeight,
-	// 	);
-	// }
-	// Height of the visible portion of the scroll container
-	// get mainPhysicalHeight() {
-	// 	return Math.max(this.main.offsetHeight, this.main.clientHeight);
-	// }
-
-	// The current scroll position
-	// get scrollTop() {
-	// 	return this.main.scrollTop;
-	// }
-
-	// If the scroll event would result in a value above or below the actual size of the container
-	// get outOfBounds() {
-	// 	return (
-	// 		this.scrollTop + this.mainPhysicalHeight >= this.mainHeight ||
-	// 		this.scrollTop < 5
-	// 	);
-	// }
-
-	// get isAtTop() {
-	// 	return this.scrollTop < 5;
-	// }
-
-	// get isAtBottom() {
-	// 	return this.scrollTop + this.mainPhysicalHeight >= this.mainHeight;
-	// }
-
-	// handleHeightRef = (el) => {
-	// 	this.heightRef = el;
-	// };
-
-	// handleScrolling = () => {
-	// 	// Only hides the header/footer if all of the menus are closed
-	// 	if (
-	// 		!this.scrollTicking &&
-	// 		!this.props.homepage.isProfileActive &&
-	// 		!this.props.homepage.isNotesModalActive &&
-	// 		!this.props.homepage.isSearchModalActive &&
-	// 		!this.props.homepage.isSettingsModalActive &&
-	// 		!this.props.homepage.isVersionSelectionActive &&
-	// 		!this.props.homepage.isChapterSelectionActive &&
-	// 		!this.props.homepage.isInformationModalActive
-	// 	) {
-	// 		// console.log('scroll scrollticking');
-	// 		// Using this value to determine when the animation frame completed
-	// 		this.scrollTicking = true;
-	// 		requestAnimationFrame(this.updateScrollDirection);
-	// 	}
-	// };
-
-	// menuTicking = false;
-
 	handleMenuTimer = (menu) => {
 		if (menu === 'profile') {
 			this.props.dispatch(toggleProfile());
@@ -413,80 +329,7 @@ class HomePage extends React.PureComponent {
 		if (menu === 'version') {
 			this.props.dispatch(toggleVersionSelection());
 		}
-		// this.menuTicking = false;
 	};
-
-	// updateScrollDirection = () => {
-	// 	this.main = document.getElementsByTagName('main')[0];
-
-	// 	const resizeHeight = 0;
-	// 	if (!this.outOfBounds) {
-	// 		// Previous state was not scrolling down but new state is
-	// 		if (
-	// 			this.scrollTop >= this.previousScrollTop &&
-	// 			!this.state.isScrollingDown
-	// 		) {
-	// 			this.setState(
-	// 				{
-	// 					isScrollingDown: !!this.isMobileSized,
-	// 				},
-	// 				() => {
-	// 					this.previousScrollTop = this.scrollTop;
-	// 					this.scrollTicking = false;
-	// 				},
-	// 			);
-	// 			// New state is scrolling up and old state is scrolling down
-	// 		} else if (
-	// 			this.scrollTop < this.previousScrollTop &&
-	// 			this.state.isScrollingDown
-	// 		) {
-	// 			this.setState(
-	// 				{
-	// 					isScrollingDown: false,
-	// 				},
-	// 				() => {
-	// 					this.previousScrollTop = this.scrollTop;
-	// 					this.scrollTicking = false;
-	// 				},
-	// 			);
-	// 		} else if (
-	// 			this.scrollTop + this.mainPhysicalHeight >=
-	// 			this.mainHeight - resizeHeight
-	// 		) {
-	// 			this.setState(
-	// 				{
-	// 					isScrollingDown: false,
-	// 				},
-	// 				() => {
-	// 					this.previousScrollTop = this.scrollTop;
-	// 					this.scrollTicking = false;
-	// 				},
-	// 			);
-	// 		} else {
-	// 			this.previousScrollTop = this.scrollTop;
-	// 			this.scrollTicking = false;
-	// 		}
-	// 	} else if (this.isAtTop || this.isAtBottom) {
-	// 		this.setState(
-	// 			{
-	// 				isScrollingDown: false,
-	// 			},
-	// 			() => {
-	// 				this.previousScrollTop = this.scrollTop;
-	// 				this.scrollTicking = false;
-	// 			},
-	// 		);
-	// 	} else {
-	// 		this.previousScrollTop = this.scrollTop;
-	// 		this.scrollTicking = false;
-	// 	}
-	// };
-
-	// This may be buggy if the function got called before the
-	// dom was mounted but I have yet to experience any bugs
-	// previousScrollTop = this.main ? this.main.scrollTop : 0;
-
-	// scrollTicking = false;
 
 	resetPasswordSent = () => {
 		// We might still want this to try and provide a slightly better user experience
@@ -526,12 +369,6 @@ class HomePage extends React.PureComponent {
 
 	toggleProfile = () => {
 		if (this.isMenuOpen('profile')) {
-			// clearTimeout(this.menuTimer);
-			// this.menuTimer = setTimeout(this.handleMenuTimer, 700, 'profile');
-			// if (!this.menuTicking) {
-			// 	this.menuTicking = true;
-			// 	requestAnimationFrame(this.handleMenuClose);
-			// }
 			this.props.dispatch(toggleProfile());
 		} else {
 			this.props.dispatch(toggleProfile());
@@ -540,12 +377,6 @@ class HomePage extends React.PureComponent {
 
 	toggleNotesModal = () => {
 		if (this.isMenuOpen('notes')) {
-			// clearTimeout(this.menuTimer);
-			// this.menuTimer = setTimeout(this.handleMenuTimer, 700, 'notes');
-			// if (!this.menuTicking) {
-			// 	this.menuTicking = true;
-			// 	requestAnimationFrame(this.handleMenuClose);
-			// }
 			this.props.dispatch(toggleNotesModal());
 		} else {
 			this.props.dispatch(toggleNotesModal());
@@ -554,12 +385,6 @@ class HomePage extends React.PureComponent {
 
 	toggleSettingsModal = () => {
 		if (this.isMenuOpen('settings')) {
-			// clearTimeout(this.menuTimer);
-			// this.menuTimer = setTimeout(this.handleMenuTimer, 700, 'settings');
-			// if (!this.menuTicking) {
-			// 	this.menuTicking = true;
-			// 	requestAnimationFrame(this.handleMenuClose);
-			// }
 			this.props.dispatch(toggleSettingsModal());
 		} else {
 			this.props.dispatch(toggleSettingsModal());
@@ -568,12 +393,6 @@ class HomePage extends React.PureComponent {
 
 	toggleSearchModal = () => {
 		if (this.isMenuOpen('search')) {
-			// clearTimeout(this.menuTimer);
-			// this.menuTimer = setTimeout(this.handleMenuTimer, 700, 'search');
-			// if (!this.menuTicking) {
-			// 	this.menuTicking = true;
-			// 	requestAnimationFrame(this.handleMenuClose);
-			// }
 			this.props.dispatch(toggleSearchModal());
 		} else {
 			this.props.dispatch(toggleSearchModal());
@@ -581,21 +400,11 @@ class HomePage extends React.PureComponent {
 	};
 
 	toggleChapterSelection = () => {
-		// if (this.isMenuOpen('chapter')) {
-		// 	clearTimeout(this.menuTimer);
-		// 	this.menuTimer = setTimeout(this.handleMenuTimer, 600, 'chapter');
-		// } else {
 		this.props.dispatch(toggleChapterSelection());
-		// }
 	};
 
 	toggleVersionSelection = () => {
-		// if (this.isMenuOpen('version')) {
-		// 	clearTimeout(this.menuTimer);
-		// 	this.menuTimer = setTimeout(this.handleMenuTimer, 600, 'version');
-		// } else {
 		this.props.dispatch(toggleVersionSelection());
-		// }
 	};
 
 	// Checks if a menu other than the one given is open, otherwise returns whether any menus are open
@@ -671,12 +480,11 @@ class HomePage extends React.PureComponent {
 		const {
 			userSettings,
 			formattedSource,
-			userId,
-			userAuthenticated,
 			isMenuOpen,
 			initialVolume,
 			initialPlaybackRate,
 		} = this.props;
+		const { userId, userAuthenticated } = this.props.profile;
 
 		const autoPlayEnabled = userSettings.get('autoPlayEnabled');
 		const { isScrollingDown, footerDistance: distance } = this.state;
@@ -855,6 +663,7 @@ HomePage.propTypes = {
 		PropTypes.number,
 		PropTypes.string,
 	]),
+	profile: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -864,6 +673,7 @@ const mapStateToProps = createStructuredSelector({
 	userAuthenticated: selectAuthenticationStatus(),
 	userId: selectUserId(),
 	textData: selectUserNotes(),
+	profile: makeSelectProfile(),
 	isMenuOpen: selectMenuOpenState(),
 });
 
@@ -888,10 +698,17 @@ const withTextReducer = injectReducer({
 const withTextSaga = injectSaga({ key: 'textSelection', saga: textSaga });
 const withNotesSaga = injectSaga({ key: 'notes', saga: notesSaga });
 const withNotesReducer = injectReducer({ key: 'notes', reducer: notesReducer });
+const withProfileReducer = injectReducer({
+	key: 'profile',
+	reducer: profileReducer,
+});
+const withProfileSaga = injectSaga({ key: 'profile', saga: profileSaga });
 
 export default compose(
 	withReducer,
 	withTextReducer,
+	withProfileReducer,
+	withProfileSaga,
 	withNotesReducer,
 	withSaga,
 	withNotesSaga,

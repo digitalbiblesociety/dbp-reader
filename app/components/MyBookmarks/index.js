@@ -22,7 +22,7 @@ class MyBookmarks extends React.PureComponent {
 			getFormattedNoteDate,
 		} = this.props;
 		return bookmarks.map((listItem) => (
-			<div key={listItem.id} className={'highlight-item'}>
+			<div key={listItem.id} id={listItem.id} className={'highlight-item'}>
 				<Link
 					as={`/bible/${listItem.bible_id}/${listItem.book_id}/${
 						listItem.chapter
@@ -44,6 +44,7 @@ class MyBookmarks extends React.PureComponent {
 					</a>
 				</Link>
 				<div
+					key={`${listItem.id}-delete`}
 					onClick={() => deleteNote({ noteId: listItem.id, isBookmark: true })}
 					className={'delete-highlight'}
 					tabIndex={0}

@@ -301,7 +301,11 @@ class MyNotes extends React.PureComponent {
 				<section className="note-list">
 					{sectionType === 'notes'
 						? filteredPageData.map((listItem) => (
-								<div key={listItem.id} className={'highlight-item'}>
+								<div
+									key={listItem.id}
+									id={listItem.id}
+									className={'highlight-item'}
+								>
 									<div
 										role="button"
 										tabIndex={0}
@@ -319,6 +323,7 @@ class MyNotes extends React.PureComponent {
 										</div>
 									</div>
 									<div
+										id={`${listItem.id}-edit`}
 										onClick={() => this.handleClick(listItem)}
 										className={'edit-note'}
 										tabIndex={0}
@@ -328,6 +333,7 @@ class MyNotes extends React.PureComponent {
 										<span>Edit</span>
 									</div>
 									<div
+										id={`${listItem.id}-delete`}
 										onClick={() => deleteNote({ noteId: listItem.id })}
 										className={'delete-highlight'}
 										tabIndex={0}

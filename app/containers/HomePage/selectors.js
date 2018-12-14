@@ -49,7 +49,7 @@ const selectUserNotes = () =>
 	createDeepEqualSelector(
 		[selectNotes, selectHomePageDomain, selectProfilePageDomain],
 		(notes, home, profile) => {
-			// const bibleId = home.get('activeTextId');
+			const activeTextId = home.get('activeTextId');
 			const bookId = home.get('activeBookId');
 			const chapter = home.get('activeChapter');
 			const text = home.get('chapterText');
@@ -66,13 +66,17 @@ const selectUserNotes = () =>
 				.get('userNotes')
 				.filter(
 					(note) =>
-						note.get('book_id') === bookId && note.get('chapter') === chapter,
+						note.get('book_id') === bookId &&
+						note.get('chapter') === chapter &&
+						note.get('bible_id') === activeTextId,
 				);
 			const filteredBookmarks = notes
 				.get('chapterBookmarks')
 				.filter(
 					(note) =>
-						note.get('book_id') === bookId && note.get('chapter') === chapter,
+						note.get('book_id') === bookId &&
+						note.get('chapter') === chapter &&
+						note.get('bible_id') === activeTextId,
 				);
 			const bookmarks = filteredBookmarks.toJS
 				? filteredBookmarks.toJS()

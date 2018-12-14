@@ -80,6 +80,7 @@ export class GoogleAuthentication extends React.PureComponent {
 		return (
 			<div
 				role={'button'}
+				id={'google-login'}
 				tabIndex={0}
 				onClick={this.handleSocialLogin}
 				className="google"

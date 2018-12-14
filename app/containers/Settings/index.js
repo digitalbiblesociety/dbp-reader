@@ -186,6 +186,7 @@ export class Settings extends React.PureComponent {
 									/>
 								) : (
 									<span
+										id={'paper-theme-button'}
 										role="button"
 										tabIndex={0}
 										onClick={() => this.updateTheme({ theme: 'paper' })}
@@ -199,6 +200,7 @@ export class Settings extends React.PureComponent {
 									/>
 								) : (
 									<span
+										id={'dark-theme-button'}
 										role="button"
 										tabIndex={0}
 										onClick={() => this.updateTheme({ theme: 'dark' })}
@@ -212,6 +214,7 @@ export class Settings extends React.PureComponent {
 									/>
 								) : (
 									<span
+										id={'red-theme-button'}
 										role="button"
 										tabIndex={0}
 										onClick={() => this.updateTheme({ theme: 'red' })}
@@ -221,6 +224,7 @@ export class Settings extends React.PureComponent {
 							</section>
 							<section className="font-settings">
 								<span
+									id={'sans-font-button'}
 									role="button"
 									tabIndex={0}
 									onClick={() => this.updateFontType({ font: 'sans' })}
@@ -231,6 +235,7 @@ export class Settings extends React.PureComponent {
 									<span className="title">Aa</span>
 								</span>
 								<span
+									id={'serif-font-button'}
 									role="button"
 									tabIndex={0}
 									onClick={() => this.updateFontType({ font: 'serif' })}
@@ -241,6 +246,7 @@ export class Settings extends React.PureComponent {
 									<span className="title">Aa</span>
 								</span>
 								<span
+									id={'slab-font-button'}
 									role="button"
 									tabIndex={0}
 									onClick={() => this.updateFontType({ font: 'slab' })}
@@ -253,6 +259,7 @@ export class Settings extends React.PureComponent {
 							</section>
 							<section className="font-sizes">
 								<span
+									id={'font-size-button-1'}
 									role="button"
 									tabIndex={0}
 									onClick={() => this.updateFontSize({ size: 0 })}
@@ -263,6 +270,7 @@ export class Settings extends React.PureComponent {
 									Aa
 								</span>
 								<span
+									id={'font-size-button-2'}
 									role="button"
 									tabIndex={0}
 									onClick={() => this.updateFontSize({ size: 18 })}
@@ -273,6 +281,7 @@ export class Settings extends React.PureComponent {
 									Aa
 								</span>
 								<span
+									id={'font-size-button-3'}
 									role="button"
 									tabIndex={0}
 									onClick={() => this.updateFontSize({ size: 42 })}
@@ -283,6 +292,7 @@ export class Settings extends React.PureComponent {
 									Aa
 								</span>
 								<span
+									id={'font-size-button-4'}
 									role="button"
 									tabIndex={0}
 									onClick={() => this.updateFontSize({ size: 69 })}
@@ -293,6 +303,7 @@ export class Settings extends React.PureComponent {
 									Aa
 								</span>
 								<span
+									id={'font-size-button-5'}
 									role="button"
 									tabIndex={0}
 									onClick={() => this.updateFontSize({ size: 100 })}
@@ -339,17 +350,16 @@ export class Settings extends React.PureComponent {
 								max={100}
 							/>
 							<section className="option-toggles">
-								{toggleOptions
-									.valueSeq()
-									.map((option) => (
-										<SettingsToggle
-											key={option.get('name')}
-											available={option.get('available')}
-											checked={option.get('active')}
-											name={option.get('name')}
-											action={this.toggleSettingsOption}
-										/>
-									))}
+								{toggleOptions.valueSeq().map((option) => (
+									<SettingsToggle
+										id={option.get('name')}
+										key={option.get('name')}
+										available={option.get('available')}
+										checked={option.get('active')}
+										name={option.get('name')}
+										action={this.toggleSettingsOption}
+									/>
+								))}
 							</section>
 						</div>
 					</div>

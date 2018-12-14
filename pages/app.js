@@ -60,11 +60,13 @@ class AppContainer extends React.Component {
 		// If the page was served from the server then I need to cache the data for this route
 		if (this.props.isFromServer) {
 			this.props.fetchedUrls.forEach((url) => {
-				overrideCache(url.href, url.data);
+				if (url.data.error || url.data.errors) {
+					overrideCache(url.href, {}, 1);
+				} else {
+					overrideCache(url.href, url.data);
+				}
 			});
 		}
-		// console.log('user profile', this.props.userProfile);
-
 		// If undefined gets stored in local storage it cannot be parsed so I have to compare strings
 		if (
 			this.props.userProfile.userId &&
@@ -88,49 +90,40 @@ class AppContainer extends React.Component {
 				'bible_is_user_nickname',
 				this.props.userProfile.name,
 			);
+		} else {
+			const storedId =
+				localStorage.getItem('bible_is_user_id') ||
+				sessionStorage.getItem('bible_is_user_id') ||
+				'';
+			if (storedId) {
+				this.props.dispatch({
+					type: 'GET_INITIAL_ROUTE_STATE_PROFILE',
+					profile: {
+						userId: storedId,
+						userAuthenticated: !!storedId,
+						userProfile: {
+							email:
+								localStorage.getItem('bible_is_user_email') ||
+								sessionStorage.getItem('bible_is_user_email') ||
+								'',
+							name:
+								localStorage.getItem('bible_is_user_name') ||
+								sessionStorage.getItem('bible_is_user_name') ||
+								'',
+							nickname:
+								localStorage.getItem('bible_is_user_nickname') ||
+								sessionStorage.getItem('bible_is_user_nickname') ||
+								'',
+						},
+					},
+				});
+			}
 		}
 
 		this.props.dispatch(setChapterTextLoadingState({ state: false }));
 
 		// Intercept all route changes to ensure that the loading spinner starts
 		Router.router.events.on('routeChangeStart', this.handleRouteChange);
-
-		// Probably don't need to do this because all of the state can be obtained in getInitialProps now
-		// if (userId && isAuthenticated) {
-		//   this.props.dispatch({
-		//     type: 'GET_INITIAL_ROUTE_STATE_HOMEPAGE',
-		//     homepage: {
-		//       userSettings,
-		//       userProfile,
-		//       userId,
-		//       userAuthenticated: isAuthenticated,
-		//     },
-		//   });
-		//   this.props.dispatch({
-		//     type: 'GET_INITIAL_ROUTE_STATE_PROFILE',
-		//     profile: {
-		//       userProfile,
-		//       userId,
-		//       userAuthenticated: isAuthenticated,
-		//     },
-		//   });
-		// } else {
-		//   this.props.dispatch({
-		//     type: 'GET_INITIAL_ROUTE_STATE_HOMEPAGE',
-		//     homepage: {
-		//       userSettings,
-		//       userId,
-		//       userAuthenticated: isAuthenticated,
-		//     },
-		//   });
-		//   this.props.dispatch({
-		//     type: 'GET_INITIAL_ROUTE_STATE_PROFILE',
-		//     profile: {
-		//       userId,
-		//       userAuthenticated: isAuthenticated,
-		//     },
-		//   });
-		// }
 
 		const browserObject = {
 			agent: '',
@@ -167,6 +160,7 @@ class AppContainer extends React.Component {
 		// Start loading spinner for text
 		// Close any open menus
 		// Remove current audio source - (may fix item 1)
+		// TODO: Probably need to get the new highlights here or at least start the process for getting them
 		this.props.dispatch(setChapterTextLoadingState({ state: true }));
 	};
 
@@ -250,9 +244,6 @@ AppContainer.getInitialProps = async (context) => {
 		nickname: userName,
 	};
 	let userId = reqUserId || '';
-
-	// console.log('user profile', userProfile);
-
 	let hasVideo = false;
 	let isFromServer = true;
 	let userSettings = {
@@ -761,24 +752,7 @@ AppContainer.getInitialProps = async (context) => {
 	const testaments = bookData
 		? bookData.reduce((a, c) => ({ ...a, [c.book_id]: c.testament }), {})
 		: [];
-	// console.log('user profile', userProfile);
-	// console.log('initial volume', initialVolume);
-	// console.log('initial playback', initialPlaybackRate);
-	// console.log('user id', userId);
-	// console.log('user settings', userSettings);
 	if (context.reduxStore) {
-		context.reduxStore.dispatch({
-			type: 'GET_INITIAL_ROUTE_STATE_PROFILE',
-			profile: {
-				userId: userId || '',
-				userAuthenticated: isAuthenticated || false,
-				userProfile: {
-					...userProfile,
-					verified: false,
-					accounts: [],
-				},
-			},
-		});
 		context.reduxStore.dispatch({
 			type: 'GET_INITIAL_ROUTE_STATE_HOMEPAGE',
 			homepage: {
