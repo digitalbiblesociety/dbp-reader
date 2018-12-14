@@ -39,7 +39,11 @@ export default function configureStore(initialState = {}, history) {
 	);
 
 	if (typeof self === 'object') {
-		persistStore(store);
+		persistStore(store, {
+			whitelist: ['profile', 'textSelection'],
+			blacklist: ['homepage', 'notes'],
+			keyPrefix: 'Bible.is',
+		});
 	}
 
 	// Extensions
