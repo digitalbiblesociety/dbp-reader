@@ -40,8 +40,8 @@ export default function configureStore(initialState = {}, history) {
 
 	if (typeof self === 'object') {
 		persistStore(store, {
-			whitelist: ['profile', 'textSelection'],
-			blacklist: ['homepage', 'notes'],
+			whitelist: ['profile'],
+			blacklist: ['homepage', 'notes', 'textSelection'],
 			keyPrefix: 'Bible.is',
 		});
 	}
