@@ -720,14 +720,9 @@ class Text extends React.PureComponent {
 			(!oneVersePerLine && !readersMode && formattedSource.main) &&
 			this.createFormattedHighlights
 		) {
-			// Temporary fix for the fact that highlight_start is a string... ... ...
-			const highlightsToPass = highlights.map((h) => ({
-				...h,
-				highlight_start: parseInt(h.highlight_start, 10),
-			}));
 			// Use function for highlighting the formatted formattedText
 			formattedText = this.createFormattedHighlights(
-				highlightsToPass,
+				highlights,
 				formattedSource.main,
 			);
 		} else if (
@@ -739,7 +734,7 @@ class Text extends React.PureComponent {
 			// Use function for highlighting the plain plainText
 			// TODO: Can remove filter once I fix the problem with the new highlights not being fetched
 			plainText = this.createHighlights(
-				highlightsToPass.filter((h) => h.chapter === activeChapter),
+				highlights.filter((h) => h.chapter === activeChapter),
 				initialText,
 			);
 		} else {
