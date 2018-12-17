@@ -9,22 +9,7 @@ export default ({
 	verseNumber,
 	text: chapterText,
 	isHref,
-	// vid,
 }) => {
-	// if (!books.length || !chapterText.length) {
-	// 	return url({ textId, bookId, chapter, isHref, nextVerse: verseNumber });
-	// }
-	// if (vid) {
-	//   console.log('previous chapter', {
-	//     books,
-	//     chapter,
-	//     bookId,
-	//     textId,
-	//     verseNumber,
-	//     text: chapterText,
-	//     isHref,
-	//   });
-	// }
 	if (verseNumber && chapterText.length) {
 		const prevVerse = parseInt(verseNumber, 10) - 1 || 1;
 		const lastVerse = chapterText.length;
@@ -34,20 +19,16 @@ export default ({
 			// Verse was valid
 
 			return url({ textId, bookId, chapter, nextVerse: prevVerse, isHref });
-			// return `${baseUrl}/${textId}/${bookId}/${chapter}/${prevVerse}`;
 		} else if (prevVerse < 0) {
 			// Verse was below valid range
 
 			return url({ textId, bookId, chapter, nextVerse: '1', isHref });
-			// return `${baseUrl}/${textId}/${bookId}/${chapter}/1`;
 		} else if (prevVerse > lastVerse) {
 			// Verse was above valid range
 
 			return url({ textId, bookId, chapter, nextVerse: lastVerse, isHref });
-			// return `${baseUrl}/${textId}/${bookId}/${chapter}/${lastVerse}`;
 		}
 		return url({ textId, bookId, chapter, nextVerse: verseNumber, isHref });
-		// return `${baseUrl}/${textId}/${bookId}/${chapter}`;
 	} else if (verseNumber) {
 		const nextVerse = parseInt(verseNumber, 10) - 1 || 1;
 
@@ -55,16 +36,10 @@ export default ({
 			// The next verse is within a valid range
 
 			return url({ textId, bookId, chapter, nextVerse, isHref });
-			// return `${baseUrl}/${textId}/${bookId}/${chapter}/${nextVerse}`;
 		} else if (nextVerse < 0) {
 			// The next verse is below 0 and thus invalid
 
 			return url({ textId, bookId, chapter, nextVerse: '1', isHref });
-			// return `${baseUrl}/${textId}/${bookId}/${chapter}/1`;
-			// Need to find a way to do this for formatted text
-			// } else if (nextVerse > lastVerse) {
-			// Next verse is above the last verse in the chapter and thus is invalid
-			// 	return url({ textId, bookId, chapter, nextVerse: lastVerse, isHref });
 		}
 		// Worst case just go back to the same verse (In hindsight this may not be the best...)
 		return url({ textId, bookId, chapter, nextVerse: verseNumber, isHref });
@@ -72,7 +47,6 @@ export default ({
 
 	if (books[0] && bookId === books[0].book_id && chapter - 1 === 0) {
 		return url({ textId, bookId, chapter, isHref });
-		// return `${baseUrl}/${textId}/${bookId}/${chapter}`;
 	}
 
 	let activeBookIndex;
@@ -89,51 +63,24 @@ export default ({
 			}
 		}
 	});
-	// if (vid) {
-	//   console.log('previousBookIndex', previousBookIndex);
-	// }
 
 	const previousBook =
 		fromJS(books[previousBookIndex]) || fromJS({ chapters: [], book_id: '' });
 	const activeBook =
 		fromJS(books[activeBookIndex]) || fromJS({ chapters: [], book_id: '' });
-	// if (vid) {
-	//   console.log('previousBook', previousBook, 'activeBook', activeBook);
-	// }
 	if (chapter - 1 === 0) {
 		// Goes to the last chapter in the previous book
-		// if (vid) {
-		//   console.log(
-		//     'at second to last return',
-		//     url({
-		//       textId,
-		//       bookId: previousBook.get('book_id').toLowerCase(),
-		//       chapter: previousBook.getIn(['chapters', -1]),
-		//       isHref,
-		//     }),
-		//   );
-		// }
 		return url({
 			textId,
 			bookId: previousBook.get('book_id').toLowerCase(),
 			chapter: previousBook.getIn(['chapters', -1]),
 			isHref,
 		});
-		// return `${baseUrl}/${textId}/${previousBook
-		// 	.get('book_id')
-		// 	.toLowerCase()}/${previousBook.getIn(['chapters', -1])}`;
 	}
-	// console.log('going back');
-
 	// If the chapter number is greater than the active chapter then we have gone too far and need to get the previous chapter
 	const chapterIndex = activeBook
 		.get('chapters')
 		.findIndex((c) => c === chapter || c > chapter);
-	// console.log('chapterIndex', chapterIndex);
-	// console.log('activeBook.get()', activeBook.get('chapters'));
-	// if (vid) {
-	//   console.log('bottom return');
-	// }
+
 	return url({ textId, bookId, chapter: chapterIndex, isHref });
-	// return `${baseUrl}/${textId}/${bookId}/${chapterIndex}`;
 };

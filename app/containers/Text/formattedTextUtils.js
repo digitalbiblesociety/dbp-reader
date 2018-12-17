@@ -44,7 +44,6 @@ const applyNotes = (source, notes) => {
 			svg.appendChild(use);
 			// If there are errors in Edge or IE check that the pollyfill for prepend
 			// is being loaded, I also default to append as a safe fallback
-			// verseElement.prepend ? verseElement.prepend(svg) : verseElement.appendChild(svg);
 			verseElement.appendChild(svg);
 			versesWithNotes[note.verse_start] = true;
 		}
@@ -95,7 +94,6 @@ const applyBookmarks = (source, bookmarks) => {
 			svg.appendChild(use);
 			// If there are errors in Edge or IE check that the pollyfill for prepend
 			// is being loaded, I also default to appendChild as a safe fallback
-			// verseElement.prepend ? verseElement.prepend(svg) : verseElement.appendChild(svg);
 			verseElement.appendChild(svg);
 			versesWithBookmarks[bookmark.verse] = true;
 		}

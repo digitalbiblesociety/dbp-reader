@@ -7,7 +7,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-// import ImageComponent from '../ImageComponent';
 import SvgWrapper from '../SvgWrapper';
 import PopupMessage from '../PopupMessage';
 import messages from './messages';
@@ -30,8 +29,6 @@ class AccountSettings extends React.PureComponent {
 	};
 
 	handleFileInputChange = (e) => {
-		// console.log('e.target.files[0]', e.target.files[0]);
-
 		if (e.target.files[0]) {
 			this.props.changePicture({ avatar: e.target.files[0] });
 		} else {
@@ -40,16 +37,10 @@ class AccountSettings extends React.PureComponent {
 				clearTimeout(this.timer);
 			}
 			setTimeout(() => {
-				// console.log('Selection after 50ms', window.getSelection().toString());
 				this.setState({ popupOpen: false });
 			}, 2500);
 		}
 	};
-	// handleAddressFieldChange = (e, field) => {
-	// 	this.setState({
-	// 		[field]: e.target.value,
-	// 	});
-	// }
 
 	sendUpdateEmail = () => {
 		const currentEmail = this.props.profile.email;
@@ -61,41 +52,9 @@ class AccountSettings extends React.PureComponent {
 		}
 	};
 
-	// sendUpdateUserInformation = () => {
-	// 	const { country, address1, address2, city, state, zip } = this.state;
-	// 	const { userId } = this.props;
-	// 	const profile = { country, address1, address2, city, state, zip };
-	//
-	// 	this.props.updateUserInformation({ profile, userId });
-	// }
-	// changePicture = () => {
-	// 	if (this.inputElement) {
-	// 		this.inputElement.click();
-	// 	}
-	// 	// Need to implement some sort of image upload thing here
-	// 	// Or need to have a short dialogue indicating to the user that they need to use a link
-	// 	// this.setState({ popupOpen: true });
-	// 	// if (this.timer) {
-	// 	// 	clearTimeout(this.timer);
-	// 	// }
-	// 	// setTimeout(() => {
-	// 	// 	// console.log('Selection after 50ms', window.getSelection().toString());
-	// 	// 	this.setState({ popupOpen: false });
-	// 	// }, 2500);
-	// };
-
 	render() {
 		const { logout, profile } = this.props;
-		const {
-			email,
-			popupOpen,
-			// country,
-			// address1,
-			// address2,
-			// city,
-			// state,
-			// zip,
-		} = this.state;
+		const { email, popupOpen } = this.state;
 
 		return (
 			<div className="account-settings">
@@ -108,27 +67,10 @@ class AccountSettings extends React.PureComponent {
 					<FormattedMessage {...messages.logout} />
 				</div>
 				<section className="personal-info">
-					{/* {profile.avatar && profile.avatar !== 'null' ? ( */}
-					{/* <ImageComponent */}
-					{/* classes="profile-picture" */}
-					{/* alt="Profile Picture" */}
-					{/* src={profile.avatar} */}
-					{/* /> */}
-					{/* ) : ( */}
 					<SvgWrapper
 						className={'avatar-placeholder'}
 						svgid={'avatar_placeholder'}
 					/>
-					{/* }) */}
-					{/* <input */}
-					{/* id={'fileInput'} */}
-					{/* className={'change-picture-input'} */}
-					{/* type={'file'} */}
-					{/* onChange={this.handleFileInputChange} */}
-					{/* /> */}
-					{/* <label htmlFor={'fileInput'} className={'change-picture'}> */}
-					{/* Change Picture */}
-					{/* </label> */}
 					{profile.nickname && profile.nickname !== 'undefined' ? (
 						<h3 className="name">{profile.nickname}</h3>
 					) : null}
@@ -185,7 +127,6 @@ AccountSettings.propTypes = {
 	deleteUser: PropTypes.func,
 	updateEmail: PropTypes.func,
 	changePicture: PropTypes.func,
-	// updateUserInformation: PropTypes.func,
 	profile: PropTypes.object,
 	userId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };

@@ -5,12 +5,9 @@
  */
 
 import React from 'react';
-// import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
-// import styled from 'styled-components';
 import {
 	FacebookShareButton,
-	GooglePlusShareButton,
 	TwitterShareButton,
 	EmailShareButton,
 	FacebookShareCount,
@@ -84,9 +81,7 @@ class ContextPortal extends React.PureComponent {
 	};
 
 	handleCopy = (e) => {
-		// console.log('before setting clipboard data');
 		e.clipboardData.setData('text/plain', window.location.href);
-		// console.log('clipboard data', e.clipboardData);
 		e.preventDefault();
 	};
 
@@ -95,45 +90,33 @@ class ContextPortal extends React.PureComponent {
 			.getSelection()
 			.getRangeAt(0)
 			.cloneRange();
-		// console.log('mouse entered', e.target.id);
 		if (e.target.id === 'copy-button') {
 			// handle the button being the target
 			const textBox = document.getElementById('link-to-copy');
-			// textBox.focus();
 			textBox.select();
-			// console.log('input when mouse entered copy', textBox);
 		} else if (e.target.id === 'link-to-copy') {
 			// handle the link being the target
-			// e.target.focus();
 			e.target.select();
-			// console.log('input when mouse entered input', e.target);
 		} else if (e.target.id === 'copy-container') {
 			// handle the button being the target
 			const textBox = document.getElementById('link-to-copy');
-			// textBox.focus();
 			textBox.select();
-			// console.log('input when mouse entered copy', textBox);
 		}
 	};
 
 	handleMouseLeave = (e) => {
-		// console.log('mouse left', e.target.id);
 		if (e.target.id === 'copy-button') {
 			// handle the button being the target
 			const textBox = document.getElementById('link-to-copy');
 			textBox.setSelectionRange(0, 0);
-			// console.log(textBox);
 		} else if (e.target.id === 'link-to-copy') {
 			// handle the link being the target
 			e.target.setSelectionRange(0, 0);
-			// console.log(e.target);
 		} else if (e.target.id === 'copy-container') {
 			// handle the button being the target
 			const textBox = document.getElementById('link-to-copy');
 			textBox.setSelectionRange(0, 0);
-			// console.log('input when mouse entered copy', textBox);
 		}
-		// console.log(this.clonedRange);
 		// Doing this so that if the user accidentally hovers over the copy link they won't have to reselect the text
 		window.getSelection().removeAllRanges();
 		window.getSelection().addRange(this.clonedRange);
@@ -143,7 +126,6 @@ class ContextPortal extends React.PureComponent {
 		const coords = { x: e.clientX, y: e.clientY };
 		this.setState({ openPopup: true, coords });
 		setTimeout(() => this.setState({ openPopup: false }), 1000);
-		// console.log('clicked the copy button');
 		document.addEventListener('copy', this.handleCopy);
 		document.execCommand('copy');
 		document.removeEventListener('copy', this.handleCopy);
@@ -156,19 +138,11 @@ class ContextPortal extends React.PureComponent {
 
 	render() {
 		const {
-			// shareHighlightToFacebook,
 			addFacebookLike,
-			// setActiveNote,
 			coordinates,
-			// parentNode,
-			// toggleNotesModal,
-			// notesActive,
 			closeContextMenu,
-			// setActiveNotesView,
 			selectedText,
 		} = this.props;
-
-		// console.log('selectedText', selectedText);
 
 		const component = (
 			<div
@@ -244,13 +218,6 @@ class ContextPortal extends React.PureComponent {
 					>
 						<SvgWrapper className={'icon'} svgid="facebook" />
 					</FacebookShareButton>
-					{/* <GooglePlusShareButton
-						onShareWindowClose={closeContextMenu}
-						className={'menu-item social google'}
-						url={window.location.href}
-					>
-						<SvgWrapper className={'icon'} svgid="google" />
-					</GooglePlusShareButton> */}
 					<GooglePlusShare quote={selectedText} />
 					<TwitterShareButton
 						onShareWindowClose={closeContextMenu}
@@ -311,38 +278,15 @@ class ContextPortal extends React.PureComponent {
 			</div>
 		);
 
-		// if (parentNode instanceof HTMLElement || parentNode instanceof Node) {
-		// 	return ReactDOM.createPortal(component, parentNode);
-		// }
-
 		return component;
 	}
-	// Component if I go back to not using react-share
-	// const component = (
-	// 	<StyledDiv className={'shadow'} x={coordinates.x} y={coordinates.y}>
-	// 		<Row>
-	// 			<Item onClick={handleNoteClick}><SvgWrapper className='icon height="25px" width="25px" svgid="note-list" /></Item>
-	// 			<Item onClick={addHighlight}><SvgWrapper height="25px" width="25px" svgid="highlights" /></Item>
-	// 			<Item onClick={handleBookmarkClick}><SvgWrapper height="25px" width="25px" svgid="bookmarks" /></Item>
-	// 			<Item onClick={addFacebookLike} className="facebook"><SvgWrapper height="35px" width="35px" svgid="fb-thumb" /></Item>
-	// 		</Row>
-	// 		<Row>
-	// 			<Item onClick={shareHighlightToFacebook} data-layout="button_count" data-href={window.location.href} className="facebook fb-share-button"><SvgWrapper height="25px" width="25px" svgid="facebook" /></Item>
-	// 			<Item onClick={closeContextMenu} className="google"><SvgWrapper height="25px" width="25px" svgid="google_plus" /></Item>
-	// 			<Item onClick={closeContextMenu} className="twitter"><SvgWrapper height="35px" width="35px" svgid="twitter" /></Item>
-	// 			<Item onClick={closeContextMenu}><SvgWrapper height="25px" width="25px" svgid="email" /></Item>
-	// 		</Row>
-	// 	</StyledDiv>
-	// );
 }
 
 ContextPortal.propTypes = {
-	// parentNode: PropTypes.object,
 	selectedText: PropTypes.string,
 	coordinates: PropTypes.object,
 	notesActive: PropTypes.bool,
 	addHighlight: PropTypes.func,
-	// shareHighlightToFacebook: PropTypes.func,
 	setActiveNote: PropTypes.func,
 	addFacebookLike: PropTypes.func,
 	toggleNotesModal: PropTypes.func,

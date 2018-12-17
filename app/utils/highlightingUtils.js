@@ -8,8 +8,6 @@ const preorderTraverse = (node, array) => {
 		array.push(child);
 		array = preorderTraverse(child, array); // eslint-disable-line no-param-reassign
 	});
-	// array = preorderTraverse(node.left, array);
-	// array = preorderTraverse(node.right, array);
 	return array;
 };
 
@@ -25,11 +23,8 @@ const getFormattedParentVerseNumber = (node, verseNumber) => {
 
 	while (getFormattedElementVerseId(newNode) !== verseNumber) {
 		newNode = newNode.parentNode;
-		// console.log('new node', newNode);
-		// console.log('new node attributes', newNode.attributes);
 		if (counter >= 10) break;
 		counter += 1;
-		// console.log('condition to be checked', !(node.attributes && node.attributes['data-id'] && node.attributes['data-id'].value.split('_')[1] !== firstVerse));
 	}
 
 	return newNode;
@@ -48,26 +43,20 @@ const getFormattedParentVerse = (node) => {
 	// Both of these things exist only on a verse element
 	// I don't think I need to check for the class of v but if things break then I may have to
 	while (!(newNode.attributes && newNode.attributes['data-id'])) {
-		// console.log('new node', newNode);
-		// console.log('new node attributes', newNode.attributes);
 		newNode = newNode.parentNode;
 		if (counter >= 10) break;
 		counter += 1;
-		// console.log('condition to be checked', !(node.attributes && node.attributes['data-id'] && node.attributes['data-id'].value.split('_')[1] !== firstVerse));
 	}
 
 	return newNode;
 };
 
 const getFormattedChildIndex = (parent, child) => {
-	// if (parent.isSameNode(child)) {
-	// 	return index;
-	// }
 	if (!parent || !child) {
 		return null;
 	}
 	const preorderArray = preorderTraverse(parent, []);
-	// console.log('preorder array', preorderArray);
+
 	return preorderArray.indexOf(child);
 };
 
@@ -87,7 +76,6 @@ const getPlainParentVerse = (node, verseNumber) => {
 			newNode.attributes['data-verseid'].value !== verseNumber
 		)
 	) {
-		// console.log('newNode', newNode);
 		newNode = newNode.parentNode;
 		if (counter >= 10) break;
 		counter += 1;
@@ -112,7 +100,6 @@ const getPlainParentVerseWithoutNumber = (node) => {
 			newNode.attributes['data-verseid'].value
 		)
 	) {
-		// console.log('newNode', newNode);
 		newNode = newNode.parentNode;
 		if (counter >= 10) break;
 		counter += 1;
@@ -149,16 +136,12 @@ const getClosestParent = ({
 		return aParent;
 	}
 	return eParent;
-	// console.log(verseNodes);
-	// console.log([...verseNodes].reduce((acc, node) => acc.concat(node.innerText), ''));
-	// return [...verseNodes].reduce((acc, node) => acc.concat(node.innerText), '');
 };
 
 const getOffsetNeededForPsalms = ({ refNode, book, chapter, verse, node }) => {
 	const verseNodes = [
 		...refNode.querySelectorAll(`[data-id=${book}${chapter}_${verse}]`),
 	];
-	// console.log('verseNodes.reduce((a, node) => a.concat(node.textContent))', verseNodes.reduce((a, n) => a.concat(n.textContent)));
 
 	const previous = verseNodes.slice(0, verseNodes.indexOf(node));
 
@@ -191,7 +174,6 @@ const getTextInSelectedNodes = ({
 		].forEach((v) => verseNodes.push(v));
 		currentVerse += 1;
 	}
-	// console.log('verseNodes', verseNodes);
 
 	return verseNodes.reduce(
 		(a, c) => a + c.textContent.replace(replaceCharsRegex, '').length,

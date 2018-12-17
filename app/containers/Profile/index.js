@@ -29,7 +29,6 @@ import {
 	updatePassword,
 	updateUserInformation,
 	deleteUser,
-	// setUserLoginStatus,
 	logout,
 	viewErrorMessage,
 	clearErrorMessage,
@@ -41,10 +40,8 @@ import { cleanNotebook } from '../Notes/actions';
 import makeSelectProfile from './selectors';
 import reducer from './reducer';
 import saga from './saga';
-// import messages from './messages';
 
 export class Profile extends React.PureComponent {
-	// eslint-disable-line react/prefer-stateless-function
 	state = {
 		popupOpen: false,
 		clearAccessToken: false,
@@ -56,27 +53,6 @@ export class Profile extends React.PureComponent {
 			this.props.toggleProfile,
 		);
 		this.closeMenuController.onMenuMount();
-		// const userProfile = {};
-		// const userId =
-		// 	localStorage.getItem('bible_is_user_id') ||
-		// 	sessionStorage.getItem('bible_is_user_id');
-		// const userAuthenticated = !!(
-		// 	localStorage.getItem('bible_is_user_id') ||
-		// 	sessionStorage.getItem('bible_is_user_id')
-		// );
-		// userProfile.email = sessionStorage.getItem('bible_is_user_email');
-		// userProfile.nickname = sessionStorage.getItem('bible_is_user_nickname');
-		// userProfile.name = sessionStorage.getItem('bible_is_user_name');
-		// userProfile.avatar = '';
-		// if (userId && userAuthenticated) {
-		// 	this.props.dispatch(
-		// 		setUserLoginStatus({
-		// 			userProfile,
-		// 			userId,
-		// 			userAuthenticated,
-		// 		}),
-		// 	);
-		// }
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -151,7 +127,6 @@ export class Profile extends React.PureComponent {
 		if (typeof FB !== 'undefined') {
 			// Find the fb access code
 			FB.getLoginStatus(() => {
-				// FB.logout(loginResponse.authResponse.accessToken);
 				FB.logout(() => {});
 			});
 		}
@@ -159,7 +134,6 @@ export class Profile extends React.PureComponent {
 	};
 
 	openPopup = (coords) => {
-		// console.log('opening popup');
 		this.setState({ popupOpen: true, popupCoords: coords }, () => {
 			setTimeout(
 				() =>
@@ -170,30 +144,6 @@ export class Profile extends React.PureComponent {
 			);
 		});
 	};
-
-	// onCloseModal = () => {
-	// 	// closes the modal if it is active on a click of the button
-	// 	if (this.timer) {
-	// 		clearTimeout(this.timer);
-	// 	}
-	// 	this.props.dispatch(pleaseLogin({ status: false }));
-	// }
-	//
-	// onPleaseLogin = () => {
-	// 	// handles the modal popup that tells a user they need to login before
-	// 	// they can download videoss
-	// 	if (!this.props.pleaseLoginStatus) {
-	// 		this.props.dispatch(pleaseLogin({ status: true }));
-	// 	}
-	// 	if (this.timer) {
-	// 		clearTimeout(this.timer);
-	// 	}
-	// 	this.timer = setTimeout(() => {
-	// 		if (this.props.pleaseLoginStatus) {
-	// 			this.props.dispatch(pleaseLogin({ status: false }));
-	// 		}
-	// 	}, 4000);
-	// }
 
 	get accountOptions() {
 		const {
@@ -212,8 +162,6 @@ export class Profile extends React.PureComponent {
 			oauthErrorMessage,
 		} = this.props.profile;
 		const { popupOpen, popupCoords } = this.state;
-		// console.log('passwordResetMessage', passwordResetMessage);
-		// console.log('userAuthenticated', userAuthenticated);
 
 		return userAuthenticated ? (
 			<AccountSettings
@@ -291,7 +239,6 @@ export class Profile extends React.PureComponent {
 	render() {
 		const { toggleProfile, userAccessToken } = this.props;
 		const { popupOpen, popupCoords, clearAccessToken } = this.state;
-		// console.log('userAccessToken', userAccessToken);
 
 		return (
 			<aside ref={this.setRef} className="profile">

@@ -9,10 +9,6 @@ import PropTypes from 'prop-types';
 import SvgWrapper from '../SvgWrapper';
 import FacebookAuthentication from '../../containers/FacebookAuthentication';
 import GoogleAuthentication from '../../containers/GoogleAuthentication';
-// import checkEmailForValidity from '../../utils/checkEmailForValidity';
-// import styled from 'styled-components';
-// import { FormattedMessage } from 'react-intl';
-// import messages from './messages';
 
 class Login extends React.PureComponent {
 	state = {
@@ -27,9 +23,7 @@ class Login extends React.PureComponent {
 			nextProps.socialLoginLink &&
 			nextProps.socialLoginLink !== this.props.socialLoginLink
 		) {
-			// console.log('social link', nextProps.socialLoginLink);
 			window.open(nextProps.socialLoginLink, '_self');
-			// socialWindow.focus();
 		}
 	}
 
@@ -45,7 +39,6 @@ class Login extends React.PureComponent {
 
 	handleSendingLogin = (e) => {
 		e.preventDefault();
-		// console.log('Sending the login')
 		this.props.sendLoginForm({
 			email: this.state.email,
 			password: this.state.password,
@@ -54,7 +47,6 @@ class Login extends React.PureComponent {
 	};
 
 	handleStayLoggedInChange = (e) => {
-		// e.preventDefault();
 		this.setState({
 			staySignedIn: e.target.checked,
 		});
@@ -71,9 +63,9 @@ class Login extends React.PureComponent {
 			selectAccountOption,
 			errorMessage,
 		} = this.props;
-		// console.log('errorMessage', errorMessage);
+
 		return (
-			<React.Fragment>
+			<>
 				<form onSubmit={this.handleSendingLogin}>
 					<span className={'sign-in-input'}>
 						<SvgWrapper
@@ -149,7 +141,7 @@ class Login extends React.PureComponent {
 						</span>
 					</section>
 				</form>
-			</React.Fragment>
+			</>
 		);
 	}
 
@@ -170,7 +162,7 @@ class Login extends React.PureComponent {
 		} = this.props;
 
 		return (
-			<React.Fragment>
+			<>
 				{this.signInComponent}
 				<FacebookAuthentication
 					oauthError={oauthError}
@@ -185,7 +177,7 @@ class Login extends React.PureComponent {
 					socialMediaLogin={socialMediaLogin}
 					socialLoginLink={socialLoginLink}
 				/>
-			</React.Fragment>
+			</>
 		);
 	}
 }
@@ -200,7 +192,6 @@ Login.propTypes = {
 	oauthError: PropTypes.bool,
 	oauthErrorMessage: PropTypes.string,
 	errorMessage: PropTypes.string,
-	// errorMessage: PropTypes.string,
 	activeDriver: PropTypes.string,
 	errorMessageViewed: PropTypes.bool,
 };

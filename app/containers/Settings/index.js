@@ -25,19 +25,7 @@ import {
 } from './themes';
 import makeSelectSettings from './selectors';
 import reducer from './reducer';
-import {
-	updateTheme,
-	updateFontType,
-	updateFontSize,
-	// toggleReadersMode,
-	// toggleCrossReferences,
-	// toggleRedLetter,
-	// toggleJustifiedText,
-	// toggleOneVersePerLine,
-	// toggleVerticalScrolling,
-} from './actions';
-// import messages from './messages';
-// import { FormattedMessage } from 'react-intl';
+import { updateTheme, updateFontType, updateFontSize } from './actions';
 
 // add icon for settings close button
 export class Settings extends React.PureComponent {
@@ -64,7 +52,6 @@ export class Settings extends React.PureComponent {
 			redLetter !==
 			this.props.userSettings.getIn(['toggleOptions', 'redLetter', 'active'])
 		) {
-			// console.log('red', redLetter);
 			toggleWordsOfJesus(redLetter);
 		}
 
@@ -92,8 +79,6 @@ export class Settings extends React.PureComponent {
 	handleSliderChange = (position) => this.updateFontSize({ size: position });
 
 	handleSettingsModalToggle = () => {
-		// document.removeEventListener('click', this.handleClickOutside);
-
 		this.props.toggleSettingsModal();
 	};
 
@@ -119,12 +104,6 @@ export class Settings extends React.PureComponent {
 			}),
 		);
 	};
-	// toggleReadersMode = () => this.props.dispatch(toggleReadersMode());
-	// toggleCrossReferences = () => this.props.dispatch(toggleCrossReferences());
-	// toggleRedLetter = () => this.props.dispatch(toggleRedLetter());
-	// toggleJustifiedText = () => this.props.dispatch(toggleJustifiedText());
-	// toggleOneVersePerLine = () => this.props.dispatch(toggleOneVersePerLine());
-	// toggleVerticalScrolling = () => this.props.dispatch(toggleVerticalScrolling());
 	toggle = {
 		"READER'S MODE": ['userSettings', 'toggleOptions', 'readersMode', 'active'],
 		'CROSS REFERENCE': [

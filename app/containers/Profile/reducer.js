@@ -132,7 +132,7 @@ function profileReducer(state = initialState, action) {
 		case 'GET_INITIAL_ROUTE_STATE_PROFILE':
 			return state.merge(action.profile);
 		case 'persist/REHYDRATE':
-			// TODO: Ask for Sam's input on this to since if I can get around it
+			// TODO: Ask for Sam's input on this to see if I can get around it
 			if (state.get('userId')) {
 				return action.payload.profile
 					.set('userProfile', state.get('userProfile'))

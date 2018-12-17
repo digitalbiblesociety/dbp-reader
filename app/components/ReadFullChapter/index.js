@@ -8,7 +8,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import PrefetchLink from '../../utils/PrefetchLink';
-// import styled from 'styled-components';
 import messages from './messages';
 
 function ReadFullChapter({ activeTextId, activeBookId, activeChapter }) {

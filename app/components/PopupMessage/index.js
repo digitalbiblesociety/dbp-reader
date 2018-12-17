@@ -7,12 +7,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
-// import App from 'containers/App';
-// import styled from 'styled-components';
 
 function PopupMessage({ styles, message, x, y }) {
-	// console.log(styles);
-	// console.log({ top: y - 50, left: x - 87.5, ...styles });
 	const component = (
 		<div
 			style={{ top: y - 50, left: x - 87.5, ...styles }}
@@ -31,16 +27,12 @@ function PopupMessage({ styles, message, x, y }) {
 						rel={'noopener'}
 					>
 						contact support
-					</a>.
+					</a>
+					.
 				</p>
 			)}
 		</div>
 	);
-	// console.log(parentComponent);
-	// console.log(App);
-	// if (parentComponent) {
-	// 	return ReactDOM.createPortal(component, parentComponent);
-	// }
 
 	return ReactDOM.createPortal(component, document.getElementById('__next'));
 }

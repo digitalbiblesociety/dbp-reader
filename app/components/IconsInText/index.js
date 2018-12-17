@@ -7,7 +7,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import SvgWrapper from '../SvgWrapper';
-// import styled from 'styled-components';
 
 function IconsInText({ noteData, bookmarkData, clickHandler }) {
 	if (noteData.hasNote && bookmarkData.hasBookmark) {

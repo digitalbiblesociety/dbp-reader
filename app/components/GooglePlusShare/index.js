@@ -2,12 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import SvgWrapper from '../SvgWrapper';
 
-// Probably need to render this twice, first for loading indicator, second for the actual button
 class GooglePlusShare extends React.PureComponent {
 	componentDidMount() {
 		/* eslint-disable no-undef */
 		if (typeof gapi !== 'undefined') {
-			// console.log('googundefined
 			const options = {
 				contenturl: window.location.href,
 				contentdeeplinkid: '/bible',
@@ -20,9 +18,7 @@ class GooglePlusShare extends React.PureComponent {
 				calltoactiondeeplinkid: window.location.pathname,
 			};
 
-			// console.log('window.location.href', window.location.href);
 			gapi.interactivepost.render('sharePost', options);
-			// gapi.plus.render('sharePost', options);
 			/* eslint-enable no-undef */
 		}
 	}

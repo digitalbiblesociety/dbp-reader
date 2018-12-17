@@ -36,9 +36,6 @@ class VideoProgressBar extends React.PureComponent {
 	render() {
 		const { currentTime, duration, bufferLength } = this.props;
 		const timePercent = (currentTime / duration) * 100;
-		// console.log('buffer percentage', (bufferLength / duration) * 100);
-		// console.log('time percent', timePercent);
-		// console.log('buffer distance', bufferLength);
 		return (
 			<div
 				className={this.containerClassNames}

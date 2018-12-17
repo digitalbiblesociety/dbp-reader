@@ -9,9 +9,6 @@ import PropTypes from 'prop-types';
 import Link from 'next/link';
 import PopupMessage from '../PopupMessage';
 import checkEmail from '../../utils/checkEmailForValidity';
-// import styled from 'styled-components';
-// import { FormattedMessage } from 'react-intl';
-// import messages from './messages';
 
 class PasswordReset extends React.PureComponent {
 	state = {
@@ -44,7 +41,7 @@ class PasswordReset extends React.PureComponent {
 		const { email } = this.state;
 
 		return (
-			<React.Fragment>
+			<>
 				<div className="forgot-password">
 					<p>
 						In order to reset your password, please enter the email address you
@@ -72,7 +69,7 @@ class PasswordReset extends React.PureComponent {
 				{popupOpen ? (
 					<PopupMessage x={popupCoords.x} y={popupCoords.y} message={message} />
 				) : null}
-			</React.Fragment>
+			</>
 		);
 	}
 }

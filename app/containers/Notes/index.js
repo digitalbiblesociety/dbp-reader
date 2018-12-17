@@ -14,7 +14,6 @@ import PleaseSignInMessage from '../../components/PleaseSignInMessage';
 import SvgWrapper from '../../components/SvgWrapper';
 import EditNote from '../../components/EditNote';
 import MyNotes from '../../components/MyNotes';
-// import injectSaga from '../../utils/injectSaga';
 import injectReducer from '../../utils/injectReducer';
 import CloseMenuFunctions from '../../utils/closeMenuFunctions';
 import { setActiveNote, deleteHighlights } from '../HomePage/actions';
@@ -45,16 +44,12 @@ import makeSelectNotes, {
 	selectNotePassage,
 	selectActiveTextId,
 	vernacularBookNameObject,
-	// selectHighlights,
-	// selectListData,
 	selectActiveBookName,
 } from './selectors';
 import reducer from './reducer';
-// import saga from './saga';
 import messages from './messages';
 
 export class Notes extends React.PureComponent {
-	// eslint-disable-line react/prefer-stateless-function
 	constructor(props) {
 		super(props);
 		this.props.dispatch(setActiveChild(props.openView));
@@ -65,14 +60,11 @@ export class Notes extends React.PureComponent {
 			this.props.toggleNotesModal,
 		);
 		this.closeMenuController.onMenuMount();
-		// console.log('Notes mounted');
-		// document.addEventListener('click', this.handleClickOutside);
 		this.props.dispatch(getChapterForNote({ note: this.props.note }));
 	}
 
 	componentWillUnmount() {
 		this.closeMenuController.onMenuUnmount();
-		// document.removeEventListener('click', this.handleClickOutside);
 	}
 
 	setRef = (node) => {
@@ -187,17 +179,6 @@ export class Notes extends React.PureComponent {
 		highlights: 'My Highlights',
 	};
 
-	// handleClickOutside = (event) => {
-	// 	const bounds = this.ref.getBoundingClientRect();
-	// 	const insideWidth = event.x >= bounds.x && event.x <= bounds.x + bounds.width;
-	// 	const insideHeight = event.y >= bounds.y && event.y <= bounds.y + bounds.height;
-	//
-	// 	if (this.ref && !(insideWidth && insideHeight)) {
-	// 		this.props.toggleNotesModal();
-	// 		document.removeEventListener('click', this.handleClickOutside);
-	// 	}
-	// }
-
 	render() {
 		const {
 			activeChild,
@@ -225,16 +206,11 @@ export class Notes extends React.PureComponent {
 			selectedText,
 			authenticationStatus,
 			note,
-			// toggleProfile,
 			notePassage,
 			activeTextId,
-			// highlights,
 			vernacularNamesObject,
-			// selectedListData,
 			activeBookName,
 		} = this.props;
-		// console.log('notebook props', this.props);
-		// console.log('data in notes', selectedListData);
 		return (
 			<aside ref={this.setRef} className="notes">
 				<header>
@@ -258,7 +234,7 @@ export class Notes extends React.PureComponent {
 					<h1 className="section-title">Notebook</h1>
 				</header>
 				{authenticationStatus ? (
-					<React.Fragment>
+					<>
 						<div className="top-bar">
 							<div
 								id={'note-list-button'}
@@ -390,7 +366,7 @@ export class Notes extends React.PureComponent {
 								activePageHighlight={activePageHighlight}
 							/>
 						)}
-					</React.Fragment>
+					</>
 				) : (
 					<PleaseSignInMessage message={'accessNotebook'} />
 				)}
@@ -401,19 +377,16 @@ export class Notes extends React.PureComponent {
 
 Notes.propTypes = {
 	dispatch: PropTypes.func.isRequired,
-	// toggleProfile: PropTypes.func,
 	toggleNotesModal: PropTypes.func,
 	authenticationStatus: PropTypes.bool,
 	note: PropTypes.object,
 	notes: PropTypes.object,
 	vernacularNamesObject: PropTypes.object,
-	// highlights: PropTypes.array,
 	userId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 	openView: PropTypes.string,
 	notePassage: PropTypes.string,
 	selectedText: PropTypes.string,
 	activeTextId: PropTypes.string,
-	// selectedListData: PropTypes.array,
 	activeBookName: PropTypes.string,
 	activeBookId: PropTypes.string,
 	activeChapter: PropTypes.number,
@@ -428,8 +401,6 @@ const mapStateToProps = createStructuredSelector({
 	notePassage: selectNotePassage(),
 	activeTextId: selectActiveTextId(),
 	vernacularNamesObject: vernacularBookNameObject(),
-	// highlights: selectHighlights(),
-	// selectedListData: selectListData(),
 	activeBookName: selectActiveBookName(),
 });
 
@@ -445,10 +416,8 @@ const withConnect = connect(
 );
 
 const withReducer = injectReducer({ key: 'notes', reducer });
-// const withSaga = injectSaga({ key: 'notes', saga });
 
 export default compose(
 	withReducer,
-	// withSaga,
 	withConnect,
 )(Notes);

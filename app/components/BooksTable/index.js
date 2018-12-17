@@ -3,22 +3,13 @@
  * BooksTable
  *
  */
-// let $;
-// if ((window.chrome || (window.Intl && Intl.v8BreakIterator)) && 'CSS' in window) {
-// 	console.log('importing jq');
-// 	$ = require('jquery');
-// }
 
 import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import PropTypes from 'prop-types';
-import {
-	getChapterText,
-	// setActiveBookName,
-	// setActiveChapter,
-} from '../../containers/HomePage/actions';
+import { getChapterText } from '../../containers/HomePage/actions';
 import LoadingSpinner from '../LoadingSpinner';
 import ChaptersContainer from '../ChaptersContainer';
 import {
@@ -47,14 +38,7 @@ class BooksTable extends React.PureComponent {
 		if (this.button && this.container) {
 			this.container.scrollTop = this.button.offsetTop - 54 - 10;
 		}
-		// console.log('component is remounting');
 	}
-
-	componentDidUpdate() {
-		// console.log('Stuff should change');
-	}
-	// setActiveBookName = ({ book, id }) => this.props.dispatch(setActiveBookName({ book, id }))
-	// setActiveChapter = (chapter) => this.props.dispatch(setActiveChapter(chapter))
 	getChapterText = ({ bible, book, chapter }) =>
 		this.props.dispatch(
 			getChapterText({
@@ -74,18 +58,15 @@ class BooksTable extends React.PureComponent {
 
 		if (positionBefore > positionAfter) {
 			const newScrollTop = scrollTopBefore - (positionBefore - positionAfter);
-			// console.log('scrollTopBefore', scrollTopBefore);
-			// console.log('newScrollTop', newScrollTop);
+
 			this.container.scrollTop = newScrollTop;
 		}
 	};
 
 	handleBookClick = (e, name) => {
 		typeof e.persist === 'function' && e.persist(); // eslint-disable-line no-unused-expressions
-		// console.log('this.button before setstate', this.button);
 		const positionBefore = e.target.parentElement.offsetTop;
 		const scrollTopBefore = this.container.scrollTop;
-		// const previousButton = this.button;
 
 		if (this.state.selectedBookName === name) {
 			this.setState(
@@ -123,28 +104,10 @@ class BooksTable extends React.PureComponent {
 	handleChapterClick = () => {
 		const { closeBookTable } = this.props;
 
-		// setActiveChapter(chapter);
-		// setActiveBookName({
-		// 	book: book.get('name') || book.get('name_short'),
-		// 	id: book.get('book_id'),
-		// });
 		closeBookTable();
 	};
 
 	handleRef = (el, name) => {
-		if (name === 'button' && el) {
-			const lastChapter = el.lastChild.lastChild;
-			const bookName = el.firstChild;
-			// console.log('the new button ref', el);
-			// console.log('the new button ref offsetTop', el.offsetTop);
-			if (!this.isElementInViewport(lastChapter)) {
-				// lastChapter.scrollIntoView(false);
-			}
-
-			if (!this.isElementInViewport(bookName)) {
-				// bookName.scrollIntoView();
-			}
-		}
 		this[name] = el;
 	};
 
@@ -157,9 +120,6 @@ class BooksTable extends React.PureComponent {
 			loadingBooks,
 		} = this.props;
 		const { selectedBookName } = this.state;
-		// console.log('Rendering again');
-		// console.log('books', books);
-		// console.log('this.props', this.props);
 
 		if (loadingBooks) {
 			return <LoadingSpinner />;
@@ -338,16 +298,14 @@ class BooksTable extends React.PureComponent {
 
 BooksTable.propTypes = {
 	dispatch: PropTypes.func,
-	closeBookTable: PropTypes.func, // closes the window open
-	// setActiveChapter: PropTypes.func, // Set chapter in parent component
-	// setActiveBookName: PropTypes.func, // Set book in parent component
+	closeBookTable: PropTypes.func,
 	books: PropTypes.object,
 	audioObjects: PropTypes.array,
 	userId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-	activeTextId: PropTypes.string, // parent components active text id
-	activeBookName: PropTypes.string, // parent components active book name
+	activeTextId: PropTypes.string,
+	activeBookName: PropTypes.string,
 	initialBookName: PropTypes.string,
-	activeChapter: PropTypes.number, // parent components active chapter
+	activeChapter: PropTypes.number,
 	loadingBooks: PropTypes.bool,
 	userAuthenticated: PropTypes.bool,
 	hasTextInDatabase: PropTypes.bool,

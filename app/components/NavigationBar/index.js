@@ -6,15 +6,9 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-// import '../../styles/components/navbar.scss';
-// import Logo from 'components/Logo';
-// import LocaleToggle from 'containers/LocaleToggle';
 import ChapterSelection from '../../containers/ChapterSelection';
 import TextSelection from '../../containers/TextSelection';
 import SvgWrapper from '../SvgWrapper';
-// import styled from 'styled-components';
-// import { FormattedMessage } from 'react-intl';
-// import messages from './messages';
 
 class NavigationBar extends React.PureComponent {
 	// eslint-disable-line react/prefer-stateless-function
@@ -81,7 +75,6 @@ class NavigationBar extends React.PureComponent {
 								: `${activeTextId} Version`}
 						</h1>
 						<TextSelection active={isVersionSelectionActive} />
-						{/* {isVersionSelectionActive ? <TextSelection /> : null} */}
 					</div>
 					<div
 						id={'chapter-dropdown-button'}
@@ -107,7 +100,6 @@ class NavigationBar extends React.PureComponent {
 								: 'No Book Selected'}
 						</h1>
 						<ChapterSelection active={isChapterSelectionActive} />
-						{/* {isChapterSelectionActive ? <ChapterSelection /> : null} */}
 					</div>
 				</div>
 			</div>

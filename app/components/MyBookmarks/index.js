@@ -8,8 +8,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 import SvgWrapper from '../SvgWrapper';
-// import { FormattedMessage } from 'react-intl';
-// import messages from './messages';
 
 class MyBookmarks extends React.PureComponent {
 	// eslint-disable-line react/prefer-stateless-function

@@ -61,17 +61,14 @@ const createFormattedHighlights = (
 			return 0;
 		},
 	);
-	// console.log('sortedHighlights', sortedHighlights);
 	try {
 		// Set the env for testing purposes
 		const env = process.env.NODE_ENV;
 
 		// Instantiate the string -> html parser
 		const parser = env === 'test' ? () => {} : new DOMParser();
-		// console.log('XMLSerializer', typeof XMLSerializer);
 		// Instantiate the html -> serializer
 		const serializer = env === 'test' ? () => {} : new XMLSerializer();
-		// const serializer = () => {};
 		// Instantiate jsDOM for creating a mock dom (needed for testing)
 		const jsDOM =
 			env === 'test' ? new DomCreator(formattedTextString) : undefined;
@@ -80,17 +77,11 @@ const createFormattedHighlights = (
 			env === 'test'
 				? jsDOM.window.document
 				: parser.parseFromString(formattedTextString, 'text/xml');
-
-		// Used this before getting all the data ids
-		// const arrayOfVerses = [...xmlDoc.getElementsByClassName('v')];
 		let lastVerseNumber = 0; // the verse number of the last verse to have highlights applied
 		let previousHighlightArray = sortedHighlights;
 
 		// Get all verse elements (the first element with data-id is a div which is why I slice at 1)
 		const ad = [...xmlDoc.querySelectorAll('[data-id]')].slice(1);
-		// console.log('ad', ad);
-
-		// console.log('------------------------------------------------------------------------');
 
 		// Iterate over all the verses
 		ad.forEach((verseElement) => {
@@ -110,7 +101,6 @@ const createFormattedHighlights = (
 				10,
 			);
 			const newChildren = [];
-			// console.log('New Verse ------------------------------------------------------------------------', verseNumber);
 
 			children.forEach((originalVerse) => {
 				// If this is the first child and the highlight_start is greater than its length set newHighlightStart
@@ -163,9 +153,6 @@ const createFormattedHighlights = (
 						if (a.highlight_start > b.highlight_start) return 1;
 						return 0;
 					});
-				// console.log('verse.textContent', verse.textContent);
-				// console.log('highlightsStartingInVerse', highlightsStartingInVerse);
-
 				// Get the text for a verse (really just a section of a verse)
 				let verseText = verse.textContent.split('');
 				// If the highlight start is greater than this sections length
@@ -175,8 +162,6 @@ const createFormattedHighlights = (
 					try {
 						const newData = handleNewVerse({
 							highlightsStartingInVerse,
-							// charsLeftAfterVerseEnd,
-							// continuingColor,
 							verseText,
 						});
 
@@ -184,10 +169,6 @@ const createFormattedHighlights = (
 						// Creating the new array with the updated highlight lengths based on which highlights were applied
 						// Map: -> Applies the updated highlighted_words values supplied by the highlighting function
 						// Reduce: -> Removes the highlights that were "used up" in the last verse
-						// console.log('newData.highlightsToUpdate', newData.highlightsToUpdate);
-						// console.log('newData.highlightsToUpdate[90]', newData.highlightsToUpdate[90]);
-
-						// console.log('prev array before the map and reduce', previousHighlightArray[0]);
 						previousHighlightArray = previousHighlightArray
 							.map((h) => {
 								// Gets the object representing the changing needing to be made to this highlight
@@ -200,7 +181,6 @@ const createFormattedHighlights = (
 											newH[entry[0]] = entry[1];
 										},
 									);
-									// console.log('newH', newH);
 									return newH;
 								}
 								// Return the initial highlight
@@ -213,7 +193,6 @@ const createFormattedHighlights = (
 										: [...a, h],
 								[],
 							);
-						// console.log('previousHighlightArray', previousHighlightArray[0]);
 					} catch (e) {
 						if (process.env.NODE_ENV === 'development') {
 							console.warn('Error in handleNewVerse', e); // eslint-disable-line no-console
@@ -252,7 +231,6 @@ const createFormattedHighlights = (
 					}
 				}
 				newChildren.push(verse.nodeType === 3 ? newNonTextNode : verse);
-				// console.log('new inner html', verse.innerHTML);
 				// Use charsLeft to highlight as much of this verse as possible, then carry its value over into the next verse
 				// Save this verse number as the new 'previous verse number'
 				lastVerseNumber = verseNumber;
@@ -313,9 +291,6 @@ function handleNewVerse({ highlightsStartingInVerse, verseText }) {
 		) {
 			/* HIGHLIGHT STOPS IN MIDDLE OF NEXT HIGHLIGHT */
 			// if two highlights overlap and neither is contained completely in the other
-			// l && fs < ls && fs + fe > ls && fs + fe < le
-			// console.log('Highlight stopping in middle of next one');
-
 			// Start the first highlight
 			verseText.splice(
 				h.highlight_start,
@@ -349,14 +324,12 @@ function handleNewVerse({ highlightsStartingInVerse, verseText }) {
 				);
 				// Setting the new value for highlighted_words and start
 				// Sets start to 0 because this highlight needs to resume in the beginning of the next verse
-				// console.log('verseLength', verseLength);
 
 				highlightsToUpdate[h.id] = {
 					highlighted_words:
 						h.highlighted_words - (verseLength - h.highlight_start),
 					highlight_start: 0,
 				};
-				// console.log('highlightsToUpdate', highlightsToUpdate);
 			} else {
 				// The highlight has to be contained within this verse
 				verseText.splice(
@@ -384,7 +357,6 @@ function handleNewVerse({ highlightsStartingInVerse, verseText }) {
 					1,
 					`${verseText[verseLength - 1]}</em>`,
 				);
-				// console.log('verseLength', verseLength);
 				// Setting the new value for highlighted_words and start
 				// Sets start to 0 because this highlight needs to resume in the beginning of the next verse
 				highlightsToUpdate[h.id] = {
@@ -392,11 +364,8 @@ function handleNewVerse({ highlightsStartingInVerse, verseText }) {
 						h.highlighted_words - (verseLength - h.highlight_start),
 					highlight_start: 0,
 				};
-				// console.log('highlightsToUpdate', highlightsToUpdate);
 			} else {
 				// The highlight has to be contained within this verse
-				// console.log('verseLength', verseLength);
-				// console.log('highlightLength', highlightLength);
 				verseText.splice(
 					highlightLength,
 					1,

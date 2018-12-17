@@ -15,8 +15,6 @@ class CloseMenuFunctions {
 
 	handleTouchend = (event) => {
 		if (event.changedTouches.length === 1) {
-			// event.preventDefault();
-			// console.log('target', event.target);
 			// If a touch was outside the menu and there was only one touch close it
 			const singleTouch = event.changedTouches[0];
 			const bounds = this.ref.getBoundingClientRect();
@@ -38,7 +36,6 @@ class CloseMenuFunctions {
 					singleTouch.clientY >= bounds.top &&
 					singleTouch.clientY <= bounds.top + bounds.height;
 			}
-			// console.log('touch location', insideWidth, outsideWidth, bounds);
 			if (
 				this.ref &&
 				!(insideWidth || outsideWidth) &&
@@ -49,7 +46,6 @@ class CloseMenuFunctions {
 			}
 		}
 	};
-	// var counter = 0;var n = document.getElementsByTagName('aside')[0];while(n.textContent !== 'HAYA') {if (counter === 30) {break;} else if (n.childNodes) {n.childNodes.forEach(function(c) {n = c})} counter += 1}
 	handleKeydown = (event) => {
 		if (event.which === 27) {
 			this.closeFunction(this.onCloseOptions);
@@ -81,8 +77,6 @@ class CloseMenuFunctions {
 			!(insideWidth && insideHeight) &&
 			!this.ref.contains(event.target)
 		) {
-			// console.log('Closing menu bc of outside click');
-			// alert('closing bc outside click');
 			this.closeFunction(this.onCloseOptions);
 			document.removeEventListener('click', this.handleClickOutside);
 		}
