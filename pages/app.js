@@ -27,7 +27,6 @@ import {
 	setUA,
 } from '../app/containers/HomePage/actions';
 import svg4everybody from '../app/utils/svgPolyfill';
-// import request from '../app/utils/request';
 import removeDuplicates from '../app/utils/removeDuplicateObjects';
 import parseCookie from '../app/utils/parseCookie';
 import {
@@ -67,59 +66,27 @@ class AppContainer extends React.Component {
 				}
 			});
 		}
-		// If undefined gets stored in local storage it cannot be parsed so I have to compare strings
-		if (
-			this.props.userProfile.userId &&
-			!localStorage.getItem('bible_is_user_id') &&
-			!localStorage.getItem('bible_is_user_id') === 'undefined'
-		) {
-			localStorage.setItem('bible_is_user_id', this.props.userProfile.userId);
-			localStorage.setItem('bible_is_user_email', this.props.userProfile.email);
-			localStorage.setItem('bible_is_user_name', this.props.userProfile.name);
-			localStorage.setItem(
-				'bible_is_user_nickname',
-				this.props.userProfile.name,
-			);
-			sessionStorage.setItem('bible_is_user_id', this.props.userProfile.userId);
-			sessionStorage.setItem(
-				'bible_is_user_email',
-				this.props.userProfile.email,
-			);
-			sessionStorage.setItem('bible_is_user_name', this.props.userProfile.name);
-			sessionStorage.setItem(
-				'bible_is_user_nickname',
-				this.props.userProfile.name,
-			);
-		} else {
-			const storedId =
-				localStorage.getItem('bible_is_user_id') ||
-				sessionStorage.getItem('bible_is_user_id') ||
-				'';
-			if (storedId) {
-				this.props.dispatch({
-					type: 'GET_INITIAL_ROUTE_STATE_PROFILE',
-					profile: {
-						userId: storedId,
-						userAuthenticated: !!storedId,
-						userProfile: {
-							email:
-								localStorage.getItem('bible_is_user_email') ||
-								sessionStorage.getItem('bible_is_user_email') ||
-								'',
-							name:
-								localStorage.getItem('bible_is_user_name') ||
-								sessionStorage.getItem('bible_is_user_name') ||
-								'',
-							nickname:
-								localStorage.getItem('bible_is_user_nickname') ||
-								sessionStorage.getItem('bible_is_user_nickname') ||
-								'',
-						},
-					},
-				});
-			}
-		}
 
+		// If undefined gets stored in local storage it cannot be parsed so I have to compare strings
+		if (this.props.userProfile.userId) {
+			this.props.dispatch({
+				type: 'GET_INITIAL_ROUTE_STATE_PROFILE',
+				profile: {
+					userId: this.props.userProfile.userId,
+					userAuthenticated: !!this.props.userProfile.userId,
+					userProfile: {
+						email:
+							this.props.userProfile.email ||
+							this.props.userProfile.email ||
+							'',
+						name:
+							this.props.userProfile.name || this.props.userProfile.name || '',
+						nickname:
+							this.props.userProfile.name || this.props.userProfile.name || '',
+					},
+				},
+			});
+		}
 		this.props.dispatch(setChapterTextLoadingState({ state: false }));
 
 		// Intercept all route changes to ensure that the loading spinner starts
@@ -239,6 +206,7 @@ AppContainer.getInitialProps = async (context) => {
 		userName = '',
 	} = context.query;
 	const userProfile = {
+		userId,
 		email: userEmail,
 		name: userName,
 		nickname: userName,
@@ -287,33 +255,13 @@ AppContainer.getInitialProps = async (context) => {
 	let isAuthenticated = false;
 	let initialVolume = 1;
 	let initialPlaybackRate = 1;
-	// console.log(
-	// 	'getting initial props, this should run on the server before the html is sent to the page...',
-	// );
+
 	if (req && req.headers.cookie) {
 		// Get all cookies that the page needs
-		// console.log(
-		// 	'\ncookie in get initial props: server!',
-		// 	parseCookie(req.headers.cookie),
-		// 	'\n',
-		// );
 		const cookieData = parseCookie(req.headers.cookie);
-		// Authentication Information
-		// userId = cookieData.bible_is_user_id || '';
-		// isAuthenticated = !!cookieData.bible_is_user_id;
-		// isAuthenticated = !!userId;
 
-		// User Profile
-		// userProfile.email = userEmail;
-		// userProfile.nickname = userName;
-		// userProfile.name = userName;
-		// // Avatar is a placeholder for when we actually build the rest of that functionality
-		// userProfile.avatar = '';
 		if (userId) {
-			// setUserInfo({ userId, userEmail, userName });
 			// Authentication Information
-			// userId = cookieData.bible_is_user_id || '';
-			// isAuthenticated = !!cookieData.bible_is_user_id;
 			isAuthenticated = !!userId;
 			// User Profile
 			userProfile.email = userEmail;
@@ -326,14 +274,6 @@ AppContainer.getInitialProps = async (context) => {
 			// Authentication Information
 			userId = cookieData.bible_is_user_id || '';
 			isAuthenticated = !!cookieData.bible_is_user_id;
-			// userId = localStorage.getItem('bible_is_user_id') || '';
-			// isAuthenticated = !!localStorage.getItem('bible_is_user_id') || '';
-			// // User Profile
-			// userProfile.email = localStorage.getItem('bible_is_user_email') || '';
-			// userProfile.nickname = localStorage.getItem('bible_is_user_name') || '';
-			// userProfile.name = localStorage.getItem('bible_is_user_nickname');
-			// userProfile.userId = userId;
-			isAuthenticated = !!cookieData.user_id || '';
 			// User Profile
 			userProfile.email = cookieData.bible_is_email || '';
 			userProfile.nickname = cookieData.bible_is_name || '';
@@ -399,8 +339,6 @@ AppContainer.getInitialProps = async (context) => {
 
 		// Handle oauth code if there is one
 		if (cookieData.bible_is_cb_code && cookieData.bible_is_provider) {
-			// console.log('cb code');
-
 			await fetch(
 				`${process.env.BASE_API_ROUTE}/login/${
 					cookieData.bible_is_provider
@@ -408,25 +346,15 @@ AppContainer.getInitialProps = async (context) => {
 					process.env.DBP_API_KEY
 				}&alt_url=true&code=${cookieData.bible_is_cb_code}`,
 			).then((body) => body.json());
-
-			// console.log('user', user);
 		}
 
 		isFromServer = false;
 	} else if (typeof document !== 'undefined' && document.cookie) {
-		// console.log('req was not defined but document was');
-		// Get all cookies that the page needs
-		// console.log(
-		// 	'cookie in get initial props: client!',
-		// 	parseCookie(document.cookie).bible_is_cb_code,
-		// );
 		const cookieData = parseCookie(document.cookie);
 
 		if (userId) {
 			setUserInfo({ userId, userEmail, userName });
 			// Authentication Information
-			// userId = cookieData.bible_is_user_id || '';
-			// isAuthenticated = !!cookieData.bible_is_user_id;
 			isAuthenticated = !!userId;
 			// User Profile
 			userProfile.email = userEmail;
@@ -437,8 +365,6 @@ AppContainer.getInitialProps = async (context) => {
 			userProfile.avatar = '';
 		} else if (!userId) {
 			// Authentication Information
-			// userId = cookieData.bible_is_user_id || '';
-			// isAuthenticated = !!cookieData.bible_is_user_id;
 			userId = localStorage.getItem('bible_is_user_id') || '';
 			isAuthenticated = !!localStorage.getItem('bible_is_user_id') || '';
 			// User Profile
@@ -446,11 +372,6 @@ AppContainer.getInitialProps = async (context) => {
 			userProfile.nickname = localStorage.getItem('bible_is_user_name') || '';
 			userProfile.name = localStorage.getItem('bible_is_user_nickname');
 			userProfile.userId = userId;
-			// isAuthenticated = !!cookieData.user_id || '';
-			// // User Profile
-			// userProfile.email = cookieData.bible_is_email || '';
-			// userProfile.nickname = cookieData.bible_is_name || '';
-			// userProfile.name = cookieData.bible_is_name;
 			// Avatar is a placeholder for when we actually build the rest of that functionality
 			userProfile.avatar = '';
 		}
@@ -508,8 +429,6 @@ AppContainer.getInitialProps = async (context) => {
 			},
 			autoPlayEnabled: !!cookieData.bible_is_autoplay,
 		};
-	} else {
-		// console.log('no cookie was available at this time');
 	}
 
 	const singleBibleUrl = `${
@@ -555,9 +474,8 @@ AppContainer.getInitialProps = async (context) => {
 			: '';
 
 	// Filter out gideon bibles because the api will never be fixed in this area... -_- :( :'( ;'(
-	// Todo: Revisit this to see if it is still needed!
+	// TODO: Revisit this to see if it is still needed!
 	let filesets = [];
-	// console.log('bible', bible);
 
 	if (
 		bible &&
@@ -605,7 +523,6 @@ AppContainer.getInitialProps = async (context) => {
 		} else if (set.type === 'text_plain') {
 			plainFilesetIds.push(set.id);
 		}
-
 		// Gets one id for each fileset type
 		idsForBookMetadata[set.type] = set.id;
 	});
@@ -619,7 +536,7 @@ AppContainer.getInitialProps = async (context) => {
 			}&fileset_type=${id[0]}`;
 			const res = await cachedFetch(url);
 			bookCachePairs.push({ href: url, data: res });
-			// console.log('book meta url', url);
+
 			return res.data || [];
 		},
 	);
@@ -753,6 +670,20 @@ AppContainer.getInitialProps = async (context) => {
 		? bookData.reduce((a, c) => ({ ...a, [c.book_id]: c.testament }), {})
 		: [];
 	if (context.reduxStore) {
+		if (userProfile.userId && userProfile.email) {
+			context.reduxStore.dispatch({
+				type: 'GET_INITIAL_ROUTE_STATE_PROFILE',
+				profile: {
+					userId: userProfile.userId,
+					userAuthenticated: !!userProfile.userId,
+					userProfile: {
+						email: userProfile.email || userProfile.email || '',
+						name: userProfile.name || userProfile.name || '',
+						nickname: userProfile.name || userProfile.name || '',
+					},
+				},
+			});
+		}
 		context.reduxStore.dispatch({
 			type: 'GET_INITIAL_ROUTE_STATE_HOMEPAGE',
 			homepage: {

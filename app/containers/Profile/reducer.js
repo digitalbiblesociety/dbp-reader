@@ -130,8 +130,16 @@ function profileReducer(state = initialState, action) {
 				.set('deleteUserError', true)
 				.set('deleteUserMessage', action.message);
 		case 'GET_INITIAL_ROUTE_STATE_PROFILE':
-			// console.log('action.profile', action.profile);
 			return state.merge(action.profile);
+		case 'persist/REHYDRATE':
+			// TODO: Ask for Sam's input on this to since if I can get around it
+			if (state.get('userId')) {
+				return action.payload.profile
+					.set('userProfile', state.get('userProfile'))
+					.set('userAuthenticated', state.get('userAuthenticated'))
+					.set('userId', state.get('userId'));
+			}
+			return state;
 		default:
 			return state;
 	}

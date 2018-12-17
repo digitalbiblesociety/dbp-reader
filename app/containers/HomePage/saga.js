@@ -1,9 +1,7 @@
 import fetch from 'isomorphic-fetch';
 import { takeLatest, call, all, put, fork } from 'redux-saga/effects';
 import some from 'lodash/some';
-// import reduce from 'lodash/reduce';
 import get from 'lodash/get';
-// import uniqBy from 'lodash/uniqBy';
 import uniqWith from 'lodash/uniqWith';
 import Router from 'next/router';
 import request from '../../utils/request';
@@ -12,18 +10,12 @@ import {
 	getBookmarksForChapter,
 	getUserHighlights,
 } from '../../containers/Notes/saga';
-// import {
-// 	USER_LOGGED_IN,
-// 	OAUTH_ERROR,
-// } from '../../containers/Profile/constants';
-// import { LOGIN_ERROR, USER_LOGGED_IN } from 'containers/Profile/constants';
 import {
 	getCountries,
 	getLanguages,
 	getTexts,
 } from '../../containers/TextSelection/saga';
 import { ADD_BOOKMARK } from '../../containers/Notes/constants';
-// import filter from 'lodash/filter';
 import {
 	ADD_HIGHLIGHTS,
 	LOAD_HIGHLIGHTS,
@@ -36,16 +28,8 @@ import {
 	ADD_BOOKMARK_FAILURE,
 	CREATE_USER_WITH_SOCIAL_ACCOUNT,
 } from './constants';
-import {
-	ntCodes,
-	otCodes,
-	codes,
-	// sortBySetSize,
-} from './sagaUtils';
+import { ntCodes, otCodes, codes } from './sagaUtils';
 
-// import { fromJS } from 'immutable';
-// import unionWith from 'lodash/unionWith';
-// import { ADD_HIGHLIGHTS, LOAD_HIGHLIGHTS, GET_CHAPTER_TEXT, GET_HIGHLIGHTS, GET_BOOKS, GET_AUDIO, INIT_APPLICATION } from './constants';
 export function* deleteHighlights({
 	ids,
 	userId,
@@ -55,9 +39,6 @@ export function* deleteHighlights({
 	limit,
 	page,
 }) {
-	// console.log('ids', ids);
-	// console.log('bible', bible);
-	// console.log('userid', userId);
 	const urls = ids.map(
 		(id) =>
 			`${process.env.BASE_API_ROUTE}/users/${userId}/highlights/${id}?key=${
@@ -69,20 +50,11 @@ export function* deleteHighlights({
 	};
 	try {
 		yield all(urls.map((url) => call(request, url, options)));
-		// console.log(res);
-		// if (res.find((r) => r.success)) {
 		yield fork(getHighlights, { bible, book, chapter, userId });
 		yield fork(getUserHighlights, { userId, params: { limit, page } });
-		// }
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error('There was an error deleting the highlights', err); // eslint-disable-line no-console
-		} else if (process.env.NODE_ENV === 'production') {
-			// const options = {
-			// 	header: 'POST',
-			// 	body: formData,
-			// };
-			// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
 		}
 	}
 }
@@ -102,36 +74,13 @@ export function* initApplication(props) {
 		getCountriesAndLanguages();
 		setTimeout(runTimeout, timeoutDuration);
 	}, timeoutDuration);
-
-	// yield fork(getIpAddress);
-	// console.log('running init', languageCode);
 	// Forking each of these sagas here on the init of the application so that they all run in parallel
 	yield fork(getCountries);
 	yield fork(getLanguages);
 	yield fork(getTexts, { languageISO, languageCode });
 }
 
-// Need to send another call for the bibles once this is done
-// The new call will need a [region_lock=true] parameter so I do not
-// fetch all of the content that is already being displayed
-export function* getIpAddress() {
-	try {
-		const response = yield call(request, 'https://api.ipify.org?format=json');
-
-		if (response) {
-			// console.log('response', response);
-			// const location = yield call(request, `${process.env.BASE_API_ROUTE}/users/geolocate?v=4&key=${process.env.DBP_API_KEY}&ip_address=${response.ip}`);
-			// console.log('location', location);
-		}
-	} catch (err) {
-		if (process.env.NODE_ENV === 'development') {
-			console.error('err', err); // eslint-disable-line no-console
-		}
-	}
-}
-
 export function* addBookmark(props) {
-	// console.log('adding bookmark with props: ', props);
 	const requestUrl = `${process.env.BASE_API_ROUTE}/users/${
 		props.data.user_id
 	}/bookmarks?key=${process.env.DBP_API_KEY}&v=4&pretty&project_id=${
@@ -139,22 +88,16 @@ export function* addBookmark(props) {
 	}`;
 	const formData = new FormData();
 
-	// console.log(props.find((p) => p === 'reference'));
 	Object.entries(props.data).forEach((item) => formData.set(item[0], item[1]));
 	formData.append('tags', `reference::: ${props.data.reference}`);
-	// formData.append('project_id', process.env.NOTES_PROJECT_ID);
 
 	const options = {
 		body: formData,
 		method: 'POST',
 	};
-	// console.log('adding bookmark', addBookmark);
 	try {
 		const response = yield call(request, requestUrl, options);
-		// console.log('Add user bookmark response', response); // eslint-disable-line no-console
 		if (response) {
-			// do stuff
-			// console.log('Success message: ', response.success);
 			yield fork(getBookmarksForChapter, {
 				userId: props.data.user_id,
 				params: {
@@ -178,17 +121,10 @@ export function* addBookmark(props) {
 			});
 		} else {
 			yield put({ type: ADD_BOOKMARK_FAILURE });
-			// console.log('Other message that was not a success: ', response);
 		}
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error('There was an error saving the bookmark', err); // eslint-disable-line no-console
-		} else if (process.env.NODE_ENV === 'production') {
-			// const options = {
-			// 	header: 'POST',
-			// 	body: formData,
-			// };
-			// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
 		}
 		yield put({ type: ADD_BOOKMARK_FAILURE });
 	}
@@ -205,17 +141,10 @@ export function* getBookMetadata({ bibleId }) {
 			{},
 		);
 
-		// console.log('res', res);
 		yield put({ type: 'book_metadata', testaments });
 	} catch (error) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error('Caught in get book metadata request', error); // eslint-disable-line no-console
-		} else if (process.env.NODE_ENV === 'production') {
-			// const options = {
-			// 	header: 'POST',
-			// 	body: formData,
-			// };
-			// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
 		}
 	}
 }
@@ -227,16 +156,8 @@ export function* getHighlights({ bible, book, chapter, userId }) {
 	}&bible_id=${bible}&book_id=${book}&chapter=${chapter}&limit=1000`;
 	let highlights = [];
 
-	// const options = {
-	// 	method: 'GET',
-	// 	headers: {
-	// 		project_id: process.env.NOTES_PROJECT_ID,
-	// 	},
-	// };
-	// console.log('fetch options', options);
 	try {
 		const response = yield call(request, requestUrl);
-		// console.log('highlight get response', response);
 		if (response.data) {
 			highlights = response.data;
 		}
@@ -245,12 +166,6 @@ export function* getHighlights({ bible, book, chapter, userId }) {
 	} catch (error) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error('Caught in highlights request', error); // eslint-disable-line no-console
-		} else if (process.env.NODE_ENV === 'production') {
-			// const options = {
-			// 	header: 'POST',
-			// 	body: formData,
-			// };
-			// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
 		}
 	}
 }
@@ -274,7 +189,6 @@ export function* addHighlight({
 		process.env.NOTES_PROJECT_ID
 	}&limit=1000`;
 	const formData = new FormData();
-	// console.log('data for highlight { bible, book, chapter, userId, verseStart, highlightStart, highlightedWords, color }', { bible, book, chapter, userId, verseStart, highlightStart, highlightedWords, color });
 	if (!userId || color === 'none') {
 		return;
 	}
@@ -286,7 +200,6 @@ export function* addHighlight({
 	formData.append('verse_start', verseStart);
 	if (color !== 'none') {
 		formData.append('highlighted_color', color);
-		// formData.append('user_highlight_colors', color);
 	}
 	formData.append('highlight_start', highlightStart);
 	formData.append('highlighted_words', highlightedWords);
@@ -297,10 +210,8 @@ export function* addHighlight({
 		method: 'POST',
 		body: formData,
 	};
-	// console.log('add highlight data', { bible, book, chapter, userId, verseStart, highlightStart, highlightedWords });
 	try {
 		const response = yield call(request, requestUrl, options);
-		// console.log('add highlight response', response);
 		// Need to get the highlights here because they are not being returned
 		if (response.meta.success) {
 			yield call(getHighlights, { bible, book, chapter, userId });
@@ -309,16 +220,9 @@ export function* addHighlight({
 				console.error('Error creating highlight', response.error); // eslint-disable-line no-console
 			}
 		}
-		// yield put({ type: LOAD_HIGHLIGHTS, highlights });
 	} catch (error) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error('Caught in highlights request', error); // eslint-disable-line no-console
-		} else if (process.env.NODE_ENV === 'production') {
-			// const options = {
-			// 	header: 'POST',
-			// 	body: formData,
-			// };
-			// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
 		}
 	}
 }
@@ -331,8 +235,6 @@ export function* getBibleFromUrl({
 	userId,
 	verse,
 }) {
-	// console.log('Get bible from url was called');
-
 	// This function needs to return the data listed below
 	// Books
 	// Active or first chapter text
@@ -350,51 +252,28 @@ export function* getBibleFromUrl({
 	// Probably need to do stuff here to get the audio and text for this new bible
 	try {
 		const response = yield call(request, requestUrl);
-		// let filesets;
-		// console.log('response in getbible call', response);
 
-		// if (!response.data.filesets) {
-		// 	const bibleUrl = `${process.env.BASE_API_ROUTE}/bibles?asset_id=${process.env.DBP_BUCKET_ID}&key=${process.env.DBP_API_KEY}&v=4&language_code=${response.data.iso}`;
-		// 	const allBibles = yield call(request, bibleUrl);
-		// 	// console.log('all bibles in language', allBibles);
-		// 	const activeBible = allBibles.data.find((bible) => bible.abbr === bibleId) || {};
-		// 	filesets = activeBible.filesets;
-		// }
-		// console.log('bible response', response);
 		if (response.data && Object.keys(response.data).length) {
 			// Creating new objects for each set of data needed to ensure I don't forget something
 			// I probably will want to use 'yield all' for getting the audio and text so they can be run async
-			// console.log('reponses', response);
-			// console.log('bibleId', bibleId);
 			const bible = response.data;
 			const books = bible.books; // Need to ensure that I have the books here
 			const textDirection =
 				response.data.alphabet && response.data.alphabet.direction;
-			// console.log('books', books);
-			// console.log('response', response);
-
 			let hasMatt = false;
-			// let activeBookIndex;
-			// console.log('books in new bible', books);
 			let activeBook = books.find((b) => {
 				if (b.book_id === 'MAT') {
-					// activeBookIndex = i;
 					hasMatt = true;
-				} else if (b.book_id === bookId) {
-					// activeBookIndex = i;
 				}
 				return b.book_id === bookId;
 			});
 			// Not exactly sure why I am checking for an active book here
 			let activeChapter = activeBook ? parseInt(chapter, 10) || 1 : 1;
-			// console.log('active book', activeBook);
 			if (activeBook) {
 				const lastChapterIndex = activeBook.chapters.length - 1;
-				// console.log(!isNaN(parseInt(chapter, 10)));
 				if (!isNaN(parseInt(chapter, 10))) {
 					const parsedC = parseInt(chapter, 10);
 
-					// console.log('38 is greater than 6', lastChapterIndex < parsedC, lastChapterIndex, parsedC);
 					// Checks if the entered number is greater than the last chapter
 					if (activeBook.chapters[lastChapterIndex] < parsedC) {
 						activeChapter = activeBook.chapters[lastChapterIndex];
@@ -409,9 +288,6 @@ export function* getBibleFromUrl({
 					activeChapter = activeBook.chapters[0];
 				}
 			}
-			// console.log('activeChapter', activeChapter);
-			// console.log('activeBook.chapters[0]', activeBook.chapters[0]);
-			// const activeChapter = activeBook ? (parseInt(chapter, 10) || 1) : 1;
 			// Nesting a ternary here because it keeps me from needing more variables and an if statement
 			// If there wasn't an activeBook for the bookId given then check for if the resource has Matthew
 			// If it has Matthew then use the bookId for that, otherwise just use the first bookId available
@@ -549,7 +425,6 @@ export function* getChapterFromUrl({
 		}
 
 		yield fork(getChapterAudio, { filesets, bookId, chapter });
-		// }
 		yield fork(getBookMetadata, { bibleId });
 		// Try to get the formatted text if it is available
 		if (hasFormattedText) {
@@ -726,7 +601,6 @@ function* tryNext({ urls, index, bookId, chapter }) {
 export function* getChapterAudio({ filesets, bookId, chapter }) {
 	// Send a loadaudio action for each fail in production so that there isn't a link loaded
 	// This handles the case where a user already has a link but getting the next one fails
-	// console.log('getting audio', filesets, bookId, chapter);
 	// Parse filesets |▰╭╮▰|
 	// TODO: Need to handle when there are multiple filesets for the same audio type
 	const filteredFilesets = filesets.reduce((a, file) => {
@@ -1198,9 +1072,6 @@ export function* getCopyrightSaga({ filesetIds }) {
 }
 
 export function* createSocialUser({ provider }) {
-	// TODO: Remove alt_url or add env variable for the staging site
-	// scp ./app/utils/request.js ubuntu@dev-listen.dbp4.org:dbp_4_reader/app/utils/request.js
-	// scp ./app/containers/HomePage/saga.js ubuntu@dev-listen.dbp4.org:dbp_4_reader/app/containers/HomePage/saga.js
 	const reqUrl = `${
 		process.env.BASE_API_ROUTE
 	}/login/${provider}?v=4&project_id=${process.env.NOTES_PROJECT_ID}&key=${

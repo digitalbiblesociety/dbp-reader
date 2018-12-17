@@ -493,7 +493,7 @@ class HomePage extends React.PureComponent {
 		const verse = this.props.homepage.match.params.verse || '';
 
 		return (
-			<React.Fragment>
+			<>
 				<NavigationBar
 					userAgent={userAgent}
 					activeTextId={activeTextId}
@@ -644,7 +644,7 @@ class HomePage extends React.PureComponent {
 					setActiveNotesView={this.setActiveNotesView}
 					toggleSettingsModal={this.toggleSettingsModal}
 				/>
-			</React.Fragment>
+			</>
 		);
 	}
 }
