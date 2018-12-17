@@ -86,7 +86,6 @@ export class AudioPlayer extends React.Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		// console.log('new props', nextProps.audioSource !== this.props.audioSource);
 		if (nextProps.audioSource !== this.props.audioSource) {
 			if (nextProps.audioSource) {
 				this.setState({ playing: false, loadingNextChapter: false });
@@ -95,17 +94,9 @@ export class AudioPlayer extends React.Component {
 					this.props.setAudioPlayerState(false),
 				);
 			}
-			// if (this.props.autoPlay !== nextProps.autoPlay) {
-			// 	this.setState({ autoPlayChecked: nextProps.autoPlay });
-			// }
 		}
 
 		if (nextProps.autoPlay) {
-			// console.log(
-			//   'state volume compared to player volume',
-			//   this.state.volume,
-			//   this.audioRef.volume,
-			// );
 			if (
 				navigator &&
 				navigator.userAgent &&
@@ -377,15 +368,6 @@ export class AudioPlayer extends React.Component {
 		}
 	};
 
-	// skipBackward = () => {
-	// 	this.setCurrentTime(0);
-	// 	this.pauseAudio();
-	// 	this.props.skipBackward();
-	// 	this.setState({
-	// 		playing: false,
-	// 	});
-	// };
-
 	skipForward = () => {
 		this.setCurrentTime(0);
 		this.pauseAudio();
@@ -585,15 +567,11 @@ export class AudioPlayer extends React.Component {
 			audioPlayerState,
 			videoPlayerOpen,
 			hasVideo,
-			// isScrollingDown,
 		} = this.props;
 		const { autoPlayChecked, currentSpeed } = this.state;
-		// console.log('____________________________\nAudio Player component rendered!');
-		// console.log('_______________ ', this.props.activeBookId, this.props.activeChapter, this.props.activeTextId, this.props.text.length, this.props.verseNumber, this.props.books.length);
-		// console.log('____________________________\n', this.props.activeChapter);
 
 		return (
-			<React.Fragment>
+			<>
 				<div
 					className={this.classNamesForHandle}
 					onClick={(e) => {
@@ -720,7 +698,6 @@ export class AudioPlayer extends React.Component {
 								{this.getVolumeSvg(this.state.volume)}
 								<FormattedMessage {...messages.volume} />
 							</div>
-							{/* <this.volumeControl updateVolume={this.updateVolume} volume={this.state.volume} /> */}
 							<VolumeSlider
 								active={this.state.volumeSliderState}
 								onCloseFunction={this.closeModals}
@@ -769,7 +746,7 @@ export class AudioPlayer extends React.Component {
 						src={source || '_'}
 					/>
 				</div>
-			</React.Fragment>
+			</>
 		);
 	}
 }
@@ -777,8 +754,6 @@ export class AudioPlayer extends React.Component {
 AudioPlayer.propTypes = {
 	audioSource: PropTypes.string,
 	audioPaths: PropTypes.array,
-	// skipBackward: PropTypes.func.isRequired,
-	// skipForward: PropTypes.func.isRequired,
 	setAudioPlayerState: PropTypes.func.isRequired,
 	toggleAutoPlay: PropTypes.func,
 	hasAudio: PropTypes.bool,
@@ -798,8 +773,6 @@ AudioPlayer.propTypes = {
 		PropTypes.string,
 	]),
 	initialVolume: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-	// prevAudioSource: PropTypes.string,
-	// nextAudioSource: PropTypes.string,
 };
 
 const mapStateToProps = createStructuredSelector({
