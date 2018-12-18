@@ -6,11 +6,8 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-// import { Link } from 'react-router-dom';
 import Link from 'next/link';
 import SvgWrapper from '../SvgWrapper';
-// import ColorPicker from 'components/ColorPicker';
-// import styled from 'styled-components';
 
 class MyHighlights extends React.PureComponent {
 	// eslint-disable-line react/prefer-stateless-function
@@ -33,7 +30,6 @@ class MyHighlights extends React.PureComponent {
 			toggleNotesModal,
 			startUpdateProcess,
 		} = this.props;
-		// console.log('colorPickerState', colorPickerState);
 
 		return highlights.map((highlight) => (
 			<div
@@ -89,7 +85,6 @@ MyHighlights.propTypes = {
 	highlights: PropTypes.array,
 	getReference: PropTypes.func,
 	deleteHighlights: PropTypes.func,
-	// updateHighlight: PropTypes.func,
 	toggleNotesModal: PropTypes.func,
 	startUpdateProcess: PropTypes.func,
 };

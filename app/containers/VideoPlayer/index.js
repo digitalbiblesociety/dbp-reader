@@ -111,7 +111,6 @@ class VideoPlayer extends React.PureComponent {
 
 		try {
 			// TODO: Profile to see how much time the caching actually saves here
-			// const response = await request(requestUrl);
 			const response = await cachedFetch(requestUrl);
 
 			if (response.data) {

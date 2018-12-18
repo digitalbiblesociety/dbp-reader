@@ -44,9 +44,6 @@ import createHighlights from './highlightPlainText';
 import createFormattedHighlights from './highlightFormattedText';
 import { applyNotes, applyBookmarks } from './formattedTextUtils';
 import ReadFullChapter from '../../components/ReadFullChapter';
-// Import below is needed for figuring out what needs to change to reduces render cycles
-// import differenceObject from '../../utils/deepDifferenceObject';
-
 /* Disabling the jsx-a11y linting because we need to capture the selected text
 	 and the most straight forward way of doing so is with the onMouseUp event */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
@@ -122,15 +119,6 @@ class Text extends React.PureComponent {
 
 	// I am using this function because it means that the component finished updating and that the dom is available
 	componentDidUpdate(prevProps, prevState) {
-		// TODO: Use these logs to help reduce useless updates renders
-		// if (Object.keys(differenceObject(this.state, prevState)).length || Object.keys(differenceObject(this.props, prevProps)).length) {
-		// 	console.log('component did update new props difference: ', differenceObject(this.props, prevProps));
-		// 	console.log('component did update new state difference: ', differenceObject(this.state, prevState));
-		// 	console.log('component did update old props difference: ', differenceObject(prevProps, this.props));
-		// 	console.log('component did update old state difference: ', differenceObject(prevState, this.state));
-		// }
-		// console.log('updating---------------------------------------------');
-
 		if (
 			this.main &&
 			(this.format || this.formatHighlight) &&

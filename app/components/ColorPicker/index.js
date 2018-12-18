@@ -6,11 +6,8 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-// import messages from '../HighlightColors/messages';
-// import styled from 'styled-components';
 
 function ColorPicker({ handlePickedColor }) {
-	// console.log('Rendered colorpicker');
 	return (
 		<div className={'color-picker'}>
 			<span className={'color-group'}>

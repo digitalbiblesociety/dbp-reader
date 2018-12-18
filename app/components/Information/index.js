@@ -9,7 +9,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { FormattedMessage } from 'react-intl';
-// import get from 'lodash/get';
 import AnimateHeight from 'react-animate-height';
 import CopyrightSection from '../CopyrightSection';
 import { selectCopyrights } from './selectors';
@@ -91,14 +90,6 @@ class Information extends React.PureComponent {
 				</a>
 			),
 		]);
-	// {
-	// 	copyrights.map((c) => c.organizations.map((o) => (
-	// <div key={`${o.name}_${o.url}`}>
-	// <h3>Provided to you by <a// 						rel={'noopener'}href={o.url}>{o.name}</a></h3>
-	// <p>{c.message}</p>
-	// </div>
-	// )))
-	// }
 	toggleCopyright = () => {
 		let hasVideo;
 		if (
@@ -122,12 +113,8 @@ class Information extends React.PureComponent {
 	};
 
 	render() {
-		const {
-			copyrights,
-			// toggleInformationModal,
-		} = this.props;
+		const { copyrights } = this.props;
 
-		// console.log('copyrights information render', copyrights);
 		return (
 			<section ref={this.setRef} className="information">
 				<button onClick={this.toggleCopyright} className="information-toggle">
@@ -148,11 +135,13 @@ class Information extends React.PureComponent {
 					</div>
 				</AnimateHeight>
 				<div className={'ministry-statement'}>
-					<FormattedMessage {...messages.circleC} />&nbsp;
+					<FormattedMessage {...messages.circleC} />
+					&nbsp;
 					<a rel={'noopener'} target={'_blank'} href={'http://www.bible.is'}>
 						<FormattedMessage {...messages.bibleIsText} />
 					</a>
-					<FormattedMessage {...messages.ministrySlogan} />&nbsp;
+					<FormattedMessage {...messages.ministrySlogan} />
+					&nbsp;
 					<a
 						rel={'noopener'}
 						target={'_blank'}
@@ -160,7 +149,8 @@ class Information extends React.PureComponent {
 					>
 						<FormattedMessage {...messages.faithComesByHearing} />
 					</a>
-					&nbsp;<FormattedMessage {...messages.circleR} />
+					&nbsp;
+					<FormattedMessage {...messages.circleR} />
 				</div>
 			</section>
 		);

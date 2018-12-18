@@ -84,7 +84,6 @@ function notesReducer(state = initialState, action) {
 		case SET_ACTIVE_CHILD:
 			return state.set('activeChild', action.child);
 		case SET_ACTIVE_PAGE_DATA:
-			// console.log('Setting page data', action);
 			if (action.params.sectionType === 'notes') {
 				return state.set('activePage', action.params.page);
 			} else if (action.params.sectionType === 'highlights') {
@@ -92,7 +91,6 @@ function notesReducer(state = initialState, action) {
 			}
 			return state.set('activePageBookmark', action.params.page);
 		case SET_PAGE_SIZE:
-			// console.log('Setting page size', action);
 			if (action.params.sectionType === 'notes') {
 				return state.set('activePage', 1).set('pageSize', action.params.limit);
 			} else if (action.params.sectionType === 'highlights') {
@@ -103,16 +101,13 @@ function notesReducer(state = initialState, action) {
 			return state
 				.set('activePage', 1)
 				.set('pageSizeBookmark', action.params.limit);
-		// Todo: Move this to local state
 		case TOGGLE_VERSE_TEXT:
 			return state.set('isVerseTextVisible', !state.get('isVerseTextVisible'));
-		// Todo: Move this to local state
 		case TOGGLE_PAGE_SELECTOR:
 			return state.set('pageSelectorState', !state.get('pageSelectorState'));
 		case LOAD_USER_NOTES:
 			return state.set('userNotes', fromJS(action.listData));
 		case LOAD_NOTEBOOK_DATA:
-			// console.log('Loading notebook data with active page: ', action.activePage);
 			return state
 				.set('totalPages', action.totalPages)
 				.set('listData', fromJS(action.listData));

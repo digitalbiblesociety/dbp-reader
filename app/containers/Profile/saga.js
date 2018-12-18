@@ -2,8 +2,6 @@ import { takeLatest, call, take, cancel, put } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
 import request from '../../utils/request';
 import {
-	// GET_USER_DATA,
-	// LOAD_USER_DATA,
 	CHANGE_PICTURE,
 	LOGIN_ERROR,
 	USER_LOGGED_IN,
@@ -16,7 +14,6 @@ import {
 	DELETE_USER,
 	RESET_PASSWORD,
 	UPDATE_EMAIL,
-	// UPDATE_PASSWORD,
 	RESET_PASSWORD_SUCCESS,
 	RESET_PASSWORD_ERROR,
 	UPDATE_USER_INFORMATION,
@@ -36,14 +33,6 @@ export function* sendSignUpForm({
 	}&v=4&pretty&project_id=${process.env.NOTES_PROJECT_ID}`;
 	const data = new FormData();
 
-	// console.log('user data for signup form', {
-	// 	password,
-	// 	email,
-	// 	firstName,
-	// 	lastName,
-	// 	wantsUpdates,
-	// });
-
 	data.append('email', email);
 	data.append('password', password);
 	data.append('name', lastName);
@@ -61,8 +50,6 @@ export function* sendSignUpForm({
 		const response = yield call(request, requestUrl, options);
 
 		if (response.data) {
-			// console.log('res', response);
-
 			yield put({
 				type: USER_LOGGED_IN,
 				userId: response.data.id,
@@ -73,23 +60,15 @@ export function* sendSignUpForm({
 			sessionStorage.setItem('bible_is_user_name', response.data.name);
 			sessionStorage.setItem('bible_is_user_nickname', response.data.nickname);
 		} else if (response.error) {
-			// console.log('res error', response);
 			const message = Object.values(response.error.message).reduce(
 				(acc, cur) => acc.concat(cur),
 				'',
 			);
 			yield put({ type: SIGNUP_ERROR, message });
-			// yield put('user-login-failed', response.error.message);
 		}
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error(err); // eslint-disable-line no-console
-		} else if (process.env.NODE_ENV === 'production') {
-			// const options = {
-			// 	header: 'POST',
-			// 	body: formData,
-			// };
-			// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
 		}
 	}
 }
@@ -130,20 +109,10 @@ export function* sendLoginForm({ password, email, stay }) {
 				sessionStorage.setItem('bible_is_user_name', response.name);
 				sessionStorage.setItem('bible_is_user_nickname', response.nickname);
 			}
-			// document.cookie = `bible_is_user_id=${response.id};path=/`;
-			// document.cookie = `bible_is_email=${response.email};path=/`;
-			// document.cookie = `bible_is_name=${response.name};path=/`;
-			// document.cookie = `bible_is_first_name=${response.nickname};path=/`;
 		}
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error(err); // eslint-disable-line no-console
-		} else if (process.env.NODE_ENV === 'production') {
-			// const options = {
-			// 	header: 'POST',
-			// 	body: formData,
-			// };
-			// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
 		}
 		yield put({
 			type: LOGIN_ERROR,
@@ -153,7 +122,6 @@ export function* sendLoginForm({ password, email, stay }) {
 }
 
 export function* updateEmail({ userId, email }) {
-	// console.log('in update email with ', userId, email);
 	const requestUrl = `${process.env.BASE_API_ROUTE}/users/${userId}?key=${
 		process.env.DBP_API_KEY
 	}&v=4&project_id=${process.env.NOTES_PROJECT_ID}`;
@@ -168,23 +136,15 @@ export function* updateEmail({ userId, email }) {
 
 	try {
 		const response = yield call(request, requestUrl, options);
-		// console.log('update email response', response);
 		yield put({ type: 'UPDATE_EMAIL_SUCCESS', response });
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error(err); // eslint-disable-line no-console
-		} else if (process.env.NODE_ENV === 'production') {
-			// const options = {
-			// 	header: 'POST',
-			// 	body: formData,
-			// };
-			// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
 		}
 	}
 }
 
 export function* updateUserInformation({ userId, profile }) {
-	// console.log('in update profile with ', userId, profile);
 	const requestUrl = `${process.env.BASE_API_ROUTE}/users/${userId}?key=${
 		process.env.DBP_API_KEY
 	}&v=4&project_id=${process.env.NOTES_PROJECT_ID}`;
@@ -200,17 +160,10 @@ export function* updateUserInformation({ userId, profile }) {
 
 	try {
 		const response = yield call(request, requestUrl, options);
-		// console.log('update profile response', response);
 		yield put({ type: 'UPDATE_EMAIL_SUCCESS', response });
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error(err); // eslint-disable-line no-console
-		} else if (process.env.NODE_ENV === 'production') {
-			// const options = {
-			// 	header: 'POST',
-			// 	body: formData,
-			// };
-			// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
 		}
 	}
 }
@@ -220,38 +173,10 @@ export function* updateUserInformation({ userId, profile }) {
 // Extra Header: _method: PUT
 // Content Type: form-data
 export function* changePicture({ userId, avatar }) {
-	// console.log('userId, avatar', userId, avatar);
-	// console.log('avatar.source', avatar.source);
-
 	const requestUrl = `${process.env.BASE_API_ROUTE}/users/${userId}?key=${
 		process.env.DBP_API_KEY
 	}&v=4`;
 	const requestData = new FormData();
-	// const reader = new FileReader();
-	// let avatarBase64;
-	//
-	// reader.addEventListener(
-	// 	'load',
-	// 	() => {
-	// 		console.log('Read the avatar', reader.result);
-	//
-	// 		avatarBase64 = reader.result;
-	// 	},
-	// 	false,
-	// );
-	//
-	// reader.addEventListener('loadend', () => {
-	// 	console.log('avatarBase64', avatarBase64);
-	// });
-	//
-	// if (avatar) {
-	// 	console.log('Started reading avatar');
-	//
-	// 	yield reader.readAsDataURL(avatar);
-	// }
-
-	// yield setTimeout(() => {}, 500);
-
 	requestData.append('avatar', avatar);
 	requestData.append('_method', 'PUT');
 
@@ -259,15 +184,11 @@ export function* changePicture({ userId, avatar }) {
 		method: 'POST',
 		_method: 'PUT',
 		body: requestData,
-		// headers: {
-		// 	'Content-Type': 'application/x-www-form-urlencoded',
-		// },
 	};
 
 	try {
 		const response = yield call(request, requestUrl, requestOptions);
 
-		// console.log('response');
 		if (response.success) {
 			// console.log('picture was saved successfully');
 		} else {
@@ -281,7 +202,6 @@ export function* changePicture({ userId, avatar }) {
 }
 
 export function* sendResetPassword({ password, userAccessToken, email }) {
-	// console.log('{ password, userAccessToken, email }', { password, userAccessToken, email });
 	const requestUrl = `${process.env.BASE_API_ROUTE}/users/password/reset?key=${
 		process.env.DBP_API_KEY
 	}&v=4&project_id=${
@@ -307,14 +227,8 @@ export function* sendResetPassword({ password, userAccessToken, email }) {
 	};
 
 	try {
-		// console.log('in try');
-		// console.log('in try', requestUrl);
-		// console.log('in try', options);
-		// console.log('{ password, userAccessToken }', { password, userAccessToken });
-
 		const response = yield call(request, requestUrl, options);
 
-		// console.log('response in reset password', response);
 		yield put({
 			type: USER_LOGGED_IN,
 			userId: response.id,
@@ -324,8 +238,6 @@ export function* sendResetPassword({ password, userAccessToken, email }) {
 		document.cookie = `bible_is_name=${response.name};path=/`;
 		document.cookie = `bible_is_first_name=${response.first_name};path=/`;
 	} catch (err) {
-		// console.log('in catch');
-
 		if (process.env.NODE_ENV === 'development') {
 			console.warn('error in reset password', err); // eslint-disable-line no-console
 		}
@@ -373,15 +285,11 @@ export function* resetPassword({ email }) {
 		const response = yield call(request, requestUrl, options);
 
 		if (response.error) {
-			// console.log('Failure in reset email', response);
-
 			yield put({
 				type: RESET_PASSWORD_ERROR,
 				message: response.error.message,
 			});
 		} else {
-			// console.log('Success in reset email', response);
-
 			yield put({
 				type: RESET_PASSWORD_SUCCESS,
 				message:
@@ -400,7 +308,6 @@ export function* resetPassword({ email }) {
 }
 
 export function* deleteUser({ userId }) {
-	// console.log('in delete user with id', userId);
 	const requestUrl = `${process.env.BASE_API_ROUTE}/users/${userId}?key=${
 		process.env.DBP_API_KEY
 	}&v=4&project_id=${process.env.NOTES_PROJECT_ID}`;
@@ -424,14 +331,6 @@ export function* deleteUser({ userId }) {
 }
 
 export function* socialMediaLogin({ driver }) {
-	// const {
-	// 	name,
-	// 	email,
-	// 	picture,
-	// 	id,
-	// 	accessToken,
-	// } = res;
-	// console.log('Driver supplied to social media login', driver);
 	let requestUrl = `${process.env.BASE_API_ROUTE}/login/${driver}?key=${
 		process.env.DBP_API_KEY
 	}&v=4&project_id=${process.env.NOTES_PROJECT_ID}`;
@@ -444,32 +343,22 @@ export function* socialMediaLogin({ driver }) {
 	}
 
 	try {
-		// console.log('requestUrl', requestUrl);
-
 		const response = yield call(request, requestUrl);
-		// console.log('social response', response);
+
 		if (response) {
 			yield put({ type: SOCIAL_MEDIA_LOGIN_SUCCESS, url: response });
 		}
 	} catch (err) {
 		if (err && process.env.NODE_ENV === 'development') {
 			console.error(err); // eslint-disable-line no-console
-		} else if (process.env.NODE_ENV === 'production') {
-			// const options = {
-			// 	header: 'POST',
-			// 	body: formData,
-			// };
-			// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
 		}
 	}
 }
 
 // Individual exports for testing
 export default function* defaultSaga() {
-	// yield takeLatest(GET_USER_DATA, getUserData);
 	const sendSignUpFormSaga = yield takeLatest(SEND_SIGNUP_FORM, sendSignUpForm);
 	const sendLoginFormSaga = yield takeLatest(SEND_LOGIN_FORM, sendLoginForm);
-	// yield takeLatest(UPDATE_PASSWORD, updatePassword);
 	const sendResetPasswordSaga = yield takeLatest(
 		SEND_PASSWORD_RESET,
 		sendResetPassword,

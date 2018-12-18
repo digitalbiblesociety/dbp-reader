@@ -8,7 +8,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { List, AutoSizer } from 'react-virtualized';
 import LoadingSpinner from '../LoadingSpinner';
-// import flags from '../../images/flags.svg';
 
 class CountryList extends React.PureComponent {
 	// eslint-disable-line react/prefer-stateless-function
@@ -26,16 +25,13 @@ class CountryList extends React.PureComponent {
 			toggleLanguageList,
 			activeCountryName,
 			setCountryListState,
-			// toggleVersionList,
 			getCountry,
 			filterText,
 		} = this.props;
-		// const { filterText } = this.state;
 		const filteredCountryMap = filterText
 			? countries.filter((country) => this.filterFunction(country, filterText))
 			: countries;
 		const filteredCountries = filteredCountryMap.valueSeq();
-		// console.log('filtered countries', filteredCountries);
 
 		if (countries.size === 0) {
 			return (
@@ -48,7 +44,6 @@ class CountryList extends React.PureComponent {
 
 		const renderARow = ({ index, style, key }) => {
 			const country = filteredCountries.get(index);
-			// console.log('Rendering row', country.get('name'));
 			return (
 				<div
 					className="country-name"
@@ -100,10 +95,6 @@ class CountryList extends React.PureComponent {
 
 			return activeIndex;
 		};
-		// console.log(
-		//   'filtered ----------------------------------------\n\n',
-		//   filteredCountries,
-		// );
 
 		return filteredCountries.size ? (
 			<List
@@ -163,7 +154,6 @@ class CountryList extends React.PureComponent {
 			this.state.pulling &&
 			this.state.distance > minDistance
 		) {
-			// console.log('ended and needs to send api call');
 			this.setState({
 				startY: 0,
 				distance: 0,
@@ -172,7 +162,6 @@ class CountryList extends React.PureComponent {
 			});
 			this.props.getCountries();
 		} else {
-			// console.log('ended but should not send api call');
 			this.setState({
 				startY: 0,
 				distance: 0,
@@ -183,7 +172,6 @@ class CountryList extends React.PureComponent {
 	};
 
 	handleTouchStart = (touchStartEvent) => {
-		// touchStartEvent.preventDefault();
 		this.handleStart(touchStartEvent.targetTouches[0].clientY);
 	};
 
@@ -196,10 +184,8 @@ class CountryList extends React.PureComponent {
 	};
 
 	handleMouseDown = (mouseDownEvent) => {
-		// mouseDownEvent.preventDefault();
 		this.handleStart(mouseDownEvent.clientY);
 		this.container.addEventListener('mousemove', this.handleMouseMove);
-		// document.getElementsByClassName('country-name-list')[0].addEventListenter('mousemove', this.handleMouseMove);
 	};
 
 	handleMouseMove = (mouseMoveEvent) => {
@@ -208,9 +194,7 @@ class CountryList extends React.PureComponent {
 
 	handleMouseUp = (e) => {
 		this.handleEnd(e.clientY);
-		// console.log('document.getElementsByClassName(\'country-name-list\')[0]', document.getElementsByClassName('country-name-list')[0]);
 		this.container.removeEventListener('mousemove', this.handleMouseMove);
-		// document.getElementsByClassName('country-name-list')[0].removeEventListenter('mousemove', this.handleMouseMove);
 	};
 
 	handleMouseLeave = (e) => {
@@ -297,15 +281,11 @@ CountryList.propTypes = {
 	setCountryName: PropTypes.func,
 	toggleLanguageList: PropTypes.func,
 	setCountryListState: PropTypes.func,
-	// toggleVersionList: PropTypes.func,
 	getCountry: PropTypes.func,
 	getCountries: PropTypes.func,
 	filterText: PropTypes.string,
 	active: PropTypes.bool,
 	loadingCountries: PropTypes.bool,
-	// Using two different loading variables to keep the
-	// list from disappearing on a manual refresh
-	// finishedLoadingCountries: PropTypes.bool,
 	activeCountryName: PropTypes.string,
 };
 

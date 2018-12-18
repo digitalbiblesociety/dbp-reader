@@ -6,12 +6,6 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-// import check from '../static/check.svg';
-
-// import styled from 'styled-components';
-
-// import { FormattedMessage } from 'react-intl';
-// import messages from './messages';
 
 function Checkbox({ label, updater, toggleState, id, className }) {
 	return (

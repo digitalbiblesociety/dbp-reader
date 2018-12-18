@@ -7,9 +7,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import SvgWrapper from '../SvgWrapper';
-// import { FormattedMessage } from 'react-intl';
-// import messages from './messages';
-// import styled from 'styled-components';
+
 const Footer = ({
 	settingsActive,
 	profileActive,

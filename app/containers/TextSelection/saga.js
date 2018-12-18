@@ -5,7 +5,6 @@ import territoryCodes from '../../utils/territoryCodes.json';
 import request from '../../utils/request';
 import {
 	GET_COUNTRIES,
-	GET_COUNTRY,
 	GET_DPB_TEXTS,
 	GET_LANGUAGES,
 	ERROR_GETTING_LANGUAGES,
@@ -27,7 +26,6 @@ export function* getCountries() {
 
 	try {
 		const response = yield call(cachedFetch, requestUrl, {}, oneDay);
-		// console.log('countries response', response);
 		const countriesObject = response.data.reduce((acc, country) => {
 			const tempObj = acc;
 			if (typeof country.name !== 'string') {
@@ -66,54 +64,20 @@ export function* getCountries() {
 	}
 }
 
-export function* getCountry() {
-	// const requestUrl = `${process.env.BASE_API_ROUTE}/countries?key=${process.env.DBP_API_KEY}&v=4&asset_id=${process.env.DBP_BUCKET_ID}&has_filesets=true&include_languages=true&iso=${iso}`;
-
-	try {
-		// const response = yield call(request, requestUrl);
-		//
-		// yield put(loadCountry({ country: response.country }));
-	} catch (err) {
-		if (process.env.NODE_ENV === 'development') {
-			console.error(err); // eslint-disable-line no-console
-		} else if (process.env.NODE_ENV === 'production') {
-			// const options = {
-			// 	header: 'POST',
-			// 	body: formData,
-			// };
-			// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
-		}
-	}
-}
-
 export function* getTexts({ languageCode }) {
-	let requestUrl = '';
-	// console.log('active language code', languageCode);
-
-	// if (languageISO === 'ANY') {
-	//   requestUrl = `${process.env.BASE_API_ROUTE}/bibles?&asset_id=${
-	//     process.env.DBP_BUCKET_ID
-	//   }&key=${process.env.DBP_API_KEY}&v=4`;
-	// } else {
-	requestUrl = `${process.env.BASE_API_ROUTE}/bibles?asset_id=${
+	const requestUrl = `${process.env.BASE_API_ROUTE}/bibles?asset_id=${
 		process.env.DBP_BUCKET_ID
 	}&key=${process.env.DBP_API_KEY}&language_code=${languageCode}&v=4`;
-	// }
 	const videoRequestUrl = `${
 		process.env.BASE_API_ROUTE
 	}/bibles?asset_id=dbp-vid&key=${
 		process.env.DBP_API_KEY
 	}&language_code=${languageCode}&v=4`;
-	// }
-	// https://api.dbp4.org/bibles?&asset_id=$dbp-prod&key=1234&language_code=8076&v=4
 	try {
 		const response = yield call(request, requestUrl);
 		const videoRes = yield call(request, videoRequestUrl);
-		// console.log('getting bibles for the selector', response.data);
-		// console.log('video response', videoRes);
 		// Some texts may have plain text in the database but no filesets
 		// This filters out all texts that don't have a fileset
-		// console.log('response', response);
 		const videos = videoRes.data.filter(
 			(video) => video.abbr && video.language && video.language_id && video.iso,
 		);
@@ -132,11 +96,8 @@ export function* getTexts({ languageCode }) {
 							f.type === 'text_format',
 					)),
 		);
-		// console.log('videos', videos);
-		// console.log('texts', texts);
 		// Create map of videos for constant time lookup when iterating through the texts
 		const videosMap = videos.reduce((a, c) => ({ ...a, [c.abbr]: c }), {});
-		// console.log('videos map', videosMap);
 		// Find any overlapping bibles between the videos and texts
 		// Combine the filesets for only those overlapping bibles
 		const mappedTexts = texts.map((text) => ({
@@ -160,20 +121,12 @@ export function* getTexts({ languageCode }) {
 							f.type === 'text_format',
 				  ) || [],
 		}));
-		// console.log(texts);
-		// console.log('mappedTexts', mappedTexts);
 
 		yield put({ type: CLEAR_ERROR_GETTING_VERSIONS });
 		yield put(loadTexts({ texts: mappedTexts }));
 	} catch (error) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error(error); // eslint-disable-line no-console
-		} else if (process.env.NODE_ENV === 'production') {
-			// const options = {
-			// 	header: 'POST',
-			// 	body: formData,
-			// };
-			// fetch('${process.env.BASE_API_ROUTE}/error_logging', options);
 		}
 
 		yield put({ type: ERROR_GETTING_VERSIONS });
@@ -191,7 +144,6 @@ export function* getLanguages() {
 		const response = yield call(cachedFetch, requestUrl, {}, oneDay);
 		// Sometimes the api returns an array and sometimes an object with the data key
 		const languages = response.data || response;
-		// languages.unshift({ name: 'ANY', iso: 'ANY', alt_names: [] });
 
 		yield put(setLanguages({ languages }));
 		yield put({ type: CLEAR_ERROR_GETTING_LANGUAGES });
@@ -240,8 +192,6 @@ export function* getLanguageAltNames() {
 				};
 			})
 			.sort(sortLanguagesByVname);
-		// languages.unshift({ name: 'ANY', iso: 'ANY', alt_names: [] });
-		// console.log('Done getting the alt names');
 		yield put(setLanguages({ languages }));
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
@@ -253,7 +203,6 @@ export function* getLanguageAltNames() {
 // Individual exports for testing
 export default function* defaultSaga() {
 	yield takeLatest(GET_DPB_TEXTS, getTexts);
-	yield takeLatest(GET_COUNTRY, getCountry);
 	yield takeLatest(GET_LANGUAGES, getLanguages);
 	yield takeLatest(GET_COUNTRIES, getCountries);
 }

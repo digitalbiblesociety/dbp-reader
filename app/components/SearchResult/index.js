@@ -7,13 +7,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
-// import PrefetchLink from '../../utils/PrefetchLink';
-
-// import some from 'lodash/some';
-// import styled from 'styled-components';
-
-// import { FormattedMessage } from 'react-intl';
-// import messages from './messages';
 
 function SearchResult({ result: r, bibleId }) {
 	// Dont know of a better way to differentiate between words because two of the

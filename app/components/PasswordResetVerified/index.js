@@ -77,24 +77,16 @@ class PasswordResetVerified extends React.PureComponent {
 					</p>,
 				);
 			}
-			// if (passwordErrorType === 'upperNumSym') {
-			// 	errors.push(<p key={'passwordError4'} className={'signup-error-message'}><FormattedMessage {...messages.passwordError4} /></p>);
-			// }
 		}
-		// errors.push(<p key={'passwordError5'} className={'signup-error-message'}><FormattedMessage {...messages.passwordError5} /></p>);
 		return <div className={'errors-div'}>{errors}</div>;
 	}
-
-	// checkValidEmail = () => checkEmail(this.state.email)
 
 	checkValidPassword = () => {
 		const { firstPass, secondPass } = this.state;
 		const passLength = firstPass.length > 8;
 		const passEqual = firstPass === secondPass;
 		const passNotPass = firstPass !== 'firstPass';
-		// const upperNumSym = /(?=.*\d)|(?=.*[A-Z])|(?=.*[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/])/.test(firstPass); // eslint-disable-line no-useless-escape
-		// console.log('upper num sym', upperNumSym);
-		const validPassword = passLength && passEqual && passNotPass; // && upperNumSym;
+		const validPassword = passLength && passEqual && passNotPass;
 
 		if (!passEqual) {
 			this.setState({ passwordErrorType: 'confirm' });
@@ -105,10 +97,6 @@ class PasswordResetVerified extends React.PureComponent {
 		if (!passNotPass) {
 			this.setState({ passwordErrorType: 'password1' });
 		}
-		// else if (!upperNumSym) {
-		// 	this.setState({ passwordErrorType: 'upperNumSym' });
-		// }
-		// console.log('valid password', validPassword);
 
 		if (validPassword) {
 			this.setState({ passwordErrorType: '' });

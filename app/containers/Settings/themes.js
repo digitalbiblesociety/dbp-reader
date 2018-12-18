@@ -245,14 +245,10 @@ const sizes = {
 };
 
 export const toggleWordsOfJesus = (state) => {
-	// console.log('toggle words', state);
 	document.documentElement.style.setProperty(
 		'--application-words-of-jesus',
 		state ? '#A00' : 'inherit',
 	);
-	// document.documentElement.style.setProperty('--application-words-of-jesus', '#000');
-	// console.log(document.documentElement.style.getPropertyValue('--application-words-of-jesus'));
-	// console.log('after toggle');
 	document.cookie = `bible_is_words_of_jesus=${state}`;
 };
 

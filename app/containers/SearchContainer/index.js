@@ -55,8 +55,6 @@ export class SearchContainer extends React.PureComponent {
 	getSearchResults = (props) => this.props.dispatch(getSearchResults(props));
 
 	handleSearchModalToggle = () => {
-		// document.removeEventListener('click', this.handleClickOutside);
-
 		this.props.toggleSearchModal();
 	};
 
@@ -85,7 +83,6 @@ export class SearchContainer extends React.PureComponent {
 	};
 
 	handleSearchInputChange = (e) => {
-		// console.log('is a reference changed', this.checkInputForReference(e.target.value));
 		const val = e.target.value;
 		const { bibleId, activeFilesetId, loadingResults } = this.props;
 		const refObject = this.checkInputForReference(e.target.value);
@@ -158,13 +155,7 @@ export class SearchContainer extends React.PureComponent {
 					(b.name_short && b.name_short.toLowerCase() === lBook)) &&
 				b.chapters.includes(chapter),
 		);
-		// console.log('handling redirect', books);
-		// Todo: Use next router for the programatic navigation here
 		if (bookObject) {
-			// console.log('url to be pushed...', `/bible/${bibleId}/${bookObject.book_id.toLowerCase()}/${chapter}${firstVerse ? `/${firstVerse}` : ''}`);
-			// this.props.toggleSearchModal();
-			// console.log('Router', Router);
-			// console.log('Router.router', Router.router);
 			Router.push(
 				`/bible/${bibleId.toLowerCase()}/${bookObject.book_id.toLowerCase()}/${chapter}${
 					firstVerse ? `/${firstVerse}` : ''
@@ -182,33 +173,14 @@ export class SearchContainer extends React.PureComponent {
 		// Regular expression for testing whether a user entered a reference
 		// book | chapter(s) | chapter separator | start verse | verse separator | end verse
 		// es2016 ([\p{L}]+\p{Z}*)(\p{N}+)\p{P}*(\p{N}*)\p{P}*(\p{N}*) - multi-lingual (Does not work for Arabic)
-
-		// book | chapter(s) | chapter separator | start verse | verse separator | end verse
 		// es2015 \w+\s*[0-9]+[:.]*[0-9]*[-.]*[0-9]* - english only
 		// There must be at least a word then whitespace then a number
 		const regex = /(.*?)\s*(\d+):?(\d+)?.*/;
-
 		const isReference = regex.test(searchText);
-		/* Leaving the logs below in on the off chance that we need to do a unicode regex */
-		// console.log('isReference', isReference);
-		// console.log('regex', regex);
-		// console.log('searchText.match(regex, g)', searchText.match(regex, 'g'));
-
-		// const unicodeRegex = new RegExp('([\u{L}]+\u{Z}*)', '(\u{N}+)', '\u{P}*', '(\u{N}*)', '\u{P}*', '(\u{N}*)');
-		// const unicodeReg = new XRegExp('([\\p{L}]+)\\p{Z}*(\\p{N}+)\\p{P}*(\\p{N}*)\\p{P}*(\\p{N}*)');
-		// console.log('unicodeReg', unicodeReg);
-		// console.log('unicodeReg test', unicodeReg.test(searchText));
-		// console.log('unicodeReg match', searchText.match(unicodeReg, 'g'));
-
-		// console.log('es2016', /([\p{L}]+\p{Z}*)(\p{N}+)\p{P}*(\p{N}*)\p{P}*(\p{N}*)/u.test(searchText));
-		// console.log('searchText', searchText);
-		// console.log('isReference', isReference);
 
 		if (isReference) {
-			// Return the whether it was a reference plus the book, chapter and verse(s)
+			// Return whether it was a reference plus the book, chapter and verse(s)
 			const match = searchText.match(regex);
-			// console.log('match', match);
-
 			// Using trim to remove any whitespace
 			// Using parseInt to turn the numbers into integers
 			return {
@@ -226,14 +198,12 @@ export class SearchContainer extends React.PureComponent {
 
 	get formattedResults() {
 		const {
-			// searchResults,
 			showError,
 			trySearchOptions,
 			lastFiveSearches,
 			loadingResults,
 		} = this.props.searchcontainer;
 		const { bibleId, searchResults } = this.props;
-		// console.log('selectedRes', searchResults);
 		const { firstSearch } = this.state;
 
 		if (firstSearch) {
@@ -278,17 +248,15 @@ export class SearchContainer extends React.PureComponent {
 							<div className={'header'}>
 								<h1>{res.get('name')}</h1>
 							</div>
-							{res
-								.get('results')
-								.map((r) => (
-									<SearchResult
-										bibleId={bibleId}
-										key={`${r.get('book_id')}${r.get('chapter')}${r.get(
-											'verse_start',
-										)}`}
-										result={r}
-									/>
-								))}
+							{res.get('results').map((r) => (
+								<SearchResult
+									bibleId={bibleId}
+									key={`${r.get('book_id')}${r.get('chapter')}${r.get(
+										'verse_start',
+									)}`}
+									result={r}
+								/>
+							))}
 						</div>
 					))
 				) : (

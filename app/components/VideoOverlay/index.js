@@ -25,111 +25,12 @@ SvgButton.propTypes = {
 	videoObject: PropTypes.object,
 };
 
-// const LinkText = ({ isNext }) =>
-//   isNext ? (
-//     <a
-//       id="nextidlink"
-//       style={{ zIndex: 10, pointerEvents: 'visible' }}
-//       onClick={() => {
-//         console.log('clicked a');
-//       }}
-//     >
-//       <SvgButton
-//         videoObject={{ reference: 'Next Chapter' }}
-//         id={'next_video'}
-//       />
-//     </a>
-//   ) : (
-//     <a
-//       id="previdlink"
-//       style={{ zIndex: 10, pointerEvents: 'visible' }}
-//       onClick={() => {
-//         console.log('clicked a');
-//       }}
-//     >
-//       <SvgButton
-//         videoObject={{ reference: 'Previous Chapter' }}
-//         id={'previous_video'}
-//       />
-//     </a>
-//   );
-
-// LinkText.propTypes = {
-//   isNext: PropTypes.bool,
-// };
-
-// ChapterLink
-/*
-	const ChapterLink = (props) => {
-  const { books, bookId, chapter, textId, text, isNext } = props;
-
-  return (
-    <Link
-      as={
-        isNext
-          ? getNextChapterUrl({
-              books,
-              bookId,
-              chapter,
-              textId,
-              text,
-              isHref: false,
-            })
-          : getPreviousChapterUrl({
-              books,
-              bookId,
-              chapter,
-              textId,
-              text,
-              isHref: false,
-              vid: true,
-            })
-      }
-      href={
-        isNext
-          ? getNextChapterUrl({
-              books,
-              bookId,
-              chapter,
-              textId,
-              text,
-              isHref: true,
-            })
-          : getPreviousChapterUrl({
-              books,
-              bookId,
-              chapter,
-              textId,
-              text,
-              isHref: true,
-              vid: true,
-            })
-      }
-    >
-      <LinkText isNext={isNext} />
-    </Link>
-  );
-};
-
-ChapterLink.propTypes = {
-  books: PropTypes.array,
-  bookId: PropTypes.string,
-  chapter: PropTypes.number,
-  textId: PropTypes.string,
-  text: PropTypes.array,
-  isNext: PropTypes.bool,
-};
-*/
-
 class VideoOverlay extends React.PureComponent {
 	handleNextClick = () => {
-		// console.log('clicked the new chapter href', this.nextChapterHref);
-		// console.log('clicked the new chapter as', this.nextChapterAs);
 		this.props.closePlayer();
 		Router.replace(this.nextChapterAs);
 	};
 	handlePreviousClick = () => {
-		// console.log('clicked the new chapter', this.previousChapterAs);
 		this.props.closePlayer();
 		Router.replace(this.previousChapterAs);
 	};
@@ -195,11 +96,6 @@ class VideoOverlay extends React.PureComponent {
 			pauseFunction,
 			previousFunction,
 			nextFunction,
-			// books,
-			// bookId,
-			// chapter,
-			// textId,
-			// text,
 		} = this.props;
 
 		return (

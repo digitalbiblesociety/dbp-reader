@@ -2,7 +2,7 @@
  *
  * HomePage actions
  *
- * todo: Remove boilerplate by creating a function to create actions
+ * TODO: Remove boilerplate by creating a function to create actions
  * Automatically pass through all props so these files are basically useless... -_-
  */
 
@@ -158,10 +158,6 @@ export const getCopyrights = (props) => ({
 	type: GET_COPYRIGHTS,
 	...props,
 });
-
-// export const toggleMenuBar = () => ({
-// 	type: TOGGLE_MENU_BAR,
-// });
 
 export const toggleFirstLoadForTextSelection = () => ({
 	type: TOGGLE_FIRST_LOAD_TEXT_SELECTION,

@@ -6,15 +6,6 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-// import NotFoundPage from '../../containers/NotFoundPage';
-// import styled from 'styled-components';
-
-// const Container = styled.div`
-// 	padding:15px;
-// `;
-
-// import { FormattedMessage } from 'react-intl';
-// import messages from './messages';
 
 class GenericErrorBoundary extends React.Component {
 	constructor(props) {
@@ -53,7 +44,6 @@ class GenericErrorBoundary extends React.Component {
 
 GenericErrorBoundary.propTypes = {
 	children: PropTypes.node,
-	// affectedArea: PropTypes.string,
 };
 
 export default GenericErrorBoundary;

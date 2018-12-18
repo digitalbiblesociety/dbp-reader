@@ -11,7 +11,6 @@ const selectBooks = () =>
 		const testamentMap = substate.get('testaments').toJS
 			? substate.get('testaments').toJS()
 			: substate.get('testaments');
-		// console.log('testamentMap', testamentMap);
 		books.forEach((book) => {
 			if (splitBooks[testamentMap[book.get('book_id')]]) {
 				splitBooks[testamentMap[book.get('book_id')]].push(book);
@@ -19,11 +18,6 @@ const selectBooks = () =>
 				splitBooks[testamentMap[book.get('book_id')]] = [book];
 			}
 		});
-
-		// console.log('books', books);
-		// console.log('testamentMap', testamentMap);
-		// console.log('splitBooks', fromJS(splitBooks));
-		// console.log('ot', fromJS(splitBooks).get('OT'));
 
 		if (Object.keys(splitBooks).length) {
 			return fromJS(splitBooks);

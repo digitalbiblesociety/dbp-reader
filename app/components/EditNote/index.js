@@ -7,15 +7,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import PopupMessage from '../PopupMessage';
-// import BooksTable from '../BooksTable';
 import SvgWrapper from '../SvgWrapper';
-// import styled from 'styled-components';
 
 class EditNote extends React.PureComponent {
 	// eslint-disable-line react/prefer-stateless-function
 	constructor(props) {
 		super(props);
-		// Todo: Can get rid of the const statements below once the tags field is an object
+		// TODO: Can get rid of the const statements below once the tags field is an object
 		const hasTitle =
 			this.props.note.get('tags') &&
 			typeof this.props.note.get('tags').find === 'function' &&
@@ -48,14 +46,6 @@ class EditNote extends React.PureComponent {
 		}
 	}
 
-	componentWillUnmount() {
-		// Dispatch api call to save the user note and hope nothing hiccups
-		// This will not fire if the user closes the tab or the browser
-		// if (this.state.textarea) {
-		// 	this.handleSave();
-		// }
-	}
-
 	getReference = (verseStart, verseEnd, chapter) =>
 		`${this.props.activeBookName} ${chapter}:${
 			verseStart === verseEnd || !verseEnd
@@ -75,25 +65,6 @@ class EditNote extends React.PureComponent {
 		return `${month.length === 1 ? `0${month}` : month}.${day}.${year}`;
 	};
 
-	// Use this to suggest to the user that they may want to save their note
-	// setTimer = () => {
-	// 	const titleText = this.state.titleText;
-	// 	const textArea = this.state.textarea;
-	// 	// Clears the timeout so that at most there will only be one request per 2.5 seconds
-	// 	if (this.timer) {
-	// 		clearTimeout(this.timer);
-	// 	}
-	// 	// Don't have to bind 'this' bc of the arrow function
-	// 	this.timer = setTimeout(() => {
-	// 		// Don't save if there isn't a value
-	// 		if (!textArea || !titleText) {
-	// 			return;
-	// 		}
-	// 		// Make a function to alert the user that their work is not saved
-	// 		this.handleSave();
-	// 	}, 5000);
-	// }
-
 	handleTextareaChange = (e) => {
 		e.persist();
 		if (
@@ -101,10 +72,8 @@ class EditNote extends React.PureComponent {
 			this.props.savedTheNote ||
 			this.props.errorSavingNote
 		) {
-			// console.log('reading the saved message');
 			this.props.readSavedMessage();
 			this.props.clearNoteErrorMessage();
-			// this.setTimer();
 		}
 		this.setState(
 			(cs) =>
@@ -121,10 +90,8 @@ class EditNote extends React.PureComponent {
 			this.props.savedTheNote ||
 			this.props.errorSavingNote
 		) {
-			// console.log('reading the saved message');
 			this.props.readSavedMessage();
 			this.props.clearNoteErrorMessage();
-			// this.setTimer();
 		}
 		this.setState(
 			(cs) =>
@@ -155,7 +122,6 @@ class EditNote extends React.PureComponent {
 			'';
 
 		if (!textarea) {
-			// const coords = e.target.getBoundingClientRect() || { x: 0, y: 0 };
 			const rightEdge = window.innerWidth - 100;
 			const bottomEdge = window.innerHeight - 115;
 			const x = rightEdge < e.clientX ? rightEdge : e.clientX;
@@ -214,13 +180,12 @@ class EditNote extends React.PureComponent {
 		}
 
 		this.setState({ savingNote: true });
-		// this.props.setActiveChild('notes');
 	};
 
 	deleteNote = () => {
 		this.props.deleteNote({ noteId: this.props.note.get('id') });
 		this.props.setActiveChild('notes');
-	}; // console.log('send api call to delete the note')
+	};
 
 	get verseReference() {
 		const { vernacularNamesObject, note } = this.props;
@@ -231,7 +196,6 @@ class EditNote extends React.PureComponent {
 			const ref = note
 				.get('tags')
 				.find((tag) => tag.get('type') === 'reference');
-			// console.log('has a reference', ref);
 			return ref.get('value');
 		}
 		const book = note.get('book_id');
@@ -239,7 +203,6 @@ class EditNote extends React.PureComponent {
 		const end = note.get('verse_end');
 		const chapter = note.get('chapter');
 		const verses = start === end || !end ? start : `${start}-${end}`;
-		// console.log('note.get(\'book_id\')', note.get('book_id'));
 
 		if (book && chapter && start) {
 			return `${vernacularNamesObject[book]} ${chapter}:${verses}`;
@@ -252,25 +215,15 @@ class EditNote extends React.PureComponent {
 	render() {
 		const {
 			toggleVerseText,
-			// toggleAddVerseMenu,
 			note,
-			// isAddVerseExpanded,
 			isVerseTextVisible,
 			activeTextId,
 			notePassage,
 			savedTheNote,
-			// activeBookName,
 			notesErrorMessage,
 			errorSavingNote,
 		} = this.props;
 		const { savingNote, popupOpen, coords } = this.state;
-		// console.log('note', note);
-
-		// console.log('activebookname', activeBookName);
-		// const {
-		// 	selectedBookName,
-		// 	selectedChapter,
-		// } = this.state;
 
 		return (
 			<section className="edit-notes">
@@ -305,7 +258,9 @@ class EditNote extends React.PureComponent {
 				</div>
 				{isVerseTextVisible ? (
 					<div className="verse-text">
-						&quot;&nbsp;{notePassage}&nbsp;&quot;
+						&quot;&nbsp;
+						{notePassage}
+						&nbsp;&quot;
 					</div>
 				) : null}
 				<textarea
@@ -321,7 +276,8 @@ class EditNote extends React.PureComponent {
 						tabIndex={0}
 						onClick={() => this.deleteNote()}
 					>
-						<SvgWrapper className={'icon'} svgid={'delete'} />Delete Note
+						<SvgWrapper className={'icon'} svgid={'delete'} />
+						Delete Note
 					</span>
 					{savedTheNote && !errorSavingNote ? (
 						<span
@@ -368,10 +324,8 @@ EditNote.propTypes = {
 	setActiveChild: PropTypes.func,
 	toggleVerseText: PropTypes.func,
 	readSavedMessage: PropTypes.func,
-	// toggleAddVerseMenu: PropTypes.func,
 	note: PropTypes.object,
 	vernacularNamesObject: PropTypes.object,
-	// isAddVerseExpanded: PropTypes.bool,
 	isVerseTextVisible: PropTypes.bool,
 	notePassage: PropTypes.string,
 	activeTextId: PropTypes.string,

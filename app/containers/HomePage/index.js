@@ -46,7 +46,6 @@ import {
 	toggleChapterSelection,
 	toggleVersionSelection,
 	toggleFirstLoadForTextSelection,
-	// setUA,
 	setActiveNote,
 	setActiveTextId,
 	setActiveChapter,
@@ -74,10 +73,7 @@ class HomePage extends React.PureComponent {
 		footerDistance: 0,
 		heightDifference: 0,
 	};
-	// eslint-disable-line react/prefer-stateless-function
-	// Todo: Move all of this to app.js
 	componentDidMount() {
-		// console.log('Homepage mounted______________________');
 		const {
 			activeFilesets,
 			activeBookId,
@@ -88,7 +84,6 @@ class HomePage extends React.PureComponent {
 
 		this.getCopyrights({ filesetIds: activeFilesets });
 		if (userId && userAuthenticated) {
-			// console.log('user is now authenticated')
 			this.props.dispatch(
 				getHighlights({
 					bible: activeTextId,
@@ -329,12 +324,6 @@ class HomePage extends React.PureComponent {
 		if (menu === 'version') {
 			this.props.dispatch(toggleVersionSelection());
 		}
-	};
-
-	resetPasswordSent = () => {
-		// We might still want this to try and provide a slightly better user experience
-		// the idea is to take the user back to where they were once they reset their password
-		// // this.props.history.replace(`/${localStorage.getItem('bible_is_1_bible_id') || 'engesv'}/${localStorage.getItem('bible_is_2_book_id') || 'mat'}/${localStorage.getItem('bible_is_3_chapter') || '1'}`)
 	};
 
 	addBookmark = (data) => this.props.dispatch(addBookmark({ ...data }));

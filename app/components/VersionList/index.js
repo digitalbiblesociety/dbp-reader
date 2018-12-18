@@ -6,27 +6,16 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-// import some from 'lodash/some';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-// import { Link } from 'react-router-dom';
 import { createStructuredSelector } from 'reselect';
 import { FormattedMessage } from 'react-intl';
-// import SvgWrapper from 'components/SvgWrapper';
 import LoadingSpinner from '../LoadingSpinner';
 import VersionListSection from '../VersionListSection';
 import messages from './messages';
 import { selectActiveChapter, selectActiveBookId } from './selectors';
 
 class VersionList extends React.PureComponent {
-	// eslint-disable-line react/prefer-stateless-function
-	// constructor(props) {
-	// 	super(props);
-	// 	this.state = {
-	// 		filterText: '',
-	// 	};
-	// }
-
 	get filteredVersionList() {
 		const { bibles, activeTextId, filterText } = this.props;
 
@@ -35,7 +24,6 @@ class VersionList extends React.PureComponent {
 			: bibles;
 		// Change the way I figure out if a resource has text or audio
 		// path, key, types, className, text, clickHandler
-		// console.log('filtered bibles', filteredBibles.get(0).get('filesets').valueSeq());
 		const scrubbedBibles = filteredBibles.reduce(
 			(acc, bible) => [
 				...acc,
@@ -64,14 +52,12 @@ class VersionList extends React.PureComponent {
 			],
 			[],
 		);
-		// console.log('scrubbed bibles', scrubbedBibles);
 		// When I first get the response from the server with filesets
-		const audioAndText = []; // filteredBibles.reduce();
-		const audioOnly = []; // filteredBibles.reduce();
-		const textOnly = []; // filteredBibles.reduce();
+		const audioAndText = [];
+		const audioOnly = [];
+		const textOnly = [];
 
 		scrubbedBibles.forEach((b) => {
-			// console.log(b);
 			if (
 				(b.types.audio_drama || b.types.audio) &&
 				(b.types.text_plain || b.types.text_format)

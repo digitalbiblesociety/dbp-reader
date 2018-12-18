@@ -12,9 +12,6 @@ import GoogleAuthentication from '../../containers/GoogleAuthentication';
 import Checkbox from '../Checkbox';
 import checkEmail from '../../utils/checkEmailForValidity';
 import messages from '../PasswordResetVerified/messages';
-// import messages from './messages';
-// import SvgWrapper from 'components/SvgWrapper';
-// import styled from 'styled-components';
 
 class SignUp extends React.PureComponent {
 	state = {
@@ -30,32 +27,9 @@ class SignUp extends React.PureComponent {
 		showSignupError: false,
 		wantsUpdates: false,
 	};
-
-	componentWillReceiveProps() {
-		// if (nextProps.socialLoginLink && nextProps.socialLoginLink !== this.props.socialLoginLink) {
-		// 	const socialWindow = window.open(nextProps.socialLoginLink, '_blank');
-		//
-		// 	socialWindow.focus();
-		// }
-	}
-
-	// componentDidUpdate(prevProps, prevState) {
-	// 	if ((prevState.confirmPassword !== prevState.password) && this.checkValidPassword()) {
-	// 		console.log('valid')
-	// 		this.setValidPassword(true);
-	// 	} else if (((prevState.confirmPassword === prevState.password) && prevState.password.length) && !this.checkValidPassword()) {
-	// 		this.setValidPassword(false);
-	// 	}
-	// }
-
 	componentWillUnmount() {
 		this.props.viewErrorMessage();
 	}
-
-	// setValidPassword = (valid) => {
-	// 	this.setState({ validPassword: valid });
-	// 	this.viewError();
-	// }
 
 	handlePasswordChange = (e) => {
 		this.setState({ password: e.target.value });
@@ -92,7 +66,6 @@ class SignUp extends React.PureComponent {
 		const validPassword = this.checkValidPassword();
 
 		if (validPassword && validEmail) {
-			// console.log('sending sign up form');
 			this.props.sendSignupForm({
 				email: this.state.email,
 				password: this.state.password,
@@ -105,11 +78,9 @@ class SignUp extends React.PureComponent {
 		} else if (!validPassword) {
 			// password error message
 			this.setState({ showSignupError: true });
-			// console.log('password error');
 		} else if (!validEmail) {
 			// email error message
 			this.setState({ showSignupError: true });
-			// console.log('email error');
 		}
 		this.setState({ validPassword, validEmail });
 		this.viewError();
@@ -126,9 +97,7 @@ class SignUp extends React.PureComponent {
 		const passLength = password.length > 8;
 		const passEqual = password === confirmPassword;
 		const passNotPass = password !== 'password';
-		// const upperNumSym = /(?=.*\d)|(?=.*[A-Z])|(?=.*[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/])/.test(password); // eslint-disable-line no-useless-escape
-		// console.log('upper num sym', upperNumSym);
-		const validPassword = passLength && passEqual && passNotPass; // && upperNumSym;
+		const validPassword = passLength && passEqual && passNotPass;
 
 		if (!passEqual) {
 			this.setState({ passwordErrorType: 'confirm' });
@@ -139,10 +108,6 @@ class SignUp extends React.PureComponent {
 		if (!passNotPass) {
 			this.setState({ passwordErrorType: 'password' });
 		}
-		// } else if (!upperNumSym) {
-		// 	this.setState({ passwordErrorType: 'upperNumSym' });
-		// }
-		// console.log('valid password', validPassword);
 
 		if (validPassword) {
 			this.setState({ passwordErrorType: '' });
@@ -189,9 +154,6 @@ class SignUp extends React.PureComponent {
 					</p>,
 				);
 			}
-			// } else if (passwordErrorType === 'upperNumSym') {
-			// 	errors.push(<p id={'passwordError4'} key={'passwordError4'} className={'signup-error-message'}><FormattedMessage {...messages.passwordError4} /></p>);
-			// }
 		}
 
 		errors.push(
@@ -367,7 +329,6 @@ SignUp.propTypes = {
 	socialMediaLogin: PropTypes.func,
 	viewErrorMessage: PropTypes.func,
 	readOauthError: PropTypes.func,
-	// errorMessage: PropTypes.string,
 	activeDriver: PropTypes.string,
 	oauthError: PropTypes.bool,
 	oauthErrorMessage: PropTypes.string,

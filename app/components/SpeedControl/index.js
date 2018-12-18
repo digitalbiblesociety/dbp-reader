@@ -7,7 +7,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import CloseMenuFunctions from '../../utils/closeMenuFunctions';
-// import styled from 'styled-components';
 
 class SpeedControl extends React.PureComponent {
 	componentDidMount() {

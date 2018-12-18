@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import Slider from 'rc-slider/lib/Slider';
 import CloseMenuFunctions from '../../utils/closeMenuFunctions';
 import Colors from '../../utils/javascriptColors';
-// import styled from 'styled-components';
+
 // rc-slider Slider component doesn't accept classes for styles other than classname
 class VolumeSlider extends React.PureComponent {
 	// eslint-disable-line react/prefer-stateless-function
@@ -40,8 +40,6 @@ class VolumeSlider extends React.PureComponent {
 	setRef = (el) => (this.ref = el);
 
 	handleChange = (value) => {
-		// console.log('handling change and new volume value', value / 100 || 0);
-		// this.setState({ stateVolume: value / 100 || 0 });
 		this.props.updateVolume(value / 100 || 0);
 	};
 
@@ -84,10 +82,7 @@ class VolumeSlider extends React.PureComponent {
 			sliderClassName,
 			sliderContainerClassName,
 		} = this.props;
-		// const {
-		// 	stateVolume,
-		// } = this.state;
-		// console.log('rendering volume slider');
+
 		return (
 			<div
 				ref={this.setRef}

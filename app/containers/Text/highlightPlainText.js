@@ -36,22 +36,14 @@ const createHighlights = (highlights, arrayOfVerseObjects) => {
 			return 0;
 		},
 	);
-	// console.log(arrayOfVerseObjects);
-	// console.log('sorted highlights', sortedHighlights);
 	try {
 		const newArrayOfVerses = [];
 		const arrayOfVerses = [...arrayOfVerseObjects];
 		let previousHighlightArray = sortedHighlights;
 
-		// let charsLeftAfterVerseEnd = 0; // the number of characters for the highlight
-		// let continuingColor = ''; // Need to save the color of the active highlight that is still being applied
-		// console.log('New Highlight Iteration\n\n----------------------------------------------------------------------------------');
 		arrayOfVerses.forEach((verse) => {
-			// console.log('element index', verseElementIndex);
 			const verseNumber = verse.verse_start;
 			// Get all of the highlights that start in this verse
-			// const highlightsStartingInVerse = sortedHighlights.filter((highlight) => highlight.verse_start === verseNumber);
-
 			// Make the text an array
 			let verseText = verse.verse_text.split('');
 			// Set the start of the highlight to 0 since this is a "new" verse
@@ -95,8 +87,6 @@ const createHighlights = (highlights, arrayOfVerseObjects) => {
 			try {
 				const newData = handleNewVerse({
 					highlightsStartingInVerse,
-					// charsLeftAfterVerseEnd,
-					// continuingColor,
 					verseText,
 				});
 
@@ -104,10 +94,6 @@ const createHighlights = (highlights, arrayOfVerseObjects) => {
 				// Creating the new array with the updated highlight lengths based on which highlights were applied
 				// Map: -> Applies the updated highlighted_words values supplied by the highlighting function
 				// Reduce: -> Removes the highlights that were "used up" in the last verse
-				// console.log('newData.highlightsToUpdate', newData.highlightsToUpdate);
-				// console.log('newData.highlightsToUpdate[90]', newData.highlightsToUpdate[90]);
-
-				// console.log('prev array before the map and reduce', previousHighlightArray[0]);
 				previousHighlightArray = previousHighlightArray
 					.map((h) => {
 						// Gets the object representing the changing needing to be made to this highlight
@@ -120,7 +106,6 @@ const createHighlights = (highlights, arrayOfVerseObjects) => {
 									newH[entry[0]] = entry[1];
 								},
 							);
-							// console.log('newH', newH);
 							return newH;
 						}
 						// Return the initial highlight
@@ -133,7 +118,6 @@ const createHighlights = (highlights, arrayOfVerseObjects) => {
 								: [...a, h],
 						[],
 					);
-				// console.log('previousHighlightArray', previousHighlightArray[0]);
 			} catch (e) {
 				if (process.env.NODE_ENV === 'development') {
 					console.warn('Error in handleNewVerse', e); // eslint-disable-line no-console
@@ -150,7 +134,6 @@ const createHighlights = (highlights, arrayOfVerseObjects) => {
 				newArrayOfVerses.push({ ...verse });
 			}
 		});
-		// console.log('new verses', newArrayOfVerses);
 		return newArrayOfVerses;
 	} catch (error) {
 		if (process.env.NODE_ENV === 'development') {
@@ -195,9 +178,6 @@ function handleNewVerse({ highlightsStartingInVerse, verseText }) {
 		) {
 			/* HIGHLIGHT STOPS IN MIDDLE OF NEXT HIGHLIGHT */
 			// if two highlights overlap and neither is contained completely in the other
-			// l && fs < ls && fs + fe > ls && fs + fe < le
-			// console.log('Highlight stopping in middle of next one');
-
 			// Start the first highlight
 			verseText.splice(
 				h.highlight_start,
@@ -231,14 +211,12 @@ function handleNewVerse({ highlightsStartingInVerse, verseText }) {
 				);
 				// Setting the new value for highlighted_words and start
 				// Sets start to 0 because this highlight needs to resume in the beginning of the next verse
-				// console.log('verseLength', verseLength);
 
 				highlightsToUpdate[h.id] = {
 					highlighted_words:
 						h.highlighted_words - (verseLength - h.highlight_start),
 					highlight_start: 0,
 				};
-				// console.log('highlightsToUpdate', highlightsToUpdate);
 			} else {
 				// The highlight has to be contained within this verse
 				verseText.splice(
@@ -266,7 +244,6 @@ function handleNewVerse({ highlightsStartingInVerse, verseText }) {
 					1,
 					`${verseText[verseLength - 1]}</em>`,
 				);
-				// console.log('verseLength', verseLength);
 				// Setting the new value for highlighted_words and start
 				// Sets start to 0 because this highlight needs to resume in the beginning of the next verse
 				highlightsToUpdate[h.id] = {
@@ -274,11 +251,8 @@ function handleNewVerse({ highlightsStartingInVerse, verseText }) {
 						h.highlighted_words - (verseLength - h.highlight_start),
 					highlight_start: 0,
 				};
-				// console.log('highlightsToUpdate', highlightsToUpdate);
 			} else {
 				// The highlight has to be contained within this verse
-				// console.log('verseLength', verseLength);
-				// console.log('highlightLength', highlightLength);
 				verseText.splice(
 					highlightLength,
 					1,

@@ -6,14 +6,12 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-// import styled from 'styled-components';
-
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
 
 function HighlightColors({ addHighlight }) {
 	return (
-		<React.Fragment>
+		<>
 			<span className={'color-group'}>
 				<span
 					role={'button'}
@@ -110,7 +108,7 @@ function HighlightColors({ addHighlight }) {
 					<FormattedMessage {...messages.blue} />
 				</span>
 			</span>
-		</React.Fragment>
+		</>
 	);
 }
 

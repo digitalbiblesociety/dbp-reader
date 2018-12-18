@@ -7,16 +7,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import matchSorter from 'match-sorter';
-// import { Link } from 'react-router-dom';
 import SvgWrapper from '../SvgWrapper';
 import Pagination from '../Pagination';
 import PageSizeSelector from '../PageSizeSelector';
 import MyHighlights from '../MyHighlights';
 import MyBookmarks from '../MyBookmarks';
 import ColorPicker from '../ColorPicker';
-// import styled from 'styled-components';
 class MyNotes extends React.PureComponent {
-	// eslint-disable-line react/prefer-stateless-function
 	state = {
 		// Need to reset this once user goes from notes to bookmarks
 		filterText: '',
@@ -24,12 +21,6 @@ class MyNotes extends React.PureComponent {
 	};
 	// Need this for when a user has edited a note and come back here
 	componentDidMount() {
-		// if (this.props.sectionType === 'notes') {
-		// 	// console.log('Getting notebook data in did mount');
-		// } else if (this.props.sectionType === 'bookmarks') {
-		// } else if (this.props.sectionType === 'highlights') {
-		// }
-		// console.log('getting notes bookmarks and highlights!!!!!!');
 		this.props.getNotes({
 			limit: this.props.pageSize,
 			page: this.props.activePage,
@@ -43,10 +34,6 @@ class MyNotes extends React.PureComponent {
 			page: this.props.activePageHighlight,
 		});
 	}
-
-	// componentDidUpdate() {
-	// 	console.log('Component updated');
-	// }
 
 	componentWillReceiveProps(nextProps) {
 		if (
@@ -80,19 +67,16 @@ class MyNotes extends React.PureComponent {
 
 		if (nextProps.sectionType !== this.props.sectionType) {
 			if (nextProps.sectionType === 'notes') {
-				// console.log('Getting notes');
 				this.props.getNotes({
 					limit: nextProps.pageSize,
 					page: nextProps.activePage,
 				});
 			} else if (nextProps.sectionType === 'bookmarks') {
-				// console.log('getting bookmarks');
 				nextProps.getBookmarks({
 					limit: nextProps.pageSizeBookmark,
 					page: nextProps.activePageBookmark,
 				});
 			} else if (nextProps.sectionType === 'highlights') {
-				// console.log('getting highlights');
 				nextProps.getHighlights({
 					limit: nextProps.pageSizeHighlight,
 					page: nextProps.activePageHighlight,
@@ -221,7 +205,6 @@ class MyNotes extends React.PureComponent {
 	};
 
 	startUpdateProcess = ({ id, color }) => {
-		// console.log('start updating', id, color);
 		this.setState({
 			colorPickerState: true,
 			selectedId: id,
