@@ -6,10 +6,27 @@ phases:
   install:
     commands:
       - npm install
-      - npm install pm2 -g
+      - echo "DBP_API_KEY=e8a946a0-d9e2-11e7-bfa7-b1fb2d7f5824
+        BASE_API_ROUTE=https://api.dbp4.org
+        FB_APP_ID=938709099638405
+        FB_ACCESS=c6216880269fdc3db2d41462f9817155
+        NOTES_PROJECT_ID=34187
+        DBP_BUCKET_ID=dbp-prod
+        GOOGLE_APP_ID=612592113621-161ppecd65da9vmno3uo4hncab01pbs5.apps.googleusercontent.com
+        GOOGLE_SECRET=GCKhymXcT3Dz67C2rWt2KCe2
+        GOOGLE_SECRET_PROD=vht8fuYxtHPrr_AfOSQMLlPN
+        GOOGLE_APP_ID_PROD=1031351235454-sgb8hjdp82iigik0vncfj521ph1l8i3u.apps.googleusercontent.com
+        CDN_STATIC_FILES=https://bibleis-prod.s3.amazonaws.com" > .env
   build:
     commands:
       - BUILD_ID=$(git rev-parse HEAD) NODE_ENV=production npm run build:next
-  post_build:
-    commands:
-      - pm2 restart ecosystem.config.js --update-env --env production --only bible.is.prod
+artifacts:
+  files:
+    - .next/**/*
+    - nextServer.js
+    - ecosystem.config.js
+    - package.json
+    - next.config.js
+    - env-config.js
+    - .babelrc.js
+  name: $(AWS_REGION)-$(date +%Y-%m-%d)
