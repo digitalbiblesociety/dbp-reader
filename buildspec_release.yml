@@ -12,10 +12,13 @@ phases:
 artifacts:
   files:
     - .next/**/*
+    - static/**/*
+    - node_modules/**/*
     - nextServer.js
     - ecosystem.config.js
     - package.json
     - next.config.js
+    - newrelic.js
     - env-config.js
     - .babelrc.js
   name: $(AWS_REGION)-$(date +%Y-%m-%d)
