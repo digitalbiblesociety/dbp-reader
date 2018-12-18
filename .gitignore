@@ -16,7 +16,6 @@ newrelic.js
 app/utils/ENGKJV
 reduxStoreShape.js
 next-server
-env-config.js
 static/sitemaps/*
 cdn
 cdn/
