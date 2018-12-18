@@ -69,10 +69,6 @@ export class TextSelection extends React.PureComponent {
 			nextProps.textselection.activeLanguageCode !==
 				this.props.textselection.activeLanguageCode
 		) {
-			// console.log(
-			//   'getting texts in receive props for textselection: ',
-			//   nextProps.textselection.activeLanguageCode,
-			// );
 			this.props.dispatch(
 				getTexts({
 					languageISO: nextProps.textselection.activeIsoCode,
@@ -83,10 +79,6 @@ export class TextSelection extends React.PureComponent {
 			nextProps.homepageData.initialIsoCode !==
 			this.props.homepageData.initialIsoCode
 		) {
-			// console.log(
-			//   'getting texts in receive props for homepageData: ',
-			//   nextProps.homepageData.defaultLanguageCode,
-			// );
 			this.props.dispatch(
 				getTexts({
 					languageISO: nextProps.homepageData.initialIsoCode,
@@ -142,12 +134,6 @@ export class TextSelection extends React.PureComponent {
 	toggleLanguageList = () => this.props.dispatch(setLanguageListState());
 
 	toggleVersionList = () => this.props.dispatch(setVersionListState());
-
-	// handleVersionSelectionToggle = () => {
-	// 	document.removeEventListener('click', this.handleClickOutside);
-	//
-	// 	this.toggleVersionSelection();
-	// }
 
 	handleSearchInputChange = (e) =>
 		this.setState({ filterText: e.target.value });
@@ -295,11 +281,4 @@ const withConnect = connect(
 	mapDispatchToProps,
 );
 
-// const withReducer = injectReducer({ key: 'textSelection', reducer });
-// const withSaga = injectSaga({ key: 'textSelection', saga });
-
-export default compose(
-	// withReducer,
-	// withSaga,
-	withConnect,
-)(TextSelection);
+export default compose(withConnect)(TextSelection);

@@ -178,7 +178,6 @@ function homePageReducer(state = initialState, action) {
 		case USER_LOGGED_IN:
 			return state.set('userId', action.userId).set('userAuthenticated', true);
 		case LOG_OUT:
-			// document.cookie = 'bible_is_user_id=;path=/';
 			localStorage.removeItem('bible_is_user_id');
 			localStorage.removeItem('bible_is_user_email');
 			localStorage.removeItem('bible_is_user_name');
@@ -366,19 +365,13 @@ function homePageReducer(state = initialState, action) {
 				.set('activeVerse', action.verse)
 				.set('formattedSource', fromJS(action.formattedText));
 		case 'loadaudio':
-			// console.log('loading audio with', action);
-			return (
-				state
-					.set('audioPaths', action.audioPaths.slice(1))
-					// .set('loadingNewChapterText', false)
-					.set('audioFilesetId', action.audioFilesetId)
-					.set('loadingAudio', false)
-					.set('audioSource', action.audioPaths[0] || '')
-			);
+			return state
+				.set('audioPaths', action.audioPaths.slice(1))
+				.set('audioFilesetId', action.audioFilesetId)
+				.set('loadingAudio', false)
+				.set('audioSource', action.audioPaths[0] || '');
 		case 'getchapter':
 			return state.set('loadingAudio', true).set('loadingNewChapterText', true);
-		// case 'getbible':
-		// 	return state.map((data, key) => newBibleState.get(key) || data);
 		case 'loadbibleerror':
 			return state
 				.set('invalidBibleId', true)
@@ -388,12 +381,10 @@ function homePageReducer(state = initialState, action) {
 		case GET_COPYRIGHTS:
 			return state.set('loadingCopyright', true);
 		case 'loadcopyright':
-			// console.log('Loading copyrights, this is a test to see if all of these cases are being run or if something is happening out of order');
 			return state
 				.set('loadingCopyright', false)
 				.set('copyrights', action.copyrights);
 		case 'GET_INITIAL_ROUTE_STATE_HOMEPAGE':
-			// console.log('action.homepage', action.homepage);
 			return state.merge(action.homepage);
 		case SET_CHAPTER_TEXT_LOADING_STATE:
 			return state.set('chapterTextLoadingState', action.state);

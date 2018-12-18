@@ -12,12 +12,9 @@ import {
 	AccordionItemBody,
 	AccordionItemTitle,
 } from 'react-accessible-accordion';
-// import { Link } from 'react-router-dom';
-// import styled from 'styled-components';
 import Link from 'next/link';
 
 function VersionListSection({ items }) {
-	// console.log('items', items);
 	return (
 		<Accordion>
 			{items.map((item) => {

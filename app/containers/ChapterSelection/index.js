@@ -15,12 +15,10 @@ import {
 	toggleChapterSelection,
 } from '../HomePage/actions';
 import BooksTable from '../../components/BooksTable';
-import injectSaga from '../../utils/injectSaga';
 import injectReducer from '../../utils/injectReducer';
 import CloseMenuFunctions from '../../utils/closeMenuFunctions';
 import { selectActiveBookName, selectActiveChapter } from './selectors';
 import reducer from './reducer';
-import saga from './saga';
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 
 export class ChapterSelection extends React.PureComponent {
@@ -115,10 +113,8 @@ const withConnect = connect(
 );
 
 const withReducer = injectReducer({ key: 'chapterSelection', reducer });
-const withSaga = injectSaga({ key: 'chapterSelection', saga });
 
 export default compose(
 	withReducer,
-	withSaga,
 	withConnect,
 )(ChapterSelection);

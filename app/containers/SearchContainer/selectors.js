@@ -9,40 +9,30 @@ const selectSearchContainerDomain = (state) => state.get('searchContainer');
 /**
  * Other specific selectors
  */
-const selectSearchResults = () => createSelector(
-	selectSearchContainerDomain,
-	(search) => {
+const selectSearchResults = () =>
+	createSelector(selectSearchContainerDomain, (search) => {
 		const results = search.get('searchResults');
-		// console.log(results);
-		// console.log('reduced results', reducedResults);
-		return results
-			.reduce((acc, cur) => {
-				// console.log(cur);
-				// each different book_id needs to have an array of its results
-				const cbook = cur.get('book_id');
-				if (acc.get(cbook)) {
-					return acc
-						.setIn([cbook, 'results'], acc.getIn([cbook, 'results']).push(cur));
-				}
-				return acc
-					.setIn([cbook, 'results'], fromJS([cur]))
-					.setIn([cbook, 'name'], cur.get('book_name_alt'));
-				// return acc;
-			}, fromJS({}));
-	}
-);
+		return results.reduce((acc, cur) => {
+			// each different book_id needs to have an array of its results
+			const cbook = cur.get('book_id');
+			if (acc.get(cbook)) {
+				return acc.setIn(
+					[cbook, 'results'],
+					acc.getIn([cbook, 'results']).push(cur),
+				);
+			}
+			return acc
+				.setIn([cbook, 'results'], fromJS([cur]))
+				.setIn([cbook, 'name'], cur.get('book_name_alt'));
+		}, fromJS({}));
+	});
 
 /**
  * Default selector used by SearchContainer
  */
 
-const makeSelectSearchContainer = () => createSelector(
-	selectSearchContainerDomain,
-	(substate) => substate.toJS()
-);
+const makeSelectSearchContainer = () =>
+	createSelector(selectSearchContainerDomain, (substate) => substate.toJS());
 
 export default makeSelectSearchContainer;
-export {
-	selectSearchContainerDomain,
-	selectSearchResults,
-};
+export { selectSearchContainerDomain, selectSearchResults };

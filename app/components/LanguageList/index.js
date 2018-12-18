@@ -20,16 +20,7 @@ class LanguageList extends React.PureComponent {
 	};
 	// Try to reduce the number of times language list is iterated over
 	getFilteredLanguages(width, height) {
-		const {
-			languages,
-			// activeLanguageName,
-			// activeIsoCode,
-			languageCode,
-			filterText,
-		} = this.props;
-		// const { filterText } = this.state;
-		// console.log('languages', languages);
-		// console.log('match-sorter languages', matchSorter(languages, filterText, { keys: ['name', 'iso'] }));
+		const { languages, languageCode, filterText } = this.props;
 		const filteredLanguages = filterText
 			? matchSorter(languages, filterText, {
 					threshold: matchSorter.rankings.ACRONYM,
@@ -44,33 +35,13 @@ class LanguageList extends React.PureComponent {
 			  })
 			: languages;
 
-		// const components = () => filteredLanguages.map((language) => (
-		// 	<div className="language-name" key={language.get('iso')} role="button" tabIndex={0} onClick={() => this.handleLanguageClick(language)}>
-		// 		<h4 className={language.get('name') === activeLanguageName ? 'active-language-name' : ''}>{language.get('name')}</h4>
-		// 	</div>
-		// ));
-
 		if (languages.length === 0) {
 			return null;
 		}
 
 		const renderARow = ({ index, style, key }) => {
 			const language = filteredLanguages[index];
-			// Use code below if there needs to be an intermediary state
-			// key={language.get('iso')}
-			// if (isScrolling) {
-			// 	return <div key={key} style={style}>scrolling...</div>;
-			// }
-			// return (
-			// 	<div style={style} key={key} className="language-name" role="button" tabIndex={0} onClick={() => this.handleLanguageClick(language)}>
-			// 		<h4 className={language.get('iso') === activeIsoCode ? 'active-language-name' : ''}>{language.get('name')}</h4>
-			// 	</div>
-			// );
 
-			// Code below as a potential solution for searching a name that is not displayed
-			// const topNames = filterText ? matchSorter(language.alt_names, filterText) : [];
-			// const topNamesLength = topNames.length;
-			// topNames.slice(0, topNamesLength < 3 ? topNamesLength : 3).join(', ')
 			return (
 				<div
 					style={style}
@@ -100,26 +71,16 @@ class LanguageList extends React.PureComponent {
 
 		const getActiveIndex = () => {
 			let activeIndex = 0;
-			// console.log(
-			//   'searching for the active index for language list',
-			//   languageCode,
-			// );
 
 			filteredLanguages.forEach((l, i) => {
-				// if (l.iso === activeIsoCode) {
 				if (l.id === languageCode) {
-					// console.log('active index for language list');
 					activeIndex = i;
 				}
 			});
 
 			return activeIndex;
 		};
-		// Once somebody complains about the text overlapping use the links below to fix
-		/*
-		* https://github.com/bvaughn/react-virtualized/blob/master/source/CellMeasurer/CellMeasurer.example.js
-		* https://stackoverflow.com/questions/43837279/dynamic-row-heights-with-react-virtualized-and-new-cellmeasurer
-		* */
+
 		return filteredLanguages.length ? (
 			<List
 				id={'list-element'}
@@ -138,8 +99,6 @@ class LanguageList extends React.PureComponent {
 				There are no matches for your search.
 			</div>
 		);
-
-		// return components.length ? components : <span>There are no matches for your search.</span>;
 	}
 
 	// If a swipe happened
@@ -180,7 +139,6 @@ class LanguageList extends React.PureComponent {
 			this.state.pulling &&
 			this.state.distance > minDistance
 		) {
-			// console.log('ended and needs to send api call');
 			this.setState({
 				startY: 0,
 				distance: 0,
@@ -189,7 +147,6 @@ class LanguageList extends React.PureComponent {
 			});
 			this.props.getLanguages();
 		} else {
-			// console.log('ended but should not send api call');
 			this.setState({
 				startY: 0,
 				distance: 0,
@@ -200,7 +157,6 @@ class LanguageList extends React.PureComponent {
 	};
 
 	handleTouchStart = (touchStartEvent) => {
-		// touchStartEvent.preventDefault();
 		this.handleStart(touchStartEvent.targetTouches[0].clientY);
 	};
 
@@ -213,7 +169,6 @@ class LanguageList extends React.PureComponent {
 	};
 
 	handleMouseDown = (mouseDownEvent) => {
-		// mouseDownEvent.preventDefault();
 		this.handleStart(mouseDownEvent.clientY);
 		this.container.addEventListener('mousemove', this.handleMouseMove);
 	};
@@ -249,29 +204,22 @@ class LanguageList extends React.PureComponent {
 
 	handleLanguageClick = (e, language) => {
 		if ('stopPropagation' in e && typeof e.stopPropagation === 'function') {
-			// console.log('Stopping prop');
 			e.stopPropagation();
 		} else if ('cancelBubble' in e) {
-			// console.log('canceling bubble');
 			e.cancelBubble = true;
 		}
 		const {
 			setActiveIsoCode,
 			toggleLanguageList,
 			toggleVersionList,
-			// setCountryListState,
-			// active,
 		} = this.props;
-		// console.log('new language', language);
 		if (language) {
 			setActiveIsoCode({
 				iso: language.iso,
 				name: language.name,
 				languageCode: language.id,
 			});
-			// console.log('Toggling languageList');
 			toggleLanguageList();
-			// this.setState({ filterText: '' });
 			toggleVersionList();
 		}
 	};
@@ -279,7 +227,6 @@ class LanguageList extends React.PureComponent {
 	handleRef = (el) => {
 		this.container = el;
 	};
-	// handleChange = (e) => this.setState({ filterText: e.target.value });
 
 	render() {
 		const { active, loadingLanguages, languages } = this.props;
@@ -336,14 +283,11 @@ LanguageList.propTypes = {
 	languages: PropTypes.array,
 	setActiveIsoCode: PropTypes.func,
 	toggleLanguageList: PropTypes.func,
-	// setCountryListState: PropTypes.func,
 	toggleVersionList: PropTypes.func,
 	getLanguages: PropTypes.func,
 	filterText: PropTypes.string,
 	active: PropTypes.bool,
 	loadingLanguages: PropTypes.bool,
-	// activeLanguageName: PropTypes.string,
-	// activeIsoCode: PropTypes.string,
 	languageCode: PropTypes.number,
 };
 
