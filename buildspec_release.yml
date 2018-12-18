@@ -8,7 +8,7 @@ phases:
       - npm install
   build:
     commands:
-      - BUILD_ID=$(git rev-parse HEAD) NODE_ENV=production npm run build:next
+      - BUILD_ID=$(git rev-parse HEAD) NODE_ENV=production npm run build
 artifacts:
   files:
     - .next/**/*
