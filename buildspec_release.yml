@@ -14,11 +14,13 @@ artifacts:
     - .next/**/*
     - static/**/*
     - node_modules/**/*
+    - scripts/**/*
     - nextServer.js
     - ecosystem.config.js
     - package.json
     - next.config.js
     - newrelic.js
+    - appspec.yml
     - env-config.js
     - .babelrc.js
   name: $(AWS_REGION)-$(date +%Y-%m-%d)
