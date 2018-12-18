@@ -28,10 +28,10 @@
 		"start:dev": "cross-env NODE_ENV=development node nextServer",
 		"start:prerender": "node server/prerenderIndex.js",
 		"start:tunnel": "cross-env NODE_ENV=development ENABLE_TUNNEL=true node server",
-		"start:production": "next build && npm run start:prod",
+		"start:production": "pm2 restart ecosystem.config.js --update-env --env production --only bible.is.prod;",
 		"start:prod": "cross-env NODE_ENV=production node nextServer",
 		"presetup": "npm i chalk shelljs",
-		"build:next": "next build",
+		"build:next": "BUILD_ID=$(git rev-parse HEAD) NODE_ENV=production next build",
 		"start:next": "next start -p $PORT",
 		"setup": "node ./internals/scripts/setup.js",
 		"postsetup": "npm run build:dll",
@@ -46,11 +46,11 @@
 		"test:coverage": "cross-env NODE_ENV=test jest --coverage",
 		"test:watch": "cross-env NODE_ENV=test jest --watchAll",
 		"coveralls": "cat ./coverage/lcov.info | coveralls",
-		"build:changes": "BUILD_ID=$(git rev-parse HEAD) NODE_ENV=production npm run build:next; pm2 restart all",
+		"build:changes": "npm run build:next; pm2 restart all",
 		"build:sass": "sass ./static/app.scss ./cdn/style.css; aws s3 sync ./cdn s3://bibleis-prod/",
 		"reload:pm2": "pm2 reload ecosystem.config.js --update-env --env production --only bible.is.prod;",
-		"fetch-latest-site": "git checkout .; rm package-lock.json; git pull origin master; npm install; BUILD_ID=$(git rev-parse HEAD) NODE_ENV=production npm run build:next; pm2 restart ecosystem.config.js --update-env --env production --only bible.is.prod;",
-		"fetch-latest-dev": "git checkout .; rm package-lock.json; git pull origin development; npm install; BUILD_ID=$(git rev-parse HEAD) NODE_ENV=production npm run build:next; pm2 restart ecosystem.config.js --update-env --env production --only bible.is.dev;"
+		"fetch-latest-site": "git checkout .; rm package-lock.json; git pull origin master; npm install; npm run build:next; pm2 restart ecosystem.config.js --update-env --env production --only bible.is.prod;",
+		"fetch-latest-dev": "git checkout .; rm package-lock.json; git pull origin development; npm install; npm run build:next; pm2 restart ecosystem.config.js --update-env --env production --only bible.is.dev;"
 	},
 	"lint-staged": {
 		"*.{js,json,scss,md}": [
