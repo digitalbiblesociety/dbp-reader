@@ -4,7 +4,6 @@ coverage
 build
 node_modules
 stats.json
-newrelic.js
 .env
 .next
 .next/
