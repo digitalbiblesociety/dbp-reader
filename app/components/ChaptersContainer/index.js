@@ -32,14 +32,18 @@ function ChaptersContainer({
 					(chapter) =>
 						chapter === activeChapter &&
 						(bookName || bookNameShort) === activeBookName ? (
-							<a className={'chapter-box'} onClick={() => handleChapterClick()}>
+							<a
+								key={`${bookName}-${chapter}`}
+								className={'chapter-box'}
+								onClick={() => handleChapterClick()}
+							>
 								<span className={'active-chapter'}>{chapter}</span>
 							</a>
 						) : (
 							<Link
 								href={`/app?bibleId=${activeTextId.toLowerCase()}&bookId=${bookId.toLowerCase()}&chapter=${chapter}`}
 								as={`/bible/${activeTextId.toLowerCase()}/${bookId.toLowerCase()}/${chapter}`}
-								key={chapter}
+								key={`${bookName}-${chapter}`}
 							>
 								<a
 									className={'chapter-box'}
