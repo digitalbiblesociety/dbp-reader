@@ -12,7 +12,7 @@ const fetch = require('isomorphic-fetch');
 // const crypto = require('crypto');
 const port = process.env.PORT || 3000;
 const dev = process.env.NODE_ENV === 'development';
-const bugsnag = require('./app/utils/bugsnagClient');
+const bugsnag = require('./app/utils/bugsnagServer');
 const manifestJson = require('./static/manifest');
 const app = next({ dev });
 const handle = app.getRequestHandler();
