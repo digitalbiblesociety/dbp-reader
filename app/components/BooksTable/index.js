@@ -30,7 +30,7 @@ import {
 class BooksTable extends React.PureComponent {
 	// eslint-disable-line react/prefer-stateless-function
 	state = {
-		selectedBookName: this.props.initialBookName || '',
+		selectedBookName: this.props.initialBookName || activeBookName || '',
 		updateScrollTop: false,
 	};
 
@@ -39,6 +39,13 @@ class BooksTable extends React.PureComponent {
 			this.container.scrollTop = this.button.offsetTop - 54 - 10;
 		}
 	}
+
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.active !== this.props.active && nextProps.active) {
+			this.setState({ selectedBookName: nextProps.activeBookName });
+		}
+	}
+
 	getChapterText = ({ bible, book, chapter }) =>
 		this.props.dispatch(
 			getChapterText({
@@ -102,9 +109,7 @@ class BooksTable extends React.PureComponent {
 	};
 
 	handleChapterClick = () => {
-		const { closeBookTable } = this.props;
-
-		closeBookTable();
+		this.props.closeBookTable();
 	};
 
 	handleRef = (el, name) => {
@@ -309,6 +314,7 @@ BooksTable.propTypes = {
 	loadingBooks: PropTypes.bool,
 	userAuthenticated: PropTypes.bool,
 	hasTextInDatabase: PropTypes.bool,
+	active: PropTypes.bool,
 	filesetTypes: PropTypes.object,
 };
 

@@ -28,26 +28,28 @@ function ChaptersContainer({
 						: ' inactive-book-chapters'
 				}`}
 			>
-				{chapters.map((chapter) => (
-					<Link
-						href={`/app?bibleId=${activeTextId.toLowerCase()}&bookId=${bookId.toLowerCase()}&chapter=${chapter}`}
-						as={`/bible/${activeTextId.toLowerCase()}/${bookId.toLowerCase()}/${chapter}`}
-						key={chapter}
-					>
-						<a className={'chapter-box'} onClick={() => handleChapterClick()}>
-							<span
-								className={
-									activeChapter === chapter &&
-									(bookName || bookNameShort) === activeBookName
-										? 'active-chapter'
-										: ''
-								}
+				{chapters.map(
+					(chapter) =>
+						chapter === activeChapter &&
+						(bookName || bookNameShort) === activeBookName ? (
+							<a className={'chapter-box'} onClick={() => handleChapterClick()}>
+								<span className={'active-chapter'}>{chapter}</span>
+							</a>
+						) : (
+							<Link
+								href={`/app?bibleId=${activeTextId.toLowerCase()}&bookId=${bookId.toLowerCase()}&chapter=${chapter}`}
+								as={`/bible/${activeTextId.toLowerCase()}/${bookId.toLowerCase()}/${chapter}`}
+								key={chapter}
 							>
-								{chapter}
-							</span>
-						</a>
-					</Link>
-				))}
+								<a
+									className={'chapter-box'}
+									onClick={() => handleChapterClick()}
+								>
+									<span>{chapter}</span>
+								</a>
+							</Link>
+						),
+				)}
 			</span>
 		);
 	}

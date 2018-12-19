@@ -691,6 +691,7 @@ AppContainer.getInitialProps = async (context) => {
 				activeFilesetId,
 				audioPaths: initData.audioPaths.slice(1),
 				audioSource: initData.audioPaths[0] || '',
+				loadingAudio: !initData.audioPaths.length,
 				hasAudio: !!initData.audioPaths.length,
 				chapterText,
 				testaments,

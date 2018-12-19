@@ -80,6 +80,7 @@ export class ChapterSelection extends React.PureComponent {
 				id={'chapter-dropdown-close-button'}
 			>
 				<BooksTable
+					active={active}
 					setActiveChapter={this.setActiveChapter}
 					closeBookTable={this.toggleChapterSelection}
 					setActiveBookName={this.setActiveBookName}

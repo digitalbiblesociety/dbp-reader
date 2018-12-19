@@ -115,6 +115,10 @@ class Text extends React.PureComponent {
 			this.setState({ loadingNextPage: false });
 			this.props.setTextLoadingState({ state: false });
 		}
+		if (nextProps.activeBookId !== this.props.activeBookId) {
+			this.setState({ loadingNextPage: false });
+			this.props.setTextLoadingState({ state: false });
+		}
 	}
 
 	// I am using this function because it means that the component finished updating and that the dom is available
