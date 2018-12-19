@@ -6,7 +6,6 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import Link from 'next/link';
 import PopupMessage from '../PopupMessage';
 import checkEmail from '../../utils/checkEmailForValidity';
 
@@ -60,9 +59,9 @@ class PasswordReset extends React.PureComponent {
 					</form>
 					<div className="disclaimer">
 						If you are unable to reset your password, please
-						<Link href="/contact-form" as="/contact-form">
-							<a className="link">&nbsp;contact us&nbsp;</a>
-						</Link>
+						<a href="https://support.bible.is/contact" className="link">
+							&nbsp;contact us&nbsp;
+						</a>
 						for support.
 					</div>
 				</div>
