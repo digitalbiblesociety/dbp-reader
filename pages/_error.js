@@ -12,6 +12,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
+import dynamic from 'next/dynamic';
 import LanguageProvider from '../app/containers/LanguageProvider';
 import { translationMessages } from '../app/i18n';
 import SvgWrapper from '../app/components/SvgWrapper';

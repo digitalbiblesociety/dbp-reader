@@ -304,6 +304,11 @@ app
 			'------------------------^_^---*_*--$_$--------------------------------\n',
 			ex,
 		);
+		if (process.env.NODE_ENV === 'production') {
+			const bugsnag = dynamic(() => import('./app/utils/bugsnagClient'));
+
+			bugsnag.notify(ex);
+		}
 		/* eslint-enable no-console */
 		process.exit(1);
 	});

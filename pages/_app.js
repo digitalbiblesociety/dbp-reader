@@ -2,6 +2,7 @@ import App, { Container } from 'next/app';
 import React from 'react';
 import { Provider } from 'react-redux';
 import withReduxSaga from 'next-redux-saga';
+import dynamic from 'next/dynamic';
 import withReduxStore from '../app/withRedux';
 import LanguageProvider from '../app/containers/LanguageProvider';
 import { translationMessages } from '../app/i18n';
