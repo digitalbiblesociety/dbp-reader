@@ -12,22 +12,18 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import dynamic from 'next/dynamic';
 import LanguageProvider from '../app/containers/LanguageProvider';
 import { translationMessages } from '../app/i18n';
 import SvgWrapper from '../app/components/SvgWrapper';
 import messages from '../app/containers/NotFoundPage/messages';
 import '../static/app.scss';
 import configureStore from '../app/configureStore';
-
-const bugsnagClient =
-	process.env.NODE_ENV === 'production' &&
-	dynamic(() => import('../app/utils/bugsnagClient'));
+import bugsnagClient from '../app/utils/bugsnagClient';
 
 export default class Error extends React.Component {
 	static async getInitialProps({ res, err }) {
 		const statusCode = res ? res.statusCode : err ? err.statusCode : null; // eslint-disable-line
-		if (err && bugsnagClient) {
+		if (err && process.env.NODE_ENV === 'production') {
 			bugsnagClient.notify(err);
 		}
 

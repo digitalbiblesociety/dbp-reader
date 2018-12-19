@@ -12,6 +12,7 @@ const fetch = require('isomorphic-fetch');
 // const crypto = require('crypto');
 const port = process.env.PORT || 3000;
 const dev = process.env.NODE_ENV === 'development';
+const bugsnag = require('./app/utils/bugsnagClient');
 const manifestJson = require('./static/manifest');
 const app = next({ dev });
 const handle = app.getRequestHandler();
@@ -52,6 +53,9 @@ async function renderAndCache(req, res, pagePath, queryParams) {
 		res.setHeader('x-cache', 'MISS');
 		res.send(html);
 	} catch (err) {
+		if (process.env.NODE_ENV === 'production') {
+			bugsnag.notify(err);
+		}
 		app.renderError(err, req, res, pagePath, queryParams);
 	}
 }
@@ -285,6 +289,9 @@ app
 		// 	});
 		// }
 		server.listen(port, (err) => {
+			if (err && process.env.NODE_ENV === 'production') {
+				bugsnag.notify(err);
+			}
 			if (err) throw err;
 			console.log(`> Ready on http://localhost:${port}`); // eslint-disable-line no-console
 		});
@@ -305,8 +312,6 @@ app
 			ex,
 		);
 		if (process.env.NODE_ENV === 'production') {
-			const bugsnag = dynamic(() => import('./app/utils/bugsnagClient'));
-
 			bugsnag.notify(ex);
 		}
 		/* eslint-enable no-console */
