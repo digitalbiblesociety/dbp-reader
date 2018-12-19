@@ -1,12 +1,8 @@
 require('@babel/polyfill');
 const withCss = require('@zeit/next-css');
 const withSass = require('@zeit/next-sass');
-// const childProcess = require('child_process');
-// const promisify = require('util').promisify;
-// const execPromise = promisify(childProcess.exec);
 const isProd = process.env.NODE_ENV === 'production';
 
-// const commonsChunkConfig = require('@zeit/next-css/commons-chunk-config');
 if (isProd) {
 	module.exports = withSass(
 		withCss({
@@ -29,6 +25,14 @@ if (isProd) {
 				return config;
 			},
 			generateBuildId: async () => process.env.BUILD_ID,
+			serverRuntimeConfig: {
+				// Will only be available on the server side
+				BUGSNAG_API_KEY: process.env.BUGSNAG_BROWSER_API_KEY,
+			},
+			publicRuntimeConfig: {
+				// Will be available on both server and client
+				BUGSNAG_API_KEY: process.env.BUGSNAG_BROWSER_API_KEY, // Pass through env variables
+			},
 		}),
 	);
 } else {

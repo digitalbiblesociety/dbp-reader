@@ -188,6 +188,8 @@
 	},
 	"dependencies": {
 		"@babel/polyfill": "^7.0.0",
+		"@bugsnag/js": "^5.1.0",
+		"@bugsnag/plugin-react": "^5.1.0",
 		"@zeit/next-css": "^1.0.1",
 		"@zeit/next-sass": "^1.0.1",
 		"chalk": "^1.1.3",

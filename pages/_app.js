@@ -5,11 +5,30 @@ import withReduxSaga from 'next-redux-saga';
 import withReduxStore from '../app/withRedux';
 import LanguageProvider from '../app/containers/LanguageProvider';
 import { translationMessages } from '../app/i18n';
+import Error from './_error';
+
+const bugsnagClient =
+	process.env.NODE_ENV === 'production' &&
+	dynamic(() => import('../app/utils/bugsnagClient'));
+
+const ErrorBounary = bugsnagClient && bugsnagClient.getPlugin('react');
 
 class CustomApp extends App {
 	render() {
 		const { Component, pageProps, reduxStore } = this.props;
-
+		if (bugsnagClient) {
+			return (
+				<ErrorBounary FallbackComponent={Error}>
+					<Container>
+						<Provider store={reduxStore}>
+							<LanguageProvider messages={translationMessages}>
+								<Component {...pageProps} />
+							</LanguageProvider>
+						</Provider>
+					</Container>
+				</ErrorBounary>
+			);
+		}
 		return (
 			<Container>
 				<Provider store={reduxStore}>
