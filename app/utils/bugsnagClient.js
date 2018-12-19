@@ -5,7 +5,7 @@ import bugsnagReact from '@bugsnag/plugin-react';
 const bugsnagClient =
 	process.env.NODE_ENV === 'production'
 		? bugsnag({
-				apiKey: BUGSNAG_BROWSER_API_KEY,
+				apiKey: process.env.UGSNAG_BROWSER_API_KEY,
 		  })
 		: { use: () => {}, notify: () => {}, getPlugin: () => {} };
 bugsnagClient.use(bugsnagReact, React);
