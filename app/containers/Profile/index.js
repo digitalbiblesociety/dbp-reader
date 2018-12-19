@@ -53,7 +53,6 @@ export class Profile extends React.PureComponent {
 			this.props.toggleProfile,
 		);
 		this.closeMenuController.onMenuMount();
-		this.is.error; // TODO: remove error after bugsnag test
 	}
 
 	componentWillReceiveProps(nextProps) {
