@@ -30,7 +30,8 @@ import {
 class BooksTable extends React.PureComponent {
 	// eslint-disable-line react/prefer-stateless-function
 	state = {
-		selectedBookName: this.props.initialBookName || activeBookName || '',
+		selectedBookName:
+			this.props.initialBookName || this.props.activeBookName || '',
 		updateScrollTop: false,
 	};
 
