@@ -6,6 +6,7 @@ const codes = {
 	video_stream: true,
 	NT: true,
 	OT: true,
+	P: true,
 	C: true,
 	OTPNTP: true,
 	OTP: true,

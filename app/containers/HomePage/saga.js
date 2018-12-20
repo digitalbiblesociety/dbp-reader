@@ -923,7 +923,7 @@ export function* getCopyrightSaga({ filesetIds }) {
 			}&v=4&asset_id=${process.env.DBP_BUCKET_ID}&type=${set.type}`,
 		),
 	);
-
+	console.log(filteredFilesetIds);
 	try {
 		const response = yield all(reqUrls.map((url) => call(request, url)));
 		const vidRes = [];
@@ -938,6 +938,7 @@ export function* getCopyrightSaga({ filesetIds }) {
 			);
 			vidRes.push(r);
 		}
+		console.log('response', response);
 		// Takes the response and turns it into an array that is more easily used and that doesn't contain unnecessary fields
 		const copyrights =
 			response.map(
@@ -1017,6 +1018,11 @@ export function* getCopyrightSaga({ filesetIds }) {
 						(c.type === 'text_plain' || c.type === 'text_format'),
 			  )[0]
 			: {};
+		const partialText = copyrights.filter(
+			(c) =>
+				c.testament === 'P' &&
+				(c.type === 'text_plain' || c.type === 'text_format'),
+		)[0];
 
 		const cAudio = copyrights.filter(
 			(c) =>
@@ -1036,6 +1042,10 @@ export function* getCopyrightSaga({ filesetIds }) {
 						(c.type === 'audio' || c.type === 'audio_drama'),
 			  )[0]
 			: {};
+		const partialAudio = copyrights.filter(
+			(c) =>
+				c.testament === 'P' && (c.type === 'audio' || c.type === 'audio_drama'),
+		)[0];
 
 		const cVideo = videoCopyright.filter(
 			(c) => c.testament === 'C' && c.type === 'video_stream',
@@ -1050,16 +1060,25 @@ export function* getCopyrightSaga({ filesetIds }) {
 					(c) => otCodes[c.testament] && c.type === 'video_stream',
 			  )[0]
 			: {};
+		const partialVideo = videoCopyright.filter(
+			(c) => c.testament === 'P' && c.type === 'video_stream',
+		)[0];
 		const copyrightObject = {
 			newTestament: {
-				audio: cAudio || ntAudio,
-				text: cText || ntText,
-				video: cVideo || ntVideo,
+				audio: cAudio || ntAudio || partialAudio,
+				text: cText || ntText || partialText,
+				video: cVideo || ntVideo || partialVideo,
 			},
 			oldTestament: {
-				audio: !(cAudio || ntAudio) && (cAudio || otAudio),
-				text: !(cAudio || ntAudio) && (cText || otText),
-				video: !(cVideo || ntVideo) && (cVideo || otVideo),
+				audio:
+					!(cAudio || ntAudio || partialAudio) &&
+					(cAudio || otAudio || partialAudio),
+				text:
+					!(cAudio || ntAudio || partialText) &&
+					(cText || otText || partialText),
+				video:
+					!(cVideo || ntVideo || partialVideo) &&
+					(cVideo || otVideo || partialVideo),
 			},
 		};
 
