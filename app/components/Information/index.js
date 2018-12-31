@@ -129,7 +129,10 @@ class Information extends React.PureComponent {
 					/>
 				</button>
 				<AnimateHeight height={this.state.height} duration={1000}>
-					<div className="copyrights-section">
+					<div
+						style={{ maxHeight: this.state.height }}
+						className="copyrights-section"
+					>
 						<CopyrightSection copyrights={copyrights} prefix={'old'} />
 						<CopyrightSection copyrights={copyrights} prefix={'new'} />
 					</div>
