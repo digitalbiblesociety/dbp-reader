@@ -86,6 +86,9 @@ export class AudioPlayer extends React.Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
+		if (nextProps.hasVideo && nextProps.videoPlayerOpen) {
+			this.pauseAudio();
+		}
 		if (nextProps.audioSource !== this.props.audioSource) {
 			if (nextProps.audioSource) {
 				this.setState({ playing: false, loadingNextChapter: false });
@@ -329,6 +332,10 @@ export class AudioPlayer extends React.Component {
 	playAudio = () => {
 		const playPromise = this.audioRef.play();
 		// All modern browsers return a promise
+		if (this.props.videoPlayerOpen && this.props.hasVideo) {
+			this.pauseAudio();
+			return;
+		}
 		// This is only because IE doesn't return a promise
 		if (playPromise) {
 			playPromise

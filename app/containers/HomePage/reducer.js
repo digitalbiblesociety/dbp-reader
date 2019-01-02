@@ -98,6 +98,7 @@ const initialState = fromJS({
 				available: false,
 			},
 		},
+		autoPlayEnabled: false,
 	},
 	copyrights: {
 		newTestament: {
@@ -122,7 +123,6 @@ const initialState = fromJS({
 	isNotesModalActive: false,
 	isVersionSelectionActive: false,
 	isInformationModalActive: false,
-	autoPlayEnabled: false,
 	loadingBooks: false,
 	isFromServer: true,
 	invalidBibleId: false,
@@ -263,9 +263,13 @@ function homePageReducer(state = initialState, action) {
 		case SET_ACTIVE_CHAPTER:
 			return state.set('activeChapter', action.chapter);
 		case ACTIVE_TEXT_ID:
+			if (typeof window !== 'undefined') {
+				document.cookie = `bible_is_autoplay=${false};path=/`;
+			}
 			return state
 				.set('activeFilesets', fromJS(action.filesets))
 				.set('activeTextName', action.textName)
+				.setIn(['userSettings', 'autoPlayEnabled'], false)
 				.set('activeTextId', action.textId);
 		case SET_AUDIO_PLAYER_STATE:
 			if (typeof window !== 'undefined') {
