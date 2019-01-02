@@ -84,7 +84,6 @@ export function* getTexts({ languageCode }) {
 
 		const texts = response.data.filter(
 			(text) =>
-				text.language &&
 				text.iso &&
 				text.abbr &&
 				(text.filesets[process.env.DBP_BUCKET_ID] &&
