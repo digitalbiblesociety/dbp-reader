@@ -27,6 +27,8 @@ class VideoPlayer extends React.PureComponent {
 		videos: [],
 		currentVideo: {},
 		poster: '',
+		hlsSupported:
+			typeof Hls.isSupported === 'function' ? Hls.isSupported() : true,
 	};
 
 	componentDidMount() {
@@ -43,8 +45,9 @@ class VideoPlayer extends React.PureComponent {
 				bookId: this.props.bookId || '',
 				chapter: this.props.chapter,
 			});
+			this.checkHlsSupport();
 		}
-
+		// console.log('is supported', Hls.isSupported(), this.state.hlsSupported);
 		Router.router.events.on('routeChangeStart', this.handleRouteChange);
 	}
 
@@ -95,6 +98,15 @@ class VideoPlayer extends React.PureComponent {
 			this.hls.detachMedia();
 			this.hls.stopLoad();
 			this.hls.destroy();
+		}
+		if (this.videoRef) {
+			this.videoRef.removeEventListener(
+				'timeupdate',
+				this.timeUpdateEventListener,
+			);
+			this.videoRef.removeEventListener('seeking', this.seekingEventListener);
+			this.videoRef.removeEventListener('seeked', this.seekedEventListener);
+			this.videoRef.removeEventListener('loadedmetadata', this.loadedMetadata);
 		}
 
 		Router.router.events.off('routeChangeStart', this.handleRouteChange);
@@ -180,6 +192,18 @@ class VideoPlayer extends React.PureComponent {
 		} else {
 			this.videoRef.currentTime = time;
 			this.setState({ currentTime: time });
+		}
+	};
+
+	checkHlsSupport = () => {
+		if (typeof Hls.isSupported === 'function') {
+			this.setState({
+				hlsSupported: Hls.isSupported(),
+			});
+		} else {
+			this.setState({
+				hlsSupported: false,
+			});
 		}
 	};
 
@@ -277,39 +301,64 @@ class VideoPlayer extends React.PureComponent {
 		});
 	};
 
+	loadedMetadata = () => {
+		this.videoRef.play();
+		this.setState({ paused: false });
+	};
+
 	initVideoStream = ({ thumbnailClick }) => {
-		const { currentVideo } = this.state;
-		// Create the hls stream first
-		this.initHls();
-		try {
-			// Check for the video element
-			if (this.videoRef) {
-				// Make sure that there is a valid source
-				if (currentVideo.source) {
-					this.hls.attachMedia(this.videoRef);
-					this.hls.loadSource(
-						`${currentVideo.source}?key=${process.env.DBP_API_KEY}&v=4`,
-					);
-					this.hls.media.addEventListener(
-						'timeupdate',
-						this.timeUpdateEventListener,
-					);
-					this.hls.media.addEventListener('seeking', this.seekingEventListener);
-					this.hls.media.addEventListener('seeked', this.seekedEventListener);
-					this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
-						if (this.state.playerOpen && thumbnailClick) {
-							this.hls.media.play();
-							this.setState({ paused: false });
-						}
-					});
-					this.hls.on(Hls.Events.BUFFER_APPENDING, () => {
-						this.setBuffer();
-					});
+		const { currentVideo, hlsSupported } = this.state;
+		if (!hlsSupported) {
+			if (this.videoRef.canPlayType('application/vnd.apple.mpegurl')) {
+				this.videoRef.src = `${currentVideo.source}?key=${
+					process.env.DBP_API_KEY
+				}&v=4`;
+				this.videoRef.addEventListener(
+					'timeupdate',
+					this.timeUpdateEventListener,
+				);
+				this.videoRef.addEventListener('seeking', this.seekingEventListener);
+				this.videoRef.addEventListener('seeked', this.seekedEventListener);
+				if (thumbnailClick) {
+					this.videoRef.addEventListener('loadedmetadata', this.loadedMetadata);
 				}
 			}
-		} catch (err) {
-			if (process.env.NODE_ENV === 'development') {
-				console.log('initVideoStream', err); // eslint-disable-line no-console
+		} else {
+			// Create the hls stream first
+			this.initHls();
+			try {
+				// Check for the video element
+				if (this.videoRef) {
+					// Make sure that there is a valid source
+					if (currentVideo.source) {
+						this.hls.attachMedia(this.videoRef);
+						this.hls.loadSource(
+							`${currentVideo.source}?key=${process.env.DBP_API_KEY}&v=4`,
+						);
+						this.hls.media.addEventListener(
+							'timeupdate',
+							this.timeUpdateEventListener,
+						);
+						this.hls.media.addEventListener(
+							'seeking',
+							this.seekingEventListener,
+						);
+						this.hls.media.addEventListener('seeked', this.seekedEventListener);
+						this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
+							if (this.state.playerOpen && thumbnailClick) {
+								this.hls.media.play();
+								this.setState({ paused: false });
+							}
+						});
+						this.hls.on(Hls.Events.BUFFER_APPENDING, () => {
+							this.setBuffer();
+						});
+					}
+				}
+			} catch (err) {
+				if (process.env.NODE_ENV === 'development') {
+					console.log('initVideoStream', err); // eslint-disable-line no-console
+				}
 			}
 		}
 	};
@@ -348,31 +397,45 @@ class VideoPlayer extends React.PureComponent {
 	};
 
 	playVideo = ({ thumbnailClick }) => {
-		const { currentVideo } = this.state;
-		try {
-			// if the current video has a source (initial load may be an empty object)
-			if (currentVideo.source) {
-				// if there is already an hls stream and that streams url is equal to this videos source then play the video
-				if (
-					this.hls.media &&
-					this.hls.url ===
-						`${currentVideo.source}?key=${process.env.DBP_API_KEY}&v=4`
-				) {
-					this.hls.media.play();
-					this.setState({ paused: false });
-					// if the sources didn't match then this is a new video and the hls stream needs to be updated
-				} else {
-					// Stop the current player from loading anymore video
-					this.hls.stopLoad();
-					// Remove the old hls stream
-					this.hls.destroy();
-					// Init a new hls stream
-					this.initVideoStream({ thumbnailClick });
-				}
+		const { currentVideo, hlsSupported } = this.state;
+		if (!hlsSupported) {
+			if (
+				this.videoRef.src ===
+				`${currentVideo.source}?key=${process.env.DBP_API_KEY}&v=4`
+			) {
+				this.videoRef.play();
+				this.setState({ paused: false });
+				// if the sources didn't match then this is a new video and the hls stream needs to be updated
+			} else {
+				// Init a new hls stream
+				this.initVideoStream({ thumbnailClick });
 			}
-		} catch (err) {
-			if (process.env.NODE_ENV === 'development') {
-				console.log('caught in playVideo', err); // eslint-disable-line no-console
+		} else {
+			try {
+				// if the current video has a source (initial load may be an empty object)
+				if (currentVideo.source) {
+					// if there is already an hls stream and that streams url is equal to this videos source then play the video
+					if (
+						this.hls.media &&
+						this.hls.url ===
+							`${currentVideo.source}?key=${process.env.DBP_API_KEY}&v=4`
+					) {
+						this.hls.media.play();
+						this.setState({ paused: false });
+						// if the sources didn't match then this is a new video and the hls stream needs to be updated
+					} else {
+						// Stop the current player from loading anymore video
+						this.hls.stopLoad();
+						// Remove the old hls stream
+						this.hls.destroy();
+						// Init a new hls stream
+						this.initVideoStream({ thumbnailClick });
+					}
+				}
+			} catch (err) {
+				if (process.env.NODE_ENV === 'development') {
+					console.log('caught in playVideo', err); // eslint-disable-line no-console
+				}
 			}
 		}
 	};

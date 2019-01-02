@@ -923,7 +923,7 @@ export function* getCopyrightSaga({ filesetIds }) {
 			}&v=4&asset_id=${process.env.DBP_BUCKET_ID}&type=${set.type}`,
 		),
 	);
-	console.log(filteredFilesetIds);
+
 	try {
 		const response = yield all(reqUrls.map((url) => call(request, url)));
 		const vidRes = [];
@@ -938,7 +938,6 @@ export function* getCopyrightSaga({ filesetIds }) {
 			);
 			vidRes.push(r);
 		}
-		console.log('response', response);
 		// Takes the response and turns it into an array that is more easily used and that doesn't contain unnecessary fields
 		const copyrights =
 			response.map(
