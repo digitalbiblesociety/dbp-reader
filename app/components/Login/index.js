@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 import SvgWrapper from '../SvgWrapper';
 import FacebookAuthentication from '../../containers/FacebookAuthentication';
 import GoogleAuthentication from '../../containers/GoogleAuthentication';
+import DonateButton from '../DonateButton';
 
 class Login extends React.PureComponent {
 	state = {
@@ -177,6 +178,7 @@ class Login extends React.PureComponent {
 					socialMediaLogin={socialMediaLogin}
 					socialLoginLink={socialLoginLink}
 				/>
+				<DonateButton />
 			</>
 		);
 	}

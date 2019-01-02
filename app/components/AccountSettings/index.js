@@ -10,6 +10,7 @@ import { FormattedMessage } from 'react-intl';
 import SvgWrapper from '../SvgWrapper';
 import PopupMessage from '../PopupMessage';
 import messages from './messages';
+import DonateButton from '../DonateButton';
 
 class AccountSettings extends React.PureComponent {
 	state = {
@@ -102,6 +103,7 @@ class AccountSettings extends React.PureComponent {
 						Change e-mail
 					</span>
 				</div>
+				<DonateButton />
 				<div
 					className="button delete-account"
 					role="button"

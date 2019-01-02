@@ -16,6 +16,24 @@
 			margin-top: 5px;
 		}
 	}
+
+	.donate-button {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-direction: column;
+		width: 75px;
+		margin: 15px auto;
+
+		span {
+			font-size: 20px;
+			margin-top: -15px;
+		}
+
+		&:hover {
+			opacity: 0.65;
+		}
+	}
 }
 .profile header {
 	position: relative;
