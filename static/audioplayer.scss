@@ -228,6 +228,16 @@
 	margin: 0 auto;
 	text-align: center;
 }
+
+.audio-player-play-disabled {
+	color: rgba(130, 130, 130, 0.9);
+
+	&:hover,
+	&:focus {
+		cursor: progress;
+	}
+}
+
 #speed-wrap .item {
 	display: flex;
 	flex-direction: column;

@@ -562,8 +562,8 @@ export class AudioPlayer extends React.Component {
 		<div
 			id={'play-audio'}
 			onClick={this.playAudio}
-			className={'icon-wrap'}
-			style={{ color: `${this.state.loadingNextChapter ? '#aaa' : '#fff'}` }}
+			className={`icon-wrap ${this.state.loadingNextChapter &&
+				'audio-player-play-disabled'}`}
 			title={messages.playTitle.defaultMessage}
 		>
 			<SvgWrapper className="svgitem icon" svgid="play" />
@@ -610,9 +610,9 @@ export class AudioPlayer extends React.Component {
 					<div
 						className={
 							audioPlayerState &&
-							(!videoPlayerOpen || !hasVideo) &&
-							hasAudio &&
-							source !== ''
+								(!videoPlayerOpen || !hasVideo) &&
+								hasAudio &&
+								source !== ''
 								? 'audio-player-container'
 								: 'audio-player-container closed'
 						}
