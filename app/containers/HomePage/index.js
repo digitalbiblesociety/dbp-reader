@@ -12,6 +12,7 @@ import { TransitionGroup } from 'react-transition-group';
 import injectSaga from '../../utils/injectSaga';
 import injectReducer from '../../utils/injectReducer';
 import Settings from '../Settings';
+import settingsReducer from '../Settings/reducer';
 import AudioPlayer from '../AudioPlayer';
 import VideoPlayer from '../VideoPlayer';
 import Profile from '../Profile';
@@ -66,6 +67,12 @@ import makeSelectHomePage, {
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
+import {
+	applyTheme,
+	applyFontFamily,
+	applyFontSize,
+	toggleWordsOfJesus,
+} from '../Settings/themes';
 
 class HomePage extends React.PureComponent {
 	state = {
@@ -197,7 +204,6 @@ class HomePage extends React.PureComponent {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		// console.log('Homepage received props ______________________');
 		// Based on nextProps so that requests have the latest chapter information
 		const {
 			activeTextId,
@@ -205,6 +211,8 @@ class HomePage extends React.PureComponent {
 			activeChapter,
 			addBookmarkSuccess,
 		} = nextProps.homepage;
+		const { userSettings } = nextProps;
+		const { userSettings: prevSettings } = this.props;
 		const { userId, userAuthenticated } = nextProps.profile;
 		const {
 			addBookmarkSuccess: addBookmarkSuccessProps,
@@ -217,6 +225,32 @@ class HomePage extends React.PureComponent {
 			userAuthenticated: userAuthenticatedProps,
 		} = this.props.profile;
 
+		// Only apply the them if one of them changed - use the newest one always since that will be what the user clicked
+		if (typeof document !== 'undefined') {
+			if (
+				prevSettings.getIn(['toggleOptions', 'redLetter', 'active']) !==
+				userSettings.getIn(['toggleOptions', 'redLetter', 'active'])
+			) {
+				toggleWordsOfJesus(
+					userSettings.getIn(['toggleOptions', 'redLetter', 'active']),
+				);
+			}
+			if (prevSettings.get('activeTheme') !== userSettings.get('activeTheme')) {
+				applyTheme(userSettings.get('activeTheme'));
+			}
+			if (
+				prevSettings.get('activeFontType') !==
+				userSettings.get('activeFontType')
+			) {
+				applyFontFamily(userSettings.get('activeFontType'));
+			}
+			if (
+				prevSettings.get('activeFontSize') !==
+				userSettings.get('activeFontSize')
+			) {
+				applyFontSize(userSettings.get('activeFontSize'));
+			}
+		}
 		// If there is an authenticated user then send these calls
 		if (
 			userId &&
@@ -692,6 +726,10 @@ const withProfileReducer = injectReducer({
 	reducer: profileReducer,
 });
 const withProfileSaga = injectSaga({ key: 'profile', saga: profileSaga });
+const withSettingsReducer = injectReducer({
+	key: 'settings',
+	reducer: settingsReducer,
+});
 
 export default compose(
 	withReducer,
@@ -702,5 +740,6 @@ export default compose(
 	withSaga,
 	withNotesSaga,
 	withTextSaga,
+	withSettingsReducer,
 	withConnect,
 )(HomePage);

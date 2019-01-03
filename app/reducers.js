@@ -11,6 +11,7 @@ import profileReducer from './containers/Profile/reducer';
 // import textSelectionReducer from './containers/TextSelection/reducer';
 import homepageReducer from './containers/HomePage/reducer';
 import videoPlayerReducer from './containers/VideoPlayer/reducer';
+import settingsReducer from './containers/Settings/reducer';
 
 /*
  * routeReducer
@@ -50,6 +51,7 @@ export default function createReducer(injectedReducers) {
 		language: languageProviderReducer,
 		homepage: homepageReducer,
 		videoPlayer: videoPlayerReducer,
+		settings: settingsReducer,
 		...injectedReducers,
 	});
 }

@@ -4,13 +4,14 @@ import { is } from 'immutable';
 // create a "selector creator" that uses lodash.isEqual instead of ===
 const createDeepEqualSelector = createSelectorCreator(defaultMemoize, is);
 const selectHomePageDomain = (state) => state.get('homepage');
+const selectSettingsDomain = (state) => state.get('settings');
 const selectHomepageText = (state) => state.getIn(['homepage', 'chapterText']);
 const selectProfilePageDomain = (state) => state.get('profile');
 const selectFormattedTextSource = (state) =>
 	state.getIn(['homepage', 'formattedSource']);
 const selectCrossReferenceState = (state) =>
 	state.getIn([
-		'homepage',
+		'settings',
 		'userSettings',
 		'toggleOptions',
 		'crossReferences',
@@ -19,8 +20,13 @@ const selectCrossReferenceState = (state) =>
 const selectNotes = (state) => state.get('notes');
 const selectUserNotes = () =>
 	createDeepEqualSelector(
-		[selectNotes, selectHomePageDomain, selectProfilePageDomain],
-		(notes, home, profile) => {
+		[
+			selectNotes,
+			selectHomePageDomain,
+			selectProfilePageDomain,
+			selectSettingsDomain,
+		],
+		(notes, home, profile, settings) => {
 			const activeTextId = home.get('activeTextId');
 			const bookId = home.get('activeBookId');
 			const chapter = home.get('activeChapter');
@@ -57,13 +63,13 @@ const selectUserNotes = () =>
 			if (
 				!text ||
 				(home.get('formattedSource') &&
-					!home.getIn([
+					!settings.getIn([
 						'userSettings',
 						'toggleOptions',
 						'readersMode',
 						'active',
 					]) &&
-					!home.getIn([
+					!settings.getIn([
 						'userSettings',
 						'toggleOptions',
 						'oneVersePerLine',
@@ -208,7 +214,7 @@ const selectFormattedSource = () =>
  */
 
 const selectSettings = () =>
-	createDeepEqualSelector(selectHomePageDomain, (substate) =>
+	createDeepEqualSelector(selectSettingsDomain, (substate) =>
 		substate.get('userSettings'),
 	);
 // TODO: May need to remove toJS if the application is showing signs of slowness

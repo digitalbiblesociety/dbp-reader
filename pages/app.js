@@ -29,32 +29,9 @@ import {
 import svg4everybody from '../app/utils/svgPolyfill';
 import removeDuplicates from '../app/utils/removeDuplicateObjects';
 import parseCookie from '../app/utils/parseCookie';
-import {
-	applyTheme,
-	applyFontFamily,
-	applyFontSize,
-	toggleWordsOfJesus,
-} from '../app/containers/Settings/themes';
 
 class AppContainer extends React.Component {
 	static displayName = 'Main app'; // eslint-disable-line no-undef
-	componentWillMount() {
-		if (
-			typeof document !== 'undefined' &&
-			this.props.userSettings &&
-			this.props.userSettings.toggleOptions
-		) {
-			const activeTheme = this.props.userSettings.activeTheme;
-			const activeFontType = this.props.userSettings.activeFontType;
-			const activeFontSize = this.props.userSettings.activeFontSize;
-			const redLetter = this.props.userSettings.toggleOptions.redLetter.active;
-			// Apply theme data to site
-			toggleWordsOfJesus(redLetter);
-			applyTheme(activeTheme);
-			applyFontFamily(activeFontType);
-			applyFontSize(activeFontSize);
-		}
-	}
 	componentDidMount() {
 		// If the page was served from the server then I need to cache the data for this route
 		if (this.props.isFromServer) {
@@ -214,44 +191,6 @@ AppContainer.getInitialProps = async (context) => {
 	let userId = reqUserId || '';
 	let hasVideo = false;
 	let isFromServer = true;
-	let userSettings = {
-		activeTheme: 'red',
-		activeFontType: 'sans',
-		activeFontSize: 42,
-		toggleOptions: {
-			readersMode: {
-				name: "READER'S MODE",
-				active: false,
-				available: true,
-			},
-			crossReferences: {
-				name: 'CROSS REFERENCE',
-				active: true,
-				available: true,
-			},
-			redLetter: {
-				name: 'RED LETTER',
-				active: true,
-				available: true,
-			},
-			justifiedText: {
-				name: 'JUSTIFIED TEXT',
-				active: false,
-				available: true,
-			},
-			oneVersePerLine: {
-				name: 'ONE VERSE PER LINE',
-				active: false,
-				available: true,
-			},
-			verticalScrolling: {
-				name: 'VERTICAL SCROLLING',
-				active: false,
-				available: false,
-			},
-		},
-		autoPlayEnabled: false,
-	};
 	let isAuthenticated = false;
 	let initialVolume = 1;
 	let initialPlaybackRate = 1;
@@ -286,56 +225,6 @@ AppContainer.getInitialProps = async (context) => {
 		initialVolume =
 			cookieData.bible_is_volume === 0 ? 0 : cookieData.bible_is_volume || 1;
 		initialPlaybackRate = cookieData.bible_is_playbackrate || 1;
-
-		// User Settings
-		userSettings = {
-			activeTheme: cookieData.bible_is_theme || 'red',
-			activeFontType: cookieData.bible_is_font_family || 'sans',
-			activeFontSize: cookieData.bible_is_font_size || 42,
-			toggleOptions: {
-				readersMode: {
-					name: "READER'S MODE",
-					active: cookieData.bible_is_userSettings_toggleOptions_readersMode_active
-						? !!cookieData.bible_is_userSettings_toggleOptions_readersMode_active
-						: false,
-					available: true,
-				},
-				crossReferences: {
-					name: 'CROSS REFERENCE',
-					active: cookieData.bible_is_userSettings_toggleOptions_crossReferences_active
-						? !!cookieData.bible_is_userSettings_toggleOptions_crossReferences_active
-						: true,
-					available: true,
-				},
-				redLetter: {
-					name: 'RED LETTER',
-					active: cookieData.bible_is_words_of_jesus
-						? !!cookieData.bible_is_words_of_jesus
-						: true,
-					available: true,
-				},
-				justifiedText: {
-					name: 'JUSTIFIED TEXT',
-					active: cookieData.bible_is_userSettings_toggleOptions_justifiedText_active
-						? !!cookieData.bible_is_userSettings_toggleOptions_justifiedText_active
-						: false,
-					available: true,
-				},
-				oneVersePerLine: {
-					name: 'ONE VERSE PER LINE',
-					active: cookieData.bible_is_userSettings_toggleOptions_oneVersePerLine_active
-						? !!cookieData.bible_is_userSettings_toggleOptions_oneVersePerLine_active
-						: false,
-					available: true,
-				},
-				verticalScrolling: {
-					name: 'VERTICAL SCROLLING',
-					active: false,
-					available: false,
-				},
-			},
-			autoPlayEnabled: !!cookieData.bible_is_autoplay,
-		};
 
 		// Handle oauth code if there is one
 		if (cookieData.bible_is_cb_code && cookieData.bible_is_provider) {
@@ -380,55 +269,6 @@ AppContainer.getInitialProps = async (context) => {
 		initialVolume =
 			cookieData.bible_is_volume === 0 ? 0 : cookieData.bible_is_volume || 1;
 		initialPlaybackRate = cookieData.bible_is_playbackrate || 1;
-		// User Settings
-		userSettings = {
-			activeTheme: cookieData.bible_is_theme || 'red',
-			activeFontType: cookieData.bible_is_font_family || 'sans',
-			activeFontSize: cookieData.bible_is_font_size || 42,
-			toggleOptions: {
-				readersMode: {
-					name: "READER'S MODE",
-					active: cookieData.bible_is_userSettings_toggleOptions_readersMode_active
-						? !!cookieData.bible_is_userSettings_toggleOptions_readersMode_active
-						: false,
-					available: true,
-				},
-				crossReferences: {
-					name: 'CROSS REFERENCE',
-					active: cookieData.bible_is_userSettings_toggleOptions_crossReferences_active
-						? !!cookieData.bible_is_userSettings_toggleOptions_crossReferences_active
-						: true,
-					available: true,
-				},
-				redLetter: {
-					name: 'RED LETTER',
-					active: cookieData.bible_is_words_of_jesus
-						? !!cookieData.bible_is_words_of_jesus
-						: true,
-					available: true,
-				},
-				justifiedText: {
-					name: 'JUSTIFIED TEXT',
-					active: cookieData.bible_is_userSettings_toggleOptions_justifiedText_active
-						? !!cookieData.bible_is_userSettings_toggleOptions_justifiedText_active
-						: false,
-					available: true,
-				},
-				oneVersePerLine: {
-					name: 'ONE VERSE PER LINE',
-					active: cookieData.bible_is_userSettings_toggleOptions_oneVersePerLine_active
-						? !!cookieData.bible_is_userSettings_toggleOptions_oneVersePerLine_active
-						: false,
-					available: true,
-				},
-				verticalScrolling: {
-					name: 'VERTICAL SCROLLING',
-					active: false,
-					available: false,
-				},
-			},
-			autoPlayEnabled: !!cookieData.bible_is_autoplay,
-		};
 	}
 
 	const singleBibleUrl = `${
@@ -695,7 +535,7 @@ AppContainer.getInitialProps = async (context) => {
 				hasAudio: !!initData.audioPaths.length,
 				chapterText,
 				testaments,
-				userSettings,
+				// userSettings,
 				formattedSource: initData.formattedText,
 				activeFilesets: filesets,
 				books: bookData || [],
@@ -759,7 +599,6 @@ AppContainer.getInitialProps = async (context) => {
 		isAuthenticated: isAuthenticated || false,
 		isFromServer,
 		routeLocation,
-		userSettings,
 		match: {
 			params: {
 				bibleId,
@@ -780,7 +619,6 @@ AppContainer.getInitialProps = async (context) => {
 AppContainer.propTypes = {
 	dispatch: PropTypes.func,
 	match: PropTypes.object,
-	userSettings: PropTypes.object,
 	userProfile: PropTypes.object,
 	chapterText: PropTypes.array,
 	fetchedUrls: PropTypes.array,
