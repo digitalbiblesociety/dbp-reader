@@ -11,6 +11,7 @@ import {
 	UPDATE_THEME,
 	UPDATE_FONT_TYPE,
 	UPDATE_FONT_SIZE,
+	TOGGLE_AUTOPLAY,
 } from './constants';
 
 const initialState = fromJS({
@@ -62,6 +63,11 @@ function settingsReducer(state = initialState, action) {
 			return state.setIn(['userSettings', 'activeFontType'], action.font);
 		case UPDATE_FONT_SIZE:
 			return state.setIn(['userSettings', 'activeFontSize'], action.size);
+		case TOGGLE_AUTOPLAY:
+			if (typeof window !== 'undefined') {
+				document.cookie = `bible_is_autoplay=${action.state};path=/`;
+			}
+			return state.setIn(['userSettings', 'autoPlayEnabled'], action.state);
 		case TOGGLE_SETTINGS_OPTION:
 			if (typeof window !== 'undefined') {
 				// Exclusive path is the path to the setting that cannot be active at the same time as this one

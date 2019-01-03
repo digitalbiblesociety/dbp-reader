@@ -26,7 +26,6 @@ import {
 	SET_AUDIO_PLAYER_STATE,
 	SET_CHAPTER_TEXT_LOADING_STATE,
 	TOGGLE_PROFILE,
-	TOGGLE_AUTOPLAY,
 	TOGGLE_NOTES_MODAL,
 	TOGGLE_SEARCH_MODAL,
 	TOGGLE_SETTINGS_MODAL,
@@ -148,11 +147,7 @@ function homePageReducer(state = initialState, action) {
 			return state.set('testaments', action.testaments);
 		case TOGGLE_FIRST_LOAD_TEXT_SELECTION:
 			return state.set('firstLoad', false);
-		case TOGGLE_AUTOPLAY:
-			if (typeof window !== 'undefined') {
-				document.cookie = `bible_is_autoplay=${action.state};path=/`;
-			}
-			return state.setIn(['userSettings', 'autoPlayEnabled'], action.state);
+
 		case GET_CHAPTER_TEXT:
 			return state.set('loadingNewChapterText', true);
 		case GET_BOOKS:
