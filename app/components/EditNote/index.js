@@ -65,6 +65,31 @@ class EditNote extends React.PureComponent {
 		return `${month.length === 1 ? `0${month}` : month}.${day}.${year}`;
 	};
 
+	get verseReference() {
+		const { vernacularNamesObject, note } = this.props;
+		if (
+			note.get('tags') &&
+			note.get('tags').find((tag) => tag.get('type') === 'reference')
+		) {
+			const ref = note
+				.get('tags')
+				.find((tag) => tag.get('type') === 'reference');
+			return ref.get('value');
+		}
+		const book = note.get('book_id');
+		const start = note.get('verse_start');
+		const end = note.get('verse_end');
+		const chapter = note.get('chapter');
+		const verses = start === end || !end ? start : `${start}-${end}`;
+
+		if (book && chapter && start) {
+			return `${vernacularNamesObject[book]} ${chapter}:${verses}`;
+		} else if (this.state.selectedBookName && this.state.selectedChapter) {
+			return `${this.state.selectedBookName} ${this.state.selectedChapter}`;
+		}
+		return 'Please Add a Verse';
+	}
+
 	handleTextareaChange = (e) => {
 		e.persist();
 		if (
@@ -186,31 +211,6 @@ class EditNote extends React.PureComponent {
 		this.props.deleteNote({ noteId: this.props.note.get('id') });
 		this.props.setActiveChild('notes');
 	};
-
-	get verseReference() {
-		const { vernacularNamesObject, note } = this.props;
-		if (
-			note.get('tags') &&
-			note.get('tags').find((tag) => tag.get('type') === 'reference')
-		) {
-			const ref = note
-				.get('tags')
-				.find((tag) => tag.get('type') === 'reference');
-			return ref.get('value');
-		}
-		const book = note.get('book_id');
-		const start = note.get('verse_start');
-		const end = note.get('verse_end');
-		const chapter = note.get('chapter');
-		const verses = start === end || !end ? start : `${start}-${end}`;
-
-		if (book && chapter && start) {
-			return `${vernacularNamesObject[book]} ${chapter}:${verses}`;
-		} else if (this.state.selectedBookName && this.state.selectedChapter) {
-			return `${this.state.selectedBookName} ${this.state.selectedChapter}`;
-		}
-		return 'Please Add a Verse';
-	}
 
 	render() {
 		const {

@@ -11,10 +11,6 @@ import getFormattedTimeString from '../../utils/getFormattedTimeString';
 import Colors from '../../utils/javascriptColors';
 
 class AudioProgressBar extends React.PureComponent {
-	handleChange = (v) => {
-		this.props.setCurrentTime(this.props.duration * (v / 100) || 0);
-	};
-
 	get timeLeft() {
 		return getFormattedTimeString(this.props.duration);
 	}
@@ -22,6 +18,10 @@ class AudioProgressBar extends React.PureComponent {
 	get timePassed() {
 		return getFormattedTimeString(this.props.currentTime);
 	}
+
+	handleChange = (v) => {
+		this.props.setCurrentTime(this.props.duration * (v / 100) || 0);
+	};
 
 	render() {
 		const percent = 100 * (this.props.currentTime / this.props.duration) || 0;

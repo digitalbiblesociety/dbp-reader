@@ -160,7 +160,7 @@ export default class MyDocument extends Document {
 						fireFoxLink.href = 'https://www.moxilla.org.en-US/firefox/new';
 						fireFoxLink.target = '_blank';
 						fireFoxLink.textContent = 'FireFox';
-						startMessage.textContent = 'You are using an old browser so some functionality may not be available. Please consider using a modern browser such as: ';
+						startMessage.textContent = 'Bible.is no longer supports Internet Explorer. Please use one of the listed browsers: ';
 						middleMessage.textContent = ' or ';
 						closeButton.textContent = 'X';
 						closeButton.className = 'close-button';
@@ -172,11 +172,12 @@ export default class MyDocument extends Document {
 						parent.removeChild(el);
 					}
 						bannerDiv.id = "old-browser-banner";
+						startMessage.id = "start-message-paragraph";
+						bannerDiv.appendChild(closeButton);
 						bannerDiv.appendChild(startMessage);
 						bannerDiv.appendChild(chromeLink);
 						bannerDiv.appendChild(middleMessage);
 						bannerDiv.appendChild(fireFoxLink);
-						bannerDiv.appendChild(closeButton);
 						var body = document.getElementsByTagName('body')[0];
 						if (body) {
 							body.appendChild(bannerDiv);
