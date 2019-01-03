@@ -249,7 +249,7 @@ export const toggleWordsOfJesus = (state) => {
 		'--application-words-of-jesus',
 		state ? '#A00' : 'inherit',
 	);
-	document.cookie = `bible_is_words_of_jesus=${state}`;
+	document.cookie = `bible_is_words_of_jesus=${state};path=/`;
 };
 
 export const applyFontFamily = (fontFamily) => {
@@ -257,7 +257,7 @@ export const applyFontFamily = (fontFamily) => {
 		'--application-font-family',
 		fonts[fontFamily],
 	);
-	document.cookie = `bible_is_font_family=${fontFamily}`;
+	document.cookie = `bible_is_font_family=${fontFamily};path=/`;
 };
 
 export const applyFontSize = (fontSize) => {
@@ -265,12 +265,12 @@ export const applyFontSize = (fontSize) => {
 		'--application-base-font-size',
 		sizes[fontSize],
 	);
-	document.cookie = `bible_is_font_size=${fontSize}`;
+	document.cookie = `bible_is_font_size=${fontSize};path=/`;
 };
 
 export const applyTheme = (theme) => {
 	Object.entries(themes[theme]).forEach((property) => {
 		document.documentElement.style.setProperty(property[0], property[1]);
 	});
-	document.cookie = `bible_is_theme=${theme}`;
+	document.cookie = `bible_is_theme=${theme};path=/`;
 };
