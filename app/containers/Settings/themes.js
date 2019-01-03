@@ -1,4 +1,4 @@
-const paper = {
+export const paper = {
 	'--background-color': '#FFF',
 	'--text-selection-background': '#FDF9F3',
 	'--text-selection-accordion-title-background': 'rgba(0,0,0,0.1)',
@@ -75,7 +75,7 @@ const paper = {
 	'--video-player-films-svg-color': 'rgba(255, 255, 255, 1)',
 };
 
-const dark = {
+export const dark = {
 	'--text-selection-background': '#1B1F24',
 	'--text-selection-accordion-title-background': 'rgba(255,255,255,.3)',
 	'--text-selection-accordion-body-background': '#000000',
@@ -148,7 +148,7 @@ const dark = {
 	'--video-player-films-svg-color': 'rgba(255, 255, 255, 1)',
 };
 
-const red = {
+export const red = {
 	'--text-selection-background': '#1B1F24',
 	'--text-selection-accordion-title-background': 'rgba(255,255,255,.3)',
 	'--text-selection-accordion-body-background': '#000000',
@@ -224,7 +224,7 @@ const red = {
 	'--video-player-films-svg-color': 'rgba(255, 255, 255, 1)',
 };
 
-const themes = {
+export const themes = {
 	paper,
 	dark,
 	red,
