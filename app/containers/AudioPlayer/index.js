@@ -330,6 +330,9 @@ export class AudioPlayer extends React.Component {
 	};
 
 	playAudio = () => {
+		if (this.state.loadingNextChapter) {
+			return;
+		}
 		const playPromise = this.audioRef.play();
 		// All modern browsers return a promise
 		if (this.props.videoPlayerOpen && this.props.hasVideo) {
@@ -555,14 +558,15 @@ export class AudioPlayer extends React.Component {
 		</div>
 	);
 
-	playIcon = (
+	playIcon = () => (
 		<div
 			id={'play-audio'}
 			onClick={this.playAudio}
 			className={'icon-wrap'}
+			style={{ color: `${this.state.loadingNextChapter ? '#aaa' : '#fff'}` }}
 			title={messages.playTitle.defaultMessage}
 		>
-			<SvgWrapper className="svgitem icon" fill="#fff" svgid="play" />
+			<SvgWrapper className="svgitem icon" svgid="play" />
 			<FormattedMessage {...messages.play} />
 		</div>
 	);
@@ -635,7 +639,7 @@ export class AudioPlayer extends React.Component {
 						>
 							{this.prevIcon}
 						</Link>
-						{this.state.playing ? this.pauseIcon : this.playIcon}
+						{this.state.playing ? this.pauseIcon : this.playIcon()}
 						<Link
 							as={getNextChapterUrl({
 								books: this.props.books,
