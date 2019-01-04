@@ -72,6 +72,10 @@ export class SearchContainer extends React.PureComponent {
 			if (this.timer) {
 				clearTimeout(this.timer);
 			}
+			this.addSearchTerm({
+				bibleId: this.props.activeFilesetId || this.props.bibleId,
+				searchText,
+			});
 
 			const refObject = this.checkInputForReference(searchText);
 

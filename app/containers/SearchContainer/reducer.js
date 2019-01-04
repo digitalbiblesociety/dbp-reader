@@ -36,21 +36,6 @@ function searchContainerReducer(state = initialState, action) {
 				return state.set('loadingResults', true);
 			}
 
-			localStorage.setItem(
-				'bible_is_last_searches',
-				state.get('lastFiveSearches').size > 9
-					? JSON.stringify(
-							state
-								.get('lastFiveSearches')
-								.push(action.searchText.toLowerCase())
-								.shift(),
-					  )
-					: JSON.stringify(
-							state
-								.get('lastFiveSearches')
-								.push(action.searchText.toLowerCase()),
-					  ),
-			);
 			return state.set(
 				'lastFiveSearches',
 				state.get('lastFiveSearches').size > 9
