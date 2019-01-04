@@ -12,6 +12,7 @@ import profileReducer from './containers/Profile/reducer';
 import homepageReducer from './containers/HomePage/reducer';
 import videoPlayerReducer from './containers/VideoPlayer/reducer';
 import settingsReducer from './containers/Settings/reducer';
+import searchContainerReducer from './containers/SearchContainer/reducer';
 
 /*
  * routeReducer
@@ -52,6 +53,7 @@ export default function createReducer(injectedReducers) {
 		homepage: homepageReducer,
 		videoPlayer: videoPlayerReducer,
 		settings: settingsReducer,
+		searchContainer: searchContainerReducer,
 		...injectedReducers,
 	});
 }

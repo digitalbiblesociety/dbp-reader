@@ -6,6 +6,7 @@
 
 import { fromJS } from 'immutable';
 import {
+	ADD_SEARCH_TERM,
 	GET_SEARCH_RESULTS,
 	LOAD_SEARCH_RESULTS,
 	SEARCH_ERROR,
@@ -28,12 +29,13 @@ const initialState = fromJS({
 
 function searchContainerReducer(state = initialState, action) {
 	switch (action.type) {
-		case GET_SEARCH_RESULTS:
+		case ADD_SEARCH_TERM:
 			if (
 				state.get('lastFiveSearches').includes(action.searchText.toLowerCase())
 			) {
 				return state.set('loadingResults', true);
 			}
+
 			localStorage.setItem(
 				'bible_is_last_searches',
 				state.get('lastFiveSearches').size > 9
@@ -49,19 +51,17 @@ function searchContainerReducer(state = initialState, action) {
 								.push(action.searchText.toLowerCase()),
 					  ),
 			);
-			return state
-				.set(
-					'lastFiveSearches',
-					state.get('lastFiveSearches').size > 9
-						? state
-								.get('lastFiveSearches')
-								.push(action.searchText.toLowerCase())
-								.shift()
-						: state
-								.get('lastFiveSearches')
-								.push(action.searchText.toLowerCase()),
-				)
-				.set('loadingResults', true);
+			return state.set(
+				'lastFiveSearches',
+				state.get('lastFiveSearches').size > 9
+					? state
+							.get('lastFiveSearches')
+							.push(action.searchText.toLowerCase())
+							.shift()
+					: state.get('lastFiveSearches').push(action.searchText.toLowerCase()),
+			);
+		case GET_SEARCH_RESULTS:
+			return state.set('loadingResults', true);
 		case LOAD_SEARCH_RESULTS:
 			return state
 				.set('loadingResults', false)
