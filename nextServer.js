@@ -264,8 +264,6 @@ app
 			// Params may not actually be passed using this method
 			const queryParams = {
 				bibleId: req.params.bibleId,
-				bookId: 'mat',
-				chapter: '1',
 			};
 
 			if (

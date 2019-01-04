@@ -73,6 +73,11 @@ export function* getTexts({ languageCode }) {
 	}/bibles?asset_id=dbp-vid&key=${
 		process.env.DBP_API_KEY
 	}&language_code=${languageCode}&v=4`;
+	// Put logic here for determining what url to direct to when user chooses new version
+	// Benefits are that all the information can be gathered up front and behind a clear
+	// loading spinner
+	// Negatives are that the list of versions would take longer to load
+
 	try {
 		const response = yield call(request, requestUrl);
 		const videoRes = yield call(request, videoRequestUrl);

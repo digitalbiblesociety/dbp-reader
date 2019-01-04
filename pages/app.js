@@ -29,6 +29,7 @@ import {
 import svg4everybody from '../app/utils/svgPolyfill';
 import removeDuplicates from '../app/utils/removeDuplicateObjects';
 import parseCookie from '../app/utils/parseCookie';
+import getFirstMatchingChapter from '../app/utils/getFirstMatchingChapter';
 
 class AppContainer extends React.Component {
 	static displayName = 'Main app'; // eslint-disable-line no-undef
@@ -173,8 +174,8 @@ AppContainer.getInitialProps = async (context) => {
 	const { req, res: serverRes } = context;
 	const routeLocation = context.asPath;
 	const {
-		bookId = 'GEN',
-		chapter = 7,
+		bookId = '',
+		chapter,
 		bibleId = 'ENGESV',
 		verse,
 		token,
@@ -291,7 +292,7 @@ AppContainer.getInitialProps = async (context) => {
 		return { data: {} };
 	});
 
-	const singleBibleJson = singleBibleRes;
+	const singleBibleJson = singleBibleRes; // Not sure why I did this, probably should remove
 	const bible = singleBibleJson.data || {};
 	// Acceptable fileset types that the site is capable of ingesting and displaying
 	const setTypes = {
@@ -301,6 +302,9 @@ AppContainer.getInitialProps = async (context) => {
 		text_format: true,
 		video_stream: true,
 	};
+	// Filter out gideon bibles because the api will never be fixed in this area... -_- :( :'( ;'(
+	// Filters out the filesets that should be filtered by the api
+	// Gets only one of the text_plain or text_format filesets (These are identical if they both occur)
 	const activeFilesetId =
 		bible && bible.filesets && bible.filesets[process.env.DBP_BUCKET_ID]
 			? bible.filesets[process.env.DBP_BUCKET_ID]
@@ -312,9 +316,6 @@ AppContainer.getInitialProps = async (context) => {
 					)
 					.reduce((a, c) => c.id, '')
 			: '';
-
-	// Filter out gideon bibles because the api will never be fixed in this area... -_- :( :'( ;'(
-	// TODO: Revisit this to see if it is still needed!
 	let filesets = [];
 
 	if (
@@ -354,7 +355,7 @@ AppContainer.getInitialProps = async (context) => {
 
 	const formattedFilesetIds = [];
 	const plainFilesetIds = [];
-	const idsForBookMetadata = {};
+	const idsForBookMetadata = [];
 	const bookCachePairs = [];
 	// Separate filesets by type
 	filesets.forEach((set) => {
@@ -364,65 +365,251 @@ AppContainer.getInitialProps = async (context) => {
 			plainFilesetIds.push(set.id);
 		}
 		// Gets one id for each fileset type
-		idsForBookMetadata[set.type] = set.id;
+		idsForBookMetadata.push([set.type, set.id]);
 	});
 
-	const bookMetaPromises = Object.entries(idsForBookMetadata).map(
-		async (id) => {
-			const url = `${process.env.BASE_API_ROUTE}/bibles/filesets/${
-				id[1]
-			}/books?v=4&key=${process.env.DBP_API_KEY}&asset_id=${
-				process.env.DBP_BUCKET_ID
-			}&fileset_type=${id[0]}`;
-			const res = await cachedFetch(url);
-			bookCachePairs.push({ href: url, data: res });
+	const bookMetaPromises = idsForBookMetadata.map(async (filesetTuple) => {
+		const url = `${process.env.BASE_API_ROUTE}/bibles/filesets/${
+			filesetTuple[1]
+		}/books?v=4&key=${process.env.DBP_API_KEY}&asset_id=${
+			filesetTuple[0] === 'video_stream' ? 'dbp-vid' : process.env.DBP_BUCKET_ID
+		}&fileset_type=${filesetTuple[0]}`;
+		const res = await cachedFetch(url);
+		bookCachePairs.push({ href: url, data: res });
 
-			return res.data || [];
-		},
-	);
+		return { [filesetTuple[1]]: res.data } || [];
+	});
 	const bookMetaResponse = await Promise.all(bookMetaPromises);
+
 	const bookMetaData = removeDuplicates(
-		bookMetaResponse.reduce((a, c) => [...a, ...c], []),
+		bookMetaResponse.reduce(
+			(reducedObjects, filesetObject) => [
+				...reducedObjects,
+				...Object.values(filesetObject)[0],
+			],
+			[],
+		),
 		'book_id',
 	);
 
 	// Redirect to the new url if conditions are met
 	if (bookMetaData && bookMetaData.length) {
 		const foundBook = bookMetaData.find(
-			(book) => book.book_id === bookId.toUpperCase(),
+			(book) => bookId && book.book_id === bookId.toUpperCase(),
 		);
-		const foundChapter = foundBook
-			? foundBook.chapters.find((c) => c === parseInt(chapter, 10))
-			: undefined;
+		const foundChapter =
+			foundBook &&
+			foundBook.chapters.find((c) => chapter && c === parseInt(chapter, 10));
+		const hasOtAudio = filesets.some(
+			(fileset) =>
+				fileset.size === 'OT' &&
+				(fileset.type === 'audio' || fileset.type === 'audio_drama'),
+		);
+		const hasNtAudio = filesets.some(
+			(fileset) =>
+				fileset.size === 'NT' &&
+				(fileset.type === 'audio' || fileset.type === 'audio_drama'),
+		);
+		const hasOtText = filesets.some(
+			(fileset) =>
+				(fileset.size === 'OT' || fileset.size === 'C') &&
+				(fileset.type === 'text_plain' || fileset.type === 'text_format'),
+		);
+		const hasNtText = filesets.some(
+			(fileset) =>
+				(fileset.size === 'NT' || fileset.size === 'C') &&
+				(fileset.type === 'text_plain' || fileset.type === 'text_format'),
+		);
+		let bookChapterRoute = '';
+		// Logic for determining version default url
+		/** For each call scenario below use the first common book/chapter between the two filesets
+		 * 1. If has a video fileset pick the first book of that fileset
+		 * 2. If has fileset with size=NT && type=[audio, audio_drama] and fileset with size=NT type=[text_plain, text_format]
+		 * 3. If has fileset with size=OT && type=[audio, audio_drama] and fileset with size=OT type=[text_plain, text_format]
+		 * 4. If has fileset with size=NT && type=[audio, audio_drama]
+		 * 5. If has fileset with size=OT && type=[audio, audio_drama]
+		 * 6. If has fileset with size=NT && type=[text_plain, text_format]
+		 * 7. If has fileset with size=OT && type=[text_plain, text_format]
+		 */
+		// Handles getting the book/chapter that has both text and audio in the New Testament
 
+		if (hasVideo) {
+			const video = filesets.find((fileset) => fileset.type === 'video_stream');
+			const videoBooks = bookMetaResponse.find(
+				(filesetObject) => filesetObject[video.id],
+			);
+
+			bookChapterRoute = `${videoBooks[video.id][0].book_id}/${
+				videoBooks[video.id][0].chapters[0]
+			}`;
+		} else if (hasNtText && hasNtAudio) {
+			const audioDrama = filesets.find(
+				(fileset) => fileset.size === 'NT' && fileset.type === 'audio_drama',
+			);
+			const audio = filesets.find(
+				(fileset) => fileset.size === 'NT' && fileset.type === 'audio',
+			);
+			const textFormat = filesets.find(
+				(fileset) =>
+					(fileset.size === 'NT' || fileset.size === 'C') &&
+					fileset.type === 'text_format',
+			);
+			const textPlain = filesets.find(
+				(fileset) =>
+					(fileset.size === 'NT' || fileset.size === 'C') &&
+					fileset.type === 'text_plain',
+			);
+
+			const audioBooks = bookMetaResponse.find(
+				(filesetObject) =>
+					audioDrama ? filesetObject[audioDrama.id] : filesetObject[audio.id],
+			);
+			const textBooks = bookMetaResponse.find(
+				(filesetObject) =>
+					textFormat
+						? filesetObject[textFormat.id]
+						: filesetObject[textPlain.id],
+			);
+
+			bookChapterRoute = getFirstMatchingChapter(textBooks, audioBooks);
+		} else if (hasOtText && hasOtAudio) {
+			// Handles getting the book/chapter that has both text and audio in the Old Testament
+			const audioDrama = filesets.find(
+				(fileset) => fileset.size === 'OT' && fileset.type === 'audio_drama',
+			);
+			const audio = filesets.find(
+				(fileset) => fileset.size === 'OT' && fileset.type === 'audio',
+			);
+			const textFormat = filesets.find(
+				(fileset) =>
+					(fileset.size === 'OT' || fileset.size === 'C') &&
+					fileset.type === 'text_format',
+			);
+			const textPlain = filesets.find(
+				(fileset) =>
+					(fileset.size === 'OT' || fileset.size === 'C') &&
+					fileset.type === 'text_plain',
+			);
+
+			const audioBooks = bookMetaResponse.find(
+				(filesetObject) =>
+					audioDrama ? filesetObject[audioDrama.id] : filesetObject[audio.id],
+			);
+			const textBooks = bookMetaResponse.find(
+				(filesetObject) =>
+					textFormat
+						? filesetObject[textFormat.id]
+						: filesetObject[textPlain.id],
+			);
+
+			bookChapterRoute = getFirstMatchingChapter(textBooks, audioBooks);
+		} else if (hasNtAudio) {
+			// Gets book/chapter for just audio in the New Testament
+			const audioDrama = filesets.find(
+				(fileset) => fileset.size === 'NT' && fileset.type === 'audio_drama',
+			);
+			const audio = filesets.find(
+				(fileset) => fileset.size === 'NT' && fileset.type === 'audio',
+			);
+			const audioId = audioDrama ? audioDrama.id : audio.id;
+
+			const audioBooks = bookMetaResponse.find(
+				(filesetObject) => filesetObject[audioId],
+			);
+
+			bookChapterRoute = `${audioBooks[audioId][0].book_id}/${
+				audioBooks[audioId][0].chapters[0]
+			}`;
+		} else if (hasOtAudio) {
+			// Gets book/chapter for just audio in the Old Testament
+			const audioDrama = filesets.find(
+				(fileset) => fileset.size === 'OT' && fileset.type === 'audio_drama',
+			);
+			const audio = filesets.find(
+				(fileset) => fileset.size === 'OT' && fileset.type === 'audio',
+			);
+			const audioId = audioDrama ? audioDrama.id : audio.id;
+
+			const audioBooks = bookMetaResponse.find(
+				(filesetObject) => filesetObject[audioId],
+			);
+
+			// Gets first book id and first chapter number from that book
+			bookChapterRoute = `${audioBooks[audioId][0].book_id}/${
+				audioBooks[audioId][0].chapters[0]
+			}`;
+		} else if (hasNtText) {
+			// Gets book/chapter for just text in the New Testament
+			const textFormat = filesets.find(
+				(fileset) =>
+					(fileset.size === 'NT' || fileset.size === 'C') &&
+					fileset.type === 'text_format',
+			);
+			const textPlain = filesets.find(
+				(fileset) =>
+					(fileset.size === 'NT' || fileset.size === 'C') &&
+					fileset.type === 'text_plain',
+			);
+			const textId = textFormat ? textFormat.id : textPlain.id;
+
+			const textBooks = bookMetaResponse.find(
+				(filesetObject) => filesetObject[textId],
+			);
+
+			// Gets first book id and first chapter number from that book
+			bookChapterRoute = `${textBooks[textId][0].book_id}/${
+				textBooks[textId][0].chapters[0]
+			}`;
+		} else if (hasOtText) {
+			// Gets book/chapter for just text in the Old Testament
+			const textFormat = filesets.find(
+				(fileset) =>
+					(fileset.size === 'OT' || fileset.size === 'C') &&
+					fileset.type === 'text_format',
+			);
+			const textPlain = filesets.find(
+				(fileset) =>
+					(fileset.size === 'OT' || fileset.size === 'C') &&
+					fileset.type === 'text_plain',
+			);
+			const textId = textFormat ? textFormat.id : textPlain.id;
+
+			const textBooks = bookMetaResponse.find(
+				(filesetObject) => filesetObject[textId],
+			);
+
+			// Gets first book id and first chapter number from that book
+			bookChapterRoute = `${textBooks[textId][0].book_id}/${
+				textBooks[textId][0].chapters[0]
+			}`;
+		} else {
+			// Default to first book/chapter available
+			bookChapterRoute = `${bookMetaData[0].book_id}/${
+				bookMetaData[0].chapters[0]
+			}`;
+		}
 		// If the book wasn't found and chapter wasn't found
 		// Go to the first book and first chapter
+		const foundBookId = foundBook && foundBook.book_id;
+		const foundChapterId = foundBook && foundBook.chapters[0];
+
+		/**
+		 * 1. Visit /bible/bibleId
+		 */
 		if (!foundBook && !foundChapter) {
 			// Logs the url that will be redirected to
 			if (serverRes) {
 				// If there wasn't a book then we need to redirect to mark for video resources and matthew for other resources
-				hasVideo
-					? serverRes.writeHead(302, {
-							Location: `${req.protocol}://${req.get(
-								'host',
-							)}/bible/${bibleId}/mrk/1`,
-					  })
-					: serverRes.writeHead(302, {
-							Location: `${req.protocol}://${req.get(
-								'host',
-							)}/bible/${bibleId}/${bookMetaData[0].book_id}/${
-								bookMetaData[0].chapters[0]
-							}`,
-					  });
+				serverRes.writeHead(302, {
+					Location: `${req.protocol}://${req.get(
+						'host',
+					)}/bible/${bibleId}/${bookChapterRoute}`,
+				});
 				serverRes.end();
 			} else {
-				hasVideo
-					? Router.push(`${window.location.origin}/bible/${bibleId}/mrk/1`)
-					: Router.push(
-							`${window.location.origin}/bible/${bibleId}/${
-								bookMetaData[0].book_id
-							}/${bookMetaData[0].chapters[0]}`,
-					  );
+				Router.push(
+					`${window.location.origin}/bible/${bibleId}/${bookChapterRoute}`,
+				);
 			}
 		} else if (foundBook) {
 			// if the book was found
@@ -432,16 +619,16 @@ AppContainer.getInitialProps = async (context) => {
 				// go to the book and the first chapter for that book
 				if (serverRes) {
 					serverRes.writeHead(302, {
-						Location: `${req.protocol}://${req.get('host')}/bible/${bibleId}/${
-							foundBook.book_id
-						}/${foundBook.chapters[0]}`,
+						Location: `${req.protocol}://${req.get(
+							'host',
+						)}/bible/${bibleId}/${foundBookId}/${foundChapterId}`,
 					});
 					serverRes.end();
 				} else {
 					Router.push(
-						`${window.location.origin}/bible/${bibleId}/${foundBook.book_id}/${
-							foundBook.chapters[0]
-						}`,
+						`${
+							window.location.origin
+						}/bible/${bibleId}/${foundBookId}/${foundChapterId}`,
 					);
 				}
 			}

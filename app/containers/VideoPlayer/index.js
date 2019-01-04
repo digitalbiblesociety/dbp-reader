@@ -208,6 +208,7 @@ class VideoPlayer extends React.PureComponent {
 	};
 
 	// Checks to see if we have video content for the selected chapter
+	// This seems somewhat repetitive and unnecessary
 	checkForBooks = async ({ filesetId, bookId, chapter }) => {
 		if (!filesetId) return;
 		const reqUrl = `${

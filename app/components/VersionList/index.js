@@ -24,17 +24,12 @@ class VersionList extends React.PureComponent {
 			: bibles;
 		// Change the way I figure out if a resource has text or audio
 		// path, key, types, className, text, clickHandler
+		// Set the path to just the bible_id and let app.js handle getting the actual book and chapter needed
 		const scrubbedBibles = filteredBibles.reduce(
 			(acc, bible) => [
 				...acc,
 				{
-					path: `/${bible.get('abbr').toLowerCase()}/${
-						bible
-							.get('filesets')
-							.filter((set) => set.get('type') === 'video_stream').size
-							? 'mrk'
-							: 'mat'
-					}/1`,
+					path: `/${bible.get('abbr').toLowerCase()}`,
 					key: `${bible.get('abbr')}${bible.get('date')}`,
 					clickHandler: (audioType) =>
 						this.handleVersionListClick(bible, audioType),
