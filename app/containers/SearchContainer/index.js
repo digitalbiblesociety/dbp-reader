@@ -18,6 +18,7 @@ import CloseMenuFunctions from '../../utils/closeMenuFunctions';
 import SearchResult from '../../components/SearchResult';
 import RecentSearches from '../../components/RecentSearches';
 import {
+	addSearchTerm,
 	getSearchResults,
 	viewError,
 	stopLoading,
@@ -35,6 +36,8 @@ export class SearchContainer extends React.PureComponent {
 	};
 
 	componentDidMount() {
+		this.props.dispatch(stopLoading());
+
 		this.closeMenuController = new CloseMenuFunctions(
 			this.ref,
 			this.props.toggleSearchModal,
@@ -53,6 +56,8 @@ export class SearchContainer extends React.PureComponent {
 	};
 
 	getSearchResults = (props) => this.props.dispatch(getSearchResults(props));
+
+	addSearchTerm = (props) => this.props.dispatch(addSearchTerm(props));
 
 	handleSearchModalToggle = () => {
 		this.props.toggleSearchModal();
@@ -104,6 +109,11 @@ export class SearchContainer extends React.PureComponent {
 			if (!val) {
 				return;
 			}
+			this.addSearchTerm({
+				bibleId: activeFilesetId || bibleId,
+				searchText: val,
+			});
+
 			if (refObject.isReference) {
 				this.handleReferenceRedirect({ ...refObject, searchText: val });
 			} else {

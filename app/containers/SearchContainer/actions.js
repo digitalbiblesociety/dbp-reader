@@ -5,11 +5,17 @@
  */
 
 import {
+	ADD_SEARCH_TERM,
 	GET_SEARCH_RESULTS,
 	VIEW_ERROR,
 	STOP_LOADING,
 	START_LOADING,
 } from './constants';
+
+export const addSearchTerm = (props) => ({
+	type: ADD_SEARCH_TERM,
+	...props,
+});
 
 export const getSearchResults = (props) => ({
 	type: GET_SEARCH_RESULTS,
