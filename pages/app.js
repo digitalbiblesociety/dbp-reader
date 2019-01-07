@@ -29,7 +29,7 @@ import {
 import svg4everybody from '../app/utils/svgPolyfill';
 import removeDuplicates from '../app/utils/removeDuplicateObjects';
 import parseCookie from '../app/utils/parseCookie';
-import getFirstMatchingChapter from '../app/utils/getFirstMatchingChapter';
+import getFirstChapterReference from '../app/utils/getFirstChapterReference';
 
 class AppContainer extends React.Component {
 	static displayName = 'Main app'; // eslint-disable-line no-undef
@@ -400,194 +400,13 @@ AppContainer.getInitialProps = async (context) => {
 		const foundChapter =
 			foundBook &&
 			foundBook.chapters.find((c) => chapter && c === parseInt(chapter, 10));
-		const hasOtAudio = filesets.some(
-			(fileset) =>
-				fileset.size === 'OT' &&
-				(fileset.type === 'audio' || fileset.type === 'audio_drama'),
+		// Handles getting the book/chapter that follows Jon Stearley's methodology
+		const bookChapterRoute = getFirstChapterReference(
+			filesets,
+			hasVideo,
+			bookMetaResponse,
 		);
-		const hasNtAudio = filesets.some(
-			(fileset) =>
-				fileset.size === 'NT' &&
-				(fileset.type === 'audio' || fileset.type === 'audio_drama'),
-		);
-		const hasOtText = filesets.some(
-			(fileset) =>
-				(fileset.size === 'OT' || fileset.size === 'C') &&
-				(fileset.type === 'text_plain' || fileset.type === 'text_format'),
-		);
-		const hasNtText = filesets.some(
-			(fileset) =>
-				(fileset.size === 'NT' || fileset.size === 'C') &&
-				(fileset.type === 'text_plain' || fileset.type === 'text_format'),
-		);
-		let bookChapterRoute = '';
-		// Logic for determining version default url
-		/** For each call scenario below use the first common book/chapter between the two filesets
-		 * 1. If has a video fileset pick the first book of that fileset
-		 * 2. If has fileset with size=NT && type=[audio, audio_drama] and fileset with size=NT type=[text_plain, text_format]
-		 * 3. If has fileset with size=OT && type=[audio, audio_drama] and fileset with size=OT type=[text_plain, text_format]
-		 * 4. If has fileset with size=NT && type=[audio, audio_drama]
-		 * 5. If has fileset with size=OT && type=[audio, audio_drama]
-		 * 6. If has fileset with size=NT && type=[text_plain, text_format]
-		 * 7. If has fileset with size=OT && type=[text_plain, text_format]
-		 */
-		// Handles getting the book/chapter that has both text and audio in the New Testament
 
-		if (hasVideo) {
-			const video = filesets.find((fileset) => fileset.type === 'video_stream');
-			const videoBooks = bookMetaResponse.find(
-				(filesetObject) => filesetObject[video.id],
-			);
-
-			bookChapterRoute = `${videoBooks[video.id][0].book_id}/${
-				videoBooks[video.id][0].chapters[0]
-			}`;
-		} else if (hasNtText && hasNtAudio) {
-			const audioDrama = filesets.find(
-				(fileset) => fileset.size === 'NT' && fileset.type === 'audio_drama',
-			);
-			const audio = filesets.find(
-				(fileset) => fileset.size === 'NT' && fileset.type === 'audio',
-			);
-			const textFormat = filesets.find(
-				(fileset) =>
-					(fileset.size === 'NT' || fileset.size === 'C') &&
-					fileset.type === 'text_format',
-			);
-			const textPlain = filesets.find(
-				(fileset) =>
-					(fileset.size === 'NT' || fileset.size === 'C') &&
-					fileset.type === 'text_plain',
-			);
-
-			const audioBooks = bookMetaResponse.find(
-				(filesetObject) =>
-					audioDrama ? filesetObject[audioDrama.id] : filesetObject[audio.id],
-			);
-			const textBooks = bookMetaResponse.find(
-				(filesetObject) =>
-					textFormat
-						? filesetObject[textFormat.id]
-						: filesetObject[textPlain.id],
-			);
-
-			bookChapterRoute = getFirstMatchingChapter(textBooks, audioBooks);
-		} else if (hasOtText && hasOtAudio) {
-			// Handles getting the book/chapter that has both text and audio in the Old Testament
-			const audioDrama = filesets.find(
-				(fileset) => fileset.size === 'OT' && fileset.type === 'audio_drama',
-			);
-			const audio = filesets.find(
-				(fileset) => fileset.size === 'OT' && fileset.type === 'audio',
-			);
-			const textFormat = filesets.find(
-				(fileset) =>
-					(fileset.size === 'OT' || fileset.size === 'C') &&
-					fileset.type === 'text_format',
-			);
-			const textPlain = filesets.find(
-				(fileset) =>
-					(fileset.size === 'OT' || fileset.size === 'C') &&
-					fileset.type === 'text_plain',
-			);
-
-			const audioBooks = bookMetaResponse.find(
-				(filesetObject) =>
-					audioDrama ? filesetObject[audioDrama.id] : filesetObject[audio.id],
-			);
-			const textBooks = bookMetaResponse.find(
-				(filesetObject) =>
-					textFormat
-						? filesetObject[textFormat.id]
-						: filesetObject[textPlain.id],
-			);
-
-			bookChapterRoute = getFirstMatchingChapter(textBooks, audioBooks);
-		} else if (hasNtAudio) {
-			// Gets book/chapter for just audio in the New Testament
-			const audioDrama = filesets.find(
-				(fileset) => fileset.size === 'NT' && fileset.type === 'audio_drama',
-			);
-			const audio = filesets.find(
-				(fileset) => fileset.size === 'NT' && fileset.type === 'audio',
-			);
-			const audioId = audioDrama ? audioDrama.id : audio.id;
-
-			const audioBooks = bookMetaResponse.find(
-				(filesetObject) => filesetObject[audioId],
-			);
-
-			bookChapterRoute = `${audioBooks[audioId][0].book_id}/${
-				audioBooks[audioId][0].chapters[0]
-			}`;
-		} else if (hasOtAudio) {
-			// Gets book/chapter for just audio in the Old Testament
-			const audioDrama = filesets.find(
-				(fileset) => fileset.size === 'OT' && fileset.type === 'audio_drama',
-			);
-			const audio = filesets.find(
-				(fileset) => fileset.size === 'OT' && fileset.type === 'audio',
-			);
-			const audioId = audioDrama ? audioDrama.id : audio.id;
-
-			const audioBooks = bookMetaResponse.find(
-				(filesetObject) => filesetObject[audioId],
-			);
-
-			// Gets first book id and first chapter number from that book
-			bookChapterRoute = `${audioBooks[audioId][0].book_id}/${
-				audioBooks[audioId][0].chapters[0]
-			}`;
-		} else if (hasNtText) {
-			// Gets book/chapter for just text in the New Testament
-			const textFormat = filesets.find(
-				(fileset) =>
-					(fileset.size === 'NT' || fileset.size === 'C') &&
-					fileset.type === 'text_format',
-			);
-			const textPlain = filesets.find(
-				(fileset) =>
-					(fileset.size === 'NT' || fileset.size === 'C') &&
-					fileset.type === 'text_plain',
-			);
-			const textId = textFormat ? textFormat.id : textPlain.id;
-
-			const textBooks = bookMetaResponse.find(
-				(filesetObject) => filesetObject[textId],
-			);
-
-			// Gets first book id and first chapter number from that book
-			bookChapterRoute = `${textBooks[textId][0].book_id}/${
-				textBooks[textId][0].chapters[0]
-			}`;
-		} else if (hasOtText) {
-			// Gets book/chapter for just text in the Old Testament
-			const textFormat = filesets.find(
-				(fileset) =>
-					(fileset.size === 'OT' || fileset.size === 'C') &&
-					fileset.type === 'text_format',
-			);
-			const textPlain = filesets.find(
-				(fileset) =>
-					(fileset.size === 'OT' || fileset.size === 'C') &&
-					fileset.type === 'text_plain',
-			);
-			const textId = textFormat ? textFormat.id : textPlain.id;
-
-			const textBooks = bookMetaResponse.find(
-				(filesetObject) => filesetObject[textId],
-			);
-
-			// Gets first book id and first chapter number from that book
-			bookChapterRoute = `${textBooks[textId][0].book_id}/${
-				textBooks[textId][0].chapters[0]
-			}`;
-		} else {
-			// Default to first book/chapter available
-			bookChapterRoute = `${bookMetaData[0].book_id}/${
-				bookMetaData[0].chapters[0]
-			}`;
-		}
 		// If the book wasn't found and chapter wasn't found
 		// Go to the first book and first chapter
 		const foundBookId = foundBook && foundBook.book_id;
