@@ -13,7 +13,7 @@ function DonateButton() {
 	return (
 		<a
 			target={'_blank'}
-			href={'http://www.bible.is/donate'}
+			href={'https://www.faithcomesbyhearing.com/donate/form/183'}
 			className={'donate-button'}
 		>
 			<img
