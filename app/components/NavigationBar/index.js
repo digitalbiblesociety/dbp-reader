@@ -37,7 +37,6 @@ class NavigationBar extends React.PureComponent {
 						className="logo"
 						href={'http://www.bible.is'}
 						title={'http://www.bible.is'}
-						target={'_blank'}
 						rel={'noopener'}
 					>
 						{theme === 'paper' && userAgent !== 'ms' ? (
