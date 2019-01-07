@@ -160,7 +160,7 @@ export default class MyDocument extends Document {
 						fireFoxLink.href = 'https://www.moxilla.org.en-US/firefox/new';
 						fireFoxLink.target = '_blank';
 						fireFoxLink.textContent = 'FireFox';
-						startMessage.textContent = 'Bible.is no longer supports Internet Explorer. Please use one of the listed browsers: ';
+						startMessage.textContent = 'Many of the features on Bible.is are not supported on Internet Explorer. Please use one of the listed browsers instead: ';
 						middleMessage.textContent = ' or ';
 						closeButton.textContent = 'X';
 						closeButton.className = 'close-button';

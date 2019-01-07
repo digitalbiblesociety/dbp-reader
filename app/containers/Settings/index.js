@@ -26,6 +26,7 @@ import {
 import makeSelectSettings from './selectors';
 import reducer from './reducer';
 import { updateTheme, updateFontType, updateFontSize } from './actions';
+import Ieerror from '../../components/Ieerror';
 
 // add icon for settings close button
 export class Settings extends React.PureComponent {
@@ -138,6 +139,30 @@ export class Settings extends React.PureComponent {
 		const activeFontSize = this.props.userSettings.get('activeFontSize');
 		const activeFontType = this.props.userSettings.get('activeFontType');
 		const toggleOptions = this.props.userSettings.get('toggleOptions');
+		const isIe = this.props.isIe;
+
+		if (isIe) {
+			return (
+				<GenericErrorBoundary affectedArea="Settings">
+					<aside ref={this.setRef} className="settings">
+						<header>
+							<SvgWrapper
+								className={'icon'}
+								svgid={'arrow_right'}
+								onClick={this.handleSettingsModalToggle}
+							/>
+							<SvgWrapper
+								className={'icon'}
+								svgid={'text_options'}
+								onClick={this.handleSettingsModalToggle}
+							/>
+							<h1 className="section-title">Text Options</h1>
+						</header>
+						<Ieerror />
+					</aside>
+				</GenericErrorBoundary>
+			);
+		}
 
 		return (
 			<GenericErrorBoundary affectedArea="Settings">
@@ -352,6 +377,7 @@ Settings.propTypes = {
 	dispatch: PropTypes.func.isRequired,
 	userSettings: PropTypes.object.isRequired,
 	toggleSettingsModal: PropTypes.func.isRequired,
+	isIe: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({

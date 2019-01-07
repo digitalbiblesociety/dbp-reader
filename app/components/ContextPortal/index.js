@@ -6,6 +6,9 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import { compose } from 'redux';
 import {
 	FacebookShareButton,
 	TwitterShareButton,
@@ -17,6 +20,10 @@ import GooglePlusShare from '../GooglePlusShare';
 import HighlightColors from '../HighlightColors';
 import CloseMenuFunctions from '../../utils/closeMenuFunctions';
 import PopupMessage from '../PopupMessage';
+import { selectIeState } from './selectors';
+import injectReducer from '../../utils/injectReducer';
+import homepageReducer from '../../containers/HomePage/reducer';
+import Ieerror from '../Ieerror';
 
 // TODO: Clean up this component
 // Remove use of styled components
@@ -142,7 +149,24 @@ class ContextPortal extends React.PureComponent {
 			coordinates,
 			closeContextMenu,
 			selectedText,
+			isIe,
 		} = this.props;
+
+		if (isIe) {
+			return (
+				<div
+					style={{
+						position: 'absolute',
+						left: `${coordinates.x}px`,
+						top: `${coordinates.y}px`,
+					}}
+					ref={this.setComponentRef}
+					className={'context-menu shadow'}
+				>
+					<Ieerror />
+				</div>
+			);
+		}
 
 		const component = (
 			<div
@@ -286,6 +310,7 @@ ContextPortal.propTypes = {
 	selectedText: PropTypes.string,
 	coordinates: PropTypes.object,
 	notesActive: PropTypes.bool,
+	isIe: PropTypes.bool,
 	addHighlight: PropTypes.func,
 	setActiveNote: PropTypes.func,
 	addFacebookLike: PropTypes.func,
@@ -295,4 +320,17 @@ ContextPortal.propTypes = {
 	setActiveNotesView: PropTypes.func,
 };
 
-export default ContextPortal;
+const mapStateToProps = createStructuredSelector({
+	isIe: selectIeState(),
+});
+
+const withConnect = connect(mapStateToProps);
+const withHomepage = injectReducer({
+	key: 'homepage',
+	reducer: homepageReducer,
+});
+
+export default compose(
+	withConnect,
+	withHomepage,
+)(ContextPortal);

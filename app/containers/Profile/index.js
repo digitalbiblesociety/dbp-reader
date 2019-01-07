@@ -40,6 +40,7 @@ import { cleanNotebook } from '../Notes/actions';
 import makeSelectProfile from './selectors';
 import reducer from './reducer';
 import saga from './saga';
+import Ieerror from '../../components/Ieerror';
 
 export class Profile extends React.PureComponent {
 	state = {
@@ -237,8 +238,29 @@ export class Profile extends React.PureComponent {
 	}
 
 	render() {
-		const { toggleProfile, userAccessToken } = this.props;
+		const { toggleProfile, userAccessToken, isIe } = this.props;
 		const { popupOpen, popupCoords, clearAccessToken } = this.state;
+
+		if (isIe) {
+			return (
+				<aside ref={this.setRef} className="profile">
+					<header>
+						<h1>Profile</h1>
+						<SvgWrapper
+							className={'icon'}
+							svgid={'profile'}
+							onClick={toggleProfile}
+						/>
+						<SvgWrapper
+							className={'icon'}
+							svgid={'arrow_left'}
+							onClick={toggleProfile}
+						/>
+					</header>
+					<Ieerror />
+				</aside>
+			);
+		}
 
 		return (
 			<aside ref={this.setRef} className="profile">
@@ -278,6 +300,7 @@ Profile.propTypes = {
 	profile: PropTypes.object,
 	userAccessToken: PropTypes.string,
 	resetPasswordSent: PropTypes.func,
+	isIe: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({

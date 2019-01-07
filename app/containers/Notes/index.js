@@ -48,6 +48,7 @@ import makeSelectNotes, {
 } from './selectors';
 import reducer from './reducer';
 import messages from './messages';
+import Ieerror from '../../components/Ieerror';
 
 export class Notes extends React.PureComponent {
 	constructor(props) {
@@ -210,7 +211,37 @@ export class Notes extends React.PureComponent {
 			activeTextId,
 			vernacularNamesObject,
 			activeBookName,
+			isIe,
 		} = this.props;
+
+		if (isIe) {
+			return (
+				<aside ref={this.setRef} className="notes">
+					<header>
+						<SvgWrapper
+							className={'icon'}
+							fill="#fff"
+							svgid="arrow_right"
+							onClick={() => {
+								setActiveChild('notes');
+								toggleNotesModal();
+							}}
+						/>
+						<SvgWrapper
+							className={'icon book-icon-header'}
+							svgid={'notebook'}
+							onClick={() => {
+								setActiveChild('notes');
+								toggleNotesModal();
+							}}
+						/>
+						<h1 className="section-title">Notebook</h1>
+					</header>
+					<Ieerror />
+				</aside>
+			);
+		}
+
 		return (
 			<aside ref={this.setRef} className="notes">
 				<header>
@@ -379,6 +410,7 @@ Notes.propTypes = {
 	dispatch: PropTypes.func.isRequired,
 	toggleNotesModal: PropTypes.func,
 	authenticationStatus: PropTypes.bool,
+	isIe: PropTypes.bool,
 	note: PropTypes.object,
 	notes: PropTypes.object,
 	vernacularNamesObject: PropTypes.object,

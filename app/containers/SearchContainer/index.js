@@ -27,6 +27,7 @@ import {
 import makeSelectSearchContainer, { selectSearchResults } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
+import Ieerror from '../../components/Ieerror';
 
 export class SearchContainer extends React.PureComponent {
 	// eslint-disable-line react/prefer-stateless-function
@@ -285,8 +286,33 @@ export class SearchContainer extends React.PureComponent {
 	render() {
 		const { filterText } = this.state;
 		const { loadingResults } = this.props.searchcontainer;
+		const isIe = this.props.isIe;
 		// Need a good method of telling whether there are no results because a user hasn't searched
 		// or if it was because this was the first visit to the tab
+		if (isIe) {
+			return (
+				<aside className={'search-wrapper'}>
+					<aside ref={this.setRef} className="search">
+						<header>
+							<SvgWrapper className={'icon'} svgid={'search'} />
+							<input
+								onChange={this.handleSearchInputChange}
+								onKeyPress={this.handleSearchInputEnter}
+								value={filterText}
+								className={'input-class'}
+								placeholder={'Search'}
+							/>
+							<SvgWrapper
+								onClick={this.handleSearchModalToggle}
+								className={'icon'}
+								svgid={'arrow_left'}
+							/>
+						</header>
+						<Ieerror />
+					</aside>
+				</aside>
+			);
+		}
 		return (
 			<aside className={'search-wrapper'}>
 				<aside ref={this.setRef} className="search">
@@ -319,6 +345,7 @@ SearchContainer.propTypes = {
 	searchResults: PropTypes.object,
 	searchcontainer: PropTypes.object,
 	loadingResults: PropTypes.bool,
+	isIe: PropTypes.bool,
 	books: PropTypes.array,
 	activeFilesetId: PropTypes.string,
 };

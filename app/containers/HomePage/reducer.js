@@ -153,7 +153,7 @@ function homePageReducer(state = initialState, action) {
 		case GET_BOOKS:
 			return state.set('loadingNewChapterText', true).set('loadingBooks', true);
 		case SET_USER_AGENT:
-			return state.set('userAgent', 'ms');
+			return state.set('userAgent', 'ms').set('isIe', true);
 		case ADD_BOOKMARK_FAILURE:
 			return state.set('addBookmarkFailure', true);
 		case ADD_BOOKMARK_SUCCESS:

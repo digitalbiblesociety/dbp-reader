@@ -157,6 +157,19 @@ html #__next aside {
 		}
 	}
 }
+
+#internet-explorer-container {
+	padding: 10px;
+
+	a {
+		color: blue;
+		text-decoration: underline;
+
+		&:hover {
+			color: #6ec3e2;
+		}
+	}
+}
 // Remove default styling on em tags since I use those for highlighting
 em {
 	// Have both unset and inherit because of IE not supporting unset

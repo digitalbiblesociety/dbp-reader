@@ -506,6 +506,7 @@ class HomePage extends React.PureComponent {
 			isMenuOpen,
 			initialVolume,
 			initialPlaybackRate,
+			isIe,
 		} = this.props;
 		const { userId, userAuthenticated } = this.props.profile;
 
@@ -595,6 +596,7 @@ class HomePage extends React.PureComponent {
 							<Settings
 								userSettings={userSettings}
 								toggleSettingsModal={this.toggleSettingsModal}
+								isIe={isIe}
 							/>
 						</FadeTransition>
 					) : null}
@@ -604,6 +606,7 @@ class HomePage extends React.PureComponent {
 								resetPasswordSent={this.resetPasswordSent}
 								userAccessToken={token}
 								toggleProfile={this.toggleProfile}
+								isIe={isIe}
 							/>
 						</FadeTransition>
 					) : null}
@@ -618,6 +621,7 @@ class HomePage extends React.PureComponent {
 								toggleProfile={this.toggleProfile}
 								toggleNotesModal={this.toggleNotesModal}
 								openView={activeNotesView}
+								isIe={isIe}
 							/>
 						</FadeTransition>
 					) : null}
@@ -631,6 +635,7 @@ class HomePage extends React.PureComponent {
 								activeFilesetId={activeFilesetId}
 								books={books}
 								toggleSearchModal={this.toggleSearchModal}
+								isIe={isIe}
 							/>
 						</FadeTransition>
 					) : null}

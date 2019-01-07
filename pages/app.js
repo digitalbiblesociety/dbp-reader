@@ -30,6 +30,7 @@ import svg4everybody from '../app/utils/svgPolyfill';
 import removeDuplicates from '../app/utils/removeDuplicateObjects';
 import parseCookie from '../app/utils/parseCookie';
 import getFirstChapterReference from '../app/utils/getFirstChapterReference';
+import isUserAgentInternetExplorer from '../app/utils/isUserAgentInternetExplorer';
 
 class AppContainer extends React.Component {
 	static displayName = 'Main app'; // eslint-disable-line no-undef
@@ -70,26 +71,12 @@ class AppContainer extends React.Component {
 		// Intercept all route changes to ensure that the loading spinner starts
 		Router.router.events.on('routeChangeStart', this.handleRouteChange);
 
-		const browserObject = {
-			agent: '',
-			majorVersion: '',
-			version: '',
-		};
-		if (/msie [0-9]{1}/i.test(navigator.userAgent)) {
-			browserObject.agent = 'msie';
-			browserObject.majorVersion = parseInt(
-				/MSIE ([0-9]{1})/i.exec(navigator.userAgent)[1],
-				10,
-			);
-			browserObject.version = /MSIE ([0-9.]+)/i.exec(navigator.userAgent)[1];
-		} else if (/Trident\/[7]{1}/i.test(navigator.userAgent)) {
-			browserObject.agent = 'msie';
-			browserObject.majorVersion = 11;
-			browserObject.version = '11';
-		}
-		if (browserObject.agent === 'msie') {
+		if (this.props.isIe) {
 			this.props.dispatch(setUA());
-			if (typeof svg4everybody === 'function') {
+			if (
+				typeof svg4everybody === 'function' &&
+				typeof window !== 'undefined'
+			) {
 				svg4everybody();
 			}
 		}
@@ -119,6 +106,7 @@ class AppContainer extends React.Component {
 			routeLocation,
 			initialPlaybackRate,
 			initialVolume,
+			isIe,
 		} = this.props;
 		// Defaulting description text to an empty string since no metadata is better than inaccurate metadata
 		const descriptionText =
@@ -164,6 +152,7 @@ class AppContainer extends React.Component {
 				<HomePage
 					initialPlaybackRate={initialPlaybackRate}
 					initialVolume={initialVolume}
+					isIe={isIe}
 				/>
 			</div>
 		);
@@ -195,6 +184,13 @@ AppContainer.getInitialProps = async (context) => {
 	let isAuthenticated = false;
 	let initialVolume = 1;
 	let initialPlaybackRate = 1;
+	let isIe = false;
+
+	if (req && req.headers) {
+		isIe = isUserAgentInternetExplorer(req.headers['user-agent']);
+	} else {
+		isIe = isUserAgentInternetExplorer(navigator.userAgent);
+	}
 
 	if (req && req.headers.cookie) {
 		// Get all cookies that the page needs
@@ -558,6 +554,7 @@ AppContainer.getInitialProps = async (context) => {
 				textDirection: bible.alphabet ? bible.alphabet.direction : 'ltr',
 				activeBookId: bookId.toUpperCase() || '',
 				userId,
+				isIe,
 				userAuthenticated: isAuthenticated || false,
 				isFromServer,
 				match: {
@@ -604,6 +601,7 @@ AppContainer.getInitialProps = async (context) => {
 		userId: userId || '',
 		isAuthenticated: isAuthenticated || false,
 		isFromServer,
+		isIe,
 		routeLocation,
 		match: {
 			params: {
@@ -629,6 +627,7 @@ AppContainer.propTypes = {
 	chapterText: PropTypes.array,
 	fetchedUrls: PropTypes.array,
 	isFromServer: PropTypes.bool,
+	isIe: PropTypes.bool,
 	routeLocation: PropTypes.string,
 	activeBookName: PropTypes.string,
 	activeChapter: PropTypes.number,
