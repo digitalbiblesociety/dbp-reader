@@ -25,10 +25,6 @@ class AccountSettings extends React.PureComponent {
 		this.setState({ email: e.target.value });
 	};
 
-	handleAccountDeletion = () => {
-		this.props.deleteUser({ userId: this.props.userId });
-	};
-
 	handleFileInputChange = (e) => {
 		if (e.target.files[0]) {
 			this.props.changePicture({ avatar: e.target.files[0] });
@@ -40,16 +36,6 @@ class AccountSettings extends React.PureComponent {
 			setTimeout(() => {
 				this.setState({ popupOpen: false });
 			}, 2500);
-		}
-	};
-
-	sendUpdateEmail = () => {
-		const currentEmail = this.props.profile.email;
-		const newEmail = this.state.email;
-
-		if (newEmail !== currentEmail && newEmail) {
-			// Dispatch action to change email
-			this.props.updateEmail({ email: newEmail, userId: this.props.userId });
 		}
 	};
 
@@ -94,24 +80,8 @@ class AccountSettings extends React.PureComponent {
 							value={email}
 						/>
 					</span>
-					<span
-						role="button"
-						tabIndex={0}
-						className="button"
-						onClick={this.sendUpdateEmail}
-					>
-						Change e-mail
-					</span>
 				</div>
 				<DonateButton />
-				<div
-					className="button delete-account"
-					role="button"
-					tabIndex={0}
-					onClick={this.handleAccountDeletion}
-				>
-					Delete Account
-				</div>
 				{popupOpen ? (
 					<PopupMessage
 						message={'Please select a valid image file.'}
@@ -126,11 +96,8 @@ class AccountSettings extends React.PureComponent {
 
 AccountSettings.propTypes = {
 	logout: PropTypes.func,
-	deleteUser: PropTypes.func,
-	updateEmail: PropTypes.func,
 	changePicture: PropTypes.func,
 	profile: PropTypes.object,
-	userId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
 export default AccountSettings;
