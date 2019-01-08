@@ -97,6 +97,7 @@ class Text extends React.PureComponent {
 					footnoteState: false,
 					activeVerseInfo: { verse: 0 },
 					loadingNextPage: false,
+					contextMenuState: false,
 				},
 				() => {
 					this.props.setTextLoadingState({ state: false });
@@ -104,19 +105,23 @@ class Text extends React.PureComponent {
 			);
 		}
 		if (!isEqual(nextProps.text, this.props.text)) {
-			this.setState({ activeVerseInfo: { verse: 0 }, loadingNextPage: false });
+			this.setState({
+				activeVerseInfo: { verse: 0 },
+				loadingNextPage: false,
+				contextMenuState: false,
+			});
 			this.props.setTextLoadingState({ state: false });
 		}
 		if (nextProps.verseNumber !== this.props.verseNumber) {
-			this.setState({ loadingNextPage: false });
+			this.setState({ loadingNextPage: false, contextMenuState: false });
 			this.props.setTextLoadingState({ state: false });
 		}
 		if (nextProps.activeChapter !== this.props.activeChapter) {
-			this.setState({ loadingNextPage: false });
+			this.setState({ loadingNextPage: false, contextMenuState: false });
 			this.props.setTextLoadingState({ state: false });
 		}
 		if (nextProps.activeBookId !== this.props.activeBookId) {
-			this.setState({ loadingNextPage: false });
+			this.setState({ loadingNextPage: false, contextMenuState: false });
 			this.props.setTextLoadingState({ state: false });
 		}
 	}
