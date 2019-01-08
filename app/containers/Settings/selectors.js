@@ -8,17 +8,17 @@ const selectSettingsDomain = (state) => state.get('settings');
 /**
  * Other specific selectors
  */
+const selectActiveTheme = () =>
+	createSelector(selectSettingsDomain, (settings) =>
+		settings.getIn(['userSettings', 'activeTheme']),
+	);
 
 /**
  * Default selector used by Settings
  */
 
-const makeSelectSettings = () => createSelector(
-  selectSettingsDomain,
-  (substate) => substate.toJS()
-);
+const makeSelectSettings = () =>
+	createSelector(selectSettingsDomain, (substate) => substate.toJS());
 
 export default makeSelectSettings;
-export {
-  selectSettingsDomain,
-};
+export { selectSettingsDomain, selectActiveTheme };
