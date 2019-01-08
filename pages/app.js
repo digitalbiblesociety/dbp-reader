@@ -401,6 +401,7 @@ AppContainer.getInitialProps = async (context) => {
 			filesets,
 			hasVideo,
 			bookMetaResponse,
+			bookMetaData,
 		);
 
 		// If the book wasn't found and chapter wasn't found
@@ -411,7 +412,7 @@ AppContainer.getInitialProps = async (context) => {
 		/**
 		 * 1. Visit /bible/bibleId
 		 */
-		if (!foundBook && !foundChapter) {
+		if (!foundBook && (!foundChapter && foundChapter !== 0)) {
 			// Logs the url that will be redirected to
 			if (serverRes) {
 				// If there wasn't a book then we need to redirect to mark for video resources and matthew for other resources
@@ -429,7 +430,7 @@ AppContainer.getInitialProps = async (context) => {
 		} else if (foundBook) {
 			// if the book was found
 			// check for the chapter
-			if (!foundChapter) {
+			if (!foundChapter && foundChapter !== 0) {
 				// if the chapter was not found
 				// go to the book and the first chapter for that book
 				if (serverRes) {
