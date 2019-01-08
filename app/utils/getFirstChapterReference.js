@@ -11,20 +11,28 @@ import getFirstMatchingChapter from './getFirstMatchingChapter';
  * 7. If has fileset with size=OT && type=[text_plain, text_format]
  */
 
-const getFirstChapterReference = (filesets, hasVideo, bookMetaResponse) => {
+const getFirstChapterReference = (
+	filesets,
+	hasVideo,
+	bookMetaResponse,
+	bookMetaData,
+) => {
 	const hasOtAudio = filesets.some(
 		(fileset) =>
-			fileset.size === 'OT' &&
-			(fileset.type === 'audio' || fileset.type === 'audio_drama'),
+			fileset.size === 'OT' ||
+			(fileset.size === 'OTP' &&
+				(fileset.type === 'audio' || fileset.type === 'audio_drama')),
 	);
 	const hasNtAudio = filesets.some(
 		(fileset) =>
-			fileset.size === 'NT' &&
+			(fileset.size === 'NT' || fileset.size === 'NTP') &&
 			(fileset.type === 'audio' || fileset.type === 'audio_drama'),
 	);
 	const hasOtText = filesets.some(
 		(fileset) =>
-			(fileset.size === 'OT' || fileset.size === 'C') &&
+			(fileset.size === 'OT' ||
+				fileset.size === 'OTP' ||
+				fileset.size === 'C') &&
 			(fileset.type === 'text_plain' || fileset.type === 'text_format'),
 	);
 	const hasNtText = filesets.some(
@@ -45,10 +53,14 @@ const getFirstChapterReference = (filesets, hasVideo, bookMetaResponse) => {
 		}`;
 	} else if (hasNtText && hasNtAudio) {
 		const audioDrama = filesets.find(
-			(fileset) => fileset.size === 'NT' && fileset.type === 'audio_drama',
+			(fileset) =>
+				(fileset.size === 'NT' || fileset.size === 'NTP') &&
+				fileset.type === 'audio_drama',
 		);
 		const audio = filesets.find(
-			(fileset) => fileset.size === 'NT' && fileset.type === 'audio',
+			(fileset) =>
+				(fileset.size === 'NT' || fileset.size === 'NTP') &&
+				fileset.type === 'audio',
 		);
 		const textFormat = filesets.find(
 			(fileset) =>
@@ -74,19 +86,27 @@ const getFirstChapterReference = (filesets, hasVideo, bookMetaResponse) => {
 	} else if (hasOtText && hasOtAudio) {
 		// Handles getting the book/chapter that has both text and audio in the Old Testament
 		const audioDrama = filesets.find(
-			(fileset) => fileset.size === 'OT' && fileset.type === 'audio_drama',
+			(fileset) =>
+				(fileset.size === 'OT' || fileset.size === 'OTP') &&
+				fileset.type === 'audio_drama',
 		);
 		const audio = filesets.find(
-			(fileset) => fileset.size === 'OT' && fileset.type === 'audio',
+			(fileset) =>
+				(fileset.size === 'OT' || fileset.size === 'OTP') &&
+				fileset.type === 'audio',
 		);
 		const textFormat = filesets.find(
 			(fileset) =>
-				(fileset.size === 'OT' || fileset.size === 'C') &&
+				(fileset.size === 'OT' ||
+					fileset.size === 'OTP' ||
+					fileset.size === 'C') &&
 				fileset.type === 'text_format',
 		);
 		const textPlain = filesets.find(
 			(fileset) =>
-				(fileset.size === 'OT' || fileset.size === 'C') &&
+				(fileset.size === 'OT' ||
+					fileset.size === 'OTP' ||
+					fileset.size === 'C') &&
 				fileset.type === 'text_plain',
 		);
 
@@ -103,10 +123,14 @@ const getFirstChapterReference = (filesets, hasVideo, bookMetaResponse) => {
 	} else if (hasNtAudio) {
 		// Gets book/chapter for just audio in the New Testament
 		const audioDrama = filesets.find(
-			(fileset) => fileset.size === 'NT' && fileset.type === 'audio_drama',
+			(fileset) =>
+				(fileset.size === 'NT' || fileset.size === 'NTP') &&
+				fileset.type === 'audio_drama',
 		);
 		const audio = filesets.find(
-			(fileset) => fileset.size === 'NT' && fileset.type === 'audio',
+			(fileset) =>
+				(fileset.size === 'NT' || fileset.size === 'NTP') &&
+				fileset.type === 'audio',
 		);
 		const audioId = audioDrama ? audioDrama.id : audio.id;
 
@@ -120,10 +144,14 @@ const getFirstChapterReference = (filesets, hasVideo, bookMetaResponse) => {
 	} else if (hasOtAudio) {
 		// Gets book/chapter for just audio in the Old Testament
 		const audioDrama = filesets.find(
-			(fileset) => fileset.size === 'OT' && fileset.type === 'audio_drama',
+			(fileset) =>
+				(fileset.size === 'OT' || fileset.size === 'OTP') &&
+				fileset.type === 'audio_drama',
 		);
 		const audio = filesets.find(
-			(fileset) => fileset.size === 'OT' && fileset.type === 'audio',
+			(fileset) =>
+				(fileset.size === 'OT' || fileset.size === 'OTP') &&
+				fileset.type === 'audio',
 		);
 		const audioId = audioDrama ? audioDrama.id : audio.id;
 
@@ -161,12 +189,16 @@ const getFirstChapterReference = (filesets, hasVideo, bookMetaResponse) => {
 		// Gets book/chapter for just text in the Old Testament
 		const textFormat = filesets.find(
 			(fileset) =>
-				(fileset.size === 'OT' || fileset.size === 'C') &&
+				(fileset.size === 'OT' ||
+					fileset.size === 'OTP' ||
+					fileset.size === 'C') &&
 				fileset.type === 'text_format',
 		);
 		const textPlain = filesets.find(
 			(fileset) =>
-				(fileset.size === 'OT' || fileset.size === 'C') &&
+				(fileset.size === 'OT' ||
+					fileset.size === 'OTP' ||
+					fileset.size === 'C') &&
 				fileset.type === 'text_plain',
 		);
 		const textId = textFormat ? textFormat.id : textPlain.id;
