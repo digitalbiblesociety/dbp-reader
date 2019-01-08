@@ -336,7 +336,8 @@ function PrivacyPolicy() {
 				consumer Web site at{' '}
 				<a href="http://www.networkadvertising.org/consumer">
 					http://www.networkadvertising.org/consumer
-				</a>.
+				</a>
+				.
 			</p>
 			<p />
 			<h2>14. Security</h2>

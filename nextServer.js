@@ -169,8 +169,8 @@ app
 		});
 
 		server.get('/terms', (req, res) => handle(req, res));
-		server.get('/privacy-policy', (req, res) => handle(req, res));
-		server.get('/about-page', (req, res) => handle(req, res));
+		server.get('/privacy', (req, res) => handle(req, res));
+		server.get('/about', (req, res) => handle(req, res));
 
 		server.get('/bible/:bibleId/:bookId/:chapter', (req, res, nextP) => {
 			const actualPage = '/app';
