@@ -1095,6 +1095,22 @@ class Text extends React.PureComponent {
 		setTimeout(() => this.setState({ popupOpen: false }), 2500);
 	};
 
+	deleteHighlights = (highlightObject, highlights) => {
+		const space =
+			highlightObject.highlightStart + highlightObject.highlightedWords;
+		const highsToDelete = highlights
+			.filter(
+				(high) =>
+					high.verse_start === parseInt(highlightObject.verseStart, 10) &&
+					(high.highlight_start <= space &&
+						high.highlight_start + high.highlighted_words >=
+							highlightObject.highlightStart),
+			)
+			.reduce((a, h) => [...a, h.id], []);
+
+		this.props.deleteHighlights({ ids: highsToDelete });
+	};
+
 	addHighlight = ({ color, popupCoords }) => {
 		let highlightObject = {};
 		// User must be signed in for the highlight to be added
@@ -1178,7 +1194,9 @@ class Text extends React.PureComponent {
 					};
 				}
 
-				if (highlightObject) {
+				if (color === 'none') {
+					this.deleteHighlights(highlightObject, this.props.highlights);
+				} else if (highlightObject) {
 					this.props.addHighlight(highlightObject);
 				}
 
@@ -1396,18 +1414,7 @@ class Text extends React.PureComponent {
 					highlightObject.highlightStart = highlightStart;
 					highlightObject.highlightedWords = highlightedWords;
 					if (color === 'none') {
-						const highs = this.props.highlights;
-						const space = highlightStart + highlightedWords;
-						const highsToDelete = highs
-							.filter(
-								(high) =>
-									high.verse_start === firstVerse &&
-									(high.highlight_start <= space &&
-										high.highlight_start + high.highlighted_words >=
-											highlightStart),
-							)
-							.reduce((a, h) => [...a, h.id], []);
-						this.props.deleteHighlights({ ids: highsToDelete });
+						this.deleteHighlights(highlightObject, this.props.highlights);
 					} else {
 						this.props.addHighlight({
 							bible: this.props.activeTextId,
