@@ -544,9 +544,9 @@ class Text extends React.PureComponent {
 					const verseText =
 						[
 							...document.querySelectorAll(
-								`[data-id=${this.props.activeBookId}${
+								`[data-id="${this.props.activeBookId}${
 									this.props.activeChapter
-								}_${lastVerse}]`,
+								}_${lastVerse}"]`,
 							),
 						].reduce((a, c) => a.concat(' ', c.textContent), '') || '';
 
