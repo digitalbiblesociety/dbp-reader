@@ -21,7 +21,7 @@ export default class MyDocument extends Document {
 		return (
 			<html style={this.props.theme ? themes[this.props.theme] : {}}>
 				<Head>
-					{process.env.NODE_ENV === 'production' ? (
+					{process.env.NODE_ENV === 'production' && !process.env.IS_DEV ? (
 						<script
 							type="text/javascript"
 							dangerouslySetInnerHTML={{
@@ -30,7 +30,7 @@ export default class MyDocument extends Document {
 									);var f=d.getElementsByTagName(s)[0],
 									j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 									'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-									})(window,document,'script','dataLayer','GTM-WG2QTJC');`,
+									})(window,document,'script','dataLayer','GTM-N48RPTL');`,
 							}}
 						/>
 					) : null}
@@ -189,9 +189,9 @@ export default class MyDocument extends Document {
 				</Head>
 				<body>
 					<noscript>
-						{process.env.NODE_ENV === 'production' ? (
+						{process.env.NODE_ENV === 'production' && !process.env.IS_DEV ? (
 							<iframe
-								src="https://www.googletagmanager.com/ns.html?id=GTM-WG2QTJC"
+								src="https://www.googletagmanager.com/ns.html?id=GTM-N48RPTL"
 								height="0"
 								width="0"
 								style={{ display: 'none', visibility: 'hidden' }}
