@@ -252,6 +252,11 @@ export class AudioPlayer extends React.Component {
 
 	autoPlayListener = () => {
 		// can accept event as a parameter
+		if (this.audioRef && this.audioRef.duration) {
+			this.setState({
+				duration: this.audioRef.duration,
+			});
+		}
 		// If the chapter is loaded and the player is open
 		if (!this.state.loadingNextChapter && this.props.audioPlayerState) {
 			this.playAudio();
@@ -610,9 +615,9 @@ export class AudioPlayer extends React.Component {
 					<div
 						className={
 							audioPlayerState &&
-								(!videoPlayerOpen || !hasVideo) &&
-								hasAudio &&
-								source !== ''
+							(!videoPlayerOpen || !hasVideo) &&
+							hasAudio &&
+							source !== ''
 								? 'audio-player-container'
 								: 'audio-player-container closed'
 						}
