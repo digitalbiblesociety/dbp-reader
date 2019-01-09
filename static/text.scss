@@ -8,18 +8,6 @@
 		min-height: 0;
 	}
 
-	&.has-video {
-		padding-top: 0;
-		// height: calc(100vh - 185px);
-	}
-
-	&.video-player-open {
-		//padding-bottom: 478px;
-		padding-top: 0;
-		// height: calc(100vh - 585px);
-		// height: calc(100vh - 185px - 480px);
-	}
-
 	&.audio-player-open {
 		padding-bottom: 50px;
 	}
@@ -28,6 +16,20 @@
 		&.audio-player-open {
 			padding-bottom: 83px;
 		}
+	}
+
+	&.has-video {
+		padding-top: 0;
+		padding-bottom: 0;
+		// height: calc(100vh - 185px);
+	}
+
+	&.video-player-open {
+		//padding-bottom: 478px;
+		padding-top: 0;
+		padding-bottom: 0;
+		// height: calc(100vh - 585px);
+		// height: calc(100vh - 185px - 480px);
 	}
 
 	@include css4 {
