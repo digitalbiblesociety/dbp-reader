@@ -13,11 +13,10 @@ import VideoList from '../../components/VideoList';
 import VideoProgressBar from '../../components/VideoProgressBar';
 import VideoOverlay from '../../components/VideoOverlay';
 import deepDifferenceObject from '../../utils/deepDifferenceObject';
-import { selectHasVideo } from './selectors';
+import { selectHasVideo, selectPlayerOpenState } from './selectors';
 
 class VideoPlayer extends React.PureComponent {
 	state = {
-		playerOpen: true,
 		paused: true,
 		elipsisOpen: false,
 		volume: 1,
@@ -84,6 +83,11 @@ class VideoPlayer extends React.PureComponent {
 				bookId: nextProps.bookId || '',
 				chapter: nextProps.chapter,
 			});
+		} else if (
+			nextProps.hasVideo !== this.props.hasVideo &&
+			!nextProps.hasVideo
+		) {
+			this.props.dispatch(closeVideoPlayer());
 		}
 	}
 
@@ -346,7 +350,7 @@ class VideoPlayer extends React.PureComponent {
 						);
 						this.hls.media.addEventListener('seeked', this.seekedEventListener);
 						this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
-							if (this.state.playerOpen && thumbnailClick) {
+							if (this.props.playerOpen && thumbnailClick) {
 								this.hls.media.play();
 								this.setState({ paused: false });
 							}
@@ -447,13 +451,12 @@ class VideoPlayer extends React.PureComponent {
 	};
 
 	closePlayer = () => {
-		this.setState({ playerOpen: false, paused: true });
+		this.setState({ paused: true });
 		this.pauseVideo();
 		this.props.dispatch(closeVideoPlayer());
 	};
 
 	openPlayer = () => {
-		this.setState({ playerOpen: true });
 		this.props.dispatch(openVideoPlayer());
 	};
 
@@ -557,7 +560,6 @@ class VideoPlayer extends React.PureComponent {
 
 	render() {
 		const {
-			playerOpen,
 			playlist,
 			volume,
 			paused,
@@ -568,6 +570,7 @@ class VideoPlayer extends React.PureComponent {
 		} = this.state;
 		const {
 			hasVideo,
+			playerOpen,
 			fileset,
 			books,
 			bookId,
@@ -660,6 +663,7 @@ VideoPlayer.propTypes = {
 	books: PropTypes.array,
 	textId: PropTypes.string,
 	text: PropTypes.array,
+	playerOpen: PropTypes.bool,
 };
 
 const mapDispatchToProps = (dispatch) => ({
@@ -668,6 +672,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 const mapStateToProps = createStructuredSelector({
 	hasVideo: selectHasVideo(),
+	playerOpen: selectPlayerOpenState(),
 });
 
 const withConnect = connect(

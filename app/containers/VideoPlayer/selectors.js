@@ -2,6 +2,10 @@ import { createSelector } from 'reselect';
 import { selectNotesDomain } from '../Notes/selectors';
 
 const selectVideoDomain = (state) => state.get('videoPlayer');
+const selectHomepageDomain = (state) => state.get('homepage');
+
+const selectPlayerOpenState = () =>
+	createSelector(selectHomepageDomain, (home) => home.get('videoPlayerOpen'));
 
 const selectVideoList = () =>
 	createSelector(selectVideoDomain, (videoState) =>
@@ -29,4 +33,4 @@ const makeSelectVideo = () =>
 
 export default makeSelectVideo;
 
-export { selectVideoList, selectHasVideo };
+export { selectVideoList, selectHasVideo, selectPlayerOpenState };
