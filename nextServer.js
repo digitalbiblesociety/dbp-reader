@@ -130,7 +130,7 @@ app
 				if (err) {
 					res.status(500).send('Could not get the revision head');
 				} else {
-					res.status(200).json({ head: stdout.replace('\\n', '') });
+					res.status(200).json({ head: stdout.replace('\n', '') });
 				}
 			});
 		});
