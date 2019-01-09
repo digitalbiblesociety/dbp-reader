@@ -12,13 +12,18 @@ import SvgWrapper from '../app/components/SvgWrapper';
 // import messages from './messages';
 
 function PrivacyPolicy() {
+	const onClick = () => {
+		if (typeof history !== 'undefined') {
+			history.back();
+		}
+	};
 	return (
 		<div className="policy-page-container">
 			<header className="privacy-header">
 				<a
 					className="logo"
-					href={'https://live.bible.is'}
-					title={'https://live.bible.is'}
+					onClick={onClick}
+					title={'Go Back'}
 					rel={'noopener'}
 				>
 					<SvgWrapper className={'svg'} svgid={'bible.is_logo'} />
