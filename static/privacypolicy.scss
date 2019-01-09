@@ -1,18 +1,111 @@
 .policy-page-container {
-	margin: 0 auto;
-}
-.policy-page-container .intro {
-	font-family: 'DIN_Medium', 'Helvetica', 'Arial', sans-serif;
-	font-weight: bold;
-	display: block;
-	text-align: center;
-	line-height: 1.2em;
-	color: #2d3137;
-	margin: 70px auto -0.5em auto;
-}
-.policy-page-container .one-space {
-	margin-top: 2em;
-}
-.policy-page-container .clear {
-	clear: both;
+	background-color: #fdf9f3;
+	color: black;
+
+	header {
+		height: 54px;
+		width: 100vw;
+		background-color: #9e1e35;
+		// padding: 12.5px 15px;
+
+		.logo {
+			height: 54px;
+			width: calc(10% + 15px);
+			min-width: 111px;
+			display: flex;
+			align-items: center;
+			padding-left: 15px;
+
+			&:hover {
+				opacity: 0.65;
+				background: rgba(0, 0, 0, 0.2);
+			}
+			//max-width: 111px;
+			svg {
+				height: 26px;
+				width: 81px;
+			}
+		}
+	}
+
+	footer {
+		height: 54px;
+		width: 100vw;
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		background-color: #9e1e35;
+	}
+
+	main {
+		margin: 0 auto;
+		max-width: 650px;
+		height: calc(100vh - 108px);
+		max-height: calc(100vh - 108px);
+		overflow-x: hidden;
+		overflow-y: scroll;
+		padding: 15px;
+
+		p {
+			margin: 0 0 20px;
+			line-height: 1.5em;
+			text-shadow: 0 1px 0 #fdf9f3;
+			margin-block-start: 1em;
+			margin-block-end: 1em;
+		}
+
+		ul {
+			display: block;
+			list-style-type: disc;
+			list-style-position: inside;
+			margin-block-start: 1em;
+			margin-block-end: 1em;
+			margin-inline-start: 0px;
+			margin-inline-end: 0px;
+			padding-inline-start: 40px;
+
+			& ul {
+				list-style-type: circle;
+			}
+		}
+
+		li {
+			font-size: 18px;
+			line-height: 1.3em;
+			display: list-item;
+			text-align: -webkit-match-parent;
+		}
+
+		.p_li {
+			margin-left: 10px;
+			padding: 0 0 5px;
+		}
+
+		.p_ul {
+			margin-left: 10px;
+			padding: 0 0 5px;
+		}
+	}
+
+	.intro {
+		display: block;
+		text-align: center;
+		line-height: 1.2em;
+		color: #2d3137;
+		font-size: 3em;
+		font-weight: bold;
+	}
+
+	.one-space {
+		margin-top: 2em;
+	}
+
+	strong {
+		font-weight: bold;
+		font-size: 18px;
+	}
+
+	.clear {
+		clear: both;
+	}
 }
