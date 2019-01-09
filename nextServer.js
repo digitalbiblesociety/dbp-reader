@@ -4,6 +4,7 @@ if (process.env.NODE_ENV === 'production' && process.env.TEST !== 'test') {
 }
 require('@babel/polyfill');
 require('dotenv').config();
+const cp = require('child_process');
 const express = require('express');
 const next = require('next');
 const compression = require('compression');
@@ -123,6 +124,16 @@ app
 		server.get('/sitemap.xml', (req, res) =>
 			res.status(200).sendFile('sitemap-index.xml', sitemapOptions),
 		);
+
+		server.get('/git/version', async (req, res) => {
+			cp.exec('git rev-parse HEAD', (err, stdout) => {
+				if (err) {
+					res.status(500).send('Could not get the revision head');
+				} else {
+					res.status(200).json(JSON.stringify({ head: stdout }));
+				}
+			});
+		});
 
 		server.get('/status', async (req, res) => {
 			const ok = await fetch(
