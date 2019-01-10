@@ -2,6 +2,7 @@
 oldCodeSnippets.js
 coverage
 build
+bundles
 node_modules
 stats.json
 .env
