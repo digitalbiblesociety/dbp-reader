@@ -142,6 +142,14 @@ class VersionList extends React.PureComponent {
 				.filter((f) => f.get('type') !== 'app');
 
 			if (audioType) {
+				if (
+					typeof window !== 'undefined' &&
+					(audioType === 'audio' || audioType === 'audio_drama')
+				) {
+					document.cookie = `bible_is_audio_type=${audioType};path=/bible/${bible
+						.get('abbr')
+						.toLowerCase()}`;
+				}
 				setActiveText({
 					textId: bible.get('abbr'),
 					textName:

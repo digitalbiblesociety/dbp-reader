@@ -2,13 +2,16 @@ import get from 'lodash/get';
 import request from './request';
 // TODO: Rewrite handling of audio calls to intelligently determine whether
 // the resource is NT or OT and reduce number of calls
-export default async (filesets, bookId, chapter) => {
+export default async (filesets, bookId, chapter, audioType) => {
 	const audioReturnObject = { type: 'loadaudio', audioPaths: [''] };
 
 	const filteredFilesets = filesets.reduce((a, file) => {
 		const newFile = { ...a };
 
-		if (
+		if (audioType && file.type === audioType && file.id.slice(-4) !== 'DA16') {
+			newFile[file.id] = file;
+		} else if (
+			!audioType &&
 			(file.type === 'audio' || file.type === 'audio_drama') &&
 			file.id.slice(-4) !== 'DA16'
 		) {
@@ -31,6 +34,8 @@ export default async (filesets, bookId, chapter) => {
 
 	Object.entries(filteredFilesets)
 		.sort((a, b) => {
+			if (a[1].type === audioType) return 1;
+			if (b[1].type === audioType) return 1;
 			if (a[1].type === 'audio_drama') return 1;
 			if (b[1].type === 'audio_drama') return 1;
 			if (a[1].type > b[1].type) return 1;

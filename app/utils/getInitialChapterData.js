@@ -8,6 +8,7 @@ export default async ({
 	formattedFilesetIds,
 	bookId: lowerCaseBookId,
 	chapter,
+	audioType,
 }) => {
 	// console.log('filesets, lowerCaseBookId, chapter', filesets, lowerCaseBookId, chapter);
 	// Gather all initial data
@@ -84,7 +85,12 @@ export default async ({
 			});
 	}
 	const formattedText = await Promise.all(formattedPromises);
-	const audioReturn = await getAudio(filesets, lowerCaseBookId, chapter)
+	const audioReturn = await getAudio(
+		filesets,
+		lowerCaseBookId,
+		chapter,
+		audioType,
+	)
 		.then((data) => data)
 		.catch((err) => {
 			if (process.env.NODE_ENV === 'development') {

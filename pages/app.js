@@ -178,6 +178,7 @@ AppContainer.getInitialProps = async (context) => {
 		name: userName,
 		nickname: userName,
 	};
+	// Using let here because the cookie data can come from the server or the client
 	let userId = reqUserId || '';
 	let hasVideo = false;
 	let isFromServer = true;
@@ -185,6 +186,7 @@ AppContainer.getInitialProps = async (context) => {
 	let initialVolume = 1;
 	let initialPlaybackRate = 1;
 	let isIe = false;
+	let audioType = '';
 
 	if (req && req.headers) {
 		isIe = isUserAgentInternetExplorer(req.headers['user-agent']);
@@ -195,6 +197,9 @@ AppContainer.getInitialProps = async (context) => {
 	if (req && req.headers.cookie) {
 		// Get all cookies that the page needs
 		const cookieData = parseCookie(req.headers.cookie);
+		if (cookieData.bible_is_audio_type) {
+			audioType = cookieData.bible_is_audio_type;
+		}
 
 		if (userId) {
 			// Authentication Information
@@ -237,6 +242,9 @@ AppContainer.getInitialProps = async (context) => {
 		isFromServer = false;
 	} else if (typeof document !== 'undefined' && document.cookie) {
 		const cookieData = parseCookie(document.cookie);
+		if (cookieData.bible_is_audio_type) {
+			audioType = cookieData.bible_is_audio_type;
+		}
 
 		if (userId) {
 			setUserInfo({ userId, userEmail, userName });
@@ -451,7 +459,6 @@ AppContainer.getInitialProps = async (context) => {
 		}
 	}
 	// dont change book or chapter
-
 	let initData = {
 		plainText: [],
 		formattedText: '',
@@ -466,6 +473,7 @@ AppContainer.getInitialProps = async (context) => {
 			chapter,
 			plainFilesetIds,
 			formattedFilesetIds,
+			audioType,
 		}).catch((err) => {
 			if (process.env.NODE_ENV === 'development') {
 				console.error(

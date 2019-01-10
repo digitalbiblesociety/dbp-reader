@@ -1,5 +1,4 @@
 import fetch from 'isomorphic-fetch';
-import forge from 'node-forge';
 
 const parseJSON = (res) => res.json();
 
@@ -30,12 +29,7 @@ const checkStatus = (res) => {
 };
 
 const request = (url, options = {}) =>
-	fetch(url, {
-		...options,
-		Authorization: forge.md.sha256.create(
-			`${process.env.DBP_API_KEY}${process.env.NOTES_PROJECT_ID}${new Date()}`,
-		),
-	})
+	fetch(url, options)
 		.then(checkStatus)
 		.then(parseJSON);
 
