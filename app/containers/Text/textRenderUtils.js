@@ -54,7 +54,7 @@ export const getClassNameForTextContainer = ({
 		classNames += ' sub-footer-open';
 	}
 
-	if (audioPlayerState) {
+	if (audioPlayerState && (!hasVideo || (hasVideo && !videoPlayerOpen))) {
 		classNames += ' audio-player-open';
 	}
 
