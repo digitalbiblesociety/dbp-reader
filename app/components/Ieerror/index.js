@@ -19,7 +19,7 @@ function Ieerror() {
 			&nbsp;
 			<FormattedMessage {...messages.noSupportOr} />
 			&nbsp;
-			<a href={'https://www.moxilla.org.en-US/firefox/new'} target={'_blank'}>
+			<a href={'https://www.mozilla.org/en-US/firefox/'} target={'_blank'}>
 				<FormattedMessage {...messages.firefox} />
 			</a>
 		</div>

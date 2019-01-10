@@ -157,7 +157,7 @@ export default class MyDocument extends Document {
 						chromeLink.href = 'https://www.google.com/chrome';
 						chromeLink.target = '_blank';
 						chromeLink.textContent = 'Chrome';
-						fireFoxLink.href = 'https://www.moxilla.org.en-US/firefox/new';
+						fireFoxLink.href = 'https://www.mozilla.org/en-US/firefox/';
 						fireFoxLink.target = '_blank';
 						fireFoxLink.textContent = 'FireFox';
 						startMessage.textContent = 'Many of the features on Bible.is are not supported on Internet Explorer. Please use one of the listed browsers instead: ';
