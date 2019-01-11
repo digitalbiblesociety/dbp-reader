@@ -23,6 +23,7 @@ import reducer from './reducer';
 import messages from './messages';
 import getNextChapterUrl from '../../utils/getNextChapterUrl';
 import getPreviousChapterUrl from '../../utils/getPreviousChapterUrl';
+import getAudioAsyncCall from '../../utils/getAudioAsyncCall';
 /* eslint-disable jsx-a11y/media-has-caption */
 /* disabled the above eslint config options because you can't add tracks to audio elements */
 
@@ -83,6 +84,13 @@ export class AudioPlayer extends React.Component {
 		if (this.props.audioSource) {
 			this.audioRef.load();
 		}
+
+		this.getAudio(
+			this.props.activeFilesets,
+			this.props.activeBookId,
+			this.props.activeChapter,
+			this.props.audioType,
+		);
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -212,6 +220,12 @@ export class AudioPlayer extends React.Component {
 		this.setState({
 			elipsisState: state,
 		});
+
+	getAudio = async (filesets, bookId, chapter, audioType) => {
+		const audio = await getAudioAsyncCall(filesets, bookId, chapter, audioType);
+
+		this.props.dispatch({ type: 'loadaudio', ...audio });
+	};
 
 	getVolumeSvg(volume) {
 		if (volume <= 0.25) {
@@ -769,7 +783,9 @@ export class AudioPlayer extends React.Component {
 
 AudioPlayer.propTypes = {
 	audioSource: PropTypes.string,
+	audioType: PropTypes.string,
 	audioPaths: PropTypes.array,
+	activeFilesets: PropTypes.array,
 	setAudioPlayerState: PropTypes.func.isRequired,
 	toggleAutoPlay: PropTypes.func,
 	hasAudio: PropTypes.bool,

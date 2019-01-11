@@ -1,14 +1,11 @@
 import fetch from 'isomorphic-fetch';
-import getAudio from './getAudioAsyncCall';
 import request from './request';
 
 export default async ({
-	filesets,
 	plainFilesetIds,
 	formattedFilesetIds,
 	bookId: lowerCaseBookId,
 	chapter,
-	audioType,
 }) => {
 	// Gather all initial data
 	const bookId = lowerCaseBookId.toUpperCase();
@@ -79,23 +76,6 @@ export default async ({
 			});
 	}
 	const formattedText = await Promise.all(formattedPromises);
-	const audioReturn = await getAudio(
-		filesets,
-		lowerCaseBookId,
-		chapter,
-		audioType,
-	)
-		.then((data) => data)
-		.catch((err) => {
-			if (process.env.NODE_ENV === 'development') {
-				console.error(
-					`Error in getInitialChapterData -> getAudio catch statement: ${
-						err.status
-					}:${err.message}`,
-				);
-			}
-			return { type: 'loadaudio', audioPaths: [''] };
-		});
 	// console.log('bookMetaResponse', bookMetaResponse);
 	// console.log('Got through all requests in get initial');
 	// console.log('book res length', bookMetaResponse.length);
@@ -110,7 +90,6 @@ export default async ({
 	return {
 		plainText,
 		plainTextJson,
-		audioPaths: audioReturn.audioPaths,
 		formattedText: formattedText[0] || '',
 	};
 };

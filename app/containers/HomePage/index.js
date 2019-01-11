@@ -503,6 +503,7 @@ class HomePage extends React.PureComponent {
 			chapterTextLoadingState,
 			videoPlayerOpen,
 			hasVideo,
+			audioType,
 		} = this.props.homepage;
 
 		const {
@@ -647,15 +648,17 @@ class HomePage extends React.PureComponent {
 				</TransitionGroup>
 				<AudioPlayer
 					books={books}
-					hasVideo={hasVideo}
 					text={updatedText}
 					verseNumber={verse}
+					hasVideo={hasVideo}
+					audioType={audioType}
 					audioPaths={audioPaths}
 					audioSource={audioSource}
 					autoPlay={autoPlayEnabled}
 					activeTextId={activeTextId}
 					activeBookId={activeBookId}
 					activeChapter={activeChapter}
+					activeFilesets={activeFilesets}
 					initialVolume={initialVolume}
 					isScrollingDown={isScrollingDown}
 					videoPlayerOpen={videoPlayerOpen}

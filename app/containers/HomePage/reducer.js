@@ -86,6 +86,7 @@ const initialState = fromJS({
 	firstLoad: true,
 	audioPlayerState: true,
 	loadingNewChapterText: false,
+	audioType: '',
 	loadingCopyright: true,
 	loadingAudio: false,
 	userId: '',
@@ -285,6 +286,7 @@ function homePageReducer(state = initialState, action) {
 				.set('formattedSource', fromJS(action.formattedText));
 		case 'loadaudio':
 			return state
+				.set('hasAudio', true)
 				.set('audioPaths', action.audioPaths.slice(1))
 				.set('audioFilesetId', action.audioFilesetId)
 				.set('loadingAudio', false)
