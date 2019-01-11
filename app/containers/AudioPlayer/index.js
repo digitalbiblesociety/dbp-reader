@@ -24,6 +24,7 @@ import messages from './messages';
 import getNextChapterUrl from '../../utils/getNextChapterUrl';
 import getPreviousChapterUrl from '../../utils/getPreviousChapterUrl';
 import getAudioAsyncCall from '../../utils/getAudioAsyncCall';
+import deepDiff from '../../utils/deepDifferenceObject';
 /* eslint-disable jsx-a11y/media-has-caption */
 /* disabled the above eslint config options because you can't add tracks to audio elements */
 
@@ -96,6 +97,19 @@ export class AudioPlayer extends React.Component {
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.hasVideo && nextProps.videoPlayerOpen) {
 			this.pauseAudio();
+		}
+		if (
+			deepDiff(nextProps.activeFilesets, this.props.activeFilesets).length ||
+			nextProps.activeBookId !== this.props.activeBookId ||
+			nextProps.activeChapter !== this.props.activeChapter ||
+			nextProps.audioType !== this.props.audioType
+		) {
+			this.getAudio(
+				nextProps.activeFilesets,
+				nextProps.activeBookId,
+				nextProps.activeChapter,
+				nextProps.audioType,
+			);
 		}
 		if (nextProps.audioSource !== this.props.audioSource) {
 			if (nextProps.audioSource) {
