@@ -66,6 +66,7 @@ class AppContainer extends React.Component {
 				},
 			});
 		}
+
 		this.props.dispatch(setChapterTextLoadingState({ state: false }));
 
 		// Intercept all route changes to ensure that the loading spinner starts
@@ -282,12 +283,6 @@ AppContainer.getInitialProps = async (context) => {
 		process.env.DBP_API_KEY
 	}&v=4`;
 
-	const textUrl = `${
-		process.env.BASE_API_ROUTE
-	}/bibles/filesets/${bibleId}/${bookId}/${chapter}?key=${
-		process.env.DBP_API_KEY
-	}&v=4`;
-
 	// Get active bible data
 	const singleBibleRes = await cachedFetch(singleBibleUrl).catch((e) => {
 		if (process.env.NODE_ENV === 'development') {
@@ -360,7 +355,6 @@ AppContainer.getInitialProps = async (context) => {
 	const formattedFilesetIds = [];
 	const plainFilesetIds = [];
 	const idsForBookMetadata = [];
-	const bookCachePairs = [];
 	// Separate filesets by type
 	filesets.forEach((set) => {
 		if (set.type === 'text_format') {
@@ -379,7 +373,6 @@ AppContainer.getInitialProps = async (context) => {
 			filesetTuple[0] === 'video_stream' ? 'dbp-vid' : process.env.DBP_BUCKET_ID
 		}&fileset_type=${filesetTuple[0]}`;
 		const res = await cachedFetch(url);
-		bookCachePairs.push({ href: url, data: res });
 
 		return { [filesetTuple[1]]: res.data } || [];
 	});
@@ -496,7 +489,6 @@ AppContainer.getInitialProps = async (context) => {
 	}
 	/* eslint-enable no-console */
 	// Get text for chapter
-	const textJson = initData.plainTextJson;
 	const chapterText = initData.plainText;
 
 	let activeBook = { chapters: [] };
@@ -621,11 +613,7 @@ AppContainer.getInitialProps = async (context) => {
 				token,
 			},
 		},
-		fetchedUrls: [
-			{ href: singleBibleUrl, data: singleBibleJson },
-			{ href: textUrl, data: textJson },
-			...bookCachePairs,
-		],
+		fetchedUrls: [],
 	};
 };
 
@@ -639,6 +627,7 @@ AppContainer.propTypes = {
 	isIe: PropTypes.bool,
 	routeLocation: PropTypes.string,
 	activeBookName: PropTypes.string,
+	formattedText: PropTypes.string,
 	activeChapter: PropTypes.number,
 	initialVolume: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 	initialPlaybackRate: PropTypes.oneOfType([
