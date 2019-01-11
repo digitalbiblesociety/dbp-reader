@@ -213,7 +213,7 @@ app
 				!queryParams.verse &&
 				!isNaN(parseInt(req.params.chapter, 10))
 			) {
-				renderAndCache(req, res, actualPage, { ...queryParams, ...userParams });
+				app.render(req, res, actualPage, { ...queryParams, ...userParams });
 			} else {
 				nextP();
 			}
@@ -235,7 +235,7 @@ app
 				!isNaN(parseInt(req.params.verse, 10)) &&
 				!isNaN(parseInt(req.params.chapter, 10))
 			) {
-				renderAndCache(req, res, actualPage, queryParams);
+				app.render(req, res, actualPage, queryParams);
 			} else {
 				nextP();
 			}
@@ -259,7 +259,7 @@ app
 				queryParams.verse !== 'style.css' &&
 				!req.originalUrl.includes('/static')
 			) {
-				renderAndCache(req, res, actualPage, queryParams);
+				app.render(req, res, actualPage, queryParams);
 			} else {
 				nextP();
 			}
@@ -281,7 +281,7 @@ app
 				queryParams.verse !== 'style.css' &&
 				!req.originalUrl.includes('/static')
 			) {
-				renderAndCache(req, res, actualPage, queryParams);
+				app.render(req, res, actualPage, queryParams);
 			} else {
 				nextP();
 			}
