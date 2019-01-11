@@ -20,6 +20,7 @@ static/sitemaps/*
 cdn
 cdn/
 cdn/*
+newrelic_agent.log
 
 # Https stuff for localhost
 rootCA.key
