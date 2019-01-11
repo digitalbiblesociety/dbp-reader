@@ -45,12 +45,6 @@ export default class MyDocument extends Document {
 						defer
 						async
 					/>
-					{process.env.NODE_ENV === 'production' ? (
-						<link
-							rel="stylesheet"
-							href={`${process.env.CDN_STATIC_FILES}/style.css`}
-						/>
-					) : null}
 					<meta httpEquiv={'X-UA-Compatible'} content={'IE=edge'} />
 					<meta name="viewport" content="width=device-width, initial-scale=1" />
 					{process.env.NODE_ENV === 'production' ? (
