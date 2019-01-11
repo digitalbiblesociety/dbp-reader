@@ -10,15 +10,9 @@ export default async ({
 	chapter,
 	audioType,
 }) => {
-	// console.log('filesets, lowerCaseBookId, chapter', filesets, lowerCaseBookId, chapter);
 	// Gather all initial data
 	const bookId = lowerCaseBookId.toUpperCase();
-	// Separate filesets by type
-	// console.log('idsForBookMetadata', idsForBookMetadata);
-	// const hasPlainText = !!plainFilesetIds.length;
-	// const hasFormattedText = !!formattedFilesetIds.length;
 	// start promise for formatted text
-	// console.log('chapter in get init', chapter)
 	const formattedPromises = formattedFilesetIds.map(async (id) => {
 		const url = `${process.env.BASE_API_ROUTE}/bibles/filesets/${id}?asset_id=${
 			process.env.DBP_BUCKET_ID

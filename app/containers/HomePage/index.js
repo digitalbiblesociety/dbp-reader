@@ -88,6 +88,11 @@ class HomePage extends React.PureComponent {
 			activeTextId,
 		} = this.props.homepage;
 		const { userAuthenticated, userId } = this.props.profile;
+		const { userSettings } = this.props;
+
+		toggleWordsOfJesus(
+			userSettings.getIn(['toggleOptions', 'redLetter', 'active']),
+		);
 
 		this.getCopyrights({ filesetIds: activeFilesets });
 		if (userId && userAuthenticated) {

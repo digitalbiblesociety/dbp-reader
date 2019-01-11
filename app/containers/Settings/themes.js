@@ -269,8 +269,10 @@ export const applyFontSize = (fontSize) => {
 };
 
 export const applyTheme = (theme) => {
-	Object.entries(themes[theme]).forEach((property) => {
-		document.documentElement.style.setProperty(property[0], property[1]);
-	});
-	document.cookie = `bible_is_theme=${theme};path=/`;
+	if (themes[theme]) {
+		Object.entries(themes[theme]).forEach((property) => {
+			document.documentElement.style.setProperty(property[0], property[1]);
+		});
+		document.cookie = `bible_is_theme=${theme};path=/`;
+	}
 };

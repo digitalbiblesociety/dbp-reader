@@ -66,7 +66,22 @@ class AppContainer extends React.Component {
 				},
 			});
 		}
-
+		const redLetter =
+			!!this.props.formattedText &&
+			!!(
+				this.props.formattedText.includes('class="wj"') ||
+				this.props.formattedText.includes("class='wj'")
+			);
+		this.props.dispatch({
+			type: 'GET_INITIAL_ROUTE_STATE_SETTINGS',
+			redLetter,
+			crossReferences:
+				!!this.props.formattedText &&
+				!!(
+					this.props.formattedText.includes('class="ft"') ||
+					this.props.formattedText.includes('class="xt"')
+				),
+		});
 		this.props.dispatch(setChapterTextLoadingState({ state: false }));
 
 		// Intercept all route changes to ensure that the loading spinner starts
@@ -80,6 +95,28 @@ class AppContainer extends React.Component {
 			) {
 				svg4everybody();
 			}
+		}
+	}
+
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.formattedText !== this.props.formattedText) {
+			const redLetter =
+				!!nextProps.formattedText &&
+				!!(
+					nextProps.formattedText.includes('class="wj"') ||
+					nextProps.formattedText.includes("class='wj'")
+				);
+
+			this.props.dispatch({
+				type: 'GET_INITIAL_ROUTE_STATE_SETTINGS',
+				redLetter,
+				crossReferences:
+					!!nextProps.formattedText &&
+					!!(
+						nextProps.formattedText.includes('class="ft"') ||
+						nextProps.formattedText.includes('class="xt"')
+					),
+			});
 		}
 	}
 

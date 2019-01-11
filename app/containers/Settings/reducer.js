@@ -101,6 +101,36 @@ function settingsReducer(state = initialState, action) {
 			return state.setIn(action.path, !state.getIn(action.path));
 		// case 'GET_INITIAL_ROUTE_STATE_HOMEPAGE':
 		// 	return state.merge(action.homepage);
+		case 'GET_INITIAL_ROUTE_STATE_SETTINGS':
+			return state
+				.setIn(
+					['userSettings', 'toggleOptions', 'redLetter', 'available'],
+					action.redLetter,
+				)
+				.setIn(
+					['userSettings', 'toggleOptions', 'crossReferences', 'available'],
+					action.crossReferences,
+				);
+		case 'persist/REHYDRATE':
+			return action.payload.settings
+				.setIn(
+					['userSettings', 'toggleOptions', 'redLetter', 'available'],
+					state.getIn([
+						'userSettings',
+						'toggleOptions',
+						'redLetter',
+						'available',
+					]),
+				)
+				.setIn(
+					['userSettings', 'toggleOptions', 'crossReferences', 'available'],
+					state.getIn([
+						'userSettings',
+						'toggleOptions',
+						'crossReferences',
+						'available',
+					]),
+				);
 		default:
 			return state;
 	}

@@ -7,7 +7,7 @@ import { fromJS } from 'immutable';
 import { routerMiddleware } from 'react-router-redux';
 import createSagaMiddleware from 'redux-saga';
 import { persistStore, autoRehydrate } from 'redux-persist-immutable';
-import stateReconciler from './utils/stateReconciler';
+import reconciler from './utils/stateReconciler';
 import createReducer from './reducers';
 
 const sagaMiddleware = createSagaMiddleware();
@@ -43,7 +43,7 @@ export default function configureStore(initialState = {}, history) {
 			whitelist: ['profile', 'settings', 'searchContainer'],
 			blacklist: ['homepage', 'notes', 'textSelection'],
 			keyPrefix: 'Bible.is',
-			stateReconciler,
+			stateReconciler: reconciler,
 		});
 	}
 
