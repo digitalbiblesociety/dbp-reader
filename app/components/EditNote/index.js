@@ -208,8 +208,10 @@ class EditNote extends React.PureComponent {
 	};
 
 	deleteNote = () => {
-		this.props.deleteNote({ noteId: this.props.note.get('id') });
-		this.props.setActiveChild('notes');
+		if (this.props.note.get('id')) {
+			this.props.deleteNote({ noteId: this.props.note.get('id') });
+			this.props.setActiveChild('notes');
+		}
 	};
 
 	render() {
