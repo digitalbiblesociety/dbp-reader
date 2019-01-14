@@ -257,10 +257,10 @@ export function* resetPassword({ email }) {
 			? process.env.DEVELOPMENT_PROJECT_ID
 			: process.env.NOTES_PROJECT_ID
 	}`;
-	const resetPath =
-		process.env.NODE_ENV === 'development'
-			? 'http://localhost:3000/reset/password'
-			: 'https://listen.dbp4.org/reset/password';
+	const resetPath = `${window.location.origin ||
+		`${window.location.protocol}//${window.location.hostname}:${
+			window.location.port
+		}`}/reset/password`;
 	// Probably want to somehow get the language of the currently active text or something to use here as a fallback
 	const browserLanguage =
 		window && window.navigator ? window.navigator.language : 'en';
