@@ -17,7 +17,7 @@ import deepDifferenceObject from '../../utils/deepDifferenceObject';
 import { selectHasVideo, selectPlayerOpenState } from './selectors';
 import checkForVideoAsync from '../../utils/checkForVideoAsync';
 
-const Hls = dynamic(import('hls.js'));
+// const Hls = dynamic(import('hls.js'));
 
 class VideoPlayer extends React.PureComponent {
 	state = {
@@ -30,27 +30,17 @@ class VideoPlayer extends React.PureComponent {
 		videos: [],
 		currentVideo: {},
 		poster: '',
-		hlsSupported:
-			typeof Hls.isSupported === 'function' ? Hls.isSupported() : true,
+		hlsSupported: true,
+		// hlsSupported:
+		//   typeof this.Hls.isSupported === 'function'
+		//     ? this.Hls.isSupported()
+		//     : true,
 	};
 
 	componentDidMount() {
-		console.log('hls ', Hls);
-		const { fileset } = this.props;
-		this.initHls();
-		this.checkForBooks({
-			filesetId: fileset ? fileset.id : '',
-			bookId: this.props.bookId || '',
-			chapter: this.props.chapter,
-		});
-		if (this.videoRef) {
-			this.getVideos({
-				filesetId: fileset ? fileset.id : '',
-				bookId: this.props.bookId || '',
-				chapter: this.props.chapter,
-			});
-			this.checkHlsSupport();
-		}
+		// console.log('hls ', Hls);
+		this.getHls();
+
 		// console.log('is supported', Hls.isSupported(), this.state.hlsSupported);
 		Router.router.events.on('routeChangeStart', this.handleRouteChange);
 	}
@@ -120,6 +110,27 @@ class VideoPlayer extends React.PureComponent {
 
 		Router.router.events.off('routeChangeStart', this.handleRouteChange);
 	}
+
+	getHls = async () => {
+		const hls = await import('hls.js');
+		console.log('hls in get', hls);
+		const { fileset } = this.props;
+		this.Hls = hls.default;
+		this.isSupported = hls.isSupported;
+		this.checkForBooks({
+			filesetId: fileset ? fileset.id : '',
+			bookId: this.props.bookId || '',
+			chapter: this.props.chapter,
+		});
+		if (this.videoRef) {
+			this.getVideos({
+				filesetId: fileset ? fileset.id : '',
+				bookId: this.props.bookId || '',
+				chapter: this.props.chapter,
+			});
+			this.checkHlsSupport();
+		}
+	};
 
 	// If there ended up being video for the selected chapter get the actual stream
 	getVideos = async ({ filesetId, bookId, chapter }) => {
@@ -205,9 +216,9 @@ class VideoPlayer extends React.PureComponent {
 	};
 
 	checkHlsSupport = () => {
-		if (typeof Hls.isSupported === 'function') {
+		if (typeof this.isSupported === 'function') {
 			this.setState({
-				hlsSupported: Hls.isSupported(),
+				hlsSupported: this.isSupported(),
 			});
 		} else {
 			this.setState({
@@ -285,14 +296,14 @@ class VideoPlayer extends React.PureComponent {
 		if (this.hls) {
 			this.hls.destroy();
 		}
-		this.hls = new Hls();
-		this.hls.on(Hls.Events.ERROR, (event, data) => {
+		this.hls = new this.Hls();
+		this.hls.on(this.Hls.Events.ERROR, (event, data) => {
 			if (data.fatal) {
 				switch (data.type) {
-					case Hls.ErrorTypes.NETWORK_ERROR:
+					case this.Hls.ErrorTypes.NETWORK_ERROR:
 						this.hls.startLoad();
 						break;
-					case Hls.ErrorTypes.MEDIA_ERROR:
+					case this.Hls.ErrorTypes.MEDIA_ERROR:
 						this.hls.recoverMediaError();
 						break;
 					default:
@@ -346,13 +357,13 @@ class VideoPlayer extends React.PureComponent {
 							this.seekingEventListener,
 						);
 						this.hls.media.addEventListener('seeked', this.seekedEventListener);
-						this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
+						this.hls.on(this.Hls.Events.MANIFEST_PARSED, () => {
 							if (this.props.playerOpen && thumbnailClick) {
 								this.hls.media.play();
 								this.setState({ paused: false });
 							}
 						});
-						this.hls.on(Hls.Events.BUFFER_APPENDING, () => {
+						this.hls.on(this.Hls.Events.BUFFER_APPENDING, () => {
 							this.setBuffer();
 						});
 					}
