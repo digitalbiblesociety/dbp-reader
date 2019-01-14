@@ -503,7 +503,6 @@ class HomePage extends React.PureComponent {
 			chapterTextLoadingState,
 			videoPlayerOpen,
 			hasVideo,
-			audioType,
 		} = this.props.homepage;
 
 		const {
@@ -513,6 +512,7 @@ class HomePage extends React.PureComponent {
 			initialVolume,
 			initialPlaybackRate,
 			isIe,
+			audioType,
 		} = this.props;
 		const { userId, userAuthenticated } = this.props.profile;
 
@@ -691,6 +691,7 @@ HomePage.propTypes = {
 	userSettings: PropTypes.object,
 	formattedSource: PropTypes.object,
 	userAuthenticated: PropTypes.bool,
+	audioType: PropTypes.string,
 	userId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 	textData: PropTypes.object,
 	isMenuOpen: PropTypes.bool,

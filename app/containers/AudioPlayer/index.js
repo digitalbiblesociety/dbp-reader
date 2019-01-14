@@ -24,7 +24,6 @@ import messages from './messages';
 import getNextChapterUrl from '../../utils/getNextChapterUrl';
 import getPreviousChapterUrl from '../../utils/getPreviousChapterUrl';
 import getAudioAsyncCall from '../../utils/getAudioAsyncCall';
-import deepDiff from '../../utils/deepDifferenceObject';
 /* eslint-disable jsx-a11y/media-has-caption */
 /* disabled the above eslint config options because you can't add tracks to audio elements */
 
@@ -86,12 +85,21 @@ export class AudioPlayer extends React.Component {
 			this.audioRef.load();
 		}
 
-		this.getAudio(
-			this.props.activeFilesets,
-			this.props.activeBookId,
-			this.props.activeChapter,
-			this.props.audioType,
-		);
+		if (typeof window !== 'undefined') {
+			this.getAudio(
+				this.props.activeFilesets,
+				this.props.activeBookId,
+				this.props.activeChapter,
+				this.props.audioType,
+			);
+		} else {
+			this.getAudio(
+				this.props.activeFilesets,
+				this.props.activeBookId,
+				this.props.activeChapter,
+				this.props.audioType,
+			);
+		}
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -99,7 +107,7 @@ export class AudioPlayer extends React.Component {
 			this.pauseAudio();
 		}
 		if (
-			deepDiff(nextProps.activeFilesets, this.props.activeFilesets).length ||
+			!isEqual(nextProps.activeFilesets, this.props.activeFilesets) ||
 			nextProps.activeBookId !== this.props.activeBookId ||
 			nextProps.activeChapter !== this.props.activeChapter ||
 			nextProps.audioType !== this.props.audioType
@@ -237,7 +245,6 @@ export class AudioPlayer extends React.Component {
 
 	getAudio = async (filesets, bookId, chapter, audioType) => {
 		const audio = await getAudioAsyncCall(filesets, bookId, chapter, audioType);
-
 		this.props.dispatch({ type: 'loadaudio', ...audio });
 	};
 
