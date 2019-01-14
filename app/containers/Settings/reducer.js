@@ -13,6 +13,7 @@ import {
 	UPDATE_FONT_SIZE,
 	TOGGLE_AUTOPLAY,
 } from './constants';
+import { ACTIVE_TEXT_ID } from '../HomePage/constants';
 
 const initialState = fromJS({
 	userSettings: {
@@ -57,6 +58,8 @@ const initialState = fromJS({
 
 function settingsReducer(state = initialState, action) {
 	switch (action.type) {
+		case ACTIVE_TEXT_ID:
+			return state.setIn(['userSettings', 'autoPlayEnabled'], false);
 		case UPDATE_THEME:
 			return state.setIn(['userSettings', 'activeTheme'], action.theme);
 		case UPDATE_FONT_TYPE:
