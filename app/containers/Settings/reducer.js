@@ -115,25 +115,28 @@ function settingsReducer(state = initialState, action) {
 					action.crossReferences,
 				);
 		case 'persist/REHYDRATE':
-			return action.payload.settings
-				.setIn(
-					['userSettings', 'toggleOptions', 'redLetter', 'available'],
-					state.getIn([
-						'userSettings',
-						'toggleOptions',
-						'redLetter',
-						'available',
-					]),
-				)
-				.setIn(
-					['userSettings', 'toggleOptions', 'crossReferences', 'available'],
-					state.getIn([
-						'userSettings',
-						'toggleOptions',
-						'crossReferences',
-						'available',
-					]),
-				);
+			if (action.payload.settings) {
+				return action.payload.settings
+					.setIn(
+						['userSettings', 'toggleOptions', 'redLetter', 'available'],
+						state.getIn([
+							'userSettings',
+							'toggleOptions',
+							'redLetter',
+							'available',
+						]),
+					)
+					.setIn(
+						['userSettings', 'toggleOptions', 'crossReferences', 'available'],
+						state.getIn([
+							'userSettings',
+							'toggleOptions',
+							'crossReferences',
+							'available',
+						]),
+					);
+			}
+			return action.payload;
 		default:
 			return state;
 	}
