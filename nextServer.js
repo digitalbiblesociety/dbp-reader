@@ -24,41 +24,42 @@ const ssrCache = new LRUCache({
 		process.env.NODE_ENV === 'production' ? 1000 * 60 * 60 * 24 : 1000 * 60 * 5,
 });
 
-function getCacheKey(req) {
-	return `${req.url}`;
-}
+// function getCacheKey(req) {
+// 	return `${req.url}`;
+// }
 
 async function renderAndCache(req, res, pagePath, queryParams) {
 	// if (dev) {
-	// 	app.render(req, res, pagePath, queryParams);
+	// Stop caching individual routes as it is causing inconsistencies with the audio types
+	app.render(req, res, pagePath, queryParams);
+	return;
+	// }
+	// const key = getCacheKey(req);
+
+	// if (ssrCache.has(key)) {
+	// 	res.setHeader('x-cache', 'HIT');
+	// 	res.send(ssrCache.get(key));
 	// 	return;
 	// }
-	const key = getCacheKey(req);
 
-	if (ssrCache.has(key)) {
-		res.setHeader('x-cache', 'HIT');
-		res.send(ssrCache.get(key));
-		return;
-	}
+	// try {
+	// 	const html = await app.renderToHTML(req, res, pagePath, queryParams);
 
-	try {
-		const html = await app.renderToHTML(req, res, pagePath, queryParams);
+	// 	if (res.statusCode !== 200) {
+	// 		res.send(html);
+	// 		return;
+	// 	}
 
-		if (res.statusCode !== 200) {
-			res.send(html);
-			return;
-		}
+	// 	ssrCache.set(key, html);
 
-		ssrCache.set(key, html);
-
-		res.setHeader('x-cache', 'MISS');
-		res.send(html);
-	} catch (err) {
-		if (process.env.NODE_ENV === 'production') {
-			bugsnag.notify(err);
-		}
-		app.renderError(err, req, res, pagePath, queryParams);
-	}
+	// 	res.setHeader('x-cache', 'MISS');
+	// 	res.send(html);
+	// } catch (err) {
+	// 	if (process.env.NODE_ENV === 'production') {
+	// 		bugsnag.notify(err);
+	// 	}
+	// 	app.renderError(err, req, res, pagePath, queryParams);
+	// }
 }
 
 app
