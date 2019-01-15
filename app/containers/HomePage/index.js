@@ -9,12 +9,14 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { TransitionGroup } from 'react-transition-group';
+import dynamic from 'next/dynamic';
 import injectSaga from '../../utils/injectSaga';
 import injectReducer from '../../utils/injectReducer';
+import checkForVideoAsync from '../../utils/checkForVideoAsync';
 import Settings from '../Settings';
 import settingsReducer from '../Settings/reducer';
 import AudioPlayer from '../AudioPlayer';
-import VideoPlayer from '../VideoPlayer';
+// import VideoPlayer from '../VideoPlayer';
 import Profile from '../Profile';
 import Notes from '../Notes';
 import Text from '../Text';
@@ -31,6 +33,7 @@ import profileReducer from '../Profile/reducer';
 import makeSelectProfile from '../Profile/selectors';
 import { setActiveIsoCode } from '../TextSelection/actions';
 import { getBookmarksForChapter, addBookmark } from '../Notes/actions';
+import { setHasVideo } from '../VideoPlayer/actions';
 import {
 	addHighlight,
 	deleteHighlights,
@@ -73,6 +76,8 @@ import {
 	applyFontSize,
 	toggleWordsOfJesus,
 } from '../Settings/themes';
+
+const VideoPlayer = dynamic(import('../VideoPlayer'));
 
 class HomePage extends React.PureComponent {
 	state = {
@@ -206,6 +211,14 @@ class HomePage extends React.PureComponent {
 				console.warn('Error initializing google api', err); // eslint-disable-line no-console
 			}
 		}
+		const videoFileset = activeFilesets.filter(
+			(f) => f.type === 'video_stream',
+		)[0];
+		this.checkForVideo(
+			videoFileset ? videoFileset.id : '',
+			this.props.homepage.activeBookId,
+			this.props.homepage.activeChapter,
+		);
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -363,6 +376,16 @@ class HomePage extends React.PureComponent {
 		if (menu === 'version') {
 			this.props.dispatch(toggleVersionSelection());
 		}
+	};
+
+	checkForVideo = async (filesetId, bookId, chapter) => {
+		if (!filesetId) {
+			this.props.dispatch(setHasVideo({ state: false }));
+			return;
+		}
+		const hasVideo = await checkForVideoAsync(filesetId, bookId, chapter);
+
+		this.props.dispatch(setHasVideo({ state: hasVideo }));
 	};
 
 	addBookmark = (data) => this.props.dispatch(addBookmark({ ...data }));
@@ -544,14 +567,18 @@ class HomePage extends React.PureComponent {
 							: 'content-container'
 					}
 				>
-					<VideoPlayer
-						fileset={activeFilesets.filter((f) => f.type === 'video_stream')[0]}
-						bookId={activeBookId}
-						chapter={activeChapter}
-						books={books}
-						text={updatedText}
-						textId={activeTextId}
-					/>
+					{hasVideo && (
+						<VideoPlayer
+							fileset={
+								activeFilesets.filter((f) => f.type === 'video_stream')[0]
+							}
+							bookId={activeBookId}
+							chapter={activeChapter}
+							books={books}
+							text={updatedText}
+							textId={activeTextId}
+						/>
+					)}
 					<Text
 						books={books}
 						userId={userId}
