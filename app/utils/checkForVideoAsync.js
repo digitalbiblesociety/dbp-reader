@@ -1,7 +1,6 @@
 import request from './request';
 
 export default async (filesetId, bookId, chapter) => {
-	console.log('checking for video', filesetId, bookId, chapter);
 	if (!filesetId) return false;
 
 	const reqUrl = `${

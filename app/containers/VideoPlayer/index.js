@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
-import dynamic from 'next/dynamic';
-// import Hls from 'hls.js';
 import Router from 'next/router';
 import cachedFetch, { overrideCache } from '../../utils/cachedFetch';
 import { openVideoPlayer, closeVideoPlayer, setHasVideo } from './actions';
@@ -16,8 +14,6 @@ import VideoOverlay from '../../components/VideoOverlay';
 import deepDifferenceObject from '../../utils/deepDifferenceObject';
 import { selectHasVideo, selectPlayerOpenState } from './selectors';
 import checkForVideoAsync from '../../utils/checkForVideoAsync';
-
-// const Hls = dynamic(import('hls.js'));
 
 class VideoPlayer extends React.PureComponent {
 	state = {
@@ -31,17 +27,11 @@ class VideoPlayer extends React.PureComponent {
 		currentVideo: {},
 		poster: '',
 		hlsSupported: true,
-		// hlsSupported:
-		//   typeof this.Hls.isSupported === 'function'
-		//     ? this.Hls.isSupported()
-		//     : true,
 	};
 
 	componentDidMount() {
-		// console.log('hls ', Hls);
 		this.getHls();
 
-		// console.log('is supported', Hls.isSupported(), this.state.hlsSupported);
 		Router.router.events.on('routeChangeStart', this.handleRouteChange);
 	}
 
@@ -113,7 +103,6 @@ class VideoPlayer extends React.PureComponent {
 
 	getHls = async () => {
 		const hls = await import('hls.js');
-		console.log('hls in get', hls);
 		const { fileset } = this.props;
 		this.Hls = hls.default;
 		this.isSupported = hls.isSupported;
@@ -191,6 +180,47 @@ class VideoPlayer extends React.PureComponent {
 		}
 	};
 
+	get playButton() {
+		const { paused } = this.state;
+
+		return (
+			<SvgWrapper
+				onClick={this.playVideo}
+				className={paused ? 'play-video show-play' : 'play-video hide-play'}
+				fill={'#fff'}
+				svgid={'play_video'}
+				viewBox={'0 0 90 40'}
+			/>
+		);
+	}
+
+	get previousVideo() {
+		const { playlist, currentVideo } = this.state;
+		let previousVideo;
+		// Need to find the video directly before the current one
+		playlist.forEach((video) => {
+			if (video.id < currentVideo.id) {
+				previousVideo = video;
+			}
+		});
+		return previousVideo;
+	}
+
+	get nextVideo() {
+		const { playlist, currentVideo } = this.state;
+		let nextVideo;
+		let foundNext = false;
+		// Need to find the video immediately after the current one
+		playlist.forEach((video) => {
+			if (video.id > currentVideo.id && !foundNext) {
+				nextVideo = video;
+				foundNext = true;
+			}
+		});
+
+		return nextVideo;
+	}
+
 	setVideoRef = (el) => {
 		this.videoRef = el;
 	};
@@ -212,43 +242,6 @@ class VideoPlayer extends React.PureComponent {
 		} else {
 			this.videoRef.currentTime = time;
 			this.setState({ currentTime: time });
-		}
-	};
-
-	checkHlsSupport = () => {
-		if (typeof this.isSupported === 'function') {
-			this.setState({
-				hlsSupported: this.isSupported(),
-			});
-		} else {
-			this.setState({
-				hlsSupported: false,
-			});
-		}
-	};
-
-	// Checks to see if we have video content for the selected chapter
-	// This seems somewhat repetitive and unnecessary
-	checkForBooks = async ({ filesetId, bookId, chapter }) => {
-		if (!filesetId) {
-			this.props.dispatch(setHasVideo({ state: false }));
-			return;
-		}
-
-		try {
-			// TODO: Profile to see if caching helps here
-			const hasVideo = await checkForVideoAsync(filesetId, bookId, chapter);
-
-			if (hasVideo) {
-				this.props.dispatch(setHasVideo({ state: hasVideo }));
-			} else {
-				this.props.dispatch(setHasVideo({ state: false }));
-			}
-		} catch (err) {
-			if (process.env.NODE_ENV === 'development') {
-				console.error('Error checking for video context', err); // eslint-disable-line no-console
-			}
-			this.props.dispatch(setHasVideo({ state: false }));
 		}
 	};
 
@@ -289,6 +282,43 @@ class VideoPlayer extends React.PureComponent {
 				this.playVideo({ thumbnailClick: true });
 			},
 		);
+	};
+
+	checkHlsSupport = () => {
+		if (typeof this.isSupported === 'function') {
+			this.setState({
+				hlsSupported: this.isSupported(),
+			});
+		} else {
+			this.setState({
+				hlsSupported: false,
+			});
+		}
+	};
+
+	// Checks to see if we have video content for the selected chapter
+	// This seems somewhat repetitive and unnecessary
+	checkForBooks = async ({ filesetId, bookId, chapter }) => {
+		if (!filesetId) {
+			this.props.dispatch(setHasVideo({ state: false }));
+			return;
+		}
+
+		try {
+			// TODO: Profile to see if caching helps here
+			const hasVideo = await checkForVideoAsync(filesetId, bookId, chapter);
+
+			if (hasVideo) {
+				this.props.dispatch(setHasVideo({ state: hasVideo }));
+			} else {
+				this.props.dispatch(setHasVideo({ state: false }));
+			}
+		} catch (err) {
+			if (process.env.NODE_ENV === 'development') {
+				console.error('Error checking for video context', err); // eslint-disable-line no-console
+			}
+			this.props.dispatch(setHasVideo({ state: false }));
+		}
 	};
 
 	initHls = () => {
@@ -510,47 +540,6 @@ class VideoPlayer extends React.PureComponent {
 		this.videoRef.volume = volume;
 		this.setState({ volume });
 	};
-
-	get playButton() {
-		const { paused } = this.state;
-
-		return (
-			<SvgWrapper
-				onClick={this.playVideo}
-				className={paused ? 'play-video show-play' : 'play-video hide-play'}
-				fill={'#fff'}
-				svgid={'play_video'}
-				viewBox={'0 0 90 40'}
-			/>
-		);
-	}
-
-	get previousVideo() {
-		const { playlist, currentVideo } = this.state;
-		let previousVideo;
-		// Need to find the video directly before the current one
-		playlist.forEach((video) => {
-			if (video.id < currentVideo.id) {
-				previousVideo = video;
-			}
-		});
-		return previousVideo;
-	}
-
-	get nextVideo() {
-		const { playlist, currentVideo } = this.state;
-		let nextVideo;
-		let foundNext = false;
-		// Need to find the video immediately after the current one
-		playlist.forEach((video) => {
-			if (video.id > currentVideo.id && !foundNext) {
-				nextVideo = video;
-				foundNext = true;
-			}
-		});
-
-		return nextVideo;
-	}
 
 	previousFunction = (e) => {
 		e.stopPropagation();

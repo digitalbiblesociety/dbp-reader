@@ -544,7 +544,6 @@ class HomePage extends React.PureComponent {
 		const { userNotes, bookmarks, text: updatedText } = this.props.textData;
 		const token = this.props.homepage.match.params.token || '';
 		const verse = this.props.homepage.match.params.verse || '';
-		console.log('has video', hasVideo);
 
 		return (
 			<>
