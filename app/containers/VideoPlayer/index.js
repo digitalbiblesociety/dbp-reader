@@ -106,11 +106,6 @@ class VideoPlayer extends React.PureComponent {
 		const { fileset } = this.props;
 		this.Hls = hls.default;
 		this.isSupported = hls.isSupported;
-		this.checkForBooks({
-			filesetId: fileset ? fileset.id : '',
-			bookId: this.props.bookId || '',
-			chapter: this.props.chapter,
-		});
 		if (this.videoRef) {
 			this.getVideos({
 				filesetId: fileset ? fileset.id : '',
