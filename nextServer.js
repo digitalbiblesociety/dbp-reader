@@ -167,9 +167,11 @@ app
 			};
 			const userParams = {};
 
-			if (bookId !== req.params.bookId) {
+			if (isNaN(parseInt(req.params.chapter, 10))) {
+				res.redirect(`/bible/${req.params.bibleId}/${bookId}/1`);
+			} else if (bookId !== req.params.bookId) {
 				res.redirect(
-					`/bible/${req.params.bibleId}/${bookId}/${req.params.chapter}`,
+					`/bible/${req.params.bibleId}/${bookId}/${req.params.chapter || '1'}`,
 				);
 			} else if (
 				req.query.user_id &&
@@ -208,9 +210,11 @@ app
 				chapter: req.params.chapter,
 				verse: req.params.verse,
 			};
-			if (bookId !== req.params.bookId) {
+			if (isNaN(parseInt(req.params.chapter, 10))) {
+				res.redirect(`/bible/${req.params.bibleId}/${bookId}/1`);
+			} else if (bookId !== req.params.bookId) {
 				res.redirect(
-					`/bible/${req.params.bibleId}/${bookId}/${req.params.chapter}`,
+					`/bible/${req.params.bibleId}/${bookId}/${req.params.chapter || '1'}`,
 				);
 			} else if (
 				queryParams.verse !== 'style.css' &&
@@ -240,9 +244,7 @@ app
 			};
 
 			if (bookId !== req.params.bookId) {
-				res.redirect(
-					`/bible/${req.params.bibleId}/${bookId}/${req.params.chapter}`,
-				);
+				res.redirect(`/bible/${req.params.bibleId}/${bookId}/1`);
 			} else if (
 				queryParams.verse !== 'style.css' &&
 				!req.originalUrl.includes('/static')

@@ -447,7 +447,7 @@ AppContainer.getInitialProps = async (context) => {
 		// If the book wasn't found and chapter wasn't found
 		// Go to the first book and first chapter
 		const foundBookId = foundBook && foundBook.book_id;
-		const foundChapterId = foundBook && foundBook.chapters[0];
+		const foundChapterId = foundBook && (foundBook.chapters[0] || 1);
 
 		/**
 		 * 1. Visit /bible/bibleId
