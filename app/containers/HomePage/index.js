@@ -13,16 +13,11 @@ import dynamic from 'next/dynamic';
 import injectSaga from '../../utils/injectSaga';
 import injectReducer from '../../utils/injectReducer';
 import checkForVideoAsync from '../../utils/checkForVideoAsync';
-import Settings from '../Settings';
 import settingsReducer from '../Settings/reducer';
 import AudioPlayer from '../AudioPlayer';
-// import VideoPlayer from '../VideoPlayer';
-import Profile from '../Profile';
-import Notes from '../Notes';
 import Text from '../Text';
 import NavigationBar from '../../components/NavigationBar';
 import Footer from '../../components/Footer';
-import SearchContainer from '../SearchContainer';
 import FadeTransition from '../../components/FadeTransition';
 import notesReducer from '../Notes/reducer';
 import notesSaga from '../Notes/saga';
@@ -78,6 +73,10 @@ import {
 } from '../Settings/themes';
 
 const VideoPlayer = dynamic(import('../VideoPlayer'));
+const Profile = dynamic(import('../Profile'));
+const Settings = dynamic(import('../Settings'));
+const SearchContainer = dynamic(import('../SearchContainer'));
+const Notes = dynamic(import('../Notes'));
 
 class HomePage extends React.PureComponent {
 	state = {
@@ -544,6 +543,7 @@ class HomePage extends React.PureComponent {
 		const { userNotes, bookmarks, text: updatedText } = this.props.textData;
 		const token = this.props.homepage.match.params.token || '';
 		const verse = this.props.homepage.match.params.verse || '';
+		// const loadText = (loadingNewChapterText, loadingAudio, chapterTextLoadingState, (!formattedVerse && formattedSource.main));
 
 		return (
 			<>
