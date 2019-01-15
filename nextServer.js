@@ -155,30 +155,25 @@ app
 		server.get('/bible/:bibleId/:bookId/:chapter', (req, res, nextP) => {
 			const actualPage = '/app';
 			const bookId = checkBookId(req.params.bookId);
-			// console.log(`${req.protocol}://${req.get('host')}${req.originalUrl}`);
-			// console.log(
-			// 	'Getting bible and book and chapter for route',
-			// 	`${req.protocol}://${req.get('host')}${req.originalUrl}`,
-			// );
+			const chapter =
+				isNaN(parseInt(req.params.chapter, 10)) || !req.params.chapter
+					? '1'
+					: req.params.chapter;
+
 			const queryParams = {
 				bibleId: req.params.bibleId,
 				bookId,
-				chapter: req.params.chapter,
+				chapter,
 			};
 			const userParams = {};
 
-			if (isNaN(parseInt(req.params.chapter, 10))) {
-				res.redirect(`/bible/${req.params.bibleId}/${bookId}/1`);
-			} else if (bookId !== req.params.bookId) {
-				res.redirect(
-					`/bible/${req.params.bibleId}/${bookId}/${req.params.chapter || '1'}`,
-				);
+			if (bookId !== req.params.bookId) {
+				res.redirect(`/bible/${req.params.bibleId}/${bookId}/${chapter}`);
 			} else if (
 				req.query.user_id &&
 				req.query.user_email &&
 				req.query.user_name
 			) {
-				// console.log('Request query', JSON.stringify(req.query));
 				userParams.userId = req.query.user_id;
 				userParams.userEmail = req.query.user_email;
 				userParams.userName = req.query.user_name;
@@ -190,8 +185,7 @@ app
 			if (
 				queryParams.verse !== 'style.css' &&
 				!req.originalUrl.includes('/static') &&
-				!queryParams.verse &&
-				!isNaN(parseInt(req.params.chapter, 10))
+				!queryParams.verse
 			) {
 				renderAndCache(req, res, actualPage, { ...queryParams, ...userParams });
 			} else {
@@ -202,25 +196,30 @@ app
 		server.get('/bible/:bibleId/:bookId/:chapter/:verse', (req, res, nextP) => {
 			const actualPage = '/app';
 			const bookId = checkBookId(req.params.bookId);
+			const chapter =
+				isNaN(parseInt(req.params.chapter, 10)) || !req.params.chapter
+					? '1'
+					: req.params.chapter;
+			const verse =
+				isNaN(parseInt(req.params.verse, 10)) || !req.params.verse
+					? '1'
+					: req.params.verse;
 			// console.log(`${req.protocol}://${req.get('host')}${req.originalUrl}`);
 			// Params may not actually be passed using this method
 			const queryParams = {
 				bibleId: req.params.bibleId,
 				bookId,
-				chapter: req.params.chapter,
-				verse: req.params.verse,
+				chapter,
+				verse,
 			};
-			if (isNaN(parseInt(req.params.chapter, 10))) {
-				res.redirect(`/bible/${req.params.bibleId}/${bookId}/1`);
-			} else if (bookId !== req.params.bookId) {
+
+			if (bookId !== req.params.bookId) {
 				res.redirect(
-					`/bible/${req.params.bibleId}/${bookId}/${req.params.chapter || '1'}`,
+					`/bible/${req.params.bibleId}/${bookId}/${chapter}/${verse}`,
 				);
 			} else if (
 				queryParams.verse !== 'style.css' &&
-				!req.originalUrl.includes('/static') &&
-				!isNaN(parseInt(req.params.verse, 10)) &&
-				!isNaN(parseInt(req.params.chapter, 10))
+				!req.originalUrl.includes('/static')
 			) {
 				renderAndCache(req, res, actualPage, queryParams);
 			} else {
