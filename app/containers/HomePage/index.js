@@ -705,13 +705,13 @@ HomePage.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
 	homepage: makeSelectHomePage(),
-	userSettings: selectSettings(),
 	formattedSource: selectFormattedSource(),
 	userAuthenticated: selectAuthenticationStatus(),
 	userId: selectUserId(),
 	textData: selectUserNotes(),
 	profile: makeSelectProfile(),
 	isMenuOpen: selectMenuOpenState(),
+	userSettings: selectSettings(),
 });
 
 function mapDispatchToProps(dispatch) {

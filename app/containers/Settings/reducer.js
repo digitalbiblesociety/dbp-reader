@@ -115,7 +115,10 @@ function settingsReducer(state = initialState, action) {
 					action.crossReferences,
 				);
 		case 'persist/REHYDRATE':
-			if (action.payload.settings) {
+			if (
+				action.payload.settings &&
+				typeof action.payload.settings.setIn === 'function'
+			) {
 				return action.payload.settings
 					.setIn(
 						['userSettings', 'toggleOptions', 'redLetter', 'available'],
@@ -136,7 +139,7 @@ function settingsReducer(state = initialState, action) {
 						]),
 					);
 			}
-			return action.payload;
+			return state;
 		default:
 			return state;
 	}
