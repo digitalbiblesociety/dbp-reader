@@ -257,10 +257,10 @@ export function* resetPassword({ email }) {
 			? process.env.DEVELOPMENT_PROJECT_ID
 			: process.env.NOTES_PROJECT_ID
 	}`;
-	const resetPath = `${window.location.origin ||
-		`${window.location.protocol}//${window.location.hostname}:${
-			window.location.port
-		}`}/reset/password`;
+	const resetPath = `${window.location.href ||
+		`${window.location.protocol}//${window.location.hostname}${
+			window.location.pathname
+		}`}`;
 	// Probably want to somehow get the language of the currently active text or something to use here as a fallback
 	const browserLanguage =
 		window && window.navigator ? window.navigator.language : 'en';
