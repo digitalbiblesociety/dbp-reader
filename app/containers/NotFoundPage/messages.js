@@ -37,6 +37,11 @@ export default defineMessages({
 		id: 'app.components.NotFoundPage.youDo',
 		defaultMessage: 'What can you do?',
 	},
+	browser: {
+		id: 'app.components.NotFoundPage.browser',
+		defaultMessage:
+			'Ensure you are running the latest version of your browser or download another browser such as chrome or firefox;',
+	},
 	tryAgain: {
 		id: 'app.components.NotFoundPage.tryAgain',
 		defaultMessage: 'You might retype the URL and try again;',

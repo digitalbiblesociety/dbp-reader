@@ -68,6 +68,9 @@ export default class Error extends React.Component {
 							<FormattedMessage {...messages.youDo} />
 							<ul>
 								<li>
+									<FormattedMessage {...messages.browser} />
+								</li>
+								<li>
 									<FormattedMessage {...messages.tryAgain} />
 								</li>
 								<li>
