@@ -15,6 +15,7 @@ const port = process.env.PORT || 3000;
 const dev = process.env.NODE_ENV === 'development';
 const bugsnag = require('./app/utils/bugsnagServer');
 const manifestJson = require('./static/manifest');
+const checkBookId = require('./app/utils/checkBookName');
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
@@ -24,42 +25,9 @@ const ssrCache = new LRUCache({
 		process.env.NODE_ENV === 'production' ? 1000 * 60 * 60 * 24 : 1000 * 60 * 5,
 });
 
-// function getCacheKey(req) {
-// 	return `${req.url}`;
-// }
-
 async function renderAndCache(req, res, pagePath, queryParams) {
-	// if (dev) {
 	// Stop caching individual routes as it is causing inconsistencies with the audio types
 	app.render(req, res, pagePath, queryParams);
-	return;
-	// }
-	// const key = getCacheKey(req);
-
-	// if (ssrCache.has(key)) {
-	// 	res.setHeader('x-cache', 'HIT');
-	// 	res.send(ssrCache.get(key));
-	// 	return;
-	// }
-
-	// try {
-	// 	const html = await app.renderToHTML(req, res, pagePath, queryParams);
-
-	// 	if (res.statusCode !== 200) {
-	// 		res.send(html);
-	// 		return;
-	// 	}
-
-	// 	ssrCache.set(key, html);
-
-	// 	res.setHeader('x-cache', 'MISS');
-	// 	res.send(html);
-	// } catch (err) {
-	// 	if (process.env.NODE_ENV === 'production') {
-	// 		bugsnag.notify(err);
-	// 	}
-	// 	app.renderError(err, req, res, pagePath, queryParams);
-	// }
 }
 
 app
@@ -186,6 +154,7 @@ app
 
 		server.get('/bible/:bibleId/:bookId/:chapter', (req, res, nextP) => {
 			const actualPage = '/app';
+			const bookId = checkBookId(req.params.bookId);
 			// console.log(`${req.protocol}://${req.get('host')}${req.originalUrl}`);
 			// console.log(
 			// 	'Getting bible and book and chapter for route',
@@ -193,12 +162,20 @@ app
 			// );
 			const queryParams = {
 				bibleId: req.params.bibleId,
-				bookId: req.params.bookId,
+				bookId,
 				chapter: req.params.chapter,
 			};
 			const userParams = {};
 
-			if (req.query.user_id && req.query.user_email && req.query.user_name) {
+			if (bookId !== req.params.bookId) {
+				res.redirect(
+					`/bible/${req.params.bibleId}/${bookId}/${req.params.chapter}`,
+				);
+			} else if (
+				req.query.user_id &&
+				req.query.user_email &&
+				req.query.user_name
+			) {
 				// console.log('Request query', JSON.stringify(req.query));
 				userParams.userId = req.query.user_id;
 				userParams.userEmail = req.query.user_email;
@@ -222,15 +199,20 @@ app
 
 		server.get('/bible/:bibleId/:bookId/:chapter/:verse', (req, res, nextP) => {
 			const actualPage = '/app';
+			const bookId = checkBookId(req.params.bookId);
 			// console.log(`${req.protocol}://${req.get('host')}${req.originalUrl}`);
 			// Params may not actually be passed using this method
 			const queryParams = {
 				bibleId: req.params.bibleId,
-				bookId: req.params.bookId,
+				bookId,
 				chapter: req.params.chapter,
 				verse: req.params.verse,
 			};
-			if (
+			if (bookId !== req.params.bookId) {
+				res.redirect(
+					`/bible/${req.params.bibleId}/${bookId}/${req.params.chapter}`,
+				);
+			} else if (
 				queryParams.verse !== 'style.css' &&
 				!req.originalUrl.includes('/static') &&
 				!isNaN(parseInt(req.params.verse, 10)) &&
@@ -244,6 +226,7 @@ app
 
 		server.get('/bible/:bibleId/:bookId', (req, res, nextP) => {
 			const actualPage = '/app';
+			const bookId = checkBookId(req.params.bookId);
 			// console.log(req.originalUrl.includes('/static'))
 			// console.log(
 			//   'Getting bible and book for route',
@@ -252,11 +235,15 @@ app
 			// Params may not actually be passed using this method
 			const queryParams = {
 				bibleId: req.params.bibleId,
-				bookId: req.params.bookId,
+				bookId,
 				chapter: '1',
 			};
 
-			if (
+			if (bookId !== req.params.bookId) {
+				res.redirect(
+					`/bible/${req.params.bibleId}/${bookId}/${req.params.chapter}`,
+				);
+			} else if (
 				queryParams.verse !== 'style.css' &&
 				!req.originalUrl.includes('/static')
 			) {
