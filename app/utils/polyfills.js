@@ -5,7 +5,7 @@ import values from 'core-js/fn/object/values';
 import aIncludes from 'core-js/fn/array/includes';
 import includes from 'core-js/library/fn/string/includes';
 import find from 'core-js/fn/array/find';
-import('core-js/fn/dom-collections/iterator');
+import iterator from 'core-js/fn/dom-collections/iterator';
 
 if (!Array.find) {
 	Array.find = find;
