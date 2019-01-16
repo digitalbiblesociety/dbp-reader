@@ -700,9 +700,7 @@ class Text extends React.PureComponent {
 								this.applyWholeVerseHighlights(
 									s,
 									highlights.filter(
-										(h) =>
-											h.chapter === activeChapter &&
-											h.highlighted_words === null,
+										(h) => h.chapter === activeChapter && !h.highlighted_words,
 									),
 								),
 							)[0],
@@ -761,7 +759,7 @@ class Text extends React.PureComponent {
 		// Mapping the text again here because I need to apply a class for all highlights with a char count of null
 		const mappedText = plainText.map((v) => {
 			const highlightsInVerse = highlights.filter(
-				(h) => v.verse_start === h.verse_start && h.highlighted_words === null,
+				(h) => v.verse_start === h.verse_start && !h.highlighted_words,
 			);
 			const wholeVerseHighlighted = !!highlightsInVerse.length;
 			if (wholeVerseHighlighted) {

@@ -60,7 +60,7 @@ const createFormattedHighlights = (
 			}
 			return 0;
 		})
-		.filter((h) => h.highlighted_words !== null);
+		.filter((h) => h.highlighted_words);
 	try {
 		// Set the env for testing purposes
 		const env = process.env.NODE_ENV;

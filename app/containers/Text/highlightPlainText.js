@@ -35,7 +35,7 @@ const createHighlights = (highlights, arrayOfVerseObjects) => {
 			}
 			return 0;
 		})
-		.filter((h) => h.highlighted_words !== null);
+		.filter((h) => h.highlighted_words);
 	try {
 		const newArrayOfVerses = [];
 		const arrayOfVerses = [...arrayOfVerseObjects];
