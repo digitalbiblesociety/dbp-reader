@@ -32,8 +32,8 @@ const createFormattedHighlights = (
 
 	// Doing a deep copy of the highlights since I am going to be mutating it.
 	// Sort the highlights
-	const sortedHighlights = JSON.parse(JSON.stringify(highlights)).sort(
-		(a, b) => {
+	const sortedHighlights = JSON.parse(JSON.stringify(highlights))
+		.sort((a, b) => {
 			if (a.verse_start < b.verse_start) return -1;
 			if (a.verse_start > b.verse_start) return 1;
 			if (a.verse_start === b.verse_start) {
@@ -59,8 +59,8 @@ const createFormattedHighlights = (
 				if (a.highlight_start > b.highlight_start) return 1;
 			}
 			return 0;
-		},
-	);
+		})
+		.filter((h) => h.highlighted_words !== null);
 	try {
 		// Set the env for testing purposes
 		const env = process.env.NODE_ENV;

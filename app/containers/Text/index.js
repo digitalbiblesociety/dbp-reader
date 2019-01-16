@@ -42,7 +42,11 @@ import {
 } from './textRenderUtils';
 import createHighlights from './highlightPlainText';
 import createFormattedHighlights from './highlightFormattedText';
-import { applyNotes, applyBookmarks } from './formattedTextUtils';
+import {
+	applyNotes,
+	applyBookmarks,
+	applyWholeVerseHighlights,
+} from './formattedTextUtils';
 import ReadFullChapter from '../../components/ReadFullChapter';
 /* Disabling the jsx-a11y linting because we need to capture the selected text
 	 and the most straight forward way of doing so is with the onMouseUp event */
@@ -71,6 +75,7 @@ class Text extends React.PureComponent {
 	componentDidMount() {
 		this.createHighlights = createHighlights;
 		this.createFormattedHighlights = createFormattedHighlights;
+		this.applyWholeVerseHighlights = applyWholeVerseHighlights;
 		this.applyNotes = applyNotes;
 		this.applyBookmarks = applyBookmarks;
 		this.window = window;
@@ -678,7 +683,11 @@ class Text extends React.PureComponent {
 		// than most other ways of doing it...
 		let formattedSource = initialFormattedSource;
 
-		if (this.applyNotes && this.applyBookmarks) {
+		if (
+			this.applyNotes &&
+			this.applyBookmarks &&
+			this.applyWholeVerseHighlights
+		) {
 			formattedSource = initialFormattedSource.main
 				? {
 						...initialFormattedSource,
@@ -686,6 +695,16 @@ class Text extends React.PureComponent {
 							.map((s) => this.applyNotes(s, userNotes, this.handleNoteClick))
 							.map((s) =>
 								this.applyBookmarks(s, bookmarks, this.handleNoteClick),
+							)
+							.map((s) =>
+								this.applyWholeVerseHighlights(
+									s,
+									highlights.filter(
+										(h) =>
+											h.chapter === activeChapter &&
+											h.highlighted_words === null,
+									),
+								),
 							)[0],
 				  }
 				: initialFormattedSource;
@@ -739,11 +758,27 @@ class Text extends React.PureComponent {
 		}
 
 		let textComponents;
+		// Mapping the text again here because I need to apply a class for all highlights with a char count of null
+		const mappedText = plainText.map((v) => {
+			const highlightsInVerse = highlights.filter(
+				(h) => v.verse_start === h.verse_start && h.highlighted_words === null,
+			);
+			const wholeVerseHighlighted = !!highlightsInVerse.length;
+			if (wholeVerseHighlighted) {
+				const highlighted_color = highlightsInVerse[
+					highlightsInVerse.length - 1
+				]
+					? highlightsInVerse[highlightsInVerse.length - 1].highlighted_color
+					: '';
 
+				return { ...v, wholeVerseHighlighted, highlighted_color };
+			}
+			return v;
+		});
 		// Todo: Should handle each mode for formatted text and plain text in a separate component
 		// Handle exception thrown when there isn't plain text but readers mode is selected
 		/* eslint-disable react/no-danger */
-		if (plainText.length === 0 && !formattedSource.main) {
+		if (mappedText.length === 0 && !formattedSource.main) {
 			if (audioSource) {
 				textComponents = [
 					<AudioOnlyMessage
@@ -760,7 +795,7 @@ class Text extends React.PureComponent {
 				];
 			}
 		} else if (readersMode) {
-			textComponents = plainText.map(
+			textComponents = mappedText.map(
 				(verse) =>
 					verse.hasHighlight
 						? [
@@ -768,6 +803,21 @@ class Text extends React.PureComponent {
 									onMouseUp={this.handleMouseUp}
 									onMouseDown={this.getFirstVerse}
 									onClick={this.handleHighlightClick}
+									style={
+										verse.wholeVerseHighlighted
+											? {
+													background: `linear-gradient(${
+														verse.highlighted_color
+															? verse.highlighted_color
+															: 'inherit'
+													},${
+														verse.highlighted_color
+															? verse.highlighted_color
+															: 'inherit'
+													})`,
+											  }
+											: {}
+									}
 									data-verseid={verse.verse_start}
 									key={verse.verse_start}
 									dangerouslySetInnerHTML={{ __html: verse.verse_text }}
@@ -791,6 +841,21 @@ class Text extends React.PureComponent {
 									onMouseUp={this.handleMouseUp}
 									onMouseDown={this.getFirstVerse}
 									onClick={this.handleHighlightClick}
+									style={
+										verse.wholeVerseHighlighted
+											? {
+													background: `linear-gradient(${
+														verse.highlighted_color
+															? verse.highlighted_color
+															: 'inherit'
+													},${
+														verse.highlighted_color
+															? verse.highlighted_color
+															: 'inherit'
+													})`,
+											  }
+											: {}
+									}
 									data-verseid={verse.verse_start}
 									key={verse.verse_start}
 									className={
@@ -812,13 +877,28 @@ class Text extends React.PureComponent {
 						  ],
 			);
 		} else if (oneVersePerLine) {
-			textComponents = plainText.map(
+			textComponents = mappedText.map(
 				(verse) =>
 					verse.hasHighlight ? (
 						<span
 							onMouseUp={this.handleMouseUp}
 							onMouseDown={this.getFirstVerse}
 							onClick={this.handleHighlightClick}
+							style={
+								verse.wholeVerseHighlighted
+									? {
+											background: `linear-gradient(${
+												verse.highlighted_color
+													? verse.highlighted_color
+													: 'inherit'
+											},${
+												verse.highlighted_color
+													? verse.highlighted_color
+													: 'inherit'
+											})`,
+									  }
+									: {}
+							}
 							data-verseid={verse.verse_start}
 							key={verse.verse_start}
 							className={
@@ -853,6 +933,21 @@ class Text extends React.PureComponent {
 							onMouseUp={this.handleMouseUp}
 							onMouseDown={this.getFirstVerse}
 							onClick={this.handleHighlightClick}
+							style={
+								verse.wholeVerseHighlighted
+									? {
+											background: `linear-gradient(${
+												verse.highlighted_color
+													? verse.highlighted_color
+													: 'inherit'
+											},${
+												verse.highlighted_color
+													? verse.highlighted_color
+													: 'inherit'
+											})`,
+									  }
+									: {}
+							}
 							data-verseid={verse.verse_start}
 							key={verse.verse_start}
 							className={
@@ -904,13 +999,28 @@ class Text extends React.PureComponent {
 				);
 			}
 		} else {
-			textComponents = plainText.map(
+			textComponents = mappedText.map(
 				(verse) =>
 					verse.hasHighlight ? (
 						<span
 							onMouseUp={this.handleMouseUp}
 							onMouseDown={this.getFirstVerse}
 							onClick={this.handleHighlightClick}
+							style={
+								verse.wholeVerseHighlighted
+									? {
+											background: `linear-gradient(${
+												verse.highlighted_color
+													? verse.highlighted_color
+													: 'inherit'
+											},${
+												verse.highlighted_color
+													? verse.highlighted_color
+													: 'inherit'
+											})`,
+									  }
+									: {}
+							}
 							className={
 								verseIsActive &&
 								(parseInt(activeVerse, 10) === verse.verse_start ||
@@ -944,6 +1054,21 @@ class Text extends React.PureComponent {
 							onMouseUp={this.handleMouseUp}
 							onMouseDown={this.getFirstVerse}
 							onClick={this.handleHighlightClick}
+							style={
+								verse.wholeVerseHighlighted
+									? {
+											background: `linear-gradient(${
+												verse.highlighted_color
+													? verse.highlighted_color
+													: 'inherit'
+											},${
+												verse.highlighted_color
+													? verse.highlighted_color
+													: 'inherit'
+											})`,
+									  }
+									: {}
+							}
 							className={
 								verseIsActive &&
 								(parseInt(activeVerse, 10) === verse.verse_start ||
