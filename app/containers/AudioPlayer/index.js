@@ -110,7 +110,8 @@ export class AudioPlayer extends React.Component {
 			!isEqual(nextProps.activeFilesets, this.props.activeFilesets) ||
 			nextProps.activeBookId !== this.props.activeBookId ||
 			nextProps.activeChapter !== this.props.activeChapter ||
-			nextProps.audioType !== this.props.audioType
+			nextProps.audioType !== this.props.audioType ||
+			nextProps.verseNumber !== this.props.verseNumber
 		) {
 			this.getAudio(
 				nextProps.activeFilesets,

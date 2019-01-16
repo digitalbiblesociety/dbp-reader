@@ -7,8 +7,8 @@ const createHighlights = (highlights, arrayOfVerseObjects) => {
 	// Apply all highlights for that verse
 	// If the highlight goes past the end of the verse
 	// Create a new highlight that has the update range and a start verse of the next verse in line
-	const sortedHighlights = JSON.parse(JSON.stringify(highlights)).sort(
-		(a, b) => {
+	const sortedHighlights = JSON.parse(JSON.stringify(highlights))
+		.sort((a, b) => {
 			if (a.verse_start < b.verse_start) return -1;
 			if (a.verse_start > b.verse_start) return 1;
 			if (a.verse_start === b.verse_start) {
@@ -34,8 +34,8 @@ const createHighlights = (highlights, arrayOfVerseObjects) => {
 				if (a.highlight_start > b.highlight_start) return 1;
 			}
 			return 0;
-		},
-	);
+		})
+		.filter((h) => h.highlighted_words);
 	try {
 		const newArrayOfVerses = [];
 		const arrayOfVerses = [...arrayOfVerseObjects];
