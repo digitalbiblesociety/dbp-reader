@@ -326,65 +326,7 @@ class Text extends React.PureComponent {
 		}
 	}
 
-	setEventHandlersForFormattedVerses = (ref) => {
-		// Set mousedown and mouseup events on verse elements
-		try {
-			// Sets a "click" event on every formatted verse
-			const verses = [...ref.querySelectorAll('[data-id]')].slice(1);
-
-			verses.forEach((verse) => {
-				/* eslint-disable no-param-reassign, no-unused-expressions, jsx-a11y/no-static-element-interactions */
-				verse.onmousedown = (e) => {
-					e.stopPropagation();
-					this.getFirstVerse(e);
-				};
-				verse.onmouseup = (e) => {
-					e.stopPropagation();
-					this.handleMouseUp(e);
-				};
-				// No-op to get the mouse events to fire on iOS
-				verse.onclick = () => {};
-			});
-		} catch (err) {
-			if (process.env.NODE_ENV === 'development') {
-				console.error('Error adding event handlers to formatted verses: ', err); // eslint-disable-line no-console
-			}
-		}
-
-		// Set click events on bookmark icons
-		try {
-			const elements = [...ref.getElementsByClassName('bookmark-in-verse')];
-
-			elements.forEach((el, i) => {
-				el.onclick = (e) => {
-					e.stopPropagation();
-
-					this.handleNoteClick(i, true);
-				};
-			});
-		} catch (err) {
-			if (process.env.NODE_ENV === 'development') {
-				console.error('Error adding event handlers to formatted verses: ', err); // eslint-disable-line no-console
-			}
-		}
-
-		// Set click events on note icons
-		try {
-			const elements = [...ref.getElementsByClassName('note-in-verse')];
-
-			elements.forEach((el, i) => {
-				el.onclick = (e) => {
-					e.stopPropagation();
-
-					this.handleNoteClick(i, false);
-				};
-			});
-		} catch (err) {
-			if (process.env.NODE_ENV === 'development') {
-				console.error('Error adding event handlers to formatted verses: ', err); // eslint-disable-line no-console
-			}
-		}
-	};
+	/* eslint-disable no-param-reassign, no-unused-expressions, jsx-a11y/no-static-element-interactions */
 
 	setEventHandlersForFootnotes = (ref) => {
 		const notes = [...ref.getElementsByClassName('note')];
@@ -663,6 +605,7 @@ class Text extends React.PureComponent {
 			}
 		}
 	};
+	/* eslint-disable no-param-reassign, no-unused-expressions, jsx-a11y/no-static-element-interactions */
 
 	getTextComponents(domMethodsAvailable) {
 		const {
@@ -809,13 +752,11 @@ class Text extends React.PureComponent {
 			);
 			const wholeVerseHighlighted = !!highlightsInVerse.length;
 			if (wholeVerseHighlighted) {
-				const highlighted_color = highlightsInVerse[
-					highlightsInVerse.length - 1
-				]
+				const highlightedColor = highlightsInVerse[highlightsInVerse.length - 1]
 					? highlightsInVerse[highlightsInVerse.length - 1].highlighted_color
 					: '';
 
-				return { ...v, wholeVerseHighlighted, highlighted_color };
+				return { ...v, wholeVerseHighlighted, highlightedColor };
 			}
 			return v;
 		});
@@ -851,12 +792,12 @@ class Text extends React.PureComponent {
 										verse.wholeVerseHighlighted
 											? {
 													background: `linear-gradient(${
-														verse.highlighted_color
-															? verse.highlighted_color
+														verse.highlightedColor
+															? verse.highlightedColor
 															: 'inherit'
 													},${
-														verse.highlighted_color
-															? verse.highlighted_color
+														verse.highlightedColor
+															? verse.highlightedColor
 															: 'inherit'
 													})`,
 											  }
@@ -889,12 +830,12 @@ class Text extends React.PureComponent {
 										verse.wholeVerseHighlighted
 											? {
 													background: `linear-gradient(${
-														verse.highlighted_color
-															? verse.highlighted_color
+														verse.highlightedColor
+															? verse.highlightedColor
 															: 'inherit'
 													},${
-														verse.highlighted_color
-															? verse.highlighted_color
+														verse.highlightedColor
+															? verse.highlightedColor
 															: 'inherit'
 													})`,
 											  }
@@ -932,12 +873,12 @@ class Text extends React.PureComponent {
 								verse.wholeVerseHighlighted
 									? {
 											background: `linear-gradient(${
-												verse.highlighted_color
-													? verse.highlighted_color
+												verse.highlightedColor
+													? verse.highlightedColor
 													: 'inherit'
 											},${
-												verse.highlighted_color
-													? verse.highlighted_color
+												verse.highlightedColor
+													? verse.highlightedColor
 													: 'inherit'
 											})`,
 									  }
@@ -981,12 +922,12 @@ class Text extends React.PureComponent {
 								verse.wholeVerseHighlighted
 									? {
 											background: `linear-gradient(${
-												verse.highlighted_color
-													? verse.highlighted_color
+												verse.highlightedColor
+													? verse.highlightedColor
 													: 'inherit'
 											},${
-												verse.highlighted_color
-													? verse.highlighted_color
+												verse.highlightedColor
+													? verse.highlightedColor
 													: 'inherit'
 											})`,
 									  }
@@ -1054,12 +995,12 @@ class Text extends React.PureComponent {
 								verse.wholeVerseHighlighted
 									? {
 											background: `linear-gradient(${
-												verse.highlighted_color
-													? verse.highlighted_color
+												verse.highlightedColor
+													? verse.highlightedColor
 													: 'inherit'
 											},${
-												verse.highlighted_color
-													? verse.highlighted_color
+												verse.highlightedColor
+													? verse.highlightedColor
 													: 'inherit'
 											})`,
 									  }
@@ -1102,12 +1043,12 @@ class Text extends React.PureComponent {
 								verse.wholeVerseHighlighted
 									? {
 											background: `linear-gradient(${
-												verse.highlighted_color
-													? verse.highlighted_color
+												verse.highlightedColor
+													? verse.highlightedColor
 													: 'inherit'
 											},${
-												verse.highlighted_color
-													? verse.highlighted_color
+												verse.highlightedColor
+													? verse.highlightedColor
 													: 'inherit'
 											})`,
 									  }
