@@ -8,8 +8,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import dynamic from 'next/dynamic';
 import SvgWrapper from '../SvgWrapper';
-const TextSelection = dynamic(import('../../containers/TextSelection'));
-const ChapterSelection = dynamic(import('../../containers/ChapterSelection'));
+const TextSelection = dynamic(import('../../containers/TextSelection'), {
+	loading: () => null,
+});
+const ChapterSelection = dynamic(import('../../containers/ChapterSelection'), {
+	loading: () => null,
+});
 
 class NavigationBar extends React.PureComponent {
 	// eslint-disable-line react/prefer-stateless-function
