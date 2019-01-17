@@ -148,7 +148,6 @@
 		],
 		"include": [
 			"core-js",
-			"lodash",
 			"eventsource-polyfill"
 		]
 	},
@@ -231,7 +230,7 @@
 		"react-share": "^2.0.0",
 		"react-transition-group": "^2.2.1",
 		"react-virtualized": "^9.18.5",
-		"redux": "3.6.0",
+		"redux": "4.0.1",
 		"redux-immutable": "4.0.0",
 		"redux-persist": "^4.10.2",
 		"redux-persist-immutable": "github:JH108/redux-persist-immutable#dbp-reader",
