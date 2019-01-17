@@ -49,6 +49,7 @@ import {
 } from './formattedTextUtils';
 import ReadFullChapter from '../../components/ReadFullChapter';
 import setEventHandlersForFormattedVerses from '../../utils/requiresDom/setEventHandlersForFormattedVerses';
+import setEventHandlersForFootnotes from '../../utils/requiresDom/setEventHandlersForFootnotes';
 /* Disabling the jsx-a11y linting because we need to capture the selected text
 	 and the most straight forward way of doing so is with the onMouseUp event */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
@@ -82,7 +83,7 @@ class Text extends React.PureComponent {
 		this.window = window;
 
 		if (this.format) {
-			this.setEventHandlersForFootnotes(this.format);
+			setEventHandlersForFootnotes(this.format, this.openFootnote);
 			setEventHandlersForFormattedVerses(this.format, {
 				mouseDown: this.getFirstVerse,
 				mouseUp: this.handleMouseUp,
@@ -90,7 +91,7 @@ class Text extends React.PureComponent {
 				noteClick: this.handleNoteClick,
 			});
 		} else if (this.formatHighlight) {
-			this.setEventHandlersForFootnotes(this.formatHighlight);
+			setEventHandlersForFootnotes(this.formatHighlight, this.openFootnote);
 			setEventHandlersForFormattedVerses(this.formatHighlight, {
 				mouseDown: this.getFirstVerse,
 				mouseUp: this.handleMouseUp,
@@ -241,7 +242,7 @@ class Text extends React.PureComponent {
 			(this.format || this.formatHighlight)
 		) {
 			if (this.format) {
-				this.setEventHandlersForFootnotes(this.format);
+				setEventHandlersForFootnotes(this.format, this.openFootnote);
 				setEventHandlersForFormattedVerses(this.format, {
 					mouseDown: this.getFirstVerse,
 					mouseUp: this.handleMouseUp,
@@ -249,7 +250,7 @@ class Text extends React.PureComponent {
 					noteClick: this.handleNoteClick,
 				});
 			} else if (this.formatHighlight) {
-				this.setEventHandlersForFootnotes(this.formatHighlight);
+				setEventHandlersForFootnotes(this.formatHighlight, this.openFootnote);
 				setEventHandlersForFormattedVerses(this.formatHighlight, {
 					mouseDown: this.getFirstVerse,
 					mouseUp: this.handleMouseUp,
@@ -261,7 +262,7 @@ class Text extends React.PureComponent {
 			!isEqual(this.props.highlights, prevProps.highlights) &&
 			this.formatHighlight
 		) {
-			this.setEventHandlersForFootnotes(this.formatHighlight);
+			setEventHandlersForFootnotes(this.formatHighlight, this.openFootnote);
 			setEventHandlersForFormattedVerses(this.formatHighlight, {
 				mouseDown: this.getFirstVerse,
 				mouseUp: this.handleMouseUp,
@@ -288,7 +289,7 @@ class Text extends React.PureComponent {
 		) {
 			// Need to set event handlers again here because they are removed once the plain text is rendered
 			if (this.format) {
-				this.setEventHandlersForFootnotes(this.format);
+				setEventHandlersForFootnotes(this.format, this.openFootnote);
 				setEventHandlersForFormattedVerses(this.format, {
 					mouseDown: this.getFirstVerse,
 					mouseUp: this.handleMouseUp,
@@ -296,7 +297,7 @@ class Text extends React.PureComponent {
 					noteClick: this.handleNoteClick,
 				});
 			} else if (this.formatHighlight) {
-				this.setEventHandlersForFootnotes(this.formatHighlight);
+				setEventHandlersForFootnotes(this.formatHighlight, this.openFootnote);
 				setEventHandlersForFormattedVerses(this.formatHighlight, {
 					mouseDown: this.getFirstVerse,
 					mouseUp: this.handleMouseUp,
@@ -308,7 +309,7 @@ class Text extends React.PureComponent {
 
 		// This handles setting the events on a page refresh or navigation via url
 		if (this.format && !this.props.loadingNewChapterText) {
-			this.setEventHandlersForFootnotes(this.format);
+			setEventHandlersForFootnotes(this.format, this.openFootnote);
 			setEventHandlersForFormattedVerses(this.format, {
 				mouseDown: this.getFirstVerse,
 				mouseUp: this.handleMouseUp,
@@ -316,7 +317,7 @@ class Text extends React.PureComponent {
 				noteClick: this.handleNoteClick,
 			});
 		} else if (this.formatHighlight && !this.props.loadingNewChapterText) {
-			this.setEventHandlersForFootnotes(this.formatHighlight);
+			setEventHandlersForFootnotes(this.formatHighlight, this.openFootnote);
 			setEventHandlersForFormattedVerses(this.formatHighlight, {
 				mouseDown: this.getFirstVerse,
 				mouseUp: this.handleMouseUp,
@@ -327,33 +328,6 @@ class Text extends React.PureComponent {
 	}
 
 	/* eslint-disable no-param-reassign, no-unused-expressions, jsx-a11y/no-static-element-interactions */
-
-	setEventHandlersForFootnotes = (ref) => {
-		const notes = [...ref.getElementsByClassName('note')];
-
-		notes.forEach((note) => {
-			if (
-				note.childNodes &&
-				note.childNodes[0] &&
-				typeof note.childNodes[0].removeAttribute === 'function'
-			) {
-				note.childNodes[0].removeAttribute('href');
-			}
-
-			note.onclick = (e) => {
-				e.stopPropagation();
-				if (typeof this.window !== 'undefined') {
-					const rightEdge = this.window.innerWidth - 300;
-					const x = rightEdge < e.clientX ? rightEdge : e.clientX;
-
-					this.openFootnote({
-						id: note.attributes.id.value,
-						coords: { x, y: e.clientY },
-					});
-				}
-			};
-		});
-	};
 
 	setFormattedRefHighlight = (el) => {
 		this.formatHighlight = el;
