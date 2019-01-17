@@ -6,9 +6,14 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import ChapterSelection from '../../containers/ChapterSelection';
-import TextSelection from '../../containers/TextSelection';
+import dynamic from 'next/dynamic';
 import SvgWrapper from '../SvgWrapper';
+const TextSelection = dynamic(import('../../containers/TextSelection'), {
+	loading: () => null,
+});
+const ChapterSelection = dynamic(import('../../containers/ChapterSelection'), {
+	loading: () => null,
+});
 
 class NavigationBar extends React.PureComponent {
 	// eslint-disable-line react/prefer-stateless-function
@@ -73,7 +78,9 @@ class NavigationBar extends React.PureComponent {
 								  }${activeTextName}`
 								: `${activeTextId} Version`}
 						</h1>
-						<TextSelection active={isVersionSelectionActive} />
+						{isVersionSelectionActive && (
+							<TextSelection active={isVersionSelectionActive} />
+						)}
 					</div>
 					<div
 						id={'chapter-dropdown-button'}
@@ -98,7 +105,9 @@ class NavigationBar extends React.PureComponent {
 								? `${activeBookName} ${activeChapter}`
 								: 'No Book Selected'}
 						</h1>
-						<ChapterSelection active={isChapterSelectionActive} />
+						{isChapterSelectionActive && (
+							<ChapterSelection active={isChapterSelectionActive} />
+						)}
 					</div>
 				</div>
 			</div>

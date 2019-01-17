@@ -41,7 +41,7 @@
 		"test:watch": "cross-env NODE_ENV=test jest --watchAll",
 		"coveralls": "cat ./coverage/lcov.info | coveralls",
 		"build:changes": "npm run build; pm2 restart all",
-		"build:sass": "sass ./static/app.scss ./cdn/style.css; aws s3 sync ./cdn s3://bibleis-prod/",
+		"build:sass": "sass ./static/app.scss ./cdn/styles.css; csso cdn/styles.css --output cdn/styles.min.css; gzip cdn/styles.min.css; mv cdn/styles.min.css.gz cdn/styles.min.css; aws s3 sync ./cdn s3://bibleis-prod/ --include ./cdn/styles.min.css --content-encoding gzip",
 		"reload:pm2": "pm2 reload ecosystem.config.js --update-env --env production --only bible.is.prod;",
 		"fetch-latest-site": "git checkout .; rm package-lock.json; git pull origin master; npm install; npm run build; pm2 restart ecosystem.config.js --update-env --env production --only bible.is.prod;",
 		"fetch-latest-dev": "git checkout .; rm package-lock.json; git pull origin development; npm install; npm run build; pm2 restart ecosystem.config.js --update-env --env production --only bible.is.dev;"
@@ -148,7 +148,6 @@
 		],
 		"include": [
 			"core-js",
-			"lodash",
 			"eventsource-polyfill"
 		]
 	},
@@ -231,10 +230,10 @@
 		"react-share": "^2.0.0",
 		"react-transition-group": "^2.2.1",
 		"react-virtualized": "^9.18.5",
-		"redux": "3.6.0",
+		"redux": "4.0.1",
 		"redux-immutable": "4.0.0",
 		"redux-persist": "^4.10.2",
-		"redux-persist-immutable": "^4.3.1",
+		"redux-persist-immutable": "github:JH108/redux-persist-immutable#dbp-reader",
 		"redux-saga": "0.15.3",
 		"reselect": "3.0.1",
 		"sanitize.css": "4.1.0",
