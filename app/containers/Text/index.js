@@ -48,6 +48,7 @@ import {
 	applyWholeVerseHighlights,
 } from './formattedTextUtils';
 import ReadFullChapter from '../../components/ReadFullChapter';
+import setEventHandlersForFormattedVerses from '../../utils/requiresDom/setEventHandlersForFormattedVerses';
 /* Disabling the jsx-a11y linting because we need to capture the selected text
 	 and the most straight forward way of doing so is with the onMouseUp event */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
@@ -82,10 +83,20 @@ class Text extends React.PureComponent {
 
 		if (this.format) {
 			this.setEventHandlersForFootnotes(this.format);
-			this.setEventHandlersForFormattedVerses(this.format);
+			setEventHandlersForFormattedVerses(this.format, {
+				mouseDown: this.getFirstVerse,
+				mouseUp: this.handleMouseUp,
+				bookmarkClick: this.handleNoteClick,
+				noteClick: this.handleNoteClick,
+			});
 		} else if (this.formatHighlight) {
 			this.setEventHandlersForFootnotes(this.formatHighlight);
-			this.setEventHandlersForFormattedVerses(this.formatHighlight);
+			setEventHandlersForFormattedVerses(this.formatHighlight, {
+				mouseDown: this.getFirstVerse,
+				mouseUp: this.handleMouseUp,
+				bookmarkClick: this.handleNoteClick,
+				noteClick: this.handleNoteClick,
+			});
 		}
 		this.domMethodsAvailable();
 		this.getFootnotesOnFirstRender();
@@ -231,17 +242,32 @@ class Text extends React.PureComponent {
 		) {
 			if (this.format) {
 				this.setEventHandlersForFootnotes(this.format);
-				this.setEventHandlersForFormattedVerses(this.format);
+				setEventHandlersForFormattedVerses(this.format, {
+					mouseDown: this.getFirstVerse,
+					mouseUp: this.handleMouseUp,
+					bookmarkClick: this.handleNoteClick,
+					noteClick: this.handleNoteClick,
+				});
 			} else if (this.formatHighlight) {
 				this.setEventHandlersForFootnotes(this.formatHighlight);
-				this.setEventHandlersForFormattedVerses(this.formatHighlight);
+				setEventHandlersForFormattedVerses(this.formatHighlight, {
+					mouseDown: this.getFirstVerse,
+					mouseUp: this.handleMouseUp,
+					bookmarkClick: this.handleNoteClick,
+					noteClick: this.handleNoteClick,
+				});
 			}
 		} else if (
 			!isEqual(this.props.highlights, prevProps.highlights) &&
 			this.formatHighlight
 		) {
 			this.setEventHandlersForFootnotes(this.formatHighlight);
-			this.setEventHandlersForFormattedVerses(this.formatHighlight);
+			setEventHandlersForFormattedVerses(this.formatHighlight, {
+				mouseDown: this.getFirstVerse,
+				mouseUp: this.handleMouseUp,
+				bookmarkClick: this.handleNoteClick,
+				noteClick: this.handleNoteClick,
+			});
 		} else if (
 			prevProps.userSettings.getIn([
 				'toggleOptions',
@@ -263,20 +289,40 @@ class Text extends React.PureComponent {
 			// Need to set event handlers again here because they are removed once the plain text is rendered
 			if (this.format) {
 				this.setEventHandlersForFootnotes(this.format);
-				this.setEventHandlersForFormattedVerses(this.format);
+				setEventHandlersForFormattedVerses(this.format, {
+					mouseDown: this.getFirstVerse,
+					mouseUp: this.handleMouseUp,
+					bookmarkClick: this.handleNoteClick,
+					noteClick: this.handleNoteClick,
+				});
 			} else if (this.formatHighlight) {
 				this.setEventHandlersForFootnotes(this.formatHighlight);
-				this.setEventHandlersForFormattedVerses(this.formatHighlight);
+				setEventHandlersForFormattedVerses(this.formatHighlight, {
+					mouseDown: this.getFirstVerse,
+					mouseUp: this.handleMouseUp,
+					bookmarkClick: this.handleNoteClick,
+					noteClick: this.handleNoteClick,
+				});
 			}
 		}
 
 		// This handles setting the events on a page refresh or navigation via url
 		if (this.format && !this.props.loadingNewChapterText) {
 			this.setEventHandlersForFootnotes(this.format);
-			this.setEventHandlersForFormattedVerses(this.format);
+			setEventHandlersForFormattedVerses(this.format, {
+				mouseDown: this.getFirstVerse,
+				mouseUp: this.handleMouseUp,
+				bookmarkClick: this.handleNoteClick,
+				noteClick: this.handleNoteClick,
+			});
 		} else if (this.formatHighlight && !this.props.loadingNewChapterText) {
 			this.setEventHandlersForFootnotes(this.formatHighlight);
-			this.setEventHandlersForFormattedVerses(this.formatHighlight);
+			setEventHandlersForFormattedVerses(this.formatHighlight, {
+				mouseDown: this.getFirstVerse,
+				mouseUp: this.handleMouseUp,
+				bookmarkClick: this.handleNoteClick,
+				noteClick: this.handleNoteClick,
+			});
 		}
 	}
 
