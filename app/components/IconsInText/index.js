@@ -9,7 +9,6 @@ import PropTypes from 'prop-types';
 import SvgWrapper from '../SvgWrapper';
 
 function IconsInText({ noteData, bookmarkData, clickHandler }) {
-	// console.log('icons in text', noteData, bookmarkData);
 	if (noteData.hasNote && bookmarkData.hasBookmark) {
 		return [
 			<SvgWrapper

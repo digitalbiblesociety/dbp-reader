@@ -599,7 +599,6 @@ class Text extends React.PureComponent {
 			userAuthenticated,
 			activeBookId,
 		} = this.props;
-		// console.log('init text', initialText);
 
 		const initialFormattedSource = JSON.parse(
 			JSON.stringify(initialFormattedSourceFromProps),
