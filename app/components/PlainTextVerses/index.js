@@ -7,6 +7,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import PlainTextVerse from '../PlainTextVerse';
+import ReadersModeVerse from '../ReadersModeVerse';
 
 const PlainTextVerses = ({
 	textComponents,
@@ -19,8 +20,28 @@ const PlainTextVerses = ({
 	verseIsActive,
 	activeVerse,
 }) => {
+	console.log(
+		'functions',
+		'\nonMouseUp',
+		onMouseUp,
+		'\nonMouseDown',
+		onMouseDown,
+		'\nonNoteClick',
+		onNoteClick,
+		'\nonHighlightClick',
+		onHighlightClick,
+	);
 	if (readersMode) {
-		// return reader components
+		return textComponents.map((verse) => (
+			<ReadersModeVerse
+				verse={verse}
+				onMouseUp={onMouseUp}
+				onMouseDown={onMouseDown}
+				onHighlightClick={onHighlightClick}
+				activeVerse={activeVerse}
+				verseIsActive={verseIsActive}
+			/>
+		));
 	}
 	return textComponents.map((verse) => (
 		<PlainTextVerse
