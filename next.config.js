@@ -4,6 +4,11 @@ const withSass = require('@zeit/next-sass');
 const withBundleAnalyzer = require('@zeit/next-bundle-analyzer');
 const isProd = process.env.NODE_ENV === 'production';
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
+const LodashReplacement = new LodashModuleReplacementPlugin({
+	paths: true,
+	collections: true,
+	currying: true,
+});
 
 if (process.env.ANALYZE_BUNDLE) {
 	module.exports = withBundleAnalyzer({
@@ -25,7 +30,7 @@ if (process.env.ANALYZE_BUNDLE) {
 						return entries;
 					};
 					config.plugins = config.plugins || [];
-					config.plugins.push(new LodashModuleReplacementPlugin());
+					config.plugins.push(LodashReplacement);
 
 					/* eslint-enable no-param-reassign */
 					return config;
@@ -64,9 +69,9 @@ if (process.env.ANALYZE_BUNDLE) {
 
 					return entries;
 				};
-				/* eslint-enable no-param-reassign */
 				config.plugins = config.plugins || [];
-				config.plugins.push(new LodashModuleReplacementPlugin());
+				config.plugins.push(LodashReplacement);
+				/* eslint-enable no-param-reassign */
 
 				return config;
 			},
@@ -91,9 +96,9 @@ if (process.env.ANALYZE_BUNDLE) {
 
 					return entries;
 				};
-				/* eslint-enable no-param-reassign */
 				config.plugins = config.plugins || [];
-				config.plugins.push(new LodashModuleReplacementPlugin());
+				config.plugins.push(LodashReplacement);
+				/* eslint-enable no-param-reassign */
 
 				return config;
 			},
