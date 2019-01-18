@@ -15,7 +15,6 @@ import SvgWrapper from '../../components/SvgWrapper';
 import ContextPortal from '../../components/ContextPortal';
 import FootnotePortal from '../../components/FootnotePortal';
 import LoadingSpinner from '../../components/LoadingSpinner';
-import IconsInText from '../../components/IconsInText';
 import PopupMessage from '../../components/PopupMessage';
 import PleaseSignInMessage from '../../components/PleaseSignInMessage';
 import AudioOnlyMessage from '../../components/AudioOnlyMessage';
@@ -51,6 +50,8 @@ import ReadFullChapter from '../../components/ReadFullChapter';
 import setEventHandlersForFormattedVerses from '../../utils/requiresDom/setEventHandlersForFormattedVerses';
 import setEventHandlersForFootnotes from '../../utils/requiresDom/setEventHandlersForFootnotes';
 import addHighlight from '../../utils/requiresDom/addHighlight';
+import PlainTextVerses from '../../components/PlainTextVerses';
+import shareHighlightToFacebook from '../../utils/requiresDom/shareToFacebook';
 
 /* Disabling the jsx-a11y linting because we need to capture the selected text
 	 and the most straight forward way of doing so is with the onMouseUp event */
@@ -756,187 +757,29 @@ class Text extends React.PureComponent {
 				];
 			}
 		} else if (readersMode) {
-			textComponents = mappedText.map(
-				(verse) =>
-					verse.hasHighlight
-						? [
-								<span
-									onMouseUp={this.handleMouseUp}
-									onMouseDown={this.getFirstVerse}
-									onClick={this.handleHighlightClick}
-									style={
-										verse.wholeVerseHighlighted
-											? {
-													background: `linear-gradient(${
-														verse.highlightedColor
-															? verse.highlightedColor
-															: 'inherit'
-													},${
-														verse.highlightedColor
-															? verse.highlightedColor
-															: 'inherit'
-													})`,
-											  }
-											: {}
-									}
-									data-verseid={verse.verse_start}
-									key={verse.verse_start}
-									dangerouslySetInnerHTML={{ __html: verse.verse_text }}
-									className={
-										verseIsActive &&
-										(parseInt(activeVerse, 10) === verse.verse_start ||
-											activeVerse === verse.verse_start_alt)
-											? 'active-verse'
-											: ''
-									}
-								/>,
-								<span
-									key={`${verse.verse_end}spaces`}
-									className={'readers-spaces'}
-								>
-									&nbsp;
-								</span>,
-						  ]
-						: [
-								<span
-									onMouseUp={this.handleMouseUp}
-									onMouseDown={this.getFirstVerse}
-									onClick={this.handleHighlightClick}
-									style={
-										verse.wholeVerseHighlighted
-											? {
-													background: `linear-gradient(${
-														verse.highlightedColor
-															? verse.highlightedColor
-															: 'inherit'
-													},${
-														verse.highlightedColor
-															? verse.highlightedColor
-															: 'inherit'
-													})`,
-											  }
-											: {}
-									}
-									data-verseid={verse.verse_start}
-									key={verse.verse_start}
-									className={
-										verseIsActive &&
-										(parseInt(activeVerse, 10) === verse.verse_start ||
-											activeVerse === verse.verse_start_alt)
-											? 'active-verse'
-											: ''
-									}
-								>
-									{verse.verse_text}
-								</span>,
-								<span
-									key={`${verse.verse_end}spaces`}
-									className={'readers-spaces'}
-								>
-									&nbsp;
-								</span>,
-						  ],
-			);
+			textComponents = PlainTextVerses({
+				textComponents: mappedText,
+				onMouseUp: this.handleMouseUp,
+				onMouseDown: this.getFirstVerse,
+				onHighlightClick: this.handleHighlightClick,
+				onNoteClick: this.handleNoteClick,
+				readersMode,
+				oneVersePerLine,
+				activeVerse: parseInt(activeVerse, 10),
+				verseIsActive: !!verseIsActive,
+			});
 		} else if (oneVersePerLine) {
-			textComponents = mappedText.map(
-				(verse) =>
-					verse.hasHighlight ? (
-						<span
-							onMouseUp={this.handleMouseUp}
-							onMouseDown={this.getFirstVerse}
-							onClick={this.handleHighlightClick}
-							style={
-								verse.wholeVerseHighlighted
-									? {
-											background: `linear-gradient(${
-												verse.highlightedColor
-													? verse.highlightedColor
-													: 'inherit'
-											},${
-												verse.highlightedColor
-													? verse.highlightedColor
-													: 'inherit'
-											})`,
-									  }
-									: {}
-							}
-							data-verseid={verse.verse_start}
-							key={verse.verse_start}
-							className={
-								verseIsActive &&
-								(parseInt(activeVerse, 10) === verse.verse_start ||
-									activeVerse === verse.verse_start_alt)
-									? 'active-verse'
-									: ''
-							}
-						>
-							<br />
-							<sup data-verseid={verse.verse_start}>
-								&nbsp;
-								{verse.verse_start_alt || verse.verse_start}
-								&nbsp;
-							</sup>
-							<IconsInText
-								clickHandler={this.handleNoteClick}
-								bookmarkData={{
-									hasBookmark: verse.hasBookmark,
-									index: verse.bookmarkIndex,
-								}}
-								noteData={{ hasNote: verse.hasNote, index: verse.noteIndex }}
-							/>
-							<span
-								data-verseid={verse.verse_start}
-								dangerouslySetInnerHTML={{ __html: verse.verse_text }}
-							/>
-						</span>
-					) : (
-						<span
-							onMouseUp={this.handleMouseUp}
-							onMouseDown={this.getFirstVerse}
-							onClick={this.handleHighlightClick}
-							style={
-								verse.wholeVerseHighlighted
-									? {
-											background: `linear-gradient(${
-												verse.highlightedColor
-													? verse.highlightedColor
-													: 'inherit'
-											},${
-												verse.highlightedColor
-													? verse.highlightedColor
-													: 'inherit'
-											})`,
-									  }
-									: {}
-							}
-							data-verseid={verse.verse_start}
-							key={verse.verse_start}
-							className={
-								verseIsActive &&
-								(parseInt(activeVerse, 10) === verse.verse_start ||
-									activeVerse === verse.verse_start_alt)
-									? 'active-verse'
-									: ''
-							}
-						>
-							<br />
-							<sup data-verseid={verse.verse_start}>
-								&nbsp;
-								{verse.verse_start_alt || verse.verse_start}
-								&nbsp;
-							</sup>
-							<IconsInText
-								clickHandler={this.handleNoteClick}
-								bookmarkData={{
-									hasBookmark: verse.hasBookmark,
-									index: verse.bookmarkIndex,
-								}}
-								noteData={{ hasNote: verse.hasNote, index: verse.noteIndex }}
-							/>
-							<span data-verseid={verse.verse_start}>{verse.verse_text}</span>
-						</span>
-					),
-			);
+			textComponents = PlainTextVerses({
+				textComponents: mappedText,
+				onMouseUp: this.handleMouseUp,
+				onMouseDown: this.getFirstVerse,
+				onHighlightClick: this.handleHighlightClick,
+				onNoteClick: this.handleNoteClick,
+				readersMode,
+				oneVersePerLine,
+				activeVerse: parseInt(activeVerse, 10),
+				verseIsActive: !!verseIsActive,
+			});
 		} else if (
 			formattedSource.main &&
 			(!verseNumber || (verseNumber && formattedVerse))
@@ -960,103 +803,17 @@ class Text extends React.PureComponent {
 				);
 			}
 		} else {
-			textComponents = mappedText.map(
-				(verse) =>
-					verse.hasHighlight ? (
-						<span
-							onMouseUp={this.handleMouseUp}
-							onMouseDown={this.getFirstVerse}
-							onClick={this.handleHighlightClick}
-							style={
-								verse.wholeVerseHighlighted
-									? {
-											background: `linear-gradient(${
-												verse.highlightedColor
-													? verse.highlightedColor
-													: 'inherit'
-											},${
-												verse.highlightedColor
-													? verse.highlightedColor
-													: 'inherit'
-											})`,
-									  }
-									: {}
-							}
-							className={
-								verseIsActive &&
-								(parseInt(activeVerse, 10) === verse.verse_start ||
-									activeVerse === verse.verse_start_alt)
-									? 'align-left active-verse'
-									: 'align-left'
-							}
-							data-verseid={verse.verse_start}
-							key={verse.verse_start}
-						>
-							<sup data-verseid={verse.verse_start}>
-								&nbsp;
-								{verse.verse_start_alt || verse.verse_start}
-								&nbsp;
-							</sup>
-							<IconsInText
-								clickHandler={this.handleNoteClick}
-								bookmarkData={{
-									hasBookmark: verse.hasBookmark,
-									index: verse.bookmarkIndex,
-								}}
-								noteData={{ hasNote: verse.hasNote, index: verse.noteIndex }}
-							/>
-							<span
-								data-verseid={verse.verse_start}
-								dangerouslySetInnerHTML={{ __html: verse.verse_text }}
-							/>
-						</span>
-					) : (
-						<span
-							onMouseUp={this.handleMouseUp}
-							onMouseDown={this.getFirstVerse}
-							onClick={this.handleHighlightClick}
-							style={
-								verse.wholeVerseHighlighted
-									? {
-											background: `linear-gradient(${
-												verse.highlightedColor
-													? verse.highlightedColor
-													: 'inherit'
-											},${
-												verse.highlightedColor
-													? verse.highlightedColor
-													: 'inherit'
-											})`,
-									  }
-									: {}
-							}
-							className={
-								verseIsActive &&
-								(parseInt(activeVerse, 10) === verse.verse_start ||
-									activeVerse === verse.verse_start_alt)
-									? 'align-left active-verse'
-									: 'align-left'
-							}
-							data-verseid={verse.verse_start}
-							key={verse.verse_start}
-						>
-							<sup data-verseid={verse.verse_start}>
-								&nbsp;
-								{verse.verse_start_alt || verse.verse_start}
-								&nbsp;
-							</sup>
-							<IconsInText
-								clickHandler={this.handleNoteClick}
-								bookmarkData={{
-									hasBookmark: verse.hasBookmark,
-									index: verse.bookmarkIndex,
-								}}
-								noteData={{ hasNote: verse.hasNote, index: verse.noteIndex }}
-							/>
-							<span data-verseid={verse.verse_start}>{verse.verse_text}</span>
-						</span>
-					),
-			);
+			textComponents = PlainTextVerses({
+				textComponents: mappedText,
+				onMouseUp: this.handleMouseUp,
+				onMouseDown: this.getFirstVerse,
+				onHighlightClick: this.handleHighlightClick,
+				onNoteClick: this.handleNoteClick,
+				readersMode,
+				oneVersePerLine,
+				activeVerse: parseInt(activeVerse, 10),
+				verseIsActive: !!verseIsActive,
+			});
 		}
 
 		if (
@@ -1364,25 +1121,14 @@ class Text extends React.PureComponent {
 	};
 
 	shareHighlightToFacebook = () => {
-		if (typeof this.window !== 'undefined') {
-			const FB = this.window.FB;
-			const { activeBookName: book, activeChapter: chapter } = this.props;
-			const { firstVerse: v1, lastVerse: v2, selectedText: sl } = this.state;
-			const verseRange =
-				v1 === v2
-					? `${book} ${chapter}:${v1}\n${sl}`
-					: `${book} ${chapter}:${v1}-${v2}\n"${sl}"`;
+		const { activeBookName: book, activeChapter: chapter } = this.props;
+		const { firstVerse: v1, lastVerse: v2, selectedText: sl } = this.state;
+		const verseRange =
+			v1 === v2
+				? `${book} ${chapter}:${v1}\n${sl}`
+				: `${book} ${chapter}:${v1}-${v2}\n"${sl}"`;
 
-			FB.ui(
-				{
-					method: 'share',
-					quote: verseRange,
-					href: 'http://is.bible.build/',
-				},
-				(res) => res,
-			);
-		}
-		this.closeContextMenu();
+		shareHighlightToFacebook(verseRange, this.closeContextMenu);
 	};
 
 	mainWrapperRef = (el) => {
