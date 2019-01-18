@@ -3,6 +3,7 @@ const withCss = require('@zeit/next-css');
 const withSass = require('@zeit/next-sass');
 const withBundleAnalyzer = require('@zeit/next-bundle-analyzer');
 const isProd = process.env.NODE_ENV === 'production';
+const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 
 if (process.env.ANALYZE_BUNDLE) {
 	module.exports = withBundleAnalyzer({
@@ -23,6 +24,9 @@ if (process.env.ANALYZE_BUNDLE) {
 
 						return entries;
 					};
+					config.plugins = config.plugins || [];
+					config.plugins.push(new LodashModuleReplacementPlugin());
+
 					/* eslint-enable no-param-reassign */
 					return config;
 				},
@@ -61,6 +65,9 @@ if (process.env.ANALYZE_BUNDLE) {
 					return entries;
 				};
 				/* eslint-enable no-param-reassign */
+				config.plugins = config.plugins || [];
+				config.plugins.push(new LodashModuleReplacementPlugin());
+
 				return config;
 			},
 			generateBuildId: async () => process.env.BUILD_ID,
@@ -85,6 +92,9 @@ if (process.env.ANALYZE_BUNDLE) {
 					return entries;
 				};
 				/* eslint-enable no-param-reassign */
+				config.plugins = config.plugins || [];
+				config.plugins.push(new LodashModuleReplacementPlugin());
+
 				return config;
 			},
 		}),
