@@ -31,12 +31,8 @@ const ReadersModeVerse = ({
 			}
 			data-verseid={verse.verse_start}
 			key={verse.verse_start}
-			dangerouslySetInnerHTML={
-				verse.hasHighlight && { __html: verse.verse_text }
-			}
-		>
-			{!verse.hasHighlight && verse.verse_text}
-		</span>
+			dangerouslySetInnerHTML={{ __html: verse.verse_text }}
+		/>
 		<span key={`${verse.verse_end}spaces`} className={'readers-spaces'}>
 			&nbsp;
 		</span>

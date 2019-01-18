@@ -20,17 +20,6 @@ const PlainTextVerses = ({
 	verseIsActive,
 	activeVerse,
 }) => {
-	console.log(
-		'functions',
-		'\nonMouseUp',
-		onMouseUp,
-		'\nonMouseDown',
-		onMouseDown,
-		'\nonNoteClick',
-		onNoteClick,
-		'\nonHighlightClick',
-		onHighlightClick,
-	);
 	if (readersMode) {
 		return textComponents.map((verse) => (
 			<ReadersModeVerse
