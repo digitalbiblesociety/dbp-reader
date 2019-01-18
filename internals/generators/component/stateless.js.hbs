@@ -5,21 +5,21 @@
 */
 
 import React from 'react';
-// import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 {{#if wantMessages}}
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
 {{/if}}
 
-function {{ properCase name }}() {
-	return (
-		<div>
-		{{#if wantMessages}}
-			<FormattedMessage {...messages.header} />
-		{{/if}}
-		</div>
-	);
+const {{ properCase name }} = () => {
+return (
+<div>
+	{{#if wantMessages}}
+	<FormattedMessage {...messages.header} />
+	{{/if}}
+</div>
+);
 }
 
 {{ properCase name }}.propTypes = {

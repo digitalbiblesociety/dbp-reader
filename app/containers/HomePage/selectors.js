@@ -31,8 +31,6 @@ const selectUserNotes = () =>
 			const bookId = home.get('activeBookId');
 			const chapter = home.get('activeChapter');
 			const text = home.get('chapterText');
-			const authd = home.get('userAuthenticated');
-			const userId = home.get('userId');
 			const profAuth = profile.get('userAuthenticated');
 			const profUser = profile.get('userId');
 			// TODO: Fix this once the api is functioning properly
@@ -84,7 +82,7 @@ const selectUserNotes = () =>
 				};
 			}
 			// If the user isn't authorized then there will not be any notes or bookmarks and I can just end the function here
-			if ((!authd && !userId) || (!profAuth && !profUser)) {
+			if (!profAuth && !profUser) {
 				return {
 					text: text.toJS(),
 					userNotes,

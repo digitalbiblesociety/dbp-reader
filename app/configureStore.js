@@ -6,7 +6,10 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import { fromJS } from 'immutable';
 import { routerMiddleware } from 'react-router-redux';
 import createSagaMiddleware from 'redux-saga';
-import { persistStore, autoRehydrate } from 'redux-persist-immutable';
+import {
+	persistStore,
+	autoRehydrate,
+} from 'jh108-redux-persist-immutable-plugin';
 import reconciler from './utils/stateReconciler';
 import createReducer from './reducers';
 
