@@ -9,32 +9,35 @@ const LodashReplacement = new LodashModuleReplacementPlugin({
 	collections: true,
 	currying: true,
 });
+const webpackConfig = {
+	webpack: (config) => {
+		const originalEntry = config.entry;
+		/* eslint-disable no-param-reassign */
+		config.entry = async () => {
+			const entries = await originalEntry();
+
+			if (
+				entries['main.js'] &&
+				!entries['main.js'].includes('./app/utils/polyfills.js')
+			) {
+				entries['main.js'].unshift('./app/utils/polyfills.js');
+			}
+
+			return entries;
+		};
+		config.plugins = config.plugins || [];
+		config.plugins.push(LodashReplacement);
+
+		/* eslint-enable no-param-reassign */
+		return config;
+	},
+};
 
 if (process.env.ANALYZE_BUNDLE) {
 	module.exports = withBundleAnalyzer({
 		...withSass(
 			withCss({
-				webpack: (config) => {
-					const originalEntry = config.entry;
-					/* eslint-disable no-param-reassign */
-					config.entry = async () => {
-						const entries = await originalEntry();
-
-						if (
-							entries['main.js'] &&
-							!entries['main.js'].includes('./app/utils/polyfills.js')
-						) {
-							entries['main.js'].unshift('./app/utils/polyfills.js');
-						}
-
-						return entries;
-					};
-					config.plugins = config.plugins || [];
-					config.plugins.push(LodashReplacement);
-
-					/* eslint-enable no-param-reassign */
-					return config;
-				},
+				...webpackConfig,
 				generateBuildId: async () => process.env.BUILD_ID,
 			}),
 		),
@@ -54,54 +57,10 @@ if (process.env.ANALYZE_BUNDLE) {
 } else if (isProd) {
 	module.exports = withSass(
 		withCss({
-			webpack: (config) => {
-				const originalEntry = config.entry;
-				/* eslint-disable no-param-reassign */
-				config.entry = async () => {
-					const entries = await originalEntry();
-
-					if (
-						entries['main.js'] &&
-						!entries['main.js'].includes('./app/utils/polyfills.js')
-					) {
-						entries['main.js'].unshift('./app/utils/polyfills.js');
-					}
-
-					return entries;
-				};
-				config.plugins = config.plugins || [];
-				config.plugins.push(LodashReplacement);
-				/* eslint-enable no-param-reassign */
-
-				return config;
-			},
+			...webpackConfig,
 			generateBuildId: async () => process.env.BUILD_ID,
 		}),
 	);
 } else {
-	module.exports = withSass(
-		withCss({
-			webpack: (config) => {
-				const originalEntry = config.entry;
-				/* eslint-disable no-param-reassign */
-				config.entry = async () => {
-					const entries = await originalEntry();
-
-					if (
-						entries['main.js'] &&
-						!entries['main.js'].includes('./app/utils/polyfills.js')
-					) {
-						entries['main.js'].unshift('./app/utils/polyfills.js');
-					}
-
-					return entries;
-				};
-				config.plugins = config.plugins || [];
-				config.plugins.push(LodashReplacement);
-				/* eslint-enable no-param-reassign */
-
-				return config;
-			},
-		}),
-	);
+	module.exports = withSass(withCss(webpackConfig));
 }
