@@ -125,6 +125,16 @@ export class TextSelection extends React.PureComponent {
 
 	getLanguages = () => this.props.dispatch(getLanguages());
 
+	get inputPlaceholder() {
+		if (this.props.textselection.countryListActive) {
+			return 'countryMessage';
+		} else if (this.props.textselection.languageListActive) {
+			return 'languageMessage';
+		}
+
+		return 'versionMessage';
+	}
+
 	stopClickProp = (e) => e.stopPropagation();
 
 	stopTouchProp = (e) => e.stopPropagation();
@@ -137,16 +147,6 @@ export class TextSelection extends React.PureComponent {
 
 	handleSearchInputChange = (e) =>
 		this.setState({ filterText: e.target.value });
-
-	get inputPlaceholder() {
-		if (this.props.textselection.countryListActive) {
-			return 'countryMessage';
-		} else if (this.props.textselection.languageListActive) {
-			return 'languageMessage';
-		}
-
-		return 'versionMessage';
-	}
 
 	render() {
 		const {
@@ -175,16 +175,6 @@ export class TextSelection extends React.PureComponent {
 				onClick={this.stopClickProp}
 				className={'text-selection-dropdown'}
 			>
-				<div className={'search-input-bar'}>
-					<SvgWrapper className={'icon'} svgid={'search'} />
-					<input
-						id={'version-search'}
-						onChange={this.handleSearchInputChange}
-						value={filterText}
-						className={'input-class'}
-						placeholder={messages[this.inputPlaceholder].defaultMessage}
-					/>
-				</div>
 				<div className={'tab-options'}>
 					<span
 						id={'country-tab'}
@@ -207,6 +197,16 @@ export class TextSelection extends React.PureComponent {
 					>
 						<FormattedMessage {...messages.version} />
 					</span>
+				</div>
+				<div className={'search-input-bar'}>
+					<SvgWrapper className={'icon'} svgid={'search'} />
+					<input
+						id={'version-search'}
+						onChange={this.handleSearchInputChange}
+						value={filterText}
+						className={'input-class'}
+						placeholder={messages[this.inputPlaceholder].defaultMessage}
+					/>
 				</div>
 				<CountryList
 					countries={countries}
