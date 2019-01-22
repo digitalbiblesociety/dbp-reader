@@ -9,6 +9,7 @@ const codes = {
 	P: true,
 	C: true,
 	OTPNTP: true,
+	NTPOTP: true,
 	OTP: true,
 	NTP: true,
 	OTNTP: true,
@@ -19,6 +20,7 @@ const ntCodes = {
 	NT: true,
 	NTP: true,
 	OTPNTP: true,
+	NTPOTP: true,
 	NTOTP: true,
 	OTNTP: true,
 };
@@ -26,6 +28,7 @@ const otCodes = {
 	OT: true,
 	OTP: true,
 	OTPNTP: true,
+	NTPOTP: true,
 	NTOTP: true,
 	OTNTP: true,
 };

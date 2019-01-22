@@ -23,6 +23,7 @@ const PlainTextVerses = ({
 	if (readersMode) {
 		return textComponents.map((verse) => (
 			<ReadersModeVerse
+				key={verse.verse_start}
 				verse={verse}
 				onMouseUp={onMouseUp}
 				onMouseDown={onMouseDown}
@@ -34,6 +35,7 @@ const PlainTextVerses = ({
 	}
 	return textComponents.map((verse) => (
 		<PlainTextVerse
+			key={verse.verse_start}
 			verse={verse}
 			onMouseUp={onMouseUp}
 			onMouseDown={onMouseDown}
