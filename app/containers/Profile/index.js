@@ -9,7 +9,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import injectSaga from '../../utils/injectSaga';
 import injectReducer from '../../utils/injectReducer';
 import SignUp from '../../components/SignUp';
 import Login from '../../components/Login';
@@ -39,7 +38,6 @@ import {
 import { cleanNotebook } from '../Notes/actions';
 import makeSelectProfile from './selectors';
 import reducer from './reducer';
-import saga from './saga';
 import Ieerror from '../../components/Ieerror';
 
 export class Profile extends React.PureComponent {
@@ -319,10 +317,8 @@ const withConnect = connect(
 );
 
 const withReducer = injectReducer({ key: 'profile', reducer });
-const withSaga = injectSaga({ key: 'profile', saga });
 
 export default compose(
 	withReducer,
-	withSaga,
 	withConnect,
 )(Profile);
