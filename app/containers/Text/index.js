@@ -689,11 +689,6 @@ class Text extends React.PureComponent {
 		}
 		// Using parseInt to determine whether or not the verseNumber is a real number or if it is a series of characters
 		if (verseNumber && Array.isArray(textComponents)) {
-			if (readersMode) {
-				return textComponents.filter(
-					(c) => c[0].key === (parseInt(verseNumber, 10) ? verseNumber : '1'),
-				);
-			}
 			return textComponents.filter(
 				(c) => c.key === (parseInt(verseNumber, 10) ? verseNumber : '1'),
 			);
