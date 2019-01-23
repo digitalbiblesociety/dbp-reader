@@ -242,6 +242,17 @@ class HomePage extends React.PureComponent {
 			userAuthenticated: userAuthenticatedProps,
 		} = this.props.profile;
 
+		const videoFileset = nextProps.homepage.activeFilesets.filter(
+			(f) => f.type === 'video_stream',
+		)[0];
+		if (videoFileset) {
+			this.checkForVideo(
+				videoFileset ? videoFileset.id : '',
+				nextProps.homepage.activeBookId,
+				nextProps.homepage.activeChapter,
+			);
+		}
+
 		// Only apply the them if one of them changed - use the newest one always since that will be what the user clicked
 		if (typeof document !== 'undefined') {
 			if (
