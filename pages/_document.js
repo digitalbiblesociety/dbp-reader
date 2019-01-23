@@ -117,6 +117,12 @@ export default class MyDocument extends Document {
 					<meta property="fb:app_id" content="173528326559718" />
 					<script src="https://apis.google.com/js/platform.js" async defer />
 					<script
+						async
+						defer
+						type="text/javascript"
+						src="https://fcbhjira.atlassian.net/s/d41d8cd98f00b204e9800998ecf8427e-T/l24at6/b/0/a44af77267a987a660377e5c46e0fb64/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?locale=en-UK&collectorId=2338db8d"
+					/>
+					<script
 						type="application/javascript"
 						dangerouslySetInnerHTML={{
 							__html: `(window.onload = function() {
