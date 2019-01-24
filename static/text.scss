@@ -1,6 +1,7 @@
 .text-container {
 	display: flex;
 	flex: 1;
+	height: 100%;
 	transition: height 700ms ease-in-out, padding 200ms linear,
 		flex 700ms ease-in-out;
 
