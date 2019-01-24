@@ -615,6 +615,10 @@ body #__next main .v-num {
 		pointer-events: none;
 	}
 
+	.video-player-container .video-player .play-video-container .play-video svg {
+		pointer-events: none !important;
+	}
+
 	.left-controls {
 		svg {
 			pointer-events: inherit;
