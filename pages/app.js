@@ -124,13 +124,26 @@ class AppContainer extends React.Component {
 		Router.router.events.off('routeChangeStart', this.handleRouteChange);
 	}
 	/* eslint-disable no-undef */
-	handleRouteChange = (/* url */) => {
+	handleRouteChange = (url) => {
 		/* eslint-enable no-undef */
 		// Pause audio
 		// Start loading spinner for text
 		// Close any open menus
 		// Remove current audio source - (may fix item 1)
 		// TODO: Probably need to get the new highlights here or at least start the process for getting them
+		if (typeof dataLayer !== 'undefined') {
+			try {
+				dataLayer.push({
+					event: 'pageview',
+					page: {
+						path: url,
+						title: url,
+					},
+				});
+			} catch (err) {
+				console.error('Google tag manager did not capture pageview: ', err); // eslint-disable-line no-console
+			}
+		}
 		this.props.dispatch(setChapterTextLoadingState({ state: true }));
 	};
 
