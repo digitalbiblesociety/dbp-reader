@@ -97,21 +97,25 @@ class VideoControls extends React.PureComponent {
 						/>
 						{this.getVolumeSvg(volume)}
 					</div>
-					<SvgWrapper onClick={pauseVideo} fill={'#fff'} svgid={'pause'} />
+					<div onClick={pauseVideo}>
+						<SvgWrapper fill={'#fff'} svgid={'pause'} />
+					</div>
 				</div>
 				<div className={'right-controls'}>
-					<SvgWrapper
-						fill={'#fff'}
-						onClick={toggleElipsis}
-						className={'video-elipsis'}
-						svgid={'elipsis'}
-					/>
-					<SvgWrapper
-						fill={'#fff'}
-						className={'video-fullscreen'}
-						onClick={toggleFullScreen}
-						svgid={'fullscreen'}
-					/>
+					<div onClick={toggleElipsis}>
+						<SvgWrapper
+							fill={'#fff'}
+							className={'video-elipsis'}
+							svgid={'elipsis'}
+						/>
+					</div>
+					<div onClick={toggleFullScreen}>
+						<SvgWrapper
+							fill={'#fff'}
+							className={'video-fullscreen'}
+							svgid={'fullscreen'}
+						/>
+					</div>
 				</div>
 			</div>
 		);
