@@ -609,3 +609,20 @@ body #__next main .v-num {
 //video::-internal-media-controls-overlay-enclosure {
 //	display: none;
 //}
+// Ms Edge only styles
+@supports (-ms-ime-align: auto) {
+	svg {
+		pointer-events: none;
+	}
+
+	.left-controls {
+		svg {
+			pointer-events: inherit;
+		}
+	}
+	.right-controls {
+		svg {
+			pointer-events: inherit;
+		}
+	}
+}

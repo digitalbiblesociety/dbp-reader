@@ -5,5 +5,6 @@
 	},
 	"search.exclude": {
 		"app/styles": false
-	}
+	},
+	"search.usePCRE2": true
 }
