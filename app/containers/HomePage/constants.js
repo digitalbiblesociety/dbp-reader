@@ -30,7 +30,6 @@ export const TOGGLE_INFORMATION_MODAL = 'app/HomePage/TOGGLE_INFORMATION_MODAL';
 export const TOGGLE_FIRST_LOAD_TEXT_SELECTION =
 	'app/HomePage/TOGGLE_FIRST_LOAD_TEXT_SELECTION';
 export const ACTIVE_TEXT_ID = 'app/HomePage/ACTIVE_TEXT_ID';
-export const LOAD_BOOKS = 'app/TextSelection/LOAD_BOOKS';
 export const LOAD_AUDIO = 'app/TextSelection/LOAD_AUDIO';
 export const GET_BOOKS = 'app/TextSelection/GET_BIBLES_BOOKS';
 export const GET_AUDIO = 'app/TextSelection/GET_AUDIO';

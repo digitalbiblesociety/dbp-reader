@@ -26,6 +26,7 @@ import textSaga from '../TextSelection/saga';
 import profileSaga from '../Profile/saga';
 import profileReducer from '../Profile/reducer';
 import makeSelectProfile from '../Profile/selectors';
+import getDifferenceObject from '../../utils/deepDifferenceObject';
 import { setActiveIsoCode } from '../TextSelection/actions';
 import { getBookmarksForChapter, addBookmark } from '../Notes/actions';
 import { setHasVideo } from '../VideoPlayer/actions';
