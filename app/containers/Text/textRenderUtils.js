@@ -100,12 +100,13 @@ export const getInlineStyleForTextContainer = (
 		maxHeight: `calc(100vh - ${headerHeight}px)`,
 	};
 };
-
+// If book has testament of OT and testament_order of 1 it is the first book
 export const isStartOfBible = (books, activeBookId, activeChapter) => {
 	if (!books || !books.length) {
 		return false;
 	}
-	const book = books[0];
+	// Get book that is the last in bible
+	const book = books.slice().sort((a, b) => a.book_order - b.book_order)[0];
 
 	if (!book) {
 		return false;
@@ -120,7 +121,8 @@ export const isEndOfBible = (books, activeBookId, activeChapter) => {
 	if (!books || !books.length) {
 		return false;
 	}
-	const book = books[books.length - 1];
+	// Get book that is the last in bible
+	const book = books.slice().sort((a, b) => b.book_order - a.book_order)[0];
 
 	if (!book) {
 		return false;
