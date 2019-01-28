@@ -52,8 +52,7 @@ export default ({
 			book.book_order === activeBook.book_order + 1 ||
 			book.book_order > activeBook.book_order,
 	);
-	const maxChapter = activeBook.chapters.length;
-	// console.log('nextBook', nextBook);
+	const maxChapter = activeBook.chapters[activeBook.chapters.length - 1];
 	// If the next book in line doesn't exist and we are already at the last chapter just return
 	if (!nextBook && chapter === maxChapter) {
 		return url({ textId, bookId, chapter });
