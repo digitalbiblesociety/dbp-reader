@@ -431,16 +431,17 @@ AppContainer.getInitialProps = async (context) => {
 	const bookMetaResponse = await Promise.all(bookMetaPromises);
 
 	const bookMetaData = removeDuplicates(
-		bookMetaResponse.reduce(
-			(reducedObjects, filesetObject) => [
-				...reducedObjects,
-				...Object.values(filesetObject)[0],
-			],
-			[],
-		),
+		bookMetaResponse
+			.slice()
+			.reduce(
+				(reducedObjects, filesetObject) => [
+					...reducedObjects,
+					...Object.values(filesetObject)[0],
+				],
+				[],
+			),
 		'book_id',
-	);
-
+	).sort((a, b) => a.book_order - b.book_order);
 	// Redirect to the new url if conditions are met
 	if (bookMetaData && bookMetaData.length) {
 		const foundBook = bookMetaData.find(
