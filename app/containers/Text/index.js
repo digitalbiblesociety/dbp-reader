@@ -1059,6 +1059,7 @@ class Text extends React.PureComponent {
 			'oneVersePerLine',
 			'active',
 		]);
+
 		const chapterAlt = text[0] && text[0].chapter_alt;
 
 		if (

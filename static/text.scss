@@ -4,7 +4,7 @@
 	// max-width: 1000px;
 	height: 100%;
 	width: 100%;
-	position: relative;
+	// position: relative;
 	transition: height 700ms ease-in-out, padding 200ms linear,
 		flex 700ms ease-in-out;
 
@@ -54,6 +54,7 @@
 		flex-direction: column;
 		justify-content: center;
 		overflow: hidden;
+		// position: relative;
 		margin: 0 auto;
 		padding: 0 15px;
 		height: 100%;
@@ -66,7 +67,7 @@
 	}
 
 	main {
-		padding-right: 35px;
+		// padding-right: 35px;
 		width: 100%;
 		max-height: 100%;
 		box-sizing: content-box;
@@ -78,10 +79,9 @@
 		&.rtl {
 			direction: rtl;
 			// Setting the padding this way hides the scroll bar by putting it behind its parent
-			padding-right: 0;
-			padding-left: 35px;
-			position: relative;
-			left: -35px;
+			// padding-right: 0;
+			// padding-left: 35px;
+			// left: -35px;
 
 			.drop-caps {
 				float: right;
@@ -194,19 +194,42 @@
 	position: absolute;
 	top: 10%;
 	bottom: 10%;
+	// margin-top: 10%;
 	align-items: center;
 	justify-content: center;
-
+	pointer-events: all;
 	&.prev {
-		left: 0;
+		left: 10%;
+		width: 36px;
 	}
 
 	&.next {
-		right: 0;
+		right: 10%;
+		width: 36px;
+	}
+	@media only screen and (max-width: 1336px) {
+		&.prev {
+			left: 25px;
+			width: 26px;
+		}
+		&.next {
+			right: 25px;
+			width: 26px;
+		}
+	}
+	@media only screen and (max-width: 1110px) {
+		&.prev {
+			left: 0;
+		}
+		&.next {
+			right: 0;
+		}
+	}
+	&:not(.disabled) {
+		cursor: pointer;
 	}
 
 	&:not(.disabled):hover {
-		cursor: pointer;
 		background: rgba(0, 0, 0, 0.2);
 	}
 }
