@@ -605,7 +605,6 @@ class VideoPlayer extends React.PureComponent {
 						ref={this.setVideoRef}
 						onClick={this.handleVideoClick}
 						poster={`${process.env.CDN_STATIC_FILES}/${currentVideo.thumbnail}`}
-						playsInline
 					/>
 					<VideoProgressBar
 						paused={paused}
