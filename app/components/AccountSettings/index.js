@@ -10,7 +10,7 @@ import { FormattedMessage } from 'react-intl';
 import SvgWrapper from '../SvgWrapper';
 import PopupMessage from '../PopupMessage';
 import messages from './messages';
-import DonateButton from '../DonateButton';
+// import DonateButton from '../DonateButton';
 
 class AccountSettings extends React.PureComponent {
 	state = {
@@ -81,7 +81,7 @@ class AccountSettings extends React.PureComponent {
 						/>
 					</span>
 				</div>
-				<DonateButton />
+				{/* <DonateButton /> */}
 				{popupOpen ? (
 					<PopupMessage
 						message={'Please select a valid image file.'}
