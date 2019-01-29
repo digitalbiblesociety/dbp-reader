@@ -18,6 +18,17 @@
 		}
 	}
 }
+.justify {
+	text-align: justify;
+	// Could potentially need the items below but they don't seem to help at this time
+	//-webkit-text-align-last: start;
+	//-o-text-align-last: start;
+	//text-align-last: start;
+	//-webkit-hyphens: auto;
+	//-ms-hyphens: auto;
+	//-o-hyphens: auto;
+	//hyphens: auto;
+}
 .chapter {
 	@include css4 {
 		font-family: var(--application-font-family);
@@ -28,17 +39,6 @@
 	margin: 0 auto;
 	overflow-wrap: normal;
 	line-break: auto;
-	&.justify {
-		text-align: justify;
-		// Could potentially need the items below but they don't seem to help at this time
-		//-webkit-text-align-last: start;
-		//-o-text-align-last: start;
-		//text-align-last: start;
-		//-webkit-hyphens: auto;
-		//-ms-hyphens: auto;
-		//-o-hyphens: auto;
-		//hyphens: auto;
-	}
 
 	sup {
 		font-size: smaller;

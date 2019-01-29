@@ -1,7 +1,10 @@
 .text-container {
 	display: flex;
 	flex: 1;
+	// max-width: 1000px;
 	height: 100%;
+	width: 100%;
+	position: relative;
 	transition: height 700ms ease-in-out, padding 200ms linear,
 		flex 700ms ease-in-out;
 
@@ -22,16 +25,10 @@
 	&.has-video {
 		padding-top: 0;
 		height: 50%;
-		// padding-bottom: 0;
-		// height: calc(100vh - 185px);
 	}
 
 	&.video-player-open {
-		//padding-bottom: 478px;
 		padding-top: 0;
-		// padding-bottom: 0;
-		// height: calc(100vh - 585px);
-		// height: calc(100vh - 185px - 480px);
 	}
 
 	@include css4 {
@@ -50,12 +47,6 @@
 	&.scrolled-down {
 		padding-top: 10px;
 		padding-bottom: 86px;
-		// may need padding instead of margin
-		//margin-top: 0;
-		//margin-bottom: 25px;
-
-		//transform: translateY(-54px);
-		//height: calc(100vh - 25px);
 	}
 
 	.main-wrapper {
@@ -66,6 +57,7 @@
 		margin: 0 auto;
 		padding: 0 15px;
 		height: 100%;
+		width: 100%;
 
 		@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
 			overflow-y: auto;
@@ -199,27 +191,32 @@
 	height: 80%;
 	width: 26px;
 	display: flex;
+	position: absolute;
+	top: 10%;
+	bottom: 10%;
 	align-items: center;
 	justify-content: center;
-	//margin-top:auto;
+
+	&.prev {
+		left: 0;
+	}
+
+	&.next {
+		right: 0;
+	}
+
 	&:not(.disabled):hover {
 		cursor: pointer;
 		background: rgba(0, 0, 0, 0.2);
 	}
 }
-//.text-container span {white-space:nowrap;display:inline-block;}
+
 .prev-arrow-svg {
 	@include css4 {
 		fill: var(--main-textarea-svg-fill-color);
 	}
 	width: 26px;
 	height: 26px;
-	//margin-left:10px;
-	//width:25px;
-	//min-width:25px;
-	//min-height:52px;
-	//height:52px;
-	//margin-top:calc(50vh - 104px);
 }
 .next-arrow-svg {
 	@include css4 {
@@ -227,25 +224,12 @@
 	}
 	width: 26px;
 	height: 26px;
-	//margin-right:5px;
-	//width:25px;
-	//min-width:25px;
-	//min-height:52px;
-	//height:52px;
-	//margin-top:calc(50vh - 104px);
 }
 .prev-arrow-svg:hover {
 	animation: thicken 0.3s forwards;
 }
 .next-arrow-svg:hover {
 	animation: thicken 0.3s forwards;
-}
-.text-highlighted {
-	//@include css4{
-	//  //background-color:var(--text-selection-color);
-	//  color:var(--default-text-color);
-	//};
-	//filter: sepia(40%);
 }
 
 .active-chapter-title {
@@ -296,30 +280,3 @@
 		outline: none;
 	}
 }
-
-// Style that I like but that isn't in the comps
-//@keyframes thicken {
-//	0%   { transform: scale(1.00); fill:rgba(158, 30, 53, 0.053); }
-//	0%   { transform: scale(1.00); fill:rgba(158, 30, 53, 0.153); }
-//	0%   { transform: scale(1.00); fill:rgba(158, 30, 53, 0.203); }
-//	0%   { transform: scale(1.00); fill:rgba(158, 30, 53, 0.223); }
-//	0%   { transform: scale(1.00); fill:rgba(158, 30, 53, 0.253); }
-//	0%   { transform: scale(1.00); fill:rgba(158, 30, 53, 0.283); }
-//	0%   { transform: scale(1.00); fill:rgba(158, 30, 53, 0.303); }
-//	25%  { transform: scale(1.10); fill:rgba(158, 30, 53, 0.353); }
-//	50%  { transform: scale(1.15); fill:rgba(158, 30, 53, 0.453); }
-//	75%  { transform: scale(1.20); fill:rgba(158, 30, 53, 0.553); }
-//	100% { transform: scale(1.25); fill:rgba(158, 30, 53, 0.600); }
-//	0%   { transform: scale(1.00); fill:rgba(158, 30, 53, 0.753); }
-//	25%  { transform: scale(1.10); fill:rgba(158, 30, 53, 0.853); }
-//	50%  { transform: scale(1.15); fill:rgba(158, 30, 53, 0.903); }
-//	75%  { transform: scale(1.20); fill:rgba(158, 30, 53, 0.953); }
-//	100% { transform: scale(1.25); fill:rgba(158, 30, 53, 1.000); }
-//}
-//@keyframes thicken {
-//	0%   { transform: scale(1.00); }
-//	25%  { transform: scale(1.10); }
-//	50%  { transform: scale(1.15); }
-//	75%  { transform: scale(1.20); }
-//	100% { transform: scale(1.25); }
-//}

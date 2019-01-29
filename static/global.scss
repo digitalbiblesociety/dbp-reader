@@ -76,7 +76,7 @@ html #__next aside {
 .content-container {
 	display: flex;
 	flex-direction: column;
-	max-width: 1000px;
+	// max-width: 1000px;
 	height: calc(100vh - 81px);
 	margin: 0 auto;
 	padding: 54px 10px 0 10px;
@@ -90,13 +90,8 @@ html #__next aside {
 @media only screen and (max-width: $audio-player-bp) {
 	.text-container {
 		main {
-			// padding-bottom: 75px;
 			z-index: 0;
 		}
-
-		// .main-wrapper {
-		// 	padding-bottom: 45px;
-		// }
 	}
 }
 
