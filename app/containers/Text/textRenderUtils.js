@@ -1,32 +1,8 @@
-export const getClassNameForMain = (
-	formattedSource,
-	userSettings,
-	textDirection,
-	menuIsOpen,
-) => {
-	const readersMode = userSettings.getIn([
-		'toggleOptions',
-		'readersMode',
-		'active',
-	]);
-	const oneVersePerLine = userSettings.getIn([
-		'toggleOptions',
-		'oneVersePerLine',
-		'active',
-	]);
-	const justifiedClass = userSettings.getIn([
-		'toggleOptions',
-		'justifiedText',
-		'active',
-	])
-		? 'justify'
-		: '';
+export const getClassNameForMain = (textDirection, menuIsOpen) => {
 	const isRtl = textDirection === 'rtl' ? 'rtl' : '';
 	const menuOpenClass = menuIsOpen ? ' menu-is-open' : '';
 
-	return formattedSource.main && !readersMode && !oneVersePerLine
-		? `${isRtl}${menuOpenClass}`
-		: `chapter ${justifiedClass} ${isRtl}${menuOpenClass}`;
+	return `${isRtl}${menuOpenClass}`;
 };
 
 export const getClassNameForTextContainer = ({

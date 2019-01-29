@@ -10,6 +10,9 @@ export default ({
 	text: chapterText,
 	isHref,
 }) => {
+	if (!books || !books.length) {
+		return url({ textId, bookId, chapter, isHref });
+	}
 	if (verseNumber && chapterText.length) {
 		const prevVerse = parseInt(verseNumber, 10) - 1 || 1;
 		const lastVerse = chapterText.length;
@@ -50,7 +53,7 @@ export default ({
 		bookId.toLowerCase() === books[0].book_id.toLowerCase() &&
 		chapter - 1 === 0
 	) {
-		return url({ textId, bookId, chapter });
+		return url({ textId, bookId, chapter, isHref });
 	}
 
 	let activeBookIndex;

@@ -73,11 +73,21 @@ import {
 	toggleWordsOfJesus,
 } from '../Settings/themes';
 
-const VideoPlayer = dynamic(import('../VideoPlayer'));
-const Profile = dynamic(import('../Profile'));
-const Settings = dynamic(import('../Settings'));
-const SearchContainer = dynamic(import('../SearchContainer'));
-const Notes = dynamic(import('../Notes'));
+const VideoPlayer = dynamic(import('../VideoPlayer'), {
+	loading: () => null,
+});
+const Profile = dynamic(import('../Profile'), {
+	loading: () => null,
+});
+const Settings = dynamic(import('../Settings'), {
+	loading: () => null,
+});
+const SearchContainer = dynamic(import('../SearchContainer'), {
+	loading: () => null,
+});
+const Notes = dynamic(import('../Notes'), {
+	loading: () => null,
+});
 
 class HomePage extends React.PureComponent {
 	state = {
