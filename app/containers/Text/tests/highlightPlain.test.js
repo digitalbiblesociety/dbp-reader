@@ -20,16 +20,16 @@ describe('highlightPlainText', () => {
 	});
 	it('Should return an array', () => {
 		const sampleHighlights = [];
-		const text = [...chapterText.data];
+		const text = chapterText.data.slice();
 
 		expect(Array.isArray(highlightPlainText(sampleHighlights, text))).toBe(
 			true,
 		);
 	});
-	xit('Should return inital text if no highlight', () => {
+	it('Should return inital text if no highlight', () => {
 		const sampleHighlights = [];
-		const sampleText = [...chapterText];
-		const result = [...chapterText];
+		const sampleText = chapterText.data.slice();
+		const result = chapterText.data.slice();
 
 		expect(highlightPlainText(sampleHighlights, sampleText)).toEqual(result);
 	});
