@@ -135,7 +135,9 @@
 			-ms-user-select: none;
 			user-select: none;
 		}
-
+		.single-formatted-verse {
+			text-align: center;
+		}
 		@media (min-width: 30rem) {
 			.single-formatted-verse {
 				@include css4 {
