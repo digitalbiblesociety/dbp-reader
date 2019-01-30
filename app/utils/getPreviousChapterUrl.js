@@ -10,6 +10,9 @@ export default ({
 	text: chapterText,
 	isHref,
 }) => {
+	if (!books || !books.length) {
+		return url({ textId, bookId, chapter, isHref });
+	}
 	if (verseNumber && chapterText.length) {
 		const prevVerse = parseInt(verseNumber, 10) - 1 || 1;
 		const lastVerse = chapterText.length;
@@ -45,7 +48,11 @@ export default ({
 		return url({ textId, bookId, chapter, nextVerse: verseNumber, isHref });
 	}
 
-	if (books[0] && bookId === books[0].book_id && chapter - 1 === 0) {
+	if (
+		books[0] &&
+		bookId.toLowerCase() === books[0].book_id.toLowerCase() &&
+		chapter - 1 === 0
+	) {
 		return url({ textId, bookId, chapter, isHref });
 	}
 
@@ -53,7 +60,7 @@ export default ({
 	let previousBookIndex;
 
 	books.forEach((book, index) => {
-		if (book.book_id.toLowerCase() === bookId) {
+		if (book.book_id.toLowerCase() === bookId.toLowerCase()) {
 			activeBookIndex = index;
 
 			if (index - 1 >= 0) {
@@ -72,7 +79,7 @@ export default ({
 		// Goes to the last chapter in the previous book
 		return url({
 			textId,
-			bookId: previousBook.get('book_id').toLowerCase(),
+			bookId: previousBook.get('book_id'),
 			chapter: previousBook.getIn(['chapters', -1]),
 			isHref,
 		});

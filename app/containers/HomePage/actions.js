@@ -18,7 +18,6 @@ import {
 	GET_NOTES_HOMEPAGE,
 	GET_COPYRIGHTS,
 	INIT_APPLICATION,
-	LOAD_BOOKS,
 	LOAD_AUDIO,
 	LOAD_CHAPTER_TEXT,
 	SET_USER_AGENT,
@@ -120,11 +119,6 @@ export const updateSelectedText = ({ text }) => ({
 
 export const loadChapter = (props) => ({
 	type: LOAD_CHAPTER_TEXT,
-	...props,
-});
-
-export const loadBooksAndCopywrite = (props) => ({
-	type: LOAD_BOOKS,
 	...props,
 });
 

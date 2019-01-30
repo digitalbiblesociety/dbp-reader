@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { FormattedMessage } from 'react-intl';
 import AnimateHeight from 'react-animate-height';
+import Link from 'next/link';
 import CopyrightSection from '../CopyrightSection';
 import { selectCopyrights } from './selectors';
 import ImageComponent from '../ImageComponent';
@@ -141,6 +142,12 @@ class Information extends React.PureComponent {
 					</a>
 					&nbsp;
 					<FormattedMessage {...messages.circleR} />
+					&nbsp;
+					<Link href={'/terms'}>
+						<a id={'terms-of-service'}>
+							<FormattedMessage {...messages.terms} />
+						</a>
+					</Link>
 				</div>
 			</section>
 		);

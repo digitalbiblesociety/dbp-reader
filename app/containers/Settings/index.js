@@ -3,6 +3,8 @@
  * Settings
  *
  * NOTE: The <Slider /> component requires inline styles to be passed into it
+ * TODO: Use https://github.com/markusenglund/react-switch?utm_campaign=React%2BNewsletter&utm_medium=email&utm_source=React_Newsletter_147
+ * for the toggle switches.
  */
 
 import React from 'react';

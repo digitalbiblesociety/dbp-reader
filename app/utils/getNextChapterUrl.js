@@ -1,4 +1,3 @@
-import { fromJS } from 'immutable';
 import url from './hrefLinkOrAsLink';
 
 export default ({
@@ -10,10 +9,14 @@ export default ({
 	text: chapterText,
 	isHref,
 }) => {
+	if (!books || !books.length) {
+		return url({ textId, bookId, chapter, isHref });
+	}
 	if (verseNumber && chapterText.length) {
 		const nextVerse = parseInt(verseNumber, 10) + 1 || 1;
 		const lastVerse = chapterText.length;
 
+		// Handles the verses
 		if (nextVerse <= lastVerse && nextVerse > 0) {
 			// The next verse is within a valid range
 			return url({ textId, bookId, chapter, nextVerse, isHref });
@@ -42,28 +45,19 @@ export default ({
 		return url({ textId, bookId, chapter, nextVerse: verseNumber, isHref });
 	}
 
-	let activeBookIndex;
-	let nextBookIndex;
-
-	books.forEach((book, index) => {
-		if (book.book_id.toLowerCase() === bookId) {
-			activeBookIndex = index;
-			if (index + 1 <= books.length - 1) {
-				nextBookIndex = index + 1;
-			} else {
-				nextBookIndex = index;
-			}
-		}
-	});
-
-	const nextBook =
-		fromJS(books[nextBookIndex]) || fromJS({ chapters: [1], book_id: '' });
-	const activeBook =
-		fromJS(books[activeBookIndex]) || fromJS({ chapters: [1], book_id: '' });
-	const maxChapter = activeBook.getIn(['chapters', -1]);
-
+	// Handles the chapters
+	const activeBook = books.find(
+		(book) => book.book_id.toLowerCase() === bookId.toLowerCase(),
+	);
+	// This relies on the books list already being sorted in ascending book_order
+	const nextBook = books.find(
+		(book) =>
+			book.book_order === activeBook.book_order + 1 ||
+			book.book_order > activeBook.book_order,
+	);
+	const maxChapter = activeBook.chapters[activeBook.chapters.length - 1];
 	// If the next book in line doesn't exist and we are already at the last chapter just return
-	if (!nextBook.size && chapter === maxChapter) {
+	if (!nextBook && chapter === maxChapter) {
 		return url({ textId, bookId, chapter });
 	}
 
@@ -71,23 +65,24 @@ export default ({
 		// Need to get the first chapter of the next book
 		return url({
 			textId,
-			bookId: nextBook.get('book_id').toLowerCase(),
-			chapter: nextBook.getIn(['chapters', 0]),
+			bookId: nextBook.book_id,
+			chapter: nextBook.chapters[0],
 			isHref,
 		});
 	}
-	const chapterIndex = activeBook
-		.get('chapters')
-		.findIndex((c) => c === chapter || c > chapter);
-	const nextChapterIndex =
-		activeBook.getIn(['chapters', chapterIndex]) === chapter
-			? chapterIndex + 1
-			: chapterIndex;
+
+	const chapterIndex = activeBook.chapters.findIndex(
+		(c) => c === chapter || c > chapter,
+	);
+	const nextChapterNumber =
+		activeBook.chapters[chapterIndex] === chapter
+			? activeBook.chapters[chapterIndex + 1]
+			: activeBook.chapters[chapterIndex];
 
 	return url({
 		textId,
 		bookId,
-		chapter: activeBook.getIn(['chapters', nextChapterIndex]),
+		chapter: nextChapterNumber,
 		isHref,
 	});
 };

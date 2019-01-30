@@ -32,9 +32,9 @@ const applyNotes = (source, notes) => {
 			note.verse_end <= getVerseNum(verses[lastV]) &&
 			!versesWithNotes[note.verse_start]
 		) {
-			const verseElement = verses.filter(
+			const verseElement = verses.find(
 				(v) => getVerseNum(v) === note.verse_start,
-			)[0];
+			);
 			const svg = xmlDoc.createElement('svg');
 			const use = xmlDoc.createElement('use');
 			// Can't set the event handlers here because this "dom" is removed
@@ -44,7 +44,9 @@ const applyNotes = (source, notes) => {
 			svg.appendChild(use);
 			// If there are errors in Edge or IE check that the pollyfill for prepend
 			// is being loaded, I also default to append as a safe fallback
-			verseElement.appendChild(svg);
+			if (verseElement) {
+				verseElement.appendChild(svg);
+			}
 			versesWithNotes[note.verse_start] = true;
 		}
 	});
@@ -135,9 +137,9 @@ const applyBookmarks = (source, bookmarks) => {
 			bookmark.verse <= getVerseNum(verses[lastV]) &&
 			!versesWithBookmarks[bookmark.verse]
 		) {
-			const verseElement = verses.filter(
+			const verseElement = verses.find(
 				(v) => getVerseNum(v) === bookmark.verse,
-			)[0];
+			);
 			const svg = xmlDoc.createElement('svg');
 			const use = xmlDoc.createElement('use');
 			// Can't set the event handlers here because this "dom" is removed
@@ -147,7 +149,9 @@ const applyBookmarks = (source, bookmarks) => {
 			svg.appendChild(use);
 			// If there are errors in Edge or IE check that the pollyfill for prepend
 			// is being loaded, I also default to appendChild as a safe fallback
-			verseElement.appendChild(svg);
+			if (verseElement) {
+				verseElement.appendChild(svg);
+			}
 			versesWithBookmarks[bookmark.verse] = true;
 		}
 	});

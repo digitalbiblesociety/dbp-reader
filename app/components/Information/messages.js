@@ -46,4 +46,8 @@ export default defineMessages({
 		id: 'app.components.Information.circleR',
 		defaultMessage: '®.',
 	},
+	terms: {
+		id: 'app.components.Information.terms',
+		defaultMessage: 'Terms and Conditions',
+	},
 });
