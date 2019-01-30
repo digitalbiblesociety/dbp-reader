@@ -17,24 +17,12 @@ import LoadingSpinner from '../../components/LoadingSpinner';
 import PopupMessage from '../../components/PopupMessage';
 import PleaseSignInMessage from '../../components/PleaseSignInMessage';
 import AudioOnlyMessage from '../../components/AudioOnlyMessage';
-import {
-	getFormattedParentVerseNumber,
-	getPlainParentVerse,
-	getFormattedParentVerse,
-	getFormattedChildIndex,
-	getFormattedElementVerseId,
-	getPlainParentVerseWithoutNumber,
-	getClosestParent,
-	getOffsetNeededForPsalms,
-	replaceCharsRegex,
-} from '../../utils/highlightingUtils';
+
 import getPreviousChapterUrl from '../../utils/getPreviousChapterUrl';
 import getNextChapterUrl from '../../utils/getNextChapterUrl';
 import {
-	calcDistance,
 	getClassNameForMain,
 	getClassNameForTextContainer,
-	getReference,
 	isEndOfBible,
 	isStartOfBible,
 } from './textRenderUtils';
@@ -48,11 +36,8 @@ import {
 import ReadFullChapter from '../../components/ReadFullChapter';
 import setEventHandlersForFormattedVerses from '../../utils/requiresDom/setEventHandlersForFormattedVerses';
 import setEventHandlersForFootnotes from '../../utils/requiresDom/setEventHandlersForFootnotes';
-import addHighlight from '../../utils/requiresDom/addHighlight';
-import PlainTextVerses from '../../components/PlainTextVerses';
 import shareHighlightToFacebook from '../../utils/requiresDom/shareToFacebook';
-import getLastSelectedVerse from '../../utils/requiresDom/getLastSelectedVerse';
-import getFirstVerse from '../../utils/requiresDom/getFirstSelectedVerse';
+import Verses from '../Verses';
 // import NewChapterArrow from '../../components/NewChapterArrow';
 
 const NewChapterArrow = dynamic(import('../../components/NewChapterArrow'), {
@@ -61,7 +46,6 @@ const NewChapterArrow = dynamic(import('../../components/NewChapterArrow'), {
 
 /* Disabling the jsx-a11y linting because we need to capture the selected text
 	 and the most straight forward way of doing so is with the onMouseUp event */
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 // Todo: Set selected text when user clicks a verse
 class Text extends React.PureComponent {
 	state = {
@@ -339,8 +323,6 @@ class Text extends React.PureComponent {
 		}
 	}
 
-	/* eslint-disable no-param-reassign, no-unused-expressions, jsx-a11y/no-static-element-interactions */
-
 	setFormattedRefHighlight = (el) => {
 		this.formatHighlight = el;
 	};
@@ -353,25 +335,6 @@ class Text extends React.PureComponent {
 		this.main = el;
 	};
 	// Use selected text only when marking highlights
-	setActiveNote = ({ coords, existingNote, bookmark }) => {
-		if (!this.props.userAuthenticated || !this.props.userId) {
-			this.openPopup({ x: coords.x, y: coords.y });
-			return;
-		}
-		const { firstVerse, lastVerse } = this.state;
-		const { activeBookId, activeChapter, bibleId } = this.props;
-
-		const note = {
-			verse_start: firstVerse || lastVerse,
-			verse_end: lastVerse || firstVerse,
-			book_id: activeBookId,
-			chapter: activeChapter,
-			bible_id: bibleId,
-			bookmark: bookmark ? 1 : 0,
-		};
-
-		this.props.setActiveNote({ note: existingNote || note });
-	};
 
 	getFootnotesOnFirstRender = () => {
 		const parser = new DOMParser();
@@ -403,74 +366,15 @@ class Text extends React.PureComponent {
 		});
 	};
 
-	getFirstVerse = (e) => {
-		e.stopPropagation();
-		typeof e.persist === 'function' && e.persist();
-
-		const firstVerse = getFirstVerse({
-			target: e.target,
-			button: e.button === 0,
-			userSettings: this.props.userSettings,
-			formattedSourceMain: this.props.formattedSource.main,
-			main: this.main,
-			getFormattedParentVerse,
-			getPlainParentVerseWithoutNumber,
-		});
-		this.setState({
-			firstVerse,
-		});
-	};
-
-	getLastVerse = (e) => {
-		typeof e.persist === 'function' && e.persist();
-		// Failsafe for the case that the dom hasn't loaded yet
-		// may not need this anymore
-		if (typeof this.window === 'undefined') return;
-
-		const lastVerse = getLastSelectedVerse(e, {
-			formattedSourceMain: this.props.formattedSource.main,
-			userSettings: this.props.userSettings,
-			windowObject: this.window,
-			main: this.main,
-			activeBookId: this.props.activeBookId,
-			activeChapter: this.props.activeChapter,
-			text: this.props.text,
-			selectedWholeVerse: this.selectedWholeVerse,
-			getFormattedParentVerse,
-			getPlainParentVerseWithoutNumber,
-		});
-		if (lastVerse.openMenu) {
-			this.setState(
-				{
-					lastVerse: lastVerse.stateObject.lastVerse,
-					wholeVerseIsSelected: lastVerse.stateObject.wholeVerseIsSelected,
-					anchorOffset: lastVerse.stateObject.anchorOffset,
-					anchorText: lastVerse.stateObject.anchorText,
-					anchorNode: lastVerse.stateObject.anchorNode,
-					focusOffset: lastVerse.stateObject.focusOffset,
-					focusText: lastVerse.stateObject.focusText,
-					focusNode: lastVerse.stateObject.focusNode,
-					userSelectedText: lastVerse.stateObject.userSelectedText,
-					selectedText: lastVerse.stateObject.selectedText,
-				},
-				() => this.openContextMenu(e),
-			);
-		}
-	};
-	/* eslint-disable no-param-reassign, no-unused-expressions, jsx-a11y/no-static-element-interactions */
-
 	getTextComponents(domMethodsAvailable) {
 		const {
-			text: initialText,
 			userSettings,
 			formattedSource: initialFormattedSourceFromProps,
 			highlights,
 			activeChapter,
-			activeBookName,
 			verseNumber,
 			userNotes,
 			bookmarks,
-			audioSource,
 			userAuthenticated,
 			activeBookId,
 		} = this.props;
@@ -515,14 +419,10 @@ class Text extends React.PureComponent {
 				formattedVerse = true;
 			}
 		}
-
-		const chapterAlt = initialText[0] && initialText[0].chapter_alt;
-		const verseIsActive =
-			this.state.activeVerseInfo.verse && this.state.activeVerseInfo.isPlain;
-		const activeVerse = this.state.activeVerseInfo.verse || 0;
 		// Doing it like this may impact performance, but it is probably cleaner
 		// than most other ways of doing it...
 		let formattedSource = initialFormattedSource;
+		let textComponents = [];
 
 		if (
 			this.applyNotes &&
@@ -566,7 +466,6 @@ class Text extends React.PureComponent {
 		// Need to connect to the api and get the highlights object for this chapter
 		// based on whether the highlights object has any data decide whether to
 		// run this function or not
-		let plainText = [];
 		let formattedText = [];
 
 		if (
@@ -580,82 +479,8 @@ class Text extends React.PureComponent {
 				highlights.filter((h) => h.chapter === activeChapter),
 				formattedSource.main,
 			);
-		} else if (
-			highlights.length &&
-			userAuthenticated &&
-			initialText.length &&
-			this.createHighlights
-		) {
-			// Use function for highlighting the plain plainText
-			// TODO: Can remove filter once I fix the problem with the new highlights not being fetched
-			plainText = this.createHighlights(
-				highlights.filter((h) => h.chapter === activeChapter),
-				initialText,
-			);
-		} else {
-			plainText = initialText || [];
 		}
-
-		let textComponents;
-		// Mapping the text again here because I need to apply a class for all highlights with a char count of null
-		const mappedText = plainText.map((v) => {
-			const highlightsInVerse = highlights.filter(
-				(h) => v.verse_start === h.verse_start && !h.highlighted_words,
-			);
-			const wholeVerseHighlighted = !!highlightsInVerse.length;
-			if (wholeVerseHighlighted) {
-				const highlightedColor = highlightsInVerse[highlightsInVerse.length - 1]
-					? highlightsInVerse[highlightsInVerse.length - 1].highlighted_color
-					: '';
-
-				return { ...v, wholeVerseHighlighted, highlightedColor };
-			}
-			return v;
-		});
-		// Todo: Should handle each mode for formatted text and plain text in a separate component
-		// Handle exception thrown when there isn't plain text but readers mode is selected
-		/* eslint-disable react/no-danger */
-		if (mappedText.length === 0 && !formattedSource.main) {
-			if (audioSource) {
-				textComponents = [
-					<AudioOnlyMessage
-						key={'no_text'}
-						book={activeBookName}
-						chapter={activeChapter}
-					/>,
-				];
-			} else {
-				textComponents = [
-					<h5 key={'no_text'}>
-						Text is not currently available for this version.
-					</h5>,
-				];
-			}
-		} else if (readersMode) {
-			textComponents = PlainTextVerses({
-				textComponents: mappedText,
-				onMouseUp: this.handleMouseUp,
-				onMouseDown: this.getFirstVerse,
-				onHighlightClick: this.handleHighlightClick,
-				onNoteClick: this.handleNoteClick,
-				readersMode,
-				oneVersePerLine,
-				activeVerse: parseInt(activeVerse, 10),
-				verseIsActive: !!verseIsActive,
-			});
-		} else if (oneVersePerLine) {
-			textComponents = PlainTextVerses({
-				textComponents: mappedText,
-				onMouseUp: this.handleMouseUp,
-				onMouseDown: this.getFirstVerse,
-				onHighlightClick: this.handleHighlightClick,
-				onNoteClick: this.handleNoteClick,
-				readersMode,
-				oneVersePerLine,
-				activeVerse: parseInt(activeVerse, 10),
-				verseIsActive: !!verseIsActive,
-			});
-		} else if (
+		if (
 			formattedSource.main &&
 			(!verseNumber || (verseNumber && formattedVerse))
 		) {
@@ -677,58 +502,90 @@ class Text extends React.PureComponent {
 					/>
 				);
 			}
-		} else {
-			textComponents = PlainTextVerses({
-				textComponents: mappedText,
-				onMouseUp: this.handleMouseUp,
-				onMouseDown: this.getFirstVerse,
-				onHighlightClick: this.handleHighlightClick,
-				onNoteClick: this.handleNoteClick,
-				readersMode,
-				oneVersePerLine,
-				activeVerse: parseInt(activeVerse, 10),
-				verseIsActive: !!verseIsActive,
-			});
-		}
-
-		if (
-			!formattedSource.main &&
-			!readersMode &&
-			!oneVersePerLine &&
-			Array.isArray(textComponents) &&
-			textComponents[0].key !== 'no_text'
-		) {
-			textComponents.unshift(
-				<span key={'chapterNumber'} className={'drop-caps'}>
-					{chapterAlt || activeChapter}
-				</span>,
-			);
-		}
-		// Using parseInt to determine whether or not the verseNumber is a real number or if it is a series of characters
-		if (verseNumber && Array.isArray(textComponents)) {
-			return textComponents.filter(
-				(c) => c.key === (parseInt(verseNumber, 10) ? verseNumber : '1'),
-			);
-		}
-
-		if (
-			(!formattedSource.main || readersMode || oneVersePerLine) &&
-			Array.isArray(textComponents)
-		) {
-			return (
-				<div className={justifiedText ? 'chapter justify' : 'chapter'}>
-					{textComponents}
-				</div>
-			);
 		}
 
 		return textComponents;
 	}
 
-	handleScrollOnMain = () => {
-		if (this.state.contextMenuState) {
-			this.setState({ contextMenuState: false, activeVerseInfo: { verse: 0 } });
+	getFirstVerse = (e) => {
+		e.stopPropagation();
+		typeof e.persist === 'function' && e.persist(); // eslint-disable-line no-unused-expressions
+
+		const firstVerse = getFirstVerse({
+			target: e.target,
+			button: e.button === 0,
+			userSettings: this.props.userSettings,
+			formattedSourceMain: this.props.formattedSource.main,
+			main: this.main,
+			getFormattedParentVerse,
+			getPlainParentVerseWithoutNumber,
+		});
+		this.setState({
+			firstVerse,
+		});
+	};
+	getLastVerse = (e) => {
+		typeof e.persist === 'function' && e.persist(); // eslint-disable-line no-unused-expressions
+		// Failsafe for the case that the dom hasn't loaded yet
+		// may not need this anymore
+		if (typeof this.window === 'undefined') return;
+
+		const lastVerse = getLastSelectedVerse(e, {
+			formattedSourceMain: this.props.formattedSource.main,
+			userSettings: this.props.userSettings,
+			windowObject: this.window,
+			main: this.main,
+			activeBookId: this.props.activeBookId,
+			activeChapter: this.props.activeChapter,
+			text: this.props.text,
+			selectedWholeVerse: this.selectedWholeVerse,
+			getFormattedParentVerse,
+			getPlainParentVerseWithoutNumber,
+		});
+		if (lastVerse.openMenu) {
+			this.setState(
+				{
+					lastVerse: lastVerse.stateObject.lastVerse,
+					wholeVerseIsSelected: lastVerse.stateObject.wholeVerseIsSelected,
+					anchorOffset: lastVerse.stateObject.anchorOffset,
+					anchorText: lastVerse.stateObject.anchorText,
+					anchorNode: lastVerse.stateObject.anchorNode,
+					focusOffset: lastVerse.stateObject.focusOffset,
+					focusText: lastVerse.stateObject.focusText,
+					focusNode: lastVerse.stateObject.focusNode,
+					userSelectedText: lastVerse.stateObject.userSelectedText,
+					selectedText: lastVerse.stateObject.selectedText,
+				},
+				() => this.openContextMenu(e),
+			);
 		}
+	};
+
+	setActiveNote = ({ coords, existingNote, bookmark }) => {
+		const {
+			userAuthenticated,
+			userId,
+			activeBookId,
+			activeChapter,
+			bibleId,
+		} = this.props;
+		const { firstVerse, lastVerse } = this.state;
+
+		if (!userAuthenticated || !userId) {
+			this.openPopup({ x: coords.x, y: coords.y });
+			return;
+		}
+
+		const note = {
+			verse_start: firstVerse || lastVerse,
+			verse_end: lastVerse || firstVerse,
+			book_id: activeBookId,
+			chapter: activeChapter,
+			bible_id: bibleId,
+			bookmark: bookmark ? 1 : 0,
+		};
+
+		this.props.setActiveNote({ note: existingNote || note });
 	};
 
 	// This is a no-op to trick iOS devices
@@ -750,15 +607,11 @@ class Text extends React.PureComponent {
 		}
 	};
 
-	handleArrowClick = () => {
-		this.setState({ loadingNextPage: true });
-	};
-
 	handleNoteClick = (noteIndex, clickedBookmark) => {
-		const userNotes = this.props.userNotes;
+		const { userNotes, notesActive } = this.props;
 		const existingNote = userNotes[noteIndex];
 
-		if (!this.props.notesActive) {
+		if (!notesActive) {
 			this.setActiveNote({ existingNote });
 			if (clickedBookmark) {
 				this.props.setActiveNotesView('bookmarks');
@@ -785,6 +638,7 @@ class Text extends React.PureComponent {
 			userAuthenticated,
 			activeChapter,
 			bibleId,
+			activeBookName,
 		} = this.props;
 		const { firstVerse, lastVerse } = this.state;
 		// Need to make first verse and last verse integers for the < comparison
@@ -804,24 +658,13 @@ class Text extends React.PureComponent {
 				reference: getReference(
 					verseStart || verseEnd,
 					verseEnd,
-					this.props.activeBookName,
-					this.props.activeChapter,
+					activeBookName,
+					activeChapter,
 				),
 				verse_start: verseStart || verseEnd,
 				verse_end: verseEnd,
 			});
 		}
-	};
-
-	// Probably need to stop doing this here
-	callSetStateNotInUpdate = (footnotes) => this.setState({ footnotes });
-
-	domMethodsAvailable = () =>
-		this.setState({ domMethodsAvailable: true, formattedVerse: true });
-
-	openPopup = (coords) => {
-		this.setState({ popupOpen: true, popupCoords: coords });
-		setTimeout(() => this.setState({ popupOpen: false }), 2500);
 	};
 
 	deleteHighlights = (highlightObject, highlights) => {
@@ -891,68 +734,6 @@ class Text extends React.PureComponent {
 		});
 	};
 
-	addFacebookLike = () => {
-		if (typeof this.window !== 'undefined') {
-			const fb = this.window.FB;
-			fb.api(
-				`${process.env.FB_APP_ID}?metadata=1`,
-				{
-					access_token: process.env.FB_ACCESS,
-				},
-				(res) => res,
-			);
-		}
-		this.closeContextMenu();
-	};
-
-	openFootnote = ({ id, coords }) => {
-		this.setState({
-			footnoteState: true,
-			contextMenuState: false,
-			footnotePortal: {
-				message: this.state.footnotes[id],
-				closeFootnote: this.closeFootnote,
-				coords,
-			},
-		});
-	};
-
-	openContextMenu = (e) => {
-		if (typeof this.window !== 'undefined') {
-			const rightEdge = this.window.innerWidth - 250;
-			const bottomEdge = this.window.innerHeight - 297;
-			const x = rightEdge < e.clientX ? rightEdge : e.clientX;
-			const y = bottomEdge < e.clientY ? bottomEdge : e.clientY;
-			// Using setTimeout 0 so that the check for the selection happens in the next frame and not this one
-			// That allows the function that updates the selection to run before this one does
-			if (this.timer) {
-				clearTimeout(this.timer);
-			}
-			setTimeout(() => {
-				if (
-					typeof this.window !== 'undefined' &&
-					!this.window.getSelection().toString()
-				) {
-					this.closeContextMenu();
-				} else {
-					this.setState({
-						coords: { x, y },
-						contextMenuState: true,
-					});
-				}
-			}, 0);
-		}
-	};
-
-	closeFootnote = () => this.setState({ footnoteState: false });
-
-	closeContextMenu = () => {
-		this.setState({
-			contextMenuState: false,
-			activeVerseInfo: { verse: 0, isPlain: false },
-		});
-	};
-
 	selectedWholeVerse = (verse, isPlain, clientX, clientY, userSelectedText) => {
 		if (typeof this.window !== 'undefined') {
 			const rightEdge =
@@ -1001,6 +782,87 @@ class Text extends React.PureComponent {
 		}
 	};
 
+	handleScrollOnMain = () => {
+		if (this.state.contextMenuState) {
+			this.setState({ contextMenuState: false, activeVerseInfo: { verse: 0 } });
+		}
+	};
+
+	handleArrowClick = () => {
+		this.setState({ loadingNextPage: true });
+	};
+
+	// Probably need to stop doing this here
+	callSetStateNotInUpdate = (footnotes) => this.setState({ footnotes });
+
+	domMethodsAvailable = () =>
+		this.setState({ domMethodsAvailable: true, formattedVerse: true });
+
+	openPopup = (coords) => {
+		this.setState({ popupOpen: true, popupCoords: coords });
+		setTimeout(() => this.setState({ popupOpen: false }), 2500);
+	};
+
+	addFacebookLike = () => {
+		if (typeof this.window !== 'undefined') {
+			const fb = this.window.FB;
+			fb.api(
+				`${process.env.FB_APP_ID}?metadata=1`,
+				{
+					access_token: process.env.FB_ACCESS,
+				},
+				(res) => res,
+			);
+		}
+		this.closeContextMenu();
+	};
+
+	openFootnote = ({ id, coords }) => {
+		this.setState({
+			footnoteState: true,
+			contextMenuState: false,
+			footnotePortal: {
+				message: this.state.footnotes[id],
+				closeFootnote: this.closeFootnote,
+				coords,
+			},
+		});
+	};
+	openContextMenu = (e) => {
+		if (typeof this.window !== 'undefined') {
+			const rightEdge = this.window.innerWidth - 250;
+			const bottomEdge = this.window.innerHeight - 297;
+			const x = rightEdge < e.clientX ? rightEdge : e.clientX;
+			const y = bottomEdge < e.clientY ? bottomEdge : e.clientY;
+			// Using setTimeout 0 so that the check for the selection happens in the next frame and not this one
+			// That allows the function that updates the selection to run before this one does
+			if (this.timer) {
+				clearTimeout(this.timer);
+			}
+			setTimeout(() => {
+				if (
+					typeof this.window !== 'undefined' &&
+					!this.window.getSelection().toString()
+				) {
+					this.closeContextMenu();
+				} else {
+					this.setState({
+						coords: { x, y },
+						contextMenuState: true,
+					});
+				}
+			}, 0);
+		}
+	};
+	closeFootnote = () => this.setState({ footnoteState: false });
+
+	closeContextMenu = () => {
+		this.setState({
+			contextMenuState: false,
+			activeVerseInfo: { verse: 0, isPlain: false },
+		});
+	};
+
 	shareHighlightToFacebook = () => {
 		const { activeBookName: book, activeChapter: chapter } = this.props;
 		const { firstVerse: v1, lastVerse: v2, selectedText: sl } = this.state;
@@ -1026,7 +888,6 @@ class Text extends React.PureComponent {
 			text,
 			loadingNewChapterText,
 			loadingAudio,
-			userSettings,
 			verseNumber,
 			activeTextId,
 			activeBookId,
@@ -1039,6 +900,11 @@ class Text extends React.PureComponent {
 			chapterTextLoadingState,
 			videoPlayerOpen,
 			hasVideo,
+			audioSource,
+			userSettings,
+			userAuthenticated,
+			userId,
+			activeBookName,
 		} = this.props;
 
 		const {
@@ -1048,19 +914,8 @@ class Text extends React.PureComponent {
 			footnotePortal,
 			formattedVerse,
 			userSelectedText,
+			activeVerseInfo,
 		} = this.state;
-		const readersMode = userSettings.getIn([
-			'toggleOptions',
-			'readersMode',
-			'active',
-		]);
-		const oneVersePerLine = userSettings.getIn([
-			'toggleOptions',
-			'oneVersePerLine',
-			'active',
-		]);
-
-		const chapterAlt = text[0] && text[0].chapter_alt;
 
 		if (
 			loadingNewChapterText ||
@@ -1119,16 +974,30 @@ class Text extends React.PureComponent {
 						className={getClassNameForMain(textDirection, menuIsOpen)}
 						onScroll={this.handleScrollOnMain}
 					>
-						{(formattedSource.main && !readersMode && !oneVersePerLine) ||
-						text.length === 0 ||
-						(!readersMode && !oneVersePerLine) ? null : (
-							<div className="active-chapter-title">
-								<h1 className="active-chapter-title">
-									{chapterAlt || activeChapter}
-								</h1>
-							</div>
+						{!formattedSource.main &&
+							!text.length &&
+							audioSource && (
+								<AudioOnlyMessage
+									key={'no_text'}
+									book={activeBookName}
+									chapter={activeChapter}
+								/>
+							)}
+						{!formattedSource.main &&
+							!text.length &&
+							!audioSource && (
+								<h5 key={'no_text'}>
+									Text is not currently available for this version.
+								</h5>
+							)}
+						{(formattedSource.main || text.length) && (
+							<Verses
+								userSettings={userSettings}
+								userAuthenticated={userAuthenticated}
+								userId={userId}
+								acitveVerseInfo={activeVerseInfo}
+							/>
 						)}
-						{this.getTextComponents(this.state.domMethodsAvailable)}
 						{verseNumber ? (
 							<ReadFullChapter
 								activeTextId={activeTextId}
@@ -1185,7 +1054,6 @@ class Text extends React.PureComponent {
 		);
 	}
 }
-/* eslint-enable jsx-a11y/no-noninteractive-element-interactions */
 
 Text.propTypes = {
 	text: PropTypes.array,
