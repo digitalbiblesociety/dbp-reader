@@ -532,16 +532,13 @@ class HomePage extends React.PureComponent {
 			audioPlayerState,
 			books,
 			highlights,
-			invalidBibleId,
 			isProfileActive,
 			isNotesModalActive,
 			isSearchModalActive,
 			isSettingsModalActive,
 			isVersionSelectionActive,
 			isChapterSelectionActive,
-			isInformationModalActive,
 			userAgent,
-			textDirection,
 			loadingAudio,
 			loadingNewChapterText,
 			chapterTextLoadingState,
@@ -558,11 +555,10 @@ class HomePage extends React.PureComponent {
 			isIe,
 			audioType,
 		} = this.props;
-		const { userId, userAuthenticated } = this.props.profile;
 
 		const autoPlayEnabled = userSettings.get('autoPlayEnabled');
 		const { isScrollingDown } = this.state;
-		const { userNotes, bookmarks, text: updatedText } = this.props.textData;
+		const { text: updatedText } = this.props.textData;
 		const token = this.props.homepage.match.params.token || '';
 		const verse = this.props.homepage.match.params.verse || '';
 		// const loadText = (loadingNewChapterText, loadingAudio, chapterTextLoadingState, (!formattedVerse && formattedSource.main));
@@ -606,8 +602,6 @@ class HomePage extends React.PureComponent {
 						text={updatedText}
 						hasVideo={hasVideo}
 						verseNumber={verse}
-						userNotes={userNotes}
-						bookmarks={bookmarks}
 						menuIsOpen={isMenuOpen}
 						highlights={highlights}
 						activeTextId={activeTextId}

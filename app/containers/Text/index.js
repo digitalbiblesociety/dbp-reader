@@ -298,147 +298,6 @@ class Text extends React.PureComponent {
 		});
 	};
 
-	getTextComponents(domMethodsAvailable) {
-		const {
-			userSettings,
-			formattedSource: initialFormattedSourceFromProps,
-			highlights,
-			activeChapter,
-			verseNumber,
-			userNotes,
-			bookmarks,
-			userAuthenticated,
-			activeBookId,
-		} = this.props;
-
-		const initialFormattedSource = JSON.parse(
-			JSON.stringify(initialFormattedSourceFromProps),
-		);
-		let formattedVerse = false;
-
-		// Need to move this to selector and use regex
-		// Possible for verse but not for footnotes
-		if (domMethodsAvailable && initialFormattedSource.main) {
-			if (verseNumber) {
-				const parser = new DOMParser();
-				const serializer = new XMLSerializer();
-				// Create temp xml doc from source
-				const xmlDocText = parser.parseFromString(
-					initialFormattedSource.main,
-					'text/xml',
-				);
-				// Find the verse node by its classname
-				const verseClassName = `${activeBookId.toUpperCase()}${activeChapter}_${verseNumber}`;
-				const verseNumberElement = xmlDocText.getElementsByClassName(
-					`verse${verseNumber}`,
-				)[0];
-				// Get the inner text of the verse
-				const verseString = xmlDocText.getElementsByClassName(
-					verseClassName,
-				)[0];
-				// Create a new container for the verse
-				const newXML = xmlDocText.createElement('div');
-				newXML.className = 'single-formatted-verse';
-				// Add the verse to the new container
-				if (verseNumberElement && verseString) {
-					newXML.appendChild(verseNumberElement);
-					newXML.appendChild(verseString);
-				}
-				// Use the new text as the formatted source
-				initialFormattedSource.main = newXML
-					? serializer.serializeToString(newXML)
-					: 'This chapter does not have a verse matching the url';
-				formattedVerse = true;
-			}
-		}
-		// Doing it like this may impact performance, but it is probably cleaner
-		// than most other ways of doing it...
-		let formattedSource = initialFormattedSource;
-		let textComponents = [];
-
-		if (
-			this.applyNotes &&
-			this.applyBookmarks &&
-			this.applyWholeVerseHighlights
-		) {
-			formattedSource = initialFormattedSource.main
-				? {
-						...initialFormattedSource,
-						main: [initialFormattedSource.main]
-							.map((s) => this.applyNotes(s, userNotes, this.handleNoteClick))
-							.map((s) =>
-								this.applyBookmarks(s, bookmarks, this.handleNoteClick),
-							)
-							.map((s) =>
-								this.applyWholeVerseHighlights(
-									s,
-									highlights.filter(
-										(h) => h.chapter === activeChapter && !h.highlighted_words,
-									),
-								),
-							)[0],
-				  }
-				: initialFormattedSource;
-		}
-		const readersMode = userSettings.getIn([
-			'toggleOptions',
-			'readersMode',
-			'active',
-		]);
-		const oneVersePerLine = userSettings.getIn([
-			'toggleOptions',
-			'oneVersePerLine',
-			'active',
-		]);
-		const justifiedText = userSettings.getIn([
-			'toggleOptions',
-			'justifiedText',
-			'active',
-		]);
-		// Need to connect to the api and get the highlights object for this chapter
-		// based on whether the highlights object has any data decide whether to
-		// run this function or not
-		let formattedText = [];
-
-		if (
-			highlights.length &&
-			userAuthenticated &&
-			(!oneVersePerLine && !readersMode && formattedSource.main) &&
-			this.createFormattedHighlights
-		) {
-			// Use function for highlighting the formatted formattedText
-			formattedText = this.createFormattedHighlights(
-				highlights.filter((h) => h.chapter === activeChapter),
-				formattedSource.main,
-			);
-		}
-		if (
-			formattedSource.main &&
-			(!verseNumber || (verseNumber && formattedVerse))
-		) {
-			// Need to run a function to highlight the formatted text if this option is selected
-			if (!Array.isArray(formattedText)) {
-				textComponents = (
-					<div
-						ref={this.setFormattedRefHighlight}
-						className={justifiedText ? 'justify' : ''}
-						dangerouslySetInnerHTML={{ __html: formattedText }}
-					/>
-				);
-			} else {
-				textComponents = (
-					<div
-						ref={this.setFormattedRef}
-						className={justifiedText ? 'justify' : ''}
-						dangerouslySetInnerHTML={{ __html: formattedSource.main }}
-					/>
-				);
-			}
-		}
-
-		return textComponents;
-	}
-
 	handleArrowClick = () => {
 		this.setState({ loadingNextPage: true });
 	};
@@ -551,8 +410,6 @@ class Text extends React.PureComponent {
 Text.propTypes = {
 	text: PropTypes.array,
 	books: PropTypes.array,
-	userNotes: PropTypes.array,
-	bookmarks: PropTypes.array,
 	highlights: PropTypes.array,
 	userSettings: PropTypes.object,
 	formattedSource: PropTypes.object,
@@ -565,7 +422,6 @@ Text.propTypes = {
 	videoPlayerOpen: PropTypes.bool,
 	chapterTextLoadingState: PropTypes.bool,
 	audioPlayerState: PropTypes.bool,
-	userAuthenticated: PropTypes.bool,
 	loadingNewChapterText: PropTypes.bool,
 	verseNumber: PropTypes.string,
 	activeTextId: PropTypes.string,

@@ -1,7 +1,7 @@
 /**
  *
  * Verses
- *
+ * Connected to Store and manages state for all actions within the Verses
  */
 
 import React from 'react';
@@ -18,9 +18,8 @@ import FootnotePortal from '../../components/FootnotePortal';
 import ReadFullChapter from '../../components/ReadFullChapter';
 import Information from '../../components/Information';
 import AudioOnlyMessage from '../../components/AudioOnlyMessage';
+import PlainText from '../../components/PlainText';
 // Utils
-import PlainTextVerses from '../../components/PlainTextVerses';
-import createHighlights from '../Text/highlightPlainText';
 import injectReducer from '../../utils/injectReducer';
 import {
 	getFormattedParentVerseNumber,
@@ -115,21 +114,87 @@ export class Verses extends React.PureComponent {
 		}
 	}
 
-	getPlainTextComponents() {
+	getTextComponents(domMethodsAvailable) {
 		const {
+			userSettings,
+			formattedSource: initialFormattedSourceFromProps,
 			highlights,
 			activeChapter,
 			verseNumber,
 			userAuthenticated,
-			userSettings,
+			activeBookId,
 		} = this.props;
-		const { text: initialText } = this.props.textData;
-		// Needs to be state eventually
-		const { activeVerseInfo } = this.state;
+		const { userNotes, bookmarks } = this.props.textData;
 
-		const chapterAlt = initialText[0] && initialText[0].chapter_alt;
-		const verseIsActive = activeVerseInfo.verse && activeVerseInfo.isPlain;
-		const activeVerse = activeVerseInfo.verse || 0;
+		const initialFormattedSource = JSON.parse(
+			JSON.stringify(initialFormattedSourceFromProps),
+		);
+		let formattedVerse = false;
+
+		// Need to move this to selector and use regex
+		// Possible for verse but not for footnotes
+		if (domMethodsAvailable && initialFormattedSource.main) {
+			if (verseNumber) {
+				const parser = new DOMParser();
+				const serializer = new XMLSerializer();
+				// Create temp xml doc from source
+				const xmlDocText = parser.parseFromString(
+					initialFormattedSource.main,
+					'text/xml',
+				);
+				// Find the verse node by its classname
+				const verseClassName = `${activeBookId.toUpperCase()}${activeChapter}_${verseNumber}`;
+				const verseNumberElement = xmlDocText.getElementsByClassName(
+					`verse${verseNumber}`,
+				)[0];
+				// Get the inner text of the verse
+				const verseString = xmlDocText.getElementsByClassName(
+					verseClassName,
+				)[0];
+				// Create a new container for the verse
+				const newXML = xmlDocText.createElement('div');
+				newXML.className = 'single-formatted-verse';
+				// Add the verse to the new container
+				if (verseNumberElement && verseString) {
+					newXML.appendChild(verseNumberElement);
+					newXML.appendChild(verseString);
+				}
+				// Use the new text as the formatted source
+				initialFormattedSource.main = newXML
+					? serializer.serializeToString(newXML)
+					: 'This chapter does not have a verse matching the url';
+				formattedVerse = true;
+			}
+		}
+		// Doing it like this may impact performance, but it is probably cleaner
+		// than most other ways of doing it...
+		let formattedSource = initialFormattedSource;
+		let textComponents = [];
+
+		if (
+			this.applyNotes &&
+			this.applyBookmarks &&
+			this.applyWholeVerseHighlights
+		) {
+			formattedSource = initialFormattedSource.main
+				? {
+						...initialFormattedSource,
+						main: [initialFormattedSource.main]
+							.map((s) => this.applyNotes(s, userNotes, this.handleNoteClick))
+							.map((s) =>
+								this.applyBookmarks(s, bookmarks, this.handleNoteClick),
+							)
+							.map((s) =>
+								this.applyWholeVerseHighlights(
+									s,
+									highlights.filter(
+										(h) => h.chapter === activeChapter && !h.highlighted_words,
+									),
+								),
+							)[0],
+				  }
+				: initialFormattedSource;
+		}
 		const readersMode = userSettings.getIn([
 			'toggleOptions',
 			'readersMode',
@@ -145,109 +210,49 @@ export class Verses extends React.PureComponent {
 			'justifiedText',
 			'active',
 		]);
-		let plainText = [];
+		// Need to connect to the api and get the highlights object for this chapter
+		// based on whether the highlights object has any data decide whether to
+		// run this function or not
+		let formattedText = [];
+
 		if (
 			highlights.length &&
 			userAuthenticated &&
-			initialText.length &&
-			createHighlights
+			(!oneVersePerLine && !readersMode && formattedSource.main) &&
+			this.createFormattedHighlights
 		) {
-			// Use function for highlighting the plain plainText
-			// TODO: Can remove filter once I fix the problem with the new highlights not being fetched
-			plainText = createHighlights(
+			// Use function for highlighting the formatted formattedText
+			formattedText = this.createFormattedHighlights(
 				highlights.filter((h) => h.chapter === activeChapter),
-				initialText,
+				formattedSource.main,
 			);
-		} else {
-			plainText = initialText || [];
 		}
-
-		let textComponents;
-		// Mapping the text again here because I need to apply a class for all highlights with a char count of null
-		const mappedText = plainText.map((v) => {
-			const highlightsInVerse = highlights.filter(
-				(h) => v.verse_start === h.verse_start && !h.highlighted_words,
-			);
-			const wholeVerseHighlighted = !!highlightsInVerse.length;
-			if (wholeVerseHighlighted) {
-				const highlightedColor = highlightsInVerse[highlightsInVerse.length - 1]
-					? highlightsInVerse[highlightsInVerse.length - 1].highlighted_color
-					: '';
-
-				return { ...v, wholeVerseHighlighted, highlightedColor };
-			}
-			return v;
-		});
-		// Todo: Should handle each mode for formatted text and plain text in a separate component
-		// Handle exception thrown when there isn't plain text but readers mode is selected
-		if (readersMode) {
-			textComponents = PlainTextVerses({
-				textComponents: mappedText,
-				onMouseUp: this.handleMouseUp,
-				onMouseDown: this.getFirstVerse,
-				onHighlightClick: this.handleHighlightClick,
-				onNoteClick: this.handleNoteClick,
-				readersMode,
-				oneVersePerLine,
-				activeVerse: parseInt(activeVerse, 10),
-				verseIsActive: !!verseIsActive,
-			});
-		} else if (oneVersePerLine) {
-			textComponents = PlainTextVerses({
-				textComponents: mappedText,
-				onMouseUp: this.handleMouseUp,
-				onMouseDown: this.getFirstVerse,
-				onHighlightClick: this.handleHighlightClick,
-				onNoteClick: this.handleNoteClick,
-				readersMode,
-				oneVersePerLine,
-				activeVerse: parseInt(activeVerse, 10),
-				verseIsActive: !!verseIsActive,
-			});
-		} else {
-			textComponents = PlainTextVerses({
-				textComponents: mappedText,
-				onMouseUp: this.handleMouseUp,
-				onMouseDown: this.getFirstVerse,
-				onHighlightClick: this.handleHighlightClick,
-				onNoteClick: this.handleNoteClick,
-				readersMode,
-				oneVersePerLine,
-				activeVerse: parseInt(activeVerse, 10),
-				verseIsActive: !!verseIsActive,
-			});
-		}
-
 		if (
-			!readersMode &&
-			!oneVersePerLine &&
-			Array.isArray(textComponents) &&
-			textComponents[0].key !== 'no_text'
+			formattedSource.main &&
+			(!verseNumber || (verseNumber && formattedVerse))
 		) {
-			textComponents.unshift(
-				<span key={'chapterNumber'} className={'drop-caps'}>
-					{chapterAlt || activeChapter}
-				</span>,
-			);
-		}
-		// Using parseInt to determine whether or not the verseNumber is a real number or if it is a series of characters
-		if (verseNumber && Array.isArray(textComponents)) {
-			return textComponents.filter(
-				(c) => c.key === (parseInt(verseNumber, 10) ? verseNumber : '1'),
-			);
+			// Need to run a function to highlight the formatted text if this option is selected
+			if (!Array.isArray(formattedText)) {
+				textComponents = (
+					<div
+						ref={this.setFormattedRefHighlight}
+						className={justifiedText ? 'justify' : ''}
+						dangerouslySetInnerHTML={{ __html: formattedText }}
+					/>
+				);
+			} else {
+				textComponents = (
+					<div
+						ref={this.setFormattedRef}
+						className={justifiedText ? 'justify' : ''}
+						dangerouslySetInnerHTML={{ __html: formattedSource.main }}
+					/>
+				);
+			}
 		}
 
-		return (
-			<div className={justifiedText ? 'chapter justify' : 'chapter'}>
-				{textComponents}
-			</div>
-		);
+		return textComponents;
 	}
-
-	// onMouseUp: this.handleMouseUp,
-	// onMouseDown: this.getFirstVerse,
-	// onHighlightClick: this.handleHighlightClick,
-	// onNoteClick: this.handleNoteClick,
 
 	getFirstVerse = (e) => {
 		const { userSettings, formattedSource } = this.props;
@@ -642,9 +647,13 @@ export class Verses extends React.PureComponent {
 			verseNumber,
 			menuIsOpen,
 			audioSource,
+			highlights,
+			userAuthenticated,
 		} = this.props;
 		const { text } = this.props.textData;
+		// Needs to be state eventually
 		const {
+			activeVerseInfo,
 			popupCoords,
 			popupOpen,
 			contextMenuState,
@@ -696,10 +705,23 @@ export class Verses extends React.PureComponent {
 						</h1>
 					</div>
 				)}
-				{/* {formattedSource.main && !readersMode && !oneVersePerLine
-          ? this.getTextComponents(this.state.domMethodsAvailable)
-          : this.getPlainTextComponents()} */}
-				{this.getPlainTextComponents()}
+				{formattedSource.main && !readersMode && !oneVersePerLine ? (
+					this.getTextComponents(this.state.domMethodsAvailable)
+				) : (
+					<PlainText
+						initialText={text}
+						highlights={highlights}
+						verseNumber={verseNumber}
+						userSettings={userSettings}
+						activeChapter={activeChapter}
+						activeVerseInfo={activeVerseInfo}
+						handleMouseUp={this.handleMouseUp}
+						getFirstVerse={this.getFirstVerse}
+						userAuthenticated={userAuthenticated}
+						handleNoteClick={this.handleNoteClick}
+						handleHighlightClick={this.handleHighlightClick}
+					/>
+				)}
 				{contextMenuState && (
 					<ContextPortal
 						handleAddBookmark={this.handleAddBookmark}
@@ -723,13 +745,13 @@ export class Verses extends React.PureComponent {
 						y={popupCoords.y}
 					/>
 				)}
-				{verseNumber ? (
+				{verseNumber && (
 					<ReadFullChapter
 						activeTextId={activeTextId}
 						activeBookId={activeBookId}
 						activeChapter={activeChapter}
 					/>
-				) : null}
+				)}
 				<Information />
 			</main>
 		);
