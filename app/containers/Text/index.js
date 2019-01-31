@@ -10,33 +10,22 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
 import dynamic from 'next/dynamic';
-import Information from '../../components/Information';
-import ContextPortal from '../../components/ContextPortal';
-import FootnotePortal from '../../components/FootnotePortal';
 import LoadingSpinner from '../../components/LoadingSpinner';
-import PopupMessage from '../../components/PopupMessage';
-import PleaseSignInMessage from '../../components/PleaseSignInMessage';
-import AudioOnlyMessage from '../../components/AudioOnlyMessage';
-
 import getPreviousChapterUrl from '../../utils/getPreviousChapterUrl';
 import getNextChapterUrl from '../../utils/getNextChapterUrl';
 import {
-	getClassNameForMain,
 	getClassNameForTextContainer,
 	isEndOfBible,
 	isStartOfBible,
 } from './textRenderUtils';
-import createHighlights from './highlightPlainText';
 import createFormattedHighlights from './highlightFormattedText';
 import {
 	applyNotes,
 	applyBookmarks,
 	applyWholeVerseHighlights,
 } from './formattedTextUtils';
-import ReadFullChapter from '../../components/ReadFullChapter';
 import setEventHandlersForFormattedVerses from '../../utils/requiresDom/setEventHandlersForFormattedVerses';
 import setEventHandlersForFootnotes from '../../utils/requiresDom/setEventHandlersForFootnotes';
-import shareHighlightToFacebook from '../../utils/requiresDom/shareToFacebook';
 import Verses from '../Verses';
 // import NewChapterArrow from '../../components/NewChapterArrow';
 
@@ -49,27 +38,10 @@ const NewChapterArrow = dynamic(import('../../components/NewChapterArrow'), {
 // Todo: Set selected text when user clicks a verse
 class Text extends React.PureComponent {
 	state = {
-		contextMenuState: false,
-		footnoteState: false,
-		coords: {},
-		selectedText: '',
-		userSelectedText: '',
-		firstVerse: 0,
-		lastVerse: 0,
-		highlightActive: this.props.highlights || false,
-		handlersAreSet: false,
-		handledMouseDown: false,
-		activeVerseInfo: { verse: 0 },
 		loadingNextPage: false,
-		wholeVerseIsSelected: false,
-		domMethodsAvailable: false,
-		formattedVerse: false,
-		footnotes: {},
 	};
-
 	componentDidMount() {
 		// Doing all these assignments because nextjs was erroring because they try to use the dom
-		this.createHighlights = createHighlights;
 		this.createFormattedHighlights = createFormattedHighlights;
 		this.applyWholeVerseHighlights = applyWholeVerseHighlights;
 		this.applyNotes = applyNotes;
@@ -99,43 +71,6 @@ class Text extends React.PureComponent {
 
 		if (this.mainWrapper) {
 			this.mainWrapper.focus();
-		}
-	}
-
-	componentWillReceiveProps(nextProps) {
-		// If there is new formatted text or new plain text then the menus need to be disabled
-		if (nextProps.formattedSource.main !== this.props.formattedSource.main) {
-			this.setState(
-				{
-					activeVerseInfo: { verse: 0 },
-					footnoteState: false,
-					loadingNextPage: false,
-					contextMenuState: false,
-				},
-				() => {
-					this.props.setTextLoadingState({ state: false });
-				},
-			);
-		}
-		if (!isEqual(nextProps.text, this.props.text)) {
-			this.setState({
-				activeVerseInfo: { verse: 0 },
-				loadingNextPage: false,
-				contextMenuState: false,
-			});
-			this.props.setTextLoadingState({ state: false });
-		}
-		if (nextProps.verseNumber !== this.props.verseNumber) {
-			this.setState({ loadingNextPage: false, contextMenuState: false });
-			this.props.setTextLoadingState({ state: false });
-		}
-		if (nextProps.activeChapter !== this.props.activeChapter) {
-			this.setState({ loadingNextPage: false, contextMenuState: false });
-			this.props.setTextLoadingState({ state: false });
-		}
-		if (nextProps.activeBookId !== this.props.activeBookId) {
-			this.setState({ loadingNextPage: false, contextMenuState: false });
-			this.props.setTextLoadingState({ state: false });
 		}
 	}
 
@@ -331,9 +266,6 @@ class Text extends React.PureComponent {
 		this.format = el;
 	};
 
-	setMainRef = (el) => {
-		this.main = el;
-	};
 	// Use selected text only when marking highlights
 
 	getFootnotesOnFirstRender = () => {
@@ -507,287 +439,6 @@ class Text extends React.PureComponent {
 		return textComponents;
 	}
 
-	getFirstVerse = (e) => {
-		e.stopPropagation();
-		typeof e.persist === 'function' && e.persist(); // eslint-disable-line no-unused-expressions
-
-		const firstVerse = getFirstVerse({
-			target: e.target,
-			button: e.button === 0,
-			userSettings: this.props.userSettings,
-			formattedSourceMain: this.props.formattedSource.main,
-			main: this.main,
-			getFormattedParentVerse,
-			getPlainParentVerseWithoutNumber,
-		});
-		this.setState({
-			firstVerse,
-		});
-	};
-	getLastVerse = (e) => {
-		typeof e.persist === 'function' && e.persist(); // eslint-disable-line no-unused-expressions
-		// Failsafe for the case that the dom hasn't loaded yet
-		// may not need this anymore
-		if (typeof this.window === 'undefined') return;
-
-		const lastVerse = getLastSelectedVerse(e, {
-			formattedSourceMain: this.props.formattedSource.main,
-			userSettings: this.props.userSettings,
-			windowObject: this.window,
-			main: this.main,
-			activeBookId: this.props.activeBookId,
-			activeChapter: this.props.activeChapter,
-			text: this.props.text,
-			selectedWholeVerse: this.selectedWholeVerse,
-			getFormattedParentVerse,
-			getPlainParentVerseWithoutNumber,
-		});
-		if (lastVerse.openMenu) {
-			this.setState(
-				{
-					lastVerse: lastVerse.stateObject.lastVerse,
-					wholeVerseIsSelected: lastVerse.stateObject.wholeVerseIsSelected,
-					anchorOffset: lastVerse.stateObject.anchorOffset,
-					anchorText: lastVerse.stateObject.anchorText,
-					anchorNode: lastVerse.stateObject.anchorNode,
-					focusOffset: lastVerse.stateObject.focusOffset,
-					focusText: lastVerse.stateObject.focusText,
-					focusNode: lastVerse.stateObject.focusNode,
-					userSelectedText: lastVerse.stateObject.userSelectedText,
-					selectedText: lastVerse.stateObject.selectedText,
-				},
-				() => this.openContextMenu(e),
-			);
-		}
-	};
-
-	setActiveNote = ({ coords, existingNote, bookmark }) => {
-		const {
-			userAuthenticated,
-			userId,
-			activeBookId,
-			activeChapter,
-			bibleId,
-		} = this.props;
-		const { firstVerse, lastVerse } = this.state;
-
-		if (!userAuthenticated || !userId) {
-			this.openPopup({ x: coords.x, y: coords.y });
-			return;
-		}
-
-		const note = {
-			verse_start: firstVerse || lastVerse,
-			verse_end: lastVerse || firstVerse,
-			book_id: activeBookId,
-			chapter: activeChapter,
-			bible_id: bibleId,
-			bookmark: bookmark ? 1 : 0,
-		};
-
-		this.props.setActiveNote({ note: existingNote || note });
-	};
-
-	// This is a no-op to trick iOS devices
-	handleHighlightClick = () => {
-		// Unless there is a click event the mouseup and mousedown events won't fire for mobile devices
-		// Left this blank since I actually don't need to do anything with it
-	};
-
-	handleMouseUp = (e) => {
-		e.stopPropagation();
-
-		this.getLastVerse(e);
-		if (
-			e.button === 0 &&
-			this.state.footnoteState &&
-			e.target.className !== 'key'
-		) {
-			this.closeFootnote();
-		}
-	};
-
-	handleNoteClick = (noteIndex, clickedBookmark) => {
-		const { userNotes, notesActive } = this.props;
-		const existingNote = userNotes[noteIndex];
-
-		if (!notesActive) {
-			this.setActiveNote({ existingNote });
-			if (clickedBookmark) {
-				this.props.setActiveNotesView('bookmarks');
-			} else {
-				this.props.setActiveNotesView('edit');
-			}
-			this.closeContextMenu();
-			this.props.toggleNotesModal();
-		} else {
-			this.setActiveNote({ existingNote });
-			if (clickedBookmark) {
-				this.props.setActiveNotesView('bookmarks');
-			} else {
-				this.props.setActiveNotesView('edit');
-			}
-			this.closeContextMenu();
-		}
-	};
-
-	handleAddBookmark = () => {
-		const {
-			activeBookId,
-			userId,
-			userAuthenticated,
-			activeChapter,
-			bibleId,
-			activeBookName,
-		} = this.props;
-		const { firstVerse, lastVerse } = this.state;
-		// Need to make first verse and last verse integers for the < comparison
-		const fv = parseInt(firstVerse, 10);
-		const lv = parseInt(lastVerse, 10);
-		// This takes into account RTL and LTR selections
-		const verseStart = fv < lv ? fv : lv;
-		const verseEnd = fv < lv ? lv : fv;
-
-		// Only add the bookmark if there is a userId to add it too
-		if (userAuthenticated && userId) {
-			this.props.addBookmark({
-				book_id: activeBookId,
-				chapter: activeChapter,
-				user_id: userId,
-				bible_id: bibleId,
-				reference: getReference(
-					verseStart || verseEnd,
-					verseEnd,
-					activeBookName,
-					activeChapter,
-				),
-				verse_start: verseStart || verseEnd,
-				verse_end: verseEnd,
-			});
-		}
-	};
-
-	deleteHighlights = (highlightObject, highlights) => {
-		const space =
-			highlightObject.highlightStart + highlightObject.highlightedWords;
-		const highsToDelete = highlights
-			.filter(
-				(high) =>
-					high.verse_start === parseInt(highlightObject.verseStart, 10) &&
-					(high.highlight_start <= space &&
-						high.highlight_start + high.highlighted_words >=
-							highlightObject.highlightStart),
-			)
-			.reduce((a, h) => [...a, h.id], []);
-
-		this.props.deleteHighlights({ ids: highsToDelete });
-	};
-
-	addHighlight = ({ color, popupCoords }) => {
-		addHighlight({
-			color,
-			popupCoords,
-			// Props
-			userAuthenticated: this.props.userAuthenticated,
-			userId: this.props.userId,
-			text: this.props.text,
-			highlights: this.props.highlights,
-			formattedSource: this.props.formattedSource,
-			userSettings: this.props.userSettings,
-			activeTextId: this.props.activeTextId,
-			activeBookId: this.props.activeBookId,
-			activeBookName: this.props.activeBookName,
-			activeChapter: this.props.activeChapter,
-			addHighlight: this.props.addHighlight,
-			// State
-			wholeVerseIsSelected: this.state.wholeVerseIsSelected,
-			activeVerseInfo: this.state.activeVerseInfo,
-			firstVerseState: this.state.firstVerse,
-			lastVerseState: this.state.lastVerse,
-			anchorOffsetState: this.state.anchorOffset,
-			focusOffsetState: this.state.focusOffset,
-			focusTextState: this.state.focusText,
-			anchorTextState: this.state.anchorText,
-			anchorNodeState: this.state.anchorNode,
-			focusNodeState: this.state.focusNode,
-			selectedTextState: this.state.selectedText,
-			// Methods
-			main: this.main,
-			format: this.format,
-			openPopup: this.openPopup,
-			setParentState: this.setState,
-			formatHighlight: this.formatHighlight,
-			deleteHighlights: this.deleteHighlights,
-			closeContextMenu: this.closeContextMenu,
-			// External Functions
-			getReference,
-			calcDistance,
-			getClosestParent,
-			replaceCharsRegex,
-			getPlainParentVerse,
-			getFormattedChildIndex,
-			getFormattedParentVerse,
-			getOffsetNeededForPsalms,
-			getFormattedElementVerseId,
-			getFormattedParentVerseNumber,
-			getPlainParentVerseWithoutNumber,
-		});
-	};
-
-	selectedWholeVerse = (verse, isPlain, clientX, clientY, userSelectedText) => {
-		if (typeof this.window !== 'undefined') {
-			const rightEdge =
-				this.window.innerWidth < 500
-					? this.window.innerWidth - 295
-					: this.window.innerWidth - 250;
-			const bottomEdge =
-				this.window.innerHeight < 900
-					? this.window.innerHeight - 317
-					: this.window.innerHeight - 297;
-			const x = rightEdge < clientX ? rightEdge : clientX;
-			const y = bottomEdge < clientY ? bottomEdge : clientY;
-
-			if (isPlain) {
-				this.setState((currentState) => ({
-					coords: { x, y },
-					wholeVerseIsSelected: !(
-						currentState.wholeVerseIsSelected &&
-						currentState.activeVerseInfo.verse === verse
-					),
-					contextMenuState: currentState.activeVerseInfo.verse !== verse,
-					lastVerse: currentState.firstVerse,
-					activeVerseInfo: {
-						verse: currentState.activeVerseInfo.verse !== verse ? verse : 0,
-						isPlain,
-					},
-					userSelectedText,
-				}));
-			} else {
-				// is formatted
-				this.setState((currentState) => ({
-					coords: { x, y },
-					wholeVerseIsSelected: !(
-						currentState.wholeVerseIsSelected &&
-						currentState.activeVerseInfo.verse === verse
-					),
-					contextMenuState: currentState.activeVerseInfo.verse !== verse,
-					lastVerse: currentState.firstVerse,
-					activeVerseInfo: {
-						verse: currentState.activeVerseInfo.verse !== verse ? verse : 0,
-						isPlain,
-					},
-					userSelectedText,
-				}));
-			}
-		}
-	};
-
-	handleScrollOnMain = () => {
-		if (this.state.contextMenuState) {
-			this.setState({ contextMenuState: false, activeVerseInfo: { verse: 0 } });
-		}
-	};
-
 	handleArrowClick = () => {
 		this.setState({ loadingNextPage: true });
 	};
@@ -795,84 +446,7 @@ class Text extends React.PureComponent {
 	// Probably need to stop doing this here
 	callSetStateNotInUpdate = (footnotes) => this.setState({ footnotes });
 
-	domMethodsAvailable = () =>
-		this.setState({ domMethodsAvailable: true, formattedVerse: true });
-
-	openPopup = (coords) => {
-		this.setState({ popupOpen: true, popupCoords: coords });
-		setTimeout(() => this.setState({ popupOpen: false }), 2500);
-	};
-
-	addFacebookLike = () => {
-		if (typeof this.window !== 'undefined') {
-			const fb = this.window.FB;
-			fb.api(
-				`${process.env.FB_APP_ID}?metadata=1`,
-				{
-					access_token: process.env.FB_ACCESS,
-				},
-				(res) => res,
-			);
-		}
-		this.closeContextMenu();
-	};
-
-	openFootnote = ({ id, coords }) => {
-		this.setState({
-			footnoteState: true,
-			contextMenuState: false,
-			footnotePortal: {
-				message: this.state.footnotes[id],
-				closeFootnote: this.closeFootnote,
-				coords,
-			},
-		});
-	};
-	openContextMenu = (e) => {
-		if (typeof this.window !== 'undefined') {
-			const rightEdge = this.window.innerWidth - 250;
-			const bottomEdge = this.window.innerHeight - 297;
-			const x = rightEdge < e.clientX ? rightEdge : e.clientX;
-			const y = bottomEdge < e.clientY ? bottomEdge : e.clientY;
-			// Using setTimeout 0 so that the check for the selection happens in the next frame and not this one
-			// That allows the function that updates the selection to run before this one does
-			if (this.timer) {
-				clearTimeout(this.timer);
-			}
-			setTimeout(() => {
-				if (
-					typeof this.window !== 'undefined' &&
-					!this.window.getSelection().toString()
-				) {
-					this.closeContextMenu();
-				} else {
-					this.setState({
-						coords: { x, y },
-						contextMenuState: true,
-					});
-				}
-			}, 0);
-		}
-	};
-	closeFootnote = () => this.setState({ footnoteState: false });
-
-	closeContextMenu = () => {
-		this.setState({
-			contextMenuState: false,
-			activeVerseInfo: { verse: 0, isPlain: false },
-		});
-	};
-
-	shareHighlightToFacebook = () => {
-		const { activeBookName: book, activeChapter: chapter } = this.props;
-		const { firstVerse: v1, lastVerse: v2, selectedText: sl } = this.state;
-		const verseRange =
-			v1 === v2
-				? `${book} ${chapter}:${v1}\n${sl}`
-				: `${book} ${chapter}:${v1}-${v2}\n"${sl}"`;
-
-		shareHighlightToFacebook(verseRange, this.closeContextMenu);
-	};
+	domMethodsAvailable = () => this.setState({ domMethodsAvailable: true });
 
 	mainWrapperRef = (el) => {
 		this.mainWrapper = el;
@@ -881,10 +455,6 @@ class Text extends React.PureComponent {
 	render() {
 		const {
 			activeChapter,
-			toggleNotesModal,
-			notesActive,
-			setActiveNotesView,
-			formattedSource,
 			text,
 			loadingNewChapterText,
 			loadingAudio,
@@ -896,33 +466,16 @@ class Text extends React.PureComponent {
 			isScrollingDown,
 			audioPlayerState,
 			subFooterOpen,
-			textDirection,
 			chapterTextLoadingState,
 			videoPlayerOpen,
 			hasVideo,
-			audioSource,
-			userSettings,
-			userAuthenticated,
-			userId,
-			activeBookName,
 		} = this.props;
-
-		const {
-			coords,
-			contextMenuState,
-			footnoteState,
-			footnotePortal,
-			formattedVerse,
-			userSelectedText,
-			activeVerseInfo,
-		} = this.state;
 
 		if (
 			loadingNewChapterText ||
 			loadingAudio ||
 			this.state.loadingNextPage ||
-			chapterTextLoadingState ||
-			(!formattedVerse && formattedSource.main)
+			chapterTextLoadingState
 		) {
 			return (
 				<div
@@ -969,44 +522,7 @@ class Text extends React.PureComponent {
 					containerClasses={'arrow-wrapper prev'}
 				/>
 				<div ref={this.mainWrapperRef} className={'main-wrapper'}>
-					<main
-						ref={this.setMainRef}
-						className={getClassNameForMain(textDirection, menuIsOpen)}
-						onScroll={this.handleScrollOnMain}
-					>
-						{!formattedSource.main &&
-							!text.length &&
-							audioSource && (
-								<AudioOnlyMessage
-									key={'no_text'}
-									book={activeBookName}
-									chapter={activeChapter}
-								/>
-							)}
-						{!formattedSource.main &&
-							!text.length &&
-							!audioSource && (
-								<h5 key={'no_text'}>
-									Text is not currently available for this version.
-								</h5>
-							)}
-						{(formattedSource.main || text.length) && (
-							<Verses
-								userSettings={userSettings}
-								userAuthenticated={userAuthenticated}
-								userId={userId}
-								acitveVerseInfo={activeVerseInfo}
-							/>
-						)}
-						{verseNumber ? (
-							<ReadFullChapter
-								activeTextId={activeTextId}
-								activeBookId={activeBookId}
-								activeChapter={activeChapter}
-							/>
-						) : null}
-						<Information />
-					</main>
+					<Verses mainRef={this.mainRef} menuIsOpen={menuIsOpen} />
 				</div>
 				<NewChapterArrow
 					getNewUrl={getNextChapterUrl}
@@ -1027,29 +543,6 @@ class Text extends React.PureComponent {
 					disabledContainerClasses={'arrow-wrapper next disabled'}
 					containerClasses={'arrow-wrapper next'}
 				/>
-				{contextMenuState ? (
-					<ContextPortal
-						handleAddBookmark={this.handleAddBookmark}
-						addHighlight={this.addHighlight}
-						addFacebookLike={this.addFacebookLike}
-						shareHighlightToFacebook={this.shareHighlightToFacebook}
-						setActiveNote={this.setActiveNote}
-						setActiveNotesView={setActiveNotesView}
-						closeContextMenu={this.closeContextMenu}
-						toggleNotesModal={toggleNotesModal}
-						notesActive={notesActive}
-						coordinates={coords}
-						selectedText={userSelectedText}
-					/>
-				) : null}
-				{footnoteState ? <FootnotePortal {...footnotePortal} /> : null}
-				{this.state.popupOpen ? (
-					<PopupMessage
-						message={<PleaseSignInMessage message={'toUseFeature'} />}
-						x={this.state.popupCoords.x}
-						y={this.state.popupCoords.y}
-					/>
-				) : null}
 			</div>
 		);
 	}
@@ -1063,17 +556,9 @@ Text.propTypes = {
 	highlights: PropTypes.array,
 	userSettings: PropTypes.object,
 	formattedSource: PropTypes.object,
-	addBookmark: PropTypes.func,
-	addHighlight: PropTypes.func,
-	setActiveNote: PropTypes.func,
-	deleteHighlights: PropTypes.func,
-	toggleNotesModal: PropTypes.func,
-	setActiveNotesView: PropTypes.func,
-	setTextLoadingState: PropTypes.func,
 	activeChapter: PropTypes.number,
 	hasVideo: PropTypes.bool,
 	menuIsOpen: PropTypes.bool,
-	notesActive: PropTypes.bool,
 	loadingAudio: PropTypes.bool,
 	subFooterOpen: PropTypes.bool,
 	isScrollingDown: PropTypes.bool,
@@ -1082,14 +567,9 @@ Text.propTypes = {
 	audioPlayerState: PropTypes.bool,
 	userAuthenticated: PropTypes.bool,
 	loadingNewChapterText: PropTypes.bool,
-	userId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-	bibleId: PropTypes.string,
 	verseNumber: PropTypes.string,
 	activeTextId: PropTypes.string,
 	activeBookId: PropTypes.string,
-	audioSource: PropTypes.string,
-	activeBookName: PropTypes.string,
-	textDirection: PropTypes.string,
 };
 
 export default Text;

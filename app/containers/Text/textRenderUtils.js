@@ -110,33 +110,3 @@ export const isEndOfBible = (books, activeBookId, activeChapter) => {
 
 	return bookId === activeBookId && chapter === activeChapter;
 };
-
-// Because the system captures the verse numbers this needs to be used
-// Can accept plainText boolean as third arg if needed
-export const calcDistance = (last, first /* plainText */) => {
-	// If the last verse is equal to the first verse then I don't need a diff
-	if (last === first) return 0;
-	let stringDiff = '';
-
-	for (let i = first + 1; i <= last; i += 1) {
-		// Adds the length of each verse number
-		stringDiff += i.toFixed(0);
-		// Adds characters for text to account for spaces in verse numbers
-		stringDiff += '11';
-	}
-	// Gets the total length of the distance neededk
-
-	return stringDiff.length;
-};
-
-export const getReference = (
-	verseStart,
-	verseEnd,
-	activeBookName,
-	activeChapter,
-) =>
-	`${activeBookName} ${activeChapter}:${
-		verseStart === verseEnd || !verseEnd
-			? verseStart
-			: `${verseStart}-${verseEnd}`
-	}`;

@@ -9,39 +9,121 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
+import isEqual from 'lodash/isEqual';
+// Components
+import PopupMessage from '../../components/PopupMessage';
+import PleaseSignInMessage from '../../components/PleaseSignInMessage';
+import ContextPortal from '../../components/ContextPortal';
+import FootnotePortal from '../../components/FootnotePortal';
+import ReadFullChapter from '../../components/ReadFullChapter';
+import Information from '../../components/Information';
+import AudioOnlyMessage from '../../components/AudioOnlyMessage';
 // Utils
 import PlainTextVerses from '../../components/PlainTextVerses';
 import createHighlights from '../Text/highlightPlainText';
-
 import injectReducer from '../../utils/injectReducer';
+import {
+	getFormattedParentVerseNumber,
+	getPlainParentVerse,
+	getFormattedParentVerse,
+	getFormattedChildIndex,
+	getFormattedElementVerseId,
+	getPlainParentVerseWithoutNumber,
+	getClosestParent,
+	getOffsetNeededForPsalms,
+	replaceCharsRegex,
+	getReference,
+	calcDistance,
+} from '../../utils/highlightingUtils';
+import getFirstSelectedVerse from '../../utils/requiresDom/getFirstSelectedVerse';
+import getLastSelectedVerse from '../../utils/requiresDom/getLastSelectedVerse';
+import addHighlightUtil from '../../utils/requiresDom/addHighlight';
+import shareHighlightToFacebook from '../../utils/requiresDom/shareToFacebook';
+import { getClassNameForMain } from '../Text/textRenderUtils';
+// Actions
+import {
+	setActiveNotesView,
+	toggleNotesModal,
+	setActiveNote,
+	deleteHighlights,
+	setChapterTextLoadingState,
+	addHighlight as addHighlightAction,
+} from '../HomePage/actions';
+import { addBookmark } from '../Notes/actions';
 // Reducers
 import reducer from './reducer';
 import homeReducer from '../HomePage/reducer';
 // Selectors
-import makeSelectVerses, { makeSelectHome } from './selectors';
-import makeSelectHomePage, { selectUserNotes } from '../HomePage/selectors';
+import makeSelectVerses, {
+	selectHighlights,
+	selectActiveTextId,
+	selectActiveBookId,
+	selectActiveBookName,
+	selectActiveChapter,
+	selectVerseNumber,
+	selectUserSettings,
+	selectUserId,
+	selectUserAuthenticated,
+	selectNotesMenuState,
+	selectTextDirection,
+	selectAudioSource,
+} from './selectors';
+import { selectUserNotes, selectFormattedSource } from '../HomePage/selectors';
 
 export class Verses extends React.PureComponent {
 	state = {
+		contextMenuState: false,
 		footnoteState: false,
 		coords: {},
 		selectedText: '',
 		userSelectedText: '',
 		firstVerse: 0,
 		lastVerse: 0,
-		highlightActive: this.props.homepage.highlights || false,
+		highlightActive: this.props.highlights || false,
 		handlersAreSet: false,
 		handledMouseDown: false,
 		activeVerseInfo: { verse: 0 },
+		loadingNextPage: false,
 		wholeVerseIsSelected: false,
 		domMethodsAvailable: false,
 		formattedVerse: false,
 		footnotes: {},
 	};
+	componentDidMount() {
+		// May not need this anymore
+		this.window = window;
+	}
+
+	componentWillReceiveProps(nextProps) {
+		// If there is new formatted text or new plain text then the menus need to be disabled
+		// Change the loading state to be set and controlled within the API call and promise
+		if (
+			// If there was a change in the text at all then the menus need to be closed
+			nextProps.verseNumber !== this.props.verseNumber ||
+			nextProps.activeChapter !== this.props.activeChapter ||
+			nextProps.activeBookId !== this.props.activeBookId ||
+			nextProps.formattedSource.main !== this.props.formattedSource.main ||
+			!isEqual(nextProps.textData.text, this.props.textData.text)
+		) {
+			this.setState({
+				activeVerseInfo: { verse: 0 },
+				footnoteState: false,
+				loadingNextPage: false,
+				contextMenuState: false,
+			});
+			this.props.dispatch(setChapterTextLoadingState({ state: false }));
+		}
+	}
+
 	getPlainTextComponents() {
-		const { highlights, activeChapter, verseNumber } = this.props.homepage;
+		const {
+			highlights,
+			activeChapter,
+			verseNumber,
+			userAuthenticated,
+			userSettings,
+		} = this.props;
 		const { text: initialText } = this.props.textData;
-		const { userAuthenticated, userSettings } = this.props;
 		// Needs to be state eventually
 		const { activeVerseInfo } = this.state;
 
@@ -68,7 +150,7 @@ export class Verses extends React.PureComponent {
 			highlights.length &&
 			userAuthenticated &&
 			initialText.length &&
-			this.createHighlights
+			createHighlights
 		) {
 			// Use function for highlighting the plain plainText
 			// TODO: Can remove filter once I fix the problem with the new highlights not being fetched
@@ -155,21 +237,422 @@ export class Verses extends React.PureComponent {
 			);
 		}
 
-		if ((readersMode || oneVersePerLine) && Array.isArray(textComponents)) {
-			return (
-				<div className={justifiedText ? 'chapter justify' : 'chapter'}>
-					{textComponents}
-				</div>
-			);
-		}
-		return textComponents;
+		return (
+			<div className={justifiedText ? 'chapter justify' : 'chapter'}>
+				{textComponents}
+			</div>
+		);
 	}
 
-	render() {
-		const { activeChapter, formattedSource } = this.props.homepage;
+	// onMouseUp: this.handleMouseUp,
+	// onMouseDown: this.getFirstVerse,
+	// onHighlightClick: this.handleHighlightClick,
+	// onNoteClick: this.handleNoteClick,
+
+	getFirstVerse = (e) => {
+		const { userSettings, formattedSource } = this.props;
+		e.stopPropagation();
+		typeof e.persist === 'function' && e.persist(); // eslint-disable-line no-unused-expressions
+
+		const firstVerse = getFirstSelectedVerse({
+			target: e.target,
+			button: e.button === 0,
+			formattedSourceMain: formattedSource.main,
+			main: this.mainRef,
+			userSettings,
+			getFormattedParentVerse,
+			getPlainParentVerseWithoutNumber,
+		});
+		this.setState({
+			firstVerse,
+		});
+	};
+
+	getLastVerse = (e) => {
+		const {
+			formattedSource,
+			userSettings,
+			activeChapter,
+			activeBookId,
+		} = this.props;
 		const { text } = this.props.textData;
-		// const { text, activeChapter, formattedSource } = this.props.homepage;
-		const { userSettings } = this.props;
+		typeof e.persist === 'function' && e.persist(); // eslint-disable-line no-unused-expressions
+		// Failsafe for the case that the dom hasn't loaded yet
+		// may not need this anymore
+		if (typeof this.window === 'undefined') return;
+
+		const lastVerse = getLastSelectedVerse(e, {
+			formattedSourceMain: formattedSource.main,
+			userSettings,
+			windowObject: this.window,
+			main: this.mainRef,
+			activeBookId,
+			activeChapter,
+			text,
+			selectedWholeVerse: this.selectedWholeVerse,
+			getFormattedParentVerse,
+			getPlainParentVerseWithoutNumber,
+		});
+		if (lastVerse.openMenu) {
+			this.setState(
+				{
+					lastVerse: lastVerse.stateObject.lastVerse,
+					wholeVerseIsSelected: lastVerse.stateObject.wholeVerseIsSelected,
+					anchorOffset: lastVerse.stateObject.anchorOffset,
+					anchorText: lastVerse.stateObject.anchorText,
+					anchorNode: lastVerse.stateObject.anchorNode,
+					focusOffset: lastVerse.stateObject.focusOffset,
+					focusText: lastVerse.stateObject.focusText,
+					focusNode: lastVerse.stateObject.focusNode,
+					userSelectedText: lastVerse.stateObject.userSelectedText,
+					selectedText: lastVerse.stateObject.selectedText,
+				},
+				() => this.openContextMenu(e),
+			);
+		}
+	};
+
+	setActiveNotesViewMethod = (view) =>
+		this.props.dispatch(setActiveNotesView(view));
+
+	setActiveNote = ({ coords, existingNote, bookmark }) => {
+		const {
+			userAuthenticated,
+			userId,
+			activeBookId,
+			activeChapter,
+			activeTextId,
+		} = this.props;
+		const { firstVerse, lastVerse } = this.state;
+
+		if (!userAuthenticated || !userId) {
+			this.openPopup({ x: coords.x, y: coords.y });
+			return;
+		}
+
+		const note = {
+			verse_start: firstVerse || lastVerse,
+			verse_end: lastVerse || firstVerse,
+			book_id: activeBookId,
+			chapter: activeChapter,
+			bible_id: activeTextId,
+			bookmark: bookmark ? 1 : 0,
+		};
+
+		this.props.dispatch(setActiveNote({ note: existingNote || note }));
+	};
+
+	setMainRef = (el) => {
+		this.mainRef = el;
+	};
+
+	// This is a no-op to trick iOS devices
+	handleHighlightClick = () => {
+		// Unless there is a click event the mouseup and mousedown events won't fire for mobile devices
+		// Left this blank since I actually don't need to do anything with it
+	};
+
+	handleNoteClick = (noteIndex, clickedBookmark) => {
+		const { notesActive } = this.props;
+		const { userNotes } = this.props.textData;
+		const existingNote = userNotes[noteIndex];
+
+		if (!notesActive) {
+			this.setActiveNote({ existingNote });
+			if (clickedBookmark) {
+				this.setActiveNotesViewMethod('bookmarks');
+			} else {
+				this.setActiveNotesViewMethod('edit');
+			}
+			this.closeContextMenu();
+			this.toggleNotesModalMethod();
+		} else {
+			this.setActiveNote({ existingNote });
+			if (clickedBookmark) {
+				this.setActiveNotesViewMethod('bookmarks');
+			} else {
+				this.setActiveNotesViewMethod('edit');
+			}
+			this.closeContextMenu();
+		}
+	};
+
+	handleAddBookmark = () => {
+		const {
+			activeBookId,
+			userId,
+			userAuthenticated,
+			activeChapter,
+			activeTextId,
+			activeBookName,
+		} = this.props;
+		const { firstVerse, lastVerse } = this.state;
+		// Need to make first verse and last verse integers for the < comparison
+		const fv = parseInt(firstVerse, 10);
+		const lv = parseInt(lastVerse, 10);
+		// This takes into account RTL and LTR selections
+		const verseStart = fv < lv ? fv : lv;
+		const verseEnd = fv < lv ? lv : fv;
+
+		// Only add the bookmark if there is a userId to add it too
+		if (userAuthenticated && userId) {
+			this.props.dispatch(
+				addBookmark({
+					book_id: activeBookId,
+					chapter: activeChapter,
+					user_id: userId,
+					bible_id: activeTextId,
+					reference: getReference(
+						verseStart || verseEnd,
+						verseEnd,
+						activeBookName,
+						activeChapter,
+					),
+					verse_start: verseStart || verseEnd,
+					verse_end: verseEnd,
+				}),
+			);
+		}
+	};
+
+	handleMouseUp = (e) => {
+		e.stopPropagation();
+
+		this.getLastVerse(e);
+		if (
+			e.button === 0 &&
+			this.state.footnoteState &&
+			e.target.className !== 'key'
+		) {
+			this.closeFootnote();
+		}
+	};
+
+	handleScrollOnMain = () => {
+		if (this.state.contextMenuState) {
+			this.setState({ contextMenuState: false, activeVerseInfo: { verse: 0 } });
+		}
+	};
+
+	toggleNotesModalMethod = () => this.props.dispatch(toggleNotesModal());
+
+	deleteHighlights = (highlightObject, highlights) => {
+		const space =
+			highlightObject.highlightStart + highlightObject.highlightedWords;
+		const highsToDelete = highlights
+			.filter(
+				(high) =>
+					high.verse_start === parseInt(highlightObject.verseStart, 10) &&
+					(high.highlight_start <= space &&
+						high.highlight_start + high.highlighted_words >=
+							highlightObject.highlightStart),
+			)
+			.reduce((a, h) => [...a, h.id], []);
+
+		this.props.dispatch(deleteHighlights({ ids: highsToDelete }));
+	};
+
+	selectedWholeVerse = (verse, isPlain, clientX, clientY, userSelectedText) => {
+		if (typeof this.window !== 'undefined') {
+			const rightEdge =
+				this.window.innerWidth < 500
+					? this.window.innerWidth - 295
+					: this.window.innerWidth - 250;
+			const bottomEdge =
+				this.window.innerHeight < 900
+					? this.window.innerHeight - 317
+					: this.window.innerHeight - 297;
+			const x = rightEdge < clientX ? rightEdge : clientX;
+			const y = bottomEdge < clientY ? bottomEdge : clientY;
+
+			if (isPlain) {
+				this.setState((currentState) => ({
+					coords: { x, y },
+					wholeVerseIsSelected: !(
+						currentState.wholeVerseIsSelected &&
+						currentState.activeVerseInfo.verse === verse
+					),
+					contextMenuState: currentState.activeVerseInfo.verse !== verse,
+					lastVerse: currentState.firstVerse,
+					activeVerseInfo: {
+						verse: currentState.activeVerseInfo.verse !== verse ? verse : 0,
+						isPlain,
+					},
+					userSelectedText,
+				}));
+			} else {
+				// is formatted
+				this.setState((currentState) => ({
+					coords: { x, y },
+					wholeVerseIsSelected: !(
+						currentState.wholeVerseIsSelected &&
+						currentState.activeVerseInfo.verse === verse
+					),
+					contextMenuState: currentState.activeVerseInfo.verse !== verse,
+					lastVerse: currentState.firstVerse,
+					activeVerseInfo: {
+						verse: currentState.activeVerseInfo.verse !== verse ? verse : 0,
+						isPlain,
+					},
+					userSelectedText,
+				}));
+			}
+		}
+	};
+
+	openPopup = (coords) => {
+		this.setState({ popupOpen: true, popupCoords: coords });
+		setTimeout(() => this.setState({ popupOpen: false }), 2500);
+	};
+
+	openFootnote = ({ id, coords }) => {
+		this.setState({
+			footnoteState: true,
+			contextMenuState: false,
+			footnotePortal: {
+				message: this.state.footnotes[id],
+				closeFootnote: this.closeFootnote,
+				coords,
+			},
+		});
+	};
+
+	openContextMenu = (e) => {
+		if (typeof this.window !== 'undefined') {
+			const rightEdge = this.window.innerWidth - 250;
+			const bottomEdge = this.window.innerHeight - 297;
+			const x = rightEdge < e.clientX ? rightEdge : e.clientX;
+			const y = bottomEdge < e.clientY ? bottomEdge : e.clientY;
+			// Using setTimeout 0 so that the check for the selection happens in the next frame and not this one
+			// That allows the function that updates the selection to run before this one does
+			if (this.timer) {
+				clearTimeout(this.timer);
+			}
+			setTimeout(() => {
+				if (
+					typeof this.window !== 'undefined' &&
+					!this.window.getSelection().toString()
+				) {
+					this.closeContextMenu();
+				} else {
+					this.setState({
+						coords: { x, y },
+						contextMenuState: true,
+					});
+				}
+			}, 0);
+		}
+	};
+
+	closeContextMenu = () => {
+		this.setState({
+			contextMenuState: false,
+			activeVerseInfo: { verse: 0, isPlain: false },
+		});
+	};
+
+	closeFootnote = () => this.setState({ footnoteState: false });
+
+	dispatchAddHighlight = (props) =>
+		this.props.dispatch(addHighlightAction(props));
+
+	addHighlightMethod = ({ color, popupCoords }) => {
+		addHighlightUtil({
+			color,
+			popupCoords,
+			// Props
+			userAuthenticated: this.props.userAuthenticated,
+			userId: this.props.userId,
+			text: this.props.textData.text,
+			highlights: this.props.highlights,
+			formattedSource: this.props.formattedSource,
+			userSettings: this.props.userSettings,
+			activeTextId: this.props.activeTextId,
+			activeBookId: this.props.activeBookId,
+			activeBookName: this.props.activeBookName,
+			activeChapter: this.props.activeChapter,
+			// State
+			wholeVerseIsSelected: this.state.wholeVerseIsSelected,
+			activeVerseInfo: this.state.activeVerseInfo,
+			firstVerseState: this.state.firstVerse,
+			lastVerseState: this.state.lastVerse,
+			anchorOffsetState: this.state.anchorOffset,
+			focusOffsetState: this.state.focusOffset,
+			focusTextState: this.state.focusText,
+			anchorTextState: this.state.anchorText,
+			anchorNodeState: this.state.anchorNode,
+			focusNodeState: this.state.focusNode,
+			selectedTextState: this.state.selectedText,
+			// Methods
+			main: this.mainRef,
+			format: this.format,
+			openPopup: this.openPopup,
+			setParentState: this.setState,
+			formatHighlight: this.formatHighlight,
+			deleteHighlights: this.deleteHighlights,
+			closeContextMenu: this.closeContextMenu,
+			addHighlight: this.dispatchAddHighlight,
+			// External Functions
+			getReference,
+			calcDistance,
+			getClosestParent,
+			replaceCharsRegex,
+			getPlainParentVerse,
+			getFormattedChildIndex,
+			getFormattedParentVerse,
+			getOffsetNeededForPsalms,
+			getFormattedElementVerseId,
+			getFormattedParentVerseNumber,
+			getPlainParentVerseWithoutNumber,
+		});
+	};
+
+	addFacebookLike = () => {
+		if (typeof this.window !== 'undefined') {
+			const fb = this.window.FB;
+			fb.api(
+				`${process.env.FB_APP_ID}?metadata=1`,
+				{
+					access_token: process.env.FB_ACCESS,
+				},
+				(res) => res,
+			);
+		}
+		this.closeContextMenu();
+	};
+
+	shareHighlightToFacebook = () => {
+		const { activeBookName: book, activeChapter: chapter } = this.props;
+		const { firstVerse: v1, lastVerse: v2, selectedText: sl } = this.state;
+		const verseRange =
+			v1 === v2
+				? `${book} ${chapter}:${v1}\n${sl}`
+				: `${book} ${chapter}:${v1}-${v2}\n"${sl}"`;
+
+		shareHighlightToFacebook(verseRange, this.closeContextMenu);
+	};
+
+	render() {
+		const {
+			activeChapter,
+			formattedSource,
+			userSettings,
+			notesActive,
+			textDirection,
+			verseNumber,
+			menuIsOpen,
+			audioSource,
+		} = this.props;
+		const { text } = this.props.textData;
+		const {
+			popupCoords,
+			popupOpen,
+			contextMenuState,
+			coords,
+			footnotePortal,
+			footnoteState,
+			userSelectedText,
+		} = this.state;
 		const readersMode = userSettings.getIn([
 			'toggleOptions',
 			'readersMode',
@@ -183,7 +666,27 @@ export class Verses extends React.PureComponent {
 		const chapterAlt = text[0] && text[0].chapter_alt;
 
 		return (
-			<>
+			<main
+				ref={this.setMainRef}
+				className={getClassNameForMain(textDirection, menuIsOpen)}
+				onScroll={this.handleScrollOnMain}
+			>
+				{!formattedSource.main &&
+					!text.length &&
+					audioSource && (
+						<AudioOnlyMessage
+							key={'no_text'}
+							book={activeBookName}
+							chapter={activeChapter}
+						/>
+					)}
+				{!formattedSource.main &&
+					!text.length &&
+					!audioSource && (
+						<h5 key={'no_text'}>
+							Text is not currently available for this version.
+						</h5>
+					)}
 				{(formattedSource.main && !readersMode && !oneVersePerLine) ||
 				text.length === 0 ||
 				(!readersMode && !oneVersePerLine) ? null : (
@@ -196,26 +699,82 @@ export class Verses extends React.PureComponent {
 				{/* {formattedSource.main && !readersMode && !oneVersePerLine
           ? this.getTextComponents(this.state.domMethodsAvailable)
           : this.getPlainTextComponents()} */}
-				{this.getPlainTextComponents()}}
-			</>
+				{this.getPlainTextComponents()}
+				{contextMenuState && (
+					<ContextPortal
+						handleAddBookmark={this.handleAddBookmark}
+						addHighlight={this.addHighlightMethod}
+						addFacebookLike={this.addFacebookLike}
+						shareHighlightToFacebook={this.shareHighlightToFacebook}
+						setActiveNote={this.setActiveNote}
+						setActiveNotesView={this.setActiveNotesViewMethod}
+						closeContextMenu={this.closeContextMenu}
+						toggleNotesModal={this.toggleNotesModalMethod}
+						notesActive={notesActive}
+						coordinates={coords}
+						selectedText={userSelectedText}
+					/>
+				)}
+				{footnoteState && <FootnotePortal {...footnotePortal} />}
+				{popupOpen && (
+					<PopupMessage
+						message={<PleaseSignInMessage message={'toUseFeature'} />}
+						x={popupCoords.x}
+						y={popupCoords.y}
+					/>
+				)}
+				{verseNumber ? (
+					<ReadFullChapter
+						activeTextId={activeTextId}
+						activeBookId={activeBookId}
+						activeChapter={activeChapter}
+					/>
+				) : null}
+				<Information />
+			</main>
 		);
 	}
 }
 
 Verses.propTypes = {
 	dispatch: PropTypes.func.isRequired,
-	homepage: PropTypes.object.isRequired,
-	// Other state
+	// Homepage
+	textData: PropTypes.object,
+	highlights: PropTypes.object,
+	formattedSource: PropTypes.object,
+	activeChapter: PropTypes.number,
+	activeTextId: PropTypes.string,
+	activeBookId: PropTypes.string,
+	activeBookName: PropTypes.string,
+	verseNumber: PropTypes.string,
+	notesActive: PropTypes.bool,
+	textDirection: PropTypes.string,
+	audioSource: PropTypes.string,
+	// Settings
 	userSettings: PropTypes.object,
+	// Profile
 	userAuthenticated: PropTypes.bool,
 	userId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-	textData: PropTypes.object,
+	// Parent Props
+	menuIsOpen: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
 	verses: makeSelectVerses(),
-	homepage: makeSelectHomePage(),
 	textData: selectUserNotes(),
+	highlights: selectHighlights(),
+	activeTextId: selectActiveTextId(),
+	activeBookId: selectActiveBookId(),
+	activeBookName: selectActiveBookName(),
+	activeChapter: selectActiveChapter(),
+	verseNumber: selectVerseNumber(),
+	notesActive: selectNotesMenuState(),
+	textDirection: selectTextDirection(),
+	audioSource: selectAudioSource(),
+	formattedSource: selectFormattedSource(),
+	userSettings: selectUserSettings(),
+	userAuthenticated: selectUserAuthenticated(),
+	userId: selectUserId(),
 });
 
 function mapDispatchToProps(dispatch) {
