@@ -233,6 +233,8 @@ class HomePage extends React.PureComponent {
 
 	componentWillReceiveProps(nextProps) {
 		// Based on nextProps so that requests have the latest chapter information
+		const verse = nextProps.homepage.match.params.verse || '';
+		const verseProps = this.props.homepage.match.params.verse || '';
 		const {
 			activeTextId,
 			activeBookId,
@@ -262,6 +264,15 @@ class HomePage extends React.PureComponent {
 				nextProps.homepage.activeBookId,
 				nextProps.homepage.activeChapter,
 			);
+		}
+		// If there was a change in the params then make sure loading state is set to false
+		if (
+			activeBookId !== activeBookIdProps ||
+			activeTextId !== activeTextIdProps ||
+			activeChapter !== activeChapterProps ||
+			verse !== verseProps
+		) {
+			this.setTextLoadingState({ state: false });
 		}
 
 		// Only apply the them if one of them changed - use the newest one always since that will be what the user clicked
@@ -603,13 +614,10 @@ class HomePage extends React.PureComponent {
 						hasVideo={hasVideo}
 						verseNumber={verse}
 						menuIsOpen={isMenuOpen}
-						highlights={highlights}
 						activeTextId={activeTextId}
 						activeBookId={activeBookId}
 						loadingAudio={loadingAudio}
-						userSettings={userSettings}
 						activeChapter={activeChapter}
-						formattedSource={formattedSource}
 						videoPlayerOpen={videoPlayerOpen}
 						isScrollingDown={isScrollingDown}
 						audioPlayerState={audioPlayerState}

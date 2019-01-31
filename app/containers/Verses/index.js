@@ -68,6 +68,7 @@ import makeSelectVerses, {
 	selectAudioSource,
 } from './selectors';
 import { selectUserNotes, selectFormattedSource } from '../HomePage/selectors';
+import FormattedText from '../../components/FormattedText';
 
 export class Verses extends React.PureComponent {
 	state = {
@@ -101,157 +102,12 @@ export class Verses extends React.PureComponent {
 			nextProps.verseNumber !== this.props.verseNumber ||
 			nextProps.activeChapter !== this.props.activeChapter ||
 			nextProps.activeBookId !== this.props.activeBookId ||
+			nextProps.activeTextId !== this.props.activeTextId ||
 			nextProps.formattedSource.main !== this.props.formattedSource.main ||
 			!isEqual(nextProps.textData.text, this.props.textData.text)
 		) {
-			this.setState({
-				activeVerseInfo: { verse: 0 },
-				footnoteState: false,
-				loadingNextPage: false,
-				contextMenuState: false,
-			});
 			this.props.dispatch(setChapterTextLoadingState({ state: false }));
 		}
-	}
-
-	getTextComponents(domMethodsAvailable) {
-		const {
-			userSettings,
-			formattedSource: initialFormattedSourceFromProps,
-			highlights,
-			activeChapter,
-			verseNumber,
-			userAuthenticated,
-			activeBookId,
-		} = this.props;
-		const { userNotes, bookmarks } = this.props.textData;
-
-		const initialFormattedSource = JSON.parse(
-			JSON.stringify(initialFormattedSourceFromProps),
-		);
-		let formattedVerse = false;
-
-		// Need to move this to selector and use regex
-		// Possible for verse but not for footnotes
-		if (domMethodsAvailable && initialFormattedSource.main) {
-			if (verseNumber) {
-				const parser = new DOMParser();
-				const serializer = new XMLSerializer();
-				// Create temp xml doc from source
-				const xmlDocText = parser.parseFromString(
-					initialFormattedSource.main,
-					'text/xml',
-				);
-				// Find the verse node by its classname
-				const verseClassName = `${activeBookId.toUpperCase()}${activeChapter}_${verseNumber}`;
-				const verseNumberElement = xmlDocText.getElementsByClassName(
-					`verse${verseNumber}`,
-				)[0];
-				// Get the inner text of the verse
-				const verseString = xmlDocText.getElementsByClassName(
-					verseClassName,
-				)[0];
-				// Create a new container for the verse
-				const newXML = xmlDocText.createElement('div');
-				newXML.className = 'single-formatted-verse';
-				// Add the verse to the new container
-				if (verseNumberElement && verseString) {
-					newXML.appendChild(verseNumberElement);
-					newXML.appendChild(verseString);
-				}
-				// Use the new text as the formatted source
-				initialFormattedSource.main = newXML
-					? serializer.serializeToString(newXML)
-					: 'This chapter does not have a verse matching the url';
-				formattedVerse = true;
-			}
-		}
-		// Doing it like this may impact performance, but it is probably cleaner
-		// than most other ways of doing it...
-		let formattedSource = initialFormattedSource;
-		let textComponents = [];
-
-		if (
-			this.applyNotes &&
-			this.applyBookmarks &&
-			this.applyWholeVerseHighlights
-		) {
-			formattedSource = initialFormattedSource.main
-				? {
-						...initialFormattedSource,
-						main: [initialFormattedSource.main]
-							.map((s) => this.applyNotes(s, userNotes, this.handleNoteClick))
-							.map((s) =>
-								this.applyBookmarks(s, bookmarks, this.handleNoteClick),
-							)
-							.map((s) =>
-								this.applyWholeVerseHighlights(
-									s,
-									highlights.filter(
-										(h) => h.chapter === activeChapter && !h.highlighted_words,
-									),
-								),
-							)[0],
-				  }
-				: initialFormattedSource;
-		}
-		const readersMode = userSettings.getIn([
-			'toggleOptions',
-			'readersMode',
-			'active',
-		]);
-		const oneVersePerLine = userSettings.getIn([
-			'toggleOptions',
-			'oneVersePerLine',
-			'active',
-		]);
-		const justifiedText = userSettings.getIn([
-			'toggleOptions',
-			'justifiedText',
-			'active',
-		]);
-		// Need to connect to the api and get the highlights object for this chapter
-		// based on whether the highlights object has any data decide whether to
-		// run this function or not
-		let formattedText = [];
-
-		if (
-			highlights.length &&
-			userAuthenticated &&
-			(!oneVersePerLine && !readersMode && formattedSource.main) &&
-			this.createFormattedHighlights
-		) {
-			// Use function for highlighting the formatted formattedText
-			formattedText = this.createFormattedHighlights(
-				highlights.filter((h) => h.chapter === activeChapter),
-				formattedSource.main,
-			);
-		}
-		if (
-			formattedSource.main &&
-			(!verseNumber || (verseNumber && formattedVerse))
-		) {
-			// Need to run a function to highlight the formatted text if this option is selected
-			if (!Array.isArray(formattedText)) {
-				textComponents = (
-					<div
-						ref={this.setFormattedRefHighlight}
-						className={justifiedText ? 'justify' : ''}
-						dangerouslySetInnerHTML={{ __html: formattedText }}
-					/>
-				);
-			} else {
-				textComponents = (
-					<div
-						ref={this.setFormattedRef}
-						className={justifiedText ? 'justify' : ''}
-						dangerouslySetInnerHTML={{ __html: formattedSource.main }}
-					/>
-				);
-			}
-		}
-
-		return textComponents;
 	}
 
 	getFirstVerse = (e) => {
@@ -345,6 +201,14 @@ export class Verses extends React.PureComponent {
 		};
 
 		this.props.dispatch(setActiveNote({ note: existingNote || note }));
+	};
+
+	setFormattedRef = (el) => {
+		this.format = el;
+	};
+
+	setFormattedRefHighlight = (el) => {
+		this.formatHighlight = el;
 	};
 
 	setMainRef = (el) => {
@@ -561,6 +425,8 @@ export class Verses extends React.PureComponent {
 	dispatchAddHighlight = (props) =>
 		this.props.dispatch(addHighlightAction(props));
 
+	// Should refactor to be addPlainTextHighlight and addFormattedHighlight
+	// They have some similarities but also some significant differences
 	addHighlightMethod = ({ color, popupCoords }) => {
 		addHighlightUtil({
 			color,
@@ -648,9 +514,10 @@ export class Verses extends React.PureComponent {
 			menuIsOpen,
 			audioSource,
 			highlights,
+			activeBookId,
 			userAuthenticated,
 		} = this.props;
-		const { text } = this.props.textData;
+		const { userNotes, bookmarks, text } = this.props.textData;
 		// Needs to be state eventually
 		const {
 			activeVerseInfo,
@@ -661,6 +528,7 @@ export class Verses extends React.PureComponent {
 			footnotePortal,
 			footnoteState,
 			userSelectedText,
+			domMethodsAvailable,
 		} = this.state;
 		const readersMode = userSettings.getIn([
 			'toggleOptions',
@@ -706,7 +574,29 @@ export class Verses extends React.PureComponent {
 					</div>
 				)}
 				{formattedSource.main && !readersMode && !oneVersePerLine ? (
-					this.getTextComponents(this.state.domMethodsAvailable)
+					<FormattedText
+						userNotes={userNotes}
+						bookmarks={bookmarks}
+						highlights={highlights}
+						verseNumber={verseNumber}
+						userSettings={userSettings}
+						activeChapter={activeChapter}
+						activeBookId={activeBookId}
+						formattedSource={formattedSource}
+						activeVerseInfo={activeVerseInfo}
+						domMethodsAvailable={domMethodsAvailable}
+						formatRef={this.format}
+						mainRef={this.mainRef}
+						openFootnote={this.openFootnote}
+						formatHighlightRef={this.formatHighlight}
+						handleMouseUp={this.handleMouseUp}
+						getFirstVerse={this.getFirstVerse}
+						userAuthenticated={userAuthenticated}
+						handleNoteClick={this.handleNoteClick}
+						handleHighlightClick={this.handleHighlightClick}
+						setFormattedRef={this.setFormattedRef}
+						setFormattedRefHighlight={this.setFormattedRefHighlight}
+					/>
 				) : (
 					<PlainText
 						initialText={text}

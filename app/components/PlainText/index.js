@@ -62,7 +62,6 @@ class PlainText extends React.PureComponent {
 			plainText = initialText || [];
 		}
 
-		let textComponents;
 		// Mapping the text again here because I need to apply a class for all highlights with a char count of null
 		const mappedText = plainText.map((v) => {
 			const highlightsInVerse = highlights.filter(
@@ -80,43 +79,18 @@ class PlainText extends React.PureComponent {
 		});
 		// Todo: Should handle each mode for formatted text and plain text in a separate component
 		// Handle exception thrown when there isn't plain text but readers mode is selected
-		if (readersMode) {
-			textComponents = PlainTextVerses({
-				textComponents: mappedText,
-				onMouseUp: handleMouseUp,
-				onMouseDown: getFirstVerse,
-				onHighlightClick: handleHighlightClick,
-				onNoteClick: handleNoteClick,
-				readersMode,
-				oneVersePerLine,
-				activeVerse: parseInt(activeVerse, 10),
-				verseIsActive: !!verseIsActive,
-			});
-		} else if (oneVersePerLine) {
-			textComponents = PlainTextVerses({
-				textComponents: mappedText,
-				onMouseUp: handleMouseUp,
-				onMouseDown: getFirstVerse,
-				onHighlightClick: handleHighlightClick,
-				onNoteClick: handleNoteClick,
-				readersMode,
-				oneVersePerLine,
-				activeVerse: parseInt(activeVerse, 10),
-				verseIsActive: !!verseIsActive,
-			});
-		} else {
-			textComponents = PlainTextVerses({
-				textComponents: mappedText,
-				onMouseUp: handleMouseUp,
-				onMouseDown: getFirstVerse,
-				onHighlightClick: handleHighlightClick,
-				onNoteClick: handleNoteClick,
-				readersMode,
-				oneVersePerLine,
-				activeVerse: parseInt(activeVerse, 10),
-				verseIsActive: !!verseIsActive,
-			});
-		}
+
+		const textComponents = PlainTextVerses({
+			textComponents: mappedText,
+			onMouseUp: handleMouseUp,
+			onMouseDown: getFirstVerse,
+			onHighlightClick: handleHighlightClick,
+			onNoteClick: handleNoteClick,
+			readersMode,
+			oneVersePerLine,
+			activeVerse: parseInt(activeVerse, 10),
+			verseIsActive: !!verseIsActive,
+		});
 
 		if (
 			!readersMode &&
