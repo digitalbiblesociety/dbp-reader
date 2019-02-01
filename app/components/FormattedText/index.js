@@ -25,24 +25,22 @@ class FormattedText extends React.PureComponent {
 
 	componentDidMount() {
 		const {
-			formatRef,
-			formatHighlightRef,
 			getFirstVerse,
 			handleMouseUp,
 			handleNoteClick,
 			openFootnote,
 		} = this.props;
-		if (formatRef) {
-			setEventHandlersForFootnotes(formatRef, openFootnote);
-			setEventHandlersForFormattedVerses(formatRef, {
+		if (this.formatRef) {
+			setEventHandlersForFootnotes(this.formatRef, openFootnote);
+			setEventHandlersForFormattedVerses(this.formatRef, {
 				mouseDown: getFirstVerse,
 				mouseUp: handleMouseUp,
 				bookmarkClick: handleNoteClick,
 				noteClick: handleNoteClick,
 			});
-		} else if (formatHighlightRef) {
-			setEventHandlersForFootnotes(formatHighlightRef, openFootnote);
-			setEventHandlersForFormattedVerses(formatHighlightRef, {
+		} else if (this.formatHighlightRef) {
+			setEventHandlersForFootnotes(this.formatHighlightRef, openFootnote);
+			setEventHandlersForFormattedVerses(this.formatHighlightRef, {
 				mouseDown: getFirstVerse,
 				mouseUp: handleMouseUp,
 				bookmarkClick: handleNoteClick,
@@ -57,8 +55,6 @@ class FormattedText extends React.PureComponent {
 	// I am using this function because it means that the component finished updating and that the dom is available
 	componentDidUpdate(prevProps) {
 		const {
-			formatRef,
-			formatHighlightRef,
 			mainRef,
 			activeVerseInfo,
 			activeBookId,
@@ -73,7 +69,7 @@ class FormattedText extends React.PureComponent {
 		} = this.props;
 		if (
 			mainRef &&
-			(formatRef || formatHighlightRef) &&
+			(this.formatRef || this.formatHighlightRef) &&
 			activeVerseInfo.isPlain === false &&
 			activeVerseInfo.verse !== prevProps.activeVerseInfo.verse &&
 			activeVerseInfo.verse
@@ -105,7 +101,7 @@ class FormattedText extends React.PureComponent {
 			}
 		} else if (
 			mainRef &&
-			(formatRef || formatHighlightRef) &&
+			(this.formatRef || this.formatHighlightRef) &&
 			activeVerseInfo.isPlain === false
 		) {
 			// Remove the highlight from the old active verse
@@ -159,19 +155,19 @@ class FormattedText extends React.PureComponent {
 		if (
 			formattedSource.main &&
 			prevProps.formattedSource.main !== formattedSource.main &&
-			(formatRef || formatHighlightRef)
+			(this.formatRef || this.formatHighlightRef)
 		) {
-			if (formatRef) {
-				setEventHandlersForFootnotes(formatRef, openFootnote);
-				setEventHandlersForFormattedVerses(formatRef, {
+			if (this.formatRef) {
+				setEventHandlersForFootnotes(this.formatRef, openFootnote);
+				setEventHandlersForFormattedVerses(this.formatRef, {
 					mouseDown: getFirstVerse,
 					mouseUp: handleMouseUp,
 					bookmarkClick: handleNoteClick,
 					noteClick: handleNoteClick,
 				});
-			} else if (formatHighlightRef) {
-				setEventHandlersForFootnotes(formatHighlightRef, openFootnote);
-				setEventHandlersForFormattedVerses(formatHighlightRef, {
+			} else if (this.formatHighlightRef) {
+				setEventHandlersForFootnotes(this.formatHighlightRef, openFootnote);
+				setEventHandlersForFormattedVerses(this.formatHighlightRef, {
 					mouseDown: getFirstVerse,
 					mouseUp: handleMouseUp,
 					bookmarkClick: handleNoteClick,
@@ -180,10 +176,10 @@ class FormattedText extends React.PureComponent {
 			}
 		} else if (
 			!isEqual(highlights, prevProps.highlights) &&
-			formatHighlightRef
+			this.formatHighlightRef
 		) {
-			setEventHandlersForFootnotes(formatHighlightRef, openFootnote);
-			setEventHandlersForFormattedVerses(formatHighlightRef, {
+			setEventHandlersForFootnotes(this.formatHighlightRef, openFootnote);
+			setEventHandlersForFormattedVerses(this.formatHighlightRef, {
 				mouseDown: getFirstVerse,
 				mouseUp: handleMouseUp,
 				bookmarkClick: handleNoteClick,
@@ -196,20 +192,20 @@ class FormattedText extends React.PureComponent {
 				'active',
 			]) !== userSettings.getIn(['toggleOptions', 'readersMode', 'active']) &&
 			!userSettings.getIn(['toggleOptions', 'readersMode', 'active']) &&
-			(formatHighlightRef || formatRef)
+			(this.formatHighlightRef || this.formatRef)
 		) {
 			// Need to set event handlers again here because they are removed once the plain text is rendered
-			if (formatRef) {
-				setEventHandlersForFootnotes(formatRef, openFootnote);
-				setEventHandlersForFormattedVerses(formatRef, {
+			if (this.formatRef) {
+				setEventHandlersForFootnotes(this.formatRef, openFootnote);
+				setEventHandlersForFormattedVerses(this.formatRef, {
 					mouseDown: getFirstVerse,
 					mouseUp: handleMouseUp,
 					bookmarkClick: handleNoteClick,
 					noteClick: handleNoteClick,
 				});
-			} else if (formatHighlightRef) {
-				setEventHandlersForFootnotes(formatHighlightRef, openFootnote);
-				setEventHandlersForFormattedVerses(formatHighlightRef, {
+			} else if (this.formatHighlightRef) {
+				setEventHandlersForFootnotes(this.formatHighlightRef, openFootnote);
+				setEventHandlersForFormattedVerses(this.formatHighlightRef, {
 					mouseDown: getFirstVerse,
 					mouseUp: handleMouseUp,
 					bookmarkClick: handleNoteClick,
@@ -219,17 +215,17 @@ class FormattedText extends React.PureComponent {
 		}
 
 		// This handles setting the events on a page refresh or navigation via url
-		if (formatRef) {
-			setEventHandlersForFootnotes(formatRef, openFootnote);
-			setEventHandlersForFormattedVerses(formatRef, {
+		if (this.formatRef) {
+			setEventHandlersForFootnotes(this.formatRef, openFootnote);
+			setEventHandlersForFormattedVerses(this.formatRef, {
 				mouseDown: getFirstVerse,
 				mouseUp: handleMouseUp,
 				bookmarkClick: handleNoteClick,
 				noteClick: handleNoteClick,
 			});
-		} else if (formatHighlightRef) {
-			setEventHandlersForFootnotes(formatHighlightRef, openFootnote);
-			setEventHandlersForFormattedVerses(formatHighlightRef, {
+		} else if (this.formatHighlightRef) {
+			setEventHandlersForFootnotes(this.formatHighlightRef, openFootnote);
+			setEventHandlersForFormattedVerses(this.formatHighlightRef, {
 				mouseDown: getFirstVerse,
 				mouseUp: handleMouseUp,
 				bookmarkClick: handleNoteClick,
@@ -270,6 +266,16 @@ class FormattedText extends React.PureComponent {
 		});
 	};
 
+	setFormattedRef = (el) => {
+		this.formatRef = el;
+		this.props.setFormattedRef(el);
+	};
+
+	setFormattedRefHighlight = (el) => {
+		this.formatHighlightRef = el;
+		this.props.setFormattedRefHighlight(el);
+	};
+
 	// Probably need to stop doing this here
 	callSetStateNotInUpdate = (footnotes) => this.setState({ footnotes });
 
@@ -286,8 +292,6 @@ class FormattedText extends React.PureComponent {
 			activeBookId,
 			userNotes,
 			bookmarks,
-			setFormattedRef,
-			setFormattedRefHighlight,
 			handleNoteClick,
 		} = this.props;
 		const domMethodsAvailable = this.state;
@@ -394,7 +398,7 @@ class FormattedText extends React.PureComponent {
 			if (!Array.isArray(formattedText)) {
 				return (
 					<div
-						ref={setFormattedRefHighlight}
+						ref={this.setFormattedRefHighlight}
 						className={justifiedText ? 'justify' : ''}
 						dangerouslySetInnerHTML={{ __html: formattedText }} // eslint-disable-line react/no-danger
 					/>
@@ -402,7 +406,7 @@ class FormattedText extends React.PureComponent {
 			}
 			return (
 				<div
-					ref={setFormattedRef}
+					ref={this.setFormattedRef}
 					className={justifiedText ? 'justify' : ''}
 					dangerouslySetInnerHTML={{ __html: formattedSource.main }} // eslint-disable-line react/no-danger
 				/>
@@ -419,9 +423,7 @@ FormattedText.propTypes = {
 	bookmarks: PropTypes.array,
 	formattedSource: PropTypes.object,
 	userSettings: PropTypes.object,
-	formatRef: PropTypes.object,
 	mainRef: PropTypes.object,
-	formatHighlightRef: PropTypes.object,
 	activeVerseInfo: PropTypes.object,
 	activeChapter: PropTypes.number,
 	verseNumber: PropTypes.string,

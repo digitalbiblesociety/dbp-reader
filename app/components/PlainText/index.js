@@ -113,9 +113,11 @@ class PlainText extends React.PureComponent {
 		if (verseNumber && Array.isArray(textComponents)) {
 			return (
 				<div className={justifiedText ? 'chapter justify' : 'chapter'}>
-					{textComponents.filter(
-						(c) => c.key === (parseInt(verseNumber, 10) ? verseNumber : '1'),
-					)}
+					<div className={'single-formatted-verse'}>
+						{textComponents.filter(
+							(c) => c.key === (parseInt(verseNumber, 10) ? verseNumber : '1'),
+						)}
+					</div>
 				</div>
 			);
 		}
