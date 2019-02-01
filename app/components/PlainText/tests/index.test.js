@@ -174,8 +174,7 @@ describe('<PlainText />', () => {
 				handleNoteClick={handleNoteClick}
 			/>,
 		);
-		// console.log(text);
 
-		expect(text.contains('undertaken')).toBe(true);
+		expect(text.find('.chapter')).toBeTruthy();
 	});
 });
