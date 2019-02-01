@@ -111,8 +111,12 @@ class PlainText extends React.PureComponent {
 		}
 		// Using parseInt to determine whether or not the verseNumber is a real number or if it is a series of characters
 		if (verseNumber && Array.isArray(textComponents)) {
-			return textComponents.filter(
-				(c) => c.key === (parseInt(verseNumber, 10) ? verseNumber : '1'),
+			return (
+				<div className={justifiedText ? 'chapter justify' : 'chapter'}>
+					{textComponents.filter(
+						(c) => c.key === (parseInt(verseNumber, 10) ? verseNumber : '1'),
+					)}
+				</div>
 			);
 		}
 

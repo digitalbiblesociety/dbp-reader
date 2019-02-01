@@ -20,6 +20,7 @@ class FormattedText extends React.PureComponent {
 	state = {
 		footnoteState: false,
 		footnotes: {},
+		domMethodsAvailable: false,
 	};
 
 	componentDidMount() {
@@ -283,13 +284,13 @@ class FormattedText extends React.PureComponent {
 			verseNumber,
 			userAuthenticated,
 			activeBookId,
-			domMethodsAvailable,
 			userNotes,
 			bookmarks,
 			setFormattedRef,
 			setFormattedRefHighlight,
 			handleNoteClick,
 		} = this.props;
+		const domMethodsAvailable = this.state;
 
 		const initialFormattedSource = JSON.parse(
 			JSON.stringify(initialFormattedSourceFromProps),
@@ -426,7 +427,6 @@ FormattedText.propTypes = {
 	verseNumber: PropTypes.string,
 	activeBookId: PropTypes.string,
 	userAuthenticated: PropTypes.bool,
-	domMethodsAvailable: PropTypes.bool,
 	handleMouseUp: PropTypes.func,
 	getFirstVerse: PropTypes.func,
 	handleNoteClick: PropTypes.func,
