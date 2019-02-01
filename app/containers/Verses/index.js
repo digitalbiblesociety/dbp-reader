@@ -502,6 +502,7 @@ export class Verses extends React.PureComponent {
 
 		shareHighlightToFacebook(verseRange, this.closeContextMenu);
 	};
+	domMethodsAvailable = () => this.setState({ domMethodsAvailable: true });
 
 	render() {
 		const {
@@ -516,6 +517,7 @@ export class Verses extends React.PureComponent {
 			highlights,
 			activeBookId,
 			activeBookName,
+			activeTextId,
 			userAuthenticated,
 		} = this.props;
 		const { userNotes, bookmarks, text } = this.props.textData;
@@ -657,7 +659,7 @@ Verses.propTypes = {
 	dispatch: PropTypes.func.isRequired,
 	// Homepage
 	textData: PropTypes.object,
-	highlights: PropTypes.object,
+	highlights: PropTypes.array,
 	formattedSource: PropTypes.object,
 	activeChapter: PropTypes.number,
 	activeTextId: PropTypes.string,
