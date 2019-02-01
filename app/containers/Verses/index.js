@@ -515,6 +515,7 @@ export class Verses extends React.PureComponent {
 			audioSource,
 			highlights,
 			activeBookId,
+			activeBookName,
 			userAuthenticated,
 		} = this.props;
 		const { userNotes, bookmarks, text } = this.props.textData;
@@ -573,45 +574,49 @@ export class Verses extends React.PureComponent {
 						</h1>
 					</div>
 				)}
-				{formattedSource.main && !readersMode && !oneVersePerLine ? (
-					<FormattedText
-						userNotes={userNotes}
-						bookmarks={bookmarks}
-						highlights={highlights}
-						verseNumber={verseNumber}
-						userSettings={userSettings}
-						activeChapter={activeChapter}
-						activeBookId={activeBookId}
-						formattedSource={formattedSource}
-						activeVerseInfo={activeVerseInfo}
-						domMethodsAvailable={domMethodsAvailable}
-						formatRef={this.format}
-						mainRef={this.mainRef}
-						openFootnote={this.openFootnote}
-						formatHighlightRef={this.formatHighlight}
-						handleMouseUp={this.handleMouseUp}
-						getFirstVerse={this.getFirstVerse}
-						userAuthenticated={userAuthenticated}
-						handleNoteClick={this.handleNoteClick}
-						handleHighlightClick={this.handleHighlightClick}
-						setFormattedRef={this.setFormattedRef}
-						setFormattedRefHighlight={this.setFormattedRefHighlight}
-					/>
-				) : (
-					<PlainText
-						initialText={text}
-						highlights={highlights}
-						verseNumber={verseNumber}
-						userSettings={userSettings}
-						activeChapter={activeChapter}
-						activeVerseInfo={activeVerseInfo}
-						handleMouseUp={this.handleMouseUp}
-						getFirstVerse={this.getFirstVerse}
-						userAuthenticated={userAuthenticated}
-						handleNoteClick={this.handleNoteClick}
-						handleHighlightClick={this.handleHighlightClick}
-					/>
-				)}
+				{formattedSource.main &&
+					!readersMode &&
+					!oneVersePerLine && (
+						<FormattedText
+							userNotes={userNotes}
+							bookmarks={bookmarks}
+							highlights={highlights}
+							verseNumber={verseNumber}
+							userSettings={userSettings}
+							activeChapter={activeChapter}
+							activeBookId={activeBookId}
+							formattedSource={formattedSource}
+							activeVerseInfo={activeVerseInfo}
+							domMethodsAvailable={domMethodsAvailable}
+							formatRef={this.format}
+							mainRef={this.mainRef}
+							openFootnote={this.openFootnote}
+							formatHighlightRef={this.formatHighlight}
+							handleMouseUp={this.handleMouseUp}
+							getFirstVerse={this.getFirstVerse}
+							userAuthenticated={userAuthenticated}
+							handleNoteClick={this.handleNoteClick}
+							handleHighlightClick={this.handleHighlightClick}
+							setFormattedRef={this.setFormattedRef}
+							setFormattedRefHighlight={this.setFormattedRefHighlight}
+						/>
+					)}
+				{(!formattedSource.main || readersMode || oneVersePerLine) &&
+					!!text.length && (
+						<PlainText
+							initialText={text}
+							highlights={highlights}
+							verseNumber={verseNumber}
+							userSettings={userSettings}
+							activeChapter={activeChapter}
+							activeVerseInfo={activeVerseInfo}
+							handleMouseUp={this.handleMouseUp}
+							getFirstVerse={this.getFirstVerse}
+							userAuthenticated={userAuthenticated}
+							handleNoteClick={this.handleNoteClick}
+							handleHighlightClick={this.handleHighlightClick}
+						/>
+					)}
 				{contextMenuState && (
 					<ContextPortal
 						handleAddBookmark={this.handleAddBookmark}
