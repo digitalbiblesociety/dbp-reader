@@ -51,7 +51,7 @@ const PlainTextVerse = ({
 		{verse.hasHighlight ? (
 			<span
 				data-verseid={verse.verse_start}
-				dangerouslySetInnerHTML={{ __html: verse.verse_text }}
+				dangerouslySetInnerHTML={{ __html: verse.verse_text }} // eslint-disable-line react/no-danger
 			/>
 		) : (
 			<span data-verseid={verse.verse_start}>{verse.verse_text}</span>
@@ -60,10 +60,10 @@ const PlainTextVerse = ({
 );
 
 PlainTextVerse.propTypes = {
-	onMouseUp: PropTypes.function,
-	onMouseDown: PropTypes.function,
-	onHighlightClick: PropTypes.function,
-	onNoteClick: PropTypes.function,
+	onMouseUp: PropTypes.func,
+	onMouseDown: PropTypes.func,
+	onHighlightClick: PropTypes.func,
+	onNoteClick: PropTypes.func,
 	verse: PropTypes.object,
 	activeVerse: PropTypes.number,
 	verseIsActive: PropTypes.bool,

@@ -14,6 +14,21 @@ import {
 } from 'react-accessible-accordion';
 import Link from 'next/link';
 
+const getPath = (path, types, isHref) => {
+	let fullPath = '';
+	if (isHref) {
+		fullPath += `${path}`;
+	} else {
+		fullPath += `/bible${path}`;
+	}
+	if (types.audio_drama) {
+		fullPath += '?audio_type=drama';
+	} else if (types.audio) {
+		fullPath += '?audio_type=non-drama';
+	}
+	return fullPath;
+};
+
 function VersionListSection({ items }) {
 	return (
 		<Accordion>
@@ -30,8 +45,8 @@ function VersionListSection({ items }) {
 							</AccordionItemTitle>
 							<AccordionItemBody className={'accordion-body-style'}>
 								<Link
-									href={item.path}
-									as={`/bible${item.path}`}
+									href={`${item.path}?audio_type=drama`}
+									as={`/bible${item.path}?audio_type=drama`}
 									key={`${item.key}_drama`}
 								>
 									<a
@@ -44,8 +59,8 @@ function VersionListSection({ items }) {
 									</a>
 								</Link>
 								<Link
-									href={item.path}
-									as={`/bible${item.path}`}
+									href={`${item.path}?audio_type=non-drama`}
+									as={`/bible${item.path}?audio_type=non-drama`}
 									key={`${item.key}_plain`}
 								>
 									<a
@@ -64,7 +79,11 @@ function VersionListSection({ items }) {
 				return (
 					<AccordionItem className={'accordion-title-style'} key={item.key}>
 						<AccordionItemTitle>
-							<Link href={item.path} as={`/bible${item.path}`} key={item.key}>
+							<Link
+								href={getPath(item.path, item.types, true)}
+								as={getPath(item.path, item.types, false)}
+								key={item.key}
+							>
 								<a
 									role={'button'}
 									tabIndex={0}
