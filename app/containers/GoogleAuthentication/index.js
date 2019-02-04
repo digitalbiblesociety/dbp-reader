@@ -14,15 +14,19 @@ import { createUserWithSocialAccount } from '../HomePage/actions';
 
 export class GoogleAuthentication extends React.PureComponent {
 	static displayName = 'Google Authentication';
+
 	state = { popupOpen: false, popupCoords: { x: 0, y: 0 } };
+
 	handleSocialLogin = () => {
 		this.props.dispatch(createUserWithSocialAccount({ provider: 'google' }));
 	};
+
 	openPopup = (e) => {
 		const coords = { x: e.clientX, y: e.clientY };
 		this.setState({ popupOpen: true, popupCoords: coords });
 		setTimeout(() => this.setState({ popupOpen: false }), 1250);
 	};
+
 	render() {
 		return (
 			<div

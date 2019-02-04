@@ -17,7 +17,7 @@ function ReadFullChapter({ activeTextId, activeBookId, activeChapter }) {
 				href={`/app?bibleId=${activeTextId.toLowerCase()}&bookId=${activeBookId.toLowerCase()}&chapter=${activeChapter}`}
 				as={`/bible/${activeTextId.toLowerCase()}/${activeBookId.toLowerCase()}/${activeChapter}`}
 			>
-				<button className={'read-chapter'}>
+				<button type={'button'} className={'read-chapter'}>
 					<FormattedMessage {...messages.readFullChapter} />
 				</button>
 			</Link>

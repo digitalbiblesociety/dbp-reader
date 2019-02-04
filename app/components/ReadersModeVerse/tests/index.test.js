@@ -1,7 +1,7 @@
 import { shallow } from 'enzyme';
 import React from 'react';
 import renderer from 'react-test-renderer';
-import ReadersModeVerse from '../';
+import ReadersModeVerse from '..';
 
 const highlightMessage = 'clicked highlight';
 
@@ -79,11 +79,13 @@ describe('ReadersModeVerse tests', () => {
 	it('It should shallow render the component and have one verse span', () => {
 		expect(wrapper.find('.align-left').length).toEqual(1);
 	});
+	/* eslint-disable no-underscore-dangle */
 	it('It should render the text of the verse passed to it', () => {
 		expect(
 			wrapper.find('.align-left').props().dangerouslySetInnerHTML.__html,
 		).toEqual(verse.verse_text);
 	});
+	/* eslint-enable no-underscore-dangle */
 	it('It should call onHighlightClick when the verse span is clicked', () => {
 		const verseNode = wrapper.find('.align-left');
 		const spy = jest.spyOn(verseNode.props(), 'onClick');

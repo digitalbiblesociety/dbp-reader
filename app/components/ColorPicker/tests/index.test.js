@@ -1,16 +1,16 @@
-import { shallow } from 'enzyme';
+// import { shallow } from 'enzyme';
 import React from 'react';
-import ColorPicker from '../';
 import renderer from 'react-test-renderer';
+import ColorPicker from '..';
 
 describe('ColorPicker tests', () => {
-	let wrapper;
-	beforeEach(() => {
-		wrapper = shallow(<ColorPicker handlePickedColor={jest.fn()} />);
-	});
-	afterEach(() => {
-		wrapper = null;
-	});
+	// let wrapper;
+	// beforeEach(() => {
+	//   wrapper = shallow(<ColorPicker handlePickedColor={jest.fn()} />);
+	// });
+	// afterEach(() => {
+	//   wrapper = null;
+	// });
 	it('Should render', () => {
 		const tree = renderer
 			.create(<ColorPicker handlePickedColor={jest.fn()} />)

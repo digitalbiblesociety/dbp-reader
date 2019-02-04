@@ -3,4 +3,3 @@
  * ChapterSelection constants
  *
  */
-

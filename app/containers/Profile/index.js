@@ -78,13 +78,18 @@ export class Profile extends React.PureComponent {
 	};
 
 	getUserData = (userId) => this.props.dispatch(getUserData(userId));
+
 	changePicture = (props) =>
 		this.props.dispatch(
 			changePicture({ ...props, userId: this.props.profile.userId }),
 		);
+
 	sendSignUpForm = (props) => this.props.dispatch(sendSignUpForm(props));
+
 	viewErrorMessage = (props) => this.props.dispatch(viewErrorMessage(props));
+
 	socialMediaLogin = (props) => this.props.dispatch(socialMediaLogin(props));
+
 	resetPassword = (e, props) => {
 		this.props.dispatch(resetPassword(props));
 		const client = e.target.childNodes[1].getBoundingClientRect() || {
@@ -94,6 +99,7 @@ export class Profile extends React.PureComponent {
 		const coords = { x: client.x, y: client.y };
 		this.openPopup(coords);
 	};
+
 	sendPasswordReset = (e, props) => {
 		this.props.dispatch(
 			sendPasswordReset({
@@ -103,19 +109,27 @@ export class Profile extends React.PureComponent {
 		);
 		this.props.resetPasswordSent();
 	};
+
 	deleteUser = (props) => {
 		this.props.dispatch(deleteUser(props));
 		this.props.dispatch(cleanNotebook());
 		this.props.dispatch(logout());
 	};
+
 	readOauthError = (props) => this.props.dispatch(readOauthError(props));
+
 	sendLoginForm = (props) => this.props.dispatch(sendLoginForm(props));
+
 	selectAccountOption = (option) =>
 		this.props.dispatch(selectAccountOption(option));
+
 	updatePassword = (props) => this.props.dispatch(updatePassword(props));
+
 	updateEmail = (props) => this.props.dispatch(updateEmail(props));
+
 	updateUserInformation = (props) =>
 		this.props.dispatch(updateUserInformation(props));
+
 	logout = () => {
 		this.props.dispatch(logout());
 		this.props.dispatch(cleanNotebook());

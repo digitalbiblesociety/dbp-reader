@@ -29,6 +29,7 @@ export default class Error extends React.Component {
 
 		return { statusCode };
 	}
+
 	render() {
 		const store = configureStore({}, {}, {});
 		return (

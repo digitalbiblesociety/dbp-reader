@@ -27,7 +27,7 @@ import textSaga from '../TextSelection/saga';
 import profileSaga from '../Profile/saga';
 import profileReducer from '../Profile/reducer';
 import makeSelectProfile from '../Profile/selectors';
-import getDifferenceObject from '../../utils/deepDifferenceObject';
+// import getDifferenceObject from '../../utils/deepDifferenceObject';
 import { setActiveIsoCode } from '../TextSelection/actions';
 import { getBookmarksForChapter, addBookmark } from '../Notes/actions';
 import { setHasVideo } from '../VideoPlayer/actions';
@@ -93,9 +93,8 @@ const Notes = dynamic(import('../Notes'), {
 class HomePage extends React.PureComponent {
 	state = {
 		isScrollingDown: false,
-		footerDistance: 0,
-		heightDifference: 0,
 	};
+
 	componentDidMount() {
 		const {
 			activeFilesets,
@@ -724,6 +723,7 @@ HomePage.propTypes = {
 	userSettings: PropTypes.object,
 	formattedSource: PropTypes.object,
 	userAuthenticated: PropTypes.bool,
+	isIe: PropTypes.bool,
 	audioType: PropTypes.string,
 	userId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 	textData: PropTypes.object,

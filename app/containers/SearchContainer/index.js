@@ -232,6 +232,7 @@ export class SearchContainer extends React.PureComponent {
 									key={o.id}
 									className={'search-history-item'}
 									onClick={() => this.handleSearchOptionClick(o.searchText)}
+									type={'button'}
 								>
 									{o.searchText}
 								</button>

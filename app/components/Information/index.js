@@ -22,6 +22,7 @@ class Information extends React.PureComponent {
 		opened: false,
 		height: 0,
 	};
+
 	// eslint-disable-line react/prefer-stateless-function
 	setRef = (node) => {
 		this.ref = node;
@@ -61,6 +62,7 @@ class Information extends React.PureComponent {
 				</a>
 			),
 		]);
+
 	getTextCopyright = (organizations, testament) =>
 		organizations.map((org) => [
 			<h3 key={`${org.name}_text_name_${testament}`}>
@@ -91,6 +93,7 @@ class Information extends React.PureComponent {
 				</a>
 			),
 		]);
+
 	toggleCopyright = () => {
 		const height = 515;
 
@@ -105,7 +108,11 @@ class Information extends React.PureComponent {
 
 		return (
 			<section ref={this.setRef} className="information">
-				<button onClick={this.toggleCopyright} className="information-toggle">
+				<button
+					onClick={this.toggleCopyright}
+					className="information-toggle"
+					type={'button'}
+				>
 					<FormattedMessage {...messages.material} />
 					&nbsp;|&nbsp;
 					<span className={'learn-more'}>

@@ -34,6 +34,7 @@ class SpeedControl extends React.PureComponent {
 	}
 
 	setRef = (el) => (this.ref = el);
+
 	render() {
 		const { active, options, setSpeed, currentSpeed } = this.props;
 

@@ -31,6 +31,7 @@ class Text extends React.PureComponent {
 	state = {
 		loadingNextPage: false,
 	};
+
 	componentDidMount() {
 		// Doing all these assignments because nextjs was erroring because they try to use the dom
 		if (this.mainWrapper) {

@@ -140,7 +140,7 @@ class ContextPortal extends React.PureComponent {
 
 	toggleHighlightColors = (e) => {
 		e.preventDefault();
-		this.setState({ highlightOpen: !this.state.highlightOpen });
+		this.setState((cs) => ({ highlightOpen: !cs.highlightOpen }));
 	};
 
 	render() {

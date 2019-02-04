@@ -79,16 +79,12 @@ export class Verses extends React.PureComponent {
 		userSelectedText: '',
 		firstVerse: 0,
 		lastVerse: 0,
-		highlightActive: this.props.highlights || false,
-		handlersAreSet: false,
-		handledMouseDown: false,
 		activeVerseInfo: { verse: 0 },
-		loadingNextPage: false,
 		wholeVerseIsSelected: false,
 		domMethodsAvailable: false,
-		formattedVerse: false,
 		footnotes: {},
 	};
+
 	componentDidMount() {
 		// May not need this anymore
 		this.window = window;
@@ -375,15 +371,15 @@ export class Verses extends React.PureComponent {
 	};
 
 	openFootnote = ({ id, coords }) => {
-		this.setState({
+		this.setState((cs) => ({
 			footnoteState: true,
 			contextMenuState: false,
 			footnotePortal: {
-				message: this.state.footnotes[id],
+				message: cs.footnotes[id],
 				closeFootnote: this.closeFootnote,
 				coords,
 			},
-		});
+		}));
 	};
 
 	openContextMenu = (e) => {
@@ -502,6 +498,7 @@ export class Verses extends React.PureComponent {
 
 		shareHighlightToFacebook(verseRange, this.closeContextMenu);
 	};
+
 	domMethodsAvailable = () => this.setState({ domMethodsAvailable: true });
 
 	render() {

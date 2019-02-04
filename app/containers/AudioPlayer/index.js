@@ -462,6 +462,7 @@ export class AudioPlayer extends React.Component {
 		this.setState({ autoPlayChecked: e.target.checked });
 		this.props.toggleAutoPlay({ state: e.target.checked });
 	};
+
 	// Simpler to close all modals than to try and figure out which one to close
 	closeModals = ({ speed, volume }) => {
 		if (speed === 'speed') {
@@ -809,6 +810,7 @@ AudioPlayer.propTypes = {
 	audioPaths: PropTypes.array,
 	activeFilesets: PropTypes.array,
 	setAudioPlayerState: PropTypes.func.isRequired,
+	dispatch: PropTypes.func,
 	toggleAutoPlay: PropTypes.func,
 	hasAudio: PropTypes.bool,
 	hasVideo: PropTypes.bool,

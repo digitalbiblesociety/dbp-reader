@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Router from 'next/router';
-import SvgWrapper from '../../components/SvgWrapper';
+import SvgWrapper from '../SvgWrapper';
 import getPreviousChapterUrl from '../../utils/getPreviousChapterUrl';
 import getNextChapterUrl from '../../utils/getNextChapterUrl';
 
@@ -34,6 +34,7 @@ class VideoOverlay extends React.PureComponent {
 			vid: true,
 		});
 	}
+
 	get nextChapterHref() {
 		const { books, bookId, chapter, textId, text } = this.props;
 
@@ -47,6 +48,7 @@ class VideoOverlay extends React.PureComponent {
 			vid: true,
 		});
 	}
+
 	get previousChapterAs() {
 		const { books, bookId, chapter, textId, text } = this.props;
 
@@ -60,6 +62,7 @@ class VideoOverlay extends React.PureComponent {
 			vid: true,
 		});
 	}
+
 	get previousChapterHref() {
 		const { books, bookId, chapter, textId, text } = this.props;
 
@@ -73,14 +76,17 @@ class VideoOverlay extends React.PureComponent {
 			vid: true,
 		});
 	}
+
 	handleNextClick = () => {
 		this.props.closePlayer();
 		Router.replace(this.nextChapterAs);
 	};
+
 	handlePreviousClick = () => {
 		this.props.closePlayer();
 		Router.replace(this.previousChapterAs);
 	};
+
 	render() {
 		const {
 			paused,

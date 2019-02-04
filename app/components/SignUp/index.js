@@ -27,6 +27,7 @@ class SignUp extends React.PureComponent {
 		showSignupError: false,
 		wantsUpdates: false,
 	};
+
 	componentWillUnmount() {
 		this.props.viewErrorMessage();
 	}

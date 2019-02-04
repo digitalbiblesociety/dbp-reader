@@ -33,7 +33,9 @@ import getFirstChapterReference from '../app/utils/getFirstChapterReference';
 import isUserAgentInternetExplorer from '../app/utils/isUserAgentInternetExplorer';
 
 class AppContainer extends React.Component {
-	static displayName = 'Main app'; // eslint-disable-line no-undef
+	static displayName = 'Main app';
+
+	// eslint-disable-line no-undef
 	componentDidMount() {
 		// If the page was served from the server then I need to cache the data for this route
 		if (this.props.isFromServer) {
@@ -123,6 +125,7 @@ class AppContainer extends React.Component {
 	componentWillUnmount() {
 		Router.router.events.off('routeChangeStart', this.handleRouteChange);
 	}
+
 	/* eslint-disable no-undef */
 	handleRouteChange = (url) => {
 		/* eslint-enable no-undef */

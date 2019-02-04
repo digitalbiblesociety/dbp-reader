@@ -13,6 +13,7 @@ function RecentSearches({ searches, clickHandler }) {
 			className={'search-history-item'}
 			key={s}
 			onClick={() => clickHandler(s)}
+			type={'button'}
 		>
 			{s}
 		</button>

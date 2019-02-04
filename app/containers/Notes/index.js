@@ -55,6 +55,7 @@ export class Notes extends React.PureComponent {
 		super(props);
 		this.props.dispatch(setActiveChild(props.openView));
 	}
+
 	componentDidMount() {
 		this.closeMenuController = new CloseMenuFunctions(
 			this.ref,
@@ -73,33 +74,43 @@ export class Notes extends React.PureComponent {
 	};
 
 	setActiveChild = (child) => this.props.dispatch(setActiveChild(child));
+
 	setActivePage = (props) =>
 		this.props.dispatch(
 			setActivePage({ userId: this.props.userId, params: { ...props } }),
 		);
+
 	setActiveNote = ({ note }) => {
 		this.props.dispatch(getChapterForNote({ note }));
 		this.props.dispatch(setActiveNote({ note }));
 	};
+
 	setPageSize = (props) =>
 		this.props.dispatch(
 			setPageSize({ userId: this.props.userId, params: { ...props } }),
 		);
+
 	getNotes = (props) =>
 		this.props.dispatch(
 			getNotesForNotebook({ userId: this.props.userId, params: { ...props } }),
 		);
+
 	getBookmarks = (props) =>
 		this.props.dispatch(
 			getUserBookmarkData({ userId: this.props.userId, params: { ...props } }),
 		);
+
 	getHighlights = (props) =>
 		this.props.dispatch(
 			getUserHighlights({ userId: this.props.userId, params: { ...props } }),
 		);
+
 	toggleVerseText = () => this.props.dispatch(toggleVerseText());
+
 	toggleAddVerseMenu = () => this.props.dispatch(toggleAddVerseMenu());
+
 	togglePageSelector = () => this.props.dispatch(togglePageSelector());
+
 	addHighlight = (data) =>
 		this.props.dispatch(
 			addHighlight({
@@ -107,6 +118,7 @@ export class Notes extends React.PureComponent {
 				data: { ...data, user_id: this.props.userId },
 			}),
 		);
+
 	updateHighlight = (props) =>
 		this.props.dispatch(
 			updateHighlight({
@@ -119,6 +131,7 @@ export class Notes extends React.PureComponent {
 				...props,
 			}),
 		);
+
 	deleteHighlights = (props) =>
 		this.props.dispatch(
 			deleteHighlights({
@@ -131,6 +144,7 @@ export class Notes extends React.PureComponent {
 				...props,
 			}),
 		);
+
 	addNote = (data) =>
 		this.props.dispatch(
 			addNote({
@@ -138,6 +152,7 @@ export class Notes extends React.PureComponent {
 				data: { ...data, user_id: this.props.userId },
 			}),
 		);
+
 	updateNote = (data) =>
 		this.props.dispatch(
 			updateNote({
@@ -146,6 +161,7 @@ export class Notes extends React.PureComponent {
 				data: { ...data, user_id: this.props.userId },
 			}),
 		);
+
 	deleteNote = (props) =>
 		this.props.dispatch(
 			deleteNote({
@@ -158,6 +174,7 @@ export class Notes extends React.PureComponent {
 				chapter: this.props.activeChapter,
 			}),
 		);
+
 	deleteBookmark = (props) =>
 		this.props.dispatch(
 			deleteNote({
@@ -170,7 +187,9 @@ export class Notes extends React.PureComponent {
 				chapter: this.props.activeChapter,
 			}),
 		);
+
 	readSavedMessage = (props) => this.props.dispatch(readSavedMessage(props));
+
 	clearNoteErrorMessage = () => this.props.dispatch(clearNoteErrorMessage());
 
 	titleOptions = {

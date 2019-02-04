@@ -9,13 +9,9 @@ import {
 	getNotesForChapter,
 	getBookmarksForChapter,
 	getUserHighlights,
-} from '../../containers/Notes/saga';
-import {
-	getCountries,
-	getLanguages,
-	getTexts,
-} from '../../containers/TextSelection/saga';
-import { ADD_BOOKMARK } from '../../containers/Notes/constants';
+} from '../Notes/saga';
+import { getCountries, getLanguages, getTexts } from '../TextSelection/saga';
+import { ADD_BOOKMARK } from '../Notes/constants';
 import {
 	ADD_HIGHLIGHTS,
 	LOAD_HIGHLIGHTS,

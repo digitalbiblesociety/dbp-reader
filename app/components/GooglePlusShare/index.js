@@ -22,6 +22,7 @@ class GooglePlusShare extends React.PureComponent {
 			/* eslint-enable no-undef */
 		}
 	}
+
 	render() {
 		return (
 			<div

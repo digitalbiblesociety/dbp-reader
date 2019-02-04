@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ReadersModeVerse tests Should render 1`] = `
+exports[`ReadersModeVerse tests Should match the old snapshot 1`] = `
 Array [
   <span
     className="align-left"
