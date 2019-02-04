@@ -40,9 +40,9 @@ const ReadersModeVerse = ({
 );
 
 ReadersModeVerse.propTypes = {
-	onMouseUp: PropTypes.function,
-	onMouseDown: PropTypes.function,
-	onHighlightClick: PropTypes.function,
+	onMouseUp: PropTypes.func,
+	onMouseDown: PropTypes.func,
+	onHighlightClick: PropTypes.func,
 	verse: PropTypes.object,
 	activeVerse: PropTypes.number,
 	verseIsActive: PropTypes.bool,
