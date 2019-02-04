@@ -51,7 +51,6 @@ import {
 	setActiveTextId,
 	setActiveChapter,
 	setActiveBookName,
-	setActiveNotesView,
 	setAudioPlayerState,
 	setChapterTextLoadingState,
 	resetBookmarkState,
@@ -385,8 +384,6 @@ class HomePage extends React.PureComponent {
 
 	setActiveTextId = (props) => this.props.dispatch(setActiveTextId(props));
 
-	setActiveNotesView = (view) => this.props.dispatch(setActiveNotesView(view));
-
 	setActiveNote = ({ note }) => this.props.dispatch(setActiveNote({ note }));
 
 	setAudioPlayerState = (state) =>
@@ -709,7 +706,6 @@ class HomePage extends React.PureComponent {
 					toggleProfile={this.toggleProfile}
 					toggleSearch={this.toggleSearchModal}
 					toggleNotebook={this.toggleNotesModal}
-					setActiveNotesView={this.setActiveNotesView}
 					toggleSettingsModal={this.toggleSettingsModal}
 				/>
 			</>
