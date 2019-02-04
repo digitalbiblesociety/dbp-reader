@@ -159,7 +159,6 @@ app
 				isNaN(parseInt(req.params.chapter, 10)) || !req.params.chapter
 					? '1'
 					: req.params.chapter;
-
 			const queryParams = {
 				bibleId: req.params.bibleId,
 				bookId,

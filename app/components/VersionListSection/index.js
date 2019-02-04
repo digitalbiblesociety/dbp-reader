@@ -22,9 +22,9 @@ const getPath = (path, types, isHref) => {
 		fullPath += `/bible${path}`;
 	}
 	if (types.audio_drama) {
-		fullPath += '?audio_type=drama';
+		fullPath += '?audio_type=audio_drama';
 	} else if (types.audio) {
-		fullPath += '?audio_type=non-drama';
+		fullPath += '?audio_type=audio';
 	}
 	return fullPath;
 };
@@ -45,8 +45,8 @@ function VersionListSection({ items }) {
 							</AccordionItemTitle>
 							<AccordionItemBody className={'accordion-body-style'}>
 								<Link
-									href={`${item.path}?audio_type=drama`}
-									as={`/bible${item.path}?audio_type=drama`}
+									href={`${item.path}?audio_type=audio_drama`}
+									as={`/bible${item.path}?audio_type=audio_drama`}
 									key={`${item.key}_drama`}
 								>
 									<a
@@ -59,8 +59,8 @@ function VersionListSection({ items }) {
 									</a>
 								</Link>
 								<Link
-									href={`${item.path}?audio_type=non-drama`}
-									as={`/bible${item.path}?audio_type=non-drama`}
+									href={`${item.path}?audio_type=audio`}
+									as={`/bible${item.path}?audio_type=audio`}
 									key={`${item.key}_plain`}
 								>
 									<a

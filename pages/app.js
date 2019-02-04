@@ -232,6 +232,7 @@ AppContainer.getInitialProps = async (context) => {
 		nickname: userName,
 	};
 	// Using let here because the cookie data can come from the server or the client
+	let audioParam = req && req.query.audio_type;
 	let userId = reqUserId || '';
 	let hasVideo = false;
 	let isFromServer = true;
@@ -442,6 +443,21 @@ AppContainer.getInitialProps = async (context) => {
 			),
 		'book_id',
 	).sort((a, b) => a.book_order - b.book_order);
+
+	if (audioParam) {
+		// If there are any audio filesets with the given type
+		if (filesets.some((set) => set.type === audioParam)) {
+			audioType = audioParam;
+			// Otherwise check for drama first
+		} else if (filesets.some((set) => set.type === 'audio_drama')) {
+			audioType = 'audio_drama';
+			audioParam = '';
+			// Lastly check for plain audio
+		} else if (filesets.some((set) => set.type === 'audio')) {
+			audioType = 'audio';
+			audioParam = '';
+		}
+	}
 	// Redirect to the new url if conditions are met
 	if (bookMetaData && bookMetaData.length) {
 		const foundBook = bookMetaData.find(
@@ -456,6 +472,7 @@ AppContainer.getInitialProps = async (context) => {
 			hasVideo,
 			bookMetaResponse,
 			bookMetaData,
+			audioParam,
 		);
 
 		// If the book wasn't found and chapter wasn't found
@@ -492,14 +509,18 @@ AppContainer.getInitialProps = async (context) => {
 					serverRes.writeHead(302, {
 						Location: `${req.protocol}://${req.get(
 							'host',
-						)}/bible/${bibleId}/${foundBookId}/${foundChapterId}`,
+						)}/bible/${bibleId}/${foundBookId}/${foundChapterId}${
+							audioParam ? `?audio_type=${audioParam}` : ''
+						}`,
 					});
 					serverRes.end();
 				} else {
 					Router.push(
 						`${
 							window.location.origin
-						}/bible/${bibleId}/${foundBookId}/${foundChapterId}`,
+						}/bible/${bibleId}/${foundBookId}/${foundChapterId}${
+							audioParam ? `?audio_type=${audioParam}` : ''
+						}`,
 					);
 				}
 			}

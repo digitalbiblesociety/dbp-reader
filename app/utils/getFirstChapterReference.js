@@ -16,6 +16,7 @@ const getFirstChapterReference = (
 	hasVideo,
 	bookMetaResponse,
 	bookMetaData,
+	audioParam,
 ) => {
 	const hasOtAudio = filesets.some(
 		(fileset) =>
@@ -228,7 +229,7 @@ const getFirstChapterReference = (
 		}`;
 	}
 
-	return reference;
+	return audioParam ? `${reference}?audio_type=${audioParam}` : reference;
 };
 
 export default getFirstChapterReference;
