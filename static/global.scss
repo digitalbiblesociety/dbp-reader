@@ -588,6 +588,12 @@ body .atlwdg-trigger.atlwdg-RIGHT {
 	z-index: 9999;
 }
 
+@media only screen and (max-width: 1055px) {
+	body .atlwdg-trigger.atlwdg-RIGHT {
+		display: none;
+	}
+}
+
 // Formatted Text Overrides
 body #__next main .v-num {
 	@include css4 {
