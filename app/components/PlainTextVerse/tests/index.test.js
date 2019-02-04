@@ -1,5 +1,6 @@
 import React from 'react';
 import { mount } from 'enzyme';
+import renderer from 'react-test-renderer';
 import PlainTextVerse from '../index';
 
 jest.mock('../../IconsInText', () => () => <div id="mockIcons">mockIcons</div>);
@@ -42,5 +43,57 @@ describe('PlainTextVerse', () => {
 
 		expect(wrapper.find('#mockIcons').length).toEqual(1);
 		expect(wrapper.contains(verse.verse_text)).toEqual(true);
+	});
+	it('Should match the old snapshot', () => {
+		const tree = renderer
+			.create(
+				<PlainTextVerse
+					onMouseUp={onMouseUp}
+					onMouseDown={onMouseDown}
+					onHighlightClick={onHighlightClick}
+					onNoteClick={onNoteClick}
+					verse={verse}
+					activeVerse={activeVerse}
+					verseIsActive={verseIsActive}
+					oneVerse={oneVerse}
+				/>,
+			)
+			.toJSON();
+		expect(tree).toMatchSnapshot();
+	});
+	it('Should match the old snapshot for oneVerse option', () => {
+		const tree = renderer
+			.create(
+				<PlainTextVerse
+					onMouseUp={onMouseUp}
+					onMouseDown={onMouseDown}
+					onHighlightClick={onHighlightClick}
+					onNoteClick={onNoteClick}
+					verse={verse}
+					activeVerse={activeVerse}
+					verseIsActive={verseIsActive}
+					oneVerse
+				/>,
+			)
+			.toJSON();
+		expect(tree).toMatchSnapshot();
+	});
+	it('Should render one verse per line if oneVerse is true', () => {
+		const wrapper = mount(
+			<PlainTextVerse
+				onMouseUp={onMouseUp}
+				onMouseDown={onMouseDown}
+				onHighlightClick={onHighlightClick}
+				onNoteClick={onNoteClick}
+				verse={verse}
+				activeVerse={activeVerse}
+				verseIsActive={verseIsActive}
+				oneVerse
+			/>,
+		);
+		expect(wrapper.props().oneVerse).toBe(true);
+		expect(wrapper.find('#mockIcons').length).toEqual(1);
+		expect(wrapper.contains(verse.verse_text)).toEqual(true);
+		expect(wrapper.find('br').length).toEqual(1);
 	});
 });
