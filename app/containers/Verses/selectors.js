@@ -61,7 +61,6 @@ export {
 	selectActiveBookName,
 	selectActiveChapter,
 	selectVerseNumber,
-	selectFormattedSource,
 	selectNotesMenuState,
 	selectTextDirection,
 	selectAudioSource,
