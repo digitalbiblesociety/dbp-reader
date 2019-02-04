@@ -38,6 +38,24 @@ class Text extends React.PureComponent {
 		}
 	}
 
+	componentWillReceiveProps(nextProps) {
+		// If there is new formatted text or new plain text then the menus need to be disabled
+		// Change the loading state to be set and controlled within the API call and promise
+		if (
+			// If there was a change in the text at all then the menus need to be closed
+			nextProps.verseNumber !== this.props.verseNumber ||
+			nextProps.activeChapter !== this.props.activeChapter ||
+			nextProps.activeBookId !== this.props.activeBookId ||
+			nextProps.activeTextId !== this.props.activeTextId
+		) {
+			this.setState({ loadingNextPage: false });
+		}
+	}
+
+	handleArrowClick = () => {
+		this.setState({ loadingNextPage: true });
+	};
+
 	mainWrapperRef = (el) => {
 		this.mainWrapper = el;
 	};
@@ -60,12 +78,13 @@ class Text extends React.PureComponent {
 			videoPlayerOpen,
 			hasVideo,
 		} = this.props;
+		const { loadingNextPage } = this.state;
 
 		if (
 			loadingNewChapterText ||
 			loadingAudio ||
-			this.state.loadingNextPage ||
-			chapterTextLoadingState
+			chapterTextLoadingState ||
+			loadingNextPage
 		) {
 			return (
 				<div
@@ -148,9 +167,9 @@ Text.propTypes = {
 	subFooterOpen: PropTypes.bool,
 	isScrollingDown: PropTypes.bool,
 	videoPlayerOpen: PropTypes.bool,
-	chapterTextLoadingState: PropTypes.bool,
 	audioPlayerState: PropTypes.bool,
 	loadingNewChapterText: PropTypes.bool,
+	chapterTextLoadingState: PropTypes.bool,
 	verseNumber: PropTypes.string,
 	activeTextId: PropTypes.string,
 	activeBookId: PropTypes.string,

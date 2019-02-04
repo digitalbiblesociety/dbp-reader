@@ -10,6 +10,7 @@ import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { TransitionGroup } from 'react-transition-group';
 import dynamic from 'next/dynamic';
+import isEqual from 'lodash/isEqual';
 import injectSaga from '../../utils/injectSaga';
 import injectReducer from '../../utils/injectReducer';
 import checkForVideoAsync from '../../utils/checkForVideoAsync';
@@ -233,22 +234,26 @@ class HomePage extends React.PureComponent {
 
 	componentWillReceiveProps(nextProps) {
 		// Based on nextProps so that requests have the latest chapter information
-		const verse = nextProps.homepage.match.params.verse || '';
-		const verseProps = this.props.homepage.match.params.verse || '';
 		const {
 			activeTextId,
 			activeBookId,
 			activeChapter,
 			addBookmarkSuccess,
+			audioSource,
 		} = nextProps.homepage;
-		const { userSettings } = nextProps;
-		const { userSettings: prevSettings } = this.props;
+		const { userSettings, formattedSource, textData } = nextProps;
+		const {
+			userSettings: prevSettings,
+			formattedSource: prevFormattedSource,
+			textData: prevTextData,
+		} = this.props;
 		const { userId, userAuthenticated } = nextProps.profile;
 		const {
 			addBookmarkSuccess: addBookmarkSuccessProps,
 			activeTextId: activeTextIdProps,
 			activeBookId: activeBookIdProps,
 			activeChapter: activeChapterProps,
+			audioSource: prevAudioSource,
 		} = this.props.homepage;
 		const {
 			userId: userIdProps,
@@ -267,10 +272,9 @@ class HomePage extends React.PureComponent {
 		}
 		// If there was a change in the params then make sure loading state is set to false
 		if (
-			activeBookId !== activeBookIdProps ||
-			activeTextId !== activeTextIdProps ||
-			activeChapter !== activeChapterProps ||
-			verse !== verseProps
+			formattedSource.main !== prevFormattedSource.main ||
+			!isEqual(prevTextData.text, textData.text) ||
+			audioSource !== prevAudioSource
 		) {
 			this.setTextLoadingState({ state: false });
 		}
@@ -542,7 +546,6 @@ class HomePage extends React.PureComponent {
 			activeFilesetId,
 			audioPlayerState,
 			books,
-			highlights,
 			isProfileActive,
 			isNotesModalActive,
 			isSearchModalActive,
@@ -559,7 +562,6 @@ class HomePage extends React.PureComponent {
 
 		const {
 			userSettings,
-			formattedSource,
 			isMenuOpen,
 			initialVolume,
 			initialPlaybackRate,
@@ -572,7 +574,6 @@ class HomePage extends React.PureComponent {
 		const { text: updatedText } = this.props.textData;
 		const token = this.props.homepage.match.params.token || '';
 		const verse = this.props.homepage.match.params.verse || '';
-		// const loadText = (loadingNewChapterText, loadingAudio, chapterTextLoadingState, (!formattedVerse && formattedSource.main));
 
 		return (
 			<>
