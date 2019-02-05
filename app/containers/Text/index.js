@@ -78,6 +78,7 @@ class Text extends React.PureComponent {
 			chapterTextLoadingState,
 			videoPlayerOpen,
 			hasVideo,
+			audioType,
 		} = this.props;
 		const { loadingNextPage } = this.state;
 
@@ -121,6 +122,7 @@ class Text extends React.PureComponent {
 						textId: activeTextId.toLowerCase(),
 						verseNumber,
 						text,
+						audioType,
 					}}
 					clickHandler={this.handleArrowClick}
 					disabled={
@@ -143,6 +145,7 @@ class Text extends React.PureComponent {
 						textId: activeTextId.toLowerCase(),
 						verseNumber,
 						text,
+						audioType,
 					}}
 					clickHandler={this.handleArrowClick}
 					disabled={
@@ -171,6 +174,7 @@ Text.propTypes = {
 	audioPlayerState: PropTypes.bool,
 	loadingNewChapterText: PropTypes.bool,
 	chapterTextLoadingState: PropTypes.bool,
+	audioType: PropTypes.string,
 	verseNumber: PropTypes.string,
 	activeTextId: PropTypes.string,
 	activeBookId: PropTypes.string,

@@ -12,6 +12,7 @@ function ChaptersContainer({
 	bookName,
 	bookNameShort,
 	bookId,
+	audioType,
 	selectedBookName,
 	chapters,
 	activeTextId,
@@ -41,8 +42,12 @@ function ChaptersContainer({
 							</a>
 						) : (
 							<Link
-								href={`/app?bibleId=${activeTextId.toLowerCase()}&bookId=${bookId.toLowerCase()}&chapter=${chapter}`}
-								as={`/bible/${activeTextId.toLowerCase()}/${bookId.toLowerCase()}/${chapter}`}
+								href={`/app?bibleId=${activeTextId.toLowerCase()}&bookId=${bookId.toLowerCase()}&chapter=${chapter}${
+									audioType ? `?audio_type=${audioType}` : ''
+								}`}
+								as={`/bible/${activeTextId.toLowerCase()}/${bookId.toLowerCase()}/${chapter}${
+									audioType ? `?audio_type=${audioType}` : ''
+								}`}
 								key={`${bookName}-${chapter}`}
 							>
 								<a
@@ -70,6 +75,7 @@ ChaptersContainer.propTypes = {
 	bookName: PropTypes.string,
 	bookNameShort: PropTypes.string,
 	bookId: PropTypes.string,
+	audioType: PropTypes.string,
 	chapters: PropTypes.object,
 };
 

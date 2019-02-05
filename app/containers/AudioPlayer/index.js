@@ -620,6 +620,7 @@ export class AudioPlayer extends React.Component {
 			audioPlayerState,
 			videoPlayerOpen,
 			hasVideo,
+			audioType,
 		} = this.props;
 		const { autoPlayChecked, currentSpeed } = this.state;
 
@@ -668,6 +669,7 @@ export class AudioPlayer extends React.Component {
 								verseNumber: this.props.verseNumber,
 								text: this.props.text,
 								isHref: false,
+								audioType,
 							})}
 							href={getPreviousChapterUrl({
 								books: this.props.books,
@@ -677,6 +679,7 @@ export class AudioPlayer extends React.Component {
 								verseNumber: this.props.verseNumber,
 								text: this.props.text,
 								isHref: true,
+								audioType,
 							})}
 						>
 							{this.prevIcon}
@@ -691,6 +694,7 @@ export class AudioPlayer extends React.Component {
 								verseNumber: this.props.verseNumber,
 								text: this.props.text,
 								isHref: false,
+								audioType,
 							})}
 							href={getNextChapterUrl({
 								books: this.props.books,
@@ -700,6 +704,7 @@ export class AudioPlayer extends React.Component {
 								verseNumber: this.props.verseNumber,
 								text: this.props.text,
 								isHref: true,
+								audioType,
 							})}
 						>
 							{this.nextIcon}

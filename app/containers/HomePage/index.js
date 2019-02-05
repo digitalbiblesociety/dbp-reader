@@ -29,7 +29,7 @@ import profileReducer from '../Profile/reducer';
 import makeSelectProfile from '../Profile/selectors';
 // import getDifferenceObject from '../../utils/deepDifferenceObject';
 import { setActiveIsoCode } from '../TextSelection/actions';
-import { getBookmarksForChapter, addBookmark } from '../Notes/actions';
+import { getBookmarksForChapter } from '../Notes/actions';
 import { setHasVideo } from '../VideoPlayer/actions';
 import {
 	addHighlight,
@@ -420,8 +420,6 @@ class HomePage extends React.PureComponent {
 		this.props.dispatch(setHasVideo({ state: hasVideo }));
 	};
 
-	addBookmark = (data) => this.props.dispatch(addBookmark({ ...data }));
-
 	addHighlight = (props) =>
 		this.props.dispatch(
 			addHighlight({
@@ -610,6 +608,7 @@ class HomePage extends React.PureComponent {
 						text={updatedText}
 						hasVideo={hasVideo}
 						verseNumber={verse}
+						audioType={audioType}
 						menuIsOpen={isMenuOpen}
 						activeTextId={activeTextId}
 						activeBookId={activeBookId}

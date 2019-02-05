@@ -1,4 +1,8 @@
-import { createSelectorCreator, defaultMemoize } from 'reselect';
+import {
+	createSelectorCreator,
+	defaultMemoize,
+	createSelector,
+} from 'reselect';
 import { is } from 'immutable';
 // TODO: If there seems to be some state missing check to make sure the equality check isn't failing
 // create a "selector creator" that uses lodash.isEqual instead of ===
@@ -17,6 +21,8 @@ const selectCrossReferenceState = (state) =>
 		'crossReferences',
 		'active',
 	]);
+const selectAudioType = () =>
+	createSelector(selectHomePageDomain, (home) => home.get('audioType'));
 const selectNotes = (state) => state.get('notes');
 const selectUserNotes = () =>
 	createDeepEqualSelector(
@@ -241,4 +247,5 @@ export {
 	selectUserId,
 	selectChapterText,
 	selectUserNotes,
+	selectAudioType,
 };

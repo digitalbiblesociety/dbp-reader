@@ -245,6 +245,17 @@ AppContainer.getInitialProps = async (context) => {
 	let isIe = false;
 	let audioType = '';
 
+	if (req && req.query.audio_type) {
+		audioParam = req.query.audio_type;
+	} else if (!req && typeof window !== 'undefined') {
+		const audioParameterKeyPair = window.location.search
+			.slice(1)
+			.split('&')
+			.map((key) => key.split('='))
+			.find((key) => key[0] === 'audio_type');
+		audioParam = audioParameterKeyPair && audioParameterKeyPair[1];
+	}
+
 	if (req && req.headers) {
 		isIe = isUserAgentInternetExplorer(req.headers['user-agent']);
 	} else {
