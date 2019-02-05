@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Chapter /> Should match snapshot for active chapter 1`] = `
+<a
+  className="chapter-box"
+  onClick={[MockFunction]}
+>
+  <span
+    className="active-chapter"
+  >
+    1
+  </span>
+</a>
+`;
+
+exports[`<Chapter /> Should match snapshot for inactive chapter 1`] = `
+<a
+  className="chapter-box"
+  href=""
+  onClick={[Function]}
+>
+  <span>
+    1
+  </span>
+</a>
+`;
