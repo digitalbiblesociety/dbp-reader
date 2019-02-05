@@ -11,7 +11,7 @@ describe('<Chapter />', () => {
 			<Chapter
 				clickHandler={jest.fn(() => clickMessage)}
 				chapter={1}
-				active={true}
+				active
 				href={''}
 				as={''}
 			/>,
@@ -23,7 +23,7 @@ describe('<Chapter />', () => {
 			<Chapter
 				clickHandler={jest.fn(() => clickMessage)}
 				chapter={1}
-				active={true}
+				active
 				href={''}
 				as={''}
 			/>,
@@ -35,7 +35,6 @@ describe('<Chapter />', () => {
 			<Chapter
 				clickHandler={jest.fn(() => clickMessage)}
 				chapter={1}
-				active={false}
 				href={''}
 				as={''}
 			/>,
@@ -48,7 +47,7 @@ describe('<Chapter />', () => {
 				<Chapter
 					clickHandler={jest.fn(() => clickMessage)}
 					chapter={1}
-					active={true}
+					active
 					href={''}
 					as={''}
 				/>,
@@ -62,7 +61,6 @@ describe('<Chapter />', () => {
 				<Chapter
 					clickHandler={jest.fn(() => clickMessage)}
 					chapter={1}
-					active={false}
 					href={''}
 					as={''}
 				/>,
@@ -75,7 +73,7 @@ describe('<Chapter />', () => {
 			<Chapter
 				clickHandler={jest.fn(() => clickMessage)}
 				chapter={1}
-				active={true}
+				active
 				href={''}
 				as={''}
 			/>,
