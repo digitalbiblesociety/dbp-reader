@@ -18,7 +18,7 @@ import setEventHandlersForFootnotes from '../../utils/requiresDom/setEventHandle
 
 class FormattedText extends React.PureComponent {
 	state = {
-		footnoteState: false,
+		// footnoteState: false,
 		footnotes: {},
 		domMethodsAvailable: false,
 	};
@@ -260,10 +260,11 @@ class FormattedText extends React.PureComponent {
 				return a;
 			}, {}) || {};
 
-		this.setState({
-			footnoteState: false,
-			footnotes,
-		});
+		this.props.setFootnotes(footnotes);
+		// this.setState({
+		// 	footnoteState: false,
+		// 	footnotes,
+		// });
 	};
 
 	setFormattedRef = (el) => {
@@ -277,7 +278,7 @@ class FormattedText extends React.PureComponent {
 	};
 
 	// Probably need to stop doing this here
-	callSetStateNotInUpdate = (footnotes) => this.setState({ footnotes });
+	callSetStateNotInUpdate = (footnotes) => this.props.setFootnotes(footnotes);
 
 	domMethodsAvailable = () => this.setState({ domMethodsAvailable: true });
 
@@ -429,12 +430,13 @@ FormattedText.propTypes = {
 	verseNumber: PropTypes.string,
 	activeBookId: PropTypes.string,
 	userAuthenticated: PropTypes.bool,
+	openFootnote: PropTypes.func,
+	setFootnotes: PropTypes.func,
 	handleMouseUp: PropTypes.func,
 	getFirstVerse: PropTypes.func,
 	handleNoteClick: PropTypes.func,
-	setFormattedRefHighlight: PropTypes.func,
 	setFormattedRef: PropTypes.func,
-	openFootnote: PropTypes.func,
+	setFormattedRefHighlight: PropTypes.func,
 };
 
 export default FormattedText;

@@ -211,6 +211,9 @@ export class Verses extends React.PureComponent {
 		this.mainRef = el;
 	};
 
+	setFootnotes = (footnotes) =>
+		this.setState({ footnotes, footnoteState: false });
+
 	// This is a no-op to trick iOS devices
 	handleHighlightClick = () => {
 		// Unless there is a click event the mouseup and mousedown events won't fire for mobile devices
@@ -416,7 +419,11 @@ export class Verses extends React.PureComponent {
 		});
 	};
 
-	closeFootnote = () => this.setState({ footnoteState: false });
+	closeFootnote = () =>
+		this.setState({
+			activeVerseInfo: { verse: 0, isPlain: false },
+			footnoteState: false,
+		});
 
 	dispatchAddHighlight = (props) =>
 		this.props.dispatch(addHighlightAction(props));
@@ -582,21 +589,22 @@ export class Verses extends React.PureComponent {
 							highlights={highlights}
 							verseNumber={verseNumber}
 							userSettings={userSettings}
-							activeChapter={activeChapter}
 							activeBookId={activeBookId}
+							activeChapter={activeChapter}
 							formattedSource={formattedSource}
 							activeVerseInfo={activeVerseInfo}
+							userAuthenticated={userAuthenticated}
 							domMethodsAvailable={domMethodsAvailable}
-							formatRef={this.format}
 							mainRef={this.mainRef}
+							formatRef={this.format}
 							openFootnote={this.openFootnote}
-							formatHighlightRef={this.formatHighlight}
+							setFootnotes={this.setFootnotes}
 							handleMouseUp={this.handleMouseUp}
 							getFirstVerse={this.getFirstVerse}
-							userAuthenticated={userAuthenticated}
 							handleNoteClick={this.handleNoteClick}
-							handleHighlightClick={this.handleHighlightClick}
 							setFormattedRef={this.setFormattedRef}
+							formatHighlightRef={this.formatHighlight}
+							handleHighlightClick={this.handleHighlightClick}
 							setFormattedRefHighlight={this.setFormattedRefHighlight}
 						/>
 					)}

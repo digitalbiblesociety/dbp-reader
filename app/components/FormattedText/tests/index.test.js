@@ -10,6 +10,7 @@ const userNotes = [];
 const domMethodsAvailable = false;
 const activeBookId = 'MAT';
 const setFormattedRef = () => {};
+const setFootnotes = () => {};
 const setFormattedRefHighlight = () => {};
 const formattedSource = {
 	main:
@@ -86,6 +87,7 @@ describe('<FormattedText />', () => {
 				domMethodsAvailable={domMethodsAvailable}
 				activeBookId={activeBookId}
 				setFormattedRef={setFormattedRef}
+				setFootnotes={setFootnotes}
 				setFormattedRefHighlight={setFormattedRefHighlight}
 				formattedSource={formattedSource}
 			/>,
