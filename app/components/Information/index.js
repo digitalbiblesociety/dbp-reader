@@ -133,28 +133,38 @@ class Information extends React.PureComponent {
 					</div>
 				</AnimateHeight>
 				<div className={'ministry-statement'}>
-					<FormattedMessage {...messages.circleC} />
-					&nbsp;
-					<a rel={'noopener'} target={'_blank'} href={'http://www.bible.is'}>
-						<FormattedMessage {...messages.bibleIsText} />
-					</a>
-					<FormattedMessage {...messages.ministrySlogan} />
-					&nbsp;
-					<a
-						rel={'noopener'}
-						target={'_blank'}
-						href={'https://www.faithcomesbyhearing.com'}
-					>
-						<FormattedMessage {...messages.faithComesByHearing} />
-					</a>
-					&nbsp;
-					<FormattedMessage {...messages.circleR} />
-					&nbsp;
+					<div className={'ministry-tagline'}>
+						<FormattedMessage {...messages.circleC} />
+						&nbsp;
+						<a rel={'noopener'} target={'_blank'} href={'http://www.bible.is'}>
+							<FormattedMessage {...messages.bibleIsText} />
+						</a>
+						<FormattedMessage {...messages.ministrySlogan} />
+						&nbsp;
+						<a
+							rel={'noopener'}
+							target={'_blank'}
+							href={'https://www.faithcomesbyhearing.com'}
+						>
+							<FormattedMessage {...messages.faithComesByHearing} />
+						</a>
+						&nbsp;
+						<FormattedMessage {...messages.circleR} />
+						&nbsp;
+					</div>
 					<Link href={'/terms'}>
 						<a id={'terms-of-service'}>
 							<FormattedMessage {...messages.terms} />
 						</a>
 					</Link>
+					<a
+						href={'https://support.bible.is/contact'}
+						rel={'noopener'}
+						target={'_blank'}
+						id={'help-support'}
+					>
+						<FormattedMessage {...messages.helpSupport} />
+					</a>
 				</div>
 			</section>
 		);

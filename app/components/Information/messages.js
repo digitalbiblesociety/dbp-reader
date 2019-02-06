@@ -50,4 +50,8 @@ export default defineMessages({
 		id: 'app.components.Information.terms',
 		defaultMessage: 'Terms and Conditions',
 	},
+	helpSupport: {
+		id: 'app.components.Information.helpSupport',
+		defaultMessage: 'Help & Support',
+	},
 });
