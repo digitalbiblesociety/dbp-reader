@@ -29,7 +29,7 @@ class VersionList extends React.PureComponent {
 			(acc, bible) => [
 				...acc,
 				{
-					path: `/${bible.get('abbr').toLowerCase()}`,
+					path: `/${bible.get('abbr').toUpperCase()}`,
 					key: `${bible.get('abbr')}${bible.get('date')}`,
 					clickHandler: (audioType) =>
 						this.handleVersionListClick(bible, audioType),

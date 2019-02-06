@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import SvgWrapper from '../../components/SvgWrapper';
-import VolumeSlider from '../../components/VolumeSlider';
+import SvgWrapper from '../SvgWrapper';
+import VolumeSlider from '../VolumeSlider';
 import Colors from '../../utils/javascriptColors';
 
 class VideoControls extends React.PureComponent {
@@ -27,6 +27,7 @@ class VideoControls extends React.PureComponent {
 	openVolumeSlider = () => {
 		this.setState({ volumeSliderState: true });
 	};
+
 	get containerClassNames() {
 		const { paused, elipsisOpen } = this.props;
 		let classNames = 'controls';

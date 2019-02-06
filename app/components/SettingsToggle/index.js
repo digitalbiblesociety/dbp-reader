@@ -11,6 +11,9 @@ import { FormattedMessage } from 'react-intl';
 import messages from './messages';
 /* eslint-disable jsx-a11y/label-has-for */
 function SettingsToggle({ action, id, name, checked, available }) {
+	if (!available) {
+		return null;
+	}
 	return (
 		<div
 			className={available ? 'checkbox-settings' : 'checkbox-settings disabled'}

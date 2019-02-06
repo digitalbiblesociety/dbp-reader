@@ -1,0 +1,88 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ColorPicker tests Should render 1`] = `
+<div
+  className="color-picker"
+>
+  <span
+    className="color-group"
+  >
+    <span
+      aria-label="yellow"
+      className="yellow"
+      onClick={[Function]}
+      role="button"
+      style={
+        Object {
+          "backgroundColor": "rgba(252,230,0,.5)",
+        }
+      }
+      tabIndex={-1}
+    />
+  </span>
+  <span
+    className="color-group"
+  >
+    <span
+      aria-label="green"
+      className="green"
+      onClick={[Function]}
+      role="button"
+      style={
+        Object {
+          "backgroundColor": "rgba(84,185,72,.5)",
+        }
+      }
+      tabIndex={-2}
+    />
+  </span>
+  <span
+    className="color-group"
+  >
+    <span
+      aria-label="pink"
+      className="pink"
+      onClick={[Function]}
+      role="button"
+      style={
+        Object {
+          "backgroundColor": "rgba(208,105,169,.5)",
+        }
+      }
+      tabIndex={-3}
+    />
+  </span>
+  <span
+    className="color-group"
+  >
+    <span
+      aria-label="purple"
+      className="purple"
+      onClick={[Function]}
+      role="button"
+      style={
+        Object {
+          "backgroundColor": "rgba(137,103,172,.5)",
+        }
+      }
+      tabIndex={-4}
+    />
+  </span>
+  <span
+    className="color-group"
+  >
+    <span
+      aria-label="blue"
+      className="blue"
+      onClick={[Function]}
+      role="button"
+      style={
+        Object {
+          "backgroundColor": "rgba(80,165,220,.5)",
+        }
+      }
+      tabIndex={-5}
+    />
+  </span>
+</div>
+`;

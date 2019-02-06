@@ -8,9 +8,10 @@ export default ({
 	verseNumber,
 	text: chapterText,
 	isHref,
+	audioType,
 }) => {
 	if (!books || !books.length) {
-		return url({ textId, bookId, chapter, isHref });
+		return url({ audioType, textId, bookId, chapter, isHref });
 	}
 	if (verseNumber && chapterText.length) {
 		const nextVerse = parseInt(verseNumber, 10) + 1 || 1;
@@ -19,30 +20,65 @@ export default ({
 		// Handles the verses
 		if (nextVerse <= lastVerse && nextVerse > 0) {
 			// The next verse is within a valid range
-			return url({ textId, bookId, chapter, nextVerse, isHref });
+			return url({ audioType, textId, bookId, chapter, nextVerse, isHref });
 		} else if (nextVerse < 0) {
 			// The next verse is below 0 and thus invalid
-			return url({ textId, bookId, chapter, nextVerse: '1', isHref });
+			return url({
+				audioType,
+				textId,
+				bookId,
+				chapter,
+				nextVerse: '1',
+				isHref,
+			});
 		} else if (nextVerse > lastVerse) {
 			// Next verse is above the last verse in the chapter and thus is invalid
-			return url({ textId, bookId, chapter, nextVerse: lastVerse, isHref });
+			return url({
+				audioType,
+				textId,
+				bookId,
+				chapter,
+				nextVerse: lastVerse,
+				isHref,
+			});
 		}
-		return url({ textId, bookId, chapter, nextVerse: verseNumber, isHref });
+		return url({
+			audioType,
+			textId,
+			bookId,
+			chapter,
+			nextVerse: verseNumber,
+			isHref,
+		});
 	} else if (verseNumber) {
 		const nextVerse = parseInt(verseNumber, 10) + 1 || 1;
 
 		if (nextVerse && nextVerse > 0) {
 			// The next verse is within a valid range
-			return url({ textId, bookId, chapter, nextVerse, isHref });
+			return url({ audioType, textId, bookId, chapter, nextVerse, isHref });
 		} else if (nextVerse < 0) {
 			// The next verse is below 0 and thus invalid
 
-			return url({ textId, bookId, chapter, nextVerse: '1', isHref });
+			return url({
+				audioType,
+				textId,
+				bookId,
+				chapter,
+				nextVerse: '1',
+				isHref,
+			});
 			// Need to find a way to do this for formatted text
 			// Next verse is above the last verse in the chapter and thus is invalid
 		}
 		// Worst case just go back to the same verse (In hindsight this may not be the best...)
-		return url({ textId, bookId, chapter, nextVerse: verseNumber, isHref });
+		return url({
+			audioType,
+			textId,
+			bookId,
+			chapter,
+			nextVerse: verseNumber,
+			isHref,
+		});
 	}
 
 	// Handles the chapters
@@ -58,12 +94,13 @@ export default ({
 	const maxChapter = activeBook.chapters[activeBook.chapters.length - 1];
 	// If the next book in line doesn't exist and we are already at the last chapter just return
 	if (!nextBook && chapter === maxChapter) {
-		return url({ textId, bookId, chapter });
+		return url({ audioType, textId, bookId, chapter });
 	}
 
 	if (chapter === maxChapter) {
 		// Need to get the first chapter of the next book
 		return url({
+			audioType,
 			textId,
 			bookId: nextBook.book_id,
 			chapter: nextBook.chapters[0],
@@ -80,6 +117,7 @@ export default ({
 			: activeBook.chapters[chapterIndex];
 
 	return url({
+		audioType,
 		textId,
 		bookId,
 		chapter: nextChapterNumber,

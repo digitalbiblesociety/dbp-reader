@@ -462,6 +462,7 @@ export class AudioPlayer extends React.Component {
 		this.setState({ autoPlayChecked: e.target.checked });
 		this.props.toggleAutoPlay({ state: e.target.checked });
 	};
+
 	// Simpler to close all modals than to try and figure out which one to close
 	closeModals = ({ speed, volume }) => {
 		if (speed === 'speed') {
@@ -619,6 +620,7 @@ export class AudioPlayer extends React.Component {
 			audioPlayerState,
 			videoPlayerOpen,
 			hasVideo,
+			audioType,
 		} = this.props;
 		const { autoPlayChecked, currentSpeed } = this.state;
 
@@ -667,6 +669,7 @@ export class AudioPlayer extends React.Component {
 								verseNumber: this.props.verseNumber,
 								text: this.props.text,
 								isHref: false,
+								audioType,
 							})}
 							href={getPreviousChapterUrl({
 								books: this.props.books,
@@ -676,6 +679,7 @@ export class AudioPlayer extends React.Component {
 								verseNumber: this.props.verseNumber,
 								text: this.props.text,
 								isHref: true,
+								audioType,
 							})}
 						>
 							{this.prevIcon}
@@ -690,6 +694,7 @@ export class AudioPlayer extends React.Component {
 								verseNumber: this.props.verseNumber,
 								text: this.props.text,
 								isHref: false,
+								audioType,
 							})}
 							href={getNextChapterUrl({
 								books: this.props.books,
@@ -699,6 +704,7 @@ export class AudioPlayer extends React.Component {
 								verseNumber: this.props.verseNumber,
 								text: this.props.text,
 								isHref: true,
+								audioType,
 							})}
 						>
 							{this.nextIcon}
@@ -809,6 +815,7 @@ AudioPlayer.propTypes = {
 	audioPaths: PropTypes.array,
 	activeFilesets: PropTypes.array,
 	setAudioPlayerState: PropTypes.func.isRequired,
+	dispatch: PropTypes.func,
 	toggleAutoPlay: PropTypes.func,
 	hasAudio: PropTypes.bool,
 	hasVideo: PropTypes.bool,

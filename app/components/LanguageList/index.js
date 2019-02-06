@@ -18,6 +18,7 @@ class LanguageList extends React.PureComponent {
 		endY: 0,
 		pulling: false,
 	};
+
 	// Try to reduce the number of times language list is iterated over
 	getFilteredLanguages(width, height) {
 		const { languages, languageCode, filterText } = this.props;
@@ -127,7 +128,7 @@ class LanguageList extends React.PureComponent {
 			clientY - this.state.startY >= minDistance &&
 			this.state.pulling
 		) {
-			this.setState({ distance: clientY - this.state.startY });
+			this.setState((cs) => ({ distance: clientY - cs.startY }));
 		}
 	};
 
@@ -252,9 +253,9 @@ class LanguageList extends React.PureComponent {
 								distance ? 'pull-down-refresh pulling' : 'pull-down-refresh'
 							}
 						>
-							<span style={{ textAlign: 'center', width: '100%' }}>{`${
-								distance > 40 ? 'Release' : 'Pull'
-							} to Refresh`}</span>
+							<span style={{ textAlign: 'center', width: '100%' }}>
+								{`${distance > 40 ? 'Release' : 'Pull'} to Refresh`}
+							</span>
 						</div>
 						{!loadingLanguages ? (
 							<AutoSizer>

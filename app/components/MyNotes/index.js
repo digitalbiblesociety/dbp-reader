@@ -19,6 +19,7 @@ class MyNotes extends React.PureComponent {
 		filterText: '',
 		colorPickerState: false,
 	};
+
 	// Need this for when a user has edited a note and come back here
 	componentDidMount() {
 		this.props.getNotes({

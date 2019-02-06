@@ -88,8 +88,11 @@ export class Settings extends React.PureComponent {
 	updateTheme = ({ theme }) => {
 		this.props.dispatch(updateTheme({ theme }));
 	};
+
 	updateFontType = ({ font }) => this.props.dispatch(updateFontType({ font }));
+
 	updateFontSize = ({ size }) => this.props.dispatch(updateFontSize({ size }));
+
 	toggleSettingsOption = (props) => {
 		const opposite =
 			props.name === 'ONE VERSE PER LINE'
@@ -107,6 +110,7 @@ export class Settings extends React.PureComponent {
 			}),
 		);
 	};
+
 	toggle = {
 		"READER'S MODE": ['userSettings', 'toggleOptions', 'readersMode', 'active'],
 		'CROSS REFERENCE': [

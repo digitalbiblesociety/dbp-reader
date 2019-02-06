@@ -6,15 +6,17 @@
 
 import React from 'react';
 import { PropTypes } from 'prop-types';
-import Link from 'next/link';
+import Chapter from '../Chapter';
+import url from '../../utils/hrefLinkOrAsLink';
 
 function ChaptersContainer({
 	bookName,
 	bookNameShort,
 	bookId,
+	audioType,
 	selectedBookName,
 	chapters,
-	activeTextId,
+	activeTextId: textId,
 	activeChapter,
 	activeBookName,
 	handleChapterClick,
@@ -28,32 +30,19 @@ function ChaptersContainer({
 						: ' inactive-book-chapters'
 				}`}
 			>
-				{chapters.map(
-					(chapter) =>
-						chapter === activeChapter &&
-						(bookName || bookNameShort) === activeBookName ? (
-							<a
-								key={`${bookName}-${chapter}`}
-								className={'chapter-box'}
-								onClick={() => handleChapterClick()}
-							>
-								<span className={'active-chapter'}>{chapter}</span>
-							</a>
-						) : (
-							<Link
-								href={`/app?bibleId=${activeTextId.toLowerCase()}&bookId=${bookId.toLowerCase()}&chapter=${chapter}`}
-								as={`/bible/${activeTextId.toLowerCase()}/${bookId.toLowerCase()}/${chapter}`}
-								key={`${bookName}-${chapter}`}
-							>
-								<a
-									className={'chapter-box'}
-									onClick={() => handleChapterClick()}
-								>
-									<span>{chapter}</span>
-								</a>
-							</Link>
-						),
-				)}
+				{chapters.map((chapter) => (
+					<Chapter
+						key={`${bookName}-${chapter}`}
+						active={
+							chapter === activeChapter &&
+							(bookName || bookNameShort) === activeBookName
+						}
+						chapter={chapter}
+						href={url({ textId, bookId, chapter, isHref: true, audioType })}
+						as={url({ textId, bookId, chapter, isHref: false, audioType })}
+						clickHandler={handleChapterClick}
+					/>
+				))}
 			</span>
 		);
 	}
@@ -70,6 +59,7 @@ ChaptersContainer.propTypes = {
 	bookName: PropTypes.string,
 	bookNameShort: PropTypes.string,
 	bookId: PropTypes.string,
+	audioType: PropTypes.string,
 	chapters: PropTypes.object,
 };
 

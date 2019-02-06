@@ -18,7 +18,6 @@ const Footer = ({
 	toggleProfile,
 	toggleSearch,
 	isScrollingDown,
-	setActiveNotesView,
 }) => (
 	<div
 		className={
@@ -57,7 +56,6 @@ const Footer = ({
 				onClick={() => {
 					if (!notebookActive) {
 						toggleNotebook();
-						setActiveNotesView('notes');
 					}
 				}}
 			>
@@ -89,7 +87,6 @@ Footer.propTypes = {
 	toggleSettingsModal: PropTypes.func,
 	toggleProfile: PropTypes.func,
 	toggleSearch: PropTypes.func,
-	setActiveNotesView: PropTypes.func,
 };
 
 export default Footer;

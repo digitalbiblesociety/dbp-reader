@@ -22,6 +22,7 @@ class Information extends React.PureComponent {
 		opened: false,
 		height: 0,
 	};
+
 	// eslint-disable-line react/prefer-stateless-function
 	setRef = (node) => {
 		this.ref = node;
@@ -61,6 +62,7 @@ class Information extends React.PureComponent {
 				</a>
 			),
 		]);
+
 	getTextCopyright = (organizations, testament) =>
 		organizations.map((org) => [
 			<h3 key={`${org.name}_text_name_${testament}`}>
@@ -91,6 +93,7 @@ class Information extends React.PureComponent {
 				</a>
 			),
 		]);
+
 	toggleCopyright = () => {
 		const height = 515;
 
@@ -105,7 +108,11 @@ class Information extends React.PureComponent {
 
 		return (
 			<section ref={this.setRef} className="information">
-				<button onClick={this.toggleCopyright} className="information-toggle">
+				<button
+					onClick={this.toggleCopyright}
+					className="information-toggle"
+					type={'button'}
+				>
 					<FormattedMessage {...messages.material} />
 					&nbsp;|&nbsp;
 					<span className={'learn-more'}>
@@ -126,28 +133,41 @@ class Information extends React.PureComponent {
 					</div>
 				</AnimateHeight>
 				<div className={'ministry-statement'}>
-					<FormattedMessage {...messages.circleC} />
-					&nbsp;
-					<a rel={'noopener'} target={'_blank'} href={'http://www.bible.is'}>
-						<FormattedMessage {...messages.bibleIsText} />
-					</a>
-					<FormattedMessage {...messages.ministrySlogan} />
-					&nbsp;
-					<a
-						rel={'noopener'}
-						target={'_blank'}
-						href={'https://www.faithcomesbyhearing.com'}
-					>
-						<FormattedMessage {...messages.faithComesByHearing} />
-					</a>
-					&nbsp;
-					<FormattedMessage {...messages.circleR} />
-					&nbsp;
-					<Link href={'/terms'}>
-						<a id={'terms-of-service'}>
-							<FormattedMessage {...messages.terms} />
+					<div className={'ministry-tagline'}>
+						<FormattedMessage {...messages.circleC} />
+						&nbsp;
+						<a rel={'noopener'} target={'_blank'} href={'http://www.bible.is'}>
+							<FormattedMessage {...messages.bibleIsText} />
 						</a>
-					</Link>
+						<FormattedMessage {...messages.ministrySlogan} />
+						&nbsp;
+						<a
+							rel={'noopener'}
+							target={'_blank'}
+							href={'https://www.faithcomesbyhearing.com'}
+						>
+							<FormattedMessage {...messages.faithComesByHearing} />
+						</a>
+						&nbsp;
+						<FormattedMessage {...messages.circleR} />
+						&nbsp;
+					</div>
+					<div className={'ministry-terms-support'}>
+						<Link href={'/terms'}>
+							<a id={'terms-of-service'}>
+								<FormattedMessage {...messages.terms} />
+							</a>
+						</Link>
+						&nbsp; | &nbsp;
+						<a
+							href={'https://support.bible.is/contact'}
+							rel={'noopener'}
+							target={'_blank'}
+							id={'help-support'}
+						>
+							<FormattedMessage {...messages.helpSupport} />
+						</a>
+					</div>
 				</div>
 			</section>
 		);

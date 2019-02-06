@@ -1,0 +1,68 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PlainTextVerse Should match the old snapshot 1`] = `
+<span
+  className="align-left"
+  data-verseid={1}
+  onClick={[MockFunction]}
+  onMouseDown={[MockFunction]}
+  onMouseUp={[MockFunction]}
+  style={
+    Object {
+      "background": "linear-gradient(inherit,inherit)",
+    }
+  }
+>
+  <sup
+    data-verseid={1}
+  >
+     
+    1
+     
+  </sup>
+  <div
+    id="mockIcons"
+  >
+    mockIcons
+  </div>
+  <span
+    data-verseid={1}
+  >
+    In the beginning God created the heavens and the earth.
+  </span>
+</span>
+`;
+
+exports[`PlainTextVerse Should match the old snapshot for oneVerse option 1`] = `
+<span
+  className="align-left"
+  data-verseid={1}
+  onClick={[MockFunction]}
+  onMouseDown={[MockFunction]}
+  onMouseUp={[MockFunction]}
+  style={
+    Object {
+      "background": "linear-gradient(inherit,inherit)",
+    }
+  }
+>
+  <br />
+  <sup
+    data-verseid={1}
+  >
+     
+    1
+     
+  </sup>
+  <div
+    id="mockIcons"
+  >
+    mockIcons
+  </div>
+  <span
+    data-verseid={1}
+  >
+    In the beginning God created the heavens and the earth.
+  </span>
+</span>
+`;

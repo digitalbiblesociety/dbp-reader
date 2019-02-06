@@ -52,6 +52,7 @@ const addHighlightUtil = ({
 	getPlainParentVerseWithoutNumber,
 }) => {
 	let highlightObject = {};
+
 	// User must be signed in for the highlight to be added
 	if (!userAuthenticated || !userId) {
 		openPopup({ x: popupCoords.x, y: popupCoords.y });
@@ -90,6 +91,7 @@ const addHighlightUtil = ({
 				).verse_text.length;
 				highlightObject = {
 					bible: activeTextId,
+					userId,
 					book: activeBookId,
 					chapter: activeChapter,
 					verseStart: verse,
@@ -111,6 +113,7 @@ const addHighlightUtil = ({
 					.replace(replaceCharsRegex, '').length;
 				highlightObject = {
 					bible: activeTextId,
+					userId,
 					book: activeBookId,
 					chapter: activeChapter,
 					verseStart: verse,
@@ -325,6 +328,7 @@ const addHighlightUtil = ({
 				} else {
 					addHighlight({
 						bible: activeTextId,
+						userId,
 						book: activeBookId,
 						chapter: activeChapter,
 						verseStart: firstVerse,

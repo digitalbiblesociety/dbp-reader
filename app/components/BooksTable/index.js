@@ -15,6 +15,7 @@ import ChaptersContainer from '../ChaptersContainer';
 import {
 	selectAuthenticationStatus,
 	selectUserId,
+	selectAudioType,
 } from '../../containers/HomePage/selectors';
 import {
 	selectActiveTextId,
@@ -120,6 +121,7 @@ class BooksTable extends React.PureComponent {
 	render() {
 		const {
 			books,
+			audioType,
 			activeTextId,
 			activeChapter,
 			activeBookName,
@@ -176,6 +178,7 @@ class BooksTable extends React.PureComponent {
 											</h4>
 											<ChaptersContainer
 												bookName={book.get('name')}
+												audioType={audioType}
 												bookNameShort={book.get('name_short')}
 												activeTextId={activeTextId}
 												activeChapter={activeChapter}
@@ -229,6 +232,7 @@ class BooksTable extends React.PureComponent {
 										</h4>
 										<ChaptersContainer
 											bookName={book.get('name')}
+											audioType={audioType}
 											bookNameShort={book.get('name_short')}
 											activeTextId={activeTextId}
 											activeChapter={activeChapter}
@@ -282,6 +286,7 @@ class BooksTable extends React.PureComponent {
 										</h4>
 										<ChaptersContainer
 											bookName={book.get('name')}
+											audioType={audioType}
 											bookNameShort={book.get('name_short')}
 											activeTextId={activeTextId}
 											activeChapter={activeChapter}
@@ -308,6 +313,7 @@ BooksTable.propTypes = {
 	books: PropTypes.object,
 	audioObjects: PropTypes.array,
 	userId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+	audioType: PropTypes.string,
 	activeTextId: PropTypes.string,
 	activeBookName: PropTypes.string,
 	initialBookName: PropTypes.string,
@@ -330,6 +336,7 @@ const mapStateToProps = createStructuredSelector({
 	loadingBooks: selectLoadingBookStatus(),
 	userAuthenticated: selectAuthenticationStatus(),
 	userId: selectUserId(),
+	audioType: selectAudioType(),
 });
 
 function mapDispatchToProps(dispatch) {

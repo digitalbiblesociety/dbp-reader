@@ -11,7 +11,7 @@ import highlightsObject from './sampleHighlights.json';
 *	13-14 & 14: multi-verse that ends up being two highlights in the same verse - false
 *	15 * 3: highlight overlaps multiple other highlights
 *	Tag to insert
-*	<em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[0].highlighted_color}),rgba(${sampleHighlights[0].highlighted_color}))">
+*	<em class="text-highlighted" style="background:linear-gradient(${sampleHighlights[0].highlighted_color}),${sampleHighlights[0].highlighted_color}))">
 * */
 
 describe('highlightPlainText', () => {
@@ -20,14 +20,16 @@ describe('highlightPlainText', () => {
 	});
 	it('Should return an array', () => {
 		const sampleHighlights = [];
-		const text = [...chapterText];
+		const text = chapterText.data.slice();
 
-		expect(Array.isArray(highlightPlainText(sampleHighlights, text))).toBe(true);
+		expect(Array.isArray(highlightPlainText(sampleHighlights, text))).toBe(
+			true,
+		);
 	});
 	it('Should return inital text if no highlight', () => {
 		const sampleHighlights = [];
-		const sampleText = [...chapterText];
-		const result = [...chapterText];
+		const sampleText = chapterText.data.slice();
+		const result = chapterText.data.slice();
 
 		expect(highlightPlainText(sampleHighlights, sampleText)).toEqual(result);
 	});
@@ -47,11 +49,17 @@ describe('highlightPlainText', () => {
 				hasHighlight: true,
 				verse_end: 1,
 				verse_end_alt: '1',
-				verse_text: `I <em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[0].highlighted_color}),rgba(${sampleHighlights[0].highlighted_color}))">love</em> you, O LORD, my strength.`,
+				verse_text: `I <em class="text-highlighted" style="background:linear-gradient(${
+					sampleHighlights[0].highlighted_color
+				},${
+					sampleHighlights[0].highlighted_color
+				})">love</em> you, O LORD, my strength.`,
 			},
 		].concat(chapterText.data.slice(1));
 
-		expect(highlightPlainText(sampleHighlights, smallChapterData)).toEqual(result);
+		expect(highlightPlainText(sampleHighlights, smallChapterData)).toEqual(
+			result,
+		);
 	});
 	it('Case 2: It should handle a highlight that contains another highlight and use the color of the longer highlight', () => {
 		const sampleHighlights = highlightsObject.data.slice(1, 3);
@@ -68,7 +76,15 @@ describe('highlightPlainText', () => {
 				verse_end: 2,
 				verse_end_alt: '2',
 				hasHighlight: true,
-				verse_text: `The<em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[1].highlighted_color}),rgba(${sampleHighlights[1].highlighted_color}))"> <em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[0].highlighted_color}),rgba(${sampleHighlights[0].highlighted_color}))">LORD</em> is my</em> rock and my fortress and my deliverer, my God, my rock, in whom I take refuge, my shield, and the horn of my salvation, my stronghold.`,
+				verse_text: `The<em class="text-highlighted" style="background:linear-gradient(${
+					sampleHighlights[1].highlighted_color
+				},${
+					sampleHighlights[1].highlighted_color
+				})"> <em class="text-highlighted" style="background:linear-gradient(${
+					sampleHighlights[0].highlighted_color
+				},${
+					sampleHighlights[0].highlighted_color
+				})">LORD</em> is my</em> rock and my fortress and my deliverer, my God, my rock, in whom I take refuge, my shield, and the horn of my salvation, my stronghold.`,
 			},
 		];
 
@@ -89,7 +105,11 @@ describe('highlightPlainText', () => {
 				verse_end: 3,
 				verse_end_alt: '3',
 				hasHighlight: true,
-				verse_text: `<em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[0].highlighted_color}),rgba(${sampleHighlights[0].highlighted_color}))">I call upon the LORD, who is worthy to be praised, and I am saved from my enemies.</em>`,
+				verse_text: `<em class="text-highlighted" style="background:linear-gradient(${
+					sampleHighlights[0].highlighted_color
+				},${
+					sampleHighlights[0].highlighted_color
+				})">I call upon the LORD, who is worthy to be praised, and I am saved from my enemies.</em>`,
 			},
 			{
 				book_id: 'PSA',
@@ -102,7 +122,11 @@ describe('highlightPlainText', () => {
 				verse_end: 4,
 				verse_end_alt: '4',
 				hasHighlight: true,
-				verse_text: `<em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[0].highlighted_color}),rgba(${sampleHighlights[0].highlighted_color}))">The cords of death encompassed me; the torrents of destruction assailed me</em>;`,
+				verse_text: `<em class="text-highlighted" style="background:linear-gradient(${
+					sampleHighlights[0].highlighted_color
+				},${
+					sampleHighlights[0].highlighted_color
+				})">The cords of death encompassed me; the torrents of destruction assailed me</em>;`,
 			},
 		];
 
@@ -123,7 +147,15 @@ describe('highlightPlainText', () => {
 				verse_end: 6,
 				verse_end_alt: '6',
 				hasHighlight: true,
-				verse_text: `In my <em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[0].highlighted_color}),rgba(${sampleHighlights[0].highlighted_color}))">distress</em> I called upon t<em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[1].highlighted_color}),rgba(${sampleHighlights[1].highlighted_color}))">he LO</em>RD; to my God I cried for help. From his temple he heard my voice, and my cry to him reached his ears.`,
+				verse_text: `In my <em class="text-highlighted" style="background:linear-gradient(${
+					sampleHighlights[0].highlighted_color
+				},${
+					sampleHighlights[0].highlighted_color
+				})">distress</em> I called upon t<em class="text-highlighted" style="background:linear-gradient(${
+					sampleHighlights[1].highlighted_color
+				},${
+					sampleHighlights[1].highlighted_color
+				})">he LO</em>RD; to my God I cried for help. From his temple he heard my voice, and my cry to him reached his ears.`,
 			},
 		];
 
@@ -144,7 +176,11 @@ describe('highlightPlainText', () => {
 				verse_end: 8,
 				verse_end_alt: '8',
 				hasHighlight: true,
-				verse_text: `<em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[0].highlighted_color}),rgba(${sampleHighlights[0].highlighted_color}))">Smoke went up from his nostrils, and devouring fire from his mouth; glowing coals flamed forth from him.</em>`,
+				verse_text: `<em class="text-highlighted" style="background:linear-gradient(${
+					sampleHighlights[0].highlighted_color
+				},${
+					sampleHighlights[0].highlighted_color
+				})">Smoke went up from his nostrils, and devouring fire from his mouth; glowing coals flamed forth from him.</em>`,
 			},
 			{
 				book_id: 'PSA',
@@ -157,7 +193,17 @@ describe('highlightPlainText', () => {
 				verse_end: 9,
 				verse_end_alt: '9',
 				hasHighlight: true,
-				verse_text: `<em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[0].highlighted_color}),rgba(${sampleHighlights[0].highlighted_color}))">He bowed the heavens and came down; thick darkness was under his </em><em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[1].highlighted_color}),rgba(${sampleHighlights[1].highlighted_color}))"><em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[0].highlighted_color}),rgba(${sampleHighlights[0].highlighted_color}))">feet.</em></em>`,
+				verse_text: `<em class="text-highlighted" style="background:linear-gradient(${
+					sampleHighlights[0].highlighted_color
+				},${
+					sampleHighlights[0].highlighted_color
+				})">He bowed the heavens and came down; thick darkness was under his </em><em class="text-highlighted" style="background:linear-gradient(${
+					sampleHighlights[1].highlighted_color
+				},${
+					sampleHighlights[1].highlighted_color
+				})"><em class="text-highlighted" style="background:linear-gradient(${
+					sampleHighlights[0].highlighted_color
+				},${sampleHighlights[0].highlighted_color})">feet.</em></em>`,
 			},
 			{
 				book_id: 'PSA',
@@ -170,7 +216,11 @@ describe('highlightPlainText', () => {
 				verse_end: 10,
 				verse_end_alt: '10',
 				hasHighlight: true,
-				verse_text: `<em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[1].highlighted_color}),rgba(${sampleHighlights[1].highlighted_color}))">He rode on a cherub and flew; he came swiftly on the wings of the win</em>d.`,
+				verse_text: `<em class="text-highlighted" style="background:linear-gradient(${
+					sampleHighlights[1].highlighted_color
+				},${
+					sampleHighlights[1].highlighted_color
+				})">He rode on a cherub and flew; he came swiftly on the wings of the win</em>d.`,
 			},
 		];
 
@@ -191,7 +241,11 @@ describe('highlightPlainText', () => {
 				verse_end: 12,
 				verse_end_alt: '12',
 				hasHighlight: true,
-				verse_text: `<em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[0].highlighted_color}),rgba(${sampleHighlights[0].highlighted_color}))">Out of the brightness before him hailstones and coals of fire broke through his clouds.</em>`,
+				verse_text: `<em class="text-highlighted" style="background:linear-gradient(${
+					sampleHighlights[0].highlighted_color
+				},${
+					sampleHighlights[0].highlighted_color
+				})">Out of the brightness before him hailstones and coals of fire broke through his clouds.</em>`,
 			},
 			{
 				book_id: 'PSA',
@@ -204,7 +258,15 @@ describe('highlightPlainText', () => {
 				verse_end: 13,
 				verse_end_alt: '13',
 				hasHighlight: true,
-				verse_text: `<em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[0].highlighted_color}),rgba(${sampleHighlights[0].highlighted_color}))">The LORD also thundered</em> in the heavens, and <em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[1].highlighted_color}),rgba(${sampleHighlights[1].highlighted_color}))">the Most </em>High uttered his voice, hailstones and coals of fire.`,
+				verse_text: `<em class="text-highlighted" style="background:linear-gradient(${
+					sampleHighlights[0].highlighted_color
+				},${
+					sampleHighlights[0].highlighted_color
+				})">The LORD also thundered</em> in the heavens, and <em class="text-highlighted" style="background:linear-gradient(${
+					sampleHighlights[1].highlighted_color
+				},${
+					sampleHighlights[1].highlighted_color
+				})">the Most </em>High uttered his voice, hailstones and coals of fire.`,
 			},
 		];
 
@@ -246,7 +308,15 @@ describe('highlightPlainText', () => {
 				verse_end: 12,
 				verse_end_alt: '12',
 				hasHighlight: true,
-				verse_text: `<em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[0].highlighted_color}),rgba(${sampleHighlights[0].highlighted_color}))">Out of the <em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[1].highlighted_color}),rgba(${sampleHighlights[1].highlighted_color}))">brightness</em></em> before him hailstones and coals of fire broke through his clouds.`,
+				verse_text: `<em class="text-highlighted" style="background:linear-gradient(${
+					sampleHighlights[0].highlighted_color
+				},${
+					sampleHighlights[0].highlighted_color
+				})">Out of the <em class="text-highlighted" style="background:linear-gradient(${
+					sampleHighlights[1].highlighted_color
+				},${
+					sampleHighlights[1].highlighted_color
+				})">brightness</em></em> before him hailstones and coals of fire broke through his clouds.`,
 			},
 		];
 
@@ -298,7 +368,19 @@ describe('highlightPlainText', () => {
 				verse_end: 12,
 				verse_end_alt: '12',
 				hasHighlight: true,
-				verse_text: `<em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[2].highlighted_color}),rgba(${sampleHighlights[2].highlighted_color}))"><em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[0].highlighted_color}),rgba(${sampleHighlights[0].highlighted_color}))">Out</em> of the <em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[1].highlighted_color}),rgba(${sampleHighlights[1].highlighted_color}))">brightness</em></em> before him hailstones and coals of fire broke through his clouds.`,
+				verse_text: `<em class="text-highlighted" style="background:linear-gradient(${
+					sampleHighlights[2].highlighted_color
+				},${
+					sampleHighlights[2].highlighted_color
+				})"><em class="text-highlighted" style="background:linear-gradient(${
+					sampleHighlights[0].highlighted_color
+				},${
+					sampleHighlights[0].highlighted_color
+				})">Out</em> of the <em class="text-highlighted" style="background:linear-gradient(${
+					sampleHighlights[1].highlighted_color
+				},${
+					sampleHighlights[1].highlighted_color
+				})">brightness</em></em> before him hailstones and coals of fire broke through his clouds.`,
 			},
 		];
 
@@ -307,8 +389,28 @@ describe('highlightPlainText', () => {
 	});
 	it('Case 9: It should apply a highlight contained within an older highlight where the new highlight is on top of the old one and they are the same color', () => {
 		const sampleHighlights = [
-			{ bible_id: 'ENGESV', reference: 'Matthew 1:1', chapter: 1, book_id: 'MAT', highlighted_color: '84,185,72,.25', highlight_start: 0, verse_start: 1, id: 224, highlighted_words: 41 },
-			{ bible_id: 'ENGESV', reference: 'Matthew 1:1', chapter: 1, book_id: 'MAT', highlighted_color: '84,185,72,.25', highlight_start: 4, verse_start: 1, id: 500, highlighted_words: 30 },
+			{
+				bible_id: 'ENGESV',
+				reference: 'Matthew 1:1',
+				chapter: 1,
+				book_id: 'MAT',
+				highlighted_color: '84,185,72,.25',
+				highlight_start: 0,
+				verse_start: 1,
+				id: 224,
+				highlighted_words: 41,
+			},
+			{
+				bible_id: 'ENGESV',
+				reference: 'Matthew 1:1',
+				chapter: 1,
+				book_id: 'MAT',
+				highlighted_color: '84,185,72,.25',
+				highlight_start: 4,
+				verse_start: 1,
+				id: 500,
+				highlighted_words: 30,
+			},
 		];
 		const sampleText = [
 			{
@@ -321,7 +423,8 @@ describe('highlightPlainText', () => {
 				verse_start_alt: '1',
 				verse_end: 1,
 				verse_end_alt: '1',
-				verse_text: 'The book of the genealogy of Jesus Christ, the son of David, the son of Abraham.',
+				verse_text:
+					'The book of the genealogy of Jesus Christ, the son of David, the son of Abraham.',
 			},
 		];
 		const result = [
@@ -336,7 +439,15 @@ describe('highlightPlainText', () => {
 				verse_end: 1,
 				verse_end_alt: '1',
 				hasHighlight: true,
-				verse_text: `<em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[0].highlighted_color}),rgba(${sampleHighlights[0].highlighted_color}))">The <em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[1].highlighted_color}),rgba(${sampleHighlights[1].highlighted_color}))">book of the genealogy of Jesus</em> Christ</em>, the son of David, the son of Abraham.`,
+				verse_text: `<em class="text-highlighted" style="background:linear-gradient(${
+					sampleHighlights[0].highlighted_color
+				},${
+					sampleHighlights[0].highlighted_color
+				})">The <em class="text-highlighted" style="background:linear-gradient(${
+					sampleHighlights[1].highlighted_color
+				},${
+					sampleHighlights[1].highlighted_color
+				})">book of the genealogy of Jesus</em> Christ</em>, the son of David, the son of Abraham.`,
 			},
 		];
 
@@ -344,8 +455,28 @@ describe('highlightPlainText', () => {
 	});
 	it('Case 10: It should apply a highlight contained within an older highlight where the new highlight is on top of the old one and they are NOT the same color', () => {
 		const sampleHighlights = [
-			{ bible_id: 'ENGESV', reference: 'Matthew 1:1', chapter: 1, book_id: 'MAT', highlighted_color: '84,185,72,.25', highlight_start: 0, verse_start: 1, id: 224, highlighted_words: 41 },
-			{ bible_id: 'ENGESV', reference: 'Matthew 1:1', chapter: 1, book_id: 'MAT', highlighted_color: '17,170,255,.6', highlight_start: 4, verse_start: 1, id: 500, highlighted_words: 30 },
+			{
+				bible_id: 'ENGESV',
+				reference: 'Matthew 1:1',
+				chapter: 1,
+				book_id: 'MAT',
+				highlighted_color: '84,185,72,.25',
+				highlight_start: 0,
+				verse_start: 1,
+				id: 224,
+				highlighted_words: 41,
+			},
+			{
+				bible_id: 'ENGESV',
+				reference: 'Matthew 1:1',
+				chapter: 1,
+				book_id: 'MAT',
+				highlighted_color: '17,170,255,.6',
+				highlight_start: 4,
+				verse_start: 1,
+				id: 500,
+				highlighted_words: 30,
+			},
 		];
 		const sampleText = [
 			{
@@ -358,7 +489,8 @@ describe('highlightPlainText', () => {
 				verse_start_alt: '1',
 				verse_end: 1,
 				verse_end_alt: '1',
-				verse_text: 'The book of the genealogy of Jesus Christ, the son of David, the son of Abraham.',
+				verse_text:
+					'The book of the genealogy of Jesus Christ, the son of David, the son of Abraham.',
 			},
 		];
 		const result = [
@@ -373,12 +505,40 @@ describe('highlightPlainText', () => {
 				verse_end: 1,
 				verse_end_alt: '1',
 				hasHighlight: true,
-				verse_text: `<em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[0].highlighted_color}),rgba(${sampleHighlights[0].highlighted_color}))">The <em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[1].highlighted_color}),rgba(${sampleHighlights[1].highlighted_color}))">book of the genealogy of Jesus</em> Christ</em>, the son of David, the son of Abraham.`,
+				verse_text: `<em class="text-highlighted" style="background:linear-gradient(${
+					sampleHighlights[0].highlighted_color
+				},${
+					sampleHighlights[0].highlighted_color
+				})">The <em class="text-highlighted" style="background:linear-gradient(${
+					sampleHighlights[1].highlighted_color
+				},${
+					sampleHighlights[1].highlighted_color
+				})">book of the genealogy of Jesus</em> Christ</em>, the son of David, the son of Abraham.`,
 			},
 		];
 		const sampleHighlights2 = [
-			{ bible_id: 'ENGESV', reference: 'Matthew 1:13', chapter: 1, book_id: 'MAT', highlighted_color: '84,185,72,.25', highlight_start: 4, verse_start: 13, id: 501, highlighted_words: 30 },
-			{ bible_id: 'ENGESV', reference: 'Matthew 1:13', chapter: 1, book_id: 'MAT', highlighted_color: '80,165,220,.25', highlight_start: 4, verse_start: 13, id: 502, highlighted_words: 10 },
+			{
+				bible_id: 'ENGESV',
+				reference: 'Matthew 1:13',
+				chapter: 1,
+				book_id: 'MAT',
+				highlighted_color: '84,185,72,.25',
+				highlight_start: 4,
+				verse_start: 13,
+				id: 501,
+				highlighted_words: 30,
+			},
+			{
+				bible_id: 'ENGESV',
+				reference: 'Matthew 1:13',
+				chapter: 1,
+				book_id: 'MAT',
+				highlighted_color: '80,165,220,.25',
+				highlight_start: 4,
+				verse_start: 13,
+				id: 502,
+				highlighted_words: 10,
+			},
 		];
 		const sampleText2 = [
 			{
@@ -391,7 +551,8 @@ describe('highlightPlainText', () => {
 				verse_start_alt: '13',
 				verse_end: 13,
 				verse_end_alt: '13',
-				verse_text: 'and Zerubbabel the father of Abiud, and Abiud the father of Eliakim, and Eliakim the father of Azor,',
+				verse_text:
+					'and Zerubbabel the father of Abiud, and Abiud the father of Eliakim, and Eliakim the father of Azor,',
 			},
 		];
 		const result2 = [
@@ -406,7 +567,15 @@ describe('highlightPlainText', () => {
 				verse_end: 13,
 				verse_end_alt: '13',
 				hasHighlight: true,
-				verse_text: `and <em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights2[0].highlighted_color}),rgba(${sampleHighlights2[0].highlighted_color}))"><em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights2[1].highlighted_color}),rgba(${sampleHighlights2[1].highlighted_color}))">Zerubbabel</em> the father of Abiud</em>, and Abiud the father of Eliakim, and Eliakim the father of Azor,`,
+				verse_text: `and <em class="text-highlighted" style="background:linear-gradient(${
+					sampleHighlights2[0].highlighted_color
+				},${
+					sampleHighlights2[0].highlighted_color
+				})"><em class="text-highlighted" style="background:linear-gradient(${
+					sampleHighlights2[1].highlighted_color
+				},${
+					sampleHighlights2[1].highlighted_color
+				})">Zerubbabel</em> the father of Abiud</em>, and Abiud the father of Eliakim, and Eliakim the father of Azor,`,
 			},
 		];
 
@@ -459,7 +628,19 @@ describe('highlightPlainText', () => {
 				verse_end: 12,
 				verse_end_alt: '12',
 				hasHighlight: true,
-				verse_text: `<em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[2].highlighted_color}),rgba(${sampleHighlights[2].highlighted_color}))">Out<em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[0].highlighted_color}),rgba(${sampleHighlights[0].highlighted_color}))"> of the </em><em class="text-highlighted" style="background:linear-gradient(rgba(${sampleHighlights[1].highlighted_color}),rgba(${sampleHighlights[1].highlighted_color}))">brightness</em> before</em> him hailstones and coals of fire broke through his clouds.`,
+				verse_text: `<em class="text-highlighted" style="background:linear-gradient(${
+					sampleHighlights[2].highlighted_color
+				},${
+					sampleHighlights[2].highlighted_color
+				})">Out<em class="text-highlighted" style="background:linear-gradient(${
+					sampleHighlights[0].highlighted_color
+				},${
+					sampleHighlights[0].highlighted_color
+				})"> of the </em><em class="text-highlighted" style="background:linear-gradient(${
+					sampleHighlights[1].highlighted_color
+				},${
+					sampleHighlights[1].highlighted_color
+				})">brightness</em> before</em> him hailstones and coals of fire broke through his clouds.`,
 			},
 		];
 

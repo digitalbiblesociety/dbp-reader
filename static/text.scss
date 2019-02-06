@@ -137,6 +137,8 @@
 		}
 		.single-formatted-verse {
 			text-align: center;
+			max-width: 1000px;
+			margin: 0 auto;
 		}
 		@media (min-width: 30rem) {
 			.single-formatted-verse {

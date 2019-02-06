@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import getFormattedTimeString from '../../utils/getFormattedTimeString';
-import SvgWrapper from '../../components/SvgWrapper';
+import SvgWrapper from '../SvgWrapper';
 
 class VideoList extends React.PureComponent {
 	render() {
@@ -45,9 +45,9 @@ class VideoList extends React.PureComponent {
 										alt={`There was no thumbnail for: ${video.title}`}
 									/>
 									<div className={'thumbnail-metadata'}>
-										<span className={'thumbnail-title'}>{`${
-											video.title
-										}`}</span>
+										<span className={'thumbnail-title'}>
+											{`${video.title}`}
+										</span>
 										<span className={'thumbnail-duration'}>
 											{getFormattedTimeString(video.duration)}
 										</span>

@@ -46,6 +46,7 @@ class CloseMenuFunctions {
 			}
 		}
 	};
+
 	handleKeydown = (event) => {
 		if (event.which === 27) {
 			this.closeFunction(this.onCloseOptions);

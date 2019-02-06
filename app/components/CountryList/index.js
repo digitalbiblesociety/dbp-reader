@@ -142,7 +142,7 @@ class CountryList extends React.PureComponent {
 			clientY - this.state.startY >= minDistance &&
 			this.state.pulling
 		) {
-			this.setState({ distance: clientY - this.state.startY });
+			this.setState((cs) => ({ distance: clientY - cs.startY }));
 		}
 	};
 
@@ -255,9 +255,9 @@ class CountryList extends React.PureComponent {
 								distance ? 'pull-down-refresh pulling' : 'pull-down-refresh'
 							}
 						>
-							<span style={{ textAlign: 'center', width: '100%' }}>{`${
-								distance > 40 ? 'Release' : 'Pull'
-							} to Refresh`}</span>
+							<span style={{ textAlign: 'center', width: '100%' }}>
+								{`${distance > 40 ? 'Release' : 'Pull'} to Refresh`}
+							</span>
 						</div>
 						{loadingCountries ? (
 							<LoadingSpinner />

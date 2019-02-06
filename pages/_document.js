@@ -45,6 +45,11 @@ export default class MyDocument extends Document {
 						defer
 						async
 					/>
+					<link
+						rel="manifest"
+						type="application/json"
+						href={'/static/manifest.json'}
+					/>
 					<meta httpEquiv={'X-UA-Compatible'} content={'IE=edge'} />
 					<meta name="viewport" content="width=device-width, initial-scale=1" />
 					{process.env.NODE_ENV === 'production' ? (
@@ -84,10 +89,6 @@ export default class MyDocument extends Document {
 					<meta name={'twitter:creator'} content={'@audiobible'} />
 
 					<link
-						rel="manifest"
-						href={`${process.env.CDN_STATIC_FILES}/manifest.json`}
-					/>
-					<link
 						rel="apple-touch-icon"
 						href={`${process.env.CDN_STATIC_FILES}/favicon-96x96.png`}
 					/>
@@ -116,12 +117,6 @@ export default class MyDocument extends Document {
 					/>
 					<meta property="fb:app_id" content="173528326559718" />
 					<script src="https://apis.google.com/js/platform.js" async defer />
-					<script
-						async
-						defer
-						type="text/javascript"
-						src="https://fcbhjira.atlassian.net/s/d41d8cd98f00b204e9800998ecf8427e-T/l24at6/b/0/a44af77267a987a660377e5c46e0fb64/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?locale=en-UK&collectorId=2338db8d"
-					/>
 					<script
 						type="application/javascript"
 						dangerouslySetInnerHTML={{
