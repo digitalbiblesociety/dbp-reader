@@ -624,6 +624,7 @@ AppContainer.getInitialProps = async (context) => {
 				audioType: audioType || '',
 				loadingAudio: true,
 				hasAudio: false,
+				hasVideo,
 				chapterText,
 				testaments,
 				// userSettings,

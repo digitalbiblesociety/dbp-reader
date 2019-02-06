@@ -259,16 +259,6 @@ class HomePage extends React.PureComponent {
 			userAuthenticated: userAuthenticatedProps,
 		} = this.props.profile;
 
-		const videoFileset = nextProps.homepage.activeFilesets.filter(
-			(f) => f.type === 'video_stream',
-		)[0];
-		if (videoFileset) {
-			this.checkForVideo(
-				videoFileset ? videoFileset.id : '',
-				nextProps.homepage.activeBookId,
-				nextProps.homepage.activeChapter,
-			);
-		}
 		// If there was a change in the params then make sure loading state is set to false
 		if (
 			formattedSource.main !== prevFormattedSource.main ||
