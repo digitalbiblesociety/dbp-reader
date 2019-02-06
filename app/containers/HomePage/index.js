@@ -721,6 +721,7 @@ HomePage.propTypes = {
 	userAuthenticated: PropTypes.bool,
 	isIe: PropTypes.bool,
 	audioType: PropTypes.string,
+	activeNotesView: PropTypes.string,
 	userId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 	textData: PropTypes.object,
 	isMenuOpen: PropTypes.bool,
