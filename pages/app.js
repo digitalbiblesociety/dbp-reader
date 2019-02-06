@@ -220,7 +220,7 @@ AppContainer.getInitialProps = async (context) => {
 	const routeLocation = context.asPath;
 	const {
 		bookId = '',
-		chapter,
+		chapter: chapterParam,
 		bibleId = 'ENGESV',
 		verse,
 		token,
@@ -234,6 +234,9 @@ AppContainer.getInitialProps = async (context) => {
 		name: userName,
 		nickname: userName,
 	};
+	const tempChapter =
+		typeof chapterParam === 'string' && chapterParam.split('?')[0];
+	const chapter = tempChapter || chapter;
 	// Using let here because the cookie data can come from the server or the client
 	let audioParam = req && req.query.audio_type;
 	let userId = reqUserId || '';
@@ -446,15 +449,12 @@ AppContainer.getInitialProps = async (context) => {
 	const bookMetaResponse = await Promise.all(bookMetaPromises);
 
 	const bookMetaData = removeDuplicates(
-		bookMetaResponse
-			.slice()
-			.reduce(
-				(reducedObjects, filesetObject) => [
-					...reducedObjects,
-					...Object.values(filesetObject)[0],
-				],
-				[],
-			),
+		bookMetaResponse.slice().reduce((reducedObjects, filesetObject) => {
+			if (Object.values(filesetObject) && Object.values(filesetObject)[0]) {
+				return [...reducedObjects, ...Object.values(filesetObject)[0]];
+			}
+			return reducedObjects;
+		}, []),
 		'book_id',
 	).sort((a, b) => a.book_order - b.book_order);
 
