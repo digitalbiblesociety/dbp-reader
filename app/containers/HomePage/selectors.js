@@ -24,6 +24,8 @@ const selectCrossReferenceState = (state) =>
 const selectAudioType = () =>
 	createSelector(selectHomePageDomain, (home) => home.get('audioType'));
 const selectNotes = (state) => state.get('notes');
+const selectActiveNotesView = () =>
+	createSelector(selectNotes, (notes) => notes.get('activeChild'));
 const selectUserNotes = () =>
 	createDeepEqualSelector(
 		[
@@ -248,4 +250,5 @@ export {
 	selectChapterText,
 	selectUserNotes,
 	selectAudioType,
+	selectActiveNotesView,
 };

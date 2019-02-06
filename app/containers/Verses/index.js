@@ -41,14 +41,13 @@ import shareHighlightToFacebook from '../../utils/requiresDom/shareToFacebook';
 import { getClassNameForMain } from '../Text/textRenderUtils';
 // Actions
 import {
-	setActiveNotesView,
 	toggleNotesModal,
 	setActiveNote,
 	deleteHighlights,
 	setChapterTextLoadingState,
 	addHighlight as addHighlightAction,
 } from '../HomePage/actions';
-import { addBookmark } from '../Notes/actions';
+import { addBookmark, setActiveChild } from '../Notes/actions';
 // Reducers
 import reducer from './reducer';
 import homeReducer from '../HomePage/reducer';
@@ -170,7 +169,7 @@ export class Verses extends React.PureComponent {
 	};
 
 	setActiveNotesViewMethod = (view) =>
-		this.props.dispatch(setActiveNotesView(view));
+		this.props.dispatch(setActiveChild(view));
 
 	setActiveNote = ({ coords, existingNote, bookmark }) => {
 		const {

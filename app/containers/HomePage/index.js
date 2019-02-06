@@ -63,6 +63,7 @@ import makeSelectHomePage, {
 	selectUserId,
 	selectMenuOpenState,
 	selectUserNotes,
+	selectActiveNotesView,
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -536,7 +537,6 @@ class HomePage extends React.PureComponent {
 			activeBookName,
 			activeFilesets,
 			activeTextName,
-			activeNotesView,
 			activeFilesetId,
 			audioPlayerState,
 			books,
@@ -561,6 +561,7 @@ class HomePage extends React.PureComponent {
 			initialPlaybackRate,
 			isIe,
 			audioType,
+			activeNotesView,
 		} = this.props;
 
 		const autoPlayEnabled = userSettings.get('autoPlayEnabled');
@@ -740,6 +741,7 @@ const mapStateToProps = createStructuredSelector({
 	profile: makeSelectProfile(),
 	isMenuOpen: selectMenuOpenState(),
 	userSettings: selectSettings(),
+	activeNotesView: selectActiveNotesView(),
 });
 
 function mapDispatchToProps(dispatch) {

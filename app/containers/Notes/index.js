@@ -53,7 +53,9 @@ import Ieerror from '../../components/Ieerror';
 export class Notes extends React.PureComponent {
 	constructor(props) {
 		super(props);
-		this.props.dispatch(setActiveChild(props.openView));
+		if (props.openView) {
+			this.props.dispatch(setActiveChild(props.openView));
+		}
 	}
 
 	componentDidMount() {
@@ -242,7 +244,6 @@ export class Notes extends React.PureComponent {
 							fill="#fff"
 							svgid="arrow_right"
 							onClick={() => {
-								setActiveChild('notes');
 								toggleNotesModal();
 							}}
 						/>
@@ -250,7 +251,6 @@ export class Notes extends React.PureComponent {
 							className={'icon book-icon-header'}
 							svgid={'notebook'}
 							onClick={() => {
-								setActiveChild('notes');
 								toggleNotesModal();
 							}}
 						/>
@@ -269,7 +269,6 @@ export class Notes extends React.PureComponent {
 						fill="#fff"
 						svgid="arrow_right"
 						onClick={() => {
-							setActiveChild('notes');
 							toggleNotesModal();
 						}}
 					/>
@@ -277,7 +276,6 @@ export class Notes extends React.PureComponent {
 						className={'icon book-icon-header'}
 						svgid={'notebook'}
 						onClick={() => {
-							setActiveChild('notes');
 							toggleNotesModal();
 						}}
 					/>
