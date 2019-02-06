@@ -170,6 +170,14 @@
 			justify-content: center;
 		}
 
+		.ministry-terms-support {
+			height: 16px;
+			margin-top: 5px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
 		a {
 			@include css4 {
 				color: var(--notebook-title-date-color);

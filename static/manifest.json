@@ -1,11 +1,11 @@
 {
-	"name": "Bible.is Online",
+	"name": "Bible.is",
 	"short_name": "Bible.is",
 	"theme_color": "#941B2F",
 	"background_color": "#fafafa",
 	"display": "standalone",
 	"Scope": "/",
-	"start_url": "/",
+	"start_url": "/bible/engesv/mat/1",
 	"icons": [
 		{
 			"src": "/static/icon-72x72.png",
@@ -84,5 +84,5 @@
 			"density": "4.0"
 		}
 	],
-	"splash_pages": "/bible/engesv/mat/1"
+	"splash_pages": "/bible/ENGESV/MAT/1"
 }

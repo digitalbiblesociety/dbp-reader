@@ -152,19 +152,22 @@ class Information extends React.PureComponent {
 						<FormattedMessage {...messages.circleR} />
 						&nbsp;
 					</div>
-					<Link href={'/terms'}>
-						<a id={'terms-of-service'}>
-							<FormattedMessage {...messages.terms} />
+					<div className={'ministry-terms-support'}>
+						<Link href={'/terms'}>
+							<a id={'terms-of-service'}>
+								<FormattedMessage {...messages.terms} />
+							</a>
+						</Link>
+						&nbsp; | &nbsp;
+						<a
+							href={'https://support.bible.is/contact'}
+							rel={'noopener'}
+							target={'_blank'}
+							id={'help-support'}
+						>
+							<FormattedMessage {...messages.helpSupport} />
 						</a>
-					</Link>
-					<a
-						href={'https://support.bible.is/contact'}
-						rel={'noopener'}
-						target={'_blank'}
-						id={'help-support'}
-					>
-						<FormattedMessage {...messages.helpSupport} />
-					</a>
+					</div>
 				</div>
 			</section>
 		);
