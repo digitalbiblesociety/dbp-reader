@@ -77,6 +77,7 @@ BooksTestament.propTypes = {
 	handleChapterClick: PropTypes.func,
 	activeChapter: PropTypes.number,
 	testamentPrefix: PropTypes.string,
+	testamentTitle: PropTypes.string,
 	selectedBookName: PropTypes.string,
 	activeBookName: PropTypes.string,
 	activeTextId: PropTypes.string,

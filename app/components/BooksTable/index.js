@@ -11,7 +11,7 @@ import { createStructuredSelector } from 'reselect';
 import PropTypes from 'prop-types';
 import { getChapterText } from '../../containers/HomePage/actions';
 import LoadingSpinner from '../LoadingSpinner';
-import ChaptersContainer from '../ChaptersContainer';
+import BooksTestament from '../BooksTestament';
 import {
 	selectAuthenticationStatus,
 	selectUserId,
@@ -138,169 +138,51 @@ class BooksTable extends React.PureComponent {
 					ref={(el) => this.handleRef(el, 'container')}
 					className="book-container"
 				>
-					{books.get('OT')
-						? [
-								<div key={'ot_title_key'} className={'testament-title'}>
-									<h3>Old Testament</h3>
-								</div>,
-								books.get('OT') &&
-									books.get('OT').map((book) => (
-										<div
-											className={'book-button'}
-											ref={
-												(book.get('name') || book.get('name_short')) ===
-												selectedBookName
-													? (el) => this.handleRef(el, 'button')
-													: null
-											}
-											key={(book.get('name') || book.get('name_short')).concat(
-												book.get('book_id'),
-											)}
-											id={(book.get('name') || book.get('name_short')).concat(
-												book.get('book_id'),
-											)}
-											onClick={(e) =>
-												this.handleBookClick(
-													e,
-													book.get('name') || book.get('name_short'),
-												)
-											}
-										>
-											<h4
-												className={
-													(book.get('name') || book.get('name_short')) ===
-													selectedBookName
-														? 'active-book'
-														: ''
-												}
-											>
-												{book.get('name') || book.get('name_short')}
-											</h4>
-											<ChaptersContainer
-												bookName={book.get('name')}
-												audioType={audioType}
-												bookNameShort={book.get('name_short')}
-												activeTextId={activeTextId}
-												activeChapter={activeChapter}
-												handleChapterClick={this.handleChapterClick}
-												chapters={book.get('chapters')}
-												selectedBookName={selectedBookName}
-												activeBookName={activeBookName}
-												bookId={book.get('book_id')}
-												book={book}
-											/>
-										</div>
-									)),
-						  ]
-						: null}
-					{books.get('NT')
-						? [
-								<div key={'nt_title_key'} className={'testament-title'}>
-									<h3>New Testament</h3>
-								</div>,
-								books.get('NT').map((book) => (
-									<div
-										className={'book-button'}
-										ref={
-											(book.get('name') || book.get('name_short')) ===
-											selectedBookName
-												? (el) => this.handleRef(el, 'button')
-												: null
-										}
-										key={(book.get('name') || book.get('name_short')).concat(
-											book.get('book_id'),
-										)}
-										id={(book.get('name') || book.get('name_short')).concat(
-											book.get('book_id'),
-										)}
-										onClick={(e) =>
-											this.handleBookClick(
-												e,
-												book.get('name') || book.get('name_short'),
-											)
-										}
-									>
-										<h4
-											className={
-												(book.get('name') || book.get('name_short')) ===
-												selectedBookName
-													? 'active-book'
-													: ''
-											}
-										>
-											{book.get('name') || book.get('name_short')}
-										</h4>
-										<ChaptersContainer
-											bookName={book.get('name')}
-											audioType={audioType}
-											bookNameShort={book.get('name_short')}
-											activeTextId={activeTextId}
-											activeChapter={activeChapter}
-											handleChapterClick={this.handleChapterClick}
-											chapters={book.get('chapters')}
-											selectedBookName={selectedBookName}
-											activeBookName={activeBookName}
-											bookId={book.get('book_id')}
-											book={book}
-										/>
-									</div>
-								)),
-						  ]
-						: null}
-					{books.get('AP')
-						? [
-								<div key={'ap_title_key'} className={'testament-title'}>
-									<h3>Apocrypha</h3>
-								</div>,
-								books.get('AP').map((book) => (
-									<div
-										className={'book-button'}
-										ref={
-											(book.get('name') || book.get('name_short')) ===
-											selectedBookName
-												? (el) => this.handleRef(el, 'button')
-												: null
-										}
-										key={(book.get('name') || book.get('name_short')).concat(
-											book.get('book_id'),
-										)}
-										id={(book.get('name') || book.get('name_short')).concat(
-											book.get('book_id'),
-										)}
-										onClick={(e) =>
-											this.handleBookClick(
-												e,
-												book.get('name') || book.get('name_short'),
-											)
-										}
-									>
-										<h4
-											className={
-												(book.get('name') || book.get('name_short')) ===
-												selectedBookName
-													? 'active-book'
-													: ''
-											}
-										>
-											{book.get('name') || book.get('name_short')}
-										</h4>
-										<ChaptersContainer
-											bookName={book.get('name')}
-											audioType={audioType}
-											bookNameShort={book.get('name_short')}
-											activeTextId={activeTextId}
-											activeChapter={activeChapter}
-											handleChapterClick={this.handleChapterClick}
-											chapters={book.get('chapters')}
-											selectedBookName={selectedBookName}
-											activeBookName={activeBookName}
-											bookId={book.get('book_id')}
-											book={book}
-										/>
-									</div>
-								)),
-						  ]
-						: null}
+					{!!books.get('OT') && (
+						<BooksTestament
+							books={books.get('OT')}
+							testamentPrefix={'ot'}
+							testamentTitle={'Old Testament'}
+							selectedBookName={selectedBookName}
+							handleRef={this.handleRef}
+							handleBookClick={this.handleBookClick}
+							handleChapterClick={this.handleChapterClick}
+							audioType={audioType}
+							activeBookName={activeBookName}
+							activeTextId={activeTextId}
+							activeChapter={activeChapter}
+						/>
+					)}
+					{!!books.get('NT') && (
+						<BooksTestament
+							books={books.get('NT')}
+							testamentPrefix={'nt'}
+							testamentTitle={'New Testament'}
+							selectedBookName={selectedBookName}
+							handleRef={this.handleRef}
+							handleBookClick={this.handleBookClick}
+							handleChapterClick={this.handleChapterClick}
+							audioType={audioType}
+							activeBookName={activeBookName}
+							activeTextId={activeTextId}
+							activeChapter={activeChapter}
+						/>
+					)}
+					{!!books.get('AP') && (
+						<BooksTestament
+							books={books.get('AP')}
+							testamentPrefix={'ap'}
+							testamentTitle={'Apocrypha'}
+							selectedBookName={selectedBookName}
+							handleRef={this.handleRef}
+							handleBookClick={this.handleBookClick}
+							handleChapterClick={this.handleChapterClick}
+							audioType={audioType}
+							activeBookName={activeBookName}
+							activeTextId={activeTextId}
+							activeChapter={activeChapter}
+						/>
+					)}
 				</div>
 			</div>
 		);
