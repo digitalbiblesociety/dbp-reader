@@ -1,5 +1,9 @@
 // Has the test variable for if I run the project locally without newrelic
-if (process.env.NODE_ENV === 'production' && process.env.TEST !== 'test') {
+if (
+	(process.env.NODE_ENV === 'production' ||
+		process.env.NODE_ENV === 'staging') &&
+	process.env.TEST !== 'test'
+) {
 	require('newrelic'); // eslint-disable-line
 }
 require('@babel/polyfill');
@@ -21,8 +25,7 @@ const handle = app.getRequestHandler();
 
 const ssrCache = new LRUCache({
 	max: 1000,
-	maxAge:
-		process.env.NODE_ENV === 'production' ? 1000 * 60 * 60 * 24 : 1000 * 60 * 5,
+	maxAge: dev ? 1000 * 60 * 5 : 1000 * 60 * 60 * 24,
 });
 
 async function renderAndCache(req, res, pagePath, queryParams) {
@@ -286,7 +289,11 @@ app
 		// 	});
 		// }
 		server.listen(port, (err) => {
-			if (err && process.env.NODE_ENV === 'production') {
+			if (
+				err &&
+				(process.env.NODE_ENV === 'production' ||
+					process.env.NODE_ENV === 'staging')
+			) {
 				bugsnag.notify(err);
 			}
 			if (err) throw err;
@@ -308,7 +315,7 @@ app
 			'------------------------^_^---*_*--$_$--------------------------------\n',
 			ex,
 		);
-		if (process.env.NODE_ENV === 'production') {
+		if (process.env.NODE_ENV !== 'development') {
 			bugsnag.notify(ex);
 		}
 		/* eslint-enable no-console */

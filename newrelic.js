@@ -5,10 +5,14 @@ require('dotenv').config();
  * See lib/config/default.js in the agent distribution for a more complete
  * description of configuration variables and their potential values.
  */
+/* eslint-disable no-nested-ternary */
 const appName =
-	process.env.NODE_ENV === 'production' && process.env.IS_DEV
-		? process.env.NEWRELIC_DEV_ID
-		: process.env.NEWRELIC_PROD_ID;
+	process.env.NODE_ENV === 'staging'
+		? process.env.NEWRELIC_STAGE_ID
+		: process.env.NODE_ENV === 'production' && process.env.IS_DEV
+			? process.env.NEWRELIC_DEV_ID
+			: process.env.NEWRELIC_PROD_ID;
+/* eslint-enable no-nested-ternary */
 exports.config = {
 	/**
 	 * Array of application names.

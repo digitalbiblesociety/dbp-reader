@@ -52,12 +52,6 @@ class VideoPlayer extends React.PureComponent {
 					bookId: nextProps.bookId || '',
 					chapter: nextProps.chapter,
 				});
-			} else {
-				this.checkForBooks({
-					filesetId: fileset ? fileset.id : '',
-					bookId: nextProps.bookId || '',
-					chapter: nextProps.chapter,
-				});
 			}
 		} else if (
 			nextProps.hasVideo !== this.props.hasVideo &&
@@ -604,7 +598,8 @@ class VideoPlayer extends React.PureComponent {
 					<video
 						ref={this.setVideoRef}
 						onClick={this.handleVideoClick}
-						poster={`${process.env.CDN_STATIC_FILES}/${currentVideo.thumbnail}`}
+						poster={`${process.env.CDN_STATIC_FILES}/${currentVideo.thumbnail ||
+							'mark_mrk_0.jpg'}`}
 					/>
 					<VideoProgressBar
 						paused={paused}
