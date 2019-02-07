@@ -61,7 +61,7 @@ export default class MyDocument extends Document {
 									process.env.NEWRELIC_BROWSER_LICENSE_KEY
 								}",applicationID:"${
 									process.env.NODE_ENV === 'staging'
-										? process.env.NEWRELIC_STAGE_ID
+										? process.env.NEWRELIC_BROWSER_STAGE_ID
 										: process.env.NODE_ENV === 'production' &&
 										  process.env.IS_DEV
 											? process.env.NEWRELIC_BROWSER_DEV_ID
