@@ -13,7 +13,10 @@ const ErrorBounary = bugsnagClient.getPlugin('react');
 class CustomApp extends App {
 	render() {
 		const { Component, pageProps, reduxStore } = this.props;
-		if (process.env.NODE_ENV === 'production') {
+		if (
+			process.env.NODE_ENV === 'production' ||
+			process.env.NODE_ENV === 'staging'
+		) {
 			return (
 				<ErrorBounary FallbackComponent={Error}>
 					<Container>

@@ -23,7 +23,11 @@ import bugsnagClient from '../app/utils/bugsnagClient';
 export default class Error extends React.Component {
 	static async getInitialProps({ res, err }) {
 		const statusCode = res ? res.statusCode : err ? err.statusCode : null; // eslint-disable-line
-		if (err && process.env.NODE_ENV === 'production') {
+		if (
+			err &&
+			(process.env.NODE_ENV === 'production' ||
+				process.env.NODE_ENV === 'staging')
+		) {
 			bugsnagClient.notify(err);
 		}
 

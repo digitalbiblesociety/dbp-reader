@@ -674,7 +674,10 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Caught in getChapterAudio complete audio', error); // eslint-disable-line no-console
 				yield put({ type: 'loadaudio', audioPaths: [''] });
-			} else if (process.env.NODE_ENV === 'production') {
+			} else if (
+				process.env.NODE_ENV === 'production' ||
+				process.env.NODE_ENV === 'staging'
+			) {
 				yield put({ type: 'loadaudio', audioPaths: [''] });
 			}
 		}
@@ -702,7 +705,10 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Caught in getChapterAudio nt audio', error); // eslint-disable-line no-console
 				yield put({ type: 'loadaudio', audioPaths: [''] });
-			} else if (process.env.NODE_ENV === 'production') {
+			} else if (
+				process.env.NODE_ENV === 'production' ||
+				process.env.NODE_ENV === 'staging'
+			) {
 				yield put({ type: 'loadaudio', audioPaths: [''] });
 			}
 		}
@@ -729,7 +735,10 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Caught in getChapterAudio ot audio', error); // eslint-disable-line no-console
 				yield put({ type: 'loadaudio', audioPaths: [''] });
-			} else if (process.env.NODE_ENV === 'production') {
+			} else if (
+				process.env.NODE_ENV === 'production' ||
+				process.env.NODE_ENV === 'staging'
+			) {
 				yield put({ type: 'loadaudio', audioPaths: [''] });
 			}
 		}
@@ -754,7 +763,10 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Caught in getChapterAudio nt audio', error); // eslint-disable-line no-console
 				yield put({ type: 'loadaudio', audioPaths: [''] });
-			} else if (process.env.NODE_ENV === 'production') {
+			} else if (
+				process.env.NODE_ENV === 'production' ||
+				process.env.NODE_ENV === 'staging'
+			) {
 				yield put({ type: 'loadaudio', audioPaths: [''] });
 			}
 		}
@@ -775,7 +787,10 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Caught in getChapterAudio ot audio', error); // eslint-disable-line no-console
 				yield put({ type: 'loadaudio', audioPaths: [''] });
-			} else if (process.env.NODE_ENV === 'production') {
+			} else if (
+				process.env.NODE_ENV === 'production' ||
+				process.env.NODE_ENV === 'staging'
+			) {
 				yield put({ type: 'loadaudio', audioPaths: [''] });
 			}
 		}
@@ -819,7 +834,10 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Caught in getChapterAudio partial audio', error); // eslint-disable-line no-console
 				yield put({ type: 'loadaudio', audioPaths: [''] });
-			} else if (process.env.NODE_ENV === 'production') {
+			} else if (
+				process.env.NODE_ENV === 'production' ||
+				process.env.NODE_ENV === 'staging'
+			) {
 				yield put({ type: 'loadaudio', audioPaths: [''] });
 			}
 		}
@@ -854,7 +872,10 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Caught in getChapterAudio partial audio', error); // eslint-disable-line no-console
 				yield put({ type: 'loadaudio', audioPaths: [''] });
-			} else if (process.env.NODE_ENV === 'production') {
+			} else if (
+				process.env.NODE_ENV === 'production' ||
+				process.env.NODE_ENV === 'staging'
+			) {
 				yield put({ type: 'loadaudio', audioPaths: [''] });
 			}
 		}
@@ -893,7 +914,10 @@ export function* getChapterAudio({ filesets, bookId, chapter }) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Caught in getChapterAudio partial audio', error); // eslint-disable-line no-console
 				yield put({ type: 'loadaudio', audioPaths: [''] });
-			} else if (process.env.NODE_ENV === 'production') {
+			} else if (
+				process.env.NODE_ENV === 'production' ||
+				process.env.NODE_ENV === 'staging'
+			) {
 				yield put({ type: 'loadaudio', audioPaths: [''] });
 			}
 		}
