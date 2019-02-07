@@ -15,12 +15,12 @@ Array [
     onClick={[Function]}
   >
     <h4
-      className=""
+      className="active-book"
     >
       Genesis
     </h4>
     <span
-      className="chapter-container inactive-book-chapters"
+      className="chapter-container active-book-chapters"
     >
       <a
         className="chapter-box"
