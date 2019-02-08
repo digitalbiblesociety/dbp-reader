@@ -14,6 +14,7 @@ import LoadingSpinner from '../LoadingSpinner';
 import VersionListSection from '../VersionListSection';
 import messages from './messages';
 import { selectActiveChapter, selectActiveBookId } from './selectors';
+import { changeVersion } from '../../containers/HomePage/actions';
 
 class VersionList extends React.PureComponent {
 	get filteredVersionList() {
@@ -134,13 +135,22 @@ class VersionList extends React.PureComponent {
 	};
 
 	handleVersionListClick = (bible, audioType) => {
-		const { toggleTextSelection, setActiveText } = this.props;
+		const { toggleTextSelection, setActiveText, activeTextId } = this.props;
+
+		console.log(
+			'abbr',
+			bible.get('abbr').toLowerCase(),
+			'active text',
+			activeTextId.toLowerCase(),
+		);
+		if (bible.get('abbr').toLowerCase() !== activeTextId.toLowerCase()) {
+			this.props.dispatch(changeVersion({ state: true }));
+		}
 
 		if (bible) {
 			const filesets = bible
 				.get('filesets')
 				.filter((f) => f.get('type') !== 'app');
-
 			if (audioType) {
 				if (
 					typeof window !== 'undefined' &&

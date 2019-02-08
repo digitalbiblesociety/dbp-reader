@@ -630,6 +630,7 @@ AppContainer.getInitialProps = async (context) => {
 				// userSettings,
 				formattedSource: initData.formattedText,
 				activeFilesets: filesets,
+				changingVersion: false,
 				books: bookData || [],
 				activeChapter: parseInt(chapter, 10) >= 0 ? parseInt(chapter, 10) : 1,
 				activeBookName,

@@ -41,6 +41,7 @@ import {
 	DELETE_HIGHLIGHTS,
 	CREATE_USER_WITH_SOCIAL_ACCOUNT,
 	RESET_BOOKMARK_STATE,
+	CHANGING_VERSION,
 } from './constants';
 
 export const resetBookmarkState = (props) => ({
@@ -204,4 +205,9 @@ export const setActiveChapter = (chapter) => ({
 export const setActiveNotesView = (view) => ({
 	type: SET_ACTIVE_NOTES_VIEW,
 	view,
+});
+
+export const changeVersion = (props) => ({
+	type: CHANGING_VERSION,
+	...props,
 });

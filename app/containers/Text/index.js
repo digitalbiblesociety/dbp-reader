@@ -78,10 +78,16 @@ class Text extends React.PureComponent {
 			videoPlayerOpen,
 			hasVideo,
 			audioType,
+			changingVersion,
 		} = this.props;
 		const { loadingNextPage } = this.state;
 
-		if (loadingNewChapterText || chapterTextLoadingState || loadingNextPage) {
+		if (
+			loadingNewChapterText ||
+			chapterTextLoadingState ||
+			loadingNextPage ||
+			changingVersion
+		) {
 			return (
 				<div
 					className={getClassNameForTextContainer({
@@ -162,8 +168,9 @@ Text.propTypes = {
 	hasVideo: PropTypes.bool,
 	menuIsOpen: PropTypes.bool,
 	subFooterOpen: PropTypes.bool,
-	isScrollingDown: PropTypes.bool,
 	videoPlayerOpen: PropTypes.bool,
+	changingVersion: PropTypes.bool,
+	isScrollingDown: PropTypes.bool,
 	audioPlayerState: PropTypes.bool,
 	loadingNewChapterText: PropTypes.bool,
 	chapterTextLoadingState: PropTypes.bool,

@@ -55,6 +55,7 @@ import {
 	setChapterTextLoadingState,
 	resetBookmarkState,
 	initApplication,
+	changeVersion,
 } from './actions';
 import makeSelectHomePage, {
 	selectSettings,
@@ -144,6 +145,11 @@ class HomePage extends React.PureComponent {
 					},
 				}),
 			);
+		}
+
+		if (this.props.homepage.changingVersion) {
+			console.log('false home');
+			this.props.dispatch(changeVersion({ state: false }));
 		}
 
 		if (this.props.homepage.match.params.token) {
@@ -540,6 +546,7 @@ class HomePage extends React.PureComponent {
 			loadingAudio,
 			loadingNewChapterText,
 			chapterTextLoadingState,
+			changingVersion,
 			videoPlayerOpen,
 			hasVideo,
 		} = this.props.homepage;
@@ -605,6 +612,7 @@ class HomePage extends React.PureComponent {
 						activeBookId={activeBookId}
 						loadingAudio={loadingAudio}
 						activeChapter={activeChapter}
+						changingVersion={changingVersion}
 						videoPlayerOpen={videoPlayerOpen}
 						isScrollingDown={isScrollingDown}
 						audioPlayerState={audioPlayerState}
