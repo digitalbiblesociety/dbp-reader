@@ -64,7 +64,6 @@ import makeSelectVerses, {
 	selectUserAuthenticated,
 	selectNotesMenuState,
 	selectTextDirection,
-	selectAudioSource,
 } from './selectors';
 import { selectUserNotes, selectFormattedSource } from '../HomePage/selectors';
 import FormattedText from '../../components/FormattedText';
@@ -517,7 +516,6 @@ export class Verses extends React.PureComponent {
 			textDirection,
 			verseNumber,
 			menuIsOpen,
-			audioSource,
 			highlights,
 			activeBookId,
 			activeBookName,
@@ -669,7 +667,6 @@ Verses.propTypes = {
 	verseNumber: PropTypes.string,
 	notesActive: PropTypes.bool,
 	textDirection: PropTypes.string,
-	audioSource: PropTypes.string,
 	// Settings
 	userSettings: PropTypes.object,
 	// Profile
@@ -690,7 +687,6 @@ const mapStateToProps = createStructuredSelector({
 	verseNumber: selectVerseNumber(),
 	notesActive: selectNotesMenuState(),
 	textDirection: selectTextDirection(),
-	audioSource: selectAudioSource(),
 	formattedSource: selectFormattedSource(),
 	userSettings: selectUserSettings(),
 	userAuthenticated: selectUserAuthenticated(),

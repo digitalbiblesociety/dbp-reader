@@ -30,8 +30,6 @@ const selectNotesMenuState = () =>
 	);
 const selectTextDirection = () =>
 	createSelector(selectHomePageDomain, (home) => home.get('textDirection'));
-const selectAudioSource = () =>
-	createSelector(selectHomePageDomain, (home) => home.get('audioSource'));
 // Settings State
 const selectUserSettings = () =>
 	createSelector(selectSettingsDomain, (settings) =>
@@ -63,7 +61,6 @@ export {
 	selectVerseNumber,
 	selectNotesMenuState,
 	selectTextDirection,
-	selectAudioSource,
 	// Settings
 	selectUserSettings,
 	// Profile

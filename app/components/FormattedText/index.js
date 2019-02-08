@@ -296,7 +296,7 @@ class FormattedText extends React.PureComponent {
 			handleNoteClick,
 		} = this.props;
 		const domMethodsAvailable = this.state;
-		console.log('rendered formatted text');
+
 		const initialFormattedSource = JSON.parse(
 			JSON.stringify(initialFormattedSourceFromProps),
 		);

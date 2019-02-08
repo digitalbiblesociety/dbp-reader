@@ -28,13 +28,8 @@ const selectActiveNotesView = () =>
 	createSelector(selectNotes, (notes) => notes.get('activeChild'));
 const selectUserNotes = () =>
 	createDeepEqualSelector(
-		[
-			selectNotes,
-			selectHomePageDomain,
-			selectProfilePageDomain,
-			selectSettingsDomain,
-		],
-		(notes, home, profile, settings) => {
+		[selectNotes, selectHomePageDomain, selectProfilePageDomain],
+		(notes, home, profile) => {
 			const activeTextId = home.get('activeTextId');
 			const bookId = home.get('activeBookId');
 			const chapter = home.get('activeChapter');
