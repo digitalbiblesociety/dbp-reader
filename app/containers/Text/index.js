@@ -82,12 +82,7 @@ class Text extends React.PureComponent {
 		} = this.props;
 		const { loadingNextPage } = this.state;
 
-		if (
-			loadingNewChapterText ||
-			loadingAudio ||
-			chapterTextLoadingState ||
-			loadingNextPage
-		) {
+		if (loadingNewChapterText || chapterTextLoadingState || loadingNextPage) {
 			return (
 				<div
 					className={getClassNameForTextContainer({

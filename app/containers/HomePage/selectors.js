@@ -66,23 +66,7 @@ const selectUserNotes = () =>
 				? filteredNotes.toJS()
 				: filteredNotes;
 
-			if (
-				!text ||
-				(home.get('formattedSource') &&
-					!settings.getIn([
-						'userSettings',
-						'toggleOptions',
-						'readersMode',
-						'active',
-					]) &&
-					!settings.getIn([
-						'userSettings',
-						'toggleOptions',
-						'oneVersePerLine',
-						'active',
-					]) &&
-					home.get('formattedSource').slice(0, 5) !== '<?xml')
-			) {
+			if (!text) {
 				return {
 					text: [],
 					userNotes,
