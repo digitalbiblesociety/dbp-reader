@@ -137,12 +137,6 @@ class VersionList extends React.PureComponent {
 	handleVersionListClick = (bible, audioType) => {
 		const { toggleTextSelection, setActiveText, activeTextId } = this.props;
 
-		console.log(
-			'abbr',
-			bible.get('abbr').toLowerCase(),
-			'active text',
-			activeTextId.toLowerCase(),
-		);
 		if (bible.get('abbr').toLowerCase() !== activeTextId.toLowerCase()) {
 			this.props.dispatch(changeVersion({ state: true }));
 		}
@@ -202,6 +196,7 @@ class VersionList extends React.PureComponent {
 
 VersionList.propTypes = {
 	bibles: PropTypes.object,
+	dispatch: PropTypes.func,
 	setActiveText: PropTypes.func,
 	toggleTextSelection: PropTypes.func,
 	activeTextId: PropTypes.string,

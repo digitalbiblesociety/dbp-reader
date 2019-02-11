@@ -148,7 +148,6 @@ class HomePage extends React.PureComponent {
 		}
 
 		if (this.props.homepage.changingVersion) {
-			console.log('false home');
 			this.props.dispatch(changeVersion({ state: false }));
 		}
 

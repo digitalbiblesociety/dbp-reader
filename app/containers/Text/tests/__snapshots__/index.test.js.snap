@@ -1,0 +1,255 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Text /> Should match previous snapshot with all options true 1`] = `
+<div
+  className="text-container scrolled-down video-player-open has-video"
+>
+  <div
+    className="loading-spinner"
+  >
+    <span
+      className="loading-spinner1 loading-spinner-child"
+    />
+    <span
+      className="loading-spinner2 loading-spinner-child"
+    />
+    <span
+      className="loading-spinner3 loading-spinner-child"
+    />
+    <span
+      className="loading-spinner4 loading-spinner-child"
+    />
+    <span
+      className="loading-spinner5 loading-spinner-child"
+    />
+    <span
+      className="loading-spinner6 loading-spinner-child"
+    />
+    <span
+      className="loading-spinner7 loading-spinner-child"
+    />
+    <span
+      className="loading-spinner8 loading-spinner-child"
+    />
+    <span
+      className="loading-spinner9 loading-spinner-child"
+    />
+    <span
+      className="loading-spinner10 loading-spinner-child"
+    />
+    <span
+      className="loading-spinner11 loading-spinner-child"
+    />
+    <span
+      className="loading-spinner12 loading-spinner-child"
+    />
+  </div>
+</div>
+`;
+
+exports[`<Text /> Should match previous snapshot with audioPlayerState true 1`] = `
+<div
+  className="text-container audio-player-open"
+  id="text-container-parent"
+>
+  <div
+    className="main-wrapper"
+  />
+</div>
+`;
+
+exports[`<Text /> Should match previous snapshot with changingVersion true 1`] = `
+<div
+  className="text-container"
+>
+  <div
+    className="loading-spinner"
+  >
+    <span
+      className="loading-spinner1 loading-spinner-child"
+    />
+    <span
+      className="loading-spinner2 loading-spinner-child"
+    />
+    <span
+      className="loading-spinner3 loading-spinner-child"
+    />
+    <span
+      className="loading-spinner4 loading-spinner-child"
+    />
+    <span
+      className="loading-spinner5 loading-spinner-child"
+    />
+    <span
+      className="loading-spinner6 loading-spinner-child"
+    />
+    <span
+      className="loading-spinner7 loading-spinner-child"
+    />
+    <span
+      className="loading-spinner8 loading-spinner-child"
+    />
+    <span
+      className="loading-spinner9 loading-spinner-child"
+    />
+    <span
+      className="loading-spinner10 loading-spinner-child"
+    />
+    <span
+      className="loading-spinner11 loading-spinner-child"
+    />
+    <span
+      className="loading-spinner12 loading-spinner-child"
+    />
+  </div>
+</div>
+`;
+
+exports[`<Text /> Should match previous snapshot with chapterTextLoadingState true 1`] = `
+<div
+  className="text-container"
+>
+  <div
+    className="loading-spinner"
+  >
+    <span
+      className="loading-spinner1 loading-spinner-child"
+    />
+    <span
+      className="loading-spinner2 loading-spinner-child"
+    />
+    <span
+      className="loading-spinner3 loading-spinner-child"
+    />
+    <span
+      className="loading-spinner4 loading-spinner-child"
+    />
+    <span
+      className="loading-spinner5 loading-spinner-child"
+    />
+    <span
+      className="loading-spinner6 loading-spinner-child"
+    />
+    <span
+      className="loading-spinner7 loading-spinner-child"
+    />
+    <span
+      className="loading-spinner8 loading-spinner-child"
+    />
+    <span
+      className="loading-spinner9 loading-spinner-child"
+    />
+    <span
+      className="loading-spinner10 loading-spinner-child"
+    />
+    <span
+      className="loading-spinner11 loading-spinner-child"
+    />
+    <span
+      className="loading-spinner12 loading-spinner-child"
+    />
+  </div>
+</div>
+`;
+
+exports[`<Text /> Should match previous snapshot with hasVideo true 1`] = `
+<div
+  className="text-container has-video"
+  id="text-container-parent"
+>
+  <div
+    className="main-wrapper"
+  />
+</div>
+`;
+
+exports[`<Text /> Should match previous snapshot with loadingNewChapterText true 1`] = `
+<div
+  className="text-container"
+>
+  <div
+    className="loading-spinner"
+  >
+    <span
+      className="loading-spinner1 loading-spinner-child"
+    />
+    <span
+      className="loading-spinner2 loading-spinner-child"
+    />
+    <span
+      className="loading-spinner3 loading-spinner-child"
+    />
+    <span
+      className="loading-spinner4 loading-spinner-child"
+    />
+    <span
+      className="loading-spinner5 loading-spinner-child"
+    />
+    <span
+      className="loading-spinner6 loading-spinner-child"
+    />
+    <span
+      className="loading-spinner7 loading-spinner-child"
+    />
+    <span
+      className="loading-spinner8 loading-spinner-child"
+    />
+    <span
+      className="loading-spinner9 loading-spinner-child"
+    />
+    <span
+      className="loading-spinner10 loading-spinner-child"
+    />
+    <span
+      className="loading-spinner11 loading-spinner-child"
+    />
+    <span
+      className="loading-spinner12 loading-spinner-child"
+    />
+  </div>
+</div>
+`;
+
+exports[`<Text /> Should match previous snapshot with menuIsOpen true 1`] = `
+<div
+  className="text-container"
+  id="text-container-parent"
+>
+  <div
+    className="main-wrapper"
+  />
+</div>
+`;
+
+exports[`<Text /> Should match previous snapshot with no options true 1`] = `
+<div
+  className="text-container"
+  id="text-container-parent"
+>
+  <div
+    className="main-wrapper"
+  />
+</div>
+`;
+
+exports[`<Text /> Should match previous snapshot with subFooterOpen true 1`] = `
+<div
+  className="text-container sub-footer-open"
+  id="text-container-parent"
+>
+  <div
+    className="main-wrapper"
+  />
+</div>
+`;
+
+exports[`<Text /> Should match previous snapshot with videoPlayerOpen true 1`] = `
+<div
+  className="text-container"
+  id="text-container-parent"
+>
+  <div
+    className="main-wrapper"
+  />
+</div>
+`;

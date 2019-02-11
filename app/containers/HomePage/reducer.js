@@ -130,7 +130,6 @@ function homePageReducer(state = initialState, action) {
 		case OPEN_VIDEO_PLAYER:
 			return state.set('videoPlayerOpen', true);
 		case CHANGING_VERSION:
-			console.log('changing version', action.state);
 			return state.set('changingVersion', action.state);
 		case CLOSE_VIDEO_PLAYER:
 			return state.set('videoPlayerOpen', false);
