@@ -40,7 +40,6 @@ import {
 	getHighlights,
 	getCopyrights,
 	toggleProfile,
-	toggleAutoPlay,
 	toggleNotesModal,
 	toggleSearchModal,
 	toggleSettingsModal,
@@ -51,7 +50,6 @@ import {
 	setActiveTextId,
 	setActiveChapter,
 	setActiveBookName,
-	setAudioPlayerState,
 	setChapterTextLoadingState,
 	resetBookmarkState,
 	initApplication,
@@ -382,9 +380,6 @@ class HomePage extends React.PureComponent {
 
 	setActiveNote = ({ note }) => this.props.dispatch(setActiveNote({ note }));
 
-	setAudioPlayerState = (state) =>
-		this.props.dispatch(setAudioPlayerState(state));
-
 	handleMenuTimer = (menu) => {
 		if (menu === 'profile') {
 			this.props.dispatch(toggleProfile());
@@ -439,10 +434,6 @@ class HomePage extends React.PureComponent {
 	toggleFirstLoadForTextSelection = () =>
 		this.props.homepage.firstLoad &&
 		this.props.dispatch(toggleFirstLoadForTextSelection());
-
-	toggleAutoPlay = (props) => {
-		this.props.dispatch(toggleAutoPlay(props));
-	};
 
 	toggleProfile = () => {
 		if (this.isMenuOpen('profile')) {
@@ -524,8 +515,6 @@ class HomePage extends React.PureComponent {
 
 	render() {
 		const {
-			audioPaths,
-			audioSource,
 			activeBookId,
 			activeTextId,
 			activeChapter,
@@ -560,7 +549,6 @@ class HomePage extends React.PureComponent {
 			activeNotesView,
 		} = this.props;
 
-		const autoPlayEnabled = userSettings.get('autoPlayEnabled');
 		const { isScrollingDown } = this.state;
 		const { text: updatedText } = this.props.textData;
 		const token = this.props.homepage.match.params.token || '';
@@ -672,28 +660,7 @@ class HomePage extends React.PureComponent {
 						</FadeTransition>
 					) : null}
 				</TransitionGroup>
-				<AudioPlayer
-					books={books}
-					text={updatedText}
-					verseNumber={verse}
-					hasVideo={hasVideo}
-					audioType={audioType}
-					audioPaths={audioPaths}
-					audioSource={audioSource}
-					autoPlay={autoPlayEnabled}
-					activeTextId={activeTextId}
-					activeBookId={activeBookId}
-					activeChapter={activeChapter}
-					activeFilesets={activeFilesets}
-					initialVolume={initialVolume}
-					isScrollingDown={isScrollingDown}
-					videoPlayerOpen={videoPlayerOpen}
-					audioPlayerState={audioPlayerState}
-					toggleAutoPlay={this.toggleAutoPlay}
-					initialPlaybackRate={initialPlaybackRate}
-					setAudioPlayerState={this.setAudioPlayerState}
-					loadingNewChapterText={loadingNewChapterText}
-				/>
+				<AudioPlayer verseNumber={verse} audioType={audioType} />
 				<Footer
 					profileActive={isProfileActive}
 					searchActive={isSearchModalActive}

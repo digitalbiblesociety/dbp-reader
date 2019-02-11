@@ -18,12 +18,20 @@ import SvgWrapper from '../../components/SvgWrapper';
 import SpeedControl from '../../components/SpeedControl';
 import AudioProgressBar from '../../components/AudioProgressBar';
 import VolumeSlider from '../../components/VolumeSlider';
-import makeSelectAudioPlayer, { selectHasAudio } from './selectors';
+import makeSelectAudioPlayer, {
+	selectorGenerator,
+	selectAutoPlay,
+	selectPlaybackRate,
+	selectVolume,
+} from './selectors';
+import { selectUserNotes } from '../HomePage/selectors';
+import { setAudioPlayerState, toggleAutoPlay } from '../HomePage/actions';
 import reducer from './reducer';
 import messages from './messages';
 import getNextChapterUrl from '../../utils/getNextChapterUrl';
 import getPreviousChapterUrl from '../../utils/getPreviousChapterUrl';
 import getAudioAsyncCall from '../../utils/getAudioAsyncCall';
+import { setPlaybackRate, setVolume } from './actions';
 /* eslint-disable jsx-a11y/media-has-caption */
 /* disabled the above eslint config options because you can't add tracks to audio elements */
 
@@ -38,11 +46,8 @@ export class AudioPlayer extends React.Component {
 			speedControlState: false,
 			volumeSliderState: false,
 			elipsisState: false,
-			volume: props.initialVolume || 1,
 			duration: 0,
 			currentTime: 0,
-			currentSpeed: props.initialPlaybackRate || 1,
-			autoPlayChecked: props.autoPlay,
 			nextTrack: {
 				index: 0,
 				path: props.audioPaths[0],
@@ -52,6 +57,7 @@ export class AudioPlayer extends React.Component {
 	}
 
 	componentDidMount() {
+		console.log('this.props', this.props);
 		if (this.props.audioPaths.length) {
 			this.props.audioPaths.forEach((path) => this.preLoadPath(path));
 		}
@@ -68,7 +74,7 @@ export class AudioPlayer extends React.Component {
 				this.audioRef.addEventListener('canplay', this.autoPlayListener);
 			}
 		}
-		this.audioRef.playbackRate = this.state.currentSpeed;
+		this.audioRef.playbackRate = this.props.playbackRate;
 		// Add all the event listeners I need for the audio player
 		this.audioRef.addEventListener(
 			'durationchange',
@@ -125,7 +131,7 @@ export class AudioPlayer extends React.Component {
 				this.setState({ playing: false, loadingNextChapter: false });
 			} else if (this.props.audioPlayerState && !nextProps.audioSource) {
 				this.setState({ playing: false }, () =>
-					this.props.setAudioPlayerState(false),
+					this.setAudioPlayerState(false),
 				);
 			}
 		}
@@ -140,7 +146,6 @@ export class AudioPlayer extends React.Component {
 			} else {
 				this.audioRef.addEventListener('canplay', this.autoPlayListener);
 			}
-			this.setState({ autoPlayChecked: nextProps.autoPlay });
 		} else if (!nextProps.autoPlay) {
 			if (
 				navigator &&
@@ -174,12 +179,12 @@ export class AudioPlayer extends React.Component {
 	componentDidUpdate() {
 		// Ensure that the player volume and state volume stay in sync
 		if (this.audioRef) {
-			if (this.audioRef.volume !== this.state.volume) {
-				this.audioRef.volume = this.state.volume;
+			if (this.audioRef.volume !== this.props.volume) {
+				this.audioRef.volume = this.props.volume;
 			}
 			// Ensure that the player playback rate and state playback rate stay in sync
-			if (this.audioRef.playbackRate !== this.state.currentSpeed) {
-				this.audioRef.playbackRate = this.state.currentSpeed;
+			if (this.audioRef.playbackRate !== this.props.playbackRate) {
+				this.audioRef.playbackRate = this.props.playbackRate;
 			}
 		}
 	}
@@ -244,6 +249,9 @@ export class AudioPlayer extends React.Component {
 			elipsisState: state,
 		});
 
+	setAudioPlayerState = (state) =>
+		this.props.dispatch(setAudioPlayerState(state));
+
 	getAudio = async (filesets, bookId, chapter, audioType) => {
 		const audio = await getAudioAsyncCall(filesets, bookId, chapter, audioType);
 		this.props.dispatch({ type: 'loadaudio', ...audio });
@@ -277,12 +285,10 @@ export class AudioPlayer extends React.Component {
 	};
 
 	updateVolume = (volume) => {
-		if (volume !== this.state.volume) {
+		if (volume !== this.props.volume) {
 			document.cookie = `bible_is_volume=${volume};path=/`;
 			this.audioRef.volume = volume;
-			this.setState({
-				volume,
-			});
+			this.props.dispatch(setVolume({ value: volume }));
 		}
 	};
 
@@ -410,12 +416,11 @@ export class AudioPlayer extends React.Component {
 	};
 
 	updatePlayerSpeed = (rate) => {
-		if (this.state.currentSpeed !== rate) {
+		if (this.props.playbackRate !== rate) {
 			document.cookie = `bible_is_playbackrate=${JSON.stringify(rate)};path=/`;
 			this.audioRef.playbackRate = rate;
-			this.setState({
-				currentSpeed: rate,
-			});
+			// set playback
+			this.props.dispatch(setPlaybackRate({ value: rate }));
 		}
 	};
 
@@ -435,7 +440,7 @@ export class AudioPlayer extends React.Component {
 						bookId: this.props.activeBookId.toLowerCase(),
 						textId: this.props.activeTextId.toLowerCase(),
 						verseNumber: this.props.verseNumber,
-						text: this.props.text,
+						text: this.props.textData.text,
 						isHref: true,
 					}),
 					getNextChapterUrl({
@@ -444,7 +449,7 @@ export class AudioPlayer extends React.Component {
 						bookId: this.props.activeBookId.toLowerCase(),
 						textId: this.props.activeTextId.toLowerCase(),
 						verseNumber: this.props.verseNumber,
-						text: this.props.text,
+						text: this.props.textData.text,
 						isHref: false,
 					}),
 				);
@@ -454,13 +459,12 @@ export class AudioPlayer extends React.Component {
 
 	toggleAudioPlayer = () => {
 		if (this.props.audioSource && this.props.hasAudio) {
-			this.props.setAudioPlayerState(!this.props.audioPlayerState);
+			this.setAudioPlayerState(!this.props.audioPlayerState);
 		}
 	};
 
 	handleAutoPlayChange = (e) => {
-		this.setState({ autoPlayChecked: e.target.checked });
-		this.props.toggleAutoPlay({ state: e.target.checked });
+		this.props.dispatch(toggleAutoPlay({ state: e.target.checked }));
 	};
 
 	// Simpler to close all modals than to try and figure out which one to close
@@ -482,21 +486,21 @@ export class AudioPlayer extends React.Component {
 		}
 	};
 
-	get currentSpeedSvg() {
-		const { currentSpeed } = this.state;
+	get playbackRateSvg() {
+		const { playbackRate } = this.props;
 
 		// If speed came from cookie it is stored as a string since there is not a parse float
-		if (currentSpeed === 0.75) {
+		if (playbackRate === 0.75) {
 			return (
 				<SvgWrapper className={'icon'} fill="#fff" svgid="playback_0.75x" />
 			);
-		} else if (currentSpeed === 1) {
+		} else if (playbackRate === 1) {
 			return <SvgWrapper className={'icon'} fill="#fff" svgid="playback_1x" />;
-		} else if (currentSpeed === 1.25) {
+		} else if (playbackRate === 1.25) {
 			return (
 				<SvgWrapper className={'icon'} fill="#fff" svgid="playback_1.25x" />
 			);
-		} else if (currentSpeed === 1.5) {
+		} else if (playbackRate === 1.5) {
 			return (
 				<SvgWrapper className={'icon'} fill="#fff" svgid="playback_1.5x" />
 			);
@@ -621,9 +625,11 @@ export class AudioPlayer extends React.Component {
 			videoPlayerOpen,
 			hasVideo,
 			audioType,
+			autoPlay,
+			volume,
+			playbackRate,
 		} = this.props;
-		const { autoPlayChecked, currentSpeed } = this.state;
-
+		console.log('volume', volume);
 		return (
 			<>
 				<div
@@ -667,7 +673,7 @@ export class AudioPlayer extends React.Component {
 								bookId: this.props.activeBookId.toLowerCase(),
 								textId: this.props.activeTextId.toLowerCase(),
 								verseNumber: this.props.verseNumber,
-								text: this.props.text,
+								text: this.props.textData.text,
 								isHref: false,
 								audioType,
 							})}
@@ -677,7 +683,7 @@ export class AudioPlayer extends React.Component {
 								bookId: this.props.activeBookId.toLowerCase(),
 								textId: this.props.activeTextId.toLowerCase(),
 								verseNumber: this.props.verseNumber,
-								text: this.props.text,
+								text: this.props.textData.text,
 								isHref: true,
 								audioType,
 							})}
@@ -692,7 +698,7 @@ export class AudioPlayer extends React.Component {
 								bookId: this.props.activeBookId.toLowerCase(),
 								textId: this.props.activeTextId.toLowerCase(),
 								verseNumber: this.props.verseNumber,
-								text: this.props.text,
+								text: this.props.textData.text,
 								isHref: false,
 								audioType,
 							})}
@@ -702,7 +708,7 @@ export class AudioPlayer extends React.Component {
 								bookId: this.props.activeBookId.toLowerCase(),
 								textId: this.props.activeTextId.toLowerCase(),
 								verseNumber: this.props.verseNumber,
-								text: this.props.text,
+								text: this.props.textData.text,
 								isHref: true,
 								audioType,
 							})}
@@ -724,7 +730,7 @@ export class AudioPlayer extends React.Component {
 								className={'custom-checkbox'}
 								type="checkbox"
 								onChange={this.handleAutoPlayChange}
-								defaultChecked={autoPlayChecked}
+								defaultChecked={autoPlay}
 							/>
 							<label htmlFor={'autoplay'}>
 								<FormattedMessage {...messages.autoplay} />
@@ -753,14 +759,14 @@ export class AudioPlayer extends React.Component {
 									this.setElipsisState(false);
 								}}
 							>
-								{this.getVolumeSvg(this.state.volume)}
+								{this.getVolumeSvg(volume)}
 								<FormattedMessage {...messages.volume} />
 							</div>
 							<VolumeSlider
 								active={this.state.volumeSliderState}
 								onCloseFunction={this.closeModals}
 								updateVolume={this.updateVolume}
-								volume={this.state.volume}
+								volume={volume}
 							/>
 						</div>
 						<div id="speed-wrap" className={'icon-wrap'}>
@@ -786,7 +792,7 @@ export class AudioPlayer extends React.Component {
 									this.setVolumeSliderState(false);
 								}}
 							>
-								{this.currentSpeedSvg}
+								{this.playbackRateSvg}
 								<FormattedMessage {...messages.speed} />
 							</div>
 							<SpeedControl
@@ -794,7 +800,7 @@ export class AudioPlayer extends React.Component {
 								options={[0.75, 1, 1.25, 1.5, 2]}
 								onCloseFunction={this.closeModals}
 								setSpeed={this.updatePlayerSpeed}
-								currentSpeed={currentSpeed}
+								playbackRate={playbackRate}
 							/>
 						</div>
 					</div>
@@ -810,35 +816,48 @@ export class AudioPlayer extends React.Component {
 }
 
 AudioPlayer.propTypes = {
+	textData: PropTypes.object,
 	audioSource: PropTypes.string,
 	audioType: PropTypes.string,
-	audioPaths: PropTypes.array,
-	activeFilesets: PropTypes.array,
-	setAudioPlayerState: PropTypes.func.isRequired,
+	activeBookId: PropTypes.string,
+	activeTextId: PropTypes.string,
+	verseNumber: PropTypes.string,
 	dispatch: PropTypes.func,
-	toggleAutoPlay: PropTypes.func,
 	hasAudio: PropTypes.bool,
 	hasVideo: PropTypes.bool,
 	autoPlay: PropTypes.bool,
 	videoPlayerOpen: PropTypes.bool,
 	isScrollingDown: PropTypes.bool,
 	audioPlayerState: PropTypes.bool.isRequired,
+	audioPaths: PropTypes.array,
+	activeFilesets: PropTypes.array,
 	books: PropTypes.array,
-	text: PropTypes.array,
-	activeBookId: PropTypes.string,
-	activeTextId: PropTypes.string,
-	verseNumber: PropTypes.string,
 	activeChapter: PropTypes.number,
-	initialPlaybackRate: PropTypes.oneOfType([
-		PropTypes.number,
-		PropTypes.string,
-	]),
-	initialVolume: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+	playbackRate: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+	volume: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
 const mapStateToProps = createStructuredSelector({
+	// Audio Domain
 	audioplayer: makeSelectAudioPlayer(),
-	hasAudio: selectHasAudio(),
+	// Settings Domain
+	autoPlay: selectAutoPlay(),
+	playbackRate: selectPlaybackRate(),
+	volume: selectVolume(),
+	// Homepage Domain
+	books: selectorGenerator('books', 'homepage'),
+	hasAudio: selectorGenerator('hasAudio', 'homepage'),
+	hasVideo: selectorGenerator('hasVideo', 'homepage'),
+	audioSource: selectorGenerator('audioSource', 'homepage'),
+	audioPaths: selectorGenerator('audioPaths', 'homepage'),
+	activeFilesets: selectorGenerator('activeFilesets', 'homepage'),
+	videoPlayerOpen: selectorGenerator('videoPlayerOpen', 'homepage'),
+	audioPlayerState: selectorGenerator('audioPlayerState', 'homepage'),
+	activeBookId: selectorGenerator('activeBookId', 'homepage'),
+	activeTextId: selectorGenerator('activeTextId', 'homepage'),
+	activeChapter: selectorGenerator('activeChapter', 'homepage'),
+	// Other Selectors
+	textData: selectUserNotes(),
 });
 
 function mapDispatchToProps(dispatch) {

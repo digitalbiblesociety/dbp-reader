@@ -1,23 +1,51 @@
 import { createSelector } from 'reselect';
 
+const toJs = (state) =>
+	typeof state.toJS === 'function' ? state.toJS() : state;
 /**
  * Direct selector to the audioPlayer state domain
  */
-const selectAudioPlayerDomain = (state) => state.get('audioPlayer');
-const selectHomepageDomain = (state) => state.get('homepage');
+const selectDefaultDomain = (state) => state.get('audioPlayer');
 
 /**
  * Other specific selectors
  */
-const selectHasAudio = () =>
-	createSelector(selectHomepageDomain, (home) => home.get('hasAudio'));
+const selectorGenerator = (key, domain) =>
+	domain
+		? createSelector(
+				(state) => state.get(domain),
+				(selectedState) => toJs(selectedState.get(key)),
+		  )
+		: createSelector(selectDefaultDomain, (audio) => toJs(audio.get(key)));
 
+const selectAutoPlay = () =>
+	createSelector(
+		(state) => state.get('settings'),
+		(settings) => settings.getIn(['userSettings', 'autoPlayEnabled']),
+	);
+
+const selectPlaybackRate = () =>
+	createSelector(
+		(state) => state.get('settings'),
+		(settings) => settings.getIn(['userSettings', 'playbackRate']),
+	);
+const selectVolume = () =>
+	createSelector(
+		(state) => state.get('settings'),
+		(settings) => settings.getIn(['userSettings', 'volume']),
+	);
 /**
  * Default selector used by AudioPlayer
  */
 
 const makeSelectAudioPlayer = () =>
-	createSelector(selectAudioPlayerDomain, (substate) => substate.toJS());
+	createSelector(selectDefaultDomain, (substate) => substate.toJS());
 
 export default makeSelectAudioPlayer;
-export { selectAudioPlayerDomain, selectHasAudio };
+export {
+	selectDefaultDomain,
+	selectorGenerator,
+	selectAutoPlay,
+	selectPlaybackRate,
+	selectVolume,
+};

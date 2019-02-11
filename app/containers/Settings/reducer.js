@@ -14,6 +14,7 @@ import {
 	TOGGLE_AUTOPLAY,
 } from './constants';
 import { ACTIVE_TEXT_ID } from '../HomePage/constants';
+import { SET_VOLUME, SET_PLAYBACK_RATE } from '../AudioPlayer/constants';
 
 const initialState = fromJS({
 	userSettings: {
@@ -52,12 +53,19 @@ const initialState = fromJS({
 				available: false,
 			},
 		},
+		// Audio related
 		autoPlayEnabled: false,
+		volume: 1,
+		playbackRate: 1,
 	},
 });
 
 function settingsReducer(state = initialState, action) {
 	switch (action.type) {
+		case SET_VOLUME:
+			return state.setIn(['userSettings', 'volume'], action.value);
+		case SET_PLAYBACK_RATE:
+			return state.setIn(['userSettings', 'playbackRate'], action.value);
 		case ACTIVE_TEXT_ID:
 			return state.setIn(['userSettings', 'autoPlayEnabled'], false);
 		case UPDATE_THEME:
@@ -115,6 +123,7 @@ function settingsReducer(state = initialState, action) {
 					action.crossReferences,
 				);
 		case 'persist/REHYDRATE':
+			console.log('persist is running', state);
 			if (
 				action.payload.settings &&
 				typeof action.payload.settings.setIn === 'function'
