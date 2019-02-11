@@ -542,8 +542,6 @@ class HomePage extends React.PureComponent {
 		const {
 			userSettings,
 			isMenuOpen,
-			initialVolume,
-			initialPlaybackRate,
 			isIe,
 			audioType,
 			activeNotesView,
@@ -689,11 +687,6 @@ HomePage.propTypes = {
 	userId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 	textData: PropTypes.object,
 	isMenuOpen: PropTypes.bool,
-	initialVolume: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-	initialPlaybackRate: PropTypes.oneOfType([
-		PropTypes.number,
-		PropTypes.string,
-	]),
 	profile: PropTypes.object,
 };
 

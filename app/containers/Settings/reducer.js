@@ -123,7 +123,6 @@ function settingsReducer(state = initialState, action) {
 					action.crossReferences,
 				);
 		case 'persist/REHYDRATE':
-			console.log('persist is running', state);
 			if (
 				action.payload.settings &&
 				typeof action.payload.settings.setIn === 'function'

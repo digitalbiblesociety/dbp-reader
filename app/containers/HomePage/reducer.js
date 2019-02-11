@@ -46,6 +46,7 @@ import {
 const initialState = fromJS({
 	books: [],
 	chapterText: [],
+	stuff: 'heyyyyyyyyllllllooooo',
 	audioObjects: [],
 	activeFilesets: [],
 	highlights: [],

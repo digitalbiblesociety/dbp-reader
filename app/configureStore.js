@@ -10,7 +10,7 @@ import {
 	persistStore,
 	autoRehydrate,
 } from 'jh108-redux-persist-immutable-plugin';
-import reconciler from './utils/stateReconciler';
+import REDUX_PERSIST from './utils/reduxPersist';
 import createReducer from './reducers';
 
 const sagaMiddleware = createSagaMiddleware();
@@ -42,12 +42,7 @@ export default function configureStore(initialState = {}, history) {
 	);
 
 	if (typeof self === 'object') {
-		persistStore(store, {
-			whitelist: ['profile', 'settings', 'searchContainer'],
-			blacklist: ['homepage', 'notes', 'textSelection'],
-			keyPrefix: 'Bible.is',
-			stateReconciler: reconciler,
-		});
+		persistStore(store, REDUX_PERSIST.storeConfig);
 	}
 
 	// Extensions

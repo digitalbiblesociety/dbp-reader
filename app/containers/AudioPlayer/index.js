@@ -57,7 +57,6 @@ export class AudioPlayer extends React.Component {
 	}
 
 	componentDidMount() {
-		console.log('this.props', this.props);
 		if (this.props.audioPaths.length) {
 			this.props.audioPaths.forEach((path) => this.preLoadPath(path));
 		}
@@ -629,7 +628,7 @@ export class AudioPlayer extends React.Component {
 			volume,
 			playbackRate,
 		} = this.props;
-		console.log('volume', volume);
+
 		return (
 			<>
 				<div
