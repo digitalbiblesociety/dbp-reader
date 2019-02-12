@@ -224,7 +224,7 @@ class ContextPortal extends React.PureComponent {
 						<span className={'item-text'}>Bookmark</span>
 					</span>
 					<EmailShareButton
-						className={'menu-item normal'}
+						className={'menu-item normal email-share'}
 						onShareWindowClose={closeContextMenu}
 						subject={document.title}
 						body={`"${selectedText}"\n\nTo listen to the audio click here: ${
@@ -247,7 +247,7 @@ class ContextPortal extends React.PureComponent {
 					>
 						<SvgWrapper className={'icon'} svgid="facebook" />
 					</FacebookShareButton>
-					<GooglePlusShare quote={selectedText} id={'google-share-button'} />
+					<GooglePlusShare className={'google-share'} quote={selectedText} />
 					<TwitterShareButton
 						onShareWindowClose={closeContextMenu}
 						className={'menu-item social twitter'}
@@ -261,7 +261,7 @@ class ContextPortal extends React.PureComponent {
 					<div
 						role={'button'}
 						tabIndex={0}
-						className={'menu-item social like-button facebook'}
+						className={'menu-item social like-button'}
 						title={'Like on Facebook'}
 						id={'like-facebook'}
 						onClick={addFacebookLike}
