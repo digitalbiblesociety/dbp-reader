@@ -4,8 +4,8 @@ const REDUX_PERSIST = {
 	reducerVersion: '1',
 	reducerKey: 'Bible.is',
 	storeConfig: {
-		whitelist: ['profile', 'settings', 'searchContainer'],
-		blacklist: ['homepage', 'notes', 'textSelection'],
+		whitelist: ['profile', 'settings', 'searchContainer', 'notes'],
+		blacklist: ['homepage', 'textSelection'],
 		keyPrefix: 'Bible.is.v1.',
 		stateReconciler: reconciler,
 	},
