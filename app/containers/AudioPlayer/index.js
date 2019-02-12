@@ -294,7 +294,7 @@ export class AudioPlayer extends React.Component {
 
 	autoPlayListener = () => {
 		const { loadingNextChapter, clickedPlay } = this.state;
-		const { audioPlayerState } = this.props;
+		const { audioPlayerState, changingVersion } = this.props;
 
 		// can accept event as a parameter
 		if (this.audioRef && this.audioRef.duration) {
@@ -303,7 +303,12 @@ export class AudioPlayer extends React.Component {
 			});
 		}
 		// If the chapter is loaded and the player is open
-		if (!loadingNextChapter && audioPlayerState && clickedPlay) {
+		if (
+			!loadingNextChapter &&
+			!changingVersion &&
+			audioPlayerState &&
+			clickedPlay
+		) {
 			this.playAudio();
 		}
 	};
@@ -615,7 +620,8 @@ export class AudioPlayer extends React.Component {
 		<div
 			id={'play-audio'}
 			onClick={this.playAudio}
-			className={`icon-wrap ${this.state.loadingNextChapter &&
+			className={`icon-wrap ${(this.state.loadingNextChapter ||
+				this.props.changingVersion) &&
 				'audio-player-play-disabled'}`}
 			title={messages.playTitle.defaultMessage}
 		>
@@ -835,6 +841,7 @@ AudioPlayer.propTypes = {
 	autoPlay: PropTypes.bool,
 	videoPlayerOpen: PropTypes.bool,
 	isScrollingDown: PropTypes.bool,
+	changingVersion: PropTypes.bool,
 	audioPlayerState: PropTypes.bool.isRequired,
 	audioPaths: PropTypes.array,
 	activeFilesets: PropTypes.array,
@@ -863,6 +870,7 @@ const mapStateToProps = createStructuredSelector({
 	activeBookId: selectorGenerator('activeBookId', 'homepage'),
 	activeTextId: selectorGenerator('activeTextId', 'homepage'),
 	activeChapter: selectorGenerator('activeChapter', 'homepage'),
+	changingVersion: selectorGenerator('changingVersion', 'homepage'),
 	// Other Selectors
 	textData: selectUserNotes(),
 });
