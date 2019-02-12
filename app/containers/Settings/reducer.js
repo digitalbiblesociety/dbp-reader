@@ -54,7 +54,7 @@ const initialState = fromJS({
 			},
 		},
 		// Audio related
-		autoPlayEnabled: false,
+		autoPlayEnabled: true,
 		volume: 1,
 		playbackRate: 1,
 	},
@@ -67,7 +67,8 @@ function settingsReducer(state = initialState, action) {
 		case SET_PLAYBACK_RATE:
 			return state.setIn(['userSettings', 'playbackRate'], action.value);
 		case ACTIVE_TEXT_ID:
-			return state.setIn(['userSettings', 'autoPlayEnabled'], false);
+			// May need this if settings should change based on active version
+			return state;
 		case UPDATE_THEME:
 			return state.setIn(['userSettings', 'activeTheme'], action.theme);
 		case UPDATE_FONT_TYPE:

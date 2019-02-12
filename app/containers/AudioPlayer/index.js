@@ -53,6 +53,7 @@ export class AudioPlayer extends React.Component {
 				path: props.audioPaths[0],
 				last: props.audioPaths.length === 0,
 			},
+			clickedPlay: false,
 		};
 	}
 
@@ -292,6 +293,9 @@ export class AudioPlayer extends React.Component {
 	};
 
 	autoPlayListener = () => {
+		const { loadingNextChapter, clickedPlay } = this.state;
+		const { audioPlayerState } = this.props;
+
 		// can accept event as a parameter
 		if (this.audioRef && this.audioRef.duration) {
 			this.setState({
@@ -299,7 +303,7 @@ export class AudioPlayer extends React.Component {
 			});
 		}
 		// If the chapter is loaded and the player is open
-		if (!this.state.loadingNextChapter && this.props.audioPlayerState) {
+		if (!loadingNextChapter && audioPlayerState && clickedPlay) {
 			this.playAudio();
 		}
 	};
@@ -376,7 +380,9 @@ export class AudioPlayer extends React.Component {
 	};
 
 	playAudio = () => {
-		if (this.state.loadingNextChapter) {
+		const { loadingNextChapter, currentTime } = this.state;
+
+		if (loadingNextChapter) {
 			return;
 		}
 		const playPromise = this.audioRef.play();
@@ -389,11 +395,12 @@ export class AudioPlayer extends React.Component {
 		if (playPromise) {
 			playPromise
 				.then(() => {
-					if (this.state.currentTime !== this.audioRef.currentTime) {
-						this.audioRef.currentTime = this.state.currentTime;
+					if (currentTime !== this.audioRef.currentTime) {
+						this.audioRef.currentTime = currentTime;
 					}
 					this.setState({
 						playing: true,
+						clickedPlay: true,
 					});
 				})
 				.catch((err) => {
@@ -405,11 +412,12 @@ export class AudioPlayer extends React.Component {
 				});
 		} else {
 			// This is so IE will still show the svg for the pause button and such
-			if (this.state.currentTime !== this.audioRef.currentTime) {
-				this.audioRef.currentTime = this.state.currentTime;
+			if (currentTime !== this.audioRef.currentTime) {
+				this.audioRef.currentTime = currentTime;
 			}
 			this.setState({
 				playing: true,
+				clickedPlay: true,
 			});
 		}
 	};

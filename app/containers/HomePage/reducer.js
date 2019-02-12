@@ -207,9 +207,6 @@ function homePageReducer(state = initialState, action) {
 		case SET_ACTIVE_CHAPTER:
 			return state.set('activeChapter', action.chapter);
 		case ACTIVE_TEXT_ID:
-			if (typeof window !== 'undefined') {
-				document.cookie = `bible_is_autoplay=${false};path=/`;
-			}
 			return state
 				.set('activeFilesets', fromJS(action.filesets))
 				.set('activeTextName', action.textName)
