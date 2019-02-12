@@ -96,6 +96,7 @@ class VolumeSlider extends React.PureComponent {
 						railStyle={this.railStyle}
 						trackStyle={this.trackStyle}
 						defaultValue={volume * 100}
+						value={volume * 100}
 						vertical={vertical}
 						min={0}
 						max={100}
