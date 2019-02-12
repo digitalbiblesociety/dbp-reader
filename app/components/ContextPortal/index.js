@@ -185,6 +185,7 @@ class ContextPortal extends React.PureComponent {
 						className={'menu-item normal'}
 						title={'Add a note'}
 						onClick={this.handleNoteClick}
+						id={'add-note'}
 					>
 						<SvgWrapper className={'icon'} svgid="notes" />
 						<span className={'item-text'}>Notes</span>
@@ -197,6 +198,7 @@ class ContextPortal extends React.PureComponent {
 						}
 						title={'Add a highlight'}
 						onClick={this.toggleHighlightColors}
+						id={'add-highlight'}
 					>
 						<SvgWrapper className={'icon'} svgid="highlight" />
 						<span className={'item-text'}>Highlight</span>
@@ -216,6 +218,7 @@ class ContextPortal extends React.PureComponent {
 						className={'menu-item normal'}
 						title={'Add a bookmark'}
 						onClick={this.handleBookmarkClick}
+						id={'add-bookmark'}
 					>
 						<SvgWrapper className={'icon'} svgid="bookmark" />
 						<span className={'item-text'}>Bookmark</span>
@@ -228,6 +231,7 @@ class ContextPortal extends React.PureComponent {
 							window.location.href
 						}`}
 						url={window.location.href}
+						id={'email-share-button'}
 					>
 						<SvgWrapper className={'icon'} svgid="e-mail" />
 						<span className={'item-text'}>E-mail</span>
@@ -239,16 +243,18 @@ class ContextPortal extends React.PureComponent {
 						className="menu-item social facebook fb-share-button"
 						quote={`"${selectedText}"`}
 						url={window.location.href}
+						id={'facebook-share-button'}
 					>
 						<SvgWrapper className={'icon'} svgid="facebook" />
 					</FacebookShareButton>
-					<GooglePlusShare quote={selectedText} />
+					<GooglePlusShare quote={selectedText} id={'google-share-button'} />
 					<TwitterShareButton
 						onShareWindowClose={closeContextMenu}
 						className={'menu-item social twitter'}
 						title={document.title}
 						hashtags={[`${document.title.split('|')[0].replace(/\s/g, '')}`]}
 						url={window.location.href}
+						id={'twitter-share-button'}
 					>
 						<SvgWrapper className={'icon'} svgid="twitter" />
 					</TwitterShareButton>
@@ -257,6 +263,7 @@ class ContextPortal extends React.PureComponent {
 						tabIndex={0}
 						className={'menu-item social like-button facebook'}
 						title={'Like on Facebook'}
+						id={'like-facebook'}
 						onClick={addFacebookLike}
 					>
 						<span className={'share-count'}>
