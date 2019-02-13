@@ -6,10 +6,12 @@ import { fromJS } from 'immutable';
 import { VersionList } from '..';
 import { getTexts } from '../../VersionListSection/tests/versionListSectionUtils';
 
+/* eslint-disable react/prop-types */
 jest.mock('react-intl', () => ({
-	FormattedMessage: (props) => <span>{props.defaultMessage}</span>,
+	FormattedMessage: ({ defaultMessage }) => <span>{defaultMessage}</span>,
 	defineMessages: (messages) => messages,
 }));
+/* eslint-enable react/prop-types */
 
 const props = {
 	dispatch: jest.fn(),
