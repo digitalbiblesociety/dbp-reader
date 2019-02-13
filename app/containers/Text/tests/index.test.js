@@ -271,10 +271,6 @@ const activeTextId = 'ENGESV';
 const activeBookId = 'LUK';
 
 describe('<Text />', () => {
-	it('Should have a test', () => {
-		console.log('It does have a test');
-		expect(true).toBe(true);
-	});
 	it('Should match previous snapshot with all options true', () => {
 		const tree = renderer
 			.create(
