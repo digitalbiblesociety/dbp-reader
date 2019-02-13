@@ -1,19 +1,11 @@
 language: node_js
 
 node_js:
-  - 7
-  - 6
-  - 5
+  - 10
 
 script:
-  - node ./internals/scripts/generate-templates-for-linting
+  - npm install
   - npm run test
-  - npm run build
-
-before_install:
-  - export CHROME_BIN=chromium-browser
-  - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
 
 notifications:
   email:

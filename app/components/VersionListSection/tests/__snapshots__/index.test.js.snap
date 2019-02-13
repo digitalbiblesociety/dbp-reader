@@ -1,0 +1,599 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<VersionListSection /> Should match previous snapshot using data from api 1`] = `
+<div
+  className="accordion"
+  role="tablist"
+>
+  <div
+    className="accordion-title-style"
+  >
+    <div
+      aria-controls="accordion__body-7"
+      aria-selected={false}
+      className="accordion__title"
+      disabled={false}
+      id="accordion__title-7"
+      onClick={[Function]}
+      onKeyPress={[Function]}
+      role="tab"
+      tabIndex="0"
+    >
+      <h4
+        className="active-version"
+        title="English Standard Version"
+      >
+        English Standard Version
+      </h4>
+    </div>
+    <div
+      aria-hidden={true}
+      aria-labelledby="accordion__title-7"
+      className="accordion-body-style accordion__body--hidden"
+      id="accordion__body-7"
+      role="tabpanel"
+    >
+      <a
+        className="version-item-button"
+        href="/bible/ENGESV?audio_type=audio_drama"
+        onClick={[Function]}
+        role="button"
+        tabIndex={0}
+      >
+        Dramatized Version
+      </a>
+      <a
+        className="version-item-button"
+        href="/bible/ENGESV?audio_type=audio"
+        onClick={[Function]}
+        role="button"
+        tabIndex={0}
+      >
+        Non-Dramatized Version
+      </a>
+    </div>
+  </div>
+  <div
+    className="accordion-title-style"
+  >
+    <div
+      aria-controls="accordion__body-8"
+      aria-selected={false}
+      className="accordion__title"
+      disabled={false}
+      id="accordion__title-8"
+      onClick={[Function]}
+      onKeyPress={[Function]}
+      role="tab"
+      tabIndex="0"
+    >
+      <h4
+        className=""
+        title="New International Version"
+      >
+        New International Version
+      </h4>
+    </div>
+    <div
+      aria-hidden={true}
+      aria-labelledby="accordion__title-8"
+      className="accordion-body-style accordion__body--hidden"
+      id="accordion__body-8"
+      role="tabpanel"
+    >
+      <a
+        className="version-item-button"
+        href="/bible/ENGNIV?audio_type=audio_drama"
+        onClick={[Function]}
+        role="button"
+        tabIndex={0}
+      >
+        Dramatized Version
+      </a>
+      <a
+        className="version-item-button"
+        href="/bible/ENGNIV?audio_type=audio"
+        onClick={[Function]}
+        role="button"
+        tabIndex={0}
+      >
+        Non-Dramatized Version
+      </a>
+    </div>
+  </div>
+  <div
+    className="accordion-title-style"
+  >
+    <div
+      aria-controls="accordion__body-9"
+      aria-selected={false}
+      className="accordion__title"
+      disabled={false}
+      id="accordion__title-9"
+      onClick={[Function]}
+      onKeyPress={[Function]}
+      role="tab"
+      tabIndex="0"
+    >
+      <h4
+        className=""
+        title="King James Version"
+      >
+        King James Version
+      </h4>
+    </div>
+    <div
+      aria-hidden={true}
+      aria-labelledby="accordion__title-9"
+      className="accordion-body-style accordion__body--hidden"
+      id="accordion__body-9"
+      role="tabpanel"
+    >
+      <a
+        className="version-item-button"
+        href="/bible/ENGKJV?audio_type=audio_drama"
+        onClick={[Function]}
+        role="button"
+        tabIndex={0}
+      >
+        Dramatized Version
+      </a>
+      <a
+        className="version-item-button"
+        href="/bible/ENGKJV?audio_type=audio"
+        onClick={[Function]}
+        role="button"
+        tabIndex={0}
+      >
+        Non-Dramatized Version
+      </a>
+    </div>
+  </div>
+  <div
+    className="accordion-title-style"
+  >
+    <div
+      aria-controls="accordion__body-10"
+      aria-selected={false}
+      className="accordion__title"
+      disabled={false}
+      id="accordion__title-10"
+      onClick={[Function]}
+      onKeyPress={[Function]}
+      role="tab"
+      tabIndex="0"
+    >
+      <a
+        className=" top-level-title"
+        href="/bible/ENGNAB?audio_type=audio_drama"
+        onClick={[Function]}
+        role="button"
+        tabIndex={0}
+        title="New American Bible"
+      >
+        New American Bible
+      </a>
+    </div>
+    <div
+      aria-hidden={true}
+      aria-labelledby="accordion__title-10"
+      className="accordion__body accordion__body--hidden"
+      id="accordion__body-10"
+      role="tabpanel"
+    />
+  </div>
+  <div
+    className="accordion-title-style"
+  >
+    <div
+      aria-controls="accordion__body-11"
+      aria-selected={false}
+      className="accordion__title"
+      disabled={false}
+      id="accordion__title-11"
+      onClick={[Function]}
+      onKeyPress={[Function]}
+      role="tab"
+      tabIndex="0"
+    >
+      <a
+        className=" top-level-title"
+        href="/bible/ENGWEB?audio_type=audio_drama"
+        onClick={[Function]}
+        role="button"
+        tabIndex={0}
+        title="World English Bible"
+      >
+        World English Bible (Hosanna audio) ( World English Bible )
+      </a>
+    </div>
+    <div
+      aria-hidden={true}
+      aria-labelledby="accordion__title-11"
+      className="accordion__body accordion__body--hidden"
+      id="accordion__body-11"
+      role="tabpanel"
+    />
+  </div>
+  <div
+    className="accordion-title-style"
+  >
+    <div
+      aria-controls="accordion__body-12"
+      aria-selected={false}
+      className="accordion__title"
+      disabled={false}
+      id="accordion__title-12"
+      onClick={[Function]}
+      onKeyPress={[Function]}
+      role="tab"
+      tabIndex="0"
+    >
+      <a
+        className=" top-level-title"
+        href="/bible/ENGWWH?audio_type=audio_drama"
+        onClick={[Function]}
+        role="button"
+        tabIndex={0}
+        title="World English Bible (Afred Henson)"
+      >
+        World English Bible (Afred Henson)
+      </a>
+    </div>
+    <div
+      aria-hidden={true}
+      aria-labelledby="accordion__title-12"
+      className="accordion__body accordion__body--hidden"
+      id="accordion__body-12"
+      role="tabpanel"
+    />
+  </div>
+  <div
+    className="accordion-title-style"
+  >
+    <div
+      aria-controls="accordion__body-13"
+      aria-selected={false}
+      className="accordion__title"
+      disabled={false}
+      id="accordion__title-13"
+      onClick={[Function]}
+      onKeyPress={[Function]}
+      role="tab"
+      tabIndex="0"
+    >
+      <h4
+        className=""
+        title="New International Version (Anglicised)"
+      >
+        New International Version (Anglicised)
+      </h4>
+    </div>
+    <div
+      aria-hidden={true}
+      aria-labelledby="accordion__title-13"
+      className="accordion-body-style accordion__body--hidden"
+      id="accordion__body-13"
+      role="tabpanel"
+    >
+      <a
+        className="version-item-button"
+        href="/bible/ENGNIVA?audio_type=audio_drama"
+        onClick={[Function]}
+        role="button"
+        tabIndex={0}
+      >
+        Dramatized Version
+      </a>
+      <a
+        className="version-item-button"
+        href="/bible/ENGNIVA?audio_type=audio"
+        onClick={[Function]}
+        role="button"
+        tabIndex={0}
+      >
+        Non-Dramatized Version
+      </a>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<VersionListSection /> Should match previous snapshot with valid props 1`] = `
+<div
+  className="accordion"
+  role="tablist"
+>
+  <div
+    className="accordion-title-style"
+  >
+    <div
+      aria-controls="accordion__body-0"
+      aria-selected={false}
+      className="accordion__title"
+      disabled={false}
+      id="accordion__title-0"
+      onClick={[Function]}
+      onKeyPress={[Function]}
+      role="tab"
+      tabIndex="0"
+    >
+      <h4
+        className=""
+        title="English Standard Version"
+      >
+        English Standard Version
+      </h4>
+    </div>
+    <div
+      aria-hidden={true}
+      aria-labelledby="accordion__title-0"
+      className="accordion-body-style accordion__body--hidden"
+      id="accordion__body-0"
+      role="tabpanel"
+    >
+      <a
+        className="version-item-button"
+        href="/bible/ENGESV?audio_type=audio_drama"
+        onClick={[Function]}
+        role="button"
+        tabIndex={0}
+      >
+        Dramatized Version
+      </a>
+      <a
+        className="version-item-button"
+        href="/bible/ENGESV?audio_type=audio"
+        onClick={[Function]}
+        role="button"
+        tabIndex={0}
+      >
+        Non-Dramatized Version
+      </a>
+    </div>
+  </div>
+  <div
+    className="accordion-title-style"
+  >
+    <div
+      aria-controls="accordion__body-1"
+      aria-selected={false}
+      className="accordion__title"
+      disabled={false}
+      id="accordion__title-1"
+      onClick={[Function]}
+      onKeyPress={[Function]}
+      role="tab"
+      tabIndex="0"
+    >
+      <h4
+        className="active-version"
+        title="New International Version"
+      >
+        New International Version
+      </h4>
+    </div>
+    <div
+      aria-hidden={true}
+      aria-labelledby="accordion__title-1"
+      className="accordion-body-style accordion__body--hidden"
+      id="accordion__body-1"
+      role="tabpanel"
+    >
+      <a
+        className="version-item-button"
+        href="/bible/ENGNIV?audio_type=audio_drama"
+        onClick={[Function]}
+        role="button"
+        tabIndex={0}
+      >
+        Dramatized Version
+      </a>
+      <a
+        className="version-item-button"
+        href="/bible/ENGNIV?audio_type=audio"
+        onClick={[Function]}
+        role="button"
+        tabIndex={0}
+      >
+        Non-Dramatized Version
+      </a>
+    </div>
+  </div>
+  <div
+    className="accordion-title-style"
+  >
+    <div
+      aria-controls="accordion__body-2"
+      aria-selected={false}
+      className="accordion__title"
+      disabled={false}
+      id="accordion__title-2"
+      onClick={[Function]}
+      onKeyPress={[Function]}
+      role="tab"
+      tabIndex="0"
+    >
+      <h4
+        className=""
+        title="King James Version"
+      >
+        King James Version
+      </h4>
+    </div>
+    <div
+      aria-hidden={true}
+      aria-labelledby="accordion__title-2"
+      className="accordion-body-style accordion__body--hidden"
+      id="accordion__body-2"
+      role="tabpanel"
+    >
+      <a
+        className="version-item-button"
+        href="/bible/ENGKJV?audio_type=audio_drama"
+        onClick={[Function]}
+        role="button"
+        tabIndex={0}
+      >
+        Dramatized Version
+      </a>
+      <a
+        className="version-item-button"
+        href="/bible/ENGKJV?audio_type=audio"
+        onClick={[Function]}
+        role="button"
+        tabIndex={0}
+      >
+        Non-Dramatized Version
+      </a>
+    </div>
+  </div>
+  <div
+    className="accordion-title-style"
+  >
+    <div
+      aria-controls="accordion__body-3"
+      aria-selected={false}
+      className="accordion__title"
+      disabled={false}
+      id="accordion__title-3"
+      onClick={[Function]}
+      onKeyPress={[Function]}
+      role="tab"
+      tabIndex="0"
+    >
+      <a
+        className=" top-level-title"
+        href="/bible/ENGNAB?audio_type=audio_drama"
+        onClick={[Function]}
+        role="button"
+        tabIndex={0}
+        title="New American Bible"
+      >
+        New American Bible
+      </a>
+    </div>
+    <div
+      aria-hidden={true}
+      aria-labelledby="accordion__title-3"
+      className="accordion__body accordion__body--hidden"
+      id="accordion__body-3"
+      role="tabpanel"
+    />
+  </div>
+  <div
+    className="accordion-title-style"
+  >
+    <div
+      aria-controls="accordion__body-4"
+      aria-selected={false}
+      className="accordion__title"
+      disabled={false}
+      id="accordion__title-4"
+      onClick={[Function]}
+      onKeyPress={[Function]}
+      role="tab"
+      tabIndex="0"
+    >
+      <a
+        className=" top-level-title"
+        href="/bible/ENGWEB?audio_type=audio_drama"
+        onClick={[Function]}
+        role="button"
+        tabIndex={0}
+        title="World English Bible"
+      >
+        World English Bible (Hosanna audio) ( World English Bible )
+      </a>
+    </div>
+    <div
+      aria-hidden={true}
+      aria-labelledby="accordion__title-4"
+      className="accordion__body accordion__body--hidden"
+      id="accordion__body-4"
+      role="tabpanel"
+    />
+  </div>
+  <div
+    className="accordion-title-style"
+  >
+    <div
+      aria-controls="accordion__body-5"
+      aria-selected={false}
+      className="accordion__title"
+      disabled={false}
+      id="accordion__title-5"
+      onClick={[Function]}
+      onKeyPress={[Function]}
+      role="tab"
+      tabIndex="0"
+    >
+      <a
+        className=" top-level-title"
+        href="/bible/ENGWWH?audio_type=audio_drama"
+        onClick={[Function]}
+        role="button"
+        tabIndex={0}
+        title="World English Bible (Afred Henson)"
+      >
+        World English Bible (Afred Henson)
+      </a>
+    </div>
+    <div
+      aria-hidden={true}
+      aria-labelledby="accordion__title-5"
+      className="accordion__body accordion__body--hidden"
+      id="accordion__body-5"
+      role="tabpanel"
+    />
+  </div>
+  <div
+    className="accordion-title-style"
+  >
+    <div
+      aria-controls="accordion__body-6"
+      aria-selected={false}
+      className="accordion__title"
+      disabled={false}
+      id="accordion__title-6"
+      onClick={[Function]}
+      onKeyPress={[Function]}
+      role="tab"
+      tabIndex="0"
+    >
+      <h4
+        className=""
+        title="New International Version (Anglicised)"
+      >
+        New International Version (Anglicised)
+      </h4>
+    </div>
+    <div
+      aria-hidden={true}
+      aria-labelledby="accordion__title-6"
+      className="accordion-body-style accordion__body--hidden"
+      id="accordion__body-6"
+      role="tabpanel"
+    >
+      <a
+        className="version-item-button"
+        href="/bible/ENGNIVA?audio_type=audio_drama"
+        onClick={[Function]}
+        role="button"
+        tabIndex={0}
+      >
+        Dramatized Version
+      </a>
+      <a
+        className="version-item-button"
+        href="/bible/ENGNIVA?audio_type=audio"
+        onClick={[Function]}
+        role="button"
+        tabIndex={0}
+      >
+        Non-Dramatized Version
+      </a>
+    </div>
+  </div>
+</div>
+`;

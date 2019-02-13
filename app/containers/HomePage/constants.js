@@ -5,6 +5,7 @@
  */
 
 export const GET_CHAPTER_TEXT = 'app/HomePage/GET_CHAPTER_TEXT';
+export const CHANGING_VERSION = 'app/HomePage/CHANGING_VERSION';
 export const SET_USER_AGENT = 'app/HomePage/SET_USER_AGENT';
 export const ADD_BOOKMARK_SUCCESS = 'app/HomePage/ADD_BOOKMARK_SUCCESS';
 export const ADD_BOOKMARK_FAILURE = 'app/HomePage/ADD_BOOKMARK_FAILURE';

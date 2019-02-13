@@ -66,7 +66,6 @@ class Text extends React.PureComponent {
 			activeChapter,
 			text,
 			loadingNewChapterText,
-			loadingAudio,
 			verseNumber,
 			activeTextId,
 			activeBookId,
@@ -79,14 +78,15 @@ class Text extends React.PureComponent {
 			videoPlayerOpen,
 			hasVideo,
 			audioType,
+			changingVersion,
 		} = this.props;
 		const { loadingNextPage } = this.state;
 
 		if (
 			loadingNewChapterText ||
-			loadingAudio ||
 			chapterTextLoadingState ||
-			loadingNextPage
+			loadingNextPage ||
+			changingVersion
 		) {
 			return (
 				<div
@@ -167,10 +167,10 @@ Text.propTypes = {
 	activeChapter: PropTypes.number,
 	hasVideo: PropTypes.bool,
 	menuIsOpen: PropTypes.bool,
-	loadingAudio: PropTypes.bool,
 	subFooterOpen: PropTypes.bool,
-	isScrollingDown: PropTypes.bool,
 	videoPlayerOpen: PropTypes.bool,
+	changingVersion: PropTypes.bool,
+	isScrollingDown: PropTypes.bool,
 	audioPlayerState: PropTypes.bool,
 	loadingNewChapterText: PropTypes.bool,
 	chapterTextLoadingState: PropTypes.bool,

@@ -1,5 +1,5 @@
 import React from 'react';
-// import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
 import { fromJS } from 'immutable';
 import renderer from 'react-test-renderer';
 import BooksTestament from '..';
@@ -165,7 +165,7 @@ const handleChapterClick = jest.fn();
 const activeChapter = 1;
 const testamentPrefix = 'ot';
 const testamentTitle = 'Old Testament';
-const selectedBookName = 'GEN';
+const selectedBookName = 'Genesis';
 const activeBookName = 'Genesis';
 const activeTextId = 'ENGESV';
 const audioType = 'drama';
@@ -190,5 +190,43 @@ describe('<BooksTestament />', () => {
 			)
 			.toJSON();
 		expect(tree).toMatchSnapshot();
+	});
+	it('Should only render one active book', () => {
+		const wrapper = mount(
+			<BooksTestament
+				books={books}
+				handleRef={handleRef}
+				handleBookClick={handleBookClick}
+				handleChapterClick={handleChapterClick}
+				activeChapter={activeChapter}
+				testamentPrefix={testamentPrefix}
+				testamentTitle={testamentTitle}
+				selectedBookName={selectedBookName}
+				activeBookName={activeBookName}
+				activeTextId={activeTextId}
+				audioType={audioType}
+			/>,
+		);
+		expect(wrapper.find('.active-book').length).toEqual(1);
+	});
+	it('Should only render one active chapter and it should match the given prop', () => {
+		const wrapper = mount(
+			<BooksTestament
+				books={books}
+				handleRef={handleRef}
+				handleBookClick={handleBookClick}
+				handleChapterClick={handleChapterClick}
+				activeChapter={activeChapter}
+				testamentPrefix={testamentPrefix}
+				testamentTitle={testamentTitle}
+				selectedBookName={selectedBookName}
+				activeBookName={activeBookName}
+				activeTextId={activeTextId}
+				audioType={audioType}
+			/>,
+		);
+		const chapter = wrapper.find('.active-chapter');
+		expect(chapter.length).toEqual(1);
+		expect(chapter.text()).toEqual('1');
 	});
 });

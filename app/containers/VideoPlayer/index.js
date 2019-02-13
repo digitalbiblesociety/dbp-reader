@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
+import isEqual from 'lodash/isEqual';
 import Router from 'next/router';
 import cachedFetch, { overrideCache } from '../../utils/cachedFetch';
 import { openVideoPlayer, closeVideoPlayer, setHasVideo } from './actions';
@@ -11,7 +12,6 @@ import VideoControls from '../../components/VideoControls';
 import VideoList from '../../components/VideoList';
 import VideoProgressBar from '../../components/VideoProgressBar';
 import VideoOverlay from '../../components/VideoOverlay';
-import deepDifferenceObject from '../../utils/deepDifferenceObject';
 import { selectHasVideo, selectPlayerOpenState } from './selectors';
 import checkForVideoAsync from '../../utils/checkForVideoAsync';
 
@@ -43,8 +43,7 @@ class VideoPlayer extends React.PureComponent {
 			nextProps.chapter !== this.props.chapter ||
 			(nextProps.fileset &&
 				this.props.fileset &&
-				Object.keys(deepDifferenceObject(nextProps.fileset, this.props.fileset))
-					.length)
+				!isEqual(nextProps.fileset, this.props.fileset))
 		) {
 			if (nextProps.hasVideo) {
 				this.getVideos({

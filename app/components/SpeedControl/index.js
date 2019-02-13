@@ -36,7 +36,7 @@ class SpeedControl extends React.PureComponent {
 	setRef = (el) => (this.ref = el);
 
 	render() {
-		const { active, options, setSpeed, currentSpeed } = this.props;
+		const { active, options, setSpeed, playbackRate } = this.props;
 
 		return (
 			<div
@@ -50,7 +50,7 @@ class SpeedControl extends React.PureComponent {
 						<span
 							key={option}
 							className={
-								currentSpeed === option ? 'speed-item active' : 'speed-item'
+								playbackRate === option ? 'speed-item active' : 'speed-item'
 							}
 							onClick={() => setSpeed(option)}
 						>
@@ -67,7 +67,7 @@ SpeedControl.propTypes = {
 	options: PropTypes.array,
 	setSpeed: PropTypes.func,
 	active: PropTypes.bool,
-	currentSpeed: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+	playbackRate: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 	onCloseFunction: PropTypes.func,
 };
 
