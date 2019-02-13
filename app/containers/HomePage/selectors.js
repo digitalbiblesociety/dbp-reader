@@ -28,13 +28,8 @@ const selectActiveNotesView = () =>
 	createSelector(selectNotes, (notes) => notes.get('activeChild'));
 const selectUserNotes = () =>
 	createDeepEqualSelector(
-		[
-			selectNotes,
-			selectHomePageDomain,
-			selectProfilePageDomain,
-			selectSettingsDomain,
-		],
-		(notes, home, profile, settings) => {
+		[selectNotes, selectHomePageDomain, selectProfilePageDomain],
+		(notes, home, profile) => {
 			const activeTextId = home.get('activeTextId');
 			const bookId = home.get('activeBookId');
 			const chapter = home.get('activeChapter');
@@ -66,23 +61,7 @@ const selectUserNotes = () =>
 				? filteredNotes.toJS()
 				: filteredNotes;
 
-			if (
-				!text ||
-				(home.get('formattedSource') &&
-					!settings.getIn([
-						'userSettings',
-						'toggleOptions',
-						'readersMode',
-						'active',
-					]) &&
-					!settings.getIn([
-						'userSettings',
-						'toggleOptions',
-						'oneVersePerLine',
-						'active',
-					]) &&
-					home.get('formattedSource').slice(0, 5) !== '<?xml')
-			) {
+			if (!text) {
 				return {
 					text: [],
 					userNotes,

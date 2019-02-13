@@ -24,10 +24,10 @@ class MyBookmarks extends React.PureComponent {
 				<Link
 					as={`/bible/${listItem.bible_id}/${listItem.book_id}/${
 						listItem.chapter
-					}/${listItem.verse}`}
+					}`}
 					href={`/bible/${listItem.bible_id}/${listItem.book_id}/${
 						listItem.chapter
-					}/${listItem.verse}`}
+					}`}
 				>
 					<a onClick={toggleNotesModal} className="list-item">
 						<div className="title-text">

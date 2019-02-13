@@ -14,6 +14,7 @@ import {
 	TOGGLE_AUTOPLAY,
 } from './constants';
 import { ACTIVE_TEXT_ID } from '../HomePage/constants';
+import { SET_VOLUME, SET_PLAYBACK_RATE } from '../AudioPlayer/constants';
 
 const initialState = fromJS({
 	userSettings: {
@@ -52,14 +53,22 @@ const initialState = fromJS({
 				available: false,
 			},
 		},
-		autoPlayEnabled: false,
+		// Audio related
+		autoPlayEnabled: true,
+		volume: 1,
+		playbackRate: 1,
 	},
 });
 
 function settingsReducer(state = initialState, action) {
 	switch (action.type) {
+		case SET_VOLUME:
+			return state.setIn(['userSettings', 'volume'], action.value);
+		case SET_PLAYBACK_RATE:
+			return state.setIn(['userSettings', 'playbackRate'], action.value);
 		case ACTIVE_TEXT_ID:
-			return state.setIn(['userSettings', 'autoPlayEnabled'], false);
+			// May need this if settings should change based on active version
+			return state;
 		case UPDATE_THEME:
 			return state.setIn(['userSettings', 'activeTheme'], action.theme);
 		case UPDATE_FONT_TYPE:

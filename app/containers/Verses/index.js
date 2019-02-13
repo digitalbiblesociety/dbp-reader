@@ -64,7 +64,6 @@ import makeSelectVerses, {
 	selectUserAuthenticated,
 	selectNotesMenuState,
 	selectTextDirection,
-	selectAudioSource,
 } from './selectors';
 import { selectUserNotes, selectFormattedSource } from '../HomePage/selectors';
 import FormattedText from '../../components/FormattedText';
@@ -87,6 +86,7 @@ export class Verses extends React.PureComponent {
 	componentDidMount() {
 		// May not need this anymore
 		this.window = window;
+		this.setState({ domMethodsAvailable: true });
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -516,7 +516,6 @@ export class Verses extends React.PureComponent {
 			textDirection,
 			verseNumber,
 			menuIsOpen,
-			audioSource,
 			highlights,
 			activeBookId,
 			activeBookName,
@@ -555,20 +554,12 @@ export class Verses extends React.PureComponent {
 				onScroll={this.handleScrollOnMain}
 			>
 				{!formattedSource.main &&
-					!text.length &&
-					audioSource && (
+					!text.length && (
 						<AudioOnlyMessage
 							key={'no_text'}
 							book={activeBookName}
 							chapter={activeChapter}
 						/>
-					)}
-				{!formattedSource.main &&
-					!text.length &&
-					!audioSource && (
-						<h5 key={'no_text'}>
-							Text is not currently available for this version.
-						</h5>
 					)}
 				{(formattedSource.main && !readersMode && !oneVersePerLine) ||
 				text.length === 0 ||
@@ -580,6 +571,7 @@ export class Verses extends React.PureComponent {
 					</div>
 				)}
 				{formattedSource.main &&
+					domMethodsAvailable &&
 					!readersMode &&
 					!oneVersePerLine && (
 						<FormattedText
@@ -607,7 +599,10 @@ export class Verses extends React.PureComponent {
 							setFormattedRefHighlight={this.setFormattedRefHighlight}
 						/>
 					)}
-				{(!formattedSource.main || readersMode || oneVersePerLine) &&
+				{(!formattedSource.main ||
+					readersMode ||
+					oneVersePerLine ||
+					!domMethodsAvailable) &&
 					!!text.length && (
 						<PlainText
 							initialText={text}
@@ -672,7 +667,6 @@ Verses.propTypes = {
 	verseNumber: PropTypes.string,
 	notesActive: PropTypes.bool,
 	textDirection: PropTypes.string,
-	audioSource: PropTypes.string,
 	// Settings
 	userSettings: PropTypes.object,
 	// Profile
@@ -693,7 +687,6 @@ const mapStateToProps = createStructuredSelector({
 	verseNumber: selectVerseNumber(),
 	notesActive: selectNotesMenuState(),
 	textDirection: selectTextDirection(),
-	audioSource: selectAudioSource(),
 	formattedSource: selectFormattedSource(),
 	userSettings: selectUserSettings(),
 	userAuthenticated: selectUserAuthenticated(),

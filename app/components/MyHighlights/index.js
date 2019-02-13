@@ -40,10 +40,10 @@ class MyHighlights extends React.PureComponent {
 				<Link
 					as={`/bible/${highlight.bible_id}/${highlight.book_id}/${
 						highlight.chapter
-					}/${highlight.verse_start}`}
+					}`}
 					href={`/bible/${highlight.bible_id}/${highlight.book_id}/${
 						highlight.chapter
-					}/${highlight.verse_start}`}
+					}`}
 				>
 					<a onClick={toggleNotesModal} className="list-item">
 						<div className="title-text">

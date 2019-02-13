@@ -31,12 +31,23 @@ import removeDuplicates from '../app/utils/removeDuplicateObjects';
 import parseCookie from '../app/utils/parseCookie';
 import getFirstChapterReference from '../app/utils/getFirstChapterReference';
 import isUserAgentInternetExplorer from '../app/utils/isUserAgentInternetExplorer';
+import reconcilePersistedState from '../app/utils/reconcilePersistedState';
+import REDUX_PERSIST from '../app/utils/reduxPersist';
 
 class AppContainer extends React.Component {
 	static displayName = 'Main app';
 
 	// eslint-disable-line no-undef
 	componentDidMount() {
+		if (
+			localStorage.getItem('reducerVersion') !== REDUX_PERSIST.reducerVersion
+		) {
+			reconcilePersistedState(
+				['settings', 'searchContainer', 'profile'],
+				REDUX_PERSIST.reducerKey,
+			);
+			localStorage.setItem('reducerVersion', REDUX_PERSIST.reducerVersion);
+		}
 		// If the page was served from the server then I need to cache the data for this route
 		if (this.props.isFromServer) {
 			this.props.fetchedUrls.forEach((url) => {
@@ -630,6 +641,7 @@ AppContainer.getInitialProps = async (context) => {
 				// userSettings,
 				formattedSource: initData.formattedText,
 				activeFilesets: filesets,
+				changingVersion: false,
 				books: bookData || [],
 				activeChapter: parseInt(chapter, 10) >= 0 ? parseInt(chapter, 10) : 1,
 				activeBookName,

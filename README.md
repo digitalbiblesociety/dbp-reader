@@ -1,5 +1,7 @@
 # The Koinos Reader
 
+[![Build Status](https://travis-ci.org/digitalbiblesociety/dbp-reader.svg?branch=master)](https://travis-ci.org/digitalbiblesociety/dbp-reader) [![Coverage Status](https://coveralls.io/repos/github/digitalbiblesociety/dbp-reader/badge.svg?branch=master)](https://coveralls.io/github/digitalbiblesociety/dbp-reader?branch=master)
+
 The Koinos Reader is a joint project of the [Digital Bible Society](https://dbs.org)
 and [Faith Comes by Hearing](https://faithcomesbyhearing.com).
 

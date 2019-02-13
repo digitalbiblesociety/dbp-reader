@@ -15,6 +15,7 @@ import {
 } from '../VideoPlayer/constants';
 import {
 	ACTIVE_TEXT_ID,
+	CHANGING_VERSION,
 	LOAD_AUDIO,
 	LOAD_HIGHLIGHTS,
 	SET_USER_AGENT,
@@ -78,6 +79,7 @@ const initialState = fromJS({
 	isVersionSelectionActive: false,
 	isInformationModalActive: false,
 	isFromServer: true,
+	changingVersion: false,
 	invalidBibleId: false,
 	hasTextInDatabase: true,
 	firstLoad: true,
@@ -127,6 +129,8 @@ function homePageReducer(state = initialState, action) {
 		// Video player actions
 		case OPEN_VIDEO_PLAYER:
 			return state.set('videoPlayerOpen', true);
+		case CHANGING_VERSION:
+			return state.set('changingVersion', action.state);
 		case CLOSE_VIDEO_PLAYER:
 			return state.set('videoPlayerOpen', false);
 		case SET_HAS_VIDEO:
@@ -202,9 +206,6 @@ function homePageReducer(state = initialState, action) {
 		case SET_ACTIVE_CHAPTER:
 			return state.set('activeChapter', action.chapter);
 		case ACTIVE_TEXT_ID:
-			if (typeof window !== 'undefined') {
-				document.cookie = `bible_is_autoplay=${false};path=/`;
-			}
 			return state
 				.set('activeFilesets', fromJS(action.filesets))
 				.set('activeTextName', action.textName)
