@@ -8,15 +8,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
 import { FormattedMessage } from 'react-intl';
 import LoadingSpinner from '../LoadingSpinner';
 import VersionListSection from '../VersionListSection';
 import messages from './messages';
-import { selectActiveChapter, selectActiveBookId } from './selectors';
 import { changeVersion } from '../../containers/HomePage/actions';
 
-class VersionList extends React.PureComponent {
+export class VersionList extends React.PureComponent {
 	get filteredVersionList() {
 		const { bibles, activeTextId, filterText } = this.props;
 
@@ -205,11 +203,6 @@ VersionList.propTypes = {
 	loadingVersions: PropTypes.bool,
 };
 
-const mapStateToProps = createStructuredSelector({
-	activeBookId: selectActiveBookId(),
-	activeChapter: selectActiveChapter(),
-});
-
 function mapDispatchToProps(dispatch) {
 	return {
 		dispatch,
@@ -217,7 +210,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 const withConnect = connect(
-	mapStateToProps,
+	null,
 	mapDispatchToProps,
 );
 
