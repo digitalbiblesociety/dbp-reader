@@ -1,0 +1,192 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Name of the group should match the old snapshot with a full profile 1`] = `
+<div
+  className="account-settings"
+>
+  <div
+    className="logout-button"
+    onClick={[MockFunction]}
+    role="button"
+    tabIndex={0}
+  >
+    <span>
+      Logout
+    </span>
+  </div>
+  <section
+    className="personal-info"
+  >
+    <svg
+      className="avatar-placeholder"
+    >
+      <use
+        xlinkHref="/static/svglist.svg#avatar_placeholder"
+        xmlnsXlink="http://www.w3.org/1999/xlink"
+      />
+    </svg>
+    <h3
+      className="name"
+    >
+      J
+    </h3>
+    <span
+      className="name"
+    >
+      Jesse
+    </span>
+  </section>
+  <div
+    className="email-section"
+  >
+    <span
+      className="title"
+    >
+      e-mail
+    </span>
+    <span
+      className="wrapper"
+    >
+      <svg
+        className="icon"
+        height="26px"
+        width="26px"
+      >
+        <use
+          xlinkHref="/static/svglist.svg#e-mail"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+        />
+      </svg>
+      <input
+        onChange={[Function]}
+        placeholder="emailaddress@mail.com"
+        value="jesse@dbs.org"
+      />
+    </span>
+  </div>
+</div>
+`;
+
+exports[`Name of the group should match the old snapshot with the popup open 1`] = `
+<div
+  className="account-settings"
+>
+  <div
+    className="logout-button"
+    onClick={[MockFunction]}
+    role="button"
+    tabIndex={0}
+  >
+    <span>
+      Logout
+    </span>
+  </div>
+  <section
+    className="personal-info"
+  >
+    <svg
+      className="avatar-placeholder"
+    >
+      <use
+        xlinkHref="/static/svglist.svg#avatar_placeholder"
+        xmlnsXlink="http://www.w3.org/1999/xlink"
+      />
+    </svg>
+    <h3
+      className="name"
+    >
+      J
+    </h3>
+    <span
+      className="name"
+    >
+      Jesse
+    </span>
+  </section>
+  <div
+    className="email-section"
+  >
+    <span
+      className="title"
+    >
+      e-mail
+    </span>
+    <span
+      className="wrapper"
+    >
+      <svg
+        className="icon"
+        height="26px"
+        width="26px"
+      >
+        <use
+          xlinkHref="/static/svglist.svg#e-mail"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+        />
+      </svg>
+      <input
+        onChange={[Function]}
+        placeholder="emailaddress@mail.com"
+        value="jesse@dbs.org"
+      />
+    </span>
+  </div>
+</div>
+`;
+
+exports[`Name of the group should match the old snapshot without a full profile 1`] = `
+<div
+  className="account-settings"
+>
+  <div
+    className="logout-button"
+    onClick={[MockFunction]}
+    role="button"
+    tabIndex={0}
+  >
+    <span>
+      Logout
+    </span>
+  </div>
+  <section
+    className="personal-info"
+  >
+    <svg
+      className="avatar-placeholder"
+    >
+      <use
+        xlinkHref="/static/svglist.svg#avatar_placeholder"
+        xmlnsXlink="http://www.w3.org/1999/xlink"
+      />
+    </svg>
+  </section>
+  <div
+    className="email-section"
+  >
+    <span
+      className="title"
+    >
+      e-mail
+    </span>
+    <span
+      className="wrapper"
+    >
+      <svg
+        className="icon"
+        height="26px"
+        width="26px"
+      >
+        <use
+          xlinkHref="/static/svglist.svg#e-mail"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+        />
+      </svg>
+      <input
+        onChange={[Function]}
+        placeholder="emailaddress@mail.com"
+        value=""
+      />
+    </span>
+  </div>
+</div>
+`;
