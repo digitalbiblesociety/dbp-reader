@@ -1,0 +1,55 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Checkbox component should match previous snapshot for active 1`] = `
+<div
+  className="autoplay"
+>
+  <input
+    id="autoplay-checkbox"
+    onChange={[MockFunction]}
+    type="checkbox"
+    value={true}
+  />
+  <label
+    htmlFor="autoplay-checkbox"
+  >
+    autoplay
+  </label>
+</div>
+`;
+
+exports[`Checkbox component should match previous snapshot for default props 1`] = `
+<div
+  className="default-checkbox__div"
+>
+  <input
+    id="default-checkbox"
+    onChange={[MockFunction]}
+    type="checkbox"
+    value={true}
+  />
+  <label
+    htmlFor="default-checkbox"
+  >
+    autoplay
+  </label>
+</div>
+`;
+
+exports[`Checkbox component should match previous snapshot for inactive 1`] = `
+<div
+  className="autoplay"
+>
+  <input
+    id="autoplay-checkbox"
+    onChange={[MockFunction]}
+    type="checkbox"
+    value={false}
+  />
+  <label
+    htmlFor="autoplay-checkbox"
+  >
+    autoplay
+  </label>
+</div>
+`;
