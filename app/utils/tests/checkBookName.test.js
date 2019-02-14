@@ -13,4 +13,7 @@ describe('Test check book function', () => {
 	it('Should not work with a non string', () => {
 		expect(() => checkBook(5)).toThrow();
 	});
+	it('Should return a string', () => {
+		expect(typeof checkBook('randchars')).toEqual('string');
+	});
 });
