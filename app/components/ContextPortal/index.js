@@ -29,7 +29,7 @@ import Ieerror from '../Ieerror';
 // Remove use of styled components
 // change to pure component and handle outside clicks instead of click handler
 // on each item
-class ContextPortal extends React.PureComponent {
+export class ContextPortal extends React.PureComponent {
 	state = {
 		highlightOpen: false,
 		openPopup: false,

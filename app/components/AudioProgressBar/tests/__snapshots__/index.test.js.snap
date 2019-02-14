@@ -1,0 +1,65 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AudioProgressBar Component Should match previous snapshot 1`] = `
+<div
+  className="progress-slider"
+  data-value-cur="00:00"
+  data-value-dur="05:00"
+>
+  <div
+    className="rc-slider"
+    onBlur={[Function]}
+    onFocus={[Function]}
+    onKeyDown={[Function]}
+    onMouseDown={[Function]}
+    onMouseUp={[Function]}
+    onTouchStart={[Function]}
+  >
+    <div
+      className="rc-slider-rail"
+      style={
+        Object {
+          "backgroundColor": "#5b5f64",
+          "height": "4px",
+        }
+      }
+    />
+    <div
+      className="rc-slider-track"
+      style={
+        Object {
+          "backgroundColor": "rgba(98, 177, 130, 1)",
+          "height": "4px",
+          "left": "0%",
+          "width": "0%",
+        }
+      }
+    />
+    <div
+      className="rc-slider-step"
+    />
+    <div
+      aria-disabled={false}
+      aria-valuemax={100}
+      aria-valuemin={0}
+      aria-valuenow={0}
+      className="rc-slider-handle"
+      onBlur={[Function]}
+      onKeyDown={[Function]}
+      role="slider"
+      style={
+        Object {
+          "backgroundColor": "rgba(0, 0, 0, 1)",
+          "border": "2px solid rgba(98, 177, 130, 1)",
+          "left": "0%",
+          "top": "5px",
+        }
+      }
+      tabIndex={0}
+    />
+    <div
+      className="rc-slider-mark"
+    />
+  </div>
+</div>
+`;

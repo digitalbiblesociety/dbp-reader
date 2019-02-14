@@ -10,4 +10,7 @@ describe('Test check book function', () => {
 	it('Should return book_id if id did match name', () => {
 		expect(checkBook('2 Chronicles')).toEqual('2CH');
 	});
+	it('Should not work with a non string', () => {
+		expect(() => checkBook(5)).toThrow();
+	});
 });
