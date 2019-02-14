@@ -36,7 +36,6 @@ import {
 	SET_ACTIVE_NOTE,
 	UPDATE_SELECTED_TEXT,
 	GET_BOOKS,
-	GET_CHAPTER_TEXT,
 	GET_COPYRIGHTS,
 	RESET_BOOKMARK_STATE,
 	ADD_BOOKMARK_SUCCESS,
@@ -151,9 +150,6 @@ function homePageReducer(state = initialState, action) {
 			return state.set('testaments', action.testaments);
 		case TOGGLE_FIRST_LOAD_TEXT_SELECTION:
 			return state.set('firstLoad', false);
-
-		case GET_CHAPTER_TEXT:
-			return state.set('loadingNewChapterText', true);
 		case GET_BOOKS:
 			return state.set('loadingNewChapterText', true).set('loadingBooks', true);
 		case SET_USER_AGENT:

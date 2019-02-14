@@ -36,7 +36,6 @@ import {
 	deleteHighlights,
 	getBooks,
 	getNotes,
-	getChapterText,
 	getHighlights,
 	getCopyrights,
 	toggleProfile,
@@ -362,8 +361,6 @@ class HomePage extends React.PureComponent {
 	}
 
 	getBooks = (props) => this.props.dispatch(getBooks(props));
-
-	getChapters = (props) => this.props.dispatch(getChapterText(props));
 
 	getCopyrights = (props) => this.props.dispatch(getCopyrights(props));
 

@@ -12,7 +12,6 @@ import {
 	ADD_HIGHLIGHTS,
 	GET_BOOKS,
 	GET_AUDIO,
-	GET_CHAPTER_TEXT,
 	GET_HIGHLIGHTS,
 	SET_ACTIVE_NOTE,
 	GET_NOTES_HOMEPAGE,
@@ -137,11 +136,6 @@ export const getAudio = ({ filesetId, list }) => ({
 	type: GET_AUDIO,
 	filesetId,
 	list,
-});
-
-export const getChapterText = (props) => ({
-	type: GET_CHAPTER_TEXT,
-	...props,
 });
 
 export const getHighlights = (props) => ({
