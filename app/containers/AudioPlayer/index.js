@@ -453,6 +453,7 @@ export class AudioPlayer extends React.Component {
 						textId: this.props.activeTextId.toLowerCase(),
 						verseNumber: this.props.verseNumber,
 						text: this.props.textData.text,
+						audioType: this.props.audioType,
 						isHref: true,
 					}),
 					getNextChapterUrl({
@@ -462,6 +463,7 @@ export class AudioPlayer extends React.Component {
 						textId: this.props.activeTextId.toLowerCase(),
 						verseNumber: this.props.verseNumber,
 						text: this.props.textData.text,
+						audioType: this.props.audioType,
 						isHref: false,
 					}),
 				);
