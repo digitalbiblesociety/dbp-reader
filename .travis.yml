@@ -16,7 +16,8 @@ notifications:
     on_failure: change
 
 after_success:
-  - 'npm run coveralls'
+  - npm run test:coverage
+  - npm run coveralls
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
 
 cache:
