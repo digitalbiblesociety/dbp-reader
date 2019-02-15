@@ -9,15 +9,22 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
+import { createStructuredSelector } from 'reselect';
 import LoadingSpinner from '../LoadingSpinner';
 import VersionListSection from '../VersionListSection';
 import messages from './messages';
+import { selectActiveBookId, selectActiveChapter } from './selectors';
 import { changeVersion } from '../../containers/HomePage/actions';
 
 export class VersionList extends React.PureComponent {
 	get filteredVersionList() {
-		const { bibles, activeTextId, filterText } = this.props;
-
+		const {
+			bibles,
+			activeTextId,
+			filterText,
+			activeChapter,
+			activeBookId,
+		} = this.props;
 		const filteredBibles = filterText
 			? bibles.filter(this.filterFunction)
 			: bibles;
@@ -28,7 +35,9 @@ export class VersionList extends React.PureComponent {
 			(acc, bible) => [
 				...acc,
 				{
-					path: `/${bible.get('abbr').toUpperCase()}`,
+					path: `/${bible
+						.get('abbr')
+						.toUpperCase()}/${activeBookId.toUpperCase()}/${activeChapter}`,
 					key: `${bible.get('abbr')}${bible.get('date')}`,
 					clickHandler: (audioType) =>
 						this.handleVersionListClick(bible, audioType),
@@ -199,6 +208,8 @@ VersionList.propTypes = {
 	toggleTextSelection: PropTypes.func,
 	activeTextId: PropTypes.string,
 	filterText: PropTypes.string,
+	activeBookId: PropTypes.string,
+	activeChapter: PropTypes.number,
 	active: PropTypes.bool,
 	loadingVersions: PropTypes.bool,
 };
@@ -209,8 +220,13 @@ function mapDispatchToProps(dispatch) {
 	};
 }
 
+const mapStateToProps = createStructuredSelector({
+	activeBookId: selectActiveBookId(),
+	activeChapter: selectActiveChapter(),
+});
+
 const withConnect = connect(
-	null,
+	mapStateToProps,
 	mapDispatchToProps,
 );
 
