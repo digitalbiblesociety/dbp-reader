@@ -3,10 +3,7 @@
  * CloseEventHoc
  *
  */
-// TODO: Figure out if this is the correct approach to unmounting modals
-// ask on discord or slack channel
 import React from 'react';
-// import styled from 'styled-components';
 
 const closeEventHoc = (WrappedComponent, onCloseFunction) =>
 	class extends React.Component {
