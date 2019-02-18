@@ -12,7 +12,7 @@ const props = {
 describe('Url route tests', () => {
 	it('Return the correct url if it is an href', () => {
 		expect(url(props)).toEqual(
-			'/app?bibleId=ENGESV&bookId=GEN&chapter=9?audio_type=audio_drama',
+			'/app?bibleId=ENGESV&bookId=GEN&chapter=9&audio_type=audio_drama',
 		);
 	});
 	it('Return the correct url if it is an as', () => {
@@ -32,7 +32,7 @@ describe('Url route tests', () => {
 	});
 	it('Return the correct url if it has a verse and href', () => {
 		expect(url({ ...props, nextVerse: 2 })).toEqual(
-			'/app?bibleId=ENGESV&bookId=GEN&chapter=9&verse=2?audio_type=audio_drama',
+			'/app?bibleId=ENGESV&bookId=GEN&chapter=9&verse=2&audio_type=audio_drama',
 		);
 	});
 });
