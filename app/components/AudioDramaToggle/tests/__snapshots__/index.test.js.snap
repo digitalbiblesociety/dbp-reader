@@ -1,6 +1,29 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<AudioDramaToggle /> Expect to match snapshot 1`] = `
+exports[`<AudioDramaToggle /> Expect to match snapshot for drama audio 1`] = `
+<div
+  className="audio-drama-toggle-container"
+>
+  <button
+    className="audio-drama-toggle-button active"
+    id="drama-button"
+    onClick={[Function]}
+    type="button"
+  >
+    Drama
+  </button>
+  <button
+    className="audio-drama-toggle-button"
+    id="non-drama-button"
+    onClick={[Function]}
+    type="button"
+  >
+    Non-Drama
+  </button>
+</div>
+`;
+
+exports[`<AudioDramaToggle /> Expect to match snapshot for plain audio 1`] = `
 <div
   className="audio-drama-toggle-container"
 >

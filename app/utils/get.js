@@ -12,7 +12,9 @@ const baseGet = (object, path) => {
 	return tempPath[0] ? tempObj[tempPath[0]] : tempObj;
 };
 
-export default (object, path, defaultValue) => {
+export default function get(object, path, defaultValue) {
 	const result = object == null ? undefined : baseGet(object, path);
 	return result === undefined ? defaultValue : result;
-};
+}
+
+export { get };

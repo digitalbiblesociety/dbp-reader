@@ -191,7 +191,8 @@
 			"!app/reducers.js",
 			"!app/configureStore.js",
 			"!app/withRedux.js",
-			"!app/utils/stopPropagationPolyfill.js"
+			"!app/utils/stopPropagationPolyfill.js",
+			"!app/utils/testUtils/*"
 		],
 		"coverageDirectory": "<rootDir>/coverage/jest",
 		"transform": {

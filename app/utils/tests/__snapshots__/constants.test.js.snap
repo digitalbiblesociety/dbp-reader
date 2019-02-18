@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test contstants in utils should match old snapshot 1`] = `"{\\"RESTART_ON_REMOUNT\\":\\"@@saga-injector/restart-on-remount\\",\\"DAEMON\\":\\"@@saga-injector/daemon\\",\\"ONCE_TILL_UNMOUNT\\":\\"@@saga-injector/once-till-unmount\\"}"`;
