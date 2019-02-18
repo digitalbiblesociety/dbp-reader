@@ -61,5 +61,25 @@ exports[`AudioProgressBar Component Should match previous snapshot 1`] = `
       className="rc-slider-mark"
     />
   </div>
+  <div
+    className="audio-drama-toggle-container"
+  >
+    <button
+      className="audio-drama-toggle-button active"
+      id="drama-button"
+      onClick={[MockFunction]}
+      type="button"
+    >
+      Drama
+    </button>
+    <button
+      className="audio-drama-toggle-button"
+      id="non-drama-button"
+      onClick={[MockFunction]}
+      type="button"
+    >
+      Non-Drama
+    </button>
+  </div>
 </div>
 `;

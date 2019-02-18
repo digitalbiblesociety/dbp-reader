@@ -7,6 +7,7 @@
  */
 
 import { fromJS } from 'immutable';
+import { SET_AUDIO_TYPE } from '../AudioPlayer/constants';
 import { USER_LOGGED_IN, LOG_OUT } from '../Profile/constants';
 import {
 	CLOSE_VIDEO_PLAYER,
@@ -125,15 +126,19 @@ const initialState = fromJS({
 
 function homePageReducer(state = initialState, action) {
 	switch (action.type) {
+		// Audio play actions
+		case SET_AUDIO_TYPE:
+			return state.set('audioType', action.audioType);
 		// Video player actions
 		case OPEN_VIDEO_PLAYER:
 			return state.set('videoPlayerOpen', true);
-		case CHANGING_VERSION:
-			return state.set('changingVersion', action.state);
 		case CLOSE_VIDEO_PLAYER:
 			return state.set('videoPlayerOpen', false);
 		case SET_HAS_VIDEO:
 			return state.set('hasVideo', action.state);
+		// Homepage Actions
+		case CHANGING_VERSION:
+			return state.set('changingVersion', action.state);
 		case USER_LOGGED_IN:
 			return state.set('userId', action.userId).set('userAuthenticated', true);
 		case LOG_OUT:

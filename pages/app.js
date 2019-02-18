@@ -172,7 +172,6 @@ class AppContainer extends React.Component {
 			initialPlaybackRate,
 			initialVolume,
 			isIe,
-			audioType,
 		} = this.props;
 		// Defaulting description text to an empty string since no metadata is better than inaccurate metadata
 		const descriptionText =
@@ -219,7 +218,6 @@ class AppContainer extends React.Component {
 					initialPlaybackRate={initialPlaybackRate}
 					initialVolume={initialVolume}
 					isIe={isIe}
-					audioType={audioType}
 				/>
 			</div>
 		);
@@ -726,7 +724,6 @@ AppContainer.propTypes = {
 	chapterText: PropTypes.array,
 	fetchedUrls: PropTypes.array,
 	isFromServer: PropTypes.bool,
-	audioType: PropTypes.string,
 	isIe: PropTypes.bool,
 	routeLocation: PropTypes.string,
 	activeBookName: PropTypes.string,

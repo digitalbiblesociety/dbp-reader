@@ -534,15 +534,10 @@ class HomePage extends React.PureComponent {
 			changingVersion,
 			videoPlayerOpen,
 			hasVideo,
+			audioType,
 		} = this.props.homepage;
 
-		const {
-			userSettings,
-			isMenuOpen,
-			isIe,
-			audioType,
-			activeNotesView,
-		} = this.props;
+		const { userSettings, isMenuOpen, isIe, activeNotesView } = this.props;
 
 		const { isScrollingDown } = this.state;
 		const { text: updatedText } = this.props.textData;
@@ -679,7 +674,6 @@ HomePage.propTypes = {
 	formattedSource: PropTypes.object,
 	userAuthenticated: PropTypes.bool,
 	isIe: PropTypes.bool,
-	audioType: PropTypes.string,
 	activeNotesView: PropTypes.string,
 	userId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 	textData: PropTypes.object,

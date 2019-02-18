@@ -305,7 +305,7 @@
 .progress-slider {
 	width: 50%;
 	height: 3px;
-	margin-top: -20px;
+	margin-top: -32.5px;
 	position: relative;
 	padding: 0 5px;
 
@@ -316,7 +316,7 @@
 		z-index: 50;
 		width: 25px;
 		left: 5px;
-		top: 13px;
+		top: 17px;
 
 		@include css4 {
 			color: var(--default-text-color);
@@ -330,11 +330,39 @@
 		z-index: 50;
 		width: 25px;
 		right: 9px;
-		top: 13px;
+		top: 17px;
 
 		@include css4 {
 			color: var(--default-text-color);
 		}
+	}
+
+	.audio-drama-toggle-container {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 128px;
+		margin: 0 auto;
+	}
+
+	.audio-drama-toggle-button {
+		padding: 2.5px 5px;
+		cursor: pointer;
+
+		@include css4 {
+			border: 1px solid var(--default-text-color);
+
+			&:hover,
+			&:focus,
+			&.active {
+				color: var(--active-color-primary);
+				border-color: var(--active-color-primary);
+			}
+		}
+	}
+
+	@media only screen and (max-width: 550px) {
+		margin-top: -40px;
 	}
 }
 
@@ -379,6 +407,7 @@
 
 		.icon-wrap {
 			min-width: 40px;
+			height: 45px;
 			width: auto;
 		}
 
@@ -386,9 +415,9 @@
 			order: 1;
 			width: 55%;
 			min-width: 291px;
-			margin: 0 25px 24px 25px;
+			margin: 0 25px 35px 25px;
 		}
-		//:nth-child(4) {order:1;width:55%;min-width:291px;margin:0 25px 17px 25px;}
+
 		:nth-child(3) {
 			margin-right: 0;
 		}
