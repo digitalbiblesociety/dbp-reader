@@ -23,6 +23,7 @@ const props = {
 	hasTextInDatabase: true,
 	active: true,
 	filesetTypes: {},
+	textDirection: 'ltr',
 };
 let wrapper;
 
@@ -32,6 +33,12 @@ describe('BooksTable tests', () => {
 	});
 	it('should match snapshot with all potential props', () => {
 		const tree = renderer.create(<BooksTable {...props} />).toJSON();
+		expect(tree).toMatchSnapshot();
+	});
+	it('should match snapshot with direction right to left', () => {
+		const tree = renderer
+			.create(<BooksTable {...props} textDirection={'rtl'} />)
+			.toJSON();
 		expect(tree).toMatchSnapshot();
 	});
 	it('should match snapshot when it is closed', () => {

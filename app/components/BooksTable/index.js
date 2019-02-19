@@ -26,6 +26,7 @@ import {
 	selectFilesetTypes,
 	selectLoadingBookStatus,
 } from './selectors';
+import { selectTextDirection } from '../../containers/Verses/selectors';
 
 export class BooksTable extends React.PureComponent {
 	// eslint-disable-line react/prefer-stateless-function
@@ -99,6 +100,7 @@ export class BooksTable extends React.PureComponent {
 			activeChapter,
 			activeBookName,
 			loadingBooks,
+			textDirection,
 		} = this.props;
 		const { selectedBookName } = this.state;
 
@@ -106,7 +108,13 @@ export class BooksTable extends React.PureComponent {
 			return <LoadingSpinner />;
 		}
 		return (
-			<div className="chapter-selection-section">
+			<div
+				className={
+					textDirection === 'rtl'
+						? 'chapter-selection-section rtl'
+						: 'chapter-selection-section'
+				}
+			>
 				<div
 					ref={(el) => this.handleRef(el, 'container')}
 					className="book-container"
@@ -163,21 +171,16 @@ export class BooksTable extends React.PureComponent {
 }
 
 BooksTable.propTypes = {
-	dispatch: PropTypes.func,
 	closeBookTable: PropTypes.func,
 	books: PropTypes.object,
-	audioObjects: PropTypes.array,
-	userId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 	audioType: PropTypes.string,
 	activeTextId: PropTypes.string,
 	activeBookName: PropTypes.string,
 	initialBookName: PropTypes.string,
+	textDirection: PropTypes.string,
 	activeChapter: PropTypes.number,
 	loadingBooks: PropTypes.bool,
-	userAuthenticated: PropTypes.bool,
-	hasTextInDatabase: PropTypes.bool,
 	active: PropTypes.bool,
-	filesetTypes: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -192,6 +195,8 @@ const mapStateToProps = createStructuredSelector({
 	userAuthenticated: selectAuthenticationStatus(),
 	userId: selectUserId(),
 	audioType: selectAudioType(),
+	// Verses selector
+	textDirection: selectTextDirection(),
 });
 
 function mapDispatchToProps(dispatch) {

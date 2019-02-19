@@ -37,6 +37,9 @@
 		height: 100%;
 		//text-transform:uppercase;
 		//padding: 15px;
+		&.rtl {
+			direction: rtl;
+		}
 	}
 
 	.chapter-box {
