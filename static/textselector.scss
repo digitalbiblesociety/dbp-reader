@@ -193,8 +193,22 @@
 }
 .language-name {
 	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
 	margin-top: 5px;
 	margin-bottom: 5px;
+
+	svg.language-list-icon {
+		width: 25px;
+		height: 25px;
+		margin: 5px 15px 0 0;
+
+		@include css4 {
+			color: var(--default-text-color);
+			fill: var(--default-text-color);
+		}
+	}
 
 	h4 {
 		display: inline-block;

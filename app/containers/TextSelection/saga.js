@@ -143,11 +143,26 @@ export function* getLanguages() {
 	}&v=4&asset_id=${
 		process.env.DBP_BUCKET_ID
 	}&has_filesets=true&asset_id=dbp-prod,dbp-vid`;
+	const videoResourcesUrl = `${process.env.BASE_API_ROUTE}/languages?key=${
+		process.env.DBP_API_KEY
+	}&v=4&asset_id=${
+		process.env.DBP_BUCKET_ID
+	}&has_filesets=true&asset_id=dbp-vid`;
 
 	try {
 		const response = yield call(cachedFetch, requestUrl, {}, oneDay);
+		const vidResponse = yield call(cachedFetch, videoResourcesUrl, {}, oneDay);
 		// Sometimes the api returns an array and sometimes an object with the data key
-		const languages = response.data || response;
+		const vids = vidResponse.data || vidResponse;
+		const languagesData = response.data || response;
+
+		const languages = languagesData.map((lang) => {
+			const video = vids.find((vid) => vid.id === lang.id);
+			if (video) {
+				return { ...lang, video: true };
+			}
+			return lang;
+		});
 
 		yield put(setLanguages({ languages }));
 		yield put({ type: CLEAR_ERROR_GETTING_LANGUAGES });
@@ -172,9 +187,16 @@ export function* getLanguageAltNames() {
 	}&v=4&asset_id=${
 		process.env.DBP_BUCKET_ID
 	}&has_filesets=true&include_alt_names=true&asset_id=dbp-prod,dbp-vid`;
+	const videoResourcesUrl = `${process.env.BASE_API_ROUTE}/languages?key=${
+		process.env.DBP_API_KEY
+	}&v=4&asset_id=${
+		process.env.DBP_BUCKET_ID
+	}&has_filesets=true&asset_id=dbp-vid`;
 	try {
 		const response = yield call(cachedFetch, requestUrl, {}, oneDay);
+		const vidResponse = yield call(cachedFetch, videoResourcesUrl, {}, oneDay);
 		const languageData = response.data || response;
+		const vids = vidResponse.data || vidResponse;
 		const languages = languageData
 			.map((l) => {
 				if (l.translations) {
@@ -195,7 +217,15 @@ export function* getLanguageAltNames() {
 					englishName: l.name,
 				};
 			})
+			.map((lang) => {
+				const video = vids.find((vid) => vid.id === lang.id);
+				if (video) {
+					return { ...lang, video: true };
+				}
+				return lang;
+			})
 			.sort(sortLanguagesByVname);
+
 		yield put(setLanguages({ languages }));
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
