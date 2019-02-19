@@ -34,6 +34,9 @@ body {
 	}
 	margin: 0 auto;
 }
+body .rtl {
+	direction: rtl;
+}
 div:focus {
 	outline: none;
 }

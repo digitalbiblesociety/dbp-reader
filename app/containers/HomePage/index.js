@@ -535,6 +535,7 @@ class HomePage extends React.PureComponent {
 			videoPlayerOpen,
 			hasVideo,
 			audioType,
+			textDirection,
 		} = this.props.homepage;
 
 		const { userSettings, isMenuOpen, isIe, activeNotesView } = this.props;
@@ -552,6 +553,7 @@ class HomePage extends React.PureComponent {
 					activeChapter={activeChapter}
 					activeTextName={activeTextName}
 					activeBookName={activeBookName}
+					textDirection={textDirection}
 					theme={userSettings.get('activeTheme')}
 					isScrollingDown={isScrollingDown}
 					isChapterSelectionActive={isChapterSelectionActive}
