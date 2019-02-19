@@ -41,7 +41,7 @@
 		"lint": "npm run lint:js",
 		"lint:eslint": "eslint --ignore-path .gitignore --ignore-pattern internals/scripts",
 		"lint:js": "npm run lint:eslint -- . ",
-		"lint:staged": "lint-staged",
+		"lint:staged": "lint-staged; npm run test",
 		"pretest": "npm run test:clean",
 		"test:clean": "rimraf ./coverage",
 		"test": "cross-env NODE_ENV=test jest",
@@ -60,8 +60,7 @@
 			"prettier --single-quote=true --arrow-parens=always --use-tabs --write --single-quote --trailing-comma=all",
 			"git add"
 		],
-		"*.js": "lint:eslint",
-		"*.js": "test"
+		"*.js": "lint:eslint"
 	},
 	"pre-commit": "lint:staged",
 	"plugins": [
