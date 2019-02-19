@@ -4,7 +4,7 @@
 	position: fixed;
 	top: 0;
 	left: 0;
-	height: calc(100% - 56px);
+	height: calc(100% - 44px);
 	width: 320px;
 	@include css4 {
 		background: var(--menu-body-background-color);

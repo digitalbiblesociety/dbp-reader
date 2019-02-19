@@ -4,7 +4,7 @@
 	z-index: 1;
 	top: 0;
 	right: 0;
-	height: calc(100% - 56px);
+	height: calc(100% - 44px);
 	width: 320px;
 
 	@include css4 {
@@ -13,7 +13,7 @@
 	}
 
 	.settings-wrapper {
-		height: calc(100% - 110px);
+		height: calc(100% - 98px);
 		overflow: hidden;
 	}
 
