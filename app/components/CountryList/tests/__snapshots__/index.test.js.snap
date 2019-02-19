@@ -1,0 +1,70 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CountryList component should match snapshot of active list 1`] = `
+<div
+  className="text-selection-section"
+>
+  <div
+    className="country-name-list"
+    onMouseDown={[Function]}
+    onMouseLeave={[Function]}
+    onMouseUp={[Function]}
+    onTouchEnd={[Function]}
+    onTouchMove={[Function]}
+    onTouchStart={[Function]}
+  >
+    <div
+      className="pull-down-refresh"
+      style={
+        Object {
+          "height": 0,
+          "maxHeight": 0,
+        }
+      }
+    >
+      <span
+        style={
+          Object {
+            "textAlign": "center",
+            "width": "100%",
+          }
+        }
+      >
+        Pull to Refresh
+      </span>
+    </div>
+    <div
+      style={
+        Object {
+          "height": 0,
+          "overflow": "visible",
+          "width": 0,
+        }
+      }
+    >
+      <div
+        aria-label="grid"
+        aria-readonly={true}
+        className="ReactVirtualized__Grid ReactVirtualized__List"
+        id="list-element"
+        onScroll={[Function]}
+        role="grid"
+        style={
+          Object {
+            "WebkitOverflowScrolling": "touch",
+            "boxSizing": "border-box",
+            "direction": "ltr",
+            "height": 0,
+            "overflowX": "hidden",
+            "overflowY": "auto",
+            "position": "relative",
+            "width": 0,
+            "willChange": "transform",
+          }
+        }
+        tabIndex={0}
+      />
+    </div>
+  </div>
+</div>
+`;
