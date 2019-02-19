@@ -113,3 +113,82 @@ export const invalidCopyrights = {
 		},
 	},
 };
+
+export const invalidCopyrights2 = {
+	newTestament: {
+		audio: {
+			organizations: [
+				{
+					name: 'Crossway',
+					logo: {
+						language_id: 6414,
+						language_iso: 'eng',
+						url: 'https://images.bible.cloud/logo/crossway.svg',
+						icon: 0,
+					},
+					isIcon: 0,
+					url: 'https://www.crossway.org',
+				},
+				{ name: 'Good News Publishers', isIcon: 1, url: null },
+			],
+			testament: 'NT',
+			type: 'audio_drama',
+		},
+		text: {
+			organizations: [
+				{
+					name: 'Crossway',
+					logo: {
+						language_id: 6414,
+						language_iso: 'eng',
+						url: 'https://images.bible.cloud/logo/crossway.svg',
+						icon: 0,
+					},
+					isIcon: 0,
+					url: 'https://www.crossway.org',
+				},
+				{ name: 'Good News Publishers', isIcon: 1, url: null },
+			],
+			testament: 'C',
+			type: 'text_plain',
+		},
+	},
+	oldTestament: {
+		audio: {
+			organizations: [
+				{
+					name: 'Crossway',
+					logo: {
+						language_id: 6414,
+						language_iso: 'eng',
+						url: 'https://images.bible.cloud/logo/crossway.svg',
+						icon: 0,
+					},
+					isIcon: 0,
+					url: 'https://www.crossway.org',
+				},
+				{ name: 'Good News Publishers', isIcon: 1, url: null },
+			],
+			testament: 'OT',
+			type: 'audio_drama',
+		},
+		text: {
+			organizations: [
+				{
+					name: 'Crossway',
+					logo: {
+						language_id: 6414,
+						language_iso: 'eng',
+						url: 'https://images.bible.cloud/logo/crossway.svg',
+						icon: 0,
+					},
+					isIcon: 0,
+					url: 'https://www.crossway.org',
+				},
+				{ name: 'Good News Publishers', isIcon: 1, url: null },
+			],
+			testament: 'C',
+			type: 'text_plain',
+		},
+	},
+};

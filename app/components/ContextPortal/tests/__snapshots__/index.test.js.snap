@@ -316,3 +316,1010 @@ exports[`ContextPortal Component Should match previous snapshot 1`] = `
   </div>
 </div>
 `;
+
+exports[`ContextPortal Component Should match previous snapshot if highlight menu is open 1`] = `
+<div
+  className="context-menu shadow"
+  style={
+    Object {
+      "left": "150px",
+      "position": "absolute",
+      "top": "150px",
+    }
+  }
+>
+  <div
+    className="menu-row"
+  >
+    <span
+      className="menu-item normal"
+      id="add-note"
+      onClick={[Function]}
+      role="button"
+      tabIndex={0}
+      title="Add a note"
+    >
+      <svg
+        className="icon"
+      >
+        <use
+          xlinkHref="/static/svglist.svg#notes"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+        />
+      </svg>
+      <span
+        className="item-text"
+      >
+        Notes
+      </span>
+    </span>
+    <span
+      className="menu-item active"
+      id="add-highlight"
+      onClick={[Function]}
+      role="button"
+      tabIndex={0}
+      title="Add a highlight"
+    >
+      <svg
+        className="icon"
+      >
+        <use
+          xlinkHref="/static/svglist.svg#highlight"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+        />
+      </svg>
+      <span
+        className="item-text"
+      >
+        Highlight
+      </span>
+      <div
+        className="highlight-colors active"
+      >
+        <span
+          className="color-group"
+        >
+          <span
+            className="none"
+            onClick={[Function]}
+            role="button"
+            tabIndex={0}
+          />
+          <span
+            className="color-text"
+          >
+            <span>
+              None
+            </span>
+          </span>
+        </span>
+        <span
+          className="color-group"
+        >
+          <span
+            className="yellow"
+            onClick={[Function]}
+            role="button"
+            tabIndex={-1}
+          />
+          <span
+            className="color-text"
+          >
+            <span>
+              Yellow
+            </span>
+          </span>
+        </span>
+        <span
+          className="color-group"
+        >
+          <span
+            className="green"
+            onClick={[Function]}
+            role="button"
+            tabIndex={-2}
+          />
+          <span
+            className="color-text"
+          >
+            <span>
+              Green
+            </span>
+          </span>
+        </span>
+        <span
+          className="color-group"
+        >
+          <span
+            className="pink"
+            onClick={[Function]}
+            role="button"
+            tabIndex={-3}
+          />
+          <span
+            className="color-text"
+          >
+            <span>
+              Pink
+            </span>
+          </span>
+        </span>
+        <span
+          className="color-group"
+        >
+          <span
+            className="purple"
+            onClick={[Function]}
+            role="button"
+            tabIndex={-4}
+          />
+          <span
+            className="color-text"
+          >
+            <span>
+              Purple
+            </span>
+          </span>
+        </span>
+        <span
+          className="color-group"
+        >
+          <span
+            className="blue"
+            onClick={[Function]}
+            role="button"
+            tabIndex={-5}
+          />
+          <span
+            className="color-text"
+          >
+            <span>
+              Blue
+            </span>
+          </span>
+        </span>
+      </div>
+    </span>
+    <span
+      className="menu-item normal"
+      id="add-bookmark"
+      onClick={[Function]}
+      role="button"
+      tabIndex={0}
+      title="Add a bookmark"
+    >
+      <svg
+        className="icon"
+      >
+        <use
+          xlinkHref="/static/svglist.svg#bookmark"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+        />
+      </svg>
+      <span
+        className="item-text"
+      >
+        Bookmark
+      </span>
+    </span>
+    <div
+      className="SocialMediaShareButton SocialMediaShareButton--email menu-item normal email-share"
+      onClick={[Function]}
+      onKeyPress={[Function]}
+      role="button"
+      style={Object {}}
+      tabIndex="0"
+    >
+      <svg
+        className="icon"
+      >
+        <use
+          xlinkHref="/static/svglist.svg#e-mail"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+        />
+      </svg>
+      <span
+        className="item-text"
+      >
+        E-mail
+      </span>
+    </div>
+  </div>
+  <div
+    className="menu-row"
+  >
+    <div
+      className="SocialMediaShareButton SocialMediaShareButton--facebook menu-item social facebook fb-share-button"
+      onClick={[Function]}
+      onKeyPress={[Function]}
+      role="button"
+      style={Object {}}
+      tabIndex="0"
+    >
+      <svg
+        className="icon"
+      >
+        <use
+          xlinkHref="/static/svglist.svg#facebook"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+        />
+      </svg>
+    </div>
+    <div
+      className="SocialMediaShareButton SocialMediaShareButton--googlePlus menu-item social google"
+      id="sharePost"
+    >
+      <svg
+        className="icon"
+      >
+        <use
+          xlinkHref="/static/svglist.svg#google"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+        />
+      </svg>
+    </div>
+    <div
+      className="SocialMediaShareButton SocialMediaShareButton--twitter menu-item social twitter"
+      onClick={[Function]}
+      onKeyPress={[Function]}
+      role="button"
+      style={Object {}}
+      tabIndex="0"
+    >
+      <svg
+        className="icon"
+      >
+        <use
+          xlinkHref="/static/svglist.svg#twitter"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+        />
+      </svg>
+    </div>
+    <div
+      className="menu-item social like-button"
+      id="like-facebook"
+      onClick={[MockFunction]}
+      role="button"
+      tabIndex={0}
+      title="Like on Facebook"
+    >
+      <span
+        className="share-count"
+      >
+        <div
+          className="SocialMediaShareCount"
+        />
+      </span>
+      <span
+        className="like-thumb"
+      >
+        <svg
+          height="24px"
+          width="24px"
+        >
+          <use
+            xlinkHref="/static/svglist.svg#like_one-color"
+            xmlnsXlink="http://www.w3.org/1999/xlink"
+          />
+        </svg>
+         
+        Like
+      </span>
+    </div>
+  </div>
+  <div
+    className="menu-row"
+    id="copy-container"
+    onClick={[Function]}
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    role="button"
+    tabIndex={0}
+    title="Copy link to page"
+  >
+    <input
+      className="copy-link"
+      id="link-to-copy"
+      readOnly={true}
+      value="http://localhost/"
+    />
+    <span
+      className="copy-button"
+      id="copy-button"
+    >
+      Copy
+    </span>
+  </div>
+</div>
+`;
+
+exports[`ContextPortal Component Should match previous snapshot if ie is active 1`] = `
+<div
+  className="context-menu shadow"
+  style={
+    Object {
+      "left": "150px",
+      "position": "absolute",
+      "top": "150px",
+    }
+  }
+>
+  <div
+    id="internet-explorer-container"
+  >
+    <span>
+      Bible.is does not support this feature on Internet Explorer. Please use one of the listed browsers instead:
+    </span>
+     
+    <a
+      href="https://www.google.com/chrome"
+      target="_blank"
+    >
+      <span>
+        Chrome
+      </span>
+    </a>
+     
+    <span>
+      Or
+    </span>
+     
+    <a
+      href="https://www.mozilla.org/en-US/firefox/"
+      target="_blank"
+    >
+      <span>
+        Firefox
+      </span>
+    </a>
+  </div>
+</div>
+`;
+
+exports[`ContextPortal Component Should match previous snapshot if notes menu is active 1`] = `
+<div
+  className="context-menu shadow"
+  style={
+    Object {
+      "left": "150px",
+      "position": "absolute",
+      "top": "150px",
+    }
+  }
+>
+  <div
+    className="menu-row"
+  >
+    <span
+      className="menu-item normal"
+      id="add-note"
+      onClick={[Function]}
+      role="button"
+      tabIndex={0}
+      title="Add a note"
+    >
+      <svg
+        className="icon"
+      >
+        <use
+          xlinkHref="/static/svglist.svg#notes"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+        />
+      </svg>
+      <span
+        className="item-text"
+      >
+        Notes
+      </span>
+    </span>
+    <span
+      className="menu-item normal"
+      id="add-highlight"
+      onClick={[Function]}
+      role="button"
+      tabIndex={0}
+      title="Add a highlight"
+    >
+      <svg
+        className="icon"
+      >
+        <use
+          xlinkHref="/static/svglist.svg#highlight"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+        />
+      </svg>
+      <span
+        className="item-text"
+      >
+        Highlight
+      </span>
+      <div
+        className="highlight-colors"
+      >
+        <span
+          className="color-group"
+        >
+          <span
+            className="none"
+            onClick={[Function]}
+            role="button"
+            tabIndex={0}
+          />
+          <span
+            className="color-text"
+          >
+            <span>
+              None
+            </span>
+          </span>
+        </span>
+        <span
+          className="color-group"
+        >
+          <span
+            className="yellow"
+            onClick={[Function]}
+            role="button"
+            tabIndex={-1}
+          />
+          <span
+            className="color-text"
+          >
+            <span>
+              Yellow
+            </span>
+          </span>
+        </span>
+        <span
+          className="color-group"
+        >
+          <span
+            className="green"
+            onClick={[Function]}
+            role="button"
+            tabIndex={-2}
+          />
+          <span
+            className="color-text"
+          >
+            <span>
+              Green
+            </span>
+          </span>
+        </span>
+        <span
+          className="color-group"
+        >
+          <span
+            className="pink"
+            onClick={[Function]}
+            role="button"
+            tabIndex={-3}
+          />
+          <span
+            className="color-text"
+          >
+            <span>
+              Pink
+            </span>
+          </span>
+        </span>
+        <span
+          className="color-group"
+        >
+          <span
+            className="purple"
+            onClick={[Function]}
+            role="button"
+            tabIndex={-4}
+          />
+          <span
+            className="color-text"
+          >
+            <span>
+              Purple
+            </span>
+          </span>
+        </span>
+        <span
+          className="color-group"
+        >
+          <span
+            className="blue"
+            onClick={[Function]}
+            role="button"
+            tabIndex={-5}
+          />
+          <span
+            className="color-text"
+          >
+            <span>
+              Blue
+            </span>
+          </span>
+        </span>
+      </div>
+    </span>
+    <span
+      className="menu-item normal"
+      id="add-bookmark"
+      onClick={[Function]}
+      role="button"
+      tabIndex={0}
+      title="Add a bookmark"
+    >
+      <svg
+        className="icon"
+      >
+        <use
+          xlinkHref="/static/svglist.svg#bookmark"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+        />
+      </svg>
+      <span
+        className="item-text"
+      >
+        Bookmark
+      </span>
+    </span>
+    <div
+      className="SocialMediaShareButton SocialMediaShareButton--email menu-item normal email-share"
+      onClick={[Function]}
+      onKeyPress={[Function]}
+      role="button"
+      style={Object {}}
+      tabIndex="0"
+    >
+      <svg
+        className="icon"
+      >
+        <use
+          xlinkHref="/static/svglist.svg#e-mail"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+        />
+      </svg>
+      <span
+        className="item-text"
+      >
+        E-mail
+      </span>
+    </div>
+  </div>
+  <div
+    className="menu-row"
+  >
+    <div
+      className="SocialMediaShareButton SocialMediaShareButton--facebook menu-item social facebook fb-share-button"
+      onClick={[Function]}
+      onKeyPress={[Function]}
+      role="button"
+      style={Object {}}
+      tabIndex="0"
+    >
+      <svg
+        className="icon"
+      >
+        <use
+          xlinkHref="/static/svglist.svg#facebook"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+        />
+      </svg>
+    </div>
+    <div
+      className="SocialMediaShareButton SocialMediaShareButton--googlePlus menu-item social google"
+      id="sharePost"
+    >
+      <svg
+        className="icon"
+      >
+        <use
+          xlinkHref="/static/svglist.svg#google"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+        />
+      </svg>
+    </div>
+    <div
+      className="SocialMediaShareButton SocialMediaShareButton--twitter menu-item social twitter"
+      onClick={[Function]}
+      onKeyPress={[Function]}
+      role="button"
+      style={Object {}}
+      tabIndex="0"
+    >
+      <svg
+        className="icon"
+      >
+        <use
+          xlinkHref="/static/svglist.svg#twitter"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+        />
+      </svg>
+    </div>
+    <div
+      className="menu-item social like-button"
+      id="like-facebook"
+      onClick={[MockFunction]}
+      role="button"
+      tabIndex={0}
+      title="Like on Facebook"
+    >
+      <span
+        className="share-count"
+      >
+        <div
+          className="SocialMediaShareCount"
+        />
+      </span>
+      <span
+        className="like-thumb"
+      >
+        <svg
+          height="24px"
+          width="24px"
+        >
+          <use
+            xlinkHref="/static/svglist.svg#like_one-color"
+            xmlnsXlink="http://www.w3.org/1999/xlink"
+          />
+        </svg>
+         
+        Like
+      </span>
+    </div>
+  </div>
+  <div
+    className="menu-row"
+    id="copy-container"
+    onClick={[Function]}
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    role="button"
+    tabIndex={0}
+    title="Copy link to page"
+  >
+    <input
+      className="copy-link"
+      id="link-to-copy"
+      readOnly={true}
+      value="http://localhost/"
+    />
+    <span
+      className="copy-button"
+      id="copy-button"
+    >
+      Copy
+    </span>
+  </div>
+</div>
+`;
+
+exports[`ContextPortal Component Should match previous snapshot if popup menu is active 1`] = `
+<div
+  className="context-menu shadow"
+  style={
+    Object {
+      "left": "150px",
+      "position": "absolute",
+      "top": "150px",
+    }
+  }
+>
+  <div
+    className="menu-row"
+  >
+    <span
+      className="menu-item normal"
+      id="add-note"
+      onClick={[Function]}
+      role="button"
+      tabIndex={0}
+      title="Add a note"
+    >
+      <svg
+        className="icon"
+      >
+        <use
+          xlinkHref="/static/svglist.svg#notes"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+        />
+      </svg>
+      <span
+        className="item-text"
+      >
+        Notes
+      </span>
+    </span>
+    <span
+      className="menu-item normal"
+      id="add-highlight"
+      onClick={[Function]}
+      role="button"
+      tabIndex={0}
+      title="Add a highlight"
+    >
+      <svg
+        className="icon"
+      >
+        <use
+          xlinkHref="/static/svglist.svg#highlight"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+        />
+      </svg>
+      <span
+        className="item-text"
+      >
+        Highlight
+      </span>
+      <div
+        className="highlight-colors"
+      >
+        <span
+          className="color-group"
+        >
+          <span
+            className="none"
+            onClick={[Function]}
+            role="button"
+            tabIndex={0}
+          />
+          <span
+            className="color-text"
+          >
+            <span>
+              None
+            </span>
+          </span>
+        </span>
+        <span
+          className="color-group"
+        >
+          <span
+            className="yellow"
+            onClick={[Function]}
+            role="button"
+            tabIndex={-1}
+          />
+          <span
+            className="color-text"
+          >
+            <span>
+              Yellow
+            </span>
+          </span>
+        </span>
+        <span
+          className="color-group"
+        >
+          <span
+            className="green"
+            onClick={[Function]}
+            role="button"
+            tabIndex={-2}
+          />
+          <span
+            className="color-text"
+          >
+            <span>
+              Green
+            </span>
+          </span>
+        </span>
+        <span
+          className="color-group"
+        >
+          <span
+            className="pink"
+            onClick={[Function]}
+            role="button"
+            tabIndex={-3}
+          />
+          <span
+            className="color-text"
+          >
+            <span>
+              Pink
+            </span>
+          </span>
+        </span>
+        <span
+          className="color-group"
+        >
+          <span
+            className="purple"
+            onClick={[Function]}
+            role="button"
+            tabIndex={-4}
+          />
+          <span
+            className="color-text"
+          >
+            <span>
+              Purple
+            </span>
+          </span>
+        </span>
+        <span
+          className="color-group"
+        >
+          <span
+            className="blue"
+            onClick={[Function]}
+            role="button"
+            tabIndex={-5}
+          />
+          <span
+            className="color-text"
+          >
+            <span>
+              Blue
+            </span>
+          </span>
+        </span>
+      </div>
+    </span>
+    <span
+      className="menu-item normal"
+      id="add-bookmark"
+      onClick={[Function]}
+      role="button"
+      tabIndex={0}
+      title="Add a bookmark"
+    >
+      <svg
+        className="icon"
+      >
+        <use
+          xlinkHref="/static/svglist.svg#bookmark"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+        />
+      </svg>
+      <span
+        className="item-text"
+      >
+        Bookmark
+      </span>
+    </span>
+    <div
+      className="SocialMediaShareButton SocialMediaShareButton--email menu-item normal email-share"
+      onClick={[Function]}
+      onKeyPress={[Function]}
+      role="button"
+      style={Object {}}
+      tabIndex="0"
+    >
+      <svg
+        className="icon"
+      >
+        <use
+          xlinkHref="/static/svglist.svg#e-mail"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+        />
+      </svg>
+      <span
+        className="item-text"
+      >
+        E-mail
+      </span>
+    </div>
+  </div>
+  <div
+    className="menu-row"
+  >
+    <div
+      className="SocialMediaShareButton SocialMediaShareButton--facebook menu-item social facebook fb-share-button"
+      onClick={[Function]}
+      onKeyPress={[Function]}
+      role="button"
+      style={Object {}}
+      tabIndex="0"
+    >
+      <svg
+        className="icon"
+      >
+        <use
+          xlinkHref="/static/svglist.svg#facebook"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+        />
+      </svg>
+    </div>
+    <div
+      className="SocialMediaShareButton SocialMediaShareButton--googlePlus menu-item social google"
+      id="sharePost"
+    >
+      <svg
+        className="icon"
+      >
+        <use
+          xlinkHref="/static/svglist.svg#google"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+        />
+      </svg>
+    </div>
+    <div
+      className="SocialMediaShareButton SocialMediaShareButton--twitter menu-item social twitter"
+      onClick={[Function]}
+      onKeyPress={[Function]}
+      role="button"
+      style={Object {}}
+      tabIndex="0"
+    >
+      <svg
+        className="icon"
+      >
+        <use
+          xlinkHref="/static/svglist.svg#twitter"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+        />
+      </svg>
+    </div>
+    <div
+      className="menu-item social like-button"
+      id="like-facebook"
+      onClick={[MockFunction]}
+      role="button"
+      tabIndex={0}
+      title="Like on Facebook"
+    >
+      <span
+        className="share-count"
+      >
+        <div
+          className="SocialMediaShareCount"
+        />
+      </span>
+      <span
+        className="like-thumb"
+      >
+        <svg
+          height="24px"
+          width="24px"
+        >
+          <use
+            xlinkHref="/static/svglist.svg#like_one-color"
+            xmlnsXlink="http://www.w3.org/1999/xlink"
+          />
+        </svg>
+         
+        Like
+      </span>
+    </div>
+  </div>
+  <div
+    className="menu-row"
+    id="copy-container"
+    onClick={[Function]}
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    role="button"
+    tabIndex={0}
+    title="Copy link to page"
+  >
+    <input
+      className="copy-link"
+      id="link-to-copy"
+      readOnly={true}
+      value="http://localhost/"
+    />
+    <span
+      className="copy-button"
+      id="copy-button"
+    >
+      Copy
+    </span>
+  </div>
+  <div
+    className="custom-popup"
+    style={
+      Object {
+        "left": -72.5,
+        "top": -35,
+      }
+    }
+  >
+    <p>
+      Link Copied!
+    </p>
+  </div>
+</div>
+`;

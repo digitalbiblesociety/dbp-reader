@@ -123,6 +123,12 @@ exports[`CopyrightStatement component should match previous snapshot for new tes
 </div>
 `;
 
+exports[`CopyrightStatement component should match previous snapshot for no copyright data 1`] = `
+<div
+  className="ot-copyright"
+/>
+`;
+
 exports[`CopyrightStatement component should match previous snapshot for old testament 1`] = `
 <div
   className="ot-copyright"
@@ -242,6 +248,79 @@ exports[`CopyrightStatement component should match previous snapshot for old tes
       </span>
       <br />
     </p>
+  </div>
+</div>
+`;
+
+exports[`CopyrightStatement component should match previous snapshot for old testament invalid data where there are no messages 1`] = `
+<div
+  className="ot-copyright"
+>
+  <div
+    className="cp-section"
+  >
+    <h3>
+      <span>
+        This Bible audio is brought to you by:
+      </span>
+    </h3>
+    <a
+      href="https://www.crossway.org"
+      rel="noopener"
+      target="_blank"
+    >
+      <img
+        alt="Copyright owners logo: Crossway"
+        className="image-landscape fcbh-copyright-logo"
+        src="https://images.bible.cloud/logo/crossway.svg"
+      />
+    </a>
+    <h3>
+      <span>
+        This Bible audio is brought to you by:
+      </span>
+    </h3>
+    <a
+      className="org-name"
+      href={null}
+      rel="noopener"
+      target="_blank"
+    >
+      Good News Publishers
+    </a>
+  </div>
+  <div
+    className="cp-section"
+  >
+    <h3>
+      <span>
+        This Bible text is brought to you by:
+      </span>
+    </h3>
+    <a
+      href="https://www.crossway.org"
+      rel="noopener"
+      target="_blank"
+    >
+      <img
+        alt="Copyright owners logo: Crossway"
+        className="image-landscape"
+        src="https://images.bible.cloud/logo/crossway.svg"
+      />
+    </a>
+    <h3>
+      <span>
+        This Bible text is brought to you by:
+      </span>
+    </h3>
+    <a
+      className="org-name"
+      href={null}
+      rel="noopener"
+      target="_blank"
+    >
+      Good News Publishers
+    </a>
   </div>
 </div>
 `;

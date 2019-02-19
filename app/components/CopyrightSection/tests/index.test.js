@@ -3,6 +3,7 @@ import renderer from 'react-test-renderer';
 import {
 	copyrights,
 	invalidCopyrights,
+	invalidCopyrights2,
 } from '../../../utils/testUtils/copyrightData';
 import CopyrightStatement from '..';
 
@@ -42,6 +43,20 @@ describe('CopyrightStatement component', () => {
 			.create(
 				<CopyrightStatement prefix={'old'} copyrights={invalidCopyrights} />,
 			)
+			.toJSON();
+		expect(tree).toMatchSnapshot();
+	});
+	it('should match previous snapshot for old testament invalid data where there are no messages', () => {
+		const tree = renderer
+			.create(
+				<CopyrightStatement prefix={'old'} copyrights={invalidCopyrights2} />,
+			)
+			.toJSON();
+		expect(tree).toMatchSnapshot();
+	});
+	it('should match previous snapshot for no copyright data', () => {
+		const tree = renderer
+			.create(<CopyrightStatement prefix={'old'} copyrights={{}} />)
 			.toJSON();
 		expect(tree).toMatchSnapshot();
 	});
