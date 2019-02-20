@@ -605,7 +605,13 @@ AppContainer.getInitialProps = async (context) => {
 	} else {
 		activeBook = undefined;
 	}
-
+	const availableAudioTypes = [];
+	if (filesets.some((set) => set.type === 'audio_drama')) {
+		availableAudioTypes.push('audio_drama');
+	}
+	if (filesets.some((set) => set.type === 'audio')) {
+		availableAudioTypes.push('audio');
+	}
 	const activeBookName = activeBook ? activeBook.name : '';
 	const testaments = bookData
 		? bookData.reduce((a, c) => ({ ...a, [c.book_id]: c.testament }), {})
@@ -631,6 +637,7 @@ AppContainer.getInitialProps = async (context) => {
 				userProfile,
 				activeFilesetId,
 				audioType: audioType || '',
+				availableAudioTypes,
 				loadingAudio: true,
 				hasAudio: false,
 				hasVideo,
