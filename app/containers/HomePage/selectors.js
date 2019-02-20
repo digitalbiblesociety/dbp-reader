@@ -23,6 +23,10 @@ const selectCrossReferenceState = (state) =>
 	]);
 const selectAudioType = () =>
 	createSelector(selectHomePageDomain, (home) => home.get('audioType'));
+const selectAvailableAudioTypes = () =>
+	createSelector(selectHomePageDomain, (home) =>
+		home.get('availableAudioTypes').toJS(),
+	);
 const selectNotes = (state) => state.get('notes');
 const selectActiveNotesView = () =>
 	createSelector(selectNotes, (notes) => notes.get('activeChild'));
@@ -230,4 +234,5 @@ export {
 	selectUserNotes,
 	selectAudioType,
 	selectActiveNotesView,
+	selectAvailableAudioTypes,
 };

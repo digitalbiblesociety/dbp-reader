@@ -52,6 +52,7 @@ const initialState = fromJS({
 	previousAudioPaths: [],
 	nextAudioPaths: [],
 	audioPaths: [],
+	availableAudioTypes: [],
 	note: {},
 	filesetTypes: {},
 	userProfile: {},

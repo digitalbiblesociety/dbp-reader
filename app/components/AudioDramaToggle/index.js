@@ -8,7 +8,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { createStructuredSelector } from 'reselect';
-import { selectAudioType } from '../../containers/HomePage/selectors';
+import {
+	selectAudioType,
+	selectAvailableAudioTypes,
+} from '../../containers/HomePage/selectors';
 import { setAudioType } from '../../containers/AudioPlayer/actions';
 
 export class AudioDramaToggle extends React.PureComponent {
@@ -32,18 +35,25 @@ export class AudioDramaToggle extends React.PureComponent {
 		}
 	};
 
+	classNames = (elementType) => {
+		const { audioType, availableAudioTypes } = this.props;
+		let className = 'audio-drama-toggle-button';
+		if (audioType === elementType) {
+			className += ' active';
+		}
+		if (!availableAudioTypes.includes(elementType)) {
+			className += ' disabled';
+		}
+		return className;
+	};
+
 	render() {
-		const { audioType } = this.props;
 		return (
 			<div className={'audio-drama-toggle-container'}>
 				<button
 					type={'button'}
 					id={'drama-button'}
-					className={
-						audioType === 'audio_drama'
-							? 'audio-drama-toggle-button active'
-							: 'audio-drama-toggle-button'
-					}
+					className={this.classNames('audio_drama')}
 					onClick={this.setTypeToDrama}
 				>
 					Drama
@@ -51,11 +61,7 @@ export class AudioDramaToggle extends React.PureComponent {
 				<button
 					type={'button'}
 					id={'non-drama-button'}
-					className={
-						audioType === 'audio_drama'
-							? 'audio-drama-toggle-button'
-							: 'audio-drama-toggle-button active'
-					}
+					className={this.classNames('audio')}
 					onClick={this.setTypeToNonDrama}
 				>
 					Non-Drama
@@ -68,10 +74,12 @@ export class AudioDramaToggle extends React.PureComponent {
 AudioDramaToggle.propTypes = {
 	dispatch: PropTypes.func.isRequired,
 	audioType: PropTypes.string.isRequired,
+	availableAudioTypes: PropTypes.array.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
 	audioType: selectAudioType(),
+	availableAudioTypes: selectAvailableAudioTypes(),
 });
 
 const mapDispatchToProps = (dispatch) => ({

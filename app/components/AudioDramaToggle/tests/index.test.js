@@ -5,6 +5,7 @@ import { AudioDramaToggle } from '..';
 
 const props = {
 	audioType: 'audio_drama',
+	availableAudioTypes: ['audio_drama', 'audio'],
 	dispatch: jest.fn((action) => action),
 };
 
@@ -14,7 +15,23 @@ describe('<AudioDramaToggle />', () => {
 		expect(tree).toMatchSnapshot();
 	});
 	it('Expect to match snapshot for plain audio', () => {
-		const tree = renderer.create(<AudioDramaToggle {...props} />).toJSON();
+		const tree = renderer
+			.create(<AudioDramaToggle {...props} audioType={'audio'} />)
+			.toJSON();
+		expect(tree).toMatchSnapshot();
+	});
+	it('Expect to match snapshot for only plain audio available', () => {
+		const tree = renderer
+			.create(<AudioDramaToggle {...props} availableAudioTypes={['audio']} />)
+			.toJSON();
+		expect(tree).toMatchSnapshot();
+	});
+	it('Expect to match snapshot for only drama audio available', () => {
+		const tree = renderer
+			.create(
+				<AudioDramaToggle {...props} availableAudioTypes={['audio_drama']} />,
+			)
+			.toJSON();
 		expect(tree).toMatchSnapshot();
 	});
 	it('mount and have two different buttons', () => {
