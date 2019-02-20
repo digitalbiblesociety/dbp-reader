@@ -8,7 +8,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { List, AutoSizer } from 'react-virtualized';
 import matchSorter from 'match-sorter';
-import SvgWrapper from '../SvgWrapper';
 import LoadingSpinner from '../LoadingSpinner';
 
 class LanguageList extends React.PureComponent {
@@ -54,12 +53,6 @@ class LanguageList extends React.PureComponent {
 					title={language.englishName || language.name}
 					onClick={(e) => this.handleLanguageClick(e, language)}
 				>
-					{language.video && (
-						<SvgWrapper
-							className={'language-list-icon'}
-							svgid={'gospel_films'}
-						/>
-					)}
 					<h4
 						className={
 							language.id === languageCode ? 'active-language-name' : ''
