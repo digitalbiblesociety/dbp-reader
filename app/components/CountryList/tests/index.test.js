@@ -4,6 +4,7 @@ import { fromJS } from 'immutable';
 import { countries } from '../../../utils/testUtils/countryData';
 import CountryList from '..';
 
+/* eslint-disable no-plusplus */
 jest.mock('react-virtualized', () => ({
 	List: ({ rowRenderer, rowCount }) => {
 		const components = [];
@@ -14,6 +15,7 @@ jest.mock('react-virtualized', () => ({
 	},
 	AutoSizer: ({ children }) => children({ width: 150, height: 50 }),
 }));
+/* eslint-enable no-plusplus */
 
 const props = {
 	countries: fromJS(countries),
