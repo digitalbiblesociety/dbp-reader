@@ -13,14 +13,16 @@ describe('<FadeTransition /> component', () => {
 	it('should match snapshot with classNames', () => {
 		const tree = renderer
 			.create(
-				<FadeTransition children={children} classNames={'slide-from-right'} />,
+				<FadeTransition classNames={'slide-from-right'}>
+					{children}
+				</FadeTransition>,
 			)
 			.toJSON();
 		expect(tree).toMatchSnapshot();
 	});
 	it('should match snapshot without classNames', () => {
 		const tree = renderer
-			.create(<FadeTransition children={children} />)
+			.create(<FadeTransition>{children}</FadeTransition>)
 			.toJSON();
 		expect(tree).toMatchSnapshot();
 	});
