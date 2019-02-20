@@ -1,0 +1,67 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<DonateButton /> component should match snapshot of dark theme 1`] = `
+<a
+  className="donate-button"
+  href="https://www.faithcomesbyhearing.com/donate/form/183"
+  target="_blank"
+>
+  <span
+    className="donate-svg-wrapper"
+  >
+    <svg>
+      <use
+        xlinkHref="/static/svglist.svg#donate_light"
+        xmlnsXlink="http://www.w3.org/1999/xlink"
+      />
+    </svg>
+  </span>
+  <span>
+    Donate
+  </span>
+</a>
+`;
+
+exports[`<DonateButton /> component should match snapshot of paper theme 1`] = `
+<a
+  className="donate-button"
+  href="https://www.faithcomesbyhearing.com/donate/form/183"
+  target="_blank"
+>
+  <span
+    className="donate-svg-wrapper"
+  >
+    <svg>
+      <use
+        xlinkHref="/static/svglist.svg#donate_dark"
+        xmlnsXlink="http://www.w3.org/1999/xlink"
+      />
+    </svg>
+  </span>
+  <span>
+    Donate
+  </span>
+</a>
+`;
+
+exports[`<DonateButton /> component should match snapshot of red theme 1`] = `
+<a
+  className="donate-button"
+  href="https://www.faithcomesbyhearing.com/donate/form/183"
+  target="_blank"
+>
+  <span
+    className="donate-svg-wrapper"
+  >
+    <svg>
+      <use
+        xlinkHref="/static/svglist.svg#donate_light"
+        xmlnsXlink="http://www.w3.org/1999/xlink"
+      />
+    </svg>
+  </span>
+  <span>
+    Donate
+  </span>
+</a>
+`;

@@ -16,7 +16,7 @@ import SvgWrapper from '../SvgWrapper';
 import { selectActiveTheme } from '../../containers/Settings/selectors';
 import settingsReducer from '../../containers/Settings/reducer';
 // Use below for source before pushing to dev/prod
-function DonateButton({ theme }) {
+export function DonateButton({ theme }) {
 	return (
 		<a
 			target={'_blank'}

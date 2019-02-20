@@ -4,6 +4,17 @@ import { fromJS } from 'immutable';
 import { countries } from '../../../utils/testUtils/countryData';
 import CountryList from '..';
 
+jest.mock('react-virtualized', () => ({
+	List: ({ rowRenderer, rowCount }) => {
+		const components = [];
+		for (let i = 0; i < rowCount; i++) {
+			components.push(rowRenderer({ index: i, style: '', key: `${i}_row` }));
+		}
+		return components;
+	},
+	AutoSizer: ({ children }) => children({ width: 150, height: 50 }),
+}));
+
 const props = {
 	countries: fromJS(countries),
 	setCountryName: jest.fn(),
@@ -20,6 +31,12 @@ const props = {
 describe('CountryList component', () => {
 	it('should match snapshot of active list', () => {
 		const tree = renderer.create(<CountryList {...props} />).toJSON();
+		expect(tree).toMatchSnapshot();
+	});
+	it('should match snapshot of active list with an applied filter', () => {
+		const tree = renderer
+			.create(<CountryList {...props} filterText={'uni'} />)
+			.toJSON();
 		expect(tree).toMatchSnapshot();
 	});
 });
