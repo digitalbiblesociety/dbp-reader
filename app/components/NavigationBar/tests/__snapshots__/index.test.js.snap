@@ -1,0 +1,432 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<NavigationBar /> component should match snapshot with chapter selection active 1`] = `
+<div
+  className="nav-background"
+  id="navigation-bar"
+>
+  <div
+    className="nav-container"
+  >
+    <a
+      className="logo"
+      href="http://www.bible.is"
+      rel="noopener"
+      title="http://www.bible.is"
+    >
+      <svg
+        className="svg"
+        fill=""
+      >
+        <use
+          xlinkHref="/static/svglist.svg#bible.is_logo"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+        />
+      </svg>
+    </a>
+    <div
+      className="version"
+      id="version-dropdown-button"
+      onClick={[MockFunction]}
+    >
+      <svg
+        className="svg icon"
+        fill="#fff"
+        opacity=".5"
+      >
+        <use
+          xlinkHref="/static/svglist.svg#arrow_down"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+        />
+      </svg>
+      <h1
+        className="version-text"
+        title="English Standard Version"
+      >
+        ESV - English Standard Version
+      </h1>
+    </div>
+    <div
+      className="book-chapter"
+      id="chapter-dropdown-button"
+      onClick={[MockFunction]}
+    >
+      <svg
+        className="svg icon"
+        fill="#fff"
+        opacity=".5"
+      >
+        <use
+          xlinkHref="/static/svglist.svg#arrow_down"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+        />
+      </svg>
+      <h1
+        className="book-chapter-text"
+        title="Matthew 1"
+      >
+        Matthew 1
+      </h1>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<NavigationBar /> component should match snapshot with default props 1`] = `
+<div
+  className="nav-background"
+  id="navigation-bar"
+>
+  <div
+    className="nav-container"
+  >
+    <a
+      className="logo"
+      href="http://www.bible.is"
+      rel="noopener"
+      title="http://www.bible.is"
+    >
+      <svg
+        className="svg"
+        fill=""
+      >
+        <use
+          xlinkHref="/static/svglist.svg#bible.is_logo"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+        />
+      </svg>
+    </a>
+    <div
+      className="version"
+      id="version-dropdown-button"
+      onClick={[MockFunction]}
+    >
+      <svg
+        className="svg icon"
+        fill="#fff"
+        opacity=".5"
+      >
+        <use
+          xlinkHref="/static/svglist.svg#arrow_down"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+        />
+      </svg>
+      <h1
+        className="version-text"
+        title="English Standard Version"
+      >
+        ESV - English Standard Version
+      </h1>
+    </div>
+    <div
+      className="book-chapter"
+      id="chapter-dropdown-button"
+      onClick={[MockFunction]}
+    >
+      <svg
+        className="svg icon"
+        fill="#fff"
+        opacity=".5"
+      >
+        <use
+          xlinkHref="/static/svglist.svg#arrow_down"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+        />
+      </svg>
+      <h1
+        className="book-chapter-text"
+        title="Matthew 1"
+      >
+        Matthew 1
+      </h1>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<NavigationBar /> component should match snapshot with ms as the user agent 1`] = `
+<div
+  className="nav-background"
+  id="navigation-bar"
+>
+  <div
+    className="nav-container"
+  >
+    <a
+      className="logo"
+      href="http://www.bible.is"
+      rel="noopener"
+      title="http://www.bible.is"
+    >
+      <svg
+        className="svg"
+        fill="#fff"
+      >
+        <use
+          xlinkHref="/static/svglist.svg#bible.is_logo"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+        />
+      </svg>
+    </a>
+    <div
+      className="version"
+      id="version-dropdown-button"
+      onClick={[MockFunction]}
+    >
+      <svg
+        className="svg icon"
+        fill="#fff"
+        opacity=".5"
+      >
+        <use
+          xlinkHref="/static/svglist.svg#arrow_down"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+        />
+      </svg>
+      <h1
+        className="version-text"
+        title="English Standard Version"
+      >
+        ESV - English Standard Version
+      </h1>
+    </div>
+    <div
+      className="book-chapter"
+      id="chapter-dropdown-button"
+      onClick={[MockFunction]}
+    >
+      <svg
+        className="svg icon"
+        fill="#fff"
+        opacity=".5"
+      >
+        <use
+          xlinkHref="/static/svglist.svg#arrow_down"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+        />
+      </svg>
+      <h1
+        className="book-chapter-text"
+        title="Matthew 1"
+      >
+        Matthew 1
+      </h1>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<NavigationBar /> component should match snapshot with paper theme 1`] = `
+<div
+  className="nav-background"
+  id="navigation-bar"
+>
+  <div
+    className="nav-container"
+  >
+    <a
+      className="logo"
+      href="http://www.bible.is"
+      rel="noopener"
+      title="http://www.bible.is"
+    >
+      <svg
+        className="svg"
+      >
+        <use
+          xlinkHref="/static/svglist.svg#bible.is_logo_light"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+        />
+      </svg>
+    </a>
+    <div
+      className="version"
+      id="version-dropdown-button"
+      onClick={[MockFunction]}
+    >
+      <svg
+        className="svg icon"
+        fill="#fff"
+        opacity=".5"
+      >
+        <use
+          xlinkHref="/static/svglist.svg#arrow_down"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+        />
+      </svg>
+      <h1
+        className="version-text"
+        title="English Standard Version"
+      >
+        ESV - English Standard Version
+      </h1>
+    </div>
+    <div
+      className="book-chapter"
+      id="chapter-dropdown-button"
+      onClick={[MockFunction]}
+    >
+      <svg
+        className="svg icon"
+        fill="#fff"
+        opacity=".5"
+      >
+        <use
+          xlinkHref="/static/svglist.svg#arrow_down"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+        />
+      </svg>
+      <h1
+        className="book-chapter-text"
+        title="Matthew 1"
+      >
+        Matthew 1
+      </h1>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<NavigationBar /> component should match snapshot with paper theme and ms as the user agent 1`] = `
+<div
+  className="nav-background"
+  id="navigation-bar"
+>
+  <div
+    className="nav-container"
+  >
+    <a
+      className="logo"
+      href="http://www.bible.is"
+      rel="noopener"
+      title="http://www.bible.is"
+    >
+      <svg
+        className="svg"
+        fill="#fff"
+      >
+        <use
+          xlinkHref="/static/svglist.svg#bible.is_logo"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+        />
+      </svg>
+    </a>
+    <div
+      className="version"
+      id="version-dropdown-button"
+      onClick={[MockFunction]}
+    >
+      <svg
+        className="svg icon"
+        fill="#fff"
+        opacity=".5"
+      >
+        <use
+          xlinkHref="/static/svglist.svg#arrow_down"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+        />
+      </svg>
+      <h1
+        className="version-text"
+        title="English Standard Version"
+      >
+        ESV - English Standard Version
+      </h1>
+    </div>
+    <div
+      className="book-chapter"
+      id="chapter-dropdown-button"
+      onClick={[MockFunction]}
+    >
+      <svg
+        className="svg icon"
+        fill="#fff"
+        opacity=".5"
+      >
+        <use
+          xlinkHref="/static/svglist.svg#arrow_down"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+        />
+      </svg>
+      <h1
+        className="book-chapter-text"
+        title="Matthew 1"
+      >
+        Matthew 1
+      </h1>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<NavigationBar /> component should match snapshot with version selection active 1`] = `
+<div
+  className="nav-background"
+  id="navigation-bar"
+>
+  <div
+    className="nav-container"
+  >
+    <a
+      className="logo"
+      href="http://www.bible.is"
+      rel="noopener"
+      title="http://www.bible.is"
+    >
+      <svg
+        className="svg"
+        fill=""
+      >
+        <use
+          xlinkHref="/static/svglist.svg#bible.is_logo"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+        />
+      </svg>
+    </a>
+    <div
+      className="version"
+      id="version-dropdown-button"
+      onClick={[MockFunction]}
+    >
+      <svg
+        className="svg icon"
+        fill="#fff"
+        opacity=".5"
+      >
+        <use
+          xlinkHref="/static/svglist.svg#arrow_down"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+        />
+      </svg>
+      <h1
+        className="version-text"
+        title="English Standard Version"
+      >
+        ESV - English Standard Version
+      </h1>
+    </div>
+    <div
+      className="book-chapter"
+      id="chapter-dropdown-button"
+      onClick={[MockFunction]}
+    >
+      <svg
+        className="svg icon"
+        fill="#fff"
+        opacity=".5"
+      >
+        <use
+          xlinkHref="/static/svglist.svg#arrow_down"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+        />
+      </svg>
+      <h1
+        className="book-chapter-text"
+        title="Matthew 1"
+      >
+        Matthew 1
+      </h1>
+    </div>
+  </div>
+</div>
+`;

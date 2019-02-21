@@ -1,0 +1,126 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Login /> component should match snapshot with expected props 1`] = `
+Array [
+  <form
+    onSubmit={[Function]}
+  >
+    <span
+      className="sign-in-input"
+    >
+      <svg
+        className="icon"
+        fill="#fff"
+        height="30px"
+        width="30px"
+      >
+        <use
+          xlinkHref="/static/svglist.svg#e-mail"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+        />
+      </svg>
+      <input
+        autoComplete="email"
+        className="error"
+        id="email"
+        onChange={[Function]}
+        placeholder="E-mail"
+        type="email"
+        value=""
+      />
+    </span>
+    <span
+      className="sign-in-input"
+    >
+      <svg
+        className="icon"
+        fill="#fff"
+        height="26px"
+        width="26px"
+      >
+        <use
+          xlinkHref="/static/svglist.svg#lock"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+        />
+      </svg>
+      <input
+        autoComplete="current-password"
+        className="error"
+        id="password"
+        onChange={[Function]}
+        placeholder="Password"
+        type="password"
+        value=""
+      />
+    </span>
+    <div
+      className="sign-in-button"
+    >
+      <input
+        className="login-checkbox"
+        id="login-checkbox"
+        onChange={[Function]}
+        type="checkbox"
+      />
+      <label
+        className="text"
+        htmlFor="login-checkbox"
+      >
+        Remember Me
+      </label>
+      <button
+        className="login-button"
+        type="submit"
+      >
+        Sign In
+      </button>
+    </div>
+    <div
+      className="login-error-message"
+    >
+      <svg
+        className="icon"
+      >
+        <use
+          xlinkHref="/static/svglist.svg#warning"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+        />
+      </svg>
+      <span
+        className="error-text"
+      >
+         ( Click Below to Reset )
+      </span>
+    </div>
+    <section
+      className="forgot-password"
+    >
+      <span
+        className="link"
+        id="reset-password-button"
+        onClick={[Function]}
+        role="button"
+        tabIndex={0}
+      >
+        Reset your password.
+      </span>
+    </section>
+  </form>,
+  <div
+    className="facebook"
+    id="facebook-login"
+    role="button"
+    tabIndex={0}
+  >
+    Sign in with Facebook
+  </div>,
+  <div
+    className="google"
+    id="google-login"
+    role="button"
+    tabIndex={0}
+  >
+    Sign in with Google
+  </div>,
+]
+`;
