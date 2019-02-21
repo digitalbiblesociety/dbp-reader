@@ -38,17 +38,16 @@ describe('<AudioDramaToggle />', () => {
 		const wrapper = mount(<AudioDramaToggle {...props} />);
 		const dramaButton = wrapper.find('#drama-button');
 		const nonDramaButton = wrapper.find('#non-drama-button');
-		const dramaSpy = jest.spyOn(wrapper.instance(), 'setTypeToDrama');
-		const nonDramaSpy = jest.spyOn(wrapper.instance(), 'setTypeToNonDrama');
+		const spy = jest.spyOn(wrapper.instance(), 'setAudioType');
 
 		wrapper.instance().forceUpdate();
 		expect(dramaButton).toHaveLength(1);
 		expect(nonDramaButton).toHaveLength(1);
 
 		dramaButton.simulate('click');
-		expect(dramaSpy).toHaveBeenCalledTimes(1);
+		expect(spy).toHaveBeenCalledTimes(1);
 
 		nonDramaButton.simulate('click');
-		expect(nonDramaSpy).toHaveBeenCalled();
+		expect(spy).toHaveBeenCalledTimes(2);
 	});
 });

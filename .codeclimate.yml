@@ -1,0 +1,5 @@
+exclude_patterns:
+  - './app/utils/testUtils'
+  - './app/utils/svgPolyfill'
+  - './app/utils/stopPropagationPolyfill'
+  - './app/**/*.test.{js,jsx}'

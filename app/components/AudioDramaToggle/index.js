@@ -15,23 +15,17 @@ import {
 import { setAudioType } from '../../containers/AudioPlayer/actions';
 
 export class AudioDramaToggle extends React.PureComponent {
-	setTypeToDrama = () => {
-		this.props.dispatch(setAudioType({ audioType: 'audio_drama' }));
-		// Set window location param to correct query string
-		if (history.replaceState) {
-			const search = '?audio_type=audio_drama';
-			const newPath = `${location.origin}${location.pathname}${search}`;
-			history.replaceState(null, '', newPath);
-		}
-	};
+	setAudioType = (e) => {
+		const type = e.target.value;
 
-	setTypeToNonDrama = () => {
-		this.props.dispatch(setAudioType({ audioType: 'audio' }));
-		// Set window location param to correct query string
-		if (history.replaceState) {
-			const search = '?audio_type=audio';
-			const newPath = `${location.origin}${location.pathname}${search}`;
-			history.replaceState(null, '', newPath);
+		if (type !== this.props.audioType) {
+			this.props.dispatch(setAudioType({ audioType: type }));
+			// Set window location param to correct query string
+			if (history.replaceState) {
+				const search = `?audio_type=${type}`;
+				const newPath = `${location.origin}${location.pathname}${search}`;
+				history.replaceState(null, '', newPath);
+			}
 		}
 	};
 
@@ -47,25 +41,32 @@ export class AudioDramaToggle extends React.PureComponent {
 		return className;
 	};
 
+	buttonComponent = ({ id, audioType, title }) => (
+		<button
+			type={'button'}
+			id={id}
+			title={title}
+			value={audioType}
+			className={this.classNames(audioType)}
+			onClick={this.setAudioType}
+		>
+			{title}
+		</button>
+	);
+
 	render() {
 		return (
 			<div className={'audio-drama-toggle-container'}>
-				<button
-					type={'button'}
-					id={'drama-button'}
-					className={this.classNames('audio_drama')}
-					onClick={this.setTypeToDrama}
-				>
-					Drama
-				</button>
-				<button
-					type={'button'}
-					id={'non-drama-button'}
-					className={this.classNames('audio')}
-					onClick={this.setTypeToNonDrama}
-				>
-					Non-Drama
-				</button>
+				{this.buttonComponent({
+					id: 'drama-button',
+					audioType: 'audio_drama',
+					title: 'Drama',
+				})}
+				{this.buttonComponent({
+					id: 'non-drama-button',
+					audioType: 'audio',
+					title: 'Non-Drama',
+				})}
 			</div>
 		);
 	}

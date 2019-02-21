@@ -49,8 +49,20 @@ const props = {
 	savedTheNote: false,
 	errorSavingNote: false,
 };
-
+const realDate = Date;
 describe('EditNote component', () => {
+	beforeAll(() => {
+		global.Date = jest.fn(() => ({
+			getDate: () => 20,
+			getFullYear: () => 2019,
+			getMonth: () => 1,
+		}));
+	});
+
+	afterAll(() => {
+		global.Date = realDate;
+	});
+
 	it('should match snapshot of edit note with default props', () => {
 		const tree = renderer.create(<EditNote {...props} />).toJSON();
 		expect(tree).toMatchSnapshot();

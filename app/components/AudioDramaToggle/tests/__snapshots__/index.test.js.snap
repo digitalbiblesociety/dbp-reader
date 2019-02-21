@@ -8,7 +8,9 @@ exports[`<AudioDramaToggle /> Expect to match snapshot for drama audio 1`] = `
     className="audio-drama-toggle-button active"
     id="drama-button"
     onClick={[Function]}
+    title="Drama"
     type="button"
+    value="audio_drama"
   >
     Drama
   </button>
@@ -16,7 +18,9 @@ exports[`<AudioDramaToggle /> Expect to match snapshot for drama audio 1`] = `
     className="audio-drama-toggle-button"
     id="non-drama-button"
     onClick={[Function]}
+    title="Non-Drama"
     type="button"
+    value="audio"
   >
     Non-Drama
   </button>
@@ -31,7 +35,9 @@ exports[`<AudioDramaToggle /> Expect to match snapshot for only drama audio avai
     className="audio-drama-toggle-button active"
     id="drama-button"
     onClick={[Function]}
+    title="Drama"
     type="button"
+    value="audio_drama"
   >
     Drama
   </button>
@@ -39,7 +45,9 @@ exports[`<AudioDramaToggle /> Expect to match snapshot for only drama audio avai
     className="audio-drama-toggle-button disabled"
     id="non-drama-button"
     onClick={[Function]}
+    title="Non-Drama"
     type="button"
+    value="audio"
   >
     Non-Drama
   </button>
@@ -54,7 +62,9 @@ exports[`<AudioDramaToggle /> Expect to match snapshot for only plain audio avai
     className="audio-drama-toggle-button active disabled"
     id="drama-button"
     onClick={[Function]}
+    title="Drama"
     type="button"
+    value="audio_drama"
   >
     Drama
   </button>
@@ -62,7 +72,9 @@ exports[`<AudioDramaToggle /> Expect to match snapshot for only plain audio avai
     className="audio-drama-toggle-button"
     id="non-drama-button"
     onClick={[Function]}
+    title="Non-Drama"
     type="button"
+    value="audio"
   >
     Non-Drama
   </button>
@@ -77,7 +89,9 @@ exports[`<AudioDramaToggle /> Expect to match snapshot for plain audio 1`] = `
     className="audio-drama-toggle-button"
     id="drama-button"
     onClick={[Function]}
+    title="Drama"
     type="button"
+    value="audio_drama"
   >
     Drama
   </button>
@@ -85,7 +99,9 @@ exports[`<AudioDramaToggle /> Expect to match snapshot for plain audio 1`] = `
     className="audio-drama-toggle-button active"
     id="non-drama-button"
     onClick={[Function]}
+    title="Non-Drama"
     type="button"
+    value="audio"
   >
     Non-Drama
   </button>
