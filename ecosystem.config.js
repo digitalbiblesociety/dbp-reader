@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: 'bible.is.prod',
+      name: 'bible.is.production',
       script: './nextServer.js',
       instances: 1,
       env: {
@@ -14,7 +14,7 @@ module.exports = {
       },
     },
     {
-      name: 'bible.is.dev',
+      name: 'bible.is.development',
       script: './nextServer.js',
       instances: 1,
       env: {
@@ -27,7 +27,7 @@ module.exports = {
       },
     },
     {
-      name: 'bible.is.stage',
+      name: 'bible.is.staging',
       script: './nextServer.js',
       instances: 1,
       env: {
