@@ -1,8 +1,7 @@
 // import { XMLSerializer } from 'xmldom';
 import { JSDOM } from 'jsdom';
-import { getStartingEmAttributes } from '../../../utils/testUtils';
+import { getStartingEmAttributes } from '../../../utils/testUtils/getStartingEmAttributes';
 import highlightFormattedText from '../highlightFormattedText';
-// import sampleText, { result } from './sampleText';
 // global.XMLSerializer = XMLSerializer;
 // import sampleHighlights from './sampleHighlights.json';
 // Can't test formatted text because of XMLSerializer not being available

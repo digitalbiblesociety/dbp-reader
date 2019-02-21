@@ -1,0 +1,326 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CopyrightStatement component should match previous snapshot for new testament 1`] = `
+<div
+  className="nt-copyright"
+>
+  <div
+    className="cp-section"
+  >
+    <h3>
+      <span>
+        This Bible audio is brought to you by:
+      </span>
+    </h3>
+    <a
+      href="http://www.fcbh.org"
+      rel="noopener"
+      target="_blank"
+    >
+      <img
+        alt="Copyright owners logo: Faith Comes By Hearing"
+        className="image-landscape fcbh-copyright-logo"
+        src="https://bible.cloud/images/logo/FCBH_Color.svg"
+      />
+    </a>
+    <p>
+      <span>
+        Text: The ESV Bible® (The Holy Bible, English Standard Version®) Copyright © 2001 by Crossway, a publishing ministry of Good News Publishers. ESV® Text Edition: 2007. All rights reserved.
+      </span>
+      <br />
+      <span>
+        English Standard Version, ESV, and the ESV logo are registered trademarks of Good News Publishers.  Used by permission.
+      </span>
+      <br />
+      <span>
+        Audio: ℗ 2009 Hosanna
+      </span>
+      <br />
+    </p>
+  </div>
+  <div
+    className="cp-section"
+  >
+    <h3>
+      <span>
+        This Bible text is brought to you by:
+      </span>
+    </h3>
+    <a
+      href="https://www.crossway.org"
+      rel="noopener"
+      target="_blank"
+    >
+      <img
+        alt="Copyright owners logo: Crossway"
+        className="image-landscape"
+        src="https://images.bible.cloud/logo/crossway.svg"
+      />
+    </a>
+    <h3>
+      <span>
+        This Bible text is brought to you by:
+      </span>
+    </h3>
+    <a
+      className="org-name"
+      href={null}
+      rel="noopener"
+      target="_blank"
+    >
+      Good News Publishers
+    </a>
+    <p>
+      <span>
+        The ESV Bible® (The Holy Bible, English Standard Version®) Copyright © 2001 by Crossway, a publishing ministry of Good News Publishers. ESV® Text Edition: 2007. All rights reserved.
+      </span>
+      <br />
+      <span>
+        English Standard Version, ESV, and the ESV logo are registered trademarks of Good News Publishers.  Used by permission.
+      </span>
+      <br />
+    </p>
+  </div>
+</div>
+`;
+
+exports[`CopyrightStatement component should match previous snapshot for new testament invalid data 1`] = `
+<div
+  className="nt-copyright"
+>
+  <div
+    className="cp-section"
+  >
+    <p>
+      <span>
+        Text: The ESV Bible® (The Holy Bible, English Standard Version®) Copyright © 2001 by Crossway, a publishing ministry of Good News Publishers. ESV® Text Edition: 2007. All rights reserved.
+      </span>
+      <br />
+      <span>
+        English Standard Version, ESV, and the ESV logo are registered trademarks of Good News Publishers.  Used by permission.
+      </span>
+      <br />
+      <span>
+        Audio: ℗ 2009 Hosanna
+      </span>
+      <br />
+    </p>
+  </div>
+  <div
+    className="cp-section"
+  >
+    <p>
+      <span>
+        The ESV Bible® (The Holy Bible, English Standard Version®) Copyright © 2001 by Crossway, a publishing ministry of Good News Publishers. ESV® Text Edition: 2007. All rights reserved.
+      </span>
+      <br />
+      <span>
+        English Standard Version, ESV, and the ESV logo are registered trademarks of Good News Publishers.  Used by permission.
+      </span>
+      <br />
+    </p>
+  </div>
+</div>
+`;
+
+exports[`CopyrightStatement component should match previous snapshot for no copyright data 1`] = `
+<div
+  className="ot-copyright"
+/>
+`;
+
+exports[`CopyrightStatement component should match previous snapshot for old testament 1`] = `
+<div
+  className="ot-copyright"
+>
+  <div
+    className="cp-section"
+  >
+    <h3>
+      <span>
+        This Bible audio is brought to you by:
+      </span>
+    </h3>
+    <a
+      href="http://www.fcbh.org"
+      rel="noopener"
+      target="_blank"
+    >
+      <img
+        alt="Copyright owners logo: Faith Comes By Hearing"
+        className="image-landscape fcbh-copyright-logo"
+        src="https://bible.cloud/images/logo/FCBH_Color.svg"
+      />
+    </a>
+    <p>
+      <span>
+        Text: The ESV Bible® (The Holy Bible, English Standard Version®) Copyright © 2001 by Crossway, a publishing ministry of Good News Publishers. ESV® Text Edition: 2007. All rights reserved.
+      </span>
+      <br />
+      <span>
+        English Standard Version, ESV, and the ESV logo are registered trademarks of Good News Publishers.  Used by permission.
+      </span>
+      <br />
+      <span>
+        Audio: ℗ 2009 Hosanna
+      </span>
+      <br />
+    </p>
+  </div>
+  <div
+    className="cp-section"
+  >
+    <h3>
+      <span>
+        This Bible text is brought to you by:
+      </span>
+    </h3>
+    <a
+      href="https://www.crossway.org"
+      rel="noopener"
+      target="_blank"
+    >
+      <img
+        alt="Copyright owners logo: Crossway"
+        className="image-landscape"
+        src="https://images.bible.cloud/logo/crossway.svg"
+      />
+    </a>
+    <h3>
+      <span>
+        This Bible text is brought to you by:
+      </span>
+    </h3>
+    <a
+      className="org-name"
+      href={null}
+      rel="noopener"
+      target="_blank"
+    >
+      Good News Publishers
+    </a>
+    <p>
+      <span>
+        The ESV Bible® (The Holy Bible, English Standard Version®) Copyright © 2001 by Crossway, a publishing ministry of Good News Publishers. ESV® Text Edition: 2007. All rights reserved.
+      </span>
+      <br />
+      <span>
+        English Standard Version, ESV, and the ESV logo are registered trademarks of Good News Publishers.  Used by permission.
+      </span>
+      <br />
+    </p>
+  </div>
+</div>
+`;
+
+exports[`CopyrightStatement component should match previous snapshot for old testament invalid data 1`] = `
+<div
+  className="ot-copyright"
+>
+  <div
+    className="cp-section"
+  >
+    <p>
+      <span>
+        Text: The ESV Bible® (The Holy Bible, English Standard Version®) Copyright © 2001 by Crossway, a publishing ministry of Good News Publishers. ESV® Text Edition: 2007. All rights reserved.
+      </span>
+      <br />
+      <span>
+        English Standard Version, ESV, and the ESV logo are registered trademarks of Good News Publishers.  Used by permission.
+      </span>
+      <br />
+      <span>
+        Audio: ℗ 2009 Hosanna
+      </span>
+      <br />
+    </p>
+  </div>
+  <div
+    className="cp-section"
+  >
+    <p>
+      <span>
+        The ESV Bible® (The Holy Bible, English Standard Version®) Copyright © 2001 by Crossway, a publishing ministry of Good News Publishers. ESV® Text Edition: 2007. All rights reserved.
+      </span>
+      <br />
+      <span>
+        English Standard Version, ESV, and the ESV logo are registered trademarks of Good News Publishers.  Used by permission.
+      </span>
+      <br />
+    </p>
+  </div>
+</div>
+`;
+
+exports[`CopyrightStatement component should match previous snapshot for old testament invalid data where there are no messages 1`] = `
+<div
+  className="ot-copyright"
+>
+  <div
+    className="cp-section"
+  >
+    <h3>
+      <span>
+        This Bible audio is brought to you by:
+      </span>
+    </h3>
+    <a
+      href="https://www.crossway.org"
+      rel="noopener"
+      target="_blank"
+    >
+      <img
+        alt="Copyright owners logo: Crossway"
+        className="image-landscape fcbh-copyright-logo"
+        src="https://images.bible.cloud/logo/crossway.svg"
+      />
+    </a>
+    <h3>
+      <span>
+        This Bible audio is brought to you by:
+      </span>
+    </h3>
+    <a
+      className="org-name"
+      href={null}
+      rel="noopener"
+      target="_blank"
+    >
+      Good News Publishers
+    </a>
+  </div>
+  <div
+    className="cp-section"
+  >
+    <h3>
+      <span>
+        This Bible text is brought to you by:
+      </span>
+    </h3>
+    <a
+      href="https://www.crossway.org"
+      rel="noopener"
+      target="_blank"
+    >
+      <img
+        alt="Copyright owners logo: Crossway"
+        className="image-landscape"
+        src="https://images.bible.cloud/logo/crossway.svg"
+      />
+    </a>
+    <h3>
+      <span>
+        This Bible text is brought to you by:
+      </span>
+    </h3>
+    <a
+      className="org-name"
+      href={null}
+      rel="noopener"
+      target="_blank"
+    >
+      Good News Publishers
+    </a>
+  </div>
+</div>
+`;

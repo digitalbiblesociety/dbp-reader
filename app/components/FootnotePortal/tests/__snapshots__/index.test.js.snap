@@ -1,0 +1,322 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FootnotePortal component should match snapshot with expected props 1`] = `
+ReactWrapper {
+  Symbol(enzyme.__unrendered__): <FootnotePortal
+    closeFootnote={[MockFunction]}
+    coords={
+      Object {
+        "x": 15,
+        "y": 15,
+      }
+    }
+    message="Please Login."
+  />,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateError": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "function",
+    "props": Object {
+      "closeFootnote": [MockFunction],
+      "coords": Object {
+        "x": 15,
+        "y": 15,
+      },
+      "message": "Please Login.",
+    },
+    "ref": null,
+    "rendered": Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "portal",
+      "props": Object {
+        "children": <div
+          className="footnote-portal-container"
+          style={
+            Object {
+              "left": 15,
+              "top": 15,
+            }
+          }
+        >
+          <span
+            onClick={[MockFunction]}
+            role="button"
+            tabIndex={0}
+          >
+            X
+          </span>
+          <p>
+            Please Login.
+          </p>
+        </div>,
+        "containerInfo": <div
+          id="__next"
+        >
+          <div
+            class="footnote-portal-container"
+            style="left: 15px; top: 15px;"
+          >
+            <span
+              role="button"
+              tabindex="0"
+            >
+              X
+            </span>
+            <p>
+              Please Login.
+            </p>
+          </div>
+        </div>,
+      },
+      "ref": null,
+      "rendered": Object {
+        "instance": <div
+          class="footnote-portal-container"
+          style="left: 15px; top: 15px;"
+        >
+          <span
+            role="button"
+            tabindex="0"
+          >
+            X
+          </span>
+          <p>
+            Please Login.
+          </p>
+        </div>,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "children": Array [
+            <span
+              onClick={[MockFunction]}
+              role="button"
+              tabIndex={0}
+            >
+              X
+            </span>,
+            <p>
+              Please Login.
+            </p>,
+          ],
+          "className": "footnote-portal-container",
+          "style": Object {
+            "left": 15,
+            "top": 15,
+          },
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": <span
+              role="button"
+              tabindex="0"
+            >
+              X
+            </span>,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": "X",
+              "onClick": [MockFunction],
+              "role": "button",
+              "tabIndex": 0,
+            },
+            "ref": null,
+            "rendered": Array [
+              "X",
+            ],
+            "type": "span",
+          },
+          Object {
+            "instance": <p>
+              Please Login.
+            </p>,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": "Please Login.",
+            },
+            "ref": null,
+            "rendered": Array [
+              "Please Login.",
+            ],
+            "type": "p",
+          },
+        ],
+        "type": "div",
+      },
+      "type": Symbol(react.portal),
+    },
+    "type": [Function],
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "function",
+      "props": Object {
+        "closeFootnote": [MockFunction],
+        "coords": Object {
+          "x": 15,
+          "y": 15,
+        },
+        "message": "Please Login.",
+      },
+      "ref": null,
+      "rendered": Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "portal",
+        "props": Object {
+          "children": <div
+            className="footnote-portal-container"
+            style={
+              Object {
+                "left": 15,
+                "top": 15,
+              }
+            }
+          >
+            <span
+              onClick={[MockFunction]}
+              role="button"
+              tabIndex={0}
+            >
+              X
+            </span>
+            <p>
+              Please Login.
+            </p>
+          </div>,
+          "containerInfo": <div
+            id="__next"
+          >
+            <div
+              class="footnote-portal-container"
+              style="left: 15px; top: 15px;"
+            >
+              <span
+                role="button"
+                tabindex="0"
+              >
+                X
+              </span>
+              <p>
+                Please Login.
+              </p>
+            </div>
+          </div>,
+        },
+        "ref": null,
+        "rendered": Object {
+          "instance": <div
+            class="footnote-portal-container"
+            style="left: 15px; top: 15px;"
+          >
+            <span
+              role="button"
+              tabindex="0"
+            >
+              X
+            </span>
+            <p>
+              Please Login.
+            </p>
+          </div>,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": Array [
+              <span
+                onClick={[MockFunction]}
+                role="button"
+                tabIndex={0}
+              >
+                X
+              </span>,
+              <p>
+                Please Login.
+              </p>,
+            ],
+            "className": "footnote-portal-container",
+            "style": Object {
+              "left": 15,
+              "top": 15,
+            },
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": <span
+                role="button"
+                tabindex="0"
+              >
+                X
+              </span>,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": "X",
+                "onClick": [MockFunction],
+                "role": "button",
+                "tabIndex": 0,
+              },
+              "ref": null,
+              "rendered": Array [
+                "X",
+              ],
+              "type": "span",
+            },
+            Object {
+              "instance": <p>
+                Please Login.
+              </p>,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": "Please Login.",
+              },
+              "ref": null,
+              "rendered": Array [
+                "Please Login.",
+              ],
+              "type": "p",
+            },
+          ],
+          "type": "div",
+        },
+        "type": Symbol(react.portal),
+      },
+      "type": [Function],
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+        "lifecycles": Object {
+          "componentDidUpdate": Object {
+            "onSetState": true,
+          },
+          "getDerivedStateFromProps": true,
+          "getSnapshotBeforeUpdate": true,
+          "setState": Object {
+            "skipsComponentDidUpdateOnNullish": true,
+          },
+        },
+      },
+    },
+  },
+}
+`;

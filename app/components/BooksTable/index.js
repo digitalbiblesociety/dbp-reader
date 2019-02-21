@@ -9,7 +9,6 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import PropTypes from 'prop-types';
-import { getChapterText } from '../../containers/HomePage/actions';
 import LoadingSpinner from '../LoadingSpinner';
 import BooksTestament from '../BooksTestament';
 import {
@@ -27,8 +26,9 @@ import {
 	selectFilesetTypes,
 	selectLoadingBookStatus,
 } from './selectors';
+import { selectTextDirection } from '../../containers/Verses/selectors';
 
-class BooksTable extends React.PureComponent {
+export class BooksTable extends React.PureComponent {
 	// eslint-disable-line react/prefer-stateless-function
 	state = {
 		selectedBookName:
@@ -47,20 +47,6 @@ class BooksTable extends React.PureComponent {
 			this.setState({ selectedBookName: nextProps.activeBookName });
 		}
 	}
-
-	getChapterText = ({ bible, book, chapter }) =>
-		this.props.dispatch(
-			getChapterText({
-				bible,
-				book,
-				chapter,
-				audioObjects: this.props.audioObjects,
-				hasTextInDatabase: this.props.hasTextInDatabase,
-				formattedText: this.props.filesetTypes.text_formatt,
-				userId: this.props.userId,
-				userAuthenticated: this.props.userAuthenticated,
-			}),
-		);
 
 	setScrollTop = (book, positionBefore, scrollTopBefore) => {
 		const positionAfter = book.parentElement.offsetTop; // not sure about parentElement
@@ -98,18 +84,6 @@ class BooksTable extends React.PureComponent {
 		}
 	};
 
-	isElementInViewport = (el) => {
-		const rect = el.getBoundingClientRect();
-
-		return (
-			rect.top >= 0 &&
-			rect.left >= 0 &&
-			rect.bottom <=
-				(window.innerHeight || document.documentElement.clientHeight) &&
-			rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-		);
-	};
-
 	handleChapterClick = () => {
 		this.props.closeBookTable();
 	};
@@ -126,6 +100,7 @@ class BooksTable extends React.PureComponent {
 			activeChapter,
 			activeBookName,
 			loadingBooks,
+			textDirection,
 		} = this.props;
 		const { selectedBookName } = this.state;
 
@@ -133,7 +108,13 @@ class BooksTable extends React.PureComponent {
 			return <LoadingSpinner />;
 		}
 		return (
-			<div className="chapter-selection-section">
+			<div
+				className={
+					textDirection === 'rtl'
+						? 'chapter-selection-section rtl'
+						: 'chapter-selection-section'
+				}
+			>
 				<div
 					ref={(el) => this.handleRef(el, 'container')}
 					className="book-container"
@@ -190,21 +171,16 @@ class BooksTable extends React.PureComponent {
 }
 
 BooksTable.propTypes = {
-	dispatch: PropTypes.func,
 	closeBookTable: PropTypes.func,
 	books: PropTypes.object,
-	audioObjects: PropTypes.array,
-	userId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 	audioType: PropTypes.string,
 	activeTextId: PropTypes.string,
 	activeBookName: PropTypes.string,
 	initialBookName: PropTypes.string,
+	textDirection: PropTypes.string,
 	activeChapter: PropTypes.number,
 	loadingBooks: PropTypes.bool,
-	userAuthenticated: PropTypes.bool,
-	hasTextInDatabase: PropTypes.bool,
 	active: PropTypes.bool,
-	filesetTypes: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -219,6 +195,8 @@ const mapStateToProps = createStructuredSelector({
 	userAuthenticated: selectAuthenticationStatus(),
 	userId: selectUserId(),
 	audioType: selectAudioType(),
+	// Verses selector
+	textDirection: selectTextDirection(),
 });
 
 function mapDispatchToProps(dispatch) {

@@ -1,0 +1,56 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CopyrightStatement component should match snapshot with valid new testament audio props 1`] = `
+Array [
+  <h3>
+    <span>
+      This Bible audio is brought to you by:
+    </span>
+  </h3>,
+  <a
+    href="http://www.fcbh.org"
+    rel="noopener"
+    target="_blank"
+  >
+    <img
+      alt="Copyright owners logo: Faith Comes By Hearing"
+      className="image-landscape fcbh-copyright-logo"
+      src="https://bible.cloud/images/logo/FCBH_Color.svg"
+    />
+  </a>,
+]
+`;
+
+exports[`CopyrightStatement component should match snapshot with valid new testament text props 1`] = `
+Array [
+  <h3>
+    <span>
+      This Bible text is brought to you by:
+    </span>
+  </h3>,
+  <a
+    href="https://www.crossway.org"
+    rel="noopener"
+    target="_blank"
+  >
+    <img
+      alt="Copyright owners logo: Crossway"
+      className="image-landscape"
+      src="https://images.bible.cloud/logo/crossway.svg"
+    />
+  </a>,
+  <h3>
+    <span>
+      This Bible text is brought to you by:
+    </span>
+  </h3>,
+  <a
+    className="org-name"
+    href={null}
+    rel="noopener"
+    target="_blank"
+  >
+    Good News Publishers
+  </a>,
+]
+`;

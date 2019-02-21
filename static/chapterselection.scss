@@ -7,7 +7,7 @@
 	right: 0;
 	min-width: 291px;
 	//left:calc(50% - 116px);
-	height: calc(100vh - 110px);
+	height: calc(100vh - 99px);
 	@include css4 {
 		background-color: var(--menu-body-background-color);
 		color: var(--default-text-color);
@@ -37,6 +37,9 @@
 		height: 100%;
 		//text-transform:uppercase;
 		//padding: 15px;
+		&.rtl {
+			direction: rtl;
+		}
 	}
 
 	.chapter-box {

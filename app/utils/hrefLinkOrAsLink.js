@@ -1,6 +1,8 @@
 export default ({ textId, bookId, chapter, nextVerse, isHref, audioType }) => {
 	const baseUrl = isHref ? '/app?' : '/bible';
-	const params = audioType ? `?audio_type=${audioType}` : '';
+	const params = audioType
+		? `${isHref ? '&' : '?'}audio_type=${audioType}`
+		: '';
 
 	if (isHref) {
 		if (nextVerse) {

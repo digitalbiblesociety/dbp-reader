@@ -3,6 +3,27 @@ import renderer from 'react-test-renderer';
 import { mount } from 'enzyme';
 import AudioProgressBar from '..';
 
+jest.mock('../../AudioDramaToggle', () => () => (
+	<div className={'audio-drama-toggle-container'}>
+		<button
+			type={'button'}
+			id={'drama-button'}
+			className={'audio-drama-toggle-button active'}
+			onClick={jest.fn()}
+		>
+			Drama
+		</button>
+		<button
+			type={'button'}
+			id={'non-drama-button'}
+			className={'audio-drama-toggle-button'}
+			onClick={jest.fn()}
+		>
+			Non-Drama
+		</button>
+	</div>
+));
+
 const setCurrentTime = jest.fn();
 const duration = 300;
 const currentTime = 0;

@@ -1,6 +1,6 @@
 import highlightPlainText from '../highlightPlainText';
-import chapterText from './sampleChapterArray.json';
-import highlightsObject from './sampleHighlights.json';
+import chapterText from '../../../utils/testUtils/sampleChapterArray.json';
+import highlightsObject from '../../../utils/testUtils/sampleHighlights.json';
 
 /* Text cases that are needed
 * 1: one highlight - true

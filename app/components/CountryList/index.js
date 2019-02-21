@@ -44,6 +44,7 @@ class CountryList extends React.PureComponent {
 
 		const renderARow = ({ index, style, key }) => {
 			const country = filteredCountries.get(index);
+
 			return (
 				<div
 					className="country-name"

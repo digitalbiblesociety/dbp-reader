@@ -36,7 +36,6 @@ import {
 	deleteHighlights,
 	getBooks,
 	getNotes,
-	getChapterText,
 	getHighlights,
 	getCopyrights,
 	toggleProfile,
@@ -363,8 +362,6 @@ class HomePage extends React.PureComponent {
 
 	getBooks = (props) => this.props.dispatch(getBooks(props));
 
-	getChapters = (props) => this.props.dispatch(getChapterText(props));
-
 	getCopyrights = (props) => this.props.dispatch(getCopyrights(props));
 
 	setActiveBookName = ({ book, id }) =>
@@ -537,15 +534,11 @@ class HomePage extends React.PureComponent {
 			changingVersion,
 			videoPlayerOpen,
 			hasVideo,
+			audioType,
+			textDirection,
 		} = this.props.homepage;
 
-		const {
-			userSettings,
-			isMenuOpen,
-			isIe,
-			audioType,
-			activeNotesView,
-		} = this.props;
+		const { userSettings, isMenuOpen, isIe, activeNotesView } = this.props;
 
 		const { isScrollingDown } = this.state;
 		const { text: updatedText } = this.props.textData;
@@ -560,6 +553,7 @@ class HomePage extends React.PureComponent {
 					activeChapter={activeChapter}
 					activeTextName={activeTextName}
 					activeBookName={activeBookName}
+					textDirection={textDirection}
 					theme={userSettings.get('activeTheme')}
 					isScrollingDown={isScrollingDown}
 					isChapterSelectionActive={isChapterSelectionActive}
@@ -682,7 +676,6 @@ HomePage.propTypes = {
 	formattedSource: PropTypes.object,
 	userAuthenticated: PropTypes.bool,
 	isIe: PropTypes.bool,
-	audioType: PropTypes.string,
 	activeNotesView: PropTypes.string,
 	userId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 	textData: PropTypes.object,

@@ -25,18 +25,15 @@ class NavigationBar extends React.PureComponent {
 			toggleChapterSelection,
 			toggleVersionSelection,
 			activeChapter,
-			isScrollingDown,
 			isChapterSelectionActive,
 			isVersionSelectionActive,
 			theme,
 			userAgent,
+			textDirection,
 		} = this.props;
 		// may need to wrap each of these in a container div to fix the hover issues
 		return (
-			<div
-				id={'navigation-bar'}
-				className={isScrollingDown ? 'nav-background closed' : 'nav-background'}
-			>
+			<div id={'navigation-bar'} className={'nav-background'}>
 				<div className="nav-container">
 					<a
 						className="logo"
@@ -99,7 +96,11 @@ class NavigationBar extends React.PureComponent {
 									? `${activeBookName} ${activeChapter}`
 									: 'No Book Selected'
 							}
-							className={'book-chapter-text'}
+							className={
+								textDirection === 'rtl'
+									? 'book-chapter-text rtl'
+									: 'book-chapter-text'
+							}
 						>
 							{activeBookName
 								? `${activeBookName} ${activeChapter}`
@@ -121,10 +122,10 @@ NavigationBar.propTypes = {
 	activeTextId: PropTypes.string,
 	activeBookName: PropTypes.string,
 	activeTextName: PropTypes.string,
+	textDirection: PropTypes.string,
 	toggleChapterSelection: PropTypes.func,
 	toggleVersionSelection: PropTypes.func,
 	activeChapter: PropTypes.number,
-	isScrollingDown: PropTypes.bool,
 	isChapterSelectionActive: PropTypes.bool,
 	isVersionSelectionActive: PropTypes.bool,
 };

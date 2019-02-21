@@ -34,6 +34,9 @@ body {
 	}
 	margin: 0 auto;
 }
+body .rtl {
+	direction: rtl;
+}
 div:focus {
 	outline: none;
 }
@@ -77,13 +80,13 @@ html #__next aside {
 	display: flex;
 	flex-direction: column;
 	// max-width: 1000px;
-	height: calc(100vh - 81px);
+	height: calc(100vh - 70px);
 	margin: 0 auto;
 	padding: 54px 10px 0 10px;
 	align-items: center;
 
 	&.audio-closed {
-		height: calc(100vh - 81px);
+		height: calc(100vh - 70px);
 	}
 }
 

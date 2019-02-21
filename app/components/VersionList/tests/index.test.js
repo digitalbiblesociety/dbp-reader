@@ -18,6 +18,8 @@ const props = {
 	setActiveText: jest.fn(),
 	toggleTextSelection: jest.fn(),
 	activeTextId: 'ENGESV',
+	activeBookId: 'MAT',
+	activeChapter: 5,
 	filterText: '',
 	active: true,
 	loadingVersions: false,

@@ -52,7 +52,7 @@
 		"build:sass": "sass ./static/app.scss ./cdn/styles.css; csso cdn/styles.css --output cdn/styles.min.css; gzip cdn/styles.min.css; mv cdn/styles.min.css.gz cdn/styles.min.css; aws s3 sync ./cdn s3://bibleis-prod/ --include ./cdn/styles.min.css --content-encoding gzip",
 		"reload:pm2": "pm2 reload ecosystem.config.js --update-env --env production --only bible.is.prod;",
 		"fetch-latest-site": "git checkout .; rm package-lock.json; git pull origin master; npm install; npm run npmpostinstall; npm run build:prod; pm2 restart ecosystem.config.js --update-env --env production --only bible.is.prod;",
-		"update-staging": "git checkout .; rm package-lock.json; git pull origin master; npm install; npm run npmpostinstall; npm run build:staging; pm2 restart ecosystem.config.js --update-env --env production --only bible.is.prod;",
+		"update-staging": "git checkout .; rm package-lock.json; git pull origin staging; npm install; npm run npmpostinstall; npm run build:staging; pm2 restart ecosystem.config.js --only bible.is.stage;",
 		"fetch-latest-dev": "git checkout .; rm package-lock.json; git pull origin development; npm install; npm run build; npm run npmpostinstall; pm2 restart ecosystem.config.js --update-env --env production --only bible.is.dev;"
 	},
 	"lint-staged": {
@@ -186,7 +186,13 @@
 			"!app/*/RbGenerated*/*.{js,jsx}",
 			"!app/app.js",
 			"!app/global-styles.js",
-			"!app/*/*/Loadable.{js,jsx}"
+			"!app/*/*/Loadable.{js,jsx}",
+			"!app/utils/svgPolyfill.js",
+			"!app/reducers.js",
+			"!app/configureStore.js",
+			"!app/withRedux.js",
+			"!app/utils/stopPropagationPolyfill.js",
+			"!app/utils/testUtils/*"
 		],
 		"coverageDirectory": "<rootDir>/coverage/jest",
 		"transform": {

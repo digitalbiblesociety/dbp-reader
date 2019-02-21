@@ -172,7 +172,6 @@ class AppContainer extends React.Component {
 			initialPlaybackRate,
 			initialVolume,
 			isIe,
-			audioType,
 		} = this.props;
 		// Defaulting description text to an empty string since no metadata is better than inaccurate metadata
 		const descriptionText =
@@ -219,7 +218,6 @@ class AppContainer extends React.Component {
 					initialPlaybackRate={initialPlaybackRate}
 					initialVolume={initialVolume}
 					isIe={isIe}
-					audioType={audioType}
 				/>
 			</div>
 		);
@@ -607,7 +605,13 @@ AppContainer.getInitialProps = async (context) => {
 	} else {
 		activeBook = undefined;
 	}
-
+	const availableAudioTypes = [];
+	if (filesets.some((set) => set.type === 'audio_drama')) {
+		availableAudioTypes.push('audio_drama');
+	}
+	if (filesets.some((set) => set.type === 'audio')) {
+		availableAudioTypes.push('audio');
+	}
 	const activeBookName = activeBook ? activeBook.name : '';
 	const testaments = bookData
 		? bookData.reduce((a, c) => ({ ...a, [c.book_id]: c.testament }), {})
@@ -633,6 +637,7 @@ AppContainer.getInitialProps = async (context) => {
 				userProfile,
 				activeFilesetId,
 				audioType: audioType || '',
+				availableAudioTypes,
 				loadingAudio: true,
 				hasAudio: false,
 				hasVideo,
@@ -726,7 +731,6 @@ AppContainer.propTypes = {
 	chapterText: PropTypes.array,
 	fetchedUrls: PropTypes.array,
 	isFromServer: PropTypes.bool,
-	audioType: PropTypes.string,
 	isIe: PropTypes.bool,
 	routeLocation: PropTypes.string,
 	activeBookName: PropTypes.string,

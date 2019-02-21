@@ -34,7 +34,6 @@ const Footer = ({
 				onClick={() => !profileActive && toggleProfile()}
 			>
 				<SvgWrapper className={'icon'} fill="#fff" svgid="profile" />
-				<span className={'title-text'}>Profile</span>
 			</span>
 			<span
 				title={'Search'}
@@ -45,7 +44,6 @@ const Footer = ({
 				onClick={() => !searchActive && toggleSearch()}
 			>
 				<SvgWrapper className={'icon'} fill="#fff" svgid="search" />
-				<span className={'title-text'}>Search</span>
 			</span>
 			<span
 				title={'Notebook'}
@@ -53,14 +51,9 @@ const Footer = ({
 				className={notebookActive ? 'item active' : 'item'}
 				role="button"
 				tabIndex={0}
-				onClick={() => {
-					if (!notebookActive) {
-						toggleNotebook();
-					}
-				}}
+				onClick={() => !notebookActive && toggleNotebook()}
 			>
 				<SvgWrapper className={'icon'} fill="#fff" svgid="notebook" />
-				<span className={'title-text'}>Notebook</span>
 			</span>
 			<span
 				title={'Settings'}
@@ -71,7 +64,6 @@ const Footer = ({
 				onClick={() => !settingsActive && toggleSettingsModal()}
 			>
 				<SvgWrapper className={'icon'} fill="#fff" svgid="text_options" />
-				<span className={'title-text'}>Options</span>
 			</span>
 		</div>
 	</div>

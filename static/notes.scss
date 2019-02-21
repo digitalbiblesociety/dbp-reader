@@ -3,7 +3,7 @@
 	position: fixed;
 	top: 0;
 	right: 0;
-	height: calc(100% - 56px);
+	height: calc(100% - 44px);
 	width: 320px;
 	@include css4 {
 		background-color: var(--menu-body-background-color);
@@ -421,8 +421,8 @@
 
 // List Sections
 .list-sections {
-	height: calc(100% - 104px);
-	max-height: calc(100% - 104px);
+	height: calc(100% - 107px);
+	max-height: calc(100% - 107px);
 }
 .list-sections .searchbar {
 	display: flex;
