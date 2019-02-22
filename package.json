@@ -42,7 +42,6 @@
     "lint:eslint": "eslint --ignore-path .gitignore --ignore-pattern internals/scripts",
     "lint:js": "npm run lint:eslint -- . ",
     "lint:staged": "lint-staged; npm run test",
-    "pretest": "npm run test:clean",
     "test": "cross-env NODE_ENV=test jest",
     "test:coverage": "cross-env NODE_ENV=test jest --coverage",
     "test:watch": "cross-env NODE_ENV=test jest --watchAll",
