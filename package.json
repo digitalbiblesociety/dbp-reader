@@ -190,6 +190,7 @@
 			"!app/configureStore.js",
 			"!app/withRedux.js",
 			"!app/utils/stopPropagationPolyfill.js",
+			"!app/utils/polyfills.js",
 			"!app/utils/testUtils/*"
 		],
 		"coverageDirectory": "<rootDir>/coverage/jest",
