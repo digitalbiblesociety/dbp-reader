@@ -5,6 +5,7 @@ build
 bundles
 node_modules
 stats.json
+yarn-error.log
 .env
 .next
 .next/
