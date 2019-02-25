@@ -10,9 +10,8 @@ const LodashReplacement = new LodashModuleReplacementPlugin({
 	collections: true,
 	currying: true,
 });
-const withTranspileModules = require('next-plugin-transpile-modules');
+
 const webpackConfig = {
-	transpileModules: ['@bibleis'],
 	webpack: (config) => {
 		const originalEntry = config.entry;
 		/* eslint-disable no-param-reassign */
@@ -38,13 +37,11 @@ const webpackConfig = {
 
 if (process.env.ANALYZE_BUNDLE) {
 	module.exports = withBundleAnalyzer({
-		...withTranspileModules(
-			withSass(
-				withCss({
-					...webpackConfig,
-					generateBuildId: async () => process.env.BUILD_ID,
-				}),
-			),
+		...withSass(
+			withCss({
+				...webpackConfig,
+				generateBuildId: async () => process.env.BUILD_ID,
+			}),
 		),
 		analyzeServer: ['server', 'both'].includes(process.env.ANALYZE_BUNDLE),
 		analyzeBrowser: ['browser', 'both'].includes(process.env.ANALYZE_BUNDLE),
@@ -60,14 +57,12 @@ if (process.env.ANALYZE_BUNDLE) {
 		},
 	});
 } else if (isProd) {
-	module.exports = withTranspileModules(
-		withSass(
-			withCss({
-				...webpackConfig,
-				generateBuildId: async () => process.env.BUILD_ID,
-			}),
-		),
+	module.exports = withSass(
+		withCss({
+			...webpackConfig,
+			generateBuildId: async () => process.env.BUILD_ID,
+		}),
 	);
 } else {
-	module.exports = withTranspileModules(withSass(withCss(webpackConfig)));
+	module.exports = withSass(withCss(webpackConfig));
 }
