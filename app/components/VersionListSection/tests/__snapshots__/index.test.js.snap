@@ -202,9 +202,9 @@ exports[`<VersionListSection /> Should match previous snapshot using data from a
         onClick={[Function]}
         role="button"
         tabIndex={0}
-        title="World English Bible"
+        title="World English Bible (Hosanna audio)"
       >
-        World English Bible (Hosanna audio) ( World English Bible )
+        World English Bible (Hosanna audio)
       </a>
     </div>
     <div
