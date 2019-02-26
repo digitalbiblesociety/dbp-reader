@@ -1,6 +1,7 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
 import { mount } from 'enzyme';
+import Colors from '../../../../theme_config/javascriptColors';
 import HighlightColors from '..';
 
 /* eslint-disable react/prop-types */
@@ -10,11 +11,11 @@ jest.mock('react-intl', () => ({
 }));
 /* eslint-enable react/prop-types */
 const options = ['None', 'Yellow', 'Green', 'Pink', 'Purple', 'Blue'];
-const green = 'rgba(84,185,72,.5)';
-const yellow = 'rgba(252,230,0,.5)';
-const pink = 'rgba(208,105,169,.5)';
-const purple = 'rgba(137,103,172,.5)';
-const blue = 'rgba(80,165,220,.5)';
+const green = Colors.highlightGreen;
+const yellow = Colors.highlightYellow;
+const pink = Colors.highlightPink;
+const purple = Colors.highlightPurple;
+const blue = Colors.highlightBlue;
 let addHighlight = jest.fn(() => {});
 let wrapper;
 

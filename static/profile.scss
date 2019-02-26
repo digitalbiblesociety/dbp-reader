@@ -155,7 +155,9 @@
 // Links
 .profile {
 	.link {
-		color: $sketch-document-color-light-blue;
+		@include css4 {
+			color: var(--application-link-color);
+		}
 		font-weight: 200;
 		margin-left: 15px;
 		cursor: pointer;
@@ -285,7 +287,9 @@
 		}
 
 		&.error {
-			background-color: $sketch-document-color-error;
+			@include css4 {
+				background-color: var(--application-error-color);
+			}
 		}
 	}
 }
@@ -406,7 +410,9 @@
 				}
 
 				&.error {
-					background-color: $sketch-document-color-error;
+					@include css4 {
+						background-color: var(--application-error-color);
+					}
 				}
 			}
 		}
@@ -425,11 +431,13 @@
 .forgot-password.password-verified {
 	.title {
 		display: inline-block;
-		color: $sketch-document-color-light-blue;
 		margin-top: 15px;
 		margin-bottom: 15px;
 		margin-left: 15px;
 		font-size: 18px;
+		@include css4 {
+			color: var(--application-link-color);
+		}
 	}
 	.message {
 		margin-top: 0;

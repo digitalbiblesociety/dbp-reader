@@ -217,10 +217,9 @@
 				}
 
 				.green {
-					background-color: $sketch-document-color-bright-green;
-					//width: 26px;
-					//height: 26px;
-					//border-radius: 50%;
+					@include css4 {
+						background-color: var(--highlight-green);
+					}
 
 					&:hover {
 						border: 1px solid #000;
@@ -228,10 +227,9 @@
 				}
 
 				.pink {
-					background-color: $sketch-document-color-pink;
-					//width: 26px;
-					//height: 26px;
-					//border-radius: 50%;
+					@include css4 {
+						background-color: var(--highlight-pink);
+					}
 
 					&:hover {
 						border: 1px solid #000;
@@ -239,10 +237,9 @@
 				}
 
 				.purple {
-					background-color: $sketch-document-color-purple;
-					//width: 26px;
-					//height: 26px;
-					//border-radius: 50%;
+					@include css4 {
+						background-color: var(--highlight-purple);
+					}
 
 					&:hover {
 						border: 1px solid #000;
@@ -250,10 +247,9 @@
 				}
 
 				.blue {
-					background-color: $sketch-document-color-bright-blue;
-					//width: 26px;
-					//height: 26px;
-					//border-radius: 50%;
+					@include css4 {
+						background-color: var(--highlight-blue);
+					}
 
 					&:hover {
 						border: 1px solid #000;
@@ -261,10 +257,9 @@
 				}
 
 				.yellow {
-					background-color: $sketch-document-color-yellow;
-					//width: 26px;
-					//height: 26px;
-					//border-radius: 50%;
+					@include css4 {
+						background-color: var(--highlight-yellow);
+					}
 
 					&:hover {
 						border: 1px solid #000;

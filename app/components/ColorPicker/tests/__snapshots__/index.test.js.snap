@@ -14,7 +14,7 @@ exports[`ColorPicker tests Should render 1`] = `
       role="button"
       style={
         Object {
-          "backgroundColor": "rgba(252,230,0,.5)",
+          "backgroundColor": "rgba(252,230,0,0.5)",
         }
       }
       tabIndex={-1}
@@ -30,7 +30,7 @@ exports[`ColorPicker tests Should render 1`] = `
       role="button"
       style={
         Object {
-          "backgroundColor": "rgba(84,185,72,.5)",
+          "backgroundColor": "rgba(84,185,72,0.5)",
         }
       }
       tabIndex={-2}
@@ -46,7 +46,7 @@ exports[`ColorPicker tests Should render 1`] = `
       role="button"
       style={
         Object {
-          "backgroundColor": "rgba(208,105,169,.5)",
+          "backgroundColor": "rgba(208,105,169,0.5)",
         }
       }
       tabIndex={-3}
@@ -62,7 +62,7 @@ exports[`ColorPicker tests Should render 1`] = `
       role="button"
       style={
         Object {
-          "backgroundColor": "rgba(137,103,172,.5)",
+          "backgroundColor": "rgba(137,103,172,0.5)",
         }
       }
       tabIndex={-4}
@@ -78,7 +78,7 @@ exports[`ColorPicker tests Should render 1`] = `
       role="button"
       style={
         Object {
-          "backgroundColor": "rgba(80,165,220,.5)",
+          "backgroundColor": "rgba(80,165,220,0.5)",
         }
       }
       tabIndex={-5}
