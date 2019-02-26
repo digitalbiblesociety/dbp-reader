@@ -8,43 +8,24 @@ and [Faith Comes by Hearing](https://faithcomesbyhearing.com).
 ## QuickStart
 
 - This project requires Node v10 and npm v6.
+
 - If you do not have Node follow the installation instructions here: [Node.js](https://nodejs.org/en/download/).
-- Clone the repo:
-  - `git clone https://dbsdevs@bitbucket.org/dbsdevs/dbp_4_reader.git`
-- Once you have successfully installed Node and cloned the repo run the following
-  commands in the root folder of the
-  project: - `npm install && npm start`
-- Create a file named `.env` in the root of your new project, following the pattern found in sample-env.txt add your own environment variables.
-  an example of the variables you will need to set in order to run this locally.
-  - You will need to make sure your api key has access to the project and bucket(s) used
-- Create a file named `env-config.js` use the template below but replace "YOUR_VAR_1" with your own variables from your .env file:
-
-  ```
-  require('dotenv').config();
-
-  module.exports = {
-      'process.env': {
-          YOUR_VAR_1: JSON.stringify(process.env.YOUR_VAR_1),
-          YOUR_VAR_2: JSON.stringify(process.env.YOUR_VAR_2),
-          YOUR_API_KEY: JSON.stringify(process.env.YOUR_API_KEY),
-      },
-  }
-  ```
-
-- Now navigate to localhost:3000 to see the development site
-- When making changes to the css you need to make sure that you run aws s3 sync ./cdn s3://your_app_name/ and make sure that the app name here matches the one you use in the aws env variable.
+- Clone the repository:
+  - `git clone https://github.com/digitalbiblesociety/dbp-reader.git`
+- Once you have successfully installed Node and cloned the repository run `npm install` to install the required dependencies
+- Next create a `.env` file in the root of your new project, following the pattern found in `sample-env.txt` add your own environment variables
+  - Note: You will need to make sure your api key has access to the project and bucket(s) used in your .env file
+- Next update the `env-config.js` file to only use the variables from your .env file
+- Next update the files under `theme_config` to include your custom colors and organization information
+- Now run `npm build` followed by `npm start:prod` for the production verse of the site
+  - Alternatively just run `npm start` for the development site
+- Finally navigate to localhost:3000 to see your newly created bible reader!
 
 ## Description
 
 A minimalist bible study application with a focus on flexibility, accessibility, and
 portability. It is in many ways the spiritual successor to the bible browser and the
 [inScript projects](https://github.com/digitalbiblesociety/).
-
-## Solutions to Potential Issues
-
-If you feel that there are resources being cached you can use the script below
-in your developer console to manually clear the cache of api calls.
-`Object.keys(localStorage).filter(key => key.slice(0, 7) === 'lscache').forEach(key => localStorage.removeItem(key))`
 
 ## Goals
 
