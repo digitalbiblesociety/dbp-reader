@@ -260,9 +260,12 @@ class HomePage extends React.PureComponent {
 			userId: userIdProps,
 			userAuthenticated: userAuthenticatedProps,
 		} = this.props.profile;
+		const prevVerseNumber = this.props.homepage.match.params.verse;
+		const verseNumber = nextProps.homepage.match.params.verse;
 
 		// If there was a change in the params then make sure loading state is set to false
 		if (
+			prevVerseNumber !== verseNumber ||
 			formattedSource.main !== prevFormattedSource.main ||
 			!isEqual(prevTextData.text, textData.text) ||
 			audioSource !== prevAudioSource
