@@ -18,7 +18,7 @@ and [Faith Comes by Hearing](https://faithcomesbyhearing.com).
   - Note: You will need to make sure your api key has access to the project and bucket(s) used in your .env file
 - Next update the `env-config.js` file to only use the variables from your .env file
 - Next update the files under `theme_config` to include your custom colors and organization information
-- Now run `npm build` followed by `npm start:prod` for the production verse of the site
+- Now run `npm build` followed by `npm start:prod` for the production version of the site
   - Alternatively just run `npm start` for the development site
 - Finally navigate to localhost:3000 to see your newly created bible reader!
 
