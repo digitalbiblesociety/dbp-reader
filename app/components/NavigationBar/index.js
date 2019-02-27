@@ -41,16 +41,21 @@ class NavigationBar extends React.PureComponent {
 						title={'http://www.bible.is'}
 						rel={'noopener'}
 					>
-						{theme === 'paper' && userAgent !== 'ms' ? (
-							<SvgWrapper className="svg" svgid={'bible.is_logo_light'} />
-						) : null}
-						{theme !== 'paper' || userAgent === 'ms' ? (
-							<SvgWrapper
-								fill={userAgent === 'ms' ? '#fff' : ''}
-								className="svg"
-								svgid={'bible.is_logo'}
-							/>
-						) : null}
+						{theme === 'paper' &&
+							userAgent !== 'ms' && (
+								<svg className={'svg'}>
+									<use
+										xlinkHref={
+											'/static/light_theme_logo.svg#bible.is_logo_light'
+										}
+									/>
+								</svg>
+							)}
+						{(theme !== 'paper' || userAgent === 'ms') && (
+							<svg className={'svg'} fill={userAgent === 'ms' ? '#fff' : ''}>
+								<use xlinkHref={'/static/dark_theme_logo.svg#bible.is_logo'} />
+							</svg>
+						)}
 					</a>
 					<div
 						id={'version-dropdown-button'}

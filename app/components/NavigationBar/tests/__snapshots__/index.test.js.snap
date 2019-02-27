@@ -19,8 +19,7 @@ exports[`<NavigationBar /> component should match snapshot with chapter selectio
         fill=""
       >
         <use
-          xlinkHref="/static/svglist.svg#bible.is_logo"
-          xmlnsXlink="http://www.w3.org/1999/xlink"
+          xlinkHref="/static/dark_theme_logo.svg#bible.is_logo"
         />
       </svg>
     </a>
@@ -91,8 +90,7 @@ exports[`<NavigationBar /> component should match snapshot with default props 1`
         fill=""
       >
         <use
-          xlinkHref="/static/svglist.svg#bible.is_logo"
-          xmlnsXlink="http://www.w3.org/1999/xlink"
+          xlinkHref="/static/dark_theme_logo.svg#bible.is_logo"
         />
       </svg>
     </a>
@@ -163,8 +161,7 @@ exports[`<NavigationBar /> component should match snapshot with ms as the user a
         fill="#fff"
       >
         <use
-          xlinkHref="/static/svglist.svg#bible.is_logo"
-          xmlnsXlink="http://www.w3.org/1999/xlink"
+          xlinkHref="/static/dark_theme_logo.svg#bible.is_logo"
         />
       </svg>
     </a>
@@ -234,8 +231,7 @@ exports[`<NavigationBar /> component should match snapshot with paper theme 1`] 
         className="svg"
       >
         <use
-          xlinkHref="/static/svglist.svg#bible.is_logo_light"
-          xmlnsXlink="http://www.w3.org/1999/xlink"
+          xlinkHref="/static/light_theme_logo.svg#bible.is_logo_light"
         />
       </svg>
     </a>
@@ -306,8 +302,7 @@ exports[`<NavigationBar /> component should match snapshot with paper theme and 
         fill="#fff"
       >
         <use
-          xlinkHref="/static/svglist.svg#bible.is_logo"
-          xmlnsXlink="http://www.w3.org/1999/xlink"
+          xlinkHref="/static/dark_theme_logo.svg#bible.is_logo"
         />
       </svg>
     </a>
@@ -378,8 +373,7 @@ exports[`<NavigationBar /> component should match snapshot with version selectio
         fill=""
       >
         <use
-          xlinkHref="/static/svglist.svg#bible.is_logo"
-          xmlnsXlink="http://www.w3.org/1999/xlink"
+          xlinkHref="/static/dark_theme_logo.svg#bible.is_logo"
         />
       </svg>
     </a>
