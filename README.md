@@ -20,6 +20,7 @@ and [Faith Comes by Hearing](https://faithcomesbyhearing.com).
   - Update the `env-config.js` file to only use the variables from your .env file
   - Update the files under `theme_config` to include your custom colors and organization information
   - Update `./static/light_theme_logo.svg` and `./static/dark_theme_logo.svg` to match your organization's logo
+  - Update `./static/manifest.json` to match your url and site theme
 - Now run `npm build` followed by `npm start:prod` for the production version of the site
   - Alternatively just run `npm start` for the development site
 - Finally navigate to localhost:3000 to see your newly created bible reader!
