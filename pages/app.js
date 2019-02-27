@@ -191,13 +191,13 @@ class AppContainer extends React.Component {
 					/>
 					<meta
 						property={'og:image'}
-						content={'https://listen.dbp4.org/static/icon-310x310.png'}
+						content={`${process.env.BASE_SITE_URL}/static/icon-310x310.png`}
 					/>
 					<meta property={'og:image:width'} content={310} />
 					<meta property={'og:image:height'} content={310} />
 					<meta
 						property={'og:url'}
-						content={`https://listen.dbp4.org/${routeLocation}`}
+						content={`${process.env.BASE_SITE_URL}/${routeLocation}`}
 					/>
 					<meta property={'og:description'} content={descriptionText} />
 					<meta
