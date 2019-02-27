@@ -13,20 +13,20 @@ import {
 	AccordionItemTitle,
 } from 'react-accessible-accordion';
 import Link from 'next/link';
+import url from '../../utils/hrefLinkOrAsLink';
 
 class VersionListSection extends React.PureComponent {
 	getPath = (path, types, isHref) => {
 		let fullPath = '';
-		if (isHref) {
-			fullPath += `${path}`;
-		} else {
-			fullPath += `/bible${path}`;
-		}
+
 		if (types.audio_drama) {
-			fullPath += '?audio_type=audio_drama';
+			fullPath = url({ ...path, audioType: 'audio_drama', isHref });
 		} else if (types.audio) {
-			fullPath += '?audio_type=audio';
+			fullPath = url({ ...path, audioType: 'audio', isHref });
+		} else {
+			fullPath = url({ ...path, isHref });
 		}
+
 		return fullPath;
 	};
 
@@ -48,8 +48,16 @@ class VersionListSection extends React.PureComponent {
 								</AccordionItemTitle>
 								<AccordionItemBody className={'accordion-body-style'}>
 									<Link
-										href={`${item.path}?audio_type=audio_drama`}
-										as={`/bible${item.path}?audio_type=audio_drama`}
+										href={url({
+											...item.path,
+											audioType: 'audio_drama',
+											isHref: true,
+										})}
+										as={url({
+											...item.path,
+											audioType: 'audio_drama',
+											isHref: false,
+										})}
 										key={`${item.key}_drama`}
 									>
 										<a
@@ -62,8 +70,16 @@ class VersionListSection extends React.PureComponent {
 										</a>
 									</Link>
 									<Link
-										href={`${item.path}?audio_type=audio`}
-										as={`/bible${item.path}?audio_type=audio`}
+										href={url({
+											...item.path,
+											audioType: 'audio',
+											isHref: true,
+										})}
+										as={url({
+											...item.path,
+											audioType: 'audio',
+											isHref: false,
+										})}
 										key={`${item.key}_plain`}
 									>
 										<a

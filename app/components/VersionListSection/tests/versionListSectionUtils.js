@@ -3,6 +3,8 @@ import request from '../../../utils/request';
 export function itemsParser(
 	bibles,
 	activeTextId,
+	activeBookId,
+	activeChapter,
 	filterText,
 	filter,
 	handleVersionListClick,
@@ -15,7 +17,11 @@ export function itemsParser(
 		(acc, bible) => [
 			...acc,
 			{
-				path: `/${bible.get('abbr').toUpperCase()}`,
+				path: {
+					textId: bible.get('abbr'),
+					bookId: activeBookId,
+					chapter: activeChapter,
+				},
 				key: `${bible.get('abbr')}${bible.get('date')}`,
 				clickHandler: (audioType) => handleVersionListClick(bible, audioType),
 				className: bible.get('abbr') === activeTextId ? 'active-version' : '',

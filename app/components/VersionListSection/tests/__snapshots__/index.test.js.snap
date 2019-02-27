@@ -35,7 +35,7 @@ exports[`<VersionListSection /> Should match previous snapshot using data from a
     >
       <a
         className="version-item-button"
-        href="/bible/ENGESV?audio_type=audio_drama"
+        href="/bible/ENGESV/MAT/1?audio_type=audio_drama"
         onClick={[Function]}
         role="button"
         tabIndex={0}
@@ -44,7 +44,7 @@ exports[`<VersionListSection /> Should match previous snapshot using data from a
       </a>
       <a
         className="version-item-button"
-        href="/bible/ENGESV?audio_type=audio"
+        href="/bible/ENGESV/MAT/1?audio_type=audio"
         onClick={[Function]}
         role="button"
         tabIndex={0}
@@ -83,7 +83,7 @@ exports[`<VersionListSection /> Should match previous snapshot using data from a
     >
       <a
         className="version-item-button"
-        href="/bible/ENGNIV?audio_type=audio_drama"
+        href="/bible/ENGNIV/MAT/1?audio_type=audio_drama"
         onClick={[Function]}
         role="button"
         tabIndex={0}
@@ -92,7 +92,7 @@ exports[`<VersionListSection /> Should match previous snapshot using data from a
       </a>
       <a
         className="version-item-button"
-        href="/bible/ENGNIV?audio_type=audio"
+        href="/bible/ENGNIV/MAT/1?audio_type=audio"
         onClick={[Function]}
         role="button"
         tabIndex={0}
@@ -131,7 +131,7 @@ exports[`<VersionListSection /> Should match previous snapshot using data from a
     >
       <a
         className="version-item-button"
-        href="/bible/ENGKJV?audio_type=audio_drama"
+        href="/bible/ENGKJV/MAT/1?audio_type=audio_drama"
         onClick={[Function]}
         role="button"
         tabIndex={0}
@@ -140,7 +140,7 @@ exports[`<VersionListSection /> Should match previous snapshot using data from a
       </a>
       <a
         className="version-item-button"
-        href="/bible/ENGKJV?audio_type=audio"
+        href="/bible/ENGKJV/MAT/1?audio_type=audio"
         onClick={[Function]}
         role="button"
         tabIndex={0}
@@ -165,7 +165,7 @@ exports[`<VersionListSection /> Should match previous snapshot using data from a
     >
       <a
         className=" top-level-title"
-        href="/bible/ENGNAB?audio_type=audio_drama"
+        href="/bible/ENGNAB/MAT/1?audio_type=audio_drama"
         onClick={[Function]}
         role="button"
         tabIndex={0}
@@ -198,7 +198,7 @@ exports[`<VersionListSection /> Should match previous snapshot using data from a
     >
       <a
         className=" top-level-title"
-        href="/bible/ENGWEB?audio_type=audio_drama"
+        href="/bible/ENGWEB/MAT/1?audio_type=audio_drama"
         onClick={[Function]}
         role="button"
         tabIndex={0}
@@ -231,7 +231,7 @@ exports[`<VersionListSection /> Should match previous snapshot using data from a
     >
       <a
         className=" top-level-title"
-        href="/bible/ENGWWH?audio_type=audio_drama"
+        href="/bible/ENGWWH/MAT/1?audio_type=audio_drama"
         onClick={[Function]}
         role="button"
         tabIndex={0}
@@ -278,7 +278,7 @@ exports[`<VersionListSection /> Should match previous snapshot using data from a
     >
       <a
         className="version-item-button"
-        href="/bible/ENGNIVA?audio_type=audio_drama"
+        href="/bible/ENGNIVA/MAT/1?audio_type=audio_drama"
         onClick={[Function]}
         role="button"
         tabIndex={0}
@@ -287,7 +287,7 @@ exports[`<VersionListSection /> Should match previous snapshot using data from a
       </a>
       <a
         className="version-item-button"
-        href="/bible/ENGNIVA?audio_type=audio"
+        href="/bible/ENGNIVA/MAT/1?audio_type=audio"
         onClick={[Function]}
         role="button"
         tabIndex={0}
@@ -334,7 +334,7 @@ exports[`<VersionListSection /> Should match previous snapshot with valid props 
     >
       <a
         className="version-item-button"
-        href="/bible/ENGESV?audio_type=audio_drama"
+        href="/bible/ENGESV/MAT/1?audio_type=audio_drama"
         onClick={[Function]}
         role="button"
         tabIndex={0}
@@ -343,7 +343,7 @@ exports[`<VersionListSection /> Should match previous snapshot with valid props 
       </a>
       <a
         className="version-item-button"
-        href="/bible/ENGESV?audio_type=audio"
+        href="/bible/ENGESV/MAT/1?audio_type=audio"
         onClick={[Function]}
         role="button"
         tabIndex={0}
@@ -382,7 +382,7 @@ exports[`<VersionListSection /> Should match previous snapshot with valid props 
     >
       <a
         className="version-item-button"
-        href="/bible/ENGNIV?audio_type=audio_drama"
+        href="/bible/ENGNIV/MAT/1?audio_type=audio_drama"
         onClick={[Function]}
         role="button"
         tabIndex={0}
@@ -391,7 +391,7 @@ exports[`<VersionListSection /> Should match previous snapshot with valid props 
       </a>
       <a
         className="version-item-button"
-        href="/bible/ENGNIV?audio_type=audio"
+        href="/bible/ENGNIV/MAT/1?audio_type=audio"
         onClick={[Function]}
         role="button"
         tabIndex={0}
@@ -430,7 +430,7 @@ exports[`<VersionListSection /> Should match previous snapshot with valid props 
     >
       <a
         className="version-item-button"
-        href="/bible/ENGKJV?audio_type=audio_drama"
+        href="/bible/ENGKJV/MAT/1?audio_type=audio_drama"
         onClick={[Function]}
         role="button"
         tabIndex={0}
@@ -439,7 +439,7 @@ exports[`<VersionListSection /> Should match previous snapshot with valid props 
       </a>
       <a
         className="version-item-button"
-        href="/bible/ENGKJV?audio_type=audio"
+        href="/bible/ENGKJV/MAT/1?audio_type=audio"
         onClick={[Function]}
         role="button"
         tabIndex={0}
@@ -464,7 +464,7 @@ exports[`<VersionListSection /> Should match previous snapshot with valid props 
     >
       <a
         className=" top-level-title"
-        href="/bible/ENGNAB?audio_type=audio_drama"
+        href="/bible/ENGNAB/MAT/1?audio_type=audio_drama"
         onClick={[Function]}
         role="button"
         tabIndex={0}
@@ -497,7 +497,7 @@ exports[`<VersionListSection /> Should match previous snapshot with valid props 
     >
       <a
         className=" top-level-title"
-        href="/bible/ENGWEB?audio_type=audio_drama"
+        href="/bible/ENGWEB/MAT/1?audio_type=audio_drama"
         onClick={[Function]}
         role="button"
         tabIndex={0}
@@ -530,7 +530,7 @@ exports[`<VersionListSection /> Should match previous snapshot with valid props 
     >
       <a
         className=" top-level-title"
-        href="/bible/ENGWWH?audio_type=audio_drama"
+        href="/bible/ENGWWH/MAT/1?audio_type=audio_drama"
         onClick={[Function]}
         role="button"
         tabIndex={0}
@@ -577,7 +577,7 @@ exports[`<VersionListSection /> Should match previous snapshot with valid props 
     >
       <a
         className="version-item-button"
-        href="/bible/ENGNIVA?audio_type=audio_drama"
+        href="/bible/ENGNIVA/MAT/1?audio_type=audio_drama"
         onClick={[Function]}
         role="button"
         tabIndex={0}
@@ -586,7 +586,7 @@ exports[`<VersionListSection /> Should match previous snapshot with valid props 
       </a>
       <a
         className="version-item-button"
-        href="/bible/ENGNIVA?audio_type=audio"
+        href="/bible/ENGNIVA/MAT/1?audio_type=audio"
         onClick={[Function]}
         role="button"
         tabIndex={0}
