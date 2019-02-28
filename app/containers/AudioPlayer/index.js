@@ -109,16 +109,28 @@ export class AudioPlayer extends React.Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
+		// console.log(
+		//   'next filesets',
+		//   nextProps.activeFilesets.filter((f) => f.type.includes('audio')),
+		//   '\nnext audioType: ',
+		//   nextProps.audioType,
+		//   '\nnext audioSource === props.audioSource',
+		//   nextProps.audioSource === this.props.audioSource,
+		// );
+		// if (nextProps.hasAudio !== this.props.hasAudio) {
+		//   console.log('hasAudio: ', nextProps.hasAudio);
+		// }
 		if (nextProps.hasVideo && nextProps.videoPlayerOpen) {
 			this.pauseAudio();
 		}
 		if (
-			!isEqual(nextProps.activeFilesets, this.props.activeFilesets) ||
+			nextProps.activeTextId !== this.props.activeTextId ||
 			nextProps.activeBookId !== this.props.activeBookId ||
 			nextProps.activeChapter !== this.props.activeChapter ||
 			nextProps.audioType !== this.props.audioType ||
 			nextProps.verseNumber !== this.props.verseNumber
 		) {
+			// console.log('getting audio');
 			this.getAudio(
 				nextProps.activeFilesets,
 				nextProps.activeBookId,
@@ -129,6 +141,7 @@ export class AudioPlayer extends React.Component {
 		if (nextProps.audioSource !== this.props.audioSource) {
 			if (nextProps.audioSource) {
 				this.setState({ playing: false, loadingNextChapter: false });
+				this.setAudioPlayerState(true);
 			} else if (this.props.audioPlayerState && !nextProps.audioSource) {
 				this.setState({ playing: false }, () =>
 					this.setAudioPlayerState(false),

@@ -274,5 +274,6 @@ export default async (filesets, bookId, chapter, audioType) => {
 			}
 		}
 	}
+
 	return audioReturnObject;
 };

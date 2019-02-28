@@ -159,20 +159,15 @@ export class VersionList extends React.PureComponent {
 					typeof window !== 'undefined' &&
 					(audioType === 'audio' || audioType === 'audio_drama')
 				) {
-					document.cookie = `bible_is_audio_type=${audioType};path=/bible/${bible
-						.get('abbr')
-						.toLowerCase()}`;
+					document.cookie = `bible_is_audio_type=${audioType};path=/bible/${bible.get(
+						'abbr',
+					)}`;
 				}
 				setActiveText({
 					textId: bible.get('abbr'),
 					textName:
 						bible.get('vname') || bible.get('name') || bible.get('abbr'),
-					filesets: filesets.filter(
-						(f) =>
-							f.get('type') === audioType ||
-							f.get('type') === 'text_plain' ||
-							f.get('type') === 'text_format',
-					),
+					filesets,
 				});
 				toggleTextSelection();
 			} else {

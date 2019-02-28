@@ -266,8 +266,12 @@ AppContainer.getInitialProps = async (context) => {
 			.map((key) => key.split('='))
 			.find((key) => key[0] === 'audio_type');
 		audioParam = audioParameterKeyPair && audioParameterKeyPair[1];
+	} else {
+		audioParam = context.query.audio_type;
 	}
-
+	// console.log('audio-type:', audioParam);
+	// console.log('routeLocation:', routeLocation);
+	// console.log('context path:', context.query);
 	if (req && req.headers) {
 		isIe = isUserAgentInternetExplorer(req.headers['user-agent']);
 	} else {
@@ -480,6 +484,7 @@ AppContainer.getInitialProps = async (context) => {
 			audioParam = '';
 		}
 	}
+	// console.log('audioType:', audioType);
 
 	// Redirect to the new url if conditions are met
 	if (bookMetaData && bookMetaData.length) {
@@ -639,7 +644,6 @@ AppContainer.getInitialProps = async (context) => {
 				audioType: audioType || '',
 				availableAudioTypes,
 				loadingAudio: true,
-				hasAudio: false,
 				hasVideo,
 				chapterText,
 				testaments,

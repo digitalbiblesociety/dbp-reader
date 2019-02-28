@@ -71,6 +71,7 @@ import {
 	applyFontSize,
 	toggleWordsOfJesus,
 } from '../Settings/themes';
+import { setAudioType } from '../AudioPlayer/actions';
 
 const VideoPlayer = dynamic(import('../VideoPlayer'), {
 	loading: () => null,
@@ -262,7 +263,25 @@ class HomePage extends React.PureComponent {
 		} = this.props.profile;
 		const prevVerseNumber = this.props.homepage.match.params.verse;
 		const verseNumber = nextProps.homepage.match.params.verse;
-
+		const audioParam =
+			location &&
+			location.search &&
+			location.search
+				.slice(1)
+				.split('&')
+				.map((key) => key.split('='))
+				.find((key) => key[0] === 'audio_type');
+		if (
+			audioParam &&
+			(audioParam[1] !== nextProps.homepage.audioType ||
+				audioParam[1] !== this.props.homepage.audioType)
+		) {
+			this.props.dispatch(setAudioType({ audioType: audioParam[1] }));
+			// console.log('HomeProps'.padStart(20, '-').padEnd(40, '-'));
+			// console.log('audio was suppposed to be: ', nextProps.homepage.audioType);
+			// console.log('audio should instead be: ', audioParam[1]);
+			// console.log('End HomeProps'.padStart(20, '-').padEnd(40, '-'));
+		}
 		// If there was a change in the params then make sure loading state is set to false
 		if (
 			prevVerseNumber !== verseNumber ||
