@@ -259,19 +259,10 @@ AppContainer.getInitialProps = async (context) => {
 
 	if (req && req.query.audio_type) {
 		audioParam = req.query.audio_type;
-	} else if (!req && typeof window !== 'undefined') {
-		const audioParameterKeyPair = window.location.search
-			.slice(1)
-			.split('&')
-			.map((key) => key.split('='))
-			.find((key) => key[0] === 'audio_type');
-		audioParam = audioParameterKeyPair && audioParameterKeyPair[1];
-	} else {
+	} else if (!req) {
 		audioParam = context.query.audio_type;
 	}
-	// console.log('audio-type:', audioParam);
-	// console.log('routeLocation:', routeLocation);
-	// console.log('context path:', context.query);
+
 	if (req && req.headers) {
 		isIe = isUserAgentInternetExplorer(req.headers['user-agent']);
 	} else {
