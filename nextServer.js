@@ -164,6 +164,9 @@ app
 				chapter,
 			};
 			const userParams = {};
+			// console.count('------- chapter');
+			// console.log('req params', req.params);
+			// console.log('req.query', req.query);
 
 			if (bookId !== req.params.bookId) {
 				res.redirect(301, `/bible/${req.params.bibleId}/${bookId}/${chapter}`);
@@ -202,6 +205,9 @@ app
 				isNaN(parseInt(req.params.verse, 10)) || !req.params.verse
 					? '1'
 					: req.params.verse;
+			// console.count('------- verse');
+			// console.log('req params', req.params);
+			// console.log('req.query', req.query);
 			// console.log(`${req.protocol}://${req.get('host')}${req.originalUrl}`);
 			// Params may not actually be passed using this method
 			const queryParams = {

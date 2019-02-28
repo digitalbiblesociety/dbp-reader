@@ -70,7 +70,8 @@ const initialState = fromJS({
 	activeChapter: 1,
 	hasAudio: false,
 	hasVideo: false,
-	videoPlayerOpen: true,
+	videoChapterState: false,
+	videoPlayerOpen: false,
 	userAuthenticated: false,
 	isChapterSelectionActive: false,
 	isProfileActive: false,
@@ -136,7 +137,10 @@ function homePageReducer(state = initialState, action) {
 		case CLOSE_VIDEO_PLAYER:
 			return state.set('videoPlayerOpen', false);
 		case SET_HAS_VIDEO:
-			return state.set('hasVideo', action.state);
+			return state
+				.set('hasVideo', action.state)
+				.set('videoChapterState', action.videoChapterState)
+				.set('videoPlayerOpen', action.videoPlayerOpen);
 		// Homepage Actions
 		case CHANGING_VERSION:
 			return state.set('changingVersion', action.state);

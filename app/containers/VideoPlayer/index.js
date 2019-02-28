@@ -152,13 +152,26 @@ class VideoPlayer extends React.PureComponent {
 					poster: playlist[0] ? playlist[0].thumbnail : '',
 				});
 				this.initVideoStream({ thumbnailClick: false });
+				this.openPlayer();
 				if (!this.props.hasVideo) {
-					this.props.dispatch(setHasVideo({ state: true }));
+					this.props.dispatch(
+						setHasVideo({
+							videoPlayerOpen: true,
+							state: true,
+							videoChapterState: true,
+						}),
+					);
 				}
 			} else {
 				this.setState({ playlist: [], currentVideo: {} });
 				if (this.props.hasVideo) {
-					this.props.dispatch(setHasVideo({ state: false }));
+					this.props.dispatch(
+						setHasVideo({
+							videoPlayerOpen: false,
+							state: false,
+							videoChapterState: false,
+						}),
+					);
 				}
 			}
 		} catch (err) {
@@ -288,7 +301,13 @@ class VideoPlayer extends React.PureComponent {
 	// This seems somewhat repetitive and unnecessary
 	checkForBooks = async ({ filesetId, bookId, chapter }) => {
 		if (!filesetId) {
-			this.props.dispatch(setHasVideo({ state: false }));
+			this.props.dispatch(
+				setHasVideo({
+					videoPlayerOpen: false,
+					state: false,
+					videoChapterState: false,
+				}),
+			);
 			return;
 		}
 
@@ -297,15 +316,33 @@ class VideoPlayer extends React.PureComponent {
 			const hasVideo = await checkForVideoAsync(filesetId, bookId, chapter);
 
 			if (hasVideo) {
-				this.props.dispatch(setHasVideo({ state: hasVideo }));
+				this.props.dispatch(
+					setHasVideo({
+						videoPlayerOpen: hasVideo,
+						state: hasVideo,
+						videoChapterState: hasVideo,
+					}),
+				);
 			} else {
-				this.props.dispatch(setHasVideo({ state: false }));
+				this.props.dispatch(
+					setHasVideo({
+						videoPlayerOpen: false,
+						state: false,
+						videoChapterState: false,
+					}),
+				);
 			}
 		} catch (err) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error('Error checking for video context', err); // eslint-disable-line no-console
 			}
-			this.props.dispatch(setHasVideo({ state: false }));
+			this.props.dispatch(
+				setHasVideo({
+					videoPlayerOpen: false,
+					state: false,
+					videoChapterState: false,
+				}),
+			);
 		}
 	};
 

@@ -271,16 +271,23 @@ class HomePage extends React.PureComponent {
 				.split('&')
 				.map((key) => key.split('='))
 				.find((key) => key[0] === 'audio_type');
+		const videoFileset = nextProps.homepage.activeFilesets.find(
+			(f) => f.type === 'video_stream',
+		);
 		if (
 			audioParam &&
 			(audioParam[1] !== nextProps.homepage.audioType ||
 				audioParam[1] !== this.props.homepage.audioType)
 		) {
 			this.props.dispatch(setAudioType({ audioType: audioParam[1] }));
-			// console.log('HomeProps'.padStart(20, '-').padEnd(40, '-'));
-			// console.log('audio was suppposed to be: ', nextProps.homepage.audioType);
-			// console.log('audio should instead be: ', audioParam[1]);
-			// console.log('End HomeProps'.padStart(20, '-').padEnd(40, '-'));
+		}
+		if (
+			(activeTextId !== activeTextIdProps ||
+				activeBookId !== activeBookIdProps ||
+				activeChapter !== activeChapterProps) &&
+			videoFileset
+		) {
+			this.checkForVideo(videoFileset.id, activeBookId, activeChapter);
 		}
 		// If there was a change in the params then make sure loading state is set to false
 		if (
@@ -422,12 +429,24 @@ class HomePage extends React.PureComponent {
 
 	checkForVideo = async (filesetId, bookId, chapter) => {
 		if (!filesetId) {
-			this.props.dispatch(setHasVideo({ state: false }));
+			this.props.dispatch(
+				setHasVideo({
+					state: false,
+					videoChapterState: false,
+					videoPlayerOpen: false,
+				}),
+			);
 			return;
 		}
 		const hasVideo = await checkForVideoAsync(filesetId, bookId, chapter);
 
-		this.props.dispatch(setHasVideo({ state: hasVideo }));
+		this.props.dispatch(
+			setHasVideo({
+				state: hasVideo,
+				videoChapterState: hasVideo,
+				videoPlayerOpen: hasVideo,
+			}),
+		);
 	};
 
 	addHighlight = (props) =>
@@ -556,6 +575,7 @@ class HomePage extends React.PureComponent {
 			changingVersion,
 			videoPlayerOpen,
 			hasVideo,
+			videoChapterState,
 			audioType,
 			textDirection,
 		} = this.props.homepage;
@@ -590,18 +610,19 @@ class HomePage extends React.PureComponent {
 							: 'content-container'
 					}
 				>
-					{hasVideo && (
-						<VideoPlayer
-							fileset={
-								activeFilesets.filter((f) => f.type === 'video_stream')[0]
-							}
-							bookId={activeBookId}
-							chapter={activeChapter}
-							books={books}
-							text={updatedText}
-							textId={activeTextId}
-						/>
-					)}
+					{hasVideo &&
+						videoChapterState && (
+							<VideoPlayer
+								fileset={
+									activeFilesets.filter((f) => f.type === 'video_stream')[0]
+								}
+								bookId={activeBookId}
+								chapter={activeChapter}
+								books={books}
+								text={updatedText}
+								textId={activeTextId}
+							/>
+						)}
 					<Text
 						books={books}
 						text={updatedText}
