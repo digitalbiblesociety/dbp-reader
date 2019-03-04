@@ -91,6 +91,10 @@ export class AudioPlayer extends React.Component {
 			this.audioRef.load();
 		}
 
+		if (!this.props.hasAudio && this.props.audioPlayerState) {
+			this.setAudioPlayerState(false);
+		}
+
 		if (typeof window !== 'undefined') {
 			this.getAudio(
 				this.props.activeFilesets,
@@ -139,10 +143,15 @@ export class AudioPlayer extends React.Component {
 			);
 		}
 		if (nextProps.audioSource !== this.props.audioSource) {
+			if (nextProps.audioSource && !this.props.audioSource) {
+				this.setAudioPlayerState(true);
+			}
 			if (nextProps.audioSource) {
 				this.setState({ playing: false, loadingNextChapter: false });
-				this.setAudioPlayerState(true);
-			} else if (this.props.audioPlayerState && !nextProps.audioSource) {
+			} else if (
+				this.props.audioPlayerState &&
+				(!nextProps.audioSource || !nextProps.hasAudio)
+			) {
 				this.setState({ playing: false }, () =>
 					this.setAudioPlayerState(false),
 				);

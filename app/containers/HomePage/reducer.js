@@ -279,7 +279,7 @@ function homePageReducer(state = initialState, action) {
 				.set('formattedSource', fromJS(action.formattedText));
 		case 'loadaudio':
 			return state
-				.set('hasAudio', true)
+				.set('hasAudio', !!action.audioPaths[0])
 				.set('audioPaths', action.audioPaths.slice(1))
 				.set('audioFilesetId', action.audioFilesetId)
 				.set('loadingAudio', false)
