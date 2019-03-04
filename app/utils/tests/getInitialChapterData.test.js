@@ -29,8 +29,8 @@ describe('get initial chapter data utility function', () => {
   it('should return correct default data on errors', async () => {
     const result = await getInitialChapterData({
       ...params,
-      plainFilesetIds: ['ENGESVS'],
-      formattedFilesetIds: ['ENGESVS'],
+      plainFilesetIds: ['asdf'],
+      formattedFilesetIds: ['asdf'],
     });
 
     expect(result).toHaveProperty('plainText', []);
