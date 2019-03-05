@@ -6,58 +6,59 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import Colors from '../../../theme_config/javascriptColors';
 
 function ColorPicker({ handlePickedColor }) {
 	return (
 		<div className={'color-picker'}>
 			<span className={'color-group'}>
 				<span
-					style={{ backgroundColor: 'rgba(252,230,0,.5)' }}
+					style={{ backgroundColor: Colors.highlightYellow }}
 					aria-label="yellow"
 					role={'button'}
 					tabIndex={-1}
 					className={'yellow'}
-					onClick={() => handlePickedColor({ color: 'rgba(252,230,0,.5)' })}
+					onClick={() => handlePickedColor({ color: Colors.highlightYellow })}
 				/>
 			</span>
 			<span className={'color-group'}>
 				<span
-					style={{ backgroundColor: 'rgba(84,185,72,.5)' }}
+					style={{ backgroundColor: Colors.highlightGreen }}
 					aria-label="green"
 					role={'button'}
 					tabIndex={-2}
 					className={'green'}
-					onClick={() => handlePickedColor({ color: 'rgba(84,185,72,.5)' })}
+					onClick={() => handlePickedColor({ color: Colors.highlightGreen })}
 				/>
 			</span>
 			<span className={'color-group'}>
 				<span
-					style={{ backgroundColor: 'rgba(208,105,169,.5)' }}
+					style={{ backgroundColor: Colors.highlightPink }}
 					aria-label="pink"
 					role={'button'}
 					tabIndex={-3}
 					className={'pink'}
-					onClick={() => handlePickedColor({ color: 'rgba(208,105,169,.5)' })}
+					onClick={() => handlePickedColor({ color: Colors.highlightPink })}
 				/>
 			</span>
 			<span className={'color-group'}>
 				<span
-					style={{ backgroundColor: 'rgba(137,103,172,.5)' }}
+					style={{ backgroundColor: Colors.highlightPurple }}
 					aria-label="purple"
 					role={'button'}
 					tabIndex={-4}
 					className={'purple'}
-					onClick={() => handlePickedColor({ color: 'rgba(137,103,172,.5)' })}
+					onClick={() => handlePickedColor({ color: Colors.highlightPurple })}
 				/>
 			</span>
 			<span className={'color-group'}>
 				<span
-					style={{ backgroundColor: 'rgba(80,165,220,.5)' }}
+					style={{ backgroundColor: Colors.highlightBlue }}
 					aria-label="blue"
 					role={'button'}
 					tabIndex={-5}
 					className={'blue'}
-					onClick={() => handlePickedColor({ color: 'rgba(80,165,220,.5)' })}
+					onClick={() => handlePickedColor({ color: Colors.highlightBlue })}
 				/>
 			</span>
 		</div>

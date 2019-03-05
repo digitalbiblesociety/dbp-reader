@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`redux persist utility config should match previous snapshot 1`] = `
+Object {
+  "active": true,
+  "reducerKey": "Bible.is",
+  "reducerVersion": "1",
+  "storeConfig": Object {
+    "blacklist": Array [
+      "homepage",
+      "textSelection",
+    ],
+    "keyPrefix": "Bible.is.v1.",
+    "stateReconciler": [Function],
+    "whitelist": Array [
+      "profile",
+      "settings",
+      "searchContainer",
+      "notes",
+    ],
+  },
+}
+`;

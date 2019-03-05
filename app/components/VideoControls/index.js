@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import SvgWrapper from '../SvgWrapper';
 import VolumeSlider from '../VolumeSlider';
-import Colors from '../../utils/javascriptColors';
+import Colors from '../../../theme_config/javascriptColors';
 
 class VideoControls extends React.PureComponent {
 	state = {

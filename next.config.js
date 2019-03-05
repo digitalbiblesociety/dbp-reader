@@ -10,6 +10,7 @@ const LodashReplacement = new LodashModuleReplacementPlugin({
 	collections: true,
 	currying: true,
 });
+
 const webpackConfig = {
 	webpack: (config) => {
 		const originalEntry = config.entry;

@@ -36,6 +36,7 @@ class CloseMenuFunctions {
 					singleTouch.clientY >= bounds.top &&
 					singleTouch.clientY <= bounds.top + bounds.height;
 			}
+
 			if (
 				this.ref &&
 				!(insideWidth || outsideWidth) &&

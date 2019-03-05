@@ -10,9 +10,11 @@ import {
 
 const filterText = '';
 const activeTextId = 'ENGESV';
+const activeBookId = 'MAT';
+const activeChapter = 1;
 const items = [
 	{
-		path: '/ENGESV',
+		path: { textId: 'ENGESV', bookId: 'MAT', chapter: 1 },
 		key: 'ENGESV2001',
 		className: '',
 		title: 'English Standard Version',
@@ -26,7 +28,7 @@ const items = [
 		},
 	},
 	{
-		path: '/ENGNIV',
+		path: { textId: 'ENGNIV', bookId: 'MAT', chapter: 1 },
 		key: 'ENGNIV1978',
 		className: 'active-version',
 		title: 'New International Version',
@@ -40,7 +42,7 @@ const items = [
 		},
 	},
 	{
-		path: '/ENGKJV',
+		path: { textId: 'ENGKJV', bookId: 'MAT', chapter: 1 },
 		key: 'ENGKJV1611',
 		className: '',
 		title: 'King James Version',
@@ -49,7 +51,7 @@ const items = [
 		types: { audio: true, audio_drama: true, text_plain: true },
 	},
 	{
-		path: '/ENGNAB',
+		path: { textId: 'ENGNAB', bookId: 'MAT', chapter: 1 },
 		key: 'ENGNAB1970',
 		className: '',
 		title: 'New American Bible',
@@ -58,7 +60,7 @@ const items = [
 		types: { text_format: true, audio_drama: true, text_plain: true },
 	},
 	{
-		path: '/ENGWEB',
+		path: { textId: 'ENGWEB', bookId: 'MAT', chapter: 1 },
 		key: 'ENGWEB1997',
 		className: '',
 		title: 'World English Bible',
@@ -67,7 +69,7 @@ const items = [
 		types: { text_plain: true, text_format: true, audio_drama: true },
 	},
 	{
-		path: '/ENGWWH',
+		path: { textId: 'ENGWWH', bookId: 'MAT', chapter: 1 },
 		key: 'ENGWWH1997',
 		className: '',
 		title: 'World English Bible (Afred Henson)',
@@ -76,7 +78,7 @@ const items = [
 		types: { audio_drama: true, text_plain: true },
 	},
 	{
-		path: '/ENGNIVA',
+		path: { textId: 'ENGNIVA', bookId: 'MAT', chapter: 1 },
 		key: 'ENGNIVAnull',
 		className: '',
 		title: 'New International Version (Anglicised)',
@@ -97,6 +99,8 @@ describe('<VersionListSection />', () => {
 		const sectionItems = itemsParser(
 			fromJS(apiItems),
 			activeTextId,
+			activeBookId,
+			activeChapter,
 			filterText,
 			filterFunction,
 			(bible, audioType) => `${bible}_${audioType}`,
