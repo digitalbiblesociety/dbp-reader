@@ -9,12 +9,17 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
+import Router from 'next/router';
 import { createStructuredSelector } from 'reselect';
 import LoadingSpinner from '../LoadingSpinner';
 import VersionListSection from '../VersionListSection';
 import messages from './messages';
 import { selectActiveBookId, selectActiveChapter } from './selectors';
 import { changeVersion } from '../../containers/HomePage/actions';
+import getBookMetaData from '../../utils/getBookMetaData';
+import getFirstChapterReference from '../../utils/getFirstChapterReference';
+import { selectHasVideo } from '../../containers/VideoPlayer/selectors';
+import getUrl from '../../utils/hrefLinkOrAsLink';
 
 export class VersionList extends React.PureComponent {
 	get filteredVersionList() {
@@ -143,8 +148,19 @@ export class VersionList extends React.PureComponent {
 		return false;
 	};
 
-	handleVersionListClick = (bible, audioType) => {
-		const { toggleTextSelection, setActiveText, activeTextId } = this.props;
+	// Make async
+	handleVersionListClick = async (bible, audioType) => {
+		// Figure out correct url here based on session variable value
+		const {
+			toggleTextSelection,
+			setActiveText,
+			activeTextId,
+			activeBookId,
+			activeChapter,
+		} = this.props;
+		const hasVideo = !!bible
+			.get('filesets')
+			.find((set) => set.get('type') === 'video_stream');
 
 		if (bible.get('abbr').toLowerCase() !== activeTextId.toLowerCase()) {
 			this.props.dispatch(changeVersion({ state: true }));
@@ -180,6 +196,56 @@ export class VersionList extends React.PureComponent {
 				toggleTextSelection();
 			}
 		}
+
+		if (JSON.parse(sessionStorage.getItem('bible_is_maintain_location'))) {
+			Router.push(
+				getUrl({
+					textId: bible.get('abbr'),
+					bookId: activeBookId,
+					chapter: activeChapter,
+					audioType,
+					isHref: true,
+				}),
+				getUrl({
+					textId: bible.get('abbr'),
+					bookId: activeBookId,
+					chapter: activeChapter,
+					audioType,
+					isHref: false,
+				}),
+			);
+		} else {
+			// Find url and push that one
+			const [filteredMetadata, allMetadata] = await getBookMetaData({
+				idsForBookMetadata: bible
+					.get('filesets')
+					.map((set) => [set.get('type'), set.get('id')])
+					.toJS(),
+			});
+
+			const bookChapterUrl = getFirstChapterReference(
+				bible.get('filesets').toJS(),
+				hasVideo,
+				allMetadata,
+				filteredMetadata,
+				audioType,
+			);
+
+			// Need to parse out the bookChapterUrl to create the href version for the server
+			// Safe to access 0th element for \w of match since it always returns a string
+			const bookId = bookChapterUrl.match(/\w*/)[0]; // Get first word which is bookId
+			const chapterId = bookChapterUrl.match(/\/\w*/)[0].slice(1); // get second part of url
+			const query =
+				bookChapterUrl.match(/\?.*/) &&
+				bookChapterUrl.match(/\?.*/)[0].replace('?', '&'); // Get any query params at the end
+
+			Router.push(
+				`/app?bibleId=${bible.get(
+					'abbr',
+				)}&bookId=${bookId}&chapter=${chapterId}${query}`,
+				`/bible/${bible.get('abbr')}/${bookChapterUrl}`,
+			);
+		}
 	};
 
 	render() {
@@ -208,6 +274,7 @@ VersionList.propTypes = {
 	activeBookId: PropTypes.string,
 	activeChapter: PropTypes.number,
 	active: PropTypes.bool,
+	hasVideo: PropTypes.bool,
 	loadingVersions: PropTypes.bool,
 };
 
@@ -220,6 +287,7 @@ function mapDispatchToProps(dispatch) {
 const mapStateToProps = createStructuredSelector({
 	activeBookId: selectActiveBookId(),
 	activeChapter: selectActiveChapter(),
+	hasVideo: selectHasVideo(),
 });
 
 const withConnect = connect(

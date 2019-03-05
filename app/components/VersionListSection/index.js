@@ -12,27 +12,27 @@ import {
 	AccordionItemBody,
 	AccordionItemTitle,
 } from 'react-accessible-accordion';
-import Link from 'next/link';
-import url from '../../utils/hrefLinkOrAsLink';
+// import Link from 'next/link';
+// import url from '../../utils/hrefLinkOrAsLink';
 
 class VersionListSection extends React.PureComponent {
-	getPath = (path, types, isHref) => {
-		let fullPath = '';
+	// getPath = (path, types, isHref) => {
+	// 	let fullPath = '';
 
-		if (types.audio_drama) {
-			fullPath = url({ ...path, audioType: 'audio_drama', isHref });
-		} else if (types.audio) {
-			fullPath = url({ ...path, audioType: 'audio', isHref });
-		} else {
-			fullPath = url({ ...path, isHref });
-		}
+	// 	if (types.audio_drama) {
+	// 		fullPath = url({ ...path, audioType: 'audio_drama', isHref });
+	// 	} else if (types.audio) {
+	// 		fullPath = url({ ...path, audioType: 'audio', isHref });
+	// 	} else {
+	// 		fullPath = url({ ...path, isHref });
+	// 	}
 
-		return fullPath;
-	};
+	// 	return fullPath;
+	// };
 
 	render() {
 		const { items } = this.props;
-
+		// Remove links and use programatic routing
 		return (
 			<Accordion>
 				{items.map((item) => {
@@ -47,7 +47,7 @@ class VersionListSection extends React.PureComponent {
 									</h4>
 								</AccordionItemTitle>
 								<AccordionItemBody className={'accordion-body-style'}>
-									<Link
+									{/* <Link
 										href={url({
 											...item.path,
 											audioType: 'audio_drama',
@@ -59,16 +59,17 @@ class VersionListSection extends React.PureComponent {
 											isHref: false,
 										})}
 										key={`${item.key}_drama`}
+									> */}
+									<a
+										key={`${item.key}_drama`}
+										role={'button'}
+										tabIndex={0}
+										className="version-item-button"
+										onClick={() => item.clickHandler('audio_drama')}
 									>
-										<a
-											role={'button'}
-											tabIndex={0}
-											className="version-item-button"
-											onClick={() => item.clickHandler('audio_drama')}
-										>
-											Dramatized Version
-										</a>
-									</Link>
+										Dramatized Version
+									</a>
+									{/* </Link>
 									<Link
 										href={url({
 											...item.path,
@@ -81,16 +82,17 @@ class VersionListSection extends React.PureComponent {
 											isHref: false,
 										})}
 										key={`${item.key}_plain`}
+									> */}
+									<a
+										key={`${item.key}_plain`}
+										role={'button'}
+										tabIndex={0}
+										className="version-item-button"
+										onClick={() => item.clickHandler('audio')}
 									>
-										<a
-											role={'button'}
-											tabIndex={0}
-											className="version-item-button"
-											onClick={() => item.clickHandler('audio')}
-										>
-											Non-Dramatized Version
-										</a>
-									</Link>
+										Non-Dramatized Version
+									</a>
+									{/* </Link> */}
 								</AccordionItemBody>
 							</AccordionItem>
 						);
@@ -98,23 +100,24 @@ class VersionListSection extends React.PureComponent {
 					return (
 						<AccordionItem className={'accordion-title-style'} key={item.key}>
 							<AccordionItemTitle>
-								<Link
+								{/* <Link
 									href={this.getPath(item.path, item.types, true)}
 									as={this.getPath(item.path, item.types, false)}
 									key={item.key}
+								> */}
+								<a
+									key={item.key}
+									role={'button'}
+									tabIndex={0}
+									title={item.title}
+									className={`${item.className} top-level-title`}
+									onClick={() => item.clickHandler('')}
 								>
-									<a
-										role={'button'}
-										tabIndex={0}
-										title={item.title}
-										className={`${item.className} top-level-title`}
-										onClick={() => item.clickHandler('')}
-									>
-										{item.altText
-											? `${item.text} ( ${item.altText} )`
-											: item.text}
-									</a>
-								</Link>
+									{item.altText
+										? `${item.text} ( ${item.altText} )`
+										: item.text}
+								</a>
+								{/* </Link> */}
 							</AccordionItemTitle>
 							<AccordionItemBody />
 						</AccordionItem>

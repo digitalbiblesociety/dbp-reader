@@ -85,6 +85,7 @@ export class BooksTable extends React.PureComponent {
 	};
 
 	handleChapterClick = () => {
+		sessionStorage.setItem('bible_is_maintain_location', JSON.stringify(true));
 		this.props.closeBookTable();
 	};
 
