@@ -1,390 +1,391 @@
 // Chapter and Version Shared Styles
 .text-selection-section .active-header-name {
-	@include css4 {
-		color: var(--text-selection-active-item-color);
-	}
-	margin-left: 5px;
+  @include css4 {
+    color: var(--text-selection-active-item-color);
+  }
+  margin-left: 5px;
 }
 .text-selection-section {
-	max-height: calc(100% - 100px);
-	height: calc(100% - 100px);
-	overflow: hidden;
+  max-height: calc(100% - 100px);
+  height: calc(100% - 100px);
+  overflow: hidden;
 
-	.pull-down-refresh {
-		display: flex;
-		pointer-events: none;
-		top: 0;
-		text-align: center;
-		overflow: hidden;
-		align-items: center;
-		//position: absolute;
-		//top: -40px;
-		height: 0;
-		transition: height 0.3s, min-height 0.3s;
-		width: 100%;
-		align-content: stretch;
-	}
+  .pull-down-refresh {
+    display: flex;
+    pointer-events: none;
+    top: 0;
+    text-align: center;
+    overflow: hidden;
+    align-items: center;
+    //position: absolute;
+    //top: -40px;
+    height: 0;
+    transition: height 0.3s, min-height 0.3s;
+    width: 100%;
+    align-content: stretch;
+  }
 }
 .text-selection-title {
-	display: flex;
-	align-items: center;
-	justify-content: flex-start;
-	margin: 10px 0 5px 10px;
-	cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin: 10px 0 5px 10px;
+  cursor: pointer;
 }
 .text-selection-title:hover {
-	opacity: 0.65;
+  opacity: 0.65;
 }
 .text-selection-title .text {
-	margin-left: 10px;
+  margin-left: 10px;
 }
 // Change from using background url to using an absolutely positioned element
 .text-selection-dropdown {
-	display: flex;
-	flex-direction: column;
-	position: absolute;
-	top: 54px;
-	left: 0;
-	right: 0;
-	min-width: 291px;
-	height: calc(100vh - 99px);
-	@include css4 {
-		background-color: var(--text-selection-background);
-		color: var(--default-text-color);
-	}
-	z-index: 3;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 54px;
+  left: 0;
+  right: 0;
+  min-width: 291px;
+  height: calc(100vh - 99px);
+  @include css4 {
+    background-color: var(--text-selection-background);
+    color: var(--default-text-color);
+  }
+  z-index: 3;
 
-	// Tab list styles
-	.tab-options {
-		margin: 10px;
-		display: flex;
-		z-index: 2;
-		align-items: center;
-		@include css4 {
-			background-color: var(--text-selection-background);
-		}
-		.tab-option {
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			font-weight: 200;
-			font-size: 14px;
-			height: 27px;
-			width: 33%;
-			cursor: pointer;
+  // Tab list styles
+  .tab-options {
+    margin: 10px;
+    display: flex;
+    z-index: 2;
+    align-items: center;
+    @include css4 {
+      background-color: var(--text-selection-background);
+    }
+    .tab-option {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 200;
+      font-size: 14px;
+      height: 27px;
+      width: 33%;
+      cursor: pointer;
 
-			@include css4 {
-				border: 1px solid var(--text-selection-tab-option-color);
-			}
+      @include css4 {
+        border: 1px solid var(--text-selection-tab-option-color);
+      }
 
-			&:hover {
-				@include css4 {
-					background-color: var(--text-selection-tab-option-active-background);
-					color: var(--text-selection-tab-option-active-color);
-				}
-			}
+      &:hover {
+        @include css4 {
+          background-color: var(--text-selection-tab-option-active-background);
+          color: var(--text-selection-tab-option-active-color);
+        }
+      }
 
-			&.active {
-				@include css4 {
-					background-color: var(--text-selection-tab-option-active-background);
-					color: var(--text-selection-tab-option-active-color);
-				}
-			}
-		}
+      &.active {
+        @include css4 {
+          background-color: var(--text-selection-tab-option-active-background);
+          color: var(--text-selection-tab-option-active-color);
+        }
+      }
+    }
 
-		.tab-option:first-child {
-			@include css4 {
-				border-top: 1px solid var(--text-selection-tab-option-color);
-				border-bottom: 1px solid var(--text-selection-tab-option-color);
-				border-left: 1px solid var(--text-selection-tab-option-color);
-				border-radius: 6px 0 0 6px;
-			}
-		}
+    .tab-option:first-child {
+      @include css4 {
+        border-top: 1px solid var(--text-selection-tab-option-color);
+        border-bottom: 1px solid var(--text-selection-tab-option-color);
+        border-left: 1px solid var(--text-selection-tab-option-color);
+        border-radius: 6px 0 0 6px;
+      }
+    }
 
-		.tab-option:last-child {
-			@include css4 {
-				border-top: 1px solid var(--text-selection-tab-option-color);
-				border-bottom: 1px solid var(--text-selection-tab-option-color);
-				border-right: 1px solid var(--text-selection-tab-option-color);
-				border-radius: 0 6px 6px 0;
-			}
-		}
-	}
+    .tab-option:last-child {
+      @include css4 {
+        border-top: 1px solid var(--text-selection-tab-option-color);
+        border-bottom: 1px solid var(--text-selection-tab-option-color);
+        border-right: 1px solid var(--text-selection-tab-option-color);
+        border-radius: 0 6px 6px 0;
+      }
+    }
+  }
 
-	.search-input-bar {
-		display: flex;
-		align-items: center;
-		height: 54px;
+  .search-input-bar {
+    display: flex;
+    align-items: center;
+    height: 54px;
 
-		.icon {
-			flex-shrink: 0;
-			margin-left: 15px;
-		}
+    .icon {
+      flex-shrink: 0;
+      margin-left: 15px;
+    }
 
-		.input-class {
-			margin-left: 25px;
-			margin-right: 25px;
-			@include css4 {
-				color: var(--default-text-color);
-				background-color: var(--text-selection-background);
-			}
-		}
-	}
+    .input-class {
+      margin-left: 25px;
+      margin-right: 25px;
+      @include css4 {
+        color: var(--default-text-color);
+        background-color: var(--text-selection-background);
+      }
+    }
+  }
 
-	.country-placeholder {
-		@include css4 {
-			fill: var(--default-text-color);
-		}
-	}
+  .country-placeholder {
+    @include css4 {
+      fill: var(--default-text-color);
+    }
+  }
 }
 
 // Country Selection Styles
 .country-name {
-	display: flex;
-	align-items: center;
-	cursor: pointer;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
 
-	h4 {
-		display: inline-block;
-		white-space: nowrap;
+  h4 {
+    display: inline-block;
+    white-space: nowrap;
 
-		&:after {
-			content: '';
-			width: 100%;
-			height: 32px;
-			position: absolute;
-			top: 0;
-			left: 0;
-			@include css4 {
-				background: -webkit-linear-gradient(
-					to right,
-					var(--default-language-name-background-color-transparent) 80%,
-					var(--text-selection-background)
-				);
-				background: -moz-linear-gradient(
-					to right,
-					var(--default-language-name-background-color-transparent) 80%,
-					var(--text-selection-background)
-				);
-				background: linear-gradient(
-					to right,
-					var(--default-language-name-background-color-transparent) 80%,
-					var(--text-selection-background)
-				);
-			}
-		}
-	}
+    &:after {
+      content: '';
+      width: 100%;
+      height: 32px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      @include css4 {
+        background: -webkit-linear-gradient(
+          to right,
+          var(--default-language-name-background-color-transparent) 80%,
+          var(--text-selection-background)
+        );
+        background: -moz-linear-gradient(
+          to right,
+          var(--default-language-name-background-color-transparent) 80%,
+          var(--text-selection-background)
+        );
+        background: linear-gradient(
+          to right,
+          var(--default-language-name-background-color-transparent) 80%,
+          var(--text-selection-background)
+        );
+      }
+    }
+  }
 }
 .country-name svg.icon {
-	margin-right: 20px;
-	margin-left: 5px;
+  margin-right: 20px;
+  margin-left: 5px;
 }
 .country-name:hover {
-	@include css4 {
-		color: var(--active-color-primary);
-	}
+  @include css4 {
+    color: var(--active-color-primary);
+  }
 }
 
 // Language Selection Styles
 .active-language-name {
-	@include css4 {
-		color: var(--active-color-primary);
-	}
+  @include css4 {
+    color: var(--active-color-primary);
+  }
 }
 .language-name {
-	cursor: pointer;
-	margin-top: 5px;
-	margin-bottom: 5px;
+  cursor: pointer;
+  margin-top: 5px;
+  margin-bottom: 5px;
 
-	h4 {
-		display: inline-block;
-		white-space: nowrap;
+  h4 {
+    display: inline-block;
+    white-space: nowrap;
 
-		&:after {
-			content: '';
-			width: 100%;
-			height: 34px;
-			position: absolute;
-			top: 0;
-			left: 0;
-			@include css4 {
-				background: -webkit-linear-gradient(
-					to right,
-					var(--default-language-name-background-color-transparent) 80%,
-					var(--text-selection-background)
-				);
-				background: -moz-linear-gradient(
-					to right,
-					var(--default-language-name-background-color-transparent) 80%,
-					var(--text-selection-background)
-				);
-				background: linear-gradient(
-					to right,
-					var(--default-language-name-background-color-transparent) 80%,
-					var(--text-selection-background)
-				);
-			}
-		}
-	}
+    &:after {
+      content: '';
+      width: 100%;
+      height: 34px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      @include css4 {
+        background: -webkit-linear-gradient(
+          to right,
+          var(--default-language-name-background-color-transparent) 80%,
+          var(--text-selection-background)
+        );
+        background: -moz-linear-gradient(
+          to right,
+          var(--default-language-name-background-color-transparent) 80%,
+          var(--text-selection-background)
+        );
+        background: linear-gradient(
+          to right,
+          var(--default-language-name-background-color-transparent) 80%,
+          var(--text-selection-background)
+        );
+      }
+    }
+  }
 }
 .language-name:hover {
-	@include css4 {
-		color: var(--active-color-primary);
-	}
+  @include css4 {
+    color: var(--active-color-primary);
+  }
 }
 .active-language-name {
-	@include css4 {
-		color: var(--active-color-primary);
-	}
-	max-height: 50px;
+  @include css4 {
+    color: var(--active-color-primary);
+  }
+  max-height: 50px;
 }
 // The relative input values are affecting this as well...
 .language-name-list {
-	@include css4 {
-		background-color: var(--text-selection-background);
-		color: var(--text-selection-text-color);
-	}
-	font-size: 0.98em;
-	height: calc(100%);
-	max-height: calc(100%);
-	padding: 15px;
+  @include css4 {
+    background-color: var(--text-selection-background);
+    color: var(--text-selection-text-color);
+  }
+  font-size: 0.98em;
+  height: calc(100%);
+  max-height: calc(100%);
+  padding: 15px;
 
-	.language-error-message {
-		width: 320px;
-		max-width: 291px;
-		padding: 15px;
-		// text-transform: capitalize;
-	}
+  .language-error-message {
+    width: 320px;
+    max-width: 291px;
+    padding: 15px;
+    // text-transform: capitalize;
+  }
 }
 .version-name-list {
-	@include css4 {
-		background-color: var(--text-selection-background);
-		color: var(--text-selection-text-color);
-	}
-	font-size: 0.98em;
-	height: calc(100%);
-	max-height: calc(100%);
-	overflow: auto;
-	/* Navigation/Dark Text Fill Copy 6: */
-	.version-list-section {
-		width: 100%;
-		min-height: 50px;
+  @include css4 {
+    background-color: var(--text-selection-background);
+    color: var(--text-selection-text-color);
+  }
+  font-size: 0.98em;
+  height: calc(100%);
+  max-height: calc(100%);
+  overflow: auto;
+  /* Navigation/Dark Text Fill Copy 6: */
+  .version-list-section {
+    width: 100%;
+    min-height: 50px;
 
-		.accordion {
-			cursor: initial;
-		}
+    .accordion {
+      cursor: initial;
+    }
 
-		.version-list-section-title {
-			padding: 5px 20px;
-			min-height: 25px;
-			height: 25px;
-			width: 100%;
-			text-align: center;
-			font-size: 12px;
-			// text-transform: capitalize;
-			@include css4 {
-				background-color: var(--text-selection-accordion-title-background);
-			}
+    .version-list-section-title {
+      padding: 5px 20px;
+      min-height: 25px;
+      height: 25px;
+      width: 100%;
+      text-align: center;
+      font-size: 12px;
+      // text-transform: capitalize;
+      @include css4 {
+        background-color: var(--text-selection-accordion-title-background);
+      }
 
-			&:hover {
-				cursor: default;
-			}
-		}
-		.accordion-title-style {
-			@include css4 {
-				background-color: var(--text-selection-background);
-			}
-			&:last-child {
-				padding-bottom: 30px;
-			}
-			padding-top: 15px;
-			padding-bottom: 15px;
-			// text-transform: uppercase;
+      &:hover {
+        cursor: default;
+      }
+    }
+    .accordion-title-style {
+      @include css4 {
+        background-color: var(--text-selection-background);
+      }
+      &:last-child {
+        padding-bottom: 30px;
+      }
+      padding-top: 15px;
+      padding-bottom: 15px;
+      // text-transform: uppercase;
 
-			& .accordion__title[aria-selected='true'] {
-				padding-bottom: 15px;
-				@include css4 {
-					color: var(--active-color-primary);
-				}
-			}
+      & .accordion__title[aria-selected='true'] {
+        padding-bottom: 15px;
+        @include css4 {
+          color: var(--active-color-primary);
+        }
+      }
 
-			& .accordion__title {
-				cursor: pointer;
+      & .accordion__title {
+        cursor: pointer;
 
-				h4,
-				a.top-level-title {
-					display: inline-block;
-					padding: 0 20px 0 35px;
-				}
+        h4,
+        a.top-level-title {
+          display: inline-block;
+          padding: 0 20px 0 35px;
+        }
 
-				a {
-					display: inline-block;
-					width: 100%;
-				}
-				&:hover {
-					@include css4 {
-						color: var(--active-color-primary);
-					}
-				}
-			}
-		}
+        a {
+          display: inline-block;
+          width: 100%;
+        }
+        &:hover {
+          @include css4 {
+            color: var(--active-color-primary);
+          }
+        }
+      }
+    }
 
-		.accordion-body-style {
-			@include css4 {
-				color: var(--text-selection-text-color);
-				background-color: var(--text-selection-accordion-body-background);
-			}
-			a {
-				display: inline-block;
-				padding-left: 55px;
-				width: 100%;
+    .accordion-body-style {
+      @include css4 {
+        color: var(--text-selection-text-color);
+        background-color: var(--text-selection-accordion-body-background);
+      }
+      a {
+        display: inline-block;
+        padding-left: 55px;
+        width: 100%;
 
-				&:hover {
-					@include css4 {
-						color: var(--active-color-primary);
-					}
-				}
-			}
-		}
-	}
-	.version-item-button {
-		filter: none;
-		width: 100%;
-		padding: 15px;
-		min-height: 50px;
-		margin: auto;
-		@include css4 {
-			color: var(--default-text-color);
-		}
-		display: flex;
-		align-items: center;
-		// text-transform: capitalize;
+        &:hover {
+          @include css4 {
+            color: var(--active-color-primary);
+          }
+        }
+      }
+    }
+  }
+  .version-item-button {
+    filter: none;
+    width: 100%;
+    padding: 15px;
+    min-height: 50px;
+    margin: auto;
+    @include css4 {
+      color: var(--default-text-color);
+    }
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    // text-transform: capitalize;
 
-		&:hover {
-			color: inherit;
-		}
-	}
+    &:hover {
+      color: inherit;
+    }
+  }
 }
 .country-name-list {
-	@include css4 {
-		background-color: var(--text-selection-background);
-		color: var(--text-selection-text-color);
-	}
-	font-size: 0.98em;
-	height: calc(100%);
-	max-height: calc(100%);
-	padding: 15px;
+  @include css4 {
+    background-color: var(--text-selection-background);
+    color: var(--text-selection-text-color);
+  }
+  font-size: 0.98em;
+  height: calc(100%);
+  max-height: calc(100%);
+  padding: 15px;
 
-	.country-error-message {
-		// text-transform: capitalize;
-		width: 320px;
-		max-width: 291px;
-		padding: 15px;
-	}
+  .country-error-message {
+    // text-transform: capitalize;
+    width: 320px;
+    max-width: 291px;
+    padding: 15px;
+  }
 }
 
 .active-version {
-	@include css4 {
-		color: var(--active-color-primary);
-	}
+  @include css4 {
+    color: var(--active-color-primary);
+  }
 }
