@@ -127,7 +127,7 @@ export function* getTexts({ languageCode }) {
 		}));
 
 		yield put({ type: CLEAR_ERROR_GETTING_VERSIONS });
-		yield put(loadTexts({ texts: mappedTexts }));
+		yield put(loadTexts({ texts: mappedTexts.length ? mappedTexts : videos }));
 	} catch (error) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error(error); // eslint-disable-line no-console
