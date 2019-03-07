@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NewChapterArrow should match snapshot for next arrow base props 1`] = `
+<div
+  className="arrow-wrapper next"
+  onClick={[Function]}
+>
+  <svg
+    className="next-arrow-svg"
+  >
+    <use
+      xlinkHref="/static/svglist.svg#arrow_left"
+      xmlnsXlink="http://www.w3.org/1999/xlink"
+    />
+  </svg>
+</div>
+`;
+
+exports[`NewChapterArrow should match snapshot for next arrow disabled props 1`] = `
+<div
+  className="arrow-wrapper next disabled"
+/>
+`;
+
+exports[`NewChapterArrow should match snapshot for previous arrow base props 1`] = `
+<div
+  className="arrow-wrapper prev"
+  onClick={[Function]}
+>
+  <svg
+    className="prev-arrow-svg"
+  >
+    <use
+      xlinkHref="/static/svglist.svg#arrow_left"
+      xmlnsXlink="http://www.w3.org/1999/xlink"
+    />
+  </svg>
+</div>
+`;
+
+exports[`NewChapterArrow should match snapshot for previous arrow disabled props 1`] = `
+<div
+  className="arrow-wrapper prev disabled"
+/>
+`;
