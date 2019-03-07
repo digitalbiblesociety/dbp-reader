@@ -1,0 +1,67 @@
+export const text = [
+	{
+		book_id: 'LUK',
+		book_name: 'Luke',
+		book_name_alt: 'Luke',
+		chapter: 1,
+		chapter_alt: '1',
+		verse_start: 1,
+		verse_start_alt: '1',
+		verse_end: 1,
+		verse_end_alt: '1',
+		verse_text:
+			'Since many have undertaken to compile a narrative of the events that have been fulfilled among us,',
+	},
+	{
+		book_id: 'LUK',
+		book_name: 'Luke',
+		book_name_alt: 'Luke',
+		chapter: 1,
+		chapter_alt: '1',
+		verse_start: 2,
+		verse_start_alt: '2',
+		verse_end: 2,
+		verse_end_alt: '2',
+		verse_text:
+			'just as those who were eyewitnesses from the beginning and ministers of the word have handed them down to us,',
+	},
+	{
+		book_id: 'LUK',
+		book_name: 'Luke',
+		book_name_alt: 'Luke',
+		chapter: 1,
+		chapter_alt: '1',
+		verse_start: 3,
+		verse_start_alt: '3',
+		verse_end: 3,
+		verse_end_alt: '3',
+		verse_text:
+			'I too have decided, after investigating everything accurately anew, to write it down in an orderly sequence for you, most excellent Theophilus,',
+	},
+	{
+		book_id: 'LUK',
+		book_name: 'Luke',
+		book_name_alt: 'Luke',
+		chapter: 1,
+		chapter_alt: '1',
+		verse_start: 4,
+		verse_start_alt: '4',
+		verse_end: 4,
+		verse_end_alt: '4',
+		verse_text:
+			'so that you may realize the certainty of the teachings you have received.',
+	},
+	{
+		book_id: 'LUK',
+		book_name: 'Luke',
+		book_name_alt: 'Luke',
+		chapter: 1,
+		chapter_alt: '1',
+		verse_start: 5,
+		verse_start_alt: '5',
+		verse_end: 5,
+		verse_end_alt: '5',
+		verse_text:
+			'In the days of Herod, King of Judea, there was a priest named Zechariah of the priestly division of Abijah; his wife was from the daughters of Aaron, and her name was Elizabeth.',
+	},
+];
