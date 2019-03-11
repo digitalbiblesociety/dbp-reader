@@ -161,6 +161,10 @@ export function* getLanguages() {
 }
 
 function sortLanguagesByVname(a, b) {
+	if (a.vernacular_name && b.vernacular_name && String.localeCompare) {
+		return a.vernacular_name.localeCompare(b.vernacular_name);
+	}
+
 	if (a.vernacular_name > b.vernacular_name) return 1;
 	if (a.vernacular_name < b.vernacular_name) return -1;
 	return 0;
@@ -183,7 +187,7 @@ export function* getLanguageAltNames() {
 					);
 					return {
 						...l,
-						vernacular_name: l.autonym,
+						vernacular_name: l.autonym || l.name,
 						alt_names: Array.from(altSet),
 						englishName: l.name,
 					};
@@ -191,11 +195,12 @@ export function* getLanguageAltNames() {
 				return {
 					...l,
 					alt_names: [],
-					vernacular_name: l.autonym,
+					vernacular_name: l.autonym || l.name,
 					englishName: l.name,
 				};
 			})
 			.sort(sortLanguagesByVname);
+
 		yield put(setLanguages({ languages }));
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {
