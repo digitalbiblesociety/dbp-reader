@@ -101,33 +101,26 @@ export function* getTexts({ languageCode }) {
 					)),
 		);
 		// Create map of videos for constant time lookup when iterating through the texts
-		const videosMap = videos.reduce((a, c) => ({ ...a, [c.abbr]: c }), {});
-		// Find any overlapping bibles between the videos and texts
-		// Combine the filesets for only those overlapping bibles
-		const mappedTexts = texts.map((text) => ({
-			...text,
-			filesets: videosMap[text.abbr]
-				? [
-						...text.filesets[process.env.DBP_BUCKET_ID].filter(
-							(f) =>
-								f.type === 'audio' ||
-								f.type === 'audio_drama' ||
-								f.type === 'text_plain' ||
-								f.type === 'text_format',
-						),
-						...videosMap[text.abbr].filesets['dbp-vid'],
-				  ] || []
-				: text.filesets[process.env.DBP_BUCKET_ID].filter(
-						(f) =>
-							f.type === 'audio' ||
-							f.type === 'audio_drama' ||
-							f.type === 'text_plain' ||
-							f.type === 'text_format',
-				  ) || [],
+		const types = {
+			audio: true,
+			audio_drama: true,
+			text_plain: true,
+			text_format: true,
+			video_stream: true,
+		};
+		const combinedTexts = [...texts, ...videos].map((resource) => ({
+			...resource,
+			hasVideo: !!(
+				resource.filesets['dbp-vid'] && resource.filesets['dbp-vid'].length
+			),
+			filesets: Object.values(resource.filesets)
+				.reduce((all, current) => [...all, ...current])
+				.filter((value) => types[value.type]),
 		}));
 
 		yield put({ type: CLEAR_ERROR_GETTING_VERSIONS });
-		yield put(loadTexts({ texts: mappedTexts.length ? mappedTexts : videos }));
+		yield put(loadTexts({ texts: combinedTexts }));
+		// yield put(loadTexts({ texts: mappedTexts.length ? mappedTexts : videos }));
 	} catch (error) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error(error); // eslint-disable-line no-console
