@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ChapterSelection /> should match snapshot for deafult inactive props 1`] = `
+<div
+  className="chapter-text-dropdown"
+  id="chapter-dropdown-close-button"
+  onClick={[Function]}
+  onTouchEnd={[Function]}
+  style={
+    Object {
+      "display": "none",
+    }
+  }
+>
+  <div />
+</div>
+`;
+
+exports[`<ChapterSelection /> should match snapshot for default active props 1`] = `
+<div
+  className="chapter-text-dropdown"
+  id="chapter-dropdown-close-button"
+  onClick={[Function]}
+  onTouchEnd={[Function]}
+  style={
+    Object {
+      "display": "flex",
+    }
+  }
+>
+  <div />
+</div>
+`;

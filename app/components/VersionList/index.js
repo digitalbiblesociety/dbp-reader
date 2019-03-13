@@ -20,6 +20,7 @@ import getBookMetaData from '../../utils/getBookMetaData';
 import getFirstChapterReference from '../../utils/getFirstChapterReference';
 import { selectHasVideo } from '../../containers/VideoPlayer/selectors';
 import getUrl from '../../utils/hrefLinkOrAsLink';
+import { selectAudioType } from '../../containers/HomePage/selectors';
 
 export class VersionList extends React.PureComponent {
 	get filteredVersionList() {
@@ -33,6 +34,7 @@ export class VersionList extends React.PureComponent {
 		const filteredBibles = filterText
 			? bibles.filter(this.filterFunction)
 			: bibles;
+
 		// Change the way I figure out if a resource has text or audio
 		// path, key, types, className, text, clickHandler
 		// Set the path to just the bible_id and let app.js handle getting the actual book and chapter needed
@@ -45,7 +47,9 @@ export class VersionList extends React.PureComponent {
 						bookId: activeBookId,
 						chapter: activeChapter,
 					},
-					key: `${bible.get('abbr')}${bible.get('date')}`,
+					key: `${bible.get('abbr')}${bible.get('date') || '2019'}${
+						bible.get('hasVideo') ? '_video' : '_plain'
+					}`,
 					clickHandler: (audioType) =>
 						this.handleVersionListClick(bible, audioType),
 					className: bible.get('abbr') === activeTextId ? 'active-version' : '',
@@ -55,20 +59,26 @@ export class VersionList extends React.PureComponent {
 						bible.get('vname') && bible.get('vname') !== bible.get('name')
 							? bible.get('name')
 							: '',
-					types: bible
-						.get('filesets')
-						.reduce((a, c) => ({ ...a, [c.get('type')]: true }), {}),
+					types: bible.get('filesets')
+						? bible
+								.get('filesets')
+								.reduce((a, c) => ({ ...a, [c.get('type')]: true }), {})
+						: {},
 				},
 			],
 			[],
 		);
+
 		// When I first get the response from the server with filesets
+		const video = [];
 		const audioAndText = [];
 		const audioOnly = [];
 		const textOnly = [];
 
 		scrubbedBibles.forEach((b) => {
-			if (
+			if (b.types.video_stream) {
+				video.push(b);
+			} else if (
 				(b.types.audio_drama || b.types.audio) &&
 				(b.types.text_plain || b.types.text_format)
 			) {
@@ -80,6 +90,14 @@ export class VersionList extends React.PureComponent {
 			}
 		});
 
+		const videoComponent = video.length ? (
+			<div className={'version-list-section'} key={'video'}>
+				<div className={'version-list-section-title'}>
+					<FormattedMessage {...messages.video} />
+				</div>
+				<VersionListSection items={video} />
+			</div>
+		) : null;
 		const audioAndTextComponent = audioAndText.length ? (
 			<div className={'version-list-section'} key={'audio-and-text'}>
 				<div className={'version-list-section-title'}>
@@ -106,6 +124,7 @@ export class VersionList extends React.PureComponent {
 		) : null;
 
 		const components = [
+			videoComponent,
 			audioAndTextComponent,
 			audioOnlyComponent,
 			textOnlyComponent,
@@ -157,10 +176,14 @@ export class VersionList extends React.PureComponent {
 			activeTextId,
 			activeBookId,
 			activeChapter,
+			audioType: audioTypeProps,
 		} = this.props;
-		const hasVideo = !!bible
-			.get('filesets')
-			.find((set) => set.get('type') === 'video_stream');
+		const hasVideo = !!bible.get('hasVideo');
+		// If bible id is equal to the active bible id then just return and don't change version
+		if (bible.get('abbr').toLowerCase() === activeTextId.toLowerCase()) {
+			toggleTextSelection();
+			return;
+		}
 
 		if (bible.get('abbr').toLowerCase() !== activeTextId.toLowerCase()) {
 			this.props.dispatch(changeVersion({ state: true }));
@@ -170,6 +193,7 @@ export class VersionList extends React.PureComponent {
 			const filesets = bible
 				.get('filesets')
 				.filter((f) => f.get('type') !== 'app');
+
 			if (audioType) {
 				if (
 					typeof window !== 'undefined' &&
@@ -272,6 +296,7 @@ VersionList.propTypes = {
 	activeTextId: PropTypes.string,
 	filterText: PropTypes.string,
 	activeBookId: PropTypes.string,
+	audioType: PropTypes.string,
 	activeChapter: PropTypes.number,
 	active: PropTypes.bool,
 	hasVideo: PropTypes.bool,
@@ -288,6 +313,7 @@ const mapStateToProps = createStructuredSelector({
 	activeBookId: selectActiveBookId(),
 	activeChapter: selectActiveChapter(),
 	hasVideo: selectHasVideo(),
+	audioType: selectAudioType(),
 });
 
 const withConnect = connect(

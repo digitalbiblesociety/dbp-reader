@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<PleaseSignInMessage /> Component Should match the previous snapshot 1`] = `
+<div
+  className="need-to-login"
+>
+  <span>
+    Please
+  </span>
+   
+  <span
+    className="login-text"
+    onClick={[Function]}
+    role="button"
+    tabIndex={0}
+  >
+    <span>
+      sign in
+    </span>
+  </span>
+   
+  <span>
+    to access your notebook.
+  </span>
+</div>
+`;

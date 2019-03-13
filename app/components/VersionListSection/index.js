@@ -12,24 +12,8 @@ import {
 	AccordionItemBody,
 	AccordionItemTitle,
 } from 'react-accessible-accordion';
-// import Link from 'next/link';
-// import url from '../../utils/hrefLinkOrAsLink';
 
 class VersionListSection extends React.PureComponent {
-	// getPath = (path, types, isHref) => {
-	// 	let fullPath = '';
-
-	// 	if (types.audio_drama) {
-	// 		fullPath = url({ ...path, audioType: 'audio_drama', isHref });
-	// 	} else if (types.audio) {
-	// 		fullPath = url({ ...path, audioType: 'audio', isHref });
-	// 	} else {
-	// 		fullPath = url({ ...path, isHref });
-	// 	}
-
-	// 	return fullPath;
-	// };
-
 	render() {
 		const { items } = this.props;
 		// Remove links and use programatic routing
@@ -47,19 +31,6 @@ class VersionListSection extends React.PureComponent {
 									</h4>
 								</AccordionItemTitle>
 								<AccordionItemBody className={'accordion-body-style'}>
-									{/* <Link
-										href={url({
-											...item.path,
-											audioType: 'audio_drama',
-											isHref: true,
-										})}
-										as={url({
-											...item.path,
-											audioType: 'audio_drama',
-											isHref: false,
-										})}
-										key={`${item.key}_drama`}
-									> */}
 									<a
 										key={`${item.key}_drama`}
 										role={'button'}
@@ -69,20 +40,6 @@ class VersionListSection extends React.PureComponent {
 									>
 										Dramatized Version
 									</a>
-									{/* </Link>
-									<Link
-										href={url({
-											...item.path,
-											audioType: 'audio',
-											isHref: true,
-										})}
-										as={url({
-											...item.path,
-											audioType: 'audio',
-											isHref: false,
-										})}
-										key={`${item.key}_plain`}
-									> */}
 									<a
 										key={`${item.key}_plain`}
 										role={'button'}
@@ -92,7 +49,6 @@ class VersionListSection extends React.PureComponent {
 									>
 										Non-Dramatized Version
 									</a>
-									{/* </Link> */}
 								</AccordionItemBody>
 							</AccordionItem>
 						);
@@ -100,11 +56,6 @@ class VersionListSection extends React.PureComponent {
 					return (
 						<AccordionItem className={'accordion-title-style'} key={item.key}>
 							<AccordionItemTitle>
-								{/* <Link
-									href={this.getPath(item.path, item.types, true)}
-									as={this.getPath(item.path, item.types, false)}
-									key={item.key}
-								> */}
 								<a
 									key={item.key}
 									role={'button'}
@@ -117,7 +68,6 @@ class VersionListSection extends React.PureComponent {
 										? `${item.text} ( ${item.altText} )`
 										: item.text}
 								</a>
-								{/* </Link> */}
 							</AccordionItemTitle>
 							<AccordionItemBody />
 						</AccordionItem>

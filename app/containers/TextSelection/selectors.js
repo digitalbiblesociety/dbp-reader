@@ -43,8 +43,24 @@ const selectLanguages = () =>
 				.filter((language) =>
 					activeCountryLanguages.includes(language.get('iso')),
 				)
+				.sort((a, b) => {
+					if (
+						activeCountryLanguages.indexOf(a.get('iso')) <
+						activeCountryLanguages.indexOf(b.get('iso'))
+					) {
+						return -1;
+					} else if (
+						activeCountryLanguages.indexOf(a.get('iso')) >
+						activeCountryLanguages.indexOf(b.get('iso'))
+					) {
+						return 1;
+					} else {
+						return 0;
+					}
+				})
 				.toJS();
 		}
+		// If any language then keep default sort order
 		return languages.toJS();
 	});
 

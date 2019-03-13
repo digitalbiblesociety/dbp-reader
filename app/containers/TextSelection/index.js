@@ -39,6 +39,7 @@ export class TextSelection extends React.PureComponent {
 	// eslint-disable-line react/prefer-stateless-function
 	state = {
 		filterText: '',
+		fromCountry: false,
 	};
 
 	componentDidMount() {
@@ -119,6 +120,8 @@ export class TextSelection extends React.PureComponent {
 	setCountryName = ({ name, languages }) =>
 		this.props.dispatch(setCountryName({ name, languages }));
 
+	setFromCountry = (state) => this.setState({ fromCountry: state });
+
 	getCountry = (props) => this.props.dispatch(getCountry(props));
 
 	getCountries = () => this.props.dispatch(getCountries());
@@ -165,7 +168,7 @@ export class TextSelection extends React.PureComponent {
 		} = this.props.textselection;
 		const { activeTextId } = this.props.homepageData;
 		const { bibles, active, languages, countries } = this.props;
-		const { filterText } = this.state;
+		const { filterText, fromCountry } = this.state;
 
 		return (
 			<aside
@@ -221,10 +224,12 @@ export class TextSelection extends React.PureComponent {
 					toggleVersionList={this.toggleVersionList}
 					toggleLanguageList={this.toggleLanguageList}
 					setCountryListState={this.setCountryListState}
+					setFromCountry={this.setFromCountry}
 				/>
 				<LanguageList
 					languages={languages}
 					filterText={filterText}
+					fromCountry={fromCountry}
 					active={languageListActive}
 					activeIsoCode={activeIsoCode}
 					languageCode={activeLanguageCode}
@@ -237,6 +242,7 @@ export class TextSelection extends React.PureComponent {
 					toggleVersionList={this.toggleVersionList}
 					toggleLanguageList={this.toggleLanguageList}
 					setCountryListState={this.setCountryListState}
+					setFromCountry={this.setFromCountry}
 				/>
 				<VersionList
 					bibles={bibles}
