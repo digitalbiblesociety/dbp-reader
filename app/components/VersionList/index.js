@@ -20,6 +20,7 @@ import getBookMetaData from '../../utils/getBookMetaData';
 import getFirstChapterReference from '../../utils/getFirstChapterReference';
 import { selectHasVideo } from '../../containers/VideoPlayer/selectors';
 import getUrl from '../../utils/hrefLinkOrAsLink';
+import { selectAudioType } from '../../containers/HomePage/selectors';
 
 export class VersionList extends React.PureComponent {
 	get filteredVersionList() {
@@ -175,8 +176,14 @@ export class VersionList extends React.PureComponent {
 			activeTextId,
 			activeBookId,
 			activeChapter,
+			audioType: audioTypeProps,
 		} = this.props;
 		const hasVideo = !!bible.get('hasVideo');
+		// If bible id is equal to the active bible id then just return and don't change version
+		if (bible.get('abbr').toLowerCase() === activeTextId.toLowerCase()) {
+			toggleTextSelection();
+			return;
+		}
 
 		if (bible.get('abbr').toLowerCase() !== activeTextId.toLowerCase()) {
 			this.props.dispatch(changeVersion({ state: true }));
@@ -186,6 +193,7 @@ export class VersionList extends React.PureComponent {
 			const filesets = bible
 				.get('filesets')
 				.filter((f) => f.get('type') !== 'app');
+
 			if (audioType) {
 				if (
 					typeof window !== 'undefined' &&
@@ -288,6 +296,7 @@ VersionList.propTypes = {
 	activeTextId: PropTypes.string,
 	filterText: PropTypes.string,
 	activeBookId: PropTypes.string,
+	audioType: PropTypes.string,
 	activeChapter: PropTypes.number,
 	active: PropTypes.bool,
 	hasVideo: PropTypes.bool,
@@ -304,6 +313,7 @@ const mapStateToProps = createStructuredSelector({
 	activeBookId: selectActiveBookId(),
 	activeChapter: selectActiveChapter(),
 	hasVideo: selectHasVideo(),
+	audioType: selectAudioType(),
 });
 
 const withConnect = connect(
