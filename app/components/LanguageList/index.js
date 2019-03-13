@@ -21,7 +21,7 @@ class LanguageList extends React.PureComponent {
 
 	// Try to reduce the number of times language list is iterated over
 	getFilteredLanguages(width, height) {
-		const { languages, languageCode, filterText } = this.props;
+		const { languages, languageCode, filterText, fromCountry } = this.props;
 		const filteredLanguages = filterText
 			? matchSorter(languages, filterText, {
 					threshold: matchSorter.rankings.ACRONYM,
@@ -91,7 +91,7 @@ class LanguageList extends React.PureComponent {
 				rowCount={filteredLanguages.length}
 				overscanRowCount={2}
 				rowHeight={34}
-				scrollToIndex={getActiveIndex()}
+				scrollToIndex={fromCountry ? 0 : getActiveIndex()}
 				width={width}
 				scrollToAlignment={'start'}
 			/>
@@ -213,6 +213,7 @@ class LanguageList extends React.PureComponent {
 			setActiveIsoCode,
 			toggleLanguageList,
 			toggleVersionList,
+			setFromCountry,
 		} = this.props;
 		if (language) {
 			setActiveIsoCode({
@@ -220,6 +221,7 @@ class LanguageList extends React.PureComponent {
 				name: language.name,
 				languageCode: language.id,
 			});
+			setFromCountry(false);
 			toggleLanguageList();
 			toggleVersionList();
 		}
@@ -283,11 +285,13 @@ class LanguageList extends React.PureComponent {
 LanguageList.propTypes = {
 	languages: PropTypes.array,
 	setActiveIsoCode: PropTypes.func,
+	setFromCountry: PropTypes.func,
 	toggleLanguageList: PropTypes.func,
 	toggleVersionList: PropTypes.func,
 	getLanguages: PropTypes.func,
 	filterText: PropTypes.string,
 	active: PropTypes.bool,
+	fromCountry: PropTypes.bool,
 	loadingLanguages: PropTypes.bool,
 	languageCode: PropTypes.number,
 };

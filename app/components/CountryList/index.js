@@ -22,6 +22,7 @@ class CountryList extends React.PureComponent {
 		const {
 			countries,
 			setCountryName,
+			setFromCountry,
 			toggleLanguageList,
 			activeCountryName,
 			setCountryListState,
@@ -54,6 +55,7 @@ class CountryList extends React.PureComponent {
 					tabIndex={0}
 					title={country.get('name')}
 					onClick={() => {
+						setFromCountry(true);
 						setCountryName({
 							name: country.get('name'),
 							languages: country.get('languages'),
@@ -280,6 +282,7 @@ class CountryList extends React.PureComponent {
 CountryList.propTypes = {
 	countries: PropTypes.object,
 	setCountryName: PropTypes.func,
+	setFromCountry: PropTypes.func,
 	toggleLanguageList: PropTypes.func,
 	setCountryListState: PropTypes.func,
 	getCountry: PropTypes.func,
