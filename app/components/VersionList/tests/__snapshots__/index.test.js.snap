@@ -19,7 +19,7 @@ exports[`<VersionList /> Should match previous snapshot 1`] = `
         className="version-list-section-title"
       >
         <span>
-          Audio & Text
+          Video
         </span>
       </div>
       <div
@@ -41,10 +41,10 @@ exports[`<VersionList /> Should match previous snapshot 1`] = `
             tabIndex="0"
           >
             <h4
-              className="active-version"
-              title="English Standard Version"
+              className=""
+              title="New International Version"
             >
-              English Standard Version
+              New International Version
             </h4>
           </div>
           <div
@@ -72,6 +72,22 @@ exports[`<VersionList /> Should match previous snapshot 1`] = `
             </a>
           </div>
         </div>
+      </div>
+    </div>
+    <div
+      className="version-list-section"
+    >
+      <div
+        className="version-list-section-title"
+      >
+        <span>
+          Audio & Text
+        </span>
+      </div>
+      <div
+        className="accordion"
+        role="tablist"
+      >
         <div
           className="accordion-title-style"
         >
@@ -87,10 +103,10 @@ exports[`<VersionList /> Should match previous snapshot 1`] = `
             tabIndex="0"
           >
             <h4
-              className=""
-              title="New International Version"
+              className="active-version"
+              title="English Standard Version"
             >
-              New International Version
+              English Standard Version
             </h4>
           </div>
           <div
