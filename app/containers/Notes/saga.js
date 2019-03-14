@@ -24,7 +24,6 @@ import {
 } from './constants';
 
 export function* getChapterForNote({ note }) {
-  console.log('get chapter text', note);
   const chapter =
     typeof note.get === 'function' ? note.get('chapter') : note.chapter;
   const bibleId =
@@ -59,8 +58,7 @@ export function* getChapterForNote({ note }) {
         text = res.data;
       }
     }
-    console.log('get chapter response', response);
-    console.log('get chapter text', text);
+
     yield put({
       type: LOAD_CHAPTER_FOR_NOTE,
       text: text.filter(

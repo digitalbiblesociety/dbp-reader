@@ -64,7 +64,6 @@ export class Notes extends React.PureComponent {
       this.props.toggleNotesModal,
     );
     this.closeMenuController.onMenuMount();
-    console.log('cmd this.props.note', this.props.note);
     // Only fetch chapter text if there is a selected note
     if (
       this.props.note &&
@@ -93,7 +92,6 @@ export class Notes extends React.PureComponent {
     );
 
   setActiveNote = ({ note }) => {
-    console.log('setting new note', note);
     this.props.dispatch(getChapterForNote({ note }));
     this.props.dispatch(setActiveNote({ note }));
   };
@@ -233,6 +231,7 @@ export class Notes extends React.PureComponent {
       savedTheNote,
       errorSavingNote,
       notesErrorMessage,
+      loadingChapterForNote,
     } = this.props.notes;
     const {
       toggleNotesModal,
@@ -382,6 +381,7 @@ export class Notes extends React.PureComponent {
                 toggleAddVerseMenu={this.toggleAddVerseMenu}
                 clearNoteErrorMessage={this.clearNoteErrorMessage}
                 note={note}
+                loadingChapterForNote={loadingChapterForNote}
                 notePassage={notePassage}
                 activeTextId={activeTextId}
                 selectedText={selectedText}

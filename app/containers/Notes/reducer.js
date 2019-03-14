@@ -22,12 +22,12 @@ import {
   ADD_NOTE_FAILED,
   CLEAR_NOTES_ERROR_MESSAGE,
   CLEAN_NOTEBOOK,
+  GET_CHAPTER_FOR_NOTE,
 } from './constants';
 // Should cache some of this in local storage for faster reloads
 const initialState = fromJS({
   activeChild: 'notes',
-  isVerseTextVisible: true,
-  pageSelectorState: false,
+  notesErrorMessage: '',
   paginationPageSize: 10,
   pageSize: 10,
   activePage: 1,
@@ -44,13 +44,17 @@ const initialState = fromJS({
   userHighlights: [],
   bookmarkList: [],
   chapterBookmarks: [],
+  isVerseTextVisible: true,
+  loadingChapterForNote: true,
+  pageSelectorState: false,
   savedTheNote: false,
   errorSavingNote: false,
-  notesErrorMessage: '',
 });
 
 function notesReducer(state = initialState, action) {
   switch (action.type) {
+    case GET_CHAPTER_FOR_NOTE:
+      return state.set('loadingChapterForNote', true);
     case CLEAN_NOTEBOOK:
       return state
         .set('listData', [])
@@ -80,8 +84,9 @@ function notesReducer(state = initialState, action) {
         .set('totalPagesBookmark', action.totalPages)
         .set('bookmarkList', fromJS(action.listData));
     case LOAD_CHAPTER_FOR_NOTE:
-      console.log('notes reducer', action);
-      return state.set('chapterForNote', action.text);
+      return state
+        .set('loadingChapterForNote', false)
+        .set('chapterForNote', fromJS(action.text));
     case SET_ACTIVE_CHILD:
       return state.set('activeChild', action.child);
     case SET_ACTIVE_PAGE_DATA:
