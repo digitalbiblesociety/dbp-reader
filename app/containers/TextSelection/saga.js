@@ -101,33 +101,26 @@ export function* getTexts({ languageCode }) {
 					)),
 		);
 		// Create map of videos for constant time lookup when iterating through the texts
-		const videosMap = videos.reduce((a, c) => ({ ...a, [c.abbr]: c }), {});
-		// Find any overlapping bibles between the videos and texts
-		// Combine the filesets for only those overlapping bibles
-		const mappedTexts = texts.map((text) => ({
-			...text,
-			filesets: videosMap[text.abbr]
-				? [
-						...text.filesets[process.env.DBP_BUCKET_ID].filter(
-							(f) =>
-								f.type === 'audio' ||
-								f.type === 'audio_drama' ||
-								f.type === 'text_plain' ||
-								f.type === 'text_format',
-						),
-						...videosMap[text.abbr].filesets['dbp-vid'],
-				  ] || []
-				: text.filesets[process.env.DBP_BUCKET_ID].filter(
-						(f) =>
-							f.type === 'audio' ||
-							f.type === 'audio_drama' ||
-							f.type === 'text_plain' ||
-							f.type === 'text_format',
-				  ) || [],
+		const types = {
+			audio: true,
+			audio_drama: true,
+			text_plain: true,
+			text_format: true,
+			video_stream: true,
+		};
+		const combinedTexts = [...texts, ...videos].map((resource) => ({
+			...resource,
+			hasVideo: !!(
+				resource.filesets['dbp-vid'] && resource.filesets['dbp-vid'].length
+			),
+			filesets: Object.values(resource.filesets)
+				.reduce((all, current) => [...all, ...current])
+				.filter((value) => types[value.type]),
 		}));
 
 		yield put({ type: CLEAR_ERROR_GETTING_VERSIONS });
-		yield put(loadTexts({ texts: mappedTexts }));
+		yield put(loadTexts({ texts: combinedTexts }));
+		// yield put(loadTexts({ texts: mappedTexts.length ? mappedTexts : videos }));
 	} catch (error) {
 		if (process.env.NODE_ENV === 'development') {
 			console.error(error); // eslint-disable-line no-console
@@ -161,6 +154,10 @@ export function* getLanguages() {
 }
 
 function sortLanguagesByVname(a, b) {
+	if (a.vernacular_name && b.vernacular_name && String.localeCompare) {
+		return a.vernacular_name.localeCompare(b.vernacular_name);
+	}
+
 	if (a.vernacular_name > b.vernacular_name) return 1;
 	if (a.vernacular_name < b.vernacular_name) return -1;
 	return 0;
@@ -183,7 +180,7 @@ export function* getLanguageAltNames() {
 					);
 					return {
 						...l,
-						vernacular_name: l.autonym,
+						vernacular_name: l.autonym || l.name,
 						alt_names: Array.from(altSet),
 						englishName: l.name,
 					};
@@ -191,11 +188,12 @@ export function* getLanguageAltNames() {
 				return {
 					...l,
 					alt_names: [],
-					vernacular_name: l.autonym,
+					vernacular_name: l.autonym || l.name,
 					englishName: l.name,
 				};
 			})
 			.sort(sortLanguagesByVname);
+
 		yield put(setLanguages({ languages }));
 	} catch (err) {
 		if (process.env.NODE_ENV === 'development') {

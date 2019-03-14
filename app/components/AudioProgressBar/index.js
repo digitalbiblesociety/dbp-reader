@@ -8,7 +8,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Slider from 'rc-slider/lib/Slider';
 import getFormattedTimeString from '../../utils/getFormattedTimeString';
-import Colors from '../../utils/javascriptColors';
+import Colors from '../../../theme_config/javascriptColors';
 import AudioDramaToggle from '../AudioDramaToggle';
 
 class AudioProgressBar extends React.PureComponent {

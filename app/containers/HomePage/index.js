@@ -71,6 +71,7 @@ import {
 	applyFontSize,
 	toggleWordsOfJesus,
 } from '../Settings/themes';
+import { setAudioType } from '../AudioPlayer/actions';
 
 const VideoPlayer = dynamic(import('../VideoPlayer'), {
 	loading: () => null,
@@ -260,9 +261,37 @@ class HomePage extends React.PureComponent {
 			userId: userIdProps,
 			userAuthenticated: userAuthenticatedProps,
 		} = this.props.profile;
-
+		const prevVerseNumber = this.props.homepage.match.params.verse;
+		const verseNumber = nextProps.homepage.match.params.verse;
+		const audioParam =
+			location &&
+			location.search &&
+			location.search
+				.slice(1)
+				.split('&')
+				.map((key) => key.split('='))
+				.find((key) => key[0] === 'audio_type');
+		const videoFileset = nextProps.homepage.activeFilesets.find(
+			(f) => f.type === 'video_stream',
+		);
+		if (
+			audioParam &&
+			(audioParam[1] !== nextProps.homepage.audioType ||
+				audioParam[1] !== this.props.homepage.audioType)
+		) {
+			this.props.dispatch(setAudioType({ audioType: audioParam[1] }));
+		}
+		if (
+			(activeTextId !== activeTextIdProps ||
+				activeBookId !== activeBookIdProps ||
+				activeChapter !== activeChapterProps) &&
+			videoFileset
+		) {
+			this.checkForVideo(videoFileset.id, activeBookId, activeChapter);
+		}
 		// If there was a change in the params then make sure loading state is set to false
 		if (
+			prevVerseNumber !== verseNumber ||
 			formattedSource.main !== prevFormattedSource.main ||
 			!isEqual(prevTextData.text, textData.text) ||
 			audioSource !== prevAudioSource
@@ -400,12 +429,24 @@ class HomePage extends React.PureComponent {
 
 	checkForVideo = async (filesetId, bookId, chapter) => {
 		if (!filesetId) {
-			this.props.dispatch(setHasVideo({ state: false }));
+			this.props.dispatch(
+				setHasVideo({
+					state: false,
+					videoChapterState: false,
+					videoPlayerOpen: false,
+				}),
+			);
 			return;
 		}
 		const hasVideo = await checkForVideoAsync(filesetId, bookId, chapter);
 
-		this.props.dispatch(setHasVideo({ state: hasVideo }));
+		this.props.dispatch(
+			setHasVideo({
+				state: hasVideo,
+				videoChapterState: hasVideo,
+				videoPlayerOpen: hasVideo,
+			}),
+		);
 	};
 
 	addHighlight = (props) =>
@@ -534,6 +575,7 @@ class HomePage extends React.PureComponent {
 			changingVersion,
 			videoPlayerOpen,
 			hasVideo,
+			videoChapterState,
 			audioType,
 			textDirection,
 		} = this.props.homepage;
@@ -568,18 +610,19 @@ class HomePage extends React.PureComponent {
 							: 'content-container'
 					}
 				>
-					{hasVideo && (
-						<VideoPlayer
-							fileset={
-								activeFilesets.filter((f) => f.type === 'video_stream')[0]
-							}
-							bookId={activeBookId}
-							chapter={activeChapter}
-							books={books}
-							text={updatedText}
-							textId={activeTextId}
-						/>
-					)}
+					{hasVideo &&
+						videoChapterState && (
+							<VideoPlayer
+								fileset={
+									activeFilesets.filter((f) => f.type === 'video_stream')[0]
+								}
+								bookId={activeBookId}
+								chapter={activeChapter}
+								books={books}
+								text={updatedText}
+								textId={activeTextId}
+							/>
+						)}
 					<Text
 						books={books}
 						text={updatedText}

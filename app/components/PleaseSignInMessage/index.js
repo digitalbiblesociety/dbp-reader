@@ -11,7 +11,7 @@ import { FormattedMessage } from 'react-intl';
 import { toggleProfile } from '../../containers/HomePage/actions';
 import messages from './messages';
 
-function PleaseSignInMessage({ dispatch, message }) {
+export function PleaseSignInMessage({ dispatch, message }) {
 	const handleClick = () => dispatch(toggleProfile());
 	return (
 		<div className="need-to-login">

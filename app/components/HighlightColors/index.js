@@ -7,6 +7,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
+import Colors from '../../../theme_config/javascriptColors';
 import messages from './messages';
 
 function HighlightColors({ addHighlight }) {
@@ -36,7 +37,7 @@ function HighlightColors({ addHighlight }) {
 					onClick={(e) =>
 						addHighlight({
 							popupCoords: { x: e.clientX, y: e.clientY },
-							color: 'rgba(252,230,0,.5)',
+							color: Colors.highlightYellow,
 						})
 					}
 				/>
@@ -52,7 +53,7 @@ function HighlightColors({ addHighlight }) {
 					onClick={(e) =>
 						addHighlight({
 							popupCoords: { x: e.clientX, y: e.clientY },
-							color: 'rgba(84,185,72,.5)',
+							color: Colors.highlightGreen,
 						})
 					}
 				/>
@@ -68,7 +69,7 @@ function HighlightColors({ addHighlight }) {
 					onClick={(e) =>
 						addHighlight({
 							popupCoords: { x: e.clientX, y: e.clientY },
-							color: 'rgba(208,105,169,.5)',
+							color: Colors.highlightPink,
 						})
 					}
 				/>
@@ -84,7 +85,7 @@ function HighlightColors({ addHighlight }) {
 					onClick={(e) =>
 						addHighlight({
 							popupCoords: { x: e.clientX, y: e.clientY },
-							color: 'rgba(137,103,172,.5)',
+							color: Colors.highlightPurple,
 						})
 					}
 				/>
@@ -100,7 +101,7 @@ function HighlightColors({ addHighlight }) {
 					onClick={(e) =>
 						addHighlight({
 							popupCoords: { x: e.clientX, y: e.clientY },
-							color: 'rgba(80,165,220,.5)',
+							color: Colors.highlightBlue,
 						})
 					}
 				/>

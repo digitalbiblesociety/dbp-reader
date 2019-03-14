@@ -43,11 +43,6 @@ app
 		// TODO: Ask api team for the redirect for oauth be to /oauth instead of just /
 		// Then I can move all of the extra logic out of this route which is really gross
 		server.get('/', async (req, res) => {
-			// if (process.env.IS_DEV) {
-			// 	console.log('logs for development testing');
-			// 	console.log(req.query.code);
-			// }
-
 			if (req.query.code) {
 				// TODO: Put decryption process into try catch for safety
 				// Get encrypted string of user data
@@ -55,16 +50,16 @@ app
 				const userString = Buffer.from(encryptedData, 'base64').toString(
 					'ascii',
 				);
-				// console.log('userString', userString);
 				const userArray = userString.split(',');
-				// console.log('user array', userArray);
+
 				res.redirect(
-					`/bible/engesv/mat/1?user_id=${userArray[0]}&user_email=${
+					301,
+					`/bible/ENGESV/MAT/1?user_id=${userArray[0]}&user_email=${
 						userArray[1]
 					}&user_name=${userArray[2]}`,
 				);
 			} else {
-				res.redirect('/bible/engesv/mat/1');
+				res.redirect(301, '/bible/ENGESV/MAT/1');
 			}
 		});
 
@@ -81,7 +76,8 @@ app
 			const userArray = userString.split(',');
 			// console.log('user array', userArray);
 			res.redirect(
-				`/bible/engesv/mat/1?user_id=${userArray[0]}&user_email=${
+				301,
+				`/bible/ENGESV/MAT/1?user_id=${userArray[0]}&user_email=${
 					userArray[1]
 				}&user_name=${userArray[2]}`,
 			);
@@ -168,9 +164,12 @@ app
 				chapter,
 			};
 			const userParams = {};
+			// console.count('------- chapter');
+			// console.log('req params', req.params);
+			// console.log('req.query', req.query);
 
 			if (bookId !== req.params.bookId) {
-				res.redirect(`/bible/${req.params.bibleId}/${bookId}/${chapter}`);
+				res.redirect(301, `/bible/${req.params.bibleId}/${bookId}/${chapter}`);
 			} else if (
 				req.query.user_id &&
 				req.query.user_email &&
@@ -206,6 +205,9 @@ app
 				isNaN(parseInt(req.params.verse, 10)) || !req.params.verse
 					? '1'
 					: req.params.verse;
+			// console.count('------- verse');
+			// console.log('req params', req.params);
+			// console.log('req.query', req.query);
 			// console.log(`${req.protocol}://${req.get('host')}${req.originalUrl}`);
 			// Params may not actually be passed using this method
 			const queryParams = {
@@ -217,6 +219,7 @@ app
 
 			if (bookId !== req.params.bookId) {
 				res.redirect(
+					301,
 					`/bible/${req.params.bibleId}/${bookId}/${chapter}/${verse}`,
 				);
 			} else if (
@@ -245,7 +248,7 @@ app
 			};
 
 			if (bookId !== req.params.bookId) {
-				res.redirect(`/bible/${req.params.bibleId}/${bookId}/1`);
+				res.redirect(301, `/bible/${req.params.bibleId}/${bookId}/1`);
 			} else if (
 				queryParams.verse !== 'style.css' &&
 				!req.originalUrl.includes('/static')

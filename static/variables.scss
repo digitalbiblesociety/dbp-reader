@@ -1,36 +1,5 @@
-// All colors used in Sketch file
-$sketch-document-color-dark-red: #7e0e2a;
-$sketch-document-color-red: #9e1e35;
-$sketch-document-color-orange-red: #da2015;
-$sketch-document-color-orange: #df4c10;
-$sketch-document-color-error: rgba(220, 78, 65, 0.6);
-$sketch-document-color-black: #000000;
-$sketch-document-color-dark-gray: #1b1f24;
-$sketch-document-color-medium-gray: #2c3036;
-$sketch-document-color-ugly-color: #868686;
-$sketch-document-color-light-gray: #6e747f;
-$sketch-document-color-lightest-gray: #b2bbc6;
-$sketch-document-color-offwhite: #d4d8dd;
-$sketch-document-color-closewhite: #f4f6f9;
-$sketch-document-color-white: #ffffff;
-$sketch-document-color-blue-purple: #293156;
-$sketch-document-color-dim-blue: #4267b2;
-$sketch-document-color-darkest-blue: #387dbf;
-$sketch-document-color-bright-blue: #1da1f2;
-$sketch-document-color-light-blue: #6ec3e2;
-$sketch-document-color-faded-blue: #50a5dc;
-$sketch-document-color-dark-green: #2e924d;
-$sketch-document-color-bright-green: #54b948;
-$sketch-document-color-faded-green: #4eb07b;
-$sketch-document-color-light-green: #6fbc8f;
-$sketch-document-color-brown: #703f33;
-$sketch-document-color-tan: #f8e4d3;
-$sketch-document-color-light-tan: #fdf9f3;
-$sketch-document-color-pink: #d069a9;
-$sketch-document-color-purple: #8967ac;
-$sketch-document-color-gold: #f2ac22;
-$sketch-document-color-yellow: #f6d32d;
-$sketch-document-color-bright-yellow: #fce600;
+@import '../theme_config/custom_theme_variables.scss';
+
 // Breakpoints
 $small-bp: 291px;
 $medium-bp: 405px;
@@ -40,45 +9,12 @@ $chapter-dropdown-bp: 690px;
 
 $font-primary: 'Open Sans', sans-serif;
 $checkbox-color: #6fbc8f;
-//$color-primary: #9e1e35;
-//$color-secondary: #8e1e35;
-//$dark-primary: #1b1f24;
-//$dark-secondary: #2c3036;
-//$paper-primary: #f1f1f1;
-//$paper-secondary: rgba(112,63,51,.5);
-//$paper-sidebar: #F8E4D3;
-//$paper-background: #FDF9F3;
 $login-email-color: #6e747f;
+
+// Social providers should not change colors
 $login-facebook-color: #4267b2;
 $login-google-color: #ffffff;
 $login-twitter-color: rgb(42, 163, 239);
-//$menu-active-color: rgb(98,177,130);
-//$header-footer: rgb(158,30,53);
-//$input-background-color: rgb(110,116,127);
-//$prev-next-button-color: rgba(158, 30, 53, 0.253);
-//$default-highlight-color: rgb(166, 63, 77);
-
-// Mixin for fade out text - Thought it would work, may revisit
-//@mixin fade-in-ellipsis($box-width, $right-width, $bg-color) {
-//  position: relative;
-//  max-width: calc(100% - #{$right-width});
-//  &:before {
-//    content: "";
-//    position: absolute;
-//    top: 0;
-//    left: calc(#{$box-width} - #{$right-width} - 30px);
-//    height: 100%;
-//    width: 30px;
-//    background-image : -webkit-linear-gradient(left, rgba($bg-color, 0), $bg-color);
-//    background-image : linear-gradient(left, rgba($bg-color, 0), $bg-color);
-//  }
-//}
-//@include fade-in-ellipsis($box-width, $header-right-width, $box-color);
-/*
-  $header-footer-color:#FFFFFF; dark might be slightly opaque
-  $navbar-dropdown-fill: light #F4F6F9 normal #7E0E2A dark #F4F6F9 50% opacity;
-  $header-footer-background-color: light rgb(180, 145, 130) normal rgb(158, 30, 53) dark rgb(44, 48, 54)
-*/
 
 $default-font-family: 'Raleway', Helvetica, sans serif;
 $sans-font-family-option: 'Raleway', Helvetica, sans serif;
@@ -94,219 +30,103 @@ $slab-font-family-option: 'Roboto Slab', Rockwell, Courier, monospace;
 	--sans-font-family-option: 'Raleway', Helvetica, sans serif;
 	--serif-font-family-option: 'Alegreya', 'Palatino Linotype', Palatino, serif;
 	--slab-font-family-option: 'Roboto Slab', Rockwell, Courier, monospace;
-	//--text-selection-background: #1B1F24;
-	//--text-selection-accordion-title-background: #2C3036;
-	//--text-selection-accordion-body-background: #1B1F24;
-	//--text-selection-tab-option-active-background:#FDF9F3;
-	//--text-selection-tab-option-active-color:#000000;
-	//--text-selection-tab-option-color: #FFFFFF;
-	//--text-selection-tab-option-active-border-color: #FFFFFF;
-	//--book-dropdown-background-color: #2C3036;
-	//--book-dropdown-chapter-background-color: #6E747F;
-	//--book-dropdown-text-color: #000000;
-	//--book-dropdown-section-background-color:#6E747F;
-	//--main-textarea-svg-color: #000000;
-	//--main-textarea-svg-fill-color:#000000;
-	//--main-textarea-read-chapter-background:#FFFFF5;
-	//--main-textarea-read-chapter-shadow:#B1A77A;
-	//--main-textarea-read-chapter-active:#B1A77A;
-	//--active-color-primary: #6FBC8F;
-	//--active-color-secondary: #71bc90;
-	//--highlight-blue:#387DBF;
-	//--highlight-pink:#D069A9;
-	//--highlight-yellow:#FCE600;
-	//--highlight-green:#2E924D;
-	//--highlight-purple:#8967AC;
-	//--disabled-input-option:#B2BBC6;
-	//--inactive-font-option:#868686;
-	//--dark-theme-primary:#000000;
-	//--light-theme-primary:#FDF9F3;
-	//--default-theme-primary:#7E0E2A;
-	//--settings-text-color:#FFFFFF;
-	//--notebook-footer-background-color:#1B1F24;
-	//--notebook-title-date-color:#6EC3E2;
-	//--profile-forgot-password-color:#6EC3E2;
-	//--profile-login-signup-background-color:#1B1F24;
-	//--profile-invalid-input-background-color:#9E1E35;
-	//--context-menu-background-color:#FFFFFF;
-	//--context-menu-svg-fill-color:#000000;
-	//--context-menu-text-color:#000000;
-	//--context-menu-hover-color: #ccc;
-	//--context-menu-highlight-active-background-color:#868686;
-	//--audio-player-progress-bar-background: #5B5F64;
-	//--audio-player-background: #2C3036;
-	//--audio-player-handle-background: #000000;
-	//--audio-player-gripper-background-color: rgba(25,25,25,0.9);
-	//--audio-player-gripper-before-color: rgba(255, 255, 255, 0.8);
-	//--menu-body-background-color:#2C3036;
-	//--menu-header-background-color:#7E0E2A;
-	//--menu-border-color: transparent;
-	//--menu-hover-state-background-color: rgba(0, 0, 0, 0.1);
-	//--default-background-color:#FDF9F3;
-	//--default-header-background-color:#9E1E35;
-	//--default-footer-background-color:#9E1E35;
-	//--default-header-background-transparent: rgba(#9E1E35, 0);
-	//--default-text-color:#FFFFFF;
-	//--before-after-border-color:#999999;
-	//--default-svg-fill-color:#FFFFFF;
-	//--default-input-placeholder-color:#FFFFFF;
-	//--application-text-container-color:#000000;
-	//--application-loading-spinner-color:#aeaeae;
-	////--default-header-background-color-transparent:#F8E4D300;
-	//--application-input-caret-color: #000;
-	//--application-text-caret-color: #fff;
-	//--application-transparent-gray: rgba(0,0,0,.8);
-	//--application-words-of-jesus: #A00;
-	//--application-text-selection-color: rgb(216, 182, 185);
-	//--application-light-color-option: #FFFFFF;
-	//--audioplayer-handle-background-color: rgba(0, 0, 0, 0.5);
-	//--text-arrow-color: #1B1F24;
 }
 
 $css4: true;
 $compatibility: true;
 //it is nessesary to define the variables in sass map instead of :root, for compatibility reasons.
 $variables: (
-	--text-selection-background: #1b1f24,
-	--text-selection-accordion-title-background: rgba(255, 255, 255, 0.3),
-	--text-selection-accordion-body-background: #000000,
-	--text-selection-tab-option-active-background: #fdf9f3,
-	--text-selection-tab-option-color: #ffffff,
-	--text-selection-tab-option-active-color: #000000,
-	--text-selection-tab-option-active-border-color: #ffffff,
-	--book-dropdown-background-color: #2c3036,
-	--book-dropdown-chapter-background-color: #6e747f,
-	--book-dropdown-text-color: #000000,
-	--book-dropdown-section-background-color: rgba(255, 255, 255, 0.3),
-	--main-textarea-svg-color: #000000,
-	--main-textarea-svg-fill-color: #000000,
-	--main-textarea-read-chapter-background: #fffff5,
-	--main-textarea-read-chapter-shadow: #b1a77a,
-	--main-textarea-read-chapter-active: #b1a77a,
-	--active-color-primary: #6fbc8f,
-	--active-color-secondary: #71bc90,
-	--highlight-blue: #387dbf,
-	--highlight-pink: #d069a9,
-	--highlight-yellow: #fce600,
-	--highlight-green: #2e924d,
-	--highlight-purple: #8967ac,
-	--disabled-input-option: #b2bbc6,
-	--inactive-font-option: #868686,
-	--dark-theme-primary: #000000,
-	--light-theme-primary: #fdf9f3,
-	--default-theme-primary: #7e0e2a,
-	--settings-text-color: #ffffff,
-	--theme-option-border: #b2bbc6,
-	--notebook-footer-background-color: #1b1f24,
-	--notebook-title-date-color: #6ec3e2,
-	--profile-forgot-password-color: #6ec3e2,
-	--profile-login-signup-background-color: #1b1f24,
-	--profile-invalid-input-background-color: #9e1e35,
-	--context-menu-background-color: #ffffff,
-	--context-menu-svg-fill-color: #000000,
-	--context-menu-text-color: #000000,
-	--context-menu-highlight-active-background-color: #868686,
-	--context-menu-hover-color: #ccc,
-	--audio-player-progress-bar-background: #5b5f64,
-	--audio-player-handle-background: #000000,
-	--audio-player-background: #2c3036,
-	--audio-player-gripper-background-color: rgba(25, 25, 25, 0.9),
-	--audio-player-gripper-before-color: rgba(255, 255, 255, 0.8),
-	--menu-body-background-color: #2c3036,
-	--menu-background-color-opaque: rgba(255, 255, 255, 0.1),
-	--menu-body-background-color-transparent: rgba(44, 48, 54, 0),
-	--menu-header-background-color: #7e0e2a,
-	--menu-border-color: transparent,
-	--menu-hover-state-background-color: rgba(0, 0, 0, 0.1),
-	--default-background-color: #fdf9f3,
-	--default-header-background-color: #9e1e35,
-	--default-footer-background-color: #9e1e35,
-	--default-header-background-transparent: rgba(153, 30, 53, 0),
-	--default-text-color: #ffffff,
-	--default-verse-number-color: #000,
-	--before-after-border-color: rgba(0, 0, 0, 0.2),
-	--default-svg-fill-color: #ffffff,
-	--default-input-placeholder-color: #ffffff,
-	--application-text-super-color: #000000,
-	--application-loading-spinner-color: #aeaeae,
-	--default-header-background-color-transparent: rgba(153, 30, 53, 0),
-	--application-input-caret-color: #000,
-	--application-text-caret-color: #fff,
-	--application-transparent-gray: rgba(0, 0, 0, 0.8),
-	--application-text-selection-color: rgb(216, 182, 185),
-	--application-text-container-color: #000000,
-	--default-language-name-background-color-transparent: rgba(0, 0, 0, 0),
-	--read-full-chapter: rgba(0, 0, 0, 100),
-	--video-player-background-color: rgba(0, 0, 0, 1),
-	--video-player-black-bar-color: rgba(0, 0, 0, 1),
-	--video-player-films-svg-color: rgba(255, 255, 255, 1),
+	--text-selection-background: $text-selection-background,
+	--text-selection-accordion-title-background:
+		$text-selection-accordion-title-background,
+	--text-selection-accordion-body-background:
+		$text-selection-accordion-body-background,
+	--text-selection-tab-option-active-background:
+		$text-selection-tab-option-active-background,
+	--text-selection-tab-option-color: $text-selection-tab-option-color,
+	--text-selection-tab-option-active-color:
+		$text-selection-tab-option-active-color,
+	--text-selection-tab-option-active-border-color:
+		$text-selection-tab-option-active-border-color,
+	--book-dropdown-background-color: $book-dropdown-background-color,
+	--book-dropdown-chapter-background-color:
+		$book-dropdown-chapter-background-color,
+	--book-dropdown-text-color: $book-dropdown-text-color,
+	--book-dropdown-section-background-color:
+		$book-dropdown-section-background-color,
+	--main-textarea-svg-color: $main-textarea-svg-color,
+	--main-textarea-svg-fill-color: $main-textarea-svg-fill-color,
+	--main-textarea-read-chapter-background:
+		$main-textarea-read-chapter-background,
+	--main-textarea-read-chapter-shadow: $main-textarea-read-chapter-shadow,
+	--main-textarea-read-chapter-active: $main-textarea-read-chapter-active,
+	--active-color-primary: $active-color-primary,
+	--active-color-secondary: $active-color-secondary,
+	--highlight-blue: $highlight-blue,
+	--highlight-pink: $highlight-pink,
+	--highlight-yellow: $highlight-yellow,
+	--highlight-green: $highlight-green,
+	--highlight-purple: $highlight-purple,
+	--disabled-input-option: $disabled-input-option,
+	--inactive-font-option: $inactive-font-option,
+	--dark-theme-primary: $dark-theme-primary,
+	--light-theme-primary: $light-theme-primary,
+	--default-theme-primary: $default-theme-primary,
+	--settings-text-color: $settings-text-color,
+	--theme-option-border: $theme-option-border,
+	--notebook-footer-background-color: $notebook-footer-background-color,
+	--notebook-title-date-color: $notebook-title-date-color,
+	--profile-forgot-password-color: $profile-forgot-password-color,
+	--profile-login-signup-background-color:
+		$profile-login-signup-background-color,
+	--profile-invalid-input-background-color:
+		$profile-invalid-input-background-color,
+	--context-menu-background-color: $context-menu-background-color,
+	--context-menu-svg-fill-color: $context-menu-svg-fill-color,
+	--context-menu-text-color: $context-menu-text-color,
+	--context-menu-highlight-active-background-color:
+		$context-menu-highlight-active-background-color,
+	--context-menu-hover-color: $context-menu-hover-color,
+	--audio-player-progress-bar-background: $audio-player-progress-bar-background,
+	--audio-player-handle-background: $audio-player-handle-background,
+	--audio-player-background: $audio-player-background,
+	--audio-player-gripper-background-color:
+		$audio-player-gripper-background-color,
+	--audio-player-gripper-before-color: $audio-player-gripper-before-color,
+	--menu-body-background-color: $menu-body-background-color,
+	--menu-background-color-opaque: $menu-background-color-opaque,
+	--menu-body-background-color-transparent:
+		$menu-body-background-color-transparent,
+	--menu-header-background-color: $menu-header-background-color,
+	--menu-border-color: $menu-border-color,
+	--menu-hover-state-background-color: $menu-hover-state-background-color,
+	--default-background-color: $default-background-color,
+	--default-header-background-color: $default-header-background-color,
+	--default-footer-background-color: $default-footer-background-color,
+	--default-header-background-transparent:
+		$default-header-background-transparent,
+	--default-text-color: $default-text-color,
+	--default-verse-number-color: $default-verse-number-color,
+	--before-after-border-color: $before-after-border-color,
+	--default-svg-fill-color: $default-svg-fill-color,
+	--default-input-placeholder-color: $default-input-placeholder-color,
+	--application-text-super-color: $application-text-super-color,
+	--application-loading-spinner-color: $application-loading-spinner-color,
+	--default-header-background-color-transparent:
+		$default-header-background-color-transparent,
+	--application-input-caret-color: $application-input-caret-color,
+	--application-text-caret-color: $application-text-caret-color,
+	--application-transparent-gray: $application-transparent-gray,
+	--application-text-selection-color: $application-text-selection-color,
+	--application-text-container-color: $application-text-container-color,
+	--application-link-color: $application-link-color,
+	--default-language-name-background-color-transparent:
+		$default-language-name-background-color-transparent,
+	--read-full-chapter: $read-full-chapter,
+	--video-player-background-color: $video-player-background-color,
+	--video-player-black-bar-color: $video-player-black-bar-color,
+	--video-player-films-svg-color: $video-player-films-svg-color,
 );
-// --text-selection-background: #1b1f24,
-// --text-selection-accordion-title-background: #2c3036,
-// --text-selection-accordion-body-background: #000000,
-// --text-selection-tab-option-active-background: #fdf9f3,
-// --text-selection-tab-option-active-color: #000000,
-// --text-selection-tab-option-active-border-color: #ffffff,
-// --book-dropdown-background-color: #2c3036,
-// --book-dropdown-chapter-background-color: #6e747f,
-// --book-dropdown-text-color: #000000,
-// --book-dropdown-section-background-color: #6e747f,
-// --main-textarea-svg-color: #000000,
-// --main-textarea-svg-fill-color: #000000,
-// --main-textarea-read-chapter-background: #fffff5,
-// --main-textarea-read-chapter-shadow: #b1a77a,
-// --main-textarea-read-chapter-active: #b1a77a,
-// --active-color-primary: #6fbc8f,
-// --active-color-secondary: #71bc90,
-// --highlight-blue: #387dbf,
-// --highlight-pink: #d069a9,
-// --highlight-yellow: #fce600,
-// --highlight-green: #2e924d,
-// --highlight-purple: #8967ac,
-// --disabled-input-option: #b2bbc6,
-// --inactive-font-option: #868686,
-// --dark-theme-primary: #000000,
-// --light-theme-primary: #fdf9f3,
-// --default-theme-primary: #7e0e2a,
-// --settings-text-color: #ffffff,
-// --notebook-footer-background-color: #1b1f24,
-// --notebook-title-date-color: #6ec3e2,
-// --profile-forgot-password-color: #6ec3e2,
-// --profile-login-signup-background-color: #1b1f24,
-// --profile-invalid-input-background-color: #9e1e35,
-// --context-menu-background-color: #ffffff,
-// --context-menu-svg-fill-color: #000000,
-// --context-menu-text-color: #000000,
-// --context-menu-hover-color: #ccc,
-// --context-menu-highlight-active-background-color: #868686,
-// --audio-player-progress-bar-background: #5b5f64,
-// --audio-player-handle-background: #000000,
-// --audio-player-background: #2c3036,
-// --audio-player-gripper-background-color: rgba(25, 25, 25, 0.9),
-// --audio-player-gripper-before-color: rgba(255, 255, 255, 0.8),
-// --menu-body-background-color: #2c3036,
-// --menu-body-background-color-transparent: rgba(44, 48, 54, 0),
-// --menu-header-background-color: #7e0e2a,
-// --menu-hover-state-background-color: rgba(0, 0, 0, 0.1),
-// --default-background-color: #fdf9f3,
-// --default-header-background-color: #9e1e35,
-// --default-footer-background-color: #9e1e35,
-// --default-header-background-transparent: rgba(#9e1e35, 0),
-// --default-text-color: #ffffff,
-// --before-after-border-color: #999999,
-// --default-svg-fill-color: #ffffff,
-// --default-input-placeholder-color: #ffffff,
-// --application-text-super-color: #000000,
-// --application-loading-spinner-color: #aeaeae,
-// --default-header-background-color-transparent: rgba(153, 30, 53, 0),
-// --application-input-caret-color: #000,
-// --application-text-caret-color: #fff,
-// --application-transparent-gray: rgba(0, 0, 0, 0.8),
-// --application-words-of-jesus: #a00,
-// --application-text-selection-color: rgb(216, 182, 185),
-// --audioplayer-handle-background-color: rgba(0, 0, 0, 0.5),
-// --application-light-color-option: #ffffff,
-// --text-arrow-color: #1b1f24,
 
 //Here we transfer the variables from the map to the :root element
 @if ($css4) {
@@ -326,7 +146,10 @@ $variables: (
 	}
 }
 
-//the mixin temporally sets the $css4 variable to false, compiles the css3 fallback, then makes the variable true again and compiles the css4 code. It should contain properties that use css4 variables, otherwise there will be unnessesary duplication of properties.
+//the mixin temporally sets the $css4 variable to false, compiles the css3 fallback,
+// then makes the variable true again and compiles the css4 code.
+// It should contain properties that use css4 variables, otherwise there will be
+// unnessesary duplication of properties.
 @mixin css4 {
 	@if ($css4) {
 		$css4-backup: $css4;
@@ -348,39 +171,3 @@ $variables: (
 		--application-menu-font-size: 16px;
 	}
 }
-
-//the body does not use fallback, its styles will be visible only in compatible browsers
-//body {
-//  max-width: 500px;
-//  margin: 0 auto;
-//  padding: 30px;
-//  color: var(--color);
-//  background: var(--background);
-//  font: {
-//    family: var(--font);
-//  };
-//}
-//
-//// the p and button tags uses the css4 mixin so a fall-back is provided and they will work on all browsers.
-//p {
-//  text-align: justify;
-//  @include css4 {
-//    color: var(--color);
-//  }
-//}
-//
-//button {
-//  @include css4 {
-//    background: var(--color);
-//    color: var(--background);
-//    border: 2px solid currentcolor;
-//    box-shadow: 0 0 0 5px var(--color);
-//  };
-//  &:hover {
-//    @include css4 {
-//      background: var(--background);
-//      color: var(--color);
-//      box-shadow: 0 0 0 5px var(--background);
-//    }
-//  }
-//}

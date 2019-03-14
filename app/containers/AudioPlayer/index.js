@@ -91,6 +91,10 @@ export class AudioPlayer extends React.Component {
 			this.audioRef.load();
 		}
 
+		if (!this.props.hasAudio && this.props.audioPlayerState) {
+			this.setAudioPlayerState(false);
+		}
+
 		if (typeof window !== 'undefined') {
 			this.getAudio(
 				this.props.activeFilesets,
@@ -109,16 +113,28 @@ export class AudioPlayer extends React.Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
+		// console.log(
+		//   'next filesets',
+		//   nextProps.activeFilesets.filter((f) => f.type.includes('audio')),
+		//   '\nnext audioType: ',
+		//   nextProps.audioType,
+		//   '\nnext audioSource === props.audioSource',
+		//   nextProps.audioSource === this.props.audioSource,
+		// );
+		// if (nextProps.hasAudio !== this.props.hasAudio) {
+		//   console.log('hasAudio: ', nextProps.hasAudio);
+		// }
 		if (nextProps.hasVideo && nextProps.videoPlayerOpen) {
 			this.pauseAudio();
 		}
 		if (
-			!isEqual(nextProps.activeFilesets, this.props.activeFilesets) ||
+			nextProps.activeTextId !== this.props.activeTextId ||
 			nextProps.activeBookId !== this.props.activeBookId ||
 			nextProps.activeChapter !== this.props.activeChapter ||
 			nextProps.audioType !== this.props.audioType ||
 			nextProps.verseNumber !== this.props.verseNumber
 		) {
+			// console.log('getting audio');
 			this.getAudio(
 				nextProps.activeFilesets,
 				nextProps.activeBookId,
@@ -127,9 +143,15 @@ export class AudioPlayer extends React.Component {
 			);
 		}
 		if (nextProps.audioSource !== this.props.audioSource) {
+			if (nextProps.audioSource && !this.props.audioSource) {
+				this.setAudioPlayerState(true);
+			}
 			if (nextProps.audioSource) {
 				this.setState({ playing: false, loadingNextChapter: false });
-			} else if (this.props.audioPlayerState && !nextProps.audioSource) {
+			} else if (
+				this.props.audioPlayerState &&
+				(!nextProps.audioSource || !nextProps.hasAudio)
+			) {
 				this.setState({ playing: false }, () =>
 					this.setAudioPlayerState(false),
 				);

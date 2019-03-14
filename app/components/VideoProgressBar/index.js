@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Slider from 'rc-slider';
 import getFormattedTimeString from '../../utils/getFormattedTimeString';
-import Colors from '../../utils/javascriptColors';
+import Colors from '../../../theme_config/javascriptColors';
 
 class VideoProgressBar extends React.PureComponent {
 	handleChange = (time) => {

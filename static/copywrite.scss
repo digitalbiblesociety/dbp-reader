@@ -56,10 +56,13 @@
 	}
 
 	.link {
-		color: $sketch-document-color-light-blue;
 		font-weight: 200;
 		margin-left: 15px;
 		cursor: pointer;
+
+		@include css4 {
+			color: var(--application-link-color);
+		}
 	}
 	.copyrights-section {
 		//padding: 15px;

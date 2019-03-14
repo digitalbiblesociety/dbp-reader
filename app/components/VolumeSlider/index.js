@@ -8,7 +8,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Slider from 'rc-slider/lib/Slider';
 import CloseMenuFunctions from '../../utils/closeMenuFunctions';
-import Colors from '../../utils/javascriptColors';
+import Colors from '../../../theme_config/javascriptColors';
 
 // rc-slider Slider component doesn't accept classes for styles other than classname
 class VolumeSlider extends React.PureComponent {

@@ -18,4 +18,8 @@ export default defineMessages({
 		id: 'app.containers.TextSelection.textOnly',
 		defaultMessage: 'Text Only',
 	},
+	video: {
+		id: 'app.containers.TextSelection.video',
+		defaultMessage: 'Video',
+	},
 });

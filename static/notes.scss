@@ -245,7 +245,9 @@
 			//float: right;
 
 			&.failed {
-				color: $sketch-document-color-error;
+				@include css4 {
+					color: var(--application-error-color);
+				}
 			}
 		}
 

@@ -210,6 +210,17 @@
 
 		h4 {
 			padding: 0 15px;
+
+			.gospel-films {
+				width: 36px;
+				height: 19px;
+				margin: 0;
+				float: right;
+
+				@include css4 {
+					fill: var(--video-player-films-svg-color);
+				}
+			}
 		}
 
 		h4:hover {

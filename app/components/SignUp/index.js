@@ -278,7 +278,7 @@ class SignUp extends React.PureComponent {
 						<a
 							className="link"
 							target={'_blank'}
-							href="https://live.bible.is/privacy"
+							href={`${process.env.BASE_SITE_URL}/privacy`}
 						>
 							Privacy Policy
 						</a>
@@ -286,7 +286,7 @@ class SignUp extends React.PureComponent {
 						<a
 							className="link"
 							target={'_blank'}
-							href="https://live.bible.is/terms"
+							href={`${process.env.BASE_SITE_URL}/terms`}
 						>
 							Terms of Use
 						</a>

@@ -1,0 +1,40 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<PasswordReset /> Component Should match the previous snapshot 1`] = `
+<div
+  className="forgot-password"
+>
+  <p>
+    In order to reset your password, please enter the email address you used to register for Bible.is.
+  </p>
+  <form
+    className="wrapper"
+    onSubmit={[Function]}
+  >
+    <input
+      autoComplete="email"
+      onChange={[Function]}
+      placeholder="E-mail"
+      value=""
+    />
+    <button
+      className="text"
+      type="submit"
+    >
+      Reset Password
+    </button>
+  </form>
+  <div
+    className="disclaimer"
+  >
+    If you are unable to reset your password, please
+    <a
+      className="link"
+      href="https://support.bible.is/contact"
+    >
+       contact us 
+    </a>
+    for support.
+  </div>
+</div>
+`;
