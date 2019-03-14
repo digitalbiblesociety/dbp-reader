@@ -100,7 +100,7 @@ export function* updateHighlight({
 	try {
 		const response = yield call(request, requestUrl, options);
 
-		if (response.success) {
+		if (response.meta && response.meta.success) {
 			yield fork(getHighlights, { userId, bible, book, chapter });
 			yield fork(getUserHighlights, { userId, params: { limit, page } });
 		}
