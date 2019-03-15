@@ -8,6 +8,7 @@ import {
 	LOAD_TEXTS,
 	LOAD_COUNTRY,
 	LOAD_COUNTRIES,
+	LOAD_VERSION_FOR_LANGUAGE,
 	GET_COUNTRY,
 	GET_DPB_TEXTS,
 	GET_LANGUAGES,
@@ -19,6 +20,11 @@ import {
 	SET_COUNTRY_LIST_STATE,
 	SET_COUNTRY_NAME,
 } from './constants';
+
+export const loadVersionForLanguage = (props) => ({
+	type: LOAD_VERSION_FOR_LANGUAGE,
+	...props,
+});
 
 export const loadCountry = (props) => ({
 	type: LOAD_COUNTRY,

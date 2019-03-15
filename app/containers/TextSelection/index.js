@@ -243,6 +243,7 @@ export class TextSelection extends React.PureComponent {
 					toggleLanguageList={this.toggleLanguageList}
 					setCountryListState={this.setCountryListState}
 					setFromCountry={this.setFromCountry}
+					toggleTextSelection={this.toggleVersionSelection}
 				/>
 				<VersionList
 					bibles={bibles}

@@ -1,7 +1,7 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
 import { languages } from '../../../utils/testUtils/languageData';
-import LanguageList from '..';
+import { LanguageList } from '..';
 
 /* eslint-disable no-plusplus */
 jest.mock('react-virtualized', () => ({
