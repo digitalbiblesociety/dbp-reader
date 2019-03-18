@@ -26,8 +26,8 @@ const NoteVerseText = ({ loading, notePassage }) => {
 };
 
 NoteVerseText.propTypes = {
-  loading: PropTypes.bool.isRequired,
   notePassage: PropTypes.string.isRequired,
+  loading: PropTypes.bool,
 };
 
 export default NoteVerseText;
