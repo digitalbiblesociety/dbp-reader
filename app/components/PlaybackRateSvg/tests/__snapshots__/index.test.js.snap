@@ -1,0 +1,73 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<PlaybackRateSvg /> component tests Should match snapshot with 0.75 speed 1`] = `
+<svg
+  className="icon"
+  fill="#fff"
+>
+  <use
+    xlinkHref="/static/svglist.svg#playback_0.75x"
+    xmlnsXlink="http://www.w3.org/1999/xlink"
+  />
+</svg>
+`;
+
+exports[`<PlaybackRateSvg /> component tests Should match snapshot with 1.5 speed 1`] = `
+<svg
+  className="icon"
+  fill="#fff"
+>
+  <use
+    xlinkHref="/static/svglist.svg#playback_1.5x"
+    xmlnsXlink="http://www.w3.org/1999/xlink"
+  />
+</svg>
+`;
+
+exports[`<PlaybackRateSvg /> component tests Should match snapshot with 1.25 speed 1`] = `
+<svg
+  className="icon"
+  fill="#fff"
+>
+  <use
+    xlinkHref="/static/svglist.svg#playback_1.25x"
+    xmlnsXlink="http://www.w3.org/1999/xlink"
+  />
+</svg>
+`;
+
+exports[`<PlaybackRateSvg /> component tests Should match snapshot with 2 speed 1`] = `
+<svg
+  className="icon"
+  fill="#fff"
+>
+  <use
+    xlinkHref="/static/svglist.svg#playback_2x"
+    xmlnsXlink="http://www.w3.org/1999/xlink"
+  />
+</svg>
+`;
+
+exports[`<PlaybackRateSvg /> component tests Should match snapshot with default props 1`] = `
+<svg
+  className="icon"
+  fill="#fff"
+>
+  <use
+    xlinkHref="/static/svglist.svg#playback_1x"
+    xmlnsXlink="http://www.w3.org/1999/xlink"
+  />
+</svg>
+`;
+
+exports[`<PlaybackRateSvg /> component tests Should match snapshot with no playback speed 1`] = `
+<svg
+  className="icon"
+  fill="#fff"
+>
+  <use
+    xlinkHref="/static/svglist.svg#playback_2x"
+    xmlnsXlink="http://www.w3.org/1999/xlink"
+  />
+</svg>
+`;
