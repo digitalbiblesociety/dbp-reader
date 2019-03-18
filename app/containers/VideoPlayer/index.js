@@ -31,7 +31,11 @@ class VideoPlayer extends React.PureComponent {
 
 	componentDidMount() {
 		this.getHls();
-
+		this.videoRef.addEventListener(
+			'webkitendfullscreen',
+			this.webkitendfullscreen,
+			false,
+		);
 		Router.router.events.on('routeChangeStart', this.handleRouteChange);
 	}
 
@@ -88,11 +92,19 @@ class VideoPlayer extends React.PureComponent {
 			);
 			this.videoRef.removeEventListener('seeking', this.seekingEventListener);
 			this.videoRef.removeEventListener('seeked', this.seekedEventListener);
+			this.videoRef.removeEventListener(
+				'webkitendfullscreen',
+				this.webkitendfullscreen,
+			);
 			this.videoRef.removeEventListener('loadedmetadata', this.loadedMetadata);
 		}
 
 		Router.router.events.off('routeChangeStart', this.handleRouteChange);
 	}
+
+	webkitendfullscreen = () => {
+		this.pauseVideo();
+	};
 
 	getHls = async () => {
 		const hls = await import('hls.js');
