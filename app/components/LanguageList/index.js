@@ -6,11 +6,22 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { createStructuredSelector } from 'reselect';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 import { List, AutoSizer } from 'react-virtualized';
 import matchSorter from 'match-sorter';
+import Router from 'next/router';
+import { loadVersionForLanguage } from '../../containers/TextSelection/actions';
+import { changeVersion } from '../../containers/HomePage/actions';
+import { getVersionForLanguage } from '../../utils/getVersionForLanguage';
 import LoadingSpinner from '../LoadingSpinner';
+import {
+	selectActiveBookId,
+	selectActiveChapter,
+} from '../VersionList/selectors';
 
-class LanguageList extends React.PureComponent {
+export class LanguageList extends React.PureComponent {
 	// eslint-disable-line react/prefer-stateless-function
 	state = {
 		startY: 0,
@@ -203,7 +214,7 @@ class LanguageList extends React.PureComponent {
 		return false;
 	};
 
-	handleLanguageClick = (e, language) => {
+	handleLanguageClick = async (e, language) => {
 		if ('stopPropagation' in e && typeof e.stopPropagation === 'function') {
 			e.stopPropagation();
 		} else if ('cancelBubble' in e) {
@@ -211,11 +222,47 @@ class LanguageList extends React.PureComponent {
 		}
 		const {
 			setActiveIsoCode,
+			activeBookId,
+			activeChapter,
+			toggleTextSelection,
 			toggleLanguageList,
 			toggleVersionList,
+			dispatch,
 			setFromCountry,
 		} = this.props;
-		if (language) {
+
+		if (language.bibles === 1) {
+			// Go straight to the bible
+			setActiveIsoCode({
+				iso: language.iso,
+				name: language.name,
+				languageCode: language.id,
+			});
+			// Set menu and background to loading state
+			dispatch(changeVersion({ state: true }));
+			dispatch(loadVersionForLanguage({ state: true }));
+
+			// Wait for routes to be generated
+			const { versionHref, versionAs } = await getVersionForLanguage({
+				languageCode: language.id,
+				activeBookId,
+				activeChapter,
+			});
+
+			// Temporary failsafe for until the api supports multiple values in asset_id param
+			if (!versionHref || !versionAs) {
+				// If no version then use default behavior
+				setFromCountry(false);
+				dispatch(loadVersionForLanguage({ state: false }));
+				toggleLanguageList();
+				toggleVersionList();
+			} else {
+				// Push new route
+				Router.push(versionHref, versionAs);
+				dispatch(loadVersionForLanguage({ state: false }));
+				toggleTextSelection();
+			}
+		} else if (language) {
 			setActiveIsoCode({
 				iso: language.iso,
 				name: language.name,
@@ -232,7 +279,12 @@ class LanguageList extends React.PureComponent {
 	};
 
 	render() {
-		const { active, loadingLanguages, languages } = this.props;
+		const {
+			active,
+			loadingLanguages,
+			loadingLanguageVersion,
+			languages,
+		} = this.props;
 		const distance = this.state.distance;
 
 		/* eslint-disable jsx-a11y/no-static-element-interactions */
@@ -259,7 +311,7 @@ class LanguageList extends React.PureComponent {
 								{`${distance > 40 ? 'Release' : 'Pull'} to Refresh`}
 							</span>
 						</div>
-						{!loadingLanguages ? (
+						{!loadingLanguages && !loadingLanguageVersion ? (
 							<AutoSizer>
 								{({ width, height }) =>
 									this.getFilteredLanguages(width, height)
@@ -284,16 +336,35 @@ class LanguageList extends React.PureComponent {
 
 LanguageList.propTypes = {
 	languages: PropTypes.array,
+	dispatch: PropTypes.func,
 	setActiveIsoCode: PropTypes.func,
 	setFromCountry: PropTypes.func,
 	toggleLanguageList: PropTypes.func,
 	toggleVersionList: PropTypes.func,
+	toggleTextSelection: PropTypes.func,
 	getLanguages: PropTypes.func,
+	activeBookId: PropTypes.string,
 	filterText: PropTypes.string,
 	active: PropTypes.bool,
 	fromCountry: PropTypes.bool,
 	loadingLanguages: PropTypes.bool,
+	loadingLanguageVersion: PropTypes.bool,
+	activeChapter: PropTypes.number,
 	languageCode: PropTypes.number,
 };
 
-export default LanguageList;
+const mapDispatchToProps = (dispatch) => ({
+	dispatch,
+});
+
+const mapStateToProps = createStructuredSelector({
+	activeBookId: selectActiveBookId(),
+	activeChapter: selectActiveChapter(),
+});
+
+const withConnect = connect(
+	mapStateToProps,
+	mapDispatchToProps,
+);
+
+export default compose(withConnect)(LanguageList);

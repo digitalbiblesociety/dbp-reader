@@ -17,11 +17,9 @@ import {
 	isEndOfBible,
 	isStartOfBible,
 } from './textRenderUtils';
+import NewChapterArrow from '../../components/NewChapterArrow';
 const Verses = dynamic(import('../Verses'), {
 	loading: () => <LoadingSpinner />,
-});
-const NewChapterArrow = dynamic(import('../../components/NewChapterArrow'), {
-	loading: () => null,
 });
 
 /* Disabling the jsx-a11y linting because we need to capture the selected text

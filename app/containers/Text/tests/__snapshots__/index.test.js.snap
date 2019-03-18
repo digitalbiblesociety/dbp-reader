@@ -53,8 +53,38 @@ exports[`<Text /> Should match previous snapshot with audioPlayerState true 1`] 
   id="text-container-parent"
 >
   <div
+    className="arrow-wrapper prev"
+    id=""
+    onClick={[Function]}
+    title=""
+  >
+    <svg
+      className="prev-arrow-svg"
+    >
+      <use
+        xlinkHref="/static/svglist.svg#arrow_left"
+        xmlnsXlink="http://www.w3.org/1999/xlink"
+      />
+    </svg>
+  </div>
+  <div
     className="main-wrapper"
   />
+  <div
+    className="arrow-wrapper next"
+    id=""
+    onClick={[Function]}
+    title=""
+  >
+    <svg
+      className="next-arrow-svg"
+    >
+      <use
+        xlinkHref="/static/svglist.svg#arrow_right"
+        xmlnsXlink="http://www.w3.org/1999/xlink"
+      />
+    </svg>
+  </div>
 </div>
 `;
 
@@ -158,8 +188,38 @@ exports[`<Text /> Should match previous snapshot with hasVideo true 1`] = `
   id="text-container-parent"
 >
   <div
+    className="arrow-wrapper prev"
+    id=""
+    onClick={[Function]}
+    title=""
+  >
+    <svg
+      className="prev-arrow-svg"
+    >
+      <use
+        xlinkHref="/static/svglist.svg#arrow_left"
+        xmlnsXlink="http://www.w3.org/1999/xlink"
+      />
+    </svg>
+  </div>
+  <div
     className="main-wrapper"
   />
+  <div
+    className="arrow-wrapper next"
+    id=""
+    onClick={[Function]}
+    title=""
+  >
+    <svg
+      className="next-arrow-svg"
+    >
+      <use
+        xlinkHref="/static/svglist.svg#arrow_right"
+        xmlnsXlink="http://www.w3.org/1999/xlink"
+      />
+    </svg>
+  </div>
 </div>
 `;
 
@@ -216,7 +276,13 @@ exports[`<Text /> Should match previous snapshot with menuIsOpen true 1`] = `
   id="text-container-parent"
 >
   <div
+    className="arrow-wrapper prev disabled"
+  />
+  <div
     className="main-wrapper"
+  />
+  <div
+    className="arrow-wrapper next disabled"
   />
 </div>
 `;
@@ -227,8 +293,38 @@ exports[`<Text /> Should match previous snapshot with no options true 1`] = `
   id="text-container-parent"
 >
   <div
+    className="arrow-wrapper prev"
+    id=""
+    onClick={[Function]}
+    title=""
+  >
+    <svg
+      className="prev-arrow-svg"
+    >
+      <use
+        xlinkHref="/static/svglist.svg#arrow_left"
+        xmlnsXlink="http://www.w3.org/1999/xlink"
+      />
+    </svg>
+  </div>
+  <div
     className="main-wrapper"
   />
+  <div
+    className="arrow-wrapper next"
+    id=""
+    onClick={[Function]}
+    title=""
+  >
+    <svg
+      className="next-arrow-svg"
+    >
+      <use
+        xlinkHref="/static/svglist.svg#arrow_right"
+        xmlnsXlink="http://www.w3.org/1999/xlink"
+      />
+    </svg>
+  </div>
 </div>
 `;
 
@@ -238,8 +334,38 @@ exports[`<Text /> Should match previous snapshot with subFooterOpen true 1`] = `
   id="text-container-parent"
 >
   <div
+    className="arrow-wrapper prev"
+    id=""
+    onClick={[Function]}
+    title=""
+  >
+    <svg
+      className="prev-arrow-svg"
+    >
+      <use
+        xlinkHref="/static/svglist.svg#arrow_left"
+        xmlnsXlink="http://www.w3.org/1999/xlink"
+      />
+    </svg>
+  </div>
+  <div
     className="main-wrapper"
   />
+  <div
+    className="arrow-wrapper next"
+    id=""
+    onClick={[Function]}
+    title=""
+  >
+    <svg
+      className="next-arrow-svg"
+    >
+      <use
+        xlinkHref="/static/svglist.svg#arrow_right"
+        xmlnsXlink="http://www.w3.org/1999/xlink"
+      />
+    </svg>
+  </div>
 </div>
 `;
 
@@ -249,7 +375,37 @@ exports[`<Text /> Should match previous snapshot with videoPlayerOpen true 1`] =
   id="text-container-parent"
 >
   <div
+    className="arrow-wrapper prev"
+    id=""
+    onClick={[Function]}
+    title=""
+  >
+    <svg
+      className="prev-arrow-svg"
+    >
+      <use
+        xlinkHref="/static/svglist.svg#arrow_left"
+        xmlnsXlink="http://www.w3.org/1999/xlink"
+      />
+    </svg>
+  </div>
+  <div
     className="main-wrapper"
   />
+  <div
+    className="arrow-wrapper next"
+    id=""
+    onClick={[Function]}
+    title=""
+  >
+    <svg
+      className="next-arrow-svg"
+    >
+      <use
+        xlinkHref="/static/svglist.svg#arrow_right"
+        xmlnsXlink="http://www.w3.org/1999/xlink"
+      />
+    </svg>
+  </div>
 </div>
 `;

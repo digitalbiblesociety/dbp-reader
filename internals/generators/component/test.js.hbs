@@ -1,10 +1,14 @@
-// import React from 'react';
-// import { shallow } from 'enzyme';
+import React from 'react';
+import renderer from 'react-test-renderer';
 
-// import {{ properCase name }} from '../index';
+import {{ properCase name }} from '..';
 
-describe('<{{ properCase name }} />', () => {
-	it('Expect to have unit tests specified', () => {
-		expect(true).toEqual(false);
-	});
+describe('
+<{{ properCase name }} /> component tests', () => {
+it('Should match snapshot with default props', () => {
+const tree = renderer.create(
+<{{ properCase name }} />).toJSON();
+
+expect(tree).toMatchSnapshot();
+});
 });
