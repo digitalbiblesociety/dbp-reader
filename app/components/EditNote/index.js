@@ -8,6 +8,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import PopupMessage from '../PopupMessage';
 import SvgWrapper from '../SvgWrapper';
+import NoteVerseText from '../NoteVerseText';
 
 class EditNote extends React.PureComponent {
 	// eslint-disable-line react/prefer-stateless-function
@@ -224,6 +225,7 @@ class EditNote extends React.PureComponent {
 			savedTheNote,
 			notesErrorMessage,
 			errorSavingNote,
+			loadingChapterForNote,
 		} = this.props;
 		const { savingNote, popupOpen, coords } = this.state;
 
@@ -256,15 +258,16 @@ class EditNote extends React.PureComponent {
 						svgid="arrow_right"
 					/>
 					<span className="text">{this.verseReference}</span>
-					<span className="version-dropdown">{activeTextId}</span>
+					<span className="version-dropdown">
+						{note.get('bible_id') || activeTextId}
+					</span>
 				</div>
-				{isVerseTextVisible ? (
-					<div className="verse-text">
-						&quot;&nbsp;
-						{notePassage}
-						&nbsp;&quot;
-					</div>
-				) : null}
+				{isVerseTextVisible && (
+					<NoteVerseText
+						loading={loadingChapterForNote}
+						notePassage={notePassage}
+					/>
+				)}
 				<textarea
 					onChange={this.handleTextareaChange}
 					placeholder="CLICK TO ADD NOTE"
@@ -326,16 +329,17 @@ EditNote.propTypes = {
 	setActiveChild: PropTypes.func,
 	toggleVerseText: PropTypes.func,
 	readSavedMessage: PropTypes.func,
+	clearNoteErrorMessage: PropTypes.func,
 	note: PropTypes.object,
 	vernacularNamesObject: PropTypes.object,
+	savedTheNote: PropTypes.bool,
+	errorSavingNote: PropTypes.bool,
 	isVerseTextVisible: PropTypes.bool,
+	loadingChapterForNote: PropTypes.bool,
 	notePassage: PropTypes.string,
 	activeTextId: PropTypes.string,
-	savedTheNote: PropTypes.bool,
 	activeBookName: PropTypes.string,
 	notesErrorMessage: PropTypes.string,
-	errorSavingNote: PropTypes.bool,
-	clearNoteErrorMessage: PropTypes.func,
 };
 
 export default EditNote;

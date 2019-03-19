@@ -3,7 +3,9 @@
 exports[`NewChapterArrow should match snapshot for next arrow base props 1`] = `
 <div
   className="arrow-wrapper next"
+  id=""
   onClick={[Function]}
+  title=""
 >
   <svg
     className="next-arrow-svg"
@@ -25,7 +27,9 @@ exports[`NewChapterArrow should match snapshot for next arrow disabled props 1`]
 exports[`NewChapterArrow should match snapshot for previous arrow base props 1`] = `
 <div
   className="arrow-wrapper prev"
+  id=""
   onClick={[Function]}
+  title=""
 >
   <svg
     className="prev-arrow-svg"

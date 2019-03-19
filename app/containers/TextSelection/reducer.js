@@ -20,30 +20,34 @@ import {
 	GET_LANGUAGES,
 	GET_COUNTRIES,
 	LOAD_COUNTRIES_ERROR,
+	LOAD_VERSION_FOR_LANGUAGE,
 } from './constants';
 
 const initialState = fromJS({
-	languages: [],
-	texts: [],
-	countries: {},
 	country: {},
+	countries: {},
+	texts: [],
+	languages: [],
 	countryLanguages: [],
-	languageListActive: false,
-	versionListActive: true,
-	countryListActive: false,
-	activeLanguageName: '',
-	activeCountryName: 'ANY',
 	initialBookId: 'GEN',
 	activeIsoCode: 'eng',
+	activeLanguageName: '',
+	activeCountryName: 'ANY',
 	activeLanguageCode: 6414,
+	versionListActive: true,
+	loadingVersions: false,
 	loadingCountries: false,
 	loadingLanguages: false,
-	loadingVersions: false,
+	countryListActive: false,
+	languageListActive: false,
+	loadingLanguageVersion: false,
 	finishedLoadingCountries: false,
 });
 
 function textSelectionReducer(state = initialState, action) {
 	switch (action.type) {
+		case LOAD_VERSION_FOR_LANGUAGE:
+			return state.set('loadingLanguageVersion', action.state);
 		case LOAD_COUNTRIES_ERROR:
 			return state.set('finishedLoadingCountries', true);
 		case INIT_APPLICATION:

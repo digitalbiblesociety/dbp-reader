@@ -12,7 +12,7 @@ import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { FormattedMessage } from 'react-intl';
 import isEqual from 'lodash/isEqual';
-import Link from 'next/link';
+// import dynamic from 'next/dynamic';
 import injectReducer from '../../utils/injectReducer';
 import SvgWrapper from '../../components/SvgWrapper';
 import SpeedControl from '../../components/SpeedControl';
@@ -32,6 +32,8 @@ import getNextChapterUrl from '../../utils/getNextChapterUrl';
 import getPreviousChapterUrl from '../../utils/getPreviousChapterUrl';
 import getAudioAsyncCall from '../../utils/getAudioAsyncCall';
 import { setPlaybackRate, setVolume } from './actions';
+import PlaybackRateSvg from '../../components/PlaybackRateSvg';
+import NewChapterArrow from '../../components/NewChapterArrow';
 /* eslint-disable jsx-a11y/media-has-caption */
 /* disabled the above eslint config options because you can't add tracks to audio elements */
 
@@ -400,6 +402,7 @@ export class AudioPlayer extends React.Component {
 	};
 
 	pauseAudio = () => {
+		console.log('pausing audio');
 		this.audioRef.pause();
 		this.setState({
 			playing: false,
@@ -522,28 +525,6 @@ export class AudioPlayer extends React.Component {
 		}
 	};
 
-	get playbackRateSvg() {
-		const { playbackRate } = this.props;
-
-		// If speed came from cookie it is stored as a string since there is not a parse float
-		if (playbackRate === 0.75) {
-			return (
-				<SvgWrapper className={'icon'} fill="#fff" svgid="playback_0.75x" />
-			);
-		} else if (playbackRate === 1) {
-			return <SvgWrapper className={'icon'} fill="#fff" svgid="playback_1x" />;
-		} else if (playbackRate === 1.25) {
-			return (
-				<SvgWrapper className={'icon'} fill="#fff" svgid="playback_1.25x" />
-			);
-		} else if (playbackRate === 1.5) {
-			return (
-				<SvgWrapper className={'icon'} fill="#fff" svgid="playback_1.5x" />
-			);
-		}
-		return <SvgWrapper className={'icon'} fill="#fff" svgid="playback_2x" />;
-	}
-
 	get classNamesForHandle() {
 		const {
 			audioSource: source,
@@ -604,7 +585,7 @@ export class AudioPlayer extends React.Component {
 		return classNames;
 	}
 
-	nextIcon = (
+	nextIcon = () => (
 		<div
 			id={'next-chapter-audio'}
 			onClick={this.pauseAudio}
@@ -613,18 +594,6 @@ export class AudioPlayer extends React.Component {
 		>
 			<SvgWrapper className="svgitem icon" fill="#fff" svgid="next" />
 			<FormattedMessage {...messages.next} />
-		</div>
-	);
-
-	prevIcon = (
-		<div
-			id={'previous-chapter-audio'}
-			onClick={this.pauseAudio}
-			className={'icon-wrap'}
-			title={messages.prevTitle.defaultMessage}
-		>
-			<SvgWrapper className="svgitem icon" fill="#fff" svgid="previous" />
-			<FormattedMessage {...messages.prev} />
 		</div>
 	);
 
@@ -703,55 +672,47 @@ export class AudioPlayer extends React.Component {
 								: 'audio-player-container closed'
 						}
 					>
-						<Link
-							as={getPreviousChapterUrl({
+						<NewChapterArrow
+							clickHandler={this.pauseAudio}
+							getNewUrl={getPreviousChapterUrl}
+							urlProps={{
 								books: this.props.books,
 								chapter: this.props.activeChapter,
 								bookId: this.props.activeBookId.toLowerCase(),
 								textId: this.props.activeTextId.toLowerCase(),
 								verseNumber: this.props.verseNumber,
 								text: this.props.textData.text,
-								isHref: false,
 								audioType,
-							})}
-							href={getPreviousChapterUrl({
-								books: this.props.books,
-								chapter: this.props.activeChapter,
-								bookId: this.props.activeBookId.toLowerCase(),
-								textId: this.props.activeTextId.toLowerCase(),
-								verseNumber: this.props.verseNumber,
-								text: this.props.textData.text,
-								isHref: true,
-								audioType,
-							})}
-						>
-							{this.prevIcon}
-						</Link>
+							}}
+							disabled={false}
+							svgid={'previous'}
+							svgClasses={'svgitem icon'}
+							containerClasses={'icon-wrap'}
+							id={'previous-chapter-audio'}
+							title={messages.prevTitle.defaultMessage}
+							textProps={messages.prev}
+						/>
 						{this.state.playing ? this.pauseIcon : this.playIcon()}
-						<Link
-							as={getNextChapterUrl({
+						<NewChapterArrow
+							clickHandler={this.pauseAudio}
+							getNewUrl={getNextChapterUrl}
+							urlProps={{
 								books: this.props.books,
 								chapter: this.props.activeChapter,
 								bookId: this.props.activeBookId.toLowerCase(),
 								textId: this.props.activeTextId.toLowerCase(),
 								verseNumber: this.props.verseNumber,
 								text: this.props.textData.text,
-								isHref: false,
 								audioType,
-							})}
-							href={getNextChapterUrl({
-								books: this.props.books,
-								chapter: this.props.activeChapter,
-								bookId: this.props.activeBookId.toLowerCase(),
-								textId: this.props.activeTextId.toLowerCase(),
-								verseNumber: this.props.verseNumber,
-								text: this.props.textData.text,
-								isHref: true,
-								audioType,
-							})}
-						>
-							{this.nextIcon}
-						</Link>
+							}}
+							disabled={false}
+							svgid={'next'}
+							svgClasses={'svgitem icon'}
+							containerClasses={'icon-wrap'}
+							id={'next-chapter-audio'}
+							title={messages.nextTitle.defaultMessage}
+							textProps={messages.next}
+						/>
 						<AudioProgressBar
 							setCurrentTime={this.setCurrentTime}
 							duration={this.state.duration}
@@ -829,7 +790,7 @@ export class AudioPlayer extends React.Component {
 									this.setVolumeSliderState(false);
 								}}
 							>
-								{this.playbackRateSvg}
+								<PlaybackRateSvg playbackRate={playbackRate} />
 								<FormattedMessage {...messages.speed} />
 							</div>
 							<SpeedControl
