@@ -936,12 +936,16 @@ export function* getCopyrightSaga({ filesetIds }) {
 	const reqUrls = [];
 
 	// TODO: Need a type param to add on to the end of this call so that I will get the copyright type that I need
-	filteredFilesetIds.forEach((set) =>
-		reqUrls.push(
-			`${process.env.BASE_API_ROUTE}/bibles/filesets/${set.id}/copyright?key=${
-				process.env.DBP_API_KEY
-			}&v=4&asset_id=${process.env.DBP_BUCKET_ID}&type=${set.type}`,
-		),
+	filteredFilesetIds.forEach(
+		(set) =>
+			set.type !== 'video_stream' &&
+			reqUrls.push(
+				`${process.env.BASE_API_ROUTE}/bibles/filesets/${
+					set.id
+				}/copyright?key=${process.env.DBP_API_KEY}&v=4&asset_id=${
+					process.env.DBP_BUCKET_ID
+				}&type=${set.type}`,
+			),
 	);
 
 	try {
