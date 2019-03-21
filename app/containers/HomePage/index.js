@@ -242,6 +242,7 @@ class HomePage extends React.PureComponent {
 			activeChapter,
 			addBookmarkSuccess,
 			audioSource,
+			activeFilesets,
 		} = nextProps.homepage;
 		const { userSettings, formattedSource, textData } = nextProps;
 		const {
@@ -271,9 +272,7 @@ class HomePage extends React.PureComponent {
 				.split('&')
 				.map((key) => key.split('='))
 				.find((key) => key[0] === 'audio_type');
-		const videoFileset = nextProps.homepage.activeFilesets.find(
-			(f) => f.type === 'video_stream',
-		);
+		const videoFileset = activeFilesets.find((f) => f.type === 'video_stream');
 		if (
 			audioParam &&
 			(audioParam[1] !== nextProps.homepage.audioType ||
@@ -297,6 +296,7 @@ class HomePage extends React.PureComponent {
 			audioSource !== prevAudioSource
 		) {
 			this.setTextLoadingState({ state: false });
+			this.getCopyrights({ filesetIds: activeFilesets });
 		}
 
 		// Only apply the them if one of them changed - use the newest one always since that will be what the user clicked
