@@ -4,6 +4,47 @@ import PropTypes from 'prop-types';
 import request from '../app/utils/request';
 import isUserAgentInternetExplorer from '../app/utils/isUserAgentInternetExplorer';
 import parseCookie from '../app/utils/parseCookie';
+import { VideoPlayer } from '../app/containers/VideoPlayer';
+
+const goBack = () => {
+  history.back();
+};
+
+const BackButton = () => (
+  <button
+    style={{ position: 'absolute', left: '25px' }}
+    type={'button'}
+    onClick={goBack}
+  >
+    Go Back
+  </button>
+);
+
+const Logo = ({ theme, isIe }) => (
+  <a
+    className={'logo'}
+    href={'http://www.bible.is'}
+    title={'http://www.bible.is'}
+    rel={'noopener'}
+  >
+    {theme === 'paper' &&
+      !isIe && (
+        <svg className={'svg'}>
+          <use xlinkHref={'/static/light_theme_logo.svg#bible.is_logo_light'} />
+        </svg>
+      )}
+    {(theme !== 'paper' || isIe) && (
+      <svg className={'svg'} fill={isIe ? '#fff' : ''}>
+        <use xlinkHref={'/static/dark_theme_logo.svg#bible.is_logo'} />
+      </svg>
+    )}
+  </a>
+);
+
+Logo.propTypes = {
+  theme: PropTypes.string,
+  isIe: PropTypes.bool,
+};
 
 // Basic nav
 // Basic footer
@@ -32,37 +73,24 @@ const JesusFilm = ({ iso, routeLocation, hlsStream, theme, isIe }) => {
         <title>{titleText}</title>
       </Head>
       <div id={'navigation-bar'} className={'nav-background'}>
-        <div className={'nav-container'}>
-          <a
-            className={'logo'}
-            href={'http://www.bible.is'}
-            title={'http://www.bible.is'}
-            rel={'noopener'}
-          >
-            {theme === 'paper' &&
-              !isIe && (
-                <svg className={'svg'}>
-                  <use
-                    xlinkHref={
-                      '/static/light_theme_logo.svg#bible.is_logo_light'
-                    }
-                  />
-                </svg>
-              )}
-            {(theme !== 'paper' || isIe) && (
-              <svg className={'svg'} fill={isIe ? '#fff' : ''}>
-                <use xlinkHref={'/static/dark_theme_logo.svg#bible.is_logo'} />
-              </svg>
-            )}
-          </a>
+        <div className={'nav-container jesus-film-override'}>
+          <BackButton />
+          <Logo theme={theme} isIe={isIe} />
         </div>
       </div>
-      <span style={{ color: 'black' }}>
-        This is the Jesus Film Page with ISO: {iso} and location:{' '}
-        {routeLocation}
-      </span>
-      <pre />
-      <code>{hlsStream}</code>
+      <VideoPlayer
+        dispatch={() => {}}
+        fileset={{}}
+        textId={''}
+        bookId={''}
+        chapter={0}
+        books={[]}
+        text={[]}
+        jesusFilmSource={hlsStream}
+        isJesusFilm
+        playerOpen
+        hasVideo
+      />
       <div className={'footer-background'} />
     </div>
   );
