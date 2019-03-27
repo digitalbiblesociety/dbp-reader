@@ -371,7 +371,7 @@ class JesusFilmVideoPlayer extends React.PureComponent {
           <VideoProgressBar
             paused={paused}
             currentTime={currentTime}
-            duration={duration || 300}
+            duration={duration}
             setCurrentTime={this.setCurrentTime}
             bufferLength={bufferLength}
           />

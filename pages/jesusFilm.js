@@ -49,7 +49,14 @@ Logo.propTypes = {
 // Basic nav
 // Basic footer
 // Video Player with adjusted styles
-const JesusFilm = ({ iso, routeLocation, hlsStream, theme, isIe }) => {
+const JesusFilm = ({
+  iso,
+  routeLocation,
+  hlsStream,
+  theme,
+  isIe,
+  duration,
+}) => {
   const titleText = `Jesus Film | ${iso} | Bible.is`;
 
   return (
@@ -78,7 +85,11 @@ const JesusFilm = ({ iso, routeLocation, hlsStream, theme, isIe }) => {
           <Logo theme={theme} isIe={isIe} />
         </div>
       </div>
-      <JesusFilmVideoPlayer hlsStream={hlsStream} duration={300} hasVideo />
+      <JesusFilmVideoPlayer
+        hlsStream={hlsStream}
+        duration={duration}
+        hasVideo
+      />
       <div className={'footer-background'} />
     </div>
   );
@@ -116,6 +127,12 @@ JesusFilm.getInitialProps = async (context) => {
     }&v=4&iso=${iso}`,
   );
   const arclightId = jfResponse[iso];
+  const videoObject = await request(
+    `${process.env.BASE_API_ROUTE}/arclight/jesus-film/chapters?key=${
+      process.env.DBP_API_KEY
+    }&v=4&arclight_id=${arclightId}`,
+  );
+  const duration = videoObject.duration_in_milliseconds / 60 || 6000;
   const hlsStream = arclightId
     ? `${process.env.BASE_API_ROUTE}/arclight/jesus-film?key=${
         process.env.DBP_API_KEY
@@ -126,6 +143,7 @@ JesusFilm.getInitialProps = async (context) => {
     routeLocation,
     iso,
     hlsStream,
+    duration,
     theme,
     isIe,
   };
@@ -136,6 +154,7 @@ JesusFilm.propTypes = {
   theme: PropTypes.string,
   hlsStream: PropTypes.string,
   routeLocation: PropTypes.string,
+  duration: PropTypes.number,
   isIe: PropTypes.bool,
 };
 
