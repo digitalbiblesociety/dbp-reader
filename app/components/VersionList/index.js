@@ -181,6 +181,7 @@ export class VersionList extends React.PureComponent {
     if (bible.get('jesusFilm')) {
       // If there is a Jesus Film then use alternate navigation logic
       Router.push(`/jesus-film/${bible.get('iso')}`);
+      toggleTextSelection();
       // End function early since navigation should have already occurred
       return;
     }
