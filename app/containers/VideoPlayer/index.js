@@ -15,7 +15,7 @@ import VideoOverlay from '../../components/VideoOverlay';
 import { selectHasVideo, selectPlayerOpenState } from './selectors';
 import checkForVideoAsync from '../../utils/checkForVideoAsync';
 
-export class VideoPlayer extends React.PureComponent {
+class VideoPlayer extends React.PureComponent {
   state = {
     paused: true,
     elipsisOpen: false,
@@ -108,19 +108,16 @@ export class VideoPlayer extends React.PureComponent {
 
   getHls = async () => {
     const hls = await import('hls.js');
-    const { fileset, isJesusFilm, jesusFilmSource } = this.props;
+    const { fileset } = this.props;
     this.Hls = hls.default;
     this.isSupported = hls.isSupported;
-    if (this.videoRef && !isJesusFilm) {
+    if (this.videoRef) {
       this.getVideos({
         filesetId: fileset ? fileset.id : '',
         bookId: this.props.bookId || '',
         chapter: this.props.chapter,
       });
       this.checkHlsSupport();
-    } else {
-      this.checkHlsSupport();
-      this.initVideoStream({ thumbnailClick: false });
     }
   };
 
@@ -391,66 +388,8 @@ export class VideoPlayer extends React.PureComponent {
   };
 
   initVideoStream = ({ thumbnailClick }) => {
-    const { isJesusFilm, jesusFilmSource } = this.props;
     const { currentVideo, hlsSupported } = this.state;
-
-    if (isJesusFilm && jesusFilmSource) {
-      this.setState({ currentVideo: { source: jesusFilmSource } });
-      if (!hlsSupported) {
-        if (this.videoRef.canPlayType('application/vnd.apple.mpegurl')) {
-          this.videoRef.src = jesusFilmSource;
-          this.videoRef.addEventListener(
-            'timeupdate',
-            this.timeUpdateEventListener,
-          );
-          this.videoRef.addEventListener('seeking', this.seekingEventListener);
-          this.videoRef.addEventListener('seeked', this.seekedEventListener);
-          if (thumbnailClick) {
-            this.videoRef.addEventListener(
-              'loadedmetadata',
-              this.loadedMetadata,
-            );
-          }
-        }
-      } else {
-        this.initHls();
-        try {
-          // Check for the video element
-          if (this.videoRef) {
-            // Make sure that there is a valid source
-            if (currentVideo.source) {
-              this.hls.attachMedia(this.videoRef);
-              this.hls.loadSource(jesusFilmSource);
-              this.hls.media.addEventListener(
-                'timeupdate',
-                this.timeUpdateEventListener,
-              );
-              this.hls.media.addEventListener(
-                'seeking',
-                this.seekingEventListener,
-              );
-              this.hls.media.addEventListener(
-                'seeked',
-                this.seekedEventListener,
-              );
-              this.hls.on(this.Hls.Events.MANIFEST_PARSED, () => {
-                if (this.props.playerOpen && thumbnailClick) {
-                  this.hls.media.play();
-                  this.setState({ paused: false });
-                }
-              });
-              this.hls.on(this.Hls.Events.BUFFER_APPENDING, () => {
-                this.setBuffer();
-              });
-            }
-          }
-        } catch (err) {
-          if (process.env.NODE_ENV === 'development') {
-            console.error('initVideoStream', err); // eslint-disable-line no-console
-          }
-        }
-      }
-    } else if (!hlsSupported) {
+    if (!hlsSupported) {
       if (this.videoRef.canPlayType('application/vnd.apple.mpegurl')) {
         this.videoRef.src = `${currentVideo.source}?key=${
           process.env.DBP_API_KEY
@@ -767,8 +706,6 @@ VideoPlayer.propTypes = {
   textId: PropTypes.string,
   text: PropTypes.array,
   playerOpen: PropTypes.bool,
-  isJesusFilm: PropTypes.bool,
-  jesusFilmSource: PropTypes.string,
 };
 
 const mapDispatchToProps = (dispatch) => ({
