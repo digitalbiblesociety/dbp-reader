@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import request from '../app/utils/request';
 import isUserAgentInternetExplorer from '../app/utils/isUserAgentInternetExplorer';
 import parseCookie from '../app/utils/parseCookie';
-import { VideoPlayer } from '../app/containers/VideoPlayer';
+import JesusFilmVideoPlayer from '../app/components/JesusFilmVideoPlayer';
 
 const goBack = () => {
   history.back();
@@ -78,19 +78,7 @@ const JesusFilm = ({ iso, routeLocation, hlsStream, theme, isIe }) => {
           <Logo theme={theme} isIe={isIe} />
         </div>
       </div>
-      <VideoPlayer
-        dispatch={() => {}}
-        fileset={{}}
-        textId={''}
-        bookId={''}
-        chapter={0}
-        books={[]}
-        text={[]}
-        jesusFilmSource={hlsStream}
-        isJesusFilm
-        playerOpen
-        hasVideo
-      />
+      <JesusFilmVideoPlayer hlsStream={hlsStream} duration={300} hasVideo />
       <div className={'footer-background'} />
     </div>
   );
