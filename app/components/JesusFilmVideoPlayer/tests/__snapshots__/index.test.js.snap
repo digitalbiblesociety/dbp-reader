@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<JesusFilmVideoPlayer /> component tests Should match snapshot with default props 1`] = `
+<div
+  className="video-player-container jesus-film-override"
+>
+  <h2>
+    Something went wrong. Please refresh the page or go back to try again!
+  </h2>
+</div>
+`;
