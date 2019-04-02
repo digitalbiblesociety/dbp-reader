@@ -57,7 +57,6 @@ class JesusFilmVideoPlayer extends React.PureComponent {
         'webkitendfullscreen',
         this.webkitendfullscreen,
       );
-      this.videoRef.removeEventListener('loadedmetadata', this.loadedMetadata);
     }
 
     Router.router.events.off('routeChangeStart', this.handleRouteChange);
@@ -171,11 +170,6 @@ class JesusFilmVideoPlayer extends React.PureComponent {
     });
   };
 
-  loadedMetadata = () => {
-    this.videoRef.play();
-    this.setState({ paused: false });
-  };
-
   initVideoStream = () => {
     const { hlsSupported } = this.state;
     const { hlsStream } = this.props;
@@ -215,8 +209,15 @@ class JesusFilmVideoPlayer extends React.PureComponent {
             );
             this.hls.media.addEventListener('seeked', this.seekedEventListener);
             this.hls.on(this.Hls.Events.MANIFEST_PARSED, () => {
-              this.hls.media.play();
-              this.setState({ paused: false });
+							this.hls.media.play();
+							const playPromise = this.hls.media.play();
+							if (playPromise) {
+								playPromise.then(() => {
+									this.setState({ paused: false })
+								})
+							}
+							console.log('pause false init')
+              // this.setState({ paused: false });
             });
             this.hls.on(this.Hls.Events.BUFFER_APPENDING, () => {
               this.setBuffer();
@@ -257,7 +258,8 @@ class JesusFilmVideoPlayer extends React.PureComponent {
         this.videoRef.src ===
         `${hlsStream}?key=${process.env.DBP_API_KEY}&v=4&asset_id=dbp-vid`
       ) {
-        this.videoRef.play();
+				this.videoRef.play();
+				console.log('pause false no hls play video')
         this.setState({ paused: false });
         // if the sources didn't match then this is a new video and the hls stream needs to be updated
       } else {
@@ -275,7 +277,8 @@ class JesusFilmVideoPlayer extends React.PureComponent {
               `${hlsStream}?key=${process.env.DBP_API_KEY}&v=4&asset_id=dbp-vid`
           ) {
             this.hls.media.play();
-            this.setState({ paused: false });
+				console.log('pause false has hls play video')
+				this.setState({ paused: false });
             // if the sources didn't match then this is a new video and the hls stream needs to be updated
           } else {
             // Stop the current player from loading anymore video
