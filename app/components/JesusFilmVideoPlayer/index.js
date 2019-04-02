@@ -32,6 +32,7 @@ class JesusFilmVideoPlayer extends React.PureComponent {
       );
       Router.router.events.on('routeChangeStart', this.handleRouteChange);
     }
+    document.addEventListener('keypress', this.pauseWithSpacebar);
   }
 
   componentWillUnmount() {
@@ -59,6 +60,7 @@ class JesusFilmVideoPlayer extends React.PureComponent {
       );
     }
 
+    document.removeEventListener('keypress', this.pauseWithSpacebar);
     Router.router.events.off('routeChangeStart', this.handleRouteChange);
   }
 
@@ -125,7 +127,7 @@ class JesusFilmVideoPlayer extends React.PureComponent {
     }
   };
 
-  handleVideoClick = () => {
+  togglePlayState = () => {
     const { paused } = this.state;
 
     if (paused) {
@@ -338,6 +340,12 @@ class JesusFilmVideoPlayer extends React.PureComponent {
     }
   };
 
+  pauseWithSpacebar = (e) => {
+    if (e.key === ' ') {
+      this.togglePlayState();
+    }
+  };
+
   pauseVideo = () => {
     this.videoRef.pause();
     this.setState({ paused: true });
@@ -404,14 +412,14 @@ class JesusFilmVideoPlayer extends React.PureComponent {
         key={'video-player-container'}
         className={'video-player-container jesus-film-override'}
       >
-        <div className={'video-player'}>
+        <div onClick={this.togglePlayState} className={'video-player'}>
           <VideoOverlay
             paused={paused}
             playFunction={this.playVideo}
             pauseFunction={this.pauseVideo}
             isJesusFilm
           />
-          <video ref={this.setVideoRef} onClick={this.handleVideoClick} />
+          <video ref={this.setVideoRef} onClick={this.togglePlayState} />
           <VideoProgressBar
             paused={paused}
             currentTime={currentTime}
