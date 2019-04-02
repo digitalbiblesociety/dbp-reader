@@ -31,6 +31,15 @@
 
   &.jesus-film-override {
     justify-content: center;
+
+    .back-button {
+      cursor: pointer;
+      position: absolute;
+      left: 25px;
+      &:hover {
+        opacity: 0.85;
+      }
+    }
   }
 
   .logo {

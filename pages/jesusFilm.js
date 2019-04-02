@@ -11,11 +11,7 @@ const goBack = () => {
 };
 
 const BackButton = () => (
-  <button
-    style={{ position: 'absolute', left: '25px' }}
-    type={'button'}
-    onClick={goBack}
-  >
+  <button className={'back-button'} type={'button'} onClick={goBack}>
     Go Back
   </button>
 );
