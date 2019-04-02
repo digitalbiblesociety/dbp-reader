@@ -172,23 +172,26 @@ class JesusFilmVideoPlayer extends React.PureComponent {
 
   initVideoStream = () => {
     const { hlsSupported } = this.state;
-		const { hlsStream } = this.props;
-		// console.log('initVideo: hls supported', hlsSupported)
-		// console.log('initVideo: hls stream', hlsStream)
-		// console.log('initVideo: can play type', this.videoRef.canPlayType('application/vnd.apple.mpegurl'))
-    if (!hlsSupported || this.videoRef.canPlayType('application/vnd.apple.mpegurl')) {
-			this.videoRef.src = `${hlsStream}?key=${
-				process.env.DBP_API_KEY
-			}&v=4&asset_id=dbp-vid`;
-			console.log('initVideo: new source', `${hlsStream}?key=${
-				process.env.DBP_API_KEY
-			}&v=4&asset_id=dbp-vid`)
-			this.videoRef.addEventListener(
-				'timeupdate',
-				this.timeUpdateEventListener,
-			);
-			this.videoRef.addEventListener('seeking', this.seekingEventListener);
-			this.videoRef.addEventListener('seeked', this.seekedEventListener);
+    const { hlsStream } = this.props;
+    // console.log('initVideo: hls supported', hlsSupported)
+    // console.log('initVideo: hls stream', hlsStream)
+    // console.log('initVideo: can play type', this.videoRef.canPlayType('application/vnd.apple.mpegurl'))
+    if (
+      !hlsSupported ||
+      this.videoRef.canPlayType('application/vnd.apple.mpegurl')
+    ) {
+      this.videoRef.src = `${hlsStream}?key=${
+        process.env.DBP_API_KEY
+      }&v=4&asset_id=dbp-vid`;
+      // console.log('initVideo: new source', `${hlsStream}?key=${
+      // 	process.env.DBP_API_KEY
+      // }&v=4&asset_id=dbp-vid`);
+      this.videoRef.addEventListener(
+        'timeupdate',
+        this.timeUpdateEventListener,
+      );
+      this.videoRef.addEventListener('seeking', this.seekingEventListener);
+      this.videoRef.addEventListener('seeked', this.seekedEventListener);
     } else {
       // Create the hls stream first
       this.initHls();
@@ -213,17 +216,21 @@ class JesusFilmVideoPlayer extends React.PureComponent {
             );
             this.hls.media.addEventListener('seeked', this.seekedEventListener);
             this.hls.on(this.Hls.Events.MANIFEST_PARSED, () => {
-							this.hls.media.play();
-							const playPromise = this.hls.media.play();
-							if (playPromise) {
-								playPromise.then(() => {
-									// console.log('initVideo: pause false init')
-									this.setState({ paused: false })
-								}).catch((err) => {
-									this.setState({ paused: true })
-									// console.error('initVideo: Error in play promise', err);
-								});
-							}
+              this.hls.media.play();
+              const playPromise = this.hls.media.play();
+              if (playPromise) {
+                playPromise
+                  .then(() => {
+                    // console.log('initVideo: pause false init')
+                    this.setState({ paused: false });
+                  })
+                  .catch((err) => {
+                    this.setState({ paused: true });
+                    if (process.env.NODE_ENV === 'development') {
+                      console.error('initVideo: Error in play promise', err); // eslint-disable-line no-console
+                    }
+                  });
+              }
               // this.setState({ paused: false });
             });
             this.hls.on(this.Hls.Events.BUFFER_APPENDING, () => {
@@ -260,22 +267,29 @@ class JesusFilmVideoPlayer extends React.PureComponent {
   playVideo = () => {
     const { hlsSupported } = this.state;
     const { hlsStream } = this.props;
-			// console.log('playVideo: can play type', this.videoRef.canPlayType('application/vnd.apple.mpegurl'))
-			if (!hlsSupported || this.videoRef.canPlayType('application/vnd.apple.mpegurl')) {
+    // console.log('playVideo: can play type', this.videoRef.canPlayType('application/vnd.apple.mpegurl'))
+    if (
+      !hlsSupported ||
+      this.videoRef.canPlayType('application/vnd.apple.mpegurl')
+    ) {
       if (
         this.videoRef.src ===
         `${hlsStream}?key=${process.env.DBP_API_KEY}&v=4&asset_id=dbp-vid`
       ) {
-				const playPromise = this.videoRef.play();
-				if (playPromise) {
-					playPromise.then(() => {
-						// console.log('playVideo: pause false no hls')
-						this.setState({ paused: false });
-					}).catch((err) => {
-						this.setState({ paused: true });
-						console.error('playVideo: no hls error', err); // eslint-disable-line no-console
-					})
-				}
+        const playPromise = this.videoRef.play();
+        if (playPromise) {
+          playPromise
+            .then(() => {
+              // console.log('playVideo: pause false no hls')
+              this.setState({ paused: false });
+            })
+            .catch((err) => {
+              this.setState({ paused: true });
+              if (process.env.NODE_ENV === 'development') {
+                console.error('playVideo: no hls error', err); // eslint-disable-line no-console
+              }
+            });
+        }
         // if the sources didn't match then this is a new video and the hls stream needs to be updated
       } else {
         // Init a new hls stream
@@ -291,17 +305,21 @@ class JesusFilmVideoPlayer extends React.PureComponent {
             this.hls.url ===
               `${hlsStream}?key=${process.env.DBP_API_KEY}&v=4&asset_id=dbp-vid`
           ) {
-						const playPromise = this.hls.media.play();
-						if (playPromise) {
-							playPromise.then(() => {
-								// console.log('playVideo: playing video');
-								this.setState({ paused: false });
-							}).catch((err) => {
-								this.setState({ paused: true });
-								console.error('playVideo: hls error', err); // eslint-disable-line no-console
-							})
-						}
-				// console.log('playVideo: pause false has hls play video')
+            const playPromise = this.hls.media.play();
+            if (playPromise) {
+              playPromise
+                .then(() => {
+                  // console.log('playVideo: playing video');
+                  this.setState({ paused: false });
+                })
+                .catch((err) => {
+                  this.setState({ paused: true });
+                  if (process.env.NODE_ENV === 'development') {
+                    console.error('playVideo: hls error', err); // eslint-disable-line no-console
+                  }
+                });
+            }
+            // console.log('playVideo: pause false has hls play video')
             // if the sources didn't match then this is a new video and the hls stream needs to be updated
           } else {
             // Stop the current player from loading anymore video
@@ -328,7 +346,7 @@ class JesusFilmVideoPlayer extends React.PureComponent {
   updateVolume = (volume) => {
     this.videoRef.volume = volume;
     this.setState({ volume });
-	};
+  };
 
   toggleFullScreen = () => {
     const isFullScreen = !!(
