@@ -53,7 +53,7 @@ export class LanguageList extends React.PureComponent {
 
     const renderARow = ({ index, style, key }) => {
       const language = filteredLanguages[index];
-      console.log('language here: ', language.iso, '=', language.id);
+
       return (
         <div
           style={style}
