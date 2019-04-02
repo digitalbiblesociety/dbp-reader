@@ -6,7 +6,7 @@ describe('check for video utility function', () => {
     expect(result).toEqual(true);
   });
   it('should return false if there is no video', async () => {
-    const result = await checkForVideo('ENGNIVP2DV', 'MAT', 1);
+    const result = await checkForVideo('ENGESVP2DV', 'MAT', 1);
     expect(result).toEqual(false);
   });
   it('should return false if there is an invalid fileset id', async () => {
