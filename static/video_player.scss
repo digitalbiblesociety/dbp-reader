@@ -1,562 +1,564 @@
 .black-bar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100vw;
-  height: 30px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100vw;
+	height: 30px;
 
-  &.closed {
-    display: none;
-  }
+	&.closed {
+		display: none;
+	}
 
-  &:hover {
-    cursor: pointer;
-  }
+	&:hover {
+		cursor: pointer;
+	}
 
-  @include css4 {
-    background-color: var(--video-player-black-bar-color);
-  }
+	@include css4 {
+		background-color: var(--video-player-black-bar-color);
+	}
 
-  .gospel-films {
-    height: 30px;
-    width: 30px;
-    margin-top: 13px;
+	.gospel-films {
+		height: 30px;
+		width: 30px;
+		margin-top: 13px;
 
-    @include css4 {
-      fill: var(--video-player-films-svg-color);
-    }
-  }
+		@include css4 {
+			fill: var(--video-player-films-svg-color);
+		}
+	}
 
-  .up-arrow {
-    height: 30px;
-    width: 30px;
+	.up-arrow {
+		height: 30px;
+		width: 30px;
 
-    @include css4 {
-      fill: var(--video-player-films-svg-color);
-    }
-  }
+		@include css4 {
+			fill: var(--video-player-films-svg-color);
+		}
+	}
 }
 
 .video-player-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  // justify-content: center;
-  // flex: 1 0 auto;
-  flex: 1;
-  padding-top: 0;
-  width: 100vw;
-  position: relative;
-  max-height: 0;
-  overflow: hidden;
-  transition: height 700ms ease-in-out, max-height 700ms ease-in-out,
-    padding 1200ms ease-in-out;
-  z-index: 2;
-  @supports not (-moz-appearance: none) {
-    /* Add non-firefox CSS code here */
-    // flex: 1;
-    // display: block;
-    flex: 1;
-    // flex-basis: 1;
-    // flex-grow: 1;
-    // flex-shrink: 1;
-  }
-
-  &.jesus-film-override {
-    height: calc(100vh - 45px);
-    max-height: calc(100vh - 45px);
-    padding-top: 56px;
-
-    @include css4 {
-      background-color: var(--video-player-background-color);
-    }
-
-    .video-player {
-      max-width: 100%;
-      max-height: 100%;
-      height: 100%;
-
-      .play-video-container {
-        max-width: 100%;
-        background-color: initial;
-      }
-
-      .controls {
-        max-width: 100%;
-
-        .right-controls {
-          .video-elipsis {
-            display: none;
-          }
-        }
-      }
-
-      .progress-slider {
-        max-width: 100%;
-      }
-    }
-  }
-
-  &.active {
-    // display: block;
-    max-height: 508px;
-    @supports not (-moz-appearance: none) {
-      /* Add non-firefox CSS code here */
-      // display: block;
-      max-height: 620px;
-    }
-    // min-height: 175px;
-  }
-
-  @include css4 {
-    background-color: var(--video-player-background-color);
-  }
-
-  .video-player {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    position: relative;
-    margin: auto;
-    width: 100%;
-    max-width: 752.58px;
-    height: calc(100% - 30px);
-    max-height: calc(100% - 30px);
-    min-height: 0;
-    // @supports not (-moz-appearance: none) {
-    // 	/* Add non-firefox CSS code here */
-    // 	margin: auto;
-    // }
-
-    video {
-      height: 100%;
-      // max-height: 100%;
-      z-index: 1;
-      width: 100%;
-    }
-
-    &:hover {
-      .play-video-container {
-        &.show-control-icon {
-          display: flex;
-        }
-        &.hide-control-icon {
-          display: flex;
-        }
-      }
-    }
-
-    .play-video-container {
-      position: absolute;
-      margin: auto;
-      width: 100%;
-      height: 100%;
-      max-width: 752.58px;
-      z-index: 2;
-      pointer-events: visibleFill;
-      background-color: rgba(100, 100, 100, 0.35);
-      justify-content: center;
-      align-items: center;
-
-      &.show-control-icon {
-        display: flex;
-      }
-
-      &.hide-control-icon {
-        display: none;
-      }
-
-      .control-button-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        margin: 0 10px;
-        // margin-right: 25px;
-      }
-
-      .play-video {
-        width: 80px;
-        height: 85px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 3;
-        pointer-events: visiblePainted;
-
-        &:hover {
-          cursor: pointer;
-        }
-
-        &.show-control-icon {
-          display: block;
-        }
-
-        &.hide-control-icon {
-          display: none;
-        }
-      }
-
-      .play-video-title {
-        z-index: 4;
-        margin-bottom: 10px;
-        font-weight: bold;
-      }
-    }
-
-    &:hover {
-      .controls {
-        display: flex;
-      }
-    }
-
-    .controls {
-      display: none;
-      align-self: flex-end;
-      justify-content: space-between;
-      align-items: center;
-      position: absolute;
-      margin: auto;
-      bottom: 0;
-      z-index: 2;
-      width: 100%;
-      max-width: 752.58px;
-      height: 35px;
-      padding: 5px 10px;
-      background-color: rgba(0, 0, 0, 0.3);
-
-      &.hide-controls {
-        display: none;
-      }
-
-      &.open-controls {
-        display: flex;
-      }
-
-      .left-controls {
-        align-content: flex-start;
-        display: flex;
-        height: 35px;
-        width: 65px;
-        align-items: center;
-        justify-content: space-between;
-
-        .video-volume-container {
-          display: flex;
-          flex-direction: column;
-          position: relative;
-
-          .video-volume-slider-container {
-            display: none;
-            left: 0;
-            position: absolute;
-            bottom: auto;
-
-            &.active {
-              display: block;
-            }
-          }
-
-          .video-slider-container {
-            height: 155px;
-            width: 25px;
-            display: flex;
-            flex-direction: column;
-            position: absolute;
-            bottom: 7px;
-            left: 1px;
-            align-items: center;
-            justify-content: center;
-
-            @include css4 {
-              outline: 1px solid var(--active-color-primary);
-              background-color: var(--application-transparent-gray);
-            }
-            background-color: #fff;
-
-            .fill {
-              //height: 3px;
-              //@include css4 {
-              //	background-color: var(--active-color-primary);
-              //}
-              ////width: 100px;
-              //border-radius: 5px;
-            }
-            .slider {
-              //width: 100%;
-              height: 80%;
-              //padding: 0;
-              //display: flex;
-              //align-items: center;
-              //justify-content: center;
-            }
-          }
-        }
-      }
-
-      .right-controls {
-        align-content: flex-end;
-        display: flex;
-        height: 35px;
-        width: 65px;
-        align-items: center;
-        justify-content: space-between;
-
-        .video-elipsis {
-          margin-top: 22px;
-        }
-
-        .video-fullscreen {
-          margin-top: 8px;
-        }
-      }
-
-      svg {
-        width: 26px;
-        height: 26px;
-        fill: white;
-
-        &:hover {
-          cursor: pointer;
-        }
-      }
-    }
-
-    .video-elipsis-container {
-      display: block;
-      position: absolute;
-      max-width: 752.58px;
-      width: 100%;
-      height: 100%;
-      margin: auto;
-
-      &.closed {
-        display: none;
-      }
-
-      .video-elipsis-menu {
-        width: 250px;
-        position: absolute;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
-        height: calc(100% - 34px);
-        right: 0;
-        bottom: 34px;
-        z-index: 2;
-
-        .video-elipsis-header {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding: 10px 20px;
-          height: 35px;
-          background-color: #1b1f24;
-
-          .gospel-films {
-            height: 25px;
-            width: 25px;
-            margin-top: 7px;
-          }
-
-          .close-arrow {
-            height: 25px;
-            width: 25px;
-          }
-
-          .title-text {
-            display: flex;
-            align-items: center;
-            height: 25px;
-            width: 70%;
-          }
-        }
-
-        .video-thumbnail-list {
-          max-height: calc(100% - 35px);
-          height: calc(100% - 35px);
-          // height: 410px;
-          display: flex;
-          flex-direction: column;
-          justify-content: flex-end;
-          z-index: 4;
-          // overflow-x: hidden;
-          overflow-y: auto;
-
-          .scroll-container {
-            width: 100%;
-            height: 100%;
-            overflow-y: auto;
-          }
-
-          .video-thumbnail {
-            height: 141px;
-            width: 250px;
-            position: relative;
-            border-bottom: solid 1px black;
-            background-color: rgba(196, 73, 120, 0.85);
-
-            &:active {
-              opacity: 0.9;
-            }
-
-            &:hover {
-              cursor: pointer;
-            }
-
-            .thumbnail-poster {
-              min-height: 100%;
-              min-width: 100%;
-              padding: 5;
-            }
-
-            .thumbnail-metadata {
-              height: 25px;
-              position: absolute;
-              bottom: -1px;
-              width: 100%;
-              display: flex;
-              align-items: center;
-              justify-content: space-between;
-              padding: 5px 20px;
-              background-color: rgba(44, 48, 54, 0.5);
-
-              &:before {
-                content: '';
-                width: 100%;
-                height: 100%;
-                position: absolute;
-                z-index: 5;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background-color: rgba(0, 0, 0, 0.4);
-              }
-
-              .thumbnail-title {
-                color: #fff;
-                z-index: 6;
-              }
-
-              .thumbnail-duration {
-                color: #fff;
-                z-index: 6;
-              }
-            }
-
-            .thumbnail-play-button {
-              position: absolute;
-              width: 26px;
-              height: 26px;
-              z-index: 6;
-              fill: #fff;
-              left: calc(50% - 13px);
-              top: calc(50% - 26px);
-            }
-          }
-        }
-      }
-    }
-
-    &:hover .progress-slider {
-      display: block;
-    }
-
-    .progress-slider {
-      display: none;
-      width: 100%;
-      position: absolute;
-      bottom: 39px;
-      margin: auto;
-      max-width: 752.58px;
-      z-index: 3;
-      padding: 0;
-
-      &.hide-progress-slider {
-        display: none;
-      }
-
-      &.open-progress-slider {
-        display: block;
-      }
-
-      &:before {
-        left: calc(50% - 55px);
-      }
-
-      &:after {
-        left: calc(50% + 10px);
-      }
-
-      .rc-slider {
-        transition: height 200ms ease-in-out;
-        border-radius: 0;
-
-        &:hover {
-          //padding: 4px 0;
-          cursor: pointer;
-
-          .rc-slider-rail {
-            transition: height 200ms ease-in-out;
-            height: 4px !important;
-          }
-
-          .rc-slider-track {
-            transition: height 200ms ease-in-out;
-            height: 4px !important;
-          }
-
-          .rc-slider-handle {
-            height: 10px !important;
-            width: 10px !important;
-          }
-        }
-
-        .rc-slider-handle {
-          transition: height 200ms ease-in-out, width 200ms ease-in-out;
-          height: 0 !important;
-          width: 0 !important;
-          border: none !important;
-          z-index: 2;
-          margin-left: -0.75px;
-          margin-top: -3.5px;
-        }
-
-        .rc-slider-rail {
-          border-radius: 0;
-        }
-
-        .rc-slider-track {
-          border-radius: 0;
-          z-index: 2;
-        }
-      }
-
-      &:hover {
-        .progress-bar-buffer {
-          height: 4px;
-          bottom: -6px;
-        }
-      }
-
-      .progress-bar-buffer {
-        height: 2px;
-        background-color: #555;
-        position: absolute;
-        z-index: 1;
-        bottom: -4px;
-        left: 0;
-      }
-    }
-  }
-
-  .black-bar {
-    padding-top: 0;
-    margin-top: 0;
-    height: 30px;
-  }
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	// justify-content: center;
+	// flex: 1 0 auto;
+	flex: 1;
+	padding-top: 0;
+	width: 100vw;
+	position: relative;
+	max-height: 0;
+	overflow: hidden;
+	transition: height 700ms ease-in-out, max-height 700ms ease-in-out,
+		padding 1200ms ease-in-out;
+	z-index: 2;
+	@supports not (-moz-appearance: none) {
+		/* Add non-firefox CSS code here */
+		// flex: 1;
+		// display: block;
+		flex: 1;
+		// flex-basis: 1;
+		// flex-grow: 1;
+		// flex-shrink: 1;
+	}
+
+	&.jesus-film-override {
+		height: calc(100vh - 45px);
+		max-height: calc(100vh - 45px);
+		padding-top: 56px;
+
+		@include css4 {
+			background-color: var(--video-player-background-color);
+		}
+
+		.video-player {
+			// max-width: 100%;
+			// max-height: 100%;
+			height: auto;
+			justify-content: center;
+
+			.play-video-container {
+				// max-width: 100%;
+				background-color: initial;
+				background-color: rgba(70, 70, 70, 0.3);
+			}
+
+			.controls {
+				max-width: 100%;
+
+				.right-controls {
+					.video-elipsis {
+						display: none;
+					}
+				}
+			}
+
+			.progress-slider {
+				max-width: 100%;
+			}
+		}
+	}
+
+	&.active {
+		// display: block;
+		max-height: 508px;
+		@supports not (-moz-appearance: none) {
+			/* Add non-firefox CSS code here */
+			// display: block;
+			max-height: 620px;
+		}
+		// min-height: 175px;
+	}
+
+	@include css4 {
+		background-color: var(--video-player-background-color);
+	}
+
+	.video-player {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: flex-start;
+		position: relative;
+		margin: auto;
+		width: 100%;
+		max-width: 752.58px;
+		height: calc(100% - 30px);
+		max-height: calc(100% - 30px);
+		min-height: 0;
+		// @supports not (-moz-appearance: none) {
+		// 	/* Add non-firefox CSS code here */
+		// 	margin: auto;
+		// }
+
+		video {
+			height: 100%;
+			// max-height: 100%;
+			z-index: 1;
+			width: 100%;
+		}
+
+		&:hover {
+			.play-video-container {
+				&.show-control-icon {
+					display: flex;
+				}
+				&.hide-control-icon {
+					display: flex;
+				}
+			}
+		}
+
+		.play-video-container {
+			position: absolute;
+			margin: auto;
+			width: 100%;
+			height: 100%;
+			max-width: 752.58px;
+			z-index: 2;
+			pointer-events: visibleFill;
+			background-color: rgba(100, 100, 100, 0.35);
+			justify-content: center;
+			align-items: center;
+
+			&.show-control-icon {
+				display: flex;
+			}
+
+			&.hide-control-icon {
+				display: none;
+			}
+
+			.control-button-container {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				flex-direction: column;
+				margin: 0 10px;
+				// margin-right: 25px;
+			}
+
+			.play-video {
+				width: 80px;
+				height: 85px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				z-index: 3;
+				pointer-events: visiblePainted;
+
+				&:hover {
+					cursor: pointer;
+				}
+
+				&.show-control-icon {
+					display: block;
+				}
+
+				&.hide-control-icon {
+					display: none;
+				}
+			}
+
+			.play-video-title {
+				z-index: 4;
+				margin-bottom: 10px;
+				font-weight: bold;
+			}
+		}
+
+		&:hover {
+			.controls {
+				display: flex;
+			}
+		}
+
+		.controls {
+			display: none;
+			align-self: flex-end;
+			justify-content: space-between;
+			align-items: center;
+			position: absolute;
+			margin: auto;
+			bottom: 0;
+			z-index: 2;
+			width: 100%;
+			max-width: 752.58px;
+			height: 35px;
+			padding: 5px 10px;
+			background-color: rgba(0, 0, 0, 0.3);
+
+			&.hide-controls {
+				display: none;
+			}
+
+			&.open-controls {
+				display: flex;
+			}
+
+			.left-controls {
+				align-content: flex-start;
+				display: flex;
+				height: 35px;
+				width: 65px;
+				align-items: center;
+				justify-content: space-between;
+
+				.video-volume-container {
+					display: flex;
+					flex-direction: column;
+					position: relative;
+
+					.video-volume-slider-container {
+						display: none;
+						left: 0;
+						position: absolute;
+						bottom: auto;
+
+						&.active {
+							display: block;
+						}
+					}
+
+					.video-slider-container {
+						height: 155px;
+						width: 25px;
+						display: flex;
+						flex-direction: column;
+						position: absolute;
+						bottom: 7px;
+						left: 1px;
+						align-items: center;
+						justify-content: center;
+
+						@include css4 {
+							outline: 1px solid var(--active-color-primary);
+							background-color: var(--application-transparent-gray);
+						}
+						background-color: #fff;
+
+						.fill {
+							//height: 3px;
+							//@include css4 {
+							//	background-color: var(--active-color-primary);
+							//}
+							////width: 100px;
+							//border-radius: 5px;
+						}
+						.slider {
+							//width: 100%;
+							height: 80%;
+							//padding: 0;
+							//display: flex;
+							//align-items: center;
+							//justify-content: center;
+						}
+					}
+				}
+			}
+
+			.right-controls {
+				align-content: flex-end;
+				display: flex;
+				height: 35px;
+				width: 65px;
+				align-items: center;
+				justify-content: space-between;
+
+				.video-elipsis {
+					margin-top: 22px;
+				}
+
+				.video-fullscreen {
+					margin-top: 8px;
+				}
+			}
+
+			svg {
+				width: 26px;
+				height: 26px;
+				fill: white;
+
+				&:hover {
+					cursor: pointer;
+				}
+			}
+		}
+
+		.video-elipsis-container {
+			display: block;
+			position: absolute;
+			max-width: 752.58px;
+			width: 100%;
+			height: 100%;
+			margin: auto;
+
+			&.closed {
+				display: none;
+			}
+
+			.video-elipsis-menu {
+				width: 250px;
+				position: absolute;
+				display: flex;
+				flex-direction: column;
+				justify-content: flex-end;
+				height: calc(100% - 34px);
+				right: 0;
+				bottom: 34px;
+				z-index: 2;
+
+				.video-elipsis-header {
+					display: flex;
+					align-items: center;
+					justify-content: space-between;
+					padding: 10px 20px;
+					height: 35px;
+					background-color: #1b1f24;
+
+					.gospel-films {
+						height: 25px;
+						width: 25px;
+						margin-top: 7px;
+					}
+
+					.close-arrow {
+						height: 25px;
+						width: 25px;
+					}
+
+					.title-text {
+						display: flex;
+						align-items: center;
+						height: 25px;
+						width: 70%;
+					}
+				}
+
+				.video-thumbnail-list {
+					max-height: calc(100% - 35px);
+					height: calc(100% - 35px);
+					// height: 410px;
+					display: flex;
+					flex-direction: column;
+					justify-content: flex-end;
+					z-index: 4;
+					// overflow-x: hidden;
+					overflow-y: auto;
+
+					.scroll-container {
+						width: 100%;
+						height: 100%;
+						overflow-y: auto;
+					}
+
+					.video-thumbnail {
+						height: 141px;
+						width: 250px;
+						position: relative;
+						border-bottom: solid 1px black;
+						background-color: rgba(196, 73, 120, 0.85);
+
+						&:active {
+							opacity: 0.9;
+						}
+
+						&:hover {
+							cursor: pointer;
+						}
+
+						.thumbnail-poster {
+							min-height: 100%;
+							min-width: 100%;
+							padding: 5;
+						}
+
+						.thumbnail-metadata {
+							height: 25px;
+							position: absolute;
+							bottom: -1px;
+							width: 100%;
+							display: flex;
+							align-items: center;
+							justify-content: space-between;
+							padding: 5px 20px;
+							background-color: rgba(44, 48, 54, 0.5);
+
+							&:before {
+								content: '';
+								width: 100%;
+								height: 100%;
+								position: absolute;
+								z-index: 5;
+								top: 0;
+								left: 0;
+								right: 0;
+								bottom: 0;
+								background-color: rgba(0, 0, 0, 0.4);
+							}
+
+							.thumbnail-title {
+								color: #fff;
+								z-index: 6;
+							}
+
+							.thumbnail-duration {
+								color: #fff;
+								z-index: 6;
+							}
+						}
+
+						.thumbnail-play-button {
+							position: absolute;
+							width: 26px;
+							height: 26px;
+							z-index: 6;
+							fill: #fff;
+							left: calc(50% - 13px);
+							top: calc(50% - 26px);
+						}
+					}
+				}
+			}
+		}
+
+		&:hover .progress-slider {
+			display: block;
+		}
+
+		.progress-slider {
+			display: none;
+			width: 100%;
+			position: absolute;
+			bottom: 39px;
+			margin: auto;
+			max-width: 752.58px;
+			z-index: 3;
+			padding: 0;
+
+			&.hide-progress-slider {
+				display: none;
+			}
+
+			&.open-progress-slider {
+				display: block;
+			}
+
+			&:before {
+				left: calc(50% - 55px);
+			}
+
+			&:after {
+				left: calc(50% + 10px);
+			}
+
+			.rc-slider {
+				transition: height 200ms ease-in-out;
+				border-radius: 0;
+
+				&:hover {
+					//padding: 4px 0;
+					cursor: pointer;
+
+					.rc-slider-rail {
+						transition: height 200ms ease-in-out;
+						height: 4px !important;
+					}
+
+					.rc-slider-track {
+						transition: height 200ms ease-in-out;
+						height: 4px !important;
+					}
+
+					.rc-slider-handle {
+						height: 10px !important;
+						width: 10px !important;
+					}
+				}
+
+				.rc-slider-handle {
+					transition: height 200ms ease-in-out, width 200ms ease-in-out;
+					height: 0 !important;
+					width: 0 !important;
+					border: none !important;
+					z-index: 2;
+					margin-left: -0.75px;
+					margin-top: -3.5px;
+				}
+
+				.rc-slider-rail {
+					border-radius: 0;
+				}
+
+				.rc-slider-track {
+					border-radius: 0;
+					z-index: 2;
+				}
+			}
+
+			&:hover {
+				.progress-bar-buffer {
+					height: 4px;
+					bottom: -6px;
+				}
+			}
+
+			.progress-bar-buffer {
+				height: 2px;
+				background-color: #555;
+				position: absolute;
+				z-index: 1;
+				bottom: -4px;
+				left: 0;
+			}
+		}
+	}
+
+	.black-bar {
+		padding-top: 0;
+		margin-top: 0;
+		height: 30px;
+	}
 }
 
 // @media only screen and (max-width: 850px) {
@@ -573,16 +575,16 @@
 // }
 
 @media only screen and (max-height: 620px) {
-  .video-player-container {
-    &.active {
-      min-height: 220px;
-    }
-  }
+	.video-player-container {
+		&.active {
+			min-height: 220px;
+		}
+	}
 }
 
 @media only screen and (max-width: 810px) {
-  .play-video-container {
-    bottom: 0;
-    top: 0;
-  }
+	.play-video-container {
+		bottom: 0;
+		top: 0;
+	}
 }

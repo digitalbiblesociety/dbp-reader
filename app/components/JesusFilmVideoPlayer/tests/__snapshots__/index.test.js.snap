@@ -6,10 +6,10 @@ exports[`<JesusFilmVideoPlayer /> component tests Should match snapshot with def
 >
   <div
     className="video-player"
-    onClick={[Function]}
   >
     <div
       className="play-video-container show-control-icon"
+      onClick={[Function]}
     >
       <div
         className="control-button-container"
