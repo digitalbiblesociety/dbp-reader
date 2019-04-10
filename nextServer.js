@@ -15,7 +15,7 @@ const compression = require('compression');
 const LRUCache = require('lru-cache');
 const fetch = require('isomorphic-fetch');
 // const crypto = require('crypto');p
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3002;
 const dev = process.env.NODE_ENV === 'development';
 const bugsnag = require('./app/utils/bugsnagServer');
 const manifestJson = require('./static/manifest');
@@ -43,6 +43,12 @@ app
     // TODO: Ask api team for the redirect for oauth be to /oauth instead of just /
     // Then I can move all of the extra logic out of this route which is really gross
     server.get('/', async (req, res) => {
+      console.log(''.padEnd(90, '!'));
+      if (req.headers['accept-language']) {
+        // Set max age to 30 seconds to remove any chance of the user getting stuck on the landing page
+        res.setHeader('SET-COOKIE', 'bible_is_redirected=true;max-age=30000');
+        console.log('set the header so the cookie should be updated!!!!!!!!!!');
+      }
       if (req.query.code) {
         // TODO: Put decryption process into try catch for safety
         // Get encrypted string of user data
@@ -182,9 +188,6 @@ app
         chapter,
       };
       const userParams = {};
-      // console.count('------- chapter');
-      // console.log('req params', req.params);
-      // console.log('req.query', req.query);
 
       if (bookId !== req.params.bookId) {
         res.redirect(301, `/bible/${req.params.bibleId}/${bookId}/${chapter}`);
@@ -223,10 +226,7 @@ app
         isNaN(parseInt(req.params.verse, 10)) || !req.params.verse
           ? '1'
           : req.params.verse;
-      // console.count('------- verse');
-      // console.log('req params', req.params);
-      // console.log('req.query', req.query);
-      // console.log(`${req.protocol}://${req.get('host')}${req.originalUrl}`);
+
       // Params may not actually be passed using this method
       const queryParams = {
         bibleId: req.params.bibleId,
