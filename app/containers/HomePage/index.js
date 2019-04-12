@@ -173,55 +173,59 @@ class HomePage extends React.PureComponent {
       );
       this.toggleFirstLoadForTextSelection();
     }
-    try {
-      ((d, s, id) => {
-        let js = d.getElementsByTagName(s)[0];
-        const fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) return;
-        js = d.createElement(s);
-        js.id = id;
-        js.src = `https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.12&appId=${
-          process.env.FB_APP_ID
-        }&autoLogAppEvents=1`;
-        fjs.parentNode.insertBefore(js, fjs);
-      })(document, 'script', 'facebook-jssdk');
-      // Init the Facebook api here
-      if (!this.props.userId) {
-        window.fbAsyncInit = () => {
-          FB.init({
-            appId: process.env.FB_APP_ID,
-            autoLogAppEvents: true,
-            cookie: true,
-            xfbml: true,
-            version: 'v2.12',
-          });
-        };
-      }
-    } catch (err) {
-      if (process.env.NODE_ENV === 'development') {
-        console.warn('Error initializing fb api', err); // eslint-disable-line no-console
+    if (process.env.FB_APP_ID) {
+      try {
+        ((d, s, id) => {
+          let js = d.getElementsByTagName(s)[0];
+          const fjs = d.getElementsByTagName(s)[0];
+          if (d.getElementById(id)) return;
+          js = d.createElement(s);
+          js.id = id;
+          js.src = `https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.12&appId=${
+            process.env.FB_APP_ID
+          }&autoLogAppEvents=1`;
+          fjs.parentNode.insertBefore(js, fjs);
+        })(document, 'script', 'facebook-jssdk');
+        // Init the Facebook api here
+        if (!this.props.userId) {
+          window.fbAsyncInit = () => {
+            FB.init({
+              appId: process.env.FB_APP_ID,
+              autoLogAppEvents: true,
+              cookie: true,
+              xfbml: true,
+              version: 'v2.12',
+            });
+          };
+        }
+      } catch (err) {
+        if (process.env.NODE_ENV === 'development') {
+          console.warn('Error initializing fb api', err); // eslint-disable-line no-console
+        }
       }
     }
 
-    try {
-      // May need to create a script and append it to the dom then wait for it to finish loading
-      if (!this.props.userId && typeof gapi !== 'undefined') {
-        gapi.load('auth2', () => {
-          try {
-            window.auth2 = gapi.auth2.init({
-              client_id: process.env.GOOGLE_APP_ID_PROD || 'no_client',
-              scope: 'profile',
-            });
-          } catch (err) {
-            if (process.env.NODE_ENV === 'development') {
-              console.warn('Error initializing google api lower catch', err); // eslint-disable-line no-console
+    if (process.env.GOOGLE_APP_ID_PROD) {
+      try {
+        // May need to create a script and append it to the dom then wait for it to finish loading
+        if (!this.props.userId && typeof gapi !== 'undefined') {
+          gapi.load('auth2', () => {
+            try {
+              window.auth2 = gapi.auth2.init({
+                client_id: process.env.GOOGLE_APP_ID_PROD || 'no_client',
+                scope: 'profile',
+              });
+            } catch (err) {
+              if (process.env.NODE_ENV === 'development') {
+                console.warn('Error initializing google api lower catch', err); // eslint-disable-line no-console
+              }
             }
-          }
-        });
-      }
-    } catch (err) {
-      if (process.env.NODE_ENV === 'development') {
-        console.warn('Error initializing google api', err); // eslint-disable-line no-console
+          });
+        }
+      } catch (err) {
+        if (process.env.NODE_ENV === 'development') {
+          console.warn('Error initializing google api', err); // eslint-disable-line no-console
+        }
       }
     }
     const videoFileset = activeFilesets.filter(
