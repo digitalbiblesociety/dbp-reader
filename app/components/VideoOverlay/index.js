@@ -97,7 +97,37 @@ class VideoOverlay extends React.PureComponent {
 			pauseFunction,
 			previousFunction,
 			nextFunction,
+			isJesusFilm,
+			togglePlayState,
 		} = this.props;
+
+		if (isJesusFilm) {
+			return (
+				<div
+					onClick={togglePlayState}
+					className={
+						paused
+							? 'play-video-container show-control-icon'
+							: 'play-video-container hide-control-icon'
+					}
+				>
+					{paused ? (
+						<SvgButton
+							id={'play_video'}
+							clickHandler={playFunction}
+							videoObject={{ reference: 'Jesus Film' }}
+						/>
+					) : null}
+					{paused ? null : (
+						<SvgButton
+							id={'pause_video'}
+							videoObject={{ reference: 'Jesus Film' }}
+							clickHandler={pauseFunction}
+						/>
+					)}
+				</div>
+			);
+		}
 
 		return (
 			<div
@@ -154,6 +184,7 @@ class VideoOverlay extends React.PureComponent {
 
 VideoOverlay.propTypes = {
 	paused: PropTypes.bool,
+	isJesusFilm: PropTypes.bool,
 	currentVideo: PropTypes.object,
 	nextVideo: PropTypes.object,
 	previousVideo: PropTypes.object,
@@ -161,6 +192,7 @@ VideoOverlay.propTypes = {
 	closePlayer: PropTypes.func,
 	pauseFunction: PropTypes.func,
 	nextFunction: PropTypes.func,
+	togglePlayState: PropTypes.func,
 	previousFunction: PropTypes.func,
 	books: PropTypes.array,
 	bookId: PropTypes.string,

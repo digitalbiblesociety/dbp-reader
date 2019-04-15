@@ -29,6 +29,28 @@
 	width: 100%;
 	max-width: 1000px;
 
+	&.jesus-film-override {
+		justify-content: center;
+
+		.back-button {
+			cursor: pointer;
+			position: absolute;
+			left: 25px;
+			width: 25px;
+			height: 25px;
+
+			svg {
+				width: 25px;
+				height: 25px;
+				fill: currentColor;
+			}
+
+			&:hover {
+				opacity: 0.85;
+			}
+		}
+	}
+
 	.logo {
 		height: 54px;
 		width: calc(10% + 15px);
