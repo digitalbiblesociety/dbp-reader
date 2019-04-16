@@ -15,6 +15,7 @@ module.exports = {
 		DBP_BUCKET_ID: process.env.DBP_BUCKET_ID,
 		GOOGLE_APP_ID: process.env.GOOGLE_APP_ID,
 		GOOGLE_APP_ID_PROD: process.env.GOOGLE_APP_ID_PROD,
+		GOOGLE_SECRET_PROD: process.env.GOOGLE_SECRET_PROD,
 		DEVELOPMENT_PROJECT_ID: process.env.DEVELOPMENT_PROJECT_ID,
 		CDN_STATIC_FILES: process.env.CDN_STATIC_FILES,
 		IS_DEV: process.env.IS_DEV,
