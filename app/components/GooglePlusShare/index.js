@@ -5,7 +5,11 @@ import SvgWrapper from '../SvgWrapper';
 class GooglePlusShare extends React.PureComponent {
 	componentDidMount() {
 		/* eslint-disable no-undef */
-		if (typeof gapi !== 'undefined') {
+		if (
+			typeof gapi !== 'undefined' &&
+			process.env.GOOGLE_APP_ID_PROD &&
+			process.env.GOOGLE_SECRET_PROD
+		) {
 			const options = {
 				contenturl: window.location.href,
 				contentdeeplinkid: '/bible',
@@ -24,14 +28,18 @@ class GooglePlusShare extends React.PureComponent {
 	}
 
 	render() {
-		return (
-			<div
-				id="sharePost"
-				className="SocialMediaShareButton SocialMediaShareButton--googlePlus menu-item social google"
-			>
-				<SvgWrapper className="icon" svgid="google" />
-			</div>
-		);
+		if (process.env.GOOGLE_APP_ID_PROD && process.env.GOOGLE_SECRET_PROD) {
+			return (
+				<div
+					id="sharePost"
+					className="SocialMediaShareButton SocialMediaShareButton--googlePlus menu-item social google"
+				>
+					<SvgWrapper className="icon" svgid="google" />
+				</div>
+			);
+		}
+
+		return null;
 	}
 }
 

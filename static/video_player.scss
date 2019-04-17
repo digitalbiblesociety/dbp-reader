@@ -62,6 +62,43 @@
 		// flex-shrink: 1;
 	}
 
+	&.jesus-film-override {
+		height: calc(100vh - 45px);
+		max-height: calc(100vh - 45px);
+		padding-top: 56px;
+
+		@include css4 {
+			background-color: var(--video-player-background-color);
+		}
+
+		.video-player {
+			// max-width: 100%;
+			// max-height: 100%;
+			height: auto;
+			justify-content: center;
+
+			.play-video-container {
+				// max-width: 100%;
+				background-color: initial;
+				background-color: rgba(70, 70, 70, 0.3);
+			}
+
+			.controls {
+				max-width: 100%;
+
+				.right-controls {
+					.video-elipsis {
+						display: none;
+					}
+				}
+			}
+
+			.progress-slider {
+				max-width: 100%;
+			}
+		}
+	}
+
 	&.active {
 		// display: block;
 		max-height: 508px;

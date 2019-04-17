@@ -72,18 +72,8 @@ export class TextSelection extends React.PureComponent {
 		) {
 			this.props.dispatch(
 				getTexts({
-					languageISO: nextProps.textselection.activeIsoCode,
+					languageIso: nextProps.textselection.activeIsoCode,
 					languageCode: nextProps.textselection.activeLanguageCode,
-				}),
-			);
-		} else if (
-			nextProps.homepageData.initialIsoCode !==
-			this.props.homepageData.initialIsoCode
-		) {
-			this.props.dispatch(
-				getTexts({
-					languageISO: nextProps.homepageData.initialIsoCode,
-					languageCode: nextProps.homepageData.defaultLanguageCode,
 				}),
 			);
 		}

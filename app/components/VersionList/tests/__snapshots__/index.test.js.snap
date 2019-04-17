@@ -416,6 +416,38 @@ exports[`<VersionList /> Should match previous snapshot 1`] = `
             </a>
           </div>
         </div>
+        <div
+          className="accordion-title-style"
+        >
+          <div
+            aria-controls="accordion__body-9"
+            aria-selected={false}
+            className="accordion__title"
+            disabled={false}
+            id="accordion__title-9"
+            onClick={[Function]}
+            onKeyPress={[Function]}
+            role="tab"
+            tabIndex="0"
+          >
+            <a
+              className=" top-level-title"
+              onClick={[Function]}
+              role="button"
+              tabIndex={0}
+              title="Contemporary English Version (African American Voices)"
+            >
+              Contemporary English Version (African American Voices)
+            </a>
+          </div>
+          <div
+            aria-hidden={true}
+            aria-labelledby="accordion__title-9"
+            className="accordion__body accordion__body--hidden"
+            id="accordion__body-9"
+            role="tabpanel"
+          />
+        </div>
       </div>
     </div>
     <div
@@ -436,38 +468,6 @@ exports[`<VersionList /> Should match previous snapshot 1`] = `
           className="accordion-title-style"
         >
           <div
-            aria-controls="accordion__body-9"
-            aria-selected={false}
-            className="accordion__title"
-            disabled={false}
-            id="accordion__title-9"
-            onClick={[Function]}
-            onKeyPress={[Function]}
-            role="tab"
-            tabIndex="0"
-          >
-            <a
-              className=" top-level-title"
-              onClick={[Function]}
-              role="button"
-              tabIndex={0}
-              title="New American Standard Bible"
-            >
-              New American Standard Bible
-            </a>
-          </div>
-          <div
-            aria-hidden={true}
-            aria-labelledby="accordion__title-9"
-            className="accordion__body accordion__body--hidden"
-            id="accordion__body-9"
-            role="tabpanel"
-          />
-        </div>
-        <div
-          className="accordion-title-style"
-        >
-          <div
             aria-controls="accordion__body-10"
             aria-selected={false}
             className="accordion__title"
@@ -483,9 +483,9 @@ exports[`<VersionList /> Should match previous snapshot 1`] = `
               onClick={[Function]}
               role="button"
               tabIndex={0}
-              title="New Life Version"
+              title="New American Standard Bible"
             >
-              New Life Version
+              New American Standard Bible
             </a>
           </div>
           <div
@@ -515,9 +515,9 @@ exports[`<VersionList /> Should match previous snapshot 1`] = `
               onClick={[Function]}
               role="button"
               tabIndex={0}
-              title="English Version for the Deaf"
+              title="New Life Version"
             >
-              English Version for the Deaf
+              New Life Version
             </a>
           </div>
           <div
@@ -547,9 +547,9 @@ exports[`<VersionList /> Should match previous snapshot 1`] = `
               onClick={[Function]}
               role="button"
               tabIndex={0}
-              title="American Standard Version"
+              title="English Version for the Deaf"
             >
-              American Standard Version
+              English Version for the Deaf
             </a>
           </div>
           <div
@@ -579,9 +579,9 @@ exports[`<VersionList /> Should match previous snapshot 1`] = `
               onClick={[Function]}
               role="button"
               tabIndex={0}
-              title="World Messianic Version"
+              title="American Standard Version"
             >
-              World Messianic Version
+              American Standard Version
             </a>
           </div>
           <div
@@ -611,9 +611,9 @@ exports[`<VersionList /> Should match previous snapshot 1`] = `
               onClick={[Function]}
               role="button"
               tabIndex={0}
-              title="Revised Version 1885"
+              title="World Messianic Version"
             >
-              Revised Version 1885
+              World Messianic Version
             </a>
           </div>
           <div
@@ -621,6 +621,38 @@ exports[`<VersionList /> Should match previous snapshot 1`] = `
             aria-labelledby="accordion__title-14"
             className="accordion__body accordion__body--hidden"
             id="accordion__body-14"
+            role="tabpanel"
+          />
+        </div>
+        <div
+          className="accordion-title-style"
+        >
+          <div
+            aria-controls="accordion__body-15"
+            aria-selected={false}
+            className="accordion__title"
+            disabled={false}
+            id="accordion__title-15"
+            onClick={[Function]}
+            onKeyPress={[Function]}
+            role="tab"
+            tabIndex="0"
+          >
+            <a
+              className=" top-level-title"
+              onClick={[Function]}
+              role="button"
+              tabIndex={0}
+              title="Revised Version 1885"
+            >
+              Revised Version 1885
+            </a>
+          </div>
+          <div
+            aria-hidden={true}
+            aria-labelledby="accordion__title-15"
+            className="accordion__body accordion__body--hidden"
+            id="accordion__body-15"
             role="tabpanel"
           />
         </div>

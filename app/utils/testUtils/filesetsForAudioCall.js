@@ -10,21 +10,6 @@ export const engesv = [
     size: 'C',
   },
   {
-    id: 'ENGGIDO1DA',
-    type: 'audio',
-    size: 'OT',
-  },
-  {
-    id: 'ENGESVC2DA16',
-    type: 'audio_drama',
-    size: 'P',
-  },
-  {
-    id: 'ENGGIDN2DA',
-    type: 'audio_drama',
-    size: 'NT',
-  },
-  {
     id: 'ENGESVC2DA',
     type: 'audio_drama',
     size: 'OT',
@@ -35,18 +20,8 @@ export const engesv = [
     size: 'OT',
   },
   {
-    id: 'ENGGIDN1DA',
-    type: 'audio',
-    size: 'NT',
-  },
-  {
     id: 'ENGESVO1DA',
     type: 'audio',
-    size: 'OT',
-  },
-  {
-    id: 'ENGGIDO2DA',
-    type: 'audio_drama',
     size: 'OT',
   },
   {
@@ -58,11 +33,6 @@ export const engesv = [
     id: 'ENGESVN1DA',
     type: 'audio',
     size: 'NT',
-  },
-  {
-    id: 'ENGGID',
-    type: 'text_plain',
-    size: 'C',
   },
 ];
 export const ntpotp = [
