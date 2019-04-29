@@ -56,4 +56,8 @@ portability. It is in many ways the spiritual successor to the bible browser and
   - The Reader will contain components for bible dictionaries for study and research
 
 ## Contributing
-If You are looking to get started contributing and are trying to understand how it all works start with app.js in the pages folder.
+
+- If You are looking to get started contributing and are trying to understand how it all
+  works start with app.js in the pages folder. You can follow the flow of data downwards.
+- The only globals used are `window`, `document`, Google Api `gapi`, Facebook api `FB`;
+  all other modules, functions, and components are be imported at the start of each file.

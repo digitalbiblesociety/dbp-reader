@@ -1,17 +1,11 @@
 /**
  * app.js
  *
- * This is the entry file for the application, only setup and boilerplate
- * code.
+ * This is the entry file for the application, it deals with obtaining all the data needed to render the page
  */
 
 /*
-* Todo: Items that need to be done before production
 * todo: Replace all tabIndex 0 values with what they should actually be
-* todo: Set up a function to init all of the plugins that rely on the browser
-* todo: Update site url to match the live site domain name
-* todo: Use cookies instead of session and local storage for all user settings (involves user approval before it can be utilized)
-* todo: Remove the script for providing feedback
 * */
 // Needed for redux-saga es6 generator support
 import React from 'react';
@@ -36,6 +30,7 @@ class AppContainer extends React.Component {
 
   // eslint-disable-line no-undef
   componentDidMount() {
+    // Cleans out the persisted reducers if there was a change
     if (localStorage.getItem('reducerVersion') !== REDUX_PERSIST.reducerVersion) {
       reconcilePersistedState(['settings', 'searchContainer', 'profile'], REDUX_PERSIST.reducerKey);
       localStorage.setItem('reducerVersion', REDUX_PERSIST.reducerVersion);
@@ -50,7 +45,6 @@ class AppContainer extends React.Component {
         }
       });
     }
-    // If undefined gets stored in local storage it cannot be parsed so I have to compare strings
     if (this.props.userProfile.userId) {
       this.props.dispatch({
         type: 'GET_INITIAL_ROUTE_STATE_PROFILE',
@@ -80,6 +74,7 @@ class AppContainer extends React.Component {
     // Intercept all route changes to ensure that the loading spinner starts
     Router.router.events.on('routeChangeStart', this.handleRouteChange);
 
+    // If undefined gets stored in local storage it cannot be parsed so I have to compare strings
     if (this.props.isIe) {
       this.props.dispatch(setUA());
       if (typeof svg4everybody === 'function' && typeof window !== 'undefined') {
@@ -114,8 +109,7 @@ class AppContainer extends React.Component {
     // Pause audio
     // Start loading spinner for text
     // Close any open menus
-    // Remove current audio source - (may fix item 1)
-    // TODO: Probably need to get the new highlights here or at least start the process for getting them
+    // Remove current audio source
     if (typeof dataLayer !== 'undefined') {
       try {
         dataLayer.push({
@@ -219,8 +213,8 @@ AppContainer.getInitialProps = async (context) => {
     isIe = isUserAgentInternetExplorer(req.headers['user-agent']);
   }
 
+  // Parse all cookies and assign them to the correct variables
   if (req && req.headers.cookie) {
-    // Get all cookies that the page needs
     const cookieData = parseCookie(req.headers.cookie);
 
     if (cookieData.bible_is_audio_type) {
@@ -392,6 +386,7 @@ AppContainer.getInitialProps = async (context) => {
     idsForBookMetadata.push([set.type, set.id]);
   });
 
+  // Get all the book names and chapters for each fileset
   const [bookMetaData, bookMetaResponse] = await getBookMetaData({
     idsForBookMetadata,
     videoAssetId,
@@ -411,7 +406,6 @@ AppContainer.getInitialProps = async (context) => {
       audioParam = '';
     }
   }
-  // console.log('bible id', bibleId, 'book id', bookId, 'chapter', chapter);
 
   // Redirect to the new url if conditions are met
   if (bookMetaData && bookMetaData.length) {
@@ -424,12 +418,6 @@ AppContainer.getInitialProps = async (context) => {
     // Go to the first book and first chapter
     const foundBookId = foundBook && foundBook.book_id;
     const foundChapterId = foundBook && (foundBook.chapters[0] || foundBook.chapters[0] === 0 || 1);
-    // console.log(
-    //   'Condition One:',
-    //   !foundBook && (!foundChapter && foundChapter !== 0),
-    // );
-    // console.log('Condition Two:', !!foundBook);
-    // console.log('Condition Three:', !foundChapter && foundChapter !== 0);
     /**
      * 1. Visit /bible/bibleId
      */
@@ -525,6 +513,7 @@ AppContainer.getInitialProps = async (context) => {
   }
   const activeBookName = activeBook ? activeBook.name : '';
   const testaments = bookData ? bookData.reduce((a, c) => ({ ...a, [c.book_id]: c.testament }), {}) : [];
+  // If there is a redux store then it needs to be updated
   if (context.reduxStore) {
     if (userProfile.userId && userProfile.email) {
       context.reduxStore.dispatch({
@@ -552,7 +541,6 @@ AppContainer.getInitialProps = async (context) => {
         videoAssetId,
         chapterText,
         testaments,
-        // userSettings,
         formattedSource: initData.formattedText,
         activeFilesets: filesets,
         changingVersion: false,
@@ -586,12 +574,14 @@ AppContainer.getInitialProps = async (context) => {
     });
   }
 
+  // Save the location for when a redirect happens
   if (typeof document !== 'undefined') {
     document.cookie = `bible_is_ref_bible_id=${bibleId}`;
     document.cookie = `bible_is_ref_book_id=${bookId}`;
     document.cookie = `bible_is_ref_chapter=${chapter}`;
     document.cookie = `bible_is_ref_verse=${verse}`;
   }
+  // Pass all needed data as props to the component
   return {
     initialVolume,
     initialPlaybackRate,
