@@ -1,13 +1,13 @@
 import request from './request';
 
-export default async (filesetId, bookId, chapter) => {
+export default async (filesetId, bookId, chapter, videoAssetId) => {
 	if (!filesetId) return false;
 
 	const reqUrl = `${
 		process.env.BASE_API_ROUTE
 	}/bibles/filesets/${filesetId}/books?key=${
 		process.env.DBP_API_KEY
-	}&asset_id=dbp-vid&fileset_type=video_stream&v=4`;
+	}&asset_id=${videoAssetId}&fileset_type=video_stream&v=4`;
 
 	try {
 		const res = await request(reqUrl);

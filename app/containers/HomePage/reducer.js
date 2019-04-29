@@ -91,6 +91,7 @@ const initialState = fromJS({
 	loadingCopyright: true,
 	loadingAudio: false,
 	loadingBooks: false,
+	videoAssetId: 'dbp-vid',
 	userId: '',
 	audioType: '',
 	match: {

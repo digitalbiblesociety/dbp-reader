@@ -22,10 +22,7 @@ import Router from 'next/router';
 import cachedFetch, { overrideCache } from '../app/utils/cachedFetch';
 import HomePage from '../app/containers/HomePage';
 import getinitialChapterData from '../app/utils/getInitialChapterData';
-import {
-  setChapterTextLoadingState,
-  setUA,
-} from '../app/containers/HomePage/actions';
+import { setChapterTextLoadingState, setUA } from '../app/containers/HomePage/actions';
 import svg4everybody from '../app/utils/svgPolyfill';
 import parseCookie from '../app/utils/parseCookie';
 import getFirstChapterReference from '../app/utils/getFirstChapterReference';
@@ -39,13 +36,8 @@ class AppContainer extends React.Component {
 
   // eslint-disable-line no-undef
   componentDidMount() {
-    if (
-      localStorage.getItem('reducerVersion') !== REDUX_PERSIST.reducerVersion
-    ) {
-      reconcilePersistedState(
-        ['settings', 'searchContainer', 'profile'],
-        REDUX_PERSIST.reducerKey,
-      );
+    if (localStorage.getItem('reducerVersion') !== REDUX_PERSIST.reducerVersion) {
+      reconcilePersistedState(['settings', 'searchContainer', 'profile'], REDUX_PERSIST.reducerKey);
       localStorage.setItem('reducerVersion', REDUX_PERSIST.reducerVersion);
     }
     // If the page was served from the server then I need to cache the data for this route
@@ -66,33 +58,22 @@ class AppContainer extends React.Component {
           userId: this.props.userProfile.userId,
           userAuthenticated: !!this.props.userProfile.userId,
           userProfile: {
-            email:
-              this.props.userProfile.email ||
-              this.props.userProfile.email ||
-              '',
-            name:
-              this.props.userProfile.name || this.props.userProfile.name || '',
-            nickname:
-              this.props.userProfile.name || this.props.userProfile.name || '',
+            email: this.props.userProfile.email || this.props.userProfile.email || '',
+            name: this.props.userProfile.name || this.props.userProfile.name || '',
+            nickname: this.props.userProfile.name || this.props.userProfile.name || '',
           },
         },
       });
     }
     const redLetter =
       !!this.props.formattedText &&
-      !!(
-        this.props.formattedText.includes('class="wj"') ||
-        this.props.formattedText.includes("class='wj'")
-      );
+      !!(this.props.formattedText.includes('class="wj"') || this.props.formattedText.includes("class='wj'"));
     this.props.dispatch({
       type: 'GET_INITIAL_ROUTE_STATE_SETTINGS',
       redLetter,
       crossReferences:
         !!this.props.formattedText &&
-        !!(
-          this.props.formattedText.includes('class="ft"') ||
-          this.props.formattedText.includes('class="xt"')
-        ),
+        !!(this.props.formattedText.includes('class="ft"') || this.props.formattedText.includes('class="xt"')),
     });
     this.props.dispatch(setChapterTextLoadingState({ state: false }));
 
@@ -101,10 +82,7 @@ class AppContainer extends React.Component {
 
     if (this.props.isIe) {
       this.props.dispatch(setUA());
-      if (
-        typeof svg4everybody === 'function' &&
-        typeof window !== 'undefined'
-      ) {
+      if (typeof svg4everybody === 'function' && typeof window !== 'undefined') {
         svg4everybody();
       }
     }
@@ -114,20 +92,14 @@ class AppContainer extends React.Component {
     if (nextProps.formattedText !== this.props.formattedText) {
       const redLetter =
         !!nextProps.formattedText &&
-        !!(
-          nextProps.formattedText.includes('class="wj"') ||
-          nextProps.formattedText.includes("class='wj'")
-        );
+        !!(nextProps.formattedText.includes('class="wj"') || nextProps.formattedText.includes("class='wj'"));
 
       this.props.dispatch({
         type: 'GET_INITIAL_ROUTE_STATE_SETTINGS',
         redLetter,
         crossReferences:
           !!nextProps.formattedText &&
-          !!(
-            nextProps.formattedText.includes('class="ft"') ||
-            nextProps.formattedText.includes('class="xt"')
-          ),
+          !!(nextProps.formattedText.includes('class="ft"') || nextProps.formattedText.includes('class="xt"')),
       });
     }
   }
@@ -173,8 +145,7 @@ class AppContainer extends React.Component {
       isIe,
     } = this.props;
     // Defaulting description text to an empty string since no metadata is better than inaccurate metadata
-    const descriptionText =
-      chapterText && chapterText[0] ? `${chapterText[0].verse_text}...` : '';
+    const descriptionText = chapterText && chapterText[0] ? `${chapterText[0].verse_text}...` : '';
 
     return (
       <div>
@@ -183,41 +154,24 @@ class AppContainer extends React.Component {
           <meta
             property={'og:title'}
             content={`${activeBookName} ${activeChapter}${
-              this.props.match.params.verse
-                ? `:${this.props.match.params.verse}`
-                : ''
+              this.props.match.params.verse ? `:${this.props.match.params.verse}` : ''
             } | Bible.is`}
           />
-          <meta
-            property={'og:image'}
-            content={`${process.env.BASE_SITE_URL}/static/icon-310x310.png`}
-          />
+          <meta property={'og:image'} content={`${process.env.BASE_SITE_URL}/static/icon-310x310.png`} />
           <meta property={'og:image:width'} content={310} />
           <meta property={'og:image:height'} content={310} />
-          <meta
-            property={'og:url'}
-            content={`${process.env.BASE_SITE_URL}/${routeLocation}`}
-          />
+          <meta property={'og:url'} content={`${process.env.BASE_SITE_URL}/${routeLocation}`} />
           <meta property={'og:description'} content={descriptionText} />
-          <meta
-            name={'twitter:title'}
-            content={`${activeBookName} ${activeChapter}`}
-          />
+          <meta name={'twitter:title'} content={`${activeBookName} ${activeChapter}`} />
           <meta name={'twitter:description'} content={descriptionText} />
           <title>
             {`${activeBookName} ${activeChapter}${
-              this.props.match.params.verse
-                ? `:${this.props.match.params.verse}`
-                : ''
+              this.props.match.params.verse ? `:${this.props.match.params.verse}` : ''
             }`}{' '}
             | Bible.is
           </title>
         </Head>
-        <HomePage
-          initialPlaybackRate={initialPlaybackRate}
-          initialVolume={initialVolume}
-          isIe={isIe}
-        />
+        <HomePage initialPlaybackRate={initialPlaybackRate} initialVolume={initialVolume} isIe={isIe} />
       </div>
     );
   }
@@ -242,8 +196,7 @@ AppContainer.getInitialProps = async (context) => {
     name: userName,
     nickname: userName,
   };
-  const tempChapter =
-    typeof chapterParam === 'string' && chapterParam.split('?')[0];
+  const tempChapter = typeof chapterParam === 'string' && chapterParam.split('?')[0];
   const chapter = tempChapter || chapter;
   // Using let here because the cookie data can come from the server or the client
   let audioParam = req && req.query.audio_type;
@@ -297,18 +250,15 @@ AppContainer.getInitialProps = async (context) => {
     }
 
     // Audio Player
-    initialVolume =
-      cookieData.bible_is_volume === 0 ? 0 : cookieData.bible_is_volume || 1;
+    initialVolume = cookieData.bible_is_volume === 0 ? 0 : cookieData.bible_is_volume || 1;
     initialPlaybackRate = cookieData.bible_is_playbackrate || 1;
 
     // Handle oauth code if there is one
     if (cookieData.bible_is_cb_code && cookieData.bible_is_provider) {
       await fetch(
-        `${process.env.BASE_API_ROUTE}/login/${
-          cookieData.bible_is_provider
-        }/callback?v=4&project_id=${process.env.NOTES_PROJECT_ID}&key=${
-          process.env.DBP_API_KEY
-        }&alt_url=true&code=${cookieData.bible_is_cb_code}`,
+        `${process.env.BASE_API_ROUTE}/login/${cookieData.bible_is_provider}/callback?v=4&project_id=${
+          process.env.NOTES_PROJECT_ID
+        }&key=${process.env.DBP_API_KEY}&alt_url=true&code=${cookieData.bible_is_cb_code}`
       ).then((body) => body.json());
     }
 
@@ -343,14 +293,13 @@ AppContainer.getInitialProps = async (context) => {
     }
 
     // Audio Player
-    initialVolume =
-      cookieData.bible_is_volume === 0 ? 0 : cookieData.bible_is_volume || 1;
+    initialVolume = cookieData.bible_is_volume === 0 ? 0 : cookieData.bible_is_volume || 1;
     initialPlaybackRate = cookieData.bible_is_playbackrate || 1;
   }
 
-  const singleBibleUrl = `${process.env.BASE_API_ROUTE}/bibles/${bibleId}?key=${
-    process.env.DBP_API_KEY
-  }&v=4&asset_id=${process.env.DBP_BUCKET_ID},dbp-vid`;
+  const singleBibleUrl = `${process.env.BASE_API_ROUTE}/bibles/${bibleId}?key=${process.env.DBP_API_KEY}&v=4&asset_id=${
+    process.env.DBP_BUCKET_ID
+  },dbp-vid`;
 
   // Get active bible data
   const singleBibleRes = await cachedFetch(singleBibleUrl).catch((e) => {
@@ -380,46 +329,44 @@ AppContainer.getInitialProps = async (context) => {
             (f) =>
               !f.id.includes('GID') &&
               f.id.slice(-4 !== 'DA16') &&
-              (f.type === 'text_plain' || f.type === 'text_format'),
+              (f.type === 'text_plain' || f.type === 'text_format')
           )
           .reduce((a, c) => c.id, '')
       : '';
   let filesets = [];
+  const dbpVidBucket = bible && bible.filesets && bible.filesets['dbp-vid'];
+  const dbpDefaultBucket = bible && bible.filesets && bible.filesets[process.env.DBP_BUCKET_ID];
+  const videoAssetId =
+    !dbpDefaultBucket || !bible.filesets[process.env.DBP_BUCKET_ID].find((file) => file.type === 'video_stream')
+      ? 'dbp-vid'
+      : process.env.DBP_BUCKET_ID;
 
-  if (
-    bible &&
-    bible.filesets &&
-    bible.filesets[process.env.DBP_BUCKET_ID] &&
-    bible.filesets['dbp-vid']
-  ) {
+  if (dbpVidBucket && dbpDefaultBucket) {
     hasVideo = true;
-    filesets = [
-      ...bible.filesets[process.env.DBP_BUCKET_ID],
-      ...bible.filesets['dbp-vid'],
-    ].filter(
+    filesets = [...bible.filesets[process.env.DBP_BUCKET_ID], ...bible.filesets['dbp-vid']].filter(
       (file) =>
         (!file.id.includes('GID') &&
           file.id.slice(-4) !== 'DA16' &&
           setTypes[file.type] &&
           file.size !== 'S' &&
           bible.filesets[process.env.DBP_BUCKET_ID].length > 1) ||
-        bible.filesets[process.env.DBP_BUCKET_ID].length === 1,
+        bible.filesets[process.env.DBP_BUCKET_ID].length === 1
     );
-  } else if (
-    bible &&
-    bible.filesets &&
-    bible.filesets[process.env.DBP_BUCKET_ID]
-  ) {
-    filesets = bible.filesets[process.env.DBP_BUCKET_ID].filter(
-      (file) =>
+  } else if (dbpDefaultBucket) {
+    filesets = bible.filesets[process.env.DBP_BUCKET_ID].filter((file) => {
+      if (file.type === 'video_stream') {
+        hasVideo = true;
+      }
+      return (
         (!file.id.includes('GID') &&
           file.id.slice(-4) !== 'DA16' &&
           setTypes[file.type] &&
           file.size !== 'S' &&
           bible.filesets[process.env.DBP_BUCKET_ID].length > 1) ||
-        bible.filesets[process.env.DBP_BUCKET_ID].length === 1,
-    );
-  } else if (bible && bible.filesets && bible.filesets['dbp-vid']) {
+        bible.filesets[process.env.DBP_BUCKET_ID].length === 1
+      );
+    });
+  } else if (dbpVidBucket) {
     filesets = bible.filesets['dbp-vid'].filter(
       (file) =>
         (!file.id.includes('GID') &&
@@ -427,7 +374,7 @@ AppContainer.getInitialProps = async (context) => {
           setTypes[file.type] &&
           file.size !== 'S' &&
           bible.filesets['dbp-vid'].length > 1) ||
-        bible.filesets['dbp-vid'].length === 1,
+        bible.filesets['dbp-vid'].length === 1
     );
   }
 
@@ -447,6 +394,7 @@ AppContainer.getInitialProps = async (context) => {
 
   const [bookMetaData, bookMetaResponse] = await getBookMetaData({
     idsForBookMetadata,
+    videoAssetId,
   });
 
   if (audioParam) {
@@ -467,35 +415,15 @@ AppContainer.getInitialProps = async (context) => {
 
   // Redirect to the new url if conditions are met
   if (bookMetaData && bookMetaData.length) {
-    const foundBook = bookMetaData.find(
-      (book) => bookId && book.book_id === bookId.toUpperCase(),
-    );
-    const foundChapter =
-      foundBook &&
-      foundBook.chapters.find((c) => chapter && c === parseInt(chapter, 10));
-    // Default book/chapter to matthew 1 to keep it from breaking if there is an error encountered in getFirstChapterReference
-    let bookChapterRoute = 'MAT/1';
+    const foundBook = bookMetaData.find((book) => bookId && book.book_id === bookId.toUpperCase());
+    const foundChapter = foundBook && foundBook.chapters.find((c) => chapter && c === parseInt(chapter, 10));
     // Handles getting the book/chapter that follows Jon Stearley's methodology
-    // console.log('book meta', bookMetaResponse);
-    try {
-      bookChapterRoute = getFirstChapterReference(
-        filesets,
-        hasVideo,
-        bookMetaResponse,
-        bookMetaData,
-        audioParam,
-      );
-    } catch (err) {
-      if (process.env.NODE_ENV === 'development') {
-        console.error('Error getting initial book', err); // eslint-disble-line no-console
-      }
-    }
+    const bookChapterRoute = getFirstChapterReference(filesets, hasVideo, bookMetaResponse, bookMetaData, audioParam);
 
     // If the book wasn't found and chapter wasn't found
     // Go to the first book and first chapter
     const foundBookId = foundBook && foundBook.book_id;
-    const foundChapterId =
-      foundBook && (foundBook.chapters[0] || foundBook.chapters[0] === 0 || 1);
+    const foundChapterId = foundBook && (foundBook.chapters[0] || foundBook.chapters[0] === 0 || 1);
     // console.log(
     //   'Condition One:',
     //   !foundBook && (!foundChapter && foundChapter !== 0),
@@ -510,15 +438,11 @@ AppContainer.getInitialProps = async (context) => {
       if (serverRes) {
         // If there wasn't a book then we need to redirect to mark for video resources and matthew for other resources
         serverRes.writeHead(301, {
-          Location: `${req.protocol}://${req.get(
-            'host',
-          )}/bible/${bibleId}/${bookChapterRoute}`,
+          Location: `${req.protocol}://${req.get('host')}/bible/${bibleId}/${bookChapterRoute}`,
         });
         serverRes.end();
       } else {
-        Router.push(
-          `${window.location.origin}/bible/${bibleId}/${bookChapterRoute}`,
-        );
+        Router.push(`${window.location.origin}/bible/${bibleId}/${bookChapterRoute}`);
       }
     } else if (foundBook) {
       // if the book was found
@@ -528,20 +452,16 @@ AppContainer.getInitialProps = async (context) => {
         // go to the book and the first chapter for that book
         if (serverRes) {
           serverRes.writeHead(301, {
-            Location: `${req.protocol}://${req.get(
-              'host',
-            )}/bible/${bibleId}/${foundBookId}/${foundChapterId}${
+            Location: `${req.protocol}://${req.get('host')}/bible/${bibleId}/${foundBookId}/${foundChapterId}${
               audioParam ? `?audio_type=${audioParam}` : ''
             }`,
           });
           serverRes.end();
         } else {
           Router.push(
-            `${
-              window.location.origin
-            }/bible/${bibleId}/${foundBookId}/${foundChapterId}${
+            `${window.location.origin}/bible/${bibleId}/${foundBookId}/${foundChapterId}${
               audioParam ? `?audio_type=${audioParam}` : ''
-            }`,
+            }`
           );
         }
       }
@@ -565,9 +485,7 @@ AppContainer.getInitialProps = async (context) => {
       audioType,
     }).catch((err) => {
       if (process.env.NODE_ENV === 'development') {
-        console.error(
-          `Error caught in get initial chapter data in promise: ${err.message}`,
-        );
+        console.error(`Error caught in get initial chapter data in promise: ${err.message}`);
       }
       return {
         formattedText: '',
@@ -578,9 +496,7 @@ AppContainer.getInitialProps = async (context) => {
     });
   } catch (err) {
     if (process.env.NODE_ENV === 'development') {
-      console.error(
-        `Error caught in get initial chapter data by try catch: ${err.message}`,
-      );
+      console.error(`Error caught in get initial chapter data by try catch: ${err.message}`);
     }
   }
   /* eslint-enable no-console */
@@ -591,10 +507,7 @@ AppContainer.getInitialProps = async (context) => {
   const bookData = bookMetaData.length || !bible ? bookMetaData : bible.books;
 
   if (bookData) {
-    const urlBook = bookData.find(
-      (book) =>
-        book.book_id && book.book_id.toLowerCase() === bookId.toLowerCase(),
-    );
+    const urlBook = bookData.find((book) => book.book_id && book.book_id.toLowerCase() === bookId.toLowerCase());
     if (urlBook) {
       activeBook = urlBook;
     } else {
@@ -611,9 +524,7 @@ AppContainer.getInitialProps = async (context) => {
     availableAudioTypes.push('audio');
   }
   const activeBookName = activeBook ? activeBook.name : '';
-  const testaments = bookData
-    ? bookData.reduce((a, c) => ({ ...a, [c.book_id]: c.testament }), {})
-    : [];
+  const testaments = bookData ? bookData.reduce((a, c) => ({ ...a, [c.book_id]: c.testament }), {}) : [];
   if (context.reduxStore) {
     if (userProfile.userId && userProfile.email) {
       context.reduxStore.dispatch({
@@ -638,6 +549,7 @@ AppContainer.getInitialProps = async (context) => {
         availableAudioTypes,
         loadingAudio: true,
         hasVideo,
+        videoAssetId,
         chapterText,
         testaments,
         // userSettings,
@@ -733,10 +645,7 @@ AppContainer.propTypes = {
   formattedText: PropTypes.string,
   activeChapter: PropTypes.number,
   initialVolume: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  initialPlaybackRate: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.string,
-  ]),
+  initialPlaybackRate: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
 export default connect()(AppContainer);
