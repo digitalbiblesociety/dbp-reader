@@ -263,9 +263,9 @@ exports[`<VersionList /> Should match previous snapshot 1`] = `
               onClick={[Function]}
               role="button"
               tabIndex={0}
-              title="World English Bible (Afred Henson)"
+              title="World English Bible (Winfred Henson)"
             >
-              World English Bible (Afred Henson)
+              World English Bible (Winfred Henson)
             </a>
           </div>
           <div
