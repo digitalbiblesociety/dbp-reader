@@ -54,3 +54,6 @@ portability. It is in many ways the spiritual successor to the bible browser and
     via the implementation of [React Native](https://facebook.github.io/react-native/)
   - The Reader will contain components to be re-used for a few partners like gideons
   - The Reader will contain components for bible dictionaries for study and research
+
+## Contributing
+If You are looking to get started contributing and are trying to understand how it all works start with app.js in the pages folder.

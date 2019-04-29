@@ -8,15 +8,18 @@ import { paper, dark, red, themes } from '../app/containers/Settings/themes';
 export default class MyDocument extends Document {
   // Look at applying the theme here - (low priority at this time)
   static getInitialProps = async ({ req, renderPage }) => {
+    // Need to wait for the page to finish rendering or there will be a flash of white
     const page = await renderPage();
     let cookie = {};
 
+    // Set the cookies based on if the page is loaded by the server or the client
     if (req && req.headers && req.headers.cookie) {
       cookie = parseCookie(req.headers.cookie);
     } else if (typeof document !== 'undefined') {
       cookie = document.cookie ? parseCookie(document.cookie) : {};
     }
 
+    // Return only the theme from the cookies to be used in the initial render of the page
     return { theme: cookie.bible_is_theme, ...page };
   };
   render() {
