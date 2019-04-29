@@ -57,7 +57,7 @@ portability. It is in many ways the spiritual successor to the bible browser and
 
 ## Contributing
 
-- If You are looking to get started contributing and are trying to understand how it all
-  works start with app.js in the pages folder. You can follow the flow of data downwards.
-- The only globals used are `window`, `document`, Google Api `gapi`, Facebook api `FB`;
+- If You are looking to contribute or just want to understand how it all works you should
+  start with app.js in the pages folder. You can follow everything down from there.
+- The only globals used are `window`, `document`, Google Api `gapi` and `auth2`, Facebook api `FB`;
   all other modules, functions, and components are be imported at the start of each file.

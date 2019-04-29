@@ -106,6 +106,7 @@ export class Verses extends React.PureComponent {
 	}
 
 	getFirstVerse = (e) => {
+		// Gets the starting point of the highlight
 		const { userSettings, formattedSource } = this.props;
 		e.stopPropagation();
 		typeof e.persist === 'function' && e.persist(); // eslint-disable-line no-unused-expressions
@@ -125,6 +126,7 @@ export class Verses extends React.PureComponent {
 	};
 
 	getLastVerse = (e) => {
+		// Gets the ending point of the highlight
 		const {
 			formattedSource,
 			userSettings,
@@ -258,6 +260,9 @@ export class Verses extends React.PureComponent {
 		const fv = parseInt(firstVerse, 10);
 		const lv = parseInt(lastVerse, 10);
 		// This takes into account RTL and LTR selections
+		// if the firstVerse was before the lastVerse
+		// use firstVerse as the verseStart and lastVerse as the verseEnd
+		// Other wise swap them
 		const verseStart = fv < lv ? fv : lv;
 		const verseEnd = fv < lv ? lv : fv;
 
