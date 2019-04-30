@@ -11,11 +11,15 @@ and [Faith Comes by Hearing](https://faithcomesbyhearing.com).
 
 - If you do not have Node follow the installation instructions here: [Node.js](https://nodejs.org/en/download/).
 - Follow the instructions on [Digital Bible Platform](www.dbp4.org) to obtain an api key for the app. _**You will need a valid key for the app to work!**_
+  - _**By default you will only have access to one bible resource. To gain access to more resources please contact the admins for the DBP and ask them to expand your access controls**_
 - Clone the repository:
   - `git clone https://github.com/digitalbiblesociety/dbp-reader.git`
 - Once you have successfully installed Node and cloned the repository run `npm install` to install the required dependencies
 - Next follow the steps listed below to update the files to contain your organization specific styles and information
   - Create a `.env` file in the root of your new project, following the pattern found in `sample-env.txt` add your own environment variables
+    - If you don't know what bucket_id/asset_id to put for the value of DBP_BUCKET_ID you can use dbs-web as the default
+    - The default value for BASE_API_ROUTE should be https://api.dbp4.org
+    - You will also need to create a project for (NOTES_PROJECT_ID) that is connected to your new api key using the api. (This is required for saving notes, highlights and bookmarks).
   - Note: You will need to make sure your api key has access to the project and bucket(s) used in your .env file
   - Update the `env-config.js` file to only use the variables from your .env file
   - Update the files under `theme_config` to include your custom colors and organization information
