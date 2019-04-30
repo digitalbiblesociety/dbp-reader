@@ -1,6 +1,4 @@
 /** Generates, validates and sends highlight information to api
-	@ref is a dom element
-  @handler is the desired event handler
   @param {String} color Color that was clicked in context menu
   @param {Object} popupCoords Object with x, y values for opening an error message
   | State |
@@ -27,14 +25,14 @@
   @param {String} activeBookName
   @param {Number} activeChapter
   | Methods / Refs |
-  @param {Object} main
-  @param {Object} format
+  @param {Object} main Reference to the <main> dom element
+  @param {Object} format Reference to the formatted text dom element without highlights
   @param {Function} openPopup
-  @param {Function} setParentState
-  @param {Function} formatHighlight
+  @param {Function} setParentState Sets the state of the Verse container
+  @param {Function} formatHighlight Reference to the formatted text dom element WITH highlights
   @param {Function} deleteHighlights
   @param {Function} closeContextMenu
-  @param {Function} addHighlight
+  @param {Function} addHighlight Sends the api call to add the new highlight
   | External Functions |
   @param {Function} getReference Find the book|chapter|verse reference for the highlight
   @param {Function} calcDistance Get the number that needs to be subtracted from the highlight length
