@@ -1,3 +1,7 @@
+/**
+ * Finds the verse number that applies to the user input
+ * @param {Object} param0 {dom node}, {Primary button used}, {string}, {object}, {ref node}, {function}, {function}
+ */
 const getFirstVerse = ({
   target,
   button,
@@ -18,18 +22,14 @@ const getFirstVerse = ({
     // if formatted iterate up the dom looking for data-id
     if (isFormatted) {
       const verseNode = getFormattedParentVerse(target);
-      const firstVerseNumber = verseNode
-        ? verseNode.attributes['data-id'].value.split('_')[1]
-        : '';
+      const firstVerseNumber = verseNode ? verseNode.attributes['data-id'].value.split('_')[1] : '';
 
       if (button && main.contains(target) && firstVerseNumber) {
         return firstVerseNumber;
       }
     } else if (!isFormatted) {
       const verseNode = getPlainParentVerseWithoutNumber(target);
-      const firstVerseNumber = verseNode
-        ? verseNode.attributes['data-verseid'].value
-        : '';
+      const firstVerseNumber = verseNode ? verseNode.attributes['data-verseid'].value : '';
 
       if (button && main.contains(target) && firstVerseNumber) {
         return firstVerseNumber;

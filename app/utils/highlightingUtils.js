@@ -1,5 +1,12 @@
+// These characters are not selectable within the interface and will not have a highlight color
+// Thus they need to be removed when calculating how may characters need to be highlighted
 const replaceCharsRegex = new RegExp(/[\r\n※†*✝]/g);
 
+/**
+ *
+ * @param {Object} node Dom node representing the topmost parent
+ * @param {Array} array Array of nodes in preorder
+ */
 const preorderTraverse = (node, array) => {
   if (!node) {
     return array;
@@ -10,6 +17,12 @@ const preorderTraverse = (node, array) => {
   });
   return array;
 };
+
+/**
+ *
+ * @param {Object} node Initial dom node
+ * @param {Number} verseNumber Verse number being searched for
+ */
 
 const getFormattedParentVerseNumber = (node, verseNumber) => {
   // Require both parameters -_- type coercion...
@@ -50,7 +63,11 @@ const getFormattedParentVerse = (node) => {
 
   return newNode;
 };
-
+/**
+ * Gets the index of the child in the tree of children
+ * @param {Object} parent Parent Dom node
+ * @param {Object} child Child Dom node
+ */
 const getFormattedChildIndex = (parent, child) => {
   if (!parent || !child) {
     return null;
@@ -59,7 +76,11 @@ const getFormattedChildIndex = (parent, child) => {
 
   return preorderArray.indexOf(child);
 };
-
+/**
+ *
+ * @param {Object} node Dom node
+ * @param {Number} verseNumber Verse number to be searched for
+ */
 const getPlainParentVerse = (node, verseNumber) => {
   // Require both parameters
   if (!node || !verseNumber) {
@@ -83,7 +104,10 @@ const getPlainParentVerse = (node, verseNumber) => {
 
   return newNode;
 };
-
+/**
+ * Finds the first parent node that has a verse number
+ * @param {Object} node Dom node
+ */
 const getPlainParentVerseWithoutNumber = (node) => {
   // Require parameter
   if (!node) {
@@ -93,13 +117,7 @@ const getPlainParentVerseWithoutNumber = (node) => {
   let counter = 0;
   let newNode = node;
 
-  while (
-    !(
-      newNode.attributes &&
-      newNode.attributes['data-verseid'] &&
-      newNode.attributes['data-verseid'].value
-    )
-  ) {
+  while (!(newNode.attributes && newNode.attributes['data-verseid'] && newNode.attributes['data-verseid'].value)) {
     newNode = newNode.parentNode;
     if (counter >= 10) break;
     counter += 1;
@@ -107,7 +125,10 @@ const getPlainParentVerseWithoutNumber = (node) => {
 
   return newNode;
 };
-
+/**
+ * Finds the first element that has a verse number stored as a data-id
+ * @param {Object} node Dom node
+ */
 const getFormattedElementVerseId = (node) => {
   if (!node) return null;
   // check for the data-id attribute since that is what the verse number is stored in
@@ -117,19 +138,12 @@ const getFormattedElementVerseId = (node) => {
   // return null so I can do a check on the values existence
   return null;
 };
-
-// Get the sibling that is closest to the beginning
-const getClosestParent = ({
-  refNode,
-  verse,
-  chapter,
-  book,
-  aParent,
-  eParent,
-}) => {
-  const verseNodes = [
-    ...refNode.querySelectorAll(`[data-id=${book}${chapter}_${verse}]`),
-  ];
+/**
+ * Get the sibling that is closest to the "top" of the page
+ * @param {Object} param0 Contains Dom node, verse number, chapter number, book id, anchor parent, extent (end) parent
+ */
+const getClosestParent = ({ refNode, verse, chapter, book, aParent, eParent }) => {
+  const verseNodes = [...refNode.querySelectorAll(`[data-id=${book}${chapter}_${verse}]`)];
   const eIndex = verseNodes.indexOf(eParent);
   const aIndex = verseNodes.indexOf(aParent);
 
@@ -138,28 +152,22 @@ const getClosestParent = ({
   }
   return eParent;
 };
-
+/**
+ * Calculates the number offset for the highlight length of a verse in the Psalms
+ * @param {Object} param0 ref dom node, book id, chapter, verse number, verse dom node
+ */
 const getOffsetNeededForPsalms = ({ refNode, book, chapter, verse, node }) => {
-  const verseNodes = [
-    ...refNode.querySelectorAll(`[data-id=${book}${chapter}_${verse}]`),
-  ];
+  const verseNodes = [...refNode.querySelectorAll(`[data-id=${book}${chapter}_${verse}]`)];
 
   const previous = verseNodes.slice(0, verseNodes.indexOf(node));
 
-  return previous.reduce(
-    (a, c) => a + c.textContent.replace(replaceCharsRegex, '').length,
-    0,
-  );
+  return previous.reduce((a, c) => a + c.textContent.replace(replaceCharsRegex, '').length, 0);
 };
-
-const getTextInSelectedNodes = ({
-  refNode,
-  book,
-  chapter,
-  firstVerse,
-  node,
-  lastVerse,
-}) => {
+/**
+ * Gets all the text between the first verse number and the last verse number
+ * @param {Object} param0 dom ref node, book id, chapter, verse start number, verse node, last verse number
+ */
+const getTextInSelectedNodes = ({ refNode, book, chapter, firstVerse, node, lastVerse }) => {
   if (!refNode || !node) {
     return '';
   }
@@ -168,22 +176,17 @@ const getTextInSelectedNodes = ({
   let currentVerse = firstVerse;
 
   while (currentVerse <= lastVerse) {
-    [
-      ...refNode.querySelectorAll(
-        `[data-id=${book}${chapter}_${currentVerse}]`,
-      ),
-    ].forEach((v) => verseNodes.push(v));
+    [...refNode.querySelectorAll(`[data-id=${book}${chapter}_${currentVerse}]`)].forEach((v) => verseNodes.push(v));
     currentVerse += 1;
   }
 
-  return verseNodes.reduce(
-    (a, c) => a + c.textContent.replace(replaceCharsRegex, '').length,
-    0,
-  );
+  return verseNodes.reduce((a, c) => a + c.textContent.replace(replaceCharsRegex, '').length, 0);
 };
-
-// Because the system captures the verse numbers this needs to be used
-// Can accept plainText boolean as third arg if needed
+/**
+ * Calculates the number of extra spaces in selected text based on how far apart the first and last verse are
+ * @param {Number} last Last verse number
+ * @param {Number} first First verse number
+ */
 const calcDistance = (last, first /* plainText */) => {
   // If the last verse is equal to the first verse then I don't need a diff
   if (last === first) return 0;
@@ -199,12 +202,16 @@ const calcDistance = (last, first /* plainText */) => {
 
   return stringDiff.length;
 };
-
+/**
+ * Creates the reference for a highlight based on the start and end verses
+ * @param {Number} verseStart
+ * @param {Number} verseEnd
+ * @param {String} activeBookName
+ * @param {Number} activeChapter
+ */
 const getReference = (verseStart, verseEnd, activeBookName, activeChapter) =>
   `${activeBookName} ${activeChapter}:${
-    verseStart === verseEnd || !verseEnd
-      ? verseStart
-      : `${verseStart}-${verseEnd}`
+    verseStart === verseEnd || !verseEnd ? verseStart : `${verseStart}-${verseEnd}`
   }`;
 
 export {

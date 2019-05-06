@@ -66,6 +66,7 @@ export class SearchContainer extends React.PureComponent {
 
 	handleSearchInputEnter = (e) => {
 		const searchText = e.target.value;
+
 		if (
 			((e.keyCode && e.keyCode === 13) || (e.which && e.which === 13)) &&
 			searchText
@@ -109,7 +110,7 @@ export class SearchContainer extends React.PureComponent {
 			clearTimeout(this.timer);
 		}
 
-		// Don't have to bind 'this' bc of the arrow function
+		// Don't have to bind 'this' because of the arrow function
 		this.timer = setTimeout(() => {
 			if (!val) {
 				return;

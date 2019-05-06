@@ -78,6 +78,7 @@ export class TextSelection extends React.PureComponent {
 			);
 		}
 
+		// If the active tab changes then reset the filter text
 		if (
 			nextProps.textselection.versionListActive !==
 				this.props.textselection.versionListActive ||

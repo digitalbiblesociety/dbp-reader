@@ -65,12 +65,7 @@ import makeSelectHomePage, {
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
-import {
-  applyTheme,
-  applyFontFamily,
-  applyFontSize,
-  toggleWordsOfJesus,
-} from '../Settings/themes';
+import { applyTheme, applyFontFamily, applyFontSize, toggleWordsOfJesus } from '../Settings/themes';
 import { setAudioType } from '../AudioPlayer/actions';
 
 const VideoPlayer = dynamic(import('../VideoPlayer'), {
@@ -95,18 +90,11 @@ class HomePage extends React.PureComponent {
   };
 
   componentDidMount() {
-    const {
-      activeFilesets,
-      activeBookId,
-      activeChapter,
-      activeTextId,
-    } = this.props.homepage;
+    const { activeFilesets, activeBookId, activeChapter, activeTextId } = this.props.homepage;
     const { userAuthenticated, userId } = this.props.profile;
     const { userSettings } = this.props;
 
-    toggleWordsOfJesus(
-      userSettings.getIn(['toggleOptions', 'redLetter', 'active']),
-    );
+    toggleWordsOfJesus(userSettings.getIn(['toggleOptions', 'redLetter', 'active']));
 
     this.getCopyrights({ filesetIds: activeFilesets });
     if (userId && userAuthenticated) {
@@ -117,7 +105,7 @@ class HomePage extends React.PureComponent {
           chapter: activeChapter,
           userAuthenticated,
           userId,
-        }),
+        })
       );
       this.props.dispatch(
         getNotes({
@@ -129,7 +117,7 @@ class HomePage extends React.PureComponent {
             limit: 150,
             page: 1,
           },
-        }),
+        })
       );
       this.props.dispatch(
         getBookmarksForChapter({
@@ -141,7 +129,7 @@ class HomePage extends React.PureComponent {
             limit: 150,
             page: 1,
           },
-        }),
+        })
       );
     }
 
@@ -163,17 +151,18 @@ class HomePage extends React.PureComponent {
           iso: this.props.homepage.initialIsoCode,
           languageCode: this.props.homepage.defaultLanguageCode,
           name: this.props.homepage.initialLanguageName,
-        }),
+        })
       );
       this.props.dispatch(
         initApplication({
           languageIso: this.props.homepage.defaultLanguageIso,
           languageCode: this.props.homepage.defaultLanguageCode,
-        }),
+        })
       );
       this.toggleFirstLoadForTextSelection();
     }
     if (process.env.FB_APP_ID) {
+      // If there is a Facebook app id then try to initialize the Facebook api
       try {
         ((d, s, id) => {
           let js = d.getElementsByTagName(s)[0];
@@ -206,8 +195,8 @@ class HomePage extends React.PureComponent {
     }
 
     if (process.env.GOOGLE_APP_ID_PROD) {
+      // If there is a Google app id then try to initialize the Google api
       try {
-        // May need to create a script and append it to the dom then wait for it to finish loading
         if (!this.props.userId && typeof gapi !== 'undefined') {
           gapi.load('auth2', () => {
             try {
@@ -228,13 +217,12 @@ class HomePage extends React.PureComponent {
         }
       }
     }
-    const videoFileset = activeFilesets.filter(
-      (f) => f.type === 'video_stream',
-    )[0];
+    const videoFileset = activeFilesets.filter((f) => f.type === 'video_stream')[0];
     this.checkForVideo(
       videoFileset ? videoFileset.id : '',
       this.props.homepage.activeBookId,
       this.props.homepage.activeChapter,
+      this.props.homepage.videoAssetId
     );
   }
 
@@ -247,13 +235,10 @@ class HomePage extends React.PureComponent {
       addBookmarkSuccess,
       audioSource,
       activeFilesets,
+      videoAssetId,
     } = nextProps.homepage;
     const { userSettings, formattedSource, textData } = nextProps;
-    const {
-      userSettings: prevSettings,
-      formattedSource: prevFormattedSource,
-      textData: prevTextData,
-    } = this.props;
+    const { userSettings: prevSettings, formattedSource: prevFormattedSource, textData: prevTextData } = this.props;
     const { userId, userAuthenticated } = nextProps.profile;
     const {
       addBookmarkSuccess: addBookmarkSuccessProps,
@@ -262,12 +247,10 @@ class HomePage extends React.PureComponent {
       activeChapter: activeChapterProps,
       audioSource: prevAudioSource,
     } = this.props.homepage;
-    const {
-      userId: userIdProps,
-      userAuthenticated: userAuthenticatedProps,
-    } = this.props.profile;
+    const { userId: userIdProps, userAuthenticated: userAuthenticatedProps } = this.props.profile;
     const prevVerseNumber = this.props.homepage.match.params.verse;
     const verseNumber = nextProps.homepage.match.params.verse;
+    // Checks the urls query params for the audio param
     const audioParam =
       location &&
       location.search &&
@@ -279,8 +262,7 @@ class HomePage extends React.PureComponent {
     const videoFileset = activeFilesets.find((f) => f.type === 'video_stream');
     if (
       audioParam &&
-      (audioParam[1] !== nextProps.homepage.audioType ||
-        audioParam[1] !== this.props.homepage.audioType)
+      (audioParam[1] !== nextProps.homepage.audioType || audioParam[1] !== this.props.homepage.audioType)
     ) {
       this.props.dispatch(setAudioType({ audioType: audioParam[1] }));
     }
@@ -290,7 +272,7 @@ class HomePage extends React.PureComponent {
         activeChapter !== activeChapterProps) &&
       videoFileset
     ) {
-      this.checkForVideo(videoFileset.id, activeBookId, activeChapter);
+      this.checkForVideo(videoFileset.id, activeBookId, activeChapter, videoAssetId);
     }
     // If there was a change in the params then make sure loading state is set to false
     if (
@@ -309,23 +291,15 @@ class HomePage extends React.PureComponent {
         prevSettings.getIn(['toggleOptions', 'redLetter', 'active']) !==
         userSettings.getIn(['toggleOptions', 'redLetter', 'active'])
       ) {
-        toggleWordsOfJesus(
-          userSettings.getIn(['toggleOptions', 'redLetter', 'active']),
-        );
+        toggleWordsOfJesus(userSettings.getIn(['toggleOptions', 'redLetter', 'active']));
       }
       if (prevSettings.get('activeTheme') !== userSettings.get('activeTheme')) {
         applyTheme(userSettings.get('activeTheme'));
       }
-      if (
-        prevSettings.get('activeFontType') !==
-        userSettings.get('activeFontType')
-      ) {
+      if (prevSettings.get('activeFontType') !== userSettings.get('activeFontType')) {
         applyFontFamily(userSettings.get('activeFontType'));
       }
-      if (
-        prevSettings.get('activeFontSize') !==
-        userSettings.get('activeFontSize')
-      ) {
+      if (prevSettings.get('activeFontSize') !== userSettings.get('activeFontSize')) {
         applyFontSize(userSettings.get('activeFontSize'));
       }
     }
@@ -339,7 +313,7 @@ class HomePage extends React.PureComponent {
         activeBookId !== activeBookIdProps ||
         activeChapter !== activeChapterProps)
     ) {
-      // Should move all of these into the same call to reduce the number of renders in the text component
+      // Need to check for the highlights, notes and bookmarks whenever the authentication status changes
       this.props.dispatch(
         getHighlights({
           bible: activeTextId,
@@ -347,7 +321,7 @@ class HomePage extends React.PureComponent {
           chapter: activeChapter,
           userAuthenticated,
           userId,
-        }),
+        })
       );
       this.props.dispatch(
         getNotes({
@@ -359,7 +333,7 @@ class HomePage extends React.PureComponent {
             limit: 150,
             page: 1,
           },
-        }),
+        })
       );
 
       this.props.dispatch(
@@ -372,7 +346,7 @@ class HomePage extends React.PureComponent {
             limit: 150,
             page: 1,
           },
-        }),
+        })
       );
     }
 
@@ -387,7 +361,7 @@ class HomePage extends React.PureComponent {
             limit: 150,
             page: 1,
           },
-        }),
+        })
       );
       this.props.dispatch(resetBookmarkState());
     }
@@ -397,14 +371,11 @@ class HomePage extends React.PureComponent {
 
   getCopyrights = (props) => this.props.dispatch(getCopyrights(props));
 
-  setActiveBookName = ({ book, id }) =>
-    this.props.dispatch(setActiveBookName({ book, id }));
+  setActiveBookName = ({ book, id }) => this.props.dispatch(setActiveBookName({ book, id }));
 
-  setActiveChapter = (chapter) =>
-    this.props.dispatch(setActiveChapter(chapter));
+  setActiveChapter = (chapter) => this.props.dispatch(setActiveChapter(chapter));
 
-  setTextLoadingState = (props) =>
-    this.props.dispatch(setChapterTextLoadingState(props));
+  setTextLoadingState = (props) => this.props.dispatch(setChapterTextLoadingState(props));
 
   setActiveTextId = (props) => this.props.dispatch(setActiveTextId(props));
 
@@ -431,25 +402,25 @@ class HomePage extends React.PureComponent {
     }
   };
 
-  checkForVideo = async (filesetId, bookId, chapter) => {
+  checkForVideo = async (filesetId, bookId, chapter, videoAssetId) => {
     if (!filesetId) {
       this.props.dispatch(
         setHasVideo({
           state: false,
           videoChapterState: false,
           videoPlayerOpen: false,
-        }),
+        })
       );
       return;
     }
-    const hasVideo = await checkForVideoAsync(filesetId, bookId, chapter);
+    const hasVideo = await checkForVideoAsync(filesetId, bookId, chapter, videoAssetId);
 
     this.props.dispatch(
       setHasVideo({
         state: hasVideo,
         videoChapterState: hasVideo,
         videoPlayerOpen: hasVideo,
-      }),
+      })
     );
   };
 
@@ -459,7 +430,7 @@ class HomePage extends React.PureComponent {
         ...props,
         bible: this.props.homepage.activeTextId,
         userId: this.props.userId,
-      }),
+      })
     );
 
   deleteHighlights = (props) =>
@@ -470,12 +441,11 @@ class HomePage extends React.PureComponent {
         userId: this.props.userId,
         book: this.props.homepage.activeBookId,
         chapter: this.props.homepage.activeChapter,
-      }),
+      })
     );
 
   toggleFirstLoadForTextSelection = () =>
-    this.props.homepage.firstLoad &&
-    this.props.dispatch(toggleFirstLoadForTextSelection());
+    this.props.homepage.firstLoad && this.props.dispatch(toggleFirstLoadForTextSelection());
 
   toggleProfile = () => {
     if (this.isMenuOpen('profile')) {
@@ -582,10 +552,10 @@ class HomePage extends React.PureComponent {
       videoChapterState,
       audioType,
       textDirection,
+      videoAssetId,
     } = this.props.homepage;
 
     const { userSettings, isMenuOpen, isIe, activeNotesView } = this.props;
-
     const { isScrollingDown } = this.state;
     const { text: updatedText } = this.props.textData;
     const token = this.props.homepage.match.params.token || '';
@@ -607,24 +577,17 @@ class HomePage extends React.PureComponent {
           toggleChapterSelection={this.toggleChapterSelection}
           toggleVersionSelection={this.toggleVersionSelection}
         />
-        <div
-          className={
-            videoPlayerOpen || !audioPlayerState
-              ? 'content-container audio-closed'
-              : 'content-container'
-          }
-        >
+        <div className={videoPlayerOpen || !audioPlayerState ? 'content-container audio-closed' : 'content-container'}>
           {hasVideo &&
             videoChapterState && (
               <VideoPlayer
-                fileset={
-                  activeFilesets.filter((f) => f.type === 'video_stream')[0]
-                }
+                fileset={activeFilesets.filter((f) => f.type === 'video_stream')[0]}
                 bookId={activeBookId}
                 chapter={activeChapter}
                 books={books}
                 text={updatedText}
                 textId={activeTextId}
+                videoAssetId={videoAssetId}
               />
             )}
           <Text
@@ -648,15 +611,8 @@ class HomePage extends React.PureComponent {
         </div>
         <TransitionGroup>
           {isSettingsModalActive ? (
-            <FadeTransition
-              classNames="slide-from-right"
-              in={isSettingsModalActive}
-            >
-              <Settings
-                userSettings={userSettings}
-                toggleSettingsModal={this.toggleSettingsModal}
-                isIe={isIe}
-              />
+            <FadeTransition classNames="slide-from-right" in={isSettingsModalActive}>
+              <Settings userSettings={userSettings} toggleSettingsModal={this.toggleSettingsModal} isIe={isIe} />
             </FadeTransition>
           ) : null}
           {isProfileActive ? (
@@ -670,10 +626,7 @@ class HomePage extends React.PureComponent {
             </FadeTransition>
           ) : null}
           {isNotesModalActive ? (
-            <FadeTransition
-              classNames="slide-from-right"
-              in={isNotesModalActive}
-            >
+            <FadeTransition classNames="slide-from-right" in={isNotesModalActive}>
               <Notes
                 activeBookId={activeBookId}
                 activeChapter={activeChapter}
@@ -685,10 +638,7 @@ class HomePage extends React.PureComponent {
             </FadeTransition>
           ) : null}
           {isSearchModalActive ? (
-            <FadeTransition
-              classNames="slide-from-left"
-              in={isSearchModalActive}
-            >
+            <FadeTransition classNames="slide-from-left" in={isSearchModalActive}>
               <SearchContainer
                 bibleId={activeTextId}
                 activeFilesetId={activeFilesetId}
@@ -750,7 +700,7 @@ function mapDispatchToProps(dispatch) {
 
 const withConnect = connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 );
 
 // Defeats the purpose of code splitting - need to figure out a different method to reduce bundle size
@@ -783,5 +733,5 @@ export default compose(
   withNotesSaga,
   withTextSaga,
   withSettingsReducer,
-  withConnect,
+  withConnect
 )(HomePage);

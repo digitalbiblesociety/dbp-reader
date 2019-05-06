@@ -87,6 +87,7 @@ class CountryList extends React.PureComponent {
 			);
 		};
 
+		// gets the active index from within the list of countries
 		const getActiveIndex = () => {
 			let activeIndex = 0;
 
@@ -209,6 +210,7 @@ class CountryList extends React.PureComponent {
 			? document.getElementById('list-element').scrollTop
 			: 0;
 
+	// Searches on the country name and the iso_a2 code
 	filterFunction = (country, filterText) => {
 		const lowerCaseText = filterText.toLowerCase();
 

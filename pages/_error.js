@@ -2,11 +2,8 @@
  * NotFoundPage
  *
  * This is the page we show when the user visits a url that doesn't have a route
+ * or if there is an uncaught error in the application
  *
- * NOTE: while this component should technically be a stateless functional
- * component (SFC), hot reloading does not currently support SFCs. If hot
- * reloading is not a necessity for you then you can refactor it and remove
- * the linting exception.
  */
 
 import React from 'react';
@@ -23,6 +20,7 @@ import bugsnagClient from '../app/utils/bugsnagClient';
 export default class Error extends React.Component {
   static async getInitialProps({ res, err }) {
     const statusCode = res ? res.statusCode : err ? err.statusCode : null; // eslint-disable-line
+    // Load bugsnag if we are not in development and the user wants bugsnag
     if (
       err &&
       (process.env.NODE_ENV === 'production' ||
