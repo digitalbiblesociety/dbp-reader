@@ -456,8 +456,8 @@ exports[`<MyNotes /> container should match snapshot with default props 1`] = `
             >
               02.06.19
             </span>
+             |
              
-            | 
             New Note
           </h4>
           <p
@@ -527,8 +527,8 @@ exports[`<MyNotes /> container should match snapshot with default props 1`] = `
             >
               02.12.19
             </span>
+             |
              
-            | 
             new note
           </h4>
           <p
@@ -1278,8 +1278,8 @@ exports[`<MyNotes /> container should match snapshot with page selector open 1`]
             >
               02.06.19
             </span>
+             |
              
-            | 
             New Note
           </h4>
           <p
@@ -1349,8 +1349,8 @@ exports[`<MyNotes /> container should match snapshot with page selector open 1`]
             >
               02.12.19
             </span>
+             |
              
-            | 
             new note
           </h4>
           <p

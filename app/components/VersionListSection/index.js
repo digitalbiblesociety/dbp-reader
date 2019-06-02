@@ -20,7 +20,12 @@ class VersionListSection extends React.PureComponent {
 		return (
 			<Accordion>
 				{items.map((item) => {
-					if (item.types.audio && item.types.audio_drama) {
+					if (
+						item.types.audio &&
+						item.types.audio_drama &&
+						!item.types.video_stream &&
+						!item.hasVideo
+					) {
 						return (
 							<AccordionItem className={'accordion-title-style'} key={item.key}>
 								<AccordionItemTitle>

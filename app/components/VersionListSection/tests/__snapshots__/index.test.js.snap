@@ -353,37 +353,23 @@ exports[`<VersionListSection /> Should match previous snapshot with valid props 
       role="tab"
       tabIndex="0"
     >
-      <h4
-        className="active-version"
+      <a
+        className="active-version top-level-title"
+        onClick={[Function]}
+        role="button"
+        tabIndex={0}
         title="New International Version"
       >
         New International Version
-      </h4>
+      </a>
     </div>
     <div
       aria-hidden={true}
       aria-labelledby="accordion__title-1"
-      className="accordion-body-style accordion__body--hidden"
+      className="accordion__body accordion__body--hidden"
       id="accordion__body-1"
       role="tabpanel"
-    >
-      <a
-        className="version-item-button"
-        onClick={[Function]}
-        role="button"
-        tabIndex={0}
-      >
-        Dramatized Version
-      </a>
-      <a
-        className="version-item-button"
-        onClick={[Function]}
-        role="button"
-        tabIndex={0}
-      >
-        Non-Dramatized Version
-      </a>
-    </div>
+    />
   </div>
   <div
     className="accordion-title-style"
