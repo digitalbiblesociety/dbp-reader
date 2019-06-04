@@ -1,0 +1,4 @@
+[submodule "dbp-web-eb"]
+	path = dbp-web-eb
+	url = https://git-codecommit.us-west-2.amazonaws.com/v1/repos/dbp-web-eb
+	branch = master
