@@ -27,6 +27,7 @@ class VideoPlayer extends React.PureComponent {
     currentVideo: {},
     poster: '',
     hlsSupported: true,
+    preload: 'metadata',
   };
 
   componentDidMount() {
