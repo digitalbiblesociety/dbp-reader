@@ -263,7 +263,9 @@ class VideoPlayer extends React.PureComponent {
     if (this.hls) {
       this.hls.destroy();
     }
-    this.pauseVideo();
+    if (this.videoRef) {
+      this.pauseVideo();
+    }
   };
 
   handleVideoClick = () => {
