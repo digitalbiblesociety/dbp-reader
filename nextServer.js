@@ -50,7 +50,7 @@ app
       //   req.headers['accept-language'],
       // );
       let languageIso = 'eng';
-      let redirectPath = '/bible/ENGESV/MAT/1';
+      let redirectPath = '/bible/ENGESH/MAT/1';
 
       if (req.headers['accept-language']) {
         const languages = req.headers['accept-language'];
