@@ -23,3 +23,14 @@
 4. Specify versions that are available/permissioned - (Needs to have a sensible default, preferably to a public domain resource)
 5. Configure deployment options
 6. Configure any remaining environment variables - (things such as social media and such)
+
+## Development Steps
+
+1. Extract project into a \_source folder that can be used by the cli
+2. Implement way of prompting users and receiving feedback
+3. Use feedback to perform actions on the \_source files in line with achieving project goals
+4. Provide feedback to the user if the action they took was successful or not
+5. Create a way for the user to progress past or recover from a failure
+6. Research tools for auto-deployments to desired services
+   a. Make these prompts optional and easy to skip
+7. Launch the newly configured project in local browser for user to view their work
