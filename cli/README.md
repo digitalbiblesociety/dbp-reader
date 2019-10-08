@@ -34,3 +34,18 @@
 6. Research tools for auto-deployments to desired services
    a. Make these prompts optional and easy to skip
 7. Launch the newly configured project in local browser for user to view their work
+
+## Tech to Use
+
+### Languages/Frameworks
+
+1. Typescript
+2. NodeJS
+
+### Services
+
+1. Google Cloud Platform
+2. Amazon Web Services
+3. Digital Ocean
+4. Heroku
+5. Zeit

@@ -1,0 +1,27 @@
+{
+	"name": "dbp-reader-cli",
+	"version": "1.0.0",
+	"description": "A command line interface for generating webapps based on the dbp-reader codebase",
+	"main": "index.js",
+	"scripts": {
+		"test": "npm run test"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/digitalbiblesociety/dbp-reader.git"
+	},
+	"keywords": [
+		"cli",
+		"bible",
+		"webapp"
+	],
+	"author": "Jesse Hill",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/digitalbiblesociety/dbp-reader/issues"
+	},
+	"homepage": "https://github.com/digitalbiblesociety/dbp-reader#readme",
+	"dependencies": {
+		"typescript": "^3.6.3"
+	}
+}
