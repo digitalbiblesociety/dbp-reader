@@ -2,9 +2,12 @@
 	"name": "dbp-reader-cli",
 	"version": "1.0.0",
 	"description": "A command line interface for generating webapps based on the dbp-reader codebase",
-	"main": "index.js",
+	"main": "build/index.js",
 	"scripts": {
-		"test": "npm run test"
+		"test": "jest --forceExit --coverage --verbose",
+		"watch-test": "npm run test -- --watchAll",
+		"build": "tsc -p ./tsconfig.json",
+		"watch": "tsc -w"
 	},
 	"repository": {
 		"type": "git",
