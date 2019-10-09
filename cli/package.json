@@ -6,7 +6,7 @@
 	"scripts": {
 		"test": "jest --forceExit --coverage --verbose",
 		"watch-test": "npm run test -- --watchAll",
-		"build": "tsc -p ./tsconfig.json",
+		"build": "tsc",
 		"watch": "tsc -w"
 	},
 	"repository": {
@@ -25,6 +25,8 @@
 	},
 	"homepage": "https://github.com/digitalbiblesociety/dbp-reader#readme",
 	"dependencies": {
+		"@types/node": "^12.7.12",
+		"enquirer": "^2.3.2",
 		"typescript": "^3.6.3"
 	}
 }
