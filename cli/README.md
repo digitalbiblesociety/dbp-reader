@@ -18,6 +18,7 @@
 2. Configure colors by pointing to a `.csv` or manually entering
    a. Should support `rgb`, `rgba`, `hex` and `hsl` formats
    b. Should support pointing to a local `.csv` file - (Would be nice to support `.tsv` as well)
+   c. We support up to three themes, default, dark and light
 
 3. Configure API Key for the DBP platform
 4. Specify versions that are available/permissioned - (Needs to have a sensible default, preferably to a public domain resource)
