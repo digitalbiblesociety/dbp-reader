@@ -18,7 +18,7 @@ environment-defaults:
     branch: dev
 global:
   application_name: dbp-web
-  default_ec2_keyname: reader-web-stage
+  default_ec2_keyname: dbp-dev
   default_platform: arn:aws:elasticbeanstalk:us-west-2::platform/Node.js running on
     64bit Amazon Linux/4.8.1
   default_region: us-west-2
@@ -26,6 +26,6 @@ global:
   instance_profile: null
   platform_name: null
   platform_version: null
-  profile: fcbh-eb-cli
+  profile: dbp-dev
   sc: git
   workspace_type: Application
