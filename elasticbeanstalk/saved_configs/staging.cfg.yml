@@ -1,0 +1,43 @@
+Platform:
+  PlatformArn: arn:aws:elasticbeanstalk:us-west-2::platform/Node.js running on 64bit Amazon Linux/4.8.1
+OptionSettings:
+  aws:elasticbeanstalk:container:nodejs:
+    NodeCommand: './node_modules/.bin/cross-env NODE_ENV=production node nextServer'
+  AWSEBAutoScalingGroup.aws:autoscaling:asg:
+    MinSize: '1'
+    MaxSize: '1'
+  aws:elasticbeanstalk:application:environment:
+    npm_config_unsafe_perm: '1'
+    NODE_ENV: production
+    BASE_API_ROUTE: https://api.staging.v4.dbt.io
+  aws:elasticbeanstalk:cloudwatch:logs:
+    RetentionInDays: '180'
+    StreamLogs: true
+  aws:elasticbeanstalk:environment:
+    ServiceRole: aws-elasticbeanstalk-service-role
+    LoadBalancerType: application
+  aws:elasticbeanstalk:environment:process:default:
+    HealthCheckPath: /bible/ENGESV/MAT/1
+  aws:elasticbeanstalk:healthreporting:system:
+    SystemType: enhanced
+  aws:ec2:vpc:
+    Subnets: subnet-04fc74bfdfb95a21a,subnet-0a5fb79ce31dce45e,subnet-08b9a12187ddb4842
+    ELBSubnets: subnet-034f62b7fa9703170,subnet-0aad0206a0a0bfa3e,subnet-08d81573615c760ca
+  aws:elbv2:listener:443:
+    ListenerEnabled: true
+    SSLPolicy: ELBSecurityPolicy-2016-08
+    SSLCertificateArns: arn:aws:acm:us-west-2:509573027517:certificate/ec99ba9e-e3fb-42d5-a0fe-b7f17ce79720
+    DefaultProcess: default
+    Protocol: HTTPS
+    Rules: ''
+  AWSEBLoadBalancerSecurityGroup.aws:ec2:vpc:
+    VPCId: vpc-0ec0445c25bbc16d3
+  aws:autoscaling:launchconfiguration:
+    IamInstanceProfile: aws-elasticbeanstalk-ec2-role
+    InstanceType: t2.small
+  AWSEBAutoScalingLaunchConfiguration.aws:autoscaling:launchconfiguration:
+    EC2KeyName: reader-web-stage
+EnvironmentTier:
+  Type: Standard
+  Name: WebServer
+AWSConfigurationTemplateVersion: 1.1.0.0
