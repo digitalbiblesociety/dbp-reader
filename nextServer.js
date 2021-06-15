@@ -188,11 +188,8 @@ app
     });
 
     server.get('/status', async (req, res) => {
-      // console.log("*************route status **************************");
-      // console.log(process.env.BASE_API_ROUTE);
       const ok = await fetch(
-        `${process.env.BASE_API_ROUTE}/bibles?v=4
-        }&key=${process.env.DBP_API_KEY}&language_code=6414`,
+        `${process.env.BASE_API_ROUTE}/bibles?v=4&key=${process.env.DBP_API_KEY}&language_code=6414`,
       )
         .then((r) => r.status >= 200 && r.status < 300)
         .catch(() => false);
