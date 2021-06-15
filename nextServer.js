@@ -189,9 +189,7 @@ app
 
     server.get('/status', async (req, res) => {
       const ok = await fetch(
-        `${process.env.BASE_API_ROUTE}/bibles?v=4&asset_id=${
-          process.env.DBP_BUCKET_ID
-        }&key=${process.env.DBP_API_KEY}&language_code=6414`,
+        `${process.env.BASE_API_ROUTE}/bibles?v=4&key=${process.env.DBP_API_KEY}&language_code=6414`,
       )
         .then((r) => r.status >= 200 && r.status < 300)
         .catch(() => false);

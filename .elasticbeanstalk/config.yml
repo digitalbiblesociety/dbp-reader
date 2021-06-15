@@ -1,0 +1,31 @@
+branch-defaults:
+  dev:
+    environment: dpb-web-dev
+  master:
+    environment: dbp-web-190604
+  newdata:
+    environment: dbp-web-newdata
+  staging:
+    environment: dbp-web-staging
+deploy:
+  artifact: ../dbp-web.zip
+environment-defaults:
+  dbp-web-production:
+    branch: master
+  dbp-web-staging:
+    branch: staging
+  dpb-web-dev:
+    branch: dev
+global:
+  application_name: dbp-web
+  default_ec2_keyname: dbp-dev
+  default_platform: arn:aws:elasticbeanstalk:us-west-2::platform/Node.js running on
+    64bit Amazon Linux/4.8.1
+  default_region: us-west-2
+  include_git_submodules: true
+  instance_profile: null
+  platform_name: null
+  platform_version: null
+  profile: dbp-dev
+  sc: git
+  workspace_type: Application
