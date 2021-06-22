@@ -20,9 +20,7 @@ const oneDay = 1000 * 60 * 60 * 24;
 export function* getCountries() {
   const requestUrl = `${process.env.BASE_API_ROUTE}/countries?key=${
     process.env.DBP_API_KEY
-  }&v=4&asset_id=${
-    process.env.DBP_BUCKET_ID
-  }&has_filesets=true&include_languages=true`;
+  }&v=4&has_filesets=true&include_languages=true`;
 
   try {
     const response = yield call(cachedFetch, requestUrl, {}, oneDay);
@@ -65,12 +63,7 @@ export function* getCountries() {
 }
 
 export function* getTexts({ languageCode, languageIso }) {
-  const requestUrl = `${process.env.BASE_API_ROUTE}/bibles?asset_id=${
-    process.env.DBP_BUCKET_ID
-  }&key=${process.env.DBP_API_KEY}&language_code=${languageCode}&v=4`;
-  const videoRequestUrl = `${
-    process.env.BASE_API_ROUTE
-  }/bibles?asset_id=dbp-vid&key=${
+  const requestUrl = `${process.env.BASE_API_ROUTE}/bibles?key=${
     process.env.DBP_API_KEY
   }&language_code=${languageCode}&v=4`;
   const jesusFilmUrl = `${
@@ -118,12 +111,6 @@ export function* getTexts({ languageCode, languageIso }) {
 
   try {
     const response = yield call(request, requestUrl);
-    const videoRes = yield call(request, videoRequestUrl);
-    // Some texts may have plain text in the database but no filesets
-    // This filters out all texts that don't have a fileset
-    const videos = videoRes.data.filter(
-      (video) => video.abbr && video.language && video.language_id && video.iso,
-    );
 
     const texts = response.data.filter(
       (text) =>
@@ -148,8 +135,8 @@ export function* getTexts({ languageCode, languageIso }) {
     };
     // If there is a Jesus film then add it to the array of Bibles
     const combinedTexts = jesusFilm
-      ? [...texts, ...videos, jesusFilm]
-      : [...texts, ...videos];
+      ? [...texts, jesusFilm]
+      : [...texts];
     const mappedTexts = combinedTexts.map((resource) => ({
       ...resource,
       hasVideo: !!(
@@ -174,9 +161,7 @@ export function* getTexts({ languageCode, languageIso }) {
 export function* getLanguages() {
   const requestUrl = `${process.env.BASE_API_ROUTE}/languages?key=${
     process.env.DBP_API_KEY
-  }&v=4&asset_id=${
-    process.env.DBP_BUCKET_ID
-  }&has_filesets=true&asset_id=dbp-prod,dbp-vid`;
+  }&v=4&has_filesets=true`;
 
   try {
     const response = yield call(cachedFetch, requestUrl, {}, oneDay);
@@ -207,9 +192,7 @@ function sortLanguagesByVname(a, b) {
 export function* getLanguageAltNames() {
   const requestUrl = `${process.env.BASE_API_ROUTE}/languages?key=${
     process.env.DBP_API_KEY
-  }&v=4&asset_id=${
-    process.env.DBP_BUCKET_ID
-  }&has_filesets=true&include_alt_names=true&asset_id=dbp-prod,dbp-vid`;
+  }&v=4&has_filesets=true&include_alt_names=true`;
   try {
     const response = yield call(cachedFetch, requestUrl, {}, oneDay);
     const languageData = response.data || response;
