@@ -17,7 +17,7 @@ export function* getSearchResults({ bibleId, searchText }) {
 
 	try {
 		const response = yield call(request, reqUrl);
-		const searchResults = response.data;
+		const searchResults = response.verses.data;
 
 		yield put({ type: LOAD_SEARCH_RESULTS, searchResults });
 	} catch (error) {
