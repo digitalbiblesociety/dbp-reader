@@ -12,7 +12,7 @@ const selectSearchContainerDomain = (state) => state.get('searchContainer');
 const selectSearchResults = () =>
 	createSelector(selectSearchContainerDomain, (search) => {
 		const results = search.get('searchResults');
-		return results?.reduce((acc, cur) => {
+		return results && results.reduce((acc, cur) => {
 			// each different book_id needs to have an array of its results
 			const cbook = cur.get('book_id');
 			if (acc.get(cbook)) {
