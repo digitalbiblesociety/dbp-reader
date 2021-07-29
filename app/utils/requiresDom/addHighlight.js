@@ -95,6 +95,7 @@ const addHighlightUtil = ({
 					book: activeBookId,
 					chapter: activeChapter,
 					verseStart: verse,
+					verseEnd: verse,
 					color,
 					highlightStart: 0,
 					highlightedWords,
@@ -117,6 +118,7 @@ const addHighlightUtil = ({
 					book: activeBookId,
 					chapter: activeChapter,
 					verseStart: verse,
+					verseEnd: verse,
 					color,
 					highlightStart: 0,
 					highlightedWords,
@@ -320,6 +322,7 @@ const addHighlightUtil = ({
 				highlightObject.book = activeBookId;
 				highlightObject.chapter = activeChapter;
 				highlightObject.verseStart = firstVerse;
+				highlightObject.verseEnd = lastVerse;
 				highlightObject.color = color;
 				highlightObject.highlightStart = highlightStart;
 				highlightObject.highlightedWords = highlightedWords;
@@ -332,6 +335,7 @@ const addHighlightUtil = ({
 						book: activeBookId,
 						chapter: activeChapter,
 						verseStart: firstVerse,
+						verseEnd: lastVerse,
 						color,
 						highlightStart,
 						highlightedWords,

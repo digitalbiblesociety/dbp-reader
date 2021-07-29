@@ -258,7 +258,7 @@ export class SearchContainer extends React.PureComponent {
 
 		return (
 			<div className={'search-results'}>
-				{searchResults.size && !showError ? (
+				{searchResults && searchResults.size && !showError ? (
 					searchResults.toIndexedSeq().map((res) => (
 						<div className={'book-result-section'} key={res.get('name')}>
 							<div className={'header'}>
