@@ -172,6 +172,7 @@ export function* addHighlight({
   chapter,
   userId,
   verseStart,
+  verseEnd,
   highlightStart,
   highlightedWords,
   color,
@@ -194,6 +195,7 @@ export function* addHighlight({
   formData.append('fileset_id', bible);
   formData.append('chapter', chapter);
   formData.append('verse_start', verseStart);
+  formData.append('verse_end', verseEnd);
   if (color !== 'none') {
     formData.append('highlighted_color', color);
   }
