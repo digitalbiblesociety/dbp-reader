@@ -23,8 +23,17 @@ export function* getCountries() {
   }&v=4&has_filesets=true&include_languages=true`;
 
   try {
-    const response = yield call(cachedFetch, requestUrl, {}, oneDay);
-    const countriesObject = response.data.reduce((acc, country) => {
+    let data = [];
+
+    let response = yield call(cachedFetch, requestUrl, {}, oneDay);
+    data.push(...response.data);
+
+    while (response.meta.pagination.current_page < response.meta.pagination.total_pages) {
+      response = yield call(cachedFetch, requestUrl + `&page=${response.meta.pagination.current_page + 1}`, {}, oneDay);
+      data.push(...response.data);
+    }
+
+    const countriesObject = data.reduce((acc, country) => {
       const tempObj = acc;
       if (typeof country.name !== 'string') {
         tempObj[country.name.name] = { ...country, name: country.name.name };
