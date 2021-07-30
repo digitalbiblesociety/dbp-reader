@@ -27,9 +27,11 @@ export function* getCountries() {
 
     let response = yield call(cachedFetch, requestUrl, {}, oneDay);
     data.push(...response.data);
+    console.log(response);
 
     while (response.meta.pagination.current_page < response.meta.pagination.total_pages) {
       response = yield call(cachedFetch, requestUrl + `&page=${response.meta.pagination.current_page + 1}`, {}, oneDay);
+      console.log(response);
       data.push(...response.data);
     }
 
