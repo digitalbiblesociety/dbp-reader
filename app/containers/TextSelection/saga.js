@@ -209,8 +209,16 @@ export function* getLanguageAltNames() {
     process.env.DBP_API_KEY
   }&v=4&has_filesets=true&include_alt_names=true`;
   try {
-    const response = yield call(cachedFetch, requestUrl, {}, oneDay);
-    const languageData = response.data || response;
+    let languageData = [];
+
+    let response = yield call(cachedFetch, requestUrl, {}, oneDay);
+    languageData.push(...response.data);
+
+    while (response.meta.pagination.current_page < response.meta.pagination.total_pages) {
+      response = yield call(cachedFetch, requestUrl + `&page=${response.meta.pagination.current_page + 1}`, {}, oneDay);
+      languageData.push(...response.data);
+    }
+
     const languages = languageData
       .map((l) => {
         if (l.translations) {
