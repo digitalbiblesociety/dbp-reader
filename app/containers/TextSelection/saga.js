@@ -27,11 +27,9 @@ export function* getCountries() {
 
     let response = yield call(cachedFetch, requestUrl, {}, oneDay);
     data.push(...response.data);
-    console.log(response);
 
     while (response.meta.pagination.current_page < response.meta.pagination.total_pages) {
       response = yield call(cachedFetch, requestUrl + `&page=${response.meta.pagination.current_page + 1}`, {}, oneDay);
-      console.log(response);
       data.push(...response.data);
     }
 
@@ -175,9 +173,15 @@ export function* getLanguages() {
   }&v=4&has_filesets=true`;
 
   try {
+    let languages = [];
+
     const response = yield call(cachedFetch, requestUrl, {}, oneDay);
-    // Sometimes the api returns an array and sometimes an object with the data key
-    const languages = response.data || response;
+    languages.push(...response.data);
+
+    while (response.meta.pagination.current_page < response.meta.pagination.total_pages) {
+      response = yield call(cachedFetch, requestUrl + `&page=${response.meta.pagination.current_page + 1}`, {}, oneDay);
+      languages.push(...response.data);
+    }
 
     yield put(setLanguages({ languages }));
     yield put({ type: CLEAR_ERROR_GETTING_LANGUAGES });
