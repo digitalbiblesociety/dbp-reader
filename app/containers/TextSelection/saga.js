@@ -175,7 +175,7 @@ export function* getLanguages() {
   try {
     let languages = [];
 
-    const response = yield call(cachedFetch, requestUrl, {}, oneDay);
+    let response = yield call(cachedFetch, requestUrl, {}, oneDay);
     languages.push(...response.data);
 
     while (response.meta.pagination.current_page < response.meta.pagination.total_pages) {
