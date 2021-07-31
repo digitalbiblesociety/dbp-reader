@@ -21,7 +21,7 @@ const dev = process.env.NODE_ENV === 'development';
 const manifestJson = require('./static/manifest');
 const checkBookId = require('./app/utils/checkBookName');
 const isoOneToThree = require('./app/utils/isoOneToThree.json');
-const app = next({ dev });
+const app = next({ });
 const handle = app.getRequestHandler();
 
 const ssrCache = new LRUCache({

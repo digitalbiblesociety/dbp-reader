@@ -6,9 +6,9 @@ import withReduxStore from '../app/withRedux';
 import LanguageProvider from '../app/containers/LanguageProvider';
 import { translationMessages } from '../app/i18n';
 import Error from './_error';
-import bugsnagClient from '../app/utils/bugsnagClient';
+// import bugsnagClient from '../app/utils/bugsnagClient';
 
-const ErrorBounary = bugsnagClient.getPlugin('react');
+// const ErrorBounary = bugsnagClient.getPlugin('react');
 
 class CustomApp extends App {
 	render() {
@@ -18,7 +18,6 @@ class CustomApp extends App {
 			process.env.NODE_ENV === 'staging'
 		) {
 			return (
-				<ErrorBounary FallbackComponent={Error}>
 					<Container>
 						<Provider store={reduxStore}>
 							<LanguageProvider messages={translationMessages}>
@@ -26,7 +25,6 @@ class CustomApp extends App {
 							</LanguageProvider>
 						</Provider>
 					</Container>
-				</ErrorBounary>
 			);
 		}
 		return (
