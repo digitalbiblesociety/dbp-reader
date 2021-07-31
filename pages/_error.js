@@ -18,20 +18,21 @@ import SvgWrapper from '../app/components/SvgWrapper';
 import messages from '../app/containers/NotFoundPage/messages';
 import '../static/app.scss';
 import configureStore from '../app/configureStore';
-import bugsnagClient from '../app/utils/bugsnagClient';
+// import bugsnagClient from '../app/utils/bugsnagClient';
 
 export default class Error extends React.Component {
   static async getInitialProps({ res, err }) {
     const statusCode = res ? res.statusCode : err ? err.statusCode : null; // eslint-disable-line
-    if (
-      err &&
-      (process.env.NODE_ENV === 'production' ||
-        process.env.NODE_ENV === 'staging') &&
-      process.env.BUGSNAG_SERVER_API_KEY &&
-      process.env.BUGSNAG_BROWSER_API_KEY
-    ) {
-      bugsnagClient.notify(err);
-    }
+    // if (
+    //   err &&
+    //   (process.env.NODE_ENV === 'production' ||
+    //     process.env.NODE_ENV === 'staging') &&
+    //   process.env.BUGSNAG_SERVER_API_KEY &&
+    //   process.env.BUGSNAG_BROWSER_API_KEY
+    // ) {
+    //   bugsnagClient.notify(err);
+    // }
+    console.error(err);
 
     return { statusCode };
   }
