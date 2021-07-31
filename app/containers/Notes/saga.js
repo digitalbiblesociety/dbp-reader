@@ -1,6 +1,7 @@
 import { take, cancel, takeLatest, call, fork, put } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
 import request from '../../utils/request';
+import { getHighlights } from '../HomePage/saga';
 import {
   ADD_NOTE,
   ADD_NOTE_SUCCESS,
@@ -20,7 +21,6 @@ import {
   GET_USER_HIGHLIGHTS,
   LOAD_USER_HIGHLIGHTS,
   UPDATE_HIGHLIGHT,
-  LOAD_HIGHLIGHTS,
 } from './constants';
 
 export function* getChapterForNote({ note }) {
@@ -470,25 +470,4 @@ export default function* notesSaga() {
   yield cancel(getUserBookmarksSaga);
   yield cancel(getBookmarksForChapterSaga);
   yield cancel(getUserHighlightsSaga);
-}
-
-export function* getHighlights({ bible, book, chapter, userId }) {
-  const requestUrl = `${process.env.BASE_API_ROUTE}/users/${userId ||
-    'no_user_id'}/highlights?key=${process.env.DBP_API_KEY}&v=4&project_id=${
-    process.env.NOTES_PROJECT_ID
-  }&bible_id=${bible}&book_id=${book}&chapter=${chapter}&limit=1000`;
-  let highlights = [];
-
-  try {
-    const response = yield call(request, requestUrl);
-    if (response.data) {
-      highlights = response.data;
-    }
-
-    yield put({ type: LOAD_HIGHLIGHTS, highlights });
-  } catch (error) {
-    if (process.env.NODE_ENV === 'development') {
-      console.error('Caught in highlights request', error); // eslint-disable-line no-console
-    }
-  }
 }

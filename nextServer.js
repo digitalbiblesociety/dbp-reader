@@ -17,11 +17,11 @@ const fetch = require('isomorphic-fetch');
 // const crypto = require('crypto');p
 const port = process.env.PORT || 3000;
 const dev = process.env.NODE_ENV === 'development';
-// const bugsnag = require('./app/utils/bugsnagServer');
+const bugsnag = require('./app/utils/bugsnagServer');
 const manifestJson = require('./static/manifest');
 const checkBookId = require('./app/utils/checkBookName');
 const isoOneToThree = require('./app/utils/isoOneToThree.json');
-const app = next({ });
+const app = next({ dev });
 const handle = app.getRequestHandler();
 
 const ssrCache = new LRUCache({
@@ -386,13 +386,13 @@ app
     // 	});
     // }
     server.listen(port, (err) => {
-      // if (
-      //   err &&
-      //   (process.env.NODE_ENV === 'production' ||
-      //     process.env.NODE_ENV === 'staging')
-      // ) {
-      //   bugsnag.notify(err);
-      // }
+      if (
+        err &&
+        (process.env.NODE_ENV === 'production' ||
+          process.env.NODE_ENV === 'staging')
+      ) {
+        bugsnag.notify(err);
+      }
       if (err) throw err;
       console.log(`> Ready on http://localhost:${port}`); // eslint-disable-line no-console
     });
@@ -412,9 +412,9 @@ app
       '------------------------^_^---*_*--$_$--------------------------------\n',
       ex,
     );
-    // if (process.env.NODE_ENV !== 'development') {
-    //   bugsnag.notify(ex);
-    // }
+    if (process.env.NODE_ENV !== 'development') {
+      bugsnag.notify(ex);
+    }
     /* eslint-enable no-console */
     process.exit(1);
   });

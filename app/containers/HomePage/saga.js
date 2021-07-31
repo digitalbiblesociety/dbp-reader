@@ -9,7 +9,6 @@ import {
   getNotesForChapter,
   getBookmarksForChapter,
   getUserHighlights,
-  getHighlights,
 } from '../Notes/saga';
 import { getCountries, getLanguages, getTexts } from '../TextSelection/saga';
 import { ADD_BOOKMARK } from '../Notes/constants';
@@ -146,6 +145,26 @@ export function* getBookMetadata({ bibleId }) {
   }
 }
 
+export function* getHighlights({ bible, book, chapter, userId }) {
+  const requestUrl = `${process.env.BASE_API_ROUTE}/users/${userId ||
+    'no_user_id'}/highlights?key=${process.env.DBP_API_KEY}&v=4&project_id=${
+    process.env.NOTES_PROJECT_ID
+  }&bible_id=${bible}&book_id=${book}&chapter=${chapter}&limit=1000`;
+  let highlights = [];
+
+  try {
+    const response = yield call(request, requestUrl);
+    if (response.data) {
+      highlights = response.data;
+    }
+
+    yield put({ type: LOAD_HIGHLIGHTS, highlights });
+  } catch (error) {
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Caught in highlights request', error); // eslint-disable-line no-console
+    }
+  }
+}
 
 export function* addHighlight({
   bible,
