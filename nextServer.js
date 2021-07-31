@@ -386,13 +386,13 @@ app
     // 	});
     // }
     server.listen(port, (err) => {
-      if (
-        err &&
-        (process.env.NODE_ENV === 'production' ||
-          process.env.NODE_ENV === 'staging')
-      ) {
-        bugsnag.notify(err);
-      }
+      // if (
+      //   err &&
+      //   (process.env.NODE_ENV === 'production' ||
+      //     process.env.NODE_ENV === 'staging')
+      // ) {
+      //   bugsnag.notify(err);
+      // }
       if (err) throw err;
       console.log(`> Ready on http://localhost:${port}`); // eslint-disable-line no-console
     });
