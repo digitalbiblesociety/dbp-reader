@@ -5,7 +5,7 @@ import withReduxSaga from 'next-redux-saga';
 import withReduxStore from '../app/withRedux';
 import LanguageProvider from '../app/containers/LanguageProvider';
 import { translationMessages } from '../app/i18n';
-import Error from './_error';
+// import Error from './_error';
 // import bugsnagClient from '../app/utils/bugsnagClient';
 
 // const ErrorBounary = bugsnagClient.getPlugin('react');
