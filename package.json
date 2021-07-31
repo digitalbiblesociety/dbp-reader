@@ -24,7 +24,7 @@
     "start:dev": "cross-env NODE_ENV=development node nextServer",
     "start:prerender": "node server/prerenderIndex.js",
     "start:tunnel": "cross-env NODE_ENV=development ENABLE_TUNNEL=true node server",
-    "start:production": "pm2 restart ecosystem.config.js --update-env --env production --only bible.is.prod;",
+    "start:production": "pm2 restart ecosystem.config.js --update-env --env production --only bible.is.production;",
     "start:prod": "cross-env NODE_ENV=production node nextServer",
     "presetup": "npm i chalk shelljs",
     "build": "BUILD_ID=$(git rev-parse HEAD) NODE_ENV=production next build",

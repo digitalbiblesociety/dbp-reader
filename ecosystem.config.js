@@ -6,11 +6,11 @@ module.exports = {
       instances: 1,
       env: {
         NODE_ENV: 'production',
-        PORT: 8081,
+        PORT: 3000,
       },
       env_production: {
         NODE_ENV: 'production',
-        PORT: 8081,
+        PORT: 3000,
       },
     },
     {
@@ -19,11 +19,11 @@ module.exports = {
       instances: 1,
       env: {
         NODE_ENV: 'development',
-        PORT: 8081,
+        PORT: 3001,
       },
       env_production: {
         NODE_ENV: 'production',
-        PORT: 8081,
+        PORT: 3000,
       },
     },
     {
@@ -32,11 +32,11 @@ module.exports = {
       instances: 1,
       env: {
         NODE_ENV: 'staging',
-        PORT: 8081,
+        PORT: 3000,
       },
       env_production: {
         NODE_ENV: 'staging',
-        PORT: 8081,
+        PORT: 3000,
       },
     },
   ],
