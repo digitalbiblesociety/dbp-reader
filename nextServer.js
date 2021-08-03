@@ -21,7 +21,7 @@ const bugsnag = require('./app/utils/bugsnagServer');
 const manifestJson = require('./static/manifest');
 const checkBookId = require('./app/utils/checkBookName');
 const isoOneToThree = require('./app/utils/isoOneToThree.json');
-const app = next({ dev: false });
+const app = next({ dev });
 const handle = app.getRequestHandler();
 
 const ssrCache = new LRUCache({

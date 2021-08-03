@@ -56,13 +56,6 @@ if (process.env.ANALYZE_BUNDLE) {
 			},
 		},
 	});
-} else if (isProd) {
-	module.exports = withSass(
-		withCss({
-			...webpackConfig,
-			generateBuildId: async () => process.env.BUILD_ID,
-		}),
-	);
 } else {
 	module.exports = withSass(withCss(webpackConfig));
 }
