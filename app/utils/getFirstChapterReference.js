@@ -68,12 +68,12 @@ const getFirstChapterReference = (
     );
     const textFormat = filesets.find(
       (fileset) =>
-        (fileset.size === 'NT' || fileset.size === 'C') &&
+        (fileset.size === 'NT' || fileset.size === 'NTP' || fileset.size === 'C') &&
         fileset.type === 'text_format',
     );
     const textPlain = filesets.find(
       (fileset) =>
-        (fileset.size === 'NT' || fileset.size === 'C') &&
+        (fileset.size === 'NT' || fileset.size === 'NTP' || fileset.size === 'C') &&
         fileset.type === 'text_plain',
     );
 
@@ -175,12 +175,12 @@ const getFirstChapterReference = (
     // Gets book/chapter for just text in the New Testament
     const textFormat = filesets.find(
       (fileset) =>
-        (fileset.size === 'NT' || fileset.size === 'C') &&
+        (fileset.size === 'NT' || fileset.size === 'NTP' || fileset.size === 'C') &&
         fileset.type === 'text_format',
     );
     const textPlain = filesets.find(
       (fileset) =>
-        (fileset.size === 'NT' || fileset.size === 'C') &&
+        (fileset.size === 'NT' || fileset.size === 'NTP' || fileset.size === 'C') &&
         fileset.type === 'text_plain',
     );
     const textId = textFormat ? textFormat.id : textPlain.id;
