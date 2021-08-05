@@ -24,7 +24,12 @@ server {
 	charset utf-8;
 
 	location = /favicon.ico { access_log off; log_not_found off; }
-	location = /robots.txt  { access_log off; log_not_found off; }
+	location = /robots.txt  {
+		access_log off;
+		log_not_found off;
+		add_header Content-Type text/plain;
+		return 200 "User-agent: *\nDisallow: /\n";
+	}
 
 	location /sw.js {
 		add_header Cache-Control "no-cache";
