@@ -176,6 +176,10 @@ app
     server.get('/sitemap.xml', (req, res) =>
       res.status(200).sendFile('sitemap-index.xml', sitemapOptions),
     );
+    server.get('/robots.txt', (req, res) => {
+      res.set('Content-Type', 'text/plain');
+      res.status(200).send('User-Agent: *\nDisallow: /\n');
+    });
 
     server.get('/git/version', async (req, res) => {
       cp.exec('git rev-parse HEAD', (err, stdout) => {
