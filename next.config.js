@@ -57,5 +57,8 @@ if (process.env.ANALYZE_BUNDLE) {
 		},
 	});
 } else {
-	module.exports = withSass(withCss(webpackConfig));
+	module.exports = withSass(withCss({
+		...webpackConfig,
+		generateBuildId: () => '$Format:%H$',
+	}));
 }
