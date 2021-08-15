@@ -121,19 +121,8 @@ export function* getTexts({ languageCode, languageIso }) {
   try {
     const response = yield call(request, requestUrl);
 
-    const texts = response.data.filter(
-      (text) =>
-        text.iso &&
-        text.abbr &&
-        (text.filesets[process.env.DBP_BUCKET_ID] &&
-          text.filesets[process.env.DBP_BUCKET_ID].find(
-            (f) =>
-              f.type === 'audio' ||
-              f.type === 'audio_drama' ||
-              f.type === 'text_plain' ||
-              f.type === 'text_format',
-          )),
-    );
+    const texts = response.data;
+
     // Create map of videos for constant time lookup when iterating through the texts
     const types = {
       audio: true,
