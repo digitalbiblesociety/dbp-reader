@@ -178,7 +178,27 @@ app
     );
     server.get('/robots.txt', (req, res) => {
       res.set('Content-Type', 'text/plain');
-      res.status(200).send('User-Agent: *\nDisallow: /\n');
+      res.status(200).send(`User-agent: Googlebot
+Disallow:
+User-agent: Bingbot
+Disallow:
+User-agent: Slurp
+Disallow:
+User-agent: DuckDuckBot
+Disallow:
+User-agent: Baiduspider
+Disallow:
+User-agent: YandexBot
+Disallow:
+User-agent: Exabot
+Disallow:
+User-agent: Facebot
+Disallow:
+User-agent: ia_archiver
+Disallow:
+User-agent: *
+Disallow: /
+`);
     });
 
     server.get('/git/version', async (req, res) => {
