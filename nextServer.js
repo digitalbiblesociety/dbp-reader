@@ -192,9 +192,11 @@ User-agent: YandexBot
 Disallow:
 User-agent: Exabot
 Disallow:
-User-agent: Facebot
+User-agent: facebot
 Disallow:
 User-agent: ia_archiver
+Disallow:
+User-agent: Sogou
 Disallow:
 User-agent: *
 Disallow: /
