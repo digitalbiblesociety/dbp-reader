@@ -20,6 +20,6 @@ export default defineMessages({
 	},
 	video: {
 		id: 'app.containers.TextSelection.video',
-		defaultMessage: 'Video',
+		defaultMessage: 'Includes Video',
 	},
 });
