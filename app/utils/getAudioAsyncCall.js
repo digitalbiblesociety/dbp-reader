@@ -34,6 +34,8 @@ export default async (filesets, bookId, chapter, audioType) => {
 
   Object.entries(filteredFilesets)
     .sort((a, b) => {
+      if (a[1].codec === 'opus') return 1;
+      if (b[1].codec === 'opus') return -1;
       if (a[1].type === audioType) return -1;
       if (b[1].type === audioType) return 1;
       if (a[1].type === 'audio_drama') return -1;
