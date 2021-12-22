@@ -124,6 +124,7 @@ export default class MyDocument extends Document {
           />
           <meta property="fb:app_id" content="173528326559718" />
           <script src="https://apis.google.com/js/platform.js" async defer />
+          <script src="https://cdn.jsdelivr.net/npm/hls.js@latest" />
           <script
             type="application/javascript"
             dangerouslySetInnerHTML={{
