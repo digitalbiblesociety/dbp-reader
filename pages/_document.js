@@ -113,7 +113,6 @@ export default class MyDocument extends Document {
 					<meta name="twitter:app:id:iphone" content="" />
 					<meta name="twitter:app:id:ipad" content="" />
 					<meta name="twitter:app:id:googleplay" content="" />
-
 					<meta
 						name="google-site-verification"
 						content="frHSU18EKPDnEoKj--plFdubfj_GB7hXesy-3N1o57s"
